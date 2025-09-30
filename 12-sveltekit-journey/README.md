@@ -15,26 +15,94 @@
 ```
 12-sveltekit-journey/
 ├── README.md                   # 本文档
-├── svelte-basics/             # Svelte基础
-│   ├── 01-svelte-intro.md
-│   ├── 02-reactivity.md
-│   ├── 03-components.md
-│   └── 04-props-events.md
-├── sveltekit-features/        # SvelteKit特性
-│   ├── 01-sveltekit-overview.md
-│   ├── 02-routing-layouts.md
-│   ├── 03-data-loading.md
-│   └── 04-forms-actions.md
-├── modern-frontend/           # 现代前端概念
-│   ├── 01-compile-time.md
-│   ├── 02-performance.md
-│   ├── 03-accessibility.md
-│   └── 04-animations.md
-└── deployment/                # 部署与优化
-    ├── 01-adapters.md
-    ├── 02-static-deployment.md
-    ├── 03-edge-functions.md
-    └── 04-analytics.md
+├── SvelteKit学习之旅学习路线.md         # 详细学习指南
+├── advanced-topics/             # 高级应用深度内容
+│   ├── svelte-advanced/          # Svelte高级专题
+│   │   ├── 01-svelte-compiler.md   # Svelte编译器深度
+│   │   ├── 02-advanced-reactivity.md # 高级响应式原理
+│   │   ├── 03-custom-directives.md  # 自定义指令开发
+│   │   └── 04-svelte-stores.md     # Svelte状态管理深度
+│   ├── sveltekit-advanced/       # SvelteKit高级专题
+│   │   ├── 01-advanced-routing.md  # 高级路由模式
+│   │   ├── 02-server-hooks.md      # 服务器钩子深度
+│   │   ├── 03-edge-functions.md    # 边缘函数开发
+│   │   └── 04-platform-adapters.md # 平台适配器开发
+│   ├── performance-advanced/     # 性能优化高级
+│   │   ├── 01-performance-patterns.md # 性能模式深度
+│   │   ├── 02-bundle-optimization.md # 包优化策略
+│   │   ├── 03-memory-optimization.md # 内存优化
+│   │   └── 04-runtime-performance.md # 运行时性能
+│   └── enterprise-advanced/       # 企业级高级
+│       ├── 01-enterprise-patterns.md # 企业级应用模式
+│       ├── 02-ssr-optimization.md  # SSR优化策略
+│       ├── 03-fullstack-patterns.md # 全栈开发模式
+│       └── 04-monitoring-analytics.md # 监控和分析
+├── knowledge-points/             # 知识点速查手册
+│   ├── svelte-concepts/           # Svelte核心概念
+│   │   ├── 01-svelte-keywords.md   # Svelte关键字详解
+│   │   ├── 02-reactivity-system.md # 响应式系统速查
+│   │   ├── 03-component-lifecycle.md # 组件生命周期速查
+│   │   └── 04-stores-patterns.md   # Store模式速查
+│   ├── sveltekit-apis/            # SvelteKit API速查
+│   │   ├── 01-routing-apis.md      # 路由API速查
+│   │   ├── 02-data-loading.md     # 数据加载API速查
+│   │   ├── 03-form-handling.md    # 表单处理API速查
+│   │   └── 04-server-functions.md # 服务器函数速查
+│   ├── build-tools/               # 构建工具速查
+│   │   ├── 01-vite-integration.md  # Vite集成速查
+│   │   ├── 02-rollup-config.md     # Rollup配置速查
+│   │   ├── 03-build-optimization.md # 构建优化速查
+│   │   └── 04-deployment-tools.md  # 部署工具速查
+│   └── development-tools/          # 开发工具速查
+│       ├── 01-svelte-inspector.md   # Svelte检查器
+│       ├── 01-vscode-extensions.md # VS Code扩展速查
+│       ├── 03-debugging-tools.md   # 调试工具速查
+│       └── 04-testing-tools.md     # 测试工具速查
+├── basics/                        # Svelte和SvelteKit基础
+│   ├── 01-svelte-introduction.md   # Svelte介绍
+│   ├── 02-reactivity-fundamentals.md # 响应式基础
+│   ├── 03-components-basics.md     # 组件基础
+│   ├── 04-props-events.md         # 属性和事件
+│   ├── 05-sveltekit-overview.md    # SvelteKit概述
+│   ├── 06-routing-layouts.md      # 路由和布局
+│   ├── 07-data-loading.md         # 数据加载
+│   └── 08-forms-actions.md        # 表单和操作
+├── frameworks-libs/               # 框架和库
+│   ├── 01-state-management.md     # 状态管理方案
+│   ├── 02-routing-libraries.md    # 路由库
+│   ├── 03-animation-libraries.md  # 动画库
+│   ├── 04-validation-libraries.md # 验证库
+│   └── 05-ui-component-kits.md    # UI组件库
+├── fullstack-development/         # 全栈开发
+│   ├── 01-server-side-rendering.md # 服务器端渲染
+│   ├── 02-api-routes.md           # API路由
+│   ├── 03-database-integration.md # 数据库集成
+│   ├── 04-authentication.md       # 认证和授权
+│   └── 05-realtime-features.md    # 实时功能
+├── performance-optimization/      # 性能优化
+│   ├── 01-compile-time-optimization.md # 编译时优化
+│   ├── 02-code-splitting.md       # 代码分割
+│   ├── 03-lazy-loading.md         # 懒加载
+│   ├── 04-caching-strategies.md   # 缓存策略
+│   └── 05-image-optimization.md   # 图片优化
+├── deployment-platforms/          # 部署平台
+│   ├── 01-static-site-deployment.md # 静态站点部署
+│   ├── 02-node-server-deployment.md # Node服务器部署
+│   ├── 03-edge-deployment.md       # 边缘部署
+│   ├── 04-serverless-deployment.md # 无服务器部署
+│   └── 05-docker-containerization.md # Docker容器化
+├── modern-web-concepts/           # 现代Web概念
+│   ├── 01-compile-time-frameworks.md # 编译时框架
+│   ├── 02-isr-static-regeneration.md # 增量静态再生成
+│   ├── 03-progressive-enhancement.md # 渐进增强
+│   ├── 04-accessibility-wcag.md   # 无障碍访问WCAG
+│   └── 05-web-vitals-optimization.md # Web Vitals优化
+└── best-practices/                # 最佳实践
+    ├── 01-architecture-patterns.md # 架构模式
+    ├── 02-code-organization.md    # 代码组织
+    ├── 03-testing-strategies.md   # 测试策略
+    ├── 04-security-practices.md    # 安全实践
+    └── 05-migration-guides.md     # 迁移指南
 ```
 
 ## 🔍 学习路径

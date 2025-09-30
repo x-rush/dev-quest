@@ -15,26 +15,95 @@
 ```
 10-python-discovery/
 ├── README.md                   # 本文档
-├── python-basics/             # Python基础
-│   ├── 01-syntax-basics.md
-│   ├── 02-data-types.md
-│   ├── 03-control-flow.md
-│   └── 04-functions-modules.md
-├── web-development/           # Web开发
-│   ├── 01-flask-framework.md
-│   ├── 02-django-basics.md
-│   ├── 03-fastapi-modern.md
-│   └── 04-rest-apis.md
-├── data-science/             # 数据科学
-│   ├── 01-numpy-pandas.md
-│   ├── 02-data-visualization.md
-│   ├── 03-machine-learning.md
-│   └── 04-data-analysis.md
-└── automation-scripts/       # 自动化脚本
-    ├── 01-file-automation.md
-    ├── 02-web-scraping.md
-    ├── 03-api-automation.md
-    └── 04-devops-scripts.md
+├── Python发现之旅学习路线.md         # 详细学习指南
+├── advanced-topics/             # 高级应用深度内容
+│   ├── python-advanced/          # Python高级专题
+│   │   ├── 01-metaclasses-introspection.md # 元类和内省
+│   │   ├── 02-async-programming-advanced.md # 高级异步编程
+│   │   ├── 03-memory-management.md   # 内存管理优化
+│   │   └── 04-performance-tuning.md   # 性能调优实战
+│   ├── ml-ai-advanced/            # 机器学习AI高级
+│   │   ├── 01-deep-learning-advanced.md # 深度学习高级
+│   │   ├── 02-nlp-processing.md      # 自然语言处理
+│   │   ├── 03-computer-vision.md     # 计算机视觉
+│   │   └── 04-mlops-deployment.md    # MLOps和部署
+│   ├── data-science-advanced/      # 数据科学高级
+│   │   ├── 01-advanced-pandas.md     # Pandas高级应用
+│   │   ├── 02-big-data-processing.md # 大数据处理
+│   │   ├── 03-statistical-analysis.md # 统计分析
+│   │   └── 04-data-visualization-advanced.md # 数据可视化高级
+│   └── enterprise-advanced/        # 企业级高级
+│       ├── 01-enterprise-patterns.md # 企业级模式
+│       ├── 02-cloud-native-python.md # 云原生Python
+│       ├── 04-microservices-python.md # Python微服务
+│       └── 05-automation-scaling.md  # 自动化和扩展
+├── knowledge-points/             # 知识点速查手册
+│   ├── python-concepts/           # Python核心概念
+│   │   ├── 01-python-keywords.md    # Python关键字详解
+│   │   ├── 02-data-structures.md    # 数据结构速查
+│   │   ├── 03-control-flow.md       # 控制流速查
+│   │   └── 04-functions-decorators.md # 函数和装饰器速查
+│   ├── scientific-libs/            # 科学计算库
+│   │   ├── 01-numpy-apis.md         # NumPy API速查
+│   │   ├── 02-pandas-apis.md        # Pandas API速查
+│   │   ├── 03-matplotlib-apis.md    # Matplotlib API速查
+│   │   └── 04-scipy-apis.md         # SciPy API速查
+│   ├── web-frameworks/             # Web框架API
+│   │   ├── 01-django-apis.md        # Django API速查
+│   │   ├── 02-flask-apis.md         # Flask API速查
+│   │   ├── 03-fastapi-apis.md       # FastAPI API速查
+│   │   └── 04-sqlalchemy-apis.md    # SQLAlchemy API速查
+│   └── development-tools/          # 开发工具速查
+│       ├── 01-python-debug-tools.md # Python调试工具
+│       ├── 02-virtual-environments.md # 虚拟环境工具
+│       ├── 03-package-management.md # 包管理工具
+│       └── 04-testing-frameworks.md # 测试框架速查
+├── basics/                        # Python基础
+│   ├── 01-python-fundamentals.md   # Python语言基础
+│   ├── 02-oop-concepts.md          # 面向对象编程
+│   ├── 03-functional-programming.md # 函数式编程
+│   ├── 04-modules-packages.md      # 模块和包
+│   ├── 05-exception-handling.md     # 异常处理
+│   ├── 06-file-io.md              # 文件IO操作
+│   ├── 07-regular-expressions.md  # 正则表达式
+│   └── 08-concurrency-basics.md    # 并发基础
+├── web-development/               # Web开发
+│   ├── 01-django-framework.md      # Django框架
+│   ├── 02-flask-framework.md       # Flask框架
+│   ├── 03-fastapi-framework.md     # FastAPI框架
+│   ├── 04-websockets-realtime.md   # WebSocket实时通信
+│   ├── 05-authentication.md       # 认证和授权
+│   └── 06-api-development.md       # API开发
+├── data-science-ml/               # 数据科学和机器学习
+│   ├── 01-data-analysis-basics.md  # 数据分析基础
+│   ├── 02-machine-learning-basics.md # 机器学习基础
+│   ├── 03-deep-learning-intro.md   # 深度学习入门
+│   ├── 04-data-visualization.md    # 数据可视化
+│   └── 05-statistical-analysis.md   # 统计分析
+├── automation-devops/             # 自动化和DevOps
+│   ├── 01-scripting-automation.md  # 脚本自动化
+│   ├── 02-web-scraping.md          # 网络爬虫
+│   ├── 03-api-automation.md        # API自动化
+│   ├── 04-devops-scripts.md        # DevOps脚本
+│   └── 05-cicd-pipelines.md        # CI/CD流水线
+├── scientific-computing/          # 科学计算
+│   ├── 01-numerical-computing.md   # 数值计算
+│   ├── 02-scientific-visualization.md # 科学可视化
+│   ├── 03-computational-physics.md # 计算物理
+│   ├── 04-bioinformatics.md        # 生物信息学
+│   └── 05-financial-modeling.md    # 金融建模
+├── testing-quality/               # 测试和质量保证
+│   ├── 01-unit-testing.md          # 单元测试
+│   ├── 02-integration-testing.md   # 集成测试
+│   ├── 03-test-driven-development.md # 测试驱动开发
+│   ├── 04-code-quality.md          # 代码质量
+│   └── 05-performance-testing.md   # 性能测试
+└── deployment-scaling/            # 部署和扩展
+    ├── 01-containerization.md      # 容器化部署
+    ├── 02-cloud-deployment.md      # 云平台部署
+    ├── 03-scaling-strategies.md    # 扩展策略
+    ├── 04-monitoring.md           # 监控和告警
+    └── 05-performance-optimization.md # 性能优化
 ```
 
 ## 🔍 学习路径

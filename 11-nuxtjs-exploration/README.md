@@ -15,26 +15,95 @@
 ```
 11-nuxtjs-exploration/
 ├── README.md                   # 本文档
-├── vue3-foundation/            # Vue 3基础
-│   ├── 01-composition-api.md
-│   ├── 02-reactivity-system.md
-│   ├── 03-components-advanced.md
-│   └── 04-vue-ecosystem.md
-├── nuxt3-features/             # Nuxt 3特性
-│   ├── 01-nuxt3-intro.md
-│   ├── 02-file-based-routing.md
-│   ├── 03-data-fetching.md
-│   └── 04-modules-plugins.md
-├── ssr-ssg/                   # SSR/SSG实践
-│   ├── 01-ssr-concepts.md
-│   ├── 02-ssg-static-site.md
-│   ├── 03-performance.md
-│   └── 04-seo-optimization.md
-└── deployment/                # 部署与优化
-    ├── 01-build-deployment.md
-    ├── 02-performance.md
-    ├── 03-pwa.md
-    └── 04-monitoring.md
+├── Nuxt.js生态探索学习路线.md         # 详细学习指南
+├── advanced-topics/             # 高级应用深度内容
+│   ├── vue3-advanced/            # Vue 3高级专题
+│   │   ├── 01-composition-api-advanced.md # 组合式API高级
+│   │   ├── 02-reactivity-deep.md   # 响应式系统深度
+│   │   ├── 03-performance-patterns.md # 性能模式
+│   │   └── 04-vue-internals.md     # Vue内部原理
+│   ├── nuxt3-advanced/           # Nuxt 3高级专题
+│   │   ├── 01-advanced-modules.md  # 高级模块开发
+│   │   ├── 02-nitro-engine.md      # Nitro引擎深度
+│   │   ├── 03-edge-rendering.md    # 边缘渲染
+│   │   └── 04-hybrid-rendering.md  # 混合渲染模式
+│   ├── state-management-advanced/ # 状态管理高级
+│   │   ├── 01-pinia-advanced.md    # Pinia高级应用
+│   │   ├── 02-graphql-state.md     # GraphQL状态管理
+│   │   ├── 03-global-state.md      # 全局状态模式
+│   │   └── 04-state-persistence.md  # 状态持久化
+│   └── enterprise-advanced/       # 企业级高级
+│       ├── 01-enterprise-patterns.md # 企业级模式
+│       ├── 02-ssr-optimization.md   # SSR优化策略
+│       ├── 03-pwa-progressive.md   # PWA渐进增强
+│       └── 04-analytics-monitoring.md # 分析和监控
+├── knowledge-points/             # 知识点速查手册
+│   ├── vue3-concepts/             # Vue 3核心概念
+│   │   ├── 01-vue3-keywords.md     # Vue 3关键字详解
+│   │   ├── 02-composition-api.md   # 组合式API速查
+│   │   ├── 03-reactivity-apis.md   # 响应式API速查
+│   │   └── 04-lifecycle-hooks.md   # 生命周期钩子速查
+│   ├── nuxt3-apis/                # Nuxt 3 API速查
+│   │   ├── 01-nuxt3-composables.md # Nuxt 3 Composables速查
+│   │   ├── 02-routing-apis.md      # 路由API速查
+│   │   ├── 03-data-fetching.md     # 数据获取API速查
+│   │   └── 04-module-apis.md       # 模块API速查
+│   ├── styling-patterns/           # 样式模式速查
+│   │   ├── 01-tailwind-integration.md # Tailwind集成速查
+│   │   ├── 02-css-modules.md       # CSS模块速查
+│   │   ├── 03-styled-components.md  # 样式组件速查
+│   │   └── 04-design-patterns.md    # 设计模式速查
+│   └── development-tools/          # 开发工具速查
+│       ├── 01-vue-devtools.md      # Vue DevTools速查
+│       ├── 02-nuxt-devtools.md      # Nuxt DevTools速查
+│       ├── 03-vscode-extensions.md  # VS Code扩展速查
+│       └── 04-build-tools.md       # 构建工具速查
+├── basics/                        # Vue 3和Nuxt 3基础
+│   ├── 01-vue3-fundamentals.md     # Vue 3基础
+│   ├── 02-composition-api.md       # 组合式API
+│   ├── 03-reactivity-system.md     # 响应式系统
+│   ├── 04-components-advanced.md  # 组件高级应用
+│   ├── 05-vue-ecosystem.md        # Vue生态系统
+│   ├── 06-nuxt3-introduction.md    # Nuxt 3介绍
+│   ├── 07-file-based-routing.md   # 文件系统路由
+│   ├── 08-data-fetching.md        # 数据获取
+│   └── 09-modules-plugins.md       # 模块和插件
+├── frameworks/                    # 框架和库
+│   ├── 01-pinia-state.md          # Pinia状态管理
+│   ├── 02-vue-router-advanced.md   # Vue Router高级
+│   ├── 03-vueuse-library.md        # VueUse库
+│   ├── 04-nuxt-modules.md         # Nuxt模块
+│   └── 05-ui-component-libraries.md # UI组件库
+├── rendering-strategies/          # 渲染策略
+│   ├── 01-ssr-concepts.md         # SSR概念和原理
+│   ├── 02-ssg-static-site.md       # SSG静态站点
+│   ├── 03-isr-incremental.md       # ISR增量静态再生成
+│   ├── 04-csr-client-side.md       # CSR客户端渲染
+│   └── 05-hybrid-rendering.md      # 混合渲染
+├── performance-optimization/      # 性能优化
+│   ├── 01-performance-patterns.md  # 性能模式
+│   ├── 02-code-splitting.md       # 代码分割
+│   ├── 03-lazy-loading.md         # 懒加载
+│   ├── 04-image-optimization.md   # 图片优化
+│   └── 05-bundle-optimization.md   # 包优化
+├── pwa-mobile/                   # PWA和移动端
+│   ├── 01-pwa-fundamentals.md     # PWA基础
+│   ├── 02-service-workers.md      # Service Workers
+│   ├── 03-manifest-config.md      # Manifest配置
+│   ├── 04-mobile-optimization.md  # 移动端优化
+│   └── 05-offline-strategies.md   # 离线策略
+├── deployment-devops/             # 部署和DevOps
+│   ├── 01-build-deployment.md      # 构建和部署
+│   ├── 02-static-deployment.md     # 静态部署
+│   ├── 03-server-deployment.md     # 服务器部署
+│   ├── 04-ci-cd-pipelines.md      # CI/CD流水线
+│   └── 05-monitoring-analytics.md  # 监控和分析
+└── best-practices/                # 最佳实践
+    ├── 01-architecture-patterns.md # 架构模式
+    ├── 02-code-standards.md       # 代码标准
+    ├── 03-security-practices.md    # 安全实践
+    ├── 04-seo-optimization.md     # SEO优化
+    └── 05-accessibility.md        # 无障碍访问
 ```
 
 ## 🔍 学习路径

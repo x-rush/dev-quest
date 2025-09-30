@@ -15,26 +15,95 @@
 ```
 08-java-revisited/
 ├── README.md                   # 本文档
-├── java-17-features/           # Java 17+新特性
-│   ├── 01-language-changes.md
-│   ├── 02-new-apis.md
-│   ├── 03-performance.md
-│   └── 04-preview-features.md
-├── spring-ecosystem/           # Spring生态
-│   ├── 01-spring-boot-3.md
-│   ├── 02-spring-cloud.md
-│   ├── 03-spring-security.md
-│   └── 04-microservices.md
-├── modern-java/                # 现代Java开发
-│   ├── 01-modular-development.md
-│   ├── 02-reactive-programming.md
-│   ├── 03-cloud-native.md
-│   └── 04-containerization.md
-└── cross-language/             # 跨语言对比
-    ├── 01-java-vs-php.md
-    ├── 02-java-vs-go.md
-    ├── 03-java-vs-python.md
-    └── 04-design-patterns.md
+├── Java知识回顾与现代化学习路线.md   # 详细学习指南
+├── advanced-topics/             # 高级应用深度内容
+│   ├── java-advanced/            # Java高级专题
+│   │   ├── 01-jvm-internals.md       # JVM内部原理
+│   │   ├── 02-concurrency-advanced.md # 高级并发编程
+│   │   ├── 03-garbage-collection.md   # 垃圾收集深度
+│   │   └── 04-performance-tuning.md   # 性能调优实战
+│   ├── spring-advanced/          # Spring高级专题
+│   │   ├── 01-spring-boot-advanced.md # Spring Boot高级应用
+│   │   ├── 02-spring-cloud-advanced.md # Spring Cloud微服务
+│   │   ├── 03-spring-security-advanced.md # 安全框架深度
+│   │   └── 04-spring-integration.md    # 集成模式
+│   ├── enterprise-patterns/       # 企业级模式
+│   │   ├── 01-microservices-patterns.md # 微服务架构模式
+│   │   ├── 02-event-driven-architecture.md # 事件驱动架构
+│   │   ├── 03-cqrs-event-sourcing.md  # CQRS和事件溯源
+│   │   └── 04-domain-driven-design.md  # 领域驱动设计
+│   └── cloud-native-advanced/     # 云原生高级
+│       ├── 01-kubernetes-native.md   # Kubernetes原生开发
+│       ├── 02-service-mesh.md       # 服务网格
+│       ├── 03-cloud-patterns.md     # 云原生模式
+│       └── 04-observability.md      # 可观测性
+├── knowledge-points/             # 知识点速查手册
+│   ├── java-concepts/             # Java核心概念
+│   │   ├── 01-java-keywords.md      # Java关键字详解
+│   │   ├── 02-collections-api.md    # 集合框架API
+│   │   ├── 03-stream-api.md         # Stream API速查
+│   │   └── 04-concurrency-api.md    # 并发API速查
+│   ├── spring-apis/               # Spring API速查
+│   │   ├── 01-spring-core-apis.md   # Spring核心API
+│   │   ├── 02-spring-boot-apis.md   # Spring Boot API
+│   │   ├── 03-spring-cloud-apis.md  # Spring Cloud API
+│   │   └── 04-spring-data-apis.md   # Spring Data API
+│   ├── jvm-apis/                  # JVM相关API
+│   │   ├── 01-jvm-options.md       # JVM选项速查
+│   │   ├── 02-monitoring-apis.md    # 监控API速查
+│   │   ├── 03-classloading.md       # 类加载机制速查
+│   │   └── 04-memory-management.md  # 内存管理速查
+│   └── development-tools/          # 开发工具速查
+│       ├── 01-jdk-tools.md         # JDK工具速查
+│       ├── 02-build-tools.md       # 构建工具速查
+│       ├── 03-profiling-tools.md   # 性能分析工具
+│       └── 04-debugging-tools.md   # 调试工具速查
+├── basics/                        # Java基础
+│   ├── 01-java-fundamentals.md     # Java语言基础
+│   ├── 02-oop-concepts.md          # 面向对象编程
+│   ├── 03-exception-handling.md    # 异常处理
+│   ├── 04-collections-framework.md # 集合框架
+│   ├── 05-generics-annotations.md   # 泛型和注解
+│   ├── 06-lambda-expressions.md   # Lambda表达式
+│   ├── 07-java17-features.md       # Java 17+新特性
+│   └── 08-modular-development.md   # 模块化开发
+├── frameworks/                    # 框架和库
+│   ├── 01-spring-fundamentals.md  # Spring框架基础
+│   ├── 02-spring-boot-fundamentals.md # Spring Boot基础
+│   ├── 03-spring-data.md          # Spring Data
+│   ├── 04-spring-security.md      # Spring Security
+│   ├── 05-microservices.md        # 微服务架构
+│   └── 06-testing-frameworks.md   # 测试框架
+├── enterprise-development/         # 企业级开发
+│   ├── 01-design-patterns.md      # 设计模式
+│   ├── 02-architecture-patterns.md # 架构模式
+│   ├── 03-clean-code.md           # 代码规范
+│   ├── 04-code-quality.md         # 代码质量
+│   └── 05-refactoring.md          # 重构技术
+├── data-access/                   # 数据访问
+│   ├── 01-jdbc-advanced.md        # JDBC高级应用
+│   ├── 02-jpa-hibernate.md         # JPA和Hibernate
+│   ├── 03-nosql-databases.md      # NoSQL数据库
+│   ├── 04-caching-solutions.md    # 缓存方案
+│   └── 05-database-migration.md   # 数据库迁移
+├── cloud-native/                  # 云原生开发
+│   ├── 01-containerization.md     # 容器化
+│   ├── 02-kubernetes-deployment.md # Kubernetes部署
+│   ├── 03-cloud-patterns.md       # 云原生模式
+│   ├── 04-microservices-observability.md # 微服务可观测性
+│   └── 05-serverless-java.md      # Java无服务器
+├── performance-scaling/           # 性能和扩展
+│   ├── 01-jvm-performance.md      # JVM性能优化
+│   ├── 02-concurrent-programming.md # 并发编程
+│   ├── 03-distributed-systems.md   # 分布式系统
+│   ├── 04-high-availability.md    # 高可用性
+│   └── 05-scaling-strategies.md   # 扩展策略
+└── cross-language-comparison/     # 跨语言对比
+    ├── 01-java-vs-go.md           # Java vs Go对比
+    ├── 02-java-vs-python.md       # Java vs Python对比
+    ├── 03-java-vs-php.md          # Java vs PHP对比
+    ├── 04-java-vs-rust.md         # Java vs Rust对比
+    └── 05-language-paradigms.md  # 编程范式对比
 ```
 
 ## 🔍 学习路径

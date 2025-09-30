@@ -15,26 +15,95 @@
 ```
 07-php-mastery/
 ├── README.md                   # 本文档
-├── basics/                     # 基础知识回顾
-│   ├── 01-language-fundamentals.md
-│   ├── 02-oop-concepts.md
-│   ├── 03-data-structures.md
-│   └── 04-design-patterns.md
-├── modern-php/                 # 现代PHP特性
-│   ├── 01-php8-features.md
-│   ├── 02-type-system.md
-│   ├── 03-error-handling.md
-│   └── 04-performance.md
-├── frameworks/                 # 主流框架
-│   ├── 01-laravel-deep.md
-│   ├── 02-symfony-components.md
-│   ├── 03-composer-ecosystem.md
-│   └── 04-testing-practices.md
-└── best-practices/            # 最佳实践
-    ├── 01-code-quality.md
-    ├── 02-security.md
-    ├── 03-caching-strategies.md
-    └── 04-deployment.md
+├── PHP精通之路学习路线.md         # 详细学习指南
+├── advanced-topics/             # 高级应用深度内容
+│   ├── php-advanced/            # PHP高级专题
+│   │   ├── 01-php-internals.md       # PHP内核原理
+│   │   ├── 02-advanced-extensions.md  # 扩展开发深度
+│   │   ├── 03-memory-management.md    # 内存管理优化
+│   │   └── 04-performance-tuning.md   # 性能调优实战
+│   ├── framework-advanced/        # 框架高级专题
+│   │   ├── 01-laravel-advanced.md    # Laravel高级应用
+│   │   ├── 02-symfony-advanced.md     # Symfony深度解析
+│   │   ├── 03-microservices.md       # 微服务架构
+│   │   └── 04-enterprise-patterns.md   # 企业级模式
+│   ├── architecture-patterns/       # 架构模式
+│   │   ├── 01-hexagonal-architecture.md # 六边形架构
+│   │   ├── 02-cqrs-patterns.md       # CQRS模式
+│   │   ├── 03-event-sourcing.md      # 事件溯源
+│   │   └── 04-ddd-design.md          # 领域驱动设计
+│   └── enterprise-advanced/        # 企业级高级
+│       ├── 01-scalability-strategies.md  # 可扩展性策略
+│       ├── 02-high-availability.md    # 高可用性
+│       ├── 03-monitoring-logging.md    # 监控和日志
+│       └── 04-security-hardening.md    # 安全加固
+├── knowledge-points/             # 知识点速查手册
+│   ├── php-concepts/              # PHP核心概念
+│   │   ├── 01-php-keywords.md        # PHP关键字详解
+│   │   ├── 02-data-types.md          # 数据类型速查
+│   │   ├── 03-control-structures.md   # 控制结构速查
+│   │   └── 04-functions-oop.md        # 函数和OOP速查
+│   ├── framework-apis/             # 框架API速查
+│   │   ├── 01-laravel-apis.md        # Laravel API速查
+│   │   ├── 02-symfony-apis.md        # Symfony API速查
+│   │   ├── 03-composer-commands.md   # Composer命令速查
+│   │   └── 04-testing-tools.md       # 测试工具速查
+│   ├── database-patterns/           # 数据库模式
+│   │   ├── 01-orm-patterns.md        # ORM模式速查
+│   │   ├── 02-query-optimization.md   # 查询优化速查
+│   │   ├── 03-migration-patterns.md  # 迁移模式速查
+│   │   └── 04-database-apis.md       # 数据库API速查
+│   └── development-tools/           # 开发工具速查
+│       ├── 01-php-debug-tools.md    # PHP调试工具
+│       ├── 02-profiler-tools.md      # 性能分析工具
+│       ├── 03-static-analysis.md    # 静态分析工具
+│       └── 04-deployment-tools.md    # 部署工具速查
+├── basics/                        # PHP基础
+│   ├── 01-language-fundamentals.md  # 语言基础
+│   ├── 02-oop-concepts.md          # 面向对象概念
+│   ├── 03-data-structures.md       # 数据结构
+│   ├── 04-design-patterns.md       # 设计模式
+│   ├── 07-php8-features.md         # PHP 8.x新特性
+│   ├── 08-type-system.md           # 类型系统
+│   ├── 09-error-handling.md        # 错误处理
+│   └── 10-performance-basics.md    # 性能基础
+├── frameworks/                    # 框架和库
+│   ├── 01-laravel-fundamentals.md  # Laravel基础
+│   ├── 02-symfony-fundamentals.md  # Symfony基础
+│   ├── 03-composer-ecosystem.md    # Composer生态
+│   ├── 04-testing-practices.md     # 测试实践
+│   ├── 05-package-development.md   # 包开发
+│   └── 06-api-frameworks.md       # API框架
+├── web-development/               # Web开发
+│   ├── 01-rest-apis.md            # REST API开发
+│   ├── 02-websockets.md           # WebSocket实时通信
+│   ├── 03-authentication.md       # 认证和授权
+│   ├── 04-microservices.md        # 微服务架构
+│   └── 05-api-platforms.md        # API平台
+├── data-persistence/              # 数据持久化
+│   ├── 01-database-design.md      # 数据库设计
+│   ├── 02-orm-patterns.md         # ORM模式
+│   ├── 03-caching-strategies.md   # 缓存策略
+│   ├── 04-search-engines.md       # 搜索引擎
+│   └── 05-data-migration.md       # 数据迁移
+├── testing-quality/               # 测试和质量保证
+│   ├── 01-unit-testing.md         # 单元测试
+│   ├── 02-integration-testing.md  # 集成测试
+│   ├── 03-functional-testing.md   # 功能测试
+│   ├── 04-test-automation.md     # 测试自动化
+│   └── 05-quality-metrics.md     # 质量度量
+├── deployment-operations/         # 部署和运维
+│   ├── 01-deployment-strategies.md # 部署策略
+│   ├── 02-containerization.md     # 容器化
+│   ├── 03-ci-cd-pipelines.md      # CI/CD流水线
+│   ├── 04-monitoring.md          # 监控和告警
+│   └── 05-scaling.md             # 扩容策略
+└── best-practices/                # 最佳实践
+    ├── 01-code-standards.md      # 代码标准
+    ├── 02-security-practices.md   # 安全实践
+    ├── 03-performance-optimization.md # 性能优化
+    ├── 08-maintainability.md      # 可维护性
+    └── 09-team-collaboration.md   # 团队协作
 ```
 
 ## 🔍 学习路径
