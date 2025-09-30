@@ -17,10 +17,10 @@
 
 #### 📖 基础入门 (`01-basics/`)
 - **[01-gin-introduction.md](gin/01-basics/01-gin-introduction.md)** - Gin框架入门指南 ⭐
-- **[01-gin-restful-best-practices.md](gin/01-basics/01-gin-restful-best-practices.md)** - RESTful API最佳实践 ⭐
 - **[02-gin-routing-basics.md](gin/01-basics/02-gin-routing-basics.md)** - 路由系统基础与高级用法 ⭐
 - **[03-gin-middleware-basics.md](gin/01-basics/03-gin-middleware-basics.md)** - 中间件原理与实现 ⭐
 - **[04-gin-request-handling.md](gin/01-basics/04-gin-request-handling.md)** - 请求处理与响应 ⭐
+- **[05-gin-restful-best-practices.md](gin/01-basics/05-gin-restful-best-practices.md)** - RESTful API最佳实践 ⭐
 
 #### 🚀 高级特性 (`02-advanced/`)
 - **[01-gin-advanced-features.md](gin/02-advanced/01-gin-advanced-features.md)** - Gin框架高级特性 ⭐
@@ -53,11 +53,11 @@
 
 #### ⚡ 并发编程 (`01-concurrency/`)
 - **[01-goroutine-patterns.md](go-general/01-concurrency/01-goroutine-patterns.md)** - Goroutine模式与最佳实践 ⭐
-- **[01-high-concurrency-best-practices.md](go-general/01-concurrency/01-high-concurrency-best-practices.md)** - 高并发最佳实践 ⭐
-- **[02-channel-patterns.md](go-general/01-concurrency/02-channel-patterns.md)** - Channel模式与通信 🔲
-- **[03-sync-package-guide.md](go-general/01-concurrency/03-sync-package-guide.md)** - Sync包使用指南 🔲
-- **[04-context-patterns.md](go-general/01-concurrency/04-context-patterns.md)** - Context模式与取消 🔲
-- **[05-concurrency-best-practices.md](go-general/01-concurrency/05-concurrency-best-practices.md)** - 并发编程最佳实践 🔲
+- **[02-high-concurrency-best-practices.md](go-general/01-concurrency/02-high-concurrency-best-practices.md)** - 高并发最佳实践 ⭐
+- **[03-channel-patterns.md](go-general/01-concurrency/03-channel-patterns.md)** - Channel模式与通信 🔲
+- **[04-sync-package-guide.md](go-general/01-concurrency/04-sync-package-guide.md)** - Sync包使用指南 🔲
+- **[05-context-patterns.md](go-general/01-concurrency/05-context-patterns.md)** - Context模式与取消 🔲
+- **[06-concurrency-best-practices.md](go-general/01-concurrency/06-concurrency-best-practices.md)** - 并发编程最佳实践 🔲
 
 #### 🎨 设计模式 (`02-patterns/`)
 - **[01-design-patterns.md](go-general/02-patterns/01-design-patterns.md)** - Go设计模式实现 ⭐
@@ -84,10 +84,10 @@
 #### 🏛️ 架构模式 (`01-architecture-patterns/`)
 - **[01-layered-architecture.md](architecture/01-architecture-patterns/01-layered-architecture.md)** - 分层架构设计 ⭐
 - **[02-api-gateway-and-load-balancing.md](architecture/01-architecture-patterns/02-api-gateway-and-load-balancing.md)** - API网关与负载均衡 ⭐
-- **[02-microservices-architecture.md](architecture/01-architecture-patterns/02-microservices-architecture.md)** - 微服务架构 🔲
-- **[03-event-driven-architecture.md](architecture/01-architecture-patterns/03-event-driven-architecture.md)** - 事件驱动架构 🔲
-- **[04-clean-architecture.md](architecture/01-architecture-patterns/04-clean-architecture.md)** - 整洁架构 🔲
-- **[05-serverless-architecture.md](architecture/01-architecture-patterns/05-serverless-architecture.md)** - 无服务器架构 🔲
+- **[03-microservices-architecture.md](architecture/01-architecture-patterns/03-microservices-architecture.md)** - 微服务架构 🔲
+- **[04-event-driven-architecture.md](architecture/01-architecture-patterns/04-event-driven-architecture.md)** - 事件驱动架构 🔲
+- **[05-clean-architecture.md](architecture/01-architecture-patterns/05-clean-architecture.md)** - 整洁架构 🔲
+- **[06-serverless-architecture.md](architecture/01-architecture-patterns/06-serverless-architecture.md)** - 无服务器架构 🔲
 
 #### 🔧 系统设计 (`02-system-design/`)
 - **[01-system-design-principles.md](architecture/02-system-design/01-system-design-principles.md)** - 系统设计原则 🔲
@@ -106,9 +106,9 @@
 ## 📈 学习路径建议
 
 ### 🌱 初级开发者 (0-6个月)
-1. **Gin基础** → `gin/01-basics/`
-2. **Go并发基础** → `go-general/01-concurrency/01-03`
-3. **项目工程** → `go-general/04-engineering/01-04`
+1. **Gin基础** → `gin/01-basics/01-05`
+2. **Go并发基础** → `go-general/01-concurrency/01-04`
+3. **项目工程** → `go-general/04-engineering/01-02`
 
 ### 🚀 中级开发者 (6-18个月)
 1. **Gin高级特性** → `gin/02-advanced/`
@@ -158,6 +158,7 @@
 - **2024-09-29**: 添加Go设计模式和性能优化专项
 - **2024-09-29**: 完善系统架构和分布式系统内容
 - **2024-09-29**: 修正README.md与实际文件结构的差异，确保准确性
+- **2024-09-29**: 修正文档编号重复问题，建立合理的学习顺序
 - **2024-09-29**: 完成状态标记：31个文档已完成（⭐），27个文档待创建（🔲）
 
 ## 🤝 贡献指南
