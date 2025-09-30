@@ -17,12 +17,48 @@
 01-go-backend/
 ├── README.md                           # 本文档
 ├── Go语言学习路线.md                    # 渐进式学习指南
-├── advanced-topics/                     # 高级主题（已完成）
-│   ├── README.md
-│   ├── gin/                           # Gin框架专项
-│   ├── go-general/                    # Go核心技术
-│   └── architecture/                  # 系统架构
-├── knowledge-points/                   # 知识点速查
+├── advanced-topics/                     # 高级主题深度内容
+│   ├── go-general/                      # Go核心技术深入
+│   │   ├── 01-concurrency/              # 并发编程高级专题
+│   │   │   ├── 01-goroutine-patterns.md          # Goroutine设计模式
+│   │   │   └── 02-high-concurrency-best-practices.md  # 高并发最佳实践
+│   │   ├── 02-patterns/                 # 设计模式与架构模式
+│   │   │   ├── 01-design-patterns.md            # 设计模式详解
+│   │   │   └── 02-architecture-patterns.md       # 架构模式实践
+│   │   ├── 03-performance/              # 性能优化专题
+│   │   │   ├── 01-performance-tuning.md         # 性能调优实战
+│   │   │   └── 02-memory-optimization.md        # 内存优化策略
+│   │   └── 04-engineering/              # 工程化实践
+│   │       └── 01-project-structure.md          # Go项目结构与工程化
+│   ├── gin/                            # Gin框架高级专题
+│   │   ├── 01-basics/                   # Gin基础进阶
+│   │   │   └── 01-gin-introduction.md          # Gin框架深度解析
+│   │   ├── 02-advanced/                 # Gin高级特性
+│   │   │   ├── 01-gin-advanced-features.md     # Gin高级功能
+│   │   │   ├── 02-gin-security-practices.md    # Gin安全实践
+│   │   │   ├── 03-gin-performance-optimization.md # Gin性能优化
+│   │   │   ├── 04-gin-template-engine.md       # Gin模板引擎深入
+│   │   │   └── 05-gin-context-management.md     # Gin上下文管理
+│   │   └── 05-project/                  # Gin项目实战
+│   │       ├── 01-gin-complete-project.md     # Gin完整项目案例
+│   │       └── 02-gin-microservices-project.md # Gin微服务项目实践
+│   └── architecture/                    # 系统架构设计
+│       ├── 01-architecture-patterns/    # 架构模式
+│       │   ├── 01-layered-architecture.md      # 分层架构设计
+│       │   ├── 02-api-gateway-and-load-balancing.md # API网关与负载均衡
+│       │   └── 03-microservices-architecture.md # 微服务架构
+│       ├── 02-system-design/            # 系统设计
+│       │   └── 01-system-design-principles.md   # 系统设计原则
+│       └── 03-distributed-systems/     # 分布式系统
+│           └── 01-distributed-fundamentals.md   # 分布式系统基础
+├── knowledge-points/                   # Go知识点速查手册
+│   ├── 01-go-keywords.md               # Go关键字详解
+│   ├── 02-go-built-in-functions.md     # Go内置函数手册
+│   ├── 03-go-standard-library.md       # Go标准库速查
+│   ├── 04-go-popular-libraries.md      # Go流行库指南
+│   ├── 05-go-programming-knowledge-points.md # Go编程知识点
+│   ├── 06-gin-framework-knowledge-points.md   # Gin框架知识点
+│   └── 07-gorm-orm-knowledge-points.md        # GORM ORM知识点
 ├── basics/                            # Go语言基础
 │   ├── 01-environment-setup.md
 │   ├── 02-basic-syntax.md
