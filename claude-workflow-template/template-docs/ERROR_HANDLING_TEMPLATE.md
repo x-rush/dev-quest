@@ -1,6 +1,6 @@
-# 异常处理和恢复机制
+# 异常处理和恢复机制 (增强版)
 
-> **使用说明**: 定义项目执行过程中可能遇到的各种异常情况及其处理策略。
+> **使用说明**: 定义项目执行过程中可能遇到的各种异常情况及其处理策略。包含智能重试、自动恢复和异常监控机制。
 
 ## 🚨 异常分类体系
 
@@ -499,6 +499,308 @@ const monitoringMetrics = {
 - [ ] 异常情况捕获
 ```
 
+## 🔄 智能重试和恢复系统
+
+### 自动重试机制
+```javascript
+// 智能重试策略配置
+const retryConfig = {
+    maxTotalRetries: 10,           // 全局最大重试次数
+    maxRetriesPerTask: 3,          // 单个任务最大重试次数
+    baseDelay: 30,                 // 基础延迟(秒)
+    maxDelay: 1800,                // 最大延迟(30分钟)
+    backoffFactor: 2,              // 退避因子
+    retryableErrors: [
+        'API_ERROR',
+        'TIMEOUT',
+        'NETWORK_ERROR',
+        'TEMPORARY_FAILURE'
+    ]
+};
+
+// 智能重试决策流程
+function shouldRetry(errorType, taskRetries, totalRetries) {
+    // 检查全局重试限制
+    if (totalRetries >= retryConfig.maxTotalRetries) {
+        return { shouldRetry: false, reason: 'GLOBAL_LIMIT_EXCEEDED' };
+    }
+
+    // 检查单任务重试限制
+    if (taskRetries >= retryConfig.maxRetriesPerTask) {
+        return { shouldRetry: false, reason: 'TASK_LIMIT_EXCEEDED' };
+    }
+
+    // 检查错误类型
+    if (!retryConfig.retryableErrors.includes(errorType)) {
+        return { shouldRetry: false, reason: 'NON_RETRYABLE_ERROR' };
+    }
+
+    return { shouldRetry: true, reason: 'RETRY_ALLOWED' };
+}
+```
+
+### 任务恢复点管理
+```bash
+# 创建恢复点的时机
+CREATE_RECOVERY_POINT_TRIGGERS=(
+    "任务开始前"
+    "任务完成后"
+    "检测到异常时"
+    "手动触发时"
+    "定期自动创建"
+)
+
+# 恢复点内容结构
+RECOVERY_POINT_STRUCTURE=(
+    "EXECUTION_STATUS.json"     # 执行状态
+    "EXECUTION_LOG.md"          # 执行日志
+    "ERROR_REPORT.md"           # 错误报告
+    "recovery_info.md"          # 恢复信息
+)
+```
+
+### 健康检查机制
+```bash
+# 健康检查项目
+HEALTH_CHECK_ITEMS=(
+    "任务执行时间监控"           # 检测超时任务
+    "API错误计数监控"            # 检测API异常
+    "网络连接状态检查"           # 检测网络问题
+    "系统资源使用监控"           # 检测资源不足
+    "执行进度验证"               # 检测进度异常
+    "错误模式分析"               # 检测异常模式
+)
+
+# 健康检查触发条件
+HEALTH_CHECK_TRIGGERS=(
+    "定期自动检查 (60秒间隔)"
+    "异常发生时立即检查"
+    "用户手动触发检查"
+)
+```
+
+## 🛠️ 实际使用脚本
+
+### 1. 智能重试处理器
+```bash
+# 启动智能重试监控
+./smart-retry-handler.sh --monitor
+
+# 手动重试指定任务
+./smart-retry-handler.sh --retry T001-002
+
+# 查看重试统计
+./smart-retry-handler.sh --stats
+
+# 清理旧恢复点
+./smart-retry-handler.sh --cleanup
+```
+
+### 2. 任务健康检查器
+```bash
+# 执行单次健康检查
+./task-health-checker.sh --check
+
+# 启动持续健康监控
+./task-health-checker.sh --monitor
+
+# 生成健康检查报告
+./task-health-checker.sh --report
+```
+
+### 3. 任务恢复管理器
+```bash
+# 自动恢复模式
+./task-recovery.sh --auto
+
+# 交互式恢复
+./task-recovery.sh --interactive
+
+# 智能状态恢复
+./task-recovery.sh --smart-recovery
+
+# 继续中断的任务
+./task-recovery.sh --continue T001-002
+
+# 从恢复点恢复
+./task-recovery.sh --recover-point rp_20251006_120000
+
+# 验证任务完整性
+./task-recovery.sh --verify T001-002
+```
+
+## 📊 异常监控和告警
+
+### 实时监控指标
+```javascript
+const monitoringMetrics = {
+    // 执行性能指标
+    executionSpeed: 'tasks_per_hour',
+    successRate: 'percentage',
+    errorRate: 'percentage',
+
+    // 重试统计
+    totalRetries: 'count',
+    retrySuccessRate: 'percentage',
+    averageRetryAttempts: 'number',
+
+    // 资源使用指标
+    cpuUsage: 'percentage',
+    memoryUsage: 'percentage',
+    diskUsage: 'percentage',
+
+    // 质量指标
+    qualityScore: 'average_score',
+    validationPassRate: 'percentage',
+
+    // 异常指标
+    errorCount: 'count',
+    timeoutCount: 'count',
+    recoveryCount: 'count'
+};
+```
+
+### 告警级别定义
+```markdown
+## 告警级别
+
+### 🔴 CRITICAL (严重)
+- 系统崩溃或无法恢复的错误
+- 执行状态文件损坏或丢失
+- 连续重试失败超过限制
+
+### 🟡 WARNING (警告)
+- 任务执行时间超过阈值
+- API错误次数过多
+- 系统资源使用率过高
+- 网络连接不稳定
+
+### 🔵 INFO (信息)
+- 任务正常完成
+- 恢复点创建成功
+- 重试操作执行
+```
+
+## 🔄 完整的异常处理流程
+
+### 正常执行流程
+```mermaid
+graph TD
+    A[任务开始] --> B[创建恢复点]
+    B --> C[执行任务]
+    C --> D{任务完成?}
+    D -->|是| E[创建完成恢复点]
+    D -->|否| F{检测到异常?}
+    F -->|否| C
+    F -->|是| G[异常处理]
+    G --> H{可以重试?}
+    H -->|是| I[智能重试]
+    H -->|否| J[人工干预]
+    I --> K{重试成功?}
+    K -->|是| C
+    K -->|否| L[创建错误恢复点]
+    L --> J
+    E --> M[下一个任务]
+    J --> N[等待人工处理]
+    N --> C
+```
+
+### 恢复流程
+```mermaid
+graph TD
+    A[检测到异常] --> B[分析异常类型]
+    B --> C[检查重试条件]
+    C --> D{可以重试?}
+    D -->|是| E[创建恢复点]
+    D -->|否| F[标记需要人工干预]
+    E --> G[计算重试延迟]
+    G --> H[等待延迟时间]
+    H --> I[重新核实任务目标]
+    I --> J[继续或重新执行]
+    J --> K{执行成功?}
+    K -->|是| L[更新状态继续]
+    K -->|否| M{达到重试限制?}
+    M -->|否| E
+    M -->|是| N[标记为失败]
+    N --> F
+```
+
+## 📝 异常处理最佳实践
+
+### 1. 预防性措施
+```markdown
+## 执行前预防检查
+- [ ] 系统资源充足
+- [ ] 网络连接稳定
+- [ ] API配额充足
+- [ ] 磁盘空间足够
+- [ ] 权限设置正确
+- [ ] 依赖工具可用
+```
+
+### 2. 监控策略
+```markdown
+## 多层次监控
+1. **实时监控**: 任务执行状态和进度
+2. **健康检查**: 系统资源和网络状态
+3. **异常检测**: 错误模式和性能异常
+4. **定期审计**: 执行日志和质量报告
+```
+
+### 3. 恢复策略
+```markdown
+## 分级恢复
+1. **自动恢复**: 简单异常自动重试
+2. **智能恢复**: 复杂情况智能分析后恢复
+3. **交互恢复**: 需要用户决策的情况
+4. **人工恢复**: 完全由用户处理的情况
+```
+
+## 🎯 异常处理配置示例
+
+### 项目级配置文件
+```json
+{
+  "error_handling": {
+    "retry_policy": {
+      "max_total_retries": 10,
+      "max_retries_per_task": 3,
+      "base_delay": 30,
+      "max_delay": 1800,
+      "backoff_factor": 2
+    },
+    "health_check": {
+      "interval": 60,
+      "timeout_threshold": 1800,
+      "api_error_threshold": 5,
+      "network_error_threshold": 3
+    },
+    "recovery": {
+      "max_recovery_points": 20,
+      "auto_recovery_enabled": true,
+      "interactive_recovery_fallback": true
+    },
+    "monitoring": {
+      "log_level": "INFO",
+      "alert_threshold": {
+        "error_rate": 0.1,
+        "timeout_rate": 0.05,
+        "retry_failure_rate": 0.3
+      }
+    }
+  }
+}
+```
+
 ---
 
-**注意**: 异常处理机制需要根据具体项目特点进行调整和扩展，确保能够覆盖所有可能出现的异常情况。
+**重要提示**:
+
+1. **避免无限重试**: 系统内置了多层重试限制，包括全局限制和单任务限制
+2. **智能错误分析**: 只有可重试的错误类型才会触发自动重试
+3. **指数退避策略**: 重试延迟会逐渐增加，避免频繁重试造成问题
+4. **恢复点机制**: 每次重试前都会创建恢复点，确保可以回滚
+5. **人工干预机制**: 当自动处理无法解决问题时，会暂停等待人工处理
+6. **监控和告警**: 实时监控系统状态，及时发现问题并告警
+
+这套异常处理机制能够确保Claude Code在遇到各种异常情况时，都能够智能地恢复执行，避免任务中断或无限重试的问题。
