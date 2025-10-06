@@ -1,0 +1,3 @@
+[submodule "claude-workflow-template"]
+	path = claude-workflow-template
+	url = git@github.com:x-rush/claude-code-workflow-template.git
