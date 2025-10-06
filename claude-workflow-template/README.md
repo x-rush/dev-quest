@@ -27,12 +27,8 @@ claude-workflow-template/
 │   ├── task-recovery.sh            # 🆕 任务恢复管理器
 │   └── execution-monitor.sh        # 🆕 综合监控器
 └── examples/                       # 实际案例
-    ├── dev-quest-example/          # Dev Quest项目示例
-    │   └── PROJECT_PLAN.md
-    └── simple-docs-example/        # 简单文档生成示例
-        ├── PROJECT_PLAN.md
-        ├── TASK_DEFINITIONS.md
-        └── QUALITY_STANDARDS.md
+    └── dev-quest-example/          # Dev Quest项目示例
+        └── PROJECT_PLAN.md
 ```
 
 ## 🚀 快速开始 (增强版)
