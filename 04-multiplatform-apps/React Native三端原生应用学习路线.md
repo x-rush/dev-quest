@@ -107,7 +107,7 @@ pod 'React-RCTBlob', :path => '../node_modules/react-native/Libraries/Blob'
 import { RNOHCore } from '@ohos/rnoh';
 ```
 
-## 🚀 第一阶段：React Native基础掌握 (2-3周)
+## 🚀 第一阶段：React Native基础掌握
 
 ### 1. 环境搭建和基础配置
 **学习目标**: 建立React Native开发环境
@@ -154,7 +154,7 @@ import { RNOHCore } from '@ohos/rnoh';
 - 添加底部标签导航
 - 集成深度链接功能
 
-## 🥇 第二阶段：Android深度开发 (4-5周) - MVP优先
+## 🥇 第二阶段：Android深度开发 - MVP优先
 
 ### 1. Android原生开发环境
 **学习目标**: 掌握Android原生开发环境 (你的优势领域)
@@ -216,7 +216,7 @@ class CameraModule(reactContext: ReactApplicationContext) : ReactContextBaseJava
 - 数据分析和用户行为追踪
 - Google Play商店发布流程
 
-## 🥈 第三阶段：鸿蒙生态适配开发 (3-4周)
+## 🥈 第三阶段：鸿蒙生态适配开发
 
 ### 1. 鸿蒙开发环境配置
 **学习目标**: 掌握鸿蒙开发环境
@@ -251,7 +251,7 @@ class CameraModule(reactContext: ReactApplicationContext) : ReactContextBaseJava
 - 实现鸿蒙特有的分布式功能
 - 华为应用市场上架发布
 
-## 🥉 第四阶段：iOS扩展和三端统一 (3-4周)
+## 🥉 第四阶段：iOS扩展和三端统一
 
 ### 1. iOS开发环境配置
 **学习目标**: 建立iOS开发能力

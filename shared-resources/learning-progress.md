@@ -174,34 +174,39 @@ graph LR
 ### 🔍 技术探索系列 (零散时间学习)
 
 #### 07. PHP 精通之路
-- [ ] **PHP 8.x 新特性**: 属性、联合类型、匹配表达式
-- [ ] **现代PHP框架**: Laravel 10.x、Symfony 6.x
-- [ ] **Composer生态**: 包管理和依赖注入
-- [ ] **性能优化**: JIT编译器、OPcache调优
+- [ ] **PHP 8.3 新特性**: JIT编译器、类型系统完善、Fibers并发
+- [ ] **现代PHP框架**: Laravel 11.x、Symfony 7.x、Livewire实时应用
+- [ ] **Composer生态**: 包管理、Filament Admin、现代工具链
+- [ ] **性能优化**: JIT编译、OPcache调优、无服务器PHP
+- [ ] **企业级架构**: 微服务、容器化、Kubernetes部署
 
 #### 08. Java 知识回顾
-- [ ] **Java 21+ 新特性**: 虚拟线程、模式匹配
-- [ ] **Spring Boot 3.x**: 现代化Java开发
-- [ ] **微服务架构**: Spring Cloud、服务网格
+- [ ] **Java 21+ 新特性**: 虚拟线程、结构化并发、外部函数API
+- [ ] **Spring Boot 3.x**: 现代化Java开发、Spring AI集成
+- [ ] **Spring Native**: GraalVM原生镜像、云原生Java
+- [ ] **微服务架构**: Spring Cloud 2024、服务网格、可观测性
 - [ ] **企业级开发**: 领域驱动设计、测试驱动开发
 
 #### 09. Node.js 后端探索
-- [ ] **Node.js 20+**: ES模块、Worker Threads
-- [ ] **现代框架**: Express 4.x、Koa 2.x、Fastify
-- [ ] **数据库ORM**: Prisma、TypeORM、Sequelize
-- [ ] **微服务**: NestJS、GraphQL、gRPC
+- [ ] **Node.js 20+**: ES模块、Worker Threads、性能优化
+- [ ] **现代框架**: Fastify v4、NestJS 10、TypeScript 5.x
+- [ ] **数据库生态**: Prisma、TypeORM、GraphQL联邦
+- [ ] **云原生架构**: Serverless、边缘计算、微服务
+- [ ] **AI时代后端**: AI Agent集成、零信任架构
 
 #### 10. Python 发现之旅
-- [ ] **Python 3.12+**: 新特性和性能优化
-- [ ] **Web框架**: Django 5.x、FastAPI、Flask
-- [ ] **数据科学**: Pandas、NumPy、Matplotlib
-- [ ] **AI/ML**: Scikit-learn、TensorFlow、PyTorch
+- [ ] **Python 3.12+**: 结构化模式匹配、类型系统完善
+- [ ] **现代Web框架**: FastAPI异步框架、Django 5.x、GraphQL
+- [ ] **AI和数据科学**: Transformers库、LLM应用、MLOps
+- [ ] **云原生Python**: Serverless、容器化、自动化
+- [ ] **智能自动化**: AI驱动工具、智能脚本
 
 #### 11. Nuxt.js 生态探索
-- [ ] **Nuxt 3.x**: Vue 3生态、SSR/SSG
-- [ ] ** Nitro引擎**: 服务端渲染优化
-- [ ] **模块生态**: Nuxt Modules 开发
-- [ ] **部署策略**: Vercel、Netlify、自托管
+- [ ] **Nuxt 3.12+**: Vue 3.4+、Nitro引擎、服务器组件
+- [ ] **现代渲染**: 边缘渲染、混合渲染、岛屿架构
+- [ ] **AI集成**: AI驱动的前端、智能化组件
+- [ ] **模块生态**: Nuxt Modules、Nuxt Hooks系统
+- [ ] **企业级部署**: 边缘计算、Serverless、可观测性
 
 #### 12. SvelteKit 学习之旅
 - [ ] **Svelte 5.x**: 编译时框架、响应式编程
