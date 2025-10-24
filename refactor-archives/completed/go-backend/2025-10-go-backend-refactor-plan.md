@@ -4,7 +4,7 @@
 >
 > **现状问题**: 72个文件存在大量重复和冗余内容，学习路径不够清晰
 >
-> **重构原则**: 参考[shared-resources/standards/module-structure-guide.md](shared-resources/standards/module-structure-guide.md)标准，建立最简有效的知识体系
+> **重构原则**: 参考[../../../shared-resources/standards/module-structure-guide.md](../../../shared-resources/standards/module-structure-guide.md)标准，建立最简有效的知识体系
 >
 > **重构日期**: 2025年10月
 

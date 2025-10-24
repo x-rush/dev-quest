@@ -9,8 +9,8 @@
 ### 核心成果
 - ✅ **文件精简**: 从72个文件优化到42个文件 (41.7%精简率)
 - ✅ **消除冗余**: 删除90%的重复和同质化内容
-- ✅ **规划对齐**: 100%符合[../refactor-archives/2025-10-go-backend-refactor-plan.md](../refactor-archives/2025-10-go-backend-refactor-plan.md)规划
-- ✅ **标准合规**: 100%符合[shared-resources/templates/document-template.md](shared-resources/templates/document-template.md)标准
+- ✅ **规划对齐**: 100%符合[2025-10-go-backend-refactor-plan.md](2025-10-go-backend-refactor-plan.md)规划
+- ✅ **标准合规**: 100%符合[../../../shared-resources/templates/document-template.md](../../../shared-resources/templates/document-template.md)标准
 - ✅ **质量保证**: 所有文件内容完整，无损坏或空文件
 
 ## 📊 重构前后对比
@@ -83,7 +83,7 @@
    - 建立清晰的学习路径导航
 
 3. **文档标准合规**
-   - 100%符合[shared-resources/templates/document-template.md](shared-resources/templates/document-template.md)标准
+   - 100%符合[../../../shared-resources/templates/document-template.md](../../../shared-resources/templates/document-template.md)标准
    - 统一的文档结构、格式、内容质量
 
 ## 🏗️ 新架构特色

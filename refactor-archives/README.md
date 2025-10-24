@@ -5,6 +5,7 @@
 > **归档原则**:
 > - **pending/**: 存放待执行的重构计划
 > - **completed/**: 存放已完成的重构（计划+日志）
+> - **retired/**: 存放已废弃的旧版计划（历史记录）
 
 ## 📁 目录结构
 
@@ -12,11 +13,13 @@
 refactor-archives/
 ├── 📖 README.md                      # 本文档 - 重构记录索引
 ├── 📁 pending/                       # 待执行的重构计划
-│   └── 📄 02-NEXTJS-REFACTOR-PLAN.md  # Next.js模块重构计划
-└── 📁 completed/                     # 已完成的重构
-    └── 📁 go-backend/                # Go Backend模块重构
-        ├── 📄 2025-10-go-backend-refactor-plan.md
-        └── 📄 2025-10-go-backend-refactor-log.md
+│   └── 📄 02-NEXTJS-REFACTOR-PLAN.md  # Next.js模块重构计划 (改进版)
+├── 📁 completed/                     # 已完成的重构
+│   └── 📁 go-backend/                # Go Backend模块重构
+│       ├── 📄 2025-10-go-backend-refactor-plan.md
+│       └── 📄 2025-10-go-backend-refactor-log.md
+└── 📁 retired/                       # 已废弃的旧版计划
+    └── 📄 2025-10-original-nextjs-refactor-plan.md  # 原始Next.js计划
 ```
 
 ## 📁 重构记录索引
@@ -33,7 +36,15 @@ refactor-archives/
 #### Next.js Frontend 模块
 - **重构计划**: [`pending/02-NEXTJS-REFACTOR-PLAN.md`](pending/02-NEXTJS-REFACTOR-PLAN.md)
 - **状态**: 📋 计划中，待执行
-- **说明**: 执行完成后将移动到 `completed/nextjs/` 目录
+- **说明**: 基于Go重构经验改进的严格差异化设计版本
+- **历史版本**: [`retired/2025-10-original-nextjs-refactor-plan.md`](retired/2025-10-original-nextjs-refactor-plan.md) (原始计划已废弃)
+
+### 📜 已废弃计划
+
+#### Next.js 原始重构计划 (2025-10)
+- **原始计划**: [`retired/2025-10-original-nextjs-refactor-plan.md`](retired/2025-10-original-nextjs-refactor-plan.md)
+- **状态**: 🏆 功成身退，已被改进版本替代
+- **历史价值**: 记录了初始的规划思路和问题分析
 
 ## 🎯 归档标准
 
