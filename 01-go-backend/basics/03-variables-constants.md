@@ -1,8 +1,12 @@
-# Go 数据类型详解 - 从PHP视角理解
+# 变量、常量和基础数据类型
 
-## 📚 概述
+> **文档简介**: 全面掌握Go语言的变量声明、常量定义和基础数据类型，理解Go的静态类型系统
 
-Go的数据类型系统与PHP有显著差异。作为静态类型语言，Go在编译时就确定了所有变量的类型，这提供了更好的性能和类型安全性。理解Go的数据类型对于PHP开发者至关重要。
+> **目标读者**: Go初学者，需要掌握Go基础语法的学习者
+
+> **前置知识**: 已完成第一个Go程序，了解基本程序结构
+
+> **预计时长**: 2-3小时学习 + 练习
 
 ## 📚 文档元数据
 
@@ -10,496 +14,315 @@ Go的数据类型系统与PHP有显著差异。作为静态类型语言，Go在�
 |------|------|
 | **模块** | `01-go-backend` |
 | **分类** | `basics/programming-fundamentals` |
-| **难度** | ⭐⭐ |
-| **标签** | `#数据类型` `#变量` `#常量` `#类型转换` |
+| **难度** | ⭐⭐ (2/5) |
+| **标签** | `#变量` `#常量` `#数据类型` `#类型声明` |
 | **更新日期** | `2025年10月` |
 | **作者** | Dev Quest Team |
 | **状态** | ✅ 已完成 |
 
-### 🎯 学习目标
-- 掌握Go的基本数据类型和特点
-- 理解Go的类型推断和类型转换
-- 学会Go的复合数据类型使用
-- 熟悉Go的类型系统与PHP的差异
+## 🎯 学习目标
 
-## 🔄 Go vs PHP 数据类型对比
+通过本文档学习，您将能够：
+- 掌握Go变量的声明和初始化方式
+- 理解Go常量的定义和使用
+- 熟悉Go的基础数据类型
+- 学会类型推断和类型转换
+- 理解Go的静态类型系统特点
 
-### 基本数据类型对比
+## 📝 变量声明和初始化
 
-| PHP | Go | 说明 |
-|-----|-----|------|
-| `$name = "张三"` | `var name string = "张三"` | PHP动态类型，Go静态类型 |
-| `$age = 25` | `var age int = 25` | PHP自动转换，Go明确类型 |
-| `$price = 19.99` | `var price float64 = 19.99` | PHP统一浮点数，Go区分精度 |
-| `$isActive = true` | `var isActive bool = true` | 语法相似，Go类型明确 |
+### 1. 基本变量声明
 
-### 类型声明对比
+Go提供多种变量声明方式：
 
-#### PHP 类型声明
-```php
-<?php
-// PHP 7+ 类型声明
-function greetUser(string $name, int $age): string {
-    return "Hello {$name}, age {$age}";
-}
-
-// PHP联合类型 (PHP 8+)
-function processValue(int|float|string $value): void {
-    // 处理多种类型
-}
-
-// PHP混合类型
-function processMixed(mixed $data): mixed {
-    return $data;
-}
-```
-
-#### Go 类型声明
+#### 方式1: 标准声明
 ```go
-// 明确的类型声明
-func greetUser(name string, age int) string {
-    return fmt.Sprintf("Hello %s, age %d", name, age)
-}
+// var 变量名 类型 = 值
+var name string = "张三"
+var age int = 25
+var height float64 = 175.5
+var isStudent bool = true
+```
 
-// 自定义类型
-type Age int
-type Name string
-type Price float64
+#### 方式2: 类型推断
+```go
+// var 变量名 = 值 (编译器自动推断类型)
+var name = "张三"        // 自动推断为string
+var age = 25            // 自动推断为int
+var height = 175.5      // 自动推断为float64
+var isStudent = true    // 自动推断为bool
+```
 
-func processUser(name Name, age Age) string {
-    return fmt.Sprintf("User: %s, Age: %d", name, age)
+#### 方式3: 短变量声明(函数内)
+```go
+// 变量名 := 值 (只能在函数内使用)
+name := "李四"
+age := 30
+height := 180.0
+isStudent := false
+```
+
+### 2. 批量声明
+
+```go
+// 方式1: 批量标准声明
+var (
+    username string = "admin"
+    password string = "123456"
+    loginCount int = 0
+    isActive bool = true
+)
+
+// 方式2: 多变量声明
+var x, y, z int = 1, 2, 3
+var name, age = "王五", 28
+
+// 方式3: 短变量批量声明
+name, city, country := "赵六", "深圳", "中国"
+```
+
+### 3. 零值
+
+Go中每个变量都有零值：
+
+```go
+package main
+
+import "fmt"
+
+func main() {
+    // 声明变量但不初始化
+    var s string
+    var i int
+    var f float64
+    var b bool
+    var p *int
+
+    fmt.Printf("string零值: %q (长度: %d)\n", s, len(s))  // "" (长度: 0)
+    fmt.Printf("int零值: %d\n", i)                        // 0
+    fmt.Printf("float64零值: %f\n", f)                    // 0.000000
+    fmt.Printf("bool零值: %t\n", b)                       // false
+    fmt.Printf("指针零值: %v\n", p)                       // <nil>
 }
 ```
 
-## 📝 Go 数据类型详解
+## 🔒 常量定义
 
-### 1. 基本数据类型
+### 1. 常量声明
+
+常量使用`const`关键字声明：
+
+```go
+// 单个常量
+const PI = 3.14159
+const APP_NAME = "MyApp"
+const MAX_USERS = 1000
+
+// 批量常量
+const (
+    STATUS_ACTIVE = "active"
+    STATUS_INACTIVE = "inactive"
+    STATUS_PENDING = "pending"
+)
+
+// 常量组(如果省略值，会沿用前一个值)
+const (
+    MONDAY = 1
+    TUESDAY = 2
+    WEDNESDAY = 3
+    THURSDAY = 4
+    FRIDAY = 5
+    SATURDAY = 6
+    SUNDAY = 7
+)
+```
+
+### 2. iota枚举
+
+`iota`是Go的常量生成器：
+
+```go
+package main
+
+import "fmt"
+
+// 定义级别枚举
+const (
+    LevelUnknown = iota  // 0
+    LevelLow            // 1
+    LevelMedium         // 2
+    LevelHigh           // 3
+    LevelCritical       // 4
+)
+
+// 带计算的表达式
+const (
+    _ = iota             // 忽略0
+    KB = 1 << (10 * iota) // 1 << 10 = 1024
+    MB = 1 << (10 * iota) // 1 << 20 = 1048576
+    GB = 1 << (10 * iota) // 1 << 30 = 1073741824
+)
+
+func main() {
+    fmt.Printf("LevelLow: %d\n", LevelLow)
+    fmt.Printf("KB: %d\n", KB)
+    fmt.Printf("MB: %d\n", MB)
+    fmt.Printf("GB: %d\n", GB)
+}
+```
+
+## 📊 基础数据类型
+
+### 1. 布尔类型
+
+```go
+var isActive bool = true
+var isCompleted bool = false
+
+// 布尔运算
+func main() {
+    a := true
+    b := false
+
+    fmt.Printf("a && b = %t\n", a && b)    // false
+    fmt.Printf("a || b = %t\n", a || b)    // true
+    fmt.Printf("!a = %t\n", !a)            // false
+}
+```
+
+### 2. 数值类型
 
 #### 整数类型
 ```go
 // 有符号整数
-var age int = 25                    // 根据系统架构决定位数
-var small int8 = 127                // 8位有符号整数 (-128 到 127)
-var medium int16 = 32767            // 16位有符号整数 (-32768 到 32767)
-var large int32 = 2147483647        // 32位有符号整数
-var huge int64 = 9223372036854775807 // 64位有符号整数
+var i8 int8 = 127          // -128 到 127
+var i16 int16 = 32767       // -32768 到 32767
+var i32 int32 = 2147483647  // -2147483648 到 2147483647
+var i64 int64 = 9223372036854775807  // -9.22e18 到 9.22e18
 
 // 无符号整数
-var count uint = 100                 // 根据系统架构决定位数
-var byteCount byte = 255            // uint8的别名 (0 到 255)
-var smallCount uint16 = 65535       // 16位无符号整数 (0 到 65535)
-var mediumCount uint32 = 4294967295 // 32位无符号整数
-var largeCount uint64 = 18446744073709551615 // 64位无符号整数
+var ui8 uint8 = 255          // 0 到 255
+var ui16 uint16 = 65535      // 0 到 65535
+var ui32 uint32 = 4294967295  // 0 到 4294967295
+var ui64 uint64 = 18446744073709551615  // 0 到 1.84e19
 
-// 特殊整数类型
-var ptr uintptr = 0x7ffd12345678   // 足够存储指针的整数
-var runeChar rune = 'A'             // int32的别名，表示Unicode码点
+// 平台相关类型
+var i int = 42              // 32位或64位，取决于平台
+var u uint = 42             // 32位或64位无符号整数
+var ptr uintptr = 0x123456  // 存放指针的无符号整数
 ```
 
 #### 浮点数类型
 ```go
-// 32位浮点数
-var temperature float32 = 36.6
-var pi32 float32 = 3.1415926535
-
-// 64位浮点数 (推荐使用)
-var price float64 = 19.99
-var pi64 float64 = 3.141592653589793
+var f32 float32 = 3.14159    // IEEE-754 32位浮点数
+var f64 float64 = 2.718281828 // IEEE-754 64位浮点数
 
 // 浮点数运算
-var result float64 = 10.0 / 3.0     // 3.3333333333333335
-var precise float64 = float64(10) / float64(3) // 更精确的运算
+func main() {
+    var a float64 = 3.14
+    var b float64 = 2.71
+
+    sum := a + b
+    fmt.Printf("%.2f + %.2f = %.2f\n", a, b, sum)  // 3.14 + 2.71 = 5.85
+}
 ```
 
-#### 字符串类型
+#### 复数类型
 ```go
-// 基本字符串
-var name string = "张三"
-var message string = "Hello, World!"
+var c64 complex64 = 3 + 4i    // 32位实数和虚数
+var c128 complex128 = 1 + 2i   // 64位实数和虚数
+
+func main() {
+    c := 3 + 4i
+    fmt.Printf("实部: %f, 虚部: %f\n", real(c), imag(c))  // 实部: 3.000000, 虚部: 4.000000
+    fmt.Printf("模: %f\n", cmplx.Abs(c))                   // 模: 5.000000
+}
+```
+
+### 3. 字符串类型
+
+```go
+// 字符串声明
+var s1 string = "Hello, World!"
+s2 := "Go语言"
 
 // 多行字符串
-var longMessage string = `这是一个多行字符串
-可以包含换行符
-不需要转义字符`
+s3 := `这是一个
+多行字符串
+可以包含换行符`
 
 // 字符串操作
-var fullName string = name + " 李四"           // 字符串拼接
-var formatted string = fmt.Sprintf("Name: %s, Age: %d", name, 25) // 格式化
+func main() {
+    s := "Hello"
 
-// 字符串长度 (UTF-8字符数)
-var length int = len(name)                    // 字节数
-var charCount int = utf8.RuneCountInString(name) // 字符数
+    // 字符串连接
+    greeting := s + ", World!"
+    fmt.Println(greeting)  // Hello, World!
 
-// 字符串切片
-var substring string = name[1:3]              // 获取子字符串
-```
+    // 字符串长度
+    fmt.Printf("长度: %d\n", len(s))  // 长度: 5
 
-#### 布尔类型
-```go
-// 布尔值
-var isActive bool = true
-var isComplete bool = false
+    // 字符串索引
+    fmt.Printf("第一个字符: %c\n", s[0])  // 第一个字符: H
 
-// 布尔运算
-var result bool = isActive && isComplete      // 逻辑与
-var result2 bool = isActive || isComplete     // 逻辑或
-var result3 bool = !isActive                  // 逻辑非
-
-// 条件表达式
-var status string
-if isActive {
-    status = "active"
-} else {
-    status = "inactive"
-}
-
-// 简洁的布尔表达式
-status = map[bool]string{true: "active", false: "inactive"}[isActive]
-```
-
-### 2. 复合数据类型
-
-#### 数组类型
-```go
-// 固定长度数组
-var numbers [5]int = [5]int{1, 2, 3, 4, 5}
-var names [3]string = [3]string{"张三", "李四", "王五"}
-
-// 数组长度和容量
-var length int = len(numbers)    // 5
-var capacity int = cap(numbers)   // 5
-
-// 数组访问和修改
-numbers[0] = 10                  // 修改第一个元素
-var firstNum int = numbers[0]     // 获取第一个元素
-
-// 多维数组
-var matrix [3][3]int = [3][3]int{
-    {1, 2, 3},
-    {4, 5, 6},
-    {7, 8, 9},
-}
-
-// 数组遍历
-for i, num := range numbers {
-    fmt.Printf("Index %d: %d\n", i, num)
+    // 字符串切片
+    fmt.Printf("子串: %s\n", s[1:3])     // 子串: el
 }
 ```
 
-#### 切片类型
+### 4. 字符类型
+
 ```go
-// 切片创建 (动态长度)
-var fruits []string = []string{"苹果", "香蕉", "橙子"}
-var numbers []int = []int{1, 2, 3, 4, 5}
+// byte是uint8的别名，用于ASCII字符
+var c1 byte = 'A'  // 65
 
-// 切片操作
-fruits = append(fruits, "葡萄")    // 添加元素
-fruits = append(fruits, "西瓜", "菠萝") // 添加多个元素
+// rune是int32的别名，用于Unicode字符
+var c2 rune = '中'  // Unicode码点
 
-// 切片子集
-var subset []string = fruits[1:3]   // 从索引1到3的子集
-var firstTwo []string = fruits[:2]  // 前两个元素
-var lastTwo []string = fruits[2:]   // 从索引2到末尾
+func main() {
+    // 遍历字符串的字符
+    s := "Hello世界"
 
-// 切片长度和容量
-var length int = len(fruits)        // 当前元素数量
-var capacity int = cap(fruits)     // 底层数组容量
+    fmt.Println("按字节遍历:")
+    for i := 0; i < len(s); i++ {
+        fmt.Printf("%d: %c\n", i, s[i])
+    }
 
-// 切片预分配
-var largeSlice []int = make([]int, 0, 1000) // 预分配容量1000
-
-// 切片复制
-var copySlice []int = make([]int, len(numbers))
-copy(copySlice, numbers)           // 复制元素
-
-// 切片删除元素
-fruits = append(fruits[:1], fruits[2:]...) // 删除索引1的元素
-```
-
-#### 映射类型
-```go
-// 映射创建
-var person map[string]interface{} = map[string]interface{}{
-    "name":  "张三",
-    "age":   25,
-    "email": "zhangsan@example.com",
-}
-
-// 映射操作
-person["phone"] = "13800138000"    // 添加键值对
-delete(person, "email")             // 删除键值对
-
-// 映射查找
-if email, exists := person["email"]; exists {
-    fmt.Printf("Email: %s\n", email)
-} else {
-    fmt.Println("Email not found")
-}
-
-// 映射遍历
-for key, value := range person {
-    fmt.Printf("%s: %v\n", key, value)
-}
-
-// 类型化映射
-var scores map[string]int = map[string]int{
-    "math":    90,
-    "english": 85,
-    "science": 92,
-}
-
-// 映射的嵌套
-var nestedMap map[string]map[string]int = map[string]map[string]int{
-    "student1": {"math": 90, "english": 85},
-    "student2": {"math": 85, "english": 92},
-}
-```
-
-#### 结构体类型
-```go
-// 基本结构体
-type User struct {
-    ID       int
-    Name     string
-    Email    string
-    Age      int
-    Active   bool
-}
-
-// 结构体实例化
-var user User = User{
-    ID:     1,
-    Name:   "张三",
-    Email:  "zhangsan@example.com",
-    Age:    25,
-    Active: true,
-}
-
-// 结构体指针
-var userPtr *User = &user
-userPtr.Name = "李四"               // 通过指针修改字段
-
-// 结构体方法
-func (u User) Greet() string {
-    return fmt.Sprintf("Hello, %s!", u.Name)
-}
-
-func (u *User) UpdateEmail(newEmail string) {
-    u.Email = newEmail
-}
-
-// 匿名结构体
-var anonymous struct {
-    Name string
-    Age  int
-} = struct{
-    Name string
-    Age  int
-}{
-    Name: "临时用户",
-    Age:  30,
-}
-
-// 嵌套结构体
-type Address struct {
-    Street  string
-    City    string
-    Country string
-}
-
-type Person struct {
-    Name    string
-    Age     int
-    Address Address
-}
-
-// 嵌套结构体使用
-var person Person = Person{
-    Name: "王五",
-    Age:  35,
-    Address: Address{
-        Street:  "123 Main St",
-        City:    "Beijing",
-        Country: "China",
-    },
-}
-```
-
-### 3. 指针类型
-
-#### 指针基础
-```go
-// 指针声明和使用
-var age int = 25
-var agePtr *int = &age             // 获取age的指针
-
-fmt.Printf("Age: %d\n", age)       // 输出: 25
-fmt.Printf("Age Ptr: %d\n", *agePtr) // 输出: 25
-
-// 通过指针修改值
-*agePtr = 30
-fmt.Printf("New Age: %d\n", age)   // 输出: 30
-
-// 指针作为函数参数
-func increment(num *int) {
-    *num++
-}
-
-var counter int = 0
-increment(&counter)                 // 传递指针
-fmt.Printf("Counter: %d\n", counter) // 输出: 1
-```
-
-#### 指针与结构体
-```go
-// 结构体指针
-var user *User = &User{
-    ID:     1,
-    Name:   "张三",
-    Email:  "zhangsan@example.com",
-    Age:    25,
-    Active: true,
-}
-
-// 通过指针访问字段
-fmt.Printf("User Name: %s\n", user.Name)
-user.Name = "李四"                  // 修改字段
-
-// 指针接收器方法
-func (u *User) Deactivate() {
-    u.Active = false
-}
-
-user.Deactivate()                   // 调用指针方法
-```
-
-### 4. 函数类型
-
-#### 函数作为类型
-```go
-// 函数类型定义
-type MathFunc func(int, int) int
-
-// 函数变量
-var add MathFunc = func(a, b int) int {
-    return a + b
-}
-
-var subtract MathFunc = func(a, b int) int {
-    return a - b
-}
-
-// 函数作为参数
-func calculate(a, b int, operation MathFunc) int {
-    return operation(a, b)
-}
-
-// 使用函数
-var result int = calculate(10, 5, add)    // 15
-result = calculate(10, 5, subtract)       // 5
-
-// 函数作为返回值
-func getOperation(op string) MathFunc {
-    switch op {
-    case "add":
-        return func(a, b int) int { return a + b }
-    case "subtract":
-        return func(a, b int) int { return a - b }
-    default:
-        return func(a, b int) int { return 0 }
+    fmt.Println("\n按字符遍历:")
+    for i, r := range s {
+        fmt.Printf("%d: %c (码点: %d)\n", i, r, r)
     }
 }
 ```
 
-### 5. 接口类型
+## 🔄 类型转换
 
-#### 接口定义
+### 1. 显式类型转换
+
+Go是强类型语言，需要显式转换：
+
 ```go
-// 基本接口
-type Writer interface {
-    Write([]byte) (int, error)
-}
+func main() {
+    var i int = 42
+    var f float64 = 3.14
 
-type Reader interface {
-    Read([]byte) (int, error)
-}
+    // 整数转浮点数
+    f2 := float64(i)
+    fmt.Printf("int %d 转为 float64: %f\n", i, f2)
 
-// 实现接口
-type FileWriter struct {
-    filename string
-}
+    // 浮点数转整数(会丢失小数部分)
+    i2 := int(f)
+    fmt.Printf("float64 %f 转为 int: %d\n", f, i2)
 
-func (fw FileWriter) Write(data []byte) (int, error) {
-    // 实现写入逻辑
-    return len(data), nil
-}
-
-// 接口使用
-func writeData(w Writer, data []byte) error {
-    _, err := w.Write(data)
-    return err
-}
-
-// 空接口
-func processAny(value interface{}) {
-    switch v := value.(type) {
-    case string:
-        fmt.Printf("String: %s\n", v)
-    case int:
-        fmt.Printf("Integer: %d\n", v)
-    default:
-        fmt.Printf("Unknown type: %T\n", v)
-    }
+    // 不同整数类型间转换
+    var i16 int16 = 1000
+    var i8 int8 = int8(i16)  // 可能溢出，需要小心
+    fmt.Printf("int16 %d 转为 int8: %d\n", i16, i8)
 }
 ```
 
-## 🧪 类型转换和类型推断
+### 2. 字符串转换
 
-### 类型转换
-```go
-// 基本类型转换
-var intNum int = 42
-var floatNum float64 = float64(intNum)
-var stringNum string = strconv.Itoa(intNum)
-
-// 字符串转换
-var str string = "123"
-var num int = 0
-var err error
-
-num, err = strconv.Atoi(str)
-if err != nil {
-    fmt.Printf("转换失败: %v\n", err)
-}
-
-// 浮点数转换
-var floatStr string = "3.14"
-var floatValue float64
-floatValue, err = strconv.ParseFloat(floatStr, 64)
-if err != nil {
-    fmt.Printf("转换失败: %v\n", err)
-}
-```
-
-### 类型推断
-```go
-// 使用 := 进行类型推断
-name := "张三"                      // 推断为string
-age := 25                           // 推断为int
-price := 19.99                      // 推断为float64
-isActive := true                    // 推断为bool
-
-// 函数返回值类型推断
-func getUser() (string, int) {
-    return "张三", 25
-}
-
-userName, userAge := getUser()      // 推断为string和int
-```
-
-## 📋 实践练习
-
-### 练习1: 数据类型转换
 ```go
 package main
 
@@ -509,114 +332,280 @@ import (
 )
 
 func main() {
-    // 字符串到数字的转换
-    var strNum string = "42"
-    var num int
+    // 数字转字符串
+    i := 42
+    f := 3.14
+    b := true
 
-    num, err := strconv.Atoi(strNum)
-    if err != nil {
-        fmt.Printf("转换失败: %v\n", err)
-        return
-    }
+    si := strconv.Itoa(i)           // int转string
+    sf := strconv.FormatFloat(f, 'f', 2, 64)  // float64转string
+    sb := strconv.FormatBool(b)       // bool转string
 
-    fmt.Printf("字符串 '%s' 转换为数字: %d\n", strNum, num)
+    fmt.Printf("数字转字符串: %s, %s, %s\n", si, sf, sb)
 
-    // 数字到字符串的转换
-    var convertedStr string = strconv.Itoa(num)
-    fmt.Printf("数字 %d 转换回字符串: '%s'\n", num, convertedStr)
+    // 字符串转数字
+    s1 := "123"
+    s2 := "3.14"
+    s3 := "true"
+
+    i2, _ := strconv.Atoi(s1)        // string转int
+    f2, _ := strconv.ParseFloat(s2, 64)  // string转float64
+    b2, _ := strconv.ParseBool(s3)   // string转bool
+
+    fmt.Printf("字符串转数字: %d, %f, %t\n", i2, f2, b2)
 }
 ```
 
-### 练习2: 结构体和方法
+## 🎯 实际应用示例
+
+### 示例1: 用户信息管理
+
 ```go
 package main
 
 import "fmt"
 
-type Product struct {
-    ID    int
-    Name  string
-    Price float64
-}
-
-// 构造函数
-func NewProduct(id int, name string, price float64) *Product {
-    return &Product{
-        ID:    id,
-        Name:  name,
-        Price: price,
-    }
-}
-
-// 方法
-func (p Product) GetInfo() string {
-    return fmt.Sprintf("产品: %s, 价格: %.2f", p.Name, p.Price)
-}
-
-func (p *Product) ApplyDiscount(discount float64) {
-    p.Price = p.Price * (1 - discount/100)
+// 定义用户信息结构
+type UserInfo struct {
+    ID       int
+    Username string
+    Age      int
+    Email    string
+    IsActive bool
 }
 
 func main() {
-    product := NewProduct(1, "iPhone 15", 6999.00)
+    // 创建用户信息
+    var user1 UserInfo
+    user1.ID = 1
+    user1.Username = "zhangsan"
+    user1.Age = 25
+    user1.Email = "zhangsan@example.com"
+    user1.IsActive = true
 
-    fmt.Println(product.GetInfo())
+    // 使用短声明创建第二个用户
+    user2 := UserInfo{
+        ID:       2,
+        Username: "lisi",
+        Age:      30,
+        Email:    "lisi@example.com",
+        IsActive: false,
+    }
 
-    product.ApplyDiscount(10) // 打9折
-    fmt.Println(product.GetInfo())
+    // 显示用户信息
+    displayUser(user1)
+    displayUser(user2)
+}
+
+func displayUser(user UserInfo) {
+    fmt.Println("=== 用户信息 ===")
+    fmt.Printf("ID: %d\n", user.ID)
+    fmt.Printf("用户名: %s\n", user.Username)
+    fmt.Printf("年龄: %d\n", user.Age)
+    fmt.Printf("邮箱: %s\n", user.Email)
+    fmt.Printf("状态: %t\n", user.IsActive)
+    fmt.Println("================")
 }
 ```
 
-### 练习3: 切片操作
+### 示例2: 配置管理
+
 ```go
 package main
 
 import "fmt"
 
+// 应用配置常量
+const (
+    APP_NAME    = "GoWebApp"
+    APP_VERSION  = "1.0.0"
+    MAX_CONNECTIONS = 100
+
+    // 日志级别
+    LOG_DEBUG = iota
+    LOG_INFO
+    LOG_WARN
+    LOG_ERROR
+)
+
+// 配置结构
+type Config struct {
+    Host     string
+    Port     int
+    Debug    bool
+    LogLevel int
+}
+
 func main() {
-    // 创建切片
-    numbers := []int{1, 2, 3, 4, 5}
+    // 使用默认配置
+    config := Config{
+        Host:     "localhost",
+        Port:     8080,
+        Debug:    false,
+        LogLevel: LOG_INFO,
+    }
 
-    // 添加元素
-    numbers = append(numbers, 6, 7, 8)
+    // 显示配置信息
+    fmt.Printf("应用: %s v%s\n", APP_NAME, APP_VERSION)
+    fmt.Printf("最大连接数: %d\n", MAX_CONNECTIONS)
+    fmt.Printf("服务器地址: %s:%d\n", config.Host, config.Port)
 
-    // 切片操作
-    fmt.Println("原始切片:", numbers)
-    fmt.Println("前3个元素:", numbers[:3])
-    fmt.Println("第2到第4个元素:", numbers[1:4])
+    // 根据配置调整行为
+    if config.Debug {
+        fmt.Println("调试模式已启用")
+    }
 
-    // 删除元素
-    numbers = append(numbers[:1], numbers[2:]...)
-    fmt.Println("删除第2个元素后:", numbers)
-
-    // 切片复制
-    copySlice := make([]int, len(numbers))
-    copy(copySlice, numbers)
-    fmt.Println("复制的切片:", copySlice)
+    switch config.LogLevel {
+    case LOG_DEBUG:
+        fmt.Println("日志级别: DEBUG")
+    case LOG_INFO:
+        fmt.Println("日志级别: INFO")
+    case LOG_WARN:
+        fmt.Println("日志级别: WARN")
+    case LOG_ERROR:
+        fmt.Println("日志级别: ERROR")
+    }
 }
 ```
 
-## 📋 检查清单
+### 示例3: 数据计算
 
-- [ ] 理解Go的基本数据类型和范围
-- [ ] 掌握Go的复合数据类型使用
-- [ ] 学会Go的指针类型和内存管理
-- [ ] 理解Go的类型转换和类型推断
-- [ ] 掌握结构体和方法的定义
-- [ ] 学会接口的概念和实现
-- [ ] 能够使用切片和映射进行数据处理
-- [ ] 理解Go类型系统与PHP的差异
+```go
+package main
 
-## 🚀 下一步
+import (
+    "fmt"
+    "math"
+)
 
-掌握数据类型后，你可以继续学习：
-- **控制流程**: 条件语句、循环语句、跳转语句
-- **函数深入**: 高级函数特性、闭包、递归
-- **并发编程**: Goroutine和Channel
-- **标准库**: 常用包的使用方法
+// 计算圆的面积和周长
+func calculateCircle(radius float64) (area, circumference float64) {
+    area = math.Pi * radius * radius
+    circumference = 2 * math.Pi * radius
+    return
+}
+
+func main() {
+    // 输入数据
+    var radius float64 = 5.0
+
+    // 计算
+    area, circumference := calculateCircle(radius)
+
+    // 输出结果
+    fmt.Printf("半径: %.2f\n", radius)
+    fmt.Printf("面积: %.2f\n", area)
+    fmt.Printf("周长: %.2f\n", circumference)
+
+    // 类型转换示例
+    areaInt := int(area)
+    fmt.Printf("面积(整数部分): %d\n", areaInt)
+}
+```
+
+## 🔍 常见错误和注意事项
+
+### 1. 类型不匹配错误
+```go
+// ❌ 错误
+var i int = 42
+var f float64 = i  // 不能直接赋值，需要类型转换
+
+// ✅ 正确
+var i int = 42
+var f float64 = float64(i)
+```
+
+### 2. 未使用变量错误
+```go
+// ❌ 错误
+func main() {
+    var name string = "test"  // 声明但未使用
+    fmt.Println("Hello")
+}
+
+// ✅ 正确
+func main() {
+    name := "test"
+    fmt.Println("Hello,", name)  // 使用变量
+}
+```
+
+### 3. 常量类型推断
+```go
+// ❌ 错误 - 常量必须能在编译时确定值
+const x = getNumber()  // getNumber()是函数调用
+
+// ✅ 正确
+const x = 42
+const y = 3.14
+const s = "Hello"
+```
+
+## 📈 性能提示
+
+### 1. 选择合适的数据类型
+```go
+// ✅ 选择合适的类型
+var age uint8 = 25        // 年龄用uint8足够(0-255)
+var count int = 1000000    // 大数量用int
+var price float64 = 19.99  // 金融计算用float64避免精度问题
+```
+
+### 2. 避免不必要的类型转换
+```go
+// ❌ 频繁转换
+func process(items []float64) {
+    for _, item := range items {
+        i := int(item)  // 每次都转换
+        // 使用i...
+    }
+}
+
+// ✅ 保持类型一致
+func process(items []int) {
+    for _, item := range items {
+        // 直接使用item...
+    }
+}
+```
+
+## 🔗 文档交叉引用
+
+### 相关文档
+- 📄 **[第一个程序]**: [02-first-program.md](02-first-program.md) - Go程序基础结构
+- 📄 **[函数和方法]**: [04-functions-methods.md](04-functions-methods.md) - 函数定义和方法调用
+- 📄 **[控制结构]**: [05-control-structures.md](05-control-structures.md) - 条件语句和循环
+
+### 参考资源
+- 📖 **[Go数据类型文档]**: https://golang.org/ref/spec#Types
+- 📖 **[Go常量文档]**: https://golang.org/ref/spec#Constants
+- 📖 **[Go变量文档]**: https://golang.org/ref/spec#Variables
+
+## 📝 总结
+
+### 核心要点回顾
+1. **变量声明**: 掌握var、:=和批量声明方式
+2. **常量定义**: 理解const和iota的使用
+3. **数据类型**: 熟悉基础数据类型和零值
+4. **类型转换**: 学会显式类型转换的方法
+
+### 实践练习
+- [ ] 练习不同的变量声明方式
+- [ ] 创建一个包含多种数据类型的结构体
+- [ ] 编写类型转换的示例代码
+- [ ] 使用iota创建枚举常量
 
 ---
 
-**学习提示**: Go的类型系统比PHP更严格，但这也意味着更少的运行时错误。多练习类型转换和复合数据类型的使用，你会逐渐体会到Go类型安全的优势。
+**文档状态**: ✅ 已完成
+**最后更新**: 2025年10月
+**版本**: v1.0.0
 
-*最后更新: 2025年9月*
+---
+
+> 💡 **学习建议**:
+> - 理解Go的静态类型系统，与动态语言进行对比
+> - 多练习类型转换，理解转换可能带来的数据丢失
+> - 在实际编程中选择合适的数据类型
+> - 使用常量提高代码的可读性和维护性

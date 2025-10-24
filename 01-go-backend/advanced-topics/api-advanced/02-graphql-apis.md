@@ -1,4 +1,4 @@
-# gqlgen GraphQL框架详解
+# GraphQL APIs - gqlgen框架实战指南
 
 ## 📚 文档元数据
 

@@ -1,8 +1,12 @@
-# Go 控制流程详解 - 从PHP视角理解
+# 条件语句与循环控制
 
-## 📚 概述
+> **文档简介**: 全面掌握Go语言的条件语句和循环控制结构，学会编写逻辑清晰的程序控制流程
 
-Go的控制流程结构比PHP更简洁，但提供了强大的控制能力。作为PHP开发者，理解Go的控制流程差异对于编写高效的Go代码至关重要。
+> **目标读者**: Go初学者，需要掌握Go程序控制流程的学习者
+
+> **前置知识**: 已掌握函数定义和调用基础
+
+> **预计时长**: 2-3小时学习 + 实践
 
 ## 📚 文档元数据
 
@@ -10,726 +14,827 @@ Go的控制流程结构比PHP更简洁，但提供了强大的控制能力。作
 |------|------|
 | **模块** | `01-go-backend` |
 | **分类** | `basics/programming-fundamentals` |
-| **难度** | ⭐⭐ |
-| **标签** | `#控制流程` `#条件语句` `#循环` `#错误处理` |
+| **难度** | ⭐⭐ (2/5) |
+| **标签** | `#控制结构` `#条件语句` `#循环` `#switch` `#goto` |
 | **更新日期** | `2025年10月` |
 | **作者** | Dev Quest Team |
 | **状态** | ✅ 已完成 |
 
-### 🎯 学习目标
-- 掌握Go的条件语句和循环语句
-- 理解Go的switch语句和延迟调用
-- 学会Go的错误处理模式
-- 熟悉Go的控制流程与PHP的差异
+## 🎯 学习目标
 
-## 🔄 Go vs PHP 控制流程对比
+通过本文档学习，您将能够：
+- 掌握if-else条件语句的使用
+- 理解switch多路选择结构
+- 学会for循环的各种形式
+- 掌握while风格的循环实现
+- 了解defer语句的作用和应用
 
-### 条件语句对比
+## 🔄 条件语句
 
-#### PHP 条件语句
-```php
-<?php
-// if-else语句
-$age = 25;
-if ($age >= 18) {
-    echo "成年人";
-} elseif ($age >= 13) {
-    echo "青少年";
+### 1. if-else语句
+
+#### 基本语法
+```go
+if condition {
+    // 条件为真时执行
 } else {
-    echo "儿童";
-}
-
-// 三元运算符
-$status = $age >= 18 ? "成年" : "未成年";
-
-// switch语句
-$day = "Monday";
-switch ($day) {
-    case "Monday":
-        echo "星期一";
-        break;
-    case "Tuesday":
-        echo "星期二";
-        break;
-    default:
-        echo "其他";
+    // 条件为假时执行
 }
 ```
 
-#### Go 条件语句
-```go
-// if-else语句
-age := 25
-if age >= 18 {
-    fmt.Println("成年人")
-} else if age >= 13 {
-    fmt.Println("青少年")
-} else {
-    fmt.Println("儿童")
-}
-
-// if语句中的变量声明
-if userAge := getUserAge(); userAge >= 18 {
-    fmt.Println("成年人")
-}
-
-// switch语句
-day := "Monday"
-switch day {
-case "Monday":
-    fmt.Println("星期一")
-case "Tuesday":
-    fmt.Println("星期二")
-default:
-    fmt.Println("其他")
-}
-
-// switch without condition (替代长if-else链)
-score := 85
-switch {
-case score >= 90:
-    fmt.Println("优秀")
-case score >= 80:
-    fmt.Println("良好")
-case score >= 60:
-    fmt.Println("及格")
-default:
-    fmt.Println("不及格")
-}
-```
-
-### 循环语句对比
-
-#### PHP 循环语句
-```php
-<?php
-// for循环
-for ($i = 0; $i < 5; $i++) {
-    echo $i;
-}
-
-// while循环
-$count = 0;
-while ($count < 5) {
-    echo $count;
-    $count++;
-}
-
-// do-while循环
-$count = 0;
-do {
-    echo $count;
-    $count++;
-} while ($count < 5);
-
-// foreach循环
-$fruits = ["苹果", "香蕉", "橙子"];
-foreach ($fruits as $fruit) {
-    echo $fruit;
-}
-
-foreach ($fruits as $index => $fruit) {
-    echo $index . ": " . $fruit;
-}
-```
-
-#### Go 循环语句
-```go
-// for循环 (Go中只有for循环)
-for i := 0; i < 5; i++ {
-    fmt.Println(i)
-}
-
-// while风格的for循环
-count := 0
-for count < 5 {
-    fmt.Println(count)
-    count++
-}
-
-// 无限循环
-for {
-    fmt.Println("无限循环")
-    if someCondition() {
-        break
-    }
-}
-
-// range遍历
-fruits := []string{"苹果", "香蕉", "橙子"}
-for index, fruit := range fruits {
-    fmt.Printf("%d: %s\n", index, fruit)
-}
-
-// 遍历映射
-person := map[string]interface{}{
-    "name": "张三",
-    "age":  25,
-}
-for key, value := range person {
-    fmt.Printf("%s: %v\n", key, value)
-}
-
-// 遍历字符串 (Unicode字符)
-for index, char := range "你好" {
-    fmt.Printf("%d: %c\n", index, char)
-}
-```
-
-## 📝 Go 控制流程详解
-
-### 1. 条件语句
-
-#### if-else 语句
-```go
-// 基本if-else
-age := 25
-if age >= 18 {
-    fmt.Println("成年人")
-} else {
-    fmt.Println("未成年")
-}
-
-// if-else if-else
-score := 85
-if score >= 90 {
-    fmt.Println("优秀")
-} else if score >= 80 {
-    fmt.Println("良好")
-} else if score >= 60 {
-    fmt.Println("及格")
-} else {
-    fmt.Println("不及格")
-}
-
-// if语句中的变量声明
-if user, err := getUser(); err == nil {
-    fmt.Printf("用户: %s\n", user.Name)
-} else {
-    fmt.Printf("获取用户失败: %v\n", err)
-}
-
-// 嵌套if
-if age >= 18 {
-    if hasLicense := checkDriverLicense(); hasLicense {
-        fmt.Println("可以开车")
-    } else {
-        fmt.Println("需要驾照")
-    }
-}
-```
-
-#### switch 语句
-```go
-// 基本switch
-day := "Monday"
-switch day {
-case "Monday":
-    fmt.Println("星期一")
-case "Tuesday":
-    fmt.Println("星期二")
-case "Wednesday":
-    fmt.Println("星期三")
-default:
-    fmt.Println("其他")
-}
-
-// 多值匹配
-day := "Monday"
-switch day {
-case "Monday", "Tuesday", "Wednesday", "Thursday", "Friday":
-    fmt.Println("工作日")
-case "Saturday", "Sunday":
-    fmt.Println("周末")
-default:
-    fmt.Println("未知")
-}
-
-// 条件switch
-score := 85
-switch {
-case score >= 90:
-    fmt.Println("优秀")
-    fallthrough // 继续执行下一个case
-case score >= 80:
-    fmt.Println("良好")
-case score >= 60:
-    fmt.Println("及格")
-default:
-    fmt.Println("不及格")
-}
-
-// 类型switch
-var value interface{} = "hello"
-switch v := value.(type) {
-case string:
-    fmt.Printf("字符串: %s\n", v)
-case int:
-    fmt.Printf("整数: %d\n", v)
-case bool:
-    fmt.Printf("布尔值: %t\n", v)
-default:
-    fmt.Printf("未知类型: %T\n", v)
-}
-```
-
-### 2. 循环语句
-
-#### for 循环
-```go
-// 标准for循环
-for i := 0; i < 5; i++ {
-    fmt.Println(i)
-}
-
-// 省略init语句
-i := 0
-for ; i < 5; i++ {
-    fmt.Println(i)
-}
-
-// 省略post语句
-for i := 0; i < 5; {
-    fmt.Println(i)
-    i++
-}
-
-// 省略init和post语句 (while循环)
-i := 0
-for i < 5 {
-    fmt.Println(i)
-    i++
-}
-
-// 无限循环
-for {
-    fmt.Println("无限循环")
-    if shouldBreak() {
-        break
-    }
-}
-```
-
-#### range 循环
-```go
-// 遍历切片
-numbers := []int{1, 2, 3, 4, 5}
-for index, value := range numbers {
-    fmt.Printf("索引 %d: 值 %d\n", index, value)
-}
-
-// 遍历映射
-person := map[string]interface{}{
-    "name": "张三",
-    "age":  25,
-    "email": "zhangsan@example.com",
-}
-for key, value := range person {
-    fmt.Printf("%s: %v\n", key, value)
-}
-
-// 遍历字符串 (Unicode)
-text := "Hello, 世界"
-for index, char := range text {
-    fmt.Printf("索引 %d: 字符 %c\n", index, char)
-}
-
-// 遍历通道
-ch := make(chan int)
-go func() {
-    ch <- 1
-    ch <- 2
-    ch <- 3
-    close(ch)
-}()
-
-for value := range ch {
-    fmt.Println(value)
-}
-```
-
-#### 循环控制
-```go
-// break语句
-for i := 0; i < 10; i++ {
-    if i == 5 {
-        break // 跳出循环
-    }
-    fmt.Println(i)
-}
-
-// continue语句
-for i := 0; i < 10; i++ {
-    if i%2 == 0 {
-        continue // 跳过当前迭代
-    }
-    fmt.Println(i)
-}
-
-// 带标签的break
-outer:
-for i := 0; i < 3; i++ {
-    for j := 0; j < 3; j++ {
-        if i == 1 && j == 1 {
-            break outer // 跳出外层循环
-        }
-        fmt.Printf("%d, %d\n", i, j)
-    }
-}
-
-// 带标签的continue
-outer:
-for i := 0; i < 3; i++ {
-    for j := 0; j < 3; j++ {
-        if j == 1 {
-            continue outer // 继续外层循环的下一次迭代
-        }
-        fmt.Printf("%d, %d\n", i, j)
-    }
-}
-```
-
-### 3. 延迟调用 (defer)
-
-#### defer 基础
-```go
-// defer语句会在函数返回前执行
-func example() {
-    defer fmt.Println("第一条defer语句")
-    defer fmt.Println("第二条defer语句")
-    defer fmt.Println("第三条defer语句")
-
-    fmt.Println("函数主体")
-}
-
-// 输出顺序:
-// 函数主体
-// 第三条defer语句
-// 第二条defer语句
-// 第一条defer语句
-```
-
-#### defer 实际应用
-```go
-// 文件操作
-func readFile(filename string) error {
-    file, err := os.Open(filename)
-    if err != nil {
-        return err
-    }
-    defer file.Close() // 确保文件关闭
-
-    // 读取文件内容
-    data, err := ioutil.ReadAll(file)
-    if err != nil {
-        return err
-    }
-
-    fmt.Printf("文件内容: %s\n", string(data))
-    return nil
-}
-
-// 数据库连接
-func processUser(userID int) error {
-    db, err := sql.Open("mysql", "user:password@/dbname")
-    if err != nil {
-        return err
-    }
-    defer db.Close()
-
-    // 执行查询
-    row := db.QueryRow("SELECT name, email FROM users WHERE id = ?", userID)
-    var name, email string
-    err = row.Scan(&name, &email)
-    if err != nil {
-        return err
-    }
-
-    fmt.Printf("用户: %s, 邮箱: %s\n", name, email)
-    return nil
-}
-
-// HTTP请求
-func fetchAPI(url string) error {
-    resp, err := http.Get(url)
-    if err != nil {
-        return err
-    }
-    defer resp.Body.Close()
-
-    if resp.StatusCode != http.StatusOK {
-        return fmt.Errorf("HTTP请求失败: %s", resp.Status)
-    }
-
-    body, err := ioutil.ReadAll(resp.Body)
-    if err != nil {
-        return err
-    }
-
-    fmt.Printf("API响应: %s\n", string(body))
-    return nil
-}
-```
-
-### 4. 错误处理
-
-#### Go错误处理模式
-```go
-// 基本错误处理
-func divide(a, b float64) (float64, error) {
-    if b == 0 {
-        return 0, fmt.Errorf("除数不能为零")
-    }
-    return a / b, nil
-}
-
-// 使用函数
-func main() {
-    result, err := divide(10, 2)
-    if err != nil {
-        fmt.Printf("错误: %v\n", err)
-        return
-    }
-    fmt.Printf("结果: %f\n", result)
-
-    // 错误处理
-    result, err = divide(10, 0)
-    if err != nil {
-        fmt.Printf("错误: %v\n", err)
-        return
-    }
-    fmt.Printf("结果: %f\n", result)
-}
-
-// 自定义错误类型
-type DivisionError struct {
-    Dividend float64
-    Divisor  float64
-    Message  string
-}
-
-func (e *DivisionError) Error() string {
-    return fmt.Sprintf("除法错误: %s (被除数: %.2f, 除数: %.2f)",
-        e.Message, e.Dividend, e.Divisor)
-}
-
-func divideWithError(a, b float64) (float64, error) {
-    if b == 0 {
-        return 0, &DivisionError{
-            Dividend: a,
-            Divisor:  b,
-            Message:  "除数不能为零",
-        }
-    }
-    return a / b, nil
-}
-
-// 错误包装
-func processData(data string) error {
-    if len(data) == 0 {
-        return fmt.Errorf("processData failed: %w",
-            fmt.Errorf("empty data provided"))
-    }
-    // 处理数据...
-    return nil
-}
-
-// panic和recover
-func riskyOperation() {
-    defer func() {
-        if r := recover(); r != nil {
-            fmt.Printf("捕获到panic: %v\n", r)
-        }
-    }()
-
-    // 可能导致panic的代码
-    panic("这是一个panic")
-}
-```
-
-## 🧪 实践练习
-
-### 练习1: 条件语句和循环
+#### 简单示例
 ```go
 package main
 
 import "fmt"
 
+func checkAge(age int) {
+    if age >= 18 {
+        fmt.Printf("%d岁是成年人\n", age)
+    } else {
+        fmt.Printf("%d岁是未成年人\n", age)
+    }
+}
+
 func main() {
-    // 1. 判断成绩等级
-    score := 85
-    var grade string
+    checkAge(16)
+    checkAge(18)
+    checkAge(25)
+}
+```
 
-    switch {
-    case score >= 90:
-        grade = "优秀"
-    case score >= 80:
-        grade = "良好"
-    case score >= 60:
-        grade = "及格"
-    default:
-        grade = "不及格"
+#### if-else if-else
+```go
+func getGrade(score int) string {
+    if score >= 90 {
+        return "优秀"
+    } else if score >= 80 {
+        return "良好"
+    } else if score >= 70 {
+        return "中等"
+    } else if score >= 60 {
+        return "及格"
+    } else {
+        return "不及格"
     }
+}
 
-    fmt.Printf("成绩 %d 对应等级: %s\n", score, grade)
-
-    // 2. 循环输出1-100的奇数
-    fmt.Println("1-100的奇数:")
-    for i := 1; i <= 100; i += 2 {
-        fmt.Printf("%d ", i)
-    }
-    fmt.Println()
-
-    // 3. 遍历切片
-    fruits := []string{"苹果", "香蕉", "橙子", "葡萄"}
-    for index, fruit := range fruits {
-        fmt.Printf("%d: %s\n", index, fruit)
+func main() {
+    scores := []int{95, 85, 75, 65, 55}
+    for _, score := range scores {
+        fmt.Printf("分数: %d, 等级: %s\n", score, getGrade(score))
     }
 }
 ```
 
-### 练习2: defer和错误处理
+### 2. 带初始化的if语句
+
+```go
+func main() {
+    // if语句中的短变量声明
+    if x := 10; x > 5 {
+        fmt.Printf("x = %d, 大于5\n", x)
+    }
+
+    // if-else中的短变量声明
+    if name := "张三"; name != "" {
+        fmt.Printf("姓名: %s\n", name)
+    } else {
+        fmt.Println("姓名为空")
+    }
+}
+```
+
+## 🔀 switch语句
+
+### 1. 基本switch
+
+```go
+func dayOfWeek(day int) string {
+    switch day {
+    case 1:
+        return "星期一"
+    case 2:
+        return "星期二"
+    case 3:
+        return "星期三"
+    case 4:
+        return "星期四"
+    case 5:
+        return "星期五"
+    case 6:
+        return "星期六"
+    case 7:
+        return "星期日"
+    default:
+        return "无效的日期"
+    }
+}
+
+func main() {
+    for i := 1; i <= 8; i++ {
+        fmt.Printf("第%d天是%s\n", i, dayOfWeek(i))
+    }
+}
+```
+
+### 2. switch的表达式形式
+
+```go
+func checkNumber(num int) string {
+    switch {
+    case num < 0:
+        return "负数"
+    case num == 0:
+        return "零"
+    case num > 0 && num < 10:
+        return "个位数"
+    case num >= 10 && num < 100:
+        return "两位数"
+    default:
+        return "多位数"
+    }
+}
+
+func main() {
+    numbers := []int{-5, 0, 7, 15, 123}
+    for _, num := range numbers {
+        fmt.Printf("%d是%s\n", num, checkNumber(num))
+    }
+}
+```
+
+### 3. fallthrough的使用
+
+```go
+func checkTrafficLight(light string) {
+    fmt.Printf("交通灯: %s - ", light)
+    switch light {
+    case "红灯":
+        fmt.Println("停止")
+    case "黄灯":
+        fmt.Println("准备")
+        fallthrough
+    case "绿灯":
+        fmt.Println("通行")
+    default:
+        fmt.Println("无效信号")
+    }
+}
+
+func main() {
+    lights := []string{"红灯", "黄灯", "绿灯", "蓝灯"}
+    for _, light := range lights {
+        checkTrafficLight(light)
+    }
+}
+```
+
+### 4. 类型switch
+
+```go
+func printType(value interface{}) {
+    switch v := value.(type) {
+    case int:
+        fmt.Printf("整数: %d\n", v)
+    case string:
+        fmt.Printf("字符串: %s\n", v)
+    case bool:
+        fmt.Printf("布尔值: %t\n", v)
+    case []int:
+        fmt.Printf("整数数组: %v\n", v)
+    default:
+        fmt.Printf("未知类型: %T\n", v)
+    }
+}
+
+func main() {
+    values := []interface{}{42, "Hello", true, []int{1, 2, 3}, 3.14}
+    for _, value := range values {
+        printType(value)
+    }
+}
+```
+
+## 🔄 循环结构
+
+### 1. for循环 - 三种形式
+
+#### 标准for循环
+```go
+func printNumbers(n int) {
+    fmt.Printf("1到%d的数字:\n", n)
+    for i := 1; i <= n; i++ {
+        fmt.Printf("%d ", i)
+    }
+    fmt.Println()
+}
+
+func main() {
+    printNumbers(5)
+}
+```
+
+#### while风格的for循环
+```go
+func readInputUntilStop() {
+    var input string
+    count := 0
+
+    for {
+        fmt.Scanln(&input)
+        if input == "stop" {
+            break
+        }
+        count++
+        fmt.Printf("输入 %d: %s\n", count, input)
+    }
+
+    fmt.Printf("共输入了%d个有效输入\n", count)
+}
+
+func main() {
+    fmt.Println("输入内容，输入'stop'结束:")
+    readInputUntilStop()
+}
+```
+
+#### 无限for循环
+```go
+func main() {
+    // 无限循环（需要break退出）
+    count := 0
+    for {
+        fmt.Printf("计数: %d\n", count)
+        count++
+        if count >= 5 {
+            break
+        }
+    }
+    fmt.Println("循环结束")
+}
+```
+
+### 2. range循环
+
+#### 遍历数组/切片
+```go
+func main() {
+    numbers := []int{10, 20, 30, 40, 50}
+
+    // 遍历数组元素和索引
+    fmt.Println("遍历数组元素:")
+    for i, num := range numbers {
+        fmt.Printf("索引 %d: %d\n", i, num)
+    }
+
+    // 只遍历元素
+    fmt.Println("\n只遍历元素:")
+    for _, num := range numbers {
+        fmt.Printf("%d ", num)
+    }
+    fmt.Println()
+}
+```
+
+#### 遍历映射
+```go
+func main() {
+    scores := map[string]int{
+        "张三": 85,
+        "李四": 92,
+        "王五": 78,
+    }
+
+    // 遍历映射的键值对
+    fmt.Println("学生成绩:")
+    for name, score := range scores {
+        fmt.Printf("%s: %d分\n", name, score)
+    }
+}
+```
+
+#### 遍历字符串
+```go
+func main() {
+    text := "Hello, 世界!"
+
+    // 遍历字符串的字节（UTF-8编码）
+    fmt.Println("字节遍历:")
+    for i, b := range []byte(text) {
+        fmt.Printf("位置 %d: %c\n", i, b)
+    }
+
+    // 遍历字符串的字符（Unicode码点）
+    fmt.Println("\n字符遍历:")
+    for i, r := range text {
+        fmt.Printf("位置 %d: %c (码点: %d)\n", i, r, r)
+    }
+}
+```
+
+### 3. 嵌套循环
+
+#### 多重循环
+```go
+func printMultiplicationTable(n int) {
+    fmt.Printf("%d乘法表:\n", n)
+    for i := 1; i <= n; i++ {
+        for j := 1; j <= n; j++ {
+            fmt.Printf("%dx%d=%-3d ", i, j, i*j)
+        }
+        fmt.Println()
+    }
+}
+
+func main() {
+    printMultiplicationTable(5)
+}
+```
+
+#### 循环中的标签和break/continue
+```go
+func searchInMatrix(matrix [][]int, target int) (row, col int, found bool) {
+OuterLoop:
+    for r, rowSlice := range matrix {
+        for c, value := range rowSlice {
+            if value == target {
+                return r, c, true
+            }
+            if value > target {
+                // 跳出当前行循环，继续下一行
+                continue OuterLoop
+            }
+        }
+    }
+    return -1, -1, false
+}
+
+func main() {
+    matrix := [][]int{
+        {1, 2, 3},
+        {4, 5, 6},
+        {7, 8, 9},
+        {10, 11, 12},
+    }
+
+    row, col, found := searchInMatrix(matrix, 8)
+    if found {
+        fmt.Printf("找到目标值8在位置[%d][%d]\n", row, col)
+    } else {
+        fmt.Println("未找到目标值")
+    }
+}
+```
+
+## ⚡ defer语句
+
+### 1. defer的基本用法
+
+```go
+func demonstrateDefer() {
+    fmt.Println("函数开始")
+
+    defer fmt.Println("函数结束 (1)")
+    defer fmt.Println("函数结束 (2)")
+    defer fmt.Println("函数结束 (3)")
+
+    fmt.Println("函数执行中...")
+}
+
+func main() {
+    demonstrateDefer()
+    fmt.Println("main函数继续执行")
+}
+```
+
+**输出顺序**：
+```
+函数开始
+函数执行中...
+main函数继续执行
+函数结束 (3)
+函数结束 (2)
+函数结束 (1)
+```
+
+### 2. defer的实际应用
+
+#### 资源清理
+```go
+import "os"
+
+func processFile(filename string) error {
+    file, err := os.Open(filename)
+    if err != nil {
+        return err
+    }
+    defer file.Close()  // 确保文件被关闭
+
+    // 读取文件内容
+    content := make([]byte, 1024)
+    n, err := file.Read(content)
+    if err != nil {
+        return err
+    }
+
+    fmt.Printf("读取了%d个字节\n", n)
+    return nil
+}
+
+func main() {
+    err := processFile("example.txt")
+    if err != nil {
+        fmt.Printf("处理文件错误: %v\n", err)
+    }
+}
+```
+
+#### panic恢复
+```go
+func safeOperation() (result string) {
+    defer func() {
+        if r := recover(); r != nil {
+            result = fmt.Sprintf("操作失败，已恢复: %v", r)
+        }
+    }()
+
+    // 模拟可能失败的操作
+    // panic("模拟错误")
+    result = "操作成功"
+    return
+}
+
+func main() {
+    result := safeOperation()
+    fmt.Printf("结果: %s\n", result)
+}
+```
+
+## 🎯 实际应用示例
+
+### 示例1: 用户输入验证
+
+```go
+package main
+
+import (
+    "bufio"
+    "fmt"
+    "os"
+    "strconv"
+    "strings"
+)
+
+func validateInput(input string) (bool, string) {
+    // 去除前后空格
+    input = strings.TrimSpace(input)
+
+    if input == "" {
+        return false, "输入不能为空"
+    }
+
+    if len(input) > 100 {
+        return false, "输入过长（最多100字符）"
+    }
+
+    return true, "输入有效"
+}
+
+func getUserInput(prompt string) string {
+    reader := bufio.NewReader(os.Stdin)
+    fmt.Print(prompt)
+
+    input, _ := reader.ReadString('\n')
+    return strings.TrimSpace(input)
+}
+
+func main() {
+    fmt.Println("=== 用户输入验证系统 ===")
+
+    for {
+        input := getUserInput("请输入内容（输入'quit'退出）: ")
+
+        if input == "quit" {
+            break
+        }
+
+        valid, message := validateInput(input)
+        if valid {
+            fmt.Printf("✅ %s\n", message)
+        } else {
+            fmt.Printf("❌ %s\n", message)
+        }
+    }
+
+    fmt.Println("程序结束")
+}
+```
+
+### 示例2: 菜单驱动程序
+
+```go
+package main
+
+import "fmt"
+
+func displayMenu() {
+    fmt.Println("=== 计算器菜单 ===")
+    fmt.Println("1. 加法")
+    fmt.Println("2. 减法")
+    fmt.Println("3. 乘法")
+    fmt.Println("4. 除法")
+    fmt.Println("5. 退出")
+    fmt.Print("请选择操作 (1-5): ")
+}
+
+func getNumbers() (float64, float64) {
+    var a, b float64
+    fmt.Print("请输入第一个数字: ")
+    fmt.Scanln(&a)
+    fmt.Print("请输入第二个数字: ")
+    fmt.Scanln(&b)
+    return a, b
+}
+
+func main() {
+    var choice int
+    var a, b float64
+
+    for {
+        displayMenu()
+        fmt.Scanln(&choice)
+
+        if choice == 5 {
+            fmt.Println("感谢使用，再见！")
+            break
+        }
+
+        if choice < 1 || choice > 5 {
+            fmt.Println("无效选择，请重新输入")
+            continue
+        }
+
+        a, b = getNumbers()
+
+        switch choice {
+        case 1:
+            fmt.Printf("%.2f + %.2f = %.2f\n", a, b, a+b)
+        case 2:
+            fmt.Printf("%.2f - %.2f = %.2f\n", a, b, a-b)
+        case 3:
+            fmt.Printf("%.2f × %.2f = %.2f\n", a, b, a*b)
+        case 4:
+            if b != 0 {
+                fmt.Printf("%.2f ÷ %.2f = %.2f\n", a, b, a/b)
+            } else {
+                fmt.Println("错误：除数不能为0")
+            }
+        }
+
+        fmt.Println() // 空行分隔
+    }
+}
+```
+
+### 示例3: 数据处理管道
+
 ```go
 package main
 
 import (
     "fmt"
-    "os"
+    "strings"
 )
 
-func processFile(filename string) error {
-    // 打开文件
-    file, err := os.Open(filename)
-    if err != nil {
-        return fmt.Errorf("无法打开文件: %w", err)
+// 过滤函数
+func filter(numbers []int, predicate func(int) bool) []int {
+    var result []int
+    for _, num := range numbers {
+        if predicate(num) {
+            result = append(result, num)
+        }
     }
-    defer file.Close()
+    return result
+}
 
-    // 检查文件是否存在
-    if _, err := os.Stat(filename); os.IsNotExist(err) {
-        return fmt.Errorf("文件不存在: %s", filename)
+// 映射函数
+func mapNumbers(numbers []int, transform func(int) int) []int {
+    result := make([]int, len(numbers))
+    for i, num := range numbers {
+        result[i] = transform(num)
+    }
+    return result
+}
+
+// 规约函数
+func reduce(numbers []int, operation func(int, int) int) int {
+    if len(numbers) == 0 {
+        return 0
     }
 
-    // 读取文件信息
-    fileInfo, err := file.Stat()
-    if err != nil {
-        return fmt.Errorf("无法获取文件信息: %w", err)
+    result := numbers[0]
+    for _, num := range numbers[1:] {
+        result = operation(result, num)
+    }
+    return result
+}
+
+// 数据处理管道
+func processNumbers(numbers []int) []int {
+    // 管道: 过滤偶数 → 平方 → 求和
+    pipeline := func(nums []int) []int {
+        // 步骤1: 过滤偶数
+        evens := filter(nums, func(n int) bool {
+            return n%2 == 0
+        })
+
+        // 步骤2: 平方每个偶数
+        squares := mapNumbers(evens, func(n int) int {
+            return n * n
+        })
+
+        // 步骤3: 计算总和
+        total := reduce(squares, func(a, b int) int {
+            return a + b
+        })
+
+        return []int{total}
     }
 
-    fmt.Printf("文件名: %s\n", fileInfo.Name())
-    fmt.Printf("文件大小: %d 字节\n", fileInfo.Size())
-    fmt.Printf("文件权限: %v\n", fileInfo.Mode())
-
-    return nil
+    return pipeline(numbers)
 }
 
 func main() {
-    filename := "example.txt"
+    data := []int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}
 
-    err := processFile(filename)
-    if err != nil {
-        fmt.Printf("处理文件失败: %v\n", err)
-    } else {
-        fmt.Println("文件处理成功")
+    fmt.Printf("原始数据: %v\n", data)
+    result := processNumbers(data)
+    fmt.Printf("偶数平方和: %v\n", result)
+
+    // 验证结果
+    sum := 0
+    for _, num := range data {
+        if num%2 == 0 {
+            sum += num * num
+        }
     }
+    fmt.Printf("验证结果: %d\n", sum)
 }
 ```
 
-### 练习3: 复杂的控制流
+## 🔍 常见错误和注意事项
+
+### 1. 无限循环
 ```go
-package main
-
-import "fmt"
-
-// 斐波那契数列
-func fibonacci(n int) []int {
-    if n <= 0 {
-        return []int{}
+// ❌ 错误 - 忘须有退出条件
+func badLoop() {
+    count := 0
+    for {
+        count++
+        // 没有break或return，会无限循环
     }
-
-    fib := make([]int, n)
-    fib[0] = 0
-    if n > 1 {
-        fib[1] = 1
-    }
-
-    for i := 2; i < n; i++ {
-        fib[i] = fib[i-1] + fib[i-2]
-    }
-
-    return fib
 }
 
-// 判断质数
-func isPrime(num int) bool {
-    if num <= 1 {
-        return false
-    }
-    if num == 2 {
-        return true
-    }
-    if num%2 == 0 {
-        return false
-    }
-
-    for i := 3; i*i <= num; i += 2 {
-        if num%i == 0 {
-            return false
-        }
-    }
-
-    return true
-}
-
-func main() {
-    // 1. 斐波那契数列
-    fmt.Println("斐波那契数列前10项:")
-    fib := fibonacci(10)
-    for i, num := range fib {
-        fmt.Printf("F(%d) = %d\n", i, num)
-    }
-
-    // 2. 找出1-100的质数
-    fmt.Println("\n1-100的质数:")
-    for i := 1; i <= 100; i++ {
-        if isPrime(i) {
-            fmt.Printf("%d ", i)
-        }
-    }
-    fmt.Println()
-
-    // 3. 九九乘法表
-    fmt.Println("\n九九乘法表:")
-    for i := 1; i <= 9; i++ {
-        for j := 1; j <= i; j++ {
-            fmt.Printf("%d×%d=%-2d ", j, i, i*j)
-        }
-        fmt.Println()
+// ✅ 正确 - 有明确的退出条件
+func goodLoop(n int) {
+    for i := 0; i < n; i++ {
+        // 循环条件明确
     }
 }
 ```
 
-## 📋 检查清单
+### 2. switch缺少break
+```go
+// ❌ 错误 - 没有break会继续执行下一个case
+func checkGrade(grade string) string {
+    switch grade {
+    case "A":
+        return "优秀"
+    case "B":
+        return "良好"  // 缺少fallthrough可能是意外的
+    case "C":
+        return "及格"
+    }
+}
 
-- [ ] 掌握Go的if-else条件语句
-- [ ] 理解Go的switch语句和类型switch
-- [ ] 学会Go的for循环的各种形式
-- [ ] 掌握range循环的使用方法
-- [ ] 理解defer语句的执行机制
-- [ ] 学会Go的错误处理模式
-- [ ] 掌握panic和recover的使用
-- [ ] 理解Go控制流程与PHP的差异
+// ✅ 正确 - 明确控制执行流程
+func checkGradeFixed(grade string) string {
+    switch grade {
+    case "A":
+        return "优秀"
+    case "B":
+        fallthrough  // 明确使用fallthrough
+    case "C":
+        return "良好"
+    default:
+        return "需要改进"
+    }
+}
+```
 
-## 🚀 下一步
+### 3. defer在循环中的使用
+```go
+// ❌ 谨试时的陷阱
+func badDeferInLoop() {
+    for i := 0; i < 3; i++ {
+        defer fmt.Printf("循环结束: %d\n", i)
+        // 所有defer会在函数结束时执行，不是每次循环结束时
+    }
+}
 
-掌握控制流程后，你可以继续学习：
-- **面向对象编程**: Go的OOP实现方式
-- **并发编程**: Goroutine和Channel
-- **标准库**: 常用包的使用方法
-- **Web开发**: Gin框架和REST API
+// ✅ 正确的方式 - 匿名函数创建defer
+func goodDeferInLoop() {
+    for i := 0; i < 3; i++ {
+        func(id int) {
+            defer fmt.Printf("循环结束: %d\n", id)
+        }(i)
+    }
+}
+```
+
+## 📈 性能优化提示
+
+### 1. 循环优化
+```go
+// ❌ 效率低 - 每次都计算长度
+func slowSum(numbers []int) int {
+    sum := 0
+    for i := 0; i < len(numbers); i++ {
+        sum += numbers[i]  // 每次都调用len()
+    }
+    return sum
+}
+
+// ✅ 效率高 - 预先计算长度
+func fastSum(numbers []int) int {
+    sum := 0
+    length := len(numbers)  // 预先计算
+    for i := 0; i < length; i++ {
+        sum += numbers[i]
+    }
+    return sum
+}
+```
+
+### 2. 避免不必要的循环
+```go
+// ❌ 不必要的循环
+func containsValue(slice []int, target int) bool {
+    for _, v := range slice {
+        if v == target {
+            return true
+        }
+    }
+    return false
+}
+
+// ✅ 使用map查找（适合大数据集）
+func containsValueMap(set map[int]struct{}) bool {
+    _, exists := set[target]
+    return exists
+}
+```
+
+## 🔗 文档交叉引用
+
+### 相关文档
+- 📄 **[第一个程序]**: [02-first-program.md](02-first-program.md) - Go程序基础结构
+- 📄 **[变量和常量]**: [03-variables-constants.md](03-variables-constants.md) - Go数据类型和变量
+- 📄 **[函数和方法]**: [04-functions-methods.md](04-functions-methods.md) - 函数定义和方法调用
+- 📄 **[错误处理]**: [06-error-handling.md](06-error-handling.md) - Go错误处理机制
+
+### 参考资源
+- 📖 **[Go控制流文档]**: https://golang.org/ref/spec#Statements
+- 📖 **[Go for循环文档]**: https://golang.org/ref/spec#For_statements
+- 📖 **[Go switch文档]**: https://golang.org/ref/spec#Switch_statements
+
+## 📝 总结
+
+### 核心要点回顾
+1. **条件语句**: 掌握if-else和switch的使用
+2. **循环结构**: 理解for循环的各种形式和range循环
+3. **defer语句**: 学会使用defer进行资源清理
+4. **控制流程**: 组合使用各种控制结构
+
+### 实践练习
+- [ ] 编写包含多种条件判断的程序
+- [ ] 使用switch替代复杂的if-else链
+- [ ] 实现嵌套循环和标签控制
+- [ ] 使用defer处理资源清理
+- [ ] 创建交互式菜单驱动程序
 
 ---
 
-**学习提示**: Go的控制流程虽然比PHP简洁，但提供了更强大的控制能力。特别是defer语句和错误处理模式，是Go编程的重要组成部分。多练习这些特性，你会发现Go代码的可读性和可维护性都很高。
+**文档状态**: ✅ 已完成
+**最后更新**: 2025年10月
+**版本**: v1.0.0
 
-*最后更新: 2025年9月*
+---
+
+> 💡 **学习建议**:
+> - 理解Go控制流程的简洁性和安全性
+> - 善用switch语句替代复杂的if-else结构
+> - 掌握range循环，避免手动的索引管理
+> - 使用defer确保资源的正确释放
+> - 避免无限循环，始终提供明确的退出条件
