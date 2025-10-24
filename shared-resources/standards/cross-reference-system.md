@@ -173,9 +173,9 @@ dev-quest/
 │   └── frameworks/
 │       └── 01-tailwind-css.md           → 前置: basics/
 └── shared-resources/
-    ├── CROSS_REFERENCE_SYSTEM.md        ← 本文档
-    ├── DOCUMENT_TEMPLATE.md             ← 模板引用
-    └── DOCUMENTATION_GUIDELINES.md      ← 规范引用
+    ├── cross-reference-system.md        ← 本文档
+    ├── templates/document-template.md   ← 模板引用
+    └── documentation-guidelines.md      ← 规范引用
 ```
 
 ### 2. 引用模板

@@ -28,32 +28,72 @@ graph LR
 ### 🏆 应用帝国矩阵 (核心重点)
 
 #### 01. Go 后端开发 ⭐⭐⭐
-**目标**: 高性能后端开发能力
+**目标**: 高性能现代Go后端开发能力
+
+**双路径学习体系** ⭐⭐
+- [ ] **系统化学习**: [basics/](../../01-go-backend/basics/) - 从零开始的渐进式学习
+- [ ] **快速参考**: [knowledge-points/](../../01-go-backend/knowledge-points/) - 高效速查手册
 
 **基础阶段** ⭐⭐
-- [ ] **环境搭建**: Go 1.21+ 开发环境配置
-- [ ] **基础语法**: 变量、函数、结构体、接口
-- [ ] **数据类型**: 基本类型、复合类型、指针
-- [ ] **控制流程**: 条件语句、循环、错误处理
-- [ ] **面向对象**: Go的OOP思想和接口设计
+- [x] **环境搭建**: [01-environment-setup.md](../../01-go-backend/basics/01-environment-setup.md) - Go 1.21+ 开发环境配置
+- [x] **第一个程序**: [02-first-program.md](../../01-go-backend/basics/02-first-program.md) - Go语言入门实践
+- [x] **变量常量**: [03-variables-constants.md](../../01-go-backend/basics/03-variables-constants.md) - 变量、常量和基础数据类型
+- [x] **函数方法**: [04-functions-methods.md](../../01-go-backend/basics/04-functions-methods.md) - 函数定义与方法调用
+- [x] **控制结构**: [05-control-structures.md](../../01-go-backend/basics/05-control-structures.md) - 条件语句与循环控制
+- [x] **错误处理**: [06-error-handling.md](../../01-go-backend/basics/06-error-handling.md) - Go错误处理机制
 
-**框架阶段** ⭐⭐⭐
-- [ ] **Web框架**: Gin/Echo/Fiber 框架学习
-- [ ] **数据库集成**: GORM/SQLx 数据库操作
-- [ ] **API开发**: RESTful API 设计和实现
-- [ ] **中间件**: 认证、日志、错误处理中间件
+**语言概念速查** ⭐
+- [x] **Go关键字**: [knowledge-points/language-concepts/01-go-keywords.md](../../01-go-backend/knowledge-points/language-concepts/01-go-keywords.md) - Go关键字详解
+- [x] **内置函数**: [knowledge-points/language-concepts/02-go-built-in-functions.md](../../01-go-backend/knowledge-points/language-concepts/02-go-built-in-functions.md) - Go内置函数
+- [x] **数据类型**: [knowledge-points/language-concepts/03-go-data-types.md](../../01-go-backend/knowledge-points/language-concepts/03-go-data-types.md) - 数据类型详解
+- [x] **控制流程**: [knowledge-points/language-concepts/04-go-control-flow.md](../../01-go-backend/knowledge-points/language-concepts/04-go-control-flow.md) - 控制流程详解
+- [x] **面向对象**: [knowledge-points/language-concepts/05-go-oop-concepts.md](../../01-go-backend/knowledge-points/language-concepts/05-go-oop-concepts.md) - 面向对象概念
 
-**进阶阶段** ⭐⭐⭐⭐
-- [ ] **并发编程**: Goroutine 和 Channel
-- [ ] **微服务**: gRPC、服务发现、负载均衡
-- [ ] **性能优化**: 内存优化、CPU优化
-- [ ] **测试工程**: 单元测试、集成测试、基准测试
+**标准库指南** ⭐
+- [x] **标准库**: [knowledge-points/library-guides/01-go-standard-library.md](../../01-go-backend/knowledge-points/library-guides/01-go-standard-library.md) - 标准库核心API
+- [x] **第三方库**: [knowledge-points/library-guides/02-third-party-libs.md](../../01-go-backend/knowledge-points/library-guides/02-third-party-libs.md) - 第三方库精选
 
-**部署阶段** ⭐⭐⭐⭐⭐
-- [ ] **容器化**: Docker 镜像构建和优化
-- [ ] **云部署**: Kubernetes 集群部署
-- [ ] **监控运维**: Prometheus + Grafana 监控
-- [ ] **CI/CD**: 自动化构建和部署流水线
+**快速参考** ⭐
+- [x] **语法速查**: [knowledge-points/quick-references/01-syntax-cheatsheet.md](../../01-go-backend/knowledge-points/quick-references/01-syntax-cheatsheet.md) - Go语法速查表
+- [x] **Web工具**: [knowledge-points/quick-references/02-web-tools.md](../../01-go-backend/knowledge-points/quick-references/02-web-tools.md) - 其他Web工具
+- [x] **问题排查**: [knowledge-points/quick-references/03-troubleshooting.md](../../01-go-backend/knowledge-points/quick-references/03-troubleshooting.md) - 常见问题排查
+
+**框架技术栈** ⭐⭐⭐
+- [x] **Gin框架基础**: [frameworks/01-gin-framework-basics.md](../../01-go-backend/frameworks/01-gin-framework-basics.md) - Web框架入门
+- [x] **Gin框架进阶**: [frameworks/02-gin-framework-advanced.md](../../01-go-backend/frameworks/02-gin-framework-advanced.md) - 高级特性
+- [x] **GORM完整学习**: [frameworks/03-gorm-orm-complete.md](../../01-go-backend/frameworks/03-gorm-orm-complete.md) - MySQL+PostgreSQL
+- [x] **MongoDB驱动**: [frameworks/04-mongodb-go-driver.md](../../01-go-backend/frameworks/04-mongodb-go-driver.md) - 文档数据库
+- [x] **Redis缓存**: [frameworks/05-go-redis-complete.md](../../01-go-backend/frameworks/05-go-redis-complete.md) - 缓存数据库
+
+**框架速查** ⭐
+- [x] **Gin框架速查**: [knowledge-points/framework-essentials/01-gin-framework.md](../../01-go-backend/knowledge-points/framework-essentials/01-gin-framework.md) - Gin框架速查
+- [x] **GORM速查**: [knowledge-points/framework-essentials/02-gorm-orm.md](../../01-go-backend/knowledge-points/framework-essentials/02-gorm-orm.md) - ORM速查
+
+**实战项目** ⭐⭐⭐
+- [x] **REST API服务器**: [projects/01-rest-api-server.md](../../01-go-backend/projects/01-rest-api-server.md) - Gin+GORM+MySQL
+- [x] **微服务演示**: [projects/02-microservices-demo.md](../../01-go-backend/projects/02-microservices-demo.md) - Gin+Redis+服务发现
+- [x] **实时应用**: [projects/03-real-time-app.md](../../01-go-backend/projects/03-real-time-app.md) - WebSocket+MongoDB
+- [x] **CLI工具**: [projects/04-cli-tool.md](../../01-go-backend/projects/04-cli-tool.md) - Cobra+文件操作+配置管理
+
+**现代测试工程** ⭐⭐⭐
+- [x] **单元测试**: [testing/01-unit-testing.md](../../01-go-backend/testing/01-unit-testing.md) - testing + testify
+- [x] **Mock和桩测试**: [testing/02-mocking-stubbing.md](../../01-go-backend/testing/02-mocking-stubbing.md) - gomock + mockery
+- [x] **集成测试**: [testing/03-integration-testing.md](../../01-go-backend/testing/03-integration-testing.md) - testcontainers + 数据库
+- [x] **基准测试**: [testing/04-benchmarking.md](../../01-go-backend/testing/04-benchmarking.md) - 性能基准测试
+
+**云原生部署** ⭐⭐⭐⭐
+- [x] **容器化**: [deployment/01-containerization.md](../../01-go-backend/deployment/01-containerization.md) - Docker多阶段构建
+- [x] **CI/CD流水线**: [deployment/02-ci-cd-pipelines.md](../../01-go-backend/deployment/02-ci-cd-pipelines.md) - GitHub Actions自动化
+- [x] **K8s部署**: [deployment/03-kubernetes-deployment.md](../../01-go-backend/deployment/03-kubernetes-deployment.md) - 集群部署管理
+- [x] **监控可观测性**: [deployment/04-observability.md](../../01-go-backend/deployment/04-observability.md) - Prometheus + Grafana
+
+**高级主题** ⭐⭐⭐⭐
+- [x] **并发模式**: [advanced-topics/performance/01-concurrency-patterns.md](../../01-go-backend/advanced-topics/performance/01-concurrency-patterns.md) - 高级并发模式
+- [x] **性能调优**: [advanced-topics/performance/02-performance-tuning.md](../../01-go-backend/advanced-topics/performance/02-performance-tuning.md) - 系统性能优化
+- [x] **安全最佳实践**: [advanced-topics/security/01-security-best-practices.md](../../01-go-backend/advanced-topics/security/01-security-best-practices.md) - 应用安全
+- [x] **微服务架构**: [advanced-topics/architecture/01-microservices-design.md](../../01-go-backend/advanced-topics/architecture/01-microservices-design.md) - 微服务与云原生
+- [x] **API设计模式**: [advanced-topics/api-advanced/01-restful-patterns.md](../../01-go-backend/advanced-topics/api-advanced/01-restful-patterns.md) - RESTful API最佳实践
+- [x] **GraphQL开发**: [advanced-topics/api-advanced/02-graphql-apis.md](../../01-go-backend/advanced-topics/api-advanced/02-graphql-apis.md) - 现代API开发
 
 #### 02. Next.js 前端开发 ⭐⭐⭐
 **目标**: 现代前端全栈开发能力

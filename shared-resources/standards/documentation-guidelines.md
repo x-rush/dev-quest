@@ -4,7 +4,7 @@
 
 ## 📋 文档分类与模板
 
-### 1. 详细文档 (使用DOCUMENT_TEMPLATE.md)
+### 1. 详细文档 (使用 [templates/document-template.md](../templates/document-template.md))
 **适用场景**:
 - 模块README文档
 - 核心技术概念文档
