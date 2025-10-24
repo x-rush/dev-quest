@@ -1,258 +1,252 @@
-# Go 后端开发 - 从PHP到Go的精通之路
+# Go Backend 开发 - 现代后端技术栈完整学习
+
+> **模块简介**: 系统掌握Go后端开发技术栈，从基础语法到高性能微服务架构的完整学习路径
+>
+> **目标读者**: 希望学习Go后端开发的初学者和有经验的后端开发者
+>
+> **前置知识**: 基础编程概念、HTTP协议、数据库基础
+>
+> **预计学习时长**: 3-6个月系统学习路径
+
+## 📚 文档元数据
+
+| 属性 | 内容 |
+|------|------|
+| **模块** | `01-go-backend` |
+| **分类** | `module-overview` |
+| **难度** | ⭐⭐ |
+| **标签** | `#模块概述` `#学习路线` `#go后端` |
+| **更新日期** | `2025年10月` |
+| **作者** | Dev Quest Team |
+| **状态** | ✅ 已完成 |
 
 ## 📚 模块概述
 
-本模块专为有PHP开发经验的学习者设计，旨在系统掌握Go语言及其在现代化后端开发中的应用。Go语言以其简洁的语法、高效的并发处理和出色的性能表现，正在成为现代Web开发、微服务架构和云原生应用的首选语言。
+本模块采用现代化的学习体系设计，建立**双路径学习模式**，满足不同学习场景的需求：
 
-### 🎯 学习目标
-- 掌握Go语言核心语法和编程范式
-- 学会使用Go进行高性能Web开发
-- 理解Go的并发编程模型和设计哲学
-- 构建完整的Go后端应用和微服务
-- 掌握Go应用的部署和运维
+### 🎯 核心目标
+- **技术栈全面**: 掌握Go语言、Gin框架、GORM、MongoDB、Redis等现代后端技术
+- **工程实践**: 建立完整的开发、测试、部署、监控能力
+- **项目实战**: 通过真实项目巩固理论知识
+- **前沿应用**: 掌握微服务、云原生、高并发等先进技术
 
-### 📁 目录结构
+## 📁 目录结构
 
 ```
 01-go-backend/
-├── README.md                           # 本文档
+├── README.md                           # 模块总览（本文档）
 ├── Go语言学习路线.md                    # 渐进式学习指南
-├── advanced-topics/                     # 高级主题深度内容
-│   ├── go-general/                      # Go核心技术深入
-│   │   ├── 01-concurrency/              # 并发编程高级专题
-│   │   │   ├── 01-goroutine-patterns.md          # Goroutine设计模式
-│   │   │   └── 02-high-concurrency-best-practices.md  # 高并发最佳实践
-│   │   ├── 02-patterns/                 # 设计模式与架构模式
-│   │   │   ├── 01-design-patterns.md            # 设计模式详解
-│   │   │   └── 02-architecture-patterns.md       # 架构模式实践
-│   │   ├── 03-performance/              # 性能优化专题
-│   │   │   ├── 01-performance-tuning.md         # 性能调优实战
-│   │   │   └── 02-memory-optimization.md        # 内存优化策略
-│   │   └── 04-engineering/              # 工程化实践
-│   │       └── 01-project-structure.md          # Go项目结构与工程化
-│   ├── gin/                            # Gin框架高级专题
-│   │   ├── 01-basics/                   # Gin基础进阶
-│   │   │   └── 01-gin-introduction.md          # Gin框架深度解析
-│   │   ├── 02-advanced/                 # Gin高级特性
-│   │   │   ├── 01-gin-advanced-features.md     # Gin高级功能
-│   │   │   ├── 02-gin-security-practices.md    # Gin安全实践
-│   │   │   ├── 03-gin-performance-optimization.md # Gin性能优化
-│   │   │   ├── 04-gin-template-engine.md       # Gin模板引擎深入
-│   │   │   └── 05-gin-context-management.md     # Gin上下文管理
-│   │   └── 05-project/                  # Gin项目实战
-│   │       ├── 01-gin-complete-project.md     # Gin完整项目案例
-│   │       └── 02-gin-microservices-project.md # Gin微服务项目实践
-│   └── architecture/                    # 系统架构设计
-│       ├── 01-architecture-patterns/    # 架构模式
-│       │   ├── 01-layered-architecture.md      # 分层架构设计
-│       │   ├── 02-api-gateway-and-load-balancing.md # API网关与负载均衡
-│       │   └── 03-microservices-architecture.md # 微服务架构
-│       ├── 02-system-design/            # 系统设计
-│       │   └── 01-system-design-principles.md   # 系统设计原则
-│       └── 03-distributed-systems/     # 分布式系统
-│           └── 01-distributed-fundamentals.md   # 分布式系统基础
-├── knowledge-points/                   # Go知识点速查手册
-│   ├── 01-go-keywords.md               # Go关键字详解
-│   ├── 02-go-built-in-functions.md     # Go内置函数手册
-│   ├── 03-go-standard-library.md       # Go标准库速查
-│   ├── 04-go-popular-libraries.md      # Go流行库指南
-│   ├── 05-go-programming-knowledge-points.md # Go编程知识点
-│   ├── 06-gin-framework-knowledge-points.md   # Gin框架知识点
-│   └── 07-gorm-orm-knowledge-points.md        # GORM ORM知识点
-├── basics/                            # Go语言基础
-│   ├── 01-environment-setup.md
-│   ├── 02-basic-syntax.md
-│   ├── 03-data-types.md
-│   ├── 04-control-flow.md
-│   └── 05-oop-concepts.md
-├── standard-library/                  # 标准库深入
-│   ├── 01-fmt-io.md
-│   ├── 02-net-http.md
-│   ├── 03-encoding-json.md
-│   └── 04-database-sql.md
-├── frameworks/                        # Go框架生态
-│   ├── 01-gin-framework.md
-│   ├── 02-echo-framework.md
-│   ├── 03-fiber-framework.md
-│   └── 04-gqlgen-graphql.md
-├── projects/                          # 实战项目
-│   ├── 01-rest-api-server.md
-│   ├── 02-microservices-demo.md
-│   ├── 03-real-time-chat.md
-│   └── 04-cli-tool.md
-├── testing/                           # 测试工程
-│   ├── 01-unit-testing.md
-│   ├── 02-benchmark-testing.md
-│   ├── 03-integration-testing.md
-│   └── 04-test-driven-development.md
-├── deployment/                        # 部署运维
-│   ├── 01-docker-deployment.md
-│   ├── 02-kubernetes-deployment.md
-│   ├── 03-cloud-deployment.md
-│   └── 04-monitoring-observability.md
-└── best-practices/                    # 最佳实践
-    ├── 01-code-organization.md
-    ├── 02-performance-optimization.md
-    ├── 03-security-practices.md
-    └── 04-design-patterns.md
+├── 📚 knowledge-points/           # 知识点速查手册
+│   ├── 📖 language-concepts/      # 语言核心概念
+│   │   ├── 01-go-keywords.md      # Go关键字详解 ✅
+│   │   ├── 02-go-built-in-functions.md # Go内置函数 ✅
+│   │   ├── 03-go-programming-essentials.md # Go编程精华 ✅
+│   │   ├── 04-go-data-types.md    # 数据类型详解 ✅
+│   │   ├── 05-go-control-flow.md  # 控制流程详解 ✅
+│   │   └── 06-go-oop-concepts.md  # 面向对象概念 ✅
+│   ├── 🛠️ framework-essentials/   # 框架核心知识
+│   │   ├── 01-gin-framework.md    # Gin框架速查 ✅
+│   │   └── 02-gorm-orm.md         # GORM ORM速查 ✅
+│   ├── 📦 library-guides/         # 常用库指南
+│   │   ├── 01-go-standard-library.md # 标准库核心API ✅
+│   │   └── 02-third-party-libs.md  # 第三方库精选 ✅
+│   └── 🔧 quick-references/       # 快速参考
+│       ├── 01-syntax-cheatsheet.md # Go语法速查表 ✅
+│       ├── 02-web-tools.md        # Web开发工具 ✅
+│       └── 03-troubleshooting.md  # 常见问题排查 ✅
+├── 📖 basics/                     # 从零开始的系统学习路径
+│   ├── 01-environment-setup.md     # 开发环境搭建 ✅
+│   ├── 02-first-program.md         # 第一个Go程序 ✅
+│   ├── 03-variables-constants.md   # 变量、常量和基础数据类型 ✅
+│   ├── 04-functions-methods.md     # 函数定义与方法调用 ✅
+│   ├── 05-control-structures.md    # 条件语句与循环控制 ✅
+│   └── 06-error-handling.md        # Go错误处理机制 ✅
+├── 🏗️ frameworks/                  # 数据库和框架深度学习路径
+│   ├── 01-gin-framework-basics.md # Gin框架基础入门 ✅
+│   ├── 02-gin-framework-advanced.md # Gin框架高级特性 ✅
+│   ├── 03-gorm-orm-complete.md     # GORM完整学习 ✅
+│   ├── 04-mongodb-go-driver.md     # MongoDB官方Go驱动 ✅
+│   └── 05-go-redis-complete.md     # go-redis客户端学习 ✅
+├── 🚀 projects/                   # 实战项目（技能全覆盖）
+│   ├── 01-rest-api-server.md      # REST API服务器 (Gin+GORM+MySQL) ✅
+│   ├── 02-microservices-demo.md   # 微服务演示 (Gin+Redis+服务发现) ✅
+│   ├── 03-real-time-app.md        # 实时应用 (WebSocket+MongoDB) ✅
+│   └── 04-cli-tool.md             # CLI工具开发 (Cobra+文件操作+配置管理) ✅
+├── 🧪 testing/                    # Go测试工程（符合Go最佳实践）
+│   ├── 01-unit-testing.md         # 单元测试 (testing + testify) ✅
+│   ├── 02-mocking-stubbing.md     # Mock和桩测试 (gomock + mockery) ✅
+│   ├── 03-integration-testing.md  # 集成测试 (testcontainers + 数据库) ✅
+│   └── 04-benchmarking.md         # 基准测试和性能测试 ✅
+├── 🚀 deployment/                 # 现代Go应用部署
+│   ├── 01-containerization.md     # Docker容器化（多阶段构建 + 最小镜像） ✅
+│   ├── 02-ci-cd-pipelines.md      # CI/CD流水线（GitHub Actions + 自动化） ✅
+│   ├── 03-kubernetes-deployment.md # K8s部署（Deployment + Service + ConfigMap） ✅
+│   └── 04-observability.md        # 可观测性（Prometheus + Grafana + OpenTelemetry） ✅
+└── 🎓 advanced-topics/            # 真正的高级主题（精简版，避免同质化）
+    ├── 🚀 performance/            # 性能优化主题
+    │   ├── 01-concurrency-patterns.md  # 高级并发模式 ✅
+    │   └── 02-performance-tuning.md    # 性能调优 ✅
+    ├── 🔒 security/               # 安全实践主题
+    │   └── 01-security-best-practices.md # 安全最佳实践 ✅
+    ├── 🏛️ architecture/           # 架构设计主题（精简）
+    │   └── 01-microservices-design.md  # 微服务架构与云原生 ✅
+    └── 🌐 api-advanced/           # 高级API技术
+        ├── 01-restful-patterns.md  # RESTful API最佳实践 ✅
+        └── 02-graphql-apis.md      # GraphQL开发 ✅
 ```
 
-## 🚀 模块特色
+## 🎯 学习路径建议
 
-### 🎯 针对PHP开发者
-- **概念对比**: 将Go概念与PHP对比，降低学习门槛
-- **思维转换**: 帮助从动态类型思维转向静态类型思维
-- **实战导向**: 基于实际Web开发经验设计学习路径
+### 🎓 基础学习路径（推荐初学者）
+1. **环境搭建** → `basics/01-environment-setup.md`
+2. **语法入门** → `basics/02-first-program.md`
+3. **基础知识** → `basics/03-variables-constants.md` → `basics/04-functions-methods.md`
+4. **控制流程** → `basics/05-control-structures.md`
+5. **错误处理** → `basics/06-error-handling.md`
 
-### 🏗️ 现代化技术栈
-- **Go 1.21+**: 使用最新Go语言特性和泛型
-- **现代框架**: Gin、Echo、Fiber等高性能Web框架
-- **GraphQL**: gqlgen构建现代API
-- **云原生**: Docker、Kubernetes、服务网格
-- **可观测性**: OpenTelemetry、Prometheus、Grafana
-- **DevOps**: GitHub Actions、ArgoCD、GitOps
-- **数据库**: PostgreSQL、Redis、MongoDB
-- **消息队列**: NATS、Kafka、RabbitMQ
+### 🔧 框架学习路径（推荐进阶）
+1. **Gin框架基础** → `frameworks/01-gin-framework-basics.md`
+2. **数据库集成** → `frameworks/03-gorm-orm-complete.md`
+3. **缓存技术** → `frameworks/05-go-redis-complete.md`
+4. **NoSQL数据库** → `frameworks/04-mongodb-go-driver.md`
+5. **高级特性** → `frameworks/02-gin-framework-advanced.md`
 
-### 📖 系统化学习
-- **渐进式路径**: 从基础语法到高级架构
-- **理论与实践**: 每个阶段都有配套项目
-- **完整生态**: 涵盖开发、测试、部署全流程
+### 🚀 项目实战路径（推荐实践）
+1. **REST API** → `projects/01-rest-api-server.md`
+2. **微服务** → `projects/02-microservices-demo.md`
+3. **实时应用** → `projects/03-real-time-app.md`
+4. **CLI工具** → `projects/04-cli-tool.md`
 
-## 🔍 学习路径
+### 🎓 高级主题路径（推荐深入学习）
+1. **性能优化** → `advanced-topics/performance/`
+2. **安全实践** → `advanced-topics/security/`
+3. **架构设计** → `advanced-topics/architecture/`
+4. **API设计** → `advanced-topics/api-advanced/`
 
-### 阶段一：Go基础
-- **目标**: 掌握Go语言基础语法和核心概念
-- **重点**: 环境搭建、基础语法、数据类型、并发基础
-- **输出**: 命令行工具和简单HTTP服务
+## 🛠️ 技术栈概览
 
-### 阶段二：Web框架开发
-- **目标**: 掌握现代Go Web框架和API开发
-- **重点**: Gin/Echo框架、REST/GraphQL API、数据库集成
-- **输出**: 完整的Web应用和API服务
+### 核心技术
+- **语言**: Go 1.21+
+- **Web框架**: Gin (HTTP路由、中间件、模板引擎)
+- **ORM**: GORM (MySQL, PostgreSQL, SQLite)
+- **缓存**: Redis (go-redis客户端)
+- **NoSQL**: MongoDB (mongo-go-driver)
+- **测试**: testing, testify, gomock, testcontainers
+- **部署**: Docker, Kubernetes, Vercel
 
-### 阶段三：高级特性与最佳实践
-- **目标**: 深入理解Go的高级特性和生产级最佳实践
-- **重点**: 并发模式、性能优化、测试工程、监控体系
-- **输出**: 高性能、可观测的Go应用
-
-### 阶段四：云原生与微服务
-- **目标**: 构建云原生Go应用和微服务架构
-- **重点**: 微服务设计、容器化部署、CI/CD、可观测性
-- **输出**: 生产级别的云原生Go应用
-
-## 💡 学习建议
-
-### 🔄 从PHP到Go的思维转换
-- **静态类型**: 享受编译时类型检查和性能优势
-- **错误处理**: 掌握Go的显式错误处理和防御性编程
-- **并发模型**: 理解Goroutine轻量级线程和Channel通信
-- **简洁哲学**: 体验"少即是多"的设计理念和组合优于继承
-- **工具链**: 使用强大的Go工具链（go fmt, go test, go vet等）
-
-### 📚 学习建议
-- **系统学习**: 按阶段逐步掌握知识点，确保理解透彻
-- **实践编程**: 理论与实践结合，完成每个阶段的配套项目
-- **代码审查**: 定期回顾和重构，遵循Go代码规范
-- **社区参与**: 关注Go官方博客、GitHub趋势和最佳实践
-- **技术分享**: 参与Go社区讨论，分享学习心得
-
-## 📋 学习资源
-
-### 官方文档
-- [Go Documentation](https://go.dev/doc/)
-- [Go Tour](https://go.dev/tour/)
-- [Go by Example](https://gobyexample.com/)
-- [Effective Go](https://go.dev/doc/effective_go)
-- [Go Generics Tutorial](https://go.dev/doc/tutorial/generics)
-
-### 推荐书籍
-- 《Go程序设计语言》(The Go Programming Language)
-- 《Go语言实战》(Go in Action)
-- 《Go语言学习笔记》
-- 《Go并发编程实战》
-- 《Go语言高级编程》
-- 《云原生Go：构建基于Go的云原生应用》
-
-### 在线资源
-- [Go官方博客](https://go.dev/blog/)
-- [Go.dev](https://go.dev/)
-- [Awesome Go](https://github.com/avelino/awesome-go)
-- [Go Web编程](https://github.com/astaxie/build-web-application-with-golang/blob/master/zh/preface.md)
-- [Go语言设计哲学](https://draveness.me/golang/)
-- [Practical Go Lessons](https://www.practical-go-lessons.com/)
-
-### 视频教程
-- [Go官方YouTube频道](https://www.youtube.com/c/GoogleGoDevelopers)
-- [GopherCon Talks](https://www.youtube.com/c/GopherCon)
-- [Go Time播客](https://changelog.com/gotime)
-- [JustForFunc YouTube频道](https://www.youtube.com/c/justforfunc)
-
-### 实践平台
-- [Go Playground](https://go.dev/play/)
-- [Go by Example](https://gobyexample.com/)
-- [HackerRank Go题目](https://www.hackerrank.com/domains/tutorials/10-days-of-golang)
-- [LeetCode Go题目](https://leetcode.com/)
-
-## 🔄 进度跟踪
-
-### 基础阶段
-- [ ] 环境搭建和工具配置 (go, git, IDE)
-- [ ] 基础语法和数据类型 (变量、常量、基本类型)
-- [ ] 控制流程和函数 (条件、循环、函数定义)
-- [ ] 结构体和方法 (面向对象编程)
-- [ ] 接口和组合 (Go的设计哲学)
-- [ ] 并发基础 (goroutine, channel基础)
-- [ ] 错误处理和测试 (unit test)
-
-### Web框架开发阶段
-- [ ] HTTP标准库深入 (net/http)
-- [ ] Gin框架核心特性 (路由、中间件)
-- [ ] REST API设计和实现
-- [ ] 数据库集成 (PostgreSQL, Redis)
-- [ ] Echo/Fiber框架对比
-- [ ] GraphQL API开发 (gqlgen)
-- [ ] 认证和授权 (JWT, OAuth2)
-
-### 高级特性与最佳实践阶段
-- [ ] 并发模式深入 (context, sync包)
-- [ ] 性能优化和调优 (pprof, benchmark)
-- [ ] 测试工程 (unit, integration, benchmark)
-- [ ] 错误处理和日志 (zap, structured logging)
-- [ ] 配置管理 (viper, 12-factor app)
-- [ ] 设计模式和架构 (DDD, Clean Architecture)
-
-### 云原生与微服务阶段
-- [ ] 微服务架构设计
-- [ ] gRPC和Protobuf
-- [ ] 服务发现和负载均衡
-- [ ] 容器化部署 (Docker, multi-stage builds)
-- [ ] Kubernetes部署和编排
-- [ ] 可观测性 (OpenTelemetry, Prometheus)
-- [ ] CI/CD流水线 (GitHub Actions, GitOps)
-- [ ] 云平台部署 (AWS, GCP, Azure, 阿里云)
+### 开发工具
+- **包管理**: Go Modules
+- **依赖管理**: go mod tidy
+- **代码格式化**: gofmt, goimports
+- **静态分析**: go vet, golangci-lint
+- **性能分析**: pprof, trace
 
 ## 🎯 学习成果
 
-完成本模块后，你将能够：
+完成本模块学习后，您将具备：
 
-- ✅ **独立开发**: 使用Go构建高性能、可扩展的Web应用和微服务
-- ✅ **架构设计**: 设计现代化的云原生架构和微服务系统
-- ✅ **性能优化**: 编写高性能的Go代码，掌握性能分析和调优
-- ✅ **工程实践**: 掌握Go的最佳实践、设计模式和测试驱动开发
-- ✅ **云原生部署**: 熟练使用Docker、Kubernetes部署和运维Go应用
-- ✅ **可观测性**: 构建完整的监控、日志和追踪体系
-- ✅ **DevOps流程**: 建立CI/CD流水线和自动化部署流程
-- ✅ **技术视野**: 理解Go在云原生、分布式系统中的应用
+### ✅ 技术能力
+- **Go语言精通**: 从基础语法到高级特性的全面掌握
+- **框架应用**: 熟练使用主流Go Web框架
+- **数据库操作**: 关系型、文档型、缓存数据库的综合应用
+- **并发编程**: 理解goroutine、channel、select等并发机制
+
+### ✅ 工程能力
+- **测试驱动**: 单元测试、集成测试、性能测试的完整实践
+- **容器化**: Docker容器化和云原生部署
+- **CI/CD**: 自动化构建、测试、部署流水线
+- **监控运维**: 应用监控、日志管理、性能调优
+
+### ✅ 项目经验
+- **REST API**: 完整的RESTful API设计和实现
+- **微服务**: 微服务架构的设计和开发
+- **实时应用**: WebSocket等实时通信技术
+- **CLI工具**: 命令行工具的开发和发布
+
+## 🚀 进阶方向
+
+完成本模块后，您可以继续学习：
+
+- **深入学习**: `02-nextjs-frontend` - 全栈Web开发
+- **云原生**: Kubernetes高级应用、服务网格
+- **分布式系统**: 消息队列、服务发现、分布式事务
+- **性能优化**: 大规模系统性能调优和架构优化
+
+## 🤝 学习支持
+
+### 📚 参考资源
+- **官方文档**: [Go官方文档](https://golang.org/doc/)
+- **标准库**: [Go标准库文档](https://pkg.go.dev/std/)
+
+### 🛠️ 开发工具
+- **Go Playground**: [在线Go编辑器](https://go.dev/play)
+- **Go Tour**: [交互式Go教程](https://tour.golang.org/)
+
+### 📈 社区资源
+- **Go论坛**: [Go官方论坛](https://forum.golangbridge.org/)
+- **Go博客**: [Go官方博客](https://go.dev/blog/)
 
 ---
 
-**重要提示**: 本模块专为有PHP开发经验的学习者设计，重点关注Go与PHP的差异和Go在现代化后端开发中的独特优势。建议按渐进式学习路径逐步掌握，每个阶段都包含理论学习和实践项目。
+**模块状态**: ✅ 重构完成
+**最后更新**: 2025年10月
+**版本**: v2.0.0
 
-**模块特色**:
-- 🔄 **思维转换**: 帮助PHP开发者顺利转向Go的静态类型和并发思维
-- 🏗️ **现代化技术栈**: 涵盖Go 1.21+、云原生、微服务等前沿技术
-- 📖 **完整生态**: 从开发、测试到部署运维的全流程覆盖
-- 🎯 **实战导向**: 每个阶段都有真实项目案例和最佳实践
+> 💡 **学习建议**:
+> - 遵循双路径学习：系统学习（basics）+快速查阅（knowledge-points）
+> - 实践导向：每个阶段都配合实际项目练习
+> - 工程思维：重视代码质量、测试覆盖、部署自动化
+>
+> - 持续更新：关注Go语言和生态的最新发展
 
-*最后更新: 2025年10月*
+---
+
+## 🔄 文档交叉引用
+
+### 📚 核心学习资源
+- 📄 **[学习路线图]**: [Go语言学习路线.md](Go语言学习路线.md) - 从零基础到高级的完整学习路径
+- 📄 **[知识速查手册]**: [knowledge-points/](knowledge-points/) - 快速查阅Go语言知识点
+- 📄 **[系统化学习]**: [basics/](basics/) - 从零开始的渐进式学习
+
+### 🛠️ 技术框架学习
+- 📄 **[Gin框架基础]**: [frameworks/01-gin-framework-basics.md](frameworks/01-gin-framework-basics.md) - Web框架入门
+- 📄 **[Gin框架进阶]**: [frameworks/02-gin-framework-advanced.md](frameworks/02-gin-framework-advanced.md) - 高级特性和最佳实践
+- 📄 **[GORM完整教程]**: [frameworks/03-gorm-orm-complete.md](frameworks/03-gorm-orm-complete.md) - 数据库ORM学习
+- 📄 **[MongoDB开发]**: [frameworks/04-mongodb-go-driver.md](frameworks/04-mongodb-go-driver.md) - NoSQL数据库开发
+- 📄 **[Redis缓存]**: [frameworks/05-go-redis-complete.md](frameworks/05-go-redis-complete.md) - 缓存系统开发
+
+### 🚀 实战项目
+- 📄 **[REST API服务器]**: [projects/01-rest-api-server.md](projects/01-rest-api-server.md) - Web API开发实战
+- 📄 **[微服务演示]**: [projects/02-microservices-demo.md](projects/02-microservices-demo.md) - 微服务架构实战
+- 📄 **[实时应用开发]**: [projects/03-real-time-app.md](projects/03-real-time-app.md) - WebSocket实时通信
+- 📄 **[CLI工具开发]**: [projects/04-cli-tool.md](projects/04-cli-tool.md) - 命令行工具开发
+
+### 🧪 质量保证
+- 📄 **[单元测试]**: [testing/01-unit-testing.md](testing/01-unit-testing.md) - 测试驱动开发
+- 📄 **[Mock和桩测试]**: [testing/02-mocking-stubbing.md](testing/02-mocking-stubbing.md) - 高级测试技术
+- 📄 **[集成测试]**: [testing/03-integration-testing.md](testing/03-integration-testing.md) - 系统集成测试
+- 📄 **[性能测试]**: [testing/04-benchmarking.md](testing/04-benchmarking.md) - 性能基准测试
+
+### 🚀 部署运维
+- 📄 **[Docker容器化]**: [deployment/01-containerization.md](deployment/01-containerization.md) - 容器化部署
+- 📄 **[CI/CD流水线]**: [deployment/02-ci-cd-pipelines.md](deployment/02-ci-cd-pipelines.md) - 自动化部署
+- 📄 **[Kubernetes部署]**: [deployment/03-kubernetes-deployment.md](deployment/03-kubernetes-deployment.md) - 容器编排
+- 📄 **[监控可观测性]**: [deployment/04-observability.md](deployment/04-observability.md) - 应用监控
+
+### 🎓 高级主题
+- 📄 **[微服务架构]**: [advanced-topics/architecture/01-microservices-design.md](advanced-topics/architecture/01-microservices-design.md) - 分布式系统设计
+- 📄 **[API设计模式]**: [advanced-topics/api-advanced/01-restful-patterns.md](advanced-topics/api-advanced/01-restful-patterns.md) - RESTful API最佳实践
+- 📄 **[GraphQL开发]**: [advanced-topics/api-advanced/02-graphql-apis.md](advanced-topics/api-advanced/02-graphql-apis.md) - 现代API开发
+- 📄 **[安全最佳实践]**: [advanced-topics/security/01-security-best-practices.md](advanced-topics/security/01-security-best-practices.md) - 应用安全
+- 📄 **[并发编程模式]**: [advanced-topics/performance/01-concurrency-patterns.md](advanced-topics/performance/01-concurrency-patterns.md) - 高级并发
+- 📄 **[性能调优]**: [advanced-topics/performance/02-performance-tuning.md](advanced-topics/performance/02-performance-tuning.md) - 系统优化
+
+### 参考章节
+- 📖 **[其他模块]**: [../../02-frontend/](../../02-frontend/) - 前端开发模块
+- 📖 **[其他模块]**: [../../03-devops/](../../03-devops/) - DevOps模块
+- 📖 **[共享资源]**: [../../shared-resources/](../../shared-resources/) - 文档标准和工具
+
+---
+
+> 💡 **重构说明**:
+> 本模块已于2025年10月完成重构，采用现代化的双路径学习体系，消除冗余内容，建立清晰的学习路径，大幅提升学习效率和质量。
