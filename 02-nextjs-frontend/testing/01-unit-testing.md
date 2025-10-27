@@ -1401,4 +1401,91 @@ export async function waitForLoadingToFinish() {
 - 前端测试的特殊考虑
 - 组件测试与单元测试的区别
 
-掌握这些单元测试技能，将帮助您构建更高质量、更可靠的Next.js应用程序。单元测试不仅是代码质量的保证，也是重构和维护的基石。
+## 🔗 相关资源链接
+
+### 官方资源
+- [Vitest 官方文档](https://vitest.dev/)
+- [Testing Library 官方文档](https://testing-library.com/)
+- [React Testing Library](https://testing-library.com/docs/react-testing-library/intro/)
+- [Zod 官方文档](https://zod.dev/)
+
+### 技术文章
+- [现代前端测试最佳实践](https://kentcdodds.com/blog/common-testing-mistakes)
+- [Vitest vs Jest 对比](https://vitest.dev/guide/comparisons.html)
+- [React组件测试策略](https://testing-library.com/docs/react-testing-library/example-intro)
+- [Mock策略和最佳实践](https://kentcdodds.com/blog/the-merits-of-mocking)
+
+### 工具和资源
+- [Vitest UI](https://vitest.dev/guide/ui.html)
+- [React Hook Form Testing](https://react-hook-form.com/advanced-usage#testing)
+- [MSW (Mock Service Worker)](https://mswjs.io/)
+
+## 📚 模块内相关文档
+
+### 同模块相关文档
+- [端到端测试指南](./03-e2e-testing.md) - 学习完整的E2E测试策略和实践
+
+### 相关知识模块
+- [框架相关模块](../frameworks/01-nextjs-15-complete.md) - Next.js 15的架构为测试提供的基础
+- [框架相关模块](../frameworks/02-react-19-integration.md) - React 19组件的测试策略
+- [框架相关模块](../frameworks/03-full-stack-patterns.md) - 全栈应用的API测试和集成测试
+
+### 基础前置知识
+- [JavaScript 测试基础](../../../00-javascript-foundation/basics/03-javascript-testing.md) - JavaScript测试的基础概念
+- [TypeScript 类型检查](../../../00-javascript-foundation/advanced/01-typescript-type-system.md) - TypeScript在测试中的应用
+- [React Hooks 完全指南](../../../01-react-foundation/advanced/03-react-hooks-deep-dive.md) - React Hooks的测试原理
+
+---
+
+## ✨ 总结
+
+### 核心技术要点
+1. **现代测试框架**: Vitest的配置和使用，相比传统测试工具的优势
+2. **组件测试策略**: React Testing Library的测试哲学和最佳实践
+3. **Hook测试模式**: 自定义Hook的测试技巧和模拟策略
+4. **异步测试处理**: Promise、定时器和API调用的测试方法
+5. **Mock和Stub**: 有效的模拟策略和依赖注入技术
+
+### 学习成果自检
+- [ ] 理解现代前端测试的核心理念和测试金字塔
+- [ ] 掌握Vitest和React Testing Library的配置和使用
+- [ ] 能够编写高质量的React组件单元测试
+- [ ] 熟练测试自定义Hooks和异步函数
+- [ ] 能够制定合理的测试策略和覆盖率目标
+
+---
+
+## 🤝 贡献与反馈
+
+### 贡献指南
+欢迎提交Issue和Pull Request来改进本模块内容！请遵循以下步骤：
+
+1. Fork 本仓库
+2. 创建特性分支 (`git checkout -b feature/amazing-feature`)
+3. 提交变更 (`git commit -m 'Add amazing feature'`)
+4. 推送到分支 (`git push origin feature/amazing-feature`)
+5. 创建Pull Request
+
+### 反馈渠道
+- **问题反馈**: [GitHub Issues](https://github.com/your-username/dev-quest/issues)
+- **内容建议**: [Discussion板块](https://github.com/your-username/dev-quest/discussions)
+- **技术交流**: 欢迎提交PR或Issue参与讨论
+
+### 贡献者
+- Dev Quest Team - 核心内容开发
+- 社区贡献者 - 内容完善和纠错
+
+---
+
+**📜 文档版本**: v1.0.0
+**📅 最后更新**: 2025年10月
+**🏷️ 标签**: `#unit-testing` `#vitest` `#testing-library` `#react-testing` `#mocking`
+**⭐ 推荐指数**: ⭐⭐⭐⭐⭐
+
+**💡 提示**: 本模块专注于现代前端单元测试实践，建议结合实际项目进行练习。
+
+**🎯 学习建议**:
+- 建议学习周期: 1-2周
+- 理论与实践时间比例: 4:6
+- 重点掌握组件测试和Hook测试
+- 从简单工具函数开始，逐步过渡到复杂组件测试

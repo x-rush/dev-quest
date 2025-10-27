@@ -1,6 +1,24 @@
-# Vercel部署指南 (Vercel Deployment Guide)
+# Next.js 15 Vercel 企业级部署完整指南
 
-> **PHP开发者视角**: 从传统服务器部署到现代云部署的转变，了解Vercel如何简化Next.js应用的部署流程。
+> **文档简介**: Next.js 15 + Vercel 企业级部署实践指南，涵盖自动部署、全球CDN、Serverless函数、性能优化、监控告警等现代云部署技术
+
+> **目标读者**: 具备Next.js基础的开发者，需要掌握企业级部署和运维的DevOps工程师
+
+> **前置知识**: Next.js 15基础、Git版本控制、HTTP协议、基础DevOps概念、云服务基础
+
+> **预计时长**: 4-6小时
+
+## 📚 文档元数据
+
+| 属性 | 内容 |
+|------|------|
+| **模块** | `02-nextjs-frontend` |
+| **分类** | `deployment` |
+| **难度** | ⭐⭐⭐ (3/5星) |
+| **标签** | `#vercel` `#deployment` `#serverless` `#cdn` `#devops` `#ci-cd` |
+| **更新日期** | `2025年10月` |
+| **作者** | Dev Quest Team |
+| **状态** | ✅ 已完成 |
 
 ## Vercel简介
 
@@ -1020,4 +1038,94 @@ export async function GET() {
 - 现代部署工具的优势
 - DevOps实践的改进
 
-掌握Vercel部署技能，将帮助您更加高效地部署和管理Next.js应用，享受现代云平台带来的便利和优势。Vercel不仅是一个部署平台，更是现代前端开发理念的体现。
+## 🔗 相关资源链接
+
+### 官方资源
+- [Next.js 部署文档](https://nextjs.org/docs/deployment)
+- [Vercel 官方文档](https://vercel.com/docs)
+- [Vercel 配置参考](https://vercel.com/docs/projects/project-configuration)
+- [Vercel 环境变量](https://vercel.com/docs/projects/environment-variables)
+
+### 技术文章
+- [Next.js 部署最佳实践](https://vercel.com/guides/deploying-nextjs)
+- [Vercel 性能优化](https://vercel.com/docs/concepts/next.js/production-optimizations)
+- [Serverless 函数指南](https://vercel.com/docs/concepts/functions/serverless-functions)
+- [边缘计算实践](https://vercel.com/docs/concepts/edge-network/overview)
+
+### 工具和资源
+- [Vercel CLI](https://vercel.com/docs/cli)
+- [Vercel Analytics](https://vercel.com/docs/analytics)
+- [Vercel Speed Insights](https://vercel.com/docs/speed-insights)
+- [Vercel Logs](https://vercel.com/docs/concepts/projects/logs)
+
+## 📚 模块内相关文档
+
+### 同模块相关文档
+- [Docker容器化部署](./02-docker-containerization.md) - 学习容器化部署和Vercel的对比
+- [CI/CD流水线](./03-ci-cd-pipelines.md) - 深入了解自动化部署和Vercel集成
+- [监控与分析](./04-monitoring-analytics.md) - 应用监控和Vercel Analytics的使用
+
+### 相关知识模块
+- [框架相关模块](../frameworks/01-nextjs-15-complete.md) - Next.js 15的部署优化配置
+- [框架相关模块](../frameworks/04-performance-optimization.md) - 性能优化在Vercel部署中的应用
+- [测试相关模块](../testing/03-e2e-testing.md) - E2E测试在Vercel环境中的执行
+
+### 基础前置知识
+- [React 部署基础](../../../01-react-foundation/basics/05-react-deployment.md) - React应用部署的基础概念
+- [HTTP/2 网络协议](../../../01-react-foundation/advanced/07-http2-networking.md) - 理解CDN和网络优化
+- [云服务基础](../../../01-react-foundation/advanced/08-cloud-services.md) - 云服务和Serverless概念
+
+---
+
+## ✨ 总结
+
+### 核心技术要点
+1. **Vercel平台特性**: 零配置部署、全球CDN、Serverless函数的企业级特性
+2. **项目配置优化**: next.config.ts、vercel.json和环境变量的最佳实践
+3. **部署流程管理**: CLI部署、Git集成和分支部署策略
+4. **高级功能**: 边缘函数、中间件和自定义服务器配置
+5. **性能和监控**: 内置优化工具、Analytics集成和错误监控
+
+### 学习成果自检
+- [ ] 理解Vercel平台的核心特性和优势
+- [ ] 掌握Next.js 15项目的Vercel配置和优化
+- [ ] 能够实施完整的部署流程和CI/CD集成
+- [ ] 熟练运用Vercel的高级功能和边缘计算
+- [ ] 能够建立完善的监控和分析体系
+
+---
+
+## 🤝 贡献与反馈
+
+### 贡献指南
+欢迎提交Issue和Pull Request来改进本模块内容！请遵循以下步骤：
+
+1. Fork 本仓库
+2. 创建特性分支 (`git checkout -b feature/amazing-feature`)
+3. 提交变更 (`git commit -m 'Add amazing feature'`)
+4. 推送到分支 (`git push origin feature/amazing-feature`)
+5. 创建Pull Request
+
+### 反馈渠道
+- **问题反馈**: [GitHub Issues](https://github.com/your-username/dev-quest/issues)
+- **内容建议**: [Discussion板块](https://github.com/your-username/dev-quest/discussions)
+- **技术交流**: 欢迎提交PR或Issue参与讨论
+
+### 贡献者
+- Dev Quest Team - 核心内容开发
+- 社区贡献者 - 内容完善和纠错
+
+---
+
+**📜 文档版本**: v1.0.0
+**📅 最后更新**: 2025年10月
+**🏷️ 标签**: `#vercel` `#deployment` `#serverless` `#cdn` `#devops`
+**⭐ 推荐指数**: ⭐⭐⭐⭐⭐
+
+**💡 提示**: 本模块为Vercel部署专项指南，适合需要掌握现代云部署的开发者。
+
+**🎯 学习建议**:
+- 建议学习周期: 1-2周
+- 理论与实践时间比例: 4:6
+- 重点掌握部署配置和CI/CD集成
+- 结合实际项目进行部署实践和优化
