@@ -1,273 +1,137 @@
-# React Native 三端原生应用开发 - Android+iOS+鸿蒙全覆盖
+# React Native 三端原生应用开发 — Android + iOS + 鸿蒙
 
-> **难度**: ⭐⭐⭐⭐⭐ | **学习方式**: 跨平台原生 | **目标**: 三端原生App全覆盖
+> **模块简介**: 专注 React Native 跨平台原生应用开发，一套 TypeScript 代码覆盖 Android、iOS、鸿蒙（HarmonyOS，经 RNOH 适配）三端，实现原生级用户体验与生态全覆盖
 >
-> **模块简介**: 专注React Native跨平台原生应用开发，一次开发三端部署(Android+iOS+HarmonyOS)，实现原生级用户体验和生态全覆盖。
+> **技术栈**: React Native 0.7x 新架构（Fabric 渲染器 + TurboModules）· Expo SDK 最新稳定版 · TypeScript · Reanimated 3 · Expo Router / EAS
+>
+> **目标读者**: 有 React/TypeScript 基础、准备进入移动端开发的工程师，直至主导生产级应用交付的资深开发者
 
-## 📚 文档元数据
+## 📚 模块元数据
 
 | 属性 | 内容 |
 |------|------|
-| **模块类型** | 跨平台原生应用开发 |
-| **核心框架** | React Native 0.72+ + React Native for HarmonyOS |
-| **目标平台** | Android + iOS + HarmonyOS |
-| **难度等级** | ⭐⭐⭐⭐⭐ (需要完整前端+后端基础) |
-| **更新日期** | 2025年10月 |
-| **作者** | Dev Quest Team |
-| **状态** | 🚧 规划中 |
+| **模块类型** | 跨平台原生应用开发（应用帝国矩阵 · 核心重点） |
+| **核心框架** | React Native 0.7x 新架构 + Expo SDK |
+| **目标平台** | Android + iOS + HarmonyOS（RNOH） |
+| **内容形式** | 纯文档学习路径（本仓库无可运行代码） |
+| **更新日期** | 2026年9月 |
+| **维护团队** | Dev Quest Team |
 
 ## 🎯 学习目标
 
 完成本模块后，你将能够：
 
-- ✅ **三端原生开发**: 使用React Native开发Android、iOS、鸿蒙原生应用
-- ✅ **原生性能**: 掌握接近原生应用的性能优化技巧
-- ✅ **生态整合**: 深入集成三大移动生态系统特性
-- ✅ **跨平台架构**: 设计和维护大规模跨平台应用架构
-- ✅ **商业化发布**: 完成三大平台应用商店发布和运营
+- ✅ **三端原生开发**：用 React Native 开发 Android、iOS、鸿蒙（RNOH 适配）原生应用
+- ✅ **新架构素养**：理解 Fabric/TurboModules/JSI 并据此写出正确的性能代码
+- ✅ **生态整合**：熟练使用 Expo Router、EAS、Zustand、MMKV 等主流生态工具
+- ✅ **工程化交付**：建立"测试 → 构建 → 上架 → OTA → 监控"的完整发布闭环
+- ✅ **生产级运营**：以崩溃率、启动耗时等质量指标运营真实应用
 
-## 🚀 平台优先级策略
+## 🧭 四象限导览
 
-### 🥇 第一优先级：Android应用开发
-**目标**: MVP验证和主要用户群体
-**选择原因**: 你有Android设备，可立即测试调试
+| 象限 | 目录 | 内容定位 | 文档 |
+|------|------|---------|------|
+| **教程** | `basics/` | 按序学习的入门教程，从环境搭建到第一个完整项目 | 8 篇 |
+| **字典** | `reference/` | 全量参考条目，无难度门槛，任意跳入查阅 | 11 篇 |
+| **操作指南** | `frameworks/` | React Native 框架从入门到进阶的任务式指南 + 生态集成 + 调试工具 | 4 篇 |
+| **操作指南** | `projects/` | 四个递进实战项目：待办 → 天气 → 聊天 → 生产级 | 4 篇 |
+| **操作指南** | `testing/` | Jest 单测 / RNTL 组件测试 / Maestro E2E 三层测试体系 | 3 篇 |
+| **操作指南** | `deployment/` | EAS 构建 → 双商店上架 → OTA 与可观测性 | 3 篇 |
+| **解释** | `advanced-topics/` | 新架构原理、渲染/启动性能、安全实践的深度剖析 | 4 篇 |
 
-1. **Android App** (25亿+设备)
-   - **优势**: 设备门槛低、调试便利、Google Play生态完善
-   - **重点**: React Native Android深度开发、原生模块集成
-   - **商业价值**: 快速市场验证，建立用户基础
+**单一事实来源**：概念的完整解释只在 `reference/` 存在一份，其他目录链接过去。查概念先翻字典，学技能按路径走。
 
-### 🥈 第二优先级：HarmonyOS应用开发
-**目标**: 新兴生态布局，抢占先机
-**选择原因**: 国产化趋势，政策支持，竞争少
+## 🛤️ 学习路径
 
-2. **HarmonyOS App** (1亿+设备，快速增长)
-   - **优势**: 国产化支持、厂商预装、新兴市场蓝海
-   - **重点**: React Native for OpenHarmony适配、鸿蒙特性集成
-   - **商业价值**: 政策红利，新兴生态，差异化竞争
+### 入门路径（⭐）
 
-### 🥉 第三优先级：iOS应用开发
-**目标**: 生态完善，商业价值最大化
-**选择原因**: 全球化布局，高价值用户群体
+零基础到第一个可交付的跨平台应用：
 
-3. **iOS App** (15亿+设备)
-   - **优势**: 高价值用户、付费意愿强、App Store生态完善
-   - **重点**: React Native iOS深度优化、苹果生态特性
-   - **商业价值**: 全球化市场，高ARPU值用户
+[环境搭建](basics/01-environment-setup.md) → [第一个 App](basics/02-first-app.md) → [核心组件与 Flexbox](basics/03-components-jsx.md) → [状态与 Hooks](basics/04-state-hooks.md) → [导航基础](basics/05-navigation.md) → [综合练习：待办记账 App](basics/08-first-project.md) → [RN 框架入门](frameworks/01-react-native-basics.md) → [实战：待办应用](projects/01-todo-app.md)
 
-## 📋 跨平台开发策略
+### 进阶路径（⭐⭐）
 
-### 阶段一：React Native基础掌握
-**目标**: 建立React Native开发基础
+原生能力、新架构开发与工程化：
 
-1. **环境搭建和基础**
-   - React Native开发环境配置
-   - 核心组件和API学习
-   - 调试和测试流程
+[原生模块桥接](basics/06-native-modules.md) → [高级特性：Fabric/Hermes/动画](basics/07-advanced-features.md) → [RN 框架进阶](frameworks/02-react-native-advanced.md) → [生态集成](frameworks/03-ecosystem-integration.md) → [开发工具链](frameworks/04-devtools.md) → [实战：天气应用](projects/02-weather-app.md) → [实战：聊天应用](projects/03-chat-app.md) → [单元测试](testing/01-unit-testing.md) → [组件测试](testing/02-component-testing.md) → [端到端测试](testing/03-e2e-testing.md) → [EAS Build](deployment/01-eas-build.md) → [商店上架](deployment/02-app-store-release.md)
 
-2. **第一个跨平台应用**
-   - 简单应用开发
-   - Android基础运行验证
-   - 开发工具链熟悉
+### 精通路径（⭐⭐⭐）
 
-### 阶段二：Android深度开发
-**目标**: Android平台深度掌握和MVP验证
+架构理解、性能攻坚与生产运营：
 
-1. **Android原生特性集成**
-   - Android原生模块开发
-   - 系统API深度调用
-   - 性能优化和调试
+[新架构解析：Fabric/TurboModules/JSI](advanced-topics/architecture/01-new-architecture.md) → [渲染性能](advanced-topics/performance/01-rendering-performance.md) → [启动优化](advanced-topics/performance/02-startup-optimization.md) → [OTA 更新与可观测性](deployment/03-ota-updates-observability.md) → [安全实践](advanced-topics/security/01-security-practices.md) → [实战：生产级移动应用](projects/04-production-mobile-app.md)
 
-2. **MVP产品开发和验证**
-   - 完整应用开发
-   - Google Play上架流程
-   - 用户反馈收集和迭代
+> 💡 字典（reference/）不在任何路径中——它陪伴全程：遇到概念随时查 [核心 API](reference/language-concepts/01-rn-core-api.md)、[组件 Props](reference/language-concepts/02-components-props.md)、[Hooks 速查](reference/language-concepts/03-hooks-reference.md)、[CLI 与调试速查](reference/quick-references/01-cli-and-debug-cheatsheet.md)。
 
-### 阶段三：HarmonyOS适配开发
-**目标**: 鸿蒙生态布局和差异化优势
+## 📁 实际文件树
 
-1. **React Native for HarmonyOS**
-   - RNOH环境搭建和适配
-   - 鸿蒙特有API集成
-   - 华为应用市场上架
-
-2. **鸿蒙生态深度整合**
-   - 华为生态特性利用
-   - 鸿蒙系统级功能调用
-   - 厂商合作机会挖掘
-
-### 阶段四：iOS扩展和三端统一
-**目标**: 全球化布局和三端体验统一
-
-1. **iOS应用开发**
-   - React Native iOS特性
-   - 苹果生态特性集成
-   - App Store发布流程
-
-2. **三端架构优化**
-   - 跨平台代码架构优化
-   - 平台差异化处理
-   - 统一用户体验设计
-
-## 📁 目录结构
-
-```
+```text
 04-multiplatform-apps/
-├── README.md                              # 本文档
-├── advanced-topics/                       # 高级主题深度内容
-│   ├── cross-platform-architecture/       # 跨平台架构设计
-│   │   ├── 01-code-sharing-strategies.md  # 代码复用策略
-│   │   ├── 02-platform-specific-modules.md # 平台特定模块
-│   │   ├── 03-state-management.md         # 跨平台状态管理
-│   │   └── 04-performance-optimization.md # 性能优化
-│   ├── native-modules/                    # 原生模块开发
-│   │   ├── 01-android-native-modules.md   # Android原生模块
-│   │   ├── 02-ios-native-modules.md       # iOS原生模块
-│   │   ├── 03-harmony-native-modules.md   # 鸿蒙原生模块
-│   │   └── 04-bridging-techniques.md      # 桥接技术
-│   ├── platform-integration/             # 平台深度集成
-│   │   ├── 01-android-deep-integration.md # Android深度集成
-│   │   ├── 02-harmony-ecosystem.md        # 鸿蒙生态集成
-│   │   ├── 03-ios-ecosystem.md            # iOS生态集成
-│   │   └── 04-cross-platform-api.md       # 跨平台API设计
-│   └── deployment-strategy/               # 部署发布策略
-│       ├── 01-google-play-strategy.md     # Google Play策略
-│       ├── 02-huawei-appgallery.md        # 华为应用市场
-│       ├── 03-app-store-strategy.md       # App Store策略
-│       └── 04-ci-cd-pipelines.md          # CI/CD流水线
-├── reference/  # 知识字典（全量参考）
-│   ├── react-native-core/                 # React Native核心
-│   │   ├── 01-components-overview.md      # 组件系统
-│   │   ├── 02-navigation.md               # 导航系统
-│   │   ├── 03-state-management.md         # 状态管理
-│   │   └── 04-styling-and-animations.md   # 样式和动画
-│   ├── platform-apis/                    # 平台API速查
-│   │   ├── 01-android-apis.md             # Android API
-│   │   ├── 02-ios-apis.md                 # iOS API
-│   │   ├── 03-harmony-apis.md             # 鸿蒙API
-│   │   └── 04-cross-platform-apis.md      # 跨平台API
-│   ├── development-tools/                 # 开发工具
-│   │   ├── 01-vs-code-setup.md            # VS Code配置
-│   │   ├── 02-debugging-tools.md          # 调试工具
-│   │   ├── 03-profiling-tools.md          # 性能分析工具
-│   │   └── 04-testing-frameworks.md       # 测试框架
-│   └── best-practices/                    # 最佳实践
-│       ├── 01-code-organization.md        # 代码组织
-│       ├── 02-performance-tips.md         # 性能优化技巧
-│       ├── 03-security-practices.md       # 安全实践
-│       └── 04-maintainability.md          # 可维护性
-├── basics/                                # React Native基础
-│   ├── 01-environment-setup.md            # 环境搭建
-│   ├── 02-react-native-fundamentals.md    # RN基础概念
-│   ├── 03-components-and-props.md         # 组件和属性
-│   ├── 04-state-and-lifecycle.md          # 状态和生命周期
-│   └── 05-navigation-basics.md            # 导航基础
-├── frameworks/                            # 框架和生态
-│   ├── 01-navigation-libraries.md         # 导航库
-│   ├── 02-state-management-solutions.md   # 状态管理方案
-│   ├── 03-ui-component-libraries.md       # UI组件库
-│   ├── 04-networking-libraries.md         # 网络库
-│   └── 05-development-tools.md            # 开发工具
-├── projects/                              # 实战项目
-│   ├── 01-social-networking-app.md        # 社交网络App
-│   ├── 02-productivity-app.md             # 生产力工具App
-│   ├── 03-ecommerce-app.md                # 电商App
-│   ├── 04-education-app.md                # 教育App
-│   └── 05-lifestyle-app.md                # 生活服务App
-├── testing/                               # 测试工程
-│   ├── 01-unit-testing.md                 # 单元测试
-│   ├── 02-integration-testing.md          # 集成测试
-│   ├── 03-e2e-testing.md                  # 端到端测试
-│   └── 04-platform-testing.md             # 平台兼容性测试
-├── deployment/                            # 部署发布
-│   ├── 01-build-configuration.md          # 构建配置
-│   ├── 02-google-play-deployment.md       # Google Play发布
-│   ├── 03-huawei-appgallery-deployment.md # 华为应用市场发布
-│   ├── 04-app-store-deployment.md         # App Store发布
-│   └── 05-monitoring-analytics.md         # 监控分析
-└── case-studies/                          # 成功案例
-    ├── 01-cross-platform-successes.md     # 跨平台成功案例
-    ├── 02-performance-optimization.md     # 性能优化案例
-    ├── 03-monetization-strategies.md      # 商业化案例
-    └── 04-scaling-stories.md              # 规模化案例
+├── README.md                                   # 本文档
+├── React Native三端原生应用学习路线.md            # 历史规划文档（存档）
+├── basics/                                     # 教程：按序学习入门
+│   ├── 01-environment-setup.md                 # ⭐ 环境搭建
+│   ├── 02-first-app.md                         # ⭐ 第一个 App
+│   ├── 03-components-jsx.md                    # ⭐ 核心组件、JSX 与 Flexbox
+│   ├── 04-state-hooks.md                       # ⭐ 状态与 Hooks
+│   ├── 05-navigation.md                        # ⭐ 导航基础
+│   ├── 06-native-modules.md                    # ⭐⭐ 原生模块桥接
+│   ├── 07-advanced-features.md                 # ⭐⭐ Fabric、Hermes 与动画
+│   └── 08-first-project.md                     # ⭐ 综合练习：待办记账 App
+├── reference/                                  # 字典：全量参考，无难度门槛
+│   ├── language-concepts/
+│   │   ├── 01-rn-core-api.md                   # RN 核心 API
+│   │   ├── 02-components-props.md              # 核心组件 Props 全表
+│   │   ├── 03-hooks-reference.md               # Hooks 速查
+│   │   ├── 04-typescript-patterns.md           # TypeScript 类型模式
+│   │   └── 05-harmonyos-rnoh-api.md            # RNOH 鸿蒙适配字典
+│   ├── framework-essentials/
+│   │   ├── 01-expo-essentials.md               # Expo 要点（Router/EAS）
+│   │   └── 02-navigation-essentials.md         # React Navigation 速查
+│   ├── library-guides/
+│   │   ├── 01-state-and-data.md                # 状态与数据请求库
+│   │   └── 02-native-and-device-libs.md        # 原生与设备能力库
+│   └── quick-references/
+│       ├── 01-cli-and-debug-cheatsheet.md      # CLI 与调试速查
+│       └── 02-troubleshooting.md               # 故障排除
+├── frameworks/                                 # 操作指南：框架生态
+│   ├── 01-react-native-basics.md               # ⭐ 组件、样式与 Flexbox
+│   ├── 02-react-native-advanced.md             # ⭐⭐ 新架构、原生模块与动画
+│   ├── 03-ecosystem-integration.md             # ⭐⭐ Expo Router、EAS 与库选型
+│   └── 04-devtools.md                          # ⭐ 调试与性能工具链
+├── projects/                                   # 操作指南：实战项目（⭐ 递进）
+│   ├── 01-todo-app.md                          # ⭐ 待办应用
+│   ├── 02-weather-app.md                       # ⭐⭐ 天气应用（网络 + 定位）
+│   ├── 03-chat-app.md                          # ⭐⭐ 聊天应用（实时 + 列表优化）
+│   └── 04-production-mobile-app.md             # ⭐⭐⭐ 生产级移动应用
+├── testing/                                    # 操作指南：测试工程
+│   ├── 01-unit-testing.md                      # Jest 单元测试
+│   ├── 02-component-testing.md                 # RNTL 组件测试
+│   └── 03-e2e-testing.md                       # Maestro/Detox 端到端
+├── deployment/                                 # 操作指南：部署运维
+│   ├── 01-eas-build.md                         # EAS Build 构建流程
+│   ├── 02-app-store-release.md                 # App Store / Google Play 上架
+│   └── 03-ota-updates-observability.md         # OTA 更新 + Sentry/Crashlytics
+└── advanced-topics/                            # 解释：原理与架构
+    ├── architecture/
+    │   └── 01-new-architecture.md              # ⭐⭐⭐ Fabric/TurboModules/JSI
+    ├── performance/
+    │   ├── 01-rendering-performance.md         # ⭐⭐⭐ 渲染性能
+    │   └── 02-startup-optimization.md          # ⭐⭐⭐ 启动优化
+    └── security/
+        └── 01-security-practices.md            # ⭐⭐⭐ 安全实践
 ```
 
-## 🛠️ 技术栈概览
+## 🔗 关联模块
 
-### 核心技术
-- **开发框架**: React Native 0.72+ + React Native for OpenHarmony
-- **编程语言**: TypeScript + JavaScript (少量原生Kotlin/Swift/Dart)
-- **状态管理**: Redux Toolkit + RTK Query
-- **导航**: React Navigation 6.x
-- **UI框架**: React Native Elements / NativeBase
-
-### 平台特定技术
-- **Android**: Kotlin原生模块 + Android SDK
-- **iOS**: Swift原生模块 + iOS SDK
-- **HarmonyOS**: ArkTS接口 + HarmonyOS SDK
-
-### 开发工具
-- **IDE**: VS Code + Android Studio + Xcode
-- **调试**: React Native Debugger + Flipper
-- **构建**: Gradle (Android) + Xcode (iOS) + DevEco Studio (鸿蒙)
-- **版本控制**: Git + GitHub
-
-## 📊 平台特性对比
-
-| 平台 | 用户规模 | 商业价值 | 开发复杂度 | 生态成熟度 |
-|------|----------|----------|------------|------------|
-| Android | 25亿+ | ⭐⭐⭐⭐ | ⭐⭐⭐ | ⭐⭐⭐⭐⭐ |
-| HarmonyOS | 1亿+ | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐⭐ |
-| iOS | 15亿+ | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ |
-
-### 开发优先级策略
-- **快速验证**: Android优先，低成本快速试错
-- **新兴机会**: HarmonyOS第二，抢占政策红利
-- **全球布局**: iOS第三，覆盖高价值用户
-
-## 🎯 成功指标
-
-### 技术指标
-- **性能**: 启动时间 < 2秒，内存使用 < 200MB
-- **稳定性**: 崩溃率 < 0.5%
-- **兼容性**: 三端主流设备95%兼容
-
-### 业务指标
-- **用户增长**: 月新增用户 > 5000
-- **用户留存**: 7日留存率 > 40%
-- **跨平台一致性**: 功能一致性 > 95%
-
-### 发布指标
-- **上架成功**: 三大平台100%成功上架
-- **审核通过**: 首次审核通过率 > 80%
-- **更新频率**: 每2周一次版本更新
-
-## 💡 学习建议
-
-### 学习路径策略
-1. **扎实基础**: 先精通React Native核心概念
-2. **逐个突破**: 按平台优先级逐个深度掌握
-3. **实战验证**: 每个平台都要有完整项目经验
-4. **持续优化**: 基于用户反馈持续改进
-
-### 平台开发技巧
-- **Android深度利用**: 充分利用你的Android设备优势
-- **鸿蒙生态关注**: 密切关注鸿蒙生态发展动态
-- **iOS生态学习**: 深入理解苹果生态和设计规范
-- **跨平台思维**: 设计时考虑三端差异和统一
-
-### 商业化思维
-- **MVP先行**: 快速验证商业模式和用户需求
-- **数据驱动**: 基于数据分析指导产品迭代
-- **生态整合**: 深度利用各平台生态特性
-- **全球化视野**: 考虑不同市场用户习惯
+- **[05-kotlin-compose](../05-kotlin-compose/README.md)** — Android 原生深水区：RNOH 鸿蒙模块的原生侧与 RN Android 原生模块（Kotlin）的技术底座
+- **[06-swift-swiftui](../06-swift-swiftui/README.md)** — iOS 原生深水区：RN iOS 原生模块（Swift）与苹果生态特性的技术底座
+- **[02-nextjs-frontend](../02-nextjs-frontend/README.md)** — Web 前端主战场：React 思维、组件模型与状态管理在此深入，与 RN 共享 React 心智模型
 
 ---
 
-**模块状态**: 🚧 规划中
-**最后更新**: 2025年10月
-**版本**: v1.0.0
+**模块状态**: ✅ 双轨结构完整（basics 8 篇 + reference 11 篇 + 第二波 15 篇）
+**最后更新**: 2026年9月
 **维护团队**: Dev Quest Team
 
-> 💡 **学习提示**:
-> React Native三端开发的核心价值在于用一套代码服务全球移动用户。建议按照Android→HarmonyOS→iOS的顺序循序渐进，充分利用你的设备优势，同时抓住鸿蒙生态的新兴机遇。记住，跨平台思维和平台特质的平衡是成功的关键！📱
+> 💡 **学习提示**：跨平台的价值在于一套代码服务多端用户。按入门 → 进阶 → 精通三条路径推进，字典随查随用；鸿蒙（RNOH）作为第三端贯穿各专题文档，版本对齐永远先查 [RNOH 字典](reference/language-concepts/05-harmonyos-rnoh-api.md)。

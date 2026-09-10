@@ -1,208 +1,119 @@
 # PHP 精通之路 - 温故知新
 
-## 📚 模块概述
+> 面向在职 PHP 开发者的温故知新模块：以 **PHP 8.3+（枚举 / readonly / 一等 callable 语法）+ Composer + Laravel 11（Artisan / Eloquent / 队列）+ PHPUnit / Pest** 为技术栈基线，采用 Diátaxis 双轴框架组织内容，实现从"会用"到"精通"的跃升。本模块属**技术探索系列**，适合零散时间学习，建议每天 30 分钟到 1 小时。
 
-本模块专为PHP开发者设计，旨在系统化梳理PHP知识体系，掌握现代PHP开发技术，实现从"会用"到"精通"的跃升。
+## 📚 文档元数据
 
-### 🎯 学习目标
-- 巩固PHP基础知识，填补知识盲点
-- 掌握PHP 8.x现代特性和最佳实践
-- 深入理解主流PHP框架的底层原理
-- 提升代码质量和性能优化能力
+| 属性 | 内容 |
+|------|------|
+| **模块** | `07-php-mastery` |
+| **象限** | 模块总览 |
+| **难度** | ⭐ 至 ⭐⭐⭐（按路径渐进） |
+| **标签** | `#PHP` `#Laravel` `#Composer` `#PHPUnit` `#Pest` |
+| **更新日期** | `2026年9月` |
 
-### 📁 目录结构
+## 🎯 学习目标
 
-```
+- 巩固 PHP 基础，系统掌握 PHP 8.x 现代特性与最佳实践
+- 深入理解 Laravel 11 框架体系，从路由到生产级架构
+- 建立测试工程与部署运维的完整工程能力
+- 通过 4 个递进项目积累可复用的实战经验
+
+## 🧭 四象限导览
+
+| 象限 | 目录 | 内容 | 访问方式 |
+|------|------|------|---------|
+| **教程** | [basics/](./basics/) | 8 篇按序入门：环境搭建 → 语言基础 → 现代 OOP → 错误处理 → 高级特性 → 综合项目 | 按编号顺序学 |
+| **字典** | [reference/](./reference/) | 11 篇全量参考：关键字、内置函数、类型与 OOP、数组模式、Laravel/Symfony 速查、故障排除 | 按需跳入，无难度门槛 |
+| **操作指南** | [frameworks/](./frameworks/) · [projects/](./projects/) · [testing/](./testing/) · [deployment/](./deployment/) | Laravel 入门/进阶/生态/工具链；4 个 ⭐ 递进项目；PHPUnit/Pest/Feature 测试；Docker/服务器/CI-CD 部署 | 面向目标，照做即可 |
+| **解释** | [advanced-topics/](./advanced-topics/) | 架构解析、查询优化、缓存与队列、安全实践 | 为什么这样设计 |
+
+> **单一事实来源**：概念的完整解释只在 `reference/` 存在一份，其他目录链接过去，不重复展开。
+
+## 🛤️ 学习路径
+
+### 入门路径（⭐）
+
+[环境搭建](./basics/01-environment-setup.md) → [第一个脚本](./basics/02-first-script.md) → [变量与类型](./basics/03-variables-types.md) → [函数与 OOP](./basics/04-functions-oop.md) → [控制流程](./basics/05-control-flow.md) → [错误与异常](./basics/06-error-exceptions.md) → [Laravel 入门](./frameworks/01-laravel-basics.md) → [开发工具链](./frameworks/04-devtools.md) → [TODO REST API](./projects/01-todo-api.md)
+
+### 进阶路径（⭐⭐）
+
+[PHP 高级特性](./basics/07-advanced-features.md) → [Laravel 进阶](./frameworks/02-laravel-advanced.md) → [生态集成](./frameworks/03-ecosystem-integration.md) → [单元测试](./testing/01-unit-testing.md) → [Pest 测试](./testing/02-pest-testing.md) → [Feature 测试](./testing/03-feature-testing.md) → [容器化部署](./deployment/01-docker-deployment.md) → [服务器部署](./deployment/02-server-deployment.md) → [博客平台](./projects/02-blog-platform.md) → [电商 API](./projects/03-ecommerce-api.md)
+
+### 精通路径（⭐⭐⭐）
+
+[Laravel 架构解析](./advanced-topics/architecture/01-laravel-architecture.md) → [查询优化](./advanced-topics/performance/01-query-optimization.md) → [缓存与队列调优](./advanced-topics/performance/02-caching-queues.md) → [安全实践](./advanced-topics/security/01-security-practices.md) → [CI/CD 与可观测性](./deployment/03-ci-cd-observability.md) → [生产级 Laravel 应用](./projects/04-production-laravel-app.md)
+
+## 📁 文件树
+
+```text
 07-php-mastery/
-├── README.md                   # 本文档
-├── PHP精通之路学习路线.md         # 详细学习指南
-├── advanced-topics/             # 高级应用深度内容
-│   ├── php-advanced/            # PHP高级专题
-│   │   ├── 01-php-internals.md       # PHP内核原理
-│   │   ├── 02-advanced-extensions.md  # 扩展开发深度
-│   │   ├── 03-memory-management.md    # 内存管理优化
-│   │   ├── 04-performance-tuning.md   # 性能调优实战
-│   │   ├── 05-jit-optimization.md     # JIT编译器优化
-│   │   ├── 06-fibers-concurrency.md   # PHP Fibers并发编程
-│   │   └── 07-opcache-advanced.md     # OPcache高级优化
-│   ├── framework-advanced/        # 框架高级专题
-│   │   ├── 01-laravel-11-advanced.md  # Laravel 11高级应用
-│   │   ├── 02-symfony-7-advanced.md   # Symfony 7深度解析
-│   │   ├── 03-microservices.md       # 微服务架构
-│   │   ├── 04-enterprise-patterns.md   # 企业级模式
-│   │   ├── 05-livewire-realtime.md    # Livewire实时应用
-│   │   ├── 06-api-platform-graphql.md # API Platform & GraphQL
-│   │   └── 07-serverless-php.md       # 无服务器PHP架构
-│   ├── architecture-patterns/       # 架构模式
-│   │   ├── 01-hexagonal-architecture.md # 六边形架构
-│   │   ├── 02-cqrs-patterns.md       # CQRS模式
-│   │   ├── 03-event-sourcing.md      # 事件溯源
-│   │   ├── 04-ddd-design.md          # 领域驱动设计
-│   │   ├── 05-message-driven-architecture.md # 消息驱动架构
-│   │   └── 06-reactive-patterns.md    # 响应式编程模式
-│   └── enterprise-advanced/        # 企业级高级
-│       ├── 01-scalability-strategies.md  # 可扩展性策略
-│       ├── 02-high-availability.md    # 高可用性
-│       ├── 03-monitoring-logging.md    # 监控和日志
-│       ├── 04-security-hardening.md    # 安全加固
-│       ├── 05-kubernetes-php.md        # Kubernetes部署PHP
-│       └── 06-grafana-prometheus.md    # Grafana & Prometheus监控
-├── reference/  # 知识字典（全量参考）
-│   ├── php-concepts/              # PHP核心概念
-│   │   ├── 01-php-keywords.md        # PHP关键字详解
-│   │   ├── 02-php-83-features.md     # PHP 8.3新特性速查
-│   │   ├── 03-data-types.md          # 数据类型速查
-│   │   ├── 04-control-structures.md   # 控制结构速查
-│   │   ├── 05-functions-oop.md        # 函数和OOP速查
-│   │   ├── 06-jit-compilation.md     # JIT编译速查
-│   │   └── 07-attributes-annotations.md # PHP属性速查
-│   ├── framework-apis/             # 框架API速查
-│   │   ├── 01-laravel-11-apis.md     # Laravel 11 API速查
-│   │   ├── 02-symfony-7-apis.md      # Symfony 7 API速查
-│   │   ├── 03-composer-commands.md   # Composer命令速查
-│   │   ├── 04-testing-tools.md       # 测试工具速查
-│   │   ├── 05-livewire-apis.md       # Livewire API速查
-│   │   └── 06-filament-apis.md       # Filament Admin API速查
-│   ├── database-patterns/           # 数据库模式
-│   │   ├── 01-orm-patterns.md        # ORM模式速查
-│   │   ├── 02-query-optimization.md   # 查询优化速查
-│   │   ├── 03-migration-patterns.md  # 迁移模式速查
-│   │   ├── 04-database-apis.md       # 数据库API速查
-│   │   ├── 05-postgresql-apis.md     # PostgreSQL高级特性速查
-│   │   └── 06-redis-patterns.md      # Redis模式速查
-│   └── development-tools/           # 开发工具速查
-│       ├── 01-php-debug-tools.md    # PHP调试工具
-│       ├── 02-profiler-tools.md      # 性能分析工具
-│       ├── 03-static-analysis.md    # 静态分析工具
-│       ├── 04-deployment-tools.md    # 部署工具速查
-│       ├── 05-docker-php.md          # Docker容器化速查
-│       └── 06-phpstan-rules.md       # PHPStan规则速查
-├── basics/                        # PHP基础
-│   ├── 01-language-fundamentals.md  # 语言基础
-│   ├── 02-oop-concepts.md          # 面向对象概念
-│   ├── 03-data-structures.md       # 数据结构
-│   ├── 04-design-patterns.md       # 设计模式
-│   ├── 07-php8-features.md         # PHP 8.x新特性
-│   ├── 08-type-system.md           # 类型系统
-│   ├── 09-error-handling.md        # 错误处理
-│   └── 10-performance-basics.md    # 性能基础
-├── frameworks/                    # 框架和库
-│   ├── 01-laravel-fundamentals.md  # Laravel基础
-│   ├── 02-symfony-fundamentals.md  # Symfony基础
-│   ├── 03-composer-ecosystem.md    # Composer生态
-│   ├── 04-testing-practices.md     # 测试实践
-│   ├── 05-package-development.md   # 包开发
-│   └── 06-api-frameworks.md       # API框架
-├── web-development/               # Web开发
-│   ├── 01-rest-apis.md            # REST API开发
-│   ├── 02-websockets.md           # WebSocket实时通信
-│   ├── 03-authentication.md       # 认证和授权
-│   ├── 04-microservices.md        # 微服务架构
-│   └── 05-api-platforms.md        # API平台
-├── data-persistence/              # 数据持久化
-│   ├── 01-database-design.md      # 数据库设计
-│   ├── 02-orm-patterns.md         # ORM模式
-│   ├── 03-caching-strategies.md   # 缓存策略
-│   ├── 04-search-engines.md       # 搜索引擎
-│   └── 05-data-migration.md       # 数据迁移
-├── testing-quality/               # 测试和质量保证
-│   ├── 01-unit-testing.md         # 单元测试
-│   ├── 02-integration-testing.md  # 集成测试
-│   ├── 03-functional-testing.md   # 功能测试
-│   ├── 04-test-automation.md     # 测试自动化
-│   └── 05-quality-metrics.md     # 质量度量
-├── deployment-operations/         # 部署和运维
-│   ├── 01-deployment-strategies.md # 部署策略
-│   ├── 02-containerization.md     # 容器化
-│   ├── 03-ci-cd-pipelines.md      # CI/CD流水线
-│   ├── 04-monitoring.md          # 监控和告警
-│   └── 05-scaling.md             # 扩容策略
-└── best-practices/                # 最佳实践
-    ├── 01-code-standards.md      # 代码标准
-    ├── 02-security-practices.md   # 安全实践
-    ├── 03-performance-optimization.md # 性能优化
-    ├── 08-maintainability.md      # 可维护性
-    └── 09-team-collaboration.md   # 团队协作
+├── README.md                                # 本文档
+├── basics/                                  # 教程：按序学习
+│   ├── 01-environment-setup.md              # ⭐ 环境搭建
+│   ├── 02-first-script.md                   # ⭐ 第一个脚本
+│   ├── 03-variables-types.md                # ⭐ 变量与类型
+│   ├── 04-functions-oop.md                  # ⭐ 函数与 OOP
+│   ├── 05-control-flow.md                   # ⭐ 控制流程
+│   ├── 06-error-exceptions.md               # ⭐ 错误与异常
+│   ├── 07-advanced-features.md              # ⭐⭐ 高级特性
+│   └── 08-first-project.md                  # ⭐ 综合练习：CLI 任务工具
+├── reference/                               # 字典：全量参考
+│   ├── language-concepts/
+│   │   ├── 01-php-keywords.md               # 关键字详解
+│   │   ├── 02-built-in-functions.md         # 内置函数
+│   │   ├── 03-types-oop-modern.md           # 类型系统与现代 OOP
+│   │   ├── 04-control-flow.md               # 控制流程
+│   │   └── 05-arrays-patterns.md            # 数组与常用模式
+│   ├── framework-essentials/
+│   │   ├── 01-laravel-essentials.md         # Laravel 核心速查
+│   │   └── 02-symfony-essentials.md         # Symfony 核心速查
+│   ├── library-guides/
+│   │   ├── 01-standard-library-spl.md       # 标准库 SPL
+│   │   └── 02-composer-ecosystem.md         # Composer 生态
+│   └── quick-references/
+│       ├── 01-php-cheatsheet.md             # PHP 快速速查表
+│       └── 02-troubleshooting.md            # 故障排除
+├── frameworks/                              # 操作指南：框架生态
+│   ├── 01-laravel-basics.md                 # ⭐ Laravel 入门
+│   ├── 02-laravel-advanced.md               # ⭐⭐ Laravel 进阶
+│   ├── 03-ecosystem-integration.md          # ⭐⭐ 生态集成
+│   └── 04-devtools.md                       # ⭐ 开发工具链
+├── projects/                                # 操作指南：实战项目（⭐ 递进）
+│   ├── 01-todo-api.md                       # ⭐ TODO REST API
+│   ├── 02-blog-platform.md                  # ⭐⭐ 博客平台
+│   ├── 03-ecommerce-api.md                  # ⭐⭐ 电商 API
+│   └── 04-production-laravel-app.md         # ⭐⭐⭐ 生产级 Laravel 应用
+├── testing/                                 # 操作指南：测试工程
+│   ├── 01-unit-testing.md                   # ⭐⭐ PHPUnit 单元测试
+│   ├── 02-pest-testing.md                   # ⭐⭐ Pest 测试
+│   └── 03-feature-testing.md                # ⭐⭐ Feature 测试与数据库测试
+├── deployment/                              # 操作指南：部署运维
+│   ├── 01-docker-deployment.md              # ⭐⭐ Docker 容器化部署
+│   ├── 02-server-deployment.md              # ⭐⭐ Nginx + PHP-FPM 服务器部署
+│   └── 03-ci-cd-observability.md            # ⭐⭐⭐ CI/CD 与可观测性
+└── advanced-topics/                         # 解释：高级主题（⭐⭐⭐）
+    ├── architecture/
+    │   └── 01-laravel-architecture.md       # 服务容器与服务提供者
+    ├── performance/
+    │   ├── 01-query-optimization.md         # 查询优化
+    │   └── 02-caching-queues.md             # 缓存策略与队列调优
+    └── security/
+        └── 01-security-practices.md         # 安全实践
 ```
-
-## 🔍 学习路径
-
-### 基础知识回顾
-- **学习内容**: 语言基础、OOP概念、数据结构、PHP 8.3新特性
-- **实践输出**: 基础知识总结文档
-- **2025新技术**: PHP 8.3 JIT编译、类型系统完善
-
-### 现代PHP特性
-- **学习内容**: PHP 8.3特性、属性系统、Fibers并发、JIT优化
-- **实践输出**: 现代PHP特性总结
-- **2025新技术**: PHP Fibers异步编程、性能优化新范式
-
-### 框架深入
-- **学习内容**: Laravel 11、Symfony 7、Composer生态、Livewire实时应用
-- **实践输出**: 框架对比和选型指南
-- **2025新技术**: Laravel 11新特性、Filament Admin、无服务器PHP
-
-### 企业级工程实践
-- **学习内容**: 代码质量、安全加固、容器化部署、云原生架构
-- **实践输出**: PHP企业开发最佳实践指南
-- **2025新技术**: Kubernetes部署、监控和可观测性、微服务架构
 
 ## 💡 学习建议
 
-### 🎯 针对PHP开发者的建议
-- **温故知新**: 从熟悉的PHP基础开始，逐步深入
-- **对比学习**: 与其他语言对比，理解PHP的特点和优势
-- **实战导向**: 结合实际项目进行学习和实践
+- **温故知新**：从熟悉的 PHP 基础开始，对照 [PHP 8.3 特性](./reference/language-concepts/03-types-oop-modern.md) 找知识盲点
+- **实战导向**：每完成一个阶段，用 [projects/](./projects/) 的对应项目验证
+- **碎片学习**：概念疑难点直接查 [reference/](./reference/) 字典，不必按顺序
+- **定期回顾**：每周末用 [快速速查表](./reference/quick-references/01-php-cheatsheet.md) 自测记忆
 
-### ⏰ 零散时间利用
-- **碎片学习**: 每次学习一个小概念，积少成多
-- **定期回顾**: 每周回顾一次学习内容，巩固记忆
-- **实践验证**: 学完新特性立即在项目中尝试
+## 🔗 关联模块
 
-## 📋 学习资源
-
-### 官方文档
-- [PHP Manual](https://www.php.net/manual/)
-- [PHP 8.0 Release Notes](https://www.php.net/releases/8.0/)
-- [PHP 8.1 Release Notes](https://www.php.net/releases/8.1/)
-- [PHP 8.2 Release Notes](https://www.php.net/releases/8.2/)
-
-### 推荐书籍
-- 《PHP权威指南》
-- 《Modern PHP》
-- 《PHP 8编程实战》
-- 《Laravel框架关键技术》
-
-### 在线资源
-- [PHP The Right Way](https://phptherightway.com/)
-- [Laravel Documentation](https://laravel.com/docs)
-- [Symfony Documentation](https://symfony.com/doc)
-
-## 🔄 进度跟踪
-
-- [ ] 基础知识回顾
-  - [ ] 语言基础
-  - [ ] OOP概念
-  - [ ] 数据结构
-  - [ ] 设计模式
-- [ ] 现代PHP特性
-  - [ ] PHP 8.x新特性
-  - [ ] 类型系统
-  - [ ] 错误处理
-  - [ ] 性能优化
-- [ ] 框架深入
-  - [ ] Laravel深入
-  - [ ] Symfony组件
-  - [ ] Composer生态
-  - [ ] 测试实践
-- [ ] 工程实践
-  - [ ] 代码质量
-  - [ ] 安全实践
-  - [ ] 缓存策略
-  - [ ] 部署优化
+- [01-go-backend](../01-go-backend/README.md) — Go 后端：与 PHP 后端对比学习并发模型与部署方式
+- [08-java-revisited](../08-java-revisited/README.md) — Java 温故：同为运行时大厂栈，对照框架生态与工程实践
 
 ---
 
-**温馨提示**: 本模块适合在零散时间学习，建议每天投入30分钟到1小时，持续8-12周完成全部内容。
-
-*最后更新: 2025年9月*
+*最后更新：2026年9月*

@@ -313,7 +313,7 @@ class BaseImpl : Base { /* ... */ }
 class Derived(b: Base) : Base by b                    // 接口实现转发
 ```
 
-> 📖 `by lazy`/`by viewModels` 的完整机制见 [泛型与委托属性](../reference/language-concepts/05-generics-delegates.md)。
+> 📖 `by lazy`/`by viewModels` 的完整机制见 [泛型与委托属性](./05-generics-delegates.md)。
 
 ## 18. when / if - 表达式化控制流
 

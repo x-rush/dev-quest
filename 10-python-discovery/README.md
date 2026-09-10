@@ -2,200 +2,108 @@
 
 ## 📚 模块概述
 
-本模块专为有其他编程语言经验的开发者设计，旨在系统学习Python编程语言，探索其在Web开发、数据科学和自动化领域的应用。
+本模块专为有其他编程语言经验的开发者设计，旨在系统学习 Python 编程语言，探索其在 **Web 后端开发、数据处理和自动化**领域的应用。
+
+**技术栈基线**：Python 3.12+（类型注解、match 语句）· uv 包管理 · FastAPI · pytest · ruff
 
 ### 🎯 学习目标
-- 掌握Python基础语法和核心概念
-- 了解Python在Web开发中的应用
-- 探索数据科学和机器学习基础
-- 学会使用Python进行自动化脚本开发
 
-### 📁 目录结构
+- 掌握 Python 3.12+ 基础语法与现代语言特性（类型注解、结构化模式匹配、异步）
+- 熟练使用 uv / ruff / pytest / mypy 现代工具链
+- 能独立构建、测试并部署 FastAPI 服务
+- 理解 asyncio 并发模型、性能剖析与安全实践等生产级主题
 
-```
+### 💡 学习建议（针对有编程经验的学习者）
+
+- **对比学习**：将 Python 概念与已知语言对照（如 Go struct vs dataclass、npm vs uv、goroutine vs asyncio），复用已有编程思维
+- **零散时间**：每天精读一篇 reference 字典条目或一个速查表；周末推进一个项目
+- **字典无等级，学习有路径**：概念解释统一住在 `reference/`，按难度走下面的三条路径
+
+## 🧭 四象限导览
+
+| 象限 | 目录 | 定位 | 文档 |
+|------|------|------|------|
+| 教程 | [basics/](basics/) | 按序学习入门（8 篇） | 环境搭建 → 第一个脚本 → 变量与类型 → 函数与 OOP → 控制流 → 异常 → 高级特性 → 第一个项目 |
+| 字典 | [reference/](reference/) | 全量参考，任意跳入（11 篇） | 关键字 / 内置函数 / 数据结构 / OOP 协议 / 类型注解 · FastAPI / Django&Flask · 标准库 / 生态库 · 语法速查 / 故障排除 |
+| 操作指南 | [frameworks/](frameworks/) | 框架与工具链 | [FastAPI 入门 ⭐](frameworks/01-fastapi-basics.md) · [FastAPI 进阶 ⭐⭐](frameworks/02-fastapi-advanced.md) · [生态集成 ⭐⭐](frameworks/03-ecosystem-integration.md) · [开发工具链 ⭐](frameworks/04-devtools.md) |
+| 操作指南 | [projects/](projects/) | 实战项目（⭐ 递进） | [TODO API ⭐](projects/01-todo-api.md) · [短链接服务 ⭐⭐](projects/02-url-shortener.md) · [数据管道 ⭐⭐](projects/03-data-pipeline.md) · [生产级应用 ⭐⭐⭐](projects/04-production-fastapi-app.md) |
+| 操作指南 | [testing/](testing/) | 测试工程 | [单元测试](testing/01-unit-testing.md) · [集成测试](testing/02-integration-testing.md) · [Mock 测试](testing/03-mocking-testing.md) |
+| 操作指南 | [deployment/](deployment/) | 部署运维 | [容器化 ⭐⭐](deployment/01-docker-deployment.md) · [CI/CD ⭐⭐](deployment/02-ci-cd-pipelines.md) · [可观测性 ⭐⭐⭐](deployment/03-observability.md) |
+| 解释 | [advanced-topics/](advanced-topics/) | 架构 / 性能 / 安全 | [项目架构 ⭐⭐⭐](advanced-topics/architecture/01-project-architecture.md) · [asyncio ⭐⭐⭐](advanced-topics/performance/01-async-python.md) · [性能剖析 ⭐⭐⭐](advanced-topics/performance/02-profiling-optimization.md) · [安全实践 ⭐⭐⭐](advanced-topics/security/01-security-practices.md) |
+
+## 🛤️ 学习路径
+
+### 入门路径（⭐）
+
+[环境搭建](basics/01-environment-setup.md) → [第一个脚本](basics/02-first-script.md) → [变量与类型](basics/03-variables-types.md) → [函数与 OOP](basics/04-functions-oop.md) → [控制流](basics/05-control-flow.md) → [异常处理](basics/06-exceptions.md) → [开发工具链](frameworks/04-devtools.md) → [FastAPI 入门](frameworks/01-fastapi-basics.md) → [项目：TODO API](projects/01-todo-api.md)
+
+### 进阶路径（⭐⭐）
+
+[高级特性](basics/07-advanced-features.md) → [FastAPI 进阶](frameworks/02-fastapi-advanced.md) → [生态集成](frameworks/03-ecosystem-integration.md) → [单元测试](testing/01-unit-testing.md) → [Mock 测试](testing/03-mocking-testing.md) → [集成测试](testing/02-integration-testing.md) → [项目：短链接服务](projects/02-url-shortener.md) → [项目：数据管道](projects/03-data-pipeline.md) → [容器化部署](deployment/01-docker-deployment.md) → [CI/CD 流水线](deployment/02-ci-cd-pipelines.md)
+
+### 精通路径（⭐⭐⭐）
+
+[项目分层与领域建模](advanced-topics/architecture/01-project-architecture.md) → [asyncio 异步并发模型](advanced-topics/performance/01-async-python.md) → [性能剖析与优化](advanced-topics/performance/02-profiling-optimization.md) → [安全实践](advanced-topics/security/01-security-practices.md) → [可观测性](deployment/03-observability.md) → [项目：生产级 FastAPI 应用](projects/04-production-fastapi-app.md)
+
+> 📖 字典随时可查：[语言概念](reference/language-concepts/) · [框架要点](reference/framework-essentials/) · [库指南](reference/library-guides/) · [速查表](reference/quick-references/)
+
+## 📁 实际文件树
+
+```text
 10-python-discovery/
-├── README.md                   # 本文档
-├── Python发现之旅学习路线.md         # 详细学习指南
-├── advanced-topics/             # 高级应用深度内容
-│   ├── python-advanced/          # Python高级专题
-│   │   ├── 01-python-312-features.md # Python 3.12新特性
-│   │   ├── 02-metaclasses-introspection.md # 元类和内省
-│   │   ├── 03-async-programming-advanced.md # 高级异步编程
-│   │   ├── 04-memory-management.md   # 内存管理优化
-│   │   ├── 05-performance-tuning.md   # 性能调优实战
-│   │   ├── 06-pattern-matching.md     # 结构化模式匹配
-│   │   └── 07-typing-system.md       # 类型系统高级
-│   ├── ml-ai-advanced/            # 机器学习AI高级
-│   │   ├── 01-deep-learning-advanced.md # 深度学习高级
-│   │   ├── 02-llm-applications.md     # 大语言模型应用
-│   │   ├── 03-nlp-processing.md      # 自然语言处理
-│   │   ├── 04-computer-vision.md     # 计算机视觉
-│   │   ├── 05-mlops-deployment.md    # MLOps和部署
-│   │   ├── 06-ai-agent-development.md # AI Agent开发
-│   │   └── 07-transformers-models.md  # Transformers模型
-│   ├── data-science-advanced/      # 数据科学高级
-│   │   ├── 01-advanced-pandas.md     # Pandas高级应用
-│   │   ├── 02-big-data-processing.md # 大数据处理
-│   │   ├── 03-statistical-analysis.md # 统计分析
-│   │   ├── 04-data-visualization-advanced.md # 数据可视化高级
-│   │   ├── 05-data-engineering.md    # 数据工程
-│   │   └── 06-streaming-analytics.md  # 流数据分析
-│   └── enterprise-advanced/        # 企业级高级
-│       ├── 01-enterprise-patterns.md # 企业级模式
-│       ├── 02-cloud-native-python.md # 云原生Python
-│       ├── 03-microservices-python.md # Python微服务
-│       ├── 04-async-microservices.md # 异步微服务
-│       ├── 05-automation-scaling.md  # 自动化和扩展
-│       ├── 06-serverless-python.md   # 无服务器Python
-│       └── 07-observability.md       # 可观测性架构
-├── reference/  # 知识字典（全量参考）
-│   ├── python-concepts/           # Python核心概念
-│   │   ├── 01-python-keywords.md    # Python关键字详解
-│   │   ├── 02-data-structures.md    # 数据结构速查
-│   │   ├── 03-control-flow.md       # 控制流速查
-│   │   └── 04-functions-decorators.md # 函数和装饰器速查
-│   ├── scientific-libs/            # 科学计算库
-│   │   ├── 01-numpy-apis.md         # NumPy API速查
-│   │   ├── 02-pandas-apis.md        # Pandas API速查
-│   │   ├── 03-matplotlib-apis.md    # Matplotlib API速查
-│   │   └── 04-scipy-apis.md         # SciPy API速查
-│   ├── web-frameworks/             # Web框架API
-│   │   ├── 01-django-apis.md        # Django API速查
-│   │   ├── 02-flask-apis.md         # Flask API速查
-│   │   ├── 03-fastapi-apis.md       # FastAPI API速查
-│   │   └── 04-sqlalchemy-apis.md    # SQLAlchemy API速查
-│   └── development-tools/          # 开发工具速查
-│       ├── 01-python-debug-tools.md # Python调试工具
-│       ├── 02-virtual-environments.md # 虚拟环境工具
-│       ├── 03-package-management.md # 包管理工具
-│       └── 04-testing-frameworks.md # 测试框架速查
-├── basics/                        # Python基础
-│   ├── 01-python-fundamentals.md   # Python语言基础
-│   ├── 02-oop-concepts.md          # 面向对象编程
-│   ├── 03-functional-programming.md # 函数式编程
-│   ├── 04-modules-packages.md      # 模块和包
-│   ├── 05-exception-handling.md     # 异常处理
-│   ├── 06-file-io.md              # 文件IO操作
-│   ├── 07-regular-expressions.md  # 正则表达式
-│   └── 08-concurrency-basics.md    # 并发基础
-├── web-development/               # Web开发
-│   ├── 01-django-framework.md      # Django框架
-│   ├── 02-flask-framework.md       # Flask框架
-│   ├── 03-fastapi-framework.md     # FastAPI框架
-│   ├── 04-websockets-realtime.md   # WebSocket实时通信
-│   ├── 05-authentication.md       # 认证和授权
-│   └── 06-api-development.md       # API开发
-├── data-science-ml/               # 数据科学和机器学习
-│   ├── 01-data-analysis-basics.md  # 数据分析基础
-│   ├── 02-machine-learning-basics.md # 机器学习基础
-│   ├── 03-deep-learning-intro.md   # 深度学习入门
-│   ├── 04-data-visualization.md    # 数据可视化
-│   └── 05-statistical-analysis.md   # 统计分析
-├── automation-devops/             # 自动化和DevOps
-│   ├── 01-scripting-automation.md  # 脚本自动化
-│   ├── 02-web-scraping.md          # 网络爬虫
-│   ├── 03-api-automation.md        # API自动化
-│   ├── 04-devops-scripts.md        # DevOps脚本
-│   └── 05-cicd-pipelines.md        # CI/CD流水线
-├── scientific-computing/          # 科学计算
-│   ├── 01-numerical-computing.md   # 数值计算
-│   ├── 02-scientific-visualization.md # 科学可视化
-│   ├── 03-computational-physics.md # 计算物理
-│   ├── 04-bioinformatics.md        # 生物信息学
-│   └── 05-financial-modeling.md    # 金融建模
-├── testing-quality/               # 测试和质量保证
-│   ├── 01-unit-testing.md          # 单元测试
-│   ├── 02-integration-testing.md   # 集成测试
-│   ├── 03-test-driven-development.md # 测试驱动开发
-│   ├── 04-code-quality.md          # 代码质量
-│   └── 05-performance-testing.md   # 性能测试
-└── deployment-scaling/            # 部署和扩展
-    ├── 01-containerization.md      # 容器化部署
-    ├── 02-cloud-deployment.md      # 云平台部署
-    ├── 03-scaling-strategies.md    # 扩展策略
-    ├── 04-monitoring.md           # 监控和告警
-    └── 05-performance-optimization.md # 性能优化
+├── README.md                        # 本文档：四象限导览 + 三路径视图
+├── basics/                          # 教程（8 篇）
+│   ├── 01-environment-setup.md      # ⭐ uv 与现代工具链
+│   ├── 02-first-script.md           # ⭐ 第一个脚本
+│   ├── 03-variables-types.md        # ⭐ 变量与类型
+│   ├── 04-functions-oop.md          # ⭐ 函数与面向对象
+│   ├── 05-control-flow.md           # ⭐ 控制流程
+│   ├── 06-exceptions.md             # ⭐ 异常处理
+│   ├── 07-advanced-features.md      # ⭐⭐ 高级特性（含异步基础）
+│   └── 08-first-project.md          # ⭐ 第一个项目
+├── reference/                       # 字典（11 篇，无难度门槛）
+│   ├── language-concepts/           # 01 关键字 · 02 内置函数 · 03 数据结构 · 04 OOP 协议 · 05 类型注解
+│   ├── framework-essentials/        # 01 FastAPI · 02 Django/Flask
+│   ├── library-guides/              # 01 标准库 · 02 生态库
+│   └── quick-references/            # 01 语法速查 · 02 故障排除
+├── frameworks/                      # 操作指南：框架生态
+│   ├── 01-fastapi-basics.md         # ⭐ 路由、Pydantic 与自动文档
+│   ├── 02-fastapi-advanced.md       # ⭐⭐ 依赖注入、后台任务、中间件
+│   ├── 03-ecosystem-integration.md  # ⭐⭐ SQLAlchemy 2.0 + 数据库 + Redis
+│   └── 04-devtools.md               # ⭐ uv、ruff、mypy、IPython
+├── projects/                        # 操作指南：实战项目（⭐ 递进）
+│   ├── 01-todo-api.md               # ⭐ TODO REST API
+│   ├── 02-url-shortener.md          # ⭐⭐ 短链接服务（Redis + 统计）
+│   ├── 03-data-pipeline.md          # ⭐⭐ 数据处理管道（解析 + 定时）
+│   └── 04-production-fastapi-app.md # ⭐⭐⭐ 生产级 FastAPI 应用
+├── testing/                         # 操作指南：测试工程
+│   ├── 01-unit-testing.md           # ⭐⭐ pytest + fixture
+│   ├── 02-integration-testing.md    # ⭐⭐ TestClient + 测试数据库
+│   └── 03-mocking-testing.md        # ⭐⭐ monkeypatch / mocker
+├── deployment/                      # 操作指南：部署运维
+│   ├── 01-docker-deployment.md      # ⭐⭐ uv 镜像多阶段构建
+│   ├── 02-ci-cd-pipelines.md        # ⭐⭐ GitHub Actions
+│   └── 03-observability.md          # ⭐⭐⭐ structlog + Sentry/Prometheus
+└── advanced-topics/                 # 解释：高级主题（均 ⭐⭐⭐）
+    ├── architecture/01-project-architecture.md   # 分层与领域建模
+    ├── performance/01-async-python.md            # asyncio 并发模型
+    ├── performance/02-profiling-optimization.md  # 性能剖析与优化
+    └── security/01-security-practices.md         # 依赖、注入与密钥
 ```
 
-## 🔍 学习路径
+## 🔗 关联模块
 
-### Python基础
-- **学习内容**: 动态类型、函数式编程、面向对象、模式匹配
-- **实践输出**: Python基础程序和工具函数
-- **2025新技术**: Python 3.12新特性、结构化模式匹配、类型系统完善
+- [01-go-backend](../01-go-backend/README.md) — 应用帝国矩阵·Go 后端：对比两语言的 Web 服务与并发模型（goroutine vs asyncio、net/http vs FastAPI）
+- [09-nodejs-backend](../09-nodejs-backend/README.md) — 技术探索系列·Node.js 后端：对比 npm 生态与 uv、Express 与 FastAPI 的异步模型
 
-### 现代Web开发
-- **学习内容**: FastAPI异步框架、Django 5.x、GraphQL API
-- **实践输出**: 高性能Python Web应用和API服务
-- **2025新技术**: FastAPI异步编程、Django 5新特性、WebSocket实时通信
+## 📖 学习资源
 
-### AI和数据科学时代
-- **学习内容**: Transformers库、LLM应用、数据工程、流分析
-- **实践输出**: AI应用项目和现代数据分析系统
-- **2025新技术**: 大语言模型应用、AI Agent开发、MLOps自动化
-
-### 云原生自动化
-- **学习内容**: 容器化自动化、无服务器Python、可观测性
-- **实践输出**: 企业级自动化工具和云原生应用
-- **2025新技术**: Serverless Python、云原生部署、智能自动化
-
-## 💡 学习建议
-
-### 🎯 针对有编程经验的学习者
-- **对比学习**: 将Python概念与已知语言对比学习
-- **利用经验**: 复用已有的编程思维和设计模式
-- **特色学习**: 重点学习Python的独特优势（简洁、生态）
-
-### ⏰ 零散时间利用
-- **语法练习**: 每天练习一个Python语法特性
-- **小项目**: 利用周末时间完成小型Python项目
-- **社区参与**: 参与Python社区，了解最佳实践
-
-## 📋 学习资源
-
-### 官方文档
-- [Python.org Documentation](https://docs.python.org/3/)
-- [Flask Documentation](https://flask.palletsprojects.com/)
-- [Django Documentation](https://docs.djangoproject.com/)
-- [FastAPI Documentation](https://fastapi.tiangolo.com/)
-
-### 推荐书籍
-- 《Python编程：从入门到实践》
-- 《流畅的Python》
-- 《Python数据科学手册》
-- 《Python自动化实战》
-
-### 在线资源
-- [Real Python](https://realpython.com/)
-- [Python for Beginners](https://www.pythonforbeginners.com/)
-- [Kaggle Learn](https://www.kaggle.com/learn)
-- [Awesome Python](https://github.com/vinta/awesome-python)
-
-## 🔄 进度跟踪
-
-- [ ] Python基础
-  - [ ] 语法基础
-  - [ ] 数据类型和结构
-  - [ ] 控制流和函数
-  - [ ] 模块和包管理
-- [ ] Web开发
-  - [ ] Flask框架
-  - [ ] Django基础
-  - [ ] FastAPI现代框架
-  - [ ] REST API开发
-- [ ] 数据科学
-  - [ ] NumPy和Pandas
-  - [ ] 数据可视化
-  - [ ] 机器学习入门
-  - [ ] 数据分析项目
-- [ ] 自动化脚本
-  - [ ] 文件自动化
-  - [ ] 网络爬虫
-  - [ ] API自动化
-  - [ ] DevOps脚本
+- 官方文档：[Python 3.12](https://docs.python.org/3/) · [FastAPI](https://fastapi.tiangolo.com/) · [uv](https://docs.astral.sh/uv/) · [pytest](https://docs.pytest.org/) · [ruff](https://docs.astral.sh/ruff/)
+- 推荐书籍：《流畅的 Python》（深入语言机制）、《Python 编程：从入门到实践》（零散时间补基础）
+- 社区：[Real Python](https://realpython.com/) · [Awesome Python](https://github.com/vinta/awesome-python)
 
 ---
 
-**学习价值**: Python具有简洁易学、生态丰富的特点，在Web开发、数据科学、人工智能等领域都有广泛应用。掌握Python将为你的技术栈增添重要的一环。
+**学习价值**: Python 具有简洁易学、生态丰富的特点，在 Web 开发、数据科学、自动化等领域应用广泛。以现代工具链为基线系统学习，将为你的技术栈增添重要一环。
 
-*最后更新: 2025年9月*
+*最后更新: 2026年9月*

@@ -1,0 +1,168 @@
+# CI/CD 与可观测性 - GitHub Actions + Firebase Crashlytics
+
+> **文档简介**: 用 GitHub Actions 自动化 Android 构建测试与签名发布，接入 Firebase Crashlytics 实现线上崩溃与 ANR 的主动监控
+>
+> **目标读者**: 已会手动出包（见[发布构建](01-release-build.md)）、想把"人肉发布"变成流水线的进阶学习者
+>
+> **前置知识**: [发布构建](01-release-build.md)、[Play Store 上架流程](02-play-store-release.md)、[集成与端到端测试](../testing/03-integration-e2e-testing.md)
+
+## 📚 文档元数据
+
+| 属性 | 内容 |
+|------|------|
+| **模块** | `05-kotlin-compose` |
+| **象限** | 操作指南（deployment） |
+| **难度** | ⭐⭐⭐ |
+| **标签** | `#github-actions` `#crashlytics` `#vitals` `#release-automation` |
+| **更新日期** | `2026年9月` |
+
+---
+
+## 1️⃣ GitHub Actions：PR 门禁 + 签名构建
+
+`.github/workflows/android.yml`：
+
+```yaml
+name: Android CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - uses: gradle/actions/setup-gradle@v4   # 缓存 Gradle，加速后续构建
+
+      - name: 单元测试 + Lint（PR 门禁）
+        run: ./gradlew testDebugUnitTest lintDebug
+
+      - name: 还原签名密钥（push 才执行）
+        if: github.event_name == 'push'
+        env:
+          KEYSTORE_BASE64: ${{ secrets.UPLOAD_KEYSTORE_BASE64 }}
+          KEYSTORE_PROPS: ${{ secrets.KEYSTORE_PROPERTIES }}
+        run: |
+          echo "$KEYSTORE_BASE64" | base64 -d > upload-keystore.jks
+          echo "$KEYSTORE_PROPS" > keystore.properties   # 与本地同名，构建脚本零改动
+
+      - name: 签名 AAB
+        if: github.event_name == 'push'
+        run: ./gradlew bundleProdRelease
+
+      - uses: actions/upload-artifact@v4
+        if: github.event_name == 'push'
+        with:
+          name: release-aab
+          path: app/build/outputs/bundle/prodRelease/*.aab
+```
+
+要点：
+
+- 密钥走 **Actions Secrets**（Base64 编码的 jks + properties 文本），与 [发布构建](01-release-build.md)
+  的本地文件名对齐后，脚本无需分支判断；
+- PR 上只跑 `test + lint`，push 才出签名包——门禁要快，发布要稳；
+- 仪器测试（`connectedDebugAndroidTest`）需要模拟器环境：可用 `reactivecircus/android-emulator-runner`
+  起 KVM 模拟器，或接入云真机服务后作为 push 级门禁；
+- 进阶：`r0adkll/upload-google-play` 等 Action 或 Fastlane 可直接把 AAB 推上内部/封闭轨道，
+  与 [Play 分轨发布](02-play-store-release.md) 打通全自动。
+
+## 2️⃣ Crashlytics：崩溃主动上报
+
+**接入**（Firebase Console 创建项目后）：
+
+```kotlin
+// 根 build.gradle.kts：插件
+plugins {
+    id("com.google.gms.google-services") version "4.4.x" apply false
+    id("com.google.firebase.crashlytics") version "3.0.x" apply false
+}
+
+// app/build.gradle.kts
+plugins {
+    id("com.google.gms.google-services")
+    id("com.google.firebase.crashlytics")
+}
+android {
+    buildTypes {
+        release {
+            configure<CrashlyticsExtension> {
+                mappingFileUploadEnabled = true   // 上传混淆映射，堆栈自动还原
+            }
+        }
+    }
+}
+dependencies {
+    implementation(platform("com.google.firebase:firebase-bom:33.x.x"))
+    implementation("com.google.firebase:firebase-crashlytics")
+    implementation("com.google.firebase:firebase-analytics")
+}
+```
+
+`google-services.json` 放 app/ 目录——它只含公开标识符，可以入仓；CI 缺它时生成占位文件即可编译。
+
+**使用层次**：
+
+```kotlin
+// ① 自动捕获：未处理崩溃默认上报，映射还原
+// ② 已捕获异常：记录但不中断
+try { riskyOperation() } catch (e: Exception) {
+    FirebaseCrashlytics.getInstance().recordException(e)
+}
+
+// ③ 自定义上下文：定位"哪个版本/哪条路径"出的问题
+FirebaseCrashlytics.getInstance().apply {
+    setCustomKey("feature", "weather")           // 与功能模块对齐
+    setCustomKey("api_endpoint", "/v1/forecast")
+    log("刷新失败，进入重试")
+}
+```
+
+## 3️⃣ Release Health：以指标驱动灰度决策
+
+Crashlytics Dashboard 关注三个数：
+
+| 指标 | 含义 | 健康线 |
+|------|------|--------|
+| 无崩溃用户率 | crash-free users | > 99.5% |
+| 无崩溃会话率 | crash-free sessions | > 99.7% |
+| ANR 率 | 主线程阻塞（Vitals 同步可见） | < 0.47%（Play 政策线） |
+
+结合 [Play 灰度](02-play-store-release.md)：灰度 10% 观察 24-48h，
+无崩溃率异常再放量；异常则**暂停 rollout**（已升级用户不受影响）并发布修复版本。
+
+## 4️⃣ 可观测性分层
+
+- **崩溃层**：Crashlytics（本文）——非致命异常也记录，别只等 crash
+- **性能层**：Firebase Performance 监控启动耗时/网络请求（与 [启动优化](../advanced-topics/performance/02-startup-memory.md) 互相验证）
+- **行为层**：Analytics 关键事件（首启/核心转化），驱动产品决策
+- **系统层**：Play Console Vitals（ANR、电池、权限拒绝），面向商店政策的官方口径
+
+## 🎨 最佳实践
+
+### ✅ 推荐
+
+- CI 每个版本号产物归档（artifact），发布记录可追溯
+- Crashlytics 自定义 key 与[多模块结构](../projects/04-production-android-app.md)对齐（feature 名作 key）
+- mapping 文件每次发布上传并备份——没有它，混淆堆栈无法解读
+
+### ❌ 避免陷阱
+
+- Secrets 明文写进 yml 或 echo 到日志
+- 只监控 fatal crash：`recordException` 记录的非致命异常往往是下次 crash 的前兆
+- 灰度不看数据直接放量，或看到问题直接撤包（正确做法是暂停 + 新版本修复）
+
+## 🔗 相关文档
+
+- 📖 前置步骤：[发布构建](01-release-build.md) ｜ [Play Store 上架流程](02-play-store-release.md)
+- 🧪 质量门禁：[集成与端到端测试](../testing/03-integration-e2e-testing.md)
+- 🚀 深度优化：[启动与内存优化](../advanced-topics/performance/02-startup-memory.md) ｜ [生产级 Android 应用](../projects/04-production-android-app.md)

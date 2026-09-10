@@ -1,0 +1,211 @@
+# 入门项目：TODO REST API
+
+> **文档简介**: 独立完成第一个完整的 TODO REST API——Express 5 + Prisma + Zod + Vitest 的最小组合，覆盖 CRUD、过滤、分页与测试的全流程
+>
+> **目标读者**: 完成 basics 路径、希望第一次独立交付完整 API 的初学者
+>
+> **前置知识**: [第一个完整项目](../basics/08-first-project.md)、[Express 基础](../frameworks/01-express-basics.md)
+
+## 📚 文档元数据
+
+| 属性 | 内容 |
+|------|------|
+| **模块** | `09-nodejs-backend` |
+| **象限** | 操作指南 |
+| **难度** | ⭐ |
+| **标签** | `#rest-api` `#crud` `#prisma` `#zod` `#入门项目` |
+| **更新日期** | `2026年9月` |
+
+> basics 的任务管理项目已带你走过一遍全流程；本项目是它的**独立拓展练习**——从空白仓库出发，完成带标签、优先级与过滤能力的 TODO API。步骤只给关键代码与决策点，细节自行查字典补齐。
+
+## 🎯 项目目标
+
+- 独立完成"设计 → 建模 → 实现 → 测试"的完整闭环
+- 实践统一错误信封与 Zod 请求校验
+- 用 Vitest 写出第一批服务层单元测试
+
+## 1. 需求清单
+
+| 能力 | 方法与路径 | 说明 |
+|------|-----------|------|
+| 建任务 | `POST /todos` | title 必填，priority ∈ low/mid/high，默认 low |
+| 查列表 | `GET /todos` | 支持 `?status=&priority=&page=&pageSize=` 过滤分页 |
+| 查单个 | `GET /todos/:id` | 不存在返回 404 |
+| 改状态 | `PATCH /todos/:id` | 部分更新，只校验提供的字段 |
+| 删除 | `DELETE /todos/:id` | 返回 204 |
+
+## 2. 数据建模
+
+```prisma
+// prisma/schema.prisma
+model Todo {
+  id        String    @id @default(cuid())
+  title     String
+  done      Boolean   @default(false)
+  priority  String    @default("low") // low | mid | high，取值校验交给应用层 Zod
+  createdAt DateTime  @default(now())
+
+  @@index([done, priority, createdAt]) // 覆盖列表页的过滤+排序
+}
+```
+
+```bash
+pnpm exec prisma migrate dev --name todo-init
+```
+
+## 3. 校验层：Zod schema 即文档
+
+```typescript
+// src/schemas/todo.ts
+import { z } from 'zod';
+
+export const createTodoSchema = z.object({
+  body: z.object({
+    title: z.string().min(1).max(100),
+    priority: z.enum(['low', 'mid', 'high']).default('low'),
+  }),
+});
+
+export const listQuerySchema = z.object({
+  query: z.object({
+    status: z.enum(['all', 'open', 'done']).default('all'),
+    priority: z.enum(['low', 'mid', 'high']).optional(),
+    page: z.coerce.number().int().min(1).default(1),   // query 是 string，自动转型
+    pageSize: z.coerce.number().int().min(1).max(50).default(20),
+  }),
+});
+
+export const updateTodoSchema = z.object({
+  params: z.object({ id: z.string() }),
+  body: z.object({
+    title: z.string().min(1).max(100).optional(),
+    done: z.boolean().optional(),
+    priority: z.enum(['low', 'mid', 'high']).optional(),
+  }),
+});
+```
+
+## 4. 服务层：业务与框架解耦
+
+```typescript
+// src/services/todo-service.ts —— 只依赖 prisma，不感知 express
+import { prisma } from '../lib/prisma.js';
+import { notFound } from '../lib/http-error.js';
+
+interface ListFilter {
+  status: 'all' | 'open' | 'done';
+  priority?: 'low' | 'mid' | 'high';
+  page: number;
+  pageSize: number;
+}
+
+export async function listTodos(f: ListFilter) {
+  const where = {
+    ...(f.status !== 'all' && { done: f.status === 'done' }),
+    ...(f.priority && { priority: f.priority }),
+  };
+
+  const [items, total] = await prisma.$transaction([
+    prisma.todo.findMany({
+      where,
+      orderBy: { createdAt: 'desc' },
+      skip: (f.page - 1) * f.pageSize,
+      take: f.pageSize,
+    }),
+    prisma.todo.count({ where }),
+  ]);
+
+  return { items, total, page: f.page, pageSize: f.pageSize };
+}
+
+export async function toggleTodo(id: string, done: boolean) {
+  const todo = await prisma.todo.findUnique({ where: { id } });
+  if (!todo) throw notFound(`任务 ${id} 不存在`);
+  return prisma.todo.update({ where: { id }, data: { done } });
+}
+
+export async function deleteTodo(id: string) {
+  const { count } = await prisma.todo.deleteMany({ where: { id } });
+  if (count === 0) throw notFound(`任务 ${id} 不存在`);
+}
+```
+
+## 5. 路由装配
+
+```typescript
+// src/routes/todos.ts —— async handler，Express 5 自动捕获 reject
+import { Router } from 'express';
+import * as svc from '../services/todo-service.js';
+import {
+  createTodoSchema,
+  listQuerySchema,
+  updateTodoSchema,
+} from '../schemas/todo.js';
+
+const router = Router();
+
+router.post('/', async (req, res) => {
+  const { title, priority } = createTodoSchema.shape.body.parse(req.body);
+  res.status(201).json(await svc.createTodo(title, priority));
+});
+
+router.get('/', async (req, res) => {
+  const q = listQuerySchema.shape.query.parse(req.query); // ZodError → 422
+  res.json(await svc.listTodos(q));
+});
+
+router.get('/:id', async (req, res) => {
+  res.json(await svc.getTodo(req.params.id));
+});
+
+router.patch('/:id', async (req, res) => {
+  const patch = updateTodoSchema.shape.body.parse(req.body);
+  res.json(await svc.updateTodo(req.params.id, patch));
+});
+
+router.delete('/:id', async (req, res) => {
+  await svc.deleteTodo(req.params.id);
+  res.status(204).end(); // 删除成功无响应体
+});
+
+export default router;
+```
+
+## 6. 验收与测试
+
+```bash
+curl -X POST localhost:3000/todos -H 'Content-Type: application/json' \
+  -d '{"title":"写周报","priority":"high"}'
+curl 'localhost:3000/todos?status=open&priority=high&page=1'
+```
+
+用 Vitest 给服务层写第一批测试（不启 HTTP，直连测试库）：
+
+```typescript
+// tests/todo-service.test.ts
+import { describe, it, expect } from 'vitest';
+import { listTodos } from '../src/services/todo-service.js';
+
+describe('listTodos', () => {
+  it('按 status=done 过滤', async () => {
+    const result = await listTodos({ status: 'done', page: 1, pageSize: 20 });
+    expect(result.items.every((t) => t.done)).toBe(true);
+  });
+});
+```
+
+完整测试方法见 [`../testing/01-unit-testing.md`](../testing/01-unit-testing.md)。
+
+## ✅ 完成自检
+
+- [ ] 全部 5 个端点通过 curl 手工验收
+- [ ] 非法 priority 返回 422 而非 500
+- [ ] 删除不存在的 id 返回 404
+- [ ] 至少 3 条服务层测试通过
+
+## 🔗 相关文档
+
+- 📄 [第一个完整项目：任务管理 REST API](../basics/08-first-project.md) — 本项目的教学版原型
+- 📄 [Express 基础](../frameworks/01-express-basics.md) — 路由与中间件写法
+- 📄 [生态集成](../frameworks/03-ecosystem-integration.md) — Prisma 连接与事务细节
+- 📄 [认证服务实战](02-auth-service.md) — 下一个难度⭐⭐项目
