@@ -1,0 +1,219 @@
+# 错误处理与进程稳定性
+
+> **文档简介**: 建立 Node 后端的完整错误处理体系——错误传播、异步错误捕获、集中式错误中间件与进程级兜底
+
+> **目标读者**: 已了解 Express 路由与中间件、准备让服务"生产可用"的开发者
+
+> **前置知识**: [路由与中间件](./05-http-routing.md)，[异步编程](./04-async-promises.md)
+
+## 📚 文档元数据
+
+| 属性 | 内容 |
+|------|------|
+| **模块** | `09-nodejs-backend` |
+| **象限** | 教程（basics） |
+| **难度** | ⭐ |
+| **标签** | `#错误处理` `#ErrorMiddleware` `#uncaughtException` `#稳定性` |
+| **更新日期** | `2026年9月` |
+
+## 🎯 学习目标
+
+完成本文档后，你将能够：
+
+- 区分操作性错误与程序员错误并分别对待
+- 在同步、Promise、回调三种语境中正确传播错误
+- 实现集中式 Express 错误中间件与统一错误响应格式
+- 配置 `uncaughtException` / `unhandledRejection` 进程兜底
+
+## 🔍 两类错误，两种策略
+
+| 类型 | 例子 | 策略 |
+|------|------|------|
+| **操作性错误**（预期内） | 数据库连不上、文件不存在、请求超时、输入非法 | 记日志、降级、返回 4xx/5xx，服务继续运行 |
+| **程序员错误**（Bug） | 未定义变量、类型用错、逻辑漏判 | 修复代码；进程不可信，应崩溃重启 |
+
+这个区分是 Node 错误处理的基石：**不要试图捕获 Bug 后继续运行**，状态可能已损坏。
+
+## 🛠️ 错误传播：三种语境
+
+### 同步代码：throw + try/catch
+
+```ts
+function parseConfig(raw: string) {
+  const cfg = JSON.parse(raw); // 可能同步抛出
+  return cfg;
+}
+
+try {
+  parseConfig(badJson);
+} catch (err) {
+  console.error("配置解析失败", err);
+}
+```
+
+### Promise/async-await：自动传播
+
+`async` 函数内 throw 会变成 Promise rejection，沿 await 链向上传播——**但必须有人接住**：
+
+```ts
+async function bootstrap() {
+  await connectDb();     // 失败 → rejection 传给调用方
+}
+// ✅ 在调用处捕获
+bootstrap().catch((err) => {
+  console.error("启动失败", err);
+  process.exit(1);
+});
+```
+
+Express 5 的进步：路由处理器是 async 函数时，rejection 自动转给 `next(err)`，无需手写 try/catch。
+
+### 回调式 API：error-first 约定
+
+遗留回调式 API 遵循 `(err, result)` 首参错误约定——不处理也不传出的回调错误会变成 `uncaughtException`。现代代码应改用 `node:fs/promises` 等 Promise 版本。
+
+### 错误包装保留因果链
+
+```ts
+class ServiceError extends Error {
+  constructor(message: string, options?: { code?: string; cause?: unknown }) {
+    super(message, { cause: options?.cause }); // Error cause 标准属性
+    this.name = "ServiceError";
+  }
+}
+
+try {
+  await db.query(sql);
+} catch (err) {
+  throw new ServiceError("查询任务失败", { code: "DB_ERROR", cause: err });
+  // cause 保留原始堆栈，排查时不丢失根因
+}
+```
+
+## 🛠️ Express 集中式错误处理
+
+### 定义错误处理中间件
+
+签名必须是四参数——Express 靠参数个数识别错误中间件：
+
+```ts
+import type { ErrorRequestHandler } from "express";
+
+interface AppError extends Error {
+  status?: number;
+  code?: string;
+}
+
+const errorHandler: ErrorRequestHandler = (err, req, res, _next) => {
+  const status = err.status ?? 500;
+
+  // 500 及以上必须记录；4xx 属于客户端问题，按需记录
+  if (status >= 500) {
+    console.error(`[500] ${req.method} ${req.url}`, err);
+  }
+
+  res.status(status).json({
+    error: {
+      code: err.code ?? "INTERNAL_ERROR",
+      message: status >= 500 && process.env.NODE_ENV === "production"
+        ? "服务器内部错误"        // 生产环境不泄露内部细节
+        : err.message,
+    },
+  });
+};
+
+// 必须在所有路由之后注册
+app.use(errorHandler);
+```
+
+### 业务错误统一抛出
+
+```ts
+class HttpError extends Error {
+  constructor(public status: number, message: string, public code: string) {
+    super(message);
+  }
+}
+
+// 路由中只管抛
+app.get("/users/:id", async (req, res) => {
+  const user = await db.findUser(req.params.id);
+  if (!user) {
+    throw new HttpError(404, "用户不存在", "USER_NOT_FOUND");
+  }
+  res.json(user);
+});
+// Express 5 自动把 throw 的错误送进 errorHandler
+```
+
+404 不是错误：先注册一个普通中间件兜底返回 404，再注册 `errorHandler`。
+
+## 🛠️ 进程级兜底
+
+任何逃逸的错误最终到达进程层。**默认策略：记日志、清理、退出，交给进程管理器重启**。
+
+```ts
+// src/fatal.ts —— 在应用入口最先 import
+import process from "node:process";
+
+process.on("uncaughtException", (err) => {
+  console.error("未捕获异常，进程即将退出", err);
+  process.exit(1);
+});
+
+process.on("unhandledRejection", (reason) => {
+  console.error("未处理的 Promise 拒绝", reason);
+  process.exit(1);
+});
+
+process.on("SIGTERM", () => console.log("收到 SIGTERM")); // 优雅退出见 02-first-server
+```
+
+要点：
+
+- `uncaughtException` 后 **Node 文档明确不建议继续运行**——正确姿势是退出并让 systemd/K8s 重启
+- `unhandledRejection` 自 Node 15 起默认就是崩溃（`--unhandled-rejections=throw`），不要试图"修复"这个行为
+- 兜底处理器里只做同步日志，不要再启动可能抛错的异步操作
+
+## 🎨 最佳实践
+
+- ✅ **错误中间件只有一个，放路由链最末端**
+- ✅ **用 `Error cause` 链包装底层错误**，日志里保留根因
+- ✅ **生产 5xx 响应不回传堆栈**，细节进日志
+- ❌ **不要 `catch (err) {}` 静默吞错**——这是线上事故第一来源
+- ❌ **不要把程序员错误当操作性错误处理**：捕获 Bug 继续跑比崩溃更危险
+
+## ❓ 常见问题
+
+### Q1: 我的 async 路由抛错变成请求挂起？
+
+**A**: Express 4 需要手写 `next(err)` 或用包装函数；Express 5 已原生支持 async 自动转发。也可能是你注册了错误中间件却没放在路由之后。
+
+### Q2: 错误日志里堆栈很乱看不到根因？
+
+**A**: 用 `err.cause` 层层包装后，打印顶层错误不会带出 cause 堆栈。日志库（如 pino）序列化时记得开启 err 序列化器输出 cause 链。
+
+## 🎯 练习与实践
+
+### 练习一：给路由加上完整错误流
+
+**任务要求**:
+1. 在 05 课的任务清单 API 上实现 `HttpError` 与 `errorHandler`
+2. 制造三类错误：校验失败（400）、查不到资源（404）、模拟数据库宕机（503）
+3. 验证三者都从同一中间件输出统一格式
+
+### 练习二：可观察的崩溃
+
+**挑战任务**:
+- 写一个每 100 次请求抛一次 `uncaughtException` 的"故障服务"
+- 观察：进程退出后，验证由进程管理器（systemd 或 docker `restart: always`）自动拉起
+
+**提示**: 容器场景在 Dockerfile 的 CMD 直接跑 node，重启交给编排层。
+
+---
+
+## 🔗 相关文档
+
+- 📄 **[路由与中间件](./05-http-routing.md)** — 错误中间件的注册位置语义
+- 📄 **[Stream 与 Worker](./07-streams-workers.md)** — 流中的错误传播与 `pipeline` 兜底
+- 📄 **[常见故障排除](../reference/quick-references/02-troubleshooting.md)** — 内存泄漏与崩溃排查

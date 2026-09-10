@@ -1,0 +1,179 @@
+# 可选值与集合 API 速查
+
+> **文档简介**: Optional 解包全手段（可选链、guard let、map/flatMap）与 Array/Dictionary/Set 核心 API 的条目式参考
+>
+> **目标读者**: 查阅某个解包写法或集合方法的全体学习者
+>
+> **前置知识**: 无；配套教程见 [basics/03-swift-syntax-essentials.md](../../basics/03-swift-syntax-essentials.md)
+
+## 📚 文档元数据
+
+| 属性 | 内容 |
+|------|------|
+| **模块** | `06-swift-swiftui` |
+| **象限** | 字典 |
+| **难度** | ⭐ |
+| **标签** | `#Optional` `#Array` `#Dictionary` `#Set` `#集合API` |
+| **更新日期** | `2026年9月` |
+
+---
+
+## 1. Optional 类型
+
+**定义**: `enum Optional<Wrapped> { case none, case some(Wrapped) }`——`String?` 只是 `Optional<String>` 的语法糖。
+
+### 1.1 解包手段对照表
+
+| 手段 | 语法 | 场景 | nil 时行为 |
+|------|------|------|-----------|
+| if let | `if let name { … }` | 有值才执行的分支 | 跳过分支 |
+| guard let | `guard let name else { return }` | 早退出 + 绑定提升 | 执行 else 并退出 |
+| nil 合并 | `name ?? "默认"` | 提供默认值 | 取右侧 |
+| 可选链 | `user?.profile?.name` | 连续访问 | 整体为 nil |
+| map | `name.map { $0.count }` | 有值才转换 | nil |
+| 强制解包 | `name!` | 100% 确定有值 | **崩溃** |
+| as? / try? | `try? fetch()` | 错误转 nil | nil |
+
+### 1.2 可选链与整体 nil
+
+```swift
+struct User { var address: Address? }
+struct Address { var city: String? }
+
+let user = User(address: nil)
+let city = user.address?.city ?? "未知"     // Optional 链短路，整体 Optional<String>
+let upper = user.address?.city?.uppercased() // 链可以任意长
+```
+
+**关键**: 可选链结果的类型是 `T?` 而不是 `T`，哪怕最后一个属性非可选——因为链条中途可能断。
+
+### 1.3 guard let 的绑定提升
+
+```swift
+func render(user: User?) {
+    guard let user, let city = user.address?.city else {
+        return                     // 必须退出：return/throw/continue/fatalError
+    }
+    // 此后 user 与 city 都是普通非可选值，作用域直达函数尾
+    print("\(user.name) 住在 \(city)")
+}
+```
+
+---
+
+## 2. Array
+
+### 2.1 创建与访问
+
+```swift
+var nums = [3, 1, 2]
+nums[0]                       // 下标越界会崩溃
+nums.first                    // 3（Optional）
+nums.last                     // 2（Optional）
+nums.first(where: { $0 > 1 }) // Optional(2)
+nums.count; nums.isEmpty
+```
+
+### 2.2 变换与过滤（最常用五件套）
+
+```swift
+nums.map { $0 * 2 }                    // [6,2,4] —— 一一映射
+nums.filter { $0 > 1 }                 // [3,2] —— 筛选
+nums.reduce(0, +)                      // 6 —— 折叠求和
+nums.compactMap { $0 > 1 ? $0 : nil }  // [3,2] —— 映射并剔除 nil
+nums.flatMap { [$0, $0] }              // 展平一层
+```
+
+### 2.3 排序与查找
+
+```swift
+nums.sorted()                        // 升序新数组
+nums.sorted { $0 > $1 }              // 自定义降序
+nums.sort()                          // 原地排序（var 需要）
+nums.contains(1); nums.contains { $0 > 5 }
+nums.firstIndex(of: 2)               // Optional(1)
+nums.min(); nums.max()
+```
+
+### 2.4 增删
+
+```swift
+nums.append(4); nums += [5]
+nums.insert(0, at: 0)
+nums.remove(at: 0); nums.removeAll()
+nums.dropFirst(); nums.prefix(2); nums.suffix(2)   // 非破坏性切片
+```
+
+### 2.5 与 SwiftUI 配合
+
+```swift
+ForEach(items) { item in … }        // 需要元素 Identifiable
+List(viewModel.items.filter(\.isPinned)) { … }
+```
+
+**陷阱**: `ForEach` 依赖 `id` 稳定性。用 `indices` 或随机 id 做 id 会导致增删动画错乱，见 [02-troubleshooting.md](../quick-references/02-troubleshooting.md)。
+
+---
+
+## 3. Dictionary
+
+### 3.1 增查改删
+
+```swift
+var scores = ["alice": 90, "bob": 75]
+scores["carol"] = 88                 // 增/改
+scores["alice"]                      // Optional(90) —— 下标永远返回可选
+scores["dave", default: 0]           // 0 —— 带默认值查询
+scores.removeValue(forKey: "bob")    // Optional(75)
+```
+
+### 3.2 高频变换
+
+```swift
+scores.mapValues { $0 + 5 }          // 全部 +5
+scores.filter { $0.value > 80 }      // 过滤（得到 Dictionary）
+Dictionary(grouping: users, by: \.city)   // 按键分组 → [City: [User]]
+scores.merge([carol: 80]) { max($0, $1) } // 合并并解决键冲突
+```
+
+### 3.3 典型模式：计数器
+
+```swift
+var counts: [String: Int] = [:]
+for word in words {
+    counts[word, default: 0] += 1    // 一行完成词频统计
+}
+```
+
+**陷阱**: 下标赋 `nil` 是**删除**键值对；判断"键不存在"用 `scores[key] == nil`，判断"值可能为 nil"需区分双重可选。
+
+---
+
+## 4. Set
+
+```swift
+let a: Set = [1, 2, 3]
+let b: Set = [3, 4]
+
+a.union(b)           // {1,2,3,4}  并
+a.intersection(b)    // {3}        交
+a.subtracting(b)     // {1,2}      差
+a.symmetricDifference(b)  // {1,2,4}
+a.contains(2)        // true —— 哈希查找，O(1)
+```
+
+**选型**: 只判断"存在性/去重"用 Set；需要顺序用 Array + `Set` 辅助判重。
+
+---
+
+## ⚠️ 高频陷阱速查
+
+- **数组下标越界崩溃**：优先 `first`/`last`/`firstIndex(of:)` 等返回 Optional 的 API
+- **Dictionary 下标的 Optional**：读值永远是 `T?`；`for (k, v) in dict` 中 v 才是普通值
+- **`sorted()` 与 `sort()` 混淆**：前者返回新数组，后者原地修改且要求 var
+
+## 相关文档
+
+- 📄 [01-swift-keywords.md](./01-swift-keywords.md) — guard/if 等关键字语义
+- 📄 [05-protocols-generics.md](./05-protocols-generics.md) — Sequence/Collection 协议体系
+- 📄 [01-foundation-and-stdlib.md](../library-guides/01-foundation-and-stdlib.md) — Foundation 类型补充
