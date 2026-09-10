@@ -11,19 +11,21 @@ Dev Quest 是一个**个人学习路径仓库**（纯文档项目，无可运行
 
 ## 模块结构规范
 
-每个模块遵循统一目录结构：
+每个模块遵循统一的**双轴结构**（内容用途四象限 + ⭐/⭐⭐/⭐⭐⭐ 难度标记，详见 `shared-resources/standards/module-structure-guide.md`）：
 
 ```
 NN-<tech>/
-├── README.md              # 模块入口与学习路径
-├── basics/                # 基础入门（编号文档 01-xx.md）
-├── advanced-topics/       # 高级主题（按专题分子目录）
-├── knowledge-points/      # 知识点速查（按类别分子目录）
-├── frameworks/            # 框架生态指南
-├── projects/              # 实战项目
-├── testing/               # 测试工程
-└── deployment/            # 部署运维
+├── README.md              # 模块入口：四象限导览 + 入门/进阶/精通三路径视图
+├── basics/                # 教程：按序学习入门（编号文档 01-xx.md）
+├── reference/             # 字典：全量参考（本模块知识字典，无难度门槛）
+├── frameworks/            # 操作指南：框架生态
+├── projects/              # 操作指南：实战项目（⭐ 递进）
+├── testing/               # 操作指南：测试工程
+├── deployment/            # 操作指南：部署运维
+└── advanced-topics/       # 解释：高级主题（按专题分子目录）
 ```
+
+**单一事实来源**：概念的完整解释只在 `reference/` 中存在一份，其他目录链接过去。
 
 01、02 模块已完成标准化重构；03-10 模块目前仅有 README 规划文档，内容分批补齐。
 

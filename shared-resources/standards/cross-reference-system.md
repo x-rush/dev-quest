@@ -65,9 +65,9 @@ graph LR
 ```markdown
 ### 学习路径
 **前置要求**:
-- [ ] **Go基础**: [Go语言基础](../01-go-backend/basics/02-basic-syntax.md) ⭐⭐
-- [ ] **Web基础**: [HTTP协议](../01-go-backend/standard-library/02-net-http.md) ⭐⭐
-- [ ] **数据库**: [SQL基础](../01-go-backend/knowledge-points/07-gorm-orm-knowledge-points.md) ⭐⭐⭐
+- [ ] **Go基础**: [环境搭建](../01-go-backend/basics/01-environment-setup.md) ⭐
+- [ ] **Web基础**: [RESTful设计模式](../01-go-backend/advanced-topics/api-advanced/01-restful-patterns.md) ⭐⭐
+- [ ] **数据库**: [GORM ORM完全指南](../01-go-backend/frameworks/03-gorm-orm-complete.md) ⭐⭐
 ```
 
 #### 后续学习引用
@@ -184,14 +184,14 @@ dev-quest/
 ```markdown
 ### 🔗 快速导航
 **开始学习**:
-- 📖 **新手入门**: [基础概念](basics/01-environment-setup.md) ⭐⭐
-- 🛠️ **框架学习**: [Gin框架](frameworks/01-gin-framework.md) ⭐⭐⭐
-- 🚀 **项目实战**: [REST API](projects/01-rest-api-server.md) ⭐⭐⭐⭐
+- 📖 **新手入门**: [环境搭建](basics/01-environment-setup.md) ⭐
+- 🛠️ **框架学习**: [Gin框架基础](frameworks/01-gin-framework-basics.md) ⭐
+- 🚀 **项目实战**: [REST API](projects/01-rest-api-server.md) ⭐⭐
 
 **知识拓展**:
-- 🔍 **深度专题**: [高级主题](advanced-topics/) ⭐⭐⭐⭐⭐
-- 📚 **速查手册**: [知识点](knowledge-points/) ⭐⭐
-- 🧪 **测试指南**: [测试工程](testing/) ⭐⭐⭐
+- 🔍 **深度专题**: [高级主题](advanced-topics/) ⭐⭐⭐
+- 📚 **字典查阅**: [参考手册](reference/) 无难度门槛
+- 🧪 **测试指南**: [测试工程](testing/) ⭐⭐
 
 **相关模块**:
 - 🌐 **前端开发**: [Next.js教程](../02-nextjs-frontend/README.md)
