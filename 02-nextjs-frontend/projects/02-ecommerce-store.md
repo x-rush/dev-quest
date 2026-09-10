@@ -2650,9 +2650,9 @@ volumes:
 - 📄 **[04-saas-platform.md](./04-saas-platform.md)**: SaaS平台项目实战
 
 ### 参考章节
-- 📖 **[Framework Deep Dive - Next.js](../frameworks/nextjs-core.md)**: Next.js核心特性深度学习
-- 📖 **[Database - Prisma ORM](../reference/database/prisma.md)**: Prisma ORM快速参考
-- 📖 **[Authentication - NextAuth](../reference/auth/nextauth.md)**: NextAuth.js最佳实践
+- 📖 **[Framework Deep Dive - Next.js](../frameworks/01-nextjs-15-complete.md)**: Next.js核心特性深度学习
+- 📖 **[Database - Prisma ORM](../frameworks/03-full-stack-patterns.md)**: Prisma ORM快速参考
+- 📖 **[Authentication - NextAuth](../reference/framework-patterns/07-authentication-flows.md)**: NextAuth.js最佳实践
 
 ## 📝 总结
 

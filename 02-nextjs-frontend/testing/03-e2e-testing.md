@@ -1213,9 +1213,9 @@ export class TestDataManager {
 - [部署相关模块](../deployment/04-monitoring-analytics.md) - E2E测试的监控和报告集成
 
 ### 基础前置知识
-- [JavaScript 异步编程](../../../00-javascript-foundation/advanced/03-async-programming.md) - 异步操作测试的基础知识
-- [浏览器渲染原理](../../../01-react-foundation/advanced/06-browser-rendering.md) - 理解浏览器行为对E2E测试的影响
-- [React Hooks 完全指南](../../../01-react-foundation/advanced/03-react-hooks-deep-dive.md) - React组件在E2E测试中的行为
+- [JavaScript 异步编程](../reference/language-concepts/04-javascript-modern.md) - 异步操作测试的基础知识
+- [浏览器渲染原理](../reference/performance-optimization/01-rendering-optimization.md) - 理解浏览器行为对E2E测试的影响
+- [React Hooks 深入理解](../frameworks/02-react-19-integration.md) - React组件在E2E测试中的行为
 
 ---
 

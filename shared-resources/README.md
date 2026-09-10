@@ -28,11 +28,11 @@ shared-resources/
 │   ├── 📄 documentation-guidelines.md     # 文档编写指南
 │   ├── 📄 cross-reference-system.md       # 交叉引用系统规范
 │   ├── 📄 module-development-standards.md # 模块开发标准
-│   └── 📄 quick-reference-standards.md    # 速查文档标准
+│   └── 📄 module-structure-guide.md       # 模块结构标准
 ├── 📁 templates/                     # 文档模板系统
 │   ├── 📄 document-template.md            # 标准文档模板
 │   ├── 📄 quick-template.md               # 速查文档模板
-│   └── 📄 project-template.md             # 项目文档模板 (可选)
+│   └── 📄 project-template.md             # 项目文档模板（并入 document-template）
 ├── 📁 tools/                         # 项目工具和索引
 │   ├── 📄 development-tools.md            # 开发工具推荐
 │   ├── 📄 document-index.md               # 全文档索引
@@ -100,7 +100,7 @@ shared-resources/
 **适用场景**: 创建新的学习模块或重构现有模块
 
 ### ⚡ 速查文档标准
-**文件**: [quick-reference-standards.md](standards/quick-reference-standards.md)
+**文件**: [module-structure-guide.md](standards/module-structure-guide.md)（reference/ 字典条目规范）
 
 **用途**: 专门针对速查文档的设计和编写标准
 
@@ -143,7 +143,7 @@ shared-resources/
 **适用文档**: 语法速查、API参考、工具配置等
 
 ### 🚀 项目文档模板
-**文件**: [project-template.md](templates/project-template.md) *(计划中)*
+**文件**: [document-template.md](templates/document-template.md)（实战项目文档通用骨架）
 
 **用途**: 实战项目文档的标准化模板
 

@@ -1750,9 +1750,9 @@ vercel --prod
 - 📄 **[04-saas-platform.md](./04-saas-platform.md)**: SaaS平台项目实战
 
 ### 参考章节
-- 📖 **[Framework Deep Dive - Next.js](../frameworks/nextjs-core.md)**: Next.js核心特性深度学习
-- 📖 **[Styling - Tailwind CSS](../reference/styling/tailwind-css.md)**: Tailwind CSS快速参考
-- 📖 **[API Integration](../reference/api/integration.md)**: API集成最佳实践
+- 📖 **[Framework Deep Dive - Next.js](../frameworks/01-nextjs-15-complete.md)**: Next.js核心特性深度学习
+- 📖 **[Styling - Tailwind CSS](../basics/05-styling-with-tailwind.md)**: Tailwind CSS快速参考
+- 📖 **[API Integration](../basics/06-data-fetching-basics.md)**: API集成最佳实践
 
 ## 📝 总结
 

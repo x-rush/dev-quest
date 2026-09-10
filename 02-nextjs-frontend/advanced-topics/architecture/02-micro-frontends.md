@@ -1367,13 +1367,13 @@ devServer.start().catch(console.error);
 ## 🔄 文档交叉引用
 
 ### 相关文档
-- 📄 **[性能优化模式](../reference/performance-optimization/01-rendering-optimization.md)**: 深入了解微前端性能优化策略
-- 📄 **[状态管理模式](../reference/framework-patterns/05-state-management-patterns.md)**: 学习跨应用状态管理方案
-- 📄 **[数据获取模式](../reference/framework-patterns/04-data-fetching-patterns.md)**: 掌握微前端数据获取和缓存策略
+- 📄 **[性能优化模式](../../reference/performance-optimization/01-rendering-optimization.md)**: 深入了解微前端性能优化策略
+- 📄 **[状态管理模式](../../reference/framework-patterns/05-state-management-patterns.md)**: 学习跨应用状态管理方案
+- 📄 **[数据获取模式](../../reference/framework-patterns/04-data-fetching-patterns.md)**: 掌握微前端数据获取和缓存策略
 
 ### 参考章节
-- 📖 **[本模块其他章节]**: [API集成模式](./api-integration/01-graphql-apollo.md)中的微服务通信部分
-- 📖 **[其他模块相关内容]**: [Go微服务架构](../../01-go-backend/reference/microservices/01-microservices-patterns.md)中的服务间通信模式
+- 📖 **[本模块其他章节]**: [API集成模式](../api-integration/01-graphql-apollo.md)中的微服务通信部分
+- 📖 **[其他模块相关内容]**: [Go微服务架构](../../../01-go-backend/advanced-topics/architecture/01-microservices-design.md)中的服务间通信模式
 
 ---
 

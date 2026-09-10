@@ -2,6 +2,22 @@
 
 本项目遵循 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/) 格式。
 
+## [2.2.0] - 2026-09-10
+
+### Added
+- 标准体系升级为 Diátaxis 双轴框架：内容四象限（教程/操作指南/字典/解释）+ 三级难度标记（⭐/⭐⭐/⭐⭐⭐）
+- `knowledge-points/` 全局更名为 `reference/`（模块知识字典，单一事实来源）
+- 补齐 03-10 模块知识库内容约 300 篇：basics/ 教程 8 篇、reference/ 字典 11 篇、frameworks/projects/testing/deployment 工程域指南、advanced-topics 高级主题
+- 03-10 模块 README 重写为四象限导览 + 入门/进阶/精通三路径视图
+
+### Changed
+- `document-index.md` 03-10 章节从"规划中"占位更新为实际文档目录索引（v3.0.0）
+- `learning-progress.md` 为 02-10 模块补充模块入口链接并修正过时技术基线（Node 22/Express 5 等）
+- 模块结构指南重写为 v2.0.0（双轴设计原则、README 三路径视图格式、结构适配原则）
+
+### Fixed
+- 全仓 Markdown 相对链接校验（3269 条真实链接，0 断链）：修复 document-index/cross-reference-system 的层级错误、02 模块指向旧仓库结构的 61 处死链、learning-progress 与各 README 的陈旧文件名引用
+
 ## [2.1.0] - 2026-09-10
 
 ### Added

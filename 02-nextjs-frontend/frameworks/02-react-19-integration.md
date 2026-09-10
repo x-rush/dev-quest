@@ -1371,9 +1371,9 @@ export function PerformanceExample() {
 - [测试相关模块](../testing/03-e2e-testing.md) - Next.js应用的端到端测试实践
 
 ### 基础前置知识
-- [React Hooks 完全指南](../../../01-react-foundation/advanced/03-react-hooks-deep-dive.md) - 深入理解React Hooks
-- [JavaScript 异步编程](../../../00-javascript-foundation/advanced/03-async-programming.md) - 掌握现代异步编程模式
-- [TypeScript 泛型编程](../../../00-javascript-foundation/advanced/04-typescript-generics.md) - TypeScript高级类型系统
+- [React Hooks 模式](../reference/framework-patterns/03-client-components-patterns.md) - 深入理解React Hooks
+- [JavaScript 异步编程](../reference/language-concepts/04-javascript-modern.md) - 掌握现代异步编程模式
+- [TypeScript 泛型编程](../reference/language-concepts/03-typescript-types.md) - TypeScript高级类型系统
 
 ---
 

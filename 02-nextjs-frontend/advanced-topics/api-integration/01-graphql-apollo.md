@@ -1942,7 +1942,7 @@ export const cacheHelpers = {
 
 ### 参考章节
 - 📖 **[本模块其他章节]**: [API集成模式](../api-integration/01-graphql-apollo.md)中的实时订阅部分
-- 📖 **[其他模块相关内容]**: [Go API开发](../../01-go-backend/reference/web-development/01-gin-rest-api.md)中的API设计原则
+- 📖 **[其他模块相关内容]**: [Go API开发](../../../01-go-backend/projects/01-rest-api-server.md)中的API设计原则
 
 ---
 

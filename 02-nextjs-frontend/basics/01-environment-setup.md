@@ -768,10 +768,10 @@ npm ci
 
 | 相关主题 | 参考 |
 |---------|------|
-| **TypeScript基础** | [02-typescript-fundamentals.md](./02-typescript-fundamentals.md) |
-| **React基础** | [03-react-basics.md](./03-react-basics.md) |
-| **Next.js路由** | [04-nextjs-routing.md](./04-nextjs-routing.md) |
-| **样式解决方案** | [05-styling-solutions.md](./05-styling-solutions.md) |
+| **TypeScript基础** | [03-typescript-integration.md](./03-typescript-integration.md) |
+| **React基础** | [02-first-nextjs-app.md](./02-first-nextjs-app.md) |
+| **Next.js路由** | [04-layouts-routing.md](./04-layouts-routing.md) |
+| **样式解决方案** | [05-styling-with-tailwind.md](./05-styling-with-tailwind.md) |
 
 ## 📚 附加资源
 

@@ -92,7 +92,7 @@ graph LR
 **难度**: ⭐⭐
 **前置**: [Go环境搭建](01-environment-setup.md)
 **后续**: [数据类型](03-data-types.md), [控制流程](04-control-flow.md)
-**相关**: [02-nextjs-frontend TypeScript基础](../../02-nextjs-frontend/basics/02-typescript-fundamentals.md)
+**相关**: [02-nextjs-frontend TypeScript基础](../../02-nextjs-frontend/basics/03-typescript-integration.md)
 **标签**: #go #basics #syntax #variables
 ---
 ```
@@ -127,8 +127,8 @@ graph TD
 - ➡️ **下一课**: [数据类型](03-data-types.md)
 
 **平行学习**:
-- 🔄 **前端对应**: [TypeScript基础](../../02-nextjs-frontend/basics/02-typescript-fundamentals.md)
-- 🔄 **语言对比**: [PHP变量](../../07-php-mastery/basics/02-variables-data-types.md)
+- 🔄 **前端对应**: [TypeScript基础](../../02-nextjs-frontend/basics/03-typescript-integration.md)
+- 🔄 **语言对比**: [PHP变量](../../07-php-mastery/basics/03-variables-types.md)
 ```
 
 ## 📊 引用质量标准
@@ -211,7 +211,7 @@ dev-quest/
 **相关内容**:
 - 🔄 **练习**: [语法练习题](../../projects/01-rest-api-server.md#基础语法部分)
 - 📖 **参考**: [Go官方语法文档](https://go.dev/ref/spec)
-- 🔗 **对比**: [PHP语法对比](../../07-php-mastery/basics/03-syntax-control-structures.md)
+- 🔗 **对比**: [PHP语法对比](../../07-php-mastery/basics/05-control-flow.md)
 ```
 
 ## 🔄 维护和更新

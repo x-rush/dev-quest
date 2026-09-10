@@ -1289,9 +1289,9 @@ export class MigrationManager {
 - [部署相关模块](../deployment/02-docker-containerization.md) - 全栈应用的容器化部署
 
 ### 基础前置知识
-- [数据库设计基础](../../../01-react-foundation/basics/04-database-design.md) - 数据库设计原理和最佳实践
-- [API 设计原则](../../../01-react-foundation/advanced/02-api-design-principles.md) - RESTful API设计理论
-- [认证授权基础](../../../01-react-foundation/advanced/05-authentication-authorization.md) - 认证和授权的核心概念
+- 数据库设计基础 - 数据库设计原理和最佳实践
+- API 设计原则 - RESTful API设计理论
+- [认证授权基础](../reference/framework-patterns/07-authentication-flows.md) - 认证和授权的核心概念
 
 ---
 

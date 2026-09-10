@@ -135,7 +135,7 @@ graph LR
 │   ├── 🔧 development-tools/     # 开发工具生态（4个文件）
 │   │   ├── 01-testing-tools.md                 # 🧪 测试工具指南 ✅
 │   │   ├── 02-styling-tools.md                 # 🎨 样式工具 ✅
-│   │   ├── 03-build-tools.md                   # ⚙️ 构建工具 ✅
+│   │   ├── 03-package-managers.md                   # ⚙️ 构建工具 ✅
 │   │   └── 04-debugging-tools.md               # 🔍 调试工具 ✅
 │   └── ⚡ performance-optimization/ # 性能优化专题（2个文件）
 │       ├── 01-rendering-optimization.md        # 📈 渲染优化 ✅
@@ -205,7 +205,7 @@ graph LR
 #### 🔧 Development Tools - 开发工具（4个文件）
 - [`01-testing-tools.md`](reference/development-tools/01-testing-tools.md) - 🧪 测试工具指南
 - [`02-styling-tools.md`](reference/development-tools/02-styling-tools.md) - 🎨 样式工具
-- [`03-build-tools.md`](reference/development-tools/03-build-tools.md) - ⚙️ 构建工具
+- [`03-package-managers.md`](reference/development-tools/03-package-managers.md) - ⚙️ 构建工具
 - [`04-debugging-tools.md`](reference/development-tools/04-debugging-tools.md) - 🔍 调试工具
 
 #### ⚡ Performance Optimization - 性能优化（2个文件）

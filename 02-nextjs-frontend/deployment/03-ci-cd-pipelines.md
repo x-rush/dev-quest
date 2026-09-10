@@ -1181,9 +1181,9 @@ Next.js 15 CI/CD流水线是现代软件工程的核心实践，直接影响开�
 - [测试相关模块](../testing/03-e2e-testing.md) - E2E测试在CI/CD中的自动化执行
 
 ### 基础前置知识
-- [Git版本控制](../../../00-javascript-foundation/basics/04-git-version-control.md) - Git工作流和分支策略
-- [CI/CD基础概念](../../../01-react-foundation/advanced/12-cicd-fundamentals.md) - CI/CD的基本概念和工作原理
-- [DevOps实践](../../../01-react-foundation/advanced/11-devops-practices.md) - DevOps文化和实践方法
+- Git版本控制 - Git工作流和分支策略
+- CI/CD基础概念 - CI/CD的基本概念和工作原理
+- DevOps实践 - DevOps文化和实践方法
 
 ---
 

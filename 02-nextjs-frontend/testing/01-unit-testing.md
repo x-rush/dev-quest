@@ -1431,9 +1431,9 @@ export async function waitForLoadingToFinish() {
 - [框架相关模块](../frameworks/03-full-stack-patterns.md) - 全栈应用的API测试和集成测试
 
 ### 基础前置知识
-- [JavaScript 测试基础](../../../00-javascript-foundation/basics/03-javascript-testing.md) - JavaScript测试的基础概念
-- [TypeScript 类型检查](../../../00-javascript-foundation/advanced/01-typescript-type-system.md) - TypeScript在测试中的应用
-- [React Hooks 完全指南](../../../01-react-foundation/advanced/03-react-hooks-deep-dive.md) - React Hooks的测试原理
+- [JavaScript 测试基础](../reference/development-tools/01-testing-tools.md) - JavaScript测试的基础概念
+- [TypeScript 类型检查](../reference/language-concepts/03-typescript-types.md) - TypeScript在测试中的应用
+- [React Hooks 深入理解](../frameworks/02-react-19-integration.md) - React Hooks的测试原理
 
 ---
 

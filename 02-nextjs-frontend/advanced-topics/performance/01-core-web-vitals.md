@@ -935,8 +935,8 @@ export function MobileOptimizedImage({ src, alt, ...props }) {
 ## 🔄 文档交叉引用
 
 ### 相关文档
-- 📄 **[渲染性能优化](../reference/performance-optimization/01-rendering-optimization.md)**: 深入了解SSR/SSG/ISR渲染策略
-- 📄 **[打包优化策略](../reference/performance-optimization/02-bundle-optimization.md)**: 学习代码分割和Bundle优化技术
+- 📄 **[渲染性能优化](../../reference/performance-optimization/01-rendering-optimization.md)**: 深入了解SSR/SSG/ISR渲染策略
+- 📄 **[打包优化策略](../../reference/performance-optimization/02-bundle-optimization.md)**: 学习代码分割和Bundle优化技术
 - 📄 **[性能测试指南](../../testing/04-performance-testing.md)**: 掌握Lighthouse和性能测试方法
 - 📄 **[监控和分析](../../deployment/04-monitoring-analytics.md)**: 了解生产环境性能监控
 

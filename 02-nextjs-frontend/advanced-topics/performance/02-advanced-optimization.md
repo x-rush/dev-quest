@@ -1333,8 +1333,8 @@ export const networkOptimizer = new NetworkOptimizer({
 ### 相关文档
 - 📄 **[Core Web Vitals优化](./01-core-web-vitals.md)**: 深入了解性能指标优化策略
 - 📄 **[性能测试指南](../../testing/04-performance-testing.md)**: 掌握性能测试和分析方法
-- 📄 **[渲染优化策略](../reference/performance-optimization/01-rendering-optimization.md)**: 学习SSR/SSG/ISR优化技术
-- 📄 **[打包优化技术](../reference/performance-optimization/02-bundle-optimization.md)**: 深入了解代码分割和Bundle优化
+- 📄 **[渲染优化策略](../../reference/performance-optimization/01-rendering-optimization.md)**: 学习SSR/SSG/ISR优化技术
+- 📄 **[打包优化技术](../../reference/performance-optimization/02-bundle-optimization.md)**: 深入了解代码分割和Bundle优化
 
 ### 参考章节
 - 📖 **[本模块其他章节]**: [Web安全最佳实践](../security/01-security-best-practices.md)中的性能安全考量

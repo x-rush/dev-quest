@@ -1266,7 +1266,7 @@ export const intelligentLoadBalancer = new IntelligentLoadBalancer({
 
 ### 参考章节
 - 📖 **[本模块其他章节]**: [微前端架构](./02-micro-frontends.md)中的模块化扩展设计
-- 📖 **[其他模块相关内容]**: [GraphQL + Apollo](./api-integration/01-graphql-apollo.md)中的API扩展策略
+- 📖 **[其他模块相关内容]**: [GraphQL + Apollo](../api-integration/01-graphql-apollo.md)中的API扩展策略
 
 ## 📝 总结
 

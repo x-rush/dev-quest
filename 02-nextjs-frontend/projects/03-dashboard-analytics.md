@@ -3391,9 +3391,9 @@ volumes:
 - 📄 **[04-saas-platform.md](./04-saas-platform.md)**: SaaS平台项目实战
 
 ### 参考章节
-- 📖 **[Framework Deep Dive - Next.js](../frameworks/nextjs-core.md)**: Next.js核心特性深度学习
-- 📖 **[Data Visualization - Chart.js](../reference/data/chartjs.md)**: Chart.js快速参考
-- 📖 **[Performance Optimization](../reference/performance/optimization.md)**: 性能优化最佳实践
+- 📖 **[Framework Deep Dive - Next.js](../frameworks/01-nextjs-15-complete.md)**: Next.js核心特性深度学习
+- 📖 **Data Visualization - Chart.js**: Chart.js快速参考
+- 📖 **[Performance Optimization](../reference/performance-optimization/01-rendering-optimization.md)**: 性能优化最佳实践
 
 ## 📝 总结
 

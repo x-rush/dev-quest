@@ -1071,9 +1071,9 @@ export async function GET() {
 - [测试相关模块](../testing/03-e2e-testing.md) - E2E测试在Vercel环境中的执行
 
 ### 基础前置知识
-- [React 部署基础](../../../01-react-foundation/basics/05-react-deployment.md) - React应用部署的基础概念
-- [HTTP/2 网络协议](../../../01-react-foundation/advanced/07-http2-networking.md) - 理解CDN和网络优化
-- [云服务基础](../../../01-react-foundation/advanced/08-cloud-services.md) - 云服务和Serverless概念
+- React 部署基础 - React应用部署的基础概念
+- [HTTP/2 网络协议](../advanced-topics/performance/01-core-web-vitals.md) - 理解CDN和网络优化
+- 云服务基础 - 云服务和Serverless概念
 
 ---
 

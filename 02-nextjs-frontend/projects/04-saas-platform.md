@@ -3601,9 +3601,9 @@ module.exports = nextConfig
 - 📄 **[03-dashboard-analytics.md](./03-dashboard-analytics.md)**: 数据仪表板项目实战
 
 ### 参考章节
-- 📖 **[Framework Deep Dive - Next.js](../frameworks/nextjs-core.md)**: Next.js核心特性深度学习
-- 📖 **[Database - Multi-tenant Architecture](../reference/database/multi-tenant.md)**: 多租户架构最佳实践
-- 📖 **[Authentication - NextAuth](../reference/auth/nextauth.md)**: NextAuth.js高级配置
+- 📖 **[Framework Deep Dive - Next.js](../frameworks/01-nextjs-15-complete.md)**: Next.js核心特性深度学习
+- 📖 **[Database - Multi-tenant Architecture](../frameworks/03-full-stack-patterns.md)**: 多租户架构最佳实践
+- 📖 **[Authentication - NextAuth](../reference/framework-patterns/07-authentication-flows.md)**: NextAuth.js高级配置
 
 ## 📝 总结
 

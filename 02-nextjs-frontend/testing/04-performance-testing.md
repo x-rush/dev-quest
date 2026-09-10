@@ -2187,8 +2187,8 @@ export class PerformanceBenchmark {
 - 📄 **[测试工具详解](../reference/development-tools/01-testing-tools.md)**: 测试生态系统和工具对比
 
 ### 参考章节
-- 📖 **[性能优化知识](../reference/performance-optimization/01-core-web-vitals.md)**: Core Web Vitals详细解释
-- 📖 **[Next.js性能配置](../reference/nextjs-advanced/01-performance-optimization.md)**: Next.js性能优化技术
+- 📖 **[性能优化知识](../advanced-topics/performance/01-core-web-vitals.md)**: Core Web Vitals详细解释
+- 📖 **[Next.js性能配置](../frameworks/04-performance-optimization.md)**: Next.js性能优化技术
 - 📖 **[企业落地项目](../projects/01-corporate-landing.md)**: 企业级项目性能测试实践
 - 📖 **[电商平台项目](../projects/02-ecommerce-store.md)**: 大型应用性能测试策略
 

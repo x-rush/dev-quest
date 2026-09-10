@@ -2032,9 +2032,9 @@ export function PerformanceDashboard() {
 - [部署相关模块](../deployment/04-monitoring-analytics.md) - 应用性能监控和分析
 
 ### 基础前置知识
-- [Web性能优化基础](../../../01-react-foundation/basics/05-web-performance-basics.md) - Web性能优化的核心概念
-- [浏览器渲染原理](../../../01-react-foundation/advanced/06-browser-rendering.md) - 理解浏览器渲染和优化机制
-- [HTTP/2 和网络优化](../../../01-react-foundation/advanced/07-http2-networking.md) - 网络层优化技术
+- [Web性能优化基础](../advanced-topics/performance/01-core-web-vitals.md) - Web性能优化的核心概念
+- [浏览器渲染原理](../reference/performance-optimization/01-rendering-optimization.md) - 理解浏览器渲染和优化机制
+- [HTTP/2 和网络优化](../reference/performance-optimization/02-bundle-optimization.md) - 网络层优化技术
 
 ---
 

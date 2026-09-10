@@ -128,7 +128,7 @@ dev-quest/
 │   │   ├── testing/                      # 测试工程
 │   │   ├── deployment/                   # 部署运维
 │   │   └── README.md                     # 模块详细说明
-│   ├── 03-tanstack-stack/                # TanStack 全家桶学习路线 (规划中)
+│   ├── 03-tanstack-stack/                # TanStack 全家桶学习路线
 │   ├── 04-multiplatform-apps/            # React Native 三端原生App (Android+iOS+鸿蒙)
 │   ├── 05-kotlin-compose/               # Kotlin Jetpack Compose 原生开发
 │   └── 06-swift-swiftui/                # Swift SwiftUI 原生开发

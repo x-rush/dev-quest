@@ -1148,9 +1148,9 @@ module.exports = nextConfig
 - [部署相关模块](../deployment/01-vercel-deployment.md) - Next.js应用的Vercel企业级部署
 
 ### 基础前置知识
-- [React 基础概念](../../../01-react-foundation/basics/01-react-fundamentals.md) - React核心概念回顾
-- [JavaScript 现代特性](../../../00-javascript-foundation/basics/01-modern-javascript-features.md) - 现代JavaScript语法特性
-- [TypeScript 入门](../../../00-javascript-foundation/basics/02-typescript-interface.md) - TypeScript类型系统基础
+- [React 基础概念](../reference/language-concepts/01-react-syntax-cheatsheet.md) - React核心概念回顾
+- [JavaScript 现代特性](../reference/language-concepts/04-javascript-modern.md) - 现代JavaScript语法特性
+- [TypeScript 入门](../reference/language-concepts/03-typescript-types.md) - TypeScript类型系统基础
 
 ---
 

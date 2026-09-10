@@ -45,9 +45,9 @@ graph LR
 **语言概念速查** ⭐
 - [x] **Go关键字**: [reference/language-concepts/01-go-keywords.md](../../01-go-backend/reference/language-concepts/01-go-keywords.md) - Go关键字详解
 - [x] **内置函数**: [reference/language-concepts/02-go-built-in-functions.md](../../01-go-backend/reference/language-concepts/02-go-built-in-functions.md) - Go内置函数
-- [x] **数据类型**: [reference/language-concepts/03-go-data-types.md](../../01-go-backend/reference/language-concepts/03-go-data-types.md) - 数据类型详解
-- [x] **控制流程**: [reference/language-concepts/04-go-control-flow.md](../../01-go-backend/reference/language-concepts/04-go-control-flow.md) - 控制流程详解
-- [x] **面向对象**: [reference/language-concepts/05-go-oop-concepts.md](../../01-go-backend/reference/language-concepts/05-go-oop-concepts.md) - 面向对象概念
+- [x] **数据类型**: [reference/language-concepts/04-go-data-types.md](../../01-go-backend/reference/language-concepts/04-go-data-types.md) - 数据类型详解
+- [x] **控制流程**: [reference/language-concepts/05-go-control-flow.md](../../01-go-backend/reference/language-concepts/05-go-control-flow.md) - 控制流程详解
+- [x] **面向对象**: [reference/language-concepts/06-go-oop-concepts.md](../../01-go-backend/reference/language-concepts/06-go-oop-concepts.md) - 面向对象概念
 
 **标准库指南** ⭐
 - [x] **标准库**: [reference/library-guides/01-go-standard-library.md](../../01-go-backend/reference/library-guides/01-go-standard-library.md) - 标准库核心API
@@ -97,6 +97,7 @@ graph LR
 
 #### 02. Next.js 前端开发 ⭐⭐⭐
 **目标**: 现代前端全栈开发能力
+**模块入口**: [02-nextjs-frontend/README.md](../../02-nextjs-frontend/README.md)（含入门/进阶/精通三路径视图）
 
 **基础阶段** ⭐⭐
 - [ ] **环境配置**: Node.js 18+ + TypeScript 环境
@@ -124,6 +125,7 @@ graph LR
 
 #### 03. TanStack 全家桶 ⭐⭐⭐⭐
 **目标**: 类型安全数据层开发能力（Query/Table/Router/Form/Start）
+**模块入口**: [03-tanstack-stack/README.md](../../03-tanstack-stack/README.md)（含入门/进阶/精通三路径视图）
 
 **基础阶段** ⭐⭐⭐
 - [ ] **Headless设计理念**: 理解无头库的设计哲学与组合方式
@@ -143,13 +145,14 @@ graph LR
 
 #### 04. React Native 三端原生应用 ⭐⭐⭐⭐⭐
 **目标**: Android+iOS+鸿蒙三端原生App全覆盖
+**模块入口**: [04-multiplatform-apps/README.md](../../04-multiplatform-apps/README.md)（含入门/进阶/精通三路径视图）
 
 **第一阶段**: React Native基础掌握
-- [ ] **环境搭建**: React Native CLI + 开发工具配置
+- [ ] **环境搭建**: Expo CLI + 开发工具配置
 - [ ] **RN基础概念**: 组件系统、Props、State
 - [ ] **样式和布局**: Flexbox布局、样式系统
-- [ ] **导航系统**: React Navigation 6.x
-- [ ] **调试工具**: Flipper、React Native Debugger
+- [ ] **导航系统**: Expo Router / React Navigation
+- [ ] **调试工具**: Expo DevTools、React DevTools
 
 **第二阶段**: Android深度开发 (优先级🥇)
 - [ ] **Android环境**: Android Studio + SDK配置
@@ -181,6 +184,7 @@ graph LR
 
 #### 05. Kotlin Compose 原生开发 ⭐⭐⭐⭐
 **目标**: Android官方原生开发能力（Kotlin + Jetpack Compose）
+**模块入口**: [05-kotlin-compose/README.md](../../05-kotlin-compose/README.md)（含入门/进阶/精通三路径视图）
 
 - [ ] **Kotlin基础**: 协程、Flow、密封类等现代特性
 - [ ] **Compose入门**: 声明式UI、组合与重组、状态管理
@@ -190,6 +194,7 @@ graph LR
 
 #### 06. SwiftUI 原生开发 ⭐⭐⭐⭐
 **目标**: iOS官方原生开发能力（Swift + SwiftUI）
+**模块入口**: [06-swift-swiftui/README.md](../../06-swift-swiftui/README.md)（含入门/进阶/精通三路径视图）
 
 - [ ] **Swift基础**: async/await、泛型、协议导向编程
 - [ ] **SwiftUI入门**: 视图、修饰符、状态管理（@State/@Binding）
@@ -200,6 +205,7 @@ graph LR
 ### 🔍 技术探索系列 (零散时间学习)
 
 #### 07. PHP 精通之路
+**模块入口**: [07-php-mastery/README.md](../../07-php-mastery/README.md)（含入门/进阶/精通三路径视图）
 - [ ] **PHP 8.3 新特性**: JIT编译器、类型系统完善、Fibers并发
 - [ ] **现代PHP框架**: Laravel 11.x、Symfony 7.x、Livewire实时应用
 - [ ] **Composer生态**: 包管理、Filament Admin、现代工具链
@@ -207,6 +213,7 @@ graph LR
 - [ ] **企业级架构**: 微服务、容器化、Kubernetes部署
 
 #### 08. Java 知识回顾
+**模块入口**: [08-java-revisited/README.md](../../08-java-revisited/README.md)（含入门/进阶/精通三路径视图）
 - [ ] **Java 21+ 新特性**: 虚拟线程、结构化并发、外部函数API
 - [ ] **Spring Boot 3.x**: 现代化Java开发、Spring AI集成
 - [ ] **Spring Native**: GraalVM原生镜像、云原生Java
@@ -214,13 +221,15 @@ graph LR
 - [ ] **企业级开发**: 领域驱动设计、测试驱动开发
 
 #### 09. Node.js 后端探索
-- [ ] **Node.js 20+**: ES模块、Worker Threads、性能优化
-- [ ] **现代框架**: Fastify v4、NestJS 10、TypeScript 5.x
+**模块入口**: [09-nodejs-backend/README.md](../../09-nodejs-backend/README.md)（含入门/进阶/精通三路径视图）
+- [ ] **Node.js 22 LTS**: ES模块、Worker Threads、性能优化
+- [ ] **现代框架**: Express 5、Fastify、NestJS、TypeScript 5.x
 - [ ] **数据库生态**: Prisma、TypeORM、GraphQL联邦
 - [ ] **云原生架构**: Serverless、边缘计算、微服务
 - [ ] **AI时代后端**: AI Agent集成、零信任架构
 
 #### 10. Python 发现之旅
+**模块入口**: [10-python-discovery/README.md](../../10-python-discovery/README.md)（含入门/进阶/精通三路径视图）
 - [ ] **Python 3.12+**: 结构化模式匹配、类型系统完善
 - [ ] **现代Web框架**: FastAPI异步框架、Django 5.x、GraphQL
 - [ ] **AI和数据科学**: Transformers库、LLM应用、MLOps
@@ -343,8 +352,8 @@ graph LR
 
 ---
 
-**文档版本**: v2.0.0
-**最后更新**: 2025年10月
+**文档版本**: v2.1.0
+**最后更新**: 2026年9月
 **维护团队**: Dev Quest Team
 
 > 💡 **学习提示**:

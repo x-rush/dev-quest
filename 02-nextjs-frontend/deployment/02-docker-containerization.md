@@ -1561,9 +1561,9 @@ Next.js 15 Docker 容器化部署为现代应用提供了可靠、可扩展的�
 - [测试相关模块](../testing/03-e2e-testing.md) - 容器化环境中的E2E测试
 
 ### 基础前置知识
-- [Docker基础概念](../../../01-react-foundation/advanced/09-docker-basics.md) - Docker的核心概念和使用
-- [微服务架构](../../../01-react-foundation/advanced/10-microservices.md) - 微服务架构的基础知识
-- [DevOps实践](../../../01-react-foundation/advanced/11-devops-practices.md) - DevOps和容器化部署
+- Docker基础概念 - Docker的核心概念和使用
+- [微服务架构](../../01-go-backend/advanced-topics/architecture/01-microservices-design.md) - 微服务架构的基础知识
+- [DevOps实践](../deployment/03-ci-cd-pipelines.md) - DevOps和容器化部署
 
 ---
 

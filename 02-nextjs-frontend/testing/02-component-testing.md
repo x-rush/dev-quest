@@ -1943,8 +1943,8 @@ describe("Component Performance", () => {
 - 📄 **[测试工具详解](../reference/development-tools/01-testing-tools.md)**: 测试工具深度指南
 
 ### 参考章节
-- 📖 **[React基础知识](../reference/react-basics/01-components.md)**: React组件开发基础
-- 📖 **[状态管理](../reference/react-basics/02-state-management.md)**: React状态管理模式
+- 📖 **[React基础知识](../reference/language-concepts/01-react-syntax-cheatsheet.md)**: React组件开发基础
+- 📖 **[状态管理](../reference/framework-patterns/05-state-management-patterns.md)**: React状态管理模式
 - 📖 **[企业落地项目](../projects/01-corporate-landing.md)**: 实际项目中的测试实践
 - 📖 **[电商平台项目](../projects/02-ecommerce-store.md)**: 复杂应用的测试策略
 

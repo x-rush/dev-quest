@@ -1175,9 +1175,9 @@ Next.js 15 的监控和分析体系为现代Web应用提供了全面的可观测
 - [测试相关模块](../testing/01-unit-testing.md) - 单元测试覆盖率和质量监控
 
 ### 基础前置知识
-- [Web性能优化基础](../../../01-react-foundation/basics/05-web-performance-basics.md) - Web性能指标和优化基础
-- [浏览器渲染原理](../../../01-react-foundation/advanced/06-browser-rendering.md) - 理解性能监控的技术基础
-- [数据可视化基础](../../../01-react-foundation/advanced/13-data-visualization.md) - 监控数据的可视化展示
+- [Web性能优化基础](../advanced-topics/performance/01-core-web-vitals.md) - Web性能指标和优化基础
+- [浏览器渲染原理](../reference/performance-optimization/01-rendering-optimization.md) - 理解性能监控的技术基础
+- [数据可视化基础](../projects/03-dashboard-analytics.md) - 监控数据的可视化展示
 
 ---
 
