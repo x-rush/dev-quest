@@ -2184,11 +2184,11 @@ export class PerformanceBenchmark {
 - 📄 **[单元测试指南](./01-unit-testing.md)**: 单元测试基础知识和最佳实践
 - 📄 **[组件测试指南](./02-component-testing.md)**: React组件测试详细指南
 - 📄 **[E2E测试指南](./03-e2e-testing.md)**: 端到端测试策略和实施
-- 📄 **[测试工具详解](../knowledge-points/development-tools/01-testing-tools.md)**: 测试生态系统和工具对比
+- 📄 **[测试工具详解](../reference/development-tools/01-testing-tools.md)**: 测试生态系统和工具对比
 
 ### 参考章节
-- 📖 **[性能优化知识](../knowledge-points/performance-optimization/01-core-web-vitals.md)**: Core Web Vitals详细解释
-- 📖 **[Next.js性能配置](../knowledge-points/nextjs-advanced/01-performance-optimization.md)**: Next.js性能优化技术
+- 📖 **[性能优化知识](../reference/performance-optimization/01-core-web-vitals.md)**: Core Web Vitals详细解释
+- 📖 **[Next.js性能配置](../reference/nextjs-advanced/01-performance-optimization.md)**: Next.js性能优化技术
 - 📖 **[企业落地项目](../projects/01-corporate-landing.md)**: 企业级项目性能测试实践
 - 📖 **[电商平台项目](../projects/02-ecommerce-store.md)**: 大型应用性能测试策略
 

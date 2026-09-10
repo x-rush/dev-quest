@@ -135,7 +135,7 @@
 │       ├── 02-huawei-appgallery.md        # 华为应用市场
 │       ├── 03-app-store-strategy.md       # App Store策略
 │       └── 04-ci-cd-pipelines.md          # CI/CD流水线
-├── knowledge-points/                      # 知识点速查手册
+├── reference/  # 知识字典（全量参考）
 │   ├── react-native-core/                 # React Native核心
 │   │   ├── 01-components-overview.md      # 组件系统
 │   │   ├── 02-navigation.md               # 导航系统

@@ -1940,11 +1940,11 @@ describe("Component Performance", () => {
 - 📄 **[单元测试指南](./01-unit-testing.md)**: 单元测试基础知识和工具使用
 - 📄 **[E2E测试指南](./03-e2e-testing.md)**: 端到端测试策略和Playwright使用
 - 📄 **[性能测试指南](./04-performance-testing.md)**: 应用性能测试和监控
-- 📄 **[测试工具详解](../knowledge-points/development-tools/01-testing-tools.md)**: 测试工具深度指南
+- 📄 **[测试工具详解](../reference/development-tools/01-testing-tools.md)**: 测试工具深度指南
 
 ### 参考章节
-- 📖 **[React基础知识](../knowledge-points/react-basics/01-components.md)**: React组件开发基础
-- 📖 **[状态管理](../knowledge-points/react-basics/02-state-management.md)**: React状态管理模式
+- 📖 **[React基础知识](../reference/react-basics/01-components.md)**: React组件开发基础
+- 📖 **[状态管理](../reference/react-basics/02-state-management.md)**: React状态管理模式
 - 📖 **[企业落地项目](../projects/01-corporate-landing.md)**: 实际项目中的测试实践
 - 📖 **[电商平台项目](../projects/02-ecommerce-store.md)**: 复杂应用的测试策略
 

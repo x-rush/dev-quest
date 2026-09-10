@@ -1226,12 +1226,12 @@ export { permissions, roles }
 
 ### 相关文档
 - 📄 **[Core Web Vitals优化](../performance/01-core-web-vitals.md)**: 深入了解性能优化中的安全考量
-- 📄 **[认证流程模式](../../knowledge-points/framework-patterns/07-authentication-flows.md)**: 学习企业级认证系统实现
-- 📄 **[渲染性能优化](../../knowledge-points/performance-optimization/01-rendering-optimization.md)**: 了解SSR/SSG安全特性
+- 📄 **[认证流程模式](../../reference/framework-patterns/07-authentication-flows.md)**: 学习企业级认证系统实现
+- 📄 **[渲染性能优化](../../reference/performance-optimization/01-rendering-optimization.md)**: 了解SSR/SSG安全特性
 
 ### 参考章节
 - 📖 **[本模块其他章节]**: [高级性能调优](../performance/02-advanced-optimization.md)中的安全优化部分
-- 📖 **[其他模块相关内容]**: [测试工具指南](../../knowledge-points/development-tools/01-testing-tools.md)中的安全测试部分
+- 📖 **[其他模块相关内容]**: [测试工具指南](../../reference/development-tools/01-testing-tools.md)中的安全测试部分
 
 ## 📝 总结
 

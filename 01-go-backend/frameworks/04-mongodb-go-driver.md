@@ -111,7 +111,7 @@ func main() {
 
 ## 🔗 相关资源
 
-- **前置学习**: [knowledge-points/library-guides/01-go-standard-library.md](../knowledge-points/library-guides/01-go-standard-library.md)
+- **前置学习**: [reference/library-guides/01-go-standard-library.md](../reference/library-guides/01-go-standard-library.md)
 - **相关文档**: [frameworks/03-gorm-orm-complete.md](03-gorm-orm-complete.md)
 - **实践项目**: [projects/02-microservices-demo.md](../projects/02-microservices-demo.md)
 

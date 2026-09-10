@@ -117,7 +117,7 @@ graph LR
 ```
 02-nextjs-frontend/
 ├── README.md                           # 模块总览（本文档）
-├── 📚 knowledge-points/           # 知识点速查手册（18个文件）
+├── 📚 reference/           # 字典：全量参考（18个文件）
 │   ├── 📖 language-concepts/      # 语言核心概念（5个文件）
 │   │   ├── 01-react-syntax-cheatsheet.md       # ⚛️ React语法速查表 ✅
 │   │   ├── 02-nextjs-api-reference.md          # 🚀 Next.js API参考 ✅
@@ -182,35 +182,35 @@ graph LR
         └── 01-graphql-apollo.md               # 🔗 GraphQL + Apollo ✅
 ```
 
-### 📚 Knowledge Points - 知识点速查手册（18个文件）
+### 📚 Reference - 知识字典（18个文件）
 **定位**: 快速查找和理解核心概念，适合日常查阅
 **特点**: 严格差异化设计，与basics无内容重叠
 
 #### 📖 Language Concepts - 语言概念（5个文件）
-- [`01-react-syntax-cheatsheet.md`](knowledge-points/language-concepts/01-react-syntax-cheatsheet.md) - ⚛️ React语法速查表
-- [`02-nextjs-api-reference.md`](knowledge-points/language-concepts/02-nextjs-api-reference.md) - 🚀 Next.js API参考
-- [`03-typescript-types.md`](knowledge-points/language-concepts/03-typescript-types.md) - 📘 TypeScript类型速查
-- [`04-javascript-modern.md`](knowledge-points/language-concepts/04-javascript-modern.md) - 💎 现代JS语法
-- [`05-css-patterns.md`](knowledge-points/language-concepts/05-css-patterns.md) - 🎨 CSS-in-JS模式
+- [`01-react-syntax-cheatsheet.md`](reference/language-concepts/01-react-syntax-cheatsheet.md) - ⚛️ React语法速查表
+- [`02-nextjs-api-reference.md`](reference/language-concepts/02-nextjs-api-reference.md) - 🚀 Next.js API参考
+- [`03-typescript-types.md`](reference/language-concepts/03-typescript-types.md) - 📘 TypeScript类型速查
+- [`04-javascript-modern.md`](reference/language-concepts/04-javascript-modern.md) - 💎 现代JS语法
+- [`05-css-patterns.md`](reference/language-concepts/05-css-patterns.md) - 🎨 CSS-in-JS模式
 
 #### 🛠️ Framework Patterns - 框架模式（7个文件）
-- [`01-app-router-patterns.md`](knowledge-points/framework-patterns/01-app-router-patterns.md) - 🗺️ App Router实战模式
-- [`02-server-components-patterns.md`](knowledge-points/framework-patterns/02-server-components-patterns.md) - 🔄 服务端组件模式
-- [`03-client-components-patterns.md`](knowledge-points/framework-patterns/03-client-components-patterns.md) - 📱 客户端组件模式
-- [`04-data-fetching-patterns.md`](knowledge-points/framework-patterns/04-data-fetching-patterns.md) - 📡 数据获取模式
-- [`05-state-management-patterns.md`](knowledge-points/framework-patterns/05-state-management-patterns.md) - 🗄️ 状态管理模式
-- [`06-form-validation-patterns.md`](knowledge-points/framework-patterns/06-form-validation-patterns.md) - 📝 表单验证模式
-- [`07-authentication-flows.md`](knowledge-points/framework-patterns/07-authentication-flows.md) - 🔐 认证流程模式
+- [`01-app-router-patterns.md`](reference/framework-patterns/01-app-router-patterns.md) - 🗺️ App Router实战模式
+- [`02-server-components-patterns.md`](reference/framework-patterns/02-server-components-patterns.md) - 🔄 服务端组件模式
+- [`03-client-components-patterns.md`](reference/framework-patterns/03-client-components-patterns.md) - 📱 客户端组件模式
+- [`04-data-fetching-patterns.md`](reference/framework-patterns/04-data-fetching-patterns.md) - 📡 数据获取模式
+- [`05-state-management-patterns.md`](reference/framework-patterns/05-state-management-patterns.md) - 🗄️ 状态管理模式
+- [`06-form-validation-patterns.md`](reference/framework-patterns/06-form-validation-patterns.md) - 📝 表单验证模式
+- [`07-authentication-flows.md`](reference/framework-patterns/07-authentication-flows.md) - 🔐 认证流程模式
 
 #### 🔧 Development Tools - 开发工具（4个文件）
-- [`01-testing-tools.md`](knowledge-points/development-tools/01-testing-tools.md) - 🧪 测试工具指南
-- [`02-styling-tools.md`](knowledge-points/development-tools/02-styling-tools.md) - 🎨 样式工具
-- [`03-build-tools.md`](knowledge-points/development-tools/03-build-tools.md) - ⚙️ 构建工具
-- [`04-debugging-tools.md`](knowledge-points/development-tools/04-debugging-tools.md) - 🔍 调试工具
+- [`01-testing-tools.md`](reference/development-tools/01-testing-tools.md) - 🧪 测试工具指南
+- [`02-styling-tools.md`](reference/development-tools/02-styling-tools.md) - 🎨 样式工具
+- [`03-build-tools.md`](reference/development-tools/03-build-tools.md) - ⚙️ 构建工具
+- [`04-debugging-tools.md`](reference/development-tools/04-debugging-tools.md) - 🔍 调试工具
 
 #### ⚡ Performance Optimization - 性能优化（2个文件）
-- [`01-rendering-optimization.md`](knowledge-points/performance-optimization/01-rendering-optimization.md) - 📈 渲染优化
-- [`02-bundle-optimization.md`](knowledge-points/performance-optimization/02-bundle-optimization.md) - 📦 打包优化
+- [`01-rendering-optimization.md`](reference/performance-optimization/01-rendering-optimization.md) - 📈 渲染优化
+- [`02-bundle-optimization.md`](reference/performance-optimization/02-bundle-optimization.md) - 📦 打包优化
 
 ### 📖 Basics - 渐进式学习路径（8个文件）
 **定位**: 从零开始的完整学习体验，注重基础理解和实践
@@ -286,7 +286,7 @@ graph LR
 
 #### 📚 合理选择路径
 - **零基础**: 推荐 `basics/` → `frameworks/` → `projects/` 顺序
-- **有经验**: 可直接从 `knowledge-points/` 开始，结合 `projects/` 实践
+- **有经验**: 可直接从 `reference/` 开始，结合 `projects/` 实践
 - **专项提升**: 根据需要重点学习特定领域
 
 #### 🛠️ 实践优先
@@ -374,9 +374,9 @@ graph LR
 ## 🔄 文档交叉引用
 
 ### 📚 核心学习资源
-- 📄 **[React语法速查表](knowledge-points/language-concepts/01-react-syntax-cheatsheet.md)**: React核心语法和Hooks快速参考
-- 📄 **[Next.js API参考](knowledge-points/language-concepts/02-nextjs-api-reference.md)**: Next.js完整API文档
-- 📄 **[企业级认证流程](knowledge-points/framework-patterns/07-authentication-flows.md)**: 完整的认证实现指南
+- 📄 **[React语法速查表](reference/language-concepts/01-react-syntax-cheatsheet.md)**: React核心语法和Hooks快速参考
+- 📄 **[Next.js API参考](reference/language-concepts/02-nextjs-api-reference.md)**: Next.js完整API文档
+- 📄 **[企业级认证流程](reference/framework-patterns/07-authentication-flows.md)**: 完整的认证实现指南
 - 📄 **[第一个Next.js应用](basics/02-first-nextjs-app.md)**: 零基础入门指南
 
 ### 🎯 项目实践资源
@@ -423,7 +423,7 @@ graph LR
 
 ### 🚀 下一步行动
 1. **初学者**: 从 [basics/01-environment-setup.md](basics/01-environment-setup.md) 开始
-2. **有经验者**: 从 [knowledge-points/language-concepts/](knowledge-points/language-concepts/) 开始快速查阅
+2. **有经验者**: 从 [reference/language-concepts/](reference/language-concepts/) 开始快速查阅
 3. **项目实践**: 选择 [projects/](projects/) 中的项目进行实战练习
 4. **专项提升**: 根据需要深入学习 [testing/](testing/)、[deployment/](deployment/) 或 [advanced-topics/](advanced-topics/)
 
@@ -466,7 +466,7 @@ graph LR
 **版本**: v2.0.0
 
 > 💡 **重构说明**:
-> 本模块已于2025年10月完成重构，采用现代化的双路径学习体系，建立清晰的知识点速查手册和渐进式学习路径，100%基于Next.js 15 + React 19 + TypeScript 5最新技术栈，消除冗余内容，大幅提升学习效率和质量。
+> 本模块已于2025年10月完成重构，采用现代化的双轴学习体系：字典参考（reference）+ 渐进式学习路径，100%基于Next.js 15 + React 19 + TypeScript 5最新技术栈，消除冗余内容，大幅提升学习效率和质量。
 
 ---
 
@@ -476,4 +476,4 @@ graph LR
 > - 重视实践项目，理论结合实践
 > - 遇到问题时积极查阅官方文档和社区资源
 >
-> 🎯 **下一步**: 根据你的学习目标，选择从 [basics/](basics/) 或 [knowledge-points/](knowledge-points/) 开始学习！
+> 🎯 **下一步**: 根据你的学习目标，选择从 [basics/](basics/) 或 [reference/](reference/) 开始学习！

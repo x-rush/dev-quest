@@ -48,7 +48,7 @@
 │       ├── 05-automation-scaling.md  # 自动化和扩展
 │       ├── 06-serverless-python.md   # 无服务器Python
 │       └── 07-observability.md       # 可观测性架构
-├── knowledge-points/             # 知识点速查手册
+├── reference/  # 知识字典（全量参考）
 │   ├── python-concepts/           # Python核心概念
 │   │   ├── 01-python-keywords.md    # Python关键字详解
 │   │   ├── 02-data-structures.md    # 数据结构速查

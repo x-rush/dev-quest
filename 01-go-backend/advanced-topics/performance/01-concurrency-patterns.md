@@ -239,7 +239,7 @@ func TimeoutOperation() error {
 
 ## 🔗 相关资源
 
-- **深入学习**: [knowledge-points/language-concepts/03-go-programming-essentials.md](../../knowledge-points/language-concepts/03-go-programming-essentials.md)
+- **深入学习**: [reference/language-concepts/03-go-programming-essentials.md](../../reference/language-concepts/03-go-programming-essentials.md)
 - **相关文档**: [advanced-topics/performance/02-performance-tuning.md](02-performance-tuning.md)
 - **实践参考**: [projects/02-microservices-demo.md](../../projects/02-microservices-demo.md)
 

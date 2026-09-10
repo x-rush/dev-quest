@@ -1026,12 +1026,12 @@ Next.js 15的路由系统为现代Web应用提供了强大而灵活的架构基�
 ### 相关文档
 - 📄 **[前一个basics文档](./03-typescript-integration.md)**: 学习TypeScript集成，为路由组件添加类型安全
 - 📄 **[后一个basics文档](./05-styling-with-tailwind.md)**: 学习样式系统，美化路由和布局组件
-- 📄 **[相关的knowledge-points文档](../knowledge-points/framework-patterns/01-app-router-patterns.md)**: 深入了解App Router的设计模式和最佳实践
-- 📄 **[相关的knowledge-points文档](../knowledge-points/framework-patterns/03-client-components-patterns.md)**: 快速参考客户端组件的路由模式
+- 📄 **[相关的reference文档](../reference/framework-patterns/01-app-router-patterns.md)**: 深入了解App Router的设计模式和最佳实践
+- 📄 **[相关的reference文档](../reference/framework-patterns/03-client-components-patterns.md)**: 快速参考客户端组件的路由模式
 
 ### 参考章节
 - 📖 **[本模块其他章节]**: [TypeScript集成](./03-typescript-integration.md#页面和路由的类型安全) | [样式设计](./05-styling-with-tailwind.md#响应式设计系统)
-- 📖 **[Knowledge Points快速参考]**: [App Router模式](../knowledge-points/framework-patterns/01-app-router-patterns.md) | [Next.js API参考](../knowledge-points/language-concepts/02-nextjs-api-reference.md)
+- 📖 **[Knowledge Points快速参考]**: [App Router模式](../reference/framework-patterns/01-app-router-patterns.md) | [Next.js API参考](../reference/language-concepts/02-nextjs-api-reference.md)
 
 ## 📝 总结
 

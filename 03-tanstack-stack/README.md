@@ -32,7 +32,7 @@
 │   ├── table-advanced/             # Table进阶（虚拟化、行分组、可编辑表格）
 │   ├── router-advanced/            # Router进阶（搜索参数、预加载、嵌套布局）
 │   └── start-framework/            # Start全栈框架（SSR、API路由、服务端函数）
-├── knowledge-points/               # 知识点速查
+├── reference/               # 知识字典（全量参考）
 │   ├── query-recipes/              # Query常见模式速查
 │   ├── table-recipes/              # Table常见模式速查
 │   └── router-recipes/             # Router常见模式速查

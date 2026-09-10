@@ -47,7 +47,7 @@
 │       ├── 04-security-hardening.md    # 安全加固
 │       ├── 05-kubernetes-php.md        # Kubernetes部署PHP
 │       └── 06-grafana-prometheus.md    # Grafana & Prometheus监控
-├── knowledge-points/             # 知识点速查手册
+├── reference/  # 知识字典（全量参考）
 │   ├── php-concepts/              # PHP核心概念
 │   │   ├── 01-php-keywords.md        # PHP关键字详解
 │   │   ├── 02-php-83-features.md     # PHP 8.3新特性速查

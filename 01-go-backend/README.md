@@ -36,7 +36,7 @@
 01-go-backend/
 ├── README.md                           # 模块总览（本文档）
 ├── Go语言学习路线.md                    # 渐进式学习指南
-├── 📚 knowledge-points/           # 知识点速查手册
+├── 📚 reference/           # 知识字典（全量参考）
 │   ├── 📖 language-concepts/      # 语言核心概念
 │   │   ├── 01-go-keywords.md      # Go关键字详解 ✅
 │   │   ├── 02-go-built-in-functions.md # Go内置函数 ✅
@@ -194,7 +194,7 @@
 **版本**: v2.0.0
 
 > 💡 **学习建议**:
-> - 遵循双路径学习：系统学习（basics）+快速查阅（knowledge-points）
+> - 遵循双轴学习：教程进阶（basics）+ 字典查阅（reference）
 > - 实践导向：每个阶段都配合实际项目练习
 > - 工程思维：重视代码质量、测试覆盖、部署自动化
 >
@@ -206,7 +206,7 @@
 
 ### 📚 核心学习资源
 - 📄 **[学习路线图]**: [Go语言学习路线.md](Go语言学习路线.md) - 从零基础到高级的完整学习路径
-- 📄 **[知识速查手册]**: [knowledge-points/](knowledge-points/) - 快速查阅Go语言知识点
+- 📄 **[知识速查手册]**: [reference/](reference/) - 快速查阅Go语言知识点
 - 📄 **[系统化学习]**: [basics/](basics/) - 从零开始的渐进式学习
 
 ### 🛠️ 技术框架学习

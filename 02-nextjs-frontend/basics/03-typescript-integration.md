@@ -869,12 +869,12 @@ TypeScript为Next.js开发带来了强大的类型安全保障，让代码更加
 ### 相关文档
 - 📄 **[前一个basics文档](./02-first-nextjs-app.md)**: 学习第一个Next.js应用创建，理解基础组件开发
 - 📄 **[后一个basics文档](./04-layouts-routing.md)**: 深入学习布局和路由系统，构建复杂页面结构
-- 📄 **[相关的knowledge-points文档](../knowledge-points/language-concepts/03-typescript-types.md)**: 快速参考TypeScript类型系统和高级特性
-- 📄 **[相关的framework-patterns文档](../knowledge-points/framework-patterns/02-server-components-patterns.md)**: 深入了解服务端组件的类型安全模式
+- 📄 **[相关的reference文档](../reference/language-concepts/03-typescript-types.md)**: 快速参考TypeScript类型系统和高级特性
+- 📄 **[相关的framework-patterns文档](../reference/framework-patterns/02-server-components-patterns.md)**: 深入了解服务端组件的类型安全模式
 
 ### 参考章节
 - 📖 **[本模块其他章节]**: [环境搭建配置](./01-environment-setup.md#typescript配置) | [布局路由设计](./04-layouts-routing.md#动态路由)
-- 📖 **[Knowledge Points快速参考]**: [TypeScript类型参考](../knowledge-points/language-concepts/03-typescript-types.md) | [JavaScript现代语法](../knowledge-points/language-concepts/04-javascript-modern.md)
+- 📖 **[Knowledge Points快速参考]**: [TypeScript类型参考](../reference/language-concepts/03-typescript-types.md) | [JavaScript现代语法](../reference/language-concepts/04-javascript-modern.md)
 
 ## 📝 总结
 

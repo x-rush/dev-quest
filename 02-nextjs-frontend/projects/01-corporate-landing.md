@@ -1751,8 +1751,8 @@ vercel --prod
 
 ### 参考章节
 - 📖 **[Framework Deep Dive - Next.js](../frameworks/nextjs-core.md)**: Next.js核心特性深度学习
-- 📖 **[Styling - Tailwind CSS](../knowledge-points/styling/tailwind-css.md)**: Tailwind CSS快速参考
-- 📖 **[API Integration](../knowledge-points/api/integration.md)**: API集成最佳实践
+- 📖 **[Styling - Tailwind CSS](../reference/styling/tailwind-css.md)**: Tailwind CSS快速参考
+- 📖 **[API Integration](../reference/api/integration.md)**: API集成最佳实践
 
 ## 📝 总结
 

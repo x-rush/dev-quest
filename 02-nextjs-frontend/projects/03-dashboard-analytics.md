@@ -3392,8 +3392,8 @@ volumes:
 
 ### 参考章节
 - 📖 **[Framework Deep Dive - Next.js](../frameworks/nextjs-core.md)**: Next.js核心特性深度学习
-- 📖 **[Data Visualization - Chart.js](../knowledge-points/data/chartjs.md)**: Chart.js快速参考
-- 📖 **[Performance Optimization](../knowledge-points/performance/optimization.md)**: 性能优化最佳实践
+- 📖 **[Data Visualization - Chart.js](../reference/data/chartjs.md)**: Chart.js快速参考
+- 📖 **[Performance Optimization](../reference/performance/optimization.md)**: 性能优化最佳实践
 
 ## 📝 总结
 

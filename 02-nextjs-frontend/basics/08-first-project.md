@@ -1099,12 +1099,12 @@ module.exports = nextConfig
 
 ### 相关文档
 - 📄 **[前一个basics文档](./07-state-management.md)**: 学习状态管理，为项目中的复杂交互做好准备
-- 📄 **[相关的knowledge-points文档](../knowledge-points/framework-patterns/06-form-validation-patterns.md)**: 深入了解表单验证模式和最佳实践
-- 📄 **[相关的framework-patterns文档](../knowledge-points/framework-patterns/07-authentication-flows.md)**: 快速参考认证流程和权限管理模式
+- 📄 **[相关的reference文档](../reference/framework-patterns/06-form-validation-patterns.md)**: 深入了解表单验证模式和最佳实践
+- 📄 **[相关的framework-patterns文档](../reference/framework-patterns/07-authentication-flows.md)**: 快速参考认证流程和权限管理模式
 
 ### 参考章节
 - 📖 **[本模块其他章节回顾]**: [环境搭建](./01-environment-setup.md) | [应用创建](./02-first-nextjs-app.md) | [TypeScript集成](./03-typescript-integration.md) | [布局路由](./04-layouts-routing.md) | [样式设计](./05-styling-with-tailwind.md) | [数据获取](./06-data-fetching-basics.md) | [状态管理](./07-state-management.md)
-- 📖 **[Knowledge Points快速参考]**: [表单验证模式](../knowledge-points/framework-patterns/06-form-validation-patterns.md) | [认证流程](../knowledge-points/framework-patterns/07-authentication-flows.md)
+- 📖 **[Knowledge Points快速参考]**: [表单验证模式](../reference/framework-patterns/06-form-validation-patterns.md) | [认证流程](../reference/framework-patterns/07-authentication-flows.md)
 
 ## 📝 总结
 

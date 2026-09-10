@@ -1936,13 +1936,13 @@ export const cacheHelpers = {
 ## 🔄 文档交叉引用
 
 ### 相关文档
-- 📄 **[数据获取模式](../../knowledge-points/framework-patterns/04-data-fetching-patterns.md)**: 深入了解GraphQL vs REST API的选择策略
-- 📄 **[认证流程模式](../../knowledge-points/framework-patterns/07-authentication-flows.md)**: 学习GraphQL认证和授权实现
-- 📄 **[状态管理模式](../../knowledge-points/framework-patterns/05-state-management-patterns.md)**: 掌握Apollo Client状态管理最佳实践
+- 📄 **[数据获取模式](../../reference/framework-patterns/04-data-fetching-patterns.md)**: 深入了解GraphQL vs REST API的选择策略
+- 📄 **[认证流程模式](../../reference/framework-patterns/07-authentication-flows.md)**: 学习GraphQL认证和授权实现
+- 📄 **[状态管理模式](../../reference/framework-patterns/05-state-management-patterns.md)**: 掌握Apollo Client状态管理最佳实践
 
 ### 参考章节
 - 📖 **[本模块其他章节]**: [API集成模式](../api-integration/01-graphql-apollo.md)中的实时订阅部分
-- 📖 **[其他模块相关内容]**: [Go API开发](../../01-go-backend/knowledge-points/web-development/01-gin-rest-api.md)中的API设计原则
+- 📖 **[其他模块相关内容]**: [Go API开发](../../01-go-backend/reference/web-development/01-gin-rest-api.md)中的API设计原则
 
 ---
 

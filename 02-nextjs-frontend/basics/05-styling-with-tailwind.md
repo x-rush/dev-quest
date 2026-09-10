@@ -1099,12 +1099,12 @@ Tailwind CSS为Next.js应用提供了强大而灵活的样式解决方案。继�
 ### 相关文档
 - 📄 **[前一个basics文档](./04-layouts-routing.md)**: 学习布局和路由系统，为样式化页面结构做好准备
 - 📄 **[后一个basics文档](./06-data-fetching-basics.md)**: 学习数据获取，为动态内容添加样式
-- 📄 **[相关的knowledge-points文档](../knowledge-points/language-concepts/05-css-patterns.md)**: 深入了解CSS模式和最佳实践
-- 📄 **[相关的knowledge-points文档](../knowledge-points/development-tools/02-styling-tools.md)**: 快速参考样式工具和插件配置
+- 📄 **[相关的reference文档](../reference/language-concepts/05-css-patterns.md)**: 深入了解CSS模式和最佳实践
+- 📄 **[相关的reference文档](../reference/development-tools/02-styling-tools.md)**: 快速参考样式工具和插件配置
 
 ### 参考章节
 - 📖 **[本模块其他章节]**: [布局路由设计](./04-layouts-routing.md#响应式布局) | [数据获取基础](./06-data-fetching-basics.md#客户端数据获取)
-- 📖 **[Knowledge Points快速参考]**: [CSS模式参考](../knowledge-points/language-concepts/05-css-patterns.md) | [样式工具配置](../knowledge-points/development-tools/02-styling-tools.md)
+- 📖 **[Knowledge Points快速参考]**: [CSS模式参考](../reference/language-concepts/05-css-patterns.md) | [样式工具配置](../reference/development-tools/02-styling-tools.md)
 
 ## 📝 总结
 

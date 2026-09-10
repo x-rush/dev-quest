@@ -17,7 +17,7 @@
 - 📖 **[基础概念](#基础概念)** - 入门基础内容
 - 🛠️ **[框架工具](#框架工具)** - 开发框架和工具
 - 🚀 **[项目实战](#项目实战)** - 实际项目案例
-- 📊 **[知识点速查](#知识点速查)** - 快速参考手册
+- 📚 **[知识字典](#知识字典-reference)** - 全量参考手册
 - 🔧 **[测试与部署](#测试与部署)** - 工程实践
 
 ---
@@ -63,13 +63,13 @@
 | [性能调优](../01-go-backend/advanced-topics/performance/02-performance-tuning.md) | 系统优化 |
 | [安全最佳实践](../01-go-backend/advanced-topics/security/01-security-best-practices.md) | 应用安全 |
 
-### 📖 知识点速查 (knowledge-points/)
+### 📚 知识字典 (reference/)
 | 分类 | 文档 |
 |------|------|
-| [语言核心概念](../01-go-backend/knowledge-points/language-concepts/01-go-keywords.md) | Go关键字、内置函数、编程要点等6篇 |
-| [框架核心要点](../01-go-backend/knowledge-points/framework-essentials/01-gin-framework.md) | Gin、GORM要点2篇 |
-| [库指南](../01-go-backend/knowledge-points/library-guides/01-go-standard-library.md) | 标准库与三方库2篇 |
-| [快速参考](../01-go-backend/knowledge-points/quick-references/01-syntax-cheatsheet.md) | 语法速查、Web工具、故障排查3篇 |
+| [语言核心概念](../01-go-backend/reference/language-concepts/01-go-keywords.md) | Go关键字、内置函数、编程要点等6篇 |
+| [框架核心要点](../01-go-backend/reference/framework-essentials/01-gin-framework.md) | Gin、GORM要点2篇 |
+| [库指南](../01-go-backend/reference/library-guides/01-go-standard-library.md) | 标准库与三方库2篇 |
+| [快速参考](../01-go-backend/reference/quick-references/01-syntax-cheatsheet.md) | 语法速查、Web工具、故障排查3篇 |
 
 ### 🔧 测试与部署
 | 分类 | 文档 |
@@ -121,13 +121,13 @@
 | [高级优化](../02-nextjs-frontend/advanced-topics/performance/02-advanced-optimization.md) | 深度性能优化 |
 | [安全最佳实践](../02-nextjs-frontend/advanced-topics/security/01-security-best-practices.md) | 前端安全 |
 
-### 📖 知识点速查 (knowledge-points/)
+### 📚 知识字典 (reference/)
 | 分类 | 文档 |
 |------|------|
-| [语言概念](../02-nextjs-frontend/knowledge-points/language-concepts/01-react-syntax-cheatsheet.md) | React语法、Next.js API、TS类型等5篇 |
-| [框架模式](../02-nextjs-frontend/knowledge-points/framework-patterns/01-app-router-patterns.md) | 路由、组件、数据获取等7篇 |
-| [开发工具](../02-nextjs-frontend/knowledge-points/development-tools/01-testing-tools.md) | 测试、样式、包管理、调试工具4篇 |
-| [性能优化](../02-nextjs-frontend/knowledge-points/performance-optimization/01-rendering-optimization.md) | 渲染与包体积优化2篇 |
+| [语言概念](../02-nextjs-frontend/reference/language-concepts/01-react-syntax-cheatsheet.md) | React语法、Next.js API、TS类型等5篇 |
+| [框架模式](../02-nextjs-frontend/reference/framework-patterns/01-app-router-patterns.md) | 路由、组件、数据获取等7篇 |
+| [开发工具](../02-nextjs-frontend/reference/development-tools/01-testing-tools.md) | 测试、样式、包管理、调试工具4篇 |
+| [性能优化](../02-nextjs-frontend/reference/performance-optimization/01-rendering-optimization.md) | 渲染与包体积优化2篇 |
 
 ### 🔧 测试与部署
 | 分类 | 文档 |

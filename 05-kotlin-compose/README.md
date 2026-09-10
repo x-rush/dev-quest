@@ -38,7 +38,7 @@
 │       ├── 02-app-bundle-advanced.md   # 高级打包技术
 │       ├── 03-analytics-advanced.md    # 高级分析集成
 │       └── 04-monetization-strategies.md # 变现策略
-├── knowledge-points/                   # 知识点速查手册
+├── reference/  # 知识字典（全量参考）
 │   ├── kotlin-concepts/                 # Kotlin核心概念
 │   │   ├── 01-kotlin-keywords.md       # Kotlin关键字详解
 │   │   ├── 02-kotlin-21-features.md    # Kotlin 2.1新特性速查

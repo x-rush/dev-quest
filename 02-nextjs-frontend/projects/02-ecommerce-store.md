@@ -2651,8 +2651,8 @@ volumes:
 
 ### 参考章节
 - 📖 **[Framework Deep Dive - Next.js](../frameworks/nextjs-core.md)**: Next.js核心特性深度学习
-- 📖 **[Database - Prisma ORM](../knowledge-points/database/prisma.md)**: Prisma ORM快速参考
-- 📖 **[Authentication - NextAuth](../knowledge-points/auth/nextauth.md)**: NextAuth.js最佳实践
+- 📖 **[Database - Prisma ORM](../reference/database/prisma.md)**: Prisma ORM快速参考
+- 📖 **[Authentication - NextAuth](../reference/auth/nextauth.md)**: NextAuth.js最佳实践
 
 ## 📝 总结
 

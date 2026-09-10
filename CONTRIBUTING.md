@@ -38,7 +38,7 @@
 
 ## 模块结构
 
-每个技术模块遵循统一结构（README + basics/advanced-topics/knowledge-points/frameworks/projects/testing/deployment），详见[模块结构指南](shared-resources/standards/module-structure-guide.md)。
+每个技术模块遵循统一结构（README + basics/advanced-topics/reference/frameworks/projects/testing/deployment），详见[模块结构指南](shared-resources/standards/module-structure-guide.md)。
 
 ## 许可证
 

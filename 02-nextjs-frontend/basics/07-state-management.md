@@ -1178,12 +1178,12 @@ interface CartItem {
 ### 相关文档
 - 📄 **[前一个basics文档](./06-data-fetching-basics.md)**: 学习数据获取基础，理解服务器状态管理
 - 📄 **[后一个basics文档](./08-first-project.md)**: 学习完整项目实战，综合应用状态管理知识
-- 📄 **[相关的knowledge-points文档](../knowledge-points/framework-patterns/05-state-management-patterns.md)**: 深入了解状态管理模式和最佳实践
-- 📄 **[相关的knowledge-points文档](../knowledge-points/language-concepts/01-react-syntax-cheatsheet.md)**: 快速参考React Hook和状态管理语法
+- 📄 **[相关的reference文档](../reference/framework-patterns/05-state-management-patterns.md)**: 深入了解状态管理模式和最佳实践
+- 📄 **[相关的reference文档](../reference/language-concepts/01-react-syntax-cheatsheet.md)**: 快速参考React Hook和状态管理语法
 
 ### 参考章节
 - 📖 **[本模块其他章节]**: [数据获取基础](./06-data-fetching-basics.md#服务器状态管理) | [完整项目实战](./08-first-project.md#状态管理系统实现)
-- 📖 **[Knowledge Points快速参考]**: [状态管理模式](../knowledge-points/framework-patterns/05-state-management-patterns.md) | [React语法速查](../knowledge-points/language-concepts/01-react-syntax-cheatsheet.md)
+- 📖 **[Knowledge Points快速参考]**: [状态管理模式](../reference/framework-patterns/05-state-management-patterns.md) | [React语法速查](../reference/language-concepts/01-react-syntax-cheatsheet.md)
 
 ## 📝 总结
 

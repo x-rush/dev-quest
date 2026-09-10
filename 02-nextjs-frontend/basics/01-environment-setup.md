@@ -797,12 +797,12 @@ npm ci
 
 ### 相关文档
 - 📄 **[后一个basics文档](./02-first-nextjs-app.md)**: 学习创建第一个Next.js应用，实践环境搭建成果
-- 📄 **[相关的knowledge-points文档](../knowledge-points/development-tools/03-package-managers.md)**: 深入了解包管理器的使用和配置
-- 📄 **[相关的knowledge-points文档](../knowledge-points/language-concepts/04-javascript-modern.md)**: 快速参考现代JavaScript语法特性
+- 📄 **[相关的reference文档](../reference/development-tools/03-package-managers.md)**: 深入了解包管理器的使用和配置
+- 📄 **[相关的reference文档](../reference/language-concepts/04-javascript-modern.md)**: 快速参考现代JavaScript语法特性
 
 ### 参考章节
 - 📖 **[本模块其他章节]**: [创建第一个Next.js应用](./02-first-nextjs-app.md#项目创建流程) | [TypeScript集成](./03-typescript-integration.md#typescript项目配置)
-- 📖 **[Knowledge Points快速参考]**: [开发工具配置](../knowledge-points/development-tools/04-debugging-tools.md) | [JavaScript现代语法](../knowledge-points/language-concepts/04-javascript-modern.md)
+- 📖 **[Knowledge Points快速参考]**: [开发工具配置](../reference/development-tools/04-debugging-tools.md) | [JavaScript现代语法](../reference/language-concepts/04-javascript-modern.md)
 
 ## 📝 总结
 

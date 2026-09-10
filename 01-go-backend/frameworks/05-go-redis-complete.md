@@ -118,7 +118,7 @@ func main() {
 
 ## 🔗 相关资源
 
-- **前置学习**: [knowledge-points/library-guides/02-third-party-libs.md](../knowledge-points/library-guides/02-third-party-libs.md)
+- **前置学习**: [reference/library-guides/02-third-party-libs.md](../reference/library-guides/02-third-party-libs.md)
 - **相关文档**: [frameworks/01-gin-framework-basics.md](01-gin-framework-basics.md)
 - **实践项目**: [projects/02-microservices-demo.md](../projects/02-microservices-demo.md)
 

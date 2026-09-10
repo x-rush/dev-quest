@@ -3602,8 +3602,8 @@ module.exports = nextConfig
 
 ### 参考章节
 - 📖 **[Framework Deep Dive - Next.js](../frameworks/nextjs-core.md)**: Next.js核心特性深度学习
-- 📖 **[Database - Multi-tenant Architecture](../knowledge-points/database/multi-tenant.md)**: 多租户架构最佳实践
-- 📖 **[Authentication - NextAuth](../knowledge-points/auth/nextauth.md)**: NextAuth.js高级配置
+- 📖 **[Database - Multi-tenant Architecture](../reference/database/multi-tenant.md)**: 多租户架构最佳实践
+- 📖 **[Authentication - NextAuth](../reference/auth/nextauth.md)**: NextAuth.js高级配置
 
 ## 📝 总结
 

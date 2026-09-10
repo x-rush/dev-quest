@@ -661,12 +661,12 @@ npm start
 ### 相关文档
 - 📄 **[前一个basics文档](./01-environment-setup.md)**: 学习环境搭建，为项目开发做好准备
 - 📄 **[后一个basics文档](./03-typescript-integration.md)**: 深入学习TypeScript集成，提升代码质量
-- 📄 **[相关的knowledge-points文档](../knowledge-points/language-concepts/01-react-syntax-cheatsheet.md)**: 快速参考React语法和组件模式
-- 📄 **[相关的framework-patterns文档](../knowledge-points/framework-patterns/01-app-router-patterns.md)**: 深入了解App Router的设计模式和最佳实践
+- 📄 **[相关的reference文档](../reference/language-concepts/01-react-syntax-cheatsheet.md)**: 快速参考React语法和组件模式
+- 📄 **[相关的framework-patterns文档](../reference/framework-patterns/01-app-router-patterns.md)**: 深入了解App Router的设计模式和最佳实践
 
 ### 参考章节
 - 📖 **[本模块其他章节]**: [TypeScript集成配置](./03-typescript-integration.md#typescript项目配置) | [布局和路由设计](./04-layouts-routing.md#app-router基础架构)
-- 📖 **[Knowledge Points快速参考]**: [React语法速查](../knowledge-points/language-concepts/01-react-syntax-cheatsheet.md) | [Next.js API参考](../knowledge-points/language-concepts/02-nextjs-api-reference.md)
+- 📖 **[Knowledge Points快速参考]**: [React语法速查](../reference/language-concepts/01-react-syntax-cheatsheet.md) | [Next.js API参考](../reference/language-concepts/02-nextjs-api-reference.md)
 
 ## 📝 总结
 

@@ -1070,12 +1070,12 @@ Next.js 15的数据获取生态系统为现代Web应用提供了强大而灵活�
 ### 相关文档
 - 📄 **[前一个basics文档](./05-styling-with-tailwind.md)**: 学习样式系统，为数据展示界面做好美化
 - 📄 **[后一个basics文档](./07-state-management.md)**: 学习状态管理，处理客户端数据和交互状态
-- 📄 **[相关的knowledge-points文档](../knowledge-points/framework-patterns/04-data-fetching-patterns.md)**: 深入了解数据获取模式和最佳实践
-- 📄 **[相关的knowledge-points文档](../knowledge-points/language-concepts/02-nextjs-api-reference.md)**: 快速参考Next.js API和数据获取方法
+- 📄 **[相关的reference文档](../reference/framework-patterns/04-data-fetching-patterns.md)**: 深入了解数据获取模式和最佳实践
+- 📄 **[相关的reference文档](../reference/language-concepts/02-nextjs-api-reference.md)**: 快速参考Next.js API和数据获取方法
 
 ### 参考章节
 - 📖 **[本模块其他章节]**: [样式设计](./05-styling-with-tailwind.md#加载组件) | [状态管理](./07-state-management.md#服务器状态管理)
-- 📖 **[Knowledge Points快速参考]**: [数据获取模式](../knowledge-points/framework-patterns/04-data-fetching-patterns.md) | [Next.js API参考](../knowledge-points/language-concepts/02-nextjs-api-reference.md)
+- 📖 **[Knowledge Points快速参考]**: [数据获取模式](../reference/framework-patterns/04-data-fetching-patterns.md) | [Next.js API参考](../reference/language-concepts/02-nextjs-api-reference.md)
 
 ## 📝 总结
 

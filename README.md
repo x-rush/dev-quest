@@ -83,7 +83,7 @@ dev-quest/
 │   │   │   ├── architecture/             # 系统架构设计
 │   │   │   ├── performance/             # 性能优化专题
 │   │   │   └── security/                 # 安全最佳实践
-│   │   ├── knowledge-points/             # 知识点速查手册
+│   │   ├── reference/  # 知识字典（全量参考）
 │   │   │   ├── language-concepts/        # 语言核心概念
 │   │   │   ├── framework-essentials/     # 框架核心要点
 │   │   │   ├── library-guides/           # 标准库与三方库指南
@@ -118,7 +118,7 @@ dev-quest/
 │   │   │   ├── architecture/             # 现代前端架构
 │   │   │   ├── performance/              # 性能优化专项
 │   │   │   └── security/                 # 安全实践
-│   │   ├── knowledge-points/             # 知识点速查手册
+│   │   ├── reference/  # 知识字典（全量参考）
 │   │   │   ├── language-concepts/        # 语言核心概念
 │   │   │   ├── framework-patterns/       # 框架模式
 │   │   │   ├── development-tools/        # 开发工具

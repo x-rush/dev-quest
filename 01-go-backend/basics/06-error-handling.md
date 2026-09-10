@@ -917,7 +917,7 @@ func main() {
 
 ### 相关文档
 - 📄 **[函数和方法]**: [04-functions-methods.md](04-functions-methods.md) - 函数定义和方法调用
-- 📄 **[Go编程精华]**: [../knowledge-points/language-concepts/03-go-programming-essentials.md](../knowledge-points/language-concepts/03-go-programming-essentials.md) - Go语言设计哲学
+- 📄 **[Go编程精华]**: [../reference/language-concepts/03-go-programming-essentials.md](../reference/language-concepts/03-go-programming-essentials.md) - Go语言设计哲学
 - 📄 **[Gin框架错误处理]**: [../frameworks/01-gin-framework-basics.md](../frameworks/01-gin-framework-basics.md) - Web框架错误处理
 
 ### 参考资源

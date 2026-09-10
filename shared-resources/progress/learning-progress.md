@@ -32,7 +32,7 @@ graph LR
 
 **双路径学习体系** ⭐⭐
 - [ ] **系统化学习**: [basics/](../../01-go-backend/basics/) - 从零开始的渐进式学习
-- [ ] **快速参考**: [knowledge-points/](../../01-go-backend/knowledge-points/) - 高效速查手册
+- [ ] **快速参考**: [reference/](../../01-go-backend/reference/) - 高效速查手册
 
 **基础阶段** ⭐⭐
 - [x] **环境搭建**: [01-environment-setup.md](../../01-go-backend/basics/01-environment-setup.md) - Go 1.21+ 开发环境配置
@@ -43,20 +43,20 @@ graph LR
 - [x] **错误处理**: [06-error-handling.md](../../01-go-backend/basics/06-error-handling.md) - Go错误处理机制
 
 **语言概念速查** ⭐
-- [x] **Go关键字**: [knowledge-points/language-concepts/01-go-keywords.md](../../01-go-backend/knowledge-points/language-concepts/01-go-keywords.md) - Go关键字详解
-- [x] **内置函数**: [knowledge-points/language-concepts/02-go-built-in-functions.md](../../01-go-backend/knowledge-points/language-concepts/02-go-built-in-functions.md) - Go内置函数
-- [x] **数据类型**: [knowledge-points/language-concepts/03-go-data-types.md](../../01-go-backend/knowledge-points/language-concepts/03-go-data-types.md) - 数据类型详解
-- [x] **控制流程**: [knowledge-points/language-concepts/04-go-control-flow.md](../../01-go-backend/knowledge-points/language-concepts/04-go-control-flow.md) - 控制流程详解
-- [x] **面向对象**: [knowledge-points/language-concepts/05-go-oop-concepts.md](../../01-go-backend/knowledge-points/language-concepts/05-go-oop-concepts.md) - 面向对象概念
+- [x] **Go关键字**: [reference/language-concepts/01-go-keywords.md](../../01-go-backend/reference/language-concepts/01-go-keywords.md) - Go关键字详解
+- [x] **内置函数**: [reference/language-concepts/02-go-built-in-functions.md](../../01-go-backend/reference/language-concepts/02-go-built-in-functions.md) - Go内置函数
+- [x] **数据类型**: [reference/language-concepts/03-go-data-types.md](../../01-go-backend/reference/language-concepts/03-go-data-types.md) - 数据类型详解
+- [x] **控制流程**: [reference/language-concepts/04-go-control-flow.md](../../01-go-backend/reference/language-concepts/04-go-control-flow.md) - 控制流程详解
+- [x] **面向对象**: [reference/language-concepts/05-go-oop-concepts.md](../../01-go-backend/reference/language-concepts/05-go-oop-concepts.md) - 面向对象概念
 
 **标准库指南** ⭐
-- [x] **标准库**: [knowledge-points/library-guides/01-go-standard-library.md](../../01-go-backend/knowledge-points/library-guides/01-go-standard-library.md) - 标准库核心API
-- [x] **第三方库**: [knowledge-points/library-guides/02-third-party-libs.md](../../01-go-backend/knowledge-points/library-guides/02-third-party-libs.md) - 第三方库精选
+- [x] **标准库**: [reference/library-guides/01-go-standard-library.md](../../01-go-backend/reference/library-guides/01-go-standard-library.md) - 标准库核心API
+- [x] **第三方库**: [reference/library-guides/02-third-party-libs.md](../../01-go-backend/reference/library-guides/02-third-party-libs.md) - 第三方库精选
 
 **快速参考** ⭐
-- [x] **语法速查**: [knowledge-points/quick-references/01-syntax-cheatsheet.md](../../01-go-backend/knowledge-points/quick-references/01-syntax-cheatsheet.md) - Go语法速查表
-- [x] **Web工具**: [knowledge-points/quick-references/02-web-tools.md](../../01-go-backend/knowledge-points/quick-references/02-web-tools.md) - 其他Web工具
-- [x] **问题排查**: [knowledge-points/quick-references/03-troubleshooting.md](../../01-go-backend/knowledge-points/quick-references/03-troubleshooting.md) - 常见问题排查
+- [x] **语法速查**: [reference/quick-references/01-syntax-cheatsheet.md](../../01-go-backend/reference/quick-references/01-syntax-cheatsheet.md) - Go语法速查表
+- [x] **Web工具**: [reference/quick-references/02-web-tools.md](../../01-go-backend/reference/quick-references/02-web-tools.md) - 其他Web工具
+- [x] **问题排查**: [reference/quick-references/03-troubleshooting.md](../../01-go-backend/reference/quick-references/03-troubleshooting.md) - 常见问题排查
 
 **框架技术栈** ⭐⭐⭐
 - [x] **Gin框架基础**: [frameworks/01-gin-framework-basics.md](../../01-go-backend/frameworks/01-gin-framework-basics.md) - Web框架入门
@@ -66,8 +66,8 @@ graph LR
 - [x] **Redis缓存**: [frameworks/05-go-redis-complete.md](../../01-go-backend/frameworks/05-go-redis-complete.md) - 缓存数据库
 
 **框架速查** ⭐
-- [x] **Gin框架速查**: [knowledge-points/framework-essentials/01-gin-framework.md](../../01-go-backend/knowledge-points/framework-essentials/01-gin-framework.md) - Gin框架速查
-- [x] **GORM速查**: [knowledge-points/framework-essentials/02-gorm-orm.md](../../01-go-backend/knowledge-points/framework-essentials/02-gorm-orm.md) - ORM速查
+- [x] **Gin框架速查**: [reference/framework-essentials/01-gin-framework.md](../../01-go-backend/reference/framework-essentials/01-gin-framework.md) - Gin框架速查
+- [x] **GORM速查**: [reference/framework-essentials/02-gorm-orm.md](../../01-go-backend/reference/framework-essentials/02-gorm-orm.md) - ORM速查
 
 **实战项目** ⭐⭐⭐
 - [x] **REST API服务器**: [projects/01-rest-api-server.md](../../01-go-backend/projects/01-rest-api-server.md) - Gin+GORM+MySQL

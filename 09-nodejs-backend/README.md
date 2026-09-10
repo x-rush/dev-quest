@@ -47,7 +47,7 @@
 │       ├── 05-observability.md       # 可观测性架构
 │       ├── 06-graphql-federation.md  # GraphQL联邦
 │       └── 07-ai-backend-integration.md # AI后端集成
-├── knowledge-points/             # 知识点速查手册
+├── reference/  # 知识字典（全量参考）
 │   ├── nodejs-concepts/           # Node.js核心概念
 │   │   ├── 01-nodejs-keywords.md    # Node.js关键字详解
 │   │   ├── 02-core-modules.md      # 核心模块速查

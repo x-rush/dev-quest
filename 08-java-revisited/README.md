@@ -47,7 +47,7 @@
 │       ├── 05-istio-service-mesh.md  # Istio服务网格
 │       ├── 06-grafana-prometheus.md  # 监控和告警
 │       └── 07-serverless-java.md     # 无服务器Java
-├── knowledge-points/             # 知识点速查手册
+├── reference/  # 知识字典（全量参考）
 │   ├── java-concepts/             # Java核心概念
 │   │   ├── 01-java-keywords.md      # Java关键字详解
 │   │   ├── 02-collections-api.md    # 集合框架API

@@ -38,7 +38,7 @@
 │       ├── 02-security-advanced.md      # 高级安全实现
 │       ├── 03-cloud-integration.md     # 云服务集成
 │       └── 04-app-distribution.md      # 企业应用分发
-├── knowledge-points/                   # 知识点速查手册
+├── reference/  # 知识字典（全量参考）
 │   ├── swift-concepts/                  # Swift核心概念
 │   │   ├── 01-swift-keywords.md         # Swift关键字详解
 │   │   ├── 02-swift-60-features.md      # Swift 6.0新特性速查
