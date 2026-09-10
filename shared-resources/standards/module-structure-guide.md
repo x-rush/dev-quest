@@ -2,7 +2,7 @@
 
 > **目标**: 为每个技术模块建立统一、高质量的文档结构标准
 >
-> **适用范围**: 所有技术模块（Go、Next.js、Taro、React Native、Android、iOS等）
+> **适用范围**: 所有技术模块（Go、Next.js、TanStack、React Native、Kotlin Compose、SwiftUI等）
 >
 > **更新日期**: 2025年10月
 

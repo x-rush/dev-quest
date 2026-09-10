@@ -14,7 +14,7 @@
 ### 📁 目录结构
 
 ```
-06-ios-native/
+06-swift-swiftui/
 ├── README.md                           # 本文档
 ├── iOS原生开发学习路线.md               # 详细学习指南
 ├── advanced-topics/                     # 高级应用深度内容

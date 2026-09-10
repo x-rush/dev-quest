@@ -12,7 +12,7 @@
 | **学习模式** | 双轨制学习（深度+广度） |
 | **难度等级** | ⭐⭐⭐ (适合有基础的开发者) |
 | **技术栈** | Go, Next.js, React, TypeScript, 云原生 |
-| **更新日期** | 2025年10月 |
+| **更新日期** | 2026年9月 |
 | **作者** | Dev Quest Team |
 | **状态** | ✅ 持续更新中 |
 
@@ -31,26 +31,26 @@
 ### 🏆 应用帝国矩阵 (核心重点)
 **系统性学习路径**: 深度掌握每个技术栈，构建完整的应用开发生态
 
-#### 🎯 学习路线 (流量优先+三端覆盖)
+#### 🎯 学习路线 (数据层+跨平台+原生覆盖)
 ```mermaid
 graph LR
     A[Go后端开发] --> B[Next.js前端开发]
-    B --> C[Taro小程序+快应用]
+    B --> C[TanStack数据层]
     C --> D[React Native三端App]
-    D --> E[Android原生开发]
-    E --> F[iOS原生开发]
+    D --> E[Kotlin Compose原生]
+    E --> F[SwiftUI原生]
 ```
 
 **📈 技术进阶策略**:
-- 🥇 **流量获取优先**: Taro全覆盖小程序+快应用，触达所有高流量平台
+- 🥇 **数据层先行**: TanStack Query/Table/Router构建类型安全的数据层
 - 🥈 **跨平台原生**: React Native三端(App+iOS+鸿蒙)，实现原生级体验
-- 🥉 **原生深度**: Android+iOS原生开发，掌握平台底层能力
-- 🎯 **生态全覆盖**: 从轻量应用到深度原生，技术栈完整覆盖
+- 🥉 **原生深度**: Jetpack Compose与SwiftUI，掌握官方原生开发能力
+- 🎯 **生态全覆盖**: 从数据层到跨平台再到深度原生，技术栈完整覆盖
 
 **📍 学习重点**:
-- 🎯 **流量获取优先**: 微信(10亿+)、支付宝(8亿+)、抖音(6亿+)、快应用联盟(数亿+)全覆盖
+- 🔧 **类型安全数据层**: TanStack Query缓存管理 + Table表格 + Router类型安全路由
 - 📱 **跨平台原生**: React Native一次开发，Android+iOS+鸿蒙三端部署
-- 🚀 **渐进式扩展**: 从小程序到原生App，从流量获取到深度体验
+- 🚀 **渐进式扩展**: 从数据层到跨平台App到原生开发，从效率到深度体验
 - 🔄 **设备优势利用**: Android设备优先，鸿蒙生态布局，iOS全球化扩展
 - 💼 **技术栈平衡**: 跨平台效率与原生深度并重，生态全覆盖策略
 
@@ -63,8 +63,6 @@ graph LR
     G[PHP精通之路] --> H[Java知识回顾]
     H --> I[Node.js后端探索]
     I --> J[Python发现之旅]
-    J --> K[Nuxt.js生态探索]
-    K --> L[SvelteKit学习之旅]
 ```
 
 ## 📁 完整目录结构
@@ -72,107 +70,97 @@ graph LR
 ```
 dev-quest/
 ├── 🏆 应用帝国矩阵 (核心重点)
-│   ├── 01-go-backend/                    # Go 后端开发学习路线
-│   │   ├── advanced-topics/              # 高级主题深度内容
-│   │   │   ├── go-general/               # Go核心技术深入
-│   │   │   │   ├── 01-concurrency/       # 并发编程高级专题
-│   │   │   │   ├── 02-patterns/          # 设计模式与架构模式
-│   │   │   │   ├── 03-performance/       # 性能优化专题
-│   │   │   │   └── 04-engineering/       # 工程化实践
-│   │   │   ├── gin/                      # Gin框架高级专题
-│   │   │   │   ├── 01-basics/            # Gin基础进阶
-│   │   │   │   ├── 02-advanced/         # Gin高级特性
-│   │   │   │   ├── 03-testing/           # 测试工程
-│   │   │   │   ├── 04-integration/       # 集成应用
-│   │   │   │   └── 05-project/           # 项目实战
-│   │   │   └── architecture/             # 系统架构设计
-│   │   │       ├── 01-architecture-patterns/ # 架构模式
-│   │   │       ├── 02-system-design/     # 系统设计
-│   │   │       └── 03-distributed-systems/ # 分布式系统
-│   │   ├── knowledge-points/             # 知识点速查手册
-│   │   │   ├── 01-go-keywords.md         # Go关键字详解
-│   │   │   ├── 02-go-built-in-functions.md # Go内置函数手册
-│   │   │   ├── 03-go-standard-library.md # Go标准库速查
-│   │   │   ├── 04-go-popular-libraries.md # Go流行库指南
-│   │   │   ├── 05-go-programming-knowledge-points.md # Go编程知识点
-│   │   │   ├── 06-gin-framework-knowledge-points.md # Gin框架知识点
-│   │   │   └── 07-gorm-orm-knowledge-points.md # GORM ORM知识点
+│   ├── 01-go-backend/                    # Go 后端开发学习路线 (已重构)
 │   │   ├── basics/                       # Go基础
 │   │   │   ├── 01-environment-setup.md
-│   │   │   ├── 02-basic-syntax.md
-│   │   │   ├── 03-data-types.md
-│   │   │   ├── 04-control-flow.md
-│   │   │   └── 05-oop-concepts.md
-│   │   ├── standard-library/             # 标准库深入
-│   │   │   ├── 01-fmt-io.md
-│   │   │   ├── 02-net-http.md
-│   │   │   ├── 03-encoding-json.md
-│   │   │   └── 04-database-sql.md
+│   │   │   ├── 02-first-program.md
+│   │   │   ├── 03-variables-constants.md
+│   │   │   ├── 04-functions-methods.md
+│   │   │   ├── 05-control-structures.md
+│   │   │   └── 06-error-handling.md
+│   │   ├── advanced-topics/              # 高级主题深度内容
+│   │   │   ├── api-advanced/             # API高级专题
+│   │   │   ├── architecture/             # 系统架构设计
+│   │   │   ├── performance/             # 性能优化专题
+│   │   │   └── security/                 # 安全最佳实践
+│   │   ├── knowledge-points/             # 知识点速查手册
+│   │   │   ├── language-concepts/        # 语言核心概念
+│   │   │   ├── framework-essentials/     # 框架核心要点
+│   │   │   ├── library-guides/           # 标准库与三方库指南
+│   │   │   └── quick-references/         # 快速参考速查
 │   │   ├── frameworks/                   # Go框架生态
-│   │   │   ├── 01-gin-framework.md
-│   │   │   ├── 02-echo-framework.md
-│   │   │   ├── 03-fiber-framework.md
-│   │   │   └── 04-gqlgen-graphql.md
+│   │   │   ├── 01-gin-framework-basics.md
+│   │   │   ├── 02-gin-framework-advanced.md
+│   │   │   ├── 03-gorm-orm-complete.md
+│   │   │   ├── 04-mongodb-go-driver.md
+│   │   │   └── 05-go-redis-complete.md
 │   │   ├── projects/                     # 实战项目
 │   │   │   ├── 01-rest-api-server.md
 │   │   │   ├── 02-microservices-demo.md
-│   │   │   ├── 03-real-time-chat.md
+│   │   │   ├── 03-real-time-app.md
 │   │   │   └── 04-cli-tool.md
 │   │   ├── testing/                      # 测试工程
 │   │   │   ├── 01-unit-testing.md
-│   │   │   ├── 02-benchmark-testing.md
+│   │   │   ├── 02-mocking-stubbing.md
 │   │   │   ├── 03-integration-testing.md
-│   │   │   └── 04-test-driven-development.md
+│   │   │   ├── 04-benchmarking.md
+│   │   │   └── 05-test-driven-development.md
 │   │   ├── deployment/                   # 部署运维
-│   │   │   ├── 01-docker-deployment.md
-│   │   │   ├── 02-kubernetes-deployment.md
-│   │   │   ├── 03-cloud-deployment.md
-│   │   │   └── 04-monitoring-observability.md
-│   │   ├── best-practices/               # 最佳实践
-│   │   │   ├── 01-code-organization.md
-│   │   │   ├── 02-performance-optimization.md
-│   │   │   ├── 03-security-practices.md
-│   │   │   └── 04-design-patterns.md
+│   │   │   ├── 01-containerization.md
+│   │   │   ├── 02-ci-cd-pipelines.md
+│   │   │   ├── 03-kubernetes-deployment.md
+│   │   │   └── 04-observability.md
 │   │   └── README.md                     # 模块详细说明
-│   ├── 02-nextjs-frontend/               # Next.js 前端开发学习路线
+│   ├── 02-nextjs-frontend/               # Next.js 前端开发学习路线 (已重构)
+│   │   ├── basics/                       # Next.js基础
 │   │   ├── advanced-topics/              # 高级应用深度内容
-│   │   │   ├── react-advanced/           # React 19高级特性
-│   │   │   ├── nextjs-advanced/          # Next.js 15深度专题
+│   │   │   ├── api-integration/          # API集成
 │   │   │   ├── architecture/             # 现代前端架构
 │   │   │   ├── performance/              # 性能优化专项
-│   │   │   └── engineering/              # 工程化实践
+│   │   │   └── security/                 # 安全实践
 │   │   ├── knowledge-points/             # 知识点速查手册
-│   │   │   ├── react-concepts/           # React核心概念
-│   │   │   ├── nextjs-features/          # Next.js功能速查
-│   │   │   ├── typescript-patterns/      # TypeScript模式
-│   │   │   ├── modern-tools/             # 现代工具速查
-│   │   │   └── best-practices/           # 最佳实践
-│   │   ├── basics/                       # Next.js基础
+│   │   │   ├── language-concepts/        # 语言核心概念
+│   │   │   ├── framework-patterns/       # 框架模式
+│   │   │   ├── development-tools/        # 开发工具
+│   │   │   └── performance-optimization/  # 性能优化
 │   │   ├── frameworks/                   # 现代框架集成
 │   │   ├── projects/                     # 实战项目
 │   │   ├── testing/                      # 测试工程
 │   │   ├── deployment/                   # 部署运维
 │   │   └── README.md                     # 模块详细说明
-│   ├── 03-taro-miniprogram/              # Taro 小程序+快应用全覆盖 (流量优先)
+│   ├── 03-tanstack-stack/                # TanStack 全家桶学习路线 (规划中)
 │   ├── 04-multiplatform-apps/            # React Native 三端原生App (Android+iOS+鸿蒙)
-│   ├── 05-android-native/               # Android 原生开发学习路线
-│   ├── 06-ios-native/                   # iOS 原生开发学习路线
+│   ├── 05-kotlin-compose/               # Kotlin Jetpack Compose 原生开发
+│   └── 06-swift-swiftui/                # Swift SwiftUI 原生开发
 │
 ├── 🔍 技术探索系列 (零散时间学习)
 │   ├── 07-php-mastery/                   # PHP 精通之路
 │   ├── 08-java-revisited/                # Java 知识回顾与现代化
 │   ├── 09-nodejs-backend/                # Node.js 后端开发技术探索
-│   ├── 10-python-discovery/              # Python 发现之旅
-│   ├── 11-nuxtjs-exploration/            # Nuxt.js 生态与技术探索
-│   └── 12-sveltekit-journey/             # SvelteKit 现代前端学习之旅
+│   └── 10-python-discovery/              # Python 发现之旅
 │
 ├── 📚 共享资源和工具
-│   ├── DOCUMENT_TEMPLATE.md              # 文档标准模板
-│   ├── QUICK_TEMPLATE.md                 # 快速应用模板
-│   ├── DOCUMENTATION_GUIDELINES.md       # 文档规范指南
-│   ├── CROSS_REFERENCE_SYSTEM.md         # 交叉引用系统
-│   ├── DOCUMENT_INDEX.md                 # 智能文档索引
-│   └── README.md                         # 本文件
+│   ├── standards/                        # 项目规范标准
+│   │   ├── module-structure-guide.md     # 模块结构设计指南
+│   │   ├── module-development-standards.md # 模块开发标准
+│   │   ├── documentation-guidelines.md   # 文档规范指南
+│   │   └── cross-reference-system.md     # 交叉引用系统
+│   ├── templates/                        # 文档模板
+│   │   ├── document-template.md          # 标准文档模板
+│   │   └── quick-template.md              # 快速应用模板
+│   ├── tools/                            # 工具与索引
+│   │   ├── document-index.md             # 智能文档索引
+│   │   └── development-tools.md          # 开发工具指南
+│   ├── progress/                         # 进度跟踪
+│   │   └── learning-progress.md          # 学习进度总览
+│   └── README.md                         # 共享资源说明
+│
+├── 🗄️ 重构归档
+│   └── refactor-archives/                # 重构计划与日志归档
+│       ├── completed/                    # 已完成的重构记录
+│       └── README.md                     # 归档系统说明
+│
+└── README.md                             # 本文件
 ```
 
 ## 🎯 学习策略
@@ -198,24 +186,23 @@ dev-quest/
 ### 🏆 应用帝国矩阵 (核心重点)
 - [ ] 01. [Go 后端开发](01-go-backend/README.md) - 高性能后端开发
 - [ ] 02. [Next.js 前端开发](02-nextjs-frontend/README.md) - 现代前端框架
-- [ ] 03. [Taro 小程序+快应用](03-taro-miniprogram/README.md) - 流量优先全覆盖策略
+- [ ] 03. [TanStack 全家桶](03-tanstack-stack/README.md) - 类型安全数据层
 - [ ] 04. [React Native 三端App](04-multiplatform-apps/README.md) - Android+iOS+鸿蒙原生开发
-- [ ] 05. [Android 原生开发](05-android-native/README.md) - Android应用开发
-- [ ] 06. [iOS 原生开发](06-ios-native/README.md) - iOS应用开发
+- [ ] 05. [Kotlin Compose](05-kotlin-compose/README.md) - Android官方原生开发
+- [ ] 06. [Swift SwiftUI](06-swift-swiftui/README.md) - iOS官方原生开发
 
 ### 🔍 技术探索系列 (零散时间)
 - [ ] 07. PHP 精通之路 - PHP深度掌握
 - [ ] 08. Java 知识回顾 - Java现代化学习
 - [ ] 09. Node.js 后端探索 - Node.js技术栈
 - [ ] 10. Python 发现之旅 - Python多领域应用
-- [ ] 11. Nuxt.js 生态探索 - Vue生态技术
-- [ ] 12. SvelteKit 学习之旅 - 现代前端框架
 
 ## 🛠️ 技术栈概览
 
 ### 核心技术
-- **后端**: Go 1.21+, Gin, Echo, gRPC, GraphQL
-- **前端**: Next.js 15, React 19, TypeScript 5.x
+- **后端**: Go 1.21+, Gin, gRPC, GraphQL
+- **前端**: Next.js 15, React 19, TypeScript 5.x, TanStack (Query/Table/Router/Form)
+- **移动端**: React Native, Jetpack Compose (Kotlin), SwiftUI (Swift)
 - **数据库**: PostgreSQL, Redis, MongoDB, MySQL
 - **云原生**: Docker, Kubernetes, Helm, Istio
 - **监控**: Prometheus, Grafana, OpenTelemetry
@@ -273,16 +260,16 @@ dev-quest/
 ### 📚 标准化文档系统
 Dev Quest项目建立了完整的文档标准化体系，确保高质量的学习体验：
 
-- 📋 **[文档模板系统](shared-resources/DOCUMENT_TEMPLATE.md)** - 详细的标准文档模板，确保内容质量一致性
-- ⚡ **[快速应用模板](shared-resources/QUICK_TEMPLATE.md)** - 简化的快速模板，适用于速查和参考文档
-- 📝 **[文档规范指南](shared-resources/DOCUMENTATION_GUIDELINES.md)** - 完整的写作规范和质量标准
-- 🔗 **[交叉引用系统](shared-resources/CROSS_REFERENCE_SYSTEM.md)** - 智能的知识关联和引用规范
-- 📖 **[智能文档索引](shared-resources/DOCUMENT_INDEX.md)** - 多维度的文档导航和搜索系统
+- 📋 **[文档模板系统](shared-resources/templates/document-template.md)** - 详细的标准文档模板，确保内容质量一致性
+- ⚡ **[快速应用模板](shared-resources/templates/quick-template.md)** - 简化的快速模板，适用于速查和参考文档
+- 📝 **[文档规范指南](shared-resources/standards/documentation-guidelines.md)** - 完整的写作规范和质量标准
+- 🔗 **[交叉引用系统](shared-resources/standards/cross-reference-system.md)** - 智能的知识关联和引用规范
+- 📖 **[智能文档索引](shared-resources/tools/document-index.md)** - 多维度的文档导航和搜索系统
 
 ### 🎯 快速导航
 - 🚀 **[开始学习](#开始学习之旅)** - 如何开始你的学习旅程
 - 📊 **[学习路径](#学习策略)** - 双轨制学习策略详解
-- 🔍 **[内容索引](shared-resources/DOCUMENT_INDEX.md)** - 按需查找学习内容
+- 🔍 **[内容索引](shared-resources/tools/document-index.md)** - 按需查找学习内容
 - 🛠️ **[工具资源](#学习资源)** - 推荐的学习工具和资源
 - 📝 **[贡献指南](#贡献与反馈)** - 如何参与项目贡献
 
@@ -337,22 +324,30 @@ Dev Quest项目建立了完整的文档标准化体系，确保高质量的学�
 ---
 
 **文档状态**: ✅ 持续更新中
-**最后更新**: 2025年10月
-**版本**: v2.0.0
+**最后更新**: 2026年9月
+**版本**: v2.1.0
 **维护团队**: Dev Quest Team
 
-### 🎉 最新更新 (v2.0.0)
+### 🎉 最新更新 (v2.1.0)
+- ✅ **文档体系整理**: 修正根 README 与实际目录结构不一致的问题
+- ✅ **模块布局调整**: 按兴趣技术栈重组为 10 个模块（新增 TanStack，聚焦 Compose/SwiftUI，移除 Taro/Nuxt/SvelteKit）
+- ✅ **工程文档补齐**: 新增 CLAUDE.md、CONTRIBUTING.md、CHANGELOG.md、LICENSE
+
+<details>
+<summary>历史更新 (v2.0.0)</summary>
+
 - ✅ **文档标准化**: 建立了完整的文档模板和质量标准体系
 - ✅ **交叉引用系统**: 实现了智能的知识关联和导航系统
 - ✅ **时间规划优化**: 移除了固定时间规划，提供更灵活的学习方式
 - ✅ **结构一致性**: 统一了文档结构，确保实际目录与规划一致
 - ✅ **项目独立性**: 移除了外部依赖，成为完全独立的学习项目
-- ✅ **流量优先策略**: 重新设计03模块Taro全覆盖小程序+快应用
-- ✅ **三端原生覆盖**: 重新设计04模块React Native三端App开发
-- ✅ **生态完整布局**: 从流量获取到深度体验的技术栈全覆盖
+- ✅ **三端原生覆盖**: 重新设计跨平台模块React Native三端App开发
+- ✅ **生态完整布局**: 从跨平台效率到深度体验的技术栈全覆盖
+
+</details>
 
 > 💡 **学习提示**:
-> 建议先阅读[文档索引](shared-resources/DOCUMENT_INDEX.md)了解整体内容结构，然后根据你的技术背景和学习目标选择合适的模块开始学习。记住，技术学习是一个持续的过程，保持耐心和坚持是成功的关键！🚀
+> 建议先阅读[文档索引](shared-resources/tools/document-index.md)了解整体内容结构，然后根据你的技术背景和学习目标选择合适的模块开始学习。记住，技术学习是一个持续的过程，保持耐心和坚持是成功的关键！🚀
 
 > 🔧 **贡献提示**:
-> 本项目采用标准化的文档模板，如果你有兴趣贡献内容，请先阅读[文档规范指南](shared-resources/DOCUMENTATION_GUIDELINES.md)了解我们的写作标准和要求。
+> 本项目采用标准化的文档模板，如果你有兴趣贡献内容，请先阅读[文档规范指南](shared-resources/standards/documentation-guidelines.md)和[贡献指南](CONTRIBUTING.md)了解我们的写作标准和要求。

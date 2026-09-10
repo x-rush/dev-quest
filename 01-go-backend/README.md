@@ -243,9 +243,8 @@
 - 📄 **[性能调优]**: [advanced-topics/performance/02-performance-tuning.md](advanced-topics/performance/02-performance-tuning.md) - 系统优化
 
 ### 参考章节
-- 📖 **[其他模块]**: [../../02-frontend/](../../02-frontend/) - 前端开发模块
-- 📖 **[其他模块]**: [../../03-devops/](../../03-devops/) - DevOps模块
-- 📖 **[共享资源]**: [../../shared-resources/](../../shared-resources/) - 文档标准和工具
+- 📖 **[其他模块]**: [../02-nextjs-frontend/](../02-nextjs-frontend/) - 前端开发模块
+- 📖 **[共享资源]**: [../shared-resources/](../shared-resources/) - 文档标准和工具
 
 ---
 

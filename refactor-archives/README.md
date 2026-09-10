@@ -3,48 +3,46 @@
 > **目录说明**: 本目录统一管理所有重构相关的文档，按状态和模块分类存放，作为项目演进的历史记录和参考依据。
 >
 > **归档原则**:
-> - **pending/**: 存放待执行的重构计划
-> - **completed/**: 存放已完成的重构（计划+日志）
-> - **retired/**: 存放已废弃的旧版计划（历史记录）
+> - **pending/**: 存放待执行的重构计划（当前为空）
+> - **completed/**: 存放已完成的重构（计划+日志+原始计划）
 
 ## 📁 目录结构
 
 ```
 refactor-archives/
 ├── 📖 README.md                      # 本文档 - 重构记录索引
-├── 📁 pending/                       # 待执行的重构计划
-│   └── 📄 02-NEXTJS-REFACTOR-PLAN.md  # Next.js模块重构计划 (改进版)
+├── 📁 pending/                       # 待执行的重构计划（当前为空）
 ├── 📁 completed/                     # 已完成的重构
-│   └── 📁 go-backend/                # Go Backend模块重构
-│       ├── 📄 2025-10-go-backend-refactor-plan.md
-│       └── 📄 2025-10-go-backend-refactor-log.md
-└── 📁 retired/                       # 已废弃的旧版计划
-    └── 📄 2025-10-original-nextjs-refactor-plan.md  # 原始Next.js计划
+│   ├── 📁 01-go-backend/             # Go Backend模块重构
+│   │   ├── 📄 2025-10-go-backend-refactor-plan.md
+│   │   └── 📄 2025-10-go-backend-refactor-log.md
+│   └── 📁 02-nextjs-frontend/        # Next.js Frontend模块重构
+│       ├── 📄 2025-10-nextjs-frontend-refactor-plan.md
+│       ├── 📄 2025-10-nextjs-frontend-refactor-plan-original.md
+│       └── 📄 2025-10-nextjs-frontend-refactor-log.md
+└── 📁 backups/                       # 重构前备份（按需创建）
 ```
 
 ## 📁 重构记录索引
 
 ### ✅ 已完成重构
 
-#### Go Backend 模块 (2025-10-24)
-- **重构计划**: [`completed/go-backend/2025-10-go-backend-refactor-plan.md`](completed/go-backend/2025-10-go-backend-refactor-plan.md)
-- **重构日志**: [`completed/go-backend/2025-10-go-backend-refactor-log.md`](completed/go-backend/2025-10-go-backend-refactor-log.md)
+#### 01 Go Backend 模块 (2025-10-24)
+- **重构计划**: [`completed/01-go-backend/2025-10-go-backend-refactor-plan.md`](completed/01-go-backend/2025-10-go-backend-refactor-plan.md)
+- **重构日志**: [`completed/01-go-backend/2025-10-go-backend-refactor-log.md`](completed/01-go-backend/2025-10-go-backend-refactor-log.md)
 - **主要成果**: 72个文件精简到42个 (41.7%减少)，建立双路径学习体系
+
+#### 02 Next.js Frontend 模块 (2025-10)
+- **重构计划**: [`completed/02-nextjs-frontend/2025-10-nextjs-frontend-refactor-plan.md`](completed/02-nextjs-frontend/2025-10-nextjs-frontend-refactor-plan.md)
+- **原始计划**: [`completed/02-nextjs-frontend/2025-10-nextjs-frontend-refactor-plan-original.md`](completed/02-nextjs-frontend/2025-10-nextjs-frontend-refactor-plan-original.md) (初始规划思路的记录)
+- **重构日志**: [`completed/02-nextjs-frontend/2025-10-nextjs-frontend-refactor-log.md`](completed/02-nextjs-frontend/2025-10-nextjs-frontend-refactor-log.md)
+- **主要成果**: 完成 Next.js 15 / React 19 模块的现代化重构，对齐 shared-resources 标准
 
 ### 🔄 计划中重构
 
-#### Next.js Frontend 模块
-- **重构计划**: [`pending/02-NEXTJS-REFACTOR-PLAN.md`](pending/02-NEXTJS-REFACTOR-PLAN.md)
-- **状态**: 📋 计划中，待执行
-- **说明**: 基于Go重构经验改进的严格差异化设计版本
-- **历史版本**: [`retired/2025-10-original-nextjs-refactor-plan.md`](retired/2025-10-original-nextjs-refactor-plan.md) (原始计划已废弃)
-
-### 📜 已废弃计划
-
-#### Next.js 原始重构计划 (2025-10)
-- **原始计划**: [`retired/2025-10-original-nextjs-refactor-plan.md`](retired/2025-10-original-nextjs-refactor-plan.md)
-- **状态**: 🏆 功成身退，已被改进版本替代
-- **历史价值**: 记录了初始的规划思路和问题分析
+当前无待执行的重构计划。后续模块（03-11）如需重构，请参照
+[`../shared-resources/standards/module-structure-guide.md`](../shared-resources/standards/module-structure-guide.md)
+制定计划并放入 `pending/` 目录。
 
 ## 🎯 归档标准
 
@@ -89,8 +87,9 @@ refactor-archives/
 
 ## 🔄 访问相关文档
 
-### 📖 当前重构计划
-- [`pending/02-NEXTJS-REFACTOR-PLAN.md`](pending/02-NEXTJS-REFACTOR-PLAN.md) - Next.js模块重构计划
+### 📖 已归档重构记录
+- [`completed/01-go-backend/`](completed/01-go-backend/) - Go Backend模块重构记录
+- [`completed/02-nextjs-frontend/`](completed/02-nextjs-frontend/) - Next.js Frontend模块重构记录
 
 ### 📊 重构标准
 - [`../shared-resources/standards/module-structure-guide.md`](../shared-resources/standards/module-structure-guide.md) - 模块结构设计指南

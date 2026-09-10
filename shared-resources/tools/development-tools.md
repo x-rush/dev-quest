@@ -49,17 +49,6 @@
 - **ESLint + Prettier** - 代码质量
 - **Tailwind CSS IntelliSense** - CSS智能提示
 
-### Taro 小程序开发工具
-- **Taro CLI** - Taro 命令行工具 (`@tarojs/cli`)
-- **各平台开发者工具**
-  - **微信开发者工具** - 微信小程序官方IDE
-  - **抖音开发者工具** - 抖音小程序开发环境
-  - **支付宝小程序开发者工具** - 支付宝小程序IDE
-  - **百度智能小程序开发者工具** - 百度小程序开发
-  - **快应用调试器** - 快应用联盟调试工具
-- **Taro UI 组件库** - `@tarojs/taro-ui`
-- **Taro Redux** - `@tarojs/redux`
-
 ### React Native 三端开发工具
 - **React Native CLI** - `react-native-cli`
 - **Expo CLI** - Expo开发工具链
@@ -206,7 +195,6 @@
 - **Go官方文档** - golang.org
 - **React文档** - react.dev
 - **Next.js文档** - nextjs.org/docs
-- **Taro官方文档** - taro-docs.jd.com
 - **React Native文档** - reactnative.dev
 - **华为开发者文档** - developer.harmonyos.com
 
@@ -236,18 +224,6 @@ npm install -g @typescript-eslint/cli
 - Vite (快速构建)
 - PostCSS (CSS处理)
 - Tailwind CSS (样式框架)
-```
-
-### Taro 小程序开发工具链
-```bash
-# 安装Taro CLI
-npm install -g @tarojs/cli
-
-# 平台工具下载
-- 微信开发者工具 (wechatdevtool)
-- 支付宝小程序开发者工具
-- 抖音开发者工具
-- 快应用调试器
 ```
 
 ### React Native 移动开发工具链
@@ -308,12 +284,6 @@ npm install -g @react-native-community/cli
 - [ ] **iOS开发**: Xcode (macOS用户)
 - [ ] **鸿蒙开发**: DevEco Studio (可选)
 - [ ] **调试工具**: Flipper / Reactotron
-
-### 小程序开发环境
-- [ ] **Taro CLI**: @tarojs/cli 最新版本
-- [ ] **微信开发者工具**: 微信小程序官方IDE
-- [ ] **支付宝工具**: 支付宝小程序开发者工具
-- [ ] **抖音工具**: 抖音小程序开发者工具
 
 ---
 

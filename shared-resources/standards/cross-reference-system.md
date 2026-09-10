@@ -195,7 +195,7 @@ dev-quest/
 
 **相关模块**:
 - 🌐 **前端开发**: [Next.js教程](../02-nextjs-frontend/README.md)
-- 📱 **小程序开发**: [Taro教程](../03-taro-miniprogram/README.md)
+- 📊 **数据层**: [TanStack教程](../03-tanstack-stack/README.md)
 ```
 
 #### 具体文档引用模板

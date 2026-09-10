@@ -2,14 +2,14 @@
 
 > **难度**: ⭐⭐⭐⭐⭐ | **学习方式**: MVP优先+原生为辅 | **目标**: 三端原生App全覆盖
 >
-> **简介**: 基于Go+Next.js+Taro的全栈基础，学习React Native跨平台原生开发，按照Android→鸿蒙→iOS的优先级，实现"React Native为主，原生为辅"的架构，快速验证MVP并占领移动端市场。
+> **简介**: 基于Go+Next.js的全栈基础，学习React Native跨平台原生开发，按照Android→鸿蒙→iOS的优先级，实现"React Native为主，原生为辅"的架构，快速验证MVP并占领移动端市场。
 
 ## 🎯 学习策略总览
 
 ### 平台优先级 (基于设备约束和市场策略)
 ```mermaid
 graph TD
-    A[Go+Next.js+Taro基础完成] --> B[Android优先级🥇]
+    A[Go+Next.js基础完成] --> B[Android优先级🥇]
     A --> C[鸿蒙优先级🥈]
     A --> D[iOS优先级🥉]
 
