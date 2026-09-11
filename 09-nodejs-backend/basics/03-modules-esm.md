@@ -152,7 +152,7 @@ import { config } from "#config";
 
 1. **内置模块**：`node:fs`、`path` 等直接命中（建议始终加 `node:` 前缀）
 2. **相对/绝对路径**：`./lib.js`——**ESM 必须写全扩展名**（不像 CJS 可省略）
-3. **裸说明符**（bare specifier）：如 `express`，沿当前目录逐级向上找 `node_modules/<pkg>`，读取其 `exports` 字段定位入口
+3. **裸说明符**（bare specifier）：如 `hono`，沿当前目录逐级向上找 `node_modules/<pkg>`，读取其 `exports` 字段定位入口
 
 目录索引行为差异：
 

@@ -1,6 +1,6 @@
 # 开发工具链：pnpm、tsx/nodemon 与 ESLint + Prettier
 
-> **文档简介**: 配置一套顺手的 Node.js 22 开发工作流——pnpm 包管理、tsx 热重载运行 TypeScript、ESLint 9 + Prettier 统一代码风格
+> **文档简介**: 配置一套顺手的 Node.js 24 开发工作流——pnpm 包管理、tsx 热重载运行 TypeScript、ESLint 9 + Prettier 统一代码风格
 >
 > **目标读者**: 开始搭建个人/团队 Node 项目的初级后端开发者
 >
@@ -33,7 +33,7 @@ pnpm 默认内容寻址存储省磁盘、安装快、依赖结构严格（杜绝
 {
   "name": "todo-api",
   "type": "module",
-  "engines": { "node": ">=22" },
+  "engines": { "node": ">=24" },
   "scripts": {
     "dev": "tsx watch src/server.ts",        // 开发：热重载
     "build": "tsc",                          // 构建：输出 dist/
@@ -51,7 +51,7 @@ pnpm 默认内容寻址存储省磁盘、安装快、依赖结构严格（杜绝
 常用命令对照：
 
 ```bash
-pnpm add express            # 添加生产依赖
+pnpm add hono               # 添加生产依赖
 pnpm add -D vitest          # 添加开发依赖
 pnpm up --latest            # 升级全部依赖
 pnpm why <pkg>              # 追溯某个依赖为什么被安装
@@ -68,7 +68,7 @@ pnpm dev                    # 即 tsx watch src/server.ts
 ```
 
 ```jsonc
-// tsconfig.json 关键项：Node 22 原生支持 ESM，模块策略选 nodenext
+// tsconfig.json 关键项：Node 24 原生支持 ESM，模块策略选 nodenext
 {
   "compilerOptions": {
     "target": "es2023",
@@ -145,13 +145,13 @@ VS Code 中用 `JavaScript Debug Terminal` 直接 `pnpm dev`，断点即可命�
 ## ✅ 最佳实践与陷阱
 
 - ✅ 把 `check`（typecheck + lint）挂到 CI，本地依赖编辑器集成
-- ✅ `engines.node` 锁定 22 LTS，配合 `.npmrc` 的 `engine-strict=true`
+- ✅ `engines.node` 锁定 24 LTS（当前 Active LTS；22 已进入 Maintenance，新项目不要选），配合 `.npmrc` 的 `engine-strict=true`
 - ❌ 用 `ts-node`——维护停滞且慢，新项目一律 tsx
 - ❌ ESLint 与 Prettier 各自管理格式导致互相打架——加 `eslint-config-prettier`
 
 ## 🔗 相关文档
 
-- 📄 [Node.js 22 开发环境搭建](../basics/01-environment-setup.md) — 工具链的前置安装
+- 📄 [Node.js 24 开发环境搭建](../basics/01-environment-setup.md) — 工具链的前置安装
 - 📖 [Node 一行式速查](../reference/quick-references/01-node-cheatsheet.md) — CLI 与脚本速查
 - 📖 [常见故障排除](../reference/quick-references/02-troubleshooting.md) — 工具链疑难杂症
 - 📄 [单元测试（Vitest）](../testing/01-unit-testing.md) — 工具链的下一站

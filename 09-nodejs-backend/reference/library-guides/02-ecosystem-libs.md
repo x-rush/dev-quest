@@ -25,8 +25,8 @@
 | 日志 | **pino** | winston | 极低开销、JSON 结构化 |
 | Redis 客户端 | ioredis | node-redis | 功能全、连接池成熟 |
 | 队列 | **BullMQ** | Graphile Worker | 基于 Redis 的延迟/重试/优先级队列 |
-| 出站 HTTP | 全局 fetch | axios、got、ky | Node 22 原生支持，无需依赖 |
-| 限流 | rate-limiter-flexible | express-rate-limit | 多存储后端、分布式可用 |
+| 出站 HTTP | 全局 fetch | axios、got、ky | Node 24 原生支持，无需依赖 |
+| 限流 | rate-limiter-flexible | hono-rate-limiter（社区） | 多存储后端、分布式可用 |
 
 ## 1. Zod：Schema 校验与类型推导
 
@@ -130,9 +130,12 @@ logger.error({ err }, "支付回调失败");
 const log = logger.child({ module: "billing" });
 log.info("发票已生成");    // {"module":"billing","msg":"发票已生成",...}
 
-// Express 集成
-import { pinoHttp } from "pino-http";
-app.use(pinoHttp({ logger }));   // 处理器内可用 req.log.info(...)
+// Hono 集成：中间件把子 logger 挂进 Context（完整 request-log 实现见 deployment/03-observability.md）
+app.use(async (c, next) => {
+  c.set("log", logger.child({ requestId: c.req.header("x-request-id") ?? crypto.randomUUID() }));
+  await next();
+});
+// 处理器内：c.get("log").info(...)
 ```
 
 ### 陷阱
@@ -168,8 +171,8 @@ await emailQueue.upsertJobRepeatable("daily-report", {}, { pattern: "0 9 * * *" 
 
 ## 5. 其他值得一提的库
 
-- **node:test**：Node 22 内置测试框架已覆盖 mock/计时器模拟/并发，零依赖起步首选；复杂快照场景再用 Vitest/Jest
-- **helmet / arctic**：Express 安全响应头一行接入；OAuth2/OIDC 客户端
+- **node:test**：Node 24 内置测试框架已覆盖 mock/计时器模拟/并发，零依赖起步首选；复杂快照场景再用 Vitest/Jest
+- **hono/secure-headers / arctic**：Hono 内置安全响应头一行接入；OAuth2/OIDC 客户端
 
 ---
 

@@ -100,7 +100,7 @@ process.exit(1);                     // 立即退出（有未刷写输出可能�
 process.exitCode = 1;                // 更温和：让进程自然结束后以此码退出
 process.pid;
 process.cwd();                       // 启动目录（≠ 模块所在目录）
-process.version;                     // v22.x.x
+process.version;                     // v24.x.x
 process.memoryUsage();               // rss / heapUsed / external
 process.hrtime.bigint();             // 高精度计时
 process.on("SIGINT", handler);       // Ctrl+C / 信号处理

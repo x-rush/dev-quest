@@ -1,6 +1,6 @@
 # Node + TypeScript 常用模式
 
-> **文档简介**: Node 后端开发中高频的 TypeScript 模式——泛型请求处理器、类型安全环境变量、Express 类型扩展、依赖注入与类型守卫
+> **文档简介**: Node 后端开发中高频的 TypeScript 模式——zValidator 类型收窄、类型安全环境变量、Hono 类型扩展、依赖注入与类型守卫
 
 > **目标读者**: 有 TS 基础、想把 Node 后端代码类型写"严"的开发者
 
@@ -43,60 +43,47 @@ export type Env = z.infer<typeof EnvSchema>;
 - `process.env.X` 类型是 `string | undefined`，散落在代码各处等于放弃检查——**只在一个模块读 env**
 - `z.coerce.number()` 注意：`""` 会变成 0，空值场景需先判空
 
-## 2. 泛型请求处理器（类型安全校验中间件）
+## 2. zValidator：schema 即类型来源
 
 ### 定义
-用泛型把"schema 推导出的数据类型"注入 `req`，让 handler 拿到精确类型。
+`@hono/zod-validator` 把 Zod schema 挂进路由，校验通过后 `c.req.valid()` 直接返回精确类型——不再需要手写"泛型校验中间件"注入类型。
 
 ### 语法与示例
 
 ```ts
-import type { NextFunction, Request, Response } from "express";
-import type { z } from "zod";
+import { zValidator } from "@hono/zod-validator";
+import { z } from "zod";
 
-function validateBody<T extends z.ZodType>(schema: T) {
-  return (
-    req: Request<unknown, unknown, z.infer<T>>,   // 第三泛型参即 body 类型
-    res: Response,
-    next: NextFunction,
-  ) => {
-    const result = schema.safeParse(req.body);
-    if (result.success) {
-      req.body = result.data;
-      next();
-    } else {
-      next({ status: 400, code: "VALIDATION_ERROR", issues: result.error.issues });
-    }
-  };
-}
+const CreateTaskSchema = z.object({
+  title: z.string().min(1).max(100),
+  status: z.enum(["todo", "doing", "done"]).default("todo"),
+});
 
-// handler 中 req.body 自动收窄为 schema 类型
-app.post("/tasks", validateBody(CreateTaskSchema), (req, res) => {
-  const { title, status } = req.body;   // title: string; status: "todo"|"doing"|"done"
-  res.json({ title, status });
+app.post("/tasks", zValidator("json", CreateTaskSchema), (c) => {
+  const data = c.req.valid("json"); // 类型 = z.infer<typeof CreateTaskSchema>，无需断言
+  return c.json(data, 201);
 });
 ```
 
 ### 陷阱
-- Express 的 `Request` 泛型参数依次是 `Params, ResBody, ReqBody, ReqQuery`——扩展错了位置类型就形同虚设
-- 校验中间件里 `next(err)` 传对象而非 Error 实例时，错误中间件要兼容普通对象
+- 校验失败默认返回 400 JSON；要定制响应格式，给 `zValidator` 传第三个 hook 回调，在其中返回自定义 `c.json(..., 422)`
+- `c.req.valid("json")` 的键必须与 `zValidator` 第一参一致（`"json"` / `"query"` / `"param"`），取错位置拿不到校验结果
+- 不想引入中间件时，可在处理器里 `safeParse` 后把 `ZodError` 抛给 `app.onError` 统一输出（错误出口设计见 [错误处理](../../basics/06-error-handling.md)）
 
-## 3. 扩展 Express 类型声明
+## 3. 扩展 Hono 的 ContextVariableMap
 
 ### 定义
-用模块声明合并给 `req.user` 等自定义字段正式类型。
+用模块声明合并给 `c.set` / `c.get` 的自定义变量正式类型——Hono 版的"扩展 Request"。
 
 ### 语法与示例
 
 ```ts
-// types/express.d.ts（需包含在 tsconfig 中）
+// types/hono.d.ts（需包含在 tsconfig 中）
 import type { User } from "../src/auth.js";
 
-declare global {
-  namespace Express {
-    interface Request {
-      user?: User;
-    }
+declare module "hono" {
+  interface ContextVariableMap {
+    auth?: User;
   }
 }
 
@@ -105,14 +92,15 @@ export {};
 
 ```ts
 // 使用处自动获得类型
-app.get("/me", requireAuth, (req, res) => {
-  res.json(req.user);   // User | undefined，requireAuth 保证非空
+app.get("/me", requireAuth, (c) => {
+  return c.json(c.get("auth"));   // User | undefined，requireAuth 保证非空
 });
 ```
 
 ### 陷阱
-- `declare global` 的文件必须至少有一个 `import/export`，否则变成脚本文件不生效
-- 类型上 `user?: User` 的可空性要靠运行时中间件保证，别撒谎声明为必有值
+- 对 `hono` 模块做 `declare module` 合并即可，**不需要** `declare global`——`ContextVariableMap` 是模块内接口
+- 类型上 `auth?: User` 的可空性要靠运行时中间件保证，别撒谎声明为必有值
+- `c.set` 的变量在同一请求作用域内对后续中间件与处理器可见，跨请求不共享
 
 ## 4. 类型守卫与错误处理
 
@@ -135,14 +123,14 @@ export function isHttpError(e: unknown): e is HttpError {
   return e instanceof HttpError;
 }
 
-// 错误中间件中使用
-const errorHandler: ErrorRequestHandler = (err, _req, res, _next) => {
+// 错误出口中使用（app.onError 全站唯一出口，见 [错误处理](../../basics/06-error-handling.md)）
+app.onError((err, c) => {
   if (isHttpError(err)) {
-    res.status(err.status).json({ error: { code: err.code } });
-    return;
+    return c.json({ error: { code: err.code } }, err.status);
   }
-  res.status(500).json({ error: { code: "INTERNAL_ERROR" } });
-};
+  console.error(err); // 未知错误记日志，响应不泄露内部细节
+  return c.json({ error: { code: "INTERNAL_ERROR" } }, 500);
+});
 
 // Zod 附带的守卫
 if (result.error instanceof z.ZodError) { /* 校验错误分支 */ }
@@ -156,6 +144,6 @@ if (result.error instanceof z.ZodError) { /* 校验错误分支 */ }
 
 ## 🔗 相关文档
 
-- 📄 **[路由与中间件](../../basics/05-http-routing.md)** — 校验中间件的教程式讲解
+- 📄 **[路由与中间件](../../basics/05-http-routing.md)** — zValidator 的教程式讲解
 - 📄 **[现代 JS 语法速查](./01-js-modern-syntax.md)** — 类型守卫与判空语法
 - 📄 **[第一个项目](../../basics/08-first-project.md)** — 本页模式的完整落地实例

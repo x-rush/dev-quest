@@ -28,7 +28,7 @@
 
 ```
 src/
-├── app.ts            # Express 组装（无监听）
+├── app.ts            # Hono 组装（无监听）
 ├── server.ts         # 监听 + 生命周期管理
 ├── config/env.ts     # 启动时环境变量校验
 ├── lib/              # prisma.ts / redis.ts / logger.ts
@@ -41,7 +41,7 @@ src/
 
 ```typescript
 // src/config/env.ts —— 用 Zod 让"缺配置"在部署的第 1 秒暴露
-import { z } from 'zod';
+import { z, flattenError } from 'zod';
 
 const envSchema = z.object({
   NODE_ENV: z.enum(['development', 'test', 'production']),
@@ -54,7 +54,7 @@ const envSchema = z.object({
 
 const parsed = envSchema.safeParse(process.env);
 if (!parsed.success) {
-  console.error('环境变量校验失败:', parsed.error.flatten().fieldErrors);
+  console.error('环境变量校验失败:', flattenError(parsed.error).fieldErrors);
   process.exit(1); // 宁可不启动，不要带病运行
 }
 
@@ -67,12 +67,14 @@ K8s/Docker 滚动更新时发 SIGTERM，服务必须：停止接新请求 → �
 
 ```typescript
 // src/server.ts
-import app from './app.js';
+import { serve } from '@hono/node-server';
+import { createApp } from './app.js';
 import { env } from './config/env.js';
 import { prisma } from './lib/prisma.js';
 import { redis } from './lib/redis.js';
 
-const server = app.listen(env.PORT);
+// serve() 返回 Node 原生 http.Server，后续 server.close() 沿用原生 API
+const server = serve({ fetch: createApp().fetch, port: env.PORT });
 
 const shutdown = async (signal: string) => {
   console.log(`收到 ${signal}，开始优雅关闭`);
@@ -103,29 +105,40 @@ process.on('SIGINT', () => void shutdown('SIGINT'));   // Ctrl+C
 ## 4. 限流与防护
 
 ```typescript
-// src/middleware/rate-limit.ts —— Redis 支撑的多实例全局限流
-import rateLimit from 'express-rate-limit';
-import { RedisStore } from 'rate-limit-redis';
+// src/middleware/rate-limit.ts —— Redis 固定窗口限流：计数存 Redis，多实例共享同一配额
+import type { MiddlewareHandler } from 'hono';
+import { getConnInfo } from '@hono/node-server/conninfo';
 import { redis } from '../lib/redis.js';
 
-export const apiLimiter = rateLimit({
-  windowMs: 60_000,           // 统计窗口 1 分钟
-  limit: 120,                 // 单 IP 每窗口 120 次
-  standardHeaders: 'draft-8', // 返回 RateLimit-* 标准响应头
-  legacyHeaders: false,
-  // 内存存储在多实例下各算各的，生产必须换 Redis
-  store: new RedisStore({ sendCommand: (...args: string[]) => redis.sendCommand(args) }),
-});
+export function rateLimit(opts: { windowSec: number; limit: number }): MiddlewareHandler {
+  return async (c, next) => {
+    const ip = getConnInfo(c).remote?.address ?? 'unknown';
+    const bucket = Math.floor(Date.now() / (opts.windowSec * 1000));
+    const key = `rl:${ip}:${bucket}`;
+
+    const count = await redis.incr(key);
+    if (count === 1) await redis.expire(key, opts.windowSec);
+
+    c.header('RateLimit-Limit', String(opts.limit));
+    c.header('RateLimit-Remaining', String(Math.max(0, opts.limit - count)));
+    if (count > opts.limit) {
+      return c.json({ error: { code: 'RATE_LIMITED' } }, 429);
+    }
+    await next();
+  };
+}
 
 // 认证接口单独收紧：防暴力破解
-export const authLimiter = rateLimit({ windowMs: 15 * 60_000, limit: 10 });
+export const authLimiter = rateLimit({ windowSec: 15 * 60, limit: 10 });
 ```
 
 ```typescript
 // src/app.ts 组装
-app.use('/api', apiLimiter);
+app.use('/api/*', rateLimit({ windowSec: 60, limit: 120 })); // 单 IP 每分钟 120 次
 app.use('/auth/login', authLimiter);
 ```
+
+> 社区也有 hono-rate-limiter 等现成封装，思路相同；自写的价值在于限流键、窗口与响应格式完全可控。
 
 ## 5. 可观测性三件套
 
@@ -138,13 +151,13 @@ export const logger = pino({
 });
 
 // 探针区分 liveness 与 readiness：
-app.get('/livez', (_req, res) => res.json({ status: 'ok' }));            // 进程活着就 200
-app.get('/readyz', async (_req, res) => {                                 // 依赖就绪才 200
+app.get('/livez', (c) => c.json({ status: 'ok' }));            // 进程活着就 200
+app.get('/readyz', async (c) => {                               // 依赖就绪才 200
   try {
     await prisma.$queryRaw`SELECT 1`;
-    res.json({ status: 'ready' });
+    return c.json({ status: 'ready' });
   } catch {
-    res.status(503).json({ status: 'db-down' }); // 未就绪 → 编排摘除流量
+    return c.json({ status: 'db-down' }, 503); // 未就绪 → 编排摘除流量
   }
 });
 ```

@@ -32,20 +32,20 @@ services（业务层）   ← 业务规则：这里承载产品价值
 repositories（数据层）← 持久化知识：Prisma 查询、缓存读写
 ```
 
-**核心纪律**：下层不知道上层的存在。service 里出现 `res.json` 就是分层泄漏的第一信号。
+**核心纪律**：下层不知道上层的存在。service 里出现 `c.json` 这类 HTTP 响应调用就是分层泄漏的第一信号。
 
 为什么值得付出这个约束？
 
-- **可测试**：业务层不感知 Express，单元测试不需要 HTTP（见 [`../../testing/01-unit-testing.md`](../../testing/01-unit-testing.md)）
+- **可测试**：业务层不感知任何 Web 框架，单元测试不需要 HTTP（见 [`../../testing/01-unit-testing.md`](../../testing/01-unit-testing.md)）
 - **可替换**：换 ORM、换传输协议（REST→gRPC）时业务层不动
 - **可定位**：Bug 的层级即修复的层级，减少"全文件搜索"式排障
 
 ```typescript
 // 接口层：薄——只做翻译
-router.post('/orders', async (req, res) => {
-  const input = createOrderSchema.parse(req.body);
-  const order = await orderService.create(input, req.auth!.sub);
-  res.status(201).json(order);
+ordersApp.post('/orders', async (c) => {
+  const input = createOrderSchema.parse(await c.req.json());
+  const order = await orderService.create(input, c.get('auth')!.sub);
+  return c.json(order, 201);
 });
 
 // 业务层：厚——规则都在这里

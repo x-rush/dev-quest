@@ -1,6 +1,6 @@
 # 容器化部署：多阶段构建
 
-> **文档简介**: 用多阶段 Dockerfile 把 Node.js 22 服务打成精简、安全的生产镜像——依赖分层缓存、Prisma 生成、非 root 运行与健康检查一步到位
+> **文档简介**: 用多阶段 Dockerfile 把 Node.js 24 服务打成精简、安全的生产镜像——依赖分层缓存、Prisma 生成、非 root 运行与健康检查一步到位
 >
 > **目标读者**: 准备把 API 服务交付容器环境的中级后端开发者
 >
@@ -27,14 +27,14 @@
 ```dockerfile
 # Dockerfile
 # ---- 阶段 1：依赖解析（仅声明依赖，最能命中缓存）----
-FROM node:22-alpine AS deps
+FROM node:24-alpine AS deps
 WORKDIR /app
 RUN corepack enable
 COPY package.json pnpm-lock.yaml ./
 RUN pnpm install --frozen-lockfile
 
 # ---- 阶段 2：构建（TypeScript 编译 + Prisma 生成）----
-FROM node:22-alpine AS build
+FROM node:24-alpine AS build
 WORKDIR /app
 RUN corepack enable
 COPY --from=deps /app/node_modules ./node_modules
@@ -43,7 +43,7 @@ COPY . .
 RUN pnpm exec prisma generate && pnpm run build
 
 # ---- 阶段 3：生产运行（只带生产依赖与编译产物）----
-FROM node:22-alpine AS runner
+FROM node:24-alpine AS runner
 WORKDIR /app
 ENV NODE_ENV=production
 
@@ -151,7 +151,7 @@ docker image ls | grep api        # 检查镜像体积
 - ✅ 先 COPY 依赖清单再 `pnpm install`——源码改动不触发依赖重装
 - ✅ `--frozen-lockfile` 锁定依赖树，保证可复现构建
 - ❌ 在 Dockerfile 里 `COPY . .` 到 deps 阶段——任何文件改动都打碎缓存
-- ❌ 用 `latest` 基础镜像——用 `node:22-alpine` 明确锁定
+- ❌ 用 `latest` 基础镜像——用 `node:24-alpine` 明确锁定
 
 ## 🔗 相关文档
 

@@ -1,6 +1,6 @@
 # CI/CD 流水线：GitHub Actions
 
-> **文档简介**: 为 Node.js 22 + pnpm 项目搭建完整的 GitHub Actions 流水线——测试门禁、Docker 镜像构建推送与自动化部署，附带 pnpm 缓存加速实践
+> **文档简介**: 为 Node.js 24 + pnpm 项目搭建完整的 GitHub Actions 流水线——测试门禁、Docker 镜像构建推送与自动化部署，附带 pnpm 缓存加速实践
 >
 > **目标读者**: 已完成容器化、需要自动化发布的中级后端开发者
 >
@@ -28,7 +28,7 @@
 ci.yml（PR 触发）:
   ① check   — typecheck + lint        （~30s，并行）
   ② unit    — Vitest 单元测试          （~1min，并行）
-  ③ integration — Supertest 集成测试   （带 PostgreSQL service）
+  ③ integration — app.request() 集成测试（带 PostgreSQL service）
 
 release.yml（打 tag 触发）:
   ④ 复用 ci 检查 → 构建 Docker 镜像 → 推送 registry → 触发部署
@@ -58,7 +58,7 @@ jobs:
         with: { version: 9 }
       - uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version: 24
           cache: pnpm
       - run: pnpm install --frozen-lockfile
 
@@ -72,7 +72,7 @@ jobs:
       - uses: pnpm/action-setup@v4
         with: { version: 9 }
       - uses: actions/setup-node@v4
-        with: { node-version: 22, cache: pnpm }
+        with: { node-version: 24, cache: pnpm }
       - run: pnpm install --frozen-lockfile
       - run: pnpm test:cov   # 覆盖率低于阈值自动失败
 
@@ -101,7 +101,7 @@ jobs:
       - uses: pnpm/action-setup@v4
         with: { version: 9 }
       - uses: actions/setup-node@v4
-        with: { node-version: 22, cache: pnpm }
+        with: { node-version: 24, cache: pnpm }
       - run: pnpm install --frozen-lockfile
       - run: pnpm exec prisma migrate deploy
       - run: pnpm exec vitest run tests/

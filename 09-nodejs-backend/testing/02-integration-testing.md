@@ -1,10 +1,10 @@
-# 集成测试：Supertest + 测试数据库
+# 集成测试：app.request() + 测试数据库
 
-> **文档简介**: 让 API 在"真实"环境中被验证——Supertest 直连 Express app、独立 PostgreSQL 测试库 + 迁移播种，一次运行覆盖路由-校验-数据库全链路
->
+> **文档简介**: 让 API 在"真实"环境中被验证——Hono 内置测试客户端 `app.request()` 直连装配好的 app、独立 PostgreSQL 测试库 + 迁移播种，一次运行覆盖路由-校验-数据库全链路
+
 > **目标读者**: 已有单元测试基础、需要验证模块协作的中级后端开发者
->
-> **前置知识**: [单元测试](01-unit-testing.md)、[app 与 server 分离](../frameworks/01-express-basics.md)
+
+> **前置知识**: [单元测试](01-unit-testing.md)、[app 与 server 分离](../frameworks/01-hono-basics.md)
 
 ## 📚 文档元数据
 
@@ -13,28 +13,34 @@
 | **模块** | `09-nodejs-backend` |
 | **象限** | 操作指南 |
 | **难度** | ⭐⭐ |
-| **标签** | `#supertest` `#integration-testing` `#prisma` `#test-db` |
+| **标签** | `#app-request` `#integration-testing` `#prisma` `#test-db` |
 | **更新日期** | `2026年9月` |
 
 ## 🎯 本节目标
 
-- 用 Supertest 对 app 发起真实 HTTP 调用（不监听端口）
+- 用 `app.request()` 对 app 发起真实 HTTP 调用（不监听端口、零额外依赖）
 - 搭建隔离的测试数据库并自动迁移
 - 在用例间保持数据干净（截断策略）
 
 ## 1. 为什么 app/server 分离是集成测试的前提
 
 ```typescript
-// tests/helpers/app.ts —— Supertest 直接接收 Express app 实例，无需真实端口
-import request from 'supertest';
-import app from '../../src/app.js';
+// tests/helpers/app.ts —— 直接复用装配好的 Hono 实例，无需真实端口
+import { createApp } from '../../src/app.js';
 
-export const api = () => request(app); // 每个用例创建独立请求代理
+export const app = createApp();
+
+/** JSON 请求助手：app.request() 的薄封装，省去重复的 header/body 拼装 */
+export function jsonRequest(path: string, method = 'GET', body?: unknown) {
+  return app.request(path, {
+    method,
+    headers: { 'Content-Type': 'application/json' },
+    body: body === undefined ? undefined : JSON.stringify(body),
+  });
+}
 ```
 
-```bash
-pnpm add -D supertest && pnpm add -D @types/supertest
-```
+与 supertest 不同，`app.request()` 是 Hono 内置能力：不需要 `pnpm add -D supertest`，也不需要把 app 包一层代理——它返回的就是 Web 标准 `Response`，断言方式与 fetch 完全一致。
 
 ## 2. 隔离的测试数据库
 
@@ -88,7 +94,7 @@ export async function resetDb() {
 ```typescript
 // tests/auth-api.test.ts —— 完整的注册-登录链路集成测试
 import { describe, it, expect, beforeEach } from 'vitest';
-import { api } from './helpers/app.js';
+import { jsonRequest } from './helpers/app.js';
 import { resetDb } from './helpers/db.js';
 
 beforeEach(resetDb);
@@ -97,28 +103,25 @@ describe('POST /auth/register + /auth/login', () => {
   it('注册后可用相同凭据登录', async () => {
     const email = 'user@example.com'; // 合成数据，非真实邮箱
 
-    const reg = await api().post('/auth/register')
-      .send({ email, password: 's3curePass!' });
+    const reg = await jsonRequest('/auth/register', 'POST', { email, password: 's3curePass!' });
     expect(reg.status).toBe(201);
 
-    const login = await api().post('/auth/login')
-      .send({ email, password: 's3curePass!' });
+    const login = await jsonRequest('/auth/login', 'POST', { email, password: 's3curePass!' });
     expect(login.status).toBe(200);
-    expect(login.body.accessToken).toBeDefined();
+    expect(((await login.json()) as { accessToken: string }).accessToken).toBeDefined();
     // refresh token 必须在 HttpOnly cookie 里，而不是响应体
-    expect(login.headers['set-cookie']?.[0]).toContain('HttpOnly');
+    expect(login.headers.get('set-cookie')).toContain('HttpOnly');
   });
 
   it('重复邮箱返回 400', async () => {
     const body = { email: 'dup@example.com', password: 's3curePass!' };
-    await api().post('/auth/register').send(body);
-    const again = await api().post('/auth/register').send(body);
+    await jsonRequest('/auth/register', 'POST', body);
+    const again = await jsonRequest('/auth/register', 'POST', body);
     expect(again.status).toBe(400);
   });
 
   it('错误密码与不存在邮箱返回一致的 401', async () => {
-    const wrong = await api().post('/auth/login')
-      .send({ email: 'nobody@example.com', password: 'whatever1!' });
+    const wrong = await jsonRequest('/auth/login', 'POST', { email: 'nobody@example.com', password: 'whatever1!' });
     expect(wrong.status).toBe(401);
   });
 });
@@ -128,6 +131,9 @@ describe('POST /auth/register + /auth/login', () => {
 
 ```typescript
 // tests/todos-api.test.ts
+import { describe, it, expect } from 'vitest';
+import { jsonRequest } from './helpers/app.js';
+
 describe('GET /todos', () => {
   it('分页与过滤生效', async () => {
     // 播种：直接写库比走 API 快
@@ -138,24 +144,27 @@ describe('GET /todos', () => {
       ],
     });
 
-    const res = await api().get('/todos?status=done');
+    const res = await jsonRequest('/todos?status=done');
+    const body = (await res.json()) as { items: Array<{ title: string }> };
     expect(res.status).toBe(200);
-    expect(res.body.items).toHaveLength(1);
-    expect(res.body.items[0].title).toBe('b');
+    expect(body.items).toHaveLength(1);
+    expect(body.items[0].title).toBe('b');
   });
 
   it('Zod 校验失败返回 422 与字段级错误', async () => {
-    const res = await api().post('/todos').send({ title: '' });
+    const res = await jsonRequest('/todos', 'POST', { title: '' });
     expect(res.status).toBe(422);
-    expect(res.body.error).toMatch(/校验失败/);
+    expect(((await res.json()) as { error: string }).error).toMatch(/校验失败/);
   });
 
   it('不存在的 id 返回 404', async () => {
-    const res = await api().get('/todos/nonexistent');
+    const res = await jsonRequest('/todos/nonexistent');
     expect(res.status).toBe(404);
   });
 });
 ```
+
+注意 `Response` 的 body 是流式的——`json()` 只能消费一次，需要复用时先存变量。
 
 ## ✅ 最佳实践与陷阱
 

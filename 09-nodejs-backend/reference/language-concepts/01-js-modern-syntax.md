@@ -165,7 +165,7 @@ obj.flag ||= true;       // 假值时赋值
 ```ts
 arr.at(-1);                                 // 末尾元素
 arr.findLast(x => x.ok);                    // 反向查找
-await Array.fromAsync(gen);                 // 异步迭代器转数组（Node 22 稳定）
+await Array.fromAsync(gen);                 // 异步迭代器转数组（Node 22+）
 Object.groupBy(users, u => u.role);         // ES2024 分组
 Object.entries(obj) / Object.fromEntries(pairs);
 ```

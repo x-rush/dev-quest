@@ -1,10 +1,10 @@
 # 生态集成：Prisma + PostgreSQL 与 Redis
 
-> **文档简介**: 手把手把 Prisma ORM 接入 PostgreSQL、把 Redis 作为缓存层接入 Express 5 服务，覆盖连接管理、事务与迁移的工程化实践
+> **文档简介**: 手把手把 Prisma ORM 接入 PostgreSQL、把 Redis 作为缓存层接入 Hono 4 服务，覆盖连接管理、事务与迁移的工程化实践
 >
 > **目标读者**: 已会写基础路由、需要接入持久化与缓存的中级后端开发者
 >
-> **前置知识**: SQL 基础、[Express 基础](01-express-basics.md)、环境变量管理
+> **前置知识**: SQL 基础、[Hono 基础](01-hono-basics.md)、环境变量管理
 
 ## 📚 文档元数据
 
@@ -22,7 +22,7 @@
 
 - 建立单例化的 Prisma Client，正确处理连接生命周期
 - 掌握迁移命令与交互式事务
-- 用 ioredis 实现带 TTL 的读缓存并接入 Express
+- 用 ioredis 实现带 TTL 的读缓存并接入 Hono 路由
 
 ## 1. Prisma 接入 PostgreSQL
 
@@ -140,10 +140,10 @@ export async function updatePost(id: string, data: { title?: string }) {
 
 ```typescript
 // 路由接入
-router.get('/posts/:id', async (req, res) => {
-  const post = await getPost(req.params.id);
+postsApp.get('/:id', async (c) => {
+  const post = await getPost(c.req.param('id'));
   if (!post) throw notFound();
-  res.json(post);
+  return c.json(post);
 });
 ```
 
@@ -151,7 +151,7 @@ router.get('/posts/:id', async (req, res) => {
 
 ```typescript
 // src/app.ts —— 探活同时覆盖数据库与 Redis，供容器/负载均衡探测
-app.get('/health', async (_req, res) => {
+app.get('/health', async (c) => {
   const checks: Record<string, string> = {};
 
   await Promise.all([
@@ -160,7 +160,7 @@ app.get('/health', async (_req, res) => {
   ]);
 
   const healthy = Object.values(checks).every((v) => v === 'ok');
-  res.status(healthy ? 200 : 503).json({ status: healthy ? 'ok' : 'degraded', checks });
+  return c.json({ status: healthy ? 'ok' : 'degraded', checks }, healthy ? 200 : 503);
 });
 ```
 

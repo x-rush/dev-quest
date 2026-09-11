@@ -56,7 +56,7 @@ export default defineConfig({
 
 ## 2. 单元边界：测服务层，Mock 仓储
 
-**原则**：单元测试的对象是"一段业务规则的输入输出"，其外部依赖（数据库、缓存、HTTP）全部替换为受控替身。入门项目的 `todo-service` 不感知 Express，正好是理想被测对象。
+**原则**：单元测试的对象是"一段业务规则的输入输出"，其外部依赖（数据库、缓存、HTTP）全部替换为受控替身。入门项目的 `todo-service` 不感知 Hono（路由层之外的纯 TS 模块），正好是理想被测对象。
 
 ```typescript
 // tests/setup.ts —— 全局 Mock Prisma，测试永不触碰真实数据库
@@ -164,7 +164,7 @@ it('过期的 refresh token 被拒绝', async () => {
 
 ## 🔗 相关文档
 
-- 📄 [集成测试：Supertest + 测试数据库](02-integration-testing.md) — 下一层：真实依赖验证
+- 📄 [集成测试：app.request() + 测试数据库](02-integration-testing.md) — 下一层：真实依赖验证
 - 📖 [后端生态库精选](../reference/library-guides/02-ecosystem-libs.md) — Vitest 速查
 - 📄 [认证服务实战](../projects/02-auth-service.md) — 令牌逻辑是单测最佳素材
 - 📖 [Node + TypeScript 常用模式](../reference/language-concepts/05-typescript-patterns.md) — 可注入设计的类型基础

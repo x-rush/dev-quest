@@ -146,7 +146,7 @@ const pages = await mapPool(urls, 5, (u) => fetchPage(u));
 
 ## 🛠️ 超时与取消：AbortController
 
-Node 22 中 `AbortController` 是取消异步操作的标准协议，原生 fetch、定时器、事件监听均支持：
+Node 24 中 `AbortController` 是取消异步操作的标准协议，原生 fetch、定时器、事件监听均支持：
 
 ```ts
 // 模式一：手动取消

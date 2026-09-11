@@ -1,10 +1,10 @@
 # 进阶项目：文件存储服务（上传 + S3 兼容存储）
 
-> **文档简介**: 构建文件存储服务——从本地 multer 上传升级到 S3 兼容对象存储（MinIO/阿里云 OSS/R2 均适用），掌握预签名 URL 与流式上传下载
+> **文档简介**: 构建文件存储服务——从本地 multipart 上传升级到 S3 兼容对象存储（MinIO/阿里云 OSS/R2 均适用），掌握预签名 URL 与流式上传下载
 >
-> **目标读者**: 已完成入门项目、接触过 multer 的中级后端开发者
+> **目标读者**: 已完成入门项目、接触过 multipart 表单上传的中级后端开发者
 >
-> **前置知识**: [Express 进阶](../frameworks/02-express-advanced.md) 的文件上传一节、[Stream 管道与多线程](../basics/07-streams-workers.md)
+> **前置知识**: [Hono 进阶](../frameworks/02-hono-advanced.md) 的文件上传一节、[Stream 管道与多线程](../basics/07-streams-workers.md)
 
 ## 📚 文档元数据
 
@@ -28,7 +28,7 @@ Stream API 的完整字典见 [`../reference/language-concepts/04-streams-api.md
 
 | 方案 | 流程 | 适用 |
 |------|------|------|
-| 经服务端 | 客户端 → Express(multer) → S3 | 小文件、需服务端加工（缩略图/病毒扫描） |
+| 经服务端 | 客户端 → Hono(parseBody) → S3 | 小文件、需服务端加工（缩略图/病毒扫描） |
 | 预签名直传 | 服务端签发 URL → 客户端 PUT S3 | 大文件、高并发上传（推荐默认） |
 
 服务端只做**签发与记录**，字节流不过 Node 进程——这是 Node 单线程模型下的正确姿势。
@@ -104,28 +104,28 @@ export async function createUploadUrl(mimetype: string, sizeBytes: number) {
 
 ```typescript
 // src/routes/files.ts
-import { Router } from 'express';
+import { Hono } from 'hono';
 import { z } from 'zod';
 import { requireAuth } from '../middleware/auth.js';
 import * as storage from '../services/storage-service.js';
 
-const router = Router();
+export const filesApp = new Hono();
 
 /** 第一步：申请上传凭证 */
-router.post('/files/upload-url', requireAuth, async (req, res) => {
+filesApp.post('/upload-url', requireAuth, async (c) => {
   const { mimetype, sizeBytes } = z
     .object({ mimetype: z.string(), sizeBytes: z.number().int().positive() })
-    .parse(req.body);
-  res.json(await storage.createUploadUrl(mimetype, sizeBytes));
+    .parse(await c.req.json());
+  return c.json(await storage.createUploadUrl(mimetype, sizeBytes));
 });
 
 /** 第二步：客户端 PUT 成功后回调确认 */
-router.post('/files/:id/confirm', requireAuth, async (req, res) => {
-  const file = await storage.confirmUpload(req.params.id);
-  res.json(file);
+filesApp.post('/:id/confirm', requireAuth, async (c) => {
+  const file = await storage.confirmUpload(c.req.param('id'));
+  return c.json(file);
 });
 
-export default router;
+// 装配：app.route('/files', filesApp)
 ```
 
 客户端用法（浏览器/Node 通用）：
@@ -140,17 +140,16 @@ await fetch(`/files/${fileId}/confirm`, { method: 'POST' });
 ## 4. 流式下载：服务端不落盘
 
 ```typescript
-import { Readable } from 'node:stream';
-import { pipeline } from 'node:stream/promises';
+import type { Context } from 'hono';
 
-/** 通过服务端下载：S3 Body 是 Readable，直接管道给 res，内存占用恒定 */
-export async function streamFile(key: string, res: import('express').Response) {
+/** 通过服务端下载：S3 Body 转 Web ReadableStream 交给 c.body()，内存占用恒定 */
+export async function streamFile(key: string, c: Context) {
   const obj = await s3.send(new GetObjectCommand({ Bucket: BUCKET, Key: key }));
 
-  res.setHeader('Content-Type', obj.ContentType ?? 'application/octet-stream');
-  res.setHeader('Content-Length', String(obj.ContentLength ?? 0));
-
-  await pipeline(obj.Body as Readable, res); // 背压自动处理
+  return c.body(obj.Body!.transformToWebStream(), 200, {
+    'Content-Type': obj.ContentType ?? 'application/octet-stream',
+    'Content-Length': String(obj.ContentLength ?? 0),
+  }); // Hono 原生支持流式响应体，背压自动处理
 }
 ```
 
@@ -185,7 +184,7 @@ import { CreateMultipartUploadCommand, UploadPartCommand } from '@aws-sdk/client
 
 ## 🔗 相关文档
 
-- 📄 [Express 进阶：文件上传](../frameworks/02-express-advanced.md) — multer 本地上传
+- 📄 [Hono 进阶：文件上传](../frameworks/02-hono-advanced.md) — parseBody 本地上传
 - 📖 [Stream API 速查](../reference/language-concepts/04-streams-api.md) — pipeline 与背压字典
 - 📄 [Stream 管道与多线程](../basics/07-streams-workers.md) — 流式处理的教程版
 - 📄 [生产级 Node.js API](04-production-nodejs-api.md) — 精通路径的收官项目

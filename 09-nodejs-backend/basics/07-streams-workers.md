@@ -190,7 +190,7 @@ if (cluster.isPrimary) {
 
 ### Q2: Worker 里能运行 TypeScript 吗？
 
-**A**: 与主进程相同——Node 22 类型剥离同样适用于 worker 入口文件；打包部署场景构建为 js 后再引用。
+**A**: 与主进程相同——Node 24 类型剥离同样适用于 worker 入口文件；打包部署场景构建为 js 后再引用。
 
 ## 🎯 练习与实践
 

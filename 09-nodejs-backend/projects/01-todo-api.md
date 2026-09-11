@@ -1,10 +1,10 @@
 # 入门项目：TODO REST API
 
-> **文档简介**: 独立完成第一个完整的 TODO REST API——Express 5 + Prisma + Zod + Vitest 的最小组合，覆盖 CRUD、过滤、分页与测试的全流程
+> **文档简介**: 独立完成第一个完整的 TODO REST API——Hono 4 + Prisma + Zod + Vitest 的最小组合，覆盖 CRUD、过滤、分页与测试的全流程
 >
 > **目标读者**: 完成 basics 路径、希望第一次独立交付完整 API 的初学者
 >
-> **前置知识**: [第一个完整项目](../basics/08-first-project.md)、[Express 基础](../frameworks/01-express-basics.md)
+> **前置知识**: [第一个完整项目](../basics/08-first-project.md)、[Hono 基础](../frameworks/01-hono-basics.md)
 
 ## 📚 文档元数据
 
@@ -13,7 +13,7 @@
 | **模块** | `09-nodejs-backend` |
 | **象限** | 操作指南 |
 | **难度** | ⭐ |
-| **标签** | `#rest-api` `#crud` `#prisma` `#zod` `#入门项目` |
+| **标签** | `#rest-api` `#hono` `#crud` `#prisma` `#zod` `#入门项目` |
 | **更新日期** | `2026年9月` |
 
 > basics 的任务管理项目已带你走过一遍全流程；本项目是它的**独立拓展练习**——从空白仓库出发，完成带标签、优先级与过滤能力的 TODO API。步骤只给关键代码与决策点，细节自行查字典补齐。
@@ -88,7 +88,7 @@ export const updateTodoSchema = z.object({
 ## 4. 服务层：业务与框架解耦
 
 ```typescript
-// src/services/todo-service.ts —— 只依赖 prisma，不感知 express
+// src/services/todo-service.ts —— 只依赖 prisma，不感知 Hono
 import { prisma } from '../lib/prisma.js';
 import { notFound } from '../lib/http-error.js';
 
@@ -133,8 +133,8 @@ export async function deleteTodo(id: string) {
 ## 5. 路由装配
 
 ```typescript
-// src/routes/todos.ts —— async handler，Express 5 自动捕获 reject
-import { Router } from 'express';
+// src/routes/todos.ts —— 子应用即路由模块，async rejection 自动进 app.onError
+import { Hono } from 'hono';
 import * as svc from '../services/todo-service.js';
 import {
   createTodoSchema,
@@ -142,33 +142,33 @@ import {
   updateTodoSchema,
 } from '../schemas/todo.js';
 
-const router = Router();
+export const todosApp = new Hono();
 
-router.post('/', async (req, res) => {
-  const { title, priority } = createTodoSchema.shape.body.parse(req.body);
-  res.status(201).json(await svc.createTodo(title, priority));
+todosApp.post('/', async (c) => {
+  const { title, priority } = createTodoSchema.shape.body.parse(await c.req.json());
+  return c.json(await svc.createTodo(title, priority), 201);
 });
 
-router.get('/', async (req, res) => {
-  const q = listQuerySchema.shape.query.parse(req.query); // ZodError → 422
-  res.json(await svc.listTodos(q));
+todosApp.get('/', async (c) => {
+  const q = listQuerySchema.shape.query.parse(c.req.query()); // ZodError → 422
+  return c.json(await svc.listTodos(q));
 });
 
-router.get('/:id', async (req, res) => {
-  res.json(await svc.getTodo(req.params.id));
+todosApp.get('/:id', async (c) => {
+  return c.json(await svc.getTodo(c.req.param('id')));
 });
 
-router.patch('/:id', async (req, res) => {
-  const patch = updateTodoSchema.shape.body.parse(req.body);
-  res.json(await svc.updateTodo(req.params.id, patch));
+todosApp.patch('/:id', async (c) => {
+  const patch = updateTodoSchema.shape.body.parse(await c.req.json());
+  return c.json(await svc.updateTodo(c.req.param('id'), patch));
 });
 
-router.delete('/:id', async (req, res) => {
-  await svc.deleteTodo(req.params.id);
-  res.status(204).end(); // 删除成功无响应体
+todosApp.delete('/:id', async (c) => {
+  await svc.deleteTodo(c.req.param('id'));
+  return c.body(null, 204); // 删除成功无响应体
 });
 
-export default router;
+// 装配：app.route('/todos', todosApp)
 ```
 
 ## 6. 验收与测试
@@ -206,6 +206,6 @@ describe('listTodos', () => {
 ## 🔗 相关文档
 
 - 📄 [第一个完整项目：任务管理 REST API](../basics/08-first-project.md) — 本项目的教学版原型
-- 📄 [Express 基础](../frameworks/01-express-basics.md) — 路由与中间件写法
+- 📄 [Hono 基础](../frameworks/01-hono-basics.md) — 路由与中间件写法
 - 📄 [生态集成](../frameworks/03-ecosystem-integration.md) — Prisma 连接与事务细节
 - 📄 [认证服务实战](02-auth-service.md) — 下一个难度⭐⭐项目

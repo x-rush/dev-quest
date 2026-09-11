@@ -24,7 +24,7 @@ node                                 # 进入 REPL
 node --watch server.js               # 文件变更自动重启（内置热重载）
 node --watch-path=src server.js      # 限定监听目录
 node --env-file=.env server.js       # 加载 .env（内置，替代 dotenv）
-node --experimental-strip-types s.ts # TS 类型剥离（22.6+，22.18+ 默认）
+node server.ts                       # 直接运行 TS（类型剥离 24 起默认开启）
 node -e "console.log(process.version)"  # 执行一行代码
 node --input-type=module -e "..."    # -e 按 ESM 解析
 node --max-old-space-size=4096 s.js  # 堆内存上限 4GB（MB 单位）
@@ -72,12 +72,12 @@ node --test --experimental-test-coverage  # 覆盖率
 
 ```bash
 pnpm install                         # 安装（npm install 同义）
-pnpm add express                     # 添加生产依赖
+pnpm add hono                        # 添加生产依赖
 pnpm add -D typescript               # 添加开发依赖
-pnpm remove express
+pnpm remove hono
 pnpm update --latest                 # 升级全部依赖
 pnpm outdated                        # 查看过期依赖
-pnpm why express                     # 解释依赖为什么被装上
+pnpm why hono                        # 解释依赖为什么被装上
 pnpm ls --depth 0                    # 列出顶层依赖
 pnpm exec prisma migrate dev         # 运行 node_modules 内二进制（npx 等价）
 pnpm dlx degit user/repo             # 临时执行远程包（npx 等价）
@@ -91,7 +91,7 @@ package.json 常用字段一行式：
 
 ```bash
 pnpm pkg set scripts.dev="node --watch src/server.ts"
-pnpm pkg set engines.node=">=22"
+pnpm pkg set engines.node=">=24"
 pnpm pkg set type=module
 ```
 

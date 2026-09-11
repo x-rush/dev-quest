@@ -4,7 +4,7 @@
 >
 > **目标读者**: 已完成入门项目、理解中间件机制的中级后端开发者
 >
-> **前置知识**: [Express 进阶](../frameworks/02-express-advanced.md) 的认证中间件、[生态集成](../frameworks/03-ecosystem-integration.md) 的 Prisma 用法
+> **前置知识**: [Hono 进阶](../frameworks/02-hono-advanced.md) 的认证中间件、[生态集成](../frameworks/03-ecosystem-integration.md) 的 Prisma 用法
 
 ## 📚 文档元数据
 
@@ -161,48 +161,51 @@ export async function logout(rawToken: string) {
 
 ```typescript
 // src/routes/auth.ts
-import { Router } from 'express';
+import { Hono } from 'hono';
+import { getCookie, setCookie, deleteCookie } from 'hono/cookie';
 import { z } from 'zod';
 import * as auth from '../services/auth-service.js';
 
-const router = Router();
+export const authApp = new Hono();
 const REFRESH_COOKIE = 'refresh_token';
 const isProd = process.env.NODE_ENV === 'production';
 
 const cookieOpts = {
   httpOnly: true,              // JS 不可读，防 XSS
   secure: isProd,              // 生产仅 HTTPS 传输
-  sameSite: 'strict' as const, // 防 CSRF
+  sameSite: 'Strict',          // 防 CSRF
   path: '/auth',               // 只随 /auth/* 请求发送
-  maxAge: 7 * 86400_000,
+  maxAge: 7 * 86400,           // hono/cookie 的 maxAge 单位是秒
 };
 
-router.post('/register', async (req, res) => {
+authApp.post('/register', async (c) => {
   const { email, password } = z
     .object({ email: z.string().email(), password: z.string().min(8) })
-    .parse(req.body); // 服务端密码最短 8 位兜底
+    .parse(await c.req.json()); // 服务端密码最短 8 位兜底
   const user = await auth.register(email, password);
-  res.status(201).json({ id: user.id, email: user.email });
+  return c.json({ id: user.id, email: user.email }, 201);
 });
 
-router.post('/login', async (req, res) => {
-  const { email, password } = req.body;
+authApp.post('/login', async (c) => {
+  const { email, password } = await c.req.json();
   const { accessToken, refreshToken } = await auth.login(email, password);
-  res.cookie(REFRESH_COOKIE, refreshToken, cookieOpts).json({ accessToken });
+  setCookie(c, REFRESH_COOKIE, refreshToken, cookieOpts); // 写入 Set-Cookie 响应头
+  return c.json({ accessToken });
 });
 
-router.post('/refresh', async (req, res) => {
-  const token = req.cookies?.[REFRESH_COOKIE];
-  if (!token) return void res.status(401).json({ error: '缺少刷新令牌' });
-  res.json(await auth.rotateRefreshToken(token));
+authApp.post('/refresh', async (c) => {
+  const token = getCookie(c, REFRESH_COOKIE); // 从请求头解析 Cookie
+  if (!token) return c.json({ error: '缺少刷新令牌' }, 401);
+  return c.json(await auth.rotateRefreshToken(token));
 });
 
-router.post('/logout', async (req, res) => { // 撤销 refresh token 并清除 cookie
-  await auth.logout(req.cookies?.[REFRESH_COOKIE] ?? '');
-  res.clearCookie(REFRESH_COOKIE, cookieOpts).status(204).end();
+authApp.post('/logout', async (c) => { // 撤销 refresh token 并清除 cookie
+  await auth.logout(getCookie(c, REFRESH_COOKIE) ?? '');
+  deleteCookie(c, REFRESH_COOKIE, { path: '/auth' });
+  return c.body(null, 204);
 });
 
-export default router;
+// 装配：app.route('/auth', authApp)
 ```
 
 ## 6. 验收清单
@@ -214,7 +217,7 @@ export default router;
 
 ## 🔗 相关文档
 
-- 📄 [Express 进阶：认证中间件](../frameworks/02-express-advanced.md) — requireAuth 的完整实现
-- 📄 [安全实践](../advanced-topics/security/01-security-practices.md) — helmet、密钥管理与注入防护
+- 📄 [Hono 进阶：认证中间件](../frameworks/02-hono-advanced.md) — requireAuth 的完整实现
+- 📄 [安全实践](../advanced-topics/security/01-security-practices.md) — 安全头、密钥管理与注入防护
 - 📖 [后端生态库精选](../reference/library-guides/02-ecosystem-libs.md) — bcryptjs/jsonwebtoken 速查
 - 📄 [文件存储服务](03-file-storage-service.md) — 同难度进阶项目

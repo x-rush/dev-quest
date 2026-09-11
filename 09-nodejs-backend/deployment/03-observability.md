@@ -25,7 +25,7 @@
 ## 1. pino：结构化日志基座
 
 ```bash
-pnpm add pino pino-http
+pnpm add pino
 ```
 
 ```typescript
@@ -50,40 +50,40 @@ export const logger = pino({
 ```typescript
 // src/middleware/request-log.ts —— 请求日志 + 请求 ID 注入
 import { randomUUID } from 'node:crypto';
-import type { Request, Response, NextFunction } from 'express';
+import type { MiddlewareHandler } from 'hono';
+import type { Logger } from 'pino';
 import { logger } from '../lib/logger.js';
 
-declare global {
-  namespace Express {
-    interface Request { requestId: string; log: import('pino').Logger; }
-  }
+// 类型扩展：c.get('requestId') / c.get('log') 获得完整类型提示（见字典 05-typescript-patterns）
+declare module 'hono' {
+  interface ContextVariableMap { requestId: string; log: Logger; }
 }
 
-export function requestContext(req: Request, res: Response, next: NextFunction) {
+export const requestContext: MiddlewareHandler = async (c, next) => {
   // 优先采信上游网关的 x-request-id（跨服务串联），否则自生成
-  req.requestId = (req.headers['x-request-id'] as string) ?? randomUUID();
-  req.log = logger.child({ requestId: req.requestId }); // 子 logger 自动带 ID
-  res.setHeader('x-request-id', req.requestId);         // 回传给客户端便于反馈
+  const requestId = c.req.header('x-request-id') ?? randomUUID();
+  c.set('requestId', requestId);
+  c.set('log', logger.child({ requestId })); // 子 logger 自动带 ID
+  c.header('x-request-id', requestId);       // 回传给客户端便于反馈
 
   const start = performance.now();
-  res.on('finish', () => {
-    req.log.info({
-      method: req.method,
-      url: req.originalUrl,
-      status: res.statusCode,
-      durationMs: Math.round(performance.now() - start),
-    }, 'request');
-  });
-  next();
-}
+  await next(); // 洋葱模型：next() 返回即响应出站，等价于 Express 的 res 'finish'
+  c.get('log').info({
+    method: c.req.method,
+    url: c.req.path,
+    status: c.res.status,
+    durationMs: Math.round(performance.now() - start),
+  }, 'request');
+};
 ```
 
-业务代码里统一用 `req.log` 而非 console：
+业务代码里统一用 `c.get('log')` 而非 console：
 
 ```typescript
-router.post('/todos', async (req, res) => {
-  req.log.debug({ body: req.body }, '创建任务'); // 自带 requestId，可全文检索
-  res.status(201).json(await todoService.create(req.body));
+app.post('/todos', async (c) => {
+  const body = await c.req.json(); // 请求体只能消费一次，先存变量
+  c.get('log').debug({ body }, '创建任务'); // 自带 requestId，可全文检索
+  return c.json(await todoService.create(body), 201);
 });
 ```
 
@@ -103,7 +103,7 @@ const sdk = new NodeSDK({
   traceExporter: new OTLPTraceExporter({
     url: process.env.OTEL_EXPORTER_OTLP_ENDPOINT,
   }),
-  instrumentations: [getNodeAutoInstrumentations()], // 自动埋点 http/express/pg/ioredis
+  instrumentations: [getNodeAutoInstrumentations()], // 自动埋点 http/pg/ioredis（Hono 跑在 node-server 的 http 层，天然被覆盖）
 });
 
 sdk.start();
@@ -113,7 +113,7 @@ process.on('SIGTERM', () => { void sdk.shutdown(); });
 ```
 
 ```bash
-# server.ts 第一行加载（早于 express import）
+# server.ts 第一行加载（早于业务 import，确保埋点覆盖所有模块）
 node --import ./dist/telemetry.js dist/server.js
 ```
 
@@ -165,7 +165,7 @@ return res.status(500).json({ error: '服务器内部错误' });
 ## ✅ 最佳实践与陷阱
 
 - ✅ 日志写 stdout，由采集器（Loki/ELK）接管——容器时代不要自己写日志文件
-- ✅ 每个 handler 用 `req.log`，让 requestId 自动贯穿
+- ✅ 每个 handler 用 `c.get('log')`，让 requestId 自动贯穿
 - ❌ `console.log(obj)` 打印大对象——热路径上的同步序列化会拖慢事件循环（见 [`../advanced-topics/performance/01-event-loop.md`](../advanced-topics/performance/01-event-loop.md)）
 - ❌ 日志里记录完整 token/身份证号——`redact` 必须在上线前配置
 

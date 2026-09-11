@@ -1,10 +1,10 @@
-# 安全实践：helmet、注入防护与密钥管理
+# 安全实践：安全头、注入防护与密钥管理
 
 > **文档简介**: 系统梳理 Node 后端的纵深防御清单——HTTP 安全头、SQL/命令/路径注入的防护原理、认证体系加固与密钥全生命周期管理
 >
 > **目标读者**: 服务即将暴露公网、需要建立安全基线的中高级后端开发者
 >
-> **前置知识**: [认证服务实战](../../projects/02-auth-service.md)、[Express 进阶](../../frameworks/02-express-advanced.md)
+> **前置知识**: [认证服务实战](../../projects/02-auth-service.md)、[Hono 进阶](../../frameworks/02-hono-advanced.md)
 
 ## 📚 文档元数据
 
@@ -13,7 +13,7 @@
 | **模块** | `09-nodejs-backend` |
 | **象限** | 解释 |
 | **难度** | ⭐⭐⭐ |
-| **标签** | `#security` `#helmet` `#injection` `#secrets` `#owasp` |
+| **标签** | `#security` `#secure-headers` `#injection` `#secrets` `#owasp` |
 | **更新日期** | `2026年9月` |
 
 ## 🎯 阅读目标
@@ -25,28 +25,28 @@
 ## 1. 安全头与中间件基线（十分钟做完）
 
 ```bash
-pnpm add helmet cors
+# 无需额外安装：hono/secure-headers、hono/cors、hono/body-limit 全部内置
 ```
 
 ```typescript
 // src/app.ts —— 防护中间件的标准站位
-import helmet from 'helmet';
-import cors from 'cors';
+import { secureHeaders } from 'hono/secure-headers';
+import { cors } from 'hono/cors';
+import { bodyLimit } from 'hono/body-limit';
 
-app.use(helmet()); // 一次设置 12+ 个安全响应头：CSP、HSTS、X-Frame-Options 等
+app.use(secureHeaders()); // 一次设置 CSP、HSTS、X-Frame-Options 等安全响应头
 
-app.use(cors({
+app.use('/api/*', cors({
   origin: ['https://app.example.com'], // 白名单，绝不用 '*' 配合凭据
   credentials: true,                   // 允许携带 cookie（refresh token 场景）
-  methods: ['GET', 'POST', 'PATCH', 'DELETE'],
+  allowMethods: ['GET', 'POST', 'PATCH', 'DELETE'],
 }));
 
-// body 解析的大小限制同样是安全边界：防大 payload 打爆内存
-app.use(express.json({ limit: '100kb' }));
-app.use(express.urlencoded({ extended: true, limit: '100kb' }));
+// 请求体大小限制同样是安全边界：防大 payload 打爆内存
+app.use('/api/*', bodyLimit({ maxSize: 100 * 1024 })); // 100kb
 ```
 
-helmet 默认值已覆盖 OWASP 安全头建议；遇到前端资源加载报 CSP 错误时，按需放宽单项而非整体关闭。
+`secureHeaders()` 默认值已覆盖 OWASP 安全头建议；遇到前端资源加载报 CSP 错误时，按需放宽单项而非整体关闭。
 
 ## 2. 注入防护：统一原理是"数据不当代码执行"
 
@@ -57,17 +57,17 @@ Prisma 的查询构造器默认参数化——**这就是用 ORM 的第一安全
 ```typescript
 // ✅ 安全：参数化查询，用户输入永远只是"数据"
 const user = await prisma.user.findFirst({
-  where: { email: req.body.email },
+  where: { email: validated.email }, // validated 来自 Zod 校验后的请求体
 });
 
 // ⚠️ 危险：字符串拼接原始 SQL，$queryRawUnsafe + 模板拼接一律视为红旗
 const users = await prisma.$queryRawUnsafe(
-  `SELECT * FROM users WHERE name = '${req.query.name}'`, // 注入点！
+  `SELECT * FROM users WHERE name = '${validated.name}'`, // 注入点！
 );
 
 // ✅ 确需原生 SQL 时：tagged template 形式自动参数化
 const users = await prisma.$queryRaw`
-  SELECT * FROM users WHERE name = ${req.query.name}
+  SELECT * FROM users WHERE name = ${validated.name}
 `;
 ```
 
@@ -75,7 +75,7 @@ const users = await prisma.$queryRaw`
 
 ```typescript
 const SORTABLE = { createdAt: 'createdAt', title: 'title' } as const;
-const field = SORTABLE[req.query.sort as keyof typeof SORTABLE] ?? 'createdAt';
+const field = SORTABLE[validated.sort as keyof typeof SORTABLE] ?? 'createdAt';
 ```
 
 ### 命令注入
@@ -93,14 +93,14 @@ execFile('convert', [`${userInput}.png`, 'out.jpg']); // 即便输入是 "; rm -
 
 ```typescript
 // ❌ 反例：拼接用户提供的文件名
-const filePath = path.join(UPLOAD_DIR, req.params.name); // "../../.env" 直接逃逸
+const filePath = path.join(UPLOAD_DIR, c.req.param('name')); // "../../.env" 直接逃逸
 
 // ✅ 正解：解析后强制校验仍在基目录内
-const filePath = path.resolve(UPLOAD_DIR, path.basename(req.params.name));
+const filePath = path.resolve(UPLOAD_DIR, path.basename(c.req.param('name')));
 if (!filePath.startsWith(UPLOAD_DIR + path.sep)) throw new HttpError(400, '非法路径');
 ```
 
-登录、文件上传、JWT 的专项实现见认证服务与 Express 进阶文档；限流防暴力破解见生产级 API。
+登录、文件上传、JWT 的专项实现见认证服务与 Hono 进阶文档；限流防暴力破解见生产级 API。
 
 ## 3. 密钥管理全生命周期
 
@@ -142,13 +142,13 @@ pnpm audit --prod                        # 已知漏洞扫描，CI 中定期执�
 pnpm outdated                            # 过时依赖清单
 ```
 
-- 固定基础镜像版本（`node:22-alpine` 非 `latest`）
+- 固定基础镜像版本（`node:24-alpine` 非 `latest`）
 - 容器非 root 运行 + 资源限额（见 [`../../deployment/01-docker-deployment.md`](../../deployment/01-docker-deployment.md)）
 - 错误响应不回堆栈与内部路径——500 只说"服务器内部错误"
 
 ## 5. 安全面清单（上线前逐项打勾）
 
-- [ ] helmet 已挂载，CSP 按业务最小放宽
+- [ ] secureHeaders() 已挂载，CSP 按业务最小放宽
 - [ ] CORS 白名单，未开启通配凭据
 - [ ] 全部 SQL 经参数化；原生查询已审计
 - [ ] 文件名/路径经 `basename` + 前缀校验

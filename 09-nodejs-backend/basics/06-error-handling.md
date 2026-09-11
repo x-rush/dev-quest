@@ -1,8 +1,8 @@
 # 错误处理与进程稳定性
 
-> **文档简介**: 建立 Node 后端的完整错误处理体系——错误传播、异步错误捕获、集中式错误中间件与进程级兜底
+> **文档简介**: 建立 Node 后端的完整错误处理体系——错误传播、异步错误捕获、Hono 集中式错误出口（onError）与进程级兜底
 
-> **目标读者**: 已了解 Express 路由与中间件、准备让服务"生产可用"的开发者
+> **目标读者**: 已了解 Hono 路由与中间件、准备让服务"生产可用"的开发者
 
 > **前置知识**: [路由与中间件](./05-http-routing.md)，[异步编程](./04-async-promises.md)
 
@@ -13,7 +13,7 @@
 | **模块** | `09-nodejs-backend` |
 | **象限** | 教程（basics） |
 | **难度** | ⭐ |
-| **标签** | `#错误处理` `#ErrorMiddleware` `#uncaughtException` `#稳定性` |
+| **标签** | `#错误处理` `#onError` `#uncaughtException` `#稳定性` |
 | **更新日期** | `2026年9月` |
 
 ## 🎯 学习目标
@@ -22,7 +22,7 @@
 
 - 区分操作性错误与程序员错误并分别对待
 - 在同步、Promise、回调三种语境中正确传播错误
-- 实现集中式 Express 错误中间件与统一错误响应格式
+- 实现 `app.onError` 集中式错误出口与统一错误响应格式
 - 配置 `uncaughtException` / `unhandledRejection` 进程兜底
 
 ## 🔍 两类错误，两种策略
@@ -66,7 +66,7 @@ bootstrap().catch((err) => {
 });
 ```
 
-Express 5 的进步：路由处理器是 async 函数时，rejection 自动转给 `next(err)`，无需手写 try/catch。
+Hono 的进步：路由处理器抛出的错误（含 async rejection）自动转发给 `app.onError`，无需手写 try/catch，也不需要老框架时代的 async 包装补丁。
 
 ### 回调式 API：error-first 约定
 
@@ -90,63 +90,74 @@ try {
 }
 ```
 
-## 🛠️ Express 集中式错误处理
+## 🛠️ Hono 集中式错误处理
 
-### 定义错误处理中间件
+### 注册错误出口：app.onError
 
-签名必须是四参数——Express 靠参数个数识别错误中间件：
+与"四参错误中间件"的老模式不同，Hono 的错误出口是一个显式注册点，且**注册位置无关**（写在前在后都拦截全站）：
 
 ```ts
-import type { ErrorRequestHandler } from "express";
+import { Hono } from "hono";
+import type { ContentfulStatusCode } from "hono/utils/http-status";
 
 interface AppError extends Error {
   status?: number;
   code?: string;
 }
 
-const errorHandler: ErrorRequestHandler = (err, req, res, _next) => {
-  const status = err.status ?? 500;
+const app = new Hono();
+
+app.onError((err, c) => {
+  // AppError 是 interface（编译期被擦除），不能用于 instanceof；按结构断言取 status。
+  // c.json 的第二参要求 ContentfulStatusCode，动态计算出的 number 需显式收窄。
+  const status = ((err as AppError).status ?? 500) as ContentfulStatusCode;
 
   // 500 及以上必须记录；4xx 属于客户端问题，按需记录
   if (status >= 500) {
-    console.error(`[500] ${req.method} ${req.url}`, err);
+    console.error(`[500] ${c.req.method} ${c.req.path}`, err);
   }
 
-  res.status(status).json({
-    error: {
-      code: err.code ?? "INTERNAL_ERROR",
-      message: status >= 500 && process.env.NODE_ENV === "production"
-        ? "服务器内部错误"        // 生产环境不泄露内部细节
-        : err.message,
+  return c.json(
+    {
+      error: {
+        code: (err as AppError).code ?? "INTERNAL_ERROR",
+        message:
+          status >= 500 && process.env.NODE_ENV === "production"
+            ? "服务器内部错误"        // 生产环境不泄露内部细节
+            : err.message,
+      },
     },
-  });
-};
+    status,
+  );
+});
 
-// 必须在所有路由之后注册
-app.use(errorHandler);
+// 未匹配路由的 404 不是错误：单独注册 notFound 出口
+app.notFound((c) => c.json({ error: { code: "NOT_FOUND" } }, 404));
 ```
 
 ### 业务错误统一抛出
 
 ```ts
 class HttpError extends Error {
-  constructor(public status: number, message: string, public code: string) {
+  status: number;
+  code: string;
+  constructor(status: number, message: string, code: string) {
     super(message);
+    this.status = status;
+    this.code = code;
   }
 }
 
 // 路由中只管抛
-app.get("/users/:id", async (req, res) => {
-  const user = await db.findUser(req.params.id);
+app.get("/users/:id", async (c) => {
+  const user = await db.findUser(c.req.param("id"));
   if (!user) {
     throw new HttpError(404, "用户不存在", "USER_NOT_FOUND");
   }
-  res.json(user);
+  return c.json(user);
 });
-// Express 5 自动把 throw 的错误送进 errorHandler
+// Hono 自动把 throw 的错误送进 onError
 ```
-
-404 不是错误：先注册一个普通中间件兜底返回 404，再注册 `errorHandler`。
 
 ## 🛠️ 进程级兜底
 
@@ -177,7 +188,7 @@ process.on("SIGTERM", () => console.log("收到 SIGTERM")); // 优雅退出见 0
 
 ## 🎨 最佳实践
 
-- ✅ **错误中间件只有一个，放路由链最末端**
+- ✅ **错误出口只有一个：`app.onError`**，全站统一格式
 - ✅ **用 `Error cause` 链包装底层错误**，日志里保留根因
 - ✅ **生产 5xx 响应不回传堆栈**，细节进日志
 - ❌ **不要 `catch (err) {}` 静默吞错**——这是线上事故第一来源
@@ -185,9 +196,9 @@ process.on("SIGTERM", () => console.log("收到 SIGTERM")); // 优雅退出见 0
 
 ## ❓ 常见问题
 
-### Q1: 我的 async 路由抛错变成请求挂起？
+### Q1: 我的 async 路由抛错，客户端拿到的是什么？
 
-**A**: Express 4 需要手写 `next(err)` 或用包装函数；Express 5 已原生支持 async 自动转发。也可能是你注册了错误中间件却没放在路由之后。
+**A**: Hono 默认返回 500 文本。注册 `app.onError` 后由你接管格式；也可能是你在处理器里 try/catch 吞掉了错误后没返回响应。
 
 ### Q2: 错误日志里堆栈很乱看不到根因？
 
@@ -198,9 +209,9 @@ process.on("SIGTERM", () => console.log("收到 SIGTERM")); // 优雅退出见 0
 ### 练习一：给路由加上完整错误流
 
 **任务要求**:
-1. 在 05 课的任务清单 API 上实现 `HttpError` 与 `errorHandler`
+1. 在 05 课的任务清单 API 上实现 `HttpError` 与 `app.onError`
 2. 制造三类错误：校验失败（400）、查不到资源（404）、模拟数据库宕机（503）
-3. 验证三者都从同一中间件输出统一格式
+3. 验证三者都从同一出口输出统一格式
 
 ### 练习二：可观察的崩溃
 
@@ -214,6 +225,6 @@ process.on("SIGTERM", () => console.log("收到 SIGTERM")); // 优雅退出见 0
 
 ## 🔗 相关文档
 
-- 📄 **[路由与中间件](./05-http-routing.md)** — 错误中间件的注册位置语义
+- 📄 **[路由与中间件](./05-http-routing.md)** — 中间件抛错与洋葱模型的交互语义
 - 📄 **[Stream 与 Worker](./07-streams-workers.md)** — 流中的错误传播与 `pipeline` 兜底
 - 📄 **[常见故障排除](../reference/quick-references/02-troubleshooting.md)** — 内存泄漏与崩溃排查
