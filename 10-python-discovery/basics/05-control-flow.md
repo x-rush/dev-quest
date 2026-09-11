@@ -142,6 +142,8 @@ total = sum(n * n for n in range(1_000_000))    # 不建中间列表
 
 > ⚠️ 推导式超过两层 `for` 或两个 `if` 就该换回普通循环——可读性优先，一行不是目的。
 
+> 📖 四种推导式的语法对照、条件/嵌套写法与生成器惰性语义，见 [推导式速查](../reference/language-concepts/14-comprehensions.md)。
+
 ---
 
 ## 4. 推导式实战：数据清洗三例

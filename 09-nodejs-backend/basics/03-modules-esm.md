@@ -204,4 +204,5 @@ TypeScript 项目用 `.js` 后缀指向 `.ts` 源文件（编译期映射），�
 
 - 📄 **[现代 JS 语法速查](../reference/language-concepts/01-js-modern-syntax.md)** — import 写法变体与元属性
 - 📄 **[Node 核心模块 API](../reference/language-concepts/03-node-core-api.md)** — `module` 与 `process` 相关 API
+- 📄 **[ESM 与模块解析速查](../reference/language-concepts/06-esm-module-resolution.md)** — exports/imports 字段、解析算法与 TS 策略的条目式字典
 - 📄 **[常见故障排除](../reference/quick-references/02-troubleshooting.md)** — ESM 兼容坑集中排查

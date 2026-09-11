@@ -170,6 +170,26 @@ Object.groupBy(users, u => u.role);         // ES2024 分组
 Object.entries(obj) / Object.fromEntries(pairs);
 ```
 
+### Error cause 链（ES2022）
+**定义**：构造 `Error` 时通过第二个参数挂上原始错误，形成"包装错误 → 根因"的因果链；跨层重抛时保留根因，日志不再丢堆栈起点。
+
+```ts
+try {
+  await db.user.find(id);
+} catch (err) {
+  throw new Error("查询用户失败", { cause: err });  // 根因挂进 cause
+}
+
+// 逐层读取链
+try {
+  await load();
+} catch (e) {
+  console.log(e.message, "->", e.cause?.message);
+}
+```
+
+**陷阱**：`cause` 不会出现在默认的错误字符串里——顶层日志必须显式序列化 cause（pino 的 `err` 序列化器需开启 `cause` 递归）；包装时若吞掉原错误不挂 cause，根因就永久丢失。
+
 ---
 
 ## 🔗 相关文档

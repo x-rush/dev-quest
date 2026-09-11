@@ -61,7 +61,10 @@ import { afterAll, beforeAll } from 'vitest';
 import { prisma } from '../src/lib/prisma.js';
 
 beforeAll(() => {
-  // 用测试库跑迁移：schema 与生产同源
+  // 用测试库跑迁移：schema 与生产同源。
+  // v7：migrate deploy 从 prisma.config.ts 读连接串，其中读取的是
+  // process.env.DATABASE_URL——子进程 env 已覆盖为测试库（dotenv 不覆盖
+  // 已存在的变量，因此测试库 URL 优先生效），schema 内不再写 url
   execSync('pnpm exec prisma migrate deploy', {
     env: { ...process.env, DATABASE_URL: process.env.DATABASE_URL },
     stdio: 'inherit',

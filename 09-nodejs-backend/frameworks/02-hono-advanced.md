@@ -97,7 +97,9 @@ import { jwt } from 'hono/jwt';
 // 只保护部分路由：按路径作用域挂载
 app.use('/api/*', async (c, next) => {
   if (c.req.path === '/auth/login') return next(); // 白名单路径
-  const auth = jwt({ secret: process.env.JWT_ACCESS_SECRET! });
+  // alg 必填：漏写会在注册时抛 JWT auth middleware requires options for "alg"；
+  // 显式声明也同时防 alg 混淆攻击（与 verify 的第三参保持一致）
+  const auth = jwt({ secret: process.env.JWT_ACCESS_SECRET!, alg: 'HS256' });
   return auth(c, next);
 });
 
@@ -211,6 +213,7 @@ export const avatarsApp = new Hono()
 
 - ✅ 错误处理只有 `app.onError` 一个出口；中间件里直接 `throw`，不要 `try/catch` 后吞错
 - ✅ 用户上传文件一律重命名，禁止拼接原始文件名（路径穿越风险）
+- ❌ `jwt({ secret })` 漏写 `alg`——注册时即抛 `JWT auth middleware requires options for "alg"`，该选项必填且应与 `verify()` 的第三参一致（如 `'HS256'`）
 - ❌ 在 `await next()` 之前抛错会让洋葱"内侧"的中间件全部跳过——需要清理逻辑时用 `try/finally` 包住 `next()`
 - ❌ 把 JWT 密钥硬编码——应走环境变量（密钥管理见 [`../advanced-topics/security/01-security-practices.md`](../advanced-topics/security/01-security-practices.md)）
 

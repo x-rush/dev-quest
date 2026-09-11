@@ -44,12 +44,13 @@ app.on("GET", ["/a", "/b"], handler);       // 多路径精确声明
 
 ```ts
 app.get("/users/:id");            // ✅ 命名参数
+app.get("/users/:id?");           // ✅ 可选段：同时匹配 /users 与 /users/9
 app.get("/posts/:id{[0-9]+}");    // ✅ 带正则约束的参数（非数字不匹配）
 app.get("/static/*");             // ✅ 通配符（Hono 原生支持，无需具名）
-app.get("/users/:id?");           // ❌ Hono 不支持可选段——拆成两条路由
 ```
 
 ### 陷阱
+- **可选段未命中时 `param` 是 `undefined`**：`/users/:id?` 匹配 `/users` 时 `c.req.param("id")` 返回 `undefined`（类型也是 `string | undefined`）——用前先判空或给默认值（`c.req.param("id") ?? "me"`），别直接喂给只认 string 的逻辑
 - 通配符 `*` 与具名参数不能出现在同一段：`/files/*` 与 `/files/:id` 冲突时按注册顺序命中
 - 子应用内写死 `/users/:id` 再挂到 `/users` 前缀下，会得到 `/users/users/:id`——前缀只出现在挂载处
 

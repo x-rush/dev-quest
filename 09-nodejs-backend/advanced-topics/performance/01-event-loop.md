@@ -54,18 +54,22 @@ Node 进程启动后，事件循环按固定顺序轮询六个阶段，每个阶
 // 反例：同步加密在主线程跑，期间全部请求冻结
 import crypto from 'node:crypto';
 
-app.post('/hash', (req, res) => {
-  const digest = crypto.pbkdf2Sync(req.body.pwd, salt, 600_000, 32, 'sha256');
+const salt = crypto.randomBytes(16);
+
+app.post('/hash', async (c) => {
+  const { pwd } = await c.req.json();
+  const digest = crypto.pbkdf2Sync(pwd, salt, 600_000, 32, 'sha256');
   // pbkdf2Sync 阻塞主线程 300ms+，其余请求全部排队
-  res.json({ digest: digest.toString('hex') });
+  return c.json({ digest: digest.toString('hex') });
 });
 
 // 正解：异步版本自动进 libuv 线程池
 import { promisify } from 'node:util';
 
-app.post('/hash', async (req, res) => {
-  const digest = await promisify(crypto.pbkdf2)(req.body.pwd, salt, 600_000, 32, 'sha256');
-  res.json({ digest: digest.toString('hex') });
+app.post('/hash', async (c) => {
+  const { pwd } = await c.req.json();
+  const digest = await promisify(crypto.pbkdf2)(pwd, salt, 600_000, 32, 'sha256');
+  return c.json({ digest: digest.toString('hex') });
 });
 ```
 
@@ -75,10 +79,10 @@ app.post('/hash', async (req, res) => {
 
 ```typescript
 // 每个 await 前后的同步代码段同样占用主线程：
-router.get('/report', async (_req, res) => {
+app.get('/report', async (c) => {
   const rows = await db.report.findMany(); // I/O 是异步的
   const html = heavyTemplateRender(rows);  // 但渲染是同步 CPU！
-  res.send(html);
+  return c.html(html);
 });
 ```
 

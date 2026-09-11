@@ -37,12 +37,15 @@
 
 字段约束：`title` 1-100 字符；`status` ∈ `todo | doing | done`，默认 `todo`。
 
+> 💡 **渐进路线（可选）**：如果想先跑通路由逻辑，可先用内存数组实现——跳过步骤二，把步骤四中的 `prisma.task.*` 换成对数组变量的 `find/filter/slice` 操作即可，步骤一、三、五、六完全不受影响。等路由、校验、错误处理都绿了，再回来补 Prisma 建模与迁移，把持久化换成真实现。
+
 ## 🛠️ 步骤一：初始化与依赖
 
 ```bash
 pnpm init && pnpm pkg set type=module
 pnpm add hono @hono/node-server @prisma/client zod
-pnpm add -D prisma typescript @types/node
+pnpm add @prisma/adapter-better-sqlite3 better-sqlite3   # Prisma v7：SQLite 经 driver adapter 连接
+pnpm add -D prisma typescript @types/node dotenv
 ```
 
 目录规划：`src/lib/`（prisma 单例、HttpError）、`src/middleware/`（错误出口）、`src/routes/`（按资源拆分子应用）、`test/`。`app.ts` 只装配不监听，`server.ts` 负责监听——测试直接复用 Hono 实例，不占端口。
@@ -50,16 +53,19 @@ pnpm add -D prisma typescript @types/node
 ## 🛠️ 步骤二：数据模型（Prisma）
 
 ```bash
-pnpm exec prisma init
+pnpm exec prisma init   # 生成 schema 与 prisma7.config.ts 骨架（v7 默认 generator 为 prisma-client）
 ```
 
 ```prisma
 // prisma/schema.prisma
-generator client { provider = "prisma-client-js" }
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma" // v7：客户端生成到项目目录（TypeScript 源码）
+}
 
 datasource db {
-  provider = "sqlite"          // 演练用 SQLite，零配置；生产换 postgresql
-  url      = env("DATABASE_URL")
+  provider = "sqlite"              // 演练用 SQLite，零配置；生产换 postgresql
+  // v7 起 schema 不再写连接串——连接配置移到 prisma7.config.ts
 }
 
 model Task {
@@ -72,11 +78,39 @@ model Task {
 }
 ```
 
-```bash
-pnpm exec prisma migrate dev --name init   # 迁移并生成类型化客户端
+```ts
+// prisma7.config.ts —— v7：CLI 与迁移从这里读取连接配置
+import "dotenv/config";
+import { defineConfig } from "prisma/config";
+
+export default defineConfig({
+  schema: "prisma/schema.prisma",
+  migrations: { path: "prisma/migrations" },
+  datasource: { url: process.env.DATABASE_URL ?? "file:./prisma/dev.db" },
+});
 ```
 
-客户端统一从 `src/lib/prisma.ts` 导出单例：`export const prisma = new PrismaClient()`，避免热重载创建多个连接池。
+```bash
+# .env
+DATABASE_URL="file:./prisma/dev.db"
+```
+
+```bash
+pnpm exec prisma migrate dev --name init   # 生成迁移并应用
+pnpm exec prisma generate                  # v7 迁移不自动生成客户端，需显式执行
+```
+
+客户端单例从 generator 的 output 目录导入，且 v7 构造时必须传入 driver adapter：
+
+```ts
+// src/lib/prisma.ts —— 单例，避免热重载创建多个连接
+import { PrismaClient } from "../generated/prisma/client.js"; // 不再来自 @prisma/client
+import { PrismaBetterSqlite3 } from "@prisma/adapter-better-sqlite3";
+
+export const prisma = new PrismaClient({
+  adapter: new PrismaBetterSqlite3({ url: process.env.DATABASE_URL ?? "file:./prisma/dev.db" }),
+});
+```
 
 ## 🛠️ 步骤三：校验与错误基建
 

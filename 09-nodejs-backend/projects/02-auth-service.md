@@ -61,8 +61,12 @@ model RefreshToken {
 
 ```bash
 pnpm add bcryptjs jsonwebtoken
-pnpm add -D @types/bcryptjs @types/jsonwebtoken
+pnpm add -D @types/jsonwebtoken
 ```
+
+> 💡 bcryptjs 3.x **自带 TypeScript 类型**，不要安装 `@types/bcryptjs`——它已是官方废弃的 stub 包（装了反而报"deprecated"）；`jsonwebtoken` 没有自带类型，仍需 `@types/jsonwebtoken`。
+
+> 💡 **签发与验证的双轨说明**：本文用 `jsonwebtoken` 做**签发**（`expiresIn`/`audience` 等 claims 选项表达力更好），frameworks 篇的 `hono/jwt` 做**验证**中间件——两者产出的都是标准 HS256 JWT，可直接互验（`hono/jwt` 的 `jwt()`/`verify()` 能校验 `jsonwebtoken` 签发的令牌）。想统一到单轨，改用 `hono/jwt` 的 `sign()` 签发即可，但过期时间需自己写进 payload 的 `exp` 字段。
 
 ```typescript
 // src/services/auth-service.ts
@@ -187,7 +191,9 @@ authApp.post('/register', async (c) => {
 });
 
 authApp.post('/login', async (c) => {
-  const { email, password } = await c.req.json();
+  const { email, password } = z // 与 register 同一口径的校验，失败抛 ZodError → onError
+    .object({ email: z.string().email(), password: z.string().min(8) })
+    .parse(await c.req.json());
   const { accessToken, refreshToken } = await auth.login(email, password);
   setCookie(c, REFRESH_COOKIE, refreshToken, cookieOpts); // 写入 Set-Cookie 响应头
   return c.json({ accessToken });

@@ -56,32 +56,26 @@ pnpm exec prisma migrate dev --name todo-init
 ## 3. 校验层：Zod schema 即文档
 
 ```typescript
-// src/schemas/todo.ts
+// src/schemas/todo.ts —— 扁平 schema：处理器里对哪个来源（json/query）调用 parse，
+// schema 就描述哪个来源的形状；body/query 分组信封是 zValidator 中间件方案的形态
 import { z } from 'zod';
 
 export const createTodoSchema = z.object({
-  body: z.object({
-    title: z.string().min(1).max(100),
-    priority: z.enum(['low', 'mid', 'high']).default('low'),
-  }),
+  title: z.string().min(1).max(100),
+  priority: z.enum(['low', 'mid', 'high']).default('low'),
 });
 
 export const listQuerySchema = z.object({
-  query: z.object({
-    status: z.enum(['all', 'open', 'done']).default('all'),
-    priority: z.enum(['low', 'mid', 'high']).optional(),
-    page: z.coerce.number().int().min(1).default(1),   // query 是 string，自动转型
-    pageSize: z.coerce.number().int().min(1).max(50).default(20),
-  }),
+  status: z.enum(['all', 'open', 'done']).default('all'),
+  priority: z.enum(['low', 'mid', 'high']).optional(),
+  page: z.coerce.number().int().min(1).default(1),   // query 是 string，自动转型
+  pageSize: z.coerce.number().int().min(1).max(50).default(20),
 });
 
 export const updateTodoSchema = z.object({
-  params: z.object({ id: z.string() }),
-  body: z.object({
-    title: z.string().min(1).max(100).optional(),
-    done: z.boolean().optional(),
-    priority: z.enum(['low', 'mid', 'high']).optional(),
-  }),
+  title: z.string().min(1).max(100).optional(),
+  done: z.boolean().optional(),
+  priority: z.enum(['low', 'mid', 'high']).optional(),
 });
 ```
 
@@ -145,12 +139,12 @@ import {
 export const todosApp = new Hono();
 
 todosApp.post('/', async (c) => {
-  const { title, priority } = createTodoSchema.shape.body.parse(await c.req.json());
+  const { title, priority } = createTodoSchema.parse(await c.req.json());
   return c.json(await svc.createTodo(title, priority), 201);
 });
 
 todosApp.get('/', async (c) => {
-  const q = listQuerySchema.shape.query.parse(c.req.query()); // ZodError → 422
+  const q = listQuerySchema.parse(c.req.query()); // ZodError → 422
   return c.json(await svc.listTodos(q));
 });
 
@@ -159,7 +153,7 @@ todosApp.get('/:id', async (c) => {
 });
 
 todosApp.patch('/:id', async (c) => {
-  const patch = updateTodoSchema.shape.body.parse(await c.req.json());
+  const patch = updateTodoSchema.parse(await c.req.json());
   return c.json(await svc.updateTodo(c.req.param('id'), patch));
 });
 

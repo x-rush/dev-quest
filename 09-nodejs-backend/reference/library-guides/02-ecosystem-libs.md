@@ -82,8 +82,11 @@ model Post {
 ```
 
 ```ts
-import { PrismaClient } from "@prisma/client";
-const prisma = new PrismaClient();
+// v7：从 generator output 目录导入（@prisma/client 不再导出客户端），
+// 构造时传入 driver adapter（PostgreSQL 用 @prisma/adapter-pg，SQLite 用 @prisma/adapter-better-sqlite3）
+import { PrismaClient } from "../generated/prisma/client.js";
+import { PrismaPg } from "@prisma/adapter-pg";
+const prisma = new PrismaClient({ adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL }) });
 // 类型安全查询：字段名全部自动补全
 const users = await prisma.user.findMany({
   where: { email: { contains: "@example.com" } },
@@ -101,13 +104,14 @@ await prisma.user.upsert({ where: { email }, update: { name }, create: { email, 
 ```
 
 ### 陷阱
-- 修改 schema 后忘记 `prisma generate`，类型与运行时不一致
+- v7 schema 的 datasource **不写连接串**（报 P1012），连接配置移到 `prisma.config.ts`；客户端构造必须传 adapter
+- 修改 schema 后需显式 `prisma generate`（v7 迁移不再自动生成），否则类型与运行时不一致
 - `include`/`select` 已做关联扁平化，但循环内单查仍是 N+1，注意查询模式
 - 唯一键冲突抛 `P2002`，错误中间件按 `err.code` 前缀 `P` 映射 4xx
 
 ### Prisma vs Drizzle
 
-- **Prisma**：迁移工具、Studio、文档与心智负担最低；运行时查询引擎（Rust 二进制）
+- **Prisma**：迁移工具、Studio、文档与心智负担最低；v7 起经 driver adapters 连接数据库（客户端以 TS 源码生成到项目目录）
 - **Drizzle**：纯 TS 实现、更接近 SQL、边缘运行时友好；SQL 心智要求更高
 
 ## 3. pino：结构化日志

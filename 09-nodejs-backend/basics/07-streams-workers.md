@@ -133,9 +133,10 @@ export function hashInWorker(filePath: string): Promise<string> {
 }
 
 // 路由中使用：主线程完全不阻塞
-app.post("/files/:id/hash", async (req, res) => {
+app.post("/files/:id/hash", async (c) => {
+  const filePath = resolvePath(c.req.param("id")); // 业务侧把 id 映射为文件路径
   const hash = await hashInWorker(filePath);
-  res.json({ hash });
+  return c.json({ hash });
 });
 ```
 

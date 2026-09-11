@@ -62,6 +62,8 @@ def add_tag(tag: str, tags: list[str] | None = None):  # ✅ 标准解法
     return tags
 ```
 
+> 💡 上面用到的 `if tags is None` 是条件判断，下一章[控制流](./05-control-flow.md)才系统讲解。这里先记住惯例：**可变默认参数一律用 `None` 占位**，函数体内再判空重建——背下这个固定套路即可，原理下一章补齐。
+
 更深入的错误案例见[常见错误排查](../reference/quick-references/02-troubleshooting.md)。
 
 ---
@@ -133,6 +135,8 @@ print(bm == Bookmark("uv", "https://astral.sh"))   # True，按字段比较
 | `@dataclass(frozen=True)` | 实例不可变，可哈希、可作 dict 键 |
 | `@dataclass(order=True)` | 生成 `<`、`>=` 等比较方法 |
 | `@dataclass(slots=True)` | 启用 `__slots__`，省内存、禁止动态属性 |
+
+字段级控制（`field()` 的 `default_factory`/`repr`/`compare`/`init` 参数全表、frozen 与排序细节）见 [dataclass 速查](../reference/language-concepts/13-dataclasses.md)。
 
 > 💡 与 Pydantic 模型的分工：dataclass 管"程序内部数据"，Pydantic 管"边界校验"（API 输入/配置文件），见 [FastAPI 速查](../reference/framework-essentials/01-fastapi-essentials.md)。
 

@@ -26,7 +26,7 @@
 | 象限 | 回答的问题 | 目录 | 内容 |
 |------|-----------|------|------|
 | **教程** | "带我入门，走一遍" | `basics/` | 8 篇渐进教程：环境 → 服务器 → 模块 → 异步 → 路由 → 错误 → 流 → 首项目 |
-| **字典** | "X 的语法/参数是什么" | `reference/` | 11 篇全量参考：语言概念 5 / 框架速查 2 / 库指南 2 / 速查排错 2 |
+| **字典** | "X 的语法/参数是什么" | `reference/` | 12 篇全量参考：语言概念 6 / 框架速查 2 / 库指南 2 / 速查排错 2 |
 | **操作指南** | "怎么完成这个任务" | `frameworks/` `projects/` `testing/` `deployment/` | Hono 与生态 4 篇 · 实战项目 4 个 · 测试 3 篇 · 部署 3 篇 |
 | **解释** | "为什么这样设计" | `advanced-topics/` | 架构 1 · 性能 2 · 安全 1，均 ⭐⭐⭐ |
 
@@ -68,7 +68,8 @@
 │   │   ├── 02-async-api.md                  # 异步 API 全表
 │   │   ├── 03-node-core-api.md              # Node 核心模块 API 速查
 │   │   ├── 04-streams-api.md                # Stream API 速查
-│   │   └── 05-typescript-patterns.md        # Node + TypeScript 常用模式
+│   │   ├── 05-typescript-patterns.md        # Node + TypeScript 常用模式
+│   │   └── 06-esm-module-resolution.md      # ESM 与模块解析速查
 │   ├── framework-essentials/                # 框架核心要点
 │   │   ├── 01-hono-essentials.md            # Hono 4 核心速查
 │   │   └── 02-fastify-nestjs.md             # 框架选型对比：Fastify、NestJS 与 Express

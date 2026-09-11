@@ -112,7 +112,14 @@ import { redis } from '../lib/redis.js';
 
 export function rateLimit(opts: { windowSec: number; limit: number }): MiddlewareHandler {
   return async (c, next) => {
-    const ip = getConnInfo(c).remote?.address ?? 'unknown';
+    // getConnInfo 依赖真实 serve 上下文：app.request() 等模拟请求没有底层 socket，
+    // 直接调用会抛 TypeError——集成测试用 x-forwarded-for 头注入可断言的固定 IP
+    let ip: string;
+    try {
+      ip = getConnInfo(c).remote?.address ?? 'unknown';
+    } catch {
+      ip = c.req.header('x-forwarded-for') ?? 'unknown';
+    }
     const bucket = Math.floor(Date.now() / (opts.windowSec * 1000));
     const key = `rl:${ip}:${bucket}`;
 

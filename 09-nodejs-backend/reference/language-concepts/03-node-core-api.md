@@ -1,6 +1,6 @@
 # Node 核心模块 API 速查
 
-> **文档简介**: fs、path、events、process、os、url 等后端最常用内置模块的条目式速查
+> **文档简介**: fs、path、events、process、http、worker_threads、os、url 等后端最常用内置模块的条目式速查
 
 > **目标读者**: 需要确认核心模块 API 用法与陷阱的 Node 开发者
 
@@ -13,7 +13,7 @@
 | **模块** | `09-nodejs-backend` |
 | **象限** | 字典（reference） |
 | **难度** | ⭐ |
-| **标签** | `#fs` `#path` `#events` `#process` `#核心模块` |
+| **标签** | `#fs` `#path` `#events` `#process` `#http` `#worker_threads` `#核心模块` |
 | **更新日期** | `2026年9月` |
 
 ## 1. node:fs / node:fs/promises
@@ -158,7 +158,65 @@ new URL("./worker.js", import.meta.url);              // 模块相对定位（Wo
 - `searchParams` 的值会自动 URL 编码，取回是解码后的；不要二次 decodeURIComponent
 - 用字符串拼接 URL 极易漏斜杠/漏编码，一律用 `URL` 构造
 
-## 7. 其他常用模块一览
+## 7. node:http
+
+### 定义
+Node 原生 HTTP 服务与客户端。业务项目通常经 Hono 等框架封装（`@hono/node-server` 底层即它），但健康检查、代理、内网探针等场景仍会直接使用。
+
+### 语法与示例
+
+```ts
+import http from "node:http";
+
+const server = http.createServer((req, res) => {
+  console.log(req.method, req.url);            // "GET" "/ping?x=1"
+  res.writeHead(200, { "Content-Type": "application/json" }); // 状态码 + 响应头
+  res.end(JSON.stringify({ ok: true }));       // 结束响应（必须调用）
+});
+
+server.listen(3000, "127.0.0.1");  // 监听端口；回调可省
+server.close();                    // 停止接新连接，存量请求处理完再退出
+
+// 客户端：现代代码直接用全局 fetch
+const res = await fetch("http://127.0.0.1:3000/ping");
+```
+
+### 陷阱
+- `req`/`res` 是 Node 自己的 IncomingMessage/ServerResponse（**不是** Web 标准 Request/Response）——迁移 Hono 时心智模型要换：Hono 处理器 `return c.json()`，这里必须显式 `res.end()`
+- 忘调 `res.end()` 客户端会悬挂到超时；`res.writeHead` 与 `setHeader` 二选一，别混用
+- `req.url` 只含路径与查询串（`/ping?x=1`），不含协议与主机
+
+## 8. node:worker_threads
+
+### 定义
+真正的多线程：每个 Worker 有独立的事件循环与 V8 实例，通过消息传递（结构化克隆）通信。CPU 密集任务的根治方案，I/O 密集用事件循环即可（对比见 [Stream 与 Worker 教程](../../basics/07-streams-workers.md)）。
+
+### 语法与示例
+
+```ts
+import { Worker, parentPort, workerData } from "node:worker_threads";
+
+// worker.js —— 工作线程侧
+if (parentPort) {
+  const result = heavyCompute(workerData.n);   // workerData 是启动时传入的数据
+  parentPort.postMessage(result);              // 结构化克隆回传
+}
+
+// 主线程侧
+const worker = new Worker(new URL("./worker.js", import.meta.url), {
+  workerData: { n: 21 },
+});
+worker.on("message", (r) => console.log(r));   // 收结果
+worker.on("error", (err) => console.error(err));
+worker.terminate();                            // 强制终止（不等待）
+```
+
+### 陷阱
+- 主线程与 Worker **不共享堆内存**——传大对象走结构化克隆（深拷贝）；真要共享用 `SharedArrayBuffer` + `Atomics`
+- 线程数别超 `os.availableParallelism()`，线程切换与内存开销反而拖慢
+- Worker 内抛出的异常不会崩主进程，但 `error` 事件不监听就静默丢失
+
+## 9. 其他常用模块一览
 
 | 模块 | 用途 | 高频 API |
 |------|------|---------|

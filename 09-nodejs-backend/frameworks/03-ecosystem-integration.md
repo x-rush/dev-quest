@@ -27,19 +27,21 @@
 ## 1. Prisma 接入 PostgreSQL
 
 ```bash
-pnpm add prisma @prisma/client
+pnpm add @prisma/client @prisma/adapter-pg pg   # v7：PostgreSQL 经 driver adapter 连接
+pnpm add -D prisma dotenv
 pnpm exec prisma init --datasource-provider postgresql
 ```
 
 ```prisma
 // prisma/schema.prisma —— 模型即数据库表的单一事实来源
 generator client {
-  provider = "prisma-client-js"
+  provider = "prisma-client"
+  output   = "../src/generated/prisma" // v7：客户端生成到项目目录（TypeScript 源码）
 }
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
+  // v7 起连接串写在 prisma.config.ts，schema 不再写 url
 }
 
 model Post {
@@ -53,17 +55,34 @@ model Post {
 }
 ```
 
+```ts
+// prisma.config.ts —— v7：CLI 与迁移从这里读取连接串（dotenv 负责加载 .env）
+import "dotenv/config";
+import { defineConfig } from "prisma/config";
+
+export default defineConfig({
+  schema: "prisma/schema.prisma",
+  migrations: { path: "prisma/migrations" },
+  datasource: { url: process.env.DATABASE_URL },
+});
+```
+
 **连接管理**：Prisma Client 内部维护连接池，进程内只应实例化一次。开发时 `tsx watch` 反复重启模块会泄漏连接，用全局缓存解决：
 
 ```typescript
 // src/lib/prisma.ts —— 开发热重载安全的单例模式
-import { PrismaClient } from '@prisma/client';
+// v7：PrismaClient 从 generator output 目录导入（@prisma/client 不再可用），构造时传入 adapter
+import { PrismaClient } from '../generated/prisma/client.js';
+import { PrismaPg } from '@prisma/adapter-pg';
 
 const globalForPrisma = globalThis as unknown as { prisma?: PrismaClient };
+
+const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL });
 
 export const prisma =
   globalForPrisma.prisma ??
   new PrismaClient({
+    adapter,
     log: process.env.NODE_ENV === 'development' ? ['warn', 'error'] : ['error'],
   });
 
@@ -74,8 +93,11 @@ if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma;
 
 ```bash
 pnpm exec prisma migrate dev --name init   # 开发：生成迁移并应用
+pnpm exec prisma generate                  # v7：迁移不再自动生成客户端，显式执行
 pnpm exec prisma migrate deploy            # 生产/CI：只应用不生成
 ```
+
+> v7 的两条 migrate 命令都从 `prisma.config.ts` 读取连接串；`schema.prisma` 里写 `url` 会报 P1012。
 
 ```typescript
 // 交互式事务：转账类"读-改-写"必须包在事务里

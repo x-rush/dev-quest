@@ -142,10 +142,12 @@ Sentry.init({
 // error-handler.ts 中把未知错误交给 Sentry（保留自有的响应逻辑）
 import * as Sentry from '@sentry/node';
 
-if (err instanceof HttpError) { /* ...返回业务错误... */ }
+app.onError((err, c) => {
+  if (err instanceof HttpError) { /* ...返回业务错误... */ }
 
-Sentry.captureException(err);          // 未知错误：聚合同类、触发告警
-return res.status(500).json({ error: '服务器内部错误' });
+  Sentry.captureException(err);          // 未知错误：聚合同类、触发告警
+  return c.json({ error: '服务器内部错误' }, 500);
+});
 ```
 
 ## 4. 三支柱如何协作排障
