@@ -135,7 +135,6 @@ rows, err := queries.MonthlyRevenueByRegion(ctx, start, end)
 
 - 📄 **[GORM ORM 速查](./02-gorm-orm.md)** - ORM-first 模型的完整字典
 - 📄 **[路由器选型对比](./04-router-selection.md)** - 同系列的 Web 层选型条目
-- 📄 **[微服务框架选型](./07-microservice-frameworks.md)** - go-zero/Kratos/Kitex 一体化框架对比
 - 📄 **[GORM 完整教程](../../frameworks/03-gorm-orm-complete.md)** - 操作指南层
 - 📄 **[Go 标准库核心 API](../library-guides/01-go-standard-library.md)** - `database/sql` 底层接口
 - 🌐 **[sqlc 官方文档](https://docs.sqlc.dev/)** - 权威来源

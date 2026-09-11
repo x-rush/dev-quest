@@ -72,7 +72,6 @@ graph LR
 - [x] **Gin框架速查**: [reference/framework-essentials/01-gin-framework.md](../../01-go-backend/reference/framework-essentials/01-gin-framework.md) - Gin框架速查
 - [x] **GORM速查**: [reference/framework-essentials/02-gorm-orm.md](../../01-go-backend/reference/framework-essentials/02-gorm-orm.md) - ORM速查
 - [ ] **数据层选型**: [reference/framework-essentials/03-sqlc-vs-gorm.md](../../01-go-backend/reference/framework-essentials/03-sqlc-vs-gorm.md) - sqlc/GORM/ent 三方对比
-- [ ] **微服务框架选型**: [reference/framework-essentials/07-microservice-frameworks.md](../../01-go-backend/reference/framework-essentials/07-microservice-frameworks.md) - go-zero/Kratos/Kitex 对比
 
 **实战项目** ⭐⭐⭐
 - [x] **REST API服务器**: [projects/01-rest-api-server.md](../../01-go-backend/projects/01-rest-api-server.md) - Gin+GORM+MySQL

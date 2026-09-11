@@ -69,7 +69,7 @@
 | 分类 | 文档 |
 |------|------|
 | [语言核心概念](../../01-go-backend/reference/language-concepts/01-go-keywords.md) | Go关键字、错误处理、并发、泛型等9篇 |
-| [框架核心要点](../../01-go-backend/reference/framework-essentials/01-gin-framework.md) | Gin、GORM、sqlc/GORM/ent 数据层对比、路由器选型、微服务框架选型、Mongo/Redis驱动等7篇 |
+| [框架核心要点](../../01-go-backend/reference/framework-essentials/01-gin-framework.md) | Gin、GORM、sqlc/GORM/ent 数据层对比、路由器选型、Mongo/Redis驱动等6篇 |
 | [库指南](../../01-go-backend/reference/library-guides/01-go-standard-library.md) | 标准库、三方库与net/http 3篇 |
 | [快速参考](../../01-go-backend/reference/quick-references/01-syntax-cheatsheet.md) | 语法速查、Web工具、故障排查3篇 |
 
