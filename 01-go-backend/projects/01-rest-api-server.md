@@ -131,6 +131,8 @@ go get -u github.com/go-playground/validator/v10
 package config
 
 import (
+    "strings"
+
     "github.com/spf13/viper"
 )
 
@@ -144,6 +146,7 @@ type Config struct {
 type ServerConfig struct {
     Host         string `mapstructure:"host"`
     Port         int    `mapstructure:"port"`
+    Mode         string `mapstructure:"mode"`
     ReadTimeout  int    `mapstructure:"read_timeout"`
     WriteTimeout int    `mapstructure:"write_timeout"`
 }
@@ -170,6 +173,9 @@ type LoggerConfig struct {
 func LoadConfig(configPath string) (*Config, error) {
     viper.SetConfigFile(configPath)
     viper.AutomaticEnv()
+    // 关键：让 DB_HOST、SERVER_PORT 等环境变量能覆盖
+    // database.host、server.port 等配置项（点号映射为下划线）
+    viper.SetEnvKeyReplacer(strings.NewReplacer(".", "_"))
 
     if err := viper.ReadInConfig(); err != nil {
         return nil, err
@@ -190,6 +196,7 @@ func LoadConfig(configPath string) (*Config, error) {
 server:
   host: "0.0.0.0"
   port: 8080
+  mode: "debug"  # "release" 时 gin.SetMode(gin.ReleaseMode)
   read_timeout: 30
   write_timeout: 30
 
@@ -383,6 +390,7 @@ package models
 
 import (
     "log"
+    "strconv"
     "your-project/internal/config"
     "gorm.io/driver/postgres"
     "gorm.io/gorm"
@@ -419,7 +427,7 @@ func getDatabaseConnectionString(dbConfig config.DatabaseConfig) string {
         " user=" + dbConfig.User +
         " password=" + dbConfig.Password +
         " dbname=" + dbConfig.DBName +
-        " port=" + string(dbConfig.Port) +
+        " port=" + strconv.Itoa(dbConfig.Port) +
         " sslmode=" + dbConfig.SSLMode +
         " TimeZone=Asia/Shanghai"
 }
@@ -513,6 +521,7 @@ func (s *AuthService) ValidateToken(tokenString string) (*Claims, error) {
 package services
 
 import (
+    "context"
     "errors"
     "your-project/internal/models"
     "gorm.io/gorm"
@@ -526,7 +535,9 @@ func NewUserService(db *gorm.DB) *UserService {
     return &UserService{db: db}
 }
 
-func (s *UserService) CreateUser(req *models.CreateUserRequest) (*models.User, error) {
+// service 方法统一接收 context.Context，并透传给 GORM 的 WithContext，
+// 使取消/超时/链路追踪信息能传导到数据库层（对比 db.Create 裸调用）。
+func (s *UserService) CreateUser(ctx context.Context, req *models.CreateUserRequest) (*models.User, error) {
     user := &models.User{
         Username:  req.Username,
         Email:     req.Email,
@@ -539,79 +550,79 @@ func (s *UserService) CreateUser(req *models.CreateUserRequest) (*models.User, e
         return nil, err
     }
 
-    if err := s.db.Create(user).Error; err != nil {
+    if err := s.db.WithContext(ctx).Create(user).Error; err != nil {
         return nil, err
     }
 
     return user, nil
 }
 
-func (s *UserService) GetUserByID(id uint) (*models.User, error) {
+func (s *UserService) GetUserByID(ctx context.Context, id uint) (*models.User, error) {
     var user models.User
-    if err := s.db.First(&user, id).Error; err != nil {
+    if err := s.db.WithContext(ctx).First(&user, id).Error; err != nil {
         return nil, err
     }
     return &user, nil
 }
 
-func (s *UserService) GetUserByUsername(username string) (*models.User, error) {
+func (s *UserService) GetUserByUsername(ctx context.Context, username string) (*models.User, error) {
     var user models.User
-    if err := s.db.Where("username = ?", username).First(&user).Error; err != nil {
+    if err := s.db.WithContext(ctx).Where("username = ?", username).First(&user).Error; err != nil {
         return nil, err
     }
     return &user, nil
 }
 
-func (s *UserService) GetUserByEmail(email string) (*models.User, error) {
+func (s *UserService) GetUserByEmail(ctx context.Context, email string) (*models.User, error) {
     var user models.User
-    if err := s.db.Where("email = ?", email).First(&user).Error; err != nil {
+    if err := s.db.WithContext(ctx).Where("email = ?", email).First(&user).Error; err != nil {
         return nil, err
     }
     return &user, nil
 }
 
-func (s *UserService) UpdateUser(id uint, req *models.UpdateUserRequest) (*models.User, error) {
+func (s *UserService) UpdateUser(ctx context.Context, id uint, req *models.UpdateUserRequest) (*models.User, error) {
     var user models.User
-    if err := s.db.First(&user, id).Error; err != nil {
+    if err := s.db.WithContext(ctx).First(&user, id).Error; err != nil {
         return nil, err
     }
 
     user.FirstName = req.FirstName
     user.LastName = req.LastName
 
-    if err := s.db.Save(&user).Error; err != nil {
+    if err := s.db.WithContext(ctx).Save(&user).Error; err != nil {
         return nil, err
     }
 
     return &user, nil
 }
 
-func (s *UserService) DeleteUser(id uint) error {
-    if err := s.db.Delete(&models.User{}, id).Error; err != nil {
+func (s *UserService) DeleteUser(ctx context.Context, id uint) error {
+    if err := s.db.WithContext(ctx).Delete(&models.User{}, id).Error; err != nil {
         return err
     }
     return nil
 }
 
-func (s *UserService) ListUsers(page, limit int) ([]models.User, int64, error) {
+func (s *UserService) ListUsers(ctx context.Context, page, limit int) ([]models.User, int64, error) {
     var users []models.User
     var total int64
 
     offset := (page - 1) * limit
 
-    if err := s.db.Model(&models.User{}).Count(&total).Error; err != nil {
+    if err := s.db.WithContext(ctx).Model(&models.User{}).Count(&total).Error; err != nil {
         return nil, 0, err
     }
 
-    if err := s.db.Offset(offset).Limit(limit).Find(&users).Error; err != nil {
+    if err := s.db.WithContext(ctx).Offset(offset).Limit(limit).Find(&users).Error; err != nil {
         return nil, 0, err
     }
 
     return users, total, nil
 }
 
-func (s *UserService) Login(req *models.LoginRequest) (*models.User, error) {
-    user, err := s.GetUserByUsername(req.Username)
+func (s *UserService) Login(ctx context.Context, req *models.LoginRequest) (*models.User, error) {
+    user, err := s.GetUserByUsername(ctx, req.Username)
     if err != nil {
         if errors.Is(err, gorm.ErrRecordNotFound) {
             return nil, errors.New("user not found")
@@ -696,7 +707,15 @@ import (
 
 func CORSMiddleware() gin.HandlerFunc {
     return func(c *gin.Context) {
-        c.Header("Access-Control-Allow-Origin", "*")
+        origin := c.GetHeader("Origin")
+
+        // Access-Control-Allow-Origin: * 与 Allow-Credentials: true 是非法组合，
+        // 浏览器会直接拒绝响应。携带凭据时必须回显具体 Origin；
+        // 若无需凭据，则改回 "*" 并删除 Credentials 头。
+        if origin != "" {
+            c.Header("Access-Control-Allow-Origin", origin)
+            c.Header("Vary", "Origin") // 防止 CDN/代理缓存了错误的 CORS 头
+        }
         c.Header("Access-Control-Allow-Credentials", "true")
         c.Header("Access-Control-Allow-Headers", "Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization, accept, origin, Cache-Control, X-Requested-With")
         c.Header("Access-Control-Allow-Methods", "POST, OPTIONS, GET, PUT, DELETE")
@@ -803,7 +822,7 @@ func (h *UserHandler) CreateUser(c *gin.Context) {
         return
     }
 
-    user, err := h.userService.CreateUser(&req)
+    user, err := h.userService.CreateUser(c.Request.Context(), &req)
     if err != nil {
         c.JSON(http.StatusInternalServerError, utils.ErrorResponse{
             Error:   "Failed to create user",
@@ -839,7 +858,7 @@ func (h *UserHandler) GetUser(c *gin.Context) {
         return
     }
 
-    user, err := h.userService.GetUserByID(uint(id))
+    user, err := h.userService.GetUserByID(c.Request.Context(), uint(id))
     if err != nil {
         c.JSON(http.StatusNotFound, utils.ErrorResponse{
             Error:   "User not found",
@@ -886,7 +905,7 @@ func (h *UserHandler) UpdateUser(c *gin.Context) {
         return
     }
 
-    user, err := h.userService.UpdateUser(uint(id), &req)
+    user, err := h.userService.UpdateUser(c.Request.Context(), uint(id), &req)
     if err != nil {
         c.JSON(http.StatusInternalServerError, utils.ErrorResponse{
             Error:   "Failed to update user",
@@ -923,7 +942,7 @@ func (h *UserHandler) DeleteUser(c *gin.Context) {
         return
     }
 
-    if err := h.userService.DeleteUser(uint(id)); err != nil {
+    if err := h.userService.DeleteUser(c.Request.Context(), uint(id)); err != nil {
         c.JSON(http.StatusInternalServerError, utils.ErrorResponse{
             Error:   "Failed to delete user",
             Details: err.Error(),
@@ -957,7 +976,7 @@ func (h *UserHandler) ListUsers(c *gin.Context) {
         limit = 10
     }
 
-    users, total, err := h.userService.ListUsers(page, limit)
+    users, total, err := h.userService.ListUsers(c.Request.Context(), page, limit)
     if err != nil {
         c.JSON(http.StatusInternalServerError, utils.ErrorResponse{
             Error:   "Failed to list users",
@@ -990,6 +1009,7 @@ package handlers
 
 import (
     "net/http"
+    "your-project/internal/middleware"
     "your-project/internal/models"
     "your-project/internal/services"
     "your-project/internal/utils"
@@ -1029,7 +1049,7 @@ func (h *AuthHandler) Login(c *gin.Context) {
         return
     }
 
-    user, err := h.userService.Login(&req)
+    user, err := h.userService.Login(c.Request.Context(), &req)
     if err != nil {
         c.JSON(http.StatusUnauthorized, utils.ErrorResponse{
             Error:   "Authentication failed",
@@ -1069,7 +1089,7 @@ func (h *AuthHandler) Login(c *gin.Context) {
 func (h *AuthHandler) GetMe(c *gin.Context) {
     userID, _, _ := middleware.GetCurrentUser(c)
 
-    user, err := h.userService.GetUserByID(userID)
+    user, err := h.userService.GetUserByID(c.Request.Context(), userID)
     if err != nil {
         c.JSON(http.StatusInternalServerError, utils.ErrorResponse{
             Error:   "Failed to get user",
@@ -1093,7 +1113,14 @@ func (h *AuthHandler) GetMe(c *gin.Context) {
 package main
 
 import (
+    "context"
+    "errors"
     "log"
+    "net/http"
+    "os/signal"
+    "strconv"
+    "syscall"
+    "time"
     "your-project/internal/config"
     "your-project/internal/handlers"
     "your-project/internal/middleware"
@@ -1175,13 +1202,35 @@ func main() {
         c.JSON(http.StatusOK, gin.H{"status": "healthy"})
     })
 
-    // Start server
-    addr := cfg.Server.Host + ":" + string(cfg.Server.Port)
-    log.Printf("Server starting on %s", addr)
-
-    if err := router.Run(addr); err != nil {
-        log.Fatalf("Failed to start server: %v", err)
+    // Start server：用 http.Server + signal.NotifyContext + Shutdown 实现优雅关停，
+    // 收到 SIGINT/SIGTERM 后先停止接收新请求，等待在途请求完成（最长 10 秒）再退出。
+    addr := cfg.Server.Host + ":" + strconv.Itoa(cfg.Server.Port)
+    srv := &http.Server{
+        Addr:         addr,
+        Handler:      router,
+        ReadTimeout:  time.Duration(cfg.Server.ReadTimeout) * time.Second,
+        WriteTimeout: time.Duration(cfg.Server.WriteTimeout) * time.Second,
     }
+
+    ctx, stop := signal.NotifyContext(context.Background(), syscall.SIGINT, syscall.SIGTERM)
+    defer stop()
+
+    go func() {
+        log.Printf("Server starting on %s", addr)
+        if err := srv.ListenAndServe(); err != nil && !errors.Is(err, http.ErrServerClosed) {
+            log.Fatalf("Failed to start server: %v", err)
+        }
+    }()
+
+    <-ctx.Done() // 等待 Ctrl+C / SIGTERM
+    log.Println("Shutting down server...")
+
+    shutdownCtx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+    defer cancel()
+    if err := srv.Shutdown(shutdownCtx); err != nil {
+        log.Fatalf("Server forced to shutdown: %v", err)
+    }
+    log.Println("Server exited gracefully")
 }
 ```
 
@@ -1248,12 +1297,14 @@ package integration
 
 import (
     "bytes"
+    "context"
     "encoding/json"
     "net/http"
     "net/http/httptest"
     "testing"
     "your-project/internal/config"
     "your-project/internal/models"
+    "your-project/internal/services"
     "github.com/gin-gonic/gin"
     "github.com/stretchr/testify/assert"
 )
@@ -1265,15 +1316,17 @@ func TestLogin(t *testing.T) {
         t.Fatalf("Failed to initialize database: %v", err)
     }
 
-    // Create test user
+    // Create test user（services.NewUserService 与 CreateUser 均需 context）
     userService := services.NewUserService(models.GetDB())
-    testUser, _ := userService.CreateUser(&models.CreateUserRequest{
+    if _, err := userService.CreateUser(context.Background(), &models.CreateUserRequest{
         Username:  "testuser",
         Email:     "test@example.com",
         Password:  "password123",
         FirstName: "Test",
         LastName:  "User",
-    })
+    }); err != nil {
+        t.Fatalf("Failed to create test user: %v", err)
+    }
 
     router := setupRouter(cfg)
 

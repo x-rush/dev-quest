@@ -278,10 +278,13 @@ import (
     "fmt"
 )
 
+// 哨兵错误：预定义的错误变量，供调用方用 errors.Is 精确匹配
+var ErrConfigNotFound = errors.New("config file not found")
+
 // 使用 %w 动词进行错误包装
 func loadConfig() error {
     // 模拟配置文件不存在
-    return errors.New("config file not found")
+    return ErrConfigNotFound
 }
 
 func initializeApp() error {
@@ -296,8 +299,10 @@ func main() {
     if err := initializeApp(); err != nil {
         fmt.Printf("错误: %v\n", err)
 
-        // 检查是否包含特定错误
-        if errors.Is(err, errors.New("config file not found")) {
+        // 注意：必须与哨兵变量比较。写成 errors.Is(err, errors.New("config file not found"))
+        // 恒为 false —— 每次调用 errors.New 都会创建一个全新的错误值，
+        // 与错误链中的任何错误都不相等（errors.Is 底层是 == 比较）
+        if errors.Is(err, ErrConfigNotFound) {
             fmt.Println("提示: 请检查配置文件是否存在")
         }
 
@@ -363,6 +368,54 @@ func main() {
     }
 }
 ```
+
+## ⏳ defer：延迟执行与资源清理
+
+Go 没有 `finally`，但有 `defer`——注册一个函数调用，在**外层函数返回时**执行。它与错误处理密不可分：打开资源的代码和释放资源的代码可以紧挨着写，无论从哪条路径返回（包括 panic）资源都会被释放。
+
+实测验证的三条规则：
+
+```go
+func main() {
+    // 1. 多个 defer 后进先出（LIFO），像栈一样
+    defer fmt.Println("defer 1")
+    defer fmt.Println("defer 2")
+    fmt.Println("函数体")
+
+    // 2. 参数在 defer 语句执行时【立即求值】
+    x := 1
+    defer fmt.Println("defer 捕获的 x:", x) // 打印 1，不是 2
+    x = 2
+    fmt.Println("修改后的 x:", x)
+
+    // 3. 经典用法：确保资源释放
+    f := func() {
+        defer fmt.Println("资源已释放")
+        fmt.Println("使用资源")
+    }
+    f()
+}
+// 输出: 函数体 / 修改后的 x: 2 / 使用资源 / 资源已释放
+//       / defer 捕获的 x: 1 / defer 2 / defer 1
+```
+
+错误处理中的标准姿势：
+
+```go
+func readFile(path string) ([]byte, error) {
+    f, err := os.Open(path)
+    if err != nil {
+        return nil, fmt.Errorf("打开 %s: %w", path, err)
+    }
+    defer f.Close() // 紧跟在错误检查之后注册，任何返回路径都会执行
+
+    return io.ReadAll(f)
+}
+```
+
+> ⚠️ **常见误解**：`defer` 不是在当前代码块结束时执行，而是**外层函数**返回时执行。循环里 `defer f.Close()` 会积攒到函数结束才统一执行，长时间运行的循环应改为每轮迭代封装成一个函数调用。
+
+defer 的另一个核心用途是配合 `recover` 捕获 panic，见下一节的 `defer func() { recover() }` 模式。
 
 ## 🚨 Panic和Recover机制
 
@@ -918,7 +971,7 @@ func main() {
 ## 🔗 文档交叉引用
 
 ### 相关文档
-- 📄 **[函数和方法]**: [04-functions-methods.md](04-functions-methods.md) - 函数定义和方法调用
+- 📄 **[函数和方法]**: [05-functions-methods.md](05-functions-methods.md) - 函数定义和方法调用
 - 📄 **[Go编程精华]**: [../reference/language-concepts/03-go-programming-essentials.md](../reference/language-concepts/03-go-programming-essentials.md) - Go语言设计哲学
 - 📄 **[Gin框架错误处理]**: [../frameworks/01-gin-framework-basics.md](../frameworks/01-gin-framework-basics.md) - Web框架错误处理
 

@@ -6,7 +6,7 @@
 |------|------|
 | **模块** | `01-go-backend` |
 | **分类** | `advanced-topics/api-design` |
-| **难度** | ⭐⭐⭐⭐ |
+| **难度** | ⭐⭐⭐ |
 | **标签** | `#graphql` `#api-design` `#gqlgen` `#schema-first` |
 | **更新日期** | `2026年9月` |
 | **作者** | Dev Quest Team |

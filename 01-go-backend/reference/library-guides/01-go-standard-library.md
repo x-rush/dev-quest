@@ -1878,6 +1878,103 @@ func main() {
 }
 ```
 
+## 19. slices - 泛型切片操作
+
+**功能**：Go 1.21+ 标准库泛型包，提供类型安全的切片操作；Go 1.23 起配合迭代器进一步完善
+
+**主要功能**：
+- 排序与搜索（泛型版，替代 `sort.Ints`/`sort.Strings` 等逐类型函数）
+- 包含/索引/比较（替代手写循环）
+- 插入/删除/克隆（替代 copy 拼接的样板代码）
+
+**与 sort 包的关系**：`slices` 是 `sort` 的泛型继任者。新代码优先用 `slices`；`sort.Slice` 仍适用于自定义比较逻辑（如多字段排序），`sort.Sort` + 接口三件套（Len/Swap/Less）的写法已被取代。
+
+**示例**：
+```go
+package main
+
+import (
+    "fmt"
+    "slices"
+)
+
+func main() {
+    nums := []int{5, 2, 8, 1, 9, 3}
+
+    slices.Sort(nums) // 替代 sort.Ints（泛型，任意 ordered 类型）
+    fmt.Println("Sort:", nums) // [1 2 3 5 8 9]
+
+    fmt.Println(slices.IsSorted(nums)) // true，替代 sort.IntsAreSorted
+
+    // 二分查找（要求已排序），替代 sort.SearchInts
+    i, ok := slices.BinarySearch(nums, 8)
+    fmt.Println(i, ok) // 4 true
+
+    // 此前需手写循环的操作
+    fmt.Println(slices.Contains(nums, 9), slices.Index(nums, 9)) // true 5
+    fmt.Println(slices.Max(nums), slices.Min(nums))              // 9 1
+
+    // 切片不能用 == 比较，slices.Equal 可以
+    a, b := []int{1, 2, 3}, []int{1, 2, 3}
+    fmt.Println(slices.Equal(a, b)) // true
+
+    // 插入/删除（替代 copy + append 拼接）
+    s := []string{"a", "b", "c"}
+    s = slices.Insert(s, 1, "x") // 在索引 1 处插入
+    fmt.Println(s)               // [a x b c]
+    s = slices.Delete(s, 1, 2)   // 删除 [1,2) 区间
+    fmt.Println(s)               // [a b c]
+    s = slices.DeleteFunc(s, func(v string) bool { return v == "c" })
+    fmt.Println(s) // [a b]
+
+    slices.Reverse(s)
+    clone := slices.Clone(s) // 独立副本，避免共享底层数组
+    fmt.Println(s, clone)    // [b a] [b a]
+}
+```
+
+## 20. maps - 泛型映射操作
+
+**功能**：Go 1.21+ 标准库泛型包，提供映射的克隆、比较与键值提取；Go 1.23 起支持迭代器
+
+**主要功能**：
+- 克隆（浅拷贝整个映射）
+- 相等比较
+- 键/值迭代器提取（配合 `slices.Sorted` 得到有序键列表）
+
+**示例**：
+```go
+package main
+
+import (
+    "fmt"
+    "maps"
+    "slices"
+)
+
+func main() {
+    ages := map[string]int{"alice": 30, "bob": 25, "carol": 35}
+
+    // 键列表排序输出（map 遍历顺序随机，需要有序时先排序）
+    keys := slices.Sorted(maps.Keys(ages)) // maps.Keys 返回迭代器
+    fmt.Println(keys) // [alice bob carol]
+
+    // 克隆：浅拷贝，值类型为引用类型时注意共享
+    m2 := maps.Clone(ages)
+    m2["dave"] = 40
+    fmt.Println(ages, m2) // dave 只存在于 m2
+
+    // 相等比较（键值对完全一致）
+    fmt.Println(maps.Equal(ages, map[string]int{"alice": 30, "bob": 25, "carol": 35})) // true
+
+    // 按条件删除
+    maps.DeleteFunc(m2, func(k string, v int) bool { return v > 30 })
+    fmt.Println(m2) // carol(35) 被删除
+}
+```
+
+> ⚠️ `maps.Clone` 是浅拷贝：值若为切片/映射/指针，克隆与原映射仍共享底层数据。
+
 ## 标准库使用最佳实践
 
 ### 1. 错误处理
@@ -1972,7 +2069,7 @@ func processData(data []byte) {
 
 Go标准库提供了丰富的功能，涵盖了：
 
-1. **基础数据结构**：strings, strconv, math, sort
+1. **基础数据结构**：strings, strconv, math, sort, slices, maps
 2. **I/O操作**：io, bufio, os, fmt
 3. **网络编程**：net, net/http, net/url
 4. **数据库**：database/sql

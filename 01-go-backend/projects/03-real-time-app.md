@@ -230,10 +230,27 @@ const (
 package websocket
 
 import (
-	"sync"
 	"time"
+
+	"github.com/gorilla/websocket"
 )
 
+// Hub 依赖以接口形式声明，避免 websocket 包反向依赖 services 包
+type UserService interface {
+	UpdateUserStatus(id string, status string) error
+}
+
+type MessageService interface {
+	SavePrivateMessage(senderID, receiverID, content string) error
+	SaveGroupMessage(senderID, groupID, content string) error
+	MarkMessageAsRead(messageID string) error
+}
+
+type GroupService interface{}
+
+// Hub 的所有状态只在 Run 所在的单一 goroutine 内读写（gorilla 官方 chat 示例模式），
+// 因此不需要互斥锁；外部包通过 Submit/Publish/PublishStatus 等导出方法投递事件，
+// 而不是直接向未导出的 channel 字段发送（跨包访问未导出字段无法编译）。
 type Hub struct {
 	// 注册的客户端
 	clients map[*Client]bool
@@ -256,9 +273,6 @@ type Hub struct {
 
 	// 消息发送队列
 	messageQueue chan Message
-
-	// 互斥锁
-	mu sync.RWMutex
 
 	// 依赖服务
 	userService    UserService
@@ -323,9 +337,6 @@ func (h *Hub) Run() {
 }
 
 func (h *Hub) handleClientRegister(client *Client) {
-	h.mu.Lock()
-	defer h.mu.Unlock()
-
 	// 注册客户端
 	h.clients[client] = true
 
@@ -341,16 +352,15 @@ func (h *Hub) handleClientRegister(client *Client) {
 		From:    "server",
 		To:      client.userID,
 	}
-	client.send <- welcome.encode()
+	client.send <- welcome.Encode()
 
 	// 广播用户上线通知
 	h.broadcastUserStatus(client.userID, "online")
 }
 
+// handleClientUnregister 幂等：仅当客户端仍在集合中才处理并 close(send)，
+// 从根本上杜绝 handleBroadcast 慢客户端踢出路径与注销路径的 double-close panic。
 func (h *Hub) handleClientUnregister(client *Client) {
-	h.mu.Lock()
-	defer h.mu.Unlock()
-
 	if _, ok := h.clients[client]; !ok {
 		return
 	}
@@ -384,20 +394,17 @@ func (h *Hub) handleClientUnregister(client *Client) {
 		}
 	}
 
-	// 关闭发送通道
+	// 关闭发送通道（close 的唯一所有权在 handleClientUnregister）
 	close(client.send)
 }
 
 func (h *Hub) handleBroadcast(message []byte) {
-	h.mu.RLock()
-	defer h.mu.RUnlock()
-
 	for client := range h.clients {
 		select {
 		case client.send <- message:
 		default:
-			close(client.send)
-			delete(h.clients, client)
+			// 慢客户端：踢出（handleClientUnregister 幂等，不会二次 close）
+			h.handleClientUnregister(client)
 		}
 	}
 }
@@ -420,17 +427,13 @@ func (h *Hub) handleMessage(msg Message) {
 }
 
 func (h *Hub) handlePrivateMessage(msg Message) {
-	h.mu.RLock()
-	defer h.mu.RUnlock()
-
 	// 发送给接收者
 	if clients, ok := h.userClients[msg.To]; ok {
 		for _, client := range clients {
 			select {
-			case client.send <- msg.encode():
+			case client.send <- msg.Encode():
 			default:
-				close(client.send)
-				delete(h.clients, client)
+				h.handleClientUnregister(client)
 			}
 		}
 	}
@@ -440,19 +443,15 @@ func (h *Hub) handlePrivateMessage(msg Message) {
 }
 
 func (h *Hub) handleGroupMessage(msg Message) {
-	h.mu.RLock()
-	defer h.mu.RUnlock()
-
 	// 发送给群组成员
 	if clients, ok := h.groupClients[msg.GroupID]; ok {
 		for _, client := range clients {
 			// 不发送给消息发送者
 			if client.userID != msg.From {
 				select {
-				case client.send <- msg.encode():
+				case client.send <- msg.Encode():
 				default:
-					close(client.send)
-					delete(h.clients, client)
+					h.handleClientUnregister(client)
 				}
 			}
 		}
@@ -463,9 +462,6 @@ func (h *Hub) handleGroupMessage(msg Message) {
 }
 
 func (h *Hub) handleTypingIndicator(msg Message) {
-	h.mu.RLock()
-	defer h.mu.RUnlock()
-
 	// 发送给特定的用户或群组
 	if msg.GroupID != "" {
 		// 群组打字状态
@@ -473,10 +469,9 @@ func (h *Hub) handleTypingIndicator(msg Message) {
 			for _, client := range clients {
 				if client.userID != msg.From {
 					select {
-					case client.send <- msg.encode():
+					case client.send <- msg.Encode():
 					default:
-						close(client.send)
-						delete(h.clients, client)
+						h.handleClientUnregister(client)
 					}
 				}
 			}
@@ -486,11 +481,9 @@ func (h *Hub) handleTypingIndicator(msg Message) {
 		if clients, ok := h.userClients[msg.To]; ok {
 			for _, client := range clients {
 				select {
-				case client.send <- msg.encode():
+				case client.send <- msg.Encode():
 				default:
-						close(client.send)
-						delete(h.clients, client)
-					}
+					h.handleClientUnregister(client)
 				}
 			}
 		}
@@ -505,10 +498,9 @@ func (h *Hub) handleReadReceipt(msg Message) {
 	if clients, ok := h.userClients[msg.From]; ok {
 		for _, client := range clients {
 			select {
-			case client.send <- msg.encode():
+			case client.send <- msg.Encode():
 			default:
-				close(client.send)
-				delete(h.clients, client)
+				h.handleClientUnregister(client)
 			}
 		}
 	}
@@ -518,35 +510,78 @@ func (h *Hub) broadcastUserStatus(userID, status string) {
 	// 更新用户状态
 	h.userService.UpdateUserStatus(userID, status)
 
-	// 广播状态更新
+	// 广播状态更新（payload 只编码一次）
 	statusMsg := Message{
 		Type:    "user_status",
 		Content: UserStatusUpdate{UserID: userID, Status: status},
 		From:    "system",
 	}
+	payload := statusMsg.Encode()
 
-	h.mu.RLock()
 	// 广播给所有用户（或者只广播给好友/群组成员）
 	for client := range h.clients {
 		select {
-		case client.send <- statusMsg.encode():
+		case client.send <- payload:
 		default:
-			close(client.send)
-			delete(h.clients, client)
+			h.handleClientUnregister(client)
 		}
 	}
-	h.mu.RUnlock()
 }
 
 func (h *Hub) cleanupInactiveClients() {
-	h.mu.Lock()
-	defer h.mu.Unlock()
-
+	// 清理必须直接调用 handleClientUnregister：
+	// 向自身的 unregister 通道发送会造成"自己等自己消费"的自死锁，
+	// 而且 handleClientUnregister 内部已做幂等检查，直接调用即可
 	for client := range h.clients {
-		if time.Since(client.lastActivity) > 5*time.Minute {
-			h.unregister <- client
+		if time.Since(client.LastActivity()) > 5*time.Minute {
+			h.handleClientUnregister(client)
 		}
 	}
+}
+
+// OnlineUsers 返回当前在线用户ID（供 /ws/online-users 路由调用）
+func (h *Hub) OnlineUsers() []string {
+	userIDs := make([]string, 0, len(h.userClients))
+	for userID := range h.userClients {
+		userIDs = append(userIDs, userID)
+	}
+	return userIDs
+}
+
+// Submit 供外部包（handlers 等）向 Hub 投递消息，非阻塞。
+func (h *Hub) Submit(msg Message) {
+	select {
+	case h.messageQueue <- msg:
+	default: // 队列满时按业务策略处理（丢弃/落库/告警）
+	}
+}
+
+// PublishStatus 供外部包（Redis 订阅者）投递用户状态更新。
+func (h *Hub) PublishStatus(status UserStatusUpdate) {
+	select {
+	case h.userStatus <- status:
+	default:
+	}
+}
+
+// Publish 供外部包广播原始字节。
+func (h *Hub) Publish(payload []byte) {
+	select {
+	case h.broadcast <- payload:
+	default:
+	}
+}
+
+// ServeClient 注册客户端并启动读写泵（升级成功后由路由层调用）。
+func (h *Hub) ServeClient(conn *websocket.Conn, userID string) {
+	client := NewClient(h, conn, userID)
+
+	// 注册客户端
+	h.register <- client
+
+	// 启动读写goroutine
+	go client.WritePump()
+	go client.ReadPump()
 }
 ```
 
@@ -559,46 +594,63 @@ import (
 	"encoding/json"
 	"log"
 	"net/http"
-	"sync"
+	"sync/atomic"
 	"time"
 
 	"github.com/gorilla/websocket"
 )
 
-var (
-	upgrader = websocket.Upgrader{
-		ReadBufferSize:  1024,
-		WriteBufferSize: 1024,
-		CheckOrigin: func(r *http.Request) bool {
-			return true // 生产环境中应该验证origin
-		},
-	}
+// gorilla/websocket 没有包级 Upgrade 函数，只有 Upgrader 类型；
+// 路由层通过 websocket.Upgrader.Upgrade(w, r, nil) 完成 HTTP -> WebSocket 协议升级。
+var Upgrader = websocket.Upgrader{
+	ReadBufferSize:  1024,
+	WriteBufferSize: 1024,
+	CheckOrigin: func(r *http.Request) bool {
+		return true // 生产环境中应该验证origin
+	},
+}
+
+const (
+	writeWait  = 10 * time.Second
+	pongWait   = 60 * time.Second
+	pingPeriod = (pongWait * 9) / 10 // 必须小于 pongWait
 )
 
 type Client struct {
-	hub         *Hub
-	conn        *websocket.Conn
-	send        chan []byte
-	userID      string
-	lastActivity time.Time
-	mu          sync.Mutex
+	hub          *Hub
+	conn         *websocket.Conn
+	send         chan []byte
+	userID       string
+	lastActivity atomic.Int64 // UnixNano；ReadPump 写、Hub 清理 goroutine 读，原子操作避免数据竞争
 }
 
 func NewClient(hub *Hub, conn *websocket.Conn, userID string) *Client {
-	return &Client{
-		hub:          hub,
-		conn:         conn,
-		send:         make(chan []byte, 256),
-		userID:       userID,
-		lastActivity: time.Now(),
+	c := &Client{
+		hub:    hub,
+		conn:   conn,
+		send:   make(chan []byte, 256),
+		userID: userID,
 	}
+	c.lastActivity.Store(time.Now().UnixNano())
+	return c
 }
 
-func (c *Client) readPump() {
+// LastActivity 供 Hub 清理逻辑无锁读取。
+func (c *Client) LastActivity() time.Time {
+	return time.Unix(0, c.lastActivity.Load())
+}
+
+func (c *Client) ReadPump() {
 	defer func() {
 		c.hub.unregister <- c
 		c.conn.Close()
 	}()
+
+	// 读超时 + pong 保活：客户端必须周期性 pong，否则连接被回收
+	c.conn.SetReadDeadline(time.Now().Add(pongWait))
+	c.conn.SetPongHandler(func(string) error {
+		return c.conn.SetReadDeadline(time.Now().Add(pongWait))
+	})
 
 	for {
 		_, message, err := c.conn.ReadMessage()
@@ -609,9 +661,7 @@ func (c *Client) readPump() {
 			break
 		}
 
-		c.mu.Lock()
-		c.lastActivity = time.Now()
-		c.mu.Unlock()
+		c.lastActivity.Store(time.Now().UnixNano())
 
 		var msg Message
 		if err := json.Unmarshal(message, &msg); err != nil {
@@ -623,12 +673,12 @@ func (c *Client) readPump() {
 		msg.From = c.userID
 
 		// 处理消息
-		c.hub.messageQueue <- msg
+		c.hub.Submit(msg)
 	}
 }
 
-func (c *Client) writePump() {
-	ticker := time.NewTicker(50 * time.Second)
+func (c *Client) WritePump() {
+	ticker := time.NewTicker(pingPeriod)
 	defer func() {
 		ticker.Stop()
 		c.conn.Close()
@@ -637,7 +687,9 @@ func (c *Client) writePump() {
 	for {
 		select {
 		case message, ok := <-c.send:
+			c.conn.SetWriteDeadline(time.Now().Add(writeWait))
 			if !ok {
+				// Hub 已 close(send)：发送关闭帧后退出
 				c.conn.WriteMessage(websocket.CloseMessage, []byte{})
 				return
 			}
@@ -648,6 +700,7 @@ func (c *Client) writePump() {
 			}
 
 		case <-ticker.C:
+			c.conn.SetWriteDeadline(time.Now().Add(writeWait))
 			if err := c.conn.WriteMessage(websocket.PingMessage, nil); err != nil {
 				return
 			}
@@ -655,7 +708,7 @@ func (c *Client) writePump() {
 	}
 }
 
-func (m *Message) encode() []byte {
+func (m *Message) Encode() []byte {
 	data, _ := json.Marshal(m)
 	return data
 }
@@ -674,15 +727,17 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v5"
+	"github.com/your-username/chat-app/models"
+	"github.com/your-username/chat-app/services"
 	"golang.org/x/crypto/bcrypt"
 )
 
 type AuthHandler struct {
-	userService UserService
+	userService *services.UserService
 	jwtSecret   string
 }
 
-func NewAuthHandler(userService UserService, jwtSecret string) *AuthHandler {
+func NewAuthHandler(userService *services.UserService, jwtSecret string) *AuthHandler {
 	return &AuthHandler{
 		userService: userService,
 		jwtSecret:   jwtSecret,
@@ -812,13 +867,14 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/your-username/chat-app/services"
 )
 
 type UserHandler struct {
-	userService UserService
+	userService *services.UserService
 }
 
-func NewUserHandler(userService UserService) *UserHandler {
+func NewUserHandler(userService *services.UserService) *UserHandler {
 	return &UserHandler{
 		userService: userService,
 	}
@@ -910,14 +966,16 @@ import (
 	"strconv"
 
 	"github.com/gin-gonic/gin"
+	"github.com/your-username/chat-app/services"
+	"github.com/your-username/chat-app/websocket"
 )
 
 type MessageHandler struct {
-	messageService MessageService
-	hub           *Hub
+	messageService *services.MessageService
+	hub            *websocket.Hub
 }
 
-func NewMessageHandler(messageService MessageService, hub *Hub) *MessageHandler {
+func NewMessageHandler(messageService *services.MessageService, hub *websocket.Hub) *MessageHandler {
 	return &MessageHandler{
 		messageService: messageService,
 		hub:           hub,
@@ -972,15 +1030,15 @@ func (h *MessageHandler) MarkMessageAsRead(c *gin.Context) {
 		return
 	}
 
-	// 通知消息发送者
+	// 通知消息发送者（hub.Submit 替代对未导出 messageQueue 字段的直接发送）
 	message, err := h.messageService.GetMessageByID(messageID)
 	if err == nil && message.SenderID != userID {
-		h.hub.messageQueue <- Message{
+		h.hub.Submit(websocket.Message{
 			Type:    "read",
 			Content: messageID,
 			From:    userID,
 			To:      message.SenderID,
-		}
+		})
 	}
 
 	c.JSON(http.StatusOK, gin.H{"message": "Message marked as read"})
@@ -1020,19 +1078,21 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/your-username/chat-app/services"
+	"github.com/your-username/chat-app/websocket"
 )
 
 type GroupHandler struct {
-	groupService  GroupService
-	messageService MessageService
-	hub          *Hub
+	groupService   *services.GroupService
+	messageService *services.MessageService
+	hub            *websocket.Hub
 }
 
-func NewGroupHandler(groupService GroupService, messageService MessageService, hub *Hub) *GroupHandler {
+func NewGroupHandler(groupService *services.GroupService, messageService *services.MessageService, hub *websocket.Hub) *GroupHandler {
 	return &GroupHandler{
-		groupService:  groupService,
+		groupService:   groupService,
 		messageService: messageService,
-		hub:          hub,
+		hub:            hub,
 	}
 }
 
@@ -1148,7 +1208,7 @@ func (h *GroupHandler) AddGroupMember(c *gin.Context) {
 	}
 
 	// 通知群组成员
-	h.hub.messageQueue <- Message{
+	h.hub.Submit(websocket.Message{
 		Type:    "group_member_added",
 		Content: map[string]interface{}{
 			"group_id": groupID,
@@ -1157,7 +1217,7 @@ func (h *GroupHandler) AddGroupMember(c *gin.Context) {
 		},
 		From:    userID,
 		GroupID: groupID,
-	}
+	})
 
 	c.JSON(http.StatusOK, gin.H{"message": "Member added successfully"})
 }
@@ -1180,7 +1240,7 @@ func (h *GroupHandler) RemoveGroupMember(c *gin.Context) {
 	}
 
 	// 通知群组成员
-	h.hub.messageQueue <- Message{
+	h.hub.Submit(websocket.Message{
 		Type:    "group_member_removed",
 		Content: map[string]interface{}{
 			"group_id": groupID,
@@ -1188,7 +1248,7 @@ func (h *GroupHandler) RemoveGroupMember(c *gin.Context) {
 		},
 		From:    userID,
 		GroupID: groupID,
-	}
+	})
 
 	c.JSON(http.StatusOK, gin.H{"message": "Member removed successfully"})
 }
@@ -1222,7 +1282,7 @@ func (h *GroupHandler) LeaveGroup(c *gin.Context) {
 	}
 
 	// 通知群组成员
-	h.hub.messageQueue <- Message{
+	h.hub.Submit(websocket.Message{
 		Type:    "group_member_left",
 		Content: map[string]interface{}{
 			"group_id": groupID,
@@ -1230,7 +1290,7 @@ func (h *GroupHandler) LeaveGroup(c *gin.Context) {
 		},
 		From:    userID,
 		GroupID: groupID,
-	}
+	})
 
 	c.JSON(http.StatusOK, gin.H{"message": "Left group successfully"})
 }
@@ -1247,6 +1307,11 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/your-username/chat-app/websocket"
 )
+
+// AuthService 只抽象路由所需的验签能力（由 JWT 中间件同源的实现提供）
+type AuthService interface {
+	ValidateToken(tokenString string) (userID string, err error)
+}
 
 func SetupWebSocketRoutes(r *gin.Engine, hub *websocket.Hub, authService AuthService) {
 	// WebSocket连接端点
@@ -1265,29 +1330,22 @@ func SetupWebSocketRoutes(r *gin.Engine, hub *websocket.Hub, authService AuthSer
 			return
 		}
 
-		// 升级HTTP连接为WebSocket连接
-		conn, err := websocket.Upgrade(c.Writer, c.Request, nil)
+		// 升级HTTP连接为WebSocket连接：
+		// gorilla/websocket 没有包级 Upgrade 函数，
+		// 必须使用 websocket.Upgrader.Upgrade(w, r, nil)
+		conn, err := websocket.Upgrader.Upgrade(c.Writer, c.Request, nil)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to upgrade connection"})
 			return
 		}
 
-		// 创建客户端
-		client := websocket.NewClient(hub, conn, userID)
-
-		// 注册客户端
-		hub.Register <- client
-
-		// 启动读写goroutine
-		go client.WritePump()
-		go client.ReadPump()
+		// 注册客户端并启动读写goroutine
+		hub.ServeClient(conn, userID)
 	})
 
 	// 获取在线用户列表
 	r.GET("/ws/online-users", func(c *gin.Context) {
-		userID := c.MustGet("user_id").(string)
-
-		onlineUsers := hub.GetOnlineUsers(userID)
+		onlineUsers := hub.OnlineUsers()
 		c.JSON(http.StatusOK, gin.H{"online_users": onlineUsers})
 	})
 }
@@ -1363,7 +1421,14 @@ func AuthMiddleware(jwtSecret string) gin.HandlerFunc {
 
 func CORSMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		c.Header("Access-Control-Allow-Origin", "*")
+		origin := c.GetHeader("Origin")
+
+		// Access-Control-Allow-Origin: * 与 Allow-Credentials: true 是非法组合，
+		// 浏览器会直接拒绝响应；携带凭据时必须回显具体 Origin
+		if origin != "" {
+			c.Header("Access-Control-Allow-Origin", origin)
+			c.Header("Vary", "Origin") // 防止 CDN/代理缓存了错误的 CORS 头
+		}
 		c.Header("Access-Control-Allow-Credentials", "true")
 		c.Header("Access-Control-Allow-Headers", "Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization, accept, origin, Cache-Control, X-Requested-With")
 		c.Header("Access-Control-Allow-Methods", "POST, OPTIONS, GET, PUT, DELETE")
@@ -1390,7 +1455,7 @@ import (
 	"encoding/json"
 	"log"
 
-	"github.com/go-redis/redis/v8"
+	"github.com/redis/go-redis/v9"
 )
 
 type RedisPublisher struct {
@@ -1444,7 +1509,7 @@ import (
 	"encoding/json"
 	"log"
 
-	"github.com/go-redis/redis/v8"
+	"github.com/redis/go-redis/v9"
 	"github.com/your-username/chat-app/websocket"
 )
 
@@ -1503,11 +1568,11 @@ func (s *RedisSubscriber) handleUserStatus(payload map[string]interface{}) {
 		return
 	}
 
-	// 更新Hub中的用户状态
-	s.hub.UserStatus <- websocket.UserStatusUpdate{
+	// 更新Hub中的用户状态（UserStatus 为未导出字段，改走导出方法 PublishStatus）
+	s.hub.PublishStatus(websocket.UserStatusUpdate{
 		UserID: userID,
 		Status: status,
-	}
+	})
 }
 
 func (s *RedisSubscriber) handleMessageEvent(payload map[string]interface{}) {
@@ -1527,8 +1592,8 @@ func (s *RedisSubscriber) handleMessageEvent(payload map[string]interface{}) {
 		Content: message,
 	}
 
-	// 发送到Hub
-	s.hub.Broadcast <- wsMessage.encode()
+	// 发送到Hub（Broadcast 为未导出字段，改走导出方法 Publish）
+	s.hub.Publish(wsMessage.Encode())
 }
 ```
 
@@ -1960,10 +2025,11 @@ import (
 	"testing"
 	"time"
 
-	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
+
+	"github.com/your-username/chat-app/models"
 )
 
 type UserServiceSuite struct {
@@ -1974,7 +2040,8 @@ type UserServiceSuite struct {
 }
 
 func (suite *UserServiceSuite) SetupSuite() {
-	// 创建测试数据库
+	// 创建测试数据库（修复：原片段直接使用未定义变量 dsn，这里补上定义）
+	dsn := "host=localhost user=postgres password=postgres dbname=chat_app_test port=5432 sslmode=disable TimeZone=Asia/Shanghai"
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	suite.NoError(err)
 	suite.db = db
@@ -2261,7 +2328,7 @@ import (
 	"encoding/json"
 	"time"
 
-	"github.com/go-redis/redis/v8"
+	"github.com/redis/go-redis/v9"
 )
 
 type LayeredCache struct {
@@ -3164,7 +3231,7 @@ func (h *MessageHandler) UploadFile(c *gin.Context) {
 		To:   receiverID,
 	}
 
-	h.hub.messageQueue <- message
+	h.hub.Submit(message)
 
 	c.JSON(http.StatusOK, gin.H{
 		"message":   "File uploaded successfully",
@@ -3251,50 +3318,76 @@ func (e *Encryption) Decrypt(ciphertext string) (string, error) {
 ### 3. 推送通知
 ```go
 // notifications/push.go
+// 修复说明：原片段使用的 appleboy/go-fcm 旧代码（fcm.NewClient(serverKey)、
+// response.Failure）基于 FCM legacy HTTP API——该 API 已于 2024-06 关停；
+// appleboy/go-fcm 自 v1.2.x 起也已改为封装官方 Firebase Admin SDK。
+// 生产代码应直接使用 firebase.google.com/go/v4（FCM v1 API）+ 服务账号凭据。
 package notifications
 
 import (
 	"context"
 	"fmt"
+	"log"
 
-	"github.com/appleboy/go-fcm"
+	firebase "firebase.google.com/go/v4"
+	"firebase.google.com/go/v4/messaging"
+	"google.golang.org/api/option"
 )
 
 type PushNotificationService struct {
-	fcmClient *fcm.Client
+	client *messaging.Client
 }
 
-func NewPushNotificationService(serverKey string) *PushNotificationService {
-	client, err := fcm.NewClient(serverKey)
+// NewPushNotificationService 传入 FCM v1 服务账号 JSON 的路径
+func NewPushNotificationService(ctx context.Context, credentialsFile string) (*PushNotificationService, error) {
+	app, err := firebase.NewApp(ctx, nil, option.WithCredentialsFile(credentialsFile))
 	if err != nil {
-		panic(err)
+		return nil, fmt.Errorf("初始化 Firebase App 失败: %w", err)
 	}
 
-	return &PushNotificationService{
-		fcmClient: client,
+	client, err := app.Messaging(ctx)
+	if err != nil {
+		return nil, fmt.Errorf("获取 Messaging 客户端失败: %w", err)
 	}
+
+	return &PushNotificationService{client: client}, nil
 }
 
 func (s *PushNotificationService) SendPushNotification(ctx context.Context, token, title, body string, data map[string]string) error {
-	message := &fcm.Message{
+	message := &messaging.Message{
 		Token: token,
-		Notification: &fcm.Notification{
+		Notification: &messaging.Notification{
 			Title: title,
 			Body:  body,
 		},
 		Data: data,
 	}
 
-	// 发送消息
-	response, err := s.fcmClient.Send(ctx, message)
+	// FCM v1 API 单次发送返回消息 ID；legacy API 的 response.Failure 计数不再存在
+	resp, err := s.client.Send(ctx, message)
 	if err != nil {
 		return err
 	}
 
-	if response.Failure > 0 {
-		return fmt.Errorf("failed to send push notification to %d devices", response.Failure)
-	}
+	log.Printf("推送发送成功: %s", resp)
+	return nil
+}
 
+// SendMulticast 批量发送（最多 500 tokens/次）
+func (s *PushNotificationService) SendMulticast(ctx context.Context, tokens []string, title, body string) error {
+	resp, err := s.client.SendEachForMulticast(ctx, &messaging.MulticastMessage{
+		Tokens: tokens,
+		Notification: &messaging.Notification{
+			Title: title,
+			Body:  body,
+		},
+	})
+	if err != nil {
+		return err
+	}
+	if resp.FailureCount > 0 {
+		return fmt.Errorf("发送失败 %d/%d 条", resp.FailureCount, len(tokens))
+	}
 	return nil
 }
 ```
@@ -3316,4 +3409,4 @@ func (s *PushNotificationService) SendPushNotification(ctx context.Context, toke
 
 这个项目展示了Go语言在实时Web应用开发中的强大能力，通过合理的设计模式和最佳实践，可以构建出高性能、可扩展的实时通信系统。
 
-*最后更新: 2025年9月*
+*最后更新: 2026年9月*

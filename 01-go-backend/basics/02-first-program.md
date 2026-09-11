@@ -491,7 +491,7 @@ func main() {
 ### 相关文档
 - 📄 **[环境搭建]**: [basics/01-environment-setup.md](01-environment-setup.md) - Go开发环境配置
 - 📄 **[变量和常量]**: [basics/03-variables-constants.md](03-variables-constants.md) - Go数据类型和变量
-- 📄 **[函数和方法]**: [basics/04-functions-methods.md](04-functions-methods.md) - 函数定义和方法调用
+- 📄 **[函数和方法]**: [basics/05-functions-methods.md](05-functions-methods.md) - 函数定义和方法调用
 
 ### 参考资源
 - 📖 **[Go官方教程]**: https://tour.golang.org/

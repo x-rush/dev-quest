@@ -122,19 +122,18 @@ tasks:
 package main
 
 import (
+	"fmt"
 	"os"
+	"strings"
 
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	"go.uber.org/zap"
 )
 
-func main() {
-	// 初始化日志
-	logger, _ := zap.NewProduction()
-	defer logger.Sync()
-
-	// 创建根命令
+// NewRootCommand 构建根命令：抽出来供 main 与 cmd/root_test.go 复用，
+// 测试可以直接调用本函数并注入输出缓冲与参数。
+func NewRootCommand(logger *zap.Logger) *cobra.Command {
 	rootCmd := &cobra.Command{
 		Use:   "task",
 		Short: "现代化的任务运行器",
@@ -161,8 +160,16 @@ func main() {
 	viper.BindPFlag("verbose", rootCmd.PersistentFlags().Lookup("verbose"))
 	viper.BindPFlag("dry-run", rootCmd.PersistentFlags().Lookup("dry-run"))
 
+	return rootCmd
+}
+
+func main() {
+	// 初始化日志
+	logger, _ := zap.NewProduction()
+	defer logger.Sync()
+
 	// 执行命令
-	if err := rootCmd.Execute(); err != nil {
+	if err := NewRootCommand(logger).Execute(); err != nil {
 		logger.Fatal("命令执行失败", zap.Error(err))
 		os.Exit(1)
 	}
@@ -477,12 +484,9 @@ func (e *TaskExecutor) executeTask(ctx context.Context, taskName string) error {
 
 	e.logger.Info("开始执行任务", zap.String("task", taskName))
 
-	// 设置任务环境变量
-	for k, v := range task.Env {
-		if err := os.Setenv(k, os.ExpandEnv(v)); err != nil {
-			return fmt.Errorf("设置环境变量失败: %w", err)
-		}
-	}
+	// 任务环境变量不再通过 os.Setenv 设置：
+	// os.Setenv 修改的是进程级全局状态，本执行器并发运行多个任务时
+	// 存在数据竞争且会相互污染，改为在 executeCommand 中通过 exec.Cmd.Env 注入
 
 	// 检查是否需要重新构建
 	if !e.config.Force && !e.shouldRun(task) {
@@ -544,6 +548,15 @@ func (e *TaskExecutor) executeCommand(ctx context.Context, task *Task, cmd strin
 	// 设置工作目录
 	if task.Dir != "" {
 		command.Dir = task.Dir
+	}
+
+	// 注入任务环境变量（并发安全：只影响本子进程，不改进程级全局环境）
+	if len(task.Env) > 0 {
+		env := make([]string, 0, len(task.Env))
+		for k, v := range task.Env {
+			env = append(env, k+"="+os.ExpandEnv(v))
+		}
+		command.Env = append(os.Environ(), env...)
 	}
 
 	// 设置标准输入输出
@@ -826,8 +839,10 @@ func CreateProgressBar(total int64, description string) *progressbar.ProgressBar
 		progressbar.OptionSetRenderBlankState(true),
 		progressbar.OptionSpinnerType(14),
 		progressbar.OptionFullWidth(),
-		progressbar.OptionSetElapsedTimeString("elapsed:"),
-		progressbar.OptionSetDescriptionString(""),
+		// 修复：progressbar/v3 没有 ElapsedTimeString / DescriptionString 字符串选项
+		// （此前文档虚构）；用 OptionSetElapsedTime + OptionShowElapsedTimeOnFinish 达到同样效果
+		progressbar.OptionSetElapsedTime(true),
+		progressbar.OptionShowElapsedTimeOnFinish(),
 	)
 }
 ```
@@ -1095,6 +1110,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+	"go.uber.org/zap"
 )
 
 func TestRootCommand(t *testing.T) {
@@ -1148,8 +1164,8 @@ tasks:
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			// 创建根命令
-			rootCmd := NewRootCommand()
+			// 创建根命令（NewRootCommand 定义见 main.go）
+			rootCmd := NewRootCommand(zap.NewNop())
 
 			// 设置输出缓冲
 			out := &bytes.Buffer{}
@@ -1178,7 +1194,7 @@ func TestInitCommand(t *testing.T) {
 	os.Chdir(tempDir)
 
 	// 执行初始化命令
-	rootCmd := NewRootCommand()
+	rootCmd := NewRootCommand(zap.NewNop())
 	rootCmd.SetArgs([]string{"init"})
 
 	err := rootCmd.Execute()

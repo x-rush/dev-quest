@@ -91,7 +91,8 @@ func (f *FakeUserRepository) GetUser(id int) (*User, error) {
 #### 1. 安装gomock工具
 ```bash
 # 安装gomock工具和mockgen
-go install github.com/golang/mock/mockgen@latest
+# （golang 组织下的原 mock 仓库已归档，官方延续版为 go.uber.org/mock，API 完全兼容）
+go install go.uber.org/mock/mockgen@latest
 
 # 验证安装
 mockgen -version
@@ -143,7 +144,7 @@ import (
     "context"
     "testing"
 
-    "github.com/golang/mock/gomock"
+    "go.uber.org/mock/gomock"
     "github.com/stretchr/testify/assert"
 
     "yourproject/interfaces"
@@ -518,7 +519,7 @@ import (
     "testing"
     "time"
 
-    "github.com/golang/mock/gomock"
+    "go.uber.org/mock/gomock"
     "github.com/stretchr/testify/assert"
     "github.com/stretchr/testify/require"
 
@@ -702,7 +703,7 @@ package helpers
 import (
     "context"
     "testing"
-    "github.com/golang/mock/gomock"
+    "go.uber.org/mock/gomock"
     "github.com/stretchr/testify/require"
 )
 

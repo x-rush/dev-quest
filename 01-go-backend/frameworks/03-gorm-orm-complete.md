@@ -14,7 +14,7 @@
 |------|------|
 | **模块** | `01-go-backend` |
 | **分类** | `frameworks/database` |
-| **难度** | ⭐⭐⭐⭐ |
+| **难度** | ⭐⭐⭐ |
 | **标签** | `#gorm` `#orm` `#数据库` `#go` `#postgresql` `#mysql` |
 | **更新日期** | `2026年9月` |
 | **作者** | Dev Quest Team |

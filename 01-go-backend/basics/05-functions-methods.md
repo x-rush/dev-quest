@@ -432,6 +432,47 @@ func main() {
 }
 ```
 
+## 🧩 接口初识
+
+方法的价值在于支撑**接口**（interface）——Go 实现多态的核心机制。这里只建立直觉，完整语义见 [Go OOP 概念字典](../reference/language-concepts/06-go-oop-concepts.md)。
+
+```go
+// 接口：只声明"能做什么"，不声明"是什么"
+type Speaker interface {
+    Speak() string
+}
+
+// 任何类型只要实现了 Speak() string，就自动满足 Speaker —— 无需声明
+type Dog struct{ Name string }
+type Robot struct{ ID int }
+
+func (d Dog) Speak() string   { return d.Name + ": 汪汪" }
+func (r Robot) Speak() string { return fmt.Sprintf("Robot-%d: 嘀嘀", r.ID) }
+
+// 面向接口编程：函数不关心具体类型
+func greet(s Speaker) {
+    fmt.Println(s.Speak())
+}
+
+func main() {
+    greet(Dog{Name: "旺财"})  // 旺财: 汪汪
+    greet(Robot{ID: 7})       // Robot-7: 嘀嘀
+
+    // 接口是"装具体值"的盒子
+    speakers := []Speaker{Dog{Name: "阿黄"}, Robot{ID: 42}}
+    for _, s := range speakers {
+        greet(s)
+    }
+}
+```
+
+三个关键点：
+1. **隐式实现**：类型实现接口不需要 `implements` 声明，方法集匹配即可——这是Go与其他主流语言最不同的设计
+2. **方法接收者决定实现**：值接收者方法同时属于值和指针；指针接收者方法只属于指针类型
+3. **接口值是盒子**：`Speaker` 变量可以装入任何实现了它的值，运行时按装入的具体类型分派
+
+方法接收者选值还是指针，往往取决于"这个类型要满足哪些接口、接口方法要不要改状态"——把本节与上面的值/指针接收者对比结合起来理解。
+
 ## 🎯 实际应用示例
 
 ### 示例1: 数学工具库
@@ -706,7 +747,7 @@ fmt.Printf("结果: %.2f", result)
 ### 相关文档
 - 📄 **[第一个程序]**: [02-first-program.md](02-first-program.md) - Go程序基础结构
 - 📄 **[变量和常量]**: [03-variables-constants.md](03-variables-constants.md) - Go数据类型和变量
-- 📄 **[控制结构]**: [05-control-structures.md](05-control-structures.md) - 条件语句和循环
+- 📄 **[控制结构]**: [06-control-structures.md](06-control-structures.md) - 条件语句和循环
 
 ### 参考资源
 - 📖 **[Go函数文档]**: https://golang.org/ref/spec#Functions

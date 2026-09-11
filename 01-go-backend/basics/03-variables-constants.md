@@ -574,8 +574,8 @@ func process(items []int) {
 
 ### 相关文档
 - 📄 **[第一个程序]**: [02-first-program.md](02-first-program.md) - Go程序基础结构
-- 📄 **[函数和方法]**: [04-functions-methods.md](04-functions-methods.md) - 函数定义和方法调用
-- 📄 **[控制结构]**: [05-control-structures.md](05-control-structures.md) - 条件语句和循环
+- 📄 **[函数和方法]**: [05-functions-methods.md](05-functions-methods.md) - 函数定义和方法调用
+- 📄 **[控制结构]**: [06-control-structures.md](06-control-structures.md) - 条件语句和循环
 
 ### 参考资源
 - 📖 **[Go数据类型文档]**: https://golang.org/ref/spec#Types

@@ -194,7 +194,7 @@ func readFile() {
 
 ## 🔗 相关资源
 
-- **深入学习**: [basics/05-control-structures.md](../../basics/05-control-structures.md)
+- **深入学习**: [basics/06-control-structures.md](../../basics/06-control-structures.md)
 - **相关文档**: [reference/language-concepts/04-go-data-types.md](04-go-data-types.md)
 - **实践参考**: [frameworks/01-gin-framework-basics.md](../../frameworks/01-gin-framework-basics.md)
 

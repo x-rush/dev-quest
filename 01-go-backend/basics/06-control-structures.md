@@ -801,8 +801,8 @@ func containsValueMap(set map[int]struct{}) bool {
 ### 相关文档
 - 📄 **[第一个程序]**: [02-first-program.md](02-first-program.md) - Go程序基础结构
 - 📄 **[变量和常量]**: [03-variables-constants.md](03-variables-constants.md) - Go数据类型和变量
-- 📄 **[函数和方法]**: [04-functions-methods.md](04-functions-methods.md) - 函数定义和方法调用
-- 📄 **[错误处理]**: [06-error-handling.md](06-error-handling.md) - Go错误处理机制
+- 📄 **[函数和方法]**: [05-functions-methods.md](05-functions-methods.md) - 函数定义和方法调用
+- 📄 **[错误处理]**: [08-error-handling.md](08-error-handling.md) - Go错误处理机制
 
 ### 参考资源
 - 📖 **[Go控制流文档]**: https://golang.org/ref/spec#Statements

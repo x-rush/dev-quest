@@ -96,7 +96,7 @@ func main() {
 
 ## 🔗 相关条目
 
-- 📄 **[函数与方法](../../basics/04-functions-methods.md)** - 多返回值与错误传递的语法基础
+- 📄 **[函数与方法](../../basics/05-functions-methods.md)** - 多返回值与错误传递的语法基础
 - 📄 **[Go 关键字详解](./01-go-keywords.md)** - `defer`/`panic`/`go` 关键字全解
 - 📄 **[Go 并发基础](./08-concurrency-basics.md)** - goroutine 中的错误传播模式
 - 🌐 **[错误处理与 Go（官方博客）](https://go.dev/blog/errors-are-values)** - 权威来源

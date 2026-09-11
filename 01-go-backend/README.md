@@ -17,7 +17,7 @@
 | Go | 1.25（补丁至 1.25.14；注：Go 1.26 已于 2026-02-10 发布，1.25 仍在官方支持窗口内，故基线取 1.25） | 2026-09-11 | [go.dev/blog/go1.25](https://go.dev/blog/go1.25) |
 | Gin | 1.12.0（满足 ≥1.10 基线） | 2026-09-11 | [gin-gonic/gin releases](https://github.com/gin-gonic/gin/releases) |
 | GORM | v1.31.2（最新稳定版；v1.30.0 起提供 `gorm.G[T]` 泛型 API） | 2026-09-11 | [pkg.go.dev/gorm.io/gorm](https://pkg.go.dev/gorm.io/gorm) |
-| MongoDB Go Driver | v2.8.2（最新稳定版；v1 路径已进入维护模式，新项目使用 `/v2`） | 2026-09-11 | [mongodb/mongo-go-driver releases](https://github.com/mongodb/mongo-go-driver/releases) |
+| MongoDB Go Driver | v2.9.1（最新稳定版；v1 路径已进入维护模式，新项目使用 `/v2`） | 2026-09-11 | [mongodb/mongo-go-driver releases](https://github.com/mongodb/mongo-go-driver/releases) |
 | go-redis | v9.22.0（v9 系列） | 2026-09-11 | [redis/go-redis releases](https://github.com/redis/go-redis/releases) |
 
 ## 📚 文档元数据
@@ -44,13 +44,13 @@
 
 ## 🧭 四象限导览
 
-按内容用途四象限组织（规范见 `../shared-resources/standards/module-structure-guide.md`）。**字典参考（reference/）现有 20 篇，无难度门槛，可任意跳入查阅**：
+按内容用途四象限组织（规范见 `../shared-resources/standards/module-structure-guide.md`）。**字典参考（reference/）现有 21 篇，无难度门槛，可任意跳入查阅**：
 
 | 象限 | 目录 | 篇数 | 入口 |
 |------|------|------|------|
-| 📖 教程 | `basics/` | 6 | [环境搭建](basics/01-environment-setup.md) |
+| 📖 教程 | `basics/` | 8 | [环境搭建](basics/01-environment-setup.md) |
 | 🛠️ 操作指南 | `frameworks/` `projects/` `testing/` `deployment/` | 18 | [Gin 入门](frameworks/01-gin-framework-basics.md) · [REST API 实战](projects/01-rest-api-server.md) |
-| 📚 字典参考 | `reference/` | **20** | [语言核心](reference/language-concepts/01-go-keywords.md) · [框架核心](reference/framework-essentials/01-gin-framework.md) · [选型对比](reference/framework-essentials/03-sqlc-vs-gorm.md) · [路由器选型](reference/framework-essentials/04-router-selection.md) |
+| 📚 字典参考 | `reference/` | **21** | [语言核心](reference/language-concepts/01-go-keywords.md) · [框架核心](reference/framework-essentials/01-gin-framework.md) · [选型对比](reference/framework-essentials/03-sqlc-vs-gorm.md) · [路由器选型](reference/framework-essentials/04-router-selection.md) · [标准库字典](reference/library-guides/01-go-standard-library.md) |
 | 🎓 深度解释 | `advanced-topics/` | 6 | [并发模式](advanced-topics/performance/01-concurrency-patterns.md) |
 
 > **字典无等级，学习有路径**：同一概念的完整解释在 `reference/` 只有一份权威条目，其他目录链接过去。
@@ -80,7 +80,8 @@
 │   │   └── 06-go-redis.md         # go-redis 客户端速查 ✅
 │   ├── 📦 library-guides/         # 常用库指南
 │   │   ├── 01-go-standard-library.md # 标准库核心API ✅
-│   │   └── 02-third-party-libs.md  # 第三方库精选 ✅
+│   │   ├── 02-third-party-libs.md  # 第三方库精选 ✅
+│   │   └── 03-net-http.md          # HTTP 服务端与客户端 ✅
 │   └── 🔧 quick-references/       # 快速参考
 │       ├── 01-syntax-cheatsheet.md # Go语法速查表 ✅
 │       ├── 02-web-tools.md        # Web开发工具 ✅
@@ -89,15 +90,17 @@
 │   ├── 01-environment-setup.md     # 开发环境搭建 ✅
 │   ├── 02-first-program.md         # 第一个Go程序 ✅
 │   ├── 03-variables-constants.md   # 变量、常量和基础数据类型 ✅
-│   ├── 04-functions-methods.md     # 函数定义与方法调用 ✅
-│   ├── 05-control-structures.md    # 条件语句与循环控制 ✅
-│   └── 06-error-handling.md        # Go错误处理机制 ✅
+│   ├── 04-composite-types.md       # 数组、切片、映射与结构体 ✅
+│   ├── 05-functions-methods.md     # 函数定义与方法调用 ✅
+│   ├── 06-control-structures.md    # 条件语句与循环控制 ✅
+│   ├── 07-concurrency-basics.md    # 并发编程基础 ✅
+│   └── 08-error-handling.md        # Go错误处理机制 ✅
 ├── 🏗️ frameworks/                  # 数据库和框架深度学习路径
 │   ├── 01-gin-framework-basics.md # Gin框架基础入门 ✅
 │   ├── 02-gin-framework-advanced.md # Gin框架高级特性 ✅
 │   ├── 03-gorm-orm-complete.md     # GORM完整学习 ✅
-│   ├── 04-mongodb-go-driver.md     # MongoDB官方Go驱动 ✅
-│   └── 05-go-redis-complete.md     # go-redis客户端学习 ✅
+│   ├── 04-mongodb-go-driver.md     # MongoDB官方Go驱动 📋
+│   └── 05-go-redis-complete.md     # go-redis客户端学习 📋
 ├── 🚀 projects/                   # 实战项目（技能全覆盖）
 │   ├── 01-rest-api-server.md      # REST API服务器 (Gin+GORM+MySQL) ✅
 │   ├── 02-microservices-demo.md   # 微服务演示 (Gin+Redis+服务发现) ✅
@@ -132,9 +135,10 @@
 ### 🎓 基础学习路径（推荐初学者）
 1. **环境搭建** → `basics/01-environment-setup.md`
 2. **语法入门** → `basics/02-first-program.md`
-3. **基础知识** → `basics/03-variables-constants.md` → `basics/04-functions-methods.md`
-4. **控制流程** → `basics/05-control-structures.md`
-5. **错误处理** → `basics/06-error-handling.md`
+3. **基础知识** → `basics/03-variables-constants.md` → `basics/04-composite-types.md` → `basics/05-functions-methods.md`
+4. **控制流程** → `basics/06-control-structures.md`
+5. **并发入门** → `basics/07-concurrency-basics.md`
+6. **错误处理** → `basics/08-error-handling.md`
 
 ### 🔧 框架学习路径（推荐进阶）
 1. **Gin框架基础** → `frameworks/01-gin-framework-basics.md`

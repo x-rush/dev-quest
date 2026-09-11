@@ -501,32 +501,39 @@ func (s *EventSubscriber) Start(ctx context.Context) error {
 ### Jaeger集成
 ```go
 // tracing/tracing.go
+// 修复说明：go.opentelemetry.io/otel/exporters/jaeger 已在 v1.17.0 冻结并弃用；
+// Jaeger 自 v1.35 起原生接收 OTLP 协议，官方推荐路径即 otlptracehttp。
+// 对应 docker-compose 需设置 COLLECTOR_OTLP_ENABLED=true，导出端点为 4318 端口。
 package tracing
 
 import (
-	"io"
+	"context"
+	"log"
 	"time"
 
 	"go.opentelemetry.io/otel"
-	"go.opentelemetry.io/otel/exporters/jaeger"
+	"go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracehttp"
 	"go.opentelemetry.io/otel/sdk/resource"
 	sdktrace "go.opentelemetry.io/otel/sdk/trace"
-	semconv "go.opentelemetry.io/otel/semconv/v1.4.0"
+	semconv "go.opentelemetry.io/otel/semconv/v1.43.0"
 	"go.opentelemetry.io/otel/trace"
 )
 
-func InitTracer(serviceName, jaegerURL string) (func(), error) {
-	// 创建Jaeger导出器
-	exp, err := jaeger.New(jaeger.WithCollectorEndpoint(jaeger.WithEndpoint(jaegerURL)))
+func InitTracer(ctx context.Context, serviceName, otlpEndpoint string) (func(), error) {
+	// 创建 OTLP/HTTP 导出器（例如 otlpEndpoint = "jaeger:4318"，无需 scheme）
+	exp, err := otlptracehttp.New(ctx,
+		otlptracehttp.WithEndpoint(otlpEndpoint),
+		otlptracehttp.WithInsecure(),
+	)
 	if err != nil {
 		return nil, err
 	}
 
 	// 创建资源
-	res, err := resource.New(context.Background(),
+	res, err := resource.New(ctx,
 		resource.WithAttributes(
-			semconv.ServiceNameKey.String(serviceName),
-			semconv.DeploymentEnvironmentKey.String("production"),
+			semconv.ServiceName(serviceName),
+			semconv.DeploymentEnvironmentNameKey.String("production"),
 		),
 	)
 	if err != nil {
@@ -544,9 +551,9 @@ func InitTracer(serviceName, jaegerURL string) (func(), error) {
 
 	// 返回清理函数
 	return func() {
-		ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+		shutdownCtx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 		defer cancel()
-		if err := tp.Shutdown(ctx); err != nil {
+		if err := tp.Shutdown(shutdownCtx); err != nil {
 			log.Printf("Failed to shutdown tracer provider: %v", err)
 		}
 	}, nil
@@ -613,6 +620,7 @@ import (
 	"fmt"
 	"os"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/spf13/viper"
@@ -658,8 +666,8 @@ type JWTConfig struct {
 }
 
 type TracingConfig struct {
-	Enabled    bool   `mapstructure:"enabled"`
-	JaegerURL  string `mapstructure:"jaeger_url"`
+	Enabled     bool   `mapstructure:"enabled"`
+	OTLPEndpoint string `mapstructure:"otlp_endpoint"` // 例如 "jaeger:4318"
 	ServiceName string `mapstructure:"service_name"`
 }
 
@@ -679,8 +687,9 @@ func LoadConfig(configPath string) (*Config, error) {
 	// 设置默认值
 	setDefaults()
 
-	// 环境变量覆盖
+	// 环境变量覆盖（DB_HOST 等环境变量能覆盖 database.host 等配置项）
 	viper.AutomaticEnv()
+	viper.SetEnvKeyReplacer(strings.NewReplacer(".", "_"))
 
 	if err := viper.ReadInConfig(); err != nil {
 		return nil, fmt.Errorf("failed to read config: %w", err)
@@ -713,7 +722,7 @@ func setDefaults() {
 	viper.SetDefault("jwt.refresh_in", "168h")
 
 	viper.SetDefault("tracing.enabled", true)
-	viper.SetDefault("tracing.jaeger_url", "http://localhost:14268/api/traces")
+	viper.SetDefault("tracing.otlp_endpoint", "jaeger:4318")
 }
 
 func GetEnv(key, defaultValue string) string {
@@ -770,7 +779,7 @@ services:
       - REDIS_HOST=redis
       - REDIS_PORT=6379
       - JWT_SECRET=your-secret-key
-      - JAEGER_URL=http://jaeger:14268/api/traces
+      - TRACING_OTLP_ENDPOINT=jaeger:4318
     depends_on:
       - postgres
       - redis
@@ -789,7 +798,7 @@ services:
       - DB_NAME=product_service
       - REDIS_HOST=redis
       - REDIS_PORT=6379
-      - JAEGER_URL=http://jaeger:14268/api/traces
+      - TRACING_OTLP_ENDPOINT=jaeger:4318
     depends_on:
       - mongo
       - redis
@@ -812,7 +821,7 @@ services:
       - REDIS_PORT=6379
       - USER_SERVICE_URL=http://user-service:8080
       - PRODUCT_SERVICE_URL=http://product-service:8080
-      - JAEGER_URL=http://jaeger:14268/api/traces
+      - TRACING_OTLP_ENDPOINT=jaeger:4318
     depends_on:
       - postgres
       - redis
@@ -856,11 +865,12 @@ services:
       - microservices
 
   # Monitoring
+  # 服务端已开启 OTLP 接收（Jaeger >= 1.35 原生支持），应用通过 4318 端口导出 span
   jaeger:
     image: jaegertracing/all-in-one:latest
     ports:
       - "16686:16686"
-      - "14268:14268"
+      - "4318:4318"
     environment:
       - COLLECTOR_OTLP_ENABLED=true
     networks:
