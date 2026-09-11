@@ -49,7 +49,7 @@
 | 象限 | 目录 | 篇数 | 入口 |
 |------|------|------|------|
 | 📖 教程 | `basics/` | 8 | [环境搭建](basics/01-environment-setup.md) |
-| 🛠️ 操作指南 | `frameworks/` `projects/` `testing/` `deployment/` | 18 | [Gin 入门](frameworks/01-gin-framework-basics.md) · [REST API 实战](projects/01-rest-api-server.md) |
+| 🛠️ 操作指南 | `frameworks/` `projects/` `testing/` `deployment/` | 19 | [Gin 入门](frameworks/01-gin-framework-basics.md) · [gRPC 服务开发](frameworks/06-grpc-service-development.md) · [REST API 实战](projects/01-rest-api-server.md) |
 | 📚 字典参考 | `reference/` | **21** | [语言核心](reference/language-concepts/01-go-keywords.md) · [框架核心](reference/framework-essentials/01-gin-framework.md) · [数据层选型](reference/framework-essentials/03-sqlc-vs-gorm.md) · [路由器选型](reference/framework-essentials/04-router-selection.md) · [标准库字典](reference/library-guides/01-go-standard-library.md) |
 | 🎓 深度解释 | `advanced-topics/` | 6 | [并发模式](advanced-topics/performance/01-concurrency-patterns.md) |
 
@@ -100,7 +100,8 @@
 │   ├── 02-gin-framework-advanced.md # Gin框架高级特性 ✅
 │   ├── 03-gorm-orm-complete.md     # GORM完整学习 ✅
 │   ├── 04-mongodb-go-driver.md     # MongoDB官方Go驱动 📋
-│   └── 05-go-redis-complete.md     # go-redis客户端学习 📋
+│   ├── 05-go-redis-complete.md     # go-redis客户端学习 📋
+│   └── 06-grpc-service-development.md # gRPC服务开发完整指南 ✅
 ├── 🚀 projects/                   # 实战项目（技能全覆盖）
 │   ├── 01-rest-api-server.md      # REST API服务器 (Gin+GORM+MySQL) ✅
 │   ├── 02-microservices-demo.md   # 微服务演示 (Gin+Redis+服务发现) ✅
@@ -146,6 +147,7 @@
 3. **缓存技术** → `frameworks/05-go-redis-complete.md`
 4. **NoSQL数据库** → `frameworks/04-mongodb-go-driver.md`
 5. **高级特性** → `frameworks/02-gin-framework-advanced.md`
+6. **gRPC服务开发** → `frameworks/06-grpc-service-development.md`
 
 ### 🚀 项目实战路径（推荐实践）
 1. **REST API** → `projects/01-rest-api-server.md`

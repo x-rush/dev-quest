@@ -46,6 +46,7 @@
 | **GORM** | [GORM ORM完全指南](../../01-go-backend/frameworks/03-gorm-orm-complete.md) | 数据库ORM |
 | **MongoDB** | [MongoDB Go驱动](../../01-go-backend/frameworks/04-mongodb-go-driver.md) | 文档数据库 |
 | **Redis** | [Go Redis完全指南](../../01-go-backend/frameworks/05-go-redis-complete.md) | 缓存与消息 |
+| **gRPC** | [gRPC服务开发完整指南](../../01-go-backend/frameworks/06-grpc-service-development.md) | 服务间RPC通信 |
 
 ### 🚀 项目实战 (projects/)
 | 项目 | 技术栈 | 说明 |

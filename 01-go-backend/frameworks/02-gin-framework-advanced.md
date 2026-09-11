@@ -2006,8 +2006,9 @@ func (pool *GrpcClientPool) GetClient(serviceName string) (interface{}, error) {
     // 选择一个实例
     instance := instances[0] // 简化选择逻辑
 
-    // 建立连接
-    conn, err := grpc.Dial(instance.Address,
+    // 建立频道（grpc.Dial 已弃用；NewClient 惰性连接，不做同步拨号，
+    // 目标不可达的错误会在后续 RPC 调用时以 Unavailable 错误码出现）
+    conn, err := grpc.NewClient(instance.Address,
         grpc.WithTransportCredentials(insecure.NewCredentials()),
         grpc.WithKeepaliveParams(keepalive.ClientParameters{
             Time:                pool.config.KeepAlive,
@@ -2016,7 +2017,7 @@ func (pool *GrpcClientPool) GetClient(serviceName string) (interface{}, error) {
         }),
     )
     if err != nil {
-        return nil, fmt.Errorf("failed to connect to service %s: %w", serviceName, err)
+        return nil, fmt.Errorf("failed to create client channel for service %s: %w", serviceName, err)
     }
 
     pool.connections[serviceName] = conn

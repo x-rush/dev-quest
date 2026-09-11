@@ -67,6 +67,7 @@ graph LR
 - [x] **GORM完整学习**: [frameworks/03-gorm-orm-complete.md](../../01-go-backend/frameworks/03-gorm-orm-complete.md) - MySQL+PostgreSQL
 - [x] **MongoDB驱动**: [frameworks/04-mongodb-go-driver.md](../../01-go-backend/frameworks/04-mongodb-go-driver.md) - 文档数据库
 - [x] **Redis缓存**: [frameworks/05-go-redis-complete.md](../../01-go-backend/frameworks/05-go-redis-complete.md) - 缓存数据库
+- [ ] **gRPC服务开发**: [frameworks/06-grpc-service-development.md](../../01-go-backend/frameworks/06-grpc-service-development.md) - proto/流模式/拦截器
 
 **框架速查** ⭐
 - [x] **Gin框架速查**: [reference/framework-essentials/01-gin-framework.md](../../01-go-backend/reference/framework-essentials/01-gin-framework.md) - Gin框架速查
