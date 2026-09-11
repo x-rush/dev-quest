@@ -16,7 +16,7 @@
 | **新架构** | 唯一架构 | 0.76 起默认开启；0.83 起（SDK 55+）不再支持旧架构；Legacy 组件已在 0.84–0.85 移除 |
 | **Expo SDK** | **57**（2026-06-30 发布） | 配套 RN 0.86 + React 19.2.3；最低 Node 22.13；Xcode 26.4+ / iOS 16.4+ / Android compileSdk 36；修复 SDK 56 的 Hermes V1 内存回归 |
 | **React** | **19.2.x** | 与 SDK 57 / RN 0.86 锁定（19.2.3） |
-| **TypeScript** | **6.0**（2026-03-23 发布） | 6.0 为 5.9 之后的过渡大版本（API 兼容 5.9）；TS 7.0（Go 原生编译器）已出 Beta/RC；Expo 模板随 SDK 附带对应版本 |
+| **TypeScript** | **7.0**（Go 原生编译器版，npm latest 7.0.2） | 7.0 已 GA；Expo 模板随 SDK 附带对应版本，无特殊配置需求 |
 | **Expo Router** | **57.x** | 自 SDK 55 起与 SDK 同步版本号；SDK 56 起不再支持从应用代码直接 import `@react-navigation/*` 包 |
 | **Reanimated** | **4.x** | 仅支持新架构（v4 随 SDK 54 起线）；babel 插件移交 `react-native-worklets`，`babel-preset-expo` 自动处理 |
 | **Hermes** | **V1 默认** | RN 0.84 起 V1 引擎为默认；调试统一走 React Native DevTools（Flipper 已移除） |
@@ -63,6 +63,8 @@
 零基础到第一个可交付的跨平台应用：
 
 [环境搭建](basics/01-environment-setup.md) → [第一个 App](basics/02-first-app.md) → [核心组件与 Flexbox](basics/03-components-jsx.md) → [状态与 Hooks](basics/04-state-hooks.md) → [导航基础](basics/05-navigation.md) → [综合练习：待办记账 App](basics/08-first-project.md) → [RN 框架入门](frameworks/01-react-native-basics.md) → [实战：待办应用](projects/01-todo-app.md)
+
+> 注：basics/06、07 两篇为 ⭐⭐ 深化内容（平台差异与原生桥接），建议完成入门路径后再读。
 
 ### 进阶路径（⭐⭐）
 

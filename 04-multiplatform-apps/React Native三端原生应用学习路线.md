@@ -2,7 +2,7 @@
 
 > ⚠️ **存档说明**：本文档为模块早期（2025 年）的历史规划稿，其中的依赖版本（RN 0.73、React 18、Flipper 等）仅反映写作时点，**已过时且不再维护**。现行技术基线（React Native 0.87 + Expo SDK 57，新架构为唯一架构，调试统一 React Native DevTools）以 [README](./README.md) 的"技术基线"区块为准；系统化学习内容见 `basics/`、`reference/`、`frameworks/` 等目录。
 
-> **难度**: ⭐⭐⭐⭐⭐ | **学习方式**: MVP优先+原生为辅 | **目标**: 三端原生App全覆盖
+> **难度**: ⭐⭐⭐ | **学习方式**: MVP优先+原生为辅 | **目标**: 三端原生App全覆盖
 >
 > **简介**: 基于Go+Next.js的全栈基础，学习React Native跨平台原生开发，按照Android→鸿蒙→iOS的优先级，实现"React Native为主，原生为辅"的架构，快速验证MVP并占领移动端市场。
 
