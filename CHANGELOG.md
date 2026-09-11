@@ -14,6 +14,7 @@
 - **类型系统类**：03 模块 TanStack Query v5 判别联合误用——解构 `isPending` 会丢失联合类型导致 `data` 无法收窄，共 4 处改为判 `data === undefined` 或保留对象访问；TanStack Table v9 API 名修正（`createPaginatedRowModel`、`createColumnHelper<TFeatures, TData>` 双泛型、`getPrePaginatedRowModel`）共 4 处
 - **版本基线类**：04 模块 TypeScript 7.0 GA 基线（npm latest 7.0.2）；Next.js 16 `revalidateTag(tag, profile)` 双参必填共 17 处代码位补齐，Server Action 内改用 `updateTag(tag)`；`unstable_cache` 定性改为"不推荐新项目使用"；09 模块 Prisma v6 语法残留全量迁移至 v7（prisma.config.ts、generator prisma-client + output、driver adapter）；Hono jwt 中间件补必填 `alg` 参数；PHP 8.5 实测修复 5 处（Fiber resume 返 NULL 用 `getReturn()` 取值、常量表达式允许一等公民 callable 引用但禁止闭包字面量等 10 项，php8.5.10 逐字回放）
 - **内容回填类**：05 模块笔记应用编辑屏补 `LaunchedEffect(noteId)` 回填逻辑；06 模块 @Model/@ModelActor 关系澄清；05 模块 `mutableStateOf` 类型推断陷阱条件修正（仅无初值时报错）
+- 01 模块 gRPC 教程 protoc 命令实测修正：`paths=source_relative` 按 proto 目录镜像输出会落错位置，`module=` 需配 `--go_out=.`（实测两处坑）；示例工程全链路验证（protoc 36.1 生成 → go build/vet → 服务端+客户端冒烟，一元 RPC 与 NotFound 错误码往返成功）
 - 根级索引与进度同步：document-index / learning-progress 各模块篇数与 01 basics 新编号对齐，修复全部死链（全仓 3769 条链接 0 断链）
 - 根级规范对齐：难度评级统一为 3 级（⭐/⭐⭐/⭐⭐⭐），54 篇文档 4-5 星折叠；100 文件日期元数据"2025年10月"→"2026年9月"
 

@@ -110,10 +110,13 @@ service UserService {
 ## ⚙️ 第二步：代码生成
 
 ```bash
-protoc --go_out=. --go_opt=paths=source_relative \
-       --go-grpc_out=. --go-grpc_opt=paths=source_relative \
+# 在模块根目录执行；module= 让产物按 go_package 的模块内路径落位（gen/userpb/）
+protoc --go_out=. --go_opt=module=example.com/userservice \
+       --go-grpc_out=. --go-grpc_opt=module=example.com/userservice \
        proto/user.proto
 ```
+
+`module=` 选项让产物按 `go_package` 声明的模块内路径落位（`gen/userpb/`）。注意不要用 `paths=source_relative`——它是按 proto 文件所在的目录镜像输出，本例会生成到 `gen/proto/` 而不是你期望的位置。
 
 产出两个文件：
 
