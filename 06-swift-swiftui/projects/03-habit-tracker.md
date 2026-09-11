@@ -215,6 +215,7 @@ struct WeeklyChart: View {
 ## 相关文档
 
 - 📄 [04-production-ios-app.md](./04-production-ios-app.md) — 下一篇：生产级 iOS 应用
+- 📄 [06-swift-charts.md](../reference/framework-essentials/06-swift-charts.md) — Charts API 字典（本文第四步的完整参考）
 - 📄 [02-swiftdata-observability.md](../reference/framework-essentials/02-swiftdata-observability.md) — 关系与删除规则字典
 - 📄 [01-unit-testing.md](../testing/01-unit-testing.md) — 给 streak/dailyCounts 写单元测试
 - 📄 [01-swift-swiftui-cheatsheet.md](../reference/quick-references/01-swift-swiftui-cheatsheet.md) — 语法速查

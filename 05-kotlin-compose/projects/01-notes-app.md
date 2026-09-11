@@ -139,16 +139,30 @@ fun NoteEditorScreen(noteId: Long?, viewModel: NotesViewModel, onDone: () -> Uni
     var title by rememberSaveable { mutableStateOf("") }
     var content by rememberSaveable { mutableStateOf("") }
 
+    // 编辑模式：进入时回填既有笔记（新建 noteId == null 跳过）
+    LaunchedEffect(noteId) {
+        noteId?.let { id ->
+            viewModel.getNote(id)?.let { note ->
+                title = note.title
+                content = note.content
+            }
+        }
+    }
+
     Column(Modifier.padding(16.dp)) {
         OutlinedTextField(value = title, onValueChange = { title = it }, label = { Text("标题") })
         OutlinedTextField(value = content, onValueChange = { content = it }, minLines = 5)
         Button(onClick = {
-            viewModel.saveNote(title, content)
+            viewModel.saveNote(noteId, title, content)
             onDone()
         }) { Text("保存") }
     }
 }
 ```
+
+- 草稿用 `rememberSaveable`，旋转屏幕/进程恢复不丢失；
+- **编辑模式必须回填**：`LaunchedEffect(noteId)` 在进入编辑页时触发一次性加载（ViewModel 暴露 `suspend fun getNote(id: Long): NoteEntity?`，转发给 DAO 的单次查询），否则编辑页永远是空表单；`noteId` 是 key，切换笔记自动重新加载；
+- 保存把 `noteId` 一并传给 `saveNote(noteId, title, content)`——ViewModel 内部有 id 走 `upsert`（更新），没有则插入，单向数据流原理见[应用架构](../advanced-topics/architecture/01-app-architecture.md)。
 
 - 草稿用 `rememberSaveable`，旋转屏幕/进程恢复不丢失；
 - 保存动作只调用 ViewModel 事件——单向数据流，原理见[应用架构](../advanced-topics/architecture/01-app-architecture.md)。

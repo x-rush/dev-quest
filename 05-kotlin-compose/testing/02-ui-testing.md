@@ -132,6 +132,6 @@ fun `加载完成后 显示笔记列表`() {
 
 ## 🔗 相关文档
 
-- 📖 概念字典：[Compose 状态 API 详解](../reference/language-concepts/04-compose-state-api.md) ｜ [Compose 核心组件速查](../reference/framework-essentials/01-compose-essentials.md)
+- 📖 概念字典：[Compose 状态 API 详解](../reference/language-concepts/04-compose-state-api.md) ｜ [Compose 核心组件速查](../reference/framework-essentials/01-compose-essentials.md) ｜ [Compose 测试 API 速查](../reference/framework-essentials/07-compose-testing.md)
 - 🧪 同级指南：[单元测试](01-unit-testing.md) ｜ [集成与端到端测试](03-integration-e2e-testing.md)
 - 🚀 实战应用：[入门项目的 UI 验收](../projects/01-notes-app.md) ｜ [生产级应用的质量门禁](../projects/04-production-android-app.md)

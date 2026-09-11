@@ -333,6 +333,7 @@ fun AddNoteDialog(onConfirm: (String, String) -> Unit, onDismiss: () -> Unit) {
 ## 🔗 相关文档
 
 - 📄 **[AndroidX 官方库指南](../reference/library-guides/01-androidx-libraries.md)** - Room/DataStore 深入用法
+- 📄 **[KSP 代码生成配置指南](../reference/library-guides/03-ksp-configuration.md)** - ksp 插件声明、ksp(...) 依赖写法与常见配置错误
 - 📄 **[协程与 Flow API 全表](../reference/language-concepts/03-coroutines-flow-api.md)** - stateIn/WhileSubscribed 原理
 - 📄 **[Material 3 主题系统](../reference/framework-essentials/02-compose-material3.md)** - 给应用换上自定义主题
 - 📖 **[Room 官方指南](https://developer.android.com/training/data-storage/room)** - 完整 Room 文档

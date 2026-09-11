@@ -161,7 +161,10 @@ class ArticleViewModel @Inject constructor(
     fun refresh() = viewModelScope.launch {
         _uiState.update { it.copy(loading = true) }
         runCatching { repository.refresh() }
-            .onFailure { e -> _uiState.update { it.copy(loading = false, error = e.message) } }
+            .onFailure { e ->
+                if (e is kotlinx.coroutines.CancellationException) throw e  // 取消异常必须放行
+                _uiState.update { it.copy(loading = false, error = e.message) }
+            }
             .onSuccess { _uiState.update { it.copy(loading = false, error = null) } }
     }
 }

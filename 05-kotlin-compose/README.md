@@ -37,7 +37,7 @@
 | 象限 | 目录 | 内容 | 状态 |
 |------|------|------|------|
 | 📖 **教程**（带我入门） | [basics/](basics/) | 8 篇按序教程：环境搭建 → 第一个 Compose 应用 → Kotlin 语法 → Composable 与状态 → 布局 → 导航 → 协程与 Flow → 第一个项目 | ✅ 8 篇 |
-| 📚 **字典**（X 是什么） | [reference/](reference/) | 18 篇全量参考：语言概念 8、框架要点 6、库指南 2、速查与排障 2 | ✅ 18 篇 |
+| 📚 **字典**（X 是什么） | [reference/](reference/) | 20 篇全量参考：语言概念 8、框架要点 7、库指南 3、速查与排障 2 | ✅ 20 篇 |
 | 🏗️ **操作指南**（怎么做事） | [frameworks/](frameworks/) | Compose 基础/进阶、生态集成（Room+Hilt+Retrofit+ViewModel）、开发工具链 | ✅ 4 篇 |
 | 🏗️ **操作指南** | [projects/](projects/) | 4 个递进实战：笔记应用 → 天气应用 → 新闻阅读器 → 生产级应用 | ✅ 4 篇 |
 | 🏗️ **操作指南** | [testing/](testing/) | 单元测试（JUnit+MockK）、Compose UI 测试、集成与端到端 | ✅ 3 篇 |
@@ -91,10 +91,12 @@
 │   │   ├── 03-side-effects.md             #   副作用 API 速查
 │   │   ├── 04-recomposition.md            #   重组与稳定性速查
 │   │   ├── 05-animation-core.md           #   动画核心 API 速查
-│   │   └── 06-navigation-components.md    #   Navigation Compose 组件速查
+│   │   ├── 06-navigation-components.md    #   Navigation Compose 组件速查
+│   │   └── 07-compose-testing.md          #   Compose 测试 API 速查
 │   ├── library-guides/
 │   │   ├── 01-androidx-libraries.md       #   AndroidX 官方库指南
-│   │   └── 02-third-party-libs.md         #   第三方库指南
+│   │   ├── 02-third-party-libs.md         #   第三方库指南
+│   │   └── 03-ksp-configuration.md        #   KSP 代码生成配置指南
 │   └── quick-references/
 │       ├── 01-kotlin-compose-cheatsheet.md #  一行式速查表
 │       └── 02-troubleshooting.md          #   常见错误与故障排除
@@ -128,7 +130,7 @@
 
 ## 🔗 关联模块
 
-- **[04-multiplatform-apps](../04-multiplatform-apps/README.md)** — Kotlin Multiplatform 跨平台视角：Compose Multiplatform 与本模块的 Android-only Compose 互为参照
+- **[04-multiplatform-apps](../04-multiplatform-apps/README.md)** — React Native 跨端视角：JS 声明式 UI 与本模块的 Kotlin Compose 对照学习（Compose Multiplatform 属 KMP 生态，本模块聚焦 Android 官方栈）
 - **[06-swift-swiftui](../06-swift-swiftui/README.md)** — iOS 平行的声明式 UI 体系：SwiftUI 与 Compose 的状态管理、布局思想可对照学习
 
 ---

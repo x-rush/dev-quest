@@ -122,6 +122,7 @@ class WeatherViewModel @Inject constructor(
                 _uiState.value = WeatherUiState.Success(r.current.temperature, r.current.windSpeed)
             },
             onFailure = { e ->
+                if (e is kotlinx.coroutines.CancellationException) throw e  // 取消异常必须放行
                 _uiState.value = WeatherUiState.Error(e.message ?: "未知错误")
             },
         )

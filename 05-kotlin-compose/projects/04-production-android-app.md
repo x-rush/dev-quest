@@ -59,6 +59,8 @@ sealed interface AppError {
 // Repository 边界处统一转译，向上只暴露 Result
 suspend fun <T> runCatchingApp(block: suspend () -> T): Result<T> =
     runCatching { block() }.recoverCatching { e ->
+        // 关键：取消异常必须原样抛出，吞掉它协程将无法响应取消
+        if (e is kotlinx.coroutines.CancellationException) throw e
         throw when (e) {
             is IOException     -> AppError.Network(e)
             is SQLiteException -> AppError.Storage(e)

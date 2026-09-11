@@ -211,5 +211,6 @@ struct NoteEditorView: View {
 
 - 📄 [02-weather-app.md](./02-weather-app.md) — 下一篇：天气应用（网络 + 定位）
 - 📄 [02-swiftdata-observability.md](../reference/framework-essentials/02-swiftdata-observability.md) — SwiftData 字典
+- 📄 [07-swiftdata-migration.md](../reference/framework-essentials/07-swiftdata-migration.md) — 数据迁移字典（进阶挑战"数据迁移"的参考）
 - 📄 [01-swift-swiftui-cheatsheet.md](../reference/quick-references/01-swift-swiftui-cheatsheet.md) — 语法速查（写卡壳时翻）
 - 📄 [08-first-project.md](../basics/08-first-project.md) — 教程侧的第一个项目

@@ -44,7 +44,7 @@
 | 象限 | 目录 | 内容 | 访问方式 |
 |------|------|------|---------|
 | **📖 教程** | [basics/](./basics/01-environment-setup.md) | 环境搭建 → Swift 语法 → SwiftUI 视图/状态/布局/导航 → 并发入门 → 首个项目，共 8 篇按序学习 | 从头到尾按编号走 |
-| **📚 字典** | [reference/](./reference/quick-references/01-swift-swiftui-cheatsheet.md) | 语言概念（11 篇）/ 框架要点（5 篇）/ 库指南（2 篇）/ 速查与故障排除（2 篇），共 20 篇全量参考 | **无难度门槛**，任意跳入查询 |
+| **📚 字典** | [reference/](./reference/quick-references/01-swift-swiftui-cheatsheet.md) | 语言概念（11 篇）/ 框架要点（7 篇）/ 库指南（2 篇）/ 速查与故障排除（2 篇），共 22 篇全量参考 | **无难度门槛**，任意跳入查询 |
 | **🛠️ 操作指南** | [frameworks/](./frameworks/01-swiftui-basics.md) [projects/](./projects/01-notes-app.md) [testing/](./testing/01-unit-testing.md) [deployment/](./deployment/01-app-release.md) | 框架任务指南 4 篇 · 实战项目 4 个（⭐ 递进）· 测试工程 3 篇 · 部署运维 3 篇 | 面向目标，按需照做 |
 | **🎓 解释** | [advanced-topics/](./advanced-topics/architecture/01-app-architecture.md) | 应用架构、渲染性能、并发深度、安全实践，共 4 篇深度专题（均 ⭐⭐⭐） | 有实践困惑后带着问题读 |
 
@@ -107,7 +107,9 @@ async/await → SwiftUI 进阶 → SwiftData + 网络 → 天气应用 → 习�
 │   │   ├── 02-swiftdata-observability.md      #     SwiftData 与 Observation
 │   │   ├── 03-state-driven-views.md           #     状态驱动视图
 │   │   ├── 04-view-modifier.md                #     ViewModifier 与修饰符链
-│   │   └── 05-data-flow.md                    #     数据流与 Environment
+│   │   ├── 05-data-flow.md                    #     数据流与 Environment
+│   │   ├── 06-swift-charts.md                 #     SwiftUI Charts 数据可视化
+│   │   └── 07-swiftdata-migration.md          #     SwiftData 模型迁移
 │   ├── library-guides/                        #   标准库与三方库
 │   │   ├── 01-foundation-and-stdlib.md        #     Foundation 与标准库
 │   │   └── 02-third-party-libs.md             #     第三方库指南
@@ -156,7 +158,7 @@ async/await → SwiftUI 进阶 → SwiftData + 网络 → 天气应用 → 习�
 
 ## 🔗 关联模块
 
-- 📄 [04-multiplatform-apps](../04-multiplatform-apps/README.md) — SwiftUI 技能直接复用于 Compose Multiplatform / KMP 对照学习
+- 📄 [04-multiplatform-apps](../04-multiplatform-apps/README.md) — React Native 跨端视角：SwiftUI 声明式思想可与其组件模型对照学习
 - 📄 [05-kotlin-compose](../05-kotlin-compose/README.md) — 声明式 UI 的安卓双生框架，状态管理与组合模型可互相印证
 
 ---

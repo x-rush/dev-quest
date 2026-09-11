@@ -246,6 +246,7 @@ ksp = "2.3.11"            # 独立版本号，升级 Kotlin 后无需强改
 ```
 
 ### 关联问题
+- KSP 配置全景（插件声明/ksp(...) 写法/处理器选库）→ [KSP 代码生成配置指南](../library-guides/03-ksp-configuration.md)
 - JDK 不匹配（AGP 9.x 需 JDK 17+）→ `Settings → Gradle JDK` 选内置 JBR
 - 依赖混版本冲突 → 所有 Compose 库统一走 BOM，不带独立版本号
 

@@ -47,7 +47,7 @@ final class Note {
 
 | 宏/修饰 | 作用 |
 |---------|------|
-| `@Model` | 生成持久化代码（宏展开为 @ModelActor 相关实现） |
+| `@Model` | 生成持久化代码（宏展开为 `PersistentModel` 与 `Observation` 一致性实现，属性自动可观察；`@ModelActor` 是独立的并发宏，二者无关） |
 | `@Attribute(.unique)` | 唯一性约束（重复插入会 upsert/报错） |
 | `@Attribute(.externalStorage)` | 大数据外存（图片二进制） |
 | `@Transient` | 跳过持久化 |
@@ -174,4 +174,5 @@ final class Router {
 
 - 📄 [04-swiftui-state-api.md](../language-concepts/04-swiftui-state-api.md) — @Query/@State 等包装器
 - 📄 [03-concurrency-api.md](../language-concepts/03-concurrency-api.md) — ModelActor 并发查询
+- 📄 [07-swiftdata-migration.md](./07-swiftdata-migration.md) — 模型变更后的版本化迁移
 - 📄 [01-foundation-and-stdlib.md](../library-guides/01-foundation-and-stdlib.md) — Data/UUID 等基础类型
