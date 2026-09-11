@@ -46,9 +46,9 @@ export function useFeed() {
   return useInfiniteQuery({
     queryKey: ['feed'],
     queryFn: fetchFeed,
-    initialPageParam: 0, // v5 必须显式提供初始页参
+    initialPageParam: 0, // v5 起必填：显式提供初始页参
     getNextPageParam: (lastPage) => lastPage.nextCursor ?? undefined,
-    maxPages: 10, // v5 新增：最多保留 10 页，防止无限滚动撑爆内存
+    maxPages: 10, // v5 起支持：最多保留 10 页，防止无限滚动撑爆内存
   })
 }
 ```

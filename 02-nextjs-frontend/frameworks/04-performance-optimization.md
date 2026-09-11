@@ -1,10 +1,10 @@
-# Next.js 15 性能优化完整指南
+# Next.js 16 性能优化完整指南
 
-> **文档简介**: Next.js 15 企业级性能优化实践指南，涵盖Core Web Vitals、构建优化、运行时优化、监控分析等现代Web性能优化技术
+> **文档简介**: Next.js 16 企业级性能优化实践指南，涵盖Core Web Vitals、构建优化、运行时优化、监控分析等现代Web性能优化技术
 
 > **目标读者**: 具备Next.js基础的中高级开发者，需要掌握性能优化和用户体验提升的性能工程师
 
-> **前置知识**: Next.js 15基础、React 19、Web性能指标、浏览器渲染原理、网络优化
+> **前置知识**: Next.js 16基础、React 19、Web性能指标、浏览器渲染原理、网络优化
 
 > **预计时长**: 10-14小时
 
@@ -25,7 +25,7 @@
 ### ⚡ 性能优化核心技能
 - 掌握Core Web Vitals指标优化策略
 - 学会构建时优化和运行时优化的最佳实践
-- 理解Next.js 15的渲染性能优化机制
+- 理解Next.js 16的渲染性能优化机制
 - 掌握性能监控和分析工具的使用
 
 ### 🚀 企业级优化能力
@@ -36,7 +36,7 @@
 
 ## 📖 概述
 
-Next.js 15为性能优化提供了强大的工具和策略，从构建时优化到运行时优化，从Core Web Vitals到用户体验优化，为构建高性能的现代Web应用提供了完整的解决方案。本指南将深入探讨Next.js 15的性能优化最佳实践。
+Next.js 16为性能优化提供了强大的工具和策略，从构建时优化到运行时优化，从Core Web Vitals到用户体验优化，为构建高性能的现代Web应用提供了完整的解决方案。本指南将深入探讨Next.js 16的性能优化最佳实践。
 
 ## 📊 Core Web Vitals 深度优化
 
@@ -583,229 +583,64 @@ export function OptimizedInput({
 
 ## 🏗️ 构建时优化
 
-### 高级Webpack/Turbopack配置
+### 高级Turbopack配置（Next.js 16 默认）
+
+Next.js 16 起，**Turbopack 已是 `next dev` 与 `next build` 的默认打包器**，Turbopack 配置从 `experimental.turbopack` 移至顶层 `turbopack` 键。Webpack 仅作为迁移期回退，需通过 `next dev --webpack` / `next build --webpack` 显式启用。
 
 ```javascript
-// next.config.js
+// next.config.ts
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Turbopack实验性功能
-  experimental: {
-    // 启用Turbopack
-    turbo: {
-      // 并行处理
-      parallel: true,
-
-      // Turbopack规则配置
-      rules: {
-        // TypeScript文件
-        '*.ts?(x)': {
-          loaders: ['babel-loader'],
-          options: {
-            presets: [
-              ['@babel/preset-env', { targets: 'defaults' }],
-              '@babel/preset-react',
-              '@babel/preset-typescript'
-            ]
-          }
-        },
-
-        // CSS文件
-        '*.css': {
-          loaders: ['postcss-loader'],
-          options: {
-            postcssOptions: {
-              plugins: [
-                'tailwindcss',
-                'autoprefixer',
-                // CSS优化插件
-                'cssnano',
-                'postcss-logical',
-                'postcss-preset-env'
-              ]
-            }
-          }
-        },
-
-        // 图片文件
-        '*.png|*.jpg|*.jpeg|*.gif|*.webp': {
-          loaders: ['file-loader'],
-          options: {
-            outputPath: 'static/',
-            publicPath: '/_next/static/'
-          }
-        },
-
-        // 字体文件
-        '*.woff|*.woff2|*.ttf|*.eot': {
-          loaders: ['file-loader'],
-          options: {
-            outputPath: 'static/fonts/',
-            publicPath: '/_next/static/fonts/'
-          }
-        }
+  // Turbopack 配置（Next.js 16：顶层键，不再是 experimental.turbopack）
+  turbopack: {
+    rules: {
+      // SVG 作为 React 组件加载
+      '*.svg': {
+        loaders: ['@svgr/turbopack'],
+        as: '*.js',
       },
-
-      // 缓存配置
-      cacheDir: '.turbo',
-
-      // 开发环境优化
-      dev: {
-        overlay: true,
-        port: 3000,
-        reload: true
-      }
     },
-
-    // 包优化
-    optimizePackageImports: [
-      'lucide-react',
-      '@radix-ui/react-icons',
-      'date-fns',
-      'clsx',
-      'tailwind-merge',
-      'recharts',
-      'framer-motion'
-    ],
-
-    // 优化选项
-    optimizeCss: true,
-    optimizeServerReact: true,
-
-    // 字体优化
-    fontLoaders: [
-      {
-        loader: '@next/font/google',
-        options: {
-          subsets: ['latin'],
-          display: 'swap',
-          preload: true
-        }
-      }
-    ]
+    resolveAlias: {
+      // 在 tsconfig paths 之外补充自定义别名
+      underscore: 'lodash',
+    },
   },
 
-  // Webpack配置（Turbopack的fallback）
-  webpack: (config, { dev, isServer }) => {
-    if (!dev && !isServer) {
-      // 生产环境优化
-      config.optimization = {
-        minimize: true,
-        minimizer: [
-          '...',
-          'css-minimizer',
-          'terser-webpack-plugin'
-        ],
-
-        // 代码分割优化
-        splitChunks: {
-          chunks: 'all',
-          cacheGroups: {
-            // 库包分组
-            vendor: {
-              test: /[\\/]node_modules[\\/]/,
-              name: 'vendors',
-              chunks: 'all',
-              priority: 10,
-              maxSize: 300000,
-              minSize: 0,
-              enforce: true
-            },
-
-            // 框架相关
-            framework: {
-              test: /[\\/]node_modules[\\/](react|react-dom|next)[\\/]/,
-              name: 'framework',
-              chunks: 'all',
-              priority: 20,
-              maxSize: 200000,
-              minSize: 0,
-              enforce: true
-            },
-
-            // 共享代码
-            common: {
-              name: 'common',
-              chunks: 'all',
-              minChunks: 2,
-              maxSize: 50000,
-              minChunks: 2,
-              enforce: true
-            },
-
-            // 页面特定
-            pages: {
-              test: /\.pages$/,
-              name: 'pages',
-              chunks: 'all',
-              priority: 30
-            },
-
-            // 组件
-            components: {
-              test: /\.components$/,
-              name: 'components',
-              chunks: 'all',
-              priority: 25
-            }
-          }
-        },
-
-        // 运行时代码优化
-        runtimeChunk: {
-          name: 'runtime',
-        },
-
-        // 模块ID优化
-        moduleIds: 'deterministic',
-
-        // 提取运行时代码
-        usedExports: true,
-
-        // side effects优化
-        sideEffects: false
-      }
-
-      // 解析优化
-      config.resolve.alias = {
-        '@': path.resolve(__dirname, 'src'),
-        '@/components': path.resolve(__dirname, 'src/components'),
-        '@/lib': path.resolve(__dirname, 'src/lib'),
-        '@/styles': path.resolve(__dirname, 'src/styles')
-      }
-
-      // 外部化配置
-      config.externals = {
-        react: 'React',
-        'react-dom': 'ReactDOM'
-      }
-    }
-
-    return config
-  },
+  // 包优化：按需引入，减小 bundle
+  optimizePackageImports: [
+    'lucide-react',
+    '@radix-ui/react-icons',
+    'date-fns',
+    'clsx',
+    'tailwind-merge',
+    'recharts',
+  ],
 
   // 图片优化配置
   images: {
     // 现代图片格式
-    formats: ['image/webp', 'image/avif'],
+    formats: ['image/avif', 'image/webp'],
 
-    // 响应式图片
+    // 响应式图片尺寸（Next.js 16 默认值已移除 16）
     deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048],
-    imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
+    imageSizes: [32, 48, 64, 96, 128, 256, 384],
 
-    // 缓存优化
-    minimumCacheTTL: 60,
+    // 缓存优化（Next.js 16 默认 minimumCacheTTL 已由 60s 提升至 4 小时）
+    minimumCacheTTL: 14400,
 
     // 安全配置
     dangerouslyAllowSVG: true,
     contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
 
-    // 域名配置
-    domains: [
-      'example.com',
-      'cdn.example.com',
-      'images.unsplash.com'
-    ]
+    // 远程图片域名（Next.js 16：使用 remotePatterns 替代已弃用的 images.domains）
+    remotePatterns: [
+      { protocol: 'https', hostname: 'example.com' },
+      { protocol: 'https', hostname: 'cdn.example.com' },
+      { protocol: 'https', hostname: 'images.unsplash.com' },
+    ],
+
+    // Next.js 16：quality 默认收敛为 [75]，其他值需在 qualities 中显式声明
+    qualities: [75, 90],
   },
 
   // 压缩配置
@@ -886,21 +721,13 @@ const nextConfig = {
         ]
       }
     ]
-  },
-
-  // 实验配置
-  eslint: {
-    ignoreDuringBuilds: true
-  },
-
-  // 实验配置
-  typescript: {
-    ignoreBuildErrors: true
   }
 }
 
 module.exports = nextConfig
 ```
+
+> ⚠️ **Next.js 16 注意**：`next build` 不再运行 lint（`next lint` 命令已移除，请直接使用 ESLint/Biome CLI）。若确有遗留 Webpack 自定义配置无法迁移，可在迁移期使用 `next dev --webpack` / `next build --webpack` 回退。
 
 ### Bundle分析和优化
 
@@ -1965,7 +1792,7 @@ export function PerformanceDashboard() {
 
 ## ✅ 总结
 
-通过本指南，你已经掌握了Next.js 15的企业级性能优化能力：
+通过本指南，你已经掌握了Next.js 16的企业级性能优化能力：
 
 ### 📊 Core Web Vitals优化
 - LCP优化策略和图片预加载技术
@@ -2022,7 +1849,7 @@ export function PerformanceDashboard() {
 ## 📚 模块内相关文档
 
 ### 同模块相关文档
-- [Next.js 15 完整指南](./01-nextjs-15-complete.md) - 学习Next.js 15内置的性能优化特性
+- [Next.js 16 完整指南](./01-nextjs-16-complete.md) - 学习Next.js 16内置的性能优化特性
 - [React 19 深度集成](./02-react-19-integration.md) - 掌握React 19并发渲染的性能优势
 - [全栈开发模式](./03-full-stack-patterns.md) - 了解全栈应用的性能优化策略
 
@@ -2049,7 +1876,7 @@ export function PerformanceDashboard() {
 
 ### 学习成果自检
 - [ ] 理解Core Web Vitals指标的含义和优化方法
-- [ ] 掌握Next.js 15的构建时和运行时优化技术
+- [ ] 掌握Next.js 16的构建时和运行时优化技术
 - [ ] 能够使用性能分析工具诊断和解决性能问题
 - [ ] 熟练设计和实现性能监控系统
 - [ ] 能够独立制定和执行性能优化策略
@@ -2083,7 +1910,7 @@ export function PerformanceDashboard() {
 **🏷️ 标签**: `#performance` `#optimization` `#core-web-vitals` `#bundle-analysis` `#monitoring`
 **⭐ 推荐指数**: ⭐⭐⭐⭐⭐
 
-**💡 提示**: 本模块为性能优化高级模块，建议先掌握Next.js 15基础和Web性能基础知识后再进行学习。
+**💡 提示**: 本模块为性能优化高级模块，建议先掌握Next.js 16基础和Web性能基础知识后再进行学习。
 
 **🎯 学习建议**:
 - 建议学习周期: 2-3周

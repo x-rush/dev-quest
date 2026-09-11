@@ -50,7 +50,7 @@
 > 与代码对齐：如果 App 请求了定位（如[天气应用](../projects/02-weather-app.md)），数据安全表单必须如实声明"位置"类型。
 
 **目标 API 要求**：Play 要求 targetSdk 满足最近政策（每年 8 月起对新提交生效），
-`targetSdk = 35` 起步是 2026 年的安全线，以 Play Console 提示为准。
+`targetSdk = 36`（Android 16）是 2026 年的安全线；Android 17（API 37）尚在 Beta，以 Play Console 提示为准。
 
 ## 4️⃣ 分轨发布（Testing Tracks）
 

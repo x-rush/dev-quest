@@ -1,10 +1,21 @@
 # iOS 原生开发 — Swift 6 + SwiftUI 现代化开发
 
-> **文档简介**: Dev Quest 应用帝国矩阵的 iOS 支柱模块：以 Swift 6 严格并发为地基，用 SwiftUI + Observation + SwiftData 构建现代原生应用，直至上架与运维
+> **文档简介**: Dev Quest 应用帝国矩阵的 iOS 支柱模块：以 Swift 6.3 严格并发为地基，用 SwiftUI + Observation + SwiftData 构建现代原生应用，直至上架与运维
 >
 > **目标读者**: 有 Go 后端与现代前端开发经验、想系统掌握 iOS 原生开发的学习者
 >
 > **前置知识**: 无硬性要求；有任一声明式 UI 框架（React/Compose）经验可显著加速
+
+## 🧪 技术基线
+
+本模块内容基于以下版本快照编写（核实日期：**2026-09-11**）。工具链请以你本机 `swift --version` 与 Xcode 实际输出为准。
+
+| 技术 | 当前版本 | 核实要点 |
+|------|---------|---------|
+| Swift | **6.3**（补丁至 6.3.3，6.4 开发中） | 2026-03-24 发布；Swift 6 严格并发为默认语言模式；6.3 起附带首个官方 **Swift SDK for Android**（跨 iOS/Android 分享 Swift 代码的里程碑） |
+| Xcode | **26.6** | 内含 Swift 6.3.3 工具链，SDK 覆盖 iOS 26.5 等 |
+| iOS SDK | **iOS 26** | SwiftUI / SwiftData 随 SDK 一体发布，无独立版本号；标志性变化为 Liquid Glass 设计与 `.glassEffect()` 等 SwiftUI 新 API |
+| 构建系统 | Swift Build（开源） | Swift 6.3 起成为 Swift Package Manager 的默认构建后端 |
 
 ## 📚 模块元数据
 
@@ -12,7 +23,7 @@
 |------|------|
 | **模块** | `06-swift-swiftui` |
 | **定位** | 应用帝国矩阵（核心重点）· 苹果生态 |
-| **技术栈** | Swift 6（严格并发）、SwiftUI + Observation（@Observable）、SwiftData、Xcode 最新稳定版 |
+| **技术栈** | Swift 6.3（严格并发）、SwiftUI + Observation（@Observable）、SwiftData、Xcode 26.x（iOS 26 SDK） |
 | **更新日期** | `2026年9月` |
 
 ## 🎯 模块简介
@@ -33,7 +44,7 @@
 | 象限 | 目录 | 内容 | 访问方式 |
 |------|------|------|---------|
 | **📖 教程** | [basics/](./basics/01-environment-setup.md) | 环境搭建 → Swift 语法 → SwiftUI 视图/状态/布局/导航 → 并发入门 → 首个项目，共 8 篇按序学习 | 从头到尾按编号走 |
-| **📚 字典** | [reference/](./reference/quick-references/01-swift-swiftui-cheatsheet.md) | 语言概念 / 框架要点 / 库指南 / 速查与故障排除，共 11 篇全量参考 | **无难度门槛**，任意跳入查询 |
+| **📚 字典** | [reference/](./reference/quick-references/01-swift-swiftui-cheatsheet.md) | 语言概念（11 篇）/ 框架要点（5 篇）/ 库指南（2 篇）/ 速查与故障排除（2 篇），共 20 篇全量参考 | **无难度门槛**，任意跳入查询 |
 | **🛠️ 操作指南** | [frameworks/](./frameworks/01-swiftui-basics.md) [projects/](./projects/01-notes-app.md) [testing/](./testing/01-unit-testing.md) [deployment/](./deployment/01-app-release.md) | 框架任务指南 4 篇 · 实战项目 4 个（⭐ 递进）· 测试工程 3 篇 · 部署运维 3 篇 | 面向目标，按需照做 |
 | **🎓 解释** | [advanced-topics/](./advanced-topics/architecture/01-app-architecture.md) | 应用架构、渲染性能、并发深度、安全实践，共 4 篇深度专题（均 ⭐⭐⭐） | 有实践困惑后带着问题读 |
 
@@ -84,10 +95,19 @@ async/await → SwiftUI 进阶 → SwiftData + 网络 → 天气应用 → 习�
 │   │   ├── 02-optionals-collections.md        #     可选值与集合
 │   │   ├── 03-concurrency-api.md              #     并发 API 全表
 │   │   ├── 04-swiftui-state-api.md            #     SwiftUI 状态 API
-│   │   └── 05-protocols-generics.md           #     协议与泛型
+│   │   ├── 05-protocols-generics.md           #     协议与泛型
+│   │   ├── 06-closures.md                     #     闭包与函数类型
+│   │   ├── 07-enums-pattern-matching.md       #     枚举与模式匹配
+│   │   ├── 08-error-handling.md               #     错误处理
+│   │   ├── 09-property-wrappers.md            #     属性包装器
+│   │   ├── 10-value-types-arc.md              #     值类型、引用类型与 ARC
+│   │   └── 11-actors-sendability.md           #     Actor 隔离与 Sendable
 │   ├── framework-essentials/                  #   框架核心要点
 │   │   ├── 01-swiftui-essentials.md           #     SwiftUI 视图与修饰符速查
-│   │   └── 02-swiftdata-observability.md      #     SwiftData 与 Observation
+│   │   ├── 02-swiftdata-observability.md      #     SwiftData 与 Observation
+│   │   ├── 03-state-driven-views.md           #     状态驱动视图
+│   │   ├── 04-view-modifier.md                #     ViewModifier 与修饰符链
+│   │   └── 05-data-flow.md                    #     数据流与 Environment
 │   ├── library-guides/                        #   标准库与三方库
 │   │   ├── 01-foundation-and-stdlib.md        #     Foundation 与标准库
 │   │   └── 02-third-party-libs.md             #     第三方库指南

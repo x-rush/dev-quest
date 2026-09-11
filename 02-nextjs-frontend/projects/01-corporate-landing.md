@@ -1,6 +1,6 @@
-# Next.js 15 企业官网开发实战
+# Next.js 16 企业官网开发实战
 
-> 通过构建一个现代化的企业官网，掌握Next.js 15的核心特性和最佳实践。本项目涵盖响应式设计、SEO优化、内容管理、多语言支持等企业级应用开发的关键技能。
+> 通过构建一个现代化的企业官网，掌握Next.js 16的核心特性和最佳实践。本项目涵盖响应式设计、SEO优化、内容管理、多语言支持等企业级应用开发的关键技能。
 
 **目标读者**: 有React基础，希望学习企业级Next.js应用开发的开发者
 **前置知识**: React基础、JavaScript ES6+、HTML/CSS、基础npm使用
@@ -12,13 +12,13 @@
 | **模块** | `02-nextjs-frontend` |
 | **分类** | `projects` |
 | **难度** | ⭐⭐⭐⭐ (4/5星) |
-| **标签** | `Next.js 15` `React 19` `TypeScript 5` `企业级应用` `SEO优化` |
+| **标签** | `Next.js 16` `React 19` `TypeScript 5` `企业级应用` `SEO优化` |
 | **更新日期** | `2025年10月` |
 | **作者** | Dev Quest Team |
 | **状态** | ✅ 已完成 |
 
 ## 🎯 学习目标
-- 掌握Next.js 15的App Router架构和核心特性
+- 掌握Next.js 16的App Router架构和核心特性
 - 实现高性能的SSR和SSG策略
 - 构建响应式、多语言的企业官网
 - 集成CMS内容管理系统
@@ -41,7 +41,7 @@
 - 📊 访问统计和数据可视化
 
 ### 技术栈
-- **前端框架**: Next.js 15 + React 19
+- **前端框架**: Next.js 16 + React 19
 - **开发语言**: TypeScript 5
 - **样式方案**: Tailwind CSS + CSS Modules
 - **状态管理**: Zustand (轻量级状态管理)
@@ -83,11 +83,11 @@ corporate-landing/
 ├── types/                      # TypeScript类型
 ├── public/                     # 静态资源
 ├── styles/                     # 样式文件
-└── middleware.ts              # 中间件
+└── proxy.ts                   # 网络代理（原中间件）
 ```
 
 ### 技术选型理由
-1. **Next.js 15**: 最新的App Router提供更好的性能和开发体验
+1. **Next.js 16**: 最新的App Router提供更好的性能和开发体验
 2. **TypeScript 5**: 类型安全和更好的开发工具支持
 3. **Tailwind CSS**: 快速响应式设计和维护性
 4. **Strapi**: 灵活的内容管理和API生成
@@ -99,7 +99,7 @@ corporate-landing/
 
 #### 1.1 创建Next.js项目
 ```bash
-# 创建Next.js 15项目
+# 创建Next.js 16项目
 npx create-next-app@latest corporate-landing --typescript --tailwind --eslint --app
 
 # 进入项目目录
@@ -247,7 +247,7 @@ import { headers } from 'next/headers';
 import { Locale } from './config';
 
 export function getLocale(): Locale {
-  const headersList = headers();
+  const headersList = await headers();
   const acceptLanguage = headersList.get('accept-language');
 
   // 简单的语言检测逻辑
@@ -258,7 +258,7 @@ export function getLocale(): Locale {
 }
 ```
 
-**middleware.ts**:
+**proxy.ts**（Next.js 16：原 middleware.ts）:
 ```typescript
 import createMiddleware from 'next-intl/middleware';
 import { locales, defaultLocale } from './lib/i18n/config';
@@ -290,7 +290,8 @@ export async function generateStaticParams() {
   return locales.map((locale) => ({ locale }));
 }
 
-export async function generateMetadata({ params: { locale } }: { params: { locale: string } }) {
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
+  const { locale } = await params;
   const t = await getTranslations({ locale, namespace: 'metadata' });
 
   return {
@@ -306,11 +307,12 @@ export async function generateMetadata({ params: { locale } }: { params: { local
 
 export default async function RootLayout({
   children,
-  params: { locale },
+  params,
 }: {
   children: React.ReactNode;
-  params: { locale: string };
+  params: Promise<{ locale: string }>;
 }) {
+  const { locale } = await params;
   if (!locales.includes(locale as any)) {
     notFound();
   }
@@ -837,12 +839,12 @@ import { Button } from '@/components/ui/button';
 import { Calendar, Clock, ArrowRight } from 'lucide-react';
 
 interface BlogPageProps {
-  params: { locale: string };
-  searchParams: { page?: string };
+  params: Promise<{ locale: string }>;
+  searchParams: Promise<{ page?: string }>;
 }
 
 export async function generateMetadata({ params }: BlogPageProps): Promise<Metadata> {
-  const locale = params.locale;
+  const { locale } = await params;
   setRequestLocale(locale);
 
   const t = await getTranslations({ locale, namespace: 'blog' });
@@ -854,8 +856,9 @@ export async function generateMetadata({ params }: BlogPageProps): Promise<Metad
 }
 
 export default async function BlogPage({ params, searchParams }: BlogPageProps) {
-  const locale = params.locale;
-  const page = parseInt(searchParams.page || '1');
+  const { locale } = await params;
+  const { page: pageParam } = await searchParams;
+  const page = parseInt(pageParam || '1');
   setRequestLocale(locale);
 
   const t = await getTranslations({ locale, namespace: 'blog' });
@@ -1564,7 +1567,7 @@ jobs:
 
 ## 💡 关键技术点
 
-### 1. Next.js 15 App Router
+### 1. Next.js 16 App Router
 - 使用App Router替代Pages Router，获得更好的性能和开发体验
 - 实现流式渲染和服务器组件
 - 掌握路由组和动态路由的使用
@@ -1750,21 +1753,21 @@ vercel --prod
 - 📄 **[04-saas-platform.md](./04-saas-platform.md)**: SaaS平台项目实战
 
 ### 参考章节
-- 📖 **[Framework Deep Dive - Next.js](../frameworks/01-nextjs-15-complete.md)**: Next.js核心特性深度学习
+- 📖 **[Framework Deep Dive - Next.js](../frameworks/01-nextjs-16-complete.md)**: Next.js核心特性深度学习
 - 📖 **[Styling - Tailwind CSS](../basics/05-styling-with-tailwind.md)**: Tailwind CSS快速参考
 - 📖 **[API Integration](../basics/06-data-fetching-basics.md)**: API集成最佳实践
 
 ## 📝 总结
 
 ### 核心要点回顾
-1. **Next.js 15 App Router**: 掌握现代Next.js开发模式
+1. **Next.js 16 App Router**: 掌握现代Next.js开发模式
 2. **多语言国际化**: 实现企业级国际化解决方案
 3. **CMS集成**: 与内容管理系统无缝集成
 4. **性能优化**: 全链路性能优化策略
 5. **企业级部署**: CI/CD和生产环境部署
 
 ### 学习成果检查
-- [ ] 能够独立创建Next.js 15项目并配置开发环境
+- [ ] 能够独立创建Next.js 16项目并配置开发环境
 - [ ] 掌握App Router的路由和布局系统
 - [ ] 实现完整的多语言支持功能
 - [ ] 集成CMS并实现内容管理功能
@@ -1786,7 +1789,7 @@ vercel --prod
 ## 🔗 外部资源
 
 ### 官方文档
-- [Next.js 15 Documentation](https://nextjs.org/docs)
+- [Next.js 16 Documentation](https://nextjs.org/docs)
 - [React 19 Documentation](https://react.dev/)
 - [TypeScript Handbook](https://www.typescriptlang.org/docs/)
 - [Tailwind CSS Documentation](https://tailwindcss.com/docs)

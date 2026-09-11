@@ -1,6 +1,6 @@
-# Next.js 15 数据获取基础完整指南
+# Next.js 16 数据获取基础完整指南
 
-> **文档简介**: Next.js 15 现代数据获取完整教程，涵盖Server Components、Client Components、API路由、缓存策略、错误处理等数据获取核心技术
+> **文档简介**: Next.js 16 现代数据获取完整教程，涵盖Server Components、Client Components、API路由、缓存策略、错误处理等数据获取核心技术
 
 > **目标读者**: 具备Next.js基础的开发者，需要掌握现代数据获取和API集成的前端工程师
 
@@ -23,7 +23,7 @@
 ## 🎯 学习目标
 
 ### 📡 数据获取核心概念
-- 理解Next.js 15中Server Components和Client Components的数据获取模式
+- 理解Next.js 16中Server Components和Client Components的数据获取模式
 - 掌握不同渲染策略(SSR、SSG、ISR、CSR)的数据获取方法
 - 学会API路由的创建和数据处理
 - 理解缓存策略和数据更新机制
@@ -36,7 +36,7 @@
 
 ## 📖 概述
 
-Next.js 15提供了强大的数据获取生态系统，支持服务器端和客户端数据获取、多种缓存策略、以及优化的数据加载模式。本教程将帮助你掌握现代Web应用的数据获取最佳实践。
+Next.js 16提供了强大的数据获取生态系统，支持服务器端和客户端数据获取、多种缓存策略、以及优化的数据加载模式。本教程将帮助你掌握现代Web应用的数据获取最佳实践。
 
 ## 🏗️ 数据获取架构概览
 
@@ -164,9 +164,10 @@ import { PostContent } from '@/components/PostContent'
 import { CommentSection } from '@/components/CommentSection'
 
 interface PostPageProps {
-  params: {
+  // Next.js 16：params 为 Promise
+  params: Promise<{
     slug: string
-  }
+  }>
 }
 
 // 获取文章详情
@@ -226,7 +227,8 @@ export async function generateStaticParams() {
 
 // 生成元数据
 export async function generateMetadata({ params }: PostPageProps): Promise<Metadata> {
-  const post = await getPostBySlug(params.slug)
+  const { slug } = await params
+  const post = await getPostBySlug(slug)
 
   if (!post) {
     return {
@@ -247,13 +249,14 @@ export async function generateMetadata({ params }: PostPageProps): Promise<Metad
 }
 
 export default async function PostPage({ params }: PostPageProps) {
-  const post = await getPostBySlug(params.slug)
+  const { slug } = await params
+  const post = await getPostBySlug(slug)
 
   if (!post) {
     notFound()
   }
 
-  const comments = await getPostComments(parseInt(params.slug))
+  const comments = await getPostComments(parseInt(slug))
 
   return (
     <div className="max-w-4xl mx-auto py-8 px-4">
@@ -665,15 +668,17 @@ import { getPostById, updatePost, deletePost } from '@/lib/posts'
 import { notFound } from 'next/navigation'
 
 interface RouteParams {
-  params: {
+  // Next.js 16：route handler 的 params 同样为 Promise
+  params: Promise<{
     id: string
-  }
+  }>
 }
 
 // GET /api/posts/[id] - 获取单篇文章
 export async function GET(request: NextRequest, { params }: RouteParams) {
   try {
-    const post = await getPostById(params.id)
+    const { id } = await params
+    const post = await getPostById(id)
 
     if (!post) {
       return NextResponse.json(
@@ -690,7 +695,7 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
       data: post
     })
   } catch (error) {
-    console.error(`Error fetching post ${params.id}:`, error)
+    console.error(`Error fetching post:`, error)
     return NextResponse.json(
       {
         success: false,
@@ -704,10 +709,11 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
 // PUT /api/posts/[id] - 更新文章
 export async function PUT(request: NextRequest, { params }: RouteParams) {
   try {
+    const { id } = await params
     const body = await request.json()
     const { title, content, excerpt, category } = body
 
-    const updatedPost = await updatePost(params.id, {
+    const updatedPost = await updatePost(id, {
       title,
       content,
       excerpt,
@@ -731,7 +737,7 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
       message: 'Post updated successfully'
     })
   } catch (error) {
-    console.error(`Error updating post ${params.id}:`, error)
+    console.error(`Error updating post:`, error)
     return NextResponse.json(
       {
         success: false,
@@ -745,7 +751,8 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
 // DELETE /api/posts/[id] - 删除文章
 export async function DELETE(request: NextRequest, { params }: RouteParams) {
   try {
-    const deleted = await deletePost(params.id)
+    const { id } = await params
+    const deleted = await deletePost(id)
 
     if (!deleted) {
       return NextResponse.json(
@@ -762,7 +769,7 @@ export async function DELETE(request: NextRequest, { params }: RouteParams) {
       message: 'Post deleted successfully'
     })
   } catch (error) {
-    console.error(`Error deleting post ${params.id}:`, error)
+    console.error(`Error deleting post:`, error)
     return NextResponse.json(
       {
         success: false,
@@ -1063,7 +1070,7 @@ export function PrefetchLink({
 - 探索实时数据同步和WebSocket应用
 - 了解数据获取的安全性和认证
 
-Next.js 15的数据获取生态系统为现代Web应用提供了强大而灵活的解决方案。继续探索更多高级特性，构建更高效的应用吧！
+Next.js 16的数据获取生态系统为现代Web应用提供了强大而灵活的解决方案。继续探索更多高级特性，构建更高效的应用吧！
 
 ## 🔄 文档交叉引用
 

@@ -166,14 +166,14 @@ uv run alembic upgrade head
 
 ```dockerfile
 # 多阶段构建详解见容器化部署
-FROM ghcr.io/astral-sh/uv:python3.12-bookworm-slim AS builder
+FROM ghcr.io/astral-sh/uv:python3.14-bookworm-slim AS builder
 WORKDIR /app
 COPY pyproject.toml uv.lock ./
 RUN uv sync --frozen --no-dev --no-install-project
 COPY . .
 RUN uv sync --frozen --no-dev
 
-FROM python:3.12-slim-bookworm
+FROM python:3.14-slim-bookworm
 COPY --from=builder /app /app
 ENV PATH="/app/.venv/bin:$PATH"
 USER nobody

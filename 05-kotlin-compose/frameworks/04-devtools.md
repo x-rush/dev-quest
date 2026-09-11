@@ -1,6 +1,6 @@
 # 开发工具链 - Android Studio 高效工作流
 
-> **文档简介**: 系统介绍 Android Studio（Koala 及更新版本）中 Compose 开发的核心工具：Compose Preview、Layout Inspector、Logcat 与编译器诊断
+> **文档简介**: 系统介绍 Android Studio（Quail 2026.1 及更新版本）中 Compose 开发的核心工具：Compose Preview、Layout Inspector、Logcat 与编译器诊断
 >
 > **目标读者**: 已能跑通 Hello Compose、希望提升日常开发与调试效率的所有学习者
 >

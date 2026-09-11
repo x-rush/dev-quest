@@ -2,7 +2,7 @@
 
 ## 概述
 
-TanStack Query v5 / Table v8 / Router v1 / Form v1 / Start v1 的高频 API 一行式速查。只查签名，语义与陷阱见对应核心 API 字典。
+TanStack Query v5 / Table v9 / Router v1 / Form v1 / Start v1 的高频 API 一行式速查。只查签名，语义与陷阱见对应核心 API 字典。
 
 ## 📚 文档元数据
 
@@ -22,8 +22,11 @@ TanStack Query v5 / Table v8 / Router v1 / Form v1 / Start v1 的高频 API 一�
 new QueryClient({ defaultOptions: { queries: { staleTime, gcTime, retry } } })
 <QueryClientProvider client={qc}>…</QueryClientProvider>
 
-useQuery({ queryKey, queryFn, enabled, staleTime, select, placeholderData })
+useQuery({ queryKey, queryFn, enabled, staleTime, select, placeholderData: (prev) => prev })
 useQuery 返回: { data, error, status, fetchStatus, isPending, isFetching, isError, refetch }
+// v5：isPending 时 data 类型收窄为 undefined；v4 的 keepPreviousData 选项已移除，占位用 placeholderData 函数式写法或内置 keepPreviousData
+
+useSuspenseQuery({ queryKey, queryFn })   // data 必非空（v5 标准模式），配合 <Suspense>
 
 useMutation({ mutationFn, onMutate, onSuccess, onError, onSettled })
 mutation.mutate(variables) // mutateAsync 可 await
@@ -45,14 +48,15 @@ dehydrate(qc) / hydrate(dehydratedState)
 ## 2. Table（@tanstack/react-table）
 
 ```tsx
-const table = useReactTable({
-  data, columns,
-  getCoreRowModel: getCoreRowModel(),              // 必填
-  getSortedRowModel: getSortedRowModel(),
-  getFilteredRowModel: getFilteredRowModel(),
-  getPaginationRowModel: getPaginationRowModel(),
-  getGroupedRowModel: getGroupedRowModel(),
-  getExpandedRowModel: getExpandedRowModel(),
+// v9：useReactTable → useTable，features 必填
+const features = tableFeatures({
+  rowSortingFeature, columnFilteringFeature, rowPaginationFeature,
+  sortedRowModel: createSortedRowModel(),
+  filteredRowModel: createFilteredRowModel(),
+  paginatedRowModel: createPaginatedRowModel(),
+})
+const table = useTable({
+  data, columns, features,               // 核心行模型自动内置，无需 getCoreRowModel
   state: { sorting, pagination, rowSelection },
   onSortingChange: setSorting, onPaginationChange: setPagination,
   getRowId: (row) => row.id, enableRowSelection: true,
@@ -67,8 +71,8 @@ const table = useReactTable({
 table.getHeaderGroups().map(hg => hg.headers.map(h => flexRender(h.column.columnDef.header, h.getContext())))
 table.getRowModel().rows.map(row => row.getVisibleCells().map(c => flexRender(c.column.columnDef.cell, c.getContext())))
 
-// 常用实例方法
-table.getState() / table.setSorting(updater)
+// 常用实例方法（v9：方法须经实例调用，解构会丢上下文）
+table.state / table.setSorting(updater)
 header.column.getToggleSortingHandler() / header.column.getIsSorted() // 'asc'|'desc'|false
 header.column.setFilterValue(v)
 table.nextPage() / table.previousPage() / table.getCanNextPage()

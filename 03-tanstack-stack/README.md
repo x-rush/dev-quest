@@ -4,7 +4,21 @@
 
 本模块系统学习 TanStack 生态的核心库（Query、Table、Router、Form），掌握现代 React 应用的服务端状态管理、数据表格、类型安全路由与表单管理能力。TanStack 是 Headless（无头）设计哲学的代表，与 [02-nextjs-frontend](../02-nextjs-frontend/README.md) 的框架学习互补，重点在于可组合、可定制的数据层技术。
 
-**技术栈基线**：React 19 + TypeScript + TanStack Query v5（v5 命名：`isPending` / `gcTime`）+ TanStack Router + TanStack Table + TanStack Form
+### 🧪 技术基线
+
+> 版本经 npm registry 与官方文档核实（核实日期：2026-09-11）。本模块代码示例以 Query v5 / Table v9 写法为准。
+
+| 技术 | 版本 | 说明 |
+|------|------|------|
+| TanStack Query | **v5**（v5.0.0 发布于 2023-10-17，当前 5.102.x） | `isLoading` 更名 `isPending`（`isLoading` = `isPending && isFetching`）；`cacheTime` 更名 `gcTime`；`keepPreviousData` 选项移除（用 `placeholderData: (prev) => prev` 或内置 `keepPreviousData` 帮助函数）；`isPending` 时 `data` 类型收窄为 `undefined`；`useSuspenseQuery` 为标准模式 |
+| TanStack Table | **v9**（v9 stable 发布于 2026-08-04，当前 9.2.x） | `useReactTable` 更名 `useTable`；新增必填 `features` 选项（`tableFeatures()` / `stockFeatures`）；行模型工厂槽位化；`getState()` → `state` |
+| TanStack Router | v1（@tanstack/react-router 1.170.x） | 文件式路由 + 100% 类型安全路由树 |
+| TanStack Start | v1（@tanstack/react-start 1.168.x） | 基于 Router + Query 的全栈 SSR 框架，配合 Query v5 可做服务端预取流式水合 |
+| TanStack Form | v1（@tanstack/react-form 1.x） | Headless 表单状态与 Standard Schema 校验 |
+| TypeScript | 5.6+ | Query v5 官方支持窗口内版本（v5.0 发布时最低 4.7） |
+| React | 19 | 生态当前主线 |
+
+**技术栈基线**：React 19 + TypeScript 5.6+ + TanStack Query v5（`isPending` / `gcTime` / `placeholderData`）+ TanStack Router v1 + TanStack Table v9 + TanStack Form v1
 
 ### 🎯 学习目标
 
@@ -21,7 +35,7 @@
 | 象限 | 目录 | 内容 | 说明 |
 |------|------|------|------|
 | **教程** | [basics/](basics/) | 8 篇按序入门 | 从环境搭建到第一个完整项目，按编号顺序学习 |
-| **字典** | [reference/](reference/) | 11 篇全量参考 | 概念的唯一权威出处，无难度门槛，随时跳入查阅 |
+| **字典** | [reference/](reference/) | 20 篇全量参考 | 概念的唯一权威出处，无难度门槛，随时跳入查阅 |
 | **操作指南** | [frameworks/](frameworks/) · [projects/](projects/) · [testing/](testing/) · [deployment/](deployment/) | 15 篇任务式指南 | "怎么完成这个任务"：框架实操、实战项目、测试工程、部署运维 |
 | **深度解释** | [advanced-topics/](advanced-topics/) | 4 篇原理剖析 | "为什么这样设计"：缓存架构、性能与安全 |
 
@@ -64,13 +78,22 @@
 ├── reference/                                     # 字典：全量参考（无难度门槛）
 │   ├── framework-essentials/
 │   │   ├── 01-query-essentials.md                 #   Query 框架要点：缓存键、staleTime/gcTime
-│   │   └── 02-router-essentials.md                #   Router 框架要点：守卫、预加载、SSR
+│   │   ├── 02-router-essentials.md                #   Router 框架要点：守卫、预加载、SSR
+│   │   ├── 03-queryclient-config.md               #   QueryClient 全局配置：defaultOptions 与网络模式
+│   │   ├── 04-prefetch-ssr.md                     #   预取与 SSR 水合：prefetch、dehydrate、RSC 流式预取
+│   │   └── 05-mutation-state.md                   #   Mutation 状态与副作用：useMutationState
 │   ├── language-concepts/
 │   │   ├── 01-query-core-api.md                   #   Query 核心 API
-│   │   ├── 02-table-core-api.md                   #   Table 核心 API
+│   │   ├── 02-table-core-api.md                   #   Table 核心 API（v9：useTable + features）
 │   │   ├── 03-router-core-api.md                  #   Router 核心 API
 │   │   ├── 04-form-core-api.md                    #   Form 核心 API
-│   │   └── 05-typescript-patterns.md              #   TypeScript 模式
+│   │   ├── 05-typescript-patterns.md              #   TypeScript 模式
+│   │   ├── 06-optimistic-update.md                #   乐观更新：onMutate 快照与回滚
+│   │   ├── 07-infinite-query.md                   #   无限查询：useInfiniteQuery 与游标分页
+│   │   ├── 08-placeholder-data.md                 #   占位数据：placeholderData 与 isPlaceholderData
+│   │   ├── 09-suspense-query.md                   #   Suspense 查询：useSuspenseQuery 与数据保证
+│   │   ├── 10-network-mode.md                     #   网络模式与离线支持：networkMode
+│   │   └── 11-search-params.md                    #   URL 搜索参数状态：validateSearch 与类型化 search
 │   ├── library-guides/
 │   │   ├── 01-ecosystem-integrations.md           #   生态集成：官方周边库指南
 │   │   └── 02-related-libs.md                     #   相关库搭配：Zustand、Jotai、Axios 等

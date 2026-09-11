@@ -1,4 +1,4 @@
-# Next.js 15 数据仪表板开发实战
+# Next.js 16 数据仪表板开发实战
 
 > 通过构建一个功能强大的数据分析和可视化仪表板，掌握现代Web数据应用开发的核心技术。本项目涵盖实时数据展示、图表可视化、数据过滤、权限管理、响应式设计等企业级数据分析应用的关键功能。
 
@@ -12,7 +12,7 @@
 | **模块** | `02-nextjs-frontend` |
 | **分类** | `projects` |
 | **难度** | ⭐⭐⭐⭐⭐ (5/5星) |
-| **标签** | `Next.js 15` `React 19` `TypeScript 5` `数据可视化` `Chart.js` `D3.js` `实时数据` |
+| **标签** | `Next.js 16` `React 19` `TypeScript 5` `数据可视化` `Chart.js` `D3.js` `实时数据` |
 | **更新日期** | `2025年10月` |
 | **作者** | Dev Quest Team |
 | **状态** | ✅ 已完成 |
@@ -43,7 +43,7 @@
 - 📈 数据趋势分析和预测
 
 ### 技术栈
-- **前端框架**: Next.js 15 + React 19
+- **前端框架**: Next.js 16 + React 19
 - **开发语言**: TypeScript 5
 - **图表库**: Chart.js + React-Chartjs-2 + D3.js
 - **状态管理**: Zustand + React Query
@@ -111,7 +111,7 @@ dashboard-analytics/
 │   ├── schema.prisma           # 数据库模型
 │   └── migrations/             # 数据库迁移
 ├── public/                     # 静态资源
-└── middleware.ts              # 中间件
+└── proxy.ts                   # 网络代理（原中间件）
 ```
 
 ### 数据库设计
@@ -352,7 +352,7 @@ enum ActivityType {
 
 #### 1.1 创建Next.js项目
 ```bash
-# 创建Next.js 15项目
+# 创建Next.js 16项目
 npx create-next-app@latest dashboard-analytics --typescript --tailwind --eslint --app
 
 # 进入项目目录
@@ -2891,13 +2891,9 @@ export class ChartOptimizer {
 #### 4.2 数据缓存策略
 **lib/cache/data-cache.ts**:
 ```typescript
-import { unstable_cache } from 'next/cache'
+// Next.js 16：unstable_cache 已弃用，改用 "use cache" + cacheTag/cacheLife
+import { revalidateTag, cacheTag, cacheLife } from 'next/cache'
 import { DataPoint, FilterOptions } from '@/types/analytics'
-
-interface CacheOptions {
-  revalidate?: number
-  tags?: string[]
-}
 
 /**
  * 数据缓存服务
@@ -2906,94 +2902,84 @@ export class DataCacheService {
   /**
    * 缓存指标数据
    */
-  static getCachedMetricData = unstable_cache(
-    async (
-      metricId: string,
-      timeRange: { start: Date; end: Date },
-      filters?: FilterOptions
-    ): Promise<DataPoint[]> => {
-      // 这里实现实际的数据获取逻辑
-      const response = await fetch(`/api/analytics/metrics/${metricId}/data`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ timeRange, filters }),
-      })
+  static async getCachedMetricData(
+    metricId: string,
+    timeRange: { start: Date; end: Date },
+    filters?: FilterOptions
+  ): Promise<DataPoint[]> {
+    'use cache'
+    cacheLife('minutes') // 5分钟级缓存
+    cacheTag('metric-data')
 
-      if (!response.ok) {
-        throw new Error('Failed to fetch metric data')
-      }
+    // 这里实现实际的数据获取逻辑
+    const response = await fetch(`/api/analytics/metrics/${metricId}/data`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ timeRange, filters }),
+    })
 
-      return response.json()
-    },
-    ['metric-data'],
-    {
-      revalidate: 300, // 5分钟缓存
-      tags: ['metric-data'],
+    if (!response.ok) {
+      throw new Error('Failed to fetch metric data')
     }
-  )
+
+    return response.json()
+  }
 
   /**
    * 缓存聚合数据
    */
-  static getCachedAggregatedData = unstable_cache(
-    async (
-      metricIds: string[],
-      aggregationType: string,
-      timeRange: { start: Date; end: Date }
-    ): Promise<any> => {
-      // 这里实现聚合数据的获取逻辑
-      const response = await fetch('/api/analytics/aggregated', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          metricIds,
-          aggregationType,
-          timeRange,
-        }),
-      })
+  static async getCachedAggregatedData(
+    metricIds: string[],
+    aggregationType: string,
+    timeRange: { start: Date; end: Date }
+  ): Promise<any> {
+    'use cache'
+    cacheLife('minutes') // 10分钟级缓存
+    cacheTag('aggregated-data')
 
-      if (!response.ok) {
-        throw new Error('Failed to fetch aggregated data')
-      }
+    // 这里实现聚合数据的获取逻辑
+    const response = await fetch('/api/analytics/aggregated', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        metricIds,
+        aggregationType,
+        timeRange,
+      }),
+    })
 
-      return response.json()
-    },
-    ['aggregated-data'],
-    {
-      revalidate: 600, // 10分钟缓存
-      tags: ['aggregated-data'],
+    if (!response.ok) {
+      throw new Error('Failed to fetch aggregated data')
     }
-  )
+
+    return response.json()
+  }
 
   /**
    * 缓存仪表板配置
    */
-  static getCachedDashboardConfig = unstable_cache(
-    async (dashboardId: string): Promise<any> => {
-      // 这里实现仪表板配置的获取逻辑
-      const response = await fetch(`/api/dashboards/${dashboardId}`)
+  static async getCachedDashboardConfig(dashboardId: string): Promise<any> {
+    'use cache'
+    cacheLife('hours') // 1小时级缓存
+    cacheTag('dashboard-config')
 
-      if (!response.ok) {
-        throw new Error('Failed to fetch dashboard config')
-      }
+    // 这里实现仪表板配置的获取逻辑
+    const response = await fetch(`/api/dashboards/${dashboardId}`)
 
-      return response.json()
-    },
-    ['dashboard-config'],
-    {
-      revalidate: 3600, // 1小时缓存
-      tags: ['dashboard-config'],
+    if (!response.ok) {
+      throw new Error('Failed to fetch dashboard config')
     }
-  )
+
+    return response.json()
+  }
 
   /**
    * 清除缓存
    */
   static async clearCache(tags: string[]): Promise<void> {
     try {
-      // 这里实现缓存清除逻辑
-      // Next.js的revalidateTag函数只能在服务器端使用
-      console.log('Clearing cache for tags:', tags)
+      // Next.js 16：revalidateTag 需传入 cacheLife profile 作为第二参数
+      tags.forEach(tag => revalidateTag(tag, 'max'))
     } catch (error) {
       console.error('Failed to clear cache:', error)
     }
@@ -3124,7 +3110,6 @@ const nextConfig = {
     return config
   },
   // 性能优化
-  swcMinify: true,
   // 优化包大小
   modularizeImports: {
     'chart.js': {
@@ -3391,7 +3376,7 @@ volumes:
 - 📄 **[04-saas-platform.md](./04-saas-platform.md)**: SaaS平台项目实战
 
 ### 参考章节
-- 📖 **[Framework Deep Dive - Next.js](../frameworks/01-nextjs-15-complete.md)**: Next.js核心特性深度学习
+- 📖 **[Framework Deep Dive - Next.js](../frameworks/01-nextjs-16-complete.md)**: Next.js核心特性深度学习
 - 📖 **Data Visualization - Chart.js**: Chart.js快速参考
 - 📖 **[Performance Optimization](../reference/performance-optimization/01-rendering-optimization.md)**: 性能优化最佳实践
 
@@ -3427,7 +3412,7 @@ volumes:
 ## 🔗 外部资源
 
 ### 官方文档
-- [Next.js 15 Documentation](https://nextjs.org/docs)
+- [Next.js 16 Documentation](https://nextjs.org/docs)
 - [Chart.js Documentation](https://www.chartjs.org/docs/)
 - [D3.js Documentation](https://d3js.org/)
 - [Socket.io Documentation](https://socket.io/docs/)

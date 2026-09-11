@@ -1,10 +1,10 @@
-# Next.js 15 全栈开发模式完整指南
+# Next.js 16 全栈开发模式完整指南
 
-> **文档简介**: Next.js 15 企业级全栈开发实践指南，涵盖API设计、数据库集成、认证授权、实时功能、微服务等现代全栈开发技术
+> **文档简介**: Next.js 16 企业级全栈开发实践指南，涵盖API设计、数据库集成、认证授权、实时功能、微服务等现代全栈开发技术
 
 > **目标读者**: 具备Next.js和后端基础的中高级开发者，需要掌握现代全栈开发架构的全栈工程师
 
-> **前置知识**: Next.js 15、React 19、TypeScript 5、数据库基础、API设计、认证授权概念
+> **前置知识**: Next.js 16、React 19、TypeScript 5、数据库基础、API设计、认证授权概念
 
 > **预计时长**: 12-16小时
 
@@ -23,7 +23,7 @@
 ## 🎯 学习目标
 
 ### 🏗️ 全栈架构设计
-- 掌握Next.js 15全栈应用的核心架构模式
+- 掌握Next.js 16全栈应用的核心架构模式
 - 学会RESTful API和GraphQL的设计与实现
 - 理解数据库集成和数据建模最佳实践
 - 掌握现代认证授权和安全架构
@@ -36,7 +36,7 @@
 
 ## 📖 概述
 
-Next.js 15为全栈开发提供了强大的基础设施，通过API Routes、Server Components、Middleware等特性，支持构建功能完整的企业级Web应用。本指南将深入探讨Next.js 15的全栈开发模式和最佳实践。
+Next.js 16为全栈开发提供了强大的基础设施，通过API Routes、Server Components、Middleware等特性，支持构建功能完整的企业级Web应用。本指南将深入探讨Next.js 16的全栈开发模式和最佳实践。
 
 ## 🏗️ 全栈架构深度解析
 
@@ -115,7 +115,7 @@ fullstack-app/
 │   │   ├── user.service.ts         # 用户服务
 │   │   ├── post.service.ts         # 文章服务
 │   │   └── notification.service.ts # 通知服务
-│   ├── middleware.ts                # 中间件
+│   ├── proxy.ts                     # 网络代理（原中间件）
 │   └── types/                      # 类型定义
 ├── prisma/                         # 数据库配置
 ├── docker/                         # Docker配置
@@ -583,11 +583,11 @@ const updateParamsSchema = z.object({
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     // 参数验证
-    const { id } = updateParamsSchema.parse(params)
+    const { id } = updateParamsSchema.parse(await params)
 
     // 权限检查
     const auth = await requireAuth(request, [PERMISSIONS.USER_READ])
@@ -668,11 +668,11 @@ export async function GET(
 
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     // 参数验证
-    const { id } = updateParamsSchema.parse(params)
+    const { id } = updateParamsSchema.parse(await params)
     const body = await request.json()
     const validatedData = updateUserSchema.parse(body)
 
@@ -751,11 +751,11 @@ export async function PUT(
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     // 参数验证
-    const { id } = updateParamsSchema.parse(params)
+    const { id } = updateParamsSchema.parse(await params)
 
     // 权限检查
     const auth = await requireAuth(request, [PERMISSIONS.USER_DELETE_ANY])
@@ -1229,7 +1229,7 @@ export class MigrationManager {
 
 ## ✅ 总结
 
-通过本指南，你已经掌握了Next.js 15企业级全栈开发的核心能力：
+通过本指南，你已经掌握了Next.js 16企业级全栈开发的核心能力：
 
 ### 🏗️ 全栈架构设计
 - 分层架构设计和服务组织原则
@@ -1279,7 +1279,7 @@ export class MigrationManager {
 ## 📚 模块内相关文档
 
 ### 同模块相关文档
-- [Next.js 15 完整指南](./01-nextjs-15-complete.md) - 掌握Next.js 15的API Routes和服务器功能
+- [Next.js 16 完整指南](./01-nextjs-16-complete.md) - 掌握Next.js 16的API Routes和服务器功能
 - [React 19 深度集成](./02-react-19-integration.md) - 学习如何在全栈应用中集成React 19特性
 - [性能优化策略](./04-performance-optimization.md) - 深入了解全栈应用的性能优化
 
@@ -1340,7 +1340,7 @@ export class MigrationManager {
 **🏷️ 标签**: `#full-stack` `#api-design` `#database` `#authentication` `#permissions`
 **⭐ 推荐指数**: ⭐⭐⭐⭐⭐
 
-**💡 提示**: 本模块为全栈开发高级模块，建议先掌握Next.js 15基础和数据库基础后再进行学习。
+**💡 提示**: 本模块为全栈开发高级模块，建议先掌握Next.js 16基础和数据库基础后再进行学习。
 
 **🎯 学习建议**:
 - 建议学习周期: 3-4周

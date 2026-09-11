@@ -1426,7 +1426,7 @@ export async function waitForLoadingToFinish() {
 - [端到端测试指南](./03-e2e-testing.md) - 学习完整的E2E测试策略和实践
 
 ### 相关知识模块
-- [框架相关模块](../frameworks/01-nextjs-15-complete.md) - Next.js 15的架构为测试提供的基础
+- [框架相关模块](../frameworks/01-nextjs-16-complete.md) - Next.js 16的架构为测试提供的基础
 - [框架相关模块](../frameworks/02-react-19-integration.md) - React 19组件的测试策略
 - [框架相关模块](../frameworks/03-full-stack-patterns.md) - 全栈应用的API测试和集成测试
 

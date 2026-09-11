@@ -1,10 +1,10 @@
-# Next.js 15 渲染性能优化完整指南
+# Next.js 16 渲染性能优化完整指南
 
-> **文档简介**: Next.js 15 渲染性能优化企业级实践指南，涵盖Core Web Vitals、SSR/SSG优化、组件渲染、图片优化、字体加载等现代性能优化技术
+> **文档简介**: Next.js 16 渲染性能优化企业级实践指南，涵盖Core Web Vitals、SSR/SSG优化、组件渲染、图片优化、字体加载等现代性能优化技术
 
 > **目标读者**: 具备Next.js基础的中高级开发者，需要掌握性能优化和用户体验提升的前端工程师
 
-> **前置知识**: Next.js 15基础、React 19渲染机制、Web性能指标、浏览器渲染原理
+> **前置知识**: Next.js 16基础、React 19渲染机制、Web性能指标、浏览器渲染原理
 
 > **预计时长**: 8-12小时
 
@@ -555,32 +555,24 @@ export default function RootLayout({
 
 ```typescript
 // app/products/[id]/page.tsx
-import { unstable_cache } from 'next/cache';
+import { cacheLife, cacheTag } from 'next/cache';
 import { getProduct } from '@/lib/api/products';
 
-export const revalidate = 3600; // 1小时
-
-// 使用 unstable_cache 缓存
+// 使用 "use cache" 显式缓存（Next.js 16：缓存不再默认开启）
 export async function getProductCached(id: string) {
-  const getCachedProduct = unstable_cache(
-    async () => {
-      return getProduct(id);
-    },
-    {
-      revalidate: 3600, // 1小时
-      tags: ['product', `product-${id}`],
-    }
-  );
-
-  return getCachedProduct();
+  'use cache'
+  cacheLife('hours'); // 1小时级缓存
+  cacheTag('product', `product-${id}`);
+  return getProduct(id);
 }
 
 export default async function ProductPage({
   params,
 }: {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }) {
-  const product = await getProductCached(params.id);
+  const { id } = await params;
+  const product = await getProductCached(id);
 
   return (
     <div>

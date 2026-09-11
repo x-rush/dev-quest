@@ -61,13 +61,13 @@ export GOSUMDB=sum.golang.google.cn
 ```go
 module example.com/myapp
 
-go 1.21
+go 1.25
 
 require (
-    github.com/gin-gonic/gin v1.9.1
+    github.com/gin-gonic/gin v1.12.0
     github.com/joho/godotenv v1.4.0
-    gorm.io/gorm v1.25.4
-    github.com/go-redis/redis/v9 v9.0.5
+    gorm.io/gorm v1.31.2
+    github.com/redis/go-redis/v9 v9.22.0
 )
 ```
 
@@ -149,7 +149,7 @@ mysql -h localhost -u root -p
 ### Redis 连接
 ```bash
 # 安装Redis驱动
-go get github.com/go-redis/redis/v9
+go get github.com/redis/go-redis/v9
 
 # Redis CLI命令
 redis-cli ping

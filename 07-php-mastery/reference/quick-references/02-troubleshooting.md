@@ -105,7 +105,7 @@ composer dump-autoload -o        # classmap 优化后再试
 
 ```bash
 php -m | grep mbstring                       # 确认现状
-sudo apt install php8.3-mbstring             # 按报错包名安装对应扩展
+sudo apt install php8.5-mbstring             # 按报错包名安装对应扩展
 ```
 
 **注意**: 若只是本地演示而确需跳过平台检查，`composer install --ignore-platform-req=ext-gd`（仅限临时，勿用于生产）。
@@ -121,8 +121,8 @@ php --ini                 # CLI 实际加载哪个 ini
 php -i | grep loaded      # 或查 web SAPI 的加载路径
 ```
 
-- CLI 与 FPM 用**不同**的 ini（`/etc/php/8.3/cli/` vs `/etc/php/8.3/fpm/`）
-- FPM 修改后必须 `sudo systemctl reload php8.3-fpm`
+- CLI 与 FPM 用**不同**的 ini（`/etc/php/8.5/cli/` vs `/etc/php/8.5/fpm/`）
+- FPM 修改后必须 `sudo systemctl reload php8.5-fpm`
 - 同一扩展在两个 ini 重复加载会告警
 
 ### `Allowed memory size of N bytes exhausted`

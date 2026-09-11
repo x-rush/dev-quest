@@ -1,10 +1,10 @@
-# Next.js 15 现代调试工具完整指南
+# Next.js 16 现代调试工具完整指南
 
-> **文档简介**: Next.js 15 现代调试工具企业级应用指南，涵盖Chrome DevTools、VS Code调试、React DevTools、Next.js Debugger等现代调试工具链
+> **文档简介**: Next.js 16 现代调试工具企业级应用指南，涵盖Chrome DevTools、VS Code调试、React DevTools、Next.js Debugger等现代调试工具链
 
 > **目标读者**: 具备基础调试知识的前端开发者，需要掌握企业级调试技巧和问题排查的工程师
 
-> **前置知识**: Next.js 15基础、TypeScript 5、JavaScript调试基础、浏览器开发者工具
+> **前置知识**: Next.js 16基础、TypeScript 5、JavaScript调试基础、浏览器开发者工具
 
 > **预计时长**: 6-8小时
 
@@ -22,13 +22,15 @@
 
 ## 📚 概述
 
-Next.js 15 企业级开发需要强大的调试工具链来快速定位和解决问题。本指南深入探讨现代调试工具的高级应用，涵盖性能分析、内存泄漏检测、网络请求调试、服务端调试等企业级调试场景，帮助开发团队建立高效的调试工作流。
+Next.js 16 企业级开发需要强大的调试工具链来快速定位和解决问题。本指南深入探讨现代调试工具的高级应用，涵盖性能分析、内存泄漏检测、网络请求调试、服务端调试等企业级调试场景，帮助开发团队建立高效的调试工作流。
 
 ## 🛠️ 企业级调试工具生态
 
 ### 调试工具分类体系
 
 ## 🔧 Webpack 配置
+
+> ⚠️ **Next.js 16 提示**：Turbopack 已是默认打包器。以下 Webpack 自定义配置仅在迁移期通过 `next dev --webpack` / `next build --webpack` 显式启用时生效；新项目请优先使用顶层 `turbopack` 配置。
 
 ### 基础配置
 **Next.js 中的 Webpack 配置增强**
@@ -140,8 +142,6 @@ const nextConfig = {
     return config;
   },
 
-  // Webpack 5 特性
-  webpack5: true,
 };
 
 module.exports = nextConfig;
@@ -976,7 +976,6 @@ const nextConfig = {
   },
 
   // SWC 配置
-  swcMinify: true,
 
   // 自定义 SWC 配置
   compiler: {
@@ -1131,9 +1130,9 @@ const decisionMatrix = {
 
   // Next.js 项目
   'Next.js application': {
-    primary: 'Turbopack (experimental)',
-    alternatives: ['Webpack (default)', 'SWC'],
-    reasoning: 'Built-in integration, optimized for Next.js',
+    primary: 'Turbopack (Next.js 16 默认)',
+    alternatives: ['Webpack (--webpack 回退)', 'SWC'],
+    reasoning: 'Built-in integration, default bundler since Next.js 16',
   },
 };
 ```

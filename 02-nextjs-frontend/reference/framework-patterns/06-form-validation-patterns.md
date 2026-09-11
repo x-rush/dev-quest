@@ -1,10 +1,10 @@
-# Next.js 15 企业级表单验证完整指南
+# Next.js 16 企业级表单验证完整指南
 
-> **文档简介**: Next.js 15 + React Hook Form v7 + Zod v3 企业级表单验证实现，涵盖多步表单、动态验证、实时校验、复杂表单架构等现代表单技术
+> **文档简介**: Next.js 16 + React Hook Form v7 + Zod v3 企业级表单验证实现，涵盖多步表单、动态验证、实时校验、复杂表单架构等现代表单技术
 
 > **目标读者**: 具备React基础的中高级开发者，需要构建复杂表单系统的前端工程师
 
-> **前置知识**: Next.js 15基础、React 19、TypeScript 5、表单基础概念、Zod验证库
+> **前置知识**: Next.js 16基础、React 19、TypeScript 5、表单基础概念、Zod验证库
 
 > **预计时长**: 6-10小时
 
@@ -50,7 +50,7 @@
 
 ### 🚀 React Hook Form v7 表单革命
 
-React Hook Form v7的发布代表了现代表单处理技术的重要突破。现代企业应用需要超越简单的表单提交，转向智能的表单管理和用户体验优化。本指南构建基于最新的技术栈：**React Hook Form v7** 提供高性能的表单状态管理，**Zod v3** 提供类型安全的验证系统，**React 19** 提供现代并发特性，配合**Next.js 15**的服务端功能，形成完整的企业级表单开发生态系统。
+React Hook Form v7的发布代表了现代表单处理技术的重要突破。现代企业应用需要超越简单的表单提交，转向智能的表单管理和用户体验优化。本指南构建基于最新的技术栈：**React Hook Form v7** 提供高性能的表单状态管理，**Zod v3** 提供类型安全的验证系统，**React 19** 提供现代并发特性，配合**Next.js 16**的服务端功能，形成完整的企业级表单开发生态系统。
 
 ### 🏗️ 企业级表单架构
 
@@ -133,7 +133,7 @@ graph TB
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
+    "lint": "eslint .",
     "type-check": "tsc --noEmit",
     "form-test": "jest --testPathPattern=form",
     "form-storybook": "storybook -p 6006"
@@ -1032,7 +1032,7 @@ export function createConditionalSchema(
 5. **异步验证** - 实时验证和API集成
 6. **文件上传处理** - 完整的文件验证和管理系统
 
-通过企业级表单验证架构，可以构建高性能、用户友好、可维护的 Next.js 15 表单系统。
+通过企业级表单验证架构，可以构建高性能、用户友好、可维护的 Next.js 16 表单系统。
 
 ---
 

@@ -79,7 +79,7 @@ function Layout() {
 
 ### 原因与解决
 
-- 忘传 `getCoreRowModel: getCoreRowModel()`——行模型必须显式接通
+- v9 忘传 `features`（或行模型槽位未在 `tableFeatures()` 中注册）——核心行模型自动内置，其余行模型按需显式接通
 - `data` 初始为 `undefined` 直接传入——用 `data ?? []`，并在加载态分支提前 return
 - 表头渲染了 `header.isPlaceholder === true` 的占位（分组表头）——按 `flexRender` 前置判空
 - `columns`/`data` 在组件体内每次渲染重建新引用 → 行模型重算死循环——提为模块常量或 `useMemo`
@@ -132,7 +132,7 @@ function Layout() {
 
 - `gcTime: 0`（或全局误设）导致卸载即清缓存——保留默认 5 分钟或显式设大
 - `staleTime: 0` + `refetchOnWindowFocus` 三连击导致切窗口必请求——按业务设 staleTime
-- 想切页即秒开又要新数据：`staleTime` 大一点 + `placeholderData: keepPreviousData`
+- 想切页即秒开又要新数据：`staleTime` 大一点 + `placeholderData: (previousData) => previousData`（v5 写法）
 
 ## 9. Devtools 看不到查询
 

@@ -1,6 +1,6 @@
 # Python 环境搭建 — uv 与现代工具链
 
-> **文档简介**: 从零搭建 Python 3.12+ 开发环境，掌握 uv 包管理器、虚拟环境、ruff 代码检查与 VS Code 配置
+> **文档简介**: 从零搭建 Python 3.14 开发环境，掌握 uv 包管理器、虚拟环境、ruff 代码检查与 VS Code 配置
 >
 > **目标读者**: 有其他语言经验、首次系统学习 Python 的开发者
 >
@@ -20,7 +20,7 @@
 
 完成本文档后，你将能够：
 
-- ✅ 安装并验证 Python 3.12+ 环境
+- ✅ 安装并验证 Python 3.14 环境
 - ✅ 使用 uv 创建项目、管理虚拟环境与依赖
 - ✅ 理解虚拟环境为何必要，以及它与 venv/pip 的关系
 - ✅ 配置 ruff 完成代码格式化与静态检查
@@ -28,9 +28,9 @@
 
 ---
 
-## 1. 安装 Python 3.12+
+## 1. 安装 Python 3.14
 
-2026 年的当前稳定版本为 Python 3.12 与 3.13 系列，新项目建议直接使用 **Python 3.12+**。推荐用 uv 统一管理 Python 版本本身：
+2026 年的当前稳定版本为 Python 3.14 系列（维护版 3.14.7），新项目建议直接使用 **Python 3.14**。推荐用 uv 统一管理 Python 版本本身：
 
 ```bash
 # macOS / Linux
@@ -44,7 +44,7 @@ powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | ie
 
 ```bash
 # 安装指定版本的解释器
-uv python install 3.12
+uv python install 3.14
 
 # 查看可用与已安装版本
 uv python list
@@ -53,8 +53,8 @@ uv python list
 验证安装：
 
 ```bash
-uv python find 3.12     # 输出解释器路径
-uv run python --version # Python 3.12.x
+uv python find 3.14     # 输出解释器路径
+uv run python --version # Python 3.14.x
 ```
 
 > 💡 uv 兼容 venv/pip 工作流但快 10-100 倍，且能替你下载管理多个 Python 版本，避免污染系统解释器。
@@ -66,9 +66,9 @@ uv run python --version # Python 3.12.x
 Python 的第三方包默认装进**全局解释器**。两个项目若依赖同一包的不同版本，就会冲突。虚拟环境为每个项目提供隔离的包目录：
 
 ```
-项目A (pydantic 2.9)  ─┐
+项目A (pydantic 2.12)  ─┐
                        ├─ 各自独立的 site-packages
-项目B (pydantic 2.11) ─┘
+项目B (pydantic 2.13) ─┘
 ```
 
 传统做法是 `python -m venv .venv` + 手动 `activate`；uv 把这一切简化为自动完成。
@@ -79,7 +79,7 @@ Python 的第三方包默认装进**全局解释器**。两个项目若依赖同
 
 ```bash
 mkdir demo && cd demo
-uv init --python 3.12   # 生成 pyproject.toml、.python-version、main.py
+uv init --python 3.14   # 生成 pyproject.toml、.python-version、main.py
 ```
 
 生成的 `pyproject.toml` 是项目的唯一事实来源（类似 `package.json`）：
@@ -88,7 +88,7 @@ uv init --python 3.12   # 生成 pyproject.toml、.python-version、main.py
 [project]
 name = "demo"
 version = "0.1.0"
-requires-python = ">=3.12"
+requires-python = ">=3.14"
 dependencies = []
 ```
 
@@ -145,13 +145,13 @@ uv run ruff check --fix . # 自动修复可修复问题
 ```toml
 [tool.ruff]
 line-length = 100
-target-version = "py312"
+target-version = "py314"
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "UP", "B"]  # 基础/导入/升级建议/bug 警告
 ```
 
-`UP` 规则组会提示 Python 3.12+ 的新写法，例如用 `X | None` 替代 `Optional[X]`。
+`UP` 规则组会提示现代写法，例如用 `X | None` 替代 `Optional[X]`。
 
 ---
 
@@ -199,16 +199,16 @@ select = ["E", "F", "I", "UP", "B"]  # 基础/导入/升级建议/bug 警告
 ## 🎯 练习与实践
 
 ### 练习一：搭建项目
-1. 用 `uv init` 创建 `pylab` 项目，指定 Python 3.12
+1. 用 `uv init` 创建 `pylab` 项目，指定 Python 3.14
 2. 添加 `rich` 依赖，编写脚本打印彩色表格
 3. 用 `uv run ruff check --fix .` 清理代码
 
 ### 练习二：环境隔离验证
-1. 在 `pylab` 中 `uv add "pydantic==2.9"`
-2. 新建 `pylab2` 项目，`uv add pydantic`（最新版）
+1. 在 `pylab` 中 `uv add "pydantic==2.12"`
+2. 新建 `pylab2` 项目，`uv add pydantic`（最新版，2.13.x）
 3. 分别运行打印版本号的脚本，确认两环境版本不同
 
-**评估标准**：`pylab` 内 `uv run python -c "import pydantic; print(pydantic.VERSION)"` 输出 2.9.x。
+**评估标准**：`pylab` 内 `uv run python -c "import pydantic; print(pydantic.VERSION)"` 输出 2.12.x。
 
 ---
 

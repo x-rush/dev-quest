@@ -1,4 +1,4 @@
-# 三方库指南 - Lombok / Jackson / JUnit 5 / Mockito / MapStruct
+# 三方库指南 - Lombok / Jackson / JUnit 6 / Mockito / MapStruct
 
 > **文档简介**: Java 生态五个高频三方库的条目式速查：定位、核心用法、与现代 Java（record/虚拟线程）的关系及陷阱
 >
@@ -13,7 +13,7 @@
 | **模块** | `08-java-revisited` |
 | **象限** | 字典 |
 | **难度** | ⭐⭐ |
-| **标签** | `#Lombok` `#Jackson` `#JUnit5` `#Mockito` `#MapStruct` |
+| **标签** | `#Lombok` `#Jackson` `#JUnit6` `#Mockito` `#MapStruct` |
 | **更新日期** | `2026年9月` |
 
 ## 🪄 Lombok - 编译期样板消除
@@ -40,23 +40,25 @@ public class Report { ... }
 
 **陷阱**: 依赖 IDE 插件支持；`@Data` 用在实体上会连带生成与懒加载关联的 equals/toString——JPA 实体慎用。
 
-## 📨 Jackson - JSON 序列化
+## 📨 Jackson - JSON 序列化（3.x，Boot 4 默认）
 
 ```xml
+<!-- Jackson 3：包名与 groupId 改为 tools.jackson（注解 jackson-annotations 除外） -->
 <dependency>
-    <groupId>com.fasterxml.jackson.core</groupId>
+    <groupId>tools.jackson.core</groupId>
     <artifactId>jackson-databind</artifactId>
 </dependency>
 ```
 
 ```java
-var mapper = new ObjectMapper();
+// Jackson 3：JsonMapper 不可变，用 builder 配置（替代 Jackson 2 的可变 ObjectMapper）
+var mapper = JsonMapper.builder().build();
 String json = mapper.writeValueAsString(user);        // 序列化
 User u = mapper.readValue(json, User.class);           // 反序列化
 List<User> users = mapper.readValue(json, new TypeReference<List<User>>() {});  // 泛型集合
 ```
 
-常用注解：
+常用注解（包名不变，仍是 `com.fasterxml.jackson.annotation`）：
 
 | 注解 | 用途 |
 |------|------|
@@ -65,11 +67,11 @@ List<User> users = mapper.readValue(json, new TypeReference<List<User>>() {});  
 | `@JsonFormat(pattern = "yyyy-MM-dd")` | 日期格式 |
 | `@JsonCreator` / `@JsonValue` | 枚举/值对象定制 |
 
-**与 record 的关系**: Jackson 2.12+ **原生支持 record**（构造器参数即组件），无需额外注解——record + Jackson 是现代 DTO 标配。
+**与 record 的关系**: Jackson 2.12+ 起就**原生支持 record**（构造器参数即组件），3.x 延续——record + Jackson 是现代 DTO 标配。
 
-**陷阱**: java.time 类型需注册 `JavaTimeModule`（Spring Boot 的 `spring-boot-starter-web` 已自动配置 ObjectMapper，直接注入使用即可）；反序列化配置 `FAIL_ON_UNKNOWN_PROPERTIES=false` 防字段漂移炸接口。
+**陷阱**: Jackson 3 相比 2.x 的默认值变化要心里有数——`FAIL_ON_UNKNOWN_PROPERTIES` 默认已关闭（字段漂移不再炸接口，但类型不匹配仍会炸）；`java.time`/`Optional` 支持内建于 databind，无需再注册 `JavaTimeModule`；日期默认序列化为 ISO-8601 字符串。Spring Boot 4 的 `spring-boot-starter-webmvc` 已自动配置 `JsonMapper`，直接注入使用即可（定制用 `JsonMapperBuilderCustomizer`，或过渡期设 `spring.jackson.use-jackson2-defaults=true`）。
 
-## 🧪 JUnit 5 - 单元测试
+## 🧪 JUnit 6 - 单元测试（Jupiter API）
 
 ```xml
 <dependency>
@@ -157,7 +159,7 @@ public interface BookMapper {
 ## ✅ 最佳实践 / ❌ 陷阱清单
 
 - ✅ 新代码 DTO 优先 record；Lombok 只服务可变类与 @Builder 场景
-- ✅ Boot 项目用注入的 ObjectMapper，不自建
+- ✅ Boot 项目用注入的 JsonMapper（Jackson 3），不自建
 - ✅ 测试命名表达行为；断言优先 AssertJ
 - ❌ 不要 JPA 实体上 `@Data`
 - ❌ 不要用反射式映射库（ModelMapper）处理关键字段

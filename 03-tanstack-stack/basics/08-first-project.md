@@ -103,10 +103,13 @@ export function useStarCity() {
 ### 步骤三：列定义 `columns.tsx`
 
 ```tsx
-import { ColumnDef } from '@tanstack/react-table'
+import { createColumnHelper } from '@tanstack/react-table'
 import { Weather } from './api'
 
-export const columns: ColumnDef<Weather>[] = [
+const columnHelper = createColumnHelper<Weather>()
+
+// v9：用 columnHelper 声明，保留每列的取值类型
+export const columns = columnHelper.columns([
   { accessorKey: 'city', header: '城市' },
   {
     accessorKey: 'temp',
@@ -115,7 +118,7 @@ export const columns: ColumnDef<Weather>[] = [
   },
   { accessorKey: 'humidity', header: '湿度' },
   { accessorKey: 'wind', header: '风速' },
-]
+])
 ```
 
 ### 步骤四：面板组装 `App.tsx`
@@ -123,8 +126,8 @@ export const columns: ColumnDef<Weather>[] = [
 ```tsx
 import { useMemo, useState } from 'react'
 import {
-  flexRender, getCoreRowModel, getSortedRowModel,
-  SortingState, useReactTable,
+  createSortedRowModel, flexRender,
+  rowSortingFeature, SortingState, tableFeatures, useTable,
 } from '@tanstack/react-table'
 import { useWeather, useStarCity } from './hooks'
 import { columns as baseColumns } from './columns'
@@ -151,13 +154,16 @@ export default function App() {
     [starMutation],
   )
 
-  const table = useReactTable({
+  // v9：排序特性与行模型注册到 tableFeatures 上，核心行模型自动内置
+  const table = useTable({
     data: data ?? [],
     columns,
     state: { sorting },
     onSortingChange: setSorting,
-    getCoreRowModel: getCoreRowModel(),
-    getSortedRowModel: getSortedRowModel(),
+    features: tableFeatures({
+      rowSortingFeature,
+      sortedRowModel: createSortedRowModel(),
+    }),
   })
 
   if (isPending) return <p>加载天气中...</p>

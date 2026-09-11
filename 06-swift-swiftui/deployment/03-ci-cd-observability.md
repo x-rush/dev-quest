@@ -24,11 +24,11 @@
 
 ### 1.1 基础工作流
 
-Xcode 16+ 内置入口：Report Navigator → Cloud → 创建工作流。推荐的最小流水线：
+Xcode 内置入口：Report Navigator → Cloud → 创建工作流。推荐的最小流水线：
 
 ```text
 触发：main 分支有新提交
-  → 1. Test（iOS 18 模拟器跑单元测试）      ← 失败即停
+  → 1. Test（iOS 26 模拟器跑单元测试）      ← 失败即停
   → 2. Archive（Release 构建）
   → 3. Distribute → TestFlight（内部组）
 ```

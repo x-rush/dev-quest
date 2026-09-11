@@ -1,6 +1,6 @@
-# 单元测试 - JUnit 5 与 Mockito
+# 单元测试 - JUnit 6（Jupiter）与 Mockito
 
-> **文档简介**: 用 JUnit 5 + Mockito 构建快速反馈的单元测试层：断言体系、参数化测试、Mock 与行为验证，让 Service 层业务逻辑被测试"锁"住
+> **文档简介**: 用 JUnit 6（Jupiter，Boot 4 默认，JUnit 5 代码几乎零改动迁移）+ Mockito 构建快速反馈的单元测试层：断言体系、参数化测试、Mock 与行为验证，让 Service 层业务逻辑被测试"锁"住
 >
 > **目标读者**: 需要为 Spring Boot 服务层编写单元测试的开发者
 >
@@ -13,17 +13,17 @@
 | **模块** | `08-java-revisited` |
 | **象限** | 操作指南 |
 | **难度** | ⭐⭐ |
-| **标签** | `#JUnit5` `#Mockito` `#TDD` `#单元测试` |
+| **标签** | `#JUnit6` `#Mockito` `#TDD` `#单元测试` |
 | **更新日期** | `2026年9月` |
 
 ## 🎯 学习目标
 
 完成本文档后，你将能够：
-- 用 JUnit 5 的 `@Test`/`@DisplayName`/断言体系写出可读的测试
+- 用 JUnit 6（Jupiter）的 `@Test`/`@DisplayName`/断言体系写出可读的测试
 - 用 `@ParameterizedTest` 消除重复用例
 - 用 Mockito 隔离依赖、验证交互与打桩异常
 
-## 🛠️ 一、JUnit 5 基础
+## 🛠️ 一、JUnit 6 基础（Jupiter API）
 
 ```java
 import org.junit.jupiter.api.Test;

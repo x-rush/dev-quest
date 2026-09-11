@@ -1,15 +1,15 @@
-# Android 原生开发学习路线 - 2025年前沿技术栈
+# Android 原生开发学习路线 - 2026 年前沿技术栈
 
 ## 前言
 
-欢迎来到 Android 原生开发的世界！2025 年的 Android 开发已经进入了 Jetpack Compose 时代，Kotlin 和声明式 UI 正在重塑开发体验。本学习路线将帮助你从零基础掌握现代 Android 开发，构建高性能、高质量的原生应用。
+欢迎来到 Android 原生开发的世界！2026 年的 Android 开发已经进入了 Jetpack Compose 时代，Kotlin 和声明式 UI 正在重塑开发体验。本学习路线将帮助你从零基础掌握现代 Android 开发，构建高性能、高质量的原生应用。
 
-## 技术栈概览 (2025年最新)
+## 技术栈概览 (2026年最新)
 
 ### 核心技术栈
 ```kotlin
 // 编程语言
-Kotlin 2.1                   // 现代化、简洁的编程语言
+Kotlin 2.4                   // 现代化、简洁的编程语言（K2 编译器）
 
 // UI 框架
 Jetpack Compose             // 声明式 UI 框架（推荐）
@@ -25,8 +25,8 @@ Jetpack Architecture Components
 └── WorkManager            // 后台任务
 
 // 开发工具
-Android Studio Hedgehog    // 官方 IDE
-Gradle 8.x                // 构建工具
+Android Studio Quail      // 官方 IDE（2026.1 或更新）
+Gradle 9.x                // 构建工具
 Android Emulator          // 模拟器
 ```
 
@@ -81,13 +81,13 @@ Compose UI Testing         // Compose UI 测试
   - 委托属性（Delegated Properties）
   - 操作符重载
 
-#### 3. Kotlin 2.1 新特性
+#### 3. Kotlin 2.4 新特性
 **学习目标**：掌握最新语言特性
 - **重点内容**：
-  - K2 编译器优化
-  -Compose 编译器改进
-  - 新的语言特性
-  - 性能优化
+  - K2 编译器成为唯一引擎（K1 与 `-language-version=1.9` 已移除）
+  - 上下文参数（context parameters）与显式后备字段（explicit backing fields）转正
+  - 标准库 UUID API 稳定、集合有序性检查扩展
+  - Compose 编译器随 Kotlin 内置发行（`org.jetbrains.kotlin.plugin.compose`）
 
 **实践项目**：
 - Kotlin 命令行工具
@@ -276,14 +276,14 @@ Compose UI Testing         // Compose UI 测试
 ### 必备工具
 ```bash
 # 开发环境
-Android Studio Hedgehog    # 官方 IDE
-Kotlin 2.1                 # 编程语言
-Android SDK API 35+        # 开发工具包
+Android Studio Quail       # 官方 IDE
+Kotlin 2.4                 # 编程语言
+Android SDK API 36+        # 开发工具包
 Android Emulator           # 模拟器
 
 # 构建工具
-Gradle 8.x                 # 构建系统
-Android Gradle Plugin 8.x   # Android 构建插件
+Gradle 9.x                 # 构建系统
+Android Gradle Plugin 9.x  # Android 构建插件
 
 # 版本控制
 Git                         # 版本控制
@@ -399,7 +399,7 @@ A: Android 开发者需求旺盛，薪资水平较高，技术栈稳定。
 
 ## 技术趋势和未来
 
-### 2025年趋势
+### 2026年趋势
 - **Jetpack Compose 成为主流**：声明式 UI 成为标准
 - **Kotlin Multiplatform Mobile (KMM)**：跨平台业务逻辑共享
 - **折叠屏设备适配**：大屏幕和折叠屏优化
@@ -416,7 +416,7 @@ A: Android 开发者需求旺盛，薪资水平较高，技术栈稳定。
 
 Android 原生开发是一个充满机遇的领域。通过本学习路线，你将掌握：
 
-✅ **Kotlin 2.1**：现代化、简洁的编程语言
+✅ **Kotlin 2.4**：现代化、简洁的编程语言
 ✅ **Jetpack Compose**：声明式 UI 开发范式
 ✅ **Jetpack 组件**：现代架构和开发模式
 ✅ **完整开发生态**：从开发到发布的完整流程
@@ -426,4 +426,4 @@ Android 原生开发是一个充满机遇的领域。通过本学习路线，你
 
 ---
 
-*最后更新: 2025年9月 - 基于 Google 最新的技术和工具*
+*最后更新: 2026年9月 - 基于 Google 最新的技术和工具*

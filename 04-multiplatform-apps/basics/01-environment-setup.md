@@ -45,18 +45,18 @@
 
 **操作指南**:
 
-1. 安装 Node.js LTS（RN 0.7x 要求 Node 18+，推荐 20 LTS）
+1. 安装 Node.js LTS（RN 0.87 要求 Node 22+，Expo SDK 57 最低 22.13，推荐 22 LTS）
 
 ```bash
 # macOS（Homebrew）
-brew install node@20
+brew install node@22
 
 # Windows（推荐用 nvm-windows 管理版本）
-nvm install 20
-nvm use 20
+nvm install 22
+nvm use 22
 ```
 
-2. 安装 JDK 17（Android 构建必需）
+2. 安装 JDK 17（Android 构建必需；RN 0.87 的 AGP 9 + Kotlin 2.0+ 基准下 JDK 17 满足）
 
 ```bash
 brew install --cask temurin@17   # macOS
@@ -77,7 +77,7 @@ brew install watchman
 **操作指南**:
 
 1. 从官网安装 Android Studio，首次启动按默认勾选安装：
-   - Android SDK Platform（RN 通常要求 API 34/35 级别）
+   - Android SDK Platform（现行 RN/Expo 基准为 compileSdk 36，安装最新稳定 API 级别即可）
    - Android SDK Platform-Tools（含 `adb`）
    - Android Emulator + 最新系统镜像
 2. 在 **Settings → Languages & Frameworks → Android SDK** 中确认以下组件已安装：
@@ -101,7 +101,7 @@ export PATH=$PATH:$ANDROID_HOME/emulator
 
 **操作指南**:
 
-1. 从 App Store 安装 Xcode（版本需满足当前 RN 版本要求，建议最新稳定版）
+1. 从 App Store 安装 Xcode（Expo SDK 57 要求 Xcode 26.4+，建议最新稳定版）
 2. 安装 Command Line Tools：`Xcode → Settings → Locations`
 3. 安装 CocoaPods（RN iOS 依赖管理）：
 
@@ -152,7 +152,7 @@ npx expo start
 - **三端 SDK 版本记录在项目 README**，新成员可按文档复现环境
 
 ### ❌ 避免陷阱
-- **JDK 版本不匹配**: Gradle 8.x 需要 JDK 17，装错大版本会出现莫名其妙的构建异常
+- **JDK 版本不匹配**: 现行 RN 工具链（AGP 9）需要 JDK 17+，装错大版本会出现莫名其妙的构建异常
 - **只在模拟器上验证**: 真机（尤其华为鸿蒙真机）与模拟器行为差异大，环境搭好后尽早连真机
 - **跳过 CocoaPods**: bare 工程 iOS 侧漏跑 `pod install` 会出现头文件找不到的编译错误
 

@@ -64,12 +64,13 @@ npm install @tanstack/react-virtual
 ```
 
 ```tsx
-import { useReactTable, getCoreRowModel, flexRender } from '@tanstack/react-table'
+import { flexRender, tableFeatures, useTable } from '@tanstack/react-table'
 import { useVirtualizer } from '@tanstack/react-virtual'
 import { useRef } from 'react'
 
 function BigTable({ rows, columns }: { rows: Row[]; columns: ColumnDef<Row>[] }) {
-  const table = useReactTable({ data: rows, columns, getCoreRowModel: getCoreRowModel() })
+  // v9：核心行模型自动内置，features 传空对象即可（无需 getCoreRowModel）
+  const table = useTable({ data: rows, columns, features: tableFeatures({}) })
   const parentRef = useRef<HTMLDivElement>(null)
 
   const virtualizer = useVirtualizer({

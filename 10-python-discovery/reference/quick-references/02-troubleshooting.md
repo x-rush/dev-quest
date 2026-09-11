@@ -62,7 +62,7 @@ with ProcessPoolExecutor() as pool:
     results = list(pool.map(cpu_heavy, inputs))
 ```
 
-**附注**: Python 3.13 提供 free-threaded（no-GIL）实验构建，生态适配中；2026 年的默认解释器仍带 GIL，按上表选型即可。
+**附注**: free-threaded（no-GIL）构建自 3.13 实验引入，3.14 起转为官方支持的构建选项（PEP 779），但默认解释器仍带 GIL，第三方生态适配持续推进中；2026 年生产环境仍按上表选型即可。
 
 ---
 

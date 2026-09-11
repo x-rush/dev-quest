@@ -1,15 +1,15 @@
-# iOS 原生开发学习路线 - 2025年前沿技术栈
+# iOS 原生开发学习路线 - 2026 前沿技术栈
 
 ## 前言
 
-恭喜你选择了 iOS 原生开发！在 2025 年，iOS 开发已经进入了全新的时代，SwiftUI 和 Swift Concurrency 正在重塑开发范式。本学习路线将帮助你从零基础掌握现代 iOS 开发，构建高质量、高性能的原生应用。
+恭喜你选择了 iOS 原生开发！在 2026 年，iOS 开发已经进入了全新的时代，SwiftUI 和 Swift Concurrency 正在重塑开发范式。本学习路线将帮助你从零基础掌握现代 iOS 开发，构建高质量、高性能的原生应用。
 
-## 技术栈概览 (2025年最新)
+## 技术栈概览 (2026年最新)
 
 ### 核心技术栈
 ```swift
 // 编程语言
-Swift 6.0                    // 现代化、类型安全的编程语言
+Swift 6.3                    // 现代化、类型安全的编程语言（严格并发为默认语言模式）
 
 // UI 框架
 SwiftUI                     // 声明式 UI 框架（推荐）
@@ -21,9 +21,12 @@ Combine                     // 响应式编程框架
 MVVM + Coordinator          // 现代架构模式
 
 // 开发工具
-Xcode 16                    // 官方 IDE
-Swift Package Manager       // 依赖管理
+Xcode 26.x                  // 官方 IDE（基线 26.6，内含 Swift 6.3.3）
+Swift Package Manager       // 依赖管理（Swift 6.3 起默认使用开源的 Swift Build 构建后端）
 TestFlight                   // 测试分发
+
+// 跨平台（了解即可，详见 04-multiplatform-apps 模块）
+Swift SDK for Android        // Swift 6.3 起：官方 Android 交叉编译支持（里程碑）
 ```
 
 ### 辅助技术栈
@@ -46,8 +49,9 @@ Lottie                       // 动画库
 SwiftUI Animations          // 原生动画框架
 
 // 测试
-XCTest                     // 单元测试框架
-SwiftUI Preview            // 实时预览
+Swift Testing                // 现代测试框架（新代码首选）
+XCTest                       // 传统测试框架（维护用）
+SwiftUI Preview              // 实时预览
 ```
 
 ## 学习阶段规划
@@ -76,10 +80,10 @@ SwiftUI Preview            // 实时预览
   - 不透明类型（Opaque Types）
   - 并发安全（Concurrency Safety）
 
-#### 3. Swift 6.0 新特性
+#### 3. Swift 6 并发与新特性（当前 6.3）
 **学习目标**：掌握最新语言特性
 - **重点内容**：
-  - Data-race safety
+  - Data-race safety（严格并发，默认开启）
   - Typed throws
   - Pack iteration
   - Noncopyable types
@@ -235,9 +239,9 @@ SwiftUI Preview            // 实时预览
 ### 必备工具
 ```bash
 # 开发环境
-Xcode 16+                    # 官方 IDE
-Swift 6.0+                   # 编程语言
-iOS 18+ Simulator           # 模拟器
+Xcode 26.x                   # 官方 IDE（基线 26.6）
+Swift 6.3+                   # 编程语言
+iOS 26 Simulator             # 模拟器
 
 # 版本控制
 Git                         # 版本控制
@@ -274,7 +278,7 @@ GitHub Copilot              # AI 代码助手
 - [Apple Developer Documentation](https://developer.apple.com/documentation/)
 - [SwiftUI Tutorials](https://developer.apple.com/tutorials/swiftui/)
 - [Swift by Apple](https://docs.swift.org/swift-book/)
-- [WWDC 2025 Videos](https://developer.apple.com/videos/)
+- [WWDC 2026 Videos](https://developer.apple.com/videos/)
 
 ### 书籍推荐
 - "Swift Programming: The Big Nerd Ranch Guide"
@@ -357,7 +361,7 @@ A: iOS 开发者需求旺盛，薪资水平较高，技术栈稳定。
 
 iOS 原生开发是一个充满机遇的领域。通过本学习路线，你将掌握：
 
-✅ **Swift 6.0**：现代化、类型安全的编程语言
+✅ **Swift 6.3**：现代化、类型安全的编程语言
 ✅ **SwiftUI**：声明式 UI 开发范式
 ✅ **Swift Concurrency**：现代并发编程模型
 ✅ **完整开发生态**：从开发到发布的完整流程
@@ -367,4 +371,4 @@ iOS 原生开发是一个充满机遇的领域。通过本学习路线，你将�
 
 ---
 
-*最后更新: 2025年9月 - 基于 Apple 最新的技术和工具*
+*最后更新: 2026年9月 - 基于 Apple 最新的技术和工具（Swift 6.3 / Xcode 26.6 / iOS 26 SDK）*

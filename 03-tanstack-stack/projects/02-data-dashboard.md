@@ -60,7 +60,7 @@ export const Route = createFileRoute('/dashboard')({
 
 ```ts
 // src/hooks/use-user-table.ts
-import { useQuery, keepPreviousData } from '@tanstack/react-query'
+import { useQuery } from '@tanstack/react-query'
 import type { DashboardSearch } from '../routes/dashboard'
 
 export interface UserRow {
@@ -88,8 +88,8 @@ export function useUserTable(search: DashboardSearch) {
       if (!res.ok) throw new Error('用户列表加载失败')
       return (await res.json()) as { rows: UserRow[]; total: number }
     },
-    // 核心体验：翻页/筛选时保留旧数据，避免表格清空
-    placeholderData: keepPreviousData,
+    // 核心体验：翻页/筛选时保留旧数据，避免表格清空（placeholderData 函数式写法）
+    placeholderData: (previousData) => previousData,
   })
 }
 ```
@@ -102,7 +102,7 @@ export function useUserTable(search: DashboardSearch) {
 
 ```tsx
 // src/components/user-table.tsx
-import { flexRender, getCoreRowModel, useReactTable } from '@tanstack/react-table'
+import { flexRender, globalFilteringFeature, tableFeatures, useTable } from '@tanstack/react-table'
 import { Route } from '@/routes/dashboard'
 import { useUserTable } from '../hooks/use-user-table'
 import { columns } from './user-columns'
@@ -112,7 +112,9 @@ export function UserTable() {
   const navigate = Route.useNavigate()
   const { data, isPlaceholderData, isPending, isError } = useUserTable(search)
 
-  const table = useReactTable({
+  // v9：全局筛选状态对应的特性需注册；服务端模式无需本地行模型
+  const table = useTable({
+    features: tableFeatures({ globalFilteringFeature }),
     data: data?.rows ?? [],
     columns,
     manualPagination: true, // 三 Manual：一切由服务端裁决
@@ -133,7 +135,6 @@ export function UserTable() {
         search: { ...search, sort: `${s.id}:${s.desc ? 'desc' : 'asc'}`, page: 1 },
       })
     },
-    getCoreRowModel: getCoreRowModel(),
   })
 
   if (isPending) return <TableSkeleton rows={search.pageSize} />
@@ -190,7 +191,7 @@ export function UserTable() {
 ## 4. 验收清单
 
 - [ ] 翻页、排序、筛选后 URL 同步变化，复制链接到新标签页还原同一视图
-- [ ] 快速连续翻页不出现空白表格（keepPreviousData 生效）
+- [ ] 快速连续翻页不出现空白表格（placeholderData 生效）
 - [ ] 浏览器后退能回到上一页的表格状态
 
 ---
@@ -199,7 +200,7 @@ export function UserTable() {
 
 | 现象 | 原因 | 修复 |
 |------|------|------|
-| 翻页白屏闪一下 | 未配 `placeholderData: keepPreviousData` | 在 useQuery 中补上 |
+| 翻页白屏闪一下 | 未配 `placeholderData: (prev) => prev` | 在 useQuery 中补上 |
 | 排序后请求发了但表头无箭头 | `state.sorting` 未与 URL 双向映射 | 按 §3 显式传入 state |
 | 筛选每敲一键发一次请求 | 无防抖 | 输入防抖后再 navigate |
 
@@ -210,5 +211,5 @@ export function UserTable() {
 - 📄 **[生态协作](../frameworks/03-ecosystem-integration.md)** - Table×Query 数据通路的原理
 - 📄 **[Table 核心 API](../reference/language-concepts/02-table-core-api.md)** - manual 模式参数字典
 - 📄 **[Router 核心 API](../reference/language-concepts/03-router-core-api.md)** - validateSearch 与导航
-- 📄 **[查询性能优化](../advanced-topics/performance/01-query-optimization.md)** - keepPreviousData 的成本账
+- 📄 **[查询性能优化](../advanced-topics/performance/01-query-optimization.md)** - 占位数据的成本账
 - 📄 **[SaaS 后台](../projects/04-saas-admin-platform.md)** - 把看板扩成完整平台

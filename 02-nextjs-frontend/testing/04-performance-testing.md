@@ -1,6 +1,6 @@
 # React应用性能测试指南 (Performance Testing Guide)
 
-> **文档简介**: 从PHP开发者视角全面掌握Next.js 15应用的性能测试，涵盖Core Web Vitals、Bundle分析、负载测试等现代性能测试技术。
+> **文档简介**: 从PHP开发者视角全面掌握Next.js 16应用的性能测试，涵盖Core Web Vitals、Bundle分析、负载测试等现代性能测试技术。
 
 > **目标读者**: 具备React基础，希望系统学习应用性能测试的中高级开发者
 
@@ -15,7 +15,7 @@
 | **模块** | `02-nextjs-frontend` |
 | **分类** | `testing` |
 | **难度** | ⭐⭐⭐⭐ (4/5星) |
-| **标签** | `#performance-testing` `#lighthouse` `#core-web-vitals` `#bundle-analysis` `#nextjs15` |
+| **标签** | `#performance-testing` `#lighthouse` `#core-web-vitals` `#bundle-analysis` `#nextjs16` |
 | **更新日期** | `2025年10月` |
 | **作者** | Dev Quest Team |
 | **状态** | ✅ 已完成 |
@@ -175,7 +175,7 @@ const nextConfig = {
     appDir: true,
     // 优化字体加载
     fontLoaders: [
-      { loader: '@next/font/google', options: { subsets: ['latin'] } },
+      { loader: 'next/font/google', options: { subsets: ['latin'] } },
     ],
   },
 
@@ -191,7 +191,6 @@ const nextConfig = {
   compress: true,
 
   // 实验性功能
-  swcMinify: true,
 
   // 构建优化
   compiler: {

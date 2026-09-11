@@ -54,7 +54,7 @@ bm/
 初始化：
 
 ```bash
-uv init --python 3.12 bm && cd bm
+uv init --python 3.14 bm && cd bm
 uv add "typer[all]"
 ```
 

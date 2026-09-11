@@ -2,7 +2,7 @@
 
 ## 概述
 
-面向 PHP 8.3+ 的单行代码速查表，按场景分组，每行可直接复制使用。供随手翻阅，不做展开讲解。
+面向 PHP 8.5 的单行代码速查表，按场景分组，每行可直接复制使用。供随手翻阅，不做展开讲解。
 
 ## 📚 文档元数据
 
@@ -11,7 +11,7 @@
 | **模块** | `07-php-mastery` |
 | **象限** | 字典 |
 | **难度** | ⭐ |
-| **标签** | `#速查表` `#一行式` `#语法` `#PHP8.3` |
+| **标签** | `#速查表` `#一行式` `#语法` `#PHP8.5` |
 | **更新日期** | `2026年9月` |
 
 ## 1. 文件骨架
@@ -34,6 +34,7 @@ $ok = match(true) { $v > 0 => true, default => false };  // match 表达式
 $never = fn(): never => throw new LogicException();      // never 返回类型
 $set = fn(int|float $v): int|float => $v;                // 联合类型
 $both = function (Countable&Stringable $x): string { return (string) count($x); };   // 交叉类型
+$clean = $s |> trim(...) |> strtoupper(...);             // 管道运算符（8.5+，右侧单参 callable）
 ```
 
 ## 3. 数组一行式
@@ -81,7 +82,9 @@ enum Level: string { case Low = 'low'; case High = 'high'; }   // Backed 枚举�
 $l = Level::from('high'); $v = $l->value; $k = $l->name;       // 枚举取值
 $c = new class { public function hi(): string { return 'hi'; } };   // 匿名类
 $p = new Point(x: 1, y: 2);                              // 命名参数构造
-$copy = (clone $point)->with(x: 9);                      // clone with（8.3+）
+$copy = clone($point, ['x' => 9]);                       // 克隆并覆盖属性（8.3+）
+$copy2 = clone($point)->with(x: 9);                      // 链式覆盖（8.5+）
+$u = new Uri\WhatWg\Url('https://php.net/docs');         // WHATWG URI（8.5+，构造即校验）
 $is = $obj instanceof $class;                            // 动态 instanceof
 $name = $obj::class;                                     // 运行时类名（8.0+）
 ```
@@ -125,3 +128,4 @@ $urlOK = filter_var($url, FILTER_VALIDATE_URL) !== false;
 - 📄 **[常见错误排查](./02-troubleshooting.md)** — 出错后来这里
 - 📄 **[常用内置函数分类全表](../language-concepts/02-built-in-functions.md)** — 函数展开版
 - 📄 **[类型系统与现代 OOP](../language-concepts/03-types-oop-modern.md)** — 类型语法细节
+- 📄 **[PHP 8.4/8.5 增量特性](../language-concepts/12-modern-php-85.md)** — 钩子/管道/URI 扩展细节

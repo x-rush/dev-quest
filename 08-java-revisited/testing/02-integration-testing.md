@@ -70,9 +70,10 @@ class BookRepositoryTest {
     <artifactId>spring-boot-testcontainers</artifactId>
     <scope>test</scope>
 </dependency>
+<!-- Testcontainers 2.0（Boot 4 默认）：模块 artifact 统一加 testcontainers- 前缀 -->
 <dependency>
     <groupId>org.testcontainers</groupId>
-    <artifactId>postgresql</artifactId>
+    <artifactId>testcontainers-postgresql</artifactId>
     <scope>test</scope>
 </dependency>
 ```

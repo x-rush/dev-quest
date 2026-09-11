@@ -73,6 +73,14 @@
 
 ## 🛠️ 代码示例
 
+> **驱动版本说明**：官方驱动当前主线为 v2（导入路径 `go.mongodb.org/mongo-driver/v2/...`），v1 路径已进入维护模式，新项目请使用：
+>
+> ```bash
+> go get go.mongodb.org/mongo-driver/v2/mongo
+> ```
+>
+> 下方示例均按 v2 API 编写（`Connect` 不再接收 `context` 参数）。字典级速查见 [MongoDB Go Driver 速查](../reference/framework-essentials/05-mongo-driver.md)。
+
 ### 基础连接示例
 ```go
 package main
@@ -80,13 +88,13 @@ package main
 import (
     "context"
     "fmt"
-    "go.mongodb.org/mongo-driver/mongo"
-    "go.mongodb.org/mongo-driver/mongo/options"
+    "go.mongodb.org/mongo-driver/v2/mongo"
+    "go.mongodb.org/mongo-driver/v2/mongo/options"
 )
 
 func main() {
-    // 连接到MongoDB
-    client, err := mongo.Connect(context.Background(), options.Client().ApplyURI("mongodb://localhost:27017"))
+    // 连接到MongoDB（v2 起 Connect 不再接收 context 参数）
+    client, err := mongo.Connect(options.Client().ApplyURI("mongodb://localhost:27017"))
     if err != nil {
         panic(err)
     }

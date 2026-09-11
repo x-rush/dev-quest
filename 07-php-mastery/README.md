@@ -1,6 +1,18 @@
 # PHP 精通之路 - 温故知新
 
-> 面向在职 PHP 开发者的温故知新模块：以 **PHP 8.3+（枚举 / readonly / 一等 callable 语法）+ Composer + Laravel 11（Artisan / Eloquent / 队列）+ PHPUnit / Pest** 为技术栈基线，采用 Diátaxis 双轴框架组织内容，实现从"会用"到"精通"的跃升。本模块属**技术探索系列**，适合零散时间学习，建议每天 30 分钟到 1 小时。
+> 面向在职 PHP 开发者的温故知新模块：以 **PHP 8.5（管道运算符 / URI 扩展 / 属性钩子）+ Composer 2.x + Laravel 13（Artisan / Eloquent / 队列）+ PHPUnit 13 / Pest 5** 为技术栈基线，采用 Diátaxis 双轴框架组织内容，实现从"会用"到"精通"的跃升。本模块属**技术探索系列**，适合零散时间学习，建议每天 30 分钟到 1 小时。
+
+## 🧪 技术基线
+
+> 以下版本信息于 **2026-09-11** 经官方发布渠道核实，是本模块全部文档的编写基线。
+
+| 技术 | 版本 | 核实日期 | 说明 |
+|------|------|---------|------|
+| **PHP** | 8.5（8.5.9） | 2026-09-11 | 2025-11-20 发布：管道运算符 `\|>`、URI 扩展、`#[\NoDiscard]`、`clone()->with()` 等；8.4 属性钩子/非对称可见性一并纳入；8.4、8.3 仍在安全支持窗口内 |
+| **Laravel** | 13 | 2026-09-11 | 2026-03-17 发布，要求 PHP 8.3-8.5；**Laravel 12**（2025-02-24）为上一个维护版，安全支持至 2027-02-24 |
+| **Composer** | 2.x | 2026-09-11 | PHP 生态事实标准的依赖管理器 |
+| **PHPUnit** | 13.x | 2026-09-11 | 2026-02-06 发布，要求 PHP 8.4+；PHP 8.3 项目使用 PHPUnit 12（支持至 2027-02） |
+| **Pest** | 5.x | 2026-09-11 | 基于 PHPUnit 13，要求 PHP 8.4+；PHP 8.3 项目使用 Pest 4 |
 
 ## 📚 文档元数据
 
@@ -14,9 +26,10 @@
 
 ## 🎯 学习目标
 
-- 巩固 PHP 基础，系统掌握 PHP 8.x 现代特性与最佳实践
-- 深入理解 Laravel 11 框架体系，从路由到生产级架构
+- 巩固 PHP 基础，系统掌握 PHP 8.x 现代特性与最佳实践（含 8.4 属性钩子与 8.5 管道运算符等增量特性）
+- 深入理解 Laravel 13 框架体系，从路由到生产级架构
 - 建立测试工程与部署运维的完整工程能力
+- 理解 FPM 短生命周期与常驻内存+协程两种运行模型的根本差异，认识 Workerman/Webman/Swoole 生态
 - 通过 4 个递进项目积累可复用的实战经验
 
 ## 🧭 四象限导览
@@ -24,9 +37,9 @@
 | 象限 | 目录 | 内容 | 访问方式 |
 |------|------|------|---------|
 | **教程** | [basics/](./basics/) | 8 篇按序入门：环境搭建 → 语言基础 → 现代 OOP → 错误处理 → 高级特性 → 综合项目 | 按编号顺序学 |
-| **字典** | [reference/](./reference/) | 11 篇全量参考：关键字、内置函数、类型与 OOP、数组模式、Laravel/Symfony 速查、故障排除 | 按需跳入，无难度门槛 |
-| **操作指南** | [frameworks/](./frameworks/) · [projects/](./projects/) · [testing/](./testing/) · [deployment/](./deployment/) | Laravel 入门/进阶/生态/工具链；4 个 ⭐ 递进项目；PHPUnit/Pest/Feature 测试；Docker/服务器/CI-CD 部署 | 面向目标，照做即可 |
-| **解释** | [advanced-topics/](./advanced-topics/) | 架构解析、查询优化、缓存与队列、安全实践 | 为什么这样设计 |
+| **字典** | [reference/](./reference/) | 18 篇全量参考：关键字、内置函数、类型与 OOP、数组模式、生成器、命名空间与自动加载、反射、字符串与正则、日期时间、异常体系、PHP 8.4/8.5 增量特性、Laravel/Symfony 速查、故障排除 | 按需跳入，无难度门槛 |
+| **操作指南** | [frameworks/](./frameworks/) · [projects/](./projects/) · [testing/](./testing/) · [deployment/](./deployment/) | Laravel 13 入门/进阶/生态/工具链；4 个 ⭐ 递进项目；PHPUnit/Pest/Feature 测试；Docker/服务器/CI-CD 部署 | 面向目标，照做即可 |
+| **解释** | [advanced-topics/](./advanced-topics/) | 4 个专题目录：架构解析、查询优化、缓存与队列、安全实践、运行时专题（FPM vs 常驻 / Workerman / Webman / Swoole 协程） | 为什么这样设计 |
 
 > **单一事实来源**：概念的完整解释只在 `reference/` 存在一份，其他目录链接过去，不重复展开。
 
@@ -42,7 +55,7 @@
 
 ### 精通路径（⭐⭐⭐）
 
-[Laravel 架构解析](./advanced-topics/architecture/01-laravel-architecture.md) → [查询优化](./advanced-topics/performance/01-query-optimization.md) → [缓存与队列调优](./advanced-topics/performance/02-caching-queues.md) → [安全实践](./advanced-topics/security/01-security-practices.md) → [CI/CD 与可观测性](./deployment/03-ci-cd-observability.md) → [生产级 Laravel 应用](./projects/04-production-laravel-app.md)
+[Laravel 架构解析](./advanced-topics/architecture/01-laravel-architecture.md) → [查询优化](./advanced-topics/performance/01-query-optimization.md) → [缓存与队列调优](./advanced-topics/performance/02-caching-queues.md) → [安全实践](./advanced-topics/security/01-security-practices.md) → [FPM vs 常驻内存](./advanced-topics/runtime/01-fpm-vs-resident.md) → [Workerman 原理](./advanced-topics/runtime/02-workerman-principles.md) → [Webman 实战](./advanced-topics/runtime/03-webman-practice.md) → [Swoole 协程生态](./advanced-topics/runtime/04-swoole-ecosystem.md) → [CI/CD 与可观测性](./deployment/03-ci-cd-observability.md) → [生产级 Laravel 应用](./projects/04-production-laravel-app.md)
 
 ## 📁 文件树
 
@@ -50,13 +63,13 @@
 07-php-mastery/
 ├── README.md                                # 本文档
 ├── basics/                                  # 教程：按序学习
-│   ├── 01-environment-setup.md              # ⭐ 环境搭建
+│   ├── 01-environment-setup.md              # ⭐ 环境搭建（PHP 8.5+）
 │   ├── 02-first-script.md                   # ⭐ 第一个脚本
 │   ├── 03-variables-types.md                # ⭐ 变量与类型
 │   ├── 04-functions-oop.md                  # ⭐ 函数与 OOP
 │   ├── 05-control-flow.md                   # ⭐ 控制流程
 │   ├── 06-error-exceptions.md               # ⭐ 错误与异常
-│   ├── 07-advanced-features.md              # ⭐⭐ 高级特性
+│   ├── 07-advanced-features.md              # ⭐⭐ 高级特性（含 8.4/8.5 增量）
 │   └── 08-first-project.md                  # ⭐ 综合练习：CLI 任务工具
 ├── reference/                               # 字典：全量参考
 │   ├── language-concepts/
@@ -64,7 +77,14 @@
 │   │   ├── 02-built-in-functions.md         # 内置函数
 │   │   ├── 03-types-oop-modern.md           # 类型系统与现代 OOP
 │   │   ├── 04-control-flow.md               # 控制流程
-│   │   └── 05-arrays-patterns.md            # 数组与常用模式
+│   │   ├── 05-arrays-patterns.md            # 数组与常用模式
+│   │   ├── 06-generators-iterators.md       # 生成器与迭代器
+│   │   ├── 07-namespaces-autoloading.md     # 命名空间与自动加载
+│   │   ├── 08-reflection-attributes.md      # 反射与属性注解
+│   │   ├── 09-strings-regex.md              # 字符串与正则
+│   │   ├── 10-datetime.md                   # 日期时间
+│   │   ├── 11-errors-exceptions.md          # 异常体系与错误处理
+│   │   └── 12-modern-php-85.md              # PHP 8.4/8.5 增量特性
 │   ├── framework-essentials/
 │   │   ├── 01-laravel-essentials.md         # Laravel 核心速查
 │   │   └── 02-symfony-essentials.md         # Symfony 核心速查
@@ -75,7 +95,7 @@
 │       ├── 01-php-cheatsheet.md             # PHP 快速速查表
 │       └── 02-troubleshooting.md            # 故障排除
 ├── frameworks/                              # 操作指南：框架生态
-│   ├── 01-laravel-basics.md                 # ⭐ Laravel 入门
+│   ├── 01-laravel-basics.md                 # ⭐ Laravel 13 入门
 │   ├── 02-laravel-advanced.md               # ⭐⭐ Laravel 进阶
 │   ├── 03-ecosystem-integration.md          # ⭐⭐ 生态集成
 │   └── 04-devtools.md                       # ⭐ 开发工具链
@@ -98,16 +118,22 @@
     ├── performance/
     │   ├── 01-query-optimization.md         # 查询优化
     │   └── 02-caching-queues.md             # 缓存策略与队列调优
-    └── security/
-        └── 01-security-practices.md         # 安全实践
+    ├── security/
+    │   └── 01-security-practices.md         # 安全实践
+    └── runtime/
+        ├── 01-fpm-vs-resident.md            # FPM vs 常驻内存模型
+        ├── 02-workerman-principles.md       # Workerman 事件驱动与多进程
+        ├── 03-webman-practice.md            # Webman 实战
+        └── 04-swoole-ecosystem.md           # Swoole 协程生态
 ```
 
 ## 💡 学习建议
 
-- **温故知新**：从熟悉的 PHP 基础开始，对照 [PHP 8.3 特性](./reference/language-concepts/03-types-oop-modern.md) 找知识盲点
+- **温故知新**：从熟悉的 PHP 基础开始，对照 [类型系统与现代 OOP](./reference/language-concepts/03-types-oop-modern.md) 与 [PHP 8.4/8.5 增量特性](./reference/language-concepts/12-modern-php-85.md) 找知识盲点
 - **实战导向**：每完成一个阶段，用 [projects/](./projects/) 的对应项目验证
 - **碎片学习**：概念疑难点直接查 [reference/](./reference/) 字典，不必按顺序
 - **定期回顾**：每周末用 [快速速查表](./reference/quick-references/01-php-cheatsheet.md) 自测记忆
+- **拓宽视野**：写惯 FPM + Laravel 后，读一读 [运行时专题](./advanced-topics/runtime/01-fpm-vs-resident.md)，理解 PHP 的另一种打开方式
 
 ## 🔗 关联模块
 

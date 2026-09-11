@@ -1,10 +1,10 @@
-# Next.js 15 GraphQL + Apollo 企业级集成指南
+# Next.js 16 GraphQL + Apollo 企业级集成指南
 
-> **文档简介**: Next.js 15 + Apollo Client v3 + GraphQL 企业级全栈开发指南，涵盖Schema设计、Apollo Server、缓存策略、实时订阅、安全认证等现代GraphQL技术栈
+> **文档简介**: Next.js 16 + Apollo Client v3 + GraphQL 企业级全栈开发指南，涵盖Schema设计、Apollo Server、缓存策略、实时订阅、安全认证等现代GraphQL技术栈
 
 > **目标读者**: 具备Next.js基础的高级开发者，需要构建现代API架构的后端工程师和全栈开发者
 
-> **前置知识**: Next.js 15深度掌握、GraphQL基础、Apollo Client、TypeScript 5、API设计、数据库概念
+> **前置知识**: Next.js 16深度掌握、GraphQL基础、Apollo Client、TypeScript 5、API设计、数据库概念
 
 > **预计时长**: 8-12小时
 
@@ -50,7 +50,7 @@
 
 ### 🚀 GraphQL + Apollo技术栈革命
 
-GraphQL + Apollo Client代表了现代API开发的重要里程碑，提供了REST API无法比拟的灵活性、性能和开发体验。Next.js 15与Apollo Server v4的结合，为企业级全栈应用提供了统一的数据层解决方案，支持复杂的前端数据需求和高性能的服务端查询执行。
+GraphQL + Apollo Client代表了现代API开发的重要里程碑，提供了REST API无法比拟的灵活性、性能和开发体验。Next.js 16与Apollo Server v4的结合，为企业级全栈应用提供了统一的数据层解决方案，支持复杂的前端数据需求和高性能的服务端查询执行。
 
 ### 🏗️ GraphQL架构设计
 

@@ -29,7 +29,7 @@
 ```bash
 npm create vite@latest todo-app -- --template react-ts
 cd todo-app && npm install
-npm install @tanstack/react-query
+npm install @tanstack/react-query@^5
 ```
 
 入口文件接入 Provider（配置细节见 [Query 基础](../frameworks/01-tanstack-query-basics.md)）：
@@ -159,7 +159,7 @@ export default function App() {
   const toggleTodo = useToggleTodo()
   const deleteTodo = useDeleteTodo()
 
-  if (isPending) return <p>加载中…</p>          // v5：isPending
+  if (isPending) return <p>加载中…</p>          // v5：isPending 时 data 类型收窄为 undefined，先判空再渲染
   if (isError) return <p role="alert">{error.message}</p>
 
   return (
@@ -206,7 +206,7 @@ export default function App() {
 |------|------|------|
 | 新增后列表不刷新 | onSuccess 忘记 invalidate | 检查 mutation 的 onSuccess |
 | 列表闪烁 | staleTime 为 0，每次挂载都重取 | 给查询配置 staleTime |
-| TS 报 `isLoading` 不存在 | 误用 v4 API | 改用 `isPending` |
+| TS 报 `isLoading` 不存在 | 误用过时 API | 主要分支改用 `isPending` |
 
 ---
 

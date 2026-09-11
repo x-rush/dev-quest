@@ -43,7 +43,7 @@ Android 开发环境由四层工具组成，理解它们的分工能让你在报
 | 工具 | 角色 | 说明 |
 |------|------|------|
 | **Android Studio** | IDE | 基于 IntelliJ IDEA，内置模拟器管理、Layout Inspector、Profiler |
-| **JDK** | 编译运行时 | Android Gradle Plugin 8.x 要求 **JDK 17+**；新版 Studio 已内置 JBR（JetBrains Runtime），通常无需另装 |
+| **JDK** | 编译运行时 | Android Gradle Plugin 9.x 要求 **JDK 17+**；新版 Studio 已内置 JBR（JetBrains Runtime），通常无需另装 |
 | **Android SDK** | 平台库 | 提供各 API 级别的 `android.jar`、构建工具（aapt2、d8）、平台工具（adb） |
 | **Gradle** | 构建系统 | 通过 Android Gradle Plugin（AGP）驱动编译、打包、签名 |
 
@@ -122,7 +122,7 @@ Linux:   ~/Android/Sdk
 # 1. 验证 adb（平台工具）——应列出已连接的设备/模拟器
 adb devices
 
-# 2. 验证 Java 版本——AGP 8.x 需要 17 及以上
+# 2. 验证 Java 版本——AGP 9.x 需要 17 及以上
 java -version
 
 # 3. 验证 sdkmanager（需先安装 cmdline-tools 组件）

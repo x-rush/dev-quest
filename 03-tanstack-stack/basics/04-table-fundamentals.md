@@ -1,6 +1,6 @@
 # Table 基础：列模型与数据行
 
-> **文档简介**: 掌握 TanStack Table v8 的核心三角——data、columns、table 实例，学会用 ColumnDef 声明列并用 flexRender 渲染出一张完整表格
+> **文档简介**: 掌握 TanStack Table v9 的核心三角——data、columns、table 实例，学会用 ColumnDef 声明列、用 features 注册特性，并用 flexRender 渲染出一张完整表格
 >
 > **目标读者**: 已理解 Headless 理念，想动手渲染第一张 TanStack 表格的开发者
 >
@@ -21,7 +21,7 @@
 完成本文档后，你将能够：
 
 - ✅ 用 `accessorKey` / `accessorFn` 声明列
-- ✅ 用 `useReactTable` + `getCoreRowModel()` 渲染基础表格
+- ✅ 用 `useTable` + `tableFeatures()` 渲染基础表格
 - ✅ 用 `flexRender` 渲染自定义单元格
 - ✅ 理解"行模型（Row Model）"是表格数据的流水线
 
@@ -32,8 +32,8 @@
 TanStack Table 一切围绕三个概念：
 
 1. **data**：`TData[]`，你的原始数组（通常来自 Query）
-2. **columns**：`ColumnDef<TData>[]`，列的声明（怎么取值、怎么渲染表头/单元格）
-3. **table**：`useReactTable` 返回的实例，持有全部状态与行模型
+2. **columns**：`ColumnDef` 数组，列的声明（怎么取值、怎么渲染表头/单元格；v9 泛型为 `ColumnDef<TFeatures, TData, TValue>`，推荐用 `createColumnHelper<TFeatures, TData>()` 保持泛型一致）
+3. **table**：`useTable` 返回的实例，持有全部状态与行模型
 
 **定义**: 列模型把"数据字段"与"渲染方式"解耦——`accessor` 负责取值，`cell` 负责渲染，二者互不干扰。
 
@@ -44,10 +44,11 @@ TanStack Table 一切围绕三个概念：
 ```tsx
 import { useMemo } from 'react'
 import {
-  ColumnDef,
+  coreFeatures,
+  createColumnHelper,
   flexRender,
-  getCoreRowModel,
-  useReactTable,
+  tableFeatures,
+  useTable,
 } from '@tanstack/react-table'
 
 type Person = {
@@ -58,28 +59,33 @@ type Person = {
   score: number
 }
 
-const columns = useMemo<ColumnDef<Person>[]>(
-  () => [
-    // 简单取值：accessorKey 直接读字段
-    { accessorKey: 'firstName', header: '名' },
-    { accessorKey: 'lastName', header: '姓' },
-    { accessorKey: 'age', header: '年龄' },
-    // 自定义取值：accessorFn 派生数据 + 自定义渲染
-    {
-      id: 'fullName',
-      accessorFn: (row) => `${row.lastName}${row.firstName}`,
-      header: '全名',
-      cell: (info) => <strong>{info.getValue<string>()}</strong>,
-    },
-    {
-      accessorKey: 'score',
-      header: '评分',
-      cell: (info) => {
-        const score = info.getValue<number>()
-        return <span>{score >= 60 ? `✅ ${score}` : `❌ ${score}`}</span>
+// v9：createColumnHelper 需要两个泛型——TFeatures 与 TData；核心特性必须显式注册
+const features = tableFeatures({ ...coreFeatures })
+const columnHelper = createColumnHelper<typeof features, Person>()
+
+const columns = useMemo(
+  () =>
+    columnHelper.columns([
+      // 简单取值：accessorKey 直接读字段
+      { accessorKey: 'firstName', header: '名' },
+      { accessorKey: 'lastName', header: '姓' },
+      { accessorKey: 'age', header: '年龄' },
+      // 自定义取值：accessorFn 派生数据 + 自定义渲染
+      {
+        id: 'fullName',
+        accessorFn: (row) => `${row.lastName}${row.firstName}`,
+        header: '全名',
+        cell: (info) => <strong>{info.getValue<string>()}</strong>,
       },
-    },
-  ],
+      {
+        accessorKey: 'score',
+        header: '评分',
+        cell: (info) => {
+          const score = info.getValue<number>()
+          return <span>{score >= 60 ? `✅ ${score}` : `❌ ${score}`}</span>
+        },
+      },
+    ]),
   [],
 )
 ```
@@ -88,10 +94,11 @@ const columns = useMemo<ColumnDef<Person>[]>(
 
 ```tsx
 function PersonTable({ data }: { data: Person[] }) {
-  const table = useReactTable({
+  // v9：features 是必填入口，且必须包含 coreFeatures（table/column/row/header/cell 与核心行模型行为）
+  const table = useTable({
     data, // 建议用 useMemo 稳定引用，见下方"陷阱"
     columns,
-    getCoreRowModel: getCoreRowModel(), // 必填：核心行模型
+    features, // 复用上方特性集；后续按需在此注册排序/筛选等特性
   })
 
   return (
@@ -113,7 +120,7 @@ function PersonTable({ data }: { data: Person[] }) {
       <tbody>
         {table.getRowModel().rows.map((row) => (
           <tr key={row.id} className="hover:bg-gray-50">
-            {row.getVisibleCells().map((cell) => (
+            {row.getAllCells().map((cell) => (
               <td key={cell.id} className="border-b px-3 py-2">
                 {flexRender(cell.column.columnDef.cell, cell.getContext())}
               </td>
@@ -128,27 +135,31 @@ function PersonTable({ data }: { data: Person[] }) {
 
 **关键点解析**：
 
-- `getCoreRowModel()` 是**必须传入**的行模型——它把 data + columns 管道化成可渲染的行
+- v9 中 `features` 为**必填项**，且必须包含 `coreFeatures`（提供 table/column/row/header/cell 与核心行模型行为）——它把 data + columns 管道化成可渲染的行；排序/筛选等其余特性按需注册到 `tableFeatures()`
 - `header` / `cell` 既可以是字符串，也可以是返回 JSX 的函数，`flexRender` 统一处理两种形态
 - `info.getValue()` 返回 `accessor` 的结果；`row.original` 可拿到整行原始数据
 
 ## 🚿 行模型流水线
 
-行模型是 Table v8 的灵魂：数据像流水线一样被逐层加工。
+行模型是 Table v9 的灵魂：数据像流水线一样被逐层加工。
 
 ```text
 data → 核心行模型 → 排序 → 筛选 → 分组 → 展开树 → 分页 → table.getRowModel()
 ```
 
-你按需"接通"管道，不接的环节自动跳过：
+你按需"接通"管道（v9 中特性与行模型槽位都要注册到 `tableFeatures()` 上），不接的环节自动跳过：
 
 ```tsx
-const table = useReactTable({
+const table = useTable({
   data,
   columns,
-  getCoreRowModel: getCoreRowModel(),
-  getSortedRowModel: getSortedRowModel(),     // 接通排序
-  getFilteredRowModel: getFilteredRowModel(), // 接通筛选
+  features: tableFeatures({
+    ...coreFeatures,                            // 核心特性必须注册
+    rowSortingFeature,                          // 先注册特性
+    columnFilteringFeature,
+    sortedRowModel: createSortedRowModel(),     // 再接通排序行模型
+    filteredRowModel: createFilteredRowModel(), // 再接通筛选行模型
+  }),
 })
 ```
 
@@ -159,7 +170,7 @@ const table = useReactTable({
 - ✅ **columns 定义在组件外或 useMemo 中**，避免每次渲染生成新引用
 - ✅ **data 引用要稳定**：来自 `useQuery` 的 `data` 天然稳定，本地拼接需 `useMemo`
 - ✅ **派生列必须给 `id`**：没有 `accessorKey` 时 id 是唯一标识
-- ❌ **避免** 忘传 `getCoreRowModel()`——表格会静默渲染空白
+- ❌ **避免** 忘传 `features` 或漏注册行模型槽位——对应能力静默失效，表格渲染空白
 - ❌ **避免** 手动遍历 `data` 渲染行——一切渲染都应经过 `table.getRowModel()`
 
 ---

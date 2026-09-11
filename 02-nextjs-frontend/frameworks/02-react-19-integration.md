@@ -1,10 +1,10 @@
-# Next.js 15 + React 19 深度集成完整指南
+# Next.js 16 + React 19 深度集成完整指南
 
-> **文档简介**: Next.js 15 与 React 19 深度集成企业级实践指南，涵盖并发特性、Suspense、服务器组件、优化策略等现代React核心技术
+> **文档简介**: Next.js 16 与 React 19 深度集成企业级实践指南，涵盖并发特性、Suspense、服务器组件、优化策略等现代React核心技术
 
 > **目标读者**: 具备React基础的中高级开发者，需要掌握React 19新特性和Next.js深度集成的技术架构师
 
-> **前置知识**: React基础、Next.js 15基础、TypeScript 5、异步编程、现代Web性能优化
+> **前置知识**: React基础、Next.js 16基础、TypeScript 5、异步编程、现代Web性能优化
 
 > **预计时长**: 10-12小时
 
@@ -28,15 +28,52 @@
 - 学会Actions、Server Components等服务器端特性
 - 理解React 19的性能优化和最佳实践
 
-### 🏗️ Next.js 15集成能力
-- 构建React 19与Next.js 15的深度集成架构
+### 🏗️ Next.js 16集成能力
+- 构建React 19与Next.js 16的深度集成架构
 - 实现复杂的状态管理和数据流处理
 - 掌握客户端和服务器组件的混合渲染策略
 - 学会现代前端架构的设计和实现
 
 ## 📖 概述
 
-React 19带来了革命性的并发特性和服务器端渲染能力，与Next.js 15的App Router完美结合，为构建高性能、可扩展的现代Web应用提供了强大的技术基础。本指南将深入探讨React 19的核心特性和Next.js 15的深度集成实践。
+React 19带来了革命性的并发特性和服务器端渲染能力，与Next.js 16的App Router完美结合，为构建高性能、可扩展的现代Web应用提供了强大的技术基础。本指南将深入探讨React 19的核心特性和Next.js 16的深度集成实践。
+
+## 🆕 React 19.3 新能力（2026-09 发布）
+
+React 19.3 无破坏性变更，以下 API 已从实验状态转正，可在 Next.js 16 项目中放心使用：
+
+### View Transitions 组件稳定
+
+`<ViewTransition>` 基于浏览器原生 View Transition API，在 `startTransition`、Suspense 揭示、`useDeferredValue` 等过渡更新中自动为元素的进入、退出、移动与缩放添加动画，无需引入第三方动画库；`addTransitionType` 可为"前进/后退"等不同过渡类型指定不同动画。
+
+### Fragment Refs 稳定
+
+可直接向 `<Fragment>` 传递 ref，获得 `FragmentInstance` 句柄（支持 `focus`/`blur`、事件监听、`scrollIntoView`、`IntersectionObserver`/`ResizeObserver` 观测等），无需再为挂 ref 而额外包裹一层 `<div>`：
+
+```tsx
+import { Fragment, useRef } from 'react';
+
+function List({ items }: { items: string[] }) {
+  const listRef = useRef<React.FragmentInstance>(null);
+  return (
+    <Fragment ref={listRef}>
+      {items.map((item) => (
+        <li key={item}>{item}</li>
+      ))}
+    </Fragment>
+  );
+}
+```
+
+### React Compiler 稳定可用
+
+React Compiler v1.0 已于 2025-10 发布稳定版，Next.js 16 内置支持（`create-next-app` 模板可选启用），自动完成组件与 Hook 的记忆化，无需手写 `useMemo`/`useCallback`/`memo`。
+
+### 其他更新
+
+- `browser()` 与 `use(browser())`：声明组件仅在浏览器端渲染，避免"服务端渲染后再在 Effect 中检测客户端"的绕行方案
+- Trusted Types 支持：与 CSP 策略协同保障 DOM 注入安全
+- Server Components 中可直接使用 Context Provider，无需额外包装组件
 
 ## 🔄 React 19 并发渲染深度解析
 
@@ -552,32 +589,30 @@ function RelatedContentSkeleton() {
 
 ```tsx
 // src/app/components/advanced-server-components.tsx
-import { unstable_cache } from 'next/cache'
+// Next.js 16：unstable_cache 已弃用，改用 "use cache" + cacheTag/cacheLife 显式缓存
+import { cacheLife, cacheTag } from 'next/cache'
 import { Suspense } from 'react'
 import { ErrorBoundary } from 'react-error-boundary'
 
 // 缓存策略管理器
 export class ServerCacheManager {
-  // 多级缓存配置
+  // 多级缓存配置（Next.js 16：以 cacheLife profile 表达缓存时长）
   private static cacheConfig = {
     // 短期缓存 - 频繁变化的数据
     shortTerm: {
-      ttl: 60, // 1分钟
-      revalidate: 60,
+      profile: 'minutes', // 分钟级
       tags: ['short-term']
     },
 
     // 中期缓存 - 中等频率变化的数据
     mediumTerm: {
-      ttl: 3600, // 1小时
-      revalidate: 3600,
+      profile: 'hours', // 小时级
       tags: ['medium-term']
     },
 
     // 长期缓存 - 很少变化的数据
     longTerm: {
-      ttl: 86400, // 24小时
-      revalidate: 86400,
+      profile: 'days', // 天级
       tags: ['long-term']
     }
   }
@@ -587,12 +622,15 @@ export class ServerCacheManager {
     fn: (...args: Args) => Promise<T>,
     config: 'shortTerm' | 'mediumTerm' | 'longTerm' = 'mediumTerm'
   ) {
-    const { ttl, revalidate, tags } = this.cacheConfig[config]
+    const { profile, tags } = this.cacheConfig[config]
 
-    return unstable_cache(fn, {
-      revalidate,
-      tags
-    })
+    // Next.js 16：用 "use cache" 指令替代 unstable_cache
+    return async (...args: Args): Promise<T> => {
+      'use cache'
+      cacheLife(profile)
+      cacheTag(...tags)
+      return fn(...args)
+    }
   }
 
   // 数据预加载
@@ -1314,7 +1352,7 @@ export function PerformanceExample() {
 
 ## ✅ 总结
 
-通过本指南，你已经深入掌握了React 19与Next.js 15的企业级集成能力：
+通过本指南，你已经深入掌握了React 19与Next.js 16的企业级集成能力：
 
 ### 🔄 并发渲染精通
 - React 19并发渲染机制和调度算法
@@ -1362,7 +1400,7 @@ export function PerformanceExample() {
 ## 📚 模块内相关文档
 
 ### 同模块相关文档
-- [Next.js 15 完整指南](./01-nextjs-15-complete.md) - 掌握Next.js 15的核心特性和App Router架构
+- [Next.js 16 完整指南](./01-nextjs-16-complete.md) - 掌握Next.js 16的核心特性和App Router架构
 - [全栈开发模式](./03-full-stack-patterns.md) - 学习如何构建完整的全栈应用
 - [性能优化策略](./04-performance-optimization.md) - 深入了解应用性能调优技术
 
@@ -1384,14 +1422,14 @@ export function PerformanceExample() {
 2. **Suspense边界管理**: 智能的异步组件加载和错误处理机制
 3. **Server Components**: 零客户端JavaScript的服务端渲染组件架构
 4. **性能优化策略**: memo、useMemo、useCallback等优化工具的高级应用
-5. **数据流管理**: React 19与Next.js 15集成的现代数据获取和状态管理模式
+5. **数据流管理**: React 19与Next.js 16集成的现代数据获取和状态管理模式
 
 ### 学习成果自检
 - [ ] 理解React 19并发渲染的工作原理和优势
 - [ ] 掌握Suspense、Transition、Deferred等并发特性的使用
 - [ ] 能够设计和实现复杂的服务器组件架构
 - [ ] 熟练运用React 19的性能优化工具和模式
-- [ ] 能够构建高性能的React 19与Next.js 15集成应用
+- [ ] 能够构建高性能的React 19与Next.js 16集成应用
 
 ---
 
@@ -1422,7 +1460,7 @@ export function PerformanceExample() {
 **🏷️ 标签**: `#react19` `#concurrent-features` `#suspense` `#server-components` `#performance`
 **⭐ 推荐指数**: ⭐⭐⭐⭐⭐
 
-**💡 提示**: 本模块为React 19高级特性模块，建议先掌握React基础和Next.js 15基础后再进行学习。
+**💡 提示**: 本模块为React 19高级特性模块，建议先掌握React基础和Next.js 16基础后再进行学习。
 
 **🎯 学习建议**:
 - 建议学习周期: 2-3周

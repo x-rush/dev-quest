@@ -185,6 +185,6 @@ fun Demo() {
 
 ## 🔗 相关文档
 
-- 📖 概念字典：[协程与 Flow API 全表](../reference/language-concepts/03-coroutines-flow-api.md) ｜ [Compose 状态 API 详解](../reference/language-concepts/04-compose-state-api.md)
+- 📖 概念字典：[协程与 Flow API 全表](../reference/language-concepts/03-coroutines-flow-api.md) ｜ [Compose 状态 API 详解](../reference/language-concepts/04-compose-state-api.md) ｜ [副作用 API](../reference/framework-essentials/03-side-effects.md) ｜ [动画核心 API](../reference/framework-essentials/05-animation-core.md)
 - 📖 前置教程：[页面导航](../basics/06-navigation.md) ｜ [协程与 Flow 基础](../basics/07-coroutines-flow-basics.md)
 - 🚀 后续学习：[生态集成：Room + Hilt + Retrofit + ViewModel](03-ecosystem-integration.md) ｜ [重组优化](../advanced-topics/performance/01-recomposition-optimization.md)

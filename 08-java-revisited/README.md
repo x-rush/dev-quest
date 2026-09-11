@@ -2,16 +2,30 @@
 
 ## 📚 模块简介
 
-本模块面向**有 Java 开发经验的学习者**，旨在回顾 Java 核心知识、掌握 Java 21 LTS 与 Spring Boot 3.x 的现代化开发模式，并将 Java 设计思想与其他技术栈进行对比迁移。
+本模块面向**有 Java 开发经验的学习者**，旨在回顾 Java 核心知识、掌握 Java 21/25 LTS 与 Spring Boot 4.x 的现代化开发模式，并将 Java 设计思想与其他技术栈进行对比迁移。
 
-- **技术栈基线**：Java 21 LTS（虚拟线程、Record、模式匹配、Sealed 类）· Spring Boot 3.x（Jakarta EE 命名空间）· Maven/Gradle · JUnit 5
+- **技术栈基线**：Java 21 LTS（虚拟线程、Record、模式匹配、Sealed 类；25 LTS 已发布可选用）· Spring Boot 4.x（Spring Framework 7 / Jakarta EE 11 命名空间）· Maven/Gradle · JUnit 6（Jupiter）
 - **模块定位**：从"Java 8 时代经验"升级到现代 Java 全栈能力，覆盖语言特性、Spring 生态、测试工程、容器化部署与生产级架构
+
+## 🧱 技术基线（2026-09-11 核实）
+
+| 技术 | 版本 | 说明 |
+|------|------|------|
+| Java | **21 LTS**（默认基线） | 25 LTS（2025-09 发布）已全面支持，可选用 |
+| Spring Boot | **4.1.x**（4.1.0，2026-06-10 发布） | 4.0 于 2025-11-20 发布；4.0/3.5 维护线并行服务中 |
+| Spring Framework | **7.0.x** | JSpecify 空安全、API 版本化、JUnit 6 支持 |
+| Spring Security | **7.0.x** | Lambda DSL 延续，Security FilterChain 不变 |
+| Hibernate / JPA | Hibernate 7.1 · Jakarta Persistence 3.2 | Jakarta EE 11 基线（Servlet 6.1 / Validation 3.1） |
+| Jackson | **3.0**（`tools.jackson`） | `JsonMapper` 不可变构建；Jackson 2 自动配置已废弃 |
+| JUnit / Testcontainers | JUnit **6**（Jupiter） · Testcontainers **2.0** | Boot 4 默认测试栈；Testcontainers artifact 改名 `testcontainers-*` |
+| Maven / Gradle | Maven 3.6.3+ · Gradle 8.5+（Boot Gradle 插件 4.1.x） | 构建脚本统一用 Wrapper 锁定版本 |
+| GraalVM | 25 | Native Image 需 GraalVM 25+（本模块未展开） |
 
 ### 🎯 学习目标
 
 - 回顾 Java 核心概念和最佳实践
-- 掌握 Java 17/21 新特性与现代化开发模式（Record、模式匹配、虚拟线程）
-- 系统化掌握 Spring Boot 3.x 全栈：数据访问、安全、消息、测试、部署
+- 掌握 Java 17-25 新特性与现代化开发模式（Record、模式匹配、虚拟线程）
+- 系统化掌握 Spring Boot 4.x 全栈：数据访问、安全、消息、测试、部署
 - 将 Java 设计思想应用到其他技术栈，建立跨语言的知识体系
 
 ## 🧭 四象限导览
@@ -19,7 +33,7 @@
 | 象限 | 目录 | 内容 | 用法 |
 |------|------|------|------|
 | **教程** | [basics/](basics/) | 8 篇按序学习：环境 → 语法 → OOP/Record → 控制流 → 异常 → 现代特性 → 项目 | 零散时间按序过一遍 |
-| **字典** | [reference/](reference/) | 11 篇全量参考：语言概念、Spring/JPA 速查、标准库、故障排除 | 查字典，任意跳入 |
+| **字典** | [reference/](reference/) | 18 篇全量参考：语言概念（含异常/资源）、Spring 核心（IoC/DI、AOP、事务、Security、REST 客户端）、Boot 3→4 迁移速查、标准库、故障排除 | 查字典，任意跳入 |
 | **操作指南** | [frameworks/](frameworks/) [projects/](projects/) [testing/](testing/) [deployment/](deployment/) | Spring Boot 生态 4 篇 · 实战项目 4 个 · 测试工程 3 篇 · 部署运维 3 篇 | 面向任务，照做即成 |
 | **解释** | [advanced-topics/](advanced-topics/) | 架构演进 · JVM/GC · 虚拟线程 · 安全实践 | 深挖"为什么" |
 
@@ -59,16 +73,23 @@
 │   │   ├── 02-collections-generics.md # 集合与泛型
 │   │   ├── 03-streams-optional.md     # Stream 与 Optional
 │   │   ├── 04-concurrency-api.md      # 并发 API
-│   │   └── 05-records-sealed-patterns.md # Record / Sealed / 模式匹配
+│   │   ├── 05-records-sealed-patterns.md # Record / Sealed / 模式匹配
+│   │   └── 06-exceptions-resources.md # 异常体系与资源管理
 │   ├── framework-essentials/
 │   │   ├── 01-spring-boot-essentials.md # Spring Boot 核心速查
-│   │   └── 02-jpa-essentials.md         # JPA 核心速查
+│   │   ├── 02-jpa-essentials.md         # JPA 核心速查
+│   │   ├── 03-ioc-di-essentials.md      # IoC/DI 与 Bean 生命周期速查
+│   │   ├── 04-aop-essentials.md         # AOP 速查
+│   │   ├── 05-transaction-essentials.md # 事务传播与隔离速查
+│   │   ├── 06-spring-security-essentials.md # Spring Security 7 速查
+│   │   └── 07-rest-client-essentials.md # RestClient/HTTP 客户端速查
 │   ├── library-guides/
 │   │   ├── 01-standard-library.md     # 标准库
 │   │   └── 02-third-party-libs.md     # 第三方库
 │   └── quick-references/
 │       ├── 01-java-cheatsheet.md      # 语法速查
-│       └── 02-troubleshooting.md      # 故障排除
+│       ├── 02-troubleshooting.md      # 故障排除
+│       └── 03-spring-boot4-migration.md # Boot 3→4 迁移速查
 ├── frameworks/                        # 操作指南：框架生态
 │   ├── 01-spring-boot-basics.md       # ⭐ 依赖注入、自动配置、REST Controller
 │   ├── 02-spring-boot-advanced.md     # ⭐⭐ Spring Data JPA、事务、AOP
@@ -80,7 +101,7 @@
 │   ├── 03-order-system.md             # ⭐⭐ 订单系统（事务 + 消息队列）
 │   └── 04-production-spring-app.md    # ⭐⭐⭐ 生产级 Spring Boot 应用
 ├── testing/                           # 操作指南：测试工程
-│   ├── 01-unit-testing.md             # ⭐⭐ JUnit 5 + Mockito
+│   ├── 01-unit-testing.md             # ⭐⭐ JUnit 6 + Mockito
 │   ├── 02-integration-testing.md      # ⭐⭐ @SpringBootTest + Testcontainers
 │   └── 03-api-testing.md              # ⭐⭐ MockMvc + REST Assured
 ├── deployment/                        # 操作指南：部署运维
@@ -112,7 +133,7 @@
 |------|--------|
 | [01-go-backend](../01-go-backend/README.md) | 虚拟线程 vs goroutine、JVM vs Go 运行时、Spring Boot vs Go Web 框架 |
 | [07-php-mastery](../07-php-mastery/README.md) | JVM 生态 vs PHP 生态、强类型 vs 动态类型工程化对比 |
-| [09-nodejs-backend](../09-nodejs-backend/README.md) | 事件循环 vs 虚拟线程、NPM vs Maven/Gradle、Express vs Spring MVC |
+| [09-nodejs-backend](../09-nodejs-backend/README.md) | 事件循环 vs 虚拟线程、NPM vs Maven/Gradle、Hono vs Spring MVC |
 
 ## 📋 学习资源
 

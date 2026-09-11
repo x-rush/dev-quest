@@ -219,4 +219,7 @@ val intent = Intent(context, DetailActivity::class.java).apply {
 - 📄 **[Kotlin 关键字与修饰符详解](../reference/language-concepts/01-kotlin-keywords.md)** - suspend/sealed/inline 等完整字典
 - 📄 **[可空性与集合 API](../reference/language-concepts/02-null-safety-collections.md)** - 集合操作符全表
 - 📄 **[泛型与委托属性](../reference/language-concepts/05-generics-delegates.md)** - `by lazy`、`by viewModels` 的原理
+- 📄 **[扩展函数与扩展属性](../reference/language-concepts/06-extension-functions.md)** - 解析规则与 Modifier 链原理
+- 📄 **[作用域函数](../reference/language-concepts/07-scope-functions.md)** - let/run/apply/also/with 选型表
+- 📄 **[Lambda 与高阶函数](../reference/language-concepts/08-lambdas-higher-order.md)** - 尾随 lambda 与带接收者 lambda 全解
 - 📄 **[Composable 与状态](./04-composables-state.md)** - 下一篇：把 Kotlin 语法用到 Compose 状态管理中

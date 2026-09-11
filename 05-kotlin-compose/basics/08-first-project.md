@@ -80,8 +80,8 @@
 
 ```toml
 [plugins]
-ksp = { id = "com.google.devtools.ksp", version = "2.2.20-2.0.4" }
-room = { id = "androidx.room", version = "2.8.4" }
+ksp = { id = "com.google.devtools.ksp", version = "2.3.11" }   # KSP 独立版本号，与 Kotlin 版本解耦
+room = { id = "androidx.room", version = "2.8.5" }
 
 [libraries]
 androidx-room-runtime = { group = "androidx.room", name = "room-runtime" }

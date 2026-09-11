@@ -48,7 +48,7 @@ vendor/bin/dep deploy production
 ## 2. PHP-FPM 池配置
 
 ```ini
-; /etc/php/8.3/fpm/pool.d/www.conf 关键参数
+; /etc/php/8.5/fpm/pool.d/www.conf 关键参数
 [www]
 pm = dynamic
 pm.max_children = 20          ; 单进程约 50MB 内存 → 上限 = 可用内存 / 50MB
@@ -59,7 +59,7 @@ pm.max_requests = 500         ; 防内存泄漏累积：500 次请求后回收�
 ```
 
 ```ini
-; /etc/php/8.3/fpm/php.ini 生产必改
+; /etc/php/8.5/fpm/php.ini 生产必改
 opcache.enable=1
 opcache.memory_consumption=256
 opcache.max_accelerated_files=20000
@@ -88,14 +88,16 @@ server {
 
     location ~ \.php$ {
         include fastcgi_params;
-        fastcgi_pass unix:/run/php/php8.3-fpm.sock;
+        fastcgi_pass unix:/run/php/php8.5-fpm.sock;
         fastcgi_param SCRIPT_FILENAME $realpath_root$fastcgi_script_name;
         fastcgi_hide_header X-Powered-By;
     }
 }
 ```
 
-发布后若使用 OPcache（`validate_timestamps=0`），执行 `sudo systemctl reload php8.3-fpm` 让新代码生效。
+发布后若使用 OPcache（`validate_timestamps=0`），执行 `sudo systemctl reload php8.5-fpm` 让新代码生效。
+
+> 💡 **JIT 说明**：PHP 8.x 的 JIT 默认关闭（`opcache.jit_buffer_size=0`）。需要时在 OPcache 配置中加 `opcache.jit=tracing` 与 `opcache.jit_buffer_size=64M`；典型 Web/I/O 密集应用收益有限，优化优先级仍是查询与缓存（见[缓存策略与队列调优](../advanced-topics/performance/02-caching-queues.md)）。
 
 ## 4. Supervisor：队列与调度守护
 
@@ -134,7 +136,7 @@ cd "/var/www/app/releases/$TS"
 composer install --no-dev --optimize-autoloader
 php artisan migrate --force
 php artisan optimize
-ln -sfn "$TS" /var/www/app/current && systemctl reload php8.3-fpm
+ln -sfn "$TS" /var/www/app/current && systemctl reload php8.5-fpm
 ```
 
 脚本逐行可读，正是 Envoyer/Deployer 内部逻辑的骨架。容器化替代方案见 [Docker 部署](./01-docker-deployment.md)。
@@ -142,7 +144,7 @@ ln -sfn "$TS" /var/www/app/current && systemctl reload php8.3-fpm
 ## ❓ 常见问题
 
 **Q: 502 Bad Gateway？**
-A: Nginx 连不上 FPM：查 `php8.3-fpm` 是否运行、socket 路径是否与 Nginx `fastcgi_pass` 一致、`listen.owner` 权限。
+A: Nginx 连不上 FPM：查 `php8.5-fpm` 是否运行、socket 路径是否与 Nginx `fastcgi_pass` 一致、`listen.owner` 权限。
 
 **Q: 页面 404 但首页正常？**
 A: `try_files` 缺少回退规则，或 Nginx 的 `root` 未指向 `public/`。

@@ -29,7 +29,7 @@
 
 感觉太慢？
 ├─ 进入页面白屏 → 非阻塞预取 + placeholderData（§3、§4）
-├─ 翻页表格闪空白 → keepPreviousData（§4）
+├─ 翻页表格闪空白 → placeholderData（§4）
 └─ 单行更新整表重取 → 乐观更新直写（§5）
 ```
 
@@ -90,21 +90,20 @@ export const Route = createFileRoute('/orders')({
 
 ---
 
-## 4. placeholderData 与 keepPreviousData
+## 4. placeholderData：占位数据策略
 
 ```ts
-import { keepPreviousData, useQuery } from '@tanstack/react-query'
+import { useQuery } from '@tanstack/react-query'
 
 const { data, isPlaceholderData } = useQuery({
   queryKey: ['orders', { page }],
   queryFn: () => fetchOrders(page),
-  placeholderData: keepPreviousData, // 新页数据到达前，继续展示旧页
+  placeholderData: (previousData) => previousData, // 函数式写法：新页数据到达前，继续展示旧页
 })
 ```
 
-- **keepPreviousData**：翻页/切筛选时 UI 不闪空白，配合 `isPlaceholderData` 做半透明过渡
-- **placeholderData: (prev) => prev**：键变化时沿用上一键的数据，等价于 keepPreviousData 的手工形态
-- **placeholderData: 常量 initialData**：用本地估算值先行渲染（如骨架计数）
+- **placeholderData: (prev) => prev**：翻页/切筛选时沿用上一键数据，UI 不闪空白，配合 `isPlaceholderData` 做半透明过渡（v4 的 `keepPreviousData` 选项在 v5 已移除，统一用本写法或内置 `keepPreviousData` 帮助函数）
+- **placeholderData: 常量/估算值**：用本地估算值先行渲染（如骨架计数）
 
 **成本注意**：placeholder 只是视觉占位，请求照发。它优化的是**感知速度**，不是网络成本——两者别混淆。
 
@@ -143,5 +142,5 @@ const { data: todoCount } = useQuery({
 - 📄 **[缓存架构与数据流](../architecture/01-cache-architecture.md)** - staleTime/gcTime 的内部语义
 - 📄 **[缓存键、staleTime 与失效策略](../../reference/framework-essentials/01-query-essentials.md)** - 参数级速查表
 - 📄 **[渲染性能](./02-rendering-performance.md)** - 请求优化之后的前端瓶颈
-- 📄 **[数据看板](../../projects/02-data-dashboard.md)** - keepPreviousData 的完整应用
+- 📄 **[数据看板](../../projects/02-data-dashboard.md)** - placeholderData 的完整应用
 - 📄 **[协作看板](../../projects/03-collaborative-kanban.md)** - 乐观更新的高频写场景

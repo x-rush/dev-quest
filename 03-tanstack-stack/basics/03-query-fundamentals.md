@@ -72,7 +72,7 @@ function TodoList() {
 
 **关键点解析**：
 
-- `isPending`：还没有数据（v5 命名，取代旧版 `isLoading` 的语义）；`isLoading` 现在等于 `isPending && isFetching`
+- `isPending`：还没有数据；v5 中此状态下 `data` 类型收窄为 `undefined`，先判空再渲染才能通过类型检查（`isLoading` 现在等于 `isPending && isFetching`，即首次加载）
 - `data` 类型由 `fetchTodos` 的返回值**自动推断**，无需手写泛型
 - 挂载即取数；组件卸载后缓存仍在，再次挂载**瞬间命中缓存**
 
@@ -136,7 +136,7 @@ const queryClient = useQueryClient()
 
 queryClient.invalidateQueries({ queryKey: ['todos'] })        // 失效并重取
 queryClient.getQueryData<Todo[]>(['todos'])                   // 只读缓存
-queryClient.setQueryData<Todo[]>(['todos'], (old) => old ?? []) // 直接写入
+queryClient.setQueryData<Todo[]>(['todos'], (old) => old ?? []) // 直接写入（updater 返回 undefined 会清空条目）
 ```
 
 完整方法表见 [Query 核心 API](../reference/language-concepts/01-query-core-api.md)。

@@ -63,7 +63,7 @@ const styles = StyleSheet.create({
 
 **关键点解析**：
 - `Pressable` 是新架构推荐的触控组件，函数式 `style` 可拿到 `pressed` 状态
-- `gap` 在 RN 0.71+ 完整支持，替代手动 margin 拼间距
+- `gap` 在现行 RN 完整支持，替代手动 margin 拼间距
 - 数组样式 `[styles.card, pressed && styles.cardPressed]` 是条件样式惯用法，`false` 项会被忽略
 
 ## 🎨 StyleSheet：样式管理规范

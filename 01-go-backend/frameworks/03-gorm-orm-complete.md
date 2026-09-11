@@ -62,6 +62,7 @@ GORM（Go Object-Relational Mapping）是Go语言功能最完整的ORM库，提�
 - **复合主键**: 支持复合主键
 - **数据库迁移**: 自动迁移
 - **Logger**: 可配置的日志记录器
+- **泛型 API**: 提供基于 Go 泛型的强类型查询入口（`gorm.G[T]` 系列），语言基础见 [Go 泛型](../reference/language-concepts/09-generics.md)
 - **可扩展性**: 灵活的插件系统
 - **开发者友好**: 语法糖、错误处理
 

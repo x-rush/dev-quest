@@ -20,12 +20,12 @@
 
 - ✅ 理解新架构（Fabric/TurboModules/JSI）对 API 用法的实际约束
 - ✅ 用 Expo Modules API 快速封装原生能力，必要时回落到 TurboModule
-- ✅ 掌握 Reanimated 3 的 worklet 编程模型，实现 UI 线程动画
+- ✅ 掌握 Reanimated 4 的 worklet 编程模型，实现 UI 线程动画
 - ✅ 判断"哪些操作必须离开 JS 线程"
 
 ## 🏗️ 新架构下的开发约束
 
-新架构（RN 0.76 起默认开启）把渲染与原生调用全部重构，日常影响集中在三点（原理详见 [Fabric/TurboModules/JSI 架构解析](../advanced-topics/architecture/01-new-architecture.md)）：
+新架构（0.76 起默认开启，0.83 起为唯一架构，旧架构已移除）把渲染与原生调用全部重构，日常影响集中在三点（原理详见 [Fabric/TurboModules/JSI 架构解析](../advanced-topics/architecture/01-new-architecture.md)）：
 
 1. **桥是同步的**：JSI 直调取代异步消息队列，原生同步方法（如 `measure`）不再强制回调地狱
 2. **懒加载原生模块**：TurboModule 首次访问才初始化，App 启动不再为未用到的模块付费（启动优化见 [启动性能优化](../advanced-topics/performance/02-startup-optimization.md)）
@@ -131,7 +131,7 @@ export function DraggableCard() {
 A: 把需要的数据用 `useSharedValue` 或参数传入 worklet；纯函数加 `'worklet';` 指令声明。
 
 **Q2: 新架构下第三方库报 `RCTBridge` 相关错误？**
-A: 该库未适配新架构。优先找替代库；否则确认 `app.json` 中 `newArchEnabled` 未关闭，等待/推动上游适配。
+A: 该库未适配新架构（现行 RN 已无旧架构兼容开关可退）。优先找替代库；否则等待/推动上游适配。
 
 **Q3: 鸿蒙端动画能跑吗？**
 A: RNOH 提供了 Fabric 与 Reanimated 的适配层，但部分版本支持滞后，发布前按 [RNOH 字典](../reference/language-concepts/05-harmonyos-rnoh-api.md) 核对版本对齐。

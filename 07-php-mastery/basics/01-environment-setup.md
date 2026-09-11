@@ -1,8 +1,8 @@
-# PHP 开发环境搭建 - PHP 8.3+ 与现代工具链
+# PHP 开发环境搭建 - PHP 8.5+ 与现代工具链
 
-> **文档简介**: 从零搭建现代化 PHP 开发环境，包括 PHP 8.3+ 运行时、Composer 依赖管理、Xdebug 调试器与 IDE 配置
+> **文档简介**: 从零搭建现代化 PHP 开发环境，包括 PHP 8.5+ 运行时、Composer 依赖管理、Xdebug 调试器与 IDE 配置
 >
-> **目标读者**: 有其他语言基础、首次系统学习 PHP 的开发者，或需要把旧环境升级到 PHP 8.3+ 的 PHP 开发者
+> **目标读者**: 有其他语言基础、首次系统学习 PHP 的开发者，或需要把旧环境升级到 PHP 8.5+ 的 PHP 开发者
 >
 > **前置知识**: 基本命令行操作经验，了解任意一门编程语言
 
@@ -13,41 +13,40 @@
 | **模块** | `07-php-mastery` |
 | **象限** | 教程 |
 | **难度** | ⭐ |
-| **标签** | `#环境搭建` `#PHP8.3` `#Composer` `#Xdebug` `#工具链` |
+| **标签** | `#环境搭建` `#PHP8.5` `#Composer` `#Xdebug` `#工具链` |
 | **更新日期** | `2026年9月` |
 
 ## 🎯 学习目标
 
 完成本文档后，你将能够：
 
-- ✅ 在本机安装并验证 PHP 8.3+ 运行时与常用扩展
+- ✅ 在本机安装并验证 PHP 8.5+ 运行时与常用扩展
 - ✅ 安装 Composer 并理解它在 PHP 生态中的角色
 - ✅ 配置 Xdebug 3 实现断点调试
 - ✅ 在 PhpStorm 或 VS Code 中完成 PHP 开发环境配置
 
-## 1. 安装 PHP 8.3+
+## 1. 安装 PHP 8.5+
 
-PHP 官方对每个版本提供约两年的安全支持。2026 年当前稳定版本为 **PHP 8.3（安全维护期）与 PHP 8.4（活跃支持期）**，本模块代码以 8.3+ 语法为基线、兼容 8.4。
+PHP 官方对每个版本提供约两年的安全支持。2026 年当前稳定版本为 **PHP 8.5（活跃支持期）**，8.4、8.3 仍在各自支持窗口内；本模块代码以 8.5 语法为基线。
 
 ### Linux（Ubuntu/Debian）
 
 推荐使用 Ondřej Surý 的 PPA 源，它提供最新版本与完整扩展：
 
 ```bash
-# 添加 PPA 并安装 PHP 8.3 及常用扩展
+# 添加 PPA 并安装 PHP 8.5 及常用扩展
 sudo add-apt-repository ppa:ondrej/php -y
 sudo apt update
-sudo apt install php8.3-cli php8.3-common \
-    php8.3-mbstring php8.3-xml php8.3-curl \
-    php8.3-sqlite3 php8.3-zip php8.3-intl
+sudo apt install php8.5-cli php8.5-common \
+    php8.5-mbstring php8.5-xml php8.5-curl \
+    php8.5-sqlite3 php8.5-zip php8.5-intl
 ```
 
 ### macOS
 
 ```bash
-# 使用 Homebrew 安装
-brew install php@8.3
-brew link --force php@8.3
+# 使用 Homebrew 安装（formula 默认即最新稳定版）
+brew install php
 ```
 
 ### Windows
@@ -58,7 +57,7 @@ brew link --force php@8.3
 
 ```bash
 php -v
-# PHP 8.3.x (cli) ... 即为成功
+# PHP 8.5.x (cli) ... 即为成功
 
 php -m          # 列出已加载扩展
 php --ini       # 查看当前使用的 php.ini 位置
@@ -141,7 +140,7 @@ php -v
 
 ### PhpStorm（推荐）
 
-1. **解释器**：`Settings → PHP`，选择 CLI Interpreter 为 php8.3
+1. **解释器**：`Settings → PHP`，选择 CLI Interpreter 为 php8.5
 2. **Xdebug**：`Settings → PHP → Debug`，确认端口 9003；`Settings → PHP → Servers` 添加服务器映射（服务器路径 ↔ 本地路径）
 3. **代码风格**：`Settings → PHP → Quality Tools` 接入 PHPStan / PHP CS Fixer
 4. 零配置调试：点击工具栏"监听 PHP Debug Connections"后访问带 `XDEBUG_SESSION=1` Cookie 的页面即命中断点
@@ -202,17 +201,17 @@ php check.php
 **A**: 按顺序排查：① `php -v` 确认扩展加载；② `xdebug.mode` 是否为 `debug`；③ IDE 监听端口是否为 9003；④ CLI 调试需要设置环境变量 `XDEBUG_SESSION=1`。
 
 ### Q3: Composer 提示缺少扩展？
-**A**: Composer 会按 `composer.json` 的 `require` 检查平台依赖。先安装对应扩展（如 `sudo apt install php8.3-mbstring`）再重试。
+**A**: Composer 会按 `composer.json` 的 `require` 检查平台依赖。先安装对应扩展（如 `sudo apt install php8.5-mbstring`）再重试。
 
 ## 🎯 练习与实践
 
 ### 基础练习
-- [ ] 安装 PHP 8.3+ 并让 `php check.php` 输出正确信息
+- [ ] 安装 PHP 8.5+ 并让 `php check.php` 输出正确信息
 - [ ] 创建一个空目录并运行 `composer init`，观察生成的 `composer.json`
 - [ ] 配置 Xdebug 并在 IDE 中对 `check.php` 打上断点命中一次
 
 ### 进阶挑战
-- [ ] 用 Docker 编写一个包含 PHP 8.3 + Xdebug 的 `Dockerfile`，在容器内复现本篇环境
+- [ ] 用 Docker 编写一个包含 PHP 8.5 + Xdebug 的 `Dockerfile`，在容器内复现本篇环境
 - [ ] 对比 `php.ini-development` 与 `php.ini-production` 的差异，列出你认为最重要的 5 项配置
 
 ---

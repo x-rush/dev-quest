@@ -1,10 +1,10 @@
 # 高级性能调优完整指南
 
-> **文档简介**: Next.js 15 + React 19 企业级高级性能调优指南，涵盖内存管理、并发优化、网络优化、缓存策略、预加载技术等深度优化策略
+> **文档简介**: Next.js 16 + React 19 企业级高级性能调优指南，涵盖内存管理、并发优化、网络优化、缓存策略、预加载技术等深度优化策略
 
 > **目标读者**: 高级前端工程师、性能专家、技术架构师、DevOps工程师
 
-> **前置知识**: Next.js 15深度掌握、React 19高级特性、Web性能基础、Chrome DevTools高级使用
+> **前置知识**: Next.js 16深度掌握、React 19高级特性、Web性能基础、Chrome DevTools高级使用
 
 > **预计时长**: 10-15小时
 
@@ -15,7 +15,7 @@
 | **模块** | `02-nextjs-frontend` |
 | **分类** | `advanced-topics/performance` |
 | **难度** | ⭐⭐⭐⭐⭐ (5/5星) |
-| **标签** | `#performance-optimization` `#advanced-optimization` `#memory-management` `#caching` `#nextjs15` `#react19` |
+| **标签** | `#performance-optimization` `#advanced-optimization` `#memory-management` `#caching` `#nextjs16` `#react19` |
 | **更新日期** | `2025年10月` |
 | **作者** | Dev Quest Team |
 | **状态** | ✅ 已完成 |
@@ -30,7 +30,7 @@
 
 ## 📖 概述
 
-本指南深入探讨Next.js 15应用的高级性能优化技术，涵盖从内存管理到网络传输的全方位优化策略。通过实际代码示例和最佳实践，帮助企业级应用达到极致性能标准。
+本指南深入探讨Next.js 16应用的高级性能优化技术，涵盖从内存管理到网络传输的全方位优化策略。通过实际代码示例和最佳实践，帮助企业级应用达到极致性能标准。
 
 ## 🧠 内存管理优化
 

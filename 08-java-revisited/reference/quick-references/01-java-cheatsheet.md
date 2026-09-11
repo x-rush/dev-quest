@@ -125,7 +125,7 @@ CompletableFuture.supplyAsync(ioTask, vthreadPool)
         .exceptionally(e -> fallback()).join();
 ```
 
-## 🧪 测试（JUnit5 + AssertJ）
+## 🧪 测试（JUnit 6 Jupiter + AssertJ）
 
 ```java
 @Test void works() { assertThat(calc(2)).isEqualTo(4); }

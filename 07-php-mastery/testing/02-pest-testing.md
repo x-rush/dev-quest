@@ -27,7 +27,7 @@
 
 ```bash
 composer remove phpunit/phpunit --dev   # Pest 依赖并接管 phpunit
-composer require --dev pestphp/pest pestphp/pest-plugin-laravel --dev
+composer require --dev pestphp/pest pestphp/pest-plugin-laravel --dev    # Pest 5（PHP 8.4+，基于 PHPUnit 13）；PHP 8.3 项目用 Pest 4
 ./vendor/bin/pest --init
 ```
 

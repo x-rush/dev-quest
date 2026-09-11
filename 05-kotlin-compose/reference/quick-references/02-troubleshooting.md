@@ -237,16 +237,16 @@ fun NoteCardPreview() {
 Sync 失败："KSP version is not compatible with the Kotlin version"。
 
 ### 原因与修复
-KSP 版本号格式是 `kotlin版本-ksp版本`（如 `2.2.20-2.0.4`），前半段必须与项目 Kotlin 版本一致。
+KSP 已改用**独立版本号**（如 `2.3.11`），不再使用 `kotlin版本-ksp版本` 拼接格式——KSP2 基于 Analysis API，与项目 Kotlin 版本解耦。出现不匹配报错时，把 KSP 插件升级到与当前 Kotlin 兼容的最新稳定版即可。
 
 ```toml
 [versions]
-kotlin = "2.2.20"
-ksp = "2.2.20-2.0.4"      # 前半段与 kotlin 一致
+kotlin = "2.4.20"
+ksp = "2.3.11"            # 独立版本号，升级 Kotlin 后无需强改
 ```
 
 ### 关联问题
-- JDK 不匹配（AGP 8.x 需 17+）→ `Settings → Gradle JDK` 选内置 JBR
+- JDK 不匹配（AGP 9.x 需 JDK 17+）→ `Settings → Gradle JDK` 选内置 JBR
 - 依赖混版本冲突 → 所有 Compose 库统一走 BOM，不带独立版本号
 
 ---

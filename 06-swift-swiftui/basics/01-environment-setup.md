@@ -29,9 +29,9 @@
 
 ### 1.1 检查系统要求
 
-开发 iOS 18+ 应用需要：
+开发 iOS 26 SDK 应用需要：
 
-- **macOS 版本**：Xcode 16.x 要求 macOS Sonoma 14.5 或更高（Xcode 26 要求 macOS Sequoia）
+- **macOS 版本**：Xcode 26.x 要求 macOS Sequoia 15.4 或更高（本模块基线为 Xcode 26.6）
 - **磁盘空间**：Xcode 本体约 12 GB，加上模拟器与组件缓存，建议预留 40 GB
 - **Apple ID**：免费账号即可开发与真机调试，付费账号才能上架 App Store
 
@@ -54,8 +54,10 @@ sudo xcode-select -s /Applications/Xcode.app/Contents/Developer
 
 # 验证安装
 xcode-select -p
-swift --version   # 应输出 Apple Swift version 6.x
+swift --version   # 应输出 Apple Swift version 6.3.x
 ```
+
+> 💡 如果只做命令行/服务端开发，或需要在多个 Swift 版本之间切换，可以用 swiftly 独立管理 Swift 工具链（见 swift.org/install）。iOS 开发仍以 Xcode 内置工具链为主。
 
 ## 🚀 第二步：创建第一个项目
 
@@ -89,7 +91,7 @@ SwiftNotes.xcodeproj         # 项目配置文件（Targets、签名、构建设
 
 ### 3.1 运行应用
 
-1. Xcode 左上角选择运行目标，如 **iPhone 16 Pro**
+1. Xcode 左上角选择运行目标，如 **iPhone 17 Pro**
 2. 按 `⌘R` 编译并运行
 3. 首次启动模拟器较慢，属正常现象
 
@@ -103,7 +105,7 @@ xcrun simctl list devices available
 xcrun simctl io booted screenshot ~/Desktop/shot.png
 
 # 清除某个模拟器的所有数据
-xcrun simctl erase "iPhone 16 Pro"
+xcrun simctl erase "iPhone 17 Pro"
 ```
 
 模拟器窗口内的常用快捷键：
@@ -162,7 +164,7 @@ Command Line Tools 未安装或未指向 Xcode。执行 `xcode-select --install`
 ### 练习一：基础练习
 
 - [ ] 安装 Xcode 并确认 `swift --version` 输出 6.x 版本号
-- [ ] 创建名为 `SwiftNotes` 的 SwiftUI 项目并成功运行在 iPhone 16 Pro 模拟器上
+- [ ] 创建名为 `SwiftNotes` 的 SwiftUI 项目并成功运行在 iPhone 17 Pro 模拟器上
 - [ ] 用 `xcrun simctl` 命令行截取一张模拟器屏幕截图
 
 ### 进阶挑战

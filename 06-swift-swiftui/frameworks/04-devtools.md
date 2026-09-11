@@ -105,7 +105,7 @@ var body: some View {
 
 ## 🛠️ 任务三：用 Instruments 定位性能问题
 
-入口：Xcode → Product → Profile（Cmd+I），或 Xcode 16+ 直接在画布预览下方点 Performance 徽章。
+入口：Xcode → Product → Profile（Cmd+I），或直接在画布预览下方点 Performance 徽章（Xcode 16 起提供）。
 
 | 场景 | 选哪个模板 | 看什么 |
 |------|-----------|--------|

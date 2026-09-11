@@ -8,6 +8,18 @@
 >
 > **预计学习时长**: 3-6个月系统学习路径
 
+## 🧪 技术基线
+
+> 本模块所有文档的版本基线，核实日期 **2026-09-11**，来源为各项目官方发布页。正文中旧版本引用以本基线为准对齐。
+
+| 技术 | 版本 | 核实日期 | 来源 |
+|------|------|---------|------|
+| Go | 1.25（补丁至 1.25.14；注：Go 1.26 已于 2026-02-10 发布，1.25 仍在官方支持窗口内，故基线取 1.25） | 2026-09-11 | [go.dev/blog/go1.25](https://go.dev/blog/go1.25) |
+| Gin | 1.12.0（满足 ≥1.10 基线） | 2026-09-11 | [gin-gonic/gin releases](https://github.com/gin-gonic/gin/releases) |
+| GORM | v1.31.2（最新稳定版；v1.30.0 起提供 `gorm.G[T]` 泛型 API） | 2026-09-11 | [pkg.go.dev/gorm.io/gorm](https://pkg.go.dev/gorm.io/gorm) |
+| MongoDB Go Driver | v2.8.2（最新稳定版；v1 路径已进入维护模式，新项目使用 `/v2`） | 2026-09-11 | [mongodb/mongo-go-driver releases](https://github.com/mongodb/mongo-go-driver/releases) |
+| go-redis | v9.22.0（v9 系列） | 2026-09-11 | [redis/go-redis releases](https://github.com/redis/go-redis/releases) |
+
 ## 📚 文档元数据
 
 | 属性 | 内容 |
@@ -16,7 +28,7 @@
 | **分类** | `module-overview` |
 | **难度** | ⭐⭐ |
 | **标签** | `#模块概述` `#学习路线` `#go后端` |
-| **更新日期** | `2025年10月` |
+| **更新日期** | `2026年9月` |
 | **作者** | Dev Quest Team |
 | **状态** | ✅ 已完成 |
 
@@ -30,6 +42,19 @@
 - **项目实战**: 通过真实项目巩固理论知识
 - **前沿应用**: 掌握微服务、云原生、高并发等先进技术
 
+## 🧭 四象限导览
+
+按内容用途四象限组织（规范见 `../shared-resources/standards/module-structure-guide.md`）。**字典参考（reference/）现有 20 篇，无难度门槛，可任意跳入查阅**：
+
+| 象限 | 目录 | 篇数 | 入口 |
+|------|------|------|------|
+| 📖 教程 | `basics/` | 6 | [环境搭建](basics/01-environment-setup.md) |
+| 🛠️ 操作指南 | `frameworks/` `projects/` `testing/` `deployment/` | 18 | [Gin 入门](frameworks/01-gin-framework-basics.md) · [REST API 实战](projects/01-rest-api-server.md) |
+| 📚 字典参考 | `reference/` | **20** | [语言核心](reference/language-concepts/01-go-keywords.md) · [框架核心](reference/framework-essentials/01-gin-framework.md) · [选型对比](reference/framework-essentials/03-sqlc-vs-gorm.md) · [路由器选型](reference/framework-essentials/04-router-selection.md) |
+| 🎓 深度解释 | `advanced-topics/` | 6 | [并发模式](advanced-topics/performance/01-concurrency-patterns.md) |
+
+> **字典无等级，学习有路径**：同一概念的完整解释在 `reference/` 只有一份权威条目，其他目录链接过去。
+
 ## 📁 目录结构
 
 ```
@@ -42,10 +67,17 @@
 │   │   ├── 03-go-programming-essentials.md # Go编程精华 ✅
 │   │   ├── 04-go-data-types.md    # 数据类型详解 ✅
 │   │   ├── 05-go-control-flow.md  # 控制流程详解 ✅
-│   │   └── 06-go-oop-concepts.md  # 面向对象概念 ✅
+│   │   ├── 06-go-oop-concepts.md  # 面向对象概念 ✅
+│   │   ├── 07-error-handling.md   # 错误处理字典 ✅
+│   │   ├── 08-concurrency-basics.md # 并发基础（goroutine/channel/sync） ✅
+│   │   └── 09-generics.md         # 泛型（Type Parameters） ✅
 │   ├── 🛠️ framework-essentials/   # 框架核心知识
 │   │   ├── 01-gin-framework.md    # Gin框架速查 ✅
-│   │   └── 02-gorm-orm.md         # GORM ORM速查 ✅
+│   │   ├── 02-gorm-orm.md         # GORM ORM速查 ✅
+│   │   ├── 03-sqlc-vs-gorm.md     # SQL-first vs ORM-first 选型对比 ✅
+│   │   ├── 04-router-selection.md # Gin/chi/echo 路由器选型对比 ✅
+│   │   ├── 05-mongo-driver.md     # MongoDB Go Driver 速查 ✅
+│   │   └── 06-go-redis.md         # go-redis 客户端速查 ✅
 │   ├── 📦 library-guides/         # 常用库指南
 │   │   ├── 01-go-standard-library.md # 标准库核心API ✅
 │   │   └── 02-third-party-libs.md  # 第三方库精选 ✅
@@ -125,12 +157,12 @@
 
 ## 🛠️ 技术栈概览
 
-### 核心技术
-- **语言**: Go 1.21+
-- **Web框架**: Gin (HTTP路由、中间件、模板引擎)
-- **ORM**: GORM (MySQL, PostgreSQL, SQLite)
-- **缓存**: Redis (go-redis客户端)
-- **NoSQL**: MongoDB (mongo-go-driver)
+### 核心技术（版本基线 2026-09-11，详见上方「技术基线」区块）
+- **语言**: Go 1.25+
+- **Web框架**: Gin 1.12+ (HTTP路由、中间件、模板引擎)
+- **ORM**: GORM 1.31+ (MySQL, PostgreSQL, SQLite)
+- **缓存**: Redis (go-redis/v9 客户端)
+- **NoSQL**: MongoDB (mongo-go-driver/v2)
 - **测试**: testing, testify, gomock, testcontainers
 - **部署**: Docker, Kubernetes, Vercel
 
@@ -189,7 +221,7 @@
 ---
 
 **模块状态**: ✅ 重构完成
-**最后更新**: 2025年10月
+**最后更新**: 2026年9月
 **版本**: v2.0.0
 
 > 💡 **学习建议**:
@@ -205,7 +237,7 @@
 
 ### 📚 核心学习资源
 - 📄 **[学习路径]**: [README 学习路径建议](README.md) - 入门/进阶/精通渐进式学习
-- 📄 **[知识速查手册]**: [reference/](reference/) - 快速查阅Go语言知识点
+- 📄 **[知识速查手册]**: [reference/](reference/) - 快速查阅Go语言知识点（20篇，含 [sqlc-vs-gorm](reference/framework-essentials/03-sqlc-vs-gorm.md) 与 [router-selection](reference/framework-essentials/04-router-selection.md) 选型对比）
 - 📄 **[系统化学习]**: [basics/](basics/) - 从零开始的渐进式学习
 
 ### 🛠️ 技术框架学习

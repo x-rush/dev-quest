@@ -27,7 +27,7 @@
 
 传统做法把 fat jar 一整个 COPY 进镜像——改一行代码也要重新上传几十 MB 的依赖层。
 
-Spring Boot 3 的 fat jar 天生分层：`java -Djarmode=tools -jar app.jar extract` 可把 **依赖 / 应用代码** 解到不同目录，各自成层，代码变更只失效最上层。
+Spring Boot 3.3+/4.x 的 fat jar 天生分层：`java -Djarmode=tools -jar app.jar extract` 可把 **依赖 / 应用代码** 解到不同目录，各自成层，代码变更只失效最上层。
 
 ## 🛠️ 二、多阶段构建 Dockerfile
 
@@ -45,7 +45,7 @@ RUN mvn -B package -DskipTests
 FROM eclipse-temurin:21-jre AS extractor
 WORKDIR /app
 COPY --from=build /app/target/app.jar ./app.jar
-# Boot 3.3+：jarmode=tools 解出分层目录
+# Boot 3.3+/4.x：jarmode=tools 解出分层目录
 RUN java -Djarmode=tools -jar app.jar extract --layers --destination extracted
 
 # ---------- 阶段 3：运行镜像 ----------
@@ -67,7 +67,7 @@ docker build -t todo-api:1.0.0 .
 docker run -p 8080:8080 --memory=512m todo-api:1.0.0
 ```
 
-> 运行类名以 `java -jar` 启动日志为准；Boot 3.2+ 的 Loader 类为 `org.springframework.boot.loader.launch.JarLauncher`。
+> 运行类名以 `java -jar` 启动日志为准；Boot 3.2+/4.x 的 Loader 类为 `org.springframework.boot.loader.launch.JarLauncher`。
 
 ## 🛠️ 三、容器中的 JVM 参数
 

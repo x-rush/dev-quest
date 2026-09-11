@@ -1,10 +1,10 @@
 # 应用扩展模式完整指南
 
-> **文档简介**: Next.js 15 + React 19 企业级应用扩展架构指南，涵盖水平扩展、垂直扩展、微服务架构、CDN、负载均衡、数据库扩展等全方位扩展策略
+> **文档简介**: Next.js 16 + React 19 企业级应用扩展架构指南，涵盖水平扩展、垂直扩展、微服务架构、CDN、负载均衡、数据库扩展等全方位扩展策略
 
 > **目标读者**: 高级前端工程师、系统架构师、DevOps工程师、技术总监
 
-> **前置知识**: Next.js 15深度掌握、React 19高级特性、分布式系统基础、云计算知识、DevOps实践
+> **前置知识**: Next.js 16深度掌握、React 19高级特性、分布式系统基础、云计算知识、DevOps实践
 
 > **预计时长**: 15-20小时
 
@@ -15,7 +15,7 @@
 | **模块** | `02-nextjs-frontend` |
 | **分类** | `advanced-topics/architecture` |
 | **难度** | ⭐⭐⭐⭐⭐ (5/5星) |
-| **标签** | `#scalability` `#architecture` `#microservices` `#load-balancing` `#cdns` `#nextjs15` |
+| **标签** | `#scalability` `#architecture` `#microservices` `#load-balancing` `#cdns` `#nextjs16` |
 | **更新日期** | `2025年10月` |
 | **作者** | Dev Quest Team |
 | **状态** | ✅ 已完成 |
@@ -23,7 +23,7 @@
 ## 🎯 学习目标
 
 - 深入理解Web应用扩展的不同策略和模式
-- 掌握Next.js 15应用的水平扩展和垂直扩展技术
+- 掌握Next.js 16应用的水平扩展和垂直扩展技术
 - 实施微服务架构和服务拆分策略
 - 建立高可用的负载均衡和故障转移机制
 - 实现多层级CDN缓存和全球内容分发

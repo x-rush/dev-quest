@@ -184,7 +184,7 @@ import (
     httpclient "net/http" // 给net/http起别名httpclient
 )
 
-// 相对导入 (Go 1.22+)
+// 相对导入（仅 GOPATH 时代可用，模块模式下编译报错，勿使用）
 import (
     "./utils"
     "../models"
@@ -346,16 +346,18 @@ default:
     println("Unknown day")
 }
 
-// switch表达式 (Go 1.22+)
-message := switch score {
-case 90, 100:
-    "Excellent"
-case 80, 89:
-    "Good"
-case 70, 79:
-    "Fair"
+// 注意：Go 的 switch 是语句而非表达式，不能像 `message := switch x {...}` 这样写（无法编译）。
+// 惯用替代：switch 语句内对局部变量赋值
+message := ""
+switch {
+case score >= 90:
+    message = "Excellent"
+case score >= 80:
+    message = "Good"
+case score >= 70:
+    message = "Fair"
 default:
-    "Need improvement"
+    message = "Need improvement"
 }
 
 // 无表达式的switch

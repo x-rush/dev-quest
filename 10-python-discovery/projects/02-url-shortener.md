@@ -140,7 +140,7 @@ uv run uvicorn main:app --reload
 
 # 创建
 curl -s -X POST localhost:8000/urls -H 'content-type: application/json' \
-  -d '{"url": "https://docs.python.org/3.12/"}'
+  -d '{"url": "https://docs.python.org/3.14/"}'
 # 跳转（-i 看 307 与 Location 头）
 curl -s -i localhost:8000/<code>
 # 统计（clicks 随跳转增长）

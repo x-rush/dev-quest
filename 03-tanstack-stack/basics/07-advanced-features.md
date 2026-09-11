@@ -86,7 +86,7 @@ function Feed() {
     useInfiniteQuery({
       queryKey: ['feed'],
       queryFn: ({ pageParam }) => api.fetchFeed(pageParam as number),
-      initialPageParam: 0, // v5 新要求：必须显式声明
+      initialPageParam: 0, // v5 起必填：必须显式声明首页游标
       getNextPageParam: (lastPage) => lastPage.nextCursor, // 返回 null/undefined 即无更多
     })
 
@@ -115,7 +115,7 @@ function Feed() {
 
 **关键点解析**：
 
-- v5 把 `initialPageParam` 设为**必填**，游标语义一目了然
+- v5 起 `initialPageParam` 为**必填**，游标语义一目了然
 - 缓存按 `pageParams` 完整记忆已加载的页，失效时整链重取
 - 每页渲染去重要自己处理（或配合 `select` 收敛）
 

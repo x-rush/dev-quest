@@ -1,10 +1,10 @@
-# Next.js 15 打包优化完全指南
+# Next.js 16 打包优化完全指南
 
-> **文档简介**: Next.js 15 现代打包优化完整指南，涵盖代码分割、Tree Shaking、Bundle分析、Turbopack优化等现代打包技术
+> **文档简介**: Next.js 16 现代打包优化完整指南，涵盖代码分割、Tree Shaking、Bundle分析、Turbopack优化等现代打包技术
 
 > **目标读者**: 具备Next.js基础的中高级开发者，需要优化应用性能和打包体积的前端工程师
 
-> **前置知识**: Next.js 15基础、Webpack/Turbopack概念、HTTP协议、性能优化基础、JavaScript模块化
+> **前置知识**: Next.js 16基础、Webpack/Turbopack概念、HTTP协议、性能优化基础、JavaScript模块化
 
 > **预计时长**: 6-10小时
 
@@ -23,7 +23,7 @@
 ## 🎯 学习目标
 
 ### 📦 企业级打包优化
-- 掌握Next.js 15现代化打包工具链和优化策略
+- 掌握Next.js 16现代化打包工具链和优化策略
 - 实现智能代码分割和动态导入，优化初始加载性能
 - 运用Tree Shaking消除无用代码，减少打包体积
 - 掌握Bundle分析和监控工具，持续优化性能
@@ -48,30 +48,27 @@
 
 ## 📖 概述
 
-Next.js 15 提供了业界领先的打包优化生态系统，结合 Webpack 5 和革命性的 Turbopack，为现代Web应用提供了极致的构建性能和运行时优化。本指南深入探讨企业级打包优化技术，从基础的代码分割到高级的微前端架构，帮助你构建高性能、可维护的现代化应用。
+Next.js 16 提供了业界领先的打包优化生态系统，结合 Webpack 5 和革命性的 Turbopack，为现代Web应用提供了极致的构建性能和运行时优化。本指南深入探讨企业级打包优化技术，从基础的代码分割到高级的微前端架构，帮助你构建高性能、可维护的现代化应用。
 
-## 🏗️ Next.js 15 打包架构概览
+## 🏗️ Next.js 16 打包架构概览
 
 ### 打包工具生态
 
-#### 🚀 Turbopack (默认推荐)
+#### 🚀 Turbopack (Next.js 16 默认打包器)
 ```typescript
-// next.config.js
+// next.config.ts
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // 启用 Turbopack (开发环境默认)
-  experimental: {
-    turbo: {
-      rules: {
-        '*.svg': {
-          loaders: ['@svgr/webpack'],
-          as: '*.js',
-        },
+  // Next.js 16：Turbopack 是 next dev 与 next build 的默认打包器，
+  // 配置位于顶层 turbopack 键（不再是 experimental.turbo）
+  turbopack: {
+    rules: {
+      '*.svg': {
+        loaders: ['@svgr/turbopack'],
+        as: '*.js',
       },
     },
   },
-  // 生产环境优化
-  swcMinify: true,
   compiler: {
     removeConsole: process.env.NODE_ENV === 'production',
   },
@@ -81,14 +78,16 @@ module.exports = nextConfig
 ```
 
 **Turbopack 核心优势**:
-- **增量构建**: 99%的更新时间 < 100ms
-- **内存缓存**: 智能依赖图缓存
-- **并行处理**: 多核CPU充分利用
+- **增量构建**: 99%的更新时间 < 100ms，Fast Refresh 最快可达 5-10 倍提升
+- **内存缓存**: 智能依赖图缓存，支持文件系统缓存进一步加速启动
+- **并行处理**: 多核CPU充分利用，生产构建相比 Webpack 快 2-5 倍
 - **TypeScript集成**: 原生TS支持，无需额外配置
 
-#### 📦 Webpack 5 (传统稳定)
+#### 📦 Webpack (迁移期回退)
 ```typescript
-// next.config.js - Webpack 自定义配置
+// next.config.ts - Webpack 自定义配置
+// ⚠️ Next.js 16 中 Webpack 不再是默认打包器：检测到 webpack 配置时
+// 必须以 next dev --webpack / next build --webpack 显式启用，否则构建失败
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   webpack: (config, { buildId, dev, isServer, defaultLoaders, webpack }) => {
@@ -693,11 +692,11 @@ export const cacheConfig = {
   },
 }
 
-// middleware.ts
+// proxy.ts（Next.js 16：由 middleware.ts 更名，运行于 Node.js runtime）
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 
-export function middleware(request: NextRequest) {
+export function proxy(request: NextRequest) {
   const response = NextResponse.next()
 
   // 静态资源缓存头
@@ -1385,7 +1384,7 @@ export default function Page() {
 
 ## 🎯 总结
 
-Next.js 15 的打包优化生态系统为现代Web应用提供了完整的优化解决方案。通过合理运用代码分割、Tree Shaking、缓存策略和监控工具，可以构建出高性能、用户友好的现代化应用。
+Next.js 16 的打包优化生态系统为现代Web应用提供了完整的优化解决方案。通过合理运用代码分割、Tree Shaking、缓存策略和监控工具，可以构建出高性能、用户友好的现代化应用。
 
 ## 🔄 文档交叉引用
 
@@ -1397,7 +1396,7 @@ Next.js 15 的打包优化生态系统为现代Web应用提供了完整的优化
 - 📄 **[调试工具](../development-tools/04-debugging-tools.md)**: 构建调试和性能分析
 
 ### 参考章节
-- 📖 **[Turbopack配置](#nextjs-15-打包架构概览)**: 革命性打包工具配置
+- 📖 **[Turbopack配置](#nextjs-16-打包架构概览)**: 革命性打包工具配置
 - 📖 **[代码分割策略](#代码分割策略)**: 智能分割和懒加载
 - 📖 **[Tree Shaking优化](#tree-shaking-优化)**: 死代码消除和依赖优化
 - 📖 **[Bundle分析](#bundle分析和监控)**: 打包分析和性能监控

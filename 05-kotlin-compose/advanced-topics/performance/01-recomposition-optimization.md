@@ -148,6 +148,6 @@ Baseline Profile 让核心路径（首屏、列表滚动）预编译，冷启动
 
 ## 🔗 相关文档
 
-- 📖 概念字典：[Compose 状态 API 详解](../../reference/language-concepts/04-compose-state-api.md) ｜ [Compose 核心组件速查](../../reference/framework-essentials/01-compose-essentials.md)
+- 📖 概念字典：[Compose 状态 API 详解](../../reference/language-concepts/04-compose-state-api.md) ｜ [重组与稳定性](../../reference/framework-essentials/04-recomposition.md) ｜ [Compose 核心组件速查](../../reference/framework-essentials/01-compose-essentials.md)
 - 📖 操作指南：[开发工具链](../../frameworks/04-devtools.md)（度量工具） ｜ [新闻阅读器](../../projects/03-news-reader.md)（key 实战）
 - 🎓 延伸解释：[启动与内存优化](02-startup-memory.md) ｜ [应用架构](../architecture/01-app-architecture.md)

@@ -62,7 +62,7 @@ CMD ["php-fpm"]
 ```dockerfile
 # Go应用Dockerfile (现代方式)
 # 多阶段构建
-FROM golang:1.21-alpine AS builder
+FROM golang:1.25-alpine AS builder
 
 # 设置工作目录
 WORKDIR /app
@@ -115,7 +115,7 @@ CMD ["./main"]
 #### 单阶段构建
 ```dockerfile
 # 基础单阶段构建
-FROM golang:1.21-alpine
+FROM golang:1.25-alpine
 
 # 设置工作目录
 WORKDIR /app
@@ -142,7 +142,7 @@ CMD ["./main"]
 #### 优化单阶段构建
 ```dockerfile
 # 优化的单阶段构建
-FROM golang:1.21-alpine
+FROM golang:1.25-alpine
 
 # 安装必要的系统依赖
 RUN apk add --no-cache git ca-certificates
@@ -184,7 +184,7 @@ CMD ["./main"]
 #### 标准多阶段构建
 ```dockerfile
 # 构建阶段
-FROM golang:1.21-alpine AS builder
+FROM golang:1.25-alpine AS builder
 
 # 设置工作目录
 WORKDIR /app
@@ -251,7 +251,7 @@ COPY frontend/ .
 RUN npm run build
 
 # Go构建阶段
-FROM golang:1.21-alpine AS go-builder
+FROM golang:1.25-alpine AS go-builder
 
 WORKDIR /app
 
@@ -451,7 +451,7 @@ networks:
 #### Dockerfile.prod
 ```dockerfile
 # 生产环境Dockerfile
-FROM golang:1.21-alpine AS builder
+FROM golang:1.25-alpine AS builder
 
 # 设置构建参数
 ARG VERSION=dev
@@ -687,7 +687,7 @@ jobs:
     - name: Set up Go
       uses: actions/setup-go@v3
       with:
-        go-version: '1.21'
+        go-version: '1.25'
 
     - name: Run tests
       run: |
@@ -835,7 +835,7 @@ func NewLogger(level string) *zap.Logger {
 ### 练习1: 构建基础Docker镜像
 ```dockerfile
 # 创建Dockerfile
-FROM golang:1.21-alpine AS builder
+FROM golang:1.25-alpine AS builder
 
 WORKDIR /app
 

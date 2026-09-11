@@ -2786,14 +2786,14 @@ func CleanupTestDB(t *testing.T, db *sql.DB) {
 // go.mod
 module github.com/yourcompany/yourproject
 
-go 1.21
+go 1.25
 
 require (
-    github.com/gin-gonic/gin v1.9.1
+    github.com/gin-gonic/gin v1.12.0
     github.com/golang-jwt/jwt/v5 v5.0.0
     github.com/stretchr/testify v1.8.4
     gorm.io/driver/mysql v1.5.2
-    gorm.io/gorm v1.25.5
+    gorm.io/gorm v1.31.2
 )
 
 // 间接依赖
@@ -2822,7 +2822,7 @@ go get -u=minor github.com/gin-gonic/gin
 go get -u=latest github.com/gin-gonic/gin
 
 # 固定版本
-go get github.com/gin-gonic/gin@v1.9.1
+go get github.com/gin-gonic/gin@v1.12.0
 
 # 使用commit hash
 go get github.com/gin-gonic/gin@da5c9f7
@@ -2863,7 +2863,7 @@ export GOPROXY=https://proxy.golang.org,https://your-private-proxy.company.com,d
 // go.mod
 module github.com/yourcompany/yourproject
 
-go 1.21
+go 1.25
 
 require (
     github.com/yourcompany/internal-auth v1.2.3
@@ -3193,7 +3193,7 @@ bench:
 #### Dockerfile
 ```dockerfile
 # 多阶段构建
-FROM golang:1.21-alpine AS builder
+FROM golang:1.25-alpine AS builder
 
 # 安装必要工具
 RUN apk add --no-cache git ca-certificates tzdata
@@ -3248,7 +3248,7 @@ on:
     branches: [ main ]
 
 env:
-  GO_VERSION: '1.21'
+  GO_VERSION: '1.25'
 
 jobs:
   test:

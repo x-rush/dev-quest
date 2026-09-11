@@ -51,7 +51,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        go-version: [1.21, 1.22, 1.23]
+        go-version: ['1.25', '1.26']
 ```
 
 ### 持续部署 (Continuous Deployment)
@@ -90,7 +90,7 @@ jobs:
     - name: Setup Go
       uses: actions/setup-go@v4
       with:
-        go-version: '1.21'
+        go-version: '1.25'
 
     - name: Cache Go modules
       uses: actions/cache@v3
@@ -138,7 +138,7 @@ jobs:
     - name: Setup Go
       uses: actions/setup-go@v4
       with:
-        go-version: '1.21'
+        go-version: '1.25'
     - name: Run golangci-lint
       uses: golangci/golangci-lint-action@v3
       with:
@@ -195,7 +195,7 @@ jobs:
     - name: Setup Go
       uses: actions/setup-go@v4
       with:
-        go-version: '1.21'
+        go-version: '1.25'
 
     - name: Cache Go modules
       uses: actions/cache@v3

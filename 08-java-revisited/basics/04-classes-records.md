@@ -147,7 +147,7 @@ public record Range(int low, int high) {
 ### record 的陷阱
 
 - **浅不可变**：组件是 `List` 等可变对象时，内部仍可被修改——构造时用 `List.copyOf` 做防御性拷贝
-- **访问器命名**：是 `x()` 而非 `getX()`；Jackson 2.12+ 已原生支持 record，老序列化框架可能不识别
+- **访问器命名**：是 `x()` 而非 `getX()`；Jackson 2.12+/3.x 已原生支持 record，老序列化框架可能不识别
 - **可选字段多**时，record 的全参构造器不友好，builder 模式仍更合适
 
 ## 🆚 如何选择

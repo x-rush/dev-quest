@@ -89,7 +89,7 @@ listRef.current?.scrollToOffset({ offset: 0, animated: true });
 并发特性：把非紧急更新降级，输入框打字不卡列表。
 
 ### 陷阱
-- 需 React 18+（RN 0.7x 默认满足）；长列表过滤场景收益明显
+- 需 React 18+（现行 RN 均满足）；长列表过滤场景收益明显
 
 ## RN 专用 Hooks（react-native 内置）
 

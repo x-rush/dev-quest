@@ -81,7 +81,7 @@ print(2 ** 100)  # 1267650600228229401496703205376 大整数无上限
 
 ## 3. f-string：现代格式化的唯一答案
 
-Python 3.12+ 的 f-string 支持嵌套引号与多行表达式，是最强的字符串插值方案：
+Python 3.12 起 f-string 支持嵌套引号与多行表达式，日常输出仍是首选的字符串插值方案：
 
 ```python
 name, price, qty = "机械键盘", 399.5, 2
@@ -112,7 +112,17 @@ data = {"user": {"name": "ada"}}
 print(f"用户名: {data["user"]["name"]}")  # 3.12 起允许内部再用双引号
 ```
 
-旧写法 `%` 与 `str.format()` 只需能读懂，新代码一律 f-string。
+**3.14 新增 t-string（PEP 750）**：`t"..."` 语法与 f-string 同形，但返回的不是 `str`，而是可延迟处理的模板对象——渲染交给库决定，适合 HTML 转义、SQL 参数化等防注入场景：
+
+```python
+title = "<script>攻击</script>"
+template = t"<h1>{title}</h1>"   # 模板对象，不会立即拼接
+# 由渲染库（如 html 支持库）决定如何转义 title 后再输出
+```
+
+入门阶段记住"f-string 直接出字符串、t-string 出模板对象"即可，详见[字符串格式化字典](../reference/language-concepts/12-string-formatting.md)。
+
+旧写法 `%` 与 `str.format()` 只需能读懂，新代码一律 f-string（需要防注入的模板渲染交给 t-string 生态）。
 
 ---
 

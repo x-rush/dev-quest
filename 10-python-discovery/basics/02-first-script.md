@@ -4,7 +4,7 @@
 >
 > **目标读者**: 已完成环境搭建、想跑通第一段 Python 代码的开发者
 >
-> **前置知识**: 已安装 Python 3.12+ 与 uv（见[环境搭建](./01-environment-setup.md)）
+> **前置知识**: 已安装 Python 3.14 与 uv（见[环境搭建](./01-environment-setup.md)）
 
 ## 📚 文档元数据
 
@@ -94,7 +94,7 @@ echo $?                  # 0（上一条命令的退出码）
 
 - **模块 docstring**：文件首行三引号字符串，`help(hello)` 时展示
 - **类型注解**：`name: str`、`-> str` 为现代 Python 标配，编辑器据此提供提示
-- **`list[str] | None`**：3.12+ 直接用内置泛型和 `|` 联合类型，无需 `typing.Optional`
+- **`list[str] | None`**：3.10+ 直接用内置泛型和 `|` 联合类型，无需 `typing.Optional`
 - **`main` 返回退出码**：让脚本可被 shell 与 CI 判断成败
 
 ---

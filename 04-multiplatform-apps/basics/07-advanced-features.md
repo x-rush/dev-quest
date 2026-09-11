@@ -22,7 +22,7 @@
 
 - ✅ 说清新架构三件套（Fabric/TurboModules/Codegen）各自的职责
 - ✅ 解释 Hermes 字节码对启动速度与内存的意义
-- ✅ 用 Reanimated 3 写出 60fps 的手势跟手动画
+- ✅ 用 Reanimated 4 写出 60fps 的手势跟手动画
 - ✅ 使用 Perf Monitor 与 DevTools 定位掉帧环节
 
 ## 🔍 核心概念
@@ -39,7 +39,7 @@
 | 优先级 | 全局统一 | 支持 Synchronous 渲染（如手势跟手） |
 | 挂载 | JS → 原生命令队列 | C++ 侧直接挂载，抖动更小 |
 
-**对业务的直接体感**: 长列表滚动更稳、模态/键盘弹出不再"跳变"、第三方原生组件兼容性由 Codegen 保障。RN 0.76+ 已默认开启，业务代码通常无需改动，但部分老库需升级到 Fabric 适配版。
+**对业务的直接体感**: 长列表滚动更稳、模态/键盘弹出不再"跳变"、第三方原生组件兼容性由 Codegen 保障。新架构自 RN 0.83 起是唯一架构（旧架构已移除），业务代码通常无需改动；未适配的旧库已无法使用，需换 Fabric 适配版或替代库。
 
 ### Hermes — 面向 RN 的 JS 引擎
 
@@ -50,9 +50,9 @@
 - 内存降低：字节码 mmap 映射，按需加载
 - 调试增强：支持 Hermes 调试协议（React Native DevTools 即基于此）
 
-Hermes 自 RN 0.70 起默认启用，检查方式：iOS 看 `Podfile` 中 `:hermes_enabled => true`，Android 看 `gradle.properties` 的 `hermesEnabled=true`。
+Hermes 默认启用，RN 0.84 起 V1 引擎为默认版本。Expo 工程开箱即用；bare 工程检查方式：iOS 看 `Podfile` 中 `:hermes_enabled => true`，Android 看 `gradle.properties` 的 `hermesEnabled=true`。
 
-## 💻 动画：Reanimated 3
+## 💻 动画：Reanimated 4
 
 **为什么不用 Animated**: 内置 `Animated` 的驱动逻辑跑在 JS 线程（或退化为原生驱动但能力受限），JS 繁忙时动画掉帧。Reanimated 把动画计算完全放到 UI 线程，手势跟手不卡顿。
 
@@ -146,10 +146,10 @@ const styles = StyleSheet.create({
 ## ❓ 常见问题
 
 ### Q1: 怎么确认我的 App 跑在新架构上？
-**A**: RN 0.76+ 默认开启；DevTools 启动日志或原生配置（Android `newArchEnabled=true`）可确认；老库混用时以官方 Upgrade Helper 结果为准。
+**A**: 现行 RN 全部默认新架构（0.83 起为唯一架构，旧架构开关已删除）；DevTools 启动日志可确认；老库混用时以官方 Upgrade Helper 结果为准。
 
 ### Q2: Reanimated 与 Gesture Handler 的安装顺序？
-**A**: 都装完后，确认 babel 配置含 `react-native-reanimated/plugin`（必须放插件列表最后），然后重新构建原生工程。
+**A**: `npx expo install` 安装即可——Expo 工程的 `babel-preset-expo` 已自动包含 worklets 插件（Reanimated 4 起插件移交 `react-native-worklets`，仍需放插件列表最后）；bare 工程需手动确认，然后重新构建原生工程。
 
 ### Q3: 鸿蒙端动画库怎么选？
 **A**: 使用 RNOH 官方适配列表中的版本（其组织下提供 harmony 补丁包），见 [05-harmonyos-rnoh-api](../reference/language-concepts/05-harmonyos-rnoh-api.md)。

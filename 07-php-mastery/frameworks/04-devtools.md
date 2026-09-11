@@ -89,7 +89,7 @@ composer analyze   # 运行（依赖上文 composer scripts）
 - 提示未使用的构造器参数与死代码
 - 强制数组形状（`array{title: string, body: string}`）替代裸数组
 
-Laravel 11 推荐同时使用 **Laravel Pint**（自动代码风格修复，`./vendor/bin/pint`）统一团队格式，把评审时间还给逻辑问题。
+Laravel 13 项目推荐同时使用 **Laravel Pint**（自动代码风格修复，`./vendor/bin/pint`）统一团队格式，把评审时间还给逻辑问题。
 
 ## 4. Xdebug 3
 

@@ -26,7 +26,7 @@
 ## 1. 安装与第一个测试
 
 ```bash
-composer require --dev phpunit/phpunit
+composer require --dev phpunit/phpunit    # PHPUnit 13（PHP 8.4+）；PHP 8.3 项目用 PHPUnit 12
 mkdir -p tests/Unit
 ```
 

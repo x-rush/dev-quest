@@ -1,10 +1,10 @@
-# Next.js 15 App Router 实战模式精要
+# Next.js 16 App Router 实战模式精要
 
-> **文档简介**: Next.js 15 App Router 完整指南，涵盖文件系统路由、动态路由、并行路由、拦截路由、中间件、路由保护等现代路由技术
+> **文档简介**: Next.js 16 App Router 完整指南，涵盖文件系统路由、动态路由、并行路由、拦截路由、中间件、路由保护等现代路由技术
 
 > **目标读者**: 具备Next.js基础的中高级开发者，需要掌握现代路由架构的前端工程师
 
-> **前置知识**: Next.js 15基础、React 19组件概念、TypeScript 5、文件系统、HTTP协议
+> **前置知识**: Next.js 16基础、React 19组件概念、TypeScript 5、文件系统、HTTP协议
 
 > **预计时长**: 6-10小时
 
@@ -22,7 +22,7 @@
 
 ## 📚 概述
 
-Next.js 15 的 App Router 是革命性的路由系统，基于 React Server Components 构建了全新的应用架构。本指南深入探讨 App Router 的实战模式、高级特性和企业级应用的最佳实践。
+Next.js 16 的 App Router 是革命性的路由系统，基于 React Server Components 构建了全新的应用架构。本指南深入探讨 App Router 的实战模式、高级特性和企业级应用的最佳实践。
 
 ## 🏗️ App Router 架构基础
 
@@ -563,16 +563,17 @@ import { StructuredData } from '@/components/seo/structured-data';
 
 // 动态路由属性接口
 interface BlogPostPageProps {
-  params: {
+  // Next.js 16：params 与 searchParams 均为 Promise，需 await 后使用
+  params: Promise<{
     slug: string;
-  };
-  searchParams: {
+  }>;
+  searchParams: Promise<{
     preview?: string;
     ref?: string;
     utm_source?: string;
     utm_medium?: string;
     utm_campaign?: string;
-  };
+  }>;
 }
 
 // 缓存的博客文章获取函数
@@ -648,7 +649,9 @@ export async function generateMetadata({
   params,
   searchParams
 }: BlogPostPageProps): Promise<Metadata> {
-  const post = await getBlogPost(params.slug, searchParams.preview === 'true');
+  const { slug } = await params;
+  const { preview } = await searchParams;
+  const post = await getBlogPost(slug, preview === 'true');
 
   if (!post) {
     return {
@@ -697,10 +700,10 @@ export async function generateMetadata({
     },
 
     alternates: {
-      canonical: `https://dev-quest.com/blog/${params.slug}`,
+      canonical: `https://dev-quest.com/blog/${slug}`,
       languages: {
-        'zh-CN': `https://dev-quest.com/blog/${params.slug}`,
-        'en': `https://dev-quest.com/en/blog/${params.slug}`,
+        'zh-CN': `https://dev-quest.com/blog/${slug}`,
+        'en': `https://dev-quest.com/en/blog/${slug}`,
       },
     },
   };
@@ -711,11 +714,11 @@ export default async function BlogPostPage({
   params,
   searchParams
 }: BlogPostPageProps) {
-  const { slug } = params;
-  const preview = searchParams.preview === 'true';
+  const { slug } = await params;
+  const { preview } = await searchParams;
 
   // 获取文章数据
-  const post = await getBlogPost(slug, preview);
+  const post = await getBlogPost(slug, preview === 'true');
 
   if (!post) {
     notFound();
@@ -1041,26 +1044,28 @@ import { X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 interface ReportModalProps {
-  params: {
+  // Next.js 16：params 与 searchParams 均为 Promise
+  params: Promise<{
     id: string;
-  };
-  searchParams: {
+  }>;
+  searchParams: Promise<{
     view?: string;
     tab?: string;
-  };
+  }>;
 }
 
 export default async function ReportModal({
   params,
   searchParams
 }: ReportModalProps) {
-  const report = await getReport(params.id);
+  const { id } = await params;
+  const report = await getReport(id);
 
   if (!report) {
     notFound();
   }
 
-  const { view = 'overview', tab = 'summary' } = searchParams;
+  const { view = 'overview', tab = 'summary' } = await searchParams;
 
   return (
     <Dialog open={true}>
@@ -1198,14 +1203,14 @@ export function PhotoModal({ children }: PhotoModalProps) {
 }
 ```
 
-## 🔧 中间件与路由保护
+## 🔧 代理（Proxy）与路由保护
 
-### 企业级中间件实现
+### 企业级代理（Proxy）实现
 
 **复杂的认证和授权中间件**
 
 ```typescript
-// middleware.ts
+// proxy.ts（Next.js 16：由 middleware.ts 更名，运行于 Node.js runtime）
 import { NextResponse, type NextRequest } from 'next/server';
 import { jwtVerify } from 'jose';
 import { createMiddleware } from 'next-intl/middleware';
@@ -1286,8 +1291,8 @@ const middlewareConfig = {
   },
 };
 
-// 主要中间件函数
-export default async function middleware(request: NextRequest) {
+// 主要代理函数
+export default async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const response = NextResponse.next();
 
@@ -1416,7 +1421,7 @@ async function checkRateLimit(request: NextRequest): Promise<NextResponse | null
 // 地理位置重定向
 async function handleGeoRedirect(request: NextRequest): Promise<NextResponse | null> {
   const { pathname } = request.nextUrl;
-  const country = request.geo?.country;
+  const country = request.headers.get('x-vercel-ip-country') // Vercel 地理信息头部;
 
   if (country && pathname === '/') {
     const redirectPath = middlewareConfig.geoRedirects['/'][country] ||
@@ -1607,38 +1612,38 @@ export const config = {
 
 ```typescript
 // lib/cache/strategies.ts
-import { unstable_cache } from 'next/cache';
-import { revalidateTag } from 'next/cache';
+// Next.js 16：unstable_cache 已弃用，改用 "use cache" + cacheLife/cacheTag 显式缓存
+import { revalidateTag, cacheLife, cacheTag } from 'next/cache';
 
-// 缓存策略配置
+// 缓存策略配置（以 cacheLife profile 表达时长）
 export const CacheStrategies = {
   // 短期缓存 - 频繁更新的数据
   shortTerm: {
-    revalidate: 60, // 1分钟
+    profile: 'minutes',
     tags: ['short-term'],
   },
 
   // 中期缓存 - 适度更新的数据
   mediumTerm: {
-    revalidate: 300, // 5分钟
+    profile: 'minutes', // 分钟级
     tags: ['medium-term'],
   },
 
   // 长期缓存 - 很少变化的数据
   longTerm: {
-    revalidate: 3600, // 1小时
+    profile: 'hours', // 小时级
     tags: ['long-term'],
   },
 
   // 静态数据 - 基本不变的数据
   static: {
-    revalidate: 86400, // 24小时
+    profile: 'days', // 天级
     tags: ['static'],
   },
 
-  // 实时数据 - 不缓存
+  // 实时数据 - 不使用 "use cache"，保持请求时动态渲染
   realtime: {
-    revalidate: 0,
+    profile: null,
     tags: ['realtime'],
   },
 };
@@ -1648,18 +1653,22 @@ export function withCache<T extends (...args: any[]) => Promise<any>>(
   fn: T,
   options: {
     key?: string;
-    revalidate?: number;
+    profile?: string;
     tags?: string[];
   } = {}
 ): T {
   const cacheKey = options.key || fn.name;
-  const revalidate = options.revalidate || 300;
+  const profile = options.profile || 'minutes';
   const tags = options.tags || [];
 
-  return unstable_cache(fn, {
-    revalidate,
-    tags: [cacheKey, ...tags],
-  }) as T;
+  const cached = async (...args: Parameters<T>): Promise<Awaited<ReturnType<T>>> => {
+    'use cache'
+    cacheLife(profile);
+    cacheTag(cacheKey, ...tags);
+    return fn(...args);
+  };
+
+  return cached as T;
 }
 
 // 数据获取函数
@@ -1680,7 +1689,7 @@ export const fetchUsers = withCache(
   },
   {
     key: 'users',
-    revalidate: 300,
+    profile: 'minutes',
     tags: ['users'],
   }
 );
@@ -1702,14 +1711,14 @@ export const fetchUserById = withCache(
   },
   {
     key: 'user-by-id',
-    revalidate: 60,
+    profile: 'minutes',
     tags: ['user-details'],
   }
 );
 
-// 缓存失效函数
+// 缓存失效函数（Next.js 16：revalidateTag 需传入 cacheLife profile 作为第二参数）
 export function invalidateCache(tags: string[]) {
-  tags.forEach(tag => revalidateTag(tag));
+  tags.forEach(tag => revalidateTag(tag, 'max'));
 }
 
 // 批量缓存失效
@@ -1758,7 +1767,7 @@ export function invalidatePostCache(slug: string) {
 
 ## 📖 总结
 
-App Router 是 Next.js 15 的核心特性，通过本指南我们深入探讨了：
+App Router 是 Next.js 16 的核心特性，通过本指南我们深入探讨了：
 
 ### 核心模式：
 1. **文件系统路由**: 基于文件夹结构的智能路由生成
@@ -1783,14 +1792,14 @@ App Router 是 Next.js 15 的核心特性，通过本指南我们深入探讨了
 - 安全可靠的中间件实现
 - SEO 友好的元数据管理
 
-通过掌握这些模式和最佳实践，开发者可以构建高性能、可维护、用户友好的现代 Web 应用，充分利用 Next.js 15 App Router 的强大功能。
+通过掌握这些模式和最佳实践，开发者可以构建高性能、可维护、用户友好的现代 Web 应用，充分利用 Next.js 16 App Router 的强大功能。
 
 ---
 
 ## 🔄 文档交叉引用
 
 ### 相关文档
-- 📄 **[服务端组件模式](./02-server-components-patterns.md)**: 深入了解Next.js 15服务端组件架构和缓存策略
+- 📄 **[服务端组件模式](./02-server-components-patterns.md)**: 深入了解Next.js 16服务端组件架构和缓存策略
 - 📄 **[客户端组件模式](./03-client-components-patterns.md)**: 掌握客户端组件开发和状态管理模式
 - 📄 **[数据获取模式](./04-data-fetching-patterns.md)**: 学习SSR/SSG/ISR等数据获取策略
 - 📄 **[认证流程模式](./07-authentication-flows.md)**: 实现企业级认证和权限控制系统

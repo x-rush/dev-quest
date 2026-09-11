@@ -1,6 +1,6 @@
-# Next.js 15 开发环境搭建完整指南
+# Next.js 16 开发环境搭建完整指南
 
-> **文档简介**: Next.js 15 开发环境企业级搭建指南，涵盖Node.js安装、IDE配置、开发工具、版本控制、调试环境等现代化开发环境
+> **文档简介**: Next.js 16 开发环境企业级搭建指南，涵盖Node.js安装、IDE配置、开发工具、版本控制、调试环境等现代化开发环境
 
 > **目标读者**: 初学者和需要环境升级的开发者，希望搭建标准化Next.js开发环境的前端工程师
 
@@ -22,7 +22,7 @@
 
 ## 🎯 学习目标
 
-- 搭建完整的Next.js 15开发环境
+- 搭建完整的Next.js 16开发环境
 - 安装和配置必要的开发工具
 - 理解现代前端开发工作流程
 - 配置TypeScript、ESLint和Prettier
@@ -31,7 +31,7 @@
 
 ## 📖 概述
 
-本综合指南将帮助您搭建Next.js 15开发环境，包含所有必要的工具和配置。现代前端开发与传统后端开发有很大不同，本指南将带您逐步完成每个设置步骤。
+本综合指南将帮助您搭建Next.js 16开发环境，包含所有必要的工具和配置。现代前端开发与传统后端开发有很大不同，本指南将带您逐步完成每个设置步骤。
 
 ## 💻 系统要求
 
@@ -227,7 +227,7 @@ yarn dev
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
+    "lint": "eslint .",
     "type-check": "tsc --noEmit",
     "format": "prettier --write .",
     "format:check": "prettier --check ."
@@ -235,7 +235,7 @@ yarn dev
   "dependencies": {
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "next": "15.0.0"
+    "next": "16.3.0"
   },
   "devDependencies": {
     "typescript": "^5.5.0",
@@ -557,7 +557,7 @@ git init
 git add .
 
 # 初始提交
-git commit -m "初始提交：Next.js 15项目设置"
+git commit -m "初始提交：Next.js 16项目设置"
 
 # 创建功能分支
 git checkout -b feature/new-feature
@@ -609,8 +609,8 @@ my-nextjs-app/
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
-    "lint:fix": "next lint --fix",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
     "type-check": "tsc --noEmit",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
@@ -745,7 +745,7 @@ npm ci
 - [ ] 安装Node.js 20.x LTS
 - [ ] 安装pnpm包管理器
 - [ ] 安装VS Code及扩展
-- [ ] 创建Next.js 15项目
+- [ ] 创建Next.js 16项目
 - [ ] 配置开发环境
 - [ ] 设置Git仓库
 - [ ] 验证所有配置正常工作
@@ -816,7 +816,7 @@ npm ci
 ### 学习成果检查
 - [ ] 是否成功安装Node.js 18.17+版本并能验证版本？
 - [ ] 是否掌握至少一种包管理器的基本使用方法？
-- [ ] 是否能够成功创建Next.js 15项目并启动开发服务器？
+- [ ] 是否能够成功创建Next.js 16项目并启动开发服务器？
 - [ ] 是否理解项目结构中各个配置文件的作用？
 - [ ] 是否能够配置基本的开发工具和代码规范？
 

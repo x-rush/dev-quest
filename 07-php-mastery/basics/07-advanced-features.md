@@ -1,6 +1,6 @@
 # 高级特性 - 枚举、属性注解与 Fibers
 
-> **文档简介**: 系统学习 PHP 8.1-8.4 的进阶语言特性：枚举、属性注解（Attributes）、Fibers 协程与一等公民 callable 语法
+> **文档简介**: 系统学习 PHP 8.1-8.5 的进阶语言特性：枚举、属性注解（Attributes）、Fibers 协程、一等公民 callable 语法与 8.4/8.5 增量
 >
 > **目标读者**: 已完成基础教程、希望写出地道现代 PHP 代码的中级学习者
 >
@@ -24,6 +24,7 @@
 - ✅ 用属性注解声明验证规则、路由等元数据并反射读取
 - ✅ 解释 Fiber 与线程/协程的关系，编写基础的 Fiber 协作调度
 - ✅ 在集合操作中使用一等公民 callable 语法简化代码
+- ✅ 建立 8.4/8.5 增量索引：属性钩子、管道运算符、URI 扩展
 
 ## 1. 枚举（PHP 8.1+）：类型安全的常量集合
 
@@ -247,9 +248,59 @@ var_dump($f->isTerminated());   // true —— 一次性执行完毕
 
 真实项目中一般不直接操作 Fiber，而是使用基于它的 async 库（如 Revolt + Amp）做并发 HTTP/MySQL 请求。
 
+## 5. 8.4/8.5 增量速览：属性钩子、管道运算符与 URI 扩展
+
+这三个特性不改变既有写法，但在进阶阶段值得建立索引——完整条目见 [PHP 8.4/8.5 增量特性](../reference/language-concepts/12-modern-php-85.md)。
+
+### 属性钩子（8.4+）：把 getter/setter 写进属性
+
+```php
+<?php
+
+declare(strict_types=1);
+
+final class Profile
+{
+    public string $email {
+        set (string $value) {
+            if (! str_contains($value, '@')) {
+                throw new ValueError('邮箱格式非法');
+            }
+            $this->email = strtolower($value);   // 写入底层存储
+        }
+    }
+}
+
+$p = new Profile();
+$p->email = 'ADA@Example.COM';
+echo $p->email, PHP_EOL;    // ada@example.com
+```
+
+要点：`get`/`set` 钩子内联读写行为，可定义无底层存储的虚拟属性；与 `readonly` 互斥；`get` 里再读 `$this->prop` 会递归。
+
+### 管道运算符（8.5+）：从左往右读的数据流
+
+```php
+$title = '  modern php  ';
+$clean = $title |> trim(...) |> mb_strtoupper(...);   // MODERN PHP
+```
+
+右侧必须是**单参数** callable；多参数函数用一等公民语法固化参数或用闭包包装。
+
+### URI 扩展（8.5+）：类型化的 URL 解析
+
+```php
+$uri = new Uri\Rfc3986\Uri('https://example.com:8080/a?x=1');
+echo $uri->getHost(), PHP_EOL;    // example.com
+$next = $uri->withPath('/b');     // 不可变：with* 返回新实例
+```
+
+`Uri\WhatWg\Url` 按浏览器同款 WHATWG 规则构造即校验，非法输入抛 `InvalidUrlException`；两者共同取代 `parse_url()` 的碎片化数组输出。
+
 ## ✅ 最佳实践
 
 - ✅ **数据库可枚举状态一律用 Backed Enum**：配合 `match` 的穷尽性检查，新增状态时静态分析兜底
+- ✅ **新特性先查字典再上手**：8.4/8.5 的钩子语法与管道限制等细节见 [增量特性条目](../reference/language-concepts/12-modern-php-85.md)
 - ✅ **属性注解只做元数据**：复杂校验逻辑交给读取注解的通用服务（如 Validator）
 - ✅ **回调一律 `Foo::method(...)` 语法**：重构时 IDE 全程追踪，消灭字符串回调
 - ❌ **不要把枚举当命名空间**：一个枚举表达一个封闭状态集，不要塞无关 case
@@ -283,4 +334,5 @@ var_dump($f->isTerminated());   // true —— 一次性执行完毕
 
 - 📄 **[综合练习：CLI 任务管理工具](./08-first-project.md)** — 用枚举与属性完成真实项目
 - 📄 **[类型系统与现代 OOP 全表](../reference/language-concepts/03-types-oop-modern.md)** — 本篇各特性的条目式权威速查
+- 📄 **[PHP 8.4/8.5 增量特性](../reference/language-concepts/12-modern-php-85.md)** — 属性钩子/管道运算符/URI 扩展条目式全表
 - 📄 **[关键字详解](../reference/language-concepts/01-php-keywords.md)** — `enum`/`match`/`fn` 关键字精确定义

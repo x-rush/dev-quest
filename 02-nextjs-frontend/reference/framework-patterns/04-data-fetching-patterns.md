@@ -1,10 +1,10 @@
 # 企业级数据获取模式详解
 
-> **文档简介**: Next.js 15 + React 19 企业级数据获取完整指南，涵盖SSG/SSR/ISR、客户端获取、缓存策略、流式渲染、GraphQL、API设计等现代数据获取技术
+> **文档简介**: Next.js 16 + React 19 企业级数据获取完整指南，涵盖SSG/SSR/ISR、客户端获取、缓存策略、流式渲染、GraphQL、API设计等现代数据获取技术
 
 > **目标读者**: 具备Next.js基础的中高级开发者，需要构建高性能数据获取系统的前端工程师
 
-> **前置知识**: Next.js 15基础、React 19、TypeScript 5、HTTP协议、缓存概念、异步编程
+> **前置知识**: Next.js 16基础、React 19、TypeScript 5、HTTP协议、缓存概念、异步编程
 
 > **预计时长**: 8-12小时
 
@@ -22,7 +22,7 @@
 
 ## 📚 概述
 
-Next.js 15 与 React 19 提供了企业级的数据获取生态系统，涵盖服务器组件、客户端组件、API 路由、缓存策略、流式渲染等。本指南深入探讨企业级数据获取模式，结合现代工具和最佳实践，构建高性能、可扩展的数据获取架构。
+Next.js 16 与 React 19 提供了企业级的数据获取生态系统，涵盖服务器组件、客户端组件、API 路由、缓存策略、流式渲染等。本指南深入探讨企业级数据获取模式，结合现代工具和最佳实践，构建高性能、可扩展的数据获取架构。
 
 ## 🏗️ 数据获取架构概览
 
@@ -155,9 +155,9 @@ async function getPostData(slug: string) {
 }
 
 // 条件渲染和错误处理
-export default async function PostPage({ params }: { params: { slug: string } }) {
+export default async function PostPage({ params }: { params: Promise<{ slug: string }> }) {
   try {
-    const { post, relatedPosts, author } = await getPostData(params.slug);
+    const { post, relatedPosts, author } = await getPostData((await params).slug);
 
     if (!post) {
       notFound();
@@ -201,9 +201,9 @@ export default async function PostPage({ params }: { params: { slug: string } })
 }
 
 // 元数据生成
-export async function generateMetadata({ params }: { params: { slug: string } }) {
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
   try {
-    const { post, author } = await getPostData(params.slug);
+    const { post, author } = await getPostData((await params).slug);
 
     return {
       title: post.title,
@@ -1214,7 +1214,7 @@ const updateUserSchema = z.object({
 // GET /api/v1/users/[id]
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const user = await requireAuth(request);
@@ -1227,7 +1227,7 @@ export async function GET(
       );
     }
 
-    const targetUser = await getUserById(params.id);
+    const targetUser = await getUserById((await params).id);
     if (!targetUser) {
       return NextResponse.json(
         { error: 'User not found' },
@@ -1241,7 +1241,7 @@ export async function GET(
     return NextResponse.json(userResponse);
 
   } catch (error) {
-    console.error(`GET /api/v1/users/${params.id} error:`, error);
+    console.error(`GET /api/v1/users/${(await params).id} error:`, error);
 
     return NextResponse.json(
       { error: 'Internal server error' },
@@ -1253,7 +1253,7 @@ export async function GET(
 // PATCH /api/v1/users/[id]
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const user = await requireAuth(request);
@@ -1269,7 +1269,7 @@ export async function PATCH(
     const body = await request.json();
     const validatedData = updateUserSchema.parse(body);
 
-    const updatedUser = await updateUser(params.id, {
+    const updatedUser = await updateUser((await params).id, {
       ...validatedData,
       updatedBy: user.id,
     });
@@ -1286,7 +1286,7 @@ export async function PATCH(
     return NextResponse.json(userResponse);
 
   } catch (error) {
-    console.error(`PATCH /api/v1/users/${params.id} error:`, error);
+    console.error(`PATCH /api/v1/users/${(await params).id} error:`, error);
 
     if (error instanceof z.ZodError) {
       return NextResponse.json(
@@ -1305,7 +1305,7 @@ export async function PATCH(
 // DELETE /api/v1/users/[id]
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const user = await requireAuth(request);
@@ -1319,14 +1319,14 @@ export async function DELETE(
     }
 
     // 防止用户删除自己
-    if (user.id === params.id) {
+    if (user.id === (await params).id) {
       return NextResponse.json(
         { error: 'Cannot delete your own account' },
         { status: 400 }
       );
     }
 
-    const deleted = await deleteUser(params.id, user.id);
+    const deleted = await deleteUser((await params).id, user.id);
 
     if (!deleted) {
       return NextResponse.json(
@@ -1338,7 +1338,7 @@ export async function DELETE(
     return NextResponse.json({ message: 'User deleted successfully' });
 
   } catch (error) {
-    console.error(`DELETE /api/v1/users/${params.id} error:`, error);
+    console.error(`DELETE /api/v1/users/${(await params).id} error:`, error);
 
     return NextResponse.json(
       { error: 'Internal server error' },
@@ -2027,7 +2027,7 @@ async function getClientIP(): Promise<string> {
 
 ## 📖 总结
 
-Next.js 15 的数据获取生态系统提供了企业级的解决方案：
+Next.js 16 的数据获取生态系统提供了企业级的解决方案：
 
 ### 核心特性：
 1. **多样化选择**: 从静态生成到实时获取的完整解决方案
@@ -2041,7 +2041,7 @@ Next.js 15 的数据获取生态系统提供了企业级的解决方案：
 3. **错误处理**: 实现健壮的错误处理和恢复机制
 4. **安全第一**: 严格的输入验证和权限控制
 
-通过合理的数据获取架构，可以构建高性能、安全、可维护的 Next.js 15 企业应用。
+通过合理的数据获取架构，可以构建高性能、安全、可维护的 Next.js 16 企业应用。
 
 ---
 
@@ -2066,7 +2066,7 @@ Next.js 15 的数据获取生态系统提供了企业级的解决方案：
 2. **缓存系统**: Next.js内置缓存和自定义缓存策略
 3. **客户端获取**: SWR、React Query等现代数据获取库
 4. **GraphQL集成**: Apollo Client和服务器端集成
-5. **Server Actions**: Next.js 15的革命性数据操作模式
+5. **Server Actions**: Next.js 16的革命性数据操作模式
 
 ### 学习成果检查
 - [ ] 是否理解了不同数据获取策略的适用场景？

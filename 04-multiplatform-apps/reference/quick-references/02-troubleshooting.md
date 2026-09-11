@@ -72,7 +72,7 @@ npx expo install --check       # 校正为 SDK 匹配版本
 |------|------|
 | `Unable to resolve module X` | `rm -rf node_modules && npm i`，必要时 `--reset-cache` 重启 Metro |
 | 装了库但原生方法 undefined | 原生代码未链接进工程：重新构建原生；iOS 补跑 `pod install` |
-| React 版本冲突警告 | RN 0.7x 对应固定 React 版本区间，以官方版本表为准，不要单独升 React |
+| React 版本冲突警告 | 每个 RN 版本绑定固定 React 版本（如 RN 0.86 ↔ React 19.2），以官方版本表为准，不要单独升 React |
 | 同一库两个大版本并存 | peerDependencies 冲突，升级依赖它的库或用 overrides 钉住版本 |
 
 ## 鸿蒙适配类

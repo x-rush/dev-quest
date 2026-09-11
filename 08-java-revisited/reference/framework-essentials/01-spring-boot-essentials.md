@@ -1,8 +1,8 @@
 # Spring Boot 核心速查
 
-> **文档简介**: Spring Boot 3.x 核心条目速查：自动配置机制、核心注解、REST 与配置绑定、Actuator 端点，以及从 Boot 2 迁移的关键变化
+> **文档简介**: Spring Boot 4.x 核心条目速查：自动配置机制、核心注解、REST 与配置绑定、Actuator 端点，以及从 Boot 2 / Boot 3 迁移的关键变化
 >
-> **目标读者**: 有旧版 Spring/Boot 经验、需要对照现代化（Boot 3.x + Jakarta + Java 21/25）的开发者
+> **目标读者**: 有旧版 Spring/Boot 经验、需要对照现代化（Boot 4.x + Jakarta EE 11 + Java 21/25）的开发者
 >
 > **前置知识**: IoC/依赖注入概念；Java 基础见 [现代 Java 特性](../../basics/07-modern-features.md)
 
@@ -25,6 +25,23 @@
 | 自动配置注册 | `META-INF/spring.factories` | `META-INF/spring/org.springframework.boot.autoconfigure.AutoConfiguration.imports` |
 | Spring Framework | 5.x | 6.x（原生 AOT、虚拟线程友好） |
 | 可观测性 | Micrometer 1.x | Micrometer 1.x + Observation API 统一指标/追踪 |
+
+## 🚀 Boot 3.x → 4.x 关键变化（2025-11 发布 4.0，基于 Spring Framework 7）
+
+| 变化点 | Boot 3.x | Boot 4.x |
+|--------|----------|----------|
+| 基础框架 | Spring Framework 6.x | **Spring Framework 7.x**（Jakarta EE 11：Servlet 6.1 / JPA 3.2 / Validation 3.1） |
+| JSON 库 | Jackson 2（`com.fasterxml.jackson`） | **Jackson 3**（`tools.jackson`；注解仍是 `com.fasterxml.jackson.annotation`），自动配置 `JsonMapper` |
+| Web MVC starter | `spring-boot-starter-web` | **`spring-boot-starter-webmvc`** |
+| AOP starter | `spring-boot-starter-aop` | **`spring-boot-starter-aspectj`** |
+| 错误处理属性 | `server.error.*` | **`spring.web.error.*`**（如 `spring.web.error.include-message`、`spring.web.error.whitelabel.enabled`） |
+| 内嵌服务器 | Tomcat 10 / Jetty 12 | Tomcat 11 / Jetty 12.1（Servlet 6.1；Undertow 支持移除） |
+| Spring Security | 6.x | **7.0.x** |
+| 空安全 | JSR 305 | **JSpecify**（框架 API 全面标注） |
+| 测试栈 | JUnit 5 + Testcontainers 1.x | **JUnit 6（Jupiter）+ Testcontainers 2.0**（artifact 改名 `testcontainers-*`） |
+| 新能力 | — | API 版本化、HTTP Service Clients、starter 全面模块化（Flyway/Liquibase 需独立 starter） |
+
+> 属性批量迁移用官方 `spring-boot-properties-migrator`（runtime 依赖，迁移完移除）；逐条对照见 [Boot 3→4 迁移速查](../quick-references/03-spring-boot4-migration.md)。
 
 ## 🏗️ 启动与自动配置
 
@@ -150,9 +167,9 @@ management:
 
 - ✅ 依赖注入用**构造器注入**（final 字段、可测试）；不用字段 `@Autowired`
 - ✅ 配置用 `@ConfigurationProperties` + record，不用散落的 `@Value`
-- ✅ 虚拟线程开启：`spring.threads.virtual.enabled=true`（Boot 3.2+，Java 21+）
+- ✅ 虚拟线程开启：`spring.threads.virtual.enabled=true`（Boot 3.2 引入，Boot 4 沿用；Java 21+）
 - ❌ 不要在 `@Configuration` 里互相 `new` 部件——交给容器
-- ❌ 不要用 `javax.*` 导入（Boot 3 必用 `jakarta.*`）
+- ❌ 不要用 `javax.*` 导入（Boot 3/4 必用 `jakarta.*`）
 - ❌ 不要吞掉 `@Transactional` 边界内的受检异常期望回滚（默认不回滚，见 [JPA 核心](./02-jpa-essentials.md)）
 
 ## 🔗 相关文档

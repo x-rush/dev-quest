@@ -47,7 +47,7 @@ const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       staleTime: 60_000,          // 数据 60 秒内视为新鲜，不重复请求
-      gcTime: 5 * 60_000,         // 无观察者后 5 分钟才回收缓存（v5 用 gcTime，不是 v4 的 cacheTime）
+      gcTime: 5 * 60_000,         // 无观察者后 5 分钟才回收缓存（cacheTime 已在 v5 移除）
       retry: 2,                   // 失败自动重试 2 次（指数退避）
       refetchOnWindowFocus: true, // 回到标签页时校验数据
     },
@@ -103,7 +103,7 @@ export function useTodos() {
 function TodoList() {
   const { isPending, isError, error, data } = useTodos()
 
-  if (isPending) return <p>加载中…</p>        // v5 用 isPending，不是 v4 的 isLoading
+  if (isPending) return <p>加载中…</p>        // v5：isPending 时 data 类型收窄为 undefined，判空后再渲染
   if (isError) return <p role="alert">出错了：{error.message}</p>
 
   return (
@@ -116,7 +116,7 @@ function TodoList() {
 }
 ```
 
-**注意 v5 命名变化**：`isPending`（尚无数据）取代了 `isLoading` 的主要判断位置；`isLoading` 现在等价于 `isPending && isFetching`。参数上 `cacheTime` 已更名为 `gcTime`。
+**注意 v5 命名与类型**：`isPending`（尚无数据）是主要判断分支，且此状态下 `data` 类型收窄为 `undefined`，先判空再渲染才能通过 TS 检查；`isLoading` 等价于 `isPending && isFetching`。参数上 `cacheTime` 已在 v5 移除，只有 `gcTime`。
 
 ---
 
@@ -205,7 +205,7 @@ export function useTodoDetail(id: number) {
 
 - 把派生数据存进缓存：用 `select` 或组件内 useMemo 派生
 - 在键里放不稳定的引用（函数、每轮渲染新建的对象字面量）
-- 用 v4 的 API 名字写 v5 代码：`isLoading`（作为主要分支判断）、`cacheTime`
+- 用过时的 API 名写 v5 代码：`isLoading`（作为主要分支判断）、`cacheTime`（v5 已移除）、`keepPreviousData` 选项（v4 的它已在 v5 移除，改用 `placeholderData: (prev) => prev` 或内置 `keepPreviousData` 帮助函数）
 
 ---
 

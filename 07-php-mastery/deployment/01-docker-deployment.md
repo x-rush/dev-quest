@@ -27,7 +27,7 @@
 
 ```dockerfile
 # Dockerfile —— 构建阶段与运行阶段分离，最终镜像不含 composer/dev 依赖
-FROM php:8.3-cli AS build
+FROM php:8.5-cli AS build
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
         git unzip libzip-dev \
@@ -43,7 +43,7 @@ RUN composer dump-autoload --optimize && php artisan config:cache && php artisan
 
 
 # 运行阶段：只拷贝产物
-FROM php:8.3-fpm-alpine
+FROM php:8.5-fpm-alpine
 
 RUN docker-php-ext-install pdo_mysql opcache
 

@@ -1,4 +1,4 @@
-# Next.js 15 SaaS平台开发实战
+# Next.js 16 SaaS平台开发实战
 
 > 通过构建一个功能完整的企业级SaaS平台，掌握现代SaaS应用开发的核心技术和商业模式。本项目涵盖多租户架构、订阅计费、用户管理、API集成、实时协作等企业级SaaS系统的关键功能。
 
@@ -12,7 +12,7 @@
 | **模块** | `02-nextjs-frontend` |
 | **分类** | `projects` |
 | **难度** | ⭐⭐⭐⭐⭐ (5/5星) |
-| **标签** | `Next.js 15` `React 19` `TypeScript 5` `SaaS` `多租户` `订阅计费` `Stripe Billing` |
+| **标签** | `Next.js 16` `React 19` `TypeScript 5` `SaaS` `多租户` `订阅计费` `Stripe Billing` |
 | **更新日期** | `2025年10月` |
 | **作者** | Dev Quest Team |
 | **状态** | ✅ 已完成 |
@@ -45,7 +45,7 @@ SaaS（Software as a Service）是现代软件行业的重要商业模式，需�
 - 📧 邮件通知和自动化
 
 ### 技术栈
-- **前端框架**: Next.js 15 + React 19
+- **前端框架**: Next.js 16 + React 19
 - **开发语言**: TypeScript 5
 - **UI组件库**: Shadcn/ui + Tailwind CSS
 - **状态管理**: Zustand + React Query
@@ -127,7 +127,7 @@ saas-platform/
 │   └── seed.ts                 # 种子数据
 ├── emails/                      # 邮件模板
 ├── public/                     # 静态资源
-└── middleware.ts              # 中间件
+└── proxy.ts                   # 网络代理（原中间件）
 ```
 
 ### 多租户数据库设计
@@ -441,7 +441,7 @@ enum AuditAction {
 
 #### 1.1 创建Next.js项目
 ```bash
-# 创建Next.js 15项目
+# 创建Next.js 16项目
 npx create-next-app@latest saas-platform --typescript --tailwind --eslint --app
 
 # 进入项目目录
@@ -552,15 +552,15 @@ export class TenantDB {
 }
 ```
 
-#### 1.3 实现多租户中间件
-**middleware.ts**:
+#### 1.3 实现多租户代理（proxy.ts）
+**proxy.ts**（Next.js 16：原 middleware.ts）:
 ```typescript
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 import { getToken } from 'next-auth/jwt'
 import { prisma } from '@/lib/db/prisma'
 
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   const token = await getToken({ req: request })
   const { pathname, host } = request.nextUrl
 
@@ -3601,7 +3601,7 @@ module.exports = nextConfig
 - 📄 **[03-dashboard-analytics.md](./03-dashboard-analytics.md)**: 数据仪表板项目实战
 
 ### 参考章节
-- 📖 **[Framework Deep Dive - Next.js](../frameworks/01-nextjs-15-complete.md)**: Next.js核心特性深度学习
+- 📖 **[Framework Deep Dive - Next.js](../frameworks/01-nextjs-16-complete.md)**: Next.js核心特性深度学习
 - 📖 **[Database - Multi-tenant Architecture](../frameworks/03-full-stack-patterns.md)**: 多租户架构最佳实践
 - 📖 **[Authentication - NextAuth](../reference/framework-patterns/07-authentication-flows.md)**: NextAuth.js高级配置
 
@@ -3637,7 +3637,7 @@ module.exports = nextConfig
 ## 🔗 外部资源
 
 ### 官方文档
-- [Next.js 15 Documentation](https://nextjs.org/docs)
+- [Next.js 16 Documentation](https://nextjs.org/docs)
 - [Stripe Billing Documentation](https://stripe.com/docs/billing)
 - [Prisma Multi-tenant Guide](https://www.prisma.io/docs/guides/performance-and-optimization/multi-tenant-architecture)
 - [NextAuth.js Documentation](https://next-auth.js.org/)

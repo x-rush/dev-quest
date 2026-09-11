@@ -1,6 +1,6 @@
 # React组件测试指南 (Component Testing Guide)
 
-> **文档简介**: 从PHP开发者视角深入理解React组件测试，掌握Next.js 15 + React 19现代测试工具栈和最佳实践。
+> **文档简介**: 从PHP开发者视角深入理解React组件测试，掌握Next.js 16 + React 19现代测试工具栈和最佳实践。
 
 > **目标读者**: 具备React基础，希望系统学习组件测试的中级开发者
 
@@ -15,7 +15,7 @@
 | **模块** | `02-nextjs-frontend` |
 | **分类** | `testing` |
 | **难度** | ⭐⭐⭐⭐ (4/5星) |
-| **标签** | `#react-testing` `#component-testing` `#rtl` `#vitest` `#nextjs15` |
+| **标签** | `#react-testing` `#component-testing` `#rtl` `#vitest` `#nextjs16` |
 | **更新日期** | `2025年10月` |
 | **作者** | Dev Quest Team |
 | **状态** | ✅ 已完成 |

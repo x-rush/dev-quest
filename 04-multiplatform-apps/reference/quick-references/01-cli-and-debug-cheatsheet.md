@@ -16,8 +16,8 @@
 
 ```bash
 # 创建工程
-npx create-expo-app@latest MyApp                    # Expo 路线
-npx @react-native-community/cli init MyApp          # bare 路线
+npx create-expo-app@latest MyApp                    # Expo 路线（默认模板含 expo-router；--template default@sdk-57 可锁 SDK）
+npx @react-native-community/cli init MyApp          # bare 路线（RN 0.87：Node 22+ / AGP 9 / Kotlin 2.0+）
 
 # 启动 Metro（dev server）
 npx expo start                  # Expo；--tunnel 走内网穿透
@@ -50,7 +50,7 @@ npx expo install expo@latest --fix   # Expo SDK 升级
 | Perf Monitor | 菜单打开，观察 JS/UI 双线程帧率 |
 | 日志 | Metro 终端（console 输出）；`adb logcat *:S ReactNativeJS:V` |
 
-**关于 Flipper**: Flipper 已被官方弃用（RN 0.76+ 移除内置支持），新项目统一使用 React Native DevTools + Hermes 调试协议；老项目维护时才可能遇到它。
+**关于 Flipper**: Flipper 已被官方弃用并从 RN 中移除（现行版本已不可用），统一使用 React Native DevTools + Hermes 调试协议与 Expo DevTools；老项目维护时才可能遇到它。
 
 ## 设备与桥接命令（Android / adb）
 

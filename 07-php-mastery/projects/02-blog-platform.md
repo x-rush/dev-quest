@@ -170,7 +170,7 @@ public function update(Request $request, Post $post): PostResource
 }
 ```
 
-Laravel 11 中在 `AppServiceProvider::boot()` 调用 `Gate::policy(Post::class, PostPolicy::class)` 完成注册。
+Laravel 13 中在 `AppServiceProvider::boot()` 调用 `Gate::policy(Post::class, PostPolicy::class)` 完成注册。
 
 ## 4. 文章接口（节选）
 

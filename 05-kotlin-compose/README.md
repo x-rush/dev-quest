@@ -1,18 +1,32 @@
-# 05 Kotlin Compose - Kotlin 2.x + Jetpack Compose 现代化 Android 开发
+# 05 Kotlin Compose - Kotlin 2.4 + Jetpack Compose 现代化 Android 开发
 
 > **文档简介**: 05-kotlin-compose 模块总览——面向有 Go 后端与现代前端经验的学习者的 Android 原生开发完整学习路径
 >
-> **技术栈基线**: Kotlin 2.x（K2 编译器）· Jetpack Compose + Material 3 · Android Studio（Koala 或更新）· Gradle Kotlin DSL
+> **技术栈基线**: Kotlin 2.4（K2 编译器）· Jetpack Compose（BOM 2026.08.00）+ Material 3 · Android Studio（Quail 或更新）· Gradle Kotlin DSL——具体版本见下方「技术基线」
 >
 > **更新日期**: 2026年9月
 
+## 📐 技术基线（核实日期 2026-09-11）
+
+| 技术 | 当前稳定版本 | 说明 |
+|------|------------|------|
+| **Kotlin** | 2.4（2.4.0 于 2026-06-03 发布，最新补丁 2.4.20） | K2 编译器唯一引擎，已移除 K1 与 `-language-version=1.9`；上下文参数、显式后备字段转正 |
+| **Jetpack Compose BOM** | 2026.08.00 | 2026 年 8 月版，核心库（Animation/Foundation/Runtime/UI）统一 1.12.x |
+| **Material 3** | 1.4.0（随 BOM 分发） | Compose 依赖一律走 BOM，不单独写版本号 |
+| **AGP** | 9.4.0（2026-09-01） | 要求 Gradle 9.6.0、JDK 17；最高支持 compileSdk 37 |
+| **Android Studio** | Quail（2026.1.4） | 兼容 AGP 7.1–9.4 |
+| **KSP** | 2.3.x | KSP 已改用独立版本号，与 Kotlin 版本解耦 |
+| **targetSdk** | 36（Android 16） | Play 2026 年新提交要求线；Android 17（API 37）尚在 Beta |
+
+> 模块内示例默认不锁定上述版本（统一经 `gradle/libs.versions.toml` 管理，以官方最新稳定版为准）；少数涉及具体版本号的示例已按本表基线书写。
+
 ## 🧭 模块定位
 
-本模块专为有 **Go 后端和现代前端开发经验**的学习者设计，系统掌握 Android 原生开发技术。Android 开发已全面进入 Jetpack Compose 声明式 UI 时代，本模块以 **Kotlin 2.x（K2 编译器）+ Jetpack Compose + Material 3** 为基线，帮你构建高性能、可发布、可维护的现代化 Android 应用。
+本模块专为有 **Go 后端和现代前端开发经验**的学习者设计，系统掌握 Android 原生开发技术。Android 开发已全面进入 Jetpack Compose 声明式 UI 时代，本模块以 **Kotlin 2.4（K2 编译器）+ Jetpack Compose + Material 3** 为基线，帮你构建高性能、可发布、可维护的现代化 Android 应用。
 
 **学习目标**：
 
-- 掌握 Kotlin 2.x 语言特性与协程/Flow 并发范式
+- 掌握 Kotlin 2.4 语言特性与协程/Flow 并发范式
 - 熟练使用 Jetpack Compose 进行声明式 UI 开发（状态驱动、组合模型）
 - 理解现代 Android 分层架构与单向数据流（UDF），打通 Room + Hilt + Retrofit + ViewModel 完整链路
 - 完成从入门项目到生产级应用的四个递进实战，掌握测试、签名发布与线上可观测性
@@ -23,7 +37,7 @@
 | 象限 | 目录 | 内容 | 状态 |
 |------|------|------|------|
 | 📖 **教程**（带我入门） | [basics/](basics/) | 8 篇按序教程：环境搭建 → 第一个 Compose 应用 → Kotlin 语法 → Composable 与状态 → 布局 → 导航 → 协程与 Flow → 第一个项目 | ✅ 8 篇 |
-| 📚 **字典**（X 是什么） | [reference/](reference/) | 11 篇全量参考：语言概念 5、框架要点 2、库指南 2、速查与排障 2 | ✅ 11 篇 |
+| 📚 **字典**（X 是什么） | [reference/](reference/) | 18 篇全量参考：语言概念 8、框架要点 6、库指南 2、速查与排障 2 | ✅ 18 篇 |
 | 🏗️ **操作指南**（怎么做事） | [frameworks/](frameworks/) | Compose 基础/进阶、生态集成（Room+Hilt+Retrofit+ViewModel）、开发工具链 | ✅ 4 篇 |
 | 🏗️ **操作指南** | [projects/](projects/) | 4 个递进实战：笔记应用 → 天气应用 → 新闻阅读器 → 生产级应用 | ✅ 4 篇 |
 | 🏗️ **操作指南** | [testing/](testing/) | 单元测试（JUnit+MockK）、Compose UI 测试、集成与端到端 | ✅ 3 篇 |
@@ -67,10 +81,17 @@
 │   │   ├── 02-null-safety-collections.md  #   可空性与集合 API
 │   │   ├── 03-coroutines-flow-api.md      #   协程与 Flow API 全表
 │   │   ├── 04-compose-state-api.md        #   Compose 状态 API
-│   │   └── 05-generics-delegates.md       #   泛型与委托属性
+│   │   ├── 05-generics-delegates.md       #   泛型与委托属性
+│   │   ├── 06-extension-functions.md      #   扩展函数与扩展属性
+│   │   ├── 07-scope-functions.md          #   作用域函数
+│   │   └── 08-lambdas-higher-order.md     #   Lambda 与高阶函数
 │   ├── framework-essentials/
 │   │   ├── 01-compose-essentials.md       #   Compose 核心组件速查
-│   │   └── 02-compose-material3.md        #   Material 3 主题系统速查
+│   │   ├── 02-compose-material3.md        #   Material 3 主题系统速查
+│   │   ├── 03-side-effects.md             #   副作用 API 速查
+│   │   ├── 04-recomposition.md            #   重组与稳定性速查
+│   │   ├── 05-animation-core.md           #   动画核心 API 速查
+│   │   └── 06-navigation-components.md    #   Navigation Compose 组件速查
 │   ├── library-guides/
 │   │   ├── 01-androidx-libraries.md       #   AndroidX 官方库指南
 │   │   └── 02-third-party-libs.md         #   第三方库指南

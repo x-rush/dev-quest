@@ -149,6 +149,6 @@ server:
 ### 本模块
 - 📖 [Spring Boot 核心速查](../../reference/framework-essentials/01-spring-boot-essentials.md) — Security 自动配置
 - 📖 [Java 关键字详解](../../reference/language-concepts/01-java-keywords.md) — `synchronized`/`final` 的安全含义
-- 📄 [生态集成](../../frameworks/03-ecosystem-integration.md) — Security 6 基础配置
+- 📄 [生态集成](../../frameworks/03-ecosystem-integration.md) — Security 7 基础配置
 - 📄 [图书管理系统项目](../../projects/02-library-management.md) — 认证落地实战
 - 📄 [生产级 Spring Boot 应用](../../projects/04-production-spring-app.md) — 密钥管理与配置收敛

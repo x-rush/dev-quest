@@ -19,7 +19,7 @@
 ## 🎯 项目目标
 
 - 功能：TODO 的增删改查、完成状态切换、按状态过滤
-- 技术栈：Java 21 + Spring Boot 3.x + Spring Web + Validation（先用内存存储，专注分层）
+- 技术栈：Java 21 + Spring Boot 4.x + Spring Web MVC + Validation（先用内存存储，专注分层）
 - 产出：可 `curl` 全流程验证的 API + 一套单元测试
 
 ## 🏗️ 一、需求与接口设计

@@ -1,10 +1,10 @@
-# Next.js 15 Vercel 企业级部署完整指南
+# Next.js 16 Vercel 企业级部署完整指南
 
-> **文档简介**: Next.js 15 + Vercel 企业级部署实践指南，涵盖自动部署、全球CDN、Serverless函数、性能优化、监控告警等现代云部署技术
+> **文档简介**: Next.js 16 + Vercel 企业级部署实践指南，涵盖自动部署、全球CDN、Serverless函数、性能优化、监控告警等现代云部署技术
 
 > **目标读者**: 具备Next.js基础的开发者，需要掌握企业级部署和运维的DevOps工程师
 
-> **前置知识**: Next.js 15基础、Git版本控制、HTTP协议、基础DevOps概念、云服务基础
+> **前置知识**: Next.js 16基础、Git版本控制、HTTP协议、基础DevOps概念、云服务基础
 
 > **预计时长**: 4-6小时
 
@@ -53,12 +53,12 @@ Vercel是专为前端开发者设计的云平台，提供：
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
+    "lint": "eslint .",
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
-    "next": "15.0.0",
-    "react": "19.0.0",
+    "next": "16.3.0",
+    "react": "19.3.0",
     "react-dom": "19.0.0"
   },
   "devDependencies": {
@@ -78,7 +78,6 @@ import type { NextConfig } from "next"
 
 const nextConfig: NextConfig = {
   // 优化配置
-  swcMinify: true,
   compress: true,
   poweredByHeader: false,
 
@@ -373,15 +372,15 @@ export async function POST(request: NextRequest) {
 }
 ```
 
-### 2. 中间件配置
+### 2. 代理（Proxy）配置
 
 ```typescript
-// middleware.ts
+// proxy.ts（Next.js 16：由 middleware.ts 更名，运行于 Node.js runtime）
 import { NextResponse } from "next/server"
 import type { NextRequest } from "next/server"
 import { createMiddlewareClient } from "@supabase/auth-helpers-nextjs"
 
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   const res = NextResponse.next()
   const supabase = createMiddlewareClient({ req: request, res })
 
@@ -1066,7 +1065,7 @@ export async function GET() {
 - [监控与分析](./04-monitoring-analytics.md) - 应用监控和Vercel Analytics的使用
 
 ### 相关知识模块
-- [框架相关模块](../frameworks/01-nextjs-15-complete.md) - Next.js 15的部署优化配置
+- [框架相关模块](../frameworks/01-nextjs-16-complete.md) - Next.js 16的部署优化配置
 - [框架相关模块](../frameworks/04-performance-optimization.md) - 性能优化在Vercel部署中的应用
 - [测试相关模块](../testing/03-e2e-testing.md) - E2E测试在Vercel环境中的执行
 
@@ -1088,7 +1087,7 @@ export async function GET() {
 
 ### 学习成果自检
 - [ ] 理解Vercel平台的核心特性和优势
-- [ ] 掌握Next.js 15项目的Vercel配置和优化
+- [ ] 掌握Next.js 16项目的Vercel配置和优化
 - [ ] 能够实施完整的部署流程和CI/CD集成
 - [ ] 熟练运用Vercel的高级功能和边缘计算
 - [ ] 能够建立完善的监控和分析体系

@@ -102,7 +102,7 @@ JS 组件树            C++ Shadow Tree            平台视图树
 
 ## 🗺️ 迁移与决策要点
 
-- **RN 0.76+ 默认启用新架构**，旧架构已进入移除通道——新项目无需决策，存量项目规划好适配窗口
+- **新架构自 RN 0.76 起默认启用、0.83 起成为唯一架构**（旧架构组件在 0.84–0.85 陆续移除）——新项目无需决策，存量项目只能迁移
 - **库选型看适配状态**：`RCTBridge` 时代 API 的库不再维护即弃用；优先 Expo SDK 与声明支持新架构的库
 - **性能归因升级**：桥延迟类问题消失后，瓶颈集中在 JS 执行与渲染提交，分析工具见 [渲染性能](../performance/01-rendering-performance.md)
 - **启动收益立现**：TurboModules 懒加载 + Hermes 字节码是启动优化两大杠杆（详见 [启动优化](../performance/02-startup-optimization.md)）
@@ -121,10 +121,10 @@ JS 组件树            C++ Shadow Tree            平台视图树
 A: 调用通道同步了，但 JS 线程仍是单线程；长任务阻塞照旧，重活移 UI 线程（Reanimated）或原生。
 
 **Q2: 混用旧架构库会怎样？**
-A: 新架构提供兼容层（interop layer），多数旧库可用但有性能与稳定性折损；核心链路库必须适配。
+A: 旧架构组件的互操作层（interop layer）可供短期过渡，但有性能与稳定性折损，且旧架构的模块注册通道本身已移除；核心链路库必须完成新架构适配。
 
 **Q3: 如何验证应用真的跑在新架构？**
-A: `npx react-native config` 检查 `newArchEnabled`；运行时看 LogBox 提示与库的 Fabric 分支加载日志。
+A: 现行 RN 无需检查开关——旧架构配置项已随 Legacy 组件移除；确认方式为 React Native DevTools 启动日志与所用库的新架构适配说明。
 
 ---
 

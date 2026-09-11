@@ -1,12 +1,24 @@
 # Next.js 全栈开发学习模块
 
-> **文档简介**: 2024年最前沿的Next.js全栈开发学习体系，从零基础到高级应用的完整进阶路径
+> **文档简介**: 2026年最前沿的Next.js全栈开发学习体系，从零基础到高级应用的完整进阶路径
 >
 > **目标读者**: Web前端开发者、全栈开发者、React开发者
 >
 > **前置知识**: HTML/CSS基础、JavaScript ES6+基础、React基础概念
 >
 > **预计时长**: 3-6个月（根据学习进度和投入时间）
+
+## 🧭 技术基线
+
+> 以下版本信息于 **2026-09-11** 依据官方发布页核实（[Next.js Blog](https://nextjs.org/blog)、[React Blog](https://react.dev/blog)、[TypeScript Releases](https://www.typescriptlang.org/)）。
+
+| 技术 | 当前版本 | 说明 | 核实日期 |
+|------|----------|------|----------|
+| Next.js | **16.3** | Turbopack 为默认打包器；Async Request APIs 全面异步；Cache Components / `"use cache"` 显式缓存；`middleware.ts` 弃用改为 `proxy.ts` | 2026-09-11 |
+| React | **19.3** | View Transitions 与 Fragment Refs 转正；React Compiler v1.0（2025-10 发布）稳定可用 | 2026-09-11 |
+| TypeScript | **5.x** | 类型系统稳定层，随 Next.js 模板升级 | 2026-09-11 |
+| TanStack Query | **v5** | 服务端状态管理（本模块状态管理/数据获取文档提及） | 2026-09-11 |
+| Turbopack | **默认打包器** | `next dev` 与 `next build` 默认使用；Webpack 需 `--webpack` 显式回退 | 2026-09-11 |
 
 ## 📚 文档元数据
 
@@ -15,8 +27,8 @@
 | **模块** | `02-nextjs-frontend` |
 | **分类** | `module-overview` |
 | **难度** | ⭐⭐⭐ |
-| **标签** | `#模块概述` `#学习路线` `#nextjs15` `#全栈开发` |
-| **更新日期** | 2025年10月 |
+| **标签** | `#模块概述` `#学习路线` `#nextjs16` `#全栈开发` |
+| **更新日期** | 2026年9月 |
 | **作者** | Dev Quest Team |
 | **状态** | ✅ 已完成 |
 
@@ -24,7 +36,7 @@
 
 完成本模块后，你将能够：
 
-- ✅ **掌握Next.js 15**: 深入理解App Router、Server Components等核心特性
+- ✅ **掌握Next.js 16**: 深入理解App Router、Server Components等核心特性
 - ✅ **全栈应用开发**: 独立完成从前端到后端的完整应用开发
 - ✅ **现代前端工程**: 掌握TypeScript 5、Tailwind CSS 4等现代工具链
 - ✅ **性能优化**: 具备大型应用的性能分析和优化能力
@@ -45,7 +57,7 @@
 
 ### 核心特色
 - **📈 双路径学习**: 系统学习路径 + 快速参考路径，满足不同学习需求
-- **🚀 技术前沿**: 100%基于Next.js 15 + React 19 + TypeScript 5最新技术栈
+- **🚀 技术前沿**: 100%基于Next.js 16 + React 19 + TypeScript 5最新技术栈
 - **💼 实战导向**: 4个完整项目，从企业官网到SaaS平台
 - **🧪 质量保证**: 完整的现代测试工程体系
 - **⚡ 性能优先**: 深入的性能优化和监控体系
@@ -93,8 +105,8 @@ graph LR
 ## 🛠️ 技术栈
 
 ### 核心技术
-- **Next.js 15**: React全栈框架，支持App Router和Server Components
-- **React 19**: 最新React版本，并发特性和Suspense
+- **Next.js 16**: React全栈框架，支持App Router和Server Components
+- **React 19.3**: 最新React版本，并发特性、Suspense、View Transitions与Fragment Refs
 - **TypeScript 5**: 类型安全的JavaScript超集
 - **Tailwind CSS 4**: 原子化CSS框架
 
@@ -102,7 +114,7 @@ graph LR
 - **Vitest**: 现代单元测试框架
 - **Playwright**: 端到端测试框架
 - **ESLint/Prettier**: 代码质量和格式化工具
-- **Turbopack**: 快速构建工具
+- **Turbopack**: 默认打包器（next dev / next build），Webpack 可 --webpack 回退
 
 ### 部署运维
 - **Vercel**: Next.js官方云平台
@@ -117,29 +129,34 @@ graph LR
 ```
 02-nextjs-frontend/
 ├── README.md                           # 模块总览（本文档）
-├── 📚 reference/           # 字典：全量参考（18个文件）
+├── 📚 reference/           # 字典：全量参考（23个文件）
 │   ├── 📖 language-concepts/      # 语言核心概念（5个文件）
 │   │   ├── 01-react-syntax-cheatsheet.md       # ⚛️ React语法速查表 ✅
 │   │   ├── 02-nextjs-api-reference.md          # 🚀 Next.js API参考 ✅
 │   │   ├── 03-typescript-types.md              # 📘 TypeScript类型速查 ✅
 │   │   ├── 04-javascript-modern.md             # 💎 现代JS语法 ✅
 │   │   └── 05-css-patterns.md                  # 🎨 CSS-in-JS模式 ✅
-│   ├── 🛠️ framework-patterns/    # 框架应用模式（7个文件）
+│   ├── 🛠️ framework-patterns/    # 框架应用模式（11个文件）
 │   │   ├── 01-app-router-patterns.md           # 🗺️ App Router实战模式 ✅
 │   │   ├── 02-server-components-patterns.md    # 🔄 服务端组件模式 ✅
 │   │   ├── 03-client-components-patterns.md    # 📱 客户端组件模式 ✅
 │   │   ├── 04-data-fetching-patterns.md        # 📡 数据获取模式 ✅
 │   │   ├── 05-state-management-patterns.md     # 🗄️ 状态管理模式 ✅
 │   │   ├── 06-form-validation-patterns.md      # 📝 表单验证模式 ✅
-│   │   └── 07-authentication-flows.md          # 🔐 认证流程模式 ✅
+│   │   ├── 07-authentication-flows.md          # 🔐 认证流程模式 ✅
+│   │   ├── 08-caching-patterns.md              # 💾 Cache Components与"use cache" ✅
+│   │   ├── 09-async-request-apis.md            # ⏳ 异步请求APIs ✅
+│   │   ├── 10-proxy-patterns.md                # 🌉 网络代理（proxy.ts） ✅
+│   │   └── 11-error-loading-patterns.md        # 🚨 错误与加载状态约定 ✅
 │   ├── 🔧 development-tools/     # 开发工具生态（4个文件）
 │   │   ├── 01-testing-tools.md                 # 🧪 测试工具指南 ✅
 │   │   ├── 02-styling-tools.md                 # 🎨 样式工具 ✅
 │   │   ├── 03-package-managers.md                   # ⚙️ 构建工具 ✅
 │   │   └── 04-debugging-tools.md               # 🔍 调试工具 ✅
-│   └── ⚡ performance-optimization/ # 性能优化专题（2个文件）
+│   └── ⚡ performance-optimization/ # 性能优化专题（3个文件）
 │       ├── 01-rendering-optimization.md        # 📈 渲染优化 ✅
-│       └── 02-bundle-optimization.md           # 📦 打包优化 ✅
+│       ├── 02-bundle-optimization.md           # 📦 打包优化 ✅
+│       └── 03-image-font-optimization.md       # 🖼️ 图片与字体优化 ✅
 ├── 📖 basics/                     # 渐进式学习路径（8个文件）
 │   ├── 01-environment-setup.md                # 🛠️ 开发环境搭建 ✅
 │   ├── 02-first-nextjs-app.md                 # 🚀 创建第一个Next.js应用 ✅
@@ -150,7 +167,7 @@ graph LR
 │   ├── 07-state-management.md                 # 🗄️ 状态管理基础 ✅
 │   └── 08-first-project.md                    # 🎯 第一个完整项目 ✅
 ├── 🏗️ frameworks/                  # 框架深度学习（4个文件）
-│   ├── 01-nextjs-15-complete.md               # 🚀 Next.js 15完整指南 ✅
+│   ├── 01-nextjs-16-complete.md               # 🚀 Next.js 16完整指南 ✅
 │   ├── 02-react-19-integration.md             # ⚛️ React 19深度集成 ✅
 │   ├── 03-full-stack-patterns.md              # 🌐 全栈开发模式 ✅
 │   └── 04-performance-optimization.md         # ⚡ 性能优化最佳实践 ✅
@@ -193,7 +210,7 @@ graph LR
 - [`04-javascript-modern.md`](reference/language-concepts/04-javascript-modern.md) - 💎 现代JS语法
 - [`05-css-patterns.md`](reference/language-concepts/05-css-patterns.md) - 🎨 CSS-in-JS模式
 
-#### 🛠️ Framework Patterns - 框架模式（7个文件）
+#### 🛠️ Framework Patterns - 框架模式（11个文件）
 - [`01-app-router-patterns.md`](reference/framework-patterns/01-app-router-patterns.md) - 🗺️ App Router实战模式
 - [`02-server-components-patterns.md`](reference/framework-patterns/02-server-components-patterns.md) - 🔄 服务端组件模式
 - [`03-client-components-patterns.md`](reference/framework-patterns/03-client-components-patterns.md) - 📱 客户端组件模式
@@ -201,6 +218,10 @@ graph LR
 - [`05-state-management-patterns.md`](reference/framework-patterns/05-state-management-patterns.md) - 🗄️ 状态管理模式
 - [`06-form-validation-patterns.md`](reference/framework-patterns/06-form-validation-patterns.md) - 📝 表单验证模式
 - [`07-authentication-flows.md`](reference/framework-patterns/07-authentication-flows.md) - 🔐 认证流程模式
+- [`08-caching-patterns.md`](reference/framework-patterns/08-caching-patterns.md) - 💾 Cache Components与"use cache"
+- [`09-async-request-apis.md`](reference/framework-patterns/09-async-request-apis.md) - ⏳ 异步请求APIs
+- [`10-proxy-patterns.md`](reference/framework-patterns/10-proxy-patterns.md) - 🌉 网络代理（proxy.ts）
+- [`11-error-loading-patterns.md`](reference/framework-patterns/11-error-loading-patterns.md) - 🚨 错误与加载状态约定
 
 #### 🔧 Development Tools - 开发工具（4个文件）
 - [`01-testing-tools.md`](reference/development-tools/01-testing-tools.md) - 🧪 测试工具指南
@@ -208,9 +229,10 @@ graph LR
 - [`03-package-managers.md`](reference/development-tools/03-package-managers.md) - ⚙️ 构建工具
 - [`04-debugging-tools.md`](reference/development-tools/04-debugging-tools.md) - 🔍 调试工具
 
-#### ⚡ Performance Optimization - 性能优化（2个文件）
+#### ⚡ Performance Optimization - 性能优化（3个文件）
 - [`01-rendering-optimization.md`](reference/performance-optimization/01-rendering-optimization.md) - 📈 渲染优化
 - [`02-bundle-optimization.md`](reference/performance-optimization/02-bundle-optimization.md) - 📦 打包优化
+- [`03-image-font-optimization.md`](reference/performance-optimization/03-image-font-optimization.md) - 🖼️ 图片与字体优化
 
 ### 📖 Basics - 渐进式学习路径（8个文件）
 **定位**: 从零开始的完整学习体验，注重基础理解和实践
@@ -227,7 +249,7 @@ graph LR
 ### 🏗️ Frameworks - 框架深度学习（4个文件）
 **定位**: 深入掌握框架和生态系统，专业能力提升
 
-- [`01-nextjs-15-complete.md`](frameworks/01-nextjs-15-complete.md) - 🚀 Next.js 15完整指南
+- [`01-nextjs-16-complete.md`](frameworks/01-nextjs-16-complete.md) - 🚀 Next.js 16完整指南
 - [`02-react-19-integration.md`](frameworks/02-react-19-integration.md) - ⚛️ React 19深度集成
 - [`03-full-stack-patterns.md`](frameworks/03-full-stack-patterns.md) - 🌐 全栈开发模式
 - [`04-performance-optimization.md`](frameworks/04-performance-optimization.md) - ⚡ 性能优化最佳实践
@@ -313,7 +335,7 @@ graph LR
 ## 🔗 相关资源
 
 ### 📖 官方文档
-- **[Next.js 15 Docs](https://nextjs.org/docs)**: 官方权威文档
+- **[Next.js 16 Docs](https://nextjs.org/docs)**: 官方权威文档
 - **[React 19 Docs](https://react.dev/)**: React最新版本文档
 - **[TypeScript 5 Docs](https://www.typescriptlang.org/docs/)**: TypeScript官方文档
 - **[Tailwind CSS 4 Docs](https://tailwindcss.com/docs)**: CSS框架文档
@@ -325,7 +347,7 @@ graph LR
 - **[React DevTools](https://react.dev/learn/react-developer-tools)**: React调试工具
 
 ### 📹 学习资源
-- **[Next.js 15 Course](https://nextjs.org/learn)**: 官方免费课程
+- **[Next.js 16 Course](https://nextjs.org/learn)**: 官方免费课程
 - **[React 19 Tutorial](https://react.dev/learn)**: React官方教程
 - **[TypeScript Handbook](https://www.typescriptlang.org/handbook)**: TypeScript手册
 - **[Tailwind CSS Tutorial](https://tailwindcss.com/course)**: 样式框架教程
@@ -358,14 +380,14 @@ graph LR
 
 | 类别 | 文档数量 | 预计学习时长 |
 |------|----------|--------------|
-| Knowledge Points | 18个 | 20-30小时 |
+| Knowledge Points | 23个 | 30-40小时 |
 | Basics | 8个 | 40-60小时 |
 | Frameworks | 4个 | 30-40小时 |
 | Projects | 4个 | 60-80小时 |
 | Testing | 4个 | 20-30小时 |
 | Deployment | 4个 | 15-25小时 |
 | Advanced Topics | 6个 | 25-35小时 |
-| **总计** | **48个** | **210-300小时** |
+| **总计** | **53个** | **220-310小时** |
 
 ---
 
@@ -408,7 +430,7 @@ graph LR
 ## 📝 总结
 
 ### 核心要点回顾
-1. **现代化技术栈**: 基于2024年最新的Next.js 15 + React 19 + TypeScript 5
+1. **现代化技术栈**: 基于2024年最新的Next.js 16 + React 19 + TypeScript 5
 2. **差异化学习体系**: 快速参考路径和系统学习路径满足不同需求
 3. **实战导向**: 4个完整项目覆盖从基础到企业级应用
 4. **质量保证**: 完整的现代测试工程和部署运维体系
@@ -417,7 +439,7 @@ graph LR
 ### 学习成果检查
 - [ ] 是否理解了模块的双路径学习体系？
 - [ ] 是否选择了适合自己的学习路径？
-- [ ] 是否掌握了Next.js 15的核心特性？
+- [ ] 是否掌握了Next.js 16的核心特性？
 - [ ] 是否具备了全栈应用开发的基础能力？
 - [ ] 是否了解了现代测试和部署的最佳实践？
 
@@ -448,7 +470,7 @@ graph LR
 ## 🔗 外部资源
 
 ### 📖 官方文档
-- 📚 **[Next.js 15 官方文档](https://nextjs.org/docs)**: 完整的框架文档
+- 📚 **[Next.js 16 官方文档](https://nextjs.org/docs)**: 完整的框架文档
 - ⚛️ **[React 19 官方文档](https://react.dev/)**: React最新版本指南
 - 📘 **[TypeScript 5 官方文档](https://www.typescriptlang.org/docs/)**: 类型系统文档
 - 🎨 **[Tailwind CSS 4 文档](https://tailwindcss.com/docs)**: CSS框架指南
@@ -462,11 +484,11 @@ graph LR
 ---
 
 **模块状态**: ✅ 重构完成
-**最后更新**: 2025年10月
+**最后更新**: 2026年9月
 **版本**: v2.0.0
 
 > 💡 **重构说明**:
-> 本模块已于2025年10月完成重构，采用现代化的双轴学习体系：字典参考（reference）+ 渐进式学习路径，100%基于Next.js 15 + React 19 + TypeScript 5最新技术栈，消除冗余内容，大幅提升学习效率和质量。
+> 本模块已于2025年10月完成重构并于2026年9月完成技术基线刷新（Next.js 16.3 / React 19.3），采用现代化的双轴学习体系：字典参考（reference）+ 渐进式学习路径，100%基于Next.js 16 + React 19 + TypeScript 5最新技术栈，消除冗余内容，大幅提升学习效率和质量。
 
 ---
 

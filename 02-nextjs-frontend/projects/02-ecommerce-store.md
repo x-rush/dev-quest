@@ -1,4 +1,4 @@
-# Next.js 15 电商应用开发实战
+# Next.js 16 电商应用开发实战
 
 > 通过构建一个功能完整的电商应用，掌握现代Web电商开发的核心技术。本项目涵盖商品展示、购物车、订单管理、支付集成、库存管理等电商系统的关键功能模块。
 
@@ -12,7 +12,7 @@
 | **模块** | `02-nextjs-frontend` |
 | **分类** | `projects` |
 | **难度** | ⭐⭐⭐⭐⭐ (5/5星) |
-| **标签** | `Next.js 15` `React 19` `TypeScript 5` `电商系统` `支付集成` `Stripe` |
+| **标签** | `Next.js 16` `React 19` `TypeScript 5` `电商系统` `支付集成` `Stripe` |
 | **更新日期** | `2025年10月` |
 | **作者** | Dev Quest Team |
 | **状态** | ✅ 已完成 |
@@ -42,7 +42,7 @@
 - 🔔 实时通知和消息系统
 
 ### 技术栈
-- **前端框架**: Next.js 15 + React 19
+- **前端框架**: Next.js 16 + React 19
 - **开发语言**: TypeScript 5
 - **状态管理**: Zustand + React Query
 - **UI组件库**: Radix UI + Tailwind CSS
@@ -110,7 +110,7 @@ ecommerce-store/
 │   ├── schema.prisma           # 数据库模型
 │   └── migrations/             # 数据库迁移
 ├── public/                     # 静态资源
-└── middleware.ts              # 中间件
+└── proxy.ts                   # 网络代理（原中间件）
 ```
 
 ### 数据库设计
@@ -431,7 +431,7 @@ enum CouponType {
 
 #### 1.1 创建Next.js项目
 ```bash
-# 创建Next.js 15项目
+# 创建Next.js 16项目
 npx create-next-app@latest ecommerce-store --typescript --tailwind --eslint --app
 
 # 进入项目目录
@@ -870,7 +870,7 @@ export interface Cart {
 
 export async function getCart(): Promise<Cart> {
   const session = await getServerSession(authConfig)
-  const cookieStore = cookies()
+  const cookieStore = await cookies()
   const cartId = cookieStore.get('cartId')?.value
 
   let cart
@@ -961,7 +961,7 @@ export async function addToCart(
   productVariantId?: string
 ): Promise<Cart> {
   const session = await getServerSession(authConfig)
-  const cookieStore = cookies()
+  const cookieStore = await cookies()
   const cartId = cookieStore.get('cartId')?.value
 
   // 获取产品信息
@@ -1090,7 +1090,7 @@ export async function removeFromCart(itemId: string): Promise<Cart> {
 
 export async function clearCart(): Promise<void> {
   const session = await getServerSession(authConfig)
-  const cookieStore = cookies()
+  const cookieStore = await cookies()
   const cartId = cookieStore.get('cartId')?.value
 
   if (session?.user?.id) {
@@ -2334,42 +2334,35 @@ describe('/api/products', () => {
 #### 4.2 性能优化
 **lib/cache/cache.ts**:
 ```typescript
-import { unstable_cache } from 'next/cache'
+// Next.js 16：unstable_cache 已弃用，改用 "use cache" + cacheTag/cacheLife
+import { revalidateTag, cacheTag, cacheLife } from 'next/cache'
 
 // 缓存产品数据
-export const getCachedProducts = unstable_cache(
-  async (params: any) => {
-    // 这里实现获取产品数据的逻辑
-    return [] // 返回产品数据
-  },
-  ['products'],
-  {
-    revalidate: 3600, // 1小时缓存
-    tags: ['products'],
-  }
-)
+export async function getCachedProducts(params: any) {
+  'use cache'
+  cacheLife('hours') // 1小时级缓存
+  cacheTag('products')
+  // 这里实现获取产品数据的逻辑
+  return [] // 返回产品数据
+}
 
 // 缓存分类数据
-export const getCachedCategories = unstable_cache(
-  async () => {
-    // 这里实现获取分类数据的逻辑
-    return [] // 返回分类数据
-  },
-  ['categories'],
-  {
-    revalidate: 86400, // 24小时缓存
-    tags: ['categories'],
-  }
-)
+export async function getCachedCategories() {
+  'use cache'
+  cacheLife('days') // 24小时级缓存
+  cacheTag('categories')
+  // 这里实现获取分类数据的逻辑
+  return [] // 返回分类数据
+}
 
-// 清除产品缓存
+// 清除产品缓存（Next.js 16：revalidateTag 需传入 cacheLife profile）
 export function revalidateProducts() {
-  revalidateTag('products')
+  revalidateTag('products', 'max')
 }
 
 // 清除分类缓存
 export function revalidateCategories() {
-  revalidateTag('categories')
+  revalidateTag('categories', 'max')
 }
 ```
 
@@ -2650,7 +2643,7 @@ volumes:
 - 📄 **[04-saas-platform.md](./04-saas-platform.md)**: SaaS平台项目实战
 
 ### 参考章节
-- 📖 **[Framework Deep Dive - Next.js](../frameworks/01-nextjs-15-complete.md)**: Next.js核心特性深度学习
+- 📖 **[Framework Deep Dive - Next.js](../frameworks/01-nextjs-16-complete.md)**: Next.js核心特性深度学习
 - 📖 **[Database - Prisma ORM](../frameworks/03-full-stack-patterns.md)**: Prisma ORM快速参考
 - 📖 **[Authentication - NextAuth](../reference/framework-patterns/07-authentication-flows.md)**: NextAuth.js最佳实践
 
@@ -2686,7 +2679,7 @@ volumes:
 ## 🔗 外部资源
 
 ### 官方文档
-- [Next.js 15 Documentation](https://nextjs.org/docs)
+- [Next.js 16 Documentation](https://nextjs.org/docs)
 - [Stripe API Documentation](https://stripe.com/docs/api)
 - [Prisma Documentation](https://www.prisma.io/docs/)
 - [NextAuth.js Documentation](https://next-auth.js.org/)

@@ -19,11 +19,11 @@
 ## 🎯 学习目标
 
 完成本文档后，你将能够：
-- 用 Spring Security 6 的 SecurityFilterChain DSL 配置认证与授权
+- 用 Spring Security 7 的 SecurityFilterChain DSL 配置认证与授权
 - 用 Spring Cache 抽象接入 Redis 缓存
 - 用 Spring AMQP / Kafka 收发消息并保证消费幂等
 
-## 🛠️ 一、Spring Security 6
+## 🛠️ 一、Spring Security 7
 
 ### 最小可用配置
 
@@ -49,7 +49,7 @@ public class SecurityConfig {
 }
 ```
 
-> Boot 3 + Security 6 全面使用 Lambda DSL，`and()` 链式写法已废弃；`authorizeRequests()` 更名为 `authorizeHttpRequests()`。
+> Boot 3 / Security 6 起全面使用 Lambda DSL（Boot 4 / Security 7 延续），`and()` 链式写法已废弃；`authorizeRequests()` 更名为 `authorizeHttpRequests()`。
 
 ### 密码必须加密存储
 
@@ -137,13 +137,15 @@ public class BookService {
 
 ```java
 @Bean
-RedisCacheManagerBuilderCustomizer cacheCustomizer(ObjectMapper mapper) {
+RedisCacheManagerBuilderCustomizer cacheCustomizer(JsonMapper jsonMapper) {
     return builder -> builder
         .withCacheConfiguration("books",
             RedisCacheConfiguration.defaultCacheConfig()
                 .entryTtl(Duration.ofMinutes(10))
                 .serializeValuesWith(RedisSerializationContext.SerializationPair
-                    .fromSerializer(new GenericJackson2JsonRedisSerializer())));
+                    // Boot 4 / Spring Data Redis 4：Jackson 3 序列化器（Jackson 2 的
+                    // GenericJackson2JsonRedisSerializer 已废弃）
+                    .fromSerializer(new GenericJacksonJsonRedisSerializer())));
 }
 ```
 

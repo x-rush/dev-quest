@@ -1,6 +1,6 @@
 # 入门项目：TODO REST API
 
-> **文档简介**: 用 Laravel 11 从零构建一个符合 REST 风格的 TODO API，覆盖模型、验证、资源响应与路由设计的最小闭环
+> **文档简介**: 用 Laravel 13 从零构建一个符合 REST 风格的 TODO API，覆盖模型、验证、资源响应与路由设计的最小闭环
 >
 > **目标读者**: 学完 frameworks 入门篇、第一次用 Laravel 写完整接口的开发者
 >
@@ -36,7 +36,7 @@
 任务字段：`id`、`title`（必填，≤120 字）、`status`（`pending|doing|done`）、`due_date`（可空日期）。
 
 ```bash
-composer create-project laravel/laravel todo-api
+composer create-project laravel/laravel:^13.0 todo-api
 cd todo-api && php artisan install:api
 php artisan make:model Todo -mfs   # 模型 + 迁移 + 工厂 + Seeder
 ```

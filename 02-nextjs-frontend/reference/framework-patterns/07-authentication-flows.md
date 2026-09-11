@@ -1,10 +1,10 @@
-# Next.js 15 企业级认证流程完整指南
+# Next.js 16 企业级认证流程完整指南
 
-> **文档简介**: Next.js 15 + NextAuth.js v5 企业级认证完整实现指南，涵盖OAuth 2.0、MFA、JWT安全、RBAC权限控制等现代认证技术
+> **文档简介**: Next.js 16 + NextAuth.js v5 企业级认证完整实现指南，涵盖OAuth 2.0、MFA、JWT安全、RBAC权限控制等现代认证技术
 
 > **目标读者**: 具备Next.js基础的中高级开发者，需要构建企业级认证系统的架构师和工程师
 
-> **前置知识**: Next.js 15基础、React 19、TypeScript 5、数据库基础、RESTful API设计
+> **前置知识**: Next.js 16基础、React 19、TypeScript 5、数据库基础、RESTful API设计
 
 > **预计时长**: 8-12小时
 
@@ -48,9 +48,9 @@
 
 ## 📖 概述
 
-### 🚀 Next.js 15 认证革命
+### 🚀 Next.js 16 认证革命
 
-Next.js 15 结合 NextAuth.js v5 代表了现代Web认证技术的重要里程碑。现代企业应用需要超越简单的用户名/密码认证，转向全面的安全身份管理解决方案。本指南构建基于最新的技术栈：**NextAuth.js v5** 提供模块化认证架构，**React 19** 提供现代并发特性，**TypeScript 5** 确保类型安全，配合**Prisma** 数据库层和**bcrypt** 密码加密，形成完整的企业级认证生态系统。
+Next.js 16 结合 NextAuth.js v5 代表了现代Web认证技术的重要里程碑。现代企业应用需要超越简单的用户名/密码认证，转向全面的安全身份管理解决方案。本指南构建基于最新的技术栈：**NextAuth.js v5** 提供模块化认证架构，**React 19** 提供现代并发特性，**TypeScript 5** 确保类型安全，配合**Prisma** 数据库层和**bcrypt** 密码加密，形成完整的企业级认证生态系统。
 
 ### 🏗️ 企业级认证架构
 
@@ -84,11 +84,11 @@ graph TB
     E --> E4[实时监控]
 ```
 
-### 💡 为什么选择 Next.js 15 + NextAuth.js v5
+### 💡 为什么选择 Next.js 16 + NextAuth.js v5
 
 #### 传统认证方案 vs 现代化方案
 
-| 特性 | 传统认证 | NextAuth.js v5 + Next.js 15 |
+| 特性 | 传统认证 | NextAuth.js v5 + Next.js 16 |
 |------|------------|---------------------------|
 | **架构** | 单体认证服务 | 分布式认证组件 |
 | **安全性** | 基础JWT验证 | 多层安全防护+MFA |
@@ -137,7 +137,7 @@ graph TB
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
+    "lint": "eslint .",
     "type-check": "tsc --noEmit"
   },
   "dependencies": {

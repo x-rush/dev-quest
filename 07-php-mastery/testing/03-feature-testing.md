@@ -36,7 +36,7 @@ Feature 测试的价值：**一次覆盖路由→中间件→验证→控制器�
 ## 2. 数据库隔离：RefreshDatabase
 
 ```php
-// tests/TestCase.php —— Laravel 11 骨架上加 trait
+// tests/TestCase.php —— Laravel 13 骨架上加 trait
 namespace Tests;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;

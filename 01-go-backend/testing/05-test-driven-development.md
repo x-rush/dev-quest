@@ -752,7 +752,7 @@ jobs:
     - uses: actions/checkout@v4
     - uses: actions/setup-go@v4
       with:
-        go-version: '1.21'
+        go-version: '1.25'
 
     - name: Run tests with coverage
       run: go test -v -race -coverprofile=coverage.out ./...

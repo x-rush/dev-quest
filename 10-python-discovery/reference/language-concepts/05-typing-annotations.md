@@ -2,7 +2,7 @@
 
 ## 概述
 
-类型注解是现代 Python 的基础设施：编辑器提示、静态检查（mypy/pyright）、框架运行时校验（FastAPI/Pydantic）共同依赖它。本条目覆盖 3.12+ 推荐写法与旧写法对照。
+类型注解是现代 Python 的基础设施：编辑器提示、静态检查（mypy/pyright）、框架运行时校验（FastAPI/Pydantic）共同依赖它。本条目覆盖 3.12+ 推荐写法与旧写法对照，并速览 3.13/3.14 的类型系统能力（模块基线 Python 3.14）。
 
 ## 📚 文档元数据
 
@@ -127,7 +127,39 @@ Mode = Literal["r", "w", "a"]
 
 ---
 
-## 6. 与 Pydantic 配合 — 运行时校验
+## 6. 3.13/3.14 类型系统增强
+
+```python
+# 3.13：TypeVar 默认值（PEP 696）——泛型未指定时落到默认类型
+from typing import TypeVar
+
+T = TypeVar("T", default=int)
+
+class Box[T = int]:
+    def get(self) -> T: ...
+
+# 3.13：TypeIs（PEP 742）——isinstance 风格的类型收窄，语义比 TypeGuard 更直觉
+from typing import TypeIs
+
+def is_strs(items: list[object]) -> TypeIs[list[str]]:
+    return all(isinstance(i, str) for i in items)
+
+# 3.13：warnings.deprecated（PEP 702）——声明弃用的标准方式
+from warnings import deprecated
+
+@deprecated("改用 new_api")
+def old_api() -> None: ...
+
+# 3.14：注解惰性求值（PEP 649/749）——前向引用不再需要字符串引号
+class Node:
+    def link(self, other: Node) -> Node: ...   # 3.13 及以前需写 "Node"
+```
+
+**要点**：注解惰性求值是 3.14 对工具链影响最大的变化——`__annotations__` 按需计算，运行时开销更低；Pydantic/FastAPI 已适配，旧代码无需改动。
+
+---
+
+## 7. 与 Pydantic 配合 — 运行时校验
 
 Pydantic v2 把注解变成**运行时强约束**，是 FastAPI 的数据层：
 

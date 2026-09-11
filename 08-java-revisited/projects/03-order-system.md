@@ -19,7 +19,7 @@
 ## 🎯 项目目标
 
 - 功能：下单、支付回调、库存扣减、发货通知（异步）
-- 技术栈：Spring Boot 3.x + JPA + RabbitMQ + Testcontainers
+- 技术栈：Spring Boot 4.x + JPA + RabbitMQ + Testcontainers
 - 关键挑战：**数据库事务与消息发送的原子性**、消费幂等
 
 ## 🏗️ 一、事务边界设计
@@ -79,7 +79,7 @@ public class OrderService {
     private final OrderRepository orders;
     private final OutboxRepository outbox;
     private final ProductRepository products;
-    private final ObjectMapper json;
+    private final JsonMapper json;   // Boot 4 / Jackson 3：自动配置的是不可变 JsonMapper
 
     @Transactional
     public Order place(Long userId, Long productId, int qty) {

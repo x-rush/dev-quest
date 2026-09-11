@@ -1,8 +1,8 @@
-# Laravel 核心速查（Laravel 11+）
+# Laravel 核心速查（Laravel 13）
 
 ## 概述
 
-Laravel 11/12 进一步精简骨架（无 Http Kernel、默认精简中间件栈），本文收录日常开发最高频的四大核心：路由、Eloquent、Artisan、服务容器。条目式组织，供快速查阅。
+Laravel 11 起精简骨架（无 Http Kernel、默认精简中间件栈），12/13 延续这一形态，本文收录日常开发最高频的四大核心：路由、Eloquent、Artisan、服务容器。条目式组织，供快速查阅。
 
 ## 📚 文档元数据
 
@@ -96,7 +96,7 @@ $order->items()->create(['sku' => 'PHP-1', 'qty' => 2]);
 
 ```bash
 # 项目脚手架
-composer create-project laravel/laravel app-demo   # 或 laravel new app-demo
+composer create-project laravel/laravel:^13.0 app-demo   # 或 laravel new app-demo
 php artisan install:api                            # 启用 API 路由 + Sanctum
 
 # 代码生成

@@ -1,10 +1,10 @@
 # Core Web Vitals 优化完整指南
 
-> **文档简介**: Next.js 15 + React 19 应用Core Web Vitals深度优化指南，涵盖LCP、FID、CLS、FCP、TTFB等关键性能指标的优化策略和实战技巧
+> **文档简介**: Next.js 16 + React 19 应用Core Web Vitals深度优化指南，涵盖LCP、FID、CLS、FCP、TTFB等关键性能指标的优化策略和实战技巧
 
 > **目标读者**: 有Next.js开发经验的前端工程师、性能优化专家、技术架构师
 
-> **前置知识**: Next.js 15基础、React 19、Web性能基础、Chrome DevTools使用
+> **前置知识**: Next.js 16基础、React 19、Web性能基础、Chrome DevTools使用
 
 > **预计时长**: 8-12小时
 
@@ -15,7 +15,7 @@
 | **模块** | `02-nextjs-frontend` |
 | **分类** | `advanced-topics/performance` |
 | **难度** | ⭐⭐⭐⭐⭐ (5/5星) |
-| **标签** | `#core-web-vitals` `#performance-optimization` `#lighthouse` `#nextjs15` `#react19` |
+| **标签** | `#core-web-vitals` `#performance-optimization` `#lighthouse` `#nextjs16` `#react19` |
 | **更新日期** | `2025年10月` |
 | **作者** | Dev Quest Team |
 | **状态** | ✅ 已完成 |
@@ -23,14 +23,14 @@
 ## 🎯 学习目标
 
 - 深入理解Core Web Vitals的各个指标和优化目标
-- 掌握Next.js 15中Core Web Vitals的测量和监控方法
+- 掌握Next.js 16中Core Web Vitals的测量和监控方法
 - 实施针对LCP、FID、CLS等指标的优化策略
 - 建立完整的性能监控和优化体系
 - 实现生产环境的性能基准测试和回归检测
 
 ## 📖 概述
 
-Core Web Vitals是Google定义的一组关键性能指标，用于衡量用户体验质量。本指南深入探讨在Next.js 15应用中优化这些指标的策略，包括技术实现、工具集成、监控分析等全方位优化方案。
+Core Web Vitals是Google定义的一组关键性能指标，用于衡量用户体验质量。本指南深入探讨在Next.js 16应用中优化这些指标的策略，包括技术实现、工具集成、监控分析等全方位优化方案。
 
 ## 🏗️ Core Web Vitals 详解
 
@@ -96,7 +96,7 @@ const vitalsWeightConfig = {
 };
 ```
 
-## 🛠️ Next.js 15 性能优化策略
+## 🛠️ Next.js 16 性能优化策略
 
 ### ⚡ LCP (Largest Contentful Paint) 优化
 
@@ -948,7 +948,7 @@ export function MobileOptimizedImage({ src, alt, ...props }) {
 
 ### 核心要点回顾
 1. **Core Web Vitals体系**: LCP、FID、CLS、INP等关键指标的深度理解和优化
-2. **Next.js 15优化策略**: 图片优化、字体加载、资源预加载等具体技术实现
+2. **Next.js 16优化策略**: 图片优化、字体加载、资源预加载等具体技术实现
 3. **性能监控系统**: 实时性能监控、Lighthouse CI集成、数据分析
 4. **高级优化技术**: 预渲染策略、关键渲染路径优化、移动端优化
 5. **最佳实践**: 性能预算制定、回归检测、持续优化流程
@@ -956,7 +956,7 @@ export function MobileOptimizedImage({ src, alt, ...props }) {
 ### 学习成果检查
 - [ ] 是否理解了Core Web Vitals各个指标的含义和优化目标？
 - [ ] 是否能够实施针对LCP、FID、CLS的优化策略？
-- [ ] 是否掌握了Next.js 15中的性能优化技术？
+- [ ] 是否掌握了Next.js 16中的性能优化技术？
 - [ ] 是否能够建立完整的性能监控和分析体系？
 - [ ] 是否具备了企业级性能优化的实战能力？
 

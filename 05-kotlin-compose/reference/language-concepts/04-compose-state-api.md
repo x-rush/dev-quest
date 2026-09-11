@@ -204,6 +204,8 @@ Button(onClick = { scope.launch { listState.animateScrollToItem(0) } }) { Text("
 ## 相关文档
 
 - 📄 **[协程与 Flow API 全表](./03-coroutines-flow-api.md)** - Flow/StateFlow 层的完整字典
+- 📄 **[副作用 API](../framework-essentials/03-side-effects.md)** - 在重组世界安全"做事"的 API 全表
+- 📄 **[重组与稳定性](../framework-essentials/04-recomposition.md)** - 状态如何驱动重启与跳过
 - 📄 **[泛型与委托属性](./05-generics-delegates.md)** - `by` 委托让 state.value 读写更简洁
 - 📄 **[Composable 与状态](../../basics/04-composables-state.md)** - 状态与重组的入门教程
 - 📖 **[Compose 状态官方文档](https://developer.android.com/develop/ui/compose/state)** - 权威参考

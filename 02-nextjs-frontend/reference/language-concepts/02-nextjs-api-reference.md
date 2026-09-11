@@ -1,6 +1,6 @@
 # Next.js API 参考手册
 
-> **文档简介**: Next.js 15核心API和函数快速参考，涵盖App Router、路由处理、数据获取等关键API
+> **文档简介**: Next.js 16核心API和函数快速参考，涵盖App Router、路由处理、数据获取等关键API
 >
 > **目标读者**: Next.js开发者，需要快速查阅Next.js API的开发者
 >
@@ -15,7 +15,7 @@
 | **模块** | `02-nextjs-frontend` |
 | **分类** | `reference` |
 | **难度** | ⭐⭐⭐⭐ (4/5星) |
-| **标签** | `#nextjs15` `#api-reference` `#app-router` `#routing` `#cheatsheet` |
+| **标签** | `#nextjs16` `#api-reference` `#app-router` `#routing` `#cheatsheet` |
 | **更新日期** | `2025年10月` |
 | **作者** | Dev Quest Team |
 | **状态** | ✅ 已完成 |
@@ -50,15 +50,18 @@ app/
 ```tsx
 // app/blog/[slug]/page.tsx
 interface BlogPostPageProps {
-  params: { slug: string }
-  searchParams: { [key: string]: string | string[] | undefined }
+  // Next.js 16：params 与 searchParams 均为 Promise
+  params: Promise<{ slug: string }>
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>
 }
 
-export default function BlogPostPage({ params, searchParams }: BlogPostPageProps) {
+export default async function BlogPostPage({ params, searchParams }: BlogPostPageProps) {
+  const { slug } = await params
+  const query = await searchParams
   return (
     <div>
-      <h1>Blog Post: {params.slug}</h1>
-      <p>Query: {JSON.stringify(searchParams)}</p>
+      <h1>Blog Post: {slug}</h1>
+      <p>Query: {JSON.stringify(query)}</p>
     </div>
   )
 }
@@ -506,7 +509,6 @@ const nextConfig = {
   reactStrictMode: true,
 
   // SWC压缩
-  swcMinify: true,
 }
 
 module.exports = nextConfig
@@ -657,9 +659,10 @@ export async function POST(request: NextRequest) {
 // app/api/posts/[id]/route.ts - 动态API路由
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
-  const post = await getPost(params.id)
+  const { id } = await params
+  const post = await getPost(id)
 
   if (!post) {
     return NextResponse.json({ error: 'Post not found' }, { status: 404 })
@@ -670,32 +673,34 @@ export async function GET(
 
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const { id } = await params
   const body = await request.json()
-  const post = await updatePost(params.id, body)
+  const post = await updatePost(id, body)
   return NextResponse.json(post)
 }
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
-  await deletePost(params.id)
+  const { id } = await params
+  await deletePost(id)
   return NextResponse.json({ success: true })
 }
 ```
 
 ---
 
-## 🎯 中间件API
+## 🎯 代理（Proxy）API
 
 ```tsx
-// middleware.ts
+// proxy.ts（Next.js 16：由 middleware.ts 更名，运行于 Node.js runtime）
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 
-export function middleware(request: NextRequest) {
+export function proxy(request: NextRequest) {
   // 获取路径
   const path = request.nextUrl.pathname
 
@@ -705,7 +710,7 @@ export function middleware(request: NextRequest) {
   }
 
   // 地区重定向
-  const country = request.geo?.country
+  const country = request.headers.get('x-vercel-ip-country') // Vercel 地理信息头部
   if (country === 'CN' && path === '/') {
     return NextResponse.redirect(new URL('/cn', request.url))
   }
@@ -737,7 +742,7 @@ function isAuthenticated(request: NextRequest): boolean {
 
 ## 🔗 相关文档
 
-- 📄 **[Next.js 15 官方文档](https://nextjs.org/docs)**: 完整Next.js文档
+- 📄 **[Next.js 16 官方文档](https://nextjs.org/docs)**: 完整Next.js文档
 - 📄 **[App Router 指南](https://nextjs.org/docs/app)**: App Router详细指南
 - 📄 **[React 语法速查](./01-react-syntax-cheatsheet.md)**: React核心语法
 - 📄 **[TypeScript 类型速查](./03-typescript-types.md)**: TypeScript类型系统
@@ -785,14 +790,14 @@ function isAuthenticated(request: NextRequest): boolean {
 ## 📝 总结
 
 ### 核心要点回顾
-1. **App Router系统**: Next.js 15的革命性路由架构，基于文件系统约定
+1. **App Router系统**: Next.js 16的革命性路由架构，基于文件系统约定
 2. **动态路由处理**: 类型安全的参数处理和路由验证
 3. **数据获取API**: fetch、Server Actions、缓存控制等核心API
 4. **中间件系统**: 请求拦截、认证授权、路由保护等
 5. **配置系统**: next.config.js、环境变量、TypeScript配置
 
 ### 学习成果检查
-- [ ] 是否掌握了Next.js 15 App Router的核心概念？
+- [ ] 是否掌握了Next.js 16 App Router的核心概念？
 - [ ] 是否能够配置动态路由和路由参数？
 - [ ] 是否理解了Next.js的数据获取策略？
 - [ ] 是否能够使用中间件进行请求处理？
@@ -819,7 +824,7 @@ function isAuthenticated(request: NextRequest): boolean {
 ## 🔗 外部资源
 
 ### 官方文档
-- 📖 **[Next.js 15 官方文档](https://nextjs.org/docs)**: 完整的Next.js文档
+- 📖 **[Next.js 16 官方文档](https://nextjs.org/docs)**: 完整的Next.js文档
 - 📖 **[App Router API 参考](https://nextjs.org/docs/app/api-reference/file-conventions)**: 文件约定API
 - 📖 **[数据获取文档](https://nextjs.org/docs/app/building-your-application/data-fetching)**: 数据获取指南
 
@@ -831,9 +836,10 @@ interface Params {
   category: string
 }
 
-// 动态路由页面
-export default function Page({ params }: { params: Params }) {
-  return <div>Category: {params.category}, Slug: {params.slug}</div>
+// 动态路由页面（Next.js 16：params 为 Promise）
+export default async function Page({ params }: { params: Promise<Params> }) {
+  const { slug, category } = await params
+  return <div>Category: {category}, Slug: {slug}</div>
 }
 ```
 

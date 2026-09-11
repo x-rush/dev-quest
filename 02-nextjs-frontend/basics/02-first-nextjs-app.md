@@ -1,6 +1,6 @@
-# Next.js 15 第一个应用创建完整指南
+# Next.js 16 第一个应用创建完整指南
 
-> **文档简介**: Next.js 15 从零开始创建第一个应用的完整教程，涵盖项目初始化、页面创建、路由配置、基础开发等入门知识
+> **文档简介**: Next.js 16 从零开始创建第一个应用的完整教程，涵盖项目初始化、页面创建、路由配置、基础开发等入门知识
 
 > **目标读者**: Next.js初学者，需要从零开始学习Next.js开发的前端开发者
 
@@ -23,7 +23,7 @@
 ## 🎯 学习目标
 
 ### 🚀 核心技能掌握
-- 掌握Next.js 15项目创建和初始化流程
+- 掌握Next.js 16项目创建和初始化流程
 - 理解App Router的基本概念和文件约定
 - 创建和管理页面路由和布局
 - 掌握基础组件开发和页面渲染
@@ -38,7 +38,7 @@
 
 ## 📖 概述
 
-Next.js 15 是基于 React 19 的全栈框架，提供了强大的开发体验和生产性能。本教程将带领你从零开始创建第一个Next.js应用，学习核心概念和开发流程。
+Next.js 16 是基于 React 19 的全栈框架，提供了强大的开发体验和生产性能。本教程将带领你从零开始创建第一个Next.js应用，学习核心概念和开发流程。
 
 ## 🏗️ 项目创建流程
 
@@ -108,7 +108,7 @@ const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
   title: '我的第一个Next.js应用',
-  description: '学习Next.js 15开发',
+  description: '学习Next.js 16开发',
 }
 
 export default function RootLayout({
@@ -147,7 +147,7 @@ export default function HomePage() {
     <div className="space-y-8">
       <section className="text-center py-12">
         <h1 className="text-4xl font-bold text-gray-900 mb-4">
-          欢迎来到Next.js 15
+          欢迎来到Next.js 16
         </h1>
         <p className="text-xl text-gray-600 mb-8">
           这是你的第一个Next.js应用
@@ -202,7 +202,7 @@ export default function AboutPage() {
 
       <div className="prose prose-lg">
         <p className="text-gray-600 mb-4">
-          这是使用Next.js 15构建的第一个应用。在这个项目中，你将学习：
+          这是使用Next.js 16构建的第一个应用。在这个项目中，你将学习：
         </p>
 
         <ul className="list-disc pl-6 space-y-2">
@@ -225,7 +225,7 @@ export default function AboutPage() {
           </div>
           <div className="text-center">
             <div className="text-2xl mb-2">🚀</div>
-            <div className="text-sm">Next.js 15</div>
+            <div className="text-sm">Next.js 16</div>
           </div>
           <div className="text-center">
             <div className="text-2xl mb-2">📘</div>
@@ -504,7 +504,7 @@ npm run type-check
 const nextConfig = {
   // 实验性功能
   experimental: {
-    // 启用Turbopack (Next.js 15)
+    // 启用Turbopack (Next.js 16)
     turbo: {
       rules: {
         '*.svg': {
@@ -672,13 +672,13 @@ npm start
 
 ### 核心要点回顾
 1. **项目创建**: 掌握使用create-next-app创建Next.js项目，理解各种配置选项的含义
-2. **App Router**: 理解Next.js 15的App Router架构，掌握文件系统路由的基本概念
+2. **App Router**: 理解Next.js 16的App Router架构，掌握文件系统路由的基本概念
 3. **组件开发**: 学会创建React组件，理解服务端组件和客户端组件的区别
 4. **路由系统**: 掌握静态路由和动态路由的创建方法，理解页面间的导航
 5. **开发调试**: 熟悉开发服务器的使用，掌握热重载和错误调试技巧
 
 ### 学习成果检查
-- [ ] 是否能够独立创建Next.js 15项目并理解项目结构？
+- [ ] 是否能够独立创建Next.js 16项目并理解项目结构？
 - [ ] 是否掌握App Router的基本概念和文件约定？
 - [ ] 是否能够创建基本的页面组件并实现页面间导航？
 - [ ] 是否理解服务端渲染和客户端渲染的区别？

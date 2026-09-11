@@ -1,6 +1,6 @@
-# Next.js 15 布局和路由设计完整指南
+# Next.js 16 布局和路由设计完整指南
 
-> **文档简介**: Next.js 15 App Router 布局和路由系统深入教程，涵盖文件系统路由、嵌套布局、动态路由、路由组、并行路由等现代路由设计模式
+> **文档简介**: Next.js 16 App Router 布局和路由系统深入教程，涵盖文件系统路由、嵌套布局、动态路由、路由组、并行路由等现代路由设计模式
 
 > **目标读者**: 具备Next.js基础的开发者，需要掌握现代路由设计和布局架构的前端工程师
 
@@ -23,7 +23,7 @@
 ## 🎯 学习目标
 
 ### 🗺️ 路由系统掌握
-- 深入理解Next.js 15 App Router的文件系统路由
+- 深入理解Next.js 16 App Router的文件系统路由
 - 掌握嵌套路由和布局的创建方法
 - 学会动态路由和路由参数处理
 - 理解路由组和路由的高级特性
@@ -36,7 +36,7 @@
 
 ## 📖 概述
 
-Next.js 15的App Router基于文件系统提供了强大的路由和布局功能。通过文件夹结构自动生成路由，支持嵌套布局、动态路由、并行路由等高级特性，让复杂应用的架构变得简单直观。
+Next.js 16的App Router基于文件系统提供了强大的路由和布局功能。通过文件夹结构自动生成路由，支持嵌套布局、动态路由、并行路由等高级特性，让复杂应用的架构变得简单直观。
 
 ## 🏗️ App Router基础架构
 
@@ -90,7 +90,7 @@ export const metadata: Metadata = {
     default: '我的Next.js应用',
     template: '%s | 我的Next.js应用'
   },
-  description: '使用Next.js 15构建的现代化Web应用',
+  description: '使用Next.js 16构建的现代化Web应用',
   keywords: ['Next.js', 'React', 'TypeScript', 'Web开发'],
   authors: [{ name: 'Dev Quest Team' }],
   creator: 'Dev Quest Team',
@@ -99,12 +99,12 @@ export const metadata: Metadata = {
     locale: 'zh_CN',
     url: 'https://myapp.com',
     title: '我的Next.js应用',
-    description: '使用Next.js 15构建的现代化Web应用',
+    description: '使用Next.js 16构建的现代化Web应用',
   },
   twitter: {
     card: 'summary_large_image',
     title: '我的Next.js应用',
-    description: '使用Next.js 15构建的现代化Web应用',
+    description: '使用Next.js 16构建的现代化Web应用',
   },
   robots: {
     index: true,
@@ -262,9 +262,10 @@ import { getPostBySlug, getAllPostSlugs } from '@/lib/blog-data'
 import { BlogContent } from '@/components/BlogContent'
 
 interface PostPageProps {
-  params: {
+  // Next.js 16：params 为 Promise
+  params: Promise<{
     slug: string
-  }
+  }>
 }
 
 // 生成静态参数
@@ -277,7 +278,8 @@ export async function generateStaticParams() {
 
 // 生成元数据
 export async function generateMetadata({ params }: PostPageProps): Promise<Metadata> {
-  const post = await getPostBySlug(params.slug)
+  const { slug } = await params
+  const post = await getPostBySlug(slug)
 
   if (!post) {
     return {
@@ -299,7 +301,8 @@ export async function generateMetadata({ params }: PostPageProps): Promise<Metad
 }
 
 export default async function PostPage({ params }: PostPageProps) {
-  const post = await getPostBySlug(params.slug)
+  const { slug } = await params
+  const post = await getPostBySlug(slug)
 
   if (!post) {
     notFound()
@@ -322,14 +325,16 @@ import { notFound } from 'next/navigation'
 import { getUserPost } from '@/lib/api'
 
 interface UserPostPageProps {
-  params: {
+  // Next.js 16：params 为 Promise
+  params: Promise<{
     userId: string
     postId: string
-  }
+  }>
 }
 
 export async function generateMetadata({ params }: UserPostPageProps): Promise<Metadata> {
-  const post = await getUserPost(params.userId, params.postId)
+  const { userId, postId } = await params
+  const post = await getUserPost(userId, postId)
 
   return {
     title: post?.title || '文章不存在',
@@ -338,7 +343,8 @@ export async function generateMetadata({ params }: UserPostPageProps): Promise<M
 }
 
 export default async function UserPostPage({ params }: UserPostPageProps) {
-  const post = await getUserPost(params.userId, params.postId)
+  const { userId, postId } = await params
+  const post = await getUserPost(userId, postId)
 
   if (!post) {
     notFound()
@@ -350,11 +356,11 @@ export default async function UserPostPage({ params }: UserPostPageProps) {
         <nav className="text-sm text-gray-500">
           <Link href="/users" className="hover:text-gray-700">用户</Link>
           <span className="mx-2">/</span>
-          <Link href={`/users/${params.userId}`} className="hover:text-gray-700">
-            用户 {params.userId}
+          <Link href={`/users/${userId}`} className="hover:text-gray-700">
+            用户 {userId}
           </Link>
           <span className="mx-2">/</span>
-          <span className="text-gray-900">文章 {params.postId}</span>
+          <span className="text-gray-900">文章 {postId}</span>
         </nav>
       </div>
 
@@ -650,11 +656,13 @@ import { notFound } from 'next/navigation'
 import { getPhotoById } from '@/lib/photos'
 
 interface PhotoPageProps {
-  params: { id: string }
+  // Next.js 16：params 为 Promise
+  params: Promise<{ id: string }>
 }
 
-export default function PhotoPage({ params }: PhotoPageProps) {
-  const photo = getPhotoById(params.id)
+export default async function PhotoPage({ params }: PhotoPageProps) {
+  const { id } = await params
+  const photo = await getPhotoById(id)
 
   if (!photo) {
     notFound()
@@ -680,11 +688,12 @@ import { getPhotoById } from '@/lib/photos'
 import { PhotoModal } from '@/components/PhotoModal'
 
 interface PhotoModalProps {
-  params: { id: string }
+  params: Promise<{ id: string }>
 }
 
-export default function PhotoModal({ params }: PhotoModalProps) {
-  const photo = getPhotoById(params.id)
+export default async function PhotoModal({ params }: PhotoModalProps) {
+  const { id } = await params
+  const photo = await getPhotoById(id)
 
   if (!photo) {
     return null
@@ -1019,7 +1028,7 @@ export function Breadcrumbs() {
 - 探索性能优化和SEO策略
 - 了解部署和运维最佳实践
 
-Next.js 15的路由系统为现代Web应用提供了强大而灵活的架构基础。继续探索更多高级特性，构建更优秀的应用吧！
+Next.js 16的路由系统为现代Web应用提供了强大而灵活的架构基础。继续探索更多高级特性，构建更优秀的应用吧！
 
 ## 🔄 文档交叉引用
 
@@ -1043,7 +1052,7 @@ Next.js 15的路由系统为现代Web应用提供了强大而灵活的架构基�
 5. **高级特性**: 理解并行路由和拦截路由，掌握高级路由模式
 
 ### 学习成果检查
-- [ ] 是否理解Next.js 15 App Router的文件系统约定？
+- [ ] 是否理解Next.js 16 App Router的文件系统约定？
 - [ ] 是否能够创建嵌套布局和共享布局组件？
 - [ ] 是否掌握动态路由的创建和参数处理方法？
 - [ ] 是否理解路由组和并行路由的使用场景？

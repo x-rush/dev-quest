@@ -1,0 +1,125 @@
+# 值类型、引用类型与 ARC
+
+> **文档简介**: struct/enum（值语义）与 class/actor（引用语义）的条目式参考：赋值与传递行为、ARC 引用计数、weak/unowned 与循环引用
+>
+> **目标读者**: 从 GC 语言（Go/Java/Kotlin）转来、需要重建内存心智模型的学习者
+>
+> **前置知识**: 建议先学 [basics/03-swift-syntax-essentials.md](../../basics/03-swift-syntax-essentials.md) §二
+
+## 📚 文档元数据
+
+| 属性 | 内容 |
+|------|------|
+| **模块** | `06-swift-swiftui` |
+| **象限** | 字典 |
+| **难度** | ⭐⭐ |
+| **标签** | `#struct` `#class` `#ARC` `#weak` `#值语义` |
+| **更新日期** | `2026年9月` |
+
+---
+
+## 📌 定义
+
+**值类型**（struct、enum、元组等）：赋值与传参时**整体拷贝**，每个持有者各有一份独立数据——修改互不影响。
+
+**引用类型**（class、actor、闭包）：赋值与传参时**共享同一个实例**，多变量指向同一块内存；生命周期由 **ARC（自动引用计数）**管理——引用计数归零时实例立即释放。
+
+Swift 标准库的设计哲学是**优先 struct**：模型、坐标、配置等数据用值语义获得隔离与线程安全；`class` 只留给需要共享可变状态或身份的场景（ViewModel、controller）。
+
+> 与 Go 对照：Go 的 map/slice 是"引用语义的值类型"混合体；Swift 中 struct 明确是值语义，class 才是引用。
+
+## 📖 语法 / 签名
+
+### 两种类型的关键差异
+
+| 能力 | struct / enum | class |
+|------|---------------|-------|
+| 赋值行为 | 拷贝 | 共享引用 |
+| 可变性控制 | `var` 实例整体可变 | 属性逐个 `var` |
+| 修改自身的方法 | 需 `mutating` | 直接修改 |
+| 继承 | 不支持 | 支持 |
+| deinit | 无 | 有 |
+| 身份比较 | 无（用 `==` 比值） | `===` 比实例 |
+
+### 引用计数与弱引用
+
+```swift
+final class Cache {
+    deinit { print("Cache 释放") }        // 计数归零时调用
+}
+
+// weak：不增加计数，实例释放后自动变 nil（必须 var + Optional）
+weak var parent: Parent?
+
+// unowned：不增加计数，且假定实例始终存活（释放后访问即崩溃）
+unowned let owner: Owner
+```
+
+### 循环引用的经典现场与解法
+
+```swift
+final class Screen {
+    var onClose: (() -> Void)?            // 强引用闭包
+    deinit { print("释放") }
+}
+
+func demo() {
+    let screen = Screen()
+    screen.onClose = { screen.dismiss() } // 闭包捕获 screen → 互相强引用
+    // 解法：screen.onClose = { [weak screen] in screen?.dismiss() }
+}
+```
+
+## 💡 示例
+
+### SwiftUI 中的标准分工
+
+```swift
+// 值类型：数据快照，传给谁都不怕被改
+struct Note: Identifiable, Codable {
+    let id: UUID
+    var title: String
+    var done: Bool
+}
+
+// 引用类型：共享可变状态，全 App 唯一实例
+@MainActor @Observable
+final class NotesModel {
+    var notes: [Note] = []          // 数组元素是值类型
+    func toggle(_ id: UUID) { … }
+}
+```
+
+### 值语义的隔离效果
+
+```swift
+var a = Note(id: UUID(), title: "草稿", done: false)
+var b = a
+b.title = "已发布"
+print(a.title)   // "草稿" —— b 的修改不影响 a
+```
+
+### 标准库集合的写时复制（Copy-on-Write）
+
+```swift
+let big = Array(0..<1_000_000)
+let copy = big        // 此刻没有真正拷贝，共享底层存储（O(1)）
+copy[0] = -1          // 首次写入才发生实际拷贝
+```
+
+## ⚠️ 常见陷阱
+
+| 陷阱 | 说明 | 解法 |
+|------|------|------|
+| struct 含 class 字段当"深拷贝" | 拷贝的只是引用，两份数据共享同一对象 | 嵌套结构保持全值类型，或显式复制 |
+| 循环引用导致泄漏 | 对象互相强引用永不释放 | `weak` 打破环；Instruments Leaks 验证 |
+| unowned 悬垂崩溃 | 实例已释放仍访问 | 生命周期不明时一律用 `weak` |
+| 误把 @State 存 class 实例 | 视图重建时状态语义混乱 | 私有简单状态用值类型；共享模型走 @Observable + Environment |
+| 滥用 class 图"省拷贝" | 值类型的拷贝多是 O(1)（COW） | 先测量再优化，默认 struct |
+
+## 🔗 相关条目
+
+- 📄 [09-property-wrappers.md](./09-property-wrappers.md) — @State 值语义与包装器
+- 📄 [11-actors-sendability.md](./11-actors-sendability.md) — actor 是引用类型中的并发安全特例
+- 📄 [03-state-driven-views.md](../framework-essentials/03-state-driven-views.md) — 视图本身是值类型
+- 📄 [02-troubleshooting.md](../quick-references/02-troubleshooting.md) — 内存类问题排查

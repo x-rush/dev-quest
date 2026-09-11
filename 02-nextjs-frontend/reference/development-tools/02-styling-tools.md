@@ -1,10 +1,10 @@
-# Next.js 15 现代样式工具完整指南
+# Next.js 16 现代样式工具完整指南
 
-> **文档简介**: Next.js 15 现代样式工具速查指南，涵盖Tailwind CSS 4、CSS-in-JS、CSS Modules、Linaria、Styled Components等现代样式解决方案
+> **文档简介**: Next.js 16 现代样式工具速查指南，涵盖Tailwind CSS 4、CSS-in-JS、CSS Modules、Linaria、Styled Components等现代样式解决方案
 
-> **目标读者**: 具备基础CSS知识的前端开发者，需要掌握Next.js 15现代样式工具链的UI/UX工程师
+> **目标读者**: 具备基础CSS知识的前端开发者，需要掌握Next.js 16现代样式工具链的UI/UX工程师
 
-> **前置知识**: Next.js 15基础、TypeScript 5、CSS3、响应式设计基础、JavaScript ES6+
+> **前置知识**: Next.js 16基础、TypeScript 5、CSS3、响应式设计基础、JavaScript ES6+
 
 > **预计时长**: 6-8小时
 
@@ -22,7 +22,7 @@
 
 ## 📚 概述
 
-Next.js 15 提供了丰富的样式解决方案，从传统的CSS Modules到现代的CSS-in-JS，从原子化CSS到组件级样式系统。本指南深入探讨企业级样式架构，涵盖性能优化、主题系统、响应式设计和可维护性最佳实践。
+Next.js 16 提供了丰富的样式解决方案，从传统的CSS Modules到现代的CSS-in-JS，从原子化CSS到组件级样式系统。本指南深入探讨企业级样式架构，涵盖性能优化、主题系统、响应式设计和可维护性最佳实践。
 
 ## 🎨 Tailwind CSS 4 企业级配置
 

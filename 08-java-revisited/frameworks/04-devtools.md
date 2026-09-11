@@ -34,7 +34,7 @@
 | 增量构建 | 无 | 有（缓存 + 增量编译，快） |
 | 生态 | 最广泛 | Android/Kotlin 领域标配 |
 
-团队没有历史包袱时：**Spring Boot 3.x 两者都一等公民**，追求构建速度选 Gradle Kotlin DSL，追求稳定可读选 Maven。
+团队没有历史包袱时：**Spring Boot 4.x 两者都一等公民**，追求构建速度选 Gradle Kotlin DSL，追求稳定可读选 Maven。
 
 ### Maven 高频命令
 
@@ -62,7 +62,7 @@ mvn -o package            # 离线模式：CI 里跳过远程仓库检查
 <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
-    <version>3.3.5</version>
+    <version>4.1.1</version>
 </parent>
 ```
 
@@ -70,8 +70,8 @@ mvn -o package            # 离线模式：CI 里跳过远程仓库检查
 // Gradle Kotlin DSL：插件方式等价
 plugins {
     java
-    id("org.springframework.boot") version "3.3.5"
-    id("io.spring.dependency-management") version "1.1.6"
+    id("org.springframework.boot") version "4.1.1"
+    id("io.spring.dependency-management") version "1.1.7"
 }
 ```
 
@@ -92,7 +92,7 @@ plugins {
 
 - **重启（Restart）**：classpath 变化时用"快速重启类加载器"重启应用上下文，比冷启动快数倍
 - **自动触发**：IDE 构建（IDEA `Ctrl+F9` / Eclipse 自动编译）即触发
-- **LiveReload**：静态资源变化时通知浏览器插件自动刷新
+- **LiveReload**：静态资源变化时通知浏览器插件自动刷新（⚠️ Boot 4.1 起已标记废弃，新项目建议依赖 IDE 自动构建 + 触发文件）
 - **禁用缓存**：自动为模板引擎（Thymeleaf 等）关闭生产缓存
 
 ```yaml

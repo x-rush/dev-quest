@@ -1,6 +1,6 @@
 # 开发工具链 — uv、ruff、mypy 与 IPython
 
-> **文档简介**: 组装 Python 3.12+ 的现代工具链：uv 管依赖与脚本、ruff 一站式检查与格式化、mypy 静态类型检查、IPython/Jupyter 交互实验与调试
+> **文档简介**: 组装 Python 3.14 的现代工具链：uv 管依赖与脚本、ruff 一站式检查与格式化、mypy 静态类型检查、IPython/Jupyter 交互实验与调试
 >
 > **目标读者**: 已完成环境搭建、想让日常开发更顺滑的开发者
 >
@@ -51,7 +51,7 @@ uv lock --upgrade               # 升级锁文件中的版本
 # pyproject.toml
 [tool.ruff]
 line-length = 100
-target-version = "py312"
+target-version = "py314"
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "B", "UP", "SIM"]   # 基础错误/pyflakes/导入排序/bugbear/现代化/简化
@@ -66,7 +66,7 @@ uv run ruff check --fix .      # 自动修复可修复项
 uv run ruff format .           # 格式化（black 替代品）
 ```
 
-**要点**：`UP` 规则会提示把旧写法升级为 3.12 现代写法（如 `X | None` 替代 `Optional[X]`）；规则含义见[关键字与语法字典](../reference/language-concepts/01-python-keywords.md)。
+**要点**：`UP` 规则会提示把旧写法升级为现代写法（如 `X | None` 替代 `Optional[X]`）；规则含义见[关键字与语法字典](../reference/language-concepts/01-python-keywords.md)。
 
 ## 3. mypy：让类型注解真正生效
 
@@ -78,7 +78,7 @@ uv run mypy .
 ```toml
 # pyproject.toml —— 渐进收紧，先跑通再逐包开启 strict
 [tool.mypy]
-python_version = "3.12"
+python_version = "3.14"
 check_untyped_defs = true
 warn_unused_ignores = true
 ```

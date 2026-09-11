@@ -16,7 +16,7 @@
 | **状态** | ✅ 已完成 |
 
 ## 技术栈
-- **Go 1.21+**: 主要开发语言
+- **Go 1.25+**: 主要开发语言
 - **Gin框架**: HTTP服务器和REST API
 - **Gorilla WebSocket**: WebSocket连接管理
 - **Redis**: 缓存、发布订阅和会话管理
@@ -1771,7 +1771,7 @@ func (s *GroupService) IsGroupAdmin(userID, groupID string) (bool, error) {
 ### Dockerfile
 ```dockerfile
 # Dockerfile
-FROM golang:1.21-alpine AS builder
+FROM golang:1.25-alpine AS builder
 
 WORKDIR /app
 

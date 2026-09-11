@@ -62,15 +62,17 @@ pnpm dev
 ## 📦 3. 安装 TanStack 核心库
 
 ```bash
-# 运行时依赖
-pnpm add @tanstack/react-query @tanstack/react-query-devtools
+# 运行时依赖（Query v5 / Table v9 为 2026 年 9 月当前大版本）
+pnpm add @tanstack/react-query@^5 @tanstack/react-query-devtools@^5
 
 # 按需安装（后续教程会用到）
-pnpm add @tanstack/react-table @tanstack/react-router @tanstack/react-form
+pnpm add @tanstack/react-table@^9 @tanstack/react-router @tanstack/react-form
 
 # Router 需要 Vite 插件来生成类型安全的路由树
 pnpm add -D @tanstack/router-plugin
 ```
+
+> 💡 TanStack Query v5 官方当前支持 TypeScript **5.6+**（v5.0 发布时最低为 4.7），低于此版本先升级 `typescript`。
 
 | 包名 | 作用 |
 |------|------|

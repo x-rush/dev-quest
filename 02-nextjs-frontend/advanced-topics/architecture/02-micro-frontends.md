@@ -1,10 +1,10 @@
-# Next.js 15 微前端架构完整指南
+# Next.js 16 微前端架构完整指南
 
-> **文档简介**: Next.js 15 + React 19 企业级微前端架构实现，涵盖Module Federation、qiankun、single-spa等现代微前端解决方案，实现大型应用的模块化开发和独立部署
+> **文档简介**: Next.js 16 + React 19 企业级微前端架构实现，涵盖Module Federation、qiankun、single-spa等现代微前端解决方案，实现大型应用的模块化开发和独立部署
 
 > **目标读者**: 具备Next.js基础的高级开发者，需要构建大型分布式前端应用的架构师
 
-> **前置知识**: Next.js 15深度掌握、React 19高级特性、TypeScript 5、Webpack 5、构建工程、系统架构设计
+> **前置知识**: Next.js 16深度掌握、React 19高级特性、TypeScript 5、Webpack 5、构建工程、系统架构设计
 
 > **预计时长**: 10-14小时
 
@@ -50,7 +50,7 @@
 
 ### 🚀 微前端架构革命
 
-现代大型前端应用面临单体架构的固有挑战：团队协作冲突、技术栈锁定、部署风险集中、性能瓶颈等问题。Next.js 15 + React 19 + Webpack 5 Module Federation为企业级微前端架构提供了技术基础，实现应用的水平拆分和独立部署，构建真正模块化的前端生态系统。
+现代大型前端应用面临单体架构的固有挑战：团队协作冲突、技术栈锁定、部署风险集中、性能瓶颈等问题。Next.js 16 + React 19 + Webpack 5 Module Federation为企业级微前端架构提供了技术基础，实现应用的水平拆分和独立部署，构建真正模块化的前端生态系统。
 
 ### 🏗️ 微前端架构设计
 
@@ -128,7 +128,6 @@ const { ModuleFederationPlugin } = require('@module-federation/nextjs-mf');
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  swcMinify: true,
 
   webpack: (config, { isServer }) => {
     config.plugins.push(
@@ -193,7 +192,6 @@ const { ModuleFederationPlugin } = require('@module-federation/nextjs-mf');
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  swcMinify: true,
 
   webpack: (config, { isServer }) => {
     config.plugins.push(
@@ -1092,7 +1090,7 @@ async function updatePackageJson(appDir: string, config: { name: string; port: n
     'dev': `next dev -p ${config.port}`,
     'build': 'next build',
     'start': `next start -p ${config.port}`,
-    'lint': 'next lint',
+    'lint': 'eslint .',
   };
 
   await fs.writeJson(packageJsonPath, packageJson, { spaces: 2 });

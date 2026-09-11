@@ -1,8 +1,8 @@
 # Spring Boot 入门 - 依赖注入、自动配置与 REST Controller
 
-> **文档简介**: 用最短路径跑通 Spring Boot 3.x 应用的三大基石：IoC 容器与依赖注入、自动配置原理、REST Controller 开发，写出第一个规范的现代 Java Web 服务
+> **文档简介**: 用最短路径跑通 Spring Boot 4.x 应用的三大基石：IoC 容器与依赖注入、自动配置原理、REST Controller 开发，写出第一个规范的现代 Java Web 服务
 >
-> **目标读者**: 回归 Java、希望快速上手 Spring Boot 3.x 的开发者
+> **目标读者**: 回归 Java、希望快速上手 Spring Boot 4.x 的开发者
 >
 > **前置知识**: 已完成 [现代 Java 特性](../basics/07-modern-features.md) 与 [第一个项目](../basics/08-first-project.md)；注解语法见 [类、接口与 Record](../basics/04-classes-records.md)
 
@@ -26,22 +26,22 @@
 
 ## 🛠️ 一、创建项目
 
-到 [Spring Initializr](https://start.spring.io/) 选择 Java 21 + Spring Boot 3.x 生成 Maven 项目，勾选 `web`、`actuator` 起步。关键依赖（`pom.xml` 片段）：
+到 [Spring Initializr](https://start.spring.io/) 选择 Java 21（或 25 LTS）+ Spring Boot 4.1 生成 Maven 项目，勾选 `web`、`actuator` 起步。关键依赖（`pom.xml` 片段；Boot 4 起 Web MVC 的 starter 由 `spring-boot-starter-web` 更名为 **`spring-boot-starter-webmvc`**）：
 
 ```xml
 <properties>
     <java.version>21</java.version>
 </properties>
 <dependencies>
-    <!-- Spring MVC + 内嵌 Tomcat -->
+    <!-- Spring MVC + 内嵌 Tomcat（Boot 4 起：starter-web 更名为 starter-webmvc） -->
     <dependency>
         <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-web</artifactId>
+        <artifactId>spring-boot-starter-webmvc</artifactId>
     </dependency>
 </dependencies>
 ```
 
-> Spring Boot 3.x 基于 Spring Framework 6.x，命名空间已从 `javax.*` 迁移到 `jakarta.*`（如 `jakarta.validation.constraints.NotNull`）。完整迁移对照见 [Spring Boot 核心速查](../reference/framework-essentials/01-spring-boot-essentials.md)。
+> Spring Boot 4.x 基于 Spring Framework 7.x（Jakarta EE 11 基线，Servlet 6.1），命名空间沿用 Boot 3 起的 `jakarta.*`（如 `jakarta.validation.constraints.NotNull`）；Boot 3→4 的 starter 改名与属性迁移见 [Boot 3→4 迁移速查](../reference/quick-references/03-spring-boot4-migration.md) 与 [Spring Boot 核心速查](../reference/framework-essentials/01-spring-boot-essentials.md)。
 
 ## 🔍 二、依赖注入（DI）
 
@@ -207,7 +207,7 @@ public class GlobalExceptionHandler {
 ### ❌ 陷阱
 - 循环依赖：A 构造注入 B、B 构造注入 A → 启动失败；用 `@Lazy` 或重新设计边界
 - 在构造器里做重活：初始化逻辑放 `@PostConstruct` 或 `ApplicationRunner`
-- 忽略 `jakarta` 与 `javax` 混用：Boot 3 下 `javax.validation` 注解静默失效
+- 忽略 `jakarta` 与 `javax` 混用：Boot 3/4 下 `javax.validation` 注解静默失效
 
 ## 🔗 相关文档
 

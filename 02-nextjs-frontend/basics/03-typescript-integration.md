@@ -1,6 +1,6 @@
-# Next.js 15 + TypeScript 5 集成配置完整指南
+# Next.js 16 + TypeScript 5 集成配置完整指南
 
-> **文档简介**: Next.js 15 与 TypeScript 5 深度集成教程，涵盖类型系统配置、类型检查、类型定义、泛型编程等企业级TypeScript开发
+> **文档简介**: Next.js 16 与 TypeScript 5 深度集成教程，涵盖类型系统配置、类型检查、类型定义、泛型编程等企业级TypeScript开发
 
 > **目标读者**: 具备JavaScript基础的开发者，需要掌握Next.js中TypeScript应用的前端工程师
 
@@ -23,7 +23,7 @@
 ## 🎯 学习目标
 
 ### 🔧 配置和类型系统
-- 掌握Next.js 15中TypeScript的完整配置
+- 掌握Next.js 16中TypeScript的完整配置
 - 理解TypeScript类型系统和类型推断
 - 学会编写类型安全的组件和API
 - 掌握泛型编程和高级类型特性
@@ -36,7 +36,7 @@
 
 ## 📖 概述
 
-TypeScript为Next.js应用提供了静态类型检查，大大提升了代码质量和开发体验。Next.js 15对TypeScript 5提供了原生支持，让类型安全的全栈开发变得简单高效。
+TypeScript为Next.js应用提供了静态类型检查，大大提升了代码质量和开发体验。Next.js 16对TypeScript 5提供了原生支持，让类型安全的全栈开发变得简单高效。
 
 ## 🏗️ TypeScript项目配置
 
@@ -846,7 +846,7 @@ type UserWithDisplayName = {
 
 通过本教程，你已经掌握了：
 
-1. **配置管理**: Next.js 15中TypeScript的完整配置
+1. **配置管理**: Next.js 16中TypeScript的完整配置
 2. **类型系统**: TypeScript类型系统和类型推断机制
 3. **组件开发**: 类型安全的React组件编写
 4. **API开发**: 类型安全的API路由实现

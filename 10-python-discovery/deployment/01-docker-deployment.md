@@ -35,7 +35,7 @@
 
 ```dockerfile
 # ---- 构建阶段 ----
-FROM ghcr.io/astral-sh/uv:python3.12-bookworm-slim AS builder
+FROM ghcr.io/astral-sh/uv:python3.14-bookworm-slim AS builder
 ENV UV_COMPILE_BYTECODE=1 UV_LINK_MODE=copy
 WORKDIR /app
 
@@ -47,7 +47,7 @@ COPY . .
 RUN uv sync --frozen --no-dev
 
 # ---- 运行阶段 ----
-FROM python:3.12-slim-bookworm
+FROM python:3.14-slim-bookworm
 RUN groupadd -r app && useradd -r -g app app      # 非 root 运行
 WORKDIR /app
 COPY --from=builder --chown=app:app /app/.venv /app/.venv

@@ -1,6 +1,6 @@
 # JPA / Hibernate 核心速查
 
-> **文档简介**: JPA 实体注解、Spring Data 仓库方法、@Transactional 事务语义、N+1 问题与懒加载陷阱的条目式速查（Hibernate 6.x / Spring Boot 3.x / Jakarta 命名空间）
+> **文档简介**: JPA 实体注解、Spring Data 仓库方法、@Transactional 事务语义、N+1 问题与懒加载陷阱的条目式速查（Hibernate 7.x / Spring Boot 4.x / Jakarta Persistence 3.2 命名空间）
 >
 > **目标读者**: 有旧版 JPA 经验、需要现代化对照与陷阱排查的开发者
 >
@@ -131,7 +131,7 @@ List<Book> findByStatus(BookStatus status);
 
 ## ✅ 最佳实践 / ❌ 陷阱清单
 
-- ✅ 实体字段用 `java.time`（LocalDate/Instant），Hibernate 6 原生映射
+- ✅ 实体字段用 `java.time`（LocalDate/Instant），Hibernate 6 起原生映射（7.x 沿用）
 - ✅ 枚举一律 `@Enumerated(EnumType.STRING)`
 - ✅ 批量插入用 `saveAll` + `spring.jpa.properties.hibernate.jdbc.batch_size=50`（配 SEQUENCE 主键）
 - ❌ 不要让 `@ManyToOne` 保持默认 EAGER；关联显式 LAZY

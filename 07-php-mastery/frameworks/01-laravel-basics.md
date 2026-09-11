@@ -1,6 +1,6 @@
 # Laravel 入门：路由、控制器与 Blade 模板
 
-> **文档简介**: 从零创建 Laravel 11 项目，掌握路由定义、资源控制器、Blade 模板渲染与完整请求生命周期
+> **文档简介**: 从零创建 Laravel 13 项目，掌握路由定义、资源控制器、Blade 模板渲染与完整请求生命周期
 >
 > **目标读者**: 已学完 PHP 基础、第一次接触 Laravel 的开发者
 >
@@ -18,7 +18,7 @@
 
 ## 🎯 学习目标
 
-- ✅ 创建 Laravel 11 项目并理解目录职责
+- ✅ 创建 Laravel 13 项目并理解目录职责
 - ✅ 编写路由与控制器，返回视图与 JSON
 - ✅ 用 Blade 模板组织页面布局与组件
 - ✅ 说清一次 HTTP 请求在 Laravel 内部的流转过程
@@ -26,8 +26,8 @@
 ## 1. 创建项目
 
 ```bash
-# 创建全新 Laravel 11 项目（要求 PHP >= 8.2，本模块基线为 8.3）
-composer create-project laravel/laravel blog-app
+# 创建全新 Laravel 13 项目（要求 PHP >= 8.3，本模块基线为 8.5）；也可用官方安装器 laravel new blog-app
+composer create-project laravel/laravel:^13.0 blog-app
 cd blog-app
 
 # 启动开发服务器（http://localhost:8000）

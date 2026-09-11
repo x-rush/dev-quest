@@ -1,10 +1,10 @@
-# Next.js 15 服务端组件模式详解
+# Next.js 16 服务端组件模式详解
 
-> **文档简介**: Next.js 15 + React 19 服务端组件完整指南，涵盖SSR/SSG/ISR、数据获取、缓存策略、安全性、并发处理等现代服务端组件技术
+> **文档简介**: Next.js 16 + React 19 服务端组件完整指南，涵盖SSR/SSG/ISR、数据获取、缓存策略、安全性、并发处理等现代服务端组件技术
 
 > **目标读者**: 具备Next.js基础的中高级开发者，需要掌握服务端渲染和性能优化的前端工程师
 
-> **前置知识**: Next.js 15基础、React 19组件概念、TypeScript 5、缓存机制、数据库基础、API设计
+> **前置知识**: Next.js 16基础、React 19组件概念、TypeScript 5、缓存机制、数据库基础、API设计
 
 > **预计时长**: 8-12小时
 
@@ -22,7 +22,7 @@
 
 ## 📚 概述
 
-Next.js 15 与 React 19 的服务端组件架构代表了现代Web开发的重大突破。服务端组件在服务器上完全渲染，零JavaScript发送到客户端，提供卓越的性能和SEO优化。本指南深入探讨企业级服务端组件开发模式，结合先进的缓存策略、安全机制和性能优化技术，构建高性能、可扩展的服务端渲染架构。
+Next.js 16 与 React 19 的服务端组件架构代表了现代Web开发的重大突破。服务端组件在服务器上完全渲染，零JavaScript发送到客户端，提供卓越的性能和SEO优化。本指南深入探讨企业级服务端组件开发模式，结合先进的缓存策略、安全机制和性能优化技术，构建高性能、可扩展的服务端渲染架构。
 
 ## 🏗️ 服务端组件架构概览
 
@@ -249,7 +249,8 @@ async function getRelatedPosts(postId: string, limit = 5) {
 
 ```typescript
 // components/advanced-data-fetcher.tsx
-import { unstable_cache } from 'next/cache';
+// Next.js 16：unstable_cache 已弃用，改用 "use cache" 显式缓存
+import { cacheLife, cacheTag } from 'next/cache';
 import { Suspense } from 'react';
 
 // 多层缓存策略
@@ -305,27 +306,23 @@ class DataFetchingService {
       return memoryCached;
     }
 
-    // 2. 使用 Next.js 缓存
-    const cachedFetcher = unstable_cache(
-      async () => {
-        try {
-          const data = await fetcher();
+    // 2. 使用 Next.js 缓存（"use cache" 显式声明）
+    const cachedFetcher = async (): Promise<T> => {
+      'use cache'
+      cacheLife(revalidate <= 60 ? 'minutes' : 'hours');
+      cacheTag(key, ...tags);
+      try {
+        const data = await fetcher();
 
-          // 3. 设置内存缓存
-          this.setMemoryCache(key, data, ttl);
+        // 3. 设置内存缓存
+        this.setMemoryCache(key, data, ttl);
 
-          return data;
-        } catch (error) {
-          console.error(`Data fetching error for key ${key}:`, error);
-          throw error;
-        }
-      },
-      [key, ...tags],
-      {
-        revalidate,
-        tags
+        return data;
+      } catch (error) {
+        console.error(`Data fetching error for key ${key}:`, error);
+        throw error;
       }
-    );
+    };
 
     return cachedFetcher();
   }
@@ -529,7 +526,7 @@ function FullPost({
 
 ```typescript
 // components/multi-layer-cache.tsx
-import { unstable_cache } from 'next/cache';
+import { cacheLife, cacheTag } from 'next/cache';
 import { Redis } from '@upstash/redis';
 
 // Redis 客户端
@@ -638,7 +635,7 @@ class NextJSCacheLayer implements CacheLayer {
   }
 
   async set<T>(key: string, value: T, ttl = 3600): Promise<void> {
-    // 通过 Next.js unstable_cache 实现
+    // 通过 Next.js 的 "use cache" 显式缓存实现
   }
 
   async delete(key: string): Promise<void> {
@@ -1297,7 +1294,7 @@ export async function SecureComponent({
   className = ''
 }: SecureComponentProps) {
   // 获取请求头
-  const headersList = headers();
+  const headersList = await headers();
 
   // 验证输入
   const validatedInput = secureInputSchema.parse({
@@ -1436,7 +1433,7 @@ async function getUserFromToken(token: string): Promise<any> {
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const headersList = headers();
+    const headersList = await headers();
 
     // 验证CSRF token
     const csrfToken = headersList.get('x-csrf-token');
@@ -1512,7 +1509,7 @@ async function performSecureOperation(
 }
 ```
 
-这个 Next.js 15 服务端组件模式详解文档涵盖了：
+这个 Next.js 16 服务端组件模式详解文档涵盖了：
 
 1. **数据获取模式**: 基础和高级数据获取、多层缓存、并行处理
 2. **缓存策略模式**: 内存、Redis、Next.js三层缓存架构
@@ -1526,7 +1523,7 @@ async function performSecureOperation(
 ## 🔄 文档交叉引用
 
 ### 相关文档
-- 📄 **[App Router模式](./01-app-router-patterns.md)**: 深入了解Next.js 15 App Router架构和路由配置
+- 📄 **[App Router模式](./01-app-router-patterns.md)**: 深入了解Next.js 16 App Router架构和路由配置
 - 📄 **[客户端组件模式](./03-client-components-patterns.md)**: 掌握客户端组件开发和交互处理
 - 📄 **[数据获取模式](./04-data-fetching-patterns.md)**: 学习完整的数据获取策略和缓存优化
 - 📄 **[状态管理模式](./05-state-management-patterns.md)**: 构建企业级状态管理架构

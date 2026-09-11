@@ -2,6 +2,8 @@
 
 > **文档简介**: 掌握go-redis客户端的使用，学会在Go应用中高效使用Redis进行缓存、消息队列等操作
 >
+> **字典速查**: [go-redis 速查](../reference/framework-essentials/06-go-redis.md) - 概念与API的字典级定义以此处为单一事实来源
+>
 > **目标读者**: 具备Go基础和Redis基础知识的开发者
 >
 > **前置知识**: Go语言基础、Redis基础概念、数据结构基础

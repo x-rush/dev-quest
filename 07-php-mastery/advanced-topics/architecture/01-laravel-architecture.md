@@ -54,7 +54,7 @@ public function register(): void
 
 ## 2. 服务提供者：启动的两阶段
 
-Laravel 11 的提供者集中在 `bootstrap/providers.php` 注册，每个提供者经历两阶段：
+Laravel 11+（13 延续）的提供者集中在 `bootstrap/providers.php` 注册，每个提供者经历两阶段：
 
 ```text
 所有提供者的 register() 依次执行     ← 只做绑定，绝不使用其他服务
@@ -102,7 +102,7 @@ public/index.php
 | 模式 | Laravel 中的形态 | 适用信号 |
 |------|-----------------|---------|
 | Action 类 | `app/Actions/*`，一个类一个用例 | 控制器超过 10 行、逻辑被多处复用 |
-| DTO | `readonly` 属性类（PHP 8.3） | 数组参数四处传递、字段含义模糊 |
+| DTO | `readonly` 属性类（PHP 8.2+） | 数组参数四处传递、字段含义模糊 |
 | Service 层 | `app/Services/*`，聚合多个 Action | 事务边界、跨模型编排 |
 | Repository | 接口 + Eloquent 实现 | 需要替换存储或严格隔离查询（慎用，勿过度抽象） |
 

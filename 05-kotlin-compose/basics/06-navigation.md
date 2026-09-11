@@ -262,4 +262,5 @@ NavHost(navController, startDestination = "auth") {
 - 📄 **[协程与 Flow 基础](./07-coroutines-flow-basics.md)** - 下一篇：为页面注入异步数据
 - 📄 **[AndroidX 官方库指南](../reference/library-guides/01-androidx-libraries.md)** - Navigation 与 ViewModel 的联动
 - 📄 **[Compose 核心组件速查](../reference/framework-essentials/01-compose-essentials.md)** - Scaffold/NavigationBar 参数速查
+- 📄 **[Navigation Compose 组件速查](../reference/framework-essentials/06-navigation-components.md)** - NavController/NavBackStackEntry/深链字典
 - 📖 **[Navigation Compose 官方文档](https://developer.android.com/develop/ui/compose/navigation)** - 路由与深链完整指南

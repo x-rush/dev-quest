@@ -1,6 +1,6 @@
 # 项目实战 02 - 图书管理系统（JPA + 认证）
 
-> **文档简介**: 进阶项目：图书借阅管理，落地 Spring Data JPA 关联映射、Spring Security 6 认证授权、Flyway 数据库迁移与 Redis 缓存，体会"真实数据库 + 真实用户"下的开发节奏
+> **文档简介**: 进阶项目：图书借阅管理，落地 Spring Data JPA 关联映射、Spring Security 7 认证授权、Flyway 数据库迁移与 Redis 缓存，体会"真实数据库 + 真实用户"下的开发节奏
 >
 > **目标读者**: 完成 TODO API、想练习多实体关联与安全控制的开发者
 >
@@ -19,7 +19,7 @@
 ## 🎯 项目目标
 
 - 功能：图书管理、会员注册登录、借书/还书、逾期查询
-- 技术栈：Spring Boot 3.x + JPA（PostgreSQL）+ Spring Security 6 + Flyway + Redis 缓存
+- 技术栈：Spring Boot 4.x + JPA（PostgreSQL）+ Spring Security 7 + Flyway + Redis 缓存
 
 ## 🏗️ 一、领域建模与关联映射
 
@@ -102,6 +102,8 @@ spring:
 
 **规则**：已提交的迁移文件永不修改，变更一律新增 `V<N>__xxx.sql`。
 
+> Boot 4 起模块化更细：使用 Flyway 需显式引入 `spring-boot-starter-flyway`（旧版仅加第三方依赖即可）。
+
 ## 🛠️ 三、借书业务：并发安全
 
 ```java
@@ -147,7 +149,7 @@ public interface BookRepository extends JpaRepository<Book, Long> {
 }
 ```
 
-## 🛠️ 四、认证：Security 6 + 用户详情
+## 🛠️ 四、认证：Security 7 + 用户详情
 
 ```java
 @Service

@@ -1,8 +1,8 @@
-# Next.js 15 企业级完整开发指南
+# Next.js 16 企业级完整开发指南
 
-> **文档简介**: Next.js 15 深度掌握指南，涵盖App Router、Server Components、性能优化、部署策略等企业级开发核心技术
+> **文档简介**: Next.js 16 深度掌握指南，涵盖App Router、Server Components、性能优化、部署策略等企业级开发核心技术
 
-> **目标读者**: 具备Next.js基础的中高级开发者，需要深入掌握Next.js 15企业级应用开发的前端架构师
+> **目标读者**: 具备Next.js基础的中高级开发者，需要深入掌握Next.js 16企业级应用开发的前端架构师
 
 > **前置知识**: Next.js基础、React 19、TypeScript 5、Web性能优化、部署运维基础
 
@@ -15,7 +15,7 @@
 | **模块** | `02-nextjs-frontend` |
 | **分类** | `frameworks` |
 | **难度** | ⭐⭐⭐⭐⭐ (5/5星) |
-| **标签** | `#nextjs15` `#app-router` `#server-components` `#performance` `#enterprise` |
+| **标签** | `#nextjs16` `#app-router` `#server-components` `#performance` `#enterprise` |
 | **更新日期** | `2025年10月` |
 | **作者** | Dev Quest Team |
 | **状态** | ✅ 已完成 |
@@ -23,7 +23,7 @@
 ## 🎯 学习目标
 
 ### 🏗️ 企业级架构掌握
-- 深入理解Next.js 15的架构设计原理和最佳实践
+- 深入理解Next.js 16的架构设计原理和最佳实践
 - 掌握App Router的高级特性和复杂应用场景
 - 学会Server Components和Client Components的混合架构设计
 - 理解企业级应用的性能优化和部署策略
@@ -36,9 +36,57 @@
 
 ## 📖 概述
 
-Next.js 15代表了现代Web开发的重大进步，通过App Router、Server Components、Turbopack等创新技术，为构建高性能、可扩展的企业级应用提供了强大的基础。本指南将深入探讨Next.js 15的高级特性和企业级应用开发最佳实践。
+Next.js 16代表了现代Web开发的重大进步，通过App Router、Server Components、Turbopack等创新技术，为构建高性能、可扩展的企业级应用提供了强大的基础。本指南将深入探讨Next.js 16的高级特性和企业级应用开发最佳实践。
 
-## 🏛️ Next.js 15 架构深度解析
+## 🆕 Next.js 16 核心变化速览
+
+从 Next.js 15 升级到 Next.js 16（16.0 于 2025-10 发布，当前 16.3），以下变化直接影响日常开发，务必先建立正确的心智模型：
+
+### 1. Turbopack 成为默认打包器
+
+Turbopack 已稳定，是 `next dev` 与 `next build` 的默认打包器（Fast Refresh 最快 5-10 倍提升，生产构建快 2-5 倍）。Webpack 仅作迁移期回退，需用 `next dev --webpack` / `next build --webpack` 显式启用；Turbopack 配置从 `experimental.turbopack` 移至顶层 `turbopack` 键。
+
+### 2. Async Request APIs 完全异步
+
+`params`、`searchParams`、`cookies()`、`headers()`、`draftMode()` 均为 Promise/异步 API。Next.js 15 的同步兼容层在 16 中已完全移除，同步访问会直接报错：
+
+```tsx
+export default async function Page({
+  params,
+  searchParams,
+}: {
+  params: Promise<{ slug: string }>;
+  searchParams: Promise<{ q?: string }>;
+}) {
+  const { slug } = await params;
+  const { q } = await searchParams;
+  // ...
+}
+```
+
+### 3. 缓存语义：默认更少缓存
+
+- 动态代码默认在请求时执行，不再隐式缓存；需要缓存时使用 Cache Components（`cacheComponents: true`）与 `"use cache"` 指令显式声明
+- `fetch` 与路由段不再默认缓存；`revalidateTag()` 需传入 `cacheLife` profile 作为第二参数，Server Actions 中推荐使用新的 `updateTag()` 实现"写后读"一致性
+- 实验性 PPR 标志移除，演进为 Cache Components 编程模型
+
+### 4. Instant Navigations 与路由增强
+
+客户端导航重写：布局去重（layout deduplication）与增量预取（incremental prefetching）让导航接近即时渲染；dev 内存占用也大幅下降，开发体验显著改善。
+
+### 5. middleware.ts 弃用，更名为 proxy.ts
+
+`proxy.ts` 明确网络边界，运行于 Node.js runtime；导出函数更名为 `proxy`。Edge runtime 场景可暂留 `middleware.ts`（已弃用，未来移除）。
+
+### 6. 其他 breaking/移除项
+
+- AMP 支持移除（`useAmp`、`config.amp` 等 API 全部删除）
+- `next lint` 命令移除，`next build` 不再运行 lint，直接使用 ESLint/Biome CLI
+- `serverRuntimeConfig`/`publicRuntimeConfig` 移除，改用环境变量
+- `next/image` 默认值变化：`minimumCacheTTL` 提升至 4 小时、`qualities` 收敛为 `[75]`、`imageSizes` 移除 16、本地带查询串的 src 需配置 `images.localPatterns`
+- 最低运行时要求 Node.js 20.9+
+
+## 🏛️ Next.js 16 架构深度解析
 
 ### 核心架构原理
 
@@ -379,11 +427,13 @@ import { notFound } from 'next/navigation'
 import { getPhotoById } from '@/lib/photos'
 
 interface PhotoPageProps {
-  params: { id: string }
+  // Next.js 16：params 为 Promise
+  params: Promise<{ id: string }>
 }
 
 export default async function PhotoPage({ params }: PhotoPageProps) {
-  const photo = await getPhotoById(params.id)
+  const { id } = await params
+  const photo = await getPhotoById(id)
 
   if (!photo) {
     notFound()
@@ -406,7 +456,8 @@ export default async function PhotoPage({ params }: PhotoPageProps) {
 
 // src/app/@modal/(.)photos/[id]/page.tsx
 export default async function PhotoModal({ params }: PhotoPageProps) {
-  const photo = await getPhotoById(params.id)
+  const { id } = await params
+  const photo = await getPhotoById(id)
 
   if (!photo) {
     return null
@@ -495,24 +546,21 @@ export function PhotoModalWrapper({ photo }: PhotoModalWrapperProps) {
 
 ```tsx
 // src/lib/advanced-caching.ts
-import { unstable_cache } from 'next/cache'
-import { revalidateTag } from 'next/cache'
+// Next.js 16：unstable_cache 已弃用，改用 "use cache" 指令 + cacheTag/cacheLife 显式缓存
+import { revalidateTag, cacheTag, cacheLife } from 'next/cache'
 
 // 多层缓存策略
 export class AdvancedCacheManager {
   // L1缓存：内存缓存（请求级别）
   private static memoryCache = new Map<string, { data: any; timestamp: number; ttl: number }>()
 
-  // L2缓存：Next.js缓存（应用级别）
-  private static nextCache = unstable_cache(
-    async (key: string) => {
-      return await this.fetchFromSource(key)
-    },
-    {
-      revalidate: 3600, // 1小时
-      tags: ['dynamic']
-    }
-  )
+  // L2缓存：Next.js缓存（应用级别，"use cache" 显式声明）
+  private static async fetchCached(key: string) {
+    'use cache'
+    cacheLife('hours') // 约1小时级别的缓存 profile
+    cacheTag('dynamic')
+    return await this.fetchFromSource(key)
+  }
 
   // L3缓存：CDN缓存（边缘级别）
   private static cdnCache = new Map<string, { data: any; etag: string }>()
@@ -542,7 +590,7 @@ export class AdvancedCacheManager {
     // L2：Next.js缓存
     if (useNext) {
       try {
-        const data = await this.nextCache(key)
+        const data = await this.fetchCached(key)
         if (data) {
           // 回填内存缓存
           if (useMemory) {
@@ -595,10 +643,10 @@ export class AdvancedCacheManager {
       })
     }
 
-    // L2：Next.js缓存（通过unstable_cache自动处理）
+    // L2：Next.js缓存（通过 "use cache" 显式声明）
     if (useNext) {
-      // 这里unstable_cache会自动处理缓存
-      await this.nextCache(key)
+      // fetchCached 内部使用 "use cache"，写入并预热 Next.js 缓存
+      await this.fetchCached(key)
     }
 
     // L3：CDN缓存
@@ -612,8 +660,8 @@ export class AdvancedCacheManager {
 
   // 缓存失效
   static invalidate(tags: string[]): void {
-    // 失效Next.js缓存
-    tags.forEach(tag => revalidateTag(tag))
+    // 失效Next.js缓存（Next.js 16：revalidateTag 需传入 cacheLife profile 作为第二参数）
+    tags.forEach(tag => revalidateTag(tag, 'max'))
 
     // 清理内存缓存
     this.memoryCache.clear()
@@ -764,7 +812,7 @@ function PageHeader() {
         流式渲染示例
       </h1>
       <p className="text-xl text-gray-600 mt-2">
-        展示Next.js 15的流式渲染能力
+        展示Next.js 16的流式渲染能力
       </p>
     </header>
   )
@@ -937,50 +985,25 @@ async function fetchSidebarData() {
 // next.config.js
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Turbopack配置
-  experimental: {
-    turbo: {
-      // Turbopack规则配置
-      rules: {
-        // SVG文件处理
-        '*.svg': {
-          loaders: ['@svgr/webpack'],
-          as: '*.js',
-        },
-
-        // TypeScript文件优化
-        '*.ts?(x)': {
-          loaders: ['babel-loader'],
-          options: {
-            presets: ['@babel/preset-env', '@babel/preset-react', '@babel/preset-typescript']
-          }
-        },
-
-        // CSS文件处理
-        '*.css': {
-          loaders: ['postcss-loader'],
-          options: {
-            postcssOptions: {
-              plugins: ['tailwindcss', 'autoprefixer']
-            }
-          }
-        }
+  // Turbopack配置（Next 16：顶层 turbopack 键；experimental.turbo 仅为兼容别名）
+  turbopack: {
+    rules: {
+      // SVG文件处理
+      '*.svg': {
+        loaders: ['@svgr/webpack'],
+        as: '*.js',
       },
-
-      // Turbopack缓存配置
-      cacheDir: '.turbo',
-
-      // 并行处理
-      parallel: true,
-
-      // 开发环境优化
-      dev: {
-        overlay: true,
-        port: 3000,
-        reload: true
-      }
     },
+  },
 
+  // 服务器组件优化（Next 15+ 移至顶层 serverExternalPackages）
+  serverExternalPackages: [
+    'sharp',
+    'canvas',
+    'jsdom'
+  ],
+
+  experimental: {
     // 优化选项
     optimizeCss: true,
     optimizeServerReact: true,
@@ -991,18 +1014,6 @@ const nextConfig = {
       'clsx',
       'tailwind-merge'
     ],
-
-    // 字体优化
-    fontLoaders: [
-      { loader: '@next/font/google', options: { subsets: ['latin'] } }
-    ],
-
-    // 服务器组件优化
-    serverComponentsExternalPackages: [
-      'sharp',
-      'canvas',
-      'jsdom'
-    ]
   },
 
   // Webpack配置（fallback）
@@ -1066,7 +1077,7 @@ const nextConfig = {
   images: {
     formats: ['image/webp', 'image/avif'],
     deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048],
-    imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
+    imageSizes: [32, 48, 64, 96, 128, 256, 384], // Next 16：16 已从默认 imageSizes 移除
     minimumCacheTTL: 60,
     dangerouslyAllowSVG: true,
     contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
@@ -1091,7 +1102,7 @@ module.exports = nextConfig
 
 ## ✅ 总结
 
-通过本指南，你已经深入掌握了Next.js 15的企业级开发能力：
+通过本指南，你已经深入掌握了Next.js 16的企业级开发能力：
 
 ### 🏗️ 架构深度理解
 - App Router的工作原理和高级特性
@@ -1122,13 +1133,13 @@ module.exports = nextConfig
 ## 🔗 相关资源链接
 
 ### 官方资源
-- [Next.js 15 官方文档](https://nextjs.org/docs)
+- [Next.js 16 官方文档](https://nextjs.org/docs)
 - [React 19 官方文档](https://react.dev/)
 - [Next.js GitHub 仓库](https://github.com/vercel/next.js)
 - [Vercel 部署平台](https://vercel.com/)
 
 ### 技术文章
-- [Next.js 15 更新日志](https://nextjs.org/blog/next-15)
+- [Next.js 16 更新日志](https://nextjs.org/blog/next-16)
 - [App Router 最佳实践](https://nextjs.org/docs/app/building-your-application/routing)
 - [Server Components 深度解析](https://nextjs.org/docs/app/building-your-application/rendering/server-components)
 
@@ -1139,7 +1150,7 @@ module.exports = nextConfig
 ## 📚 模块内相关文档
 
 ### 同模块相关文档
-- [React 19 深度集成](./02-react-19-integration.md) - 学习React 19新特性与Next.js 15的集成实践
+- [React 19 深度集成](./02-react-19-integration.md) - 学习React 19新特性与Next.js 16的集成实践
 - [全栈开发模式](./03-full-stack-patterns.md) - 掌握现代全栈应用开发架构模式
 - [性能优化策略](./04-performance-optimization.md) - 深入Next.js应用性能调优技术
 
@@ -1164,11 +1175,11 @@ module.exports = nextConfig
 5. **性能优化特性**: 图片优化、字体优化、自动代码分割等内置优化功能
 
 ### 学习成果自检
-- [ ] 理解Next.js 15的App Router架构和Pages Router的区别
+- [ ] 理解Next.js 16的App Router架构和Pages Router的区别
 - [ ] 掌握Server Components和Client Components的使用场景
 - [ ] 能够使用Server Actions处理表单提交和数据变更
-- [ ] 熟练运用Next.js 15的性能优化特性
-- [ ] 能够独立创建和部署一个完整的Next.js 15应用
+- [ ] 熟练运用Next.js 16的性能优化特性
+- [ ] 能够独立创建和部署一个完整的Next.js 16应用
 
 ---
 
@@ -1196,10 +1207,10 @@ module.exports = nextConfig
 
 **📜 文档版本**: v1.0.0
 **📅 最后更新**: 2025年10月
-**🏷️ 标签**: `#nextjs15` `#react19` `#app-router` `#server-components` `#modern-web`
+**🏷️ 标签**: `#nextjs16` `#react19` `#app-router` `#server-components` `#modern-web`
 **⭐ 推荐指数**: ⭐⭐⭐⭐⭐
 
-**💡 提示**: 本模块为Next.js 15核心模块，建议先掌握React基础后再进行学习。结合实践项目能更好地理解概念。
+**💡 提示**: 本模块为Next.js 16核心模块，建议先掌握React基础后再进行学习。结合实践项目能更好地理解概念。
 
 **🎯 学习建议**:
 - 建议学习周期: 2-3周

@@ -33,7 +33,7 @@ const result = useQuery({
   gcTime: 5 * 60 * 1000,  // 无订阅后的缓存保留期，默认 5 分钟
   retry: 3,               // 失败重试次数，可为函数
   select: (data) => data.filter((t) => !t.completed), // 订阅层派生
-  placeholderData: keepPreviousData, // 保留上一次数据做占位
+  placeholderData: (previousData) => previousData, // v5：沿用上一键数据做占位（v4 的 keepPreviousData 选项已移除）
   refetchOnWindowFocus: true, // 窗口聚焦重取（stale 时）
   initialData: undefined, // 预置初始数据（会视为新鲜）
   meta: {},               // 透传给缓存与全局回调的元信息
@@ -44,7 +44,7 @@ const result = useQuery({
 
 | 字段 | 含义 |
 |------|------|
-| `data` | 查询数据，类型由 queryFn 推断 |
+| `data` | 查询数据，类型由 queryFn 推断；`isPending` 为 true 时收窄为 `undefined`（v5 严格类型收窄） |
 | `error` | 出错对象（默认为 `Error`） |
 | `status` | `'pending' \| 'error' \| 'success'` |
 | `fetchStatus` | `'idle' \| 'fetching' \| 'paused'` |
@@ -62,6 +62,7 @@ const result = useQuery({
 - **key 中放非序列化值**（函数、类实例）会导致缓存永远 miss——只放原始值
 - `select` 结果引用不稳定时组件会高频重渲染，复杂派生用 `useMemo` 包在 select 外
 - `enabled: false` 时 `status` 停在 `pending`，渲染分支要兼容
+- v5 中 `isPending` 期间 `data` 类型是 `undefined`，先判 `isPending` 再用 `data`，TS 才能收窄出非空类型；需要"非空 data"时改用 `useSuspenseQuery`
 
 ## 2. useMutation
 
@@ -98,6 +99,7 @@ const mutation = useMutation({
 - `mutate` 在组件卸载后回调不会执行——组件外逻辑用 `mutateAsync` 或 mutationCache 全局回调
 - 同一组件多次快速 `mutate` 只保留最后一次结果的状态
 - `onSuccess` 里手动 `setQueryData` 同步多个列表是维护噩梦，优先 `invalidateQueries`
+- mutation 回调与 MutationCache 全局回调都能拿到 client（v5 在回调 context 注入 `context.client`，MutationCache 回调经 `mutation.client` 获取）——组件内也常先 `const queryClient = useQueryClient()`（见上文示例），或用 `useMutationState` 做全局观测
 
 ## 3. QueryClient 方法全表
 
@@ -110,7 +112,7 @@ const mutation = useMutation({
 | `fetchQuery({ queryKey, queryFn })` | 取数并返回 Promise（进缓存） | 事件回调中预取 |
 | `prefetchQuery({ queryKey, queryFn })` | fetchQuery 的静默版 | 路由预加载 |
 | `getQueryData(key)` | 同步读缓存 | 乐观更新读快照 |
-| `setQueryData(key, updater)` | 同步写缓存 | 乐观更新写预测值 |
+| `setQueryData(key, updater)` | 同步写缓存（updater 返回 `undefined` 会清空条目） | 乐观更新写预测值 |
 | `getQueryState(key)` | 读状态元信息 | 判断是否正在取数 |
 | `cancelQueries({ queryKey })` | 取消进行中的请求 | 乐观更新前防覆盖 |
 | `removeQueries({ queryKey })` | 物理删除缓存条目 | 登出清数据 |

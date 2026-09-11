@@ -28,7 +28,7 @@
 
 #### 下载和安装
 - **官方网站**: [go.dev/dl](https://go.dev/dl/)
-- **推荐版本**: Go 1.21+ (稳定版本)
+- **推荐版本**: Go 1.25+（当前稳定版本，详见 README 技术基线区块）
 - **安装方式**:
   - **Windows**: 下载msi安装包，按向导安装
   - **macOS**: 使用Homebrew: `brew install go`
@@ -37,7 +37,7 @@
 #### 验证安装
 ```bash
 go version
-# 输出示例: go version go1.21.0 darwin/amd64
+# 输出示例: go version go1.25.0 darwin/amd64
 
 go env
 # 查看Go环境变量
@@ -97,7 +97,7 @@ hello-go/
 go get github.com/gin-gonic/gin
 
 # 添加特定版本
-go get github.com/gin-gonic/gin@v1.9.1
+go get github.com/gin-gonic/gin@latest
 
 # 移除依赖
 go get github.com/gin-gonic/gin@none

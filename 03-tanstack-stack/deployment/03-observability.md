@@ -135,7 +135,7 @@ onCLS(report); onINP(report); onLCP(report); onTTFB(report)
 |------|----------------|
 | LCP | 首屏查询是否被 loader 预取覆盖 |
 | INP | 交互后是否有意外的大范围 refetch 阻塞主线程 |
-| CLS | keepPreviousData 缺失导致的表格塌陷抖动 |
+| CLS | placeholderData 缺失导致的表格塌陷抖动 |
 
 ---
 

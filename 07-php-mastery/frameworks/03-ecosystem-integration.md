@@ -127,7 +127,7 @@ Cache::tags(['posts'])->flush();
 ## 4. Sanctum 认证
 
 ```bash
-php artisan install:api          # Laravel 11：启用 api.php 并附带安装 Sanctum
+php artisan install:api          # Laravel 11 起引入、13 延续：启用 api.php 并附带安装 Sanctum
 php artisan migrate              # personal_access_tokens 表
 ```
 

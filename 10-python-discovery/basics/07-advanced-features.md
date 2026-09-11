@@ -104,7 +104,7 @@ def read_lines(path: str):
 ```python
 from collections.abc import Iterable
 
-def first[T](items: Iterable[T]) -> T | None:   # 3.12 新泛型语法 PEP 695
+def first[T](items: Iterable[T]) -> T | None:   # PEP 695 泛型语法（3.12+）
     for item in items:
         return item
     return None
@@ -184,6 +184,35 @@ asyncio.run(main())   # 程序入口：启动事件循环
 
 ---
 
+## 5. 3.13/3.14 新特性速览
+
+本模块基线为 Python 3.14。在前四节的稳定知识之上，这三年的版本值得专门记住：
+
+**t-string 模板字符串（3.14，PEP 750）**：`t"..."` 与 f-string 同形，返回可延迟渲染的模板对象而非 `str`，由库决定如何转义插值，主打 HTML/SQL 防注入。见[字符串格式化字典](../reference/language-concepts/12-string-formatting.md)。
+
+**类型系统增强**：
+
+```python
+# 3.13：TypeVar 可以带默认值（PEP 696），未指定时用默认类型
+from typing import TypeVar
+
+class Default: ...
+T = TypeVar("T", default=Default)
+
+# 3.13：TypeIs 收窄更直觉（PEP 742），isinstance 式的判别函数
+from typing import TypeIs
+
+def is_str_list(items: list[object]) -> TypeIs[list[str]]:
+    return all(isinstance(i, str) for i in items)
+
+# 3.14：注解改为惰性求值（PEP 649/749），前向引用不再需要引号
+def create() -> "App": ...   # 旧代码里的字符串前向引用写法成为历史
+```
+
+**free-threading 现状**：no-GIL 构建在 3.13 实验引入，3.14 起转为**官方支持**的构建选项（PEP 779），但默认安装的解释器仍带 GIL，第三方生态适配持续推进中。生产选型请参考[故障排除字典的 GIL 决策表](../reference/quick-references/02-troubleshooting.md)，现阶段 asyncio / multiprocessing 的分工不变。
+
+---
+
 ## ✅ 最佳实践
 
 - ✅ **装饰器必配 `@wraps`**，参数化装饰器三层结构记牢
@@ -196,7 +225,7 @@ asyncio.run(main())   # 程序入口：启动事件循环
 ## ❓ 常见问题
 
 ### Q1: 多线程、多进程、asyncio 怎么选？
-**A**: I/O 并发选 asyncio；CPU 密集选 `multiprocessing`（绕过 GIL）；多线程仅适合兼容阻塞库的过渡方案。GIL 细节见[常见错误排查](../reference/quick-references/02-troubleshooting.md)。
+**A**: I/O 并发选 asyncio；CPU 密集选 `multiprocessing`（绕过 GIL）；多线程仅适合兼容阻塞库的过渡方案。free-threading（no-GIL）构建 3.14 起官方支持但仍非默认，生态适配中，选型逻辑暂不变。GIL 细节见[常见错误排查](../reference/quick-references/02-troubleshooting.md)。
 
 ---
 

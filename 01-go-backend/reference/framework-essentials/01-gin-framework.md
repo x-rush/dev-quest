@@ -702,7 +702,7 @@ func CacheMiddleware(ttl time.Duration) gin.HandlerFunc {
 **示例**：
 ```go
 // Dockerfile
-FROM golang:1.21-alpine AS builder
+FROM golang:1.25-alpine AS builder
 
 WORKDIR /app
 COPY go.mod go.sum ./

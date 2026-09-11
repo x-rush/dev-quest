@@ -113,17 +113,33 @@ function PostDetail() {
 TanStack Table 是 Headless 的，数据来自哪里它不关心；做服务端分页时，把"当前页状态"放进 **URL 搜索参数（Router）**，用该状态发起 **Query**，再把结果交给 **Table**。
 
 ```tsx
-import { useReactTable, getCoreRowModel, flexRender, createColumnHelper } from '@tanstack/react-table'
-import { useQuery, keepPreviousData } from '@tanstack/react-query'
+import {
+  coreFeatures,
+  createColumnHelper,
+  flexRender,
+  rowPaginationFeature,
+  rowSortingFeature,
+  tableFeatures,
+  useTable,
+} from '@tanstack/react-table'
+import { useQuery } from '@tanstack/react-query'
 import { Route } from '@/routes/users' // 搜索参数校验定义在路由文件里
 
 interface UserRow { id: number; name: string; email: string }
 
-const columnHelper = createColumnHelper<UserRow>()
-const columns = [
+// v9：createColumnHelper 需要 TFeatures 与 TData 两个泛型；manual* 选项也依赖特性注册
+const features = tableFeatures({
+  ...coreFeatures, // 核心特性必须显式注册，react 适配器不会自动合并
+  rowSortingFeature, // manualSorting 选项来自排序特性
+  rowPaginationFeature, // manualPagination / pageCount / state.pagination 来自分页特性
+})
+const columnHelper = createColumnHelper<typeof features, UserRow>()
+const emptyRows: UserRow[] = [] // 模块级稳定引用，避免每次渲染产生新数组
+// 用 columnHelper.columns 包一层，防止数组字面量的 TValue 类型拓宽
+const columns = columnHelper.columns([
   columnHelper.accessor('name', { header: '姓名' }),
   columnHelper.accessor('email', { header: '邮箱' }),
-]
+])
 
 export function UserTable() {
   const { pageIndex, pageSize, sortBy } = Route.useSearch() // URL 是状态的事实来源
@@ -137,17 +153,17 @@ export function UserTable() {
         if (!r.ok) throw new Error('加载用户失败')
         return r.json() as Promise<{ rows: UserRow[]; total: number }>
       }),
-    placeholderData: keepPreviousData, // 翻页时保留旧数据，表格不闪空白
+    placeholderData: (previousData) => previousData, // 函数式写法：翻页时保留旧数据，表格不闪空白
   })
 
-  const table = useReactTable({
-    data: data?.rows ?? [],
+  const table = useTable({
+    data: data?.rows ?? emptyRows, // 复用模块级空数组，保持 data 引用稳定
     columns,
     manualPagination: true,   // 分页交给服务端
     manualSorting: true,      // 排序也交给服务端
     pageCount: data ? Math.ceil(data.total / pageSize) : -1,
     state: { pagination: { pageIndex, pageSize } },
-    getCoreRowModel: getCoreRowModel(),
+    features, // 复用上方特性集；v9 必填，服务端模式同样离不开核心特性
   })
 
   return (
@@ -164,7 +180,7 @@ export function UserTable() {
       <tbody style={{ opacity: isPlaceholderData ? 0.5 : 1 }}>
         {table.getRowModel().rows.map((row) => (
           <tr key={row.id}>
-            {row.getVisibleCells().map((cell) => (
+            {row.getAllCells().map((cell) => (
               <td key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</td>
             ))}
           </tr>
@@ -189,7 +205,7 @@ export function UserTable() {
 
 - ✅ 预取键与组件消费键**完全一致**，否则白预取一次
 - ✅ 表格状态放 URL 搜索参数：可分享、可回退、刷新可恢复
-- ✅ 服务端分页必配 `placeholderData: keepPreviousData`，避免翻页闪烁
+- ✅ 服务端分页必配 `placeholderData: (prev) => prev`（函数式写法，翻页保留旧数据），避免翻页闪烁
 - ❌ 不要在 loader 里 await 全部数据：关键数据 await，次要数据 prefetch
 - ❌ 不要让 Form 直接写缓存绕过 Mutation，会失去错误处理与失效时机
 

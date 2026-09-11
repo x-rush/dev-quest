@@ -34,12 +34,12 @@ class TodoControllerTest {
     @MockitoBean                           // Boot 3.4+：替换容器中的 Bean
     TodoService todoService;
 
-    @Autowired ObjectMapper objectMapper;  // 复用主配置的 Jackson
+    @Autowired JsonMapper jsonMapper;      // Boot 4 / Jackson 3：复用主配置的 JsonMapper
 
     @Test
     @DisplayName("POST /api/todos 校验空白标题返回 400 与字段错误")
     void rejectBlankTitle() throws Exception {
-        var body = objectMapper.writeValueAsString(new TodoDto(null, "  ", false));
+        var body = jsonMapper.writeValueAsString(new TodoDto(null, "  ", false));
 
         mockMvc.perform(post("/api/todos")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -84,10 +84,13 @@ class TodoControllerTest {
 
 ### 引入与基本风格
 
+> Boot 4 的依赖管理不再收录 REST Assured（仍可用，但需自行指定版本）；官方新推的 `RestTestClient` 是更轻的替代。
+
 ```xml
 <dependency>
     <groupId>io.rest-assured</groupId>
     <artifactId>rest-assured</artifactId>
+    <version>5.5.0</version> <!-- Boot 4 BOM 不再管理，需显式指定（以官方最新版为准） -->
     <scope>test</scope>
 </dependency>
 ```

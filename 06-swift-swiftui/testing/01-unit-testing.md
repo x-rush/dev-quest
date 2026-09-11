@@ -18,7 +18,7 @@
 
 ## 🎯 本指南解决什么问题
 
-Xcode 16+ 内置 Swift Testing（`import Testing`），与 XCTest 并存但**新代码首选 Swift Testing**：宏驱动、无继承、参数化一行搞定。本指南以习惯追踪器的业务扩展为例，建立"哪些测、怎么测、测到什么程度"的操作规程。
+Xcode 26.x 内置 Swift Testing（`import Testing`），与 XCTest 并存但**新代码首选 Swift Testing**：宏驱动、无继承、参数化一行搞定。本指南以习惯追踪器的业务扩展为例，建立"哪些测、怎么测、测到什么程度"的操作规程。
 
 ## 🛠️ 任务一：第一个 @Test
 

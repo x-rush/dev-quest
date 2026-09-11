@@ -73,7 +73,7 @@ final class OrderController extends Controller
 }
 ```
 
-DTO 用 PHP 8.3 的 readonly 属性承载数据，杜绝数组传来传去：
+DTO 用 readonly 属性承载数据（`final readonly` 类为 PHP 8.2+ 特性），杜绝数组传来传去：
 
 ```php
 // app/DataTransferObjects/OrderData.php
@@ -107,7 +107,7 @@ final readonly class OrderData
 ## 3. 统一异常与日志
 
 ```php
-// bootstrap/app.php（Laravel 11 集中配置异常渲染）
+// bootstrap/app.php（Laravel 11+ 集中配置异常渲染，13 延续）
 use Illuminate\Foundation\Application;
 use Illuminate\Http\Request;
 
