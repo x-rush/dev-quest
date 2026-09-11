@@ -157,11 +157,10 @@ class Cart
 $cart = new Cart();
 $cart->add($line);
 
-// 8.3 新特性：clone($obj, [...]) 克隆时批量覆盖属性（含 readonly），
+// 8.5 新特性（RFC clone_with_v2）：clone($obj, [...]) 克隆时批量覆盖属性，
 // 配合 readonly 实现"修改即新对象"；被覆盖属性须当前作用域可见
 $extra = new OrderLine('NEW', 1, 9.9);
 $copy  = clone($cart, ['items' => [...$cart->items(), $extra]]);
-// 8.5 起等价链式写法：clone($cart)->with(items: [...$cart->items(), $extra])
 ```
 
 > 💡 PHP 8.4 引入**非对称可见性**：`public private(set) array $items` 表示外部可读、仅内部可写，可替代手写 getter。注意它与 `readonly` 互斥，二选一即可。
@@ -286,7 +285,7 @@ echo $total->cents, PHP_EOL;   // 350
 
 ### 进阶挑战
 - [ ] 实现不可变 `Money` 类：支持 `add/sub/multiply`，所有操作返回新实例，`readonly` 保证原值不变
-- [ ] 用 `clone()`（8.3 批量覆盖形式 / 8.5 链式 `->with()`）实现 `Cart` 的不可变添加操作，验证原对象未被修改
+- [ ] 用 `clone()`（8.5 批量覆盖形式，封装为类内 `withXxx()` 方法）实现 `Cart` 的不可变添加操作，验证原对象未被修改
 
 ---
 

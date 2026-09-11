@@ -19,6 +19,7 @@
 - 根级 README / document-index / learning-progress 技术栈行与篇数统计同步至刷新后实况
 
 ### Fixed
+- **纠正 PHP 8.5 clone with 的虚构语法**（07 模块 4 文件）：本机 PHP 8.5.10 实测 + php.net 官方核实——`clone($obj, ['prop' => val])` 为 8.5 新增（RFC clone_with_v2，并非文档所称 8.3+），`clone($obj)->with()` 链式语法不存在（实测 parse error），readonly 覆盖须在作用域可见内（8.4 起 promoted readonly 默认 protected(set)），URI 扩展 WhatWg 类无 `getHost`/`getUserInfo`（实际为 `getAsciiHost`/`getUnicodeHost`/`getUsername`）
 - **纠正虚构的 TanStack Query v6 版本声明**（03 模块 18 文件 + 02 模块基线区块 + CHANGELOG）：npm registry 证实 v6 不存在（latest 为 5.102.8），早期检索结果被污染；同步证伪并修复 "keepPreviousData 已移除"、"mutation 回调不再注入 client"、"最低 TypeScript 5.5" 等虚假 breaking changes 声明
 - TanStack Table v9 示例修复（basics/04、frameworks/03、reference/09）：`createColumnHelper` 泛型、`tableFeatures({ coreFeatures })`、`columnHelper.columns()` 类型安全、特性作用域选项注册
 - 代码抽查验证（本机工具链实际运行：go run / npm i hono / tsc --noEmit / @tanstack/react-query@5 类型检查）发现的其余示例错误

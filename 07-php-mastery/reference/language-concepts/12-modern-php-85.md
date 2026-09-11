@@ -2,7 +2,7 @@
 
 ## 概述
 
-本文是 PHP 8.4（2024-11 发布）与 PHP 8.5（2025-11-20 发布）增量特性的字典速查：属性钩子、管道运算符、URI 扩展、`#[\NoDiscard]`、`clone()->with()`、常量表达式增强等。每条按"📌 定义 → 📖 语法 → 💡 示例 → ⚠️ 陷阱"组织，供已熟悉 8.1-8.3 特性的开发者快速补课。版本基线：本模块以 8.5 为编写基线（2026-09 核实）。
+本文是 PHP 8.4（2024-11 发布）与 PHP 8.5（2025-11-20 发布）增量特性的字典速查：属性钩子、管道运算符、URI 扩展、`#[\NoDiscard]`、`clone()` 批量覆盖、常量表达式增强等。每条按"📌 定义 → 📖 语法 → 💡 示例 → ⚠️ 陷阱"组织，供已熟悉 8.1-8.3 特性的开发者快速补课。版本基线：本模块以 8.5 为编写基线（2026-09 核实）。
 
 ## 📚 文档元数据
 
@@ -129,8 +129,12 @@ echo $pad, PHP_EOL;                      // __php___
 new Uri\Rfc3986\Uri(string $uri, ?Uri\Rfc3986\Uri $baseUrl = null)
 new Uri\WhatWg\Url(string $uri, ?Uri\WhatWg\Url $baseUrl = null, array &$softErrors = [])
 
-getScheme/getUserinfo/getHost/getPort/getPath/getQuery/getFragment(): ?string
-withScheme/withUserInfo/withHost/withPort/withPath/withQuery/withFragment(string $v): static
+// Uri\Rfc3986\Uri：getter 与 with*（返回新实例）
+getScheme/getUserInfo/getUsername/getPassword/getHost/getPort/getPath/getQuery/getFragment(): ?string
+withScheme/withUserInfo/withUsername/withPassword/withHost/withPort/withPath/withQuery/withFragment(string $v): static
+
+// Uri\WhatWg\Url：无 getUserInfo/getHost——用户信息用 getUsername/getPassword，
+// 主机用 getAsciiHost/getUnicodeHost，其余 getter/with* 同名
 ```
 
 💡 **示例**:
@@ -209,16 +213,15 @@ $summary = $cart->add('PHP-BOOK');    // ✅ 消费返回值
 
 🔗 **相关条目**: [类型系统全表](./03-types-oop-modern.md)
 
-## 条目 6：`clone()` 与 `clone()->with()`（8.3 / 8.5）
+## 条目 6：`clone()` 批量覆盖（clone with，8.5+）
 
-📌 **定义**: 8.3 给 `clone` 增加函数形式 `clone($obj, ['prop' => value])`，支持克隆时批量覆盖属性（含 readonly）；8.5 在此基础上支持链式 `clone($obj)->with(prop: value)`，语义与不可变值对象的"修改即新对象"完全对齐。
+📌 **定义**: 8.5 给 `clone` 增加函数形式 `clone($obj, ['prop' => value])`，在克隆时批量覆盖属性——为 `readonly` 类实现 with-er（不可变值对象"修改即新对象"）模式提供了语言级支持（RFC clone_with_v2）。
 
 📖 **语法/签名**:
 
 ```php
-clone($object): object                       // 8.5+：可继续 ->with()
-clone($object, array $properties): object    // 8.3+：克隆时覆盖
-clone($object)->with(string $prop, mixed ...): object   // 8.5+
+clone($object, array $properties): object    // 8.5+：克隆时批量覆盖
+(clone($object, [...]))->prop                // 返回值链式访问需括号包裹
 ```
 
 💡 **示例**:
@@ -234,20 +237,27 @@ final class Invoice
         public readonly string $no,
         public readonly int $cents,
     ) {}
+
+    // with-er 模式：类内方法封装克隆覆盖
+    public function withCents(int $cents): self
+    {
+        return clone($this, ['cents' => $cents]);
+    }
 }
 
 $origin = new Invoice('INV-1', 1000);
 
-// 8.3 函数形式：批量覆盖
-$b = clone($origin, ['cents' => 2000]);
+// 类内（经方法）：readonly 覆盖成功
+$b = $origin->withCents(2000);
 
-// 8.5 链式形式：命名参数逐个覆盖
-$c = clone($origin)->with(cents: 3000);
+// 直接覆盖非 readonly 属性：任意作用域可用
+class Point { public function __construct(public int $x) {} }
+$p2 = clone(new Point(1), ['x' => 9]);
 
-echo $c->no, '/', $c->cents, PHP_EOL;    // INV-1/3000（$origin 不受影响）
+echo $b->no, '/', $b->cents, PHP_EOL;    // INV-1/2000（$origin 不受影响）
 ```
 
-⚠️ **常见陷阱**: `with` 只能改**当前作用域可见**的属性；`clone` 关键字形式 `(clone $obj)` 依旧合法但不带 `->with()`——链式必须用 `clone()` 函数形式；`__clone()` 魔术方法照常触发。
+⚠️ **常见陷阱**: 覆盖属性必须**当前作用域可见**——`readonly` 提升属性自 8.4 起默认 `protected(set)`，在全局作用域 `clone($obj, [...])` 覆盖它会 Fatal error，须封装到类方法内；**不存在 `clone($obj)->with()` 链式语法**（实测 8.5.10 为 parse error），with-er 模式靠类内 `withXxx()` 方法实现；`clone(...)` 返回值直接接 `->` 会解析错误，需括号 `((clone($obj, [...]))->prop)`；`__clone()` 魔术方法照常触发。
 
 🔗 **相关条目**: [readonly 属性](./03-types-oop-modern.md)、[教程：函数与 OOP](../../basics/04-functions-oop.md)
 

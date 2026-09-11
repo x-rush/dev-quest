@@ -82,8 +82,7 @@ enum Level: string { case Low = 'low'; case High = 'high'; }   // Backed 枚举�
 $l = Level::from('high'); $v = $l->value; $k = $l->name;       // 枚举取值
 $c = new class { public function hi(): string { return 'hi'; } };   // 匿名类
 $p = new Point(x: 1, y: 2);                              // 命名参数构造
-$copy = clone($point, ['x' => 9]);                       // 克隆并覆盖属性（8.3+）
-$copy2 = clone($point)->with(x: 9);                      // 链式覆盖（8.5+）
+$copy = clone($point, ['x' => 9]);                       // 克隆并覆盖属性（8.5+，RFC clone_with_v2）
 $u = new Uri\WhatWg\Url('https://php.net/docs');         // WHATWG URI（8.5+，构造即校验）
 $is = $obj instanceof $class;                            // 动态 instanceof
 $name = $obj::class;                                     // 运行时类名（8.0+）
