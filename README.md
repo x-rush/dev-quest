@@ -200,9 +200,9 @@ dev-quest/
 ## 🛠️ 技术栈概览
 
 ### 核心技术
-- **后端**: Go 1.21+, Gin, gRPC, GraphQL
-- **前端**: Next.js 15, React 19, TypeScript 5.x, TanStack (Query/Table/Router/Form)
-- **移动端**: React Native, Jetpack Compose (Kotlin), SwiftUI (Swift)
+- **后端**: Go 1.24+, Gin, gRPC, GraphQL
+- **前端**: Next.js 16, React 19, TypeScript 6.x, TanStack (Query/Table/Router/Form)
+- **移动端**: React Native (Expo), Jetpack Compose (Kotlin 2.4), SwiftUI (Swift 6.3)
 - **数据库**: PostgreSQL, Redis, MongoDB, MySQL
 - **云原生**: Docker, Kubernetes, Helm, Istio
 - **监控**: Prometheus, Grafana, OpenTelemetry

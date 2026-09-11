@@ -54,7 +54,7 @@ graph LR
 - **Go模块**: [Go Modules](https://go.dev/blog/using-go-modules) - Go依赖管理
 
 ### Next.js生态
-- **Next.js文档**: [Next.js 15 Documentation](https://nextjs.org/docs) - Next.js官方文档
+- **Next.js文档**: [Next.js Documentation](https://nextjs.org/docs) - Next.js官方文档
 - **React文档**: [React 19 Documentation](https://react.dev) - React官方文档
 - **TypeScript**: [TypeScript Handbook](https://www.typescriptlang.org/docs/) - TypeScript官方文档
 ```
@@ -99,7 +99,7 @@ graph LR
 
 ### 2. 知识图谱引用
 
-```markdown
+````markdown
 ### 知识关联
 ```mermaid
 graph TD
@@ -114,6 +114,7 @@ graph TD
     H[TypeScript基础] -.-> A
     I[PHP变量] -.-> A
 ```
+````
 
 ### 3. 学习路径引用
 

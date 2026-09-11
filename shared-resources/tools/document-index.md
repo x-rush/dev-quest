@@ -66,8 +66,8 @@
 ### 📚 知识字典 (reference/)
 | 分类 | 文档 |
 |------|------|
-| [语言核心概念](../../01-go-backend/reference/language-concepts/01-go-keywords.md) | Go关键字、内置函数、编程要点等6篇 |
-| [框架核心要点](../../01-go-backend/reference/framework-essentials/01-gin-framework.md) | Gin、GORM要点2篇 |
+| [语言核心概念](../../01-go-backend/reference/language-concepts/01-go-keywords.md) | Go关键字、错误处理、并发、泛型等9篇 |
+| [框架核心要点](../../01-go-backend/reference/framework-essentials/01-gin-framework.md) | Gin、GORM、sqlc对比、路由器选型、Mongo/Redis驱动等6篇 |
 | [库指南](../../01-go-backend/reference/library-guides/01-go-standard-library.md) | 标准库与三方库2篇 |
 | [快速参考](../../01-go-backend/reference/quick-references/01-syntax-cheatsheet.md) | 语法速查、Web工具、故障排查3篇 |
 
@@ -98,7 +98,7 @@
 ### 🛠️ 框架工具 (frameworks/)
 | 框架 | 文档 | 应用场景 |
 |------|------|----------|
-| **Next.js 15** | [Next.js 15完全指南](../../02-nextjs-frontend/frameworks/01-nextjs-15-complete.md) | 框架全貌 |
+| **Next.js 16** | [Next.js 16完全指南](../../02-nextjs-frontend/frameworks/01-nextjs-16-complete.md) | 框架全貌 |
 | **React 19** | [React 19集成](../../02-nextjs-frontend/frameworks/02-react-19-integration.md) | 新特性应用 |
 | **全栈模式** | [全栈开发模式](../../02-nextjs-frontend/frameworks/03-full-stack-patterns.md) | 前后端一体开发 |
 | **性能优化** | [性能优化实践](../../02-nextjs-frontend/frameworks/04-performance-optimization.md) | 框架级优化 |
@@ -125,9 +125,9 @@
 | 分类 | 文档 |
 |------|------|
 | [语言概念](../../02-nextjs-frontend/reference/language-concepts/01-react-syntax-cheatsheet.md) | React语法、Next.js API、TS类型等5篇 |
-| [框架模式](../../02-nextjs-frontend/reference/framework-patterns/01-app-router-patterns.md) | 路由、组件、数据获取等7篇 |
+| [框架模式](../../02-nextjs-frontend/reference/framework-patterns/01-app-router-patterns.md) | 路由、组件、缓存、异步API、proxy等11篇 |
 | [开发工具](../../02-nextjs-frontend/reference/development-tools/01-testing-tools.md) | 测试、样式、包管理、调试工具4篇 |
-| [性能优化](../../02-nextjs-frontend/reference/performance-optimization/01-rendering-optimization.md) | 渲染与包体积优化2篇 |
+| [性能优化](../../02-nextjs-frontend/reference/performance-optimization/01-rendering-optimization.md) | 渲染、包体积、图片字体优化3篇 |
 
 ### 🔧 测试与部署
 | 分类 | 文档 |
@@ -139,12 +139,12 @@
 
 ## 03 TanStack全家桶
 
-> 模块入口: [03-tanstack-stack/README.md](../../03-tanstack-stack/README.md) | 已按标准结构建设（38篇）
+> 模块入口: [03-tanstack-stack/README.md](../../03-tanstack-stack/README.md) | 已按标准结构建设（47篇）
 
 | 目录 | 象限 | 篇数 | 入口 |
 |------|------|------|------|
 | 📖 [basics/](../../03-tanstack-stack/basics/) | 教程 | 8 | [环境搭建](../../03-tanstack-stack/basics/01-environment-setup.md) |
-| 📚 [reference/](../../03-tanstack-stack/reference/) | 字典 | 11 | [language-concepts/](../../03-tanstack-stack/reference/language-concepts/) |
+| 📚 [reference/](../../03-tanstack-stack/reference/) | 字典 | 20 | [language-concepts/](../../03-tanstack-stack/reference/language-concepts/) |
 | 🏗️ [frameworks/](../../03-tanstack-stack/frameworks/) | 操作指南 | 4 | [Query入门](../../03-tanstack-stack/frameworks/01-tanstack-query-basics.md) |
 | 🚀 [projects/](../../03-tanstack-stack/projects/) | 操作指南 | 4 | [TODO应用](../../03-tanstack-stack/projects/01-todo-app.md) |
 | 🧪 [testing/](../../03-tanstack-stack/testing/) | 操作指南 | 4 | [单元测试](../../03-tanstack-stack/testing/01-unit-testing.md) |
@@ -155,12 +155,12 @@
 
 ## 04 React Native三端原生App
 
-> 模块入口: [04-multiplatform-apps/README.md](../../04-multiplatform-apps/README.md) | 已按标准结构建设（37篇 + 历史规划文档）
+> 模块入口: [04-multiplatform-apps/README.md](../../04-multiplatform-apps/README.md) | 已按标准结构建设（46篇 + 历史规划文档）
 
 | 目录 | 象限 | 篇数 | 入口 |
 |------|------|------|------|
 | 📖 [basics/](../../04-multiplatform-apps/basics/) | 教程 | 8 | [环境搭建](../../04-multiplatform-apps/basics/01-environment-setup.md) |
-| 📚 [reference/](../../04-multiplatform-apps/reference/) | 字典 | 11 | [language-concepts/](../../04-multiplatform-apps/reference/language-concepts/) |
+| 📚 [reference/](../../04-multiplatform-apps/reference/) | 字典 | 20 | [language-concepts/](../../04-multiplatform-apps/reference/language-concepts/) |
 | 🏗️ [frameworks/](../../04-multiplatform-apps/frameworks/) | 操作指南 | 4 | [React Native入门](../../04-multiplatform-apps/frameworks/01-react-native-basics.md) |
 | 🚀 [projects/](../../04-multiplatform-apps/projects/) | 操作指南 | 4 | [TODO应用](../../04-multiplatform-apps/projects/01-todo-app.md) |
 | 🧪 [testing/](../../04-multiplatform-apps/testing/) | 操作指南 | 3 | [单元测试](../../04-multiplatform-apps/testing/01-unit-testing.md) |
@@ -171,12 +171,12 @@
 
 ## 05 Kotlin Compose
 
-> 模块入口: [05-kotlin-compose/README.md](../../05-kotlin-compose/README.md) | 已按标准结构建设（37篇 + 历史规划文档）
+> 模块入口: [05-kotlin-compose/README.md](../../05-kotlin-compose/README.md) | 已按标准结构建设（44篇 + 历史规划文档）
 
 | 目录 | 象限 | 篇数 | 入口 |
 |------|------|------|------|
 | 📖 [basics/](../../05-kotlin-compose/basics/) | 教程 | 8 | [环境搭建](../../05-kotlin-compose/basics/01-environment-setup.md) |
-| 📚 [reference/](../../05-kotlin-compose/reference/) | 字典 | 11 | [language-concepts/](../../05-kotlin-compose/reference/language-concepts/) |
+| 📚 [reference/](../../05-kotlin-compose/reference/) | 字典 | 18 | [language-concepts/](../../05-kotlin-compose/reference/language-concepts/) |
 | 🏗️ [frameworks/](../../05-kotlin-compose/frameworks/) | 操作指南 | 4 | [Compose入门](../../05-kotlin-compose/frameworks/01-compose-basics.md) |
 | 🚀 [projects/](../../05-kotlin-compose/projects/) | 操作指南 | 4 | [笔记应用](../../05-kotlin-compose/projects/01-notes-app.md) |
 | 🧪 [testing/](../../05-kotlin-compose/testing/) | 操作指南 | 3 | [单元测试](../../05-kotlin-compose/testing/01-unit-testing.md) |
@@ -187,12 +187,12 @@
 
 ## 06 SwiftUI
 
-> 模块入口: [06-swift-swiftui/README.md](../../06-swift-swiftui/README.md) | 已按标准结构建设（37篇 + 历史规划文档）
+> 模块入口: [06-swift-swiftui/README.md](../../06-swift-swiftui/README.md) | 已按标准结构建设（46篇 + 历史规划文档）
 
 | 目录 | 象限 | 篇数 | 入口 |
 |------|------|------|------|
 | 📖 [basics/](../../06-swift-swiftui/basics/) | 教程 | 8 | [环境搭建](../../06-swift-swiftui/basics/01-environment-setup.md) |
-| 📚 [reference/](../../06-swift-swiftui/reference/) | 字典 | 11 | [language-concepts/](../../06-swift-swiftui/reference/language-concepts/) |
+| 📚 [reference/](../../06-swift-swiftui/reference/) | 字典 | 20 | [language-concepts/](../../06-swift-swiftui/reference/language-concepts/) |
 | 🏗️ [frameworks/](../../06-swift-swiftui/frameworks/) | 操作指南 | 4 | [SwiftUI入门](../../06-swift-swiftui/frameworks/01-swiftui-basics.md) |
 | 🚀 [projects/](../../06-swift-swiftui/projects/) | 操作指南 | 4 | [笔记应用](../../06-swift-swiftui/projects/01-notes-app.md) |
 | 🧪 [testing/](../../06-swift-swiftui/testing/) | 操作指南 | 3 | [单元测试](../../06-swift-swiftui/testing/01-unit-testing.md) |
@@ -205,26 +205,26 @@
 
 ### 07 PHP精通之路
 
-> 模块入口: [07-php-mastery/README.md](../../07-php-mastery/README.md) | 已按标准结构建设（37篇）
+> 模块入口: [07-php-mastery/README.md](../../07-php-mastery/README.md) | 已按标准结构建设（48篇）
 
 | 目录 | 象限 | 篇数 | 入口 |
 |------|------|------|------|
 | 📖 [basics/](../../07-php-mastery/basics/) | 教程 | 8 | [环境搭建](../../07-php-mastery/basics/01-environment-setup.md) |
-| 📚 [reference/](../../07-php-mastery/reference/) | 字典 | 11 | [language-concepts/](../../07-php-mastery/reference/language-concepts/) |
+| 📚 [reference/](../../07-php-mastery/reference/) | 字典 | 18 | [language-concepts/](../../07-php-mastery/reference/language-concepts/) |
 | 🏗️ [frameworks/](../../07-php-mastery/frameworks/) | 操作指南 | 4 | [Laravel入门](../../07-php-mastery/frameworks/01-laravel-basics.md) |
 | 🚀 [projects/](../../07-php-mastery/projects/) | 操作指南 | 4 | [TODO API](../../07-php-mastery/projects/01-todo-api.md) |
 | 🧪 [testing/](../../07-php-mastery/testing/) | 操作指南 | 3 | [单元测试](../../07-php-mastery/testing/01-unit-testing.md) |
 | 🚀 [deployment/](../../07-php-mastery/deployment/) | 操作指南 | 3 | [容器化部署](../../07-php-mastery/deployment/01-docker-deployment.md) |
-| 🎓 [advanced-topics/](../../07-php-mastery/advanced-topics/) | 解释 | 4 | [Laravel架构](../../07-php-mastery/advanced-topics/architecture/01-laravel-architecture.md) |
+| 🎓 [advanced-topics/](../../07-php-mastery/advanced-topics/) | 解释 | 8 | [Laravel架构](../../07-php-mastery/advanced-topics/architecture/01-laravel-architecture.md) |
 
 ### 08 Java知识回顾
 
-> 模块入口: [08-java-revisited/README.md](../../08-java-revisited/README.md) | 已按标准结构建设（37篇）
+> 模块入口: [08-java-revisited/README.md](../../08-java-revisited/README.md) | 已按标准结构建设（44篇）
 
 | 目录 | 象限 | 篇数 | 入口 |
 |------|------|------|------|
 | 📖 [basics/](../../08-java-revisited/basics/) | 教程 | 8 | [环境搭建](../../08-java-revisited/basics/01-environment-setup.md) |
-| 📚 [reference/](../../08-java-revisited/reference/) | 字典 | 11 | [language-concepts/](../../08-java-revisited/reference/language-concepts/) |
+| 📚 [reference/](../../08-java-revisited/reference/) | 字典 | 18 | [language-concepts/](../../08-java-revisited/reference/language-concepts/) |
 | 🏗️ [frameworks/](../../08-java-revisited/frameworks/) | 操作指南 | 4 | [Spring Boot入门](../../08-java-revisited/frameworks/01-spring-boot-basics.md) |
 | 🚀 [projects/](../../08-java-revisited/projects/) | 操作指南 | 4 | [TODO API](../../08-java-revisited/projects/01-todo-api.md) |
 | 🧪 [testing/](../../08-java-revisited/testing/) | 操作指南 | 3 | [单元测试](../../08-java-revisited/testing/01-unit-testing.md) |
@@ -239,7 +239,7 @@
 |------|------|------|------|
 | 📖 [basics/](../../09-nodejs-backend/basics/) | 教程 | 8 | [环境搭建](../../09-nodejs-backend/basics/01-environment-setup.md) |
 | 📚 [reference/](../../09-nodejs-backend/reference/) | 字典 | 11 | [language-concepts/](../../09-nodejs-backend/reference/language-concepts/) |
-| 🏗️ [frameworks/](../../09-nodejs-backend/frameworks/) | 操作指南 | 4 | [Express入门](../../09-nodejs-backend/frameworks/01-express-basics.md) |
+| 🏗️ [frameworks/](../../09-nodejs-backend/frameworks/) | 操作指南 | 4 | [Hono入门](../../09-nodejs-backend/frameworks/01-hono-basics.md) |
 | 🚀 [projects/](../../09-nodejs-backend/projects/) | 操作指南 | 4 | [TODO API](../../09-nodejs-backend/projects/01-todo-api.md) |
 | 🧪 [testing/](../../09-nodejs-backend/testing/) | 操作指南 | 3 | [单元测试](../../09-nodejs-backend/testing/01-unit-testing.md) |
 | 🚀 [deployment/](../../09-nodejs-backend/deployment/) | 操作指南 | 3 | [容器化部署](../../09-nodejs-backend/deployment/01-docker-deployment.md) |
@@ -247,12 +247,12 @@
 
 ### 10 Python发现之旅
 
-> 模块入口: [10-python-discovery/README.md](../../10-python-discovery/README.md) | 已按标准结构建设（37篇）
+> 模块入口: [10-python-discovery/README.md](../../10-python-discovery/README.md) | 已按标准结构建设（46篇）
 
 | 目录 | 象限 | 篇数 | 入口 |
 |------|------|------|------|
 | 📖 [basics/](../../10-python-discovery/basics/) | 教程 | 8 | [环境搭建](../../10-python-discovery/basics/01-environment-setup.md) |
-| 📚 [reference/](../../10-python-discovery/reference/) | 字典 | 11 | [language-concepts/](../../10-python-discovery/reference/language-concepts/) |
+| 📚 [reference/](../../10-python-discovery/reference/) | 字典 | 20 | [language-concepts/](../../10-python-discovery/reference/language-concepts/) |
 | 🏗️ [frameworks/](../../10-python-discovery/frameworks/) | 操作指南 | 4 | [FastAPI入门](../../10-python-discovery/frameworks/01-fastapi-basics.md) |
 | 🚀 [projects/](../../10-python-discovery/projects/) | 操作指南 | 4 | [TODO API](../../10-python-discovery/projects/01-todo-api.md) |
 | 🧪 [testing/](../../10-python-discovery/testing/) | 操作指南 | 3 | [单元测试](../../10-python-discovery/testing/01-unit-testing.md) |

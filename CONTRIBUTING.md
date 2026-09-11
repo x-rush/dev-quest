@@ -35,6 +35,16 @@
 - [ ] 交叉引用使用相对路径且目标文件存在
 - [ ] 已同步更新 [文档索引](shared-resources/tools/document-index.md)
 - [ ] 已同步更新 [学习进度](shared-resources/progress/learning-progress.md)
+- [ ] 版本号/安装命令/API 签名等易变内容已核对模块 README 的"技术基线"区块
+
+## 技术基线年度复核
+
+知识库通过"基线集中声明"控制过时成本（详见[文档规范指南](shared-resources/standards/documentation-guidelines.md)的技术基线声明章节）。维护惯例：
+
+1. **每年至少一次**（建议 9 月）核实各模块 README 基线区块的版本号，来源为官方发布页
+2. 核实后运行 `grep -rEn "<旧大版本模式>" --include="*.md" 0*/ 10-*/` 定位残留的易变层引用并批量更新
+3. 大版本更迭（如 Next.js 15→16）需同步修订正文中的 breaking changes 相关示例
+4. 更新 [更新日志](CHANGELOG.md) 记录本次基线核实结论
 
 ## 模块结构
 

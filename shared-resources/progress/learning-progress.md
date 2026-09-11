@@ -35,7 +35,7 @@ graph LR
 - [ ] **快速参考**: [reference/](../../01-go-backend/reference/) - 高效速查手册
 
 **基础阶段** ⭐⭐
-- [x] **环境搭建**: [01-environment-setup.md](../../01-go-backend/basics/01-environment-setup.md) - Go 1.21+ 开发环境配置
+- [x] **环境搭建**: [01-environment-setup.md](../../01-go-backend/basics/01-environment-setup.md) - Go 1.24+ 开发环境配置
 - [x] **第一个程序**: [02-first-program.md](../../01-go-backend/basics/02-first-program.md) - Go语言入门实践
 - [x] **变量常量**: [03-variables-constants.md](../../01-go-backend/basics/03-variables-constants.md) - 变量、常量和基础数据类型
 - [x] **函数方法**: [04-functions-methods.md](../../01-go-backend/basics/04-functions-methods.md) - 函数定义与方法调用
@@ -103,7 +103,7 @@ graph LR
 - [ ] **环境配置**: Node.js 18+ + TypeScript 环境
 - [ ] **TypeScript基础**: 类型系统、接口、泛型
 - [ ] **React 19基础**: 组件、Hooks、状态管理
-- [ ] **Next.js 15入门**: App Router、路由系统
+- [ ] **Next.js 16入门**: App Router、路由系统
 
 **框架阶段** ⭐⭐⭐
 - [ ] **样式解决方案**: Tailwind CSS + CSS Modules
@@ -206,8 +206,8 @@ graph LR
 
 #### 07. PHP 精通之路
 **模块入口**: [07-php-mastery/README.md](../../07-php-mastery/README.md)（含入门/进阶/精通三路径视图）
-- [ ] **PHP 8.3 新特性**: JIT编译器、类型系统完善、Fibers并发
-- [ ] **现代PHP框架**: Laravel 11.x、Symfony 7.x、Livewire实时应用
+- [ ] **PHP 8.5 新特性**: pipe operator、URI 扩展、类型系统完善
+- [ ] **现代PHP框架**: Laravel 13.x、Symfony、Livewire实时应用
 - [ ] **Composer生态**: 包管理、Filament Admin、现代工具链
 - [ ] **性能优化**: JIT编译、OPcache调优、无服务器PHP
 - [ ] **企业级架构**: 微服务、容器化、Kubernetes部署
@@ -215,22 +215,22 @@ graph LR
 #### 08. Java 知识回顾
 **模块入口**: [08-java-revisited/README.md](../../08-java-revisited/README.md)（含入门/进阶/精通三路径视图）
 - [ ] **Java 21+ 新特性**: 虚拟线程、结构化并发、外部函数API
-- [ ] **Spring Boot 3.x**: 现代化Java开发、Spring AI集成
+- [ ] **Spring Boot 4.x**: 现代化Java开发、Spring AI集成
 - [ ] **Spring Native**: GraalVM原生镜像、云原生Java
 - [ ] **微服务架构**: Spring Cloud 2024、服务网格、可观测性
 - [ ] **企业级开发**: 领域驱动设计、测试驱动开发
 
 #### 09. Node.js 后端探索
 **模块入口**: [09-nodejs-backend/README.md](../../09-nodejs-backend/README.md)（含入门/进阶/精通三路径视图）
-- [ ] **Node.js 22 LTS**: ES模块、Worker Threads、性能优化
-- [ ] **现代框架**: Express 5、Fastify、NestJS、TypeScript 5.x
+- [ ] **Node.js 24 LTS**: ES模块、Worker Threads、性能优化
+- [ ] **现代框架**: Hono 4（主角）、Fastify、NestJS 选型对比、TypeScript 6.x
 - [ ] **数据库生态**: Prisma、TypeORM、GraphQL联邦
 - [ ] **云原生架构**: Serverless、边缘计算、微服务
 - [ ] **AI时代后端**: AI Agent集成、零信任架构
 
 #### 10. Python 发现之旅
 **模块入口**: [10-python-discovery/README.md](../../10-python-discovery/README.md)（含入门/进阶/精通三路径视图）
-- [ ] **Python 3.12+**: 结构化模式匹配、类型系统完善
+- [ ] **Python 3.14+**: 结构化模式匹配、类型系统完善
 - [ ] **现代Web框架**: FastAPI异步框架、Django 5.x、GraphQL
 - [ ] **AI和数据科学**: Transformers库、LLM应用、MLOps
 - [ ] **云原生Python**: Serverless、容器化、自动化
