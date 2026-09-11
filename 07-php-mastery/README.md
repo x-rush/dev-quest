@@ -49,6 +49,8 @@
 
 [环境搭建](./basics/01-environment-setup.md) → [第一个脚本](./basics/02-first-script.md) → [变量与类型](./basics/03-variables-types.md) → [函数与 OOP](./basics/04-functions-oop.md) → [控制流程](./basics/05-control-flow.md) → [错误与异常](./basics/06-error-exceptions.md) → [Laravel 入门](./frameworks/01-laravel-basics.md) → [开发工具链](./frameworks/04-devtools.md) → [TODO REST API](./projects/01-todo-api.md)
 
+> 枚举前置：[TODO REST API](./projects/01-todo-api.md) 直接使用 Backed Enum 与 `enum:` 校验规则，开工前先读 [高级特性](./basics/07-advanced-features.md) 的"枚举"一节（⭐⭐ 文档按需单读即可，不必整篇学完）。
+
 ### 进阶路径（⭐⭐）
 
 [PHP 高级特性](./basics/07-advanced-features.md) → [Laravel 进阶](./frameworks/02-laravel-advanced.md) → [生态集成](./frameworks/03-ecosystem-integration.md) → [单元测试](./testing/01-unit-testing.md) → [Pest 测试](./testing/02-pest-testing.md) → [Feature 测试](./testing/03-feature-testing.md) → [容器化部署](./deployment/01-docker-deployment.md) → [服务器部署](./deployment/02-server-deployment.md) → [博客平台](./projects/02-blog-platform.md) → [电商 API](./projects/03-ecommerce-api.md)

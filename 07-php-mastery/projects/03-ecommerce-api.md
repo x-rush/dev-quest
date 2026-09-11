@@ -45,6 +45,7 @@ namespace App\Services;
 use App\Enums\OrderStatus;
 use App\Models\Cart;
 use App\Models\Order;
+use App\Models\Product;
 use Illuminate\Support\Facades\DB;
 
 final class PlaceOrderService
@@ -53,8 +54,8 @@ final class PlaceOrderService
     {
         // transaction 包裹"读库存→校验→扣减→建单"，任何一步抛异常整体回滚
         return DB::transaction(function () use ($cart): Order {
-            // lockForUpdate：悲观行锁，防止并发下单把库存扣成负数
-            $items = $cart->items()->with('product')->lockForUpdate()->get();
+            // 购物车明细不锁——cart_items 不是发生竞争写入的行
+            $items = $cart->items()->with('product')->get();
 
             $total = 0;
             $order = Order::create([
@@ -64,7 +65,12 @@ final class PlaceOrderService
             ]);
 
             foreach ($items as $item) {
-                $product = $item->product;
+                // 锁必须落在"发生竞争写入的行"上：超卖竞争的是 products.stock，
+                // 两张不同购物车抢同一商品时，锁 cart_items 挡不住并发扣减。
+                // 先 SELECT ... FOR UPDATE 锁产品行，再读最新库存并扣减
+                // （多商品下单按 id 升序加锁可避免交叉死锁，此处从简）
+                $product = Product::whereKey($item->product_id)->lockForUpdate()->first();
+
                 abort_if($product->stock < $item->quantity, 409, "库存不足：{$product->name}");
 
                 $product->decrement('stock', $item->quantity);
@@ -159,23 +165,38 @@ final class ProcessPaymentCallback implements ShouldQueue
 
     public function handle(PaymentCallback $callback): void
     {
-        DB::transaction(function () use ($callback): void {
-            // 幂等锁：同一流水号只允许一个实例在处理（10 秒自动过期兜底）
-            $lock = \Illuminate\Support\Facades\Cache::lock("payment:{$callback->trade_no}", 10);
-            if (! $lock->get()) {
-                return;   // 已有并发实例在处理，直接跳过
+        // 幂等锁：同一流水号只允许一个实例在处理（10 秒自动过期兜底）
+        $lock = \Illuminate\Support\Facades\Cache::lock("payment:{$callback->trade_no}", 10);
+        if (! $lock->get()) {
+            return;   // 已有并发实例在处理，直接跳过
+        }
+
+        try {
+            // 金额校验放在事务外：金额不符属"不可重试的永久失败"，
+            // 标记回调 rejected 后抛领域异常。Job 里绝不能用 abort(409)——
+            // HTTP 异常会被队列当作任务失败重试满 5 次后进 failed_jobs，
+            // 且 409 语义只对 HTTP 响应才有意义
+            $order = Order::findOrFail($callback->payload['order_id']);
+            if ($order->total_cents !== (int) $callback->payload['amount_cents']) {
+                $callback->update(['status' => 'rejected']);
+                throw new \DomainException('回调金额与订单不符');
             }
 
-            $order = Order::whereKey($callback->payload['order_id'])->lockForUpdate()->firstOrFail();
+            DB::transaction(function () use ($callback): void {
+                $order = Order::whereKey($callback->payload['order_id'])->lockForUpdate()->firstOrFail();
 
-            if ($order->status !== OrderStatus::PendingPayment) {
-                return;   // 幂等：已支付的订单忽略重复回调
-            }
-            abort_if($order->total_cents !== (int) $callback->payload['amount_cents'], 409, '金额不符');
+                if ($order->status !== OrderStatus::PendingPayment) {
+                    return;   // 幂等：已支付的订单忽略重复回调
+                }
 
-            $order->update(['status' => OrderStatus::Paid, 'paid_at' => now()]);
-            $callback->update(['status' => 'processed']);
-        });
+                // 状态流转必须走状态机：直接 update(['status' => ...]) 会绕过 transition() 的合法性校验
+                transition($order, OrderStatus::Paid);
+                $order->update(['paid_at' => now()]);
+                $callback->update(['status' => 'processed']);
+            });
+        } finally {
+            $lock->release();   // 必须 release：漏释放要等 10 秒过期，期间同流水号的回调全部被跳过
+        }
     }
 }
 ```
@@ -184,8 +205,10 @@ final class ProcessPaymentCallback implements ShouldQueue
 
 | 风险 | 对策 |
 |------|------|
-| 并发超卖 | `lockForUpdate` 悲观锁（或乐观锁 version 字段） |
-| 回调乱序/重复 | 幂等锁 + 状态机校验 |
+| 并发超卖 | 事务内锁**发生竞争写入的行**（products.stock，`lockForUpdate`），或乐观锁 version 字段 |
+| 回调乱序/重复 | 幂等锁 + 状态机校验（统一走 `transition()`） |
+| 幂等锁泄漏 | `Cache::lock()->get()` 之后必须在 `finally` 中 `release()`（或改用 `->block()`） |
+| 回调金额不符 | 队列中抛领域异常并标记回调 rejected，不做无意义的重试 |
 | 回调处理慢拖垮接口 | 落库后异步队列处理 |
 | 金额精度 | 全程整数分 |
 

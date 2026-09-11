@@ -127,6 +127,11 @@ public class LoanService {
 
         // 3. 领域方法收敛状态变更，避免散落 setter
         book.markBorrowed();
+
+        // 4. Loan.create 接收 Member 实体（而非 memberId），先按 id 取出会员
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new MemberNotFoundException(memberId));
+
         return loanRepository.save(Loan.create(member, book, LocalDate.now(), 30));
     }
 

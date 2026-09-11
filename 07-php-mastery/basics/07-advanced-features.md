@@ -140,11 +140,13 @@ $ref = new ReflectionClass(User::class);
 $table = $ref->getAttributes(Table::class)[0]->newInstance();
 echo $table->name, PHP_EOL;        // users
 
-// 读取构造器参数上的属性
-$param = $ref->getConstructor()->getParameters()[0];
-$max = $param->getAttributes(MaxLength::class)[0]->newInstance();
+// 读取构造器提升参数上的属性：注解 target 是 property，从提升出的属性读取
+$prop = $ref->getProperty('nickname');
+$max = $prop->getAttributes(MaxLength::class)[0]->newInstance();
 echo $max->length, PHP_EOL;        // 20
 ```
+
+**陷阱（提升参数上的注解）**：写在构造器提升参数上的注解会同时出现在 ReflectionParameter 与 ReflectionProperty 的 `getAttributes()` 结果里，但 `#[MaxLength]` 声明的 target 是 `TARGET_PROPERTY`——从参数侧 `$param->getAttributes(...)[0]->newInstance()` 会抛 `Error: Attribute "MaxLength" cannot target parameter (allowed targets: property)`（实测 8.5.10）。提升参数上的属性注解一律从 `getProperty()` 读取。
 
 **使用准则**：属性只放**声明性元数据**（配置、规则、路由），不承载业务逻辑；运行时行为交给读取属性的框架/工具层。
 
@@ -201,16 +203,18 @@ declare(strict_types=1);
 
 $fiber = new Fiber(function (string $task): string {
     echo "执行 {$task} 前半段", PHP_EOL;
-    $input = Fiber::suspend("{$task}-等待中");   // 暂停，把值交还给 resume 调用方
+    $input = Fiber::suspend("{$task}-等待中");   // 暂停，把值交还给 start/resume 调用方
     echo "恢复，收到: {$input}", PHP_EOL;
     return "{$task}-完成";
 });
 
-$result = $fiber->start('任务A');
-echo "主流程拿到: {$result}", PHP_EOL;
+$sent = $fiber->start('任务A');            // 返回值 = fiber 经 suspend() 交出的值
+echo "主流程拿到: {$sent}", PHP_EOL;
 
-$final = $fiber->resume('外部数据');
-echo "最终结果: {$final}", PHP_EOL;
+$resumed = $fiber->resume('外部数据');     // 实参 = fiber 在挂起点收到的值
+var_dump($resumed);                         // NULL：fiber 没有再次 suspend，而是直接 return
+
+echo $fiber->getReturn(), PHP_EOL;          // "任务A-完成"：fiber 的 return 值，仅终止后可调
 ```
 
 输出顺序：
@@ -219,8 +223,14 @@ echo "最终结果: {$final}", PHP_EOL;
 执行 任务A 前半段
 主流程拿到: 任务A-等待中
 恢复，收到: 外部数据
-最终结果: 任务A-完成
+NULL
+任务A-完成
 ```
+
+**两个"返回值"不要混淆**（实测 8.5.10）：
+
+- `start()/resume()` 的返回值 = fiber **下一次 `Fiber::suspend()` 交出的值**；若 fiber 不再挂起、直接结束，得到 `NULL`
+- fiber 函数的 `return` 值只能用 `$fiber->getReturn()` 获取，且必须在 fiber 终止后调用（否则抛 `Error: Cannot get fiber return value: The fiber has not returned`）
 
 ### 生命周期与状态检查
 
@@ -242,8 +252,8 @@ var_dump($f->isTerminated());   // true —— 一次性执行完毕
 
 **心智模型**：
 
-- `Fiber::suspend()` = "我暂停，调度器请继续干别的"
-- `->resume($value)` = "回到你暂停的地方，这是你要的数据"
+- `Fiber::suspend($v)` = "我暂停，把 $v 交给调度器（start/resume 调用方）"
+- `->resume($v)` = "回到你暂停的地方"——`$v` 是 fiber 在挂起点收到的数据；resume 是向 fiber **传入**数据的通道，不是取结果的通道
 - Fiber 内抛出的未捕获异常会在 `start/resume` 调用处重新抛出
 
 真实项目中一般不直接操作 Fiber，而是使用基于它的 async 库（如 Revolt + Amp）做并发 HTTP/MySQL 请求。

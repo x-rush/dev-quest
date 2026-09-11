@@ -137,7 +137,7 @@ foreach ($method->getAttributes(Route::class) as $attr) {
 }
 ```
 
-⚠️ **常见陷阱**: `getArguments()` 只回原始数组不校验；注解目标不匹配（如把 `TARGET_CLASS` 的注解标在方法上）要到 `newInstance()` 才报错；注解参数必须是常量表达式（8.5 起闭包也允许，见 [8.4/8.5 增量特性](./12-modern-php-85.md)）。
+⚠️ **常见陷阱**: `getArguments()` 只回原始数组不校验；注解目标不匹配（如把 `TARGET_CLASS` 的注解标在方法上）要到 `newInstance()` 才报错；注解参数必须是常量表达式（8.5 起允许一等公民 callable 引用如 `trim(...)`，**闭包字面量仍不允许**，见 [8.4/8.5 增量特性](./12-modern-php-85.md) 条目 7）。
 
 🔗 **相关条目**: [ReflectionClass](#条目-1reflectionclass-与成员检视)、[教程：属性注解](../../basics/07-advanced-features.md)
 

@@ -151,7 +151,7 @@ echo $uri->getPort(), PHP_EOL;             // 8080
 echo $uri->getPath(), PHP_EOL;             // /a/b
 
 $patched = $uri->withHost('php.net')->withPath('/downloads');
-echo $patched->getUri(), PHP_EOL;          // https://php.net/downloads?x=1
+echo $patched->toString(), PHP_EOL;        // https://php.net:8080/downloads?x=1#frag（端口/query/fragment 均保留）
 
 // WHATWG：浏览器同款规则，非法输入直接抛异常
 try {
@@ -164,7 +164,7 @@ $url = new Uri\WhatWg\Url('https://example.com');
 echo $url->withHost('example.net')->getAsciiHost(), PHP_EOL;   // example.net
 ```
 
-⚠️ **常见陷阱**: 两个类都**不可变**——`with*` 返回新实例，`Rfc3986\Uri` 没有 `set*` 方法；`getPort()` 返回 `?int`（无端口或默认端口为 null）；`parse_url()` 未被移除但新代码建议迁移；非法 RFC 3986 结果在 `with*` 时抛 `Uri\InvalidUriException`，非法 WHATWG 输入在构造时抛 `Uri\WhatWg\InvalidUrlException`。
+⚠️ **常见陷阱**: 两个类都**不可变**——`with*` 返回新实例，`Rfc3986\Uri` 没有 `set*` 方法；`getPort()` 返回 `?int`（无端口或默认端口为 null）；取完整字符串用 `->toString()`——**没有** `getUri()` 方法，也未实现 `__toString`（对象直接进字符串上下文抛 Error，实测 8.5.10）；`parse_url()` 未被移除但新代码建议迁移；非法 RFC 3986 结果在 `with*` 时抛 `Uri\InvalidUriException`，非法 WHATWG 输入在构造时抛 `Uri\WhatWg\InvalidUrlException`。
 
 🔗 **相关条目**: [PHP 快速速查表](../quick-references/01-php-cheatsheet.md)
 
@@ -263,14 +263,14 @@ echo $b->no, '/', $b->cents, PHP_EOL;    // INV-1/2000（$origin 不受影响）
 
 ## 条目 7：常量表达式增强（8.5+）
 
-📌 **定义**: 常量表达式（类常量、属性默认值、注解参数等）现在允许出现**闭包、一等公民 callable、类型转换**——此前只允许标量、数组、`new` 等形态。
+📌 **定义**: 8.5 扩大了常量表达式（类常量、属性默认值、注解参数等）的允许范围：**一等公民 callable 引用**与**类型转换**可以进入常量；但**闭包字面量仍然不允许**——`public const F = static fn () => ...;` 实测 8.5.10 编译期直接 Fatal，这正是本条目最需要记住的边界。
 
 📖 **语法/签名**:
 
 ```php
-public const X = static fn (...): T => expr;    // 8.5：闭包进常量
-public const Y = self::handler(...);            // 8.5：一等公民 callable 进常量
-public const int N = (int) self::RAW;           // 8.5：类型转换进常量
+public const TRIM = trim(...);            // 8.5 ✅：一等公民 callable 引用进常量
+public const int N = (int) self::RAW;     // 8.5 ✅：类型转换进常量
+public const F = static fn () => 1;       // ❌ Fatal: Constant expression contains invalid operations
 ```
 
 💡 **示例**:
@@ -282,15 +282,22 @@ declare(strict_types=1);
 
 final class Retry
 {
-    public const callable BACKOFF = static fn (int $attempt): int => 2 ** $attempt;
-    public const int MAX_ATTEMPTS = (int) '5';   // 转换后的常量
+    public const POW = pow(...);                     // callable 引用进常量
+    public const string RAW = '5';
+    public const int MAX_ATTEMPTS = (int) self::RAW; // 类型转换进常量
 }
 
-echo Retry::BACKOFF(3), PHP_EOL;      // 8
-echo Retry::MAX_ATTEMPTS, PHP_EOL;    // 5
+var_dump((Retry::POW)(2, 3));     // int(8)：调用常量里的 callable 必须包一层括号
+var_dump(Retry::MAX_ATTEMPTS);    // int(5)
 ```
 
-⚠️ **常见陷阱**: 常量里的闭包每次类初始化只创建一次，但**不是**纯静态——不能引用外部变量；`json_encode(...)` 等函数引用进常量后，重构改名由 IDE/静态分析接管，优于字符串 `'json_encode'`。
+⚠️ **常见陷阱**（以下边界均实测 8.5.10）:
+
+- **闭包字面量进不了常量**：`public const BACKOFF = static fn (int $a): int => 2 ** $a;`（`fn()` 短闭包同理）报 `Fatal error: Constant expression contains invalid operations`——8.5 打开的口子只有 callable **引用**（`trim(...)`、`Foo::bar(...)`）与类型转换。想在常量里存"行为"，存指向函数的引用，而不是闭包。
+- **直接调用常量里的 callable 必须包一层括号**：`Retry::POW(2, 3)` 会被解析为静态方法调用，抛 `Error: Call to undefined method Retry::POW()`；正确写法是 `(Retry::POW)(2, 3)`。管道运算符右侧是个例外——`$x |> Retry::POW` 与 `$x |> (Retry::POW)` 实测均可用。
+- **`callable` 不能作常量的类型标注**：`public const callable C = ...` 报 `Fatal error: Class constant cannot have type callable`——存 callable 的常量不要写类型。
+- **注解参数同规则**：`#[Sanitizer(trim(...))]` 可用，`#[Sanitizer(fn () => ...)]` 同样 Fatal（见[反射与属性注解](./08-reflection-attributes.md)）。
+- 收益：`pow(...)` 进常量后，函数改名由 IDE/静态分析全程追踪，优于字符串 `'pow'`。
 
 🔗 **相关条目**: [一等公民 callable 语法](./03-types-oop-modern.md)、[常量类型化（8.3+）](./03-types-oop-modern.md)
 

@@ -239,18 +239,19 @@ $fiber = new Fiber(function (): int {
     return $value + 1;
 });
 
-$mid = $fiber->start();          // 'paused'
-$end = $fiber->resume(41);       // 恢复并注入值 → 42
-var_dump($mid, $end);
+$mid = $fiber->start();          // 返回 suspend() 交出的值：'paused'
+$end = $fiber->resume(41);       // 41 注入挂起点 $value；fiber return 42，但 resume() 返回 NULL
+var_dump($mid, $end, $fiber->getReturn());   // string(6) "paused"、NULL、int(42)
 ```
 
 | API | 语义 |
 |-----|------|
 | `new Fiber(callable)` | 创建（不执行） |
 | `start(...$args)` | 首次执行，参数传入 Fiber 函数；只能调用一次 |
-| `resume(mixed $value)` | 从挂起点恢复，`suspend` 返回该值 |
+| `resume(mixed $value)` | 从挂起点恢复，该值成为 fiber 内 `suspend` 的返回值；方法本身返回 fiber 下一次 suspend 交出的值（未再挂起则 NULL） |
 | `throw(Throwable $e)` | 恢复但在挂起点抛出异常 |
 | `Fiber::suspend(mixed $value)` | Fiber 内挂起，值返回给 start/resume |
+| `getReturn()` | 取 fiber 的 return 值，仅 `isTerminated()` 后可调（提前调用抛 Error） |
 | `isStarted/isSuspended/isRunning/isTerminated` | 状态查询 |
 
 **陷阱**: Fiber 不是线程/进程，无并行；在挂起状态销毁 Fiber 会导致后续 resume 抛 `FiberError`；阻塞 I/O 依旧阻塞整个进程。

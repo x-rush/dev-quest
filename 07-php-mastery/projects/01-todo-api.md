@@ -4,7 +4,7 @@
 >
 > **目标读者**: 学完 frameworks 入门篇、第一次用 Laravel 写完整接口的开发者
 >
-> **前置知识**: [Laravel 入门](../frameworks/01-laravel-basics.md)、[CLI 任务管理工具](../basics/08-first-project.md)
+> **前置知识**: [Laravel 入门](../frameworks/01-laravel-basics.md)、[CLI 任务管理工具](../basics/08-first-project.md)；枚举前置：[高级特性 · 枚举](../basics/07-advanced-features.md)（第 1 节即可——项目直接使用 Backed Enum 与 `enum:` 校验规则）
 
 ## 📚 文档元数据
 
@@ -136,12 +136,13 @@ final class TodoController extends Controller
 {
     public function index(Request $request): AnonymousResourceCollection
     {
+        // 非法 status 用 tryFrom 兜底返回 null：from() 会抛 ValueError，
+        // 未捕获直接 500；需要把非法值挡成 422 时，改为 $request->validate 校验
+        $status = TodoStatus::tryFrom($request->string('status'));
+
         return TodoResource::collection(
             Todo::query()
-                ->when(
-                    $request->filled('status'),
-                    fn (Builder $q) => $q->where('status', TodoStatus::from($request->string('status'))),
-                )
+                ->when($status !== null, fn (Builder $q) => $q->where('status', $status))
                 ->orderBy('due_date')
                 ->paginate(20),
         );
@@ -152,6 +153,21 @@ final class TodoController extends Controller
         $todo = Todo::create($request->validated());
 
         return (new TodoResource($todo))->response()->setStatusCode(201);
+    }
+
+    public function update(Request $request, Todo $todo): TodoResource
+    {
+        // 简单场景可内联 validate()，422 行为与 FormRequest 一致；
+        // 白名单字段 + $fillable 双保险，杜绝越权改 id 等字段
+        $data = $request->validate([
+            'title'    => ['sometimes', 'string', 'max:120'],
+            'status'   => ['sometimes', 'enum:'.TodoStatus::class],
+            'due_date' => ['nullable', 'date', 'after_or_equal:today'],
+        ]);
+
+        $todo->update($data);
+
+        return new TodoResource($todo);
     }
 
     public function destroy(Todo $todo): JsonResponse
@@ -201,7 +217,8 @@ php artisan serve
 curl -s localhost:8000/api/todos | php -r 'echo json_encode(json_decode(stream_get_contents(STDIN)), JSON_PRETTY_PRINT);'
 ```
 
-- [ ] 无效 `status` 返回 422 且带字段级错误
+- [ ] 创建/更新接口传无效 `status` 返回 422 且带字段级错误
+- [ ] 列表过滤 `?status=非法值` 不报 500（被忽略，返回未过滤列表）
 - [ ] 不存在的 id 返回 404 而非 500
 - [ ] `PATCH /api/todos/1` 只允许修改白名单字段
 
