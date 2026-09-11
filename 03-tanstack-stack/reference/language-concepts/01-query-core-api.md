@@ -62,7 +62,7 @@ const result = useQuery({
 - **key 中放非序列化值**（函数、类实例）会导致缓存永远 miss——只放原始值
 - `select` 结果引用不稳定时组件会高频重渲染，复杂派生用 `useMemo` 包在 select 外
 - `enabled: false` 时 `status` 停在 `pending`，渲染分支要兼容
-- v5 中 `isPending` 期间 `data` 类型是 `undefined`，先判 `isPending` 再用 `data`，TS 才能收窄出非空类型；需要"非空 data"时改用 `useSuspenseQuery`
+- v5 中 `isPending` 期间 `data` 是 `undefined`，但**解构后再判 `isPending` 无法收窄 `data`**——解构会丢失判别联合类型，顺序排除 `isPending`/`isError` 后 `data` 仍是 `TData | undefined`。要收窄出非空 `data`：保留对象访问（`if (query.isPending) ...` 之后 `query.data` 即非空）或显式判 `isSuccess`；需要"保证非空"的渲染时改用 `useSuspenseQuery`
 
 ## 2. useMutation
 

@@ -27,7 +27,7 @@ TanStack Table v9 的三个 API 层：`ColumnDef`（列声明）、`useTable` + 
 ```ts
 type Person = { id: number; name: string; age: number; tags: string[] }
 
-const columnHelper = createColumnHelper<Person>()
+const columnHelper = createColumnHelper<CoreFeatures, Person>()  // v9 双泛型：特性集 + 数据类型（basics/04 有完整写法）
 
 const columns = columnHelper.columns([
   {
@@ -40,8 +40,8 @@ const columns = columnHelper.columns([
     enableSorting: true,              // 是否可排序
     enableFiltering: true,            // 是否可筛选
     enableHiding: false,              // 是否可隐藏
-    filterFn: 'includesString',       // 内置筛选函数或自定义（v9 建议直接传函数）
-    sortFn: 'basic',                  // v9 更名：v8 的 sortingFn → sortFn
+    filterFn: (row, id, value) => row.getValue<string>(id).includes(value), // v9 传函数更省事；字符串名（'includesString'）需先在 features 的 filterFns 槽位注册
+    sortFn: 'basic',                  // v9 更名：v8 的 sortingFn → sortFn（字符串名同理需经 sortFns 槽位注册）
     size: 150,                        // 列宽提示
     meta: { align: 'left' },          // 自定义元信息，渲染层读取
     columns: [],                      // 子列（表头分组用）
@@ -88,7 +88,7 @@ import {
   columnFilteringFeature,
   createSortedRowModel,
   createFilteredRowModel,
-  createPaginationRowModel,
+  createPaginatedRowModel,
 } from '@tanstack/react-table'
 
 // 方式 A：按需注册（推荐，产物更小）
@@ -171,7 +171,7 @@ table.atoms.sorting.get()    // 单切片原子订阅（细粒度渲染）
 table.getHeaderGroups()          // 表头分组（含多层）
 table.getFooterGroups()          // 表尾
 table.getRowModel()              // 最终行模型（流水线终点）
-table.getPrePaginationRowModel() // 分页前的行
+table.getPrePaginatedRowModel()  // 分页前的行
 table.getSelectedRowModel()      // 选中的行
 table.state                      // 全部状态（v9）
 table.setSorting(updater)        // 编程式排序

@@ -53,7 +53,9 @@ function TodoList() {
     queryFn: fetchTodos,
   })
 
-  if (isPending) return <p>加载中...</p>       // 首次加载且无缓存
+  // 注意：解构出的 isPending 是普通布尔，无法把 data 收窄成非空——
+  // 判 data === undefined（pending 阶段 data 为 undefined）才能通过 strict 类型检查
+  if (isPending || data === undefined) return <p>加载中...</p>  // 首次加载且无缓存
   if (isError) return <p>出错了: {error.message}</p>
 
   return (
@@ -72,7 +74,7 @@ function TodoList() {
 
 **关键点解析**：
 
-- `isPending`：还没有数据；v5 中此状态下 `data` 类型收窄为 `undefined`，先判空再渲染才能通过类型检查（`isLoading` 现在等于 `isPending && isFetching`，即首次加载）
+- `isPending`：还没有数据；v5 中此状态下 `data` 是 `undefined`，判空后再渲染才能通过类型检查（注意解构出的 `isPending` 布尔**无法**收窄 `data` 的类型，须显式判 `data === undefined`，或用对象访问 `query.isPending` 保留判别联合；`isLoading` 现在等于 `isPending && isFetching`，即首次加载）
 - `data` 类型由 `fetchTodos` 的返回值**自动推断**，无需手写泛型
 - 挂载即取数；组件卸载后缓存仍在，再次挂载**瞬间命中缓存**
 

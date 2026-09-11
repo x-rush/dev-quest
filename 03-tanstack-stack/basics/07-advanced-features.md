@@ -90,7 +90,8 @@ function Feed() {
       getNextPageParam: (lastPage) => lastPage.nextCursor, // 返回 null/undefined 即无更多
     })
 
-  if (isPending) return <p>加载中...</p>
+  // 解构出的 isPending 无法收窄 data 类型，判 undefined 才能通过 strict 检查
+  if (isPending || data === undefined) return <p>加载中...</p>
 
   return (
     <>

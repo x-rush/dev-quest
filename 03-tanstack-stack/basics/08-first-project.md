@@ -2,9 +2,9 @@
 
 > **文档简介**: 综合实战——用 TanStack Query 取数 + TanStack Table 排序渲染，搭建一个可排序、可刷新、带乐观收藏的城市天气数据面板
 >
-> **目标读者**: 已完成 01-07 全部教程，准备把 Query 与 Table 串成完整链路的学习者
+> **目标读者**: 已完成 01-06 全部教程，准备把 Query 与 Table 串成完整链路的学习者（进阶写法可对照 [高级特性](./07-advanced-features.md)）
 >
-> **前置知识**: [Query 基础](./03-query-fundamentals.md)、[Table 基础](./04-table-fundamentals.md)、[高级特性](./07-advanced-features.md)
+> **前置知识**: [Query 基础](./03-query-fundamentals.md)、[Table 基础](./04-table-fundamentals.md)
 
 ## 📚 文档元数据
 
@@ -166,7 +166,7 @@ export default function App() {
     }),
   })
 
-  if (isPending) return <p>加载天气中...</p>
+  if (isPending || data === undefined) return <p>加载天气中...</p>  // 解构布尔无法收窄 data，补 undefined 判定
   if (isError) return <p>加载失败 <button onClick={() => refetch()}>重试</button></p>
 
   return (
