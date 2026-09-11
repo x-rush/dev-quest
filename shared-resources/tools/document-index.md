@@ -32,9 +32,11 @@
 | [环境搭建](../../01-go-backend/basics/01-environment-setup.md) | 开发环境配置 |
 | [第一个程序](../../01-go-backend/basics/02-first-program.md) | Hello World与项目结构 |
 | [变量与常量](../../01-go-backend/basics/03-variables-constants.md) | 类型系统基础 |
-| [函数与方法](../../01-go-backend/basics/04-functions-methods.md) | 函数定义与使用 |
-| [控制结构](../../01-go-backend/basics/05-control-structures.md) | 条件与循环 |
-| [错误处理](../../01-go-backend/basics/06-error-handling.md) | Go错误处理哲学 |
+| [复合类型](../../01-go-backend/basics/04-composite-types.md) | 数组、切片、映射与结构体 |
+| [函数与方法](../../01-go-backend/basics/05-functions-methods.md) | 函数定义与使用 |
+| [控制结构](../../01-go-backend/basics/06-control-structures.md) | 条件与循环 |
+| [并发基础](../../01-go-backend/basics/07-concurrency-basics.md) | goroutine 与 channel 入门 |
+| [错误处理](../../01-go-backend/basics/08-error-handling.md) | Go错误处理哲学 |
 
 ### 🛠️ 框架工具 (frameworks/)
 | 框架 | 文档 | 应用场景 |
@@ -68,7 +70,7 @@
 |------|------|
 | [语言核心概念](../../01-go-backend/reference/language-concepts/01-go-keywords.md) | Go关键字、错误处理、并发、泛型等9篇 |
 | [框架核心要点](../../01-go-backend/reference/framework-essentials/01-gin-framework.md) | Gin、GORM、sqlc对比、路由器选型、Mongo/Redis驱动等6篇 |
-| [库指南](../../01-go-backend/reference/library-guides/01-go-standard-library.md) | 标准库与三方库2篇 |
+| [库指南](../../01-go-backend/reference/library-guides/01-go-standard-library.md) | 标准库、三方库与net/http 3篇 |
 | [快速参考](../../01-go-backend/reference/quick-references/01-syntax-cheatsheet.md) | 语法速查、Web工具、故障排查3篇 |
 
 ### 🔧 测试与部署
@@ -124,7 +126,7 @@
 ### 📚 知识字典 (reference/)
 | 分类 | 文档 |
 |------|------|
-| [语言概念](../../02-nextjs-frontend/reference/language-concepts/01-react-syntax-cheatsheet.md) | React语法、Next.js API、TS类型等5篇 |
+| [语言概念](../../02-nextjs-frontend/reference/language-concepts/01-react-syntax-cheatsheet.md) | React语法、Next.js API、TS类型、React 19 Hooks等6篇 |
 | [框架模式](../../02-nextjs-frontend/reference/framework-patterns/01-app-router-patterns.md) | 路由、组件、缓存、异步API、proxy等11篇 |
 | [开发工具](../../02-nextjs-frontend/reference/development-tools/01-testing-tools.md) | 测试、样式、包管理、调试工具4篇 |
 | [性能优化](../../02-nextjs-frontend/reference/performance-optimization/01-rendering-optimization.md) | 渲染、包体积、图片字体优化3篇 |
@@ -171,12 +173,12 @@
 
 ## 05 Kotlin Compose
 
-> 模块入口: [05-kotlin-compose/README.md](../../05-kotlin-compose/README.md) | 已按标准结构建设（44篇 + 历史规划文档）
+> 模块入口: [05-kotlin-compose/README.md](../../05-kotlin-compose/README.md) | 已按标准结构建设（46篇 + 历史规划文档）
 
 | 目录 | 象限 | 篇数 | 入口 |
 |------|------|------|------|
 | 📖 [basics/](../../05-kotlin-compose/basics/) | 教程 | 8 | [环境搭建](../../05-kotlin-compose/basics/01-environment-setup.md) |
-| 📚 [reference/](../../05-kotlin-compose/reference/) | 字典 | 18 | [language-concepts/](../../05-kotlin-compose/reference/language-concepts/) |
+| 📚 [reference/](../../05-kotlin-compose/reference/) | 字典 | 20 | [language-concepts/](../../05-kotlin-compose/reference/language-concepts/) |
 | 🏗️ [frameworks/](../../05-kotlin-compose/frameworks/) | 操作指南 | 4 | [Compose入门](../../05-kotlin-compose/frameworks/01-compose-basics.md) |
 | 🚀 [projects/](../../05-kotlin-compose/projects/) | 操作指南 | 4 | [笔记应用](../../05-kotlin-compose/projects/01-notes-app.md) |
 | 🧪 [testing/](../../05-kotlin-compose/testing/) | 操作指南 | 3 | [单元测试](../../05-kotlin-compose/testing/01-unit-testing.md) |
@@ -187,12 +189,12 @@
 
 ## 06 SwiftUI
 
-> 模块入口: [06-swift-swiftui/README.md](../../06-swift-swiftui/README.md) | 已按标准结构建设（46篇 + 历史规划文档）
+> 模块入口: [06-swift-swiftui/README.md](../../06-swift-swiftui/README.md) | 已按标准结构建设（48篇 + 历史规划文档）
 
 | 目录 | 象限 | 篇数 | 入口 |
 |------|------|------|------|
 | 📖 [basics/](../../06-swift-swiftui/basics/) | 教程 | 8 | [环境搭建](../../06-swift-swiftui/basics/01-environment-setup.md) |
-| 📚 [reference/](../../06-swift-swiftui/reference/) | 字典 | 20 | [language-concepts/](../../06-swift-swiftui/reference/language-concepts/) |
+| 📚 [reference/](../../06-swift-swiftui/reference/) | 字典 | 22 | [language-concepts/](../../06-swift-swiftui/reference/language-concepts/) |
 | 🏗️ [frameworks/](../../06-swift-swiftui/frameworks/) | 操作指南 | 4 | [SwiftUI入门](../../06-swift-swiftui/frameworks/01-swiftui-basics.md) |
 | 🚀 [projects/](../../06-swift-swiftui/projects/) | 操作指南 | 4 | [笔记应用](../../06-swift-swiftui/projects/01-notes-app.md) |
 | 🧪 [testing/](../../06-swift-swiftui/testing/) | 操作指南 | 3 | [单元测试](../../06-swift-swiftui/testing/01-unit-testing.md) |
@@ -233,12 +235,12 @@
 
 ### 09 Node.js后端探索
 
-> 模块入口: [09-nodejs-backend/README.md](../../09-nodejs-backend/README.md) | 已按标准结构建设（37篇）
+> 模块入口: [09-nodejs-backend/README.md](../../09-nodejs-backend/README.md) | 已按标准结构建设（38篇）
 
 | 目录 | 象限 | 篇数 | 入口 |
 |------|------|------|------|
 | 📖 [basics/](../../09-nodejs-backend/basics/) | 教程 | 8 | [环境搭建](../../09-nodejs-backend/basics/01-environment-setup.md) |
-| 📚 [reference/](../../09-nodejs-backend/reference/) | 字典 | 11 | [language-concepts/](../../09-nodejs-backend/reference/language-concepts/) |
+| 📚 [reference/](../../09-nodejs-backend/reference/) | 字典 | 12 | [language-concepts/](../../09-nodejs-backend/reference/language-concepts/) |
 | 🏗️ [frameworks/](../../09-nodejs-backend/frameworks/) | 操作指南 | 4 | [Hono入门](../../09-nodejs-backend/frameworks/01-hono-basics.md) |
 | 🚀 [projects/](../../09-nodejs-backend/projects/) | 操作指南 | 4 | [TODO API](../../09-nodejs-backend/projects/01-todo-api.md) |
 | 🧪 [testing/](../../09-nodejs-backend/testing/) | 操作指南 | 3 | [单元测试](../../09-nodejs-backend/testing/01-unit-testing.md) |
@@ -247,12 +249,12 @@
 
 ### 10 Python发现之旅
 
-> 模块入口: [10-python-discovery/README.md](../../10-python-discovery/README.md) | 已按标准结构建设（46篇）
+> 模块入口: [10-python-discovery/README.md](../../10-python-discovery/README.md) | 已按标准结构建设（48篇）
 
 | 目录 | 象限 | 篇数 | 入口 |
 |------|------|------|------|
 | 📖 [basics/](../../10-python-discovery/basics/) | 教程 | 8 | [环境搭建](../../10-python-discovery/basics/01-environment-setup.md) |
-| 📚 [reference/](../../10-python-discovery/reference/) | 字典 | 20 | [language-concepts/](../../10-python-discovery/reference/language-concepts/) |
+| 📚 [reference/](../../10-python-discovery/reference/) | 字典 | 22 | [language-concepts/](../../10-python-discovery/reference/language-concepts/) |
 | 🏗️ [frameworks/](../../10-python-discovery/frameworks/) | 操作指南 | 4 | [FastAPI入门](../../10-python-discovery/frameworks/01-fastapi-basics.md) |
 | 🚀 [projects/](../../10-python-discovery/projects/) | 操作指南 | 4 | [TODO API](../../10-python-discovery/projects/01-todo-api.md) |
 | 🧪 [testing/](../../10-python-discovery/testing/) | 操作指南 | 3 | [单元测试](../../10-python-discovery/testing/01-unit-testing.md) |

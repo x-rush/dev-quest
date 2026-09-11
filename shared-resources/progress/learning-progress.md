@@ -38,9 +38,11 @@ graph LR
 - [x] **环境搭建**: [01-environment-setup.md](../../01-go-backend/basics/01-environment-setup.md) - Go 1.24+ 开发环境配置
 - [x] **第一个程序**: [02-first-program.md](../../01-go-backend/basics/02-first-program.md) - Go语言入门实践
 - [x] **变量常量**: [03-variables-constants.md](../../01-go-backend/basics/03-variables-constants.md) - 变量、常量和基础数据类型
-- [x] **函数方法**: [04-functions-methods.md](../../01-go-backend/basics/04-functions-methods.md) - 函数定义与方法调用
-- [x] **控制结构**: [05-control-structures.md](../../01-go-backend/basics/05-control-structures.md) - 条件语句与循环控制
-- [x] **错误处理**: [06-error-handling.md](../../01-go-backend/basics/06-error-handling.md) - Go错误处理机制
+- [ ] **复合类型**: [04-composite-types.md](../../01-go-backend/basics/04-composite-types.md) - 数组、切片、映射与结构体
+- [x] **函数方法**: [05-functions-methods.md](../../01-go-backend/basics/05-functions-methods.md) - 函数定义与方法调用
+- [x] **控制结构**: [06-control-structures.md](../../01-go-backend/basics/06-control-structures.md) - 条件语句与循环控制
+- [ ] **并发基础**: [07-concurrency-basics.md](../../01-go-backend/basics/07-concurrency-basics.md) - goroutine 与 channel 入门
+- [x] **错误处理**: [08-error-handling.md](../../01-go-backend/basics/08-error-handling.md) - Go错误处理机制
 
 **语言概念速查** ⭐
 - [x] **Go关键字**: [reference/language-concepts/01-go-keywords.md](../../01-go-backend/reference/language-concepts/01-go-keywords.md) - Go关键字详解
@@ -52,6 +54,7 @@ graph LR
 **标准库指南** ⭐
 - [x] **标准库**: [reference/library-guides/01-go-standard-library.md](../../01-go-backend/reference/library-guides/01-go-standard-library.md) - 标准库核心API
 - [x] **第三方库**: [reference/library-guides/02-third-party-libs.md](../../01-go-backend/reference/library-guides/02-third-party-libs.md) - 第三方库精选
+- [ ] **net/http 指南**: [reference/library-guides/03-net-http.md](../../01-go-backend/reference/library-guides/03-net-http.md) - 标准库 HTTP 服务端/客户端
 
 **快速参考** ⭐
 - [x] **语法速查**: [reference/quick-references/01-syntax-cheatsheet.md](../../01-go-backend/reference/quick-references/01-syntax-cheatsheet.md) - Go语法速查表
@@ -223,7 +226,7 @@ graph LR
 #### 09. Node.js 后端探索
 **模块入口**: [09-nodejs-backend/README.md](../../09-nodejs-backend/README.md)（含入门/进阶/精通三路径视图）
 - [ ] **Node.js 24 LTS**: ES模块、Worker Threads、性能优化
-- [ ] **现代框架**: Hono 4（主角）、Fastify、NestJS 选型对比、TypeScript 6.x
+- [ ] **现代框架**: Hono 4（主角）、Fastify、NestJS 选型对比、TypeScript 7
 - [ ] **数据库生态**: Prisma、TypeORM、GraphQL联邦
 - [ ] **云原生架构**: Serverless、边缘计算、微服务
 - [ ] **AI时代后端**: AI Agent集成、零信任架构

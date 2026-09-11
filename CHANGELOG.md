@@ -2,6 +2,21 @@
 
 本项目遵循 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/) 格式。
 
+## [2.4.0] - 2026-09-11
+
+### Added
+- 全仓四维审计（虚构 API / projects 最佳实践 / 渐进式学习 / 字典覆盖）：5 组并行审计 agent 按技术栈分工，有工具链的语言实测运行（go build/vet/-race、php -r 逐字回放、tsc --noEmit、hono/prisma 实装验证），Kotlin/Swift 静态审读并标注"待核实"
+- 5 路修复 agent 补齐缺口：01 模块新增 basics/04-composite-types、basics/07-concurrency-basics 两篇教程与 `reference/library-guides/03-net-http.md` 字典；02 模块补 RSC/metadata/React 19 Hooks 字典（`reference/language-concepts/06-react-19-hooks.md`）；05 模块补 `07-compose-testing.md`、`03-ksp-configuration.md`；06 模块补 `06-swift-charts.md`、`07-swiftdata-migration.md`；09 模块补 `06-esm-module-resolution.md`；10 模块补 `13-dataclasses.md`、`14-comprehensions.md`
+- 01 模块 basics 教程重排为 8 篇（新增复合类型与并发基础，编号 git mv 保留历史）
+
+### Fixed
+- **并发安全类**：05/06 模块 `runCatching`/`onFailure`/`recoverCatching` 吞掉 `CancellationException` 共 3 处（取消异常必须放行，否则协程无法取消）；06 模块 `Task{}` 误述为"结构化并发"改为非结构化（结构化应使用 `async let` / `TaskGroup`）
+- **类型系统类**：03 模块 TanStack Query v5 判别联合误用——解构 `isPending` 会丢失联合类型导致 `data` 无法收窄，共 4 处改为判 `data === undefined` 或保留对象访问；TanStack Table v9 API 名修正（`createPaginatedRowModel`、`createColumnHelper<TFeatures, TData>` 双泛型、`getPrePaginatedRowModel`）共 4 处
+- **版本基线类**：04 模块 TypeScript 7.0 GA 基线（npm latest 7.0.2）；Next.js 16 `revalidateTag(tag, profile)` 双参必填共 17 处代码位补齐，Server Action 内改用 `updateTag(tag)`；`unstable_cache` 定性改为"不推荐新项目使用"；09 模块 Prisma v6 语法残留全量迁移至 v7（prisma.config.ts、generator prisma-client + output、driver adapter）；Hono jwt 中间件补必填 `alg` 参数；PHP 8.5 实测修复 5 处（Fiber resume 返 NULL 用 `getReturn()` 取值、常量表达式允许一等公民 callable 引用但禁止闭包字面量等 10 项，php8.5.10 逐字回放）
+- **内容回填类**：05 模块笔记应用编辑屏补 `LaunchedEffect(noteId)` 回填逻辑；06 模块 @Model/@ModelActor 关系澄清；05 模块 `mutableStateOf` 类型推断陷阱条件修正（仅无初值时报错）
+- 根级索引与进度同步：document-index / learning-progress 各模块篇数与 01 basics 新编号对齐，修复全部死链（全仓 3769 条链接 0 断链）
+- 根级规范对齐：难度评级统一为 3 级（⭐/⭐⭐/⭐⭐⭐），54 篇文档 4-5 星折叠；100 文件日期元数据"2025年10月"→"2026年9月"
+
 ## [2.3.0] - 2026-09-11
 
 ### Added
@@ -84,6 +99,7 @@
 - 完成 `01-go-backend` 模块重构（basics/frameworks/projects/testing/deployment 标准结构）
 - 创建技术探索系列模块，建立双轨制学习体系
 
+[2.4.0]: https://github.com/x_rush/dev-quest/compare/2.3.0...2.4.0
 [2.3.0]: https://github.com/x_rush/dev-quest/compare/2.2.0...2.3.0
 [2.2.0]: https://github.com/x_rush/dev-quest/compare/2.1.0...2.2.0
 [2.1.0]: https://github.com/x_rush/dev-quest/compare/2.0.0...2.1.0
