@@ -14,7 +14,7 @@
 |------|------|
 | **模块** | `02-nextjs-frontend` |
 | **分类** | `frameworks` |
-| **难度** | ⭐⭐⭐⭐⭐ (5/5星) |
+| **难度** | ⭐⭐⭐ (精通)|
 | **标签** | `#full-stack` `#api-design` `#database` `#authentication` `#microservices` |
 | **更新日期** | `2026年9月` |
 | **作者** | Dev Quest Team |
@@ -1338,7 +1338,7 @@ export class MigrationManager {
 **📜 文档版本**: v1.0.0
 **📅 最后更新**: 2026年9月
 **🏷️ 标签**: `#full-stack` `#api-design` `#database` `#authentication` `#permissions`
-**⭐ 推荐指数**: ⭐⭐⭐⭐⭐
+**⭐ 推荐指数**: ⭐⭐⭐
 
 **💡 提示**: 本模块为全栈开发高级模块，建议先掌握Next.js 16基础和数据库基础后再进行学习。
 

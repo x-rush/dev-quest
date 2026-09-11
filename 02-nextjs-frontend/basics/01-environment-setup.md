@@ -14,7 +14,7 @@
 |------|------|
 | **模块** | `02-nextjs-frontend` |
 | **分类** | `basics` |
-| **难度** | ⭐⭐ (2/5星) |
+| **难度** | ⭐ |
 | **标签** | `#environment-setup` `#nodejs` `#development-tools` `#git` `#ide` |
 | **更新日期** | `2026年9月` |
 | **作者** | Dev Quest Team |

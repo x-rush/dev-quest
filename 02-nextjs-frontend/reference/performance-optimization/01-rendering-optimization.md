@@ -14,7 +14,7 @@
 |------|------|
 | **模块** | `02-nextjs-frontend` |
 | **分类** | `reference` |
-| **难度** | ⭐⭐⭐⭐⭐ (5/5星) |
+| **难度** | ⭐⭐⭐ (精通)|
 | **标签** | `#performance` `#optimization` `#core-web-vitals` `#rendering` `#ux` |
 | **更新日期** | `2026年9月` |
 | **作者** | Dev Quest Team |
@@ -597,7 +597,7 @@ export async function POST(request: NextRequest) {
 
   try {
     if (tag) {
-      revalidateTag(tag);
+      revalidateTag(tag, 'max');  // Next 16：revalidateTag 必须带 profile 第二参数
       return NextResponse.json({ revalidated: true, tag });
     }
 

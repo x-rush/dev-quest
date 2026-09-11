@@ -14,7 +14,7 @@
 |------|------|
 | **模块** | `02-nextjs-frontend` |
 | **分类** | `deployment` |
-| **难度** | ⭐⭐⭐⭐ (4/5星) |
+| **难度** | ⭐⭐⭐ (精通)|
 | **标签** | `#monitoring` `#analytics` `#sentry` `#performance` `#error-tracking` |
 | **更新日期** | `2026年9月` |
 | **作者** | Dev Quest Team |
@@ -1224,7 +1224,7 @@ Next.js 16 的监控和分析体系为现代Web应用提供了全面的可观测
 **📜 文档版本**: v1.0.0
 **📅 最后更新**: 2026年9月
 **🏷️ 标签**: `#monitoring` `#analytics` `#error-tracking` `#performance` `#observability`
-**⭐ 推荐指数**: ⭐⭐⭐⭐⭐
+**⭐ 推荐指数**: ⭐⭐⭐
 
 **💡 提示**: 本模块专注于现代前端监控和分析实践，适合需要构建完整监控体系的团队。
 

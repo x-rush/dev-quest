@@ -67,7 +67,7 @@ export async function createPost(formData: FormData) {
 - 缓存函数的参数与返回值必须可序列化；传入 Date/Map 等非序列化类型会静默出错或报错
 - 忘记 `cacheTag` 会导致数据无法精准失效，只能整体过期
 - Next.js 16 中 `revalidateTag(tag)` 单参数调用已被弃用，必须传 `cacheLife` profile 作为第二参数
-- `unstable_cache` 与 `experimental.ppr` / `experimental_ppr` 已弃用/移除，迁移到 `"use cache"` 模型
+- `unstable_cache` 与 `experimental.ppr` / `experimental_ppr` 官方已标记为**不推荐新项目使用**（16.3 中仍可导入/配置，但生态方向是 `"use cache"` 模型，新代码直接采用后者）
 - 旧的隐式缓存（`fetch` 默认缓存、路由段默认静态）在 16 中不再存在，升级后页面可能"突然变动态"，应主动为热点页面补上 `"use cache"`
 
 ## 🔗 相关条目

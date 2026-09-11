@@ -11,7 +11,7 @@
 |------|------|
 | **模块** | `02-nextjs-frontend` |
 | **分类** | `projects` |
-| **难度** | ⭐⭐⭐⭐⭐ (5/5星) |
+| **难度** | ⭐⭐⭐ (精通)|
 | **标签** | `Next.js 16` `React 19` `TypeScript 5` `SaaS` `多租户` `订阅计费` `Stripe Billing` |
 | **更新日期** | `2026年9月` |
 | **作者** | Dev Quest Team |
@@ -2886,6 +2886,137 @@ export class IntegrationService {
   }
 }
 ```
+
+#### 3.3 工作区元数据与文件约定（metadata / error / loading / not-found）
+
+> 📖 呼应字典：[错误与加载状态约定](../reference/framework-patterns/11-error-loading-patterns.md)、[网络代理（proxy.ts）](../reference/framework-patterns/10-proxy-patterns.md)
+
+多租户 SaaS 的元数据需要跟随租户（白标）——标题、favicon 随 workspace 变化；租户访问他人资源时应走 `not-found` 约定而不是抛 500。
+
+**工作区布局元数据（app/[workspace]/layout.tsx）**——`generateMetadata` 读取租户品牌配置：
+
+```typescript
+import type { Metadata } from 'next';
+import { notFound } from 'next/navigation';
+import { getWorkspaceBySlug } from '@/lib/tenant';
+
+interface WorkspaceLayoutProps {
+  children: React.ReactNode;
+  params: Promise<{ workspace: string }>;
+}
+
+export async function generateMetadata({ params }: WorkspaceLayoutProps): Promise<Metadata> {
+  const { workspace: slug } = await params;
+  const workspace = await getWorkspaceBySlug(slug);
+  if (!workspace) notFound(); // 租户不存在 → 404 约定
+
+  return {
+    title: { default: workspace.name, template: `%s | ${workspace.name}` },
+    description: workspace.description,
+    icons: workspace.branding?.faviconUrl
+      ? { icon: workspace.branding.faviconUrl }
+      : undefined,
+  };
+}
+
+export default async function WorkspaceLayout({ children, params }: WorkspaceLayoutProps) {
+  const { workspace: slug } = await params;
+  const workspace = await getWorkspaceBySlug(slug);
+  if (!workspace) notFound();
+
+  return <TenantProvider workspace={workspace}>{children}</TenantProvider>;
+}
+```
+
+**加载兜底（app/[workspace]/dashboard/loading.tsx）**：
+
+```typescript
+export default function Loading() {
+  return (
+    <div className="animate-pulse space-y-6 p-8">
+      <div className="h-8 w-56 rounded bg-gray-200" />
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-4">
+        {Array.from({ length: 4 }).map((_, i) => (
+          <div key={i} className="h-24 rounded-lg bg-gray-200" />
+        ))}
+      </div>
+      <div className="h-96 rounded-xl bg-gray-200" />
+    </div>
+  );
+}
+```
+
+**错误边界（app/[workspace]/error.tsx）**——必须是客户端组件，文案区分权限与故障：
+
+```typescript
+'use client';
+
+export default function WorkspaceError({
+  error,
+  reset,
+}: {
+  error: Error & { digest?: string };
+  reset: () => void;
+}) {
+  return (
+    <div role="alert" className="p-8 text-center">
+      <h2 className="text-lg font-semibold">页面加载失败</h2>
+      <p className="mt-2 text-sm text-gray-500">
+        若问题持续，请联系你的工作区管理员（错误 ID: {error.digest ?? '未知'}）。
+      </p>
+      <button onClick={reset} className="mt-4 rounded-md bg-indigo-600 px-4 py-2 text-white">
+        重试
+      </button>
+    </div>
+  );
+}
+```
+
+**404 约定（app/[workspace]/not-found.tsx）**——承接上方 `generateMetadata` 中的 `notFound()`，也覆盖租户访问他人资源被 `getWorkspaceBySlug` 拒绝的场景：
+
+```typescript
+import Link from 'next/link';
+
+export default function WorkspaceNotFound() {
+  return (
+    <div className="p-8 text-center">
+      <h2 className="text-lg font-semibold">工作区不存在或你无权访问</h2>
+      <p className="mt-2 text-sm text-gray-500">请确认链接是否正确，或联系管理员邀请你加入。</p>
+      <Link href="/" className="mt-4 inline-block text-indigo-600 underline">
+        返回首页
+      </Link>
+    </div>
+  );
+}
+```
+
+**应用级最后防线（app/global-error.tsx）**——替换整个根布局，必须自带 `<html>`/`<body>`：
+
+```typescript
+'use client';
+
+export default function GlobalError({
+  error,
+  reset,
+}: {
+  error: Error & { digest?: string };
+  reset: () => void;
+}) {
+  return (
+    <html lang="zh-CN">
+      <body>
+        <div style={{ padding: 48, textAlign: 'center' }}>
+          <h2>应用暂时不可用</h2>
+          <p>我们的团队已收到告警（ID: {error.digest ?? '未知'}）。</p>
+          <button onClick={reset}>重试</button>
+        </div>
+      </body>
+    </html>
+  );
+}
+```
+
+要点（详见上方字典）：`error.tsx` 不捕获同层 `layout.tsx` 抛出的错误——上方 WorkspaceLayout 中的 `notFound()` 会向上冒泡到父级约定，因此多租户校验建议优先放在 1.3 的 `proxy.ts`（请求进入路由前完成租户识别）；`global-error.tsx` 渲染时替换根布局，样式需内联；生产环境 `error` 对象被脱敏，排查依赖服务端日志与 `digest`。
 
 ### 步骤四：测试和优化
 

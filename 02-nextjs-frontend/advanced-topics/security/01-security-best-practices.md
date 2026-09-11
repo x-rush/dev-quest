@@ -14,7 +14,7 @@
 |------|------|
 | **模块** | `02-nextjs-frontend` |
 | **分类** | `advanced-topics/security` |
-| **难度** | ⭐⭐⭐⭐⭐ (5/5星) |
+| **难度** | ⭐⭐⭐ (精通)|
 | **标签** | `#web-security` `#xss` `#csrf` `#authentication` `#owasp` `#nextjs16` |
 | **更新日期** | `2026年9月` |
 | **作者** | Dev Quest Team |

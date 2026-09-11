@@ -1262,7 +1262,7 @@ export class TestDataManager {
 **📜 文档版本**: v1.0.0
 **📅 最后更新**: 2026年9月
 **🏷️ 标签**: `#e2e-testing` `#playwright` `#automation` `#ci-cd` `#page-objects`
-**⭐ 推荐指数**: ⭐⭐⭐⭐⭐
+**⭐ 推荐指数**: ⭐⭐⭐
 
 **💡 提示**: 本模块专注于现代E2E测试实践，建议结合实际项目进行练习。
 

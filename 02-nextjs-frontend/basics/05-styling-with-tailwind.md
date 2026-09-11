@@ -14,7 +14,7 @@
 |------|------|
 | **模块** | `02-nextjs-frontend` |
 | **分类** | `basics` |
-| **难度** | ⭐⭐⭐ (3/5星) |
+| **难度** | ⭐⭐⭐ |
 | **标签** | `#tailwindcss` `#styling` `#responsive-design` `#theme-system` `#css-in-js` |
 | **更新日期** | `2026年9月` |
 | **作者** | Dev Quest Team |

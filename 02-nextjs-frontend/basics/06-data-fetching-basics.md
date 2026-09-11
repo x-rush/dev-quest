@@ -14,7 +14,7 @@
 |------|------|
 | **模块** | `02-nextjs-frontend` |
 | **分类** | `basics` |
-| **难度** | ⭐⭐⭐⭐ (4/5星) |
+| **难度** | ⭐⭐ |
 | **标签** | `#data-fetching` `#server-components` `#api-routes` `#caching` `#async-data` |
 | **更新日期** | `2026年9月` |
 | **作者** | Dev Quest Team |
@@ -984,7 +984,7 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    revalidateTag(tag)
+    revalidateTag(tag, 'max')  // Next 16：必须带 cacheLife profile 第二参数
 
     return NextResponse.json({
       success: true,

@@ -14,7 +14,7 @@
 |------|------|
 | **模块** | `02-nextjs-frontend` |
 | **分类** | `frameworks` |
-| **难度** | ⭐⭐⭐⭐⭐ (5/5星) |
+| **难度** | ⭐⭐⭐ (精通)|
 | **标签** | `#nextjs16` `#app-router` `#server-components` `#performance` `#enterprise` |
 | **更新日期** | `2026年9月` |
 | **作者** | Dev Quest Team |
@@ -1208,7 +1208,7 @@ module.exports = nextConfig
 **📜 文档版本**: v1.0.0
 **📅 最后更新**: 2026年9月
 **🏷️ 标签**: `#nextjs16` `#react19` `#app-router` `#server-components` `#modern-web`
-**⭐ 推荐指数**: ⭐⭐⭐⭐⭐
+**⭐ 推荐指数**: ⭐⭐⭐
 
 **💡 提示**: 本模块为Next.js 16核心模块，建议先掌握React基础后再进行学习。结合实践项目能更好地理解概念。
 

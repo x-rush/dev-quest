@@ -14,7 +14,7 @@
 |------|------|
 | **模块** | `02-nextjs-frontend` |
 | **分类** | `reference` |
-| **难度** | ⭐⭐⭐⭐ (4/5星) |
+| **难度** | ⭐⭐⭐ (精通)|
 | **标签** | `#debugging` `#devtools` `#chrome-devtools` `#vscode-debug` `#react-devtools` |
 | **更新日期** | `2026年9月` |
 | **作者** | Dev Quest Team |

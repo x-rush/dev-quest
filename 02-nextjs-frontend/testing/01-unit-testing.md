@@ -1480,7 +1480,7 @@ export async function waitForLoadingToFinish() {
 **📜 文档版本**: v1.0.0
 **📅 最后更新**: 2026年9月
 **🏷️ 标签**: `#unit-testing` `#vitest` `#testing-library` `#react-testing` `#mocking`
-**⭐ 推荐指数**: ⭐⭐⭐⭐⭐
+**⭐ 推荐指数**: ⭐⭐⭐
 
 **💡 提示**: 本模块专注于现代前端单元测试实践，建议结合实际项目进行练习。
 

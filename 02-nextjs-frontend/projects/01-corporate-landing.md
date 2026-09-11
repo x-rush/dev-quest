@@ -11,7 +11,7 @@
 |------|------|
 | **模块** | `02-nextjs-frontend` |
 | **分类** | `projects` |
-| **难度** | ⭐⭐⭐⭐ (4/5星) |
+| **难度** | ⭐⭐⭐ (精通)|
 | **标签** | `Next.js 16` `React 19` `TypeScript 5` `企业级应用` `SEO优化` |
 | **更新日期** | `2026年9月` |
 | **作者** | Dev Quest Team |
@@ -1307,6 +1307,108 @@ export async function POST(request: NextRequest) {
   }
 }
 ```
+
+#### 3.5 页面元数据完善与 error / loading / not-found 文件约定
+
+> 📖 呼应字典：[错误与加载状态约定](../reference/framework-patterns/11-error-loading-patterns.md)
+
+官网是 SEO 权重最重的场景。3.2 已为博客页实现 `generateMetadata`，这里把元数据补全到根布局，并加上 App Router 的三个文件约定，让官网在分享卡片、容错与 404 场景都有兜底。
+
+**根布局元数据（app/[locale]/layout.tsx，在现有 RootLayout 中补充导出）**：
+
+```typescript
+import type { Metadata } from 'next';
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+
+  return {
+    metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? 'https://example.com'),
+    title: {
+      default: 'Acme Corp',
+      template: '%s | Acme Corp',
+    },
+    description: '全球领先的企业服务提供商',
+    alternates: {
+      canonical: `/${locale}`,
+    },
+    openGraph: {
+      siteName: 'Acme Corp',
+      type: 'website',
+    },
+  };
+}
+```
+
+**加载兜底（app/[locale]/about/loading.tsx）**——营销页视觉素材多，进入时给骨架：
+
+```typescript
+export default function Loading() {
+  return (
+    <div className="mx-auto max-w-5xl animate-pulse space-y-8 px-4 py-16">
+      <div className="h-12 w-2/3 rounded bg-gray-200" />
+      <div className="h-64 rounded-xl bg-gray-200" />
+      <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
+        {Array.from({ length: 3 }).map((_, i) => (
+          <div key={i} className="h-40 rounded-lg bg-gray-200" />
+        ))}
+      </div>
+    </div>
+  );
+}
+```
+
+**错误边界（app/[locale]/error.tsx）**——必须是客户端组件：
+
+```typescript
+'use client';
+
+export default function LocaleError({
+  error,
+  reset,
+}: {
+  error: Error & { digest?: string };
+  reset: () => void;
+}) {
+  return (
+    <div role="alert" className="mx-auto max-w-xl px-4 py-24 text-center">
+      <h2 className="text-2xl font-bold">页面出错了</h2>
+      <p className="mt-2 text-gray-500">请稍后重试；问题持续存在请联系管理员。</p>
+      {error.digest && <p className="mt-1 text-xs text-gray-400">ID: {error.digest}</p>}
+      <button
+        onClick={reset}
+        className="mt-6 rounded-md bg-blue-600 px-6 py-2 text-white"
+      >
+        重试
+      </button>
+    </div>
+  );
+}
+```
+
+**404 约定（app/[locale]/not-found.tsx）**——承接 3.2 中 CMS 查不到数据时调用的 `notFound()`：
+
+```typescript
+import Link from 'next/link';
+
+export default function LocaleNotFound() {
+  return (
+    <div className="mx-auto max-w-xl px-4 py-24 text-center">
+      <h2 className="text-3xl font-bold">404</h2>
+      <p className="mt-2 text-gray-500">页面不存在或已下线</p>
+      <Link href="/" className="mt-6 inline-block text-blue-600 underline">
+        返回首页
+      </Link>
+    </div>
+  );
+}
+```
+
+要点（详见上方字典）：`error.tsx` 不捕获同层 `layout.tsx` 抛出的错误——本项目在 RootLayout 中做的 locale 校验 `notFound()` 会向上冒泡到父级约定；仅靠 `error.tsx` 无法兜住根布局崩溃，需另配 `app/global-error.tsx`（自带 `<html>`/`<body>`）作为最后防线；`loading.tsx` 作用于整个路由段，营销页想只对慢图片流式渲染应使用 `<Suspense>`。
 
 ### 步骤四：测试和优化
 

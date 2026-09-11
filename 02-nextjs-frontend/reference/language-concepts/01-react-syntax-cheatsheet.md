@@ -14,7 +14,7 @@
 |------|------|
 | **模块** | `02-nextjs-frontend` |
 | **分类** | `reference` |
-| **难度** | ⭐⭐⭐ (3/5星) |
+| **难度** | ⭐⭐⭐ |
 | **标签** | `#react19` `#hooks` `#syntax` `#jsx` `#cheatsheet` |
 | **更新日期** | `2026年9月` |
 | **作者** | Dev Quest Team |
@@ -414,6 +414,8 @@ function ThemeComponent() {
 }
 ```
 
+> 📖 **React 19 异步 Hook 速查**：`use` / `useOptimistic` / `useActionState` / `useFormStatus` 的完整签名、示例与陷阱见 **[React 19 关键 Hooks](./06-react-19-hooks.md)**。
+
 ### Server Components 语法
 ```tsx
 // 服务器组件（默认导出）
@@ -521,6 +523,9 @@ function NameForm() {
 - `useMemo()` - 值缓存优化
 - `useRef()` - 引用操作
 - `use()` - 读取Promise/Context (React 19)
+- `useActionState()` - 表单Action状态管理 (React 19)
+- `useOptimistic()` - 乐观更新 (React 19)
+- `useFormStatus()` - 表单提交状态（react-dom, React 19）
 
 **性能优化要点**:
 - 使用`useMemo`缓存计算结果

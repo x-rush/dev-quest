@@ -14,7 +14,7 @@
 |------|------|
 | **模块** | `02-nextjs-frontend` |
 | **分类** | `deployment` |
-| **难度** | ⭐⭐⭐⭐ (4/5星) |
+| **难度** | ⭐⭐⭐ (精通)|
 | **标签** | `#docker` `#containerization` `#devops` `#deployment` `#production` `#security` |
 | **更新日期** | `2026年9月` |
 | **作者** | Dev Quest Team |
@@ -1610,7 +1610,7 @@ Next.js 16 Docker 容器化部署为现代应用提供了可靠、可扩展的�
 **📜 文档版本**: v1.0.0
 **📅 最后更新**: 2026年9月
 **🏷️ 标签**: `#docker` `#containers` `#kubernetes` `#microservices` `#devops`
-**⭐ 推荐指数**: ⭐⭐⭐⭐⭐
+**⭐ 推荐指数**: ⭐⭐⭐
 
 **💡 提示**: 本模块专注于Docker容器化部署，适合需要企业级部署方案的团队。
 

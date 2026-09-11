@@ -14,7 +14,7 @@
 |------|------|
 | **模块** | `02-nextjs-frontend` |
 | **分类** | `framework-patterns` |
-| **难度** | ⭐⭐⭐⭐⭐ (5/5星) |
+| **难度** | ⭐⭐⭐ (精通)|
 | **标签** | `#data-fetching` `#ssr` `#ssg` `#caching` `#performance` `#api-design` `#graphql` |
 | **更新日期** | `2026年9月` |
 | **作者** | Dev Quest Team |
@@ -258,31 +258,32 @@ const revalidationConfig = {
   },
 };
 
-// 智能缓存管理
+// 智能缓存管理（Next 16 起 revalidateTag 必须带 cacheLife profile 作为第二参数；
+// Server Action 内需要"写后读"一致性时改用 updateTag(tag)）
 class ProductCacheManager {
   static async invalidateProduct(productId: string) {
     // 使特定产品缓存失效
-    revalidateTag(`product-${productId}`);
-    revalidateTag('products');
-    revalidateTag('inventory');
+    revalidateTag(`product-${productId}`, 'max');
+    revalidateTag('products', 'max');
+    revalidateTag('inventory', 'max');
   }
 
   static async invalidateCategory(categoryId: string) {
-    revalidateTag(`category-${categoryId}`);
-    revalidateTag('categories');
+    revalidateTag(`category-${categoryId}`, 'max');
+    revalidateTag('categories', 'max');
   }
 
   static async invalidateBrand(brandId: string) {
-    revalidateTag(`brand-${brandId}`);
-    revalidateTag('brands');
+    revalidateTag(`brand-${brandId}`, 'max');
+    revalidateTag('brands', 'max');
   }
 
   static async invalidateAll() {
-    revalidateTag('products');
-    revalidateTag('categories');
-    revalidateTag('brands');
-    revalidateTag('inventory');
-    revalidateTag('pricing');
+    revalidateTag('products', 'max');
+    revalidateTag('categories', 'max');
+    revalidateTag('brands', 'max');
+    revalidateTag('inventory', 'max');
+    revalidateTag('pricing', 'max');
   }
 }
 
@@ -1926,8 +1927,8 @@ export async function bulkUpdateItems(formData: FormData) {
     const successful = results.filter(r => r.status === 'fulfilled').length;
     const failed = results.filter(r => r.status === 'rejected').length;
 
-    // 使相关缓存失效
-    revalidateTag('items');
+    // 使相关缓存失效（Next 16：需带 profile 第二参数）
+    revalidateTag('items', 'max');
 
     // 创建审计日志
     await createAuditLog({

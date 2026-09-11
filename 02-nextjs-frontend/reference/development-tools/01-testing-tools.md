@@ -14,7 +14,7 @@
 |------|------|
 | **模块** | `02-nextjs-frontend` |
 | **分类** | `reference` |
-| **难度** | ⭐⭐⭐⭐ (4/5星) |
+| **难度** | ⭐⭐⭐ (精通)|
 | **标签** | `#testing` `#vitest` `#playwright` `#msw` `#react-testing-library` |
 | **更新日期** | `2026年9月` |
 | **作者** | Dev Quest Team |

@@ -87,6 +87,8 @@ graph TD
 **学习特点**: 渐进式教学，注重基础理解和实践练习
 **建议时长**: 4-6周
 
+> **难度注记**: 全模块统一采用三级难度标记 —— ⭐ 入门 / ⭐⭐ 进阶 / ⭐⭐⭐ 精通。上图中 `TypeScript集成`、`数据获取基础`、`状态管理`、`第一个完整项目` 为 ⭐⭐ 进阶文档，初学者可按序推进但需预留更多时间；时间有限时可先完成 ⭐ 入门文档（`环境搭建`），再按需进入进阶内容。
+
 ### 🔍 快速参考路径（有经验开发者）
 ```mermaid
 graph LR
@@ -129,13 +131,14 @@ graph LR
 ```
 02-nextjs-frontend/
 ├── README.md                           # 模块总览（本文档）
-├── 📚 reference/           # 字典：全量参考（23个文件）
-│   ├── 📖 language-concepts/      # 语言核心概念（5个文件）
+├── 📚 reference/           # 字典：全量参考（24个文件）
+│   ├── 📖 language-concepts/      # 语言核心概念（6个文件）
 │   │   ├── 01-react-syntax-cheatsheet.md       # ⚛️ React语法速查表 ✅
 │   │   ├── 02-nextjs-api-reference.md          # 🚀 Next.js API参考 ✅
 │   │   ├── 03-typescript-types.md              # 📘 TypeScript类型速查 ✅
 │   │   ├── 04-javascript-modern.md             # 💎 现代JS语法 ✅
-│   │   └── 05-css-patterns.md                  # 🎨 CSS-in-JS模式 ✅
+│   │   ├── 05-css-patterns.md                  # 🎨 CSS-in-JS模式 ✅
+│   │   └── 06-react-19-hooks.md                # ⚛️ React 19关键Hooks ✅
 │   ├── 🛠️ framework-patterns/    # 框架应用模式（11个文件）
 │   │   ├── 01-app-router-patterns.md           # 🗺️ App Router实战模式 ✅
 │   │   ├── 02-server-components-patterns.md    # 🔄 服务端组件模式 ✅
@@ -199,16 +202,17 @@ graph LR
         └── 01-graphql-apollo.md               # 🔗 GraphQL + Apollo ✅
 ```
 
-### 📚 Reference - 知识字典（18个文件）
+### 📚 Reference - 知识字典（19个文件）
 **定位**: 快速查找和理解核心概念，适合日常查阅
 **特点**: 严格差异化设计，与basics无内容重叠
 
-#### 📖 Language Concepts - 语言概念（5个文件）
+#### 📖 Language Concepts - 语言概念（6个文件）
 - [`01-react-syntax-cheatsheet.md`](reference/language-concepts/01-react-syntax-cheatsheet.md) - ⚛️ React语法速查表
 - [`02-nextjs-api-reference.md`](reference/language-concepts/02-nextjs-api-reference.md) - 🚀 Next.js API参考
 - [`03-typescript-types.md`](reference/language-concepts/03-typescript-types.md) - 📘 TypeScript类型速查
 - [`04-javascript-modern.md`](reference/language-concepts/04-javascript-modern.md) - 💎 现代JS语法
 - [`05-css-patterns.md`](reference/language-concepts/05-css-patterns.md) - 🎨 CSS-in-JS模式
+- [`06-react-19-hooks.md`](reference/language-concepts/06-react-19-hooks.md) - ⚛️ React 19关键Hooks
 
 #### 🛠️ Framework Patterns - 框架模式（11个文件）
 - [`01-app-router-patterns.md`](reference/framework-patterns/01-app-router-patterns.md) - 🗺️ App Router实战模式

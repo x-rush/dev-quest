@@ -14,7 +14,7 @@
 |------|------|
 | **模块** | `02-nextjs-frontend` |
 | **分类** | `deployment` |
-| **难度** | ⭐⭐⭐⭐ (4/5星) |
+| **难度** | ⭐⭐⭐ (精通)|
 | **标签** | `#ci-cd` `#github-actions` `#automation` `#testing` `#deployment` `#devops` |
 | **更新日期** | `2026年9月` |
 | **作者** | Dev Quest Team |
@@ -1230,7 +1230,7 @@ Next.js 16 CI/CD流水线是现代软件工程的核心实践，直接影响开�
 **📜 文档版本**: v1.0.0
 **📅 最后更新**: 2026年9月
 **🏷️ 标签**: `#ci-cd` `#github-actions` `#automation` `#devops` `#gitops`
-**⭐ 推荐指数**: ⭐⭐⭐⭐⭐
+**⭐ 推荐指数**: ⭐⭐⭐
 
 **💡 提示**: 本模块专注于现代CI/CD实践，适合需要构建自动化部署流程的团队。
 

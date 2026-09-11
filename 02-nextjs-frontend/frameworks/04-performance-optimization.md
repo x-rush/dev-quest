@@ -14,7 +14,7 @@
 |------|------|
 | **模块** | `02-nextjs-frontend` |
 | **分类** | `frameworks` |
-| **难度** | ⭐⭐⭐⭐⭐ (5/5星) |
+| **难度** | ⭐⭐⭐ (精通)|
 | **标签** | `#performance` `#optimization` `#core-web-vitals` `#bundle-analysis` `#monitoring` |
 | **更新日期** | `2026年9月` |
 | **作者** | Dev Quest Team |
@@ -1908,7 +1908,7 @@ export function PerformanceDashboard() {
 **📜 文档版本**: v1.0.0
 **📅 最后更新**: 2026年9月
 **🏷️ 标签**: `#performance` `#optimization` `#core-web-vitals` `#bundle-analysis` `#monitoring`
-**⭐ 推荐指数**: ⭐⭐⭐⭐⭐
+**⭐ 推荐指数**: ⭐⭐⭐
 
 **💡 提示**: 本模块为性能优化高级模块，建议先掌握Next.js 16基础和Web性能基础知识后再进行学习。
 

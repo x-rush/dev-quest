@@ -11,7 +11,7 @@
 |------|------|
 | **模块** | `02-nextjs-frontend` |
 | **分类** | `projects` |
-| **难度** | ⭐⭐⭐⭐⭐ (5/5星) |
+| **难度** | ⭐⭐⭐ (精通)|
 | **标签** | `Next.js 16` `React 19` `TypeScript 5` `电商系统` `支付集成` `Stripe` |
 | **更新日期** | `2026年9月` |
 | **作者** | Dev Quest Team |
@@ -2224,6 +2224,112 @@ async function getPopularProducts(limit: number) {
   }))
 }
 ```
+
+#### 3.3 SEO 元数据与文件约定（metadata / error / loading / not-found）
+
+> 📖 呼应字典：[错误与加载状态约定](../reference/framework-patterns/11-error-loading-patterns.md)
+
+电商是典型的 SEO 关键场景：商品页的标题、价格与分享卡片直接影响搜索流量与转化率；大促期间接口抖动时，`error` / `loading` / `not-found` 约定决定用户是"重试"还是"流失"。
+
+**商品详情页动态元数据（app/products/[slug]/page.tsx）**——直接在服务端查库，不再绕道自家 API 路由：
+
+```typescript
+import type { Metadata } from 'next';
+import { notFound } from 'next/navigation';
+import { db } from '@/lib/db';
+
+interface ProductPageProps {
+  params: Promise<{ slug: string }>;
+}
+
+export async function generateMetadata({ params }: ProductPageProps): Promise<Metadata> {
+  const { slug } = await params;
+  const product = await db.product.findUnique({
+    where: { slug, status: 'ACTIVE' },
+    select: {
+      name: true,
+      description: true,
+      price: true,
+      images: { take: 1, select: { url: true } },
+    },
+  });
+  if (!product) notFound(); // 下架/不存在 → 404 而非 500，便于搜索引擎移除索引
+
+  return {
+    title: product.name,
+    description: product.description.slice(0, 155),
+    alternates: { canonical: `/products/${slug}` },
+    openGraph: {
+      title: `${product.name} - ¥${product.price}`,
+      images: product.images.map((image) => ({ url: image.url })),
+      type: 'website',
+    },
+  };
+}
+```
+
+**商品列表加载兜底（app/products/loading.tsx）**：
+
+```typescript
+export default function Loading() {
+  return (
+    <div className="mx-auto grid max-w-7xl grid-cols-1 gap-6 px-4 py-8 sm:grid-cols-2 lg:grid-cols-4">
+      {Array.from({ length: 8 }).map((_, i) => (
+        <div key={i} className="animate-pulse space-y-3">
+          <div className="aspect-square rounded-lg bg-gray-200" />
+          <div className="h-4 w-3/4 rounded bg-gray-200" />
+          <div className="h-4 w-1/3 rounded bg-gray-200" />
+        </div>
+      ))}
+    </div>
+  );
+}
+```
+
+**错误边界（app/products/[slug]/error.tsx）**——必须是客户端组件：
+
+```typescript
+'use client';
+
+export default function ProductError({
+  error,
+  reset,
+}: {
+  error: Error & { digest?: string };
+  reset: () => void;
+}) {
+  return (
+    <div role="alert" className="mx-auto max-w-lg px-4 py-24 text-center">
+      <h2 className="text-xl font-bold">商品加载失败</h2>
+      <p className="mt-2 text-gray-500">网络波动或库存服务繁忙，请重试。</p>
+      {error.digest && <p className="mt-1 text-xs text-gray-400">ID: {error.digest}</p>}
+      <button onClick={reset} className="mt-6 rounded-md bg-orange-600 px-6 py-2 text-white">
+        重试
+      </button>
+    </div>
+  );
+}
+```
+
+**404 约定（app/products/[slug]/not-found.tsx）**——承接上方 `generateMetadata` 中的 `notFound()`：
+
+```typescript
+import Link from 'next/link';
+
+export default function ProductNotFound() {
+  return (
+    <div className="mx-auto max-w-lg px-4 py-24 text-center">
+      <h2 className="text-xl font-bold">商品不存在或已下架</h2>
+      <p className="mt-2 text-gray-500">看看其他同类商品吧</p>
+      <Link href="/products" className="mt-6 inline-block rounded-md bg-orange-600 px-6 py-2 text-white">
+        浏览商品列表
+      </Link>
+    </div>
+  );
+}
+```
+
+要点（详见上方字典）：`generateMetadata` 与页面组件各自调用数据函数会执行两次查询——用 React 的 `cache()` 包裹数据函数可在同一请求内去重；`notFound()` 是控制流信号，不要用 `try/catch` 包住；`error.tsx` 不捕获同层 `layout.tsx` 的错误；生产环境 `error` 对象被脱敏，排查依赖服务端日志与 `digest`。
 
 ### 步骤四：测试和优化
 

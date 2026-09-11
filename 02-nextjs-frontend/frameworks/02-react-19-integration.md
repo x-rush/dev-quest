@@ -14,7 +14,7 @@
 |------|------|
 | **模块** | `02-nextjs-frontend` |
 | **分类** | `frameworks` |
-| **难度** | ⭐⭐⭐⭐⭐ (5/5星) |
+| **难度** | ⭐⭐⭐ (精通)|
 | **标签** | `#react19` `#concurrent-features` `#suspense` `#server-components` `#optimization` |
 | **更新日期** | `2026年9月` |
 | **作者** | Dev Quest Team |
@@ -1458,7 +1458,7 @@ export function PerformanceExample() {
 **📜 文档版本**: v1.0.0
 **📅 最后更新**: 2026年9月
 **🏷️ 标签**: `#react19` `#concurrent-features` `#suspense` `#server-components` `#performance`
-**⭐ 推荐指数**: ⭐⭐⭐⭐⭐
+**⭐ 推荐指数**: ⭐⭐⭐
 
 **💡 提示**: 本模块为React 19高级特性模块，建议先掌握React基础和Next.js 16基础后再进行学习。
 

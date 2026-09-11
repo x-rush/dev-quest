@@ -14,7 +14,7 @@
 |------|------|
 | **模块** | `02-nextjs-frontend` |
 | **分类** | `framework-patterns` |
-| **难度** | ⭐⭐⭐ (3/5星) |
+| **难度** | ⭐⭐⭐ |
 | **标签** | `#client-components` `#react-hooks` `#state-management` `#performance` `#typescript` |
 | **更新日期** | `2026年9月` |
 | **作者** | Dev Quest Team |

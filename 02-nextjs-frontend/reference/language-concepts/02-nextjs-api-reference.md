@@ -14,7 +14,7 @@
 |------|------|
 | **模块** | `02-nextjs-frontend` |
 | **分类** | `reference` |
-| **难度** | ⭐⭐⭐⭐ (4/5星) |
+| **难度** | ⭐⭐⭐ (精通)|
 | **标签** | `#nextjs16` `#api-reference` `#app-router` `#routing` `#cheatsheet` |
 | **更新日期** | `2026年9月` |
 | **作者** | Dev Quest Team |
@@ -286,8 +286,8 @@ const res = await fetch('https://api.example.com/posts', {
   next: { tags: ['posts'] }
 })
 
-// 手动重新验证
-// revalidateTag('posts')
+// 手动重新验证（Next 16 起 revalidateTag 必须带 profile 第二参数）
+// revalidateTag('posts', 'max')
 ```
 
 ### Server Actions
@@ -295,7 +295,7 @@ const res = await fetch('https://api.example.com/posts', {
 // 定义Server Action
 'use server'
 
-import { revalidatePath } from 'next/cache'
+import { revalidatePath, updateTag } from 'next/cache'
 
 export async function createPost(formData: FormData) {
   const title = formData.get('title') as string
@@ -306,9 +306,9 @@ export async function createPost(formData: FormData) {
     data: { title, content }
   })
 
-  // 重新验证缓存
+  // 重新验证缓存（Server Action 内用 updateTag 实现"写后读"一致性）
   revalidatePath('/blog')
-  revalidateTag('posts')
+  updateTag('posts')
 
   return { success: true, message: 'Post created successfully' }
 }

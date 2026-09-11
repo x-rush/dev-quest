@@ -14,7 +14,7 @@
 |------|------|
 | **模块** | `02-nextjs-frontend` |
 | **分类** | `advanced-topics/api-integration` |
-| **难度** | ⭐⭐⭐⭐ (4/5星) |
+| **难度** | ⭐⭐⭐ (精通)|
 | **标签** | `#graphql` `#apollo` `#api-design` `#real-time` `#caching` `#security` |
 | **更新日期** | `2026年9月` |
 | **作者** | Dev Quest Team |

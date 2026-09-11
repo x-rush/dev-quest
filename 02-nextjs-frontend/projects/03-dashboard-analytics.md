@@ -11,7 +11,7 @@
 |------|------|
 | **模块** | `02-nextjs-frontend` |
 | **分类** | `projects` |
-| **难度** | ⭐⭐⭐⭐⭐ (5/5星) |
+| **难度** | ⭐⭐⭐ (精通)|
 | **标签** | `Next.js 16` `React 19` `TypeScript 5` `数据可视化` `Chart.js` `D3.js` `实时数据` |
 | **更新日期** | `2026年9月` |
 | **作者** | Dev Quest Team |
@@ -63,7 +63,9 @@ dashboard-analytics/
 │   ├── (dashboard)/              # 仪表板路由组
 │   │   ├── dashboard/            # 仪表板主页面
 │   │   │   ├── layout.tsx       # 仪表板布局
-│   │   │   ├── page.tsx         # 主仪表板
+│   │   │   ├── page.tsx         # 主仪表板（Server Component + "use cache"）
+│   │   │   ├── loading.tsx      # 仪表板加载兜底
+│   │   │   ├── error.tsx        # 仪表板错误边界
 │   │   │   ├── analytics/       # 分析页面
 │   │   │   ├── reports/         # 报表页面
 │   │   │   ├── settings/        # 设置页面
@@ -79,6 +81,9 @@ dashboard-analytics/
 │   │   ├── reports/             # 报表API
 │   │   ├── export/              # 导出API
 │   │   └── socket/              # WebSocket处理
+│   ├── error.tsx                # 路由段错误边界（客户端组件）
+│   ├── loading.tsx              # 路由段加载兜底
+│   ├── not-found.tsx            # 404 约定页面
 │   ├── globals.css              # 全局样式
 │   ├── layout.tsx               # 根布局
 │   └── page.tsx                 # 首页
@@ -971,7 +976,258 @@ export class DataProcessor {
 }
 ```
 
-#### 2.3 实现图表组件
+#### 2.3 RSC 优先的数据获取改造
+
+> 📖 呼应字典：[数据获取模式](../reference/framework-patterns/04-data-fetching-patterns.md)、[Cache Components与"use cache"](../reference/framework-patterns/08-caching-patterns.md)、[React 19 关键 Hooks](../reference/language-concepts/06-react-19-hooks.md)
+
+初版实现把数据获取放在 `'use client'` 组件的 `useEffect` 里 fetch，这会让仪表板首屏经历"下载 JS → 渲染空壳 → 发起请求 → 二次渲染"的请求瀑布。Next.js 16 的推荐做法是 **RSC 优先**：页面即 Server Component，数据在服务端就绪后才进入 HTML；只有依赖浏览器交互的部分（图表 hover、过滤器联动、WebSocket 实时推送）下沉为 Client Component。
+
+**改造前：客户端瀑布（反面示例）**
+
+```typescript
+// components/dashboard/MetricsPanel.tsx
+'use client'
+
+import { useEffect, useState } from 'react'
+import type { MetricSummary } from '@/types/analytics'
+
+export function MetricsPanel({ dashboardId }: { dashboardId: string }) {
+  const [metrics, setMetrics] = useState<MetricSummary[] | null>(null)
+  const [error, setError] = useState<Error | null>(null)
+
+  useEffect(() => {
+    let cancelled = false
+    fetch(`/api/dashboards/${dashboardId}/metrics`)      // ① 浏览器请求 API 路由
+      .then((res) => res.json())
+      .then((data) => { if (!cancelled) setMetrics(data) }) // ④ 二次渲染
+      .catch((e) => { if (!cancelled) setError(e as Error) })
+    return () => { cancelled = true }
+  }, [dashboardId])
+
+  if (error) return <p role="alert">加载失败</p>
+  if (!metrics) return <p>加载中…</p>                    // ②③ 空壳期
+  return <MetricGrid metrics={metrics} />
+}
+```
+
+问题清单：
+- API 路由只是把 Prisma 查询转手一遍，多一跳 HTTP 往返
+- 首屏先渲染空壳，指标数据不参与服务端流式输出
+- 取数逻辑散落在客户端 bundle 中，无法使用 Cache Components 缓存
+
+**改造后：RSC 优先**
+
+第一步——数据函数放服务端，直接查库并用 `"use cache"` 缓存（Next.js 16 Cache Components 模式）：
+
+```typescript
+// lib/analytics/queries.ts
+import { cacheTag, cacheLife } from 'next/cache'
+import { db } from '@/lib/db'
+import type { MetricSummary } from '@/types/analytics'
+
+export async function getDashboardMetrics(dashboardId: string) {
+  'use cache'
+  cacheTag(`dashboard-${dashboardId}`, 'metrics') // 打失效标签
+  cacheLife('minutes')                            // stale 5min / revalidate 1min / expire 1h
+
+  const rows = await db.metric.findMany({
+    where: { dashboardId },
+    orderBy: { timestamp: 'desc' },
+    take: 100,
+  })
+  return rows as MetricSummary[]
+}
+```
+
+第二步——页面成为 Server Component，Promise 传递给交互组件、由 `<Suspense>` 流式兜底：
+
+```typescript
+// app/(dashboard)/dashboard/page.tsx
+import { Suspense } from 'react'
+import { getDashboardMetrics } from '@/lib/analytics/queries'
+import { MetricsPanel } from '@/components/dashboard/MetricsPanel'
+import { DashboardSkeleton } from '@/components/dashboard/DashboardSkeleton'
+
+export default async function DashboardPage() {
+  const metricsPromise = getDashboardMetrics('main')
+
+  return (
+    <div className="space-y-6">
+      <h1 className="text-2xl font-bold">数据概览</h1>
+      <Suspense fallback={<DashboardSkeleton />}>
+        <MetricsPanel metricsPromise={metricsPromise} />
+      </Suspense>
+    </div>
+  )
+}
+```
+
+第三步——交互下沉：Client Component 通过 props 接收服务端 Promise，用 React 19 的 `use()` 解包：
+
+```typescript
+// components/dashboard/MetricsPanel.tsx（改造后）
+'use client'
+
+import { use } from 'react'
+import type { MetricSummary } from '@/types/analytics'
+
+export function MetricsPanel({
+  metricsPromise,
+}: {
+  metricsPromise: Promise<MetricSummary[]>
+}) {
+  const metrics = use(metricsPromise) // resolve 前组件挂起，由上层 Suspense 兜底
+  return <MetricGrid metrics={metrics} />
+}
+```
+
+数据变更时在 Server Action 里按标签精准失效缓存：
+
+```typescript
+// app/actions/metrics.ts
+'use server'
+
+import { updateTag } from 'next/cache'
+import { db } from '@/lib/db'
+
+export async function refreshMetrics(dashboardId: string) {
+  await db.metric.sync(dashboardId)         // 业务数据同步
+  updateTag(`dashboard-${dashboardId}`)     // Server Action 内"写后读"立即失效（Next.js 16）
+}
+```
+
+> ⚠️ Next.js 16 中 `revalidateTag(tag)` 必须传入第二参数 `cacheLife` profile（如 `revalidateTag(tag, 'max')`，见 4.2 节）；在 Server Action 中希望用户**立刻**看到写入后的新数据，应使用 `updateTag(tag)`。
+
+**收益对比**：
+
+| 维度 | 改造前（useEffect fetch） | 改造后（RSC + "use cache"） |
+|------|--------------------------|----------------------------|
+| 请求链路 | 浏览器 → API 路由 → Prisma | 服务端直接 Prisma，少一跳 |
+| 首屏 | 空壳渲染后二次拉取 | 服务端流式输出，Suspense 兜底 |
+| 缓存 | 无（或手动 SWR 轮询） | cacheTag 精准失效 + cacheLife 到期过期 |
+| 客户端 JS | 取数逻辑打包进 bundle | 数据层零客户端 JS |
+
+**保留 `'use client'` 的场景**：本项目中的图表交互（2.5 的 hover/zoom）、WebSocket 实时更新（2.6 的 socket.io）与过滤器联动（2.7）依赖浏览器事件与本地 state，留在客户端才有意义——RSC 优先不是"消灭 Client Component"，而是让数据获取回到服务端。
+
+#### 2.4 页面元数据与文件约定（metadata / error / loading / not-found）
+
+> 📖 呼应字典：[错误与加载状态约定](../reference/framework-patterns/11-error-loading-patterns.md)、[App Router 实战模式](../reference/framework-patterns/01-app-router-patterns.md)
+
+仪表板类产品的 SEO 权重不高，但浏览器标签、分享卡片与书签标题仍需正确的元数据；而 `error.tsx` / `loading.tsx` / `not-found.tsx` 文件约定则是仪表板可用性的底线。
+
+**根布局元数据（app/layout.tsx）**——title 模板让每个页面只需声明自己的部分：
+
+```typescript
+import type { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: {
+    default: 'Analytics Dashboard',
+    template: '%s | Analytics Dashboard',
+  },
+  description: '实时业务数据分析仪表板',
+}
+```
+
+**页面级静态元数据（app/(dashboard)/dashboard/analytics/page.tsx）**：
+
+```typescript
+import type { Metadata } from 'next'
+
+export const metadata: Metadata = { title: '分析' }
+```
+
+**动态元数据 + 404 触发（app/(dashboard)/dashboard/users/[userId]/page.tsx）**：
+
+```typescript
+import type { Metadata } from 'next'
+import { notFound } from 'next/navigation'
+import { getDashboardUser } from '@/lib/analytics/queries'
+
+interface UserPageProps {
+  params: Promise<{ userId: string }>
+}
+
+export async function generateMetadata({ params }: UserPageProps): Promise<Metadata> {
+  const { userId } = await params
+  const user = await getDashboardUser(userId)
+  if (!user) notFound() // 查不到直接走 404 约定
+
+  return { title: `${user.name} 的数据`, description: user.role }
+}
+```
+
+**加载兜底（app/(dashboard)/dashboard/loading.tsx）**——路由段挂起时自动生效：
+
+```typescript
+export default function Loading() {
+  return (
+    <div className="animate-pulse space-y-6">
+      <div className="h-8 w-48 rounded bg-gray-200" />
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+        {Array.from({ length: 6 }).map((_, i) => (
+          <div key={i} className="h-32 rounded-lg bg-gray-200" />
+        ))}
+      </div>
+    </div>
+  )
+}
+```
+
+**错误边界（app/(dashboard)/dashboard/error.tsx）**——必须是客户端组件：
+
+```typescript
+'use client'
+
+export default function DashboardError({
+  error,
+  reset,
+}: {
+  error: Error & { digest?: string }
+  reset: () => void
+}) {
+  return (
+    <div role="alert" className="p-8 text-center">
+      <h2 className="text-lg font-semibold">仪表板加载失败</h2>
+      {error.digest && (
+        <p className="mt-1 text-sm text-gray-500">追踪 ID: {error.digest}</p>
+      )}
+      <button
+        onClick={reset}
+        className="mt-4 rounded-md bg-blue-600 px-4 py-2 text-white"
+      >
+        重试
+      </button>
+    </div>
+  )
+}
+```
+
+**404 约定（app/(dashboard)/dashboard/users/[userId]/not-found.tsx）**：
+
+```typescript
+import Link from 'next/link'
+
+export default function UserNotFound() {
+  return (
+    <div className="p-8 text-center">
+      <h2 className="text-lg font-semibold">用户不存在</h2>
+      <p className="mt-2 text-gray-500">该用户可能已被删除或无权访问</p>
+      <Link href="/dashboard/users" className="mt-4 inline-block text-blue-600 underline">
+        返回用户列表
+      </Link>
+    </div>
+  )
+}
+```
+
+注意事项（详见上方字典）：
+- `error.tsx` 必须标注 `'use client'`，且**不捕获同层 `layout.tsx` 抛出的错误**——覆盖布局错误要把 `error.tsx` 放到父路由段，或使用 `global-error.tsx`
+- `loading.tsx` 的兜底范围是整个路由段；只针对慢数据请用 2.3 的 `<Suspense>`
+- `notFound()` 是控制流信号，不要用 `try/catch` 包住它
+- 生产环境 `error` 对象会被脱敏，详细原因需查服务端日志与 `digest`
+
+#### 2.5 实现图表组件
 **components/charts/LineChart.tsx**:
 ```typescript
 'use client'
@@ -1423,7 +1679,7 @@ export function PieChart({
 }
 ```
 
-#### 2.4 实现实时数据更新
+#### 2.6 实现实时数据更新
 **hooks/useSocket.ts**:
 ```typescript
 'use client'
@@ -1708,7 +1964,7 @@ export function useRealTimeData({
 }
 ```
 
-#### 2.5 实现高级过滤器
+#### 2.7 实现高级过滤器
 **components/filters/AdvancedFilters.tsx**:
 ```typescript
 'use client'
