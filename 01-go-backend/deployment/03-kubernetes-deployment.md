@@ -8,7 +8,7 @@
 | **分类** | `deployment/devops` |
 | **难度** | ⭐⭐⭐⭐ |
 | **标签** | `#kubernetes` `#deployment` `#containerization` `#orchestration` |
-| **更新日期** | `2025年10月` |
+| **更新日期** | `2026年9月` |
 | **作者** | Dev Quest Team |
 | **状态** | ✅ 已完成 |
 

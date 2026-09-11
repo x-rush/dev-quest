@@ -1260,7 +1260,7 @@ export class TestDataManager {
 ---
 
 **📜 文档版本**: v1.0.0
-**📅 最后更新**: 2025年10月
+**📅 最后更新**: 2026年9月
 **🏷️ 标签**: `#e2e-testing` `#playwright` `#automation` `#ci-cd` `#page-objects`
 **⭐ 推荐指数**: ⭐⭐⭐⭐⭐
 

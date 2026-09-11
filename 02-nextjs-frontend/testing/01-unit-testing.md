@@ -1478,7 +1478,7 @@ export async function waitForLoadingToFinish() {
 ---
 
 **📜 文档版本**: v1.0.0
-**📅 最后更新**: 2025年10月
+**📅 最后更新**: 2026年9月
 **🏷️ 标签**: `#unit-testing` `#vitest` `#testing-library` `#react-testing` `#mocking`
 **⭐ 推荐指数**: ⭐⭐⭐⭐⭐
 

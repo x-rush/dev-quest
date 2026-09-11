@@ -16,7 +16,7 @@
 | **分类** | `reference` |
 | **难度** | ⭐⭐⭐⭐ (4/5星) |
 | **标签** | `#nextjs16` `#api-reference` `#app-router` `#routing` `#cheatsheet` |
-| **更新日期** | `2025年10月` |
+| **更新日期** | `2026年9月` |
 | **作者** | Dev Quest Team |
 | **状态** | ✅ 已完成 |
 
@@ -859,5 +859,5 @@ const realtime = await fetch('https://api.example.com/realtime', {
 ---
 
 **文档状态**: ✅ 已完成 | 🚧 进行中 | 📋 计划中
-**最后更新**: 2025年10月
+**最后更新**: 2026年9月
 **版本**: v1.0.0

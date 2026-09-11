@@ -16,7 +16,7 @@
 | **分类** | `reference/quick-references` |
 | **难度** | ⭐⭐ (2/5) |
 | **标签** | `#Web工具` `#开发工具` `#速查` |
-| **更新日期** | `2025年10月` |
+| **更新日期** | `2026年9月` |
 | **作者** | Dev Quest Team |
 | **状态** | ✅ 已完成 |
 
@@ -198,4 +198,4 @@ http POST localhost:8080/api/users name="John" email="john@example.com"
 
 ---
 
-**更新日志**: 2025年10月 - 创建Go Web开发工具速查
+**更新日志**: 2026年9月 - 创建Go Web开发工具速查

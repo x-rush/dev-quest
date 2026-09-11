@@ -16,7 +16,7 @@
 | **分类** | `reference` |
 | **难度** | ⭐⭐⭐⭐ (4/5星) |
 | **标签** | `#typescript5` `#type-system` `#generics` `#utility-types` `#cheatsheet` |
-| **更新日期** | `2025年10月` |
+| **更新日期** | `2026年9月` |
 | **作者** | Dev Quest Team |
 | **状态** | ✅ 已完成 |
 
@@ -777,5 +777,5 @@ function Button({ variant }: { variant: keyof typeof buttonVariants }) {
 ---
 
 **文档状态**: ✅ 已完成
-**最后更新**: 2025年10月
+**最后更新**: 2026年9月
 **版本**: v1.0.0
