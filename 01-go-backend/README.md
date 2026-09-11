@@ -50,7 +50,7 @@
 |------|------|------|------|
 | 📖 教程 | `basics/` | 8 | [环境搭建](basics/01-environment-setup.md) |
 | 🛠️ 操作指南 | `frameworks/` `projects/` `testing/` `deployment/` | 18 | [Gin 入门](frameworks/01-gin-framework-basics.md) · [REST API 实战](projects/01-rest-api-server.md) |
-| 📚 字典参考 | `reference/` | **21** | [语言核心](reference/language-concepts/01-go-keywords.md) · [框架核心](reference/framework-essentials/01-gin-framework.md) · [选型对比](reference/framework-essentials/03-sqlc-vs-gorm.md) · [路由器选型](reference/framework-essentials/04-router-selection.md) · [标准库字典](reference/library-guides/01-go-standard-library.md) |
+| 📚 字典参考 | `reference/` | **22** | [语言核心](reference/language-concepts/01-go-keywords.md) · [框架核心](reference/framework-essentials/01-gin-framework.md) · [数据层选型](reference/framework-essentials/03-sqlc-vs-gorm.md) · [路由器选型](reference/framework-essentials/04-router-selection.md) · [微服务框架选型](reference/framework-essentials/07-microservice-frameworks.md) · [标准库字典](reference/library-guides/01-go-standard-library.md) |
 | 🎓 深度解释 | `advanced-topics/` | 6 | [并发模式](advanced-topics/performance/01-concurrency-patterns.md) |
 
 > **字典无等级，学习有路径**：同一概念的完整解释在 `reference/` 只有一份权威条目，其他目录链接过去。
@@ -74,8 +74,9 @@
 │   ├── 🛠️ framework-essentials/   # 框架核心知识
 │   │   ├── 01-gin-framework.md    # Gin框架速查 ✅
 │   │   ├── 02-gorm-orm.md         # GORM ORM速查 ✅
-│   │   ├── 03-sqlc-vs-gorm.md     # SQL-first vs ORM-first 选型对比 ✅
+│   │   ├── 03-sqlc-vs-gorm.md     # sqlc/GORM/ent 数据层选型对比 ✅
 │   │   ├── 04-router-selection.md # Gin/chi/echo 路由器选型对比 ✅
+│   │   ├── 07-microservice-frameworks.md # go-zero/Kratos/Kitex 微服务框架选型 ✅
 │   │   ├── 05-mongo-driver.md     # MongoDB Go Driver 速查 ✅
 │   │   └── 06-go-redis.md         # go-redis 客户端速查 ✅
 │   ├── 📦 library-guides/         # 常用库指南
@@ -241,7 +242,7 @@
 
 ### 📚 核心学习资源
 - 📄 **[学习路径]**: [README 学习路径建议](README.md) - 入门/进阶/精通渐进式学习
-- 📄 **[知识速查手册]**: [reference/](reference/) - 快速查阅Go语言知识点（20篇，含 [sqlc-vs-gorm](reference/framework-essentials/03-sqlc-vs-gorm.md) 与 [router-selection](reference/framework-essentials/04-router-selection.md) 选型对比）
+- 📄 **[知识速查手册]**: [reference/](reference/) - 快速查阅Go语言知识点（22篇，含 [sqlc-vs-gorm](reference/framework-essentials/03-sqlc-vs-gorm.md)、[router-selection](reference/framework-essentials/04-router-selection.md) 与 [microservice-frameworks](reference/framework-essentials/07-microservice-frameworks.md) 选型对比）
 - 📄 **[系统化学习]**: [basics/](basics/) - 从零开始的渐进式学习
 
 ### 🛠️ 技术框架学习
