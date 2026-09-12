@@ -704,32 +704,37 @@ func goodLoop(n int) {
 }
 ```
 
-### 2. switch缺少break
+### 2. 误以为switch缺少break（沿用C直觉）
+
+与 C 不同，Go 的每个 case 执行完会**自动结束**（隐式 break），不会贯穿到下一个 case。从 C/C++/Java 转来的初学者常误标"没有 break"为错误——其实下面这段代码本身就是正确的：
+
 ```go
-// ❌ 错误 - 没有break会继续执行下一个case
+// ✅ 正确 - Go 的 case 隐式 break，匹配 "B" 只返回 "良好"，不会贯穿到 "C"
 func checkGrade(grade string) string {
     switch grade {
     case "A":
         return "优秀"
     case "B":
-        return "良好"  // 缺少fallthrough可能是意外的
+        return "良好"
     case "C":
         return "及格"
     }
+    return "需要改进"
 }
+```
 
-// ✅ 正确 - 明确控制执行流程
-func checkGradeFixed(grade string) string {
-    switch grade {
-    case "A":
-        return "优秀"
-    case "B":
-        fallthrough  // 明确使用fallthrough
-    case "C":
-        return "良好"
-    default:
-        return "需要改进"
-    }
+反过来，Go 用 `fallthrough` **显式**声明贯穿：执行完本 case 后强制进入下一个 case 的语句体（不再判断下一个 case 的条件）。只在确实需要贯穿相邻分支时使用：
+
+```go
+// fallthrough 示例：n=5 时输出 "个位数" 和 "正数"（跳过对 n > 0 的条件判断）
+switch n := 5; {
+case n < 10:
+    fmt.Println("个位数")
+    fallthrough
+case n > 0:
+    fmt.Println("正数")
+default:
+    fmt.Println("其他")
 }
 ```
 

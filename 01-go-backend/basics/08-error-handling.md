@@ -977,7 +977,7 @@ func main() {
 
 ### 参考资源
 - 📖 **[Go错误处理文档]**: https://golang.org/pkg/errors/
-- 📖 **[Go博客: 错误处理]**: https://blog.golang.org/error-handling
+- 📖 **[Go博客: 错误处理]**: https://go.dev/blog/error-handling-and-go
 - 📖 **[Go FAQ: 错误处理]**: https://golang.org/doc/faq#exceptions
 
 ## 📝 总结

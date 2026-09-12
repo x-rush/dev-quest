@@ -229,6 +229,13 @@ func main() {
 
 #### 复数类型
 ```go
+package main
+
+import (
+    "fmt"
+    "math/cmplx"
+)
+
 var c64 complex64 = 3 + 4i    // 32位实数和虚数
 var c128 complex128 = 1 + 2i   // 64位实数和虚数
 
@@ -271,6 +278,8 @@ func main() {
 ```
 
 ### 4. 字符类型
+
+> 💡 这里用到了 for 循环与 range 遍历，语法详见 [06-control-structures.md](06-control-structures.md)。
 
 ```go
 // byte是uint8的别名，用于ASCII字符
@@ -360,6 +369,8 @@ func main() {
 
 ### 示例1: 用户信息管理
 
+> 💡 这里用到了结构体（`struct`），结构体语法详见 [04-composite-types.md](04-composite-types.md)。
+
 ```go
 package main
 
@@ -410,6 +421,8 @@ func displayUser(user UserInfo) {
 
 ### 示例2: 配置管理
 
+> 💡 这里用到了 `if` 条件判断与 `switch` 多路分支，语法详见 [06-control-structures.md](06-control-structures.md)。
+
 ```go
 package main
 
@@ -421,11 +434,12 @@ const (
     APP_VERSION  = "1.0.0"
     MAX_CONNECTIONS = 100
 
-    // 日志级别
-    LOG_DEBUG = iota
-    LOG_INFO
-    LOG_WARN
-    LOG_ERROR
+    // 日志级别（注意：iota 从 const 块首行开始计数，
+    // 前面已有 3 个常量，因此 LOG_DEBUG 是 3 而不是 0）
+    LOG_DEBUG = iota // 3
+    LOG_INFO         // 4
+    LOG_WARN         // 5
+    LOG_ERROR        // 6
 )
 
 // 配置结构

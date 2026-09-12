@@ -116,7 +116,7 @@ protoc --go_out=. --go_opt=module=example.com/userservice \
        proto/user.proto
 ```
 
-`module=` 选项让产物按 `go_package` 声明的模块内路径落位（`gen/userpb/`）。注意不要用 `paths=source_relative`——它是按 proto 文件所在的目录镜像输出，本例会生成到 `gen/proto/` 而不是你期望的位置。
+`module=` 选项让产物按 `go_package` 声明的模块内路径落位（`gen/userpb/`）。注意不要用 `paths=source_relative`——它会把产物放在与 .proto 文件相同的相对目录结构下（镜像输入目录），本例（`proto/user.proto`）会生成到 `proto/` 下（`proto/user.pb.go`），而不是你期望的 `gen/userpb/`。
 
 产出两个文件：
 

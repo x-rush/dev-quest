@@ -20,7 +20,7 @@ fmt.Errorf("读取 %s 失败: %w", path, err)     // %w 包装，保留错误链
 errors.Join(err1, err2)                      // 合并多个错误
 
 // 错误链判定
-errors.Is(err, target error) bool            // 链上是否存在目标错误（含 == 与 Wrapped() 匹配）
+errors.Is(err, target error) bool            // 链上是否存在目标错误（含 == 与 Unwrap() 匹配）
 errors.As(err, target any) bool              // 链上是否存在可赋值的目标类型
 
 // panic / recover（仅限不可恢复场景）

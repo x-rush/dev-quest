@@ -244,7 +244,6 @@ import "fmt"
 
 func main() {
     fmt.Println("Go环境配置成功!")
-    fmt.Printf("Go版本: %s\n", runtime.Version())
 }
 EOF
 
@@ -253,6 +252,9 @@ go run main.go
 ```
 
 ### 练习2: 包管理实践
+
+> 💡 这是预览练习：Web 服务部分用到了 gin 框架，超出 basics 范围，详见 [../frameworks/01-gin-framework-basics.md](../frameworks/01-gin-framework-basics.md)。
+
 ```bash
 # 添加一个Web框架依赖
 go get github.com/gin-gonic/gin
@@ -265,7 +267,6 @@ cat > web.go << 'EOF'
 package main
 
 import (
-    "net/http"
     "github.com/gin-gonic/gin"
 )
 

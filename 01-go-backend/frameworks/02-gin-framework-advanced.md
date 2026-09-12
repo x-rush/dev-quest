@@ -1793,15 +1793,20 @@ func (app *Application) readinessProbe(c *gin.Context) {
 package microservices
 
 import (
-    "context"
+    "encoding/json"
     "fmt"
+    "log"
     "net/http"
+    "net/http/httputil"
     "sync"
     "time"
 
     "github.com/gin-gonic/gin"
     "google.golang.org/grpc"
     "google.golang.org/grpc/credentials/insecure"
+    "google.golang.org/grpc/keepalive"
+
+    pb "example.com/microservices/gen/userpb"
 )
 
 // ServiceRegistry 服务注册中心接口
@@ -1827,6 +1832,7 @@ type LoadBalancer struct {
     services map[string][]ServiceInstance
     mutex    sync.RWMutex
     configs  map[string]LoadBalancerConfig
+    Logger   *log.Logger
 }
 
 type LoadBalancerConfig struct {
@@ -1906,6 +1912,34 @@ func (lb *LoadBalancer) roundRobinSelect(instances []ServiceInstance, serviceNam
     return &healthyInstances[index]
 }
 
+// weightedSelect 加权选择（示例简化实现：返回第一个健康实例）
+func (lb *LoadBalancer) weightedSelect(instances []ServiceInstance, serviceName string) *ServiceInstance {
+    healthyInstances := make([]ServiceInstance, 0)
+    for _, instance := range instances {
+        if instance.Healthy {
+            healthyInstances = append(healthyInstances, instance)
+        }
+    }
+    if len(healthyInstances) == 0 {
+        return nil
+    }
+    return &healthyInstances[0]
+}
+
+// leastConnectionsSelect 最少连接选择（示例简化实现：返回最后一个健康实例）
+func (lb *LoadBalancer) leastConnectionsSelect(instances []ServiceInstance, serviceName string) *ServiceInstance {
+    healthyInstances := make([]ServiceInstance, 0)
+    for _, instance := range instances {
+        if instance.Healthy {
+            healthyInstances = append(healthyInstances, instance)
+        }
+    }
+    if len(healthyInstances) == 0 {
+        return nil
+    }
+    return &healthyInstances[len(healthyInstances)-1]
+}
+
 // ServiceProxy 服务代理中间件
 func (lb *LoadBalancer) ServiceProxy(serviceName string) gin.HandlerFunc {
     return func(c *gin.Context) {
@@ -1919,7 +1953,6 @@ func (lb *LoadBalancer) ServiceProxy(serviceName string) gin.HandlerFunc {
         }
 
         // 创建反向代理
-        targetURL := fmt.Sprintf("http://%s", instance.Address)
         proxy := &httputil.ReverseProxy{
             Director: func(req *http.Request) {
                 req.URL.Scheme = "http"
@@ -1957,6 +1990,8 @@ type GrpcClientPool struct {
     clients     map[string]interface{}
     mutex       sync.RWMutex
     config      GrpcConfig
+    registry    ServiceRegistry
+    Logger      *log.Logger
 }
 
 type GrpcConfig struct {

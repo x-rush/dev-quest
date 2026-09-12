@@ -585,7 +585,7 @@ func main() {
     operations := []func(string) string{
         strings.TrimSpace,     // 移除前后空格
         strings.ToLower,       // 转小写
-        strings.ReplaceAll(",", " "), // 替换逗号
+        func(s string) string { return strings.ReplaceAll(s, ",", " ") }, // 替换逗号
     }
     processed := StringPipeline(text, operations...)
     fmt.Printf("处理后: '%s'\n", processed)

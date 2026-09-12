@@ -322,10 +322,9 @@ type UserServiceClient struct {
 }
 
 func NewUserServiceClient(addr string) (*UserServiceClient, error) {
-    conn, err := grpc.Dial(addr, grpc.WithTransportCredentials(insecure.NewCredentials()))
-    if err != nil {
-        return nil, err
-    }
+    // grpc.Dial 已弃用；NewClient 建立的是"频道"而非物理连接：惰性连接，
+    // 不做同步拨号，目标不可达的错误会在后续 RPC 调用时以 Unavailable 错误码出现
+    conn := grpc.NewClient(addr, grpc.WithTransportCredentials(insecure.NewCredentials()))
 
     return &UserServiceClient{
         client: pb.NewUserServiceClient(conn),

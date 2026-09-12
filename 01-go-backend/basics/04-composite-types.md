@@ -58,6 +58,8 @@ fmt.Println(nums, b) // [1 2 3] [100 2 3] —— nums 未被修改
 
 ### 3. 遍历
 
+> 💡 这里用到了 for/range 循环，语法详见 [06-control-structures.md](06-control-structures.md)。
+
 ```go
 for i, v := range primes {
     fmt.Println(i, v) // 索引 + 值
@@ -143,6 +145,8 @@ fmt.Println(ages["carol"])       // 0 —— 不存在的键返回 int 零值，
 ```
 
 ### 3. comma-ok 惯用法
+
+> 💡 这里用到了 `if` 条件判断，语法详见 [06-control-structures.md](06-control-structures.md)。
 
 区分"值就是零值"和"键不存在"：
 

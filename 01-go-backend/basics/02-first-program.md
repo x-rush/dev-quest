@@ -129,6 +129,20 @@ go run hello.go
 
 ## 📝 程序进阶练习
 
+> 💡 **常用格式化动词速览**：`fmt.Printf` 系列函数按动词格式化值，本文及后续文档会频繁用到：
+
+| 动词 | 用途 | 示例 | 输出 |
+|------|------|------|------|
+| `%d` | 十进制整数 | `fmt.Printf("%d", 42)` | `42` |
+| `%s` | 字符串 | `fmt.Printf("%s", "Go")` | `Go` |
+| `%q` | 带双引号的字符串 | `fmt.Printf("%q", "Go")` | `"Go"` |
+| `%t` | 布尔值 | `fmt.Printf("%t", true)` | `true` |
+| `%f` | 浮点数（`%.2f` 保留两位小数） | `fmt.Printf("%.2f", 3.14159)` | `3.14` |
+| `%v` | 默认格式（任意类型） | `fmt.Printf("%v", []int{1, 2})` | `[1 2]` |
+| `%c` | 字符（rune 的码点） | `fmt.Printf("%c", 20013)` | `中` |
+
+遇到不认识的动词回查此表即可，细节在后续文档逐步展开。
+
 ### 练习1: 添加变量
 ```go
 package main
@@ -154,6 +168,9 @@ func main() {
 ```
 
 ### 练习2: 使用函数
+
+> 💡 这里用到了自定义函数的定义与调用，函数语法详见 [05-functions-methods.md](05-functions-methods.md)。
+
 ```go
 package main
 
@@ -181,6 +198,9 @@ func main() {
 ```
 
 ### 练习3: 条件判断
+
+> 💡 这里用到了 `if/else` 条件判断，语法详见 [06-control-structures.md](06-control-structures.md)。
+
 ```go
 package main
 
@@ -247,6 +267,9 @@ go mod list
 ## 📊 程序调试技巧
 
 ### 1. 使用fmt调试
+
+> 💡 这里用到了切片（`[]int`）与 for/range 循环：切片详见 [04-composite-types.md](04-composite-types.md)，循环语法详见 [06-control-structures.md](06-control-structures.md)。
+
 ```go
 package main
 
@@ -291,6 +314,9 @@ func main() {
 ## 🎯 实战小项目
 
 ### 项目1: 个人信息卡片
+
+> 💡 这里用到了结构体（`struct`），结构体语法详见 [04-composite-types.md](04-composite-types.md)。
+
 ```go
 package main
 
@@ -339,6 +365,9 @@ func main() {
 ```
 
 ### 项目2: 简单计算器
+
+> 💡 这里用到了 `switch` 多路分支，语法详见 [06-control-structures.md](06-control-structures.md)。
+
 ```go
 package main
 
@@ -434,24 +463,22 @@ func main() {
 }
 ```
 
-### 错误3: 缺少分号（在Go中不需要）
+### 错误3: return 换行被自动分号截断
+
+Go 通常不需要手写分号——词法器会在行尾自动插入：当一行的最后一个词法单元是标识符、字面量、`return`/`break`/`continue`/`fallthrough` 或 `)`、`]`、`}`、`++`、`--` 时，就在行尾插入一个分号。显式写出分号是合法的（可以编译），但 gofmt 会将其移除，所以不要手写分号。
+
+真正的陷阱是**自动分号截断语句**：`return` 单独写在行尾时会被自动插入分号，函数直接返回，后面的表达式永远不会执行：
+
 ```go
-// ❌ 错误 - Go不需要分号
-package main
-
-import "fmt";
-
-func main() {
-    fmt.Println("Hello");  // 这里不需要分号
+// ❌ 错误 - return 在行尾被自动插入分号，a + b 不会被求值
+func add(a, b int) int {
+    return
+        a + b  // 编译错误: missing return
 }
 
-// ✅ 正确
-package main
-
-import "fmt"
-
-func main() {
-    fmt.Println("Hello")
+// ✅ 正确 - 返回值与 return 写在同一行
+func add(a, b int) int {
+    return a + b
 }
 ```
 
