@@ -24,7 +24,7 @@
 
 ## 01 Go后端开发
 
-> 模块入口: [01-go-backend/README.md](../../01-go-backend/README.md) | 已按标准结构重构
+> 模块入口: [01-go-backend/README.md](../../01-go-backend/README.md) | 已按标准结构建设（54篇）
 
 ### 📖 基础概念 (basics/)
 | 文档 | 说明 |
@@ -84,7 +84,7 @@
 
 ## 02 Next.js前端开发
 
-> 模块入口: [02-nextjs-frontend/README.md](../../02-nextjs-frontend/README.md) | 已按标准结构重构
+> 模块入口: [02-nextjs-frontend/README.md](../../02-nextjs-frontend/README.md) | 已按标准结构建设（54篇）
 
 ### 📖 基础概念 (basics/)
 | 文档 | 说明 |

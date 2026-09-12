@@ -2,6 +2,19 @@
 
 本项目遵循 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/) 格式。
 
+## [2.5.0] - 2026-09-12
+
+### Added
+- **终极审计**（五轮）：6 路审计 agent 分模块执行五个方面——修复回归、单一事实来源一致性、未实测域（RN/Spring Boot/Swift）、结构一致性、渐进式学习路径；以"问题密度 ≤ 2/模块"为收敛判据，本轮实测确认级问题 65 个（10 模块全部超标），据此定位了历轮审计问题的三大来源：修复本身是新错源、概括性论断比代码示例更易错、最早编写的模块未经实测
+
+### Fixed
+- **修复的修复（本轮重点）**：05 模块 `recoverCatching` 内重抛 `CancellationException` 的上轮"修复"经 kotlinc 2.4.20 实测无效（transform 内 throw 被内部 runCatching 捕获，取消仍被吞）——重写为 `runCatching` + `exceptionOrNull()` 检查先放行取消的模式并附旧写法对照实证；03 模块上轮 v9 修复引入的"核心特性必须显式注册"方向性误判（官方源码证实核心特性总是自动合并）4 处纠正；02 模块 next.config 虚构键修复不彻底的残留 10 余处全量清理（`experimental.turbopack` 布尔形态、`experimental.appDir`、`serverComponentsExternalPackages`→顶层、`images.domains`→`remotePatterns` 共 11 文件）
+- **01 模块 basics 编译级错误 8 处**（本机 go 1.25.14 逐条实测）：未导入包（runtime/math/cmplx/net/http）、iota 从块首计数、`strings.ReplaceAll` 参数不足、"缺少分号"与"switch 缺少 break"两节按 C 语义误教 Go、"4 4 4"输出值、`blog.golang.org` 404 链接、GrpcClientPool 代码块补齐依赖后离线编译通过；`errors.Wrapped()` 笔误改 `Unwrap()`；projects/02 `grpc.Dial` 残留改 `NewClient`
+- **学习路径前跳**：01 模块 basics/02-04 在正式讲解前使用循环/结构体/函数等概念，补 10 处前向标注链接 + 常用格式化动词速览；04 模块 README 入门路径与 basics/08 前置声明矛盾的最小闭环修法；10 模块三档路径补入收官篇 basics/08
+- **虚构细节**：06 模块"@Model 属性名 body 会冲突"虚构约束删除（真实陷阱为 description）、`inMemory:` 虚构参数标签 ×2 改 `isStoredInMemoryOnly:`、`Task.value` 虚构同步变体改 async throws 语义；07 模块 PHP 8.5 概括句 5 处按 php.net + 本机 8.5.10 实测纠正（static 闭包允许进常量仅 fn 禁入、属性钩子不递归、backed 有 get 无 set 仍可写、URI 构造即校验、管道优先级高于比较）+ webman 3 处（安装包名、视图插件、虚构 `breakReconnect` 配置删除）；09 模块 Prisma v7 落地细节（`prisma7.config.ts` 虚构文件名、generator output 与 import 路径不匹配、v6 产物术语、url deprecated 而非报 P1012）与测试库隔离自赋值 no-op 重构为 dotenv + setupFiles 闭环
+- **版本断言与基线**：04 模块"新架构自 0.83 起唯一"系统性偏晚一版改 0.82（官方 0.82 已禁旧架构，7 文件）；08 模块基线快照漂移对齐 Boot 4.1 BOM（Hibernate 7.4 / Security 7.1 / Gradle 8.14+ / Jackson 3.1）；06 模块 Swift Build 集成定性改为 preview 非默认；10 模块软关键字 3→4（本机 3.14.7 实测补 `type`）；04 模块导航教学线随 Expo SDK 56 expo-router fork 调整（basics/05 加 bare 工程边界声明、basics/08 改 expo-router 主线）
+- **结构一致性**：09 模块基线声明从内联单行对齐为标准"技术基线"表格；document-index 补 01/02 模块篇数声明；全仓 3797 条链接 0 断链
+
 ## [2.4.0] - 2026-09-11
 
 ### Added
