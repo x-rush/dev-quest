@@ -40,7 +40,7 @@ RUN corepack enable
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 # prisma generate 需读 schema 与 prisma.config.ts（v7 生成阶段不需要连接串）；
-# 生成的 Client 是 JS + .d.ts 产物，落在 generator output 目录
+# 生成的 Client 是 TypeScript 源码产物，落在 generator output 目录
 RUN pnpm exec prisma generate && pnpm run build
 
 # ---- 阶段 3：生产运行（只带生产依赖与编译产物）----
@@ -57,11 +57,11 @@ COPY package.json pnpm-lock.yaml ./
 RUN pnpm install --frozen-lockfile --prod
 
 # 编译产物 + v7 生成的 Prisma Client（output 目录，不在 node_modules）
-# + prisma7.config.ts（migrate deploy 运行时从它读连接串）+ 迁移文件
+# + prisma.config.ts（migrate deploy 运行时从它读连接串）+ 迁移文件
 COPY --from=build /app/dist ./dist
 COPY --from=build /app/generated ./generated
 COPY --from=build /app/prisma ./prisma
-COPY --from=build /app/prisma7.config.ts ./
+COPY --from=build /app/prisma.config.ts ./
 
 USER app
 EXPOSE 3000

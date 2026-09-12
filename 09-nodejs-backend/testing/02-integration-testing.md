@@ -44,7 +44,7 @@ export function jsonRequest(path: string, method = 'GET', body?: unknown) {
 
 ## 2. 隔离的测试数据库
 
-**关键决策**：测试永远不碰开发库。用独立的 `DATABASE_URL` + 真实迁移，保证 schema 一致：
+**关键决策**：测试永远不碰开发库。用独立的 `DATABASE_URL` + 真实迁移，保证 schema 一致。整条链路必须闭环：`.env.test` 不会被自动加载，要先用它覆盖测试进程的环境变量——且必须在任何模块求值之前（prisma 单例在 import 时就读 `process.env.DATABASE_URL`），迁移与业务代码才会都落在测试库上：
 
 ```bash
 # .env.test —— 独立测试库（本地 Docker 起的 PostgreSQL）
@@ -55,24 +55,46 @@ NODE_ENV="test"
 ```
 
 ```typescript
-// tests/setup.ts —— 全局一次性：应用迁移，结束时断开连接
+// tests/env.ts —— 只做一件事：把 .env.test 注入 process.env。
+// ESM 按导入顺序求值——在所有文件里都把它放第一个 import，
+// 后续模块（含 prisma 单例）读到的就是测试库；
+// dotenv 不覆盖已存在的变量，CI 显式注入的变量优先生效
+import { config } from 'dotenv';
+
+config({ path: '.env.test' });
+```
+
+```typescript
+// tests/setup.ts —— 全局前置：应用迁移，结束时断开连接
+import './env.js';                       // ← 必须是第一个导入：先加载 .env.test
 import { execSync } from 'node:child_process';
 import { afterAll, beforeAll } from 'vitest';
 import { prisma } from '../src/lib/prisma.js';
 
 beforeAll(() => {
   // 用测试库跑迁移：schema 与生产同源。
-  // v7：migrate deploy 从 prisma.config.ts 读连接串，其中读取的是
-  // process.env.DATABASE_URL——子进程 env 已覆盖为测试库（dotenv 不覆盖
-  // 已存在的变量，因此测试库 URL 优先生效），schema 内不再写 url
-  execSync('pnpm exec prisma migrate deploy', {
-    env: { ...process.env, DATABASE_URL: process.env.DATABASE_URL },
-    stdio: 'inherit',
-  });
+  // v7：migrate deploy 从 prisma.config.ts 读连接串——其内部的
+  // import 'dotenv/config' 只加载 .env 且不覆盖已存在的变量，
+  // 子进程默认继承本进程 env，其中 DATABASE_URL 已被 env.ts
+  // 指向测试库，开发库的 .env 值因此不会生效
+  execSync('pnpm exec prisma migrate deploy', { stdio: 'inherit' });
 });
 
 afterAll(async () => {
   await prisma.$disconnect();
+});
+```
+
+```typescript
+// vitest.config.ts —— 把 setup 注册为全局前置文件：每个测试文件求值
+// 之前先执行 setup（进而先执行 env.ts），保证测试文件 import 到的
+// prisma 单例一定连着测试库
+import { defineConfig } from 'vitest/config';
+
+export default defineConfig({
+  test: {
+    setupFiles: ['tests/setup.ts'],
+  },
 });
 ```
 

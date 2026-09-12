@@ -53,7 +53,7 @@ pnpm add -D prisma typescript @types/node dotenv
 ## 🛠️ 步骤二：数据模型（Prisma）
 
 ```bash
-pnpm exec prisma init   # 生成 schema 与 prisma7.config.ts 骨架（v7 默认 generator 为 prisma-client）
+pnpm exec prisma init   # 生成 schema 与 prisma.config.ts 骨架（v7 默认 generator 为 prisma-client）
 ```
 
 ```prisma
@@ -65,7 +65,7 @@ generator client {
 
 datasource db {
   provider = "sqlite"              // 演练用 SQLite，零配置；生产换 postgresql
-  // v7 起 schema 不再写连接串——连接配置移到 prisma7.config.ts
+  // v7 起 schema 不再写连接串——连接配置移到 prisma.config.ts
 }
 
 model Task {
@@ -79,7 +79,7 @@ model Task {
 ```
 
 ```ts
-// prisma7.config.ts —— v7：CLI 与迁移从这里读取连接配置
+// prisma.config.ts —— v7：CLI 与迁移从这里读取连接配置
 import "dotenv/config";
 import { defineConfig } from "prisma/config";
 
@@ -104,7 +104,7 @@ pnpm exec prisma generate                  # v7 迁移不自动生成客户端�
 
 ```ts
 // src/lib/prisma.ts —— 单例，避免热重载创建多个连接
-import { PrismaClient } from "../generated/prisma/client.js"; // 不再来自 @prisma/client
+import { PrismaClient } from "../../generated/prisma/client.js"; // 不再来自 @prisma/client，output 相对 prisma/ 目录 → 项目根 generated/prisma
 import { PrismaBetterSqlite3 } from "@prisma/adapter-better-sqlite3";
 
 export const prisma = new PrismaClient({

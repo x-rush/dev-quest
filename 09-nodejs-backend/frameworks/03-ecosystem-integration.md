@@ -71,7 +71,7 @@ export default defineConfig({
 
 ```typescript
 // src/lib/prisma.ts —— 开发热重载安全的单例模式
-// v7：PrismaClient 从 generator output 目录导入（@prisma/client 不再可用），构造时传入 adapter
+// v7：@prisma/client 仍需安装作为运行时依赖，但不再从它导入 PrismaClient，而是从生成的 output 目录导入；构造时传入 adapter
 import { PrismaClient } from '../generated/prisma/client.js';
 import { PrismaPg } from '@prisma/adapter-pg';
 
@@ -97,7 +97,7 @@ pnpm exec prisma generate                  # v7：迁移不再自动生成客户
 pnpm exec prisma migrate deploy            # 生产/CI：只应用不生成
 ```
 
-> v7 的两条 migrate 命令都从 `prisma.config.ts` 读取连接串；`schema.prisma` 里写 `url` 会报 P1012。
+> v7 的两条 migrate 命令都从 `prisma.config.ts` 读取连接串；`schema.prisma` 的 datasource 中写 `url`/`directUrl` 已被官方标记为 deprecated（不推荐，连接串应统一在 `prisma.config.ts` 提供），但并不报错。
 
 ```typescript
 // 交互式事务：转账类"读-改-写"必须包在事务里

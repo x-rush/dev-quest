@@ -4,7 +4,16 @@
 
 本模块专为后端开发者设计，旨在系统学习 Node.js 后端开发技术，了解 JavaScript 在全栈开发中的应用，探索现代后端架构模式。属于 Dev Quest 双轨制中的**技术探索系列**，适合用零散时间渐进学习。
 
-**技术栈基线**：Node.js 24 LTS · Hono 4 · TypeScript 优先 · Prisma ORM · Vitest · pnpm
+### 🧱 技术基线
+
+| 技术 | 版本 | 说明 |
+|------|------|------|
+| Node.js | **24 LTS** | JavaScript 后端运行时基线 |
+| Hono | **4** | Web 框架主线（Web 标准 API、类型安全） |
+| TypeScript | — | 全模块 TypeScript 优先 |
+| Prisma | **7** | ORM：driver adapters 连接，配置走 `prisma.config.ts` |
+| Vitest | — | 单元 / 集成 / E2E 测试框架 |
+| pnpm | — | 包管理器 |
 
 > 版本核实日期：2026-09-11
 
@@ -127,7 +136,7 @@
 ## 🔄 进度跟踪
 
 - [x] Node.js 基础（basics 8 篇）
-- [x] 知识字典（reference 11 篇）
+- [x] 知识字典（reference 12 篇）
 - [x] 框架与生态（frameworks 4 篇）
 - [x] 实战项目（projects 4 个）
 - [x] 测试工程（testing 3 篇）

@@ -47,15 +47,15 @@
 
 ### 入门路径（⭐）
 
-[环境搭建](basics/01-environment-setup.md) → [第一个脚本](basics/02-first-script.md) → [变量与类型](basics/03-variables-types.md) → [函数与 OOP](basics/04-functions-oop.md) → [控制流](basics/05-control-flow.md) → [异常处理](basics/06-exceptions.md) → [开发工具链](frameworks/04-devtools.md) → [FastAPI 入门](frameworks/01-fastapi-basics.md) → [项目：TODO API](projects/01-todo-api.md)
+[环境搭建](basics/01-environment-setup.md) → [第一个脚本](basics/02-first-script.md) → [变量与类型](basics/03-variables-types.md) → [函数与 OOP](basics/04-functions-oop.md) → [控制流](basics/05-control-flow.md) → [异常处理](basics/06-exceptions.md) → [开发工具链](frameworks/04-devtools.md) → [FastAPI 入门](frameworks/01-fastapi-basics.md) → [项目：TODO API](projects/01-todo-api.md) → [实战收束：第一个完整项目](basics/08-first-project.md)
 
 ### 进阶路径（⭐⭐）
 
-[高级特性](basics/07-advanced-features.md) → [FastAPI 进阶](frameworks/02-fastapi-advanced.md) → [生态集成](frameworks/03-ecosystem-integration.md) → [单元测试](testing/01-unit-testing.md) → [Mock 测试](testing/03-mocking-testing.md) → [集成测试](testing/02-integration-testing.md) → [项目：短链接服务](projects/02-url-shortener.md) → [项目：数据管道](projects/03-data-pipeline.md) → [容器化部署](deployment/01-docker-deployment.md) → [CI/CD 流水线](deployment/02-ci-cd-pipelines.md)
+[高级特性](basics/07-advanced-features.md) → [实战收束：第一个完整项目](basics/08-first-project.md) → [FastAPI 进阶](frameworks/02-fastapi-advanced.md) → [生态集成](frameworks/03-ecosystem-integration.md) → [单元测试](testing/01-unit-testing.md) → [Mock 测试](testing/03-mocking-testing.md) → [集成测试](testing/02-integration-testing.md) → [项目：短链接服务](projects/02-url-shortener.md) → [项目：数据管道](projects/03-data-pipeline.md) → [容器化部署](deployment/01-docker-deployment.md) → [CI/CD 流水线](deployment/02-ci-cd-pipelines.md)
 
 ### 精通路径（⭐⭐⭐）
 
-[项目分层与领域建模](advanced-topics/architecture/01-project-architecture.md) → [asyncio 异步并发模型](advanced-topics/performance/01-async-python.md) → [性能剖析与优化](advanced-topics/performance/02-profiling-optimization.md) → [安全实践](advanced-topics/security/01-security-practices.md) → [可观测性](deployment/03-observability.md) → [项目：生产级 FastAPI 应用](projects/04-production-fastapi-app.md)
+[实战收束：第一个完整项目](basics/08-first-project.md) → [项目分层与领域建模](advanced-topics/architecture/01-project-architecture.md) → [asyncio 异步并发模型](advanced-topics/performance/01-async-python.md) → [性能剖析与优化](advanced-topics/performance/02-profiling-optimization.md) → [安全实践](advanced-topics/security/01-security-practices.md) → [可观测性](deployment/03-observability.md) → [项目：生产级 FastAPI 应用](projects/04-production-fastapi-app.md)
 
 > 📖 字典随时可查：[语言概念](reference/language-concepts/) · [框架要点](reference/framework-essentials/) · [库指南](reference/library-guides/) · [速查表](reference/quick-references/)
 

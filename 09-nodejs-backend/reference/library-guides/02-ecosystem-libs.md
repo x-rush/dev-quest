@@ -104,7 +104,7 @@ await prisma.user.upsert({ where: { email }, update: { name }, create: { email, 
 ```
 
 ### 陷阱
-- v7 schema 的 datasource **不写连接串**（报 P1012），连接配置移到 `prisma.config.ts`；客户端构造必须传 adapter
+- v7 schema 的 datasource 中 `url`/`directUrl` 已 deprecated（不推荐但不报错），连接配置移到 `prisma.config.ts`；客户端构造必须传 adapter
 - 修改 schema 后需显式 `prisma generate`（v7 迁移不再自动生成），否则类型与运行时不一致
 - `include`/`select` 已做关联扁平化，但循环内单查仍是 N+1，注意查询模式
 - 唯一键冲突抛 `P2002`，错误中间件按 `err.code` 前缀 `P` 映射 4xx
