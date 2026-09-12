@@ -182,7 +182,7 @@ npx expo start
 
 **任务要求**:
 1. 用 `npx create-expo-app` 创建工程并在 Android 真机上预览
-2. 修改 `App.tsx` 中的一行文案并体验 Metro 热更新
+2. 修改 `app/(tabs)/index.tsx` 中的一行文案并体验 Metro 热更新（create-expo-app 默认模板为 expo-router 结构，无 App.tsx）
 
 **提示**: 真机预览需手机与电脑同一局域网；若网络隔离，用 `npx expo start --tunnel`。
 

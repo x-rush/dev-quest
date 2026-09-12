@@ -66,10 +66,10 @@ npm run ios
 
 ## 💻 第一个界面
 
-打开 `App.tsx`，替换为以下代码（Expo 与 bare 工程通用）：
+打开 `app/(tabs)/index.tsx`，替换为以下代码（expo-router 页面组件：导出默认组件即可，无需 AppRegistry；`App.tsx` 仅见于 blank 模板与 bare 工程）：
 
 ```tsx
-// App.tsx
+// app/(tabs)/index.tsx
 import { useState } from 'react';
 import {
   StyleSheet,
@@ -80,7 +80,7 @@ import {
   Platform,
 } from 'react-native';
 
-export default function App() {
+export default function Home() {
   const [name, setName] = useState('');
 
   return (

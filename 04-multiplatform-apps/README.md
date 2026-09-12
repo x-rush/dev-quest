@@ -13,7 +13,7 @@
 | 技术 | 当前版本 | 关键事实 |
 |------|---------|---------|
 | **React Native** | **0.87**（2026-08-10 发布） | 最新稳定；支持窗口 0.85–0.87；Strict TypeScript API 成为默认 JS API；Metro 0.87；实验性 Swift Package Manager；最低 Node.js 22 / AGP 9 / Kotlin 2.0+ |
-| **新架构** | 唯一架构 | 0.76 起默认开启；0.83 起（SDK 55+）不再支持旧架构；Legacy 组件已在 0.84–0.85 移除 |
+| **新架构** | 唯一架构 | 0.76 起默认开启；自 RN 0.82 起（SDK 55+）新架构成为唯一架构，旧架构不再可启用；Legacy 组件已在 0.84–0.85 移除 |
 | **Expo SDK** | **57**（2026-06-30 发布） | 配套 RN 0.86 + React 19.2.3；最低 Node 22.13；Xcode 26.4+ / iOS 16.4+ / Android compileSdk 36；修复 SDK 56 的 Hermes V1 内存回归 |
 | **React** | **19.2.x** | 与 SDK 57 / RN 0.86 锁定（19.2.3） |
 | **TypeScript** | **7.0**（Go 原生编译器版，npm latest 7.0.2） | 7.0 已 GA；Expo 模板随 SDK 附带对应版本，无特殊配置需求 |

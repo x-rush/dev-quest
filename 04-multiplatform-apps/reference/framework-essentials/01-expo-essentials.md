@@ -15,7 +15,7 @@
 ## expo-router — 文件路由
 
 ### 描述
-Expo 官方的文件系统路由（基于 React Navigation），`app/` 目录结构即路由结构，新版 Expo 模板默认使用。
+Expo 官方的文件系统路由，`app/` 目录结构即路由结构，新版 Expo 模板默认使用。（历史注：SDK 56 前 expo-router 基于 React Navigation 构建；SDK 56 起已 fork React Navigation 内置。）
 
 ### 语法和示例
 ```
@@ -149,7 +149,7 @@ const withMyConfig = (config) => {
 
 ## 🔗 相关文档
 
-- 📄 **[React Navigation API 速查](./02-navigation-essentials.md)**: expo-router 的底层依赖
+- 📄 **[React Navigation API 速查](./02-navigation-essentials.md)**: expo-router 的历史底层依赖（SDK 56 起已 fork 内置）
 - 📄 **[RNOH 架构](../language-concepts/05-harmonyos-rnoh-api.md)**: 鸿蒙接入的 bare 流程
 - 📄 **[原生与设备能力库指南](../library-guides/02-native-and-device-libs.md)**: Expo 模块之外的补充选型
 - 📄 **[综合练习教程](../../basics/08-first-project.md)**: 在项目中使用 Expo 全家桶

@@ -2,9 +2,9 @@
 
 > **文档简介**: 用一个完整的待办 + 记账 App 串联入门路径全部知识：组件布局、Hooks、导航、本地持久化与三端适配
 >
-> **目标读者**: 已完成 basics 01-07 的学习者，准备独立交付第一个跨平台应用
+> **目标读者**: 已完成 basics 01-05 的学习者，准备独立交付第一个跨平台应用
 >
-> **前置知识**: 本目录 [01](./01-environment-setup.md) 至 [07](./07-advanced-features.md) 全部内容
+> **前置知识**: 本目录 [01](./01-environment-setup.md) 至 [05](./05-navigation.md)；[06](./06-native-modules.md)（原生模块）、[07](./07-advanced-features.md)（高级特性）建议先读，但本项目主要用到 01-05 的知识，06/07 概念在文中出现时已给出简要说明与链接
 
 ## 📚 文档元数据
 
@@ -42,9 +42,9 @@
 ```bash
 npx create-expo-app@latest TodoLedger
 cd TodoLedger
-npx expo install @react-navigation/native @react-navigation/bottom-tabs \
-  react-native-screens react-native-safe-area-context \
-  @react-native-async-storage/async-storage \
+# 导航由默认模板自带的 expo-router 承担：底部三 Tab 在 app/(tabs)/_layout.tsx 中用 <Tabs> 实现，
+# 不要再安装 @react-navigation/* 裸包与 expo-router 混用（Expo SDK 56 起官方不支持，expo-doctor 会标记）
+npx expo install @react-native-async-storage/async-storage \
   react-native-reanimated react-native-gesture-handler
 ```
 
@@ -55,10 +55,12 @@ npx expo install @react-navigation/native @react-navigation/bottom-tabs \
 ```
 TodoLedger/
 ├── app/                    # expo-router 路由（或自行改为普通 RN 结构）
-│   ├── _layout.tsx         # 根布局：Provider + Tabs
-│   ├── index.tsx           # 待办页
-│   ├── ledger.tsx          # 记账页
-│   └── profile.tsx         # 我的
+│   ├── _layout.tsx         # 根布局：Provider + Stack
+│   └── (tabs)/
+│       ├── _layout.tsx     # 底部标签导航：<Tabs>
+│       ├── index.tsx       # 待办页
+│       ├── ledger.tsx      # 记账页
+│       └── profile.tsx     # 我的
 ├── src/
 │   ├── components/         # 通用组件（TodoItem、AmountInput…）
 │   ├── store/              # Zustand store（可选，入门可用 Context）
@@ -70,6 +72,23 @@ TodoLedger/
 > 若使用 RN CLI 工程，把 `app/` 路由改为 [05-navigation](./05-navigation.md) 的 BottomTabs 结构，其余完全一致。
 
 ## 💻 核心实现
+
+### Tab 导航骨架（expo-router 自带 Tabs，无需安装导航包）
+
+```tsx
+// app/(tabs)/_layout.tsx
+import { Tabs } from 'expo-router';
+
+export default function TabsLayout() {
+  return (
+    <Tabs>
+      <Tabs.Screen name="index" options={{ title: '待办' }} />
+      <Tabs.Screen name="ledger" options={{ title: '记账' }} />
+      <Tabs.Screen name="profile" options={{ title: '我的' }} />
+    </Tabs>
+  );
+}
+```
 
 ### 数据模型与持久化 Hook
 
@@ -127,10 +146,10 @@ export function useLedger() {
 ### 记账页
 
 ```tsx
-// app/ledger.tsx
+// app/(tabs)/ledger.tsx
 import { useState } from 'react';
 import { FlatList, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
-import { useLedger } from '../src/hooks/useLedger';
+import { useLedger } from '../../src/hooks/useLedger';
 
 export default function LedgerScreen() {
   const { entries, add, remove, monthTotal } = useLedger();

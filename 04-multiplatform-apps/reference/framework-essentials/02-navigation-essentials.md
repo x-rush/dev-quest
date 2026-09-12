@@ -129,7 +129,7 @@ hdc shell aa start -a EntryAbility -b com.example.app
 
 ## 🔗 相关文档
 
-- 📄 **[Expo 要点](./01-expo-essentials.md)**: expo-router 是本 API 的封装层
+- 📄 **[Expo 要点](./01-expo-essentials.md)**: expo-router 曾基于本 API 构建（SDK 56 起已 fork React Navigation 内置）
 - 📄 **[TS 类型模式](../language-concepts/04-typescript-patterns.md)**: ParamList 类型化
 - 📄 **[RN 核心 API 字典](../language-concepts/01-rn-core-api.md)**: Linking 底层 API
 - 📄 **[导航基础教程](../../basics/05-navigation.md)**: 系统学习路径

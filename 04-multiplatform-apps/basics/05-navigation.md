@@ -5,6 +5,8 @@
 > **目标读者**: 已掌握组件与状态的初学者，准备把多个页面组织成完整应用
 >
 > **前置知识**: 完成 [04-state-hooks](./04-state-hooks.md)，了解 React Context 基本用法
+>
+> ⚠️ **适用范围**：本篇 React Navigation 直接用法适用于 bare 工程 / React Navigation 模板工程；Expo 主线工程使用内置 expo-router（等价写法对照见下文），自 Expo SDK 56 起官方不再支持从应用代码直接 import `@react-navigation/*` 包——与本模块 [README 技术基线](../README.md) 一致。
 
 ## 📚 文档元数据
 
@@ -27,11 +29,13 @@
 
 ## 🛠️ 安装
 
+> ⚠️ **适用范围（与 [README 技术基线](../README.md) 一致）**：本篇直接安装并 import `@react-navigation/*` 包的写法适用于 **bare 工程（RN CLI）与 React Navigation 模板工程**。Expo 主线工程（`create-expo-app` 默认模板）的导航由内置的 **expo-router** 承担——自 Expo SDK 56 起不再支持从应用代码直接 import `@react-navigation/*` 包，两者混装是 expo-doctor 会标记的非预期配对。Expo 工程的学习者请通过本篇理解导航器模型，动手时使用下文的 **expo-router 等价写法**，不要在本节的安装步骤上操作。
+
 ```bash
-# 核心包
+# 核心包（仅 bare 工程 / React Navigation 模板工程需要）
 npm install @react-navigation/native
 
-# 三端原生依赖（Expo 工程用 npx expo install 代替 npm install）
+# 三端原生依赖（bare 工程用 npm install；prebuild 的 Expo 工程可用 npx expo install 对齐版本）
 npm install react-native-screens react-native-safe-area-context
 
 # 按导航器类型追加安装
@@ -50,6 +54,18 @@ export default function App() {
   return <NavigationContainer>{/* 导航器在此嵌套 */}</NavigationContainer>;
 }
 ```
+
+**Expo 主线工程（expo-router）等价写法**：expo-router 不需要 `NavigationContainer`，也无需手工安装导航包，把上述概念映射到文件路由即可：
+
+| 本篇 React Navigation 概念 | expo-router 等价实现 |
+|---------------------------|---------------------|
+| `NavigationContainer` 包裹 | `app/_layout.tsx` 根布局（内置容器） |
+| `createNativeStackNavigator` | `app/_layout.tsx` 中的 `<Stack>` |
+| `createBottomTabNavigator` | `app/(tabs)/_layout.tsx` 中的 `<Tabs>` |
+| `navigation.navigate('Detail', { id })` | `router.push('/detail/42')` 或 `<Link href>` |
+| `route.params` | `useLocalSearchParams()` |
+
+完整对照与用法见 [Expo 要点 — expo-router](../reference/framework-essentials/01-expo-essentials.md) 与 [生态集成](../frameworks/03-ecosystem-integration.md)。
 
 ## 🔍 核心概念：导航器的嵌套模型
 

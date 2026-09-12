@@ -32,7 +32,7 @@
 | 通信模型 | 异步 JSON 队列，批量过桥 | JS 直接持有 C++ 引用，同步/异步均可 |
 | 原生模块注册 | 运行时反射 | TurboModules：按需懒加载 |
 | 类型安全 | 无（手写两端代码靠人肉对齐） | Codegen 依据 TS 规约生成类型代码 |
-| 适用 | 旧架构遗留代码 | 现行 RN 全部新项目（0.83 起新架构为唯一架构） |
+| 适用 | 旧架构遗留代码 | 现行 RN 全部新项目（0.82 起新架构为唯一架构） |
 
 **决策顺序**: 优先查社区库（React Native Directory）→ Expo SDK 能力 → 再自研原生模块。鸿蒙端的自研走 RNOH 的 ArkTS TurboModule，见 [RNOH 架构](../reference/language-concepts/05-harmonyos-rnoh-api.md)。
 
@@ -177,7 +177,7 @@ export default TurboModuleRegistry.getEnforcing<Spec>('DeviceModule');
 1. 按 Codegen 规约改造练习一的模块
 2. 观察构建产物中生成的原生接口文件
 
-**提示**: 新架构自 RN 0.83 起为唯一架构（Legacy 组件已在 0.84+ 移除），新项目无需任何开关配置。
+**提示**: 新架构自 RN 0.82 起为唯一架构（旧架构不再可启用，Legacy 组件已在 0.84+ 移除），新项目无需任何开关配置。
 
 ---
 

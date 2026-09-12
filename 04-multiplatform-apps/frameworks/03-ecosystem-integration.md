@@ -25,7 +25,7 @@
 
 ## 🧭 Expo Router：文件即路由
 
-Expo Router API 速查见 [Expo 要点](../reference/framework-essentials/01-expo-essentials.md)；其底层 React Navigation 见 [导航基础教程](../basics/05-navigation.md)。
+Expo Router API 速查见 [Expo 要点](../reference/framework-essentials/01-expo-essentials.md)；SDK 56 前 expo-router 基于 React Navigation 构建（SDK 56 起已 fork 内置），React Navigation 直接用法见 [导航基础教程](../basics/05-navigation.md)。
 
 ```
 app/

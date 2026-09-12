@@ -39,7 +39,7 @@
 | 优先级 | 全局统一 | 支持 Synchronous 渲染（如手势跟手） |
 | 挂载 | JS → 原生命令队列 | C++ 侧直接挂载，抖动更小 |
 
-**对业务的直接体感**: 长列表滚动更稳、模态/键盘弹出不再"跳变"、第三方原生组件兼容性由 Codegen 保障。新架构自 RN 0.83 起是唯一架构（旧架构已移除），业务代码通常无需改动；未适配的旧库已无法使用，需换 Fabric 适配版或替代库。
+**对业务的直接体感**: 长列表滚动更稳、模态/键盘弹出不再"跳变"、第三方原生组件兼容性由 Codegen 保障。新架构自 RN 0.82 起是唯一架构（旧架构已移除），业务代码通常无需改动；未适配的旧库已无法使用，需换 Fabric 适配版或替代库。
 
 ### Hermes — 面向 RN 的 JS 引擎
 
@@ -146,7 +146,7 @@ const styles = StyleSheet.create({
 ## ❓ 常见问题
 
 ### Q1: 怎么确认我的 App 跑在新架构上？
-**A**: 现行 RN 全部默认新架构（0.83 起为唯一架构，旧架构开关已删除）；DevTools 启动日志可确认；老库混用时以官方 Upgrade Helper 结果为准。
+**A**: 现行 RN 全部默认新架构（0.82 起为唯一架构，旧架构开关已删除）；DevTools 启动日志可确认；老库混用时以官方 Upgrade Helper 结果为准。
 
 ### Q2: Reanimated 与 Gesture Handler 的安装顺序？
 **A**: `npx expo install` 安装即可——Expo 工程的 `babel-preset-expo` 已自动包含 worklets 插件（Reanimated 4 起插件移交 `react-native-worklets`，仍需放插件列表最后）；bare 工程需手动确认，然后重新构建原生工程。
