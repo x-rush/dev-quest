@@ -27,7 +27,7 @@
 | Spring Framework | 6.x | 7.0.x |
 | Jakarta EE | 10 | 11（Servlet 6.1 / JPA 3.2 / Validation 3.1）|
 | Servlet 容器 | Tomcat 10.1 | Tomcat 11 / Jetty 12.1；**Undertow 移除** |
-| 构建 | Maven 3.6.3+ / Gradle 7.5+ | Maven 3.6.3+ / Gradle 8.5+（Gradle 9 支持）|
+| 构建 | Maven 3.6.3+ / Gradle 7.5+ | Maven 3.6.3+ / Gradle 8.14+（8.x 需 8.14 或 9.x）|
 | 测试 | JUnit 5 + Testcontainers 1.x | JUnit 6 + Testcontainers 2.0 |
 
 ## 📖 语法 / 签名（starter 与属性改名）

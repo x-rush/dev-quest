@@ -59,7 +59,7 @@ $u->email = 'ADA@example.com';    // 触发 set：校验 + 小写化
 echo $u->email, PHP_EOL;          // ada@example.com
 ```
 
-⚠️ **常见陷阱**: 钩子与 `readonly` 互斥（readonly 没有 set 时机）；有 `get` 无 `set` 的属性对外只读，但类内仍可写底层存储；构造器提升参数也能挂钩子；`get` 里再读 `$this->prop` 会递归——读写底层存储是无钩子原语。
+⚠️ **常见陷阱**: 钩子与 `readonly` 互斥（readonly 没有 set 时机）；只有 `get` 没有 `set` 的 **backed** 属性外部仍可写——写入按默认语义落到底层存储，仅 **virtual** 属性（无底层存储）不可写（实测 8.5.10 报 `Error: Property ... is read-only`）；构造器提升参数也能挂钩子；`get` 钩子里直读 `$this->prop` 不会递归——直读底层存储是绕过钩子的原语，递归风险仅在把钩子逻辑写到会再次触发钩子的路径上。
 
 🔗 **相关条目**: [readonly 与非对称可见性](./03-types-oop-modern.md)、[类型系统全表](./03-types-oop-modern.md)
 
@@ -114,7 +114,7 @@ $pad = 'php' |> (static fn (string $s): string => str_pad($s, 8, '_', STR_PAD_BO
 echo $pad, PHP_EOL;                      // __php___
 ```
 
-⚠️ **常见陷阱**: 右侧只接受**单参数**调用——`|> str_pad(...)` 缺参不可用，需闭包包装；传字符串 `'trim'` 虽是合法 callable，但丢失静态分析，统一用 `trim(...)`；运算符优先级低于算术与比较，复杂表达式左侧加括号。
+⚠️ **常见陷阱**: 右侧只接受**单参数**调用——`|> str_pad(...)` 缺参不可用，需闭包包装；传字符串 `'trim'` 虽是合法 callable，但丢失静态分析，统一用 `trim(...)`；运算符优先级低于算术运算符、高于比较运算符（实测 `1 |> strlen(...) == "1"` 按 `(1 |> strlen(...)) == "1"` 结合），复杂表达式左侧加括号。
 
 🔗 **相关条目**: [一等公民 callable 语法](./03-types-oop-modern.md)、[数组操作模式](./05-arrays-patterns.md)
 
@@ -144,7 +144,7 @@ withScheme/withUserInfo/withUsername/withPassword/withHost/withPort/withPath/wit
 
 declare(strict_types=1);
 
-// RFC 3986：解析宽松，不做合法性判断
+// RFC 3986：构造时即校验，非法 URI 抛 Uri\InvalidUriException
 $uri = new Uri\Rfc3986\Uri('https://example.com:8080/a/b?x=1#frag');
 echo $uri->getHost(), PHP_EOL;             // example.com
 echo $uri->getPort(), PHP_EOL;             // 8080
@@ -164,7 +164,7 @@ $url = new Uri\WhatWg\Url('https://example.com');
 echo $url->withHost('example.net')->getAsciiHost(), PHP_EOL;   // example.net
 ```
 
-⚠️ **常见陷阱**: 两个类都**不可变**——`with*` 返回新实例，`Rfc3986\Uri` 没有 `set*` 方法；`getPort()` 返回 `?int`（无端口或默认端口为 null）；取完整字符串用 `->toString()`——**没有** `getUri()` 方法，也未实现 `__toString`（对象直接进字符串上下文抛 Error，实测 8.5.10）；`parse_url()` 未被移除但新代码建议迁移；非法 RFC 3986 结果在 `with*` 时抛 `Uri\InvalidUriException`，非法 WHATWG 输入在构造时抛 `Uri\WhatWg\InvalidUrlException`。
+⚠️ **常见陷阱**: 两个类都**不可变**——`with*` 返回新实例，`Rfc3986\Uri` 没有 `set*` 方法；`getPort()` 返回 `?int`（无端口或默认端口为 null）；取完整字符串用 `->toString()`——**没有** `getUri()` 方法，也未实现 `__toString`（对象直接进字符串上下文抛 Error，实测 8.5.10）；`parse_url()` 未被移除但新代码建议迁移；两个类的构造函数都会校验输入：非法 RFC 3986 URI 在**构造时**即抛 `Uri\InvalidUriException`，非法 WHATWG 输入在构造时抛 `Uri\WhatWg\InvalidUrlException`。
 
 🔗 **相关条目**: [PHP 快速速查表](../quick-references/01-php-cheatsheet.md)
 
@@ -263,14 +263,15 @@ echo $b->no, '/', $b->cents, PHP_EOL;    // INV-1/2000（$origin 不受影响）
 
 ## 条目 7：常量表达式增强（8.5+）
 
-📌 **定义**: 8.5 扩大了常量表达式（类常量、属性默认值、注解参数等）的允许范围：**一等公民 callable 引用**与**类型转换**可以进入常量；但**闭包字面量仍然不允许**——`public const F = static fn () => ...;` 实测 8.5.10 编译期直接 Fatal，这正是本条目最需要记住的边界。
+📌 **定义**: 8.5 扩大了常量表达式（类常量、属性默认值、注解参数等）的允许范围：**一等公民 callable 引用**、**类型转换**与 **static 闭包**（`static function () {...}` 写法）都可以进入常量；但 **`fn` 箭头函数不允许**——`public const F = fn () => ...;` 实测 8.5.10 编译期直接 Fatal，这正是本条目最需要记住的边界。
 
 📖 **语法/签名**:
 
 ```php
 public const TRIM = trim(...);            // 8.5 ✅：一等公民 callable 引用进常量
 public const int N = (int) self::RAW;     // 8.5 ✅：类型转换进常量
-public const F = static fn () => 1;       // ❌ Fatal: Constant expression contains invalid operations
+public const G = static function (): int { return 1; };   // 8.5 ✅：static 闭包进常量
+public const F = fn () => 1;              // ❌ Fatal: Constant expression contains invalid operations
 ```
 
 💡 **示例**:
@@ -293,7 +294,7 @@ var_dump(Retry::MAX_ATTEMPTS);    // int(5)
 
 ⚠️ **常见陷阱**（以下边界均实测 8.5.10）:
 
-- **闭包字面量进不了常量**：`public const BACKOFF = static fn (int $a): int => 2 ** $a;`（`fn()` 短闭包同理）报 `Fatal error: Constant expression contains invalid operations`——8.5 打开的口子只有 callable **引用**（`trim(...)`、`Foo::bar(...)`）与类型转换。想在常量里存"行为"，存指向函数的引用，而不是闭包。
+- **`fn` 箭头函数进不了常量**：`public const BACKOFF = fn (int $a): int => 2 ** $a;`（`static fn` 同理）报 `Fatal error: Constant expression contains invalid operations`——8.5 允许进常量的是 callable **引用**（`trim(...)`、`Foo::bar(...)`）、类型转换与 **static 闭包**（`static function () {...}`），`fn` 箭头函数不在其列。想在常量里存"行为"，用 static 闭包或函数引用，而不是箭头函数。
 - **直接调用常量里的 callable 必须包一层括号**：`Retry::POW(2, 3)` 会被解析为静态方法调用，抛 `Error: Call to undefined method Retry::POW()`；正确写法是 `(Retry::POW)(2, 3)`。管道运算符右侧是个例外——`$x |> Retry::POW` 与 `$x |> (Retry::POW)` 实测均可用。
 - **`callable` 不能作常量的类型标注**：`public const callable C = ...` 报 `Fatal error: Class constant cannot have type callable`——存 callable 的常量不要写类型。
 - **注解参数同规则**：`#[Sanitizer(trim(...))]` 可用，`#[Sanitizer(fn () => ...)]` 同样 Fatal（见[反射与属性注解](./08-reflection-attributes.md)）。

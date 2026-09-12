@@ -102,7 +102,7 @@ final class Point
 }
 ```
 
-**陷阱**: `readonly` 与动态属性、8.4 非对称可见性 `(set)` 互斥；`clone with` 是修改只读对象的唯一途径（8.3+）。
+**陷阱**: `readonly` 与动态属性、8.4 非对称可见性 `(set)` 互斥；`clone with`（8.5+，RFC clone_with_v2）是批量覆盖 readonly 对象的途径——8.3 引入的只是 `__clone` 方法内对 readonly 属性的再初始化。
 
 ### final / abstract / static / instanceof
 

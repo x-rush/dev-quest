@@ -67,7 +67,7 @@ webman/
 **关键特性**:
 
 - `config/process.php` 是 Webman 的特色：**自定义常驻进程**（队列消费者、定时器进程）与 HTTP 服务同生命周期管理
-- 视图层可选装 `webman/view`（支持 Blade 语法模板），纯 API 项目可以完全不用模板
+- 视图层默认支持 PHP 原生语法模板（`webman/view` 随骨架内置，无需安装）；Blade 语法需另行安装 `webman/blade` 插件，纯 API 项目可以完全不用模板
 
 ## 🛠️ 实践指南
 
@@ -76,8 +76,8 @@ webman/
 **操作指南**:
 
 ```bash
-# 创建项目（要求 PHP >= 8.1，本模块基线 8.5）
-composer create-project workerman/webman-framework webman
+# 创建项目（要求 PHP >= 8.1，本模块基线 8.5；骨架包名是 workerman/webman，webman-framework 只是依赖包）
+composer create-project workerman/webman:~2.0
 cd webman
 
 # 前台启动（开发）
@@ -176,8 +176,10 @@ return [
             'password'  => getenv('DB_PASSWORD'),
             'charset'   => 'utf8mb4',
             // ⚠️ 常驻进程的连接是长连接：MySQL 服务端会主动断开闲置连接，
-            // 必须开启断线重连，否则夜间空闲后第一个请求报 "MySQL server has gone away"
-            'breakReconnect' => true,
+            // 断线防护靠连接池心跳 heartbeat_interval（建议 < 60s），防止 "MySQL server has gone away"
+            'pool' => [
+                'heartbeat_interval' => 50,
+            ],
         ],
     ],
 ];
@@ -186,7 +188,7 @@ return [
 **关键点解析**:
 
 - 连接在进程启动后建立并**复用到底**，不像 FPM 每请求新建——这是常驻的核心收益之一
-- 心跳/重连类配置是长连接服务的生存项，不是可选项
+- 连接池心跳（`heartbeat_interval`）是长连接服务的生存项，不是可选项
 
 ## 🎨 最佳实践
 

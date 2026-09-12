@@ -152,15 +152,19 @@ class Cart
     {
         return $this->items;
     }
+
+    // 8.5 新特性（RFC clone_with_v2）：clone($obj, [...]) 克隆时批量覆盖属性，
+    // 被覆盖属性须当前作用域可见——private 属性只能在类内方法里覆盖
+    public function withExtra(OrderLine $extra): static
+    {
+        return clone($this, ['items' => [...$this->items, $extra]]);
+    }
 }
 
 $cart = new Cart();
 $cart->add($line);
 
-// 8.5 新特性（RFC clone_with_v2）：clone($obj, [...]) 克隆时批量覆盖属性，
-// 配合 readonly 实现"修改即新对象"；被覆盖属性须当前作用域可见
-$extra = new OrderLine('NEW', 1, 9.9);
-$copy  = clone($cart, ['items' => [...$cart->items(), $extra]]);
+$copy = $cart->withExtra(new OrderLine('NEW', 1, 9.9));   // 新 Cart 实例，$cart 不受影响
 ```
 
 > 💡 PHP 8.4 引入**非对称可见性**：`public private(set) array $items` 表示外部可读、仅内部可写，可替代手写 getter。注意它与 `readonly` 互斥，二选一即可。

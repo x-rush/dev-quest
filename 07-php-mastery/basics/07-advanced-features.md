@@ -286,7 +286,7 @@ $p->email = 'ADA@Example.COM';
 echo $p->email, PHP_EOL;    // ada@example.com
 ```
 
-要点：`get`/`set` 钩子内联读写行为，可定义无底层存储的虚拟属性；与 `readonly` 互斥；`get` 里再读 `$this->prop` 会递归。
+要点：`get`/`set` 钩子内联读写行为，可定义无底层存储的虚拟属性；与 `readonly` 互斥；`get` 钩子里直读 `$this->prop` 不会递归（直读底层存储），递归风险仅在把钩子逻辑写到会再次触发钩子的路径上。
 
 ### 管道运算符（8.5+）：从左往右读的数据流
 

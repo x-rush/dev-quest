@@ -14,11 +14,11 @@
 | Java | **21 LTS**（默认基线） | 25 LTS（2025-09 发布）已全面支持，可选用 |
 | Spring Boot | **4.1.x**（4.1.0，2026-06-10 发布） | 4.0 于 2025-11-20 发布；4.0/3.5 维护线并行服务中 |
 | Spring Framework | **7.0.x** | JSpecify 空安全、API 版本化、JUnit 6 支持 |
-| Spring Security | **7.0.x** | Lambda DSL 延续，Security FilterChain 不变 |
-| Hibernate / JPA | Hibernate 7.1 · Jakarta Persistence 3.2 | Jakarta EE 11 基线（Servlet 6.1 / Validation 3.1） |
-| Jackson | **3.0**（`tools.jackson`） | `JsonMapper` 不可变构建；Jackson 2 自动配置已废弃 |
+| Spring Security | **7.1.x**（4.1 BOM 管理 7.1.0） | Lambda DSL 延续，Security FilterChain 不变 |
+| Hibernate / JPA | Hibernate **7.4.x**（4.1 BOM 管理 7.4.1.Final）· Jakarta Persistence 3.2 | Jakarta EE 11 基线（Servlet 6.1 / Validation 3.1） |
+| Jackson | **3.1**（`tools.jackson`） | `JsonMapper` 不可变构建；Jackson 2 自动配置已废弃 |
 | JUnit / Testcontainers | JUnit **6**（Jupiter） · Testcontainers **2.0** | Boot 4 默认测试栈；Testcontainers artifact 改名 `testcontainers-*` |
-| Maven / Gradle | Maven 3.6.3+ · Gradle 8.5+（Boot Gradle 插件 4.1.x） | 构建脚本统一用 Wrapper 锁定版本 |
+| Maven / Gradle | Maven 3.6.3+ · Gradle 8.14+（8.x 需 8.14 或 9.x；Boot Gradle 插件 4.1.x） | 构建脚本统一用 Wrapper 锁定版本 |
 | GraalVM | 25 | Native Image 需 GraalVM 25+（本模块未展开） |
 
 ### 🎯 学习目标
