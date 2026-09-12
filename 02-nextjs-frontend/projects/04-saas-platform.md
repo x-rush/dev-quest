@@ -3490,15 +3490,12 @@ COMPRESSION=true
 ```javascript
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  experimental: {
-    appDir: true,
-    serverComponentsExternalPackages: ['@prisma/client', 'stripe'],
-  },
+  serverExternalPackages: ['@prisma/client', 'stripe'],
   images: {
-    domains: [
-      'localhost',
-      'your-domain.com',
-      'your-s3-bucket.s3.amazonaws.com',
+    remotePatterns: [
+      { protocol: 'http', hostname: 'localhost' },
+      { protocol: 'https', hostname: 'your-domain.com' },
+      { protocol: 'https', hostname: 'your-s3-bucket.s3.amazonaws.com' },
     ],
     formats: ['image/webp', 'image/avif'],
   },

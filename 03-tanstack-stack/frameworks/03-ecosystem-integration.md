@@ -114,7 +114,6 @@ TanStack Table 是 Headless 的，数据来自哪里它不关心；做服务端�
 
 ```tsx
 import {
-  coreFeatures,
   createColumnHelper,
   flexRender,
   rowPaginationFeature,
@@ -129,8 +128,7 @@ interface UserRow { id: number; name: string; email: string }
 
 // v9：createColumnHelper 需要 TFeatures 与 TData 两个泛型；manual* 选项也依赖特性注册
 const features = tableFeatures({
-  ...coreFeatures, // 核心特性必须显式注册，react 适配器不会自动合并
-  rowSortingFeature, // manualSorting 选项来自排序特性
+  rowSortingFeature, // manualSorting 选项来自排序特性（核心特性自动合并，无需显式注册）
   rowPaginationFeature, // manualPagination / pageCount / state.pagination 来自分页特性
 })
 const columnHelper = createColumnHelper<typeof features, UserRow>()

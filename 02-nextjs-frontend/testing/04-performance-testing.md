@@ -182,7 +182,7 @@ const nextConfig = {
   // 图片优化
   images: {
     formats: ['image/webp', 'image/avif'],
-    domains: ['example.com'],
+    remotePatterns: [{ protocol: 'https', hostname: 'example.com' }],
     deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
   },

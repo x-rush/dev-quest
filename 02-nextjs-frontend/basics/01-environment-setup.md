@@ -239,11 +239,11 @@ yarn dev
   },
   "devDependencies": {
     "typescript": "^5.5.0",
-    "tailwindcss": "^3.4.0",
-    "autoprefixer": "^10.4.0",
+    "tailwindcss": "^4",
+    "@tailwindcss/postcss": "^4",
     "postcss": "^8.4.0",
     "eslint": "^8.0.0",
-    "eslint-config-next": "15.0.0",
+    "eslint-config-next": "16.3.0",
     "prettier": "^3.0.0"
   }
 }
@@ -286,11 +286,10 @@ yarn dev
 ```javascript
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  experimental: {
-    turbopack: true, // 启用Turbopack以获得更快的构建
-  },
+  // Turbopack 在 Next.js 16 中是默认打包器，无需任何配置开关
   images: {
-    domains: ['example.com'], // 配置允许的图片域名
+    // Next.js 16：images.domains 已弃用，远程域名改用 remotePatterns
+    remotePatterns: [{ protocol: 'https', hostname: 'example.com' }],
     formats: ['image/webp', 'image/avif'], // 现代图片格式
   },
   typescript: {
@@ -627,9 +626,7 @@ const isDevelopment = process.env.NODE_ENV === 'development'
 const isProduction = process.env.NODE_ENV === 'production'
 
 const nextConfig = {
-  experimental: {
-    turbopack: isDevelopment,
-  },
+  // Turbopack 在 Next.js 16 中是默认打包器，无需按环境开关
   ...(isDevelopment && {
     webpack: (config) => {
       config.devtool = 'eval-cheap-module-source-map'

@@ -88,7 +88,10 @@ const nextConfig: NextConfig = {
 
   // 图片优化
   images: {
-    domains: ["example.com", "assets.example.com"],
+    remotePatterns: [
+      { protocol: "https", hostname: "example.com" },
+      { protocol: "https", hostname: "assets.example.com" },
+    ],
     formats: ["image/webp", "image/avif"],
     deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
@@ -129,11 +132,9 @@ const nextConfig: NextConfig = {
     ]
   },
 
-  // 实验性功能
-  experimental: {
-    serverActions: true,
-    serverComponentsExternalPackages: ["sharp"],
-  },
+  // Next.js 16：serverActions 已默认启用无需配置；
+  // serverComponentsExternalPackages 已移至顶层 serverExternalPackages
+  serverExternalPackages: ["sharp"],
 }
 
 export default nextConfig

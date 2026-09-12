@@ -1522,12 +1522,14 @@ describe('Navbar', () => {
 ```javascript
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  experimental: {
-    appDir: true,
-    serverComponentsExternalPackages: ['date-fns'],
-  },
+  // Next.js 15+：serverComponentsExternalPackages 移至顶层 serverExternalPackages
+  serverExternalPackages: ['date-fns'],
   images: {
-    domains: ['localhost', 'your-cms-domain.com'],
+    // Next.js 16：images.domains 已弃用，远程域名改用 remotePatterns
+    remotePatterns: [
+      { protocol: 'https', hostname: 'your-cms-domain.com' },
+      { protocol: 'http', hostname: 'localhost' },
+    ],
     formats: ['image/webp', 'image/avif'],
   },
   compiler: {

@@ -44,7 +44,6 @@ TanStack Table 一切围绕三个概念：
 ```tsx
 import { useMemo } from 'react'
 import {
-  coreFeatures,
   createColumnHelper,
   flexRender,
   tableFeatures,
@@ -59,8 +58,8 @@ type Person = {
   score: number
 }
 
-// v9：createColumnHelper 需要两个泛型——TFeatures 与 TData；核心特性必须显式注册
-const features = tableFeatures({ ...coreFeatures })
+// v9：createColumnHelper 需要两个泛型——TFeatures 与 TData；核心特性会自动合并，无需显式注册
+const features = tableFeatures({})
 const columnHelper = createColumnHelper<typeof features, Person>()
 
 const columns = useMemo(
@@ -94,7 +93,7 @@ const columns = useMemo(
 
 ```tsx
 function PersonTable({ data }: { data: Person[] }) {
-  // v9：features 是必填入口，且必须包含 coreFeatures（table/column/row/header/cell 与核心行模型行为）
+  // v9：features 是必填入口，核心特性（table/column/row/header/cell 与核心行模型行为）会自动合并进来，无需显式注册
   const table = useTable({
     data, // 建议用 useMemo 稳定引用，见下方"陷阱"
     columns,
@@ -135,7 +134,7 @@ function PersonTable({ data }: { data: Person[] }) {
 
 **关键点解析**：
 
-- v9 中 `features` 为**必填项**，且必须包含 `coreFeatures`（提供 table/column/row/header/cell 与核心行模型行为）——它把 data + columns 管道化成可渲染的行；排序/筛选等其余特性按需注册到 `tableFeatures()`
+- v9 中 `features` 为**必填项**，核心特性（table/column/row/header/cell 与核心行模型行为）会自动合并进来，无需显式注册——它把 data + columns 管道化成可渲染的行；排序/筛选等其余特性按需注册到 `tableFeatures()`
 - `header` / `cell` 既可以是字符串，也可以是返回 JSX 的函数，`flexRender` 统一处理两种形态
 - `info.getValue()` 返回 `accessor` 的结果；`row.original` 可拿到整行原始数据
 
@@ -154,8 +153,7 @@ const table = useTable({
   data,
   columns,
   features: tableFeatures({
-    ...coreFeatures,                            // 核心特性必须注册
-    rowSortingFeature,                          // 先注册特性
+    rowSortingFeature,                          // 先注册特性（核心特性自动合并，无需显式注册）
     columnFilteringFeature,
     sortedRowModel: createSortedRowModel(),     // 再接通排序行模型
     filteredRowModel: createFilteredRowModel(), // 再接通筛选行模型

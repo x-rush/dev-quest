@@ -518,7 +518,7 @@ const nextConfig = {
   // 图片优化
   images: {
     formats: ['image/webp', 'image/avif'],
-    domains: ['example.com'], // 允许的图片域名
+    remotePatterns: [{ protocol: 'https', hostname: 'example.com' }], // 允许的图片域名
   },
 
   // 重定向配置

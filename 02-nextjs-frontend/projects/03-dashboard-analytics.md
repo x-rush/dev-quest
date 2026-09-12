@@ -3339,12 +3339,14 @@ if (typeof window !== 'undefined') {
 ```javascript
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  experimental: {
-    appDir: true,
-    serverComponentsExternalPackages: ['chart.js', 'd3'],
-  },
+  // Next.js 15+：serverComponentsExternalPackages 移至顶层 serverExternalPackages
+  serverExternalPackages: ['chart.js', 'd3'],
   images: {
-    domains: ['localhost', 'your-api-domain.com'],
+    // Next.js 16：images.domains 已弃用，远程域名改用 remotePatterns
+    remotePatterns: [
+      { protocol: 'https', hostname: 'your-api-domain.com' },
+      { protocol: 'http', hostname: 'localhost' },
+    ],
     formats: ['image/webp', 'image/avif'],
   },
   compiler: {

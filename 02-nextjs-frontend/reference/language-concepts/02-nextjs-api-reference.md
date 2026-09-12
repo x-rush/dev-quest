@@ -434,24 +434,25 @@ function ClientInteractiveComponent({ initialData }: { initialData: any[] }) {
 ```javascript
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // 实验性功能
-  experimental: {
-    // 启用Turbopack
-    turbo: {
-      rules: {
-        '*.svg': {
-          loaders: ['@svgr/webpack'],
-          as: '*.js',
-        },
+  // Turbopack配置（Next 16：顶层 turbopack 键；experimental.turbo 仅为兼容别名）
+  turbopack: {
+    rules: {
+      '*.svg': {
+        loaders: ['@svgr/webpack'],
+        as: '*.js',
       },
     },
-    // 服务器组件
-    serverComponentsExternalPackages: ['@prisma/client'],
   },
 
-  // 图片优化
+  // 服务器组件（Next 15+ 移至顶层 serverExternalPackages）
+  serverExternalPackages: ['@prisma/client'],
+
+  // 图片优化（Next.js 16：images.domains 已弃用，远程域名改用 remotePatterns）
   images: {
-    domains: ['example.com', 'cdn.example.com'],
+    remotePatterns: [
+      { protocol: 'https', hostname: 'example.com' },
+      { protocol: 'https', hostname: 'cdn.example.com' },
+    ],
     formats: ['image/webp', 'image/avif'],
     deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
@@ -496,7 +497,7 @@ const nextConfig = {
     ]
   },
 
-  // 国际化
+  // 国际化（仅 Pages Router 支持；App Router 需用路由级方案，如 [lng] 动态段）
   i18n: {
     locales: ['en', 'zh', 'ja'],
     defaultLocale: 'en',

@@ -982,7 +982,10 @@ const nextConfig = {
 
   // 图片优化
   images: {
-    domains: ['localhost', 'your-domain.com'],
+    remotePatterns: [
+      { protocol: 'http', hostname: 'localhost' },
+      { protocol: 'https', hostname: 'your-domain.com' },
+    ],
     formats: ['image/webp', 'image/avif'],
   },
 
