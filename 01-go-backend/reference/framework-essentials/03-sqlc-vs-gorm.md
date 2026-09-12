@@ -101,6 +101,41 @@ db.Create(&order)
 rows, err := queries.MonthlyRevenueByRegion(ctx, start, end)
 ```
 
+## 🔌 驱动层：pgx（sqlc 的事实标准搭配）
+
+数据层选型之外还有一层常被忽略的选型：**底层驱动**。PostgreSQL 场景的事实答案是 [pgx](https://github.com/jackc/pgx)（v5 现行，`github.com/jackc/pgx/v5`）——PostgreSQL 专精驱动，功能是 `database/sql` 的超集，也是 sqlc 官方推荐的默认驱动（`sqlc.yaml` 中 `driver: pgx/v5`）。
+
+**两种接入模式**：
+
+```go
+// 模式一：stdlib 兼容模式——走 database/sql 接口，
+// GORM / sqlc 生成代码 / 其他依赖 database/sql 的库都能直接用
+import (
+    "database/sql"
+    _ "github.com/jackc/pgx/v5/stdlib"
+)
+
+db, _ := sql.Open("pgx", dsn)
+
+// 模式二：原生 pgx API + pgxpool 连接池——拿到 pgx 全部能力
+import "github.com/jackc/pgx/v5/pgxpool"
+
+pool, _ := pgxpool.New(ctx, dsn)
+row := pool.QueryRow(ctx, "SELECT name, age FROM users WHERE id = $1", 42)
+```
+
+**pgx 独占、`database/sql` 拿不到的能力**：
+
+| 能力 | 说明 |
+|------|------|
+| `CopyFrom` | PostgreSQL COPY 协议批量写入，比逐条 INSERT 快一到两个数量级 |
+| `pgtype` 类型系统 | 原生映射 JSONB、数组、uuid、numeric、timestamptz 等 PG 专有类型 |
+| `LISTEN/NOTIFY` | 直接消费 PG 的发布订阅通知（`WaitForNotification`） |
+| Large Objects | 大对象流式读写 |
+| 批量查询 `Batch` | 多语句一次网络往返 |
+
+**组合结论**：PostgreSQL 项目里 **sqlc + pgx/v5** 就是 2026 年的默认起点——sqlc 出类型安全查询代码，pgx 出驱动性能与 PG 专有能力，GORM/ent 也可透过 stdlib 模式受益于 pgx 的连接层（GORM PostgreSQL driver 即基于 pgx stdlib）。只有当项目同时要兼容多家数据库时，才退回纯 `database/sql` 接口 + 各家驱动。
+
 ## 🧭 选型建议
 
 | 场景 | 推荐 | 理由 |
@@ -138,6 +173,7 @@ rows, err := queries.MonthlyRevenueByRegion(ctx, start, end)
 - 📄 **[GORM 完整教程](../../frameworks/03-gorm-orm-complete.md)** - 操作指南层
 - 📄 **[Go 标准库核心 API](../library-guides/01-go-standard-library.md)** - `database/sql` 底层接口
 - 🌐 **[sqlc 官方文档](https://docs.sqlc.dev/)** - 权威来源
+- 🌐 **[pgx 官方仓库](https://github.com/jackc/pgx)** - PostgreSQL 驱动权威来源
 - 🌐 **[GORM 官方文档](https://gorm.io/zh_CN/docs/)** - 权威来源
 - 🌐 **[ent 官方文档](https://entgo.io/)** - 权威来源
 
