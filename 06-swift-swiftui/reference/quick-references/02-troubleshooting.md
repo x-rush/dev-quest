@@ -92,7 +92,7 @@
 
 | 原因 | 解决 |
 |------|------|
-| 环境缺失（modelContainer、environment 模型） | 在 `#Preview` 内补注入：`Editor().modelContainer(for: .self, inMemory: true)` 或 `.environment(Store())` |
+| 环境缺失（modelContainer、environment 模型） | 在 `#Preview` 内补注入：`Editor().modelContainer(for: Note.self, isStoredInMemoryOnly: true)` 或 `.environment(Store())` |
 | 真机能力（相机/推送）在预览触发 | 预览传入 mock 服务 |
 | 初始化抛错（解包失败、解码失败） | 预览用合成数据工厂 `.sample` |
 

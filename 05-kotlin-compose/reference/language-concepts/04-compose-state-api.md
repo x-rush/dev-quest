@@ -28,7 +28,7 @@ var count by remember { mutableIntStateOf(0) }               // 基本类型专�
 ```
 
 ### 陷阱
-- 带初值的 `mutableStateOf(0)` 类型可正常推断；报错 "Not enough information to infer type variable T" 出现在**无初值**的 `mutableStateOf()` 上，此时显式写 `mutableStateOf<Int>()`，或基本类型直接用 `mutableIntStateOf(0)`（免装箱）
+- 带初值的 `mutableStateOf(0)` 类型可正常推断；报错 "Not enough information to infer type variable T" 出现在**无初值**的 `mutableStateOf()` 上，此时显式写 `mutableStateOf<Int?>(null)`（类型参数与初值都要给），或基本类型直接用 `mutableIntStateOf(0)`（免装箱）
 - 读 `value` 发生在哪个 Composable，重组范围就是那个 Composable——把读取下沉到最小子组件可缩小重组范围
 
 ## 2. remember

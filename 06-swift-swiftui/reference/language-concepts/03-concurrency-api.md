@@ -45,7 +45,7 @@ let t4 = Task.detached { independent() }   // 不继承 actor/优先级，慎用
 
 ### 1.3 实例成员
 
-`t.cancel()` 请求取消；`await t.value` 异步取结果（不带 `await` 的 `t.value` 会同步阻塞，UI 线程禁用）。
+`t.cancel()` 请求取消；`t.value` 是 `{ get async throws }` 属性——必须 `try await t.value` 取结果（非抛错任务免 `try`），不带 `await` 直接访问是编译错误，不存在同步阻塞变体。
 
 **陷阱**: `Task {}` 在 SwiftUI View 中是**非结构化**的——视图销毁后任务仍在跑。视图生命周期任务必须用 `.task` 修饰符。
 

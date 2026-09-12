@@ -49,24 +49,27 @@ feature/
 ## 2️⃣ 错误体系：Result + 领域异常
 
 ```kotlin
-// 统一的领域错误：UI 只认识这三类
+// 统一的领域错误：UI 只认识这三类（继承 Exception，才能 throw / 放入 Result.failure）
 sealed interface AppError {
-    data class Network(val cause: Throwable) : AppError
-    data class Storage(val cause: Throwable) : AppError
-    data class Unexpected(val cause: Throwable) : AppError
+    data class Network(override val cause: Throwable) : AppError, Exception(cause)
+    data class Storage(override val cause: Throwable) : AppError, Exception(cause)
+    data class Unexpected(override val cause: Throwable) : AppError, Exception(cause)
 }
 
 // Repository 边界处统一转译，向上只暴露 Result
-suspend fun <T> runCatchingApp(block: suspend () -> T): Result<T> =
-    runCatching { block() }.recoverCatching { e ->
-        // 关键：取消异常必须原样抛出，吞掉它协程将无法响应取消
-        if (e is kotlinx.coroutines.CancellationException) throw e
-        throw when (e) {
-            is IOException     -> AppError.Network(e)
-            is SQLiteException -> AppError.Storage(e)
-            else               -> AppError.Unexpected(e)
-        }
+// 注意：取消放行不能写进 recoverCatching 的 transform——它内部用 runCatching 包裹 lambda，
+// 里面的 throw 会被捕获为 Result.failure 而不是传播；必须先取 exceptionOrNull 检查放行
+suspend fun <T> runCatchingApp(block: suspend () -> T): Result<T> {
+    val result = runCatching { block() }
+    val e = result.exceptionOrNull() ?: return result
+    // runCatching 会把取消也捕获为 failure——先放行 CancellationException，协程才能正常取消
+    if (e is kotlinx.coroutines.CancellationException) throw e
+    return when (e) {
+        is IOException     -> Result.failure(AppError.Network(e))
+        is SQLiteException -> Result.failure(AppError.Storage(e))
+        else               -> Result.failure(AppError.Unexpected(e))
     }
+}
 
 // ViewModel：错误 → UiState 的单一出口
 data class FeedUiState(
@@ -76,7 +79,7 @@ data class FeedUiState(
 
 fun refresh() = viewModelScope.launch {
     runCatchingApp { repository.refresh() }
-        .onFailure { e -> _uiState.update { it.copy(banner = e as AppError) } }
+        .onFailure { e -> _uiState.update { it.copy(banner = e as? AppError) } }
         .onSuccess { _uiState.update { it.copy(banner = null) } }
 }
 ```

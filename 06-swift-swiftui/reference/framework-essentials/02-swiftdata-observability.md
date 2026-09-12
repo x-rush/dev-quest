@@ -30,7 +30,7 @@ import SwiftData
 @Model
 final class Note {
     var title: String
-    var body_: String            // 避开保留名 body 的改名写法
+    var body: String?            // body 是合法属性名（真正的保留名是 description）
     var createdAt: Date
     var priority: Int = 0
 
@@ -165,7 +165,7 @@ final class Router {
 
 ## ⚠️ 高频陷阱速查
 
-- **`body` 属性名冲突**：@Model 类属性叫 `body` 会与协议冲突，改名（如 `body_`）或加 @Transient
+- **`description` 属性名不可用**：PersistentModel 自带 `description` 成员，@Model 类不能声明同名存储属性；`body` 等名字没有保留限制，可正常使用
 - **unique + CloudKit 冲突**：`.automatic` 同步不支持 `@Attribute(.unique)`
 - **@Query 硬编码谓词**：谓词在 init 求值一次；想"随筛选条件变"的查询，改用 `context.fetch` + `.onChange`，或 `init(filter:)` 传入
 - **@Observable 属性在非隔离线程写**：被 UI 追踪的属性应由 `@MainActor` 上下文写入（store 标 @MainActor）

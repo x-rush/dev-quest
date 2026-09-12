@@ -145,7 +145,7 @@ WindowGroup { ContentView() }
 ## 5. custom 迁移示例：字段重命名
 
 ```swift
-// SchemaV3.Note 把 content 重命名为 body_（并保留 color）
+// SchemaV3.Note 把 content 重命名为 body（并保留 color）
 static let migrationV2toV3 = MigrationStage.custom(
     fromVersion: SchemaV2.self,
     toVersion: SchemaV3.self,
@@ -154,8 +154,8 @@ static let migrationV2toV3 = MigrationStage.custom(
         // didMigrate 拿到新 schema 上下文；旧值已由框架按同名/可推断字段搬运，
         // 重命名的字段在此按业务规则补偿（简单场景可让新旧字段并存一版，这里搬值）
         let notes = try context.fetch(FetchDescriptor<SchemaV3.Note>())
-        for note in notes where note.body_ == nil {
-            note.body_ = note.content        // 旧列值补到新列
+        for note in notes where note.body == nil {
+            note.body = note.content        // 旧列值补到新列
         }
         try context.save()
     }

@@ -70,16 +70,15 @@ class VM : ViewModel() { val query = MutableStateFlow("") }
 ## 3. "Not enough information to infer type variable T"
 
 ### 症状
-`mutableStateOf(0)` 处编译报泛型推断错误。
+`mutableStateOf()` 不带初值调用处编译报泛型推断错误。
 
 ### 原因
-`mutableStateOf` 的重载（基本类型特化 vs 泛型）让推断器无法确定 T。
+`mutableStateOf` 只有**一个泛型重载**（不存在基本类型特化重载），且 value 参数无默认值——不带初值时推断器拿不到 T 的信息。带初值调用（如 `mutableStateOf(0)`）类型可正常推断，不会报错。
 
 ### 修复
 ```kotlin
-val a = remember { mutableStateOf<Int>(0) }     // 显式类型参数
-val b = remember { mutableIntStateOf(0) }        // 或用 Int 专用 API
-val c: MutableState<Int> = remember { mutableStateOf(0) }   // 或显式声明类型
+val a = remember { mutableStateOf<Int?>(null) }   // 显式类型参数 + 给初值
+val b = remember { mutableIntStateOf(0) }         // 基本类型直接用专用 API（免装箱）
 ```
 
 ---
@@ -258,7 +257,7 @@ ksp = "2.3.11"            # 独立版本号，升级 Kotlin 后无需强改
 |-----------|----------|
 | 卡死/刷屏重组 | #1 死循环 |
 | 旋转后数据没了 | #2 状态丢失 |
-| 编译器泛型推断报错 | #3 mutableStateOf |
+| 无初值 mutableStateOf 推断报错 | #3 mutableStateOf |
 | 页面退出还在跑 | #4 协程泄漏 |
 | Toast 弹两次 | #5 事件重放 |
 | 列表错位 | #6 LazyColumn key |

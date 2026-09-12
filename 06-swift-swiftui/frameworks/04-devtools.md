@@ -67,7 +67,7 @@ Cmd+点击预览区或按播放键进入**交互模式**：点击、滚动、动
 ```swift
 #Preview {
     CityListView()
-        .modelContainer(for: City.self, inMemory: true)   // 内存库，不污染真机数据
+        .modelContainer(for: City.self, isStoredInMemoryOnly: true)   // 内存库，不污染真机数据
 }
 ```
 

@@ -15,7 +15,7 @@
 | Swift | **6.3**（补丁至 6.3.3，6.4 开发中） | 2026-03-24 发布；Swift 6 严格并发为默认语言模式；6.3 起附带首个官方 **Swift SDK for Android**（跨 iOS/Android 分享 Swift 代码的里程碑） |
 | Xcode | **26.6** | 内含 Swift 6.3.3 工具链，SDK 覆盖 iOS 26.5 等 |
 | iOS SDK | **iOS 26** | SwiftUI / SwiftData 随 SDK 一体发布，无独立版本号；标志性变化为 Liquid Glass 设计与 `.glassEffect()` 等 SwiftUI 新 API |
-| 构建系统 | Swift Build（开源） | Swift 6.3 起成为 Swift Package Manager 的默认构建后端 |
+| 构建系统 | Swift Build（开源） | Swift 6.3 起 Swift Build 以 preview 形式集成进 SPM（官方邀请试用反馈，尚未成为默认） |
 
 ## 📚 模块元数据
 
