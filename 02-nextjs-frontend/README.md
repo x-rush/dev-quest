@@ -131,15 +131,19 @@ graph LR
 ```
 02-nextjs-frontend/
 ├── README.md                           # 模块总览（本文档）
-├── 📚 reference/           # 字典：全量参考（24个文件）
-│   ├── 📖 language-concepts/      # 语言核心概念（6个文件）
+├── 📚 reference/           # 字典：全量参考（32个文件）
+│   ├── 📖 language-concepts/      # 语言核心概念（10个文件）
 │   │   ├── 01-react-syntax-cheatsheet.md       # ⚛️ React语法速查表 ✅
 │   │   ├── 02-nextjs-api-reference.md          # 🚀 Next.js API参考 ✅
 │   │   ├── 03-typescript-types.md              # 📘 TypeScript类型速查 ✅
 │   │   ├── 04-javascript-modern.md             # 💎 现代JS语法 ✅
 │   │   ├── 05-css-patterns.md                  # 🎨 CSS-in-JS模式 ✅
-│   │   └── 06-react-19-hooks.md                # ⚛️ React 19关键Hooks ✅
-│   ├── 🛠️ framework-patterns/    # 框架应用模式（11个文件）
+│   │   ├── 06-react-19-hooks.md                # ⚛️ React 19关键Hooks ✅
+│   │   ├── 07-type-narrowing-guards.md         # 🛡️ 类型收窄与类型守卫 ✅
+│   │   ├── 08-ts-declarations-modules.md       # 📦 枚举、环境声明与模块系统 ✅
+│   │   ├── 09-js-core-semantics.md             # 🧠 JS 核心语义（事件循环/闭包/原型链/this） ✅
+│   │   └── 10-web-platform-apis.md             # 🌐 Web 平台 API 速查 ✅
+│   ├── 🛠️ framework-patterns/    # 框架应用模式（14个文件）
 │   │   ├── 01-app-router-patterns.md           # 🗺️ App Router实战模式 ✅
 │   │   ├── 02-server-components-patterns.md    # 🔄 服务端组件模式 ✅
 │   │   ├── 03-client-components-patterns.md    # 📱 客户端组件模式 ✅
@@ -150,7 +154,12 @@ graph LR
 │   │   ├── 08-caching-patterns.md              # 💾 Cache Components与"use cache" ✅
 │   │   ├── 09-async-request-apis.md            # ⏳ 异步请求APIs ✅
 │   │   ├── 10-proxy-patterns.md                # 🌉 网络代理（proxy.ts） ✅
-│   │   └── 11-error-loading-patterns.md        # 🚨 错误与加载状态约定 ✅
+│   │   ├── 11-error-loading-patterns.md        # 🚨 错误与加载状态约定 ✅
+│   │   ├── 12-metadata-and-script.md           # 🏷️ Metadata API 与 next/script ✅
+│   │   ├── 13-route-segment-config.md          # 🧭 路由段配置（Route Segment Config） ✅
+│   │   └── 14-env-vars.md                      # 🔑 环境变量（.env/NEXT_PUBLIC_） ✅
+│   ├── 📦 library-guides/         # 常用库指南（1个文件）
+│   │   └── 03-ecosystem-map.md                 # 🗺️ 生态依赖地图（第三方库导览） ✅
 │   ├── 🔧 development-tools/     # 开发工具生态（4个文件）
 │   │   ├── 01-testing-tools.md                 # 🧪 测试工具指南 ✅
 │   │   ├── 02-styling-tools.md                 # 🎨 样式工具 ✅
@@ -202,19 +211,23 @@ graph LR
         └── 01-graphql-apollo.md               # 🔗 GraphQL + Apollo ✅
 ```
 
-### 📚 Reference - 知识字典（19个文件）
+### 📚 Reference - 知识字典（32个文件）
 **定位**: 快速查找和理解核心概念，适合日常查阅
 **特点**: 严格差异化设计，与basics无内容重叠
 
-#### 📖 Language Concepts - 语言概念（6个文件）
+#### 📖 Language Concepts - 语言概念（10个文件）
 - [`01-react-syntax-cheatsheet.md`](reference/language-concepts/01-react-syntax-cheatsheet.md) - ⚛️ React语法速查表
 - [`02-nextjs-api-reference.md`](reference/language-concepts/02-nextjs-api-reference.md) - 🚀 Next.js API参考
 - [`03-typescript-types.md`](reference/language-concepts/03-typescript-types.md) - 📘 TypeScript类型速查
 - [`04-javascript-modern.md`](reference/language-concepts/04-javascript-modern.md) - 💎 现代JS语法
 - [`05-css-patterns.md`](reference/language-concepts/05-css-patterns.md) - 🎨 CSS-in-JS模式
 - [`06-react-19-hooks.md`](reference/language-concepts/06-react-19-hooks.md) - ⚛️ React 19关键Hooks
+- [`07-type-narrowing-guards.md`](reference/language-concepts/07-type-narrowing-guards.md) - 🛡️ TypeScript类型收窄与类型守卫
+- [`08-ts-declarations-modules.md`](reference/language-concepts/08-ts-declarations-modules.md) - 📦 TypeScript枚举、环境声明与模块系统
+- [`09-js-core-semantics.md`](reference/language-concepts/09-js-core-semantics.md) - 🧠 JavaScript核心语义（事件循环/闭包/原型链/this）
+- [`10-web-platform-apis.md`](reference/language-concepts/10-web-platform-apis.md) - 🌐 Web平台API速查
 
-#### 🛠️ Framework Patterns - 框架模式（11个文件）
+#### 🛠️ Framework Patterns - 框架模式（14个文件）
 - [`01-app-router-patterns.md`](reference/framework-patterns/01-app-router-patterns.md) - 🗺️ App Router实战模式
 - [`02-server-components-patterns.md`](reference/framework-patterns/02-server-components-patterns.md) - 🔄 服务端组件模式
 - [`03-client-components-patterns.md`](reference/framework-patterns/03-client-components-patterns.md) - 📱 客户端组件模式
@@ -226,6 +239,12 @@ graph LR
 - [`09-async-request-apis.md`](reference/framework-patterns/09-async-request-apis.md) - ⏳ 异步请求APIs
 - [`10-proxy-patterns.md`](reference/framework-patterns/10-proxy-patterns.md) - 🌉 网络代理（proxy.ts）
 - [`11-error-loading-patterns.md`](reference/framework-patterns/11-error-loading-patterns.md) - 🚨 错误与加载状态约定
+- [`12-metadata-and-script.md`](reference/framework-patterns/12-metadata-and-script.md) - 🏷️ Metadata API与next/script
+- [`13-route-segment-config.md`](reference/framework-patterns/13-route-segment-config.md) - 🧭 路由段配置
+- [`14-env-vars.md`](reference/framework-patterns/14-env-vars.md) - 🔑 环境变量加载与内联
+
+#### 📦 Library Guides - 常用库指南（1个文件）
+- [`03-ecosystem-map.md`](reference/library-guides/03-ecosystem-map.md) - 🗺️ 生态依赖地图
 
 #### 🔧 Development Tools - 开发工具（4个文件）
 - [`01-testing-tools.md`](reference/development-tools/01-testing-tools.md) - 🧪 测试工具指南
@@ -384,14 +403,14 @@ graph LR
 
 | 类别 | 文档数量 | 预计学习时长 |
 |------|----------|--------------|
-| Knowledge Points | 23个 | 30-40小时 |
+| Knowledge Points | 32个 | 30-40小时 |
 | Basics | 8个 | 40-60小时 |
 | Frameworks | 4个 | 30-40小时 |
 | Projects | 4个 | 60-80小时 |
 | Testing | 4个 | 20-30小时 |
 | Deployment | 4个 | 15-25小时 |
 | Advanced Topics | 6个 | 25-35小时 |
-| **总计** | **53个** | **220-310小时** |
+| **总计** | **62个** | **220-310小时** |
 
 ---
 

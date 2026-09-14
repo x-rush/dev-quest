@@ -44,13 +44,13 @@
 
 ## 🧭 四象限导览
 
-按内容用途四象限组织（规范见 `../shared-resources/standards/module-structure-guide.md`）。**字典参考（reference/）现有 21 篇，无难度门槛，可任意跳入查阅**：
+按内容用途四象限组织（规范见 `../shared-resources/standards/module-structure-guide.md`）。**字典参考（reference/）现有 41 篇，无难度门槛，可任意跳入查阅**：
 
 | 象限 | 目录 | 篇数 | 入口 |
 |------|------|------|------|
 | 📖 教程 | `basics/` | 8 | [环境搭建](basics/01-environment-setup.md) |
 | 🛠️ 操作指南 | `frameworks/` `projects/` `testing/` `deployment/` | 19 | [Gin 入门](frameworks/01-gin-framework-basics.md) · [gRPC 服务开发](frameworks/06-grpc-service-development.md) · [REST API 实战](projects/01-rest-api-server.md) |
-| 📚 字典参考 | `reference/` | **21** | [语言核心](reference/language-concepts/01-go-keywords.md) · [框架核心](reference/framework-essentials/01-gin-framework.md) · [数据层选型](reference/framework-essentials/03-sqlc-vs-gorm.md) · [路由器选型](reference/framework-essentials/04-router-selection.md) · [标准库字典](reference/library-guides/01-go-standard-library.md) |
+| 📚 字典参考 | `reference/` | **41** | [语言核心](reference/language-concepts/01-go-keywords.md) · [框架核心](reference/framework-essentials/01-gin-framework.md) · [数据层选型](reference/framework-essentials/03-sqlc-vs-gorm.md) · [路由器选型](reference/framework-essentials/04-router-selection.md) · [标准库字典](reference/library-guides/01-go-standard-library.md) |
 | 🎓 深度解释 | `advanced-topics/` | 6 | [并发模式](advanced-topics/performance/01-concurrency-patterns.md) |
 
 > **字典无等级，学习有路径**：同一概念的完整解释在 `reference/` 只有一份权威条目，其他目录链接过去。
@@ -70,7 +70,13 @@
 │   │   ├── 06-go-oop-concepts.md  # 面向对象概念 ✅
 │   │   ├── 07-error-handling.md   # 错误处理字典 ✅
 │   │   ├── 08-concurrency-basics.md # 并发基础（goroutine/channel/sync） ✅
-│   │   └── 09-generics.md         # 泛型（Type Parameters） ✅
+│   │   ├── 09-generics.md         # 泛型（Type Parameters） ✅
+│   │   ├── 10-slice-semantics.md  # 切片（Slice）语义 ✅
+│   │   ├── 11-map-semantics.md    # map 语义 ✅
+│   │   ├── 12-channel-semantics.md # channel 语义 ✅
+│   │   ├── 13-interface-semantics.md # 接口（Interface）语义 ✅
+│   │   ├── 14-defer-panic-recover.md # defer/panic/recover 语义 ✅
+│   │   └── 15-nil-semantics.md    # nil 语义汇总 ✅
 │   ├── 🛠️ framework-essentials/   # 框架核心知识
 │   │   ├── 01-gin-framework.md    # Gin框架速查 ✅
 │   │   ├── 02-gorm-orm.md         # GORM ORM速查 ✅
@@ -81,7 +87,21 @@
 │   ├── 📦 library-guides/         # 常用库指南
 │   │   ├── 01-go-standard-library.md # 标准库核心API ✅
 │   │   ├── 02-third-party-libs.md  # 第三方库精选 ✅
-│   │   └── 03-net-http.md          # HTTP 服务端与客户端 ✅
+│   │   ├── 03-net-http.md          # HTTP 服务端与客户端 ✅
+│   │   ├── 04-encoding-json.md     # JSON 序列化与反序列化 ✅
+│   │   ├── 05-context.md           # 取消与超时控制 ✅
+│   │   ├── 06-sync.md              # 同步原语工具箱 ✅
+│   │   ├── 07-database-sql.md      # SQL 数据库访问层 ✅
+│   │   ├── 08-time.md              # 时间、时长与定时器 ✅
+│   │   ├── 09-errors.md            # 错误值工程 ✅
+│   │   ├── 10-io-bufio.md          # 流式读写接口层 ✅
+│   │   ├── 11-os.md                # 进程环境与文件系统 ✅
+│   │   ├── 12-testing.md           # 测试与基准框架 ✅
+│   │   ├── 13-slices-maps.md       # 泛型集合工具 ✅
+│   │   ├── 14-strconv.md           # 字符串与基本类型互转 ✅
+│   │   ├── 15-log-slog.md          # 结构化日志 ✅
+│   │   ├── 16-flag.md              # 命令行参数解析 ✅
+│   │   └── 17-std-package-map.md   # 标准库全包地图 ✅
 │   └── 🔧 quick-references/       # 快速参考
 │       ├── 01-syntax-cheatsheet.md # Go语法速查表 ✅
 │       ├── 02-web-tools.md        # Web开发工具 ✅
@@ -243,7 +263,7 @@
 
 ### 📚 核心学习资源
 - 📄 **[学习路径]**: [README 学习路径建议](README.md) - 入门/进阶/精通渐进式学习
-- 📄 **[知识速查手册]**: [reference/](reference/) - 快速查阅Go语言知识点（21篇，含 [sqlc-vs-gorm](reference/framework-essentials/03-sqlc-vs-gorm.md) 与 [router-selection](reference/framework-essentials/04-router-selection.md) 选型对比）
+- 📄 **[知识速查手册]**: [reference/](reference/) - 快速查阅Go语言知识点（41篇，含 [sqlc-vs-gorm](reference/framework-essentials/03-sqlc-vs-gorm.md) 与 [router-selection](reference/framework-essentials/04-router-selection.md) 选型对比）
 - 📄 **[系统化学习]**: [basics/](basics/) - 从零开始的渐进式学习
 
 ### 🛠️ 技术框架学习

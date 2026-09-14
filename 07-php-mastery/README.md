@@ -37,7 +37,7 @@
 | 象限 | 目录 | 内容 | 访问方式 |
 |------|------|------|---------|
 | **教程** | [basics/](./basics/) | 8 篇按序入门：环境搭建 → 语言基础 → 现代 OOP → 错误处理 → 高级特性 → 综合项目 | 按编号顺序学 |
-| **字典** | [reference/](./reference/) | 18 篇全量参考：关键字、内置函数、类型与 OOP、数组模式、生成器、命名空间与自动加载、反射、字符串与正则、日期时间、异常体系、PHP 8.4/8.5 增量特性、Laravel/Symfony 速查、故障排除 | 按需跳入，无难度门槛 |
+| **字典** | [reference/](./reference/) | 29 篇全量参考：关键字、内置函数、类型与 OOP、数组模式、生成器、命名空间与自动加载、反射、字符串与正则、日期时间、异常体系、PHP 8.4/8.5 增量特性、弱比较与强比较、值语义与引用、超全局变量、运算符、魔术方法、常量与魔术常量、PDO/JSON、文件与流 I/O、HTTP/会话/Cookie、扩展地图、Laravel/Symfony 速查、故障排除 | 按需跳入，无难度门槛 |
 | **操作指南** | [frameworks/](./frameworks/) · [projects/](./projects/) · [testing/](./testing/) · [deployment/](./deployment/) | Laravel 13 入门/进阶/生态/工具链；4 个 ⭐ 递进项目；PHPUnit/Pest/Feature 测试；Docker/服务器/CI-CD 部署 | 面向目标，照做即可 |
 | **解释** | [advanced-topics/](./advanced-topics/) | 4 个专题目录：架构解析、查询优化、缓存与队列、安全实践、运行时专题（FPM vs 常驻 / Workerman / Webman / Swoole 协程） | 为什么这样设计 |
 
@@ -86,13 +86,24 @@
 │   │   ├── 09-strings-regex.md              # 字符串与正则
 │   │   ├── 10-datetime.md                   # 日期时间
 │   │   ├── 11-errors-exceptions.md          # 异常体系与错误处理
-│   │   └── 12-modern-php-85.md              # PHP 8.4/8.5 增量特性
+│   │   ├── 12-modern-php-85.md              # PHP 8.4/8.5 增量特性
+│   │   ├── 13-weak-comparison.md            # 弱比较与强比较（== / ===）
+│   │   ├── 14-references-value-semantics.md # 值语义与引用（&）
+│   │   ├── 15-superglobals.md               # 超全局变量
+│   │   ├── 16-operators.md                  # 运算符全表与优先级
+│   │   ├── 17-magic-methods.md              # 魔术方法全表
+│   │   └── 18-constants-magic-constants.md  # 常量与魔术常量
 │   ├── framework-essentials/
 │   │   ├── 01-laravel-essentials.md         # Laravel 核心速查
 │   │   └── 02-symfony-essentials.md         # Symfony 核心速查
 │   ├── library-guides/
 │   │   ├── 01-standard-library-spl.md       # 标准库 SPL
-│   │   └── 02-composer-ecosystem.md         # Composer 生态
+│   │   ├── 02-composer-ecosystem.md         # Composer 生态
+│   │   ├── 03-pdo.md                        # PDO 数据库访问层
+│   │   ├── 04-json.md                       # JSON 编解码
+│   │   ├── 05-file-stream-io.md             # 文件与流 I/O
+│   │   ├── 06-http-session-cookie.md        # HTTP、会话与 Cookie
+│   │   └── 07-extension-map.md              # 内置扩展地图
 │   └── quick-references/
 │       ├── 01-php-cheatsheet.md             # PHP 快速速查表
 │       └── 02-troubleshooting.md            # 故障排除

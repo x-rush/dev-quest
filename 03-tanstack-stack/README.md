@@ -35,7 +35,7 @@
 | 象限 | 目录 | 内容 | 说明 |
 |------|------|------|------|
 | **教程** | [basics/](basics/) | 8 篇按序入门 | 从环境搭建到第一个完整项目，按编号顺序学习 |
-| **字典** | [reference/](reference/) | 20 篇全量参考 | 概念的唯一权威出处，无难度门槛，随时跳入查阅 |
+| **字典** | [reference/](reference/) | 31 篇全量参考 | 概念的唯一权威出处，无难度门槛，随时跳入查阅 |
 | **操作指南** | [frameworks/](frameworks/) · [projects/](projects/) · [testing/](testing/) · [deployment/](deployment/) | 15 篇任务式指南 | "怎么完成这个任务"：框架实操、实战项目、测试工程、部署运维 |
 | **深度解释** | [advanced-topics/](advanced-topics/) | 4 篇原理剖析 | "为什么这样设计"：缓存架构、性能与安全 |
 
@@ -81,7 +81,8 @@
 │   │   ├── 02-router-essentials.md                #   Router 框架要点：守卫、预加载、SSR
 │   │   ├── 03-queryclient-config.md               #   QueryClient 全局配置：defaultOptions 与网络模式
 │   │   ├── 04-prefetch-ssr.md                     #   预取与 SSR 水合：prefetch、dehydrate、RSC 流式预取
-│   │   └── 05-mutation-state.md                   #   Mutation 状态与副作用：useMutationState
+│   │   ├── 05-mutation-state.md                   #   Mutation 状态与副作用：useMutationState
+│   │   └── 06-start-server-functions.md           #   Start Server Functions：createServerFn 全解
 │   ├── language-concepts/
 │   │   ├── 01-query-core-api.md                   #   Query 核心 API
 │   │   ├── 02-table-core-api.md                   #   Table 核心 API（v9：useTable + features）
@@ -93,7 +94,17 @@
 │   │   ├── 08-placeholder-data.md                 #   占位数据：placeholderData 与 isPlaceholderData
 │   │   ├── 09-suspense-query.md                   #   Suspense 查询：useSuspenseQuery 与数据保证
 │   │   ├── 10-network-mode.md                     #   网络模式与离线支持：networkMode
-│   │   └── 11-search-params.md                    #   URL 搜索参数状态：validateSearch 与类型化 search
+│   │   ├── 11-search-params.md                    #   URL 搜索参数状态：validateSearch 与类型化 search
+│   │   ├── 12-use-queries.md                      #   useQueries：并行与动态查询列表
+│   │   ├── 13-use-is-fetching-use-is-mutating.md  #   useIsFetching / useIsMutating / useMutationState
+│   │   ├── 14-query-persistence.md                #   缓存持久化：PersistQueryClientProvider
+│   │   ├── 15-enabled-conditional-queries.md      #   条件与依赖查询：enabled 与 skipToken
+│   │   ├── 16-render-optimization.md              #   渲染优化：select 与 structuralSharing
+│   │   ├── 17-flexrender.md                       #   FlexRender：Table 渲染入口与单元格上下文
+│   │   ├── 18-controlled-state.md                 #   受控状态：state 切片与 OnChangeFn 回调
+│   │   ├── 19-outlet-and-route-components.md      #   Outlet 与路由组件：notFound/error/pending
+│   │   ├── 20-use-match-hooks.md                  #   useMatch / useMatches / router.invalidate
+│   │   └── 21-usefield-and-createformhook.md      #   useField 与 createFormHook：表单工厂
 │   ├── library-guides/
 │   │   ├── 01-ecosystem-integrations.md           #   生态集成：官方周边库指南
 │   │   └── 02-related-libs.md                     #   相关库搭配：Zustand、Jotai、Axios 等
