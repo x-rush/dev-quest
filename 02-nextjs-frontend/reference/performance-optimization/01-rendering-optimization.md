@@ -33,15 +33,13 @@
 // next.config.js - 优化配置
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // 启用自动优化
-  optimizeFonts: true,
-  optimizeImages: true,
+  // 字体与图片优化默认开启（Next 16 已移除 optimizeFonts/optimizeImages 键）
   experimental: {
     optimizeCss: true,
     optimizePackageImports: ['lucide-react', '@radix-ui/react-icons'],
   },
 
-  // 图片优化配置
+  // 图片优化配置（图片优化默认开启，经 images 配置控制，无 optimizeImages 键）
   images: {
     formats: ['image/webp', 'image/avif'],
     deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048],
@@ -136,8 +134,7 @@ export default function RootLayout({
 }
 
 // components/performance/Preconnect.tsx
-import { Head } from 'next/head';
-
+// App Router 不支持 next/head；React 19 会将组件树中的 <link> 自动提升到 <head>
 interface PreconnectProps {
   href: string;
   crossOrigin?: string;
@@ -145,15 +142,11 @@ interface PreconnectProps {
 
 export function Preconnect({ href, crossOrigin }: PreconnectProps) {
   return (
-    <>
-      <Head>
-        <link
-          rel="preconnect"
-          href={href}
-          crossOrigin={crossOrigin}
-        />
-      </Head>
-    </>
+    <link
+      rel="preconnect"
+      href={href}
+      crossOrigin={crossOrigin}
+    />
   );
 }
 ```
@@ -665,7 +658,7 @@ interface UseOptimizedDataOptions<T> {
   queryKey: string[];
   queryFn: () => Promise<T>;
   staleTime?: number;
-  cacheTime?: number;
+  gcTime?: number;
   refetchOnWindowFocus?: boolean;
   refetchOnReconnect?: boolean;
 }
@@ -674,7 +667,7 @@ export function useOptimizedData<T>({
   queryKey,
   queryFn,
   staleTime = 5 * 60 * 1000, // 5分钟
-  cacheTime = 10 * 60 * 1000, // 10分钟
+  gcTime = 10 * 60 * 1000, // 10分钟
   refetchOnWindowFocus = false,
   refetchOnReconnect = true,
 }: UseOptimizedDataOptions<T>) {
@@ -682,7 +675,7 @@ export function useOptimizedData<T>({
     queryKey,
     queryFn,
     staleTime,
-    cacheTime,
+    gcTime,
     refetchOnWindowFocus,
     refetchOnReconnect,
   });
@@ -740,7 +733,7 @@ export function useOptimisticData<T>(
 
 ```typescript
 // lib/monitoring/web-vitals.ts
-import { getCLS, getFID, getFCP, getLCP, getTTFB } from 'web-vitals';
+import { onCLS, onINP, onFCP, onLCP, onTTFB } from 'web-vitals';
 
 interface Metric {
   name: string;
@@ -819,11 +812,11 @@ export default function RootLayout({
   useEffect(() => {
     if (typeof window !== 'undefined') {
       // 监控所有 Core Web Vitals
-      getCLS((metric) => WebVitalsMonitor.recordMetric(metric));
-      getFID((metric) => WebVitalsMonitor.recordMetric(metric));
-      getFCP((metric) => WebVitalsMonitor.recordMetric(metric));
-      getLCP((metric) => WebVitalsMonitor.recordMetric(metric));
-      getTTFB((metric) => WebVitalsMonitor.recordMetric(metric));
+      onCLS((metric) => WebVitalsMonitor.recordMetric(metric));
+      onINP((metric) => WebVitalsMonitor.recordMetric(metric));
+      onFCP((metric) => WebVitalsMonitor.recordMetric(metric));
+      onLCP((metric) => WebVitalsMonitor.recordMetric(metric));
+      onTTFB((metric) => WebVitalsMonitor.recordMetric(metric));
     }
   }, []);
 
@@ -924,7 +917,7 @@ export class PerformanceMonitor {
 import { useEffect, useRef } from 'react';
 
 export function usePerformance(componentName: string) {
-  const mountTime = useRef<number>();
+  const mountTime = useRef<number | undefined>(undefined);
 
   useEffect(() => {
     mountTime.current = Date.now();
@@ -972,7 +965,7 @@ export function usePerformance(componentName: string) {
 
 ```typescript
 // hooks/useMemoizedComponent.ts
-import { useMemo, useCallback } from 'react';
+import React, { useMemo, useCallback } from 'react';
 
 interface UseMemoizedComponentProps<T, P> {
   component: React.ComponentType<T>;

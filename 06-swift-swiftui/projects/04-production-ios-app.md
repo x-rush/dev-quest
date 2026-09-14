@@ -55,7 +55,7 @@ struct LiveWeatherService: WeatherServicing {          // 生产实现
 
 // 环境注入：运行时给实现，测试时给 Mock
 struct LiveWeatherServiceKey: EnvironmentKey {
-    static let liveValue: any WeatherServicing = LiveWeatherService()
+    static let defaultValue: any WeatherServicing = LiveWeatherService()
 }
 
 extension EnvironmentValues {

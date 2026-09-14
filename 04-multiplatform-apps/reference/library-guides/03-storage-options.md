@@ -30,8 +30,8 @@
 
 ```ts
 // MMKV —— 同步键值（数据量小时"像操作内存一样"）
-import { MMKV } from 'react-native-mmkv';
-const storage = new MMKV();
+import { createMMKV } from 'react-native-mmkv';
+const storage = createMMKV();
 storage.set('theme', 'dark');
 const theme: string | undefined = storage.getString('theme');
 
@@ -50,14 +50,16 @@ const rows = await db.getAllAsync<{ id: string; body: string }>(
 );
 ```
 
+> **v3→v4 迁移**：react-native-mmkv v4 移除了 `MMKV` 类的值导出，改用 `createMMKV(configuration?)` 工厂创建实例（未固定版本 `npm install` 会直接装到 v4）；`set`/`getString` 等实例方法不变，但删除键的方法由 `delete(key)` 改名为 `remove(key)`（返回是否删除）。
+
 ## 💡 示例
 
 ```ts
 // 组合模式：MMKV 缓存 + SecureStore 存凭据，接口收敛到一个模块
-import { MMKV } from 'react-native-mmkv';
+import { createMMKV } from 'react-native-mmkv';
 import * as SecureStore from 'expo-secure-store';
 
-const cache = new MMKV({ id: 'cache' });
+const cache = createMMKV({ id: 'cache' });
 
 export const prefs = {
   get: (key: string) => cache.getString(key),

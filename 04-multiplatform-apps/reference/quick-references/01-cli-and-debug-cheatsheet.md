@@ -44,8 +44,8 @@ npx expo install expo@latest --fix   # Expo SDK 升级
 
 | 手段 | 打开方式 |
 |------|---------|
-| 开发者菜单 | 模拟器 `Cmd+D`（iOS）/ `Cmd+M` 或摇一摇（Android）；CLI `j`（Expo） |
-| React Native DevTools | 菜单 "Open React DevTools"；含 Console/Components/Network/Profiler |
+| 开发者菜单 | 模拟器 `Cmd+D`（iOS）/ `Cmd+M` 或摇一摇（Android）；CLI `m`（Expo） |
+| React Native DevTools | 菜单 "Open DevTools"（CLI `j`）；含 Console/Components/Network/Profiler |
 | Element Inspector | 菜单 "Toggle Element Inspector"，点元素查样式 |
 | Perf Monitor | 菜单打开，观察 JS/UI 双线程帧率 |
 | 日志 | Metro 终端（console 输出）；`adb logcat *:S ReactNativeJS:V` |

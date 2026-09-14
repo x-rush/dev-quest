@@ -127,14 +127,14 @@ func loadFailureSetsFailedState() async {
     for _ in 0..<10 where viewModel.state == .loading {
         try? await Task.sleep(for: .milliseconds(50))
     }
-    #expect(matches: viewModel.state) { state in
-        if case .failed = state { return true }
-        return false
+    guard case .failed = viewModel.state else {
+        Issue.record("预期 failed 态，实际 \(viewModel.state)")
+        return
     }
 }
 ```
 
-协议定义见 [04-production-ios-app.md](../projects/04-production-ios-app.md) 第二步；`matches:` 用于匹配枚举关联值。
+协议定义见 [04-production-ios-app.md](../projects/04-production-ios-app.md) 第二步。
 
 ## ✅ 最佳实践
 

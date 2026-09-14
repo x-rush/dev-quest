@@ -831,6 +831,7 @@ import (
     "encoding/json"
     "fmt"
     "os"
+    "time"
 )
 
 type Person struct {
@@ -838,6 +839,30 @@ type Person struct {
     Age     int      `json:"age"`
     Email   string   `json:"email,omitempty"`
     Hobbies []string `json:"hobbies"`
+}
+
+// 自定义日期类型
+type CustomDate struct {
+    time.Time
+}
+
+// 自定义MarshalJSON
+func (cd CustomDate) MarshalJSON() ([]byte, error) {
+    return json.Marshal(cd.Time.Format("2006-01-02"))
+}
+
+// 自定义UnmarshalJSON
+func (cd *CustomDate) UnmarshalJSON(data []byte) error {
+    var s string
+    if err := json.Unmarshal(data, &s); err != nil {
+        return err
+    }
+    t, err := time.Parse("2006-01-02", s)
+    if err != nil {
+        return err
+    }
+    cd.Time = t
+    return nil
 }
 
 func main() {
@@ -923,31 +948,7 @@ func main() {
         }
     }
 
-    // 自定义编解码
-    type CustomDate struct {
-        time.Time
-    }
-
-    // 自定义MarshalJSON
-    func (cd CustomDate) MarshalJSON() ([]byte, error) {
-        return json.Marshal(cd.Time.Format("2006-01-02"))
-    }
-
-    // 自定义UnmarshalJSON
-    func (cd *CustomDate) UnmarshalJSON(data []byte) error {
-        var s string
-        if err := json.Unmarshal(data, &s); err != nil {
-            return err
-        }
-        t, err := time.Parse("2006-01-02", s)
-        if err != nil {
-            return err
-        }
-        cd.Time = t
-        return nil
-    }
-
-    // 使用自定义类型
+    // 使用自定义类型（CustomDate 定义在包级）
     type Event struct {
         Name string      `json:"name"`
         Date CustomDate  `json:"date"`
@@ -1537,7 +1538,7 @@ package main
 import (
     "flag"
     "fmt"
-    "os"
+    "time"
 )
 
 func main() {
@@ -1696,7 +1697,10 @@ func main() {
 ```go
 package math
 
-import "testing"
+import (
+    "fmt"
+    "testing"
+)
 
 // 待测试的函数
 func Add(a, b int) int {

@@ -29,8 +29,9 @@ TanStack 各库的核心 API 都是泛型函数，类型从"数据源头"自动�
 const { data } = useQuery({ queryKey: ['users'], queryFn: fetchUsers })
 //    ^? User[] | undefined —— 自动推断
 
-// Table：ColumnDef 的 TData 决定 accessorKey 的候选字段
-const columns: ColumnDef<User>[] = [
+// Table：v9 ColumnDef 双泛型 <TFeatures, TData>，TData 决定 accessorKey 的候选字段
+const features = tableFeatures({})
+const columns: ColumnDef<typeof features, User>[] = [
   { accessorKey: 'name', header: '姓名' }, // 只能填 User 的键，写错编译报错
   { accessorFn: (row) => row.age, header: '年龄' }, // row 自动是 User
 ]

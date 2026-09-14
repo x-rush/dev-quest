@@ -214,7 +214,7 @@ worker.terminate();                            // 强制终止（不等待）
 ### 陷阱
 - 主线程与 Worker **不共享堆内存**——传大对象走结构化克隆（深拷贝）；真要共享用 `SharedArrayBuffer` + `Atomics`
 - 线程数别超 `os.availableParallelism()`，线程切换与内存开销反而拖慢
-- Worker 内抛出的异常不会崩主进程，但 `error` 事件不监听就静默丢失
+- Worker 内抛出的异常若不监听 `error` 事件，会以未捕获异常冒泡导致**主进程崩溃退出**（exit 1）——必须注册 `worker.on("error", ...)`
 
 ## 9. 其他常用模块一览
 

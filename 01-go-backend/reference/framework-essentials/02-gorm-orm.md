@@ -1138,11 +1138,13 @@ func (u *User) BeforeUpdate(tx *gorm.DB) error {
 
 // 更新后钩子
 func (u *User) AfterUpdate(tx *gorm.DB) error {
-    // 记录更新日志
+    // 记录更新日志（gorm 无 ChangedFields()，需用 Statement.Changed 逐字段判定）
     changes := make(map[string]interface{})
 
-    for _, field := range tx.Statement.ChangedFields() {
-        changes[field] = tx.Statement.ReflectValue.FieldByName(field).Interface()
+    for _, field := range []string{"Name", "Email", "Password", "Age"} {
+        if tx.Statement.Changed(field) {
+            changes[field] = tx.Statement.ReflectValue.FieldByName(field).Interface()
+        }
     }
 
     if len(changes) > 0 {
@@ -1530,17 +1532,17 @@ import (
     "myapp/services"
 )
 
-// 设置测试数据库
-func setupTestDB(t *testing.T) *gorm.DB {
+// 设置测试数据库（testing.TB 同时兼容 *testing.T 与 *testing.B）
+func setupTestDB(tb testing.TB) *gorm.DB {
     db, err := gorm.Open(sqlite.Open("file::memory:?cache=shared"), &gorm.Config{})
     if err != nil {
-        t.Fatal("Failed to connect to test database:", err)
+        tb.Fatal("Failed to connect to test database:", err)
     }
 
     // 自动迁移
     err = db.AutoMigrate(&models.User{}, &models.Profile{}, &models.Order{})
     if err != nil {
-        t.Fatal("Failed to migrate test database:", err)
+        tb.Fatal("Failed to migrate test database:", err)
     }
 
     return db

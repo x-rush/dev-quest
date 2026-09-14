@@ -845,7 +845,7 @@ export const queryClient = new QueryClient({
 
       // 缓存配置
       staleTime: 5 * 60 * 1000, // 5分钟内数据视为新鲜
-      cacheTime: 10 * 60 * 1000, // 10分钟缓存时间
+      gcTime: 10 * 60 * 1000, // 10分钟缓存时间
       refetchOnWindowFocus: false,
       refetchOnReconnect: true,
 
@@ -984,6 +984,7 @@ export function useUpdateProfile(userId: string) {
 // hooks/use-realtime.ts
 import { useEffect, useRef, useCallback } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
+import { toast } from 'sonner';
 
 interface RealtimeConfig {
   url: string;
@@ -997,7 +998,7 @@ interface RealtimeConfig {
 export function useRealtime(config: RealtimeConfig) {
   const wsRef = useRef<WebSocket | null>(null);
   const queryClient = useQueryClient();
-  const reconnectTimeoutRef = useRef<NodeJS.Timeout>();
+  const reconnectTimeoutRef = useRef<NodeJS.Timeout | undefined>(undefined);
   const reconnectAttempts = useRef(0);
   const maxReconnectAttempts = 5;
 
@@ -1740,7 +1741,7 @@ export const useTaskStore = createDatabaseStore<Task>('task-store', '/api/tasks'
 ```typescript
 // hooks/use-optimized-selectors.ts
 import { useMemo } from 'react';
-import { shallow } from 'zustand/shallow';
+import { useShallow } from 'zustand/react/shallow';
 
 // 记忆化选择器
 export function useMemoizedSelector<T, R>(
@@ -1776,7 +1777,7 @@ export function useComplexUserSelector() {
 
 // 计算属性选择器
 export function useComputedNotifications() {
-  const notifications = useAppStore(state => state.notifications, shallow);
+  const notifications = useAppStore(useShallow(state => state.notifications));
 
   return useMemo(() => ({
     total: notifications.length,

@@ -138,7 +138,7 @@ const queryClient = useQueryClient()
 
 queryClient.invalidateQueries({ queryKey: ['todos'] })        // 失效并重取
 queryClient.getQueryData<Todo[]>(['todos'])                   // 只读缓存
-queryClient.setQueryData<Todo[]>(['todos'], (old) => old ?? []) // 直接写入（updater 返回 undefined 会清空条目）
+queryClient.setQueryData<Todo[]>(['todos'], (old) => old ?? []) // 直接写入（updater 返回 undefined 是 no-op，不会清空条目）
 ```
 
 完整方法表见 [Query 核心 API](../reference/language-concepts/01-query-core-api.md)。

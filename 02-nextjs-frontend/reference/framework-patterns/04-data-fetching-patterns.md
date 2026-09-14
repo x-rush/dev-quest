@@ -103,6 +103,7 @@ export function createDataFetchingStrategy(config: {
 // app/posts/page.tsx
 import { notFound } from 'next/navigation';
 import { cache } from 'react';
+import { ReloadButton } from '@/components/reload-button';
 
 // 带缓存的数据库查询
 const getPosts = cache(async () => {
@@ -154,6 +155,17 @@ async function getPostData(slug: string) {
   return { post, relatedPosts, author };
 }
 
+// components/reload-button.tsx —— 异步 Server Component 内不能传事件处理器，重试按钮须抽为客户端组件
+'use client';
+
+export function ReloadButton() {
+  return (
+    <button onClick={() => window.location.reload()}>
+      Try Again
+    </button>
+  );
+}
+
 // 条件渲染和错误处理
 export default async function PostPage({ params }: { params: Promise<{ slug: string }> }) {
   try {
@@ -192,9 +204,7 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
       <div className="error-container">
         <h1>Unable to Load Post</h1>
         <p>We're having trouble loading this content. Please try again later.</p>
-        <button onClick={() => window.location.reload()}>
-          Try Again
-        </button>
+        <ReloadButton />
       </div>
     );
   }
@@ -504,7 +514,7 @@ function StatsCardsSkeleton() {
 ```typescript
 // lib/swr-config.ts
 import useSWR, { SWRConfig, SWRConfiguration } from 'swr';
-import { Cache } from 'swr/_internal';
+import type { ReactNode } from 'react';
 
 // 自定义 fetcher
 const fetcher = async <T>(url: string): Promise<T> => {
@@ -520,8 +530,9 @@ const fetcher = async <T>(url: string): Promise<T> => {
   return response.json();
 };
 
-// 增强的缓存实现
-class EnhancedCache extends Cache<any> {
+// 自定义 Map 缓存（SWR 的缓存须为 Map 实例，经 SWRConfig 的 provider 注入；
+// swr/_internal 导出的 Cache 是类型接口，不可 extends）
+class PersistentCache extends Map<string, any> {
   private persistKey = 'swr-cache-persist';
 
   constructor() {
@@ -532,7 +543,7 @@ class EnhancedCache extends Cache<any> {
   // 持久化缓存到 localStorage
   persistCache() {
     try {
-      const cacheData = this.dump();
+      const cacheData = Array.from(this.entries());
       localStorage.setItem(this.persistKey, JSON.stringify(cacheData));
     } catch (error) {
       console.warn('Failed to persist cache:', error);
@@ -544,8 +555,9 @@ class EnhancedCache extends Cache<any> {
     try {
       const persistedData = localStorage.getItem(this.persistKey);
       if (persistedData) {
-        const cacheData = JSON.parse(persistedData);
-        this.load(cacheData);
+        (JSON.parse(persistedData) as [string, any][]).forEach(([key, value]) => {
+          this.set(key, value);
+        });
       }
     } catch (error) {
       console.warn('Failed to load persisted cache:', error);
@@ -555,7 +567,7 @@ class EnhancedCache extends Cache<any> {
   // 清理过期缓存
   clearExpiredCache(maxAge: number = 24 * 60 * 60 * 1000) {
     const now = Date.now();
-    this.keys().forEach(key => {
+    Array.from(this.keys()).forEach(key => {
       const item = this.get(key);
       if (item && (now - item.createdAt) > maxAge) {
         this.delete(key);
@@ -564,25 +576,22 @@ class EnhancedCache extends Cache<any> {
     this.persistCache();
   }
 
-  set(key: string, value: any, options?: any) {
-    const result = super.set(key, value, options);
+  set(key: string, value: any) {
+    super.set(key, value);
     this.persistCache();
-    return result;
+    return this;
   }
 
   delete(key: string) {
-    const result = super.delete(key);
+    const existed = super.delete(key);
     this.persistCache();
-    return result;
+    return existed;
   }
 }
 
 // 全局 SWR 配置
 export const swrConfig: SWRConfiguration = {
   fetcher,
-
-  // 缓存配置
-  cache: new EnhancedCache(),
 
   // 重新验证策略
   revalidateOnFocus: true,
@@ -621,6 +630,20 @@ export const swrConfig: SWRConfiguration = {
     console.log('SWR Success:', key);
   },
 };
+
+// 应用根组件注入自定义缓存
+export function SWRProvider({ children }: { children: ReactNode }) {
+  return (
+    <SWRConfig
+      value={{
+        ...swrConfig,
+        provider: () => new PersistentCache(),
+      }}
+    >
+      {children}
+    </SWRConfig>
+  );
+}
 
 // 自定义 Hook: 用户数据
 export function useUser(userId?: string) {
@@ -727,6 +750,8 @@ export function useBatchData<T>(urls: string[], options?: {
 ```typescript
 // lib/query-client.ts
 import { QueryClient } from '@tanstack/react-query';
+import { Component } from 'react';
+import type { ErrorInfo, ReactNode } from 'react';
 import { defaultOptions } from './query-options';
 
 // 创建 Query Client
@@ -753,7 +778,7 @@ export const queryClient = new QueryClient({
 
       // 缓存配置
       staleTime: 5 * 60 * 1000, // 5分钟
-      cacheTime: 10 * 60 * 1000, // 10分钟
+      gcTime: 10 * 60 * 1000, // 10分钟
       refetchOnWindowFocus: false,
       refetchOnReconnect: true,
       refetchOnMount: true,
@@ -816,7 +841,7 @@ export class QueryErrorBoundary extends Component<
 
 // hooks/use-query-with-loading.ts
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { useState, useCallback } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 
 interface UseQueryWithLoadingOptions<TData, TError> {
   queryKey: any[];
@@ -839,16 +864,26 @@ export function useQueryWithLoading<TData = unknown, TError = Error>(
     refetch,
     ...queryInfo
   } = useQuery({
-    ...options,
-    onSuccess: (data) => {
+    queryKey: options.queryKey,
+    queryFn: options.queryFn,
+    staleTime: options.staleTime,
+    gcTime: options.cacheTime,
+  });
+
+  // v5 已移除 useQuery 的 onSuccess/onError 逐查询回调，改用副作用监听返回的 data/error
+  useEffect(() => {
+    if (data !== undefined) {
       setIsRefetching(false);
       options.onSuccess?.(data);
-    },
-    onError: (error) => {
+    }
+  }, [data]);
+
+  useEffect(() => {
+    if (error) {
       setIsRefetching(false);
-      options.onError?.(error);
-    },
-  });
+      options.onError?.(error as TError);
+    }
+  }, [error]);
 
   const handleRefetch = useCallback(async () => {
     setIsRefetching(true);
@@ -949,6 +984,8 @@ export function useTasks() {
 }
 
 export function useCreateTask() {
+  const queryClient = useQueryClient();
+
   return useOptimisticMutation<Task, Partial<Task>>({
     mutationFn: async (taskData) => {
       const response = await fetch('/api/tasks', {
@@ -1112,7 +1149,7 @@ export async function GET(request: NextRequest) {
 
     if (error instanceof z.ZodError) {
       return NextResponse.json(
-        { error: 'Invalid query parameters', details: error.errors },
+        { error: 'Invalid query parameters', details: error.issues },
         { status: 400 }
       );
     }
@@ -1176,7 +1213,7 @@ export async function POST(request: NextRequest) {
 
     if (error instanceof z.ZodError) {
       return NextResponse.json(
-        { error: 'Invalid request body', details: error.errors },
+        { error: 'Invalid request body', details: error.issues },
         { status: 400 }
       );
     }
@@ -1291,7 +1328,7 @@ export async function PATCH(
 
     if (error instanceof z.ZodError) {
       return NextResponse.json(
-        { error: 'Invalid request body', details: error.errors },
+        { error: 'Invalid request body', details: error.issues },
         { status: 400 }
       );
     }

@@ -266,7 +266,7 @@ imag(c complexType) floatType
 ```go
 // 创建复数
 c1 := complex(3.0, 4.0)    // complex128
-c2 := complex(1.5, 2.5)    // complex64
+c2 := complex(1.5, 2.5)    // complex128（未指定类型时实参按默认类型 float64 推导）
 fmt.Println(c1)             // (3+4i)
 
 // 获取实部和虚部

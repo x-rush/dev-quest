@@ -31,7 +31,9 @@ package main
 
 import (
     "fmt"
-    "github.com/json-iterator/go"
+    "strings"
+
+    jsoniter "github.com/json-iterator/go"
 )
 
 type User struct {
@@ -41,7 +43,7 @@ type User struct {
     Hobbies []string `json:"hobbies"`
 }
 
-var jsoniter = jsoniter.ConfigCompatibleWithStandardLibrary
+var cfg = jsoniter.ConfigCompatibleWithStandardLibrary
 
 func main() {
     // 编码
@@ -51,7 +53,7 @@ func main() {
         Hobbies: []string{"reading", "gaming"},
     }
 
-    data, err := jsoniter.Marshal(user)
+    data, err := cfg.Marshal(user)
     if err != nil {
         panic(err)
     }
@@ -59,7 +61,7 @@ func main() {
 
     // 解码
     var decoded User
-    err = jsoniter.Unmarshal(data, &decoded)
+    err = cfg.Unmarshal(data, &decoded)
     if err != nil {
         panic(err)
     }
@@ -92,7 +94,9 @@ go get github.com/segmentio/encoding
 package main
 
 import (
+    "bytes"
     "fmt"
+
     "github.com/segmentio/encoding/json"
 )
 
@@ -124,18 +128,15 @@ func main() {
     }
     fmt.Printf("解码: %+v\n", decoded)
 
-    // 自定义配置
-    config := json.EncoderConfig{
-        EscapeHTML: true,
-        SortMapKeys: true,
-    }
-    encoder := json.NewEncoder(config)
+    // 流式编码（API 与 encoding/json 兼容）
+    var buf bytes.Buffer
+    encoder := json.NewEncoder(&buf)
 
-    customData, err := encoder.Encode(product)
+    err = encoder.Encode(product)
     if err != nil {
         panic(err)
     }
-    fmt.Println("自定义编码:", string(customData))
+    fmt.Println("流式编码:", buf.String())
 }
 ```
 
@@ -366,7 +367,6 @@ go get github.com/jmoiron/sqlx
 package main
 
 import (
-    "database/sql"
     "fmt"
     "log"
     "time"
@@ -431,14 +431,22 @@ func main() {
     }
     fmt.Printf("用户列表: %+v\n", users)
 
-    // 命名参数查询
+    // 命名参数查询（Select 不支持命名参数，需用 NamedQuery）
     var usersByAge []User
-    err = db.Select(&usersByAge, "SELECT * FROM users WHERE age > :age", map[string]interface{}{
+    rows, err := db.NamedQuery("SELECT * FROM users WHERE age > :age", map[string]interface{}{
         "age": 20,
     })
     if err != nil {
         log.Fatal("查询失败:", err)
     }
+    for rows.Next() {
+        var u User
+        if err := rows.StructScan(&u); err != nil {
+            log.Fatal("扫描失败:", err)
+        }
+        usersByAge = append(usersByAge, u)
+    }
+    rows.Close()
     fmt.Printf("年龄大于20的用户: %+v\n", usersByAge)
 
     // 事务处理
@@ -913,6 +921,9 @@ package main
 
 import (
     "fmt"
+
+    "github.com/fsnotify/fsnotify"
+    "github.com/spf13/pflag"
     "github.com/spf13/viper"
 )
 
@@ -1046,6 +1057,8 @@ package main
 
 import (
     "fmt"
+    "os"
+
     "github.com/spf13/cobra"
 )
 
@@ -1177,8 +1190,8 @@ func main() {
     }
     fmt.Printf("key1 = %s\n", val)
 
-    // 设置过期时间
-    err = rdb.SetEX(ctx, "temp_key", "temp_value", 10*time.Second).Err()
+    // 设置过期时间（v9 通过 Set 的 TTL 参数实现）
+    err = rdb.Set(ctx, "temp_key", "temp_value", 10*time.Second).Err()
     if err != nil {
         panic(err)
     }
@@ -1340,7 +1353,11 @@ package main
 
 import (
     "fmt"
+
+    "github.com/go-playground/locales/en"
+    ut "github.com/go-playground/universal-translator"
     "github.com/go-playground/validator/v10"
+    en_translations "github.com/go-playground/validator/v10/translations/en"
 )
 
 type User struct {
@@ -1433,7 +1450,7 @@ func main() {
     uni := ut.New(en, en)
     trans, _ := uni.GetTranslator("en")
 
-    _ = en_trans.RegisterDefaultTranslations(validate, trans)
+    _ = en_translations.RegisterDefaultTranslations(validate, trans)
 
     err = validate.Struct(user)
     if err != nil {
@@ -1670,7 +1687,9 @@ go get github.com/google/uuid
 package main
 
 import (
+    "bytes"
     "fmt"
+
     "github.com/google/uuid"
 )
 
@@ -1687,7 +1706,10 @@ func main() {
     fmt.Printf("解析的UUID: %s\n", parsed.String())
 
     // 生成UUID v1
-    v1 := uuid.NewUUID()
+    v1, err := uuid.NewUUID()
+    if err != nil {
+        panic(err)
+    }
     fmt.Printf("UUID v1: %s\n", v1.String())
 
     // 生成UUID v3 (基于MD5哈希)
@@ -1713,7 +1735,8 @@ func main() {
     id1 := uuid.New()
     id2 := uuid.New()
     fmt.Printf("UUID相等: %t\n", id1 == id2)
-    fmt.Printf("UUID比较: %d\n", id1.Compare(id2))
+    // UUID 类型没有 Compare 方法，按字节序比较
+    fmt.Printf("UUID比较: %d\n", bytes.Compare(id1[:], id2[:]))
 
     // 从字符串创建UUID
     fromString, err := uuid.Parse("123e4567-e89b-12d3-a456-426614174000")
@@ -1723,9 +1746,12 @@ func main() {
     fmt.Printf("从字符串创建: %s\n", fromString.String())
 
     // 从字节数组创建UUID
-    var bytes [16]byte
-    copy(bytes[:], []byte("1234567890123456"))
-    fromBytes := uuid.FromBytesOrNil(bytes[:])
+    var rawBytes [16]byte
+    copy(rawBytes[:], []byte("1234567890123456"))
+    fromBytes, err := uuid.FromBytes(rawBytes[:])
+    if err != nil {
+        panic(err)
+    }
     fmt.Printf("从字节数组创建: %s\n", fromBytes.String())
 }
 ```
@@ -1745,8 +1771,20 @@ package main
 
 import (
     "fmt"
+
     "golang.org/x/crypto/bcrypt"
 )
+
+// 密码哈希函数（包级函数）
+func hashPassword(password string) (string, error) {
+    bytes, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
+    return string(bytes), err
+}
+
+func checkPasswordHash(password, hash string) bool {
+    err := bcrypt.CompareHashAndPassword([]byte(hash), []byte(password))
+    return err == nil
+}
 
 func main() {
     password := "mySecurePassword123"
@@ -1792,18 +1830,7 @@ func main() {
     }
     fmt.Printf("哈希cost: %d\n", cost)
 
-    // 密码哈希函数
-    func hashPassword(password string) (string, error) {
-        bytes, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
-        return string(bytes), err
-    }
-
-    func checkPasswordHash(password, hash string) bool {
-        err := bcrypt.CompareHashAndPassword([]byte(hash), []byte(password))
-        return err == nil
-    }
-
-    // 使用函数
+    // 使用函数（定义在包级）
     hash, err := hashPassword("anotherPassword")
     if err != nil {
         panic(err)

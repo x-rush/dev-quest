@@ -1548,14 +1548,18 @@ func fallthroughLimitations() {
         // fallthrough // 编译错误
     }
 
-    // fallthrough不能跳转到下一个带条件的case
-    switch x {
-    case 1:
-        println("One")
-        fallthrough
-    case x > 5: // 编译错误: cannot fallthrough to final case
+    // fallthrough可以跳入下一个带条件的case（不评估其条件，直接执行case体）
+    switch x := 3; {
+    case x > 5:
         println("Greater than 5")
+    case x > 0:
+        println("Positive")
+        fallthrough
+    case x > 1:
+        println("At least 2")
     }
+    // 如果x是3，输出: Positive, At least 2
+    // fallthrough唯一的限制：不能出现在switch的最后一个case中
 }
 
 // 实际应用场景

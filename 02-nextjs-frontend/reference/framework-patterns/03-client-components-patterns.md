@@ -208,7 +208,7 @@ export const BasicClientComponent: React.FC<
 // components/higher-order-client-component.tsx
 'use client';
 
-import React, { ComponentType, useState, useEffect } from 'react';
+import React, { ComponentType, useState, useEffect, useCallback } from 'react';
 import { ClientComponentMetadata } from '@/types/client-component';
 
 // 高阶组件接口

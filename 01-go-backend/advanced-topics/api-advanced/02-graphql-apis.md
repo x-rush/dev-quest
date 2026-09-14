@@ -13,10 +13,10 @@
 | **状态** | ✅ 已完成 |
 
 ## 概述
-gqlgen是Go语言中最流行的GraphQL服务器库，它采用代码优先的方式，通过定义GraphQL schema自动生成对应的Go代码。gqlgen提供了强类型支持、高性能和良好的开发体验，是构建现代GraphQL API的理想选择。
+gqlgen是Go语言中最流行的GraphQL服务器库，它采用schema优先（schema first）的方式，通过编写GraphQL SDL定义自动生成对应的Go代码。gqlgen提供了强类型支持、高性能和良好的开发体验，是构建现代GraphQL API的理想选择。
 
 ## 核心特性
-- **代码优先**: 基于Go类型定义自动生成GraphQL schema
+- **Schema优先**: 基于GraphQL SDL定义自动生成Go代码
 - **强类型**: 完全类型安全的API开发
 - **高性能**: 基于net/http构建，性能优异
 - **灵活的数据加载**: 支持数据加载器模式，解决N+1查询问题
@@ -309,7 +309,7 @@ func NewLoaders(userService *UserService) *Loaders {
         UserLoader: dataloader.NewBatchedLoader(
             userBatcher.LoadBatch,
             dataloader.WithWait(time.Millisecond*5),
-            dataloader.WithMaxBatch(100),
+            dataloader.WithBatchCapacity(100),
         ),
     }
 }
@@ -1040,9 +1040,9 @@ package security
 
 import (
     "context"
-    "strings"
 
     "github.com/99designs/gqlgen/graphql"
+    "github.com/vektah/gqlparser/v2/ast"
 )
 
 // 查询深度限制
@@ -1051,7 +1051,7 @@ func DepthLimitMiddleware(maxDepth int) func(context.Context, graphql.ResponseHa
         oc := graphql.GetOperationContext(ctx)
 
         // 检查查询深度
-        if depth := calculateDepth(oc.Operation); depth > maxDepth {
+        if depth := calculateDepth(oc.Operation.SelectionSet); depth > maxDepth {
             return graphql.ErrorResponse(ctx, "Query depth exceeds limit")
         }
 
@@ -1059,13 +1059,14 @@ func DepthLimitMiddleware(maxDepth int) func(context.Context, graphql.ResponseHa
     }
 }
 
-func calculateDepth(selectionSet *ast.SelectionSet) int {
+// gqlgen 的 ast 来自 gqlparser/v2，SelectionSet 是 Selection 切片
+func calculateDepth(selectionSet ast.SelectionSet) int {
     if selectionSet == nil {
         return 0
     }
 
     maxDepth := 0
-    for _, selection := range selectionSet.Selections {
+    for _, selection := range selectionSet {
         switch s := selection.(type) {
         case *ast.Field:
             depth := 1 + calculateDepth(s.SelectionSet)
@@ -1107,7 +1108,7 @@ func calculateComplexity(operation *ast.OperationDefinition) int {
 ```
 
 ## 总结
-gqlgen作为Go语言中最流行的GraphQL服务器库，提供了完整的GraphQL API开发解决方案。通过其代码优先的方式、强类型支持和丰富的功能特性，开发者可以快速构建高性能、类型安全的GraphQL API。结合数据加载器、中间件、测试和监控等最佳实践，可以构建出可扩展、可维护的现代化GraphQL服务。
+gqlgen作为Go语言中最流行的GraphQL服务器库，提供了完整的GraphQL API开发解决方案。通过其schema优先的方式、强类型支持和丰富的功能特性，开发者可以快速构建高性能、类型安全的GraphQL API。结合数据加载器、中间件、测试和监控等最佳实践，可以构建出可扩展、可维护的现代化GraphQL服务。
 
 ## 学习资源
 - [gqlgen官方文档](https://gqlgen.com/)

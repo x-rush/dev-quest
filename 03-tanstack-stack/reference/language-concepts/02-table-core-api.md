@@ -183,9 +183,10 @@ table.reset()                    // 重置全部状态
 ```tsx
 row.id                    // getRowId 的结果
 row.original              // 原始数据
-row.getVisibleCells()     // 可见单元格
-row.getIsSelected()       // 是否选中
-row.toggleSelected()      // 切换选中
+row.getAllCells()         // 全部单元格（核心 API，无特性门槛）
+row.getVisibleCells()     // 可见单元格（需注册 columnVisibilityFeature）
+row.getIsSelected()       // 是否选中（需注册 rowSelectionFeature）
+row.toggleSelected()      // 切换选中（需注册 rowSelectionFeature）
 row.getCanExpand() / row.toggleExpanded()  // 树形展开
 row.subRows               // 子行（分组/树形时存在）
 ```

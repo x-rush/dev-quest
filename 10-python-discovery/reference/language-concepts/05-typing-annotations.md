@@ -198,7 +198,7 @@ print(user.model_dump())        # 模型 → dict
 | 陷阱 | 说明 |
 |------|------|
 | 注解错不报错 | 静态检查靠 mypy/pyright，运行时靠 Pydantic |
-| 可变默认值 | `tags: list[str] = []` 陷阱依旧，用 `Field(default_factory=list)` |
+| 可变默认值 | Pydantic 与 dataclass 不同，会深拷贝可变默认值（安全）；习惯上仍可用 `Field(default_factory=list)` |
 | `Any` 扩散 | 一个 Any 传染整条调用链，收敛到边界 |
 | TypedDict 误当校验器 | 它运行时啥也不查，校验用 Pydantic |
 

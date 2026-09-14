@@ -1076,8 +1076,10 @@ package handlers
 
 import (
 	"net/http"
+	"time"
 
 	"github.com/gin-gonic/gin"
+	"github.com/your-username/chat-app/models"
 	"github.com/your-username/chat-app/services"
 	"github.com/your-username/chat-app/websocket"
 )
@@ -1605,9 +1607,9 @@ func (s *RedisSubscriber) handleMessageEvent(payload map[string]interface{}) {
 package services
 
 import (
-	"context"
 	"time"
 
+	"github.com/your-username/chat-app/models"
 	"gorm.io/gorm"
 )
 
@@ -1673,9 +1675,9 @@ func (s *UserService) GetUserContacts(userID string) ([]*models.User, error) {
 package services
 
 import (
-	"context"
 	"time"
 
+	"github.com/your-username/chat-app/models"
 	"gorm.io/gorm"
 )
 
@@ -1771,9 +1773,7 @@ func (s *MessageService) IsGroupMember(userID, groupID string) (bool, error) {
 package services
 
 import (
-	"context"
-	"time"
-
+	"github.com/your-username/chat-app/models"
 	"gorm.io/gorm"
 )
 
@@ -2326,6 +2326,7 @@ package cache
 import (
 	"context"
 	"encoding/json"
+	"sync"
 	"time"
 
 	"github.com/redis/go-redis/v9"
@@ -3173,10 +3174,10 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
-	"strings"
 	"time"
 
 	"github.com/gin-gonic/gin"
+	"github.com/your-username/chat-app/websocket"
 )
 
 func (h *MessageHandler) UploadFile(c *gin.Context) {
@@ -3251,6 +3252,7 @@ import (
 	"crypto/cipher"
 	"crypto/rand"
 	"encoding/base64"
+	"fmt"
 	"io"
 )
 
@@ -3284,8 +3286,8 @@ func (e *Encryption) Encrypt(plaintext string) (string, error) {
 	return base64.URLEncoding.EncodeToString(ciphertext), nil
 }
 
-func (e *Encryption) Decrypt(ciphertext string) (string, error) {
-	data, err := base64.URLEncoding.DecodeString(ciphertext)
+func (e *Encryption) Decrypt(encrypted string) (string, error) {
+	data, err := base64.URLEncoding.DecodeString(encrypted)
 	if err != nil {
 		return "", err
 	}
@@ -3305,8 +3307,9 @@ func (e *Encryption) Decrypt(ciphertext string) (string, error) {
 		return "", fmt.Errorf("ciphertext too short")
 	}
 
-	nonce, ciphertext := data[:nonceSize], data[nonceSize:]
-	plaintext, err := gcm.Open(nil, nonce, ciphertext, nil)
+	// 密文参数已占用 ciphertext 名，这里改用 encrypted/encryptedData
+	nonce, encryptedData := data[:nonceSize], data[nonceSize:]
+	plaintext, err := gcm.Open(nil, nonce, encryptedData, nil)
 	if err != nil {
 		return "", err
 	}

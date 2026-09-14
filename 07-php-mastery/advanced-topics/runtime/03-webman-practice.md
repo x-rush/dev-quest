@@ -150,10 +150,11 @@ final class AuthCheck implements MiddlewareInterface
 ```
 
 ```php
-// config/middleware.php —— 注册：键为路由分组（'' 即全局）
+// config/middleware.php —— 注册：键为应用名（多应用模式下生效），'' 即全局；
+// 路由级中间件用 Route::group(...)->middleware([...])
 return [
     ''  => [app\middleware\AccessLog::class],      // 全局中间件
-    'api' => [app\middleware\RateLimit::class],    // /api 分组
+    'api' => [app\middleware\RateLimit::class],    // api 应用
 ];
 ```
 
@@ -176,7 +177,7 @@ return [
             'password'  => getenv('DB_PASSWORD'),
             'charset'   => 'utf8mb4',
             // ⚠️ 常驻进程的连接是长连接：MySQL 服务端会主动断开闲置连接，
-            // 断线防护靠连接池心跳 heartbeat_interval（建议 < 60s），防止 "MySQL server has gone away"
+            // pool 仅在 swoole/swow 驱动下生效；默认驱动需自行处理断线重连，防止 "MySQL server has gone away"
             'pool' => [
                 'heartbeat_interval' => 50,
             ],
@@ -188,7 +189,7 @@ return [
 **关键点解析**:
 
 - 连接在进程启动后建立并**复用到底**，不像 FPM 每请求新建——这是常驻的核心收益之一
-- 连接池心跳（`heartbeat_interval`）是长连接服务的生存项，不是可选项
+- 连接池心跳（`heartbeat_interval`）仅 swoole/swow 驱动下生效；默认 Workerman 驱动没有连接池，断线重连需自行处理
 
 ## 🎨 最佳实践
 

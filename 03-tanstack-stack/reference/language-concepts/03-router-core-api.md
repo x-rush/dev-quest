@@ -137,7 +137,7 @@ navigate({ to: '/posts/$postId', params: { postId: '3' }, search: { page: 1 } })
 ### 陷阱
 
 - `strict` 模式（默认）下 `useParams({ from })` 要求当前组件确实渲染在该路由内，否则抛错；跨路由读取需 `strict: false` 并处理 `undefined`
-- search 参数只能是可序列化类型（string/number/boolean），对象会被展平
+- search 支持任意 JSON 可序列化值：嵌套对象/数组经 JSON 编码进 URL，解析后结构完整保留（defaultStringifySearch/defaultParseSearch 的 round-trip）
 
 ## 相关文档
 

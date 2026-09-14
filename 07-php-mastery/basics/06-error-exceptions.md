@@ -37,9 +37,9 @@ Throwable (interface)
 │   ├── ArithmeticError      # 数学错误（位移、整除溢出）
 │   │   └── DivisionByZeroError
 │   ├── UnhandledMatchError  # match 无 default 且未命中
-│   ├── JsonException        # JSON 编解码失败
 │   └── AssertionError       # assert() 失败
 └── Exception                # 用户/运行时异常：业务代码的主战场
+    ├── JsonException        # JSON 编解码失败
     ├── LogicException       # 逻辑错误（改代码才能修复）
     │   ├── InvalidArgumentException
     │   ├── DomainException

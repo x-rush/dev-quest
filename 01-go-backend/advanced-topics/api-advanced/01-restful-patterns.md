@@ -332,6 +332,7 @@ import (
     "strconv"
 
     "github.com/gin-gonic/gin"
+    "gorm.io/driver/sqlite"
     "gorm.io/gorm"
 )
 
@@ -356,7 +357,8 @@ func (s *UserService) GetUsers(page, limit int, search string) ([]User, int64, e
     query := s.db.Model(&User{})
 
     if search != "" {
-        query = query.Where("username ILIKE ? OR email ILIKE ?",
+        // SQLite 没有 ILIKE，用 lower() 实现不区分大小写匹配
+        query = query.Where("lower(username) LIKE ? OR lower(email) LIKE ?",
             "%"+search+"%", "%"+search+"%")
     }
 
@@ -555,7 +557,7 @@ func setupRoutes(userController *UserController) *gin.Engine {
 
 func main() {
     // 初始化数据库连接
-    db, err := gorm.Open("sqlite:///test.db", &gorm.Config{})
+    db, err := gorm.Open(sqlite.Open("test.db"), &gorm.Config{})
     if err != nil {
         panic("Failed to connect to database")
     }
@@ -596,7 +598,8 @@ func (s *UserService) GetUsersWithQuery(query *UserQuery) ([]User, int64, error)
 
     // 搜索条件
     if query.Search != "" {
-        db = db.Where("username ILIKE ? OR email ILIKE ?",
+        // SQLite 没有 ILIKE，用 lower() 实现不区分大小写匹配
+        db = db.Where("lower(username) LIKE ? OR lower(email) LIKE ?",
             "%"+query.Search+"%", "%"+query.Search+"%")
     }
 

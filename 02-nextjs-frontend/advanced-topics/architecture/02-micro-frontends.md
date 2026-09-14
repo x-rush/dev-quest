@@ -563,19 +563,23 @@ function showFallbackUI(event: any) {
 
 ```typescript
 // apps/product/src/qiankun/index.ts
+import { createRoot } from 'react-dom/client';
+// React 18+ 已移除 ReactDOM.render/unmountComponentAtNode，改用 createRoot
+let root: ReturnType<typeof createRoot> | null = null;
+
 export async function mount(props: any) {
   const { container } = props;
+  const dom = container
+    ? container.querySelector('#root')
+    : document.getElementById('root');
 
-  ReactDOM.render(
-    <App {...props} />,
-    container ? container.querySelector('#root') : document.getElementById('root')
-  );
+  root = createRoot(dom as HTMLElement);
+  root.render(<App {...props} />);
 }
 
 export async function unmount(props: any) {
-  ReactDOM.unmountComponentAtNode(
-    props.container ? props.container.querySelector('#root') : document.getElementById('root')
-  );
+  root?.unmount();
+  root = null;
 }
 
 export async function bootstrap(props: any) {

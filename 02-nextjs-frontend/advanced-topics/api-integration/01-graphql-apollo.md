@@ -313,7 +313,8 @@ const defaultConfig: RateLimitConfig = {
   max: 100, // 最多100个请求
   keyGenerator: (context) => {
     const userId = context.user?.id;
-    const ip = context.req.ip;
+    // NextRequest 无 ip 属性，从代理头取客户端 IP
+    const ip = context.req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ?? 'unknown';
     return userId ? `user:${userId}` : `ip:${ip}`;
   },
 };
@@ -962,8 +963,9 @@ export const userResolvers = {
   Mutation: {
     // 用户登录
     login: async (_: any, { email, password }: MutationResolverArgs, context: GraphQLContext) => {
-      // 速率限制检查
-      const rateLimitKey = `login:${email}:${context.req.ip}`;
+      // 速率限制检查（NextRequest 无 ip 属性，从代理头取客户端 IP）
+      const clientIp = context.req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ?? 'unknown';
+      const rateLimitKey = `login:${email}:${clientIp}`;
       // ... 速率限制逻辑
 
       const user = await prisma.user.findUnique({
@@ -1002,7 +1004,7 @@ export const userResolvers = {
         where: { id: user.id },
         data: {
           lastLoginAt: new Date(),
-          lastLoginIp: context.req.ip,
+          lastLoginIp: context.req.headers.get('x-forwarded-for')?.split(',')[0]?.trim(),
           lastLoginUserAgent: context.req.headers.get('user-agent'),
         },
       });
@@ -1247,7 +1249,7 @@ import { ApolloClient, InMemoryCache, createHttpLink, from } from '@apollo/clien
 import { setContext } from '@apollo/client/link/context';
 import { onError } from '@apollo/client/link/error';
 import { RetryLink } from '@apollo/client/link/retry';
-import { GraphQLWsLink } from '@apollo/client/link/subscriptions/ws';
+import { GraphQLWsLink } from '@apollo/client/link/subscriptions';
 import { getMainDefinition } from '@apollo/client/utilities';
 import { createClient } from 'graphql-ws';
 import { authStorage } from '@/lib/auth-storage';
@@ -1720,8 +1722,8 @@ export function useGraphQLSubscription<TData = any, TVariables = any>(
   // 手动重连
   const reconnect = useCallback(() => {
     retryCountRef.current = 0;
-    result.startSubscription?.();
-  }, [result]);
+    // 注：useSubscription 结果无 startSubscription 方法，重连需重建 ws link 或重新挂载组件
+  }, []);
 
   return {
     ...result,
@@ -1870,10 +1872,8 @@ export const createAdvancedCache = () => {
 
     // 乐观响应
     possibleTypes: {
-      union: {
-        SearchResult: ['Product', 'User', 'Category'],
-        Update: ['ProductUpdate', 'InventoryUpdate', 'UserUpdate'],
-      },
+      SearchResult: ['Product', 'User', 'Category'],
+      Update: ['ProductUpdate', 'InventoryUpdate', 'UserUpdate'],
     },
   });
 };

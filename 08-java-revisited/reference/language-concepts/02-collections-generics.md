@@ -42,7 +42,7 @@ Map（键值对，独立体系）
 | Map | `LinkedHashMap` | 哈希+链表 | O(1) | 保持插入序；`accessOrder=true` 做 LRU |
 | Map | `TreeMap` | 红黑树 | O(log n) | 按键排序、`headMap`/`tailMap` 范围视图 |
 | Map | `EnumMap` | 数组 | O(1) 且最省内存 | 键为枚举时首选 |
-| Map | `ConcurrentHashMap` | 分段/CAS | O(1) | 并发键值存储（见[并发 API](./04-concurrency-api.md)） |
+| Map | `ConcurrentHashMap` | CAS + synchronized（桶头）/ 红黑树化 | O(1) | 并发键值存储（见[并发 API](./04-concurrency-api.md)） |
 | Deque | `ArrayDeque` | 循环数组 | 两端操作 O(1) | 栈/队列首选（代替 Stack/LinkedList） |
 | Queue | `PriorityQueue` | 二叉堆 | 出队 O(log n) | 优先级调度、Top-K |
 

@@ -109,7 +109,7 @@ String label = switch (obj) {
 ```
 
 - 分支按序匹配；**子类型必须排在父类型前**，否则支配错误（dominance）编译失败
-- `case null` 不能单独与 default 同时兜底 null（default 已含 null 时无需 case null）
+- `case null` 与 default 可共存：有 `case null` 时 null 走该分支，无则 null 落入 default
 - Java 25 预览：基本类型模式（`case long l`），生产慎用
 
 ### record 模式（Java 21）与嵌套解构

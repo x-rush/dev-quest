@@ -62,7 +62,7 @@ const result = useQuery({
 - **key 中放非序列化值**（函数、类实例）会导致缓存永远 miss——只放原始值
 - `select` 结果引用不稳定时组件会高频重渲染，复杂派生用 `useMemo` 包在 select 外
 - `enabled: false` 时 `status` 停在 `pending`，渲染分支要兼容
-- v5 中 `isPending` 期间 `data` 是 `undefined`，但**解构后再判 `isPending` 无法收窄 `data`**——解构会丢失判别联合类型，顺序排除 `isPending`/`isError` 后 `data` 仍是 `TData | undefined`。要收窄出非空 `data`：保留对象访问（`if (query.isPending) ...` 排除 pending 后 `data` 仍是 `TData | undefined`，还需再排除 `isError`——或判 `isSuccess`——才得非空）或显式判 `isSuccess`；需要"保证非空"的渲染时改用 `useSuspenseQuery`
+- v5 中 `isPending` 期间 `data` 是 `undefined`；解构布尔收窄依赖 TS 4.4+ 别名判别收窄——**解构后同时排除 `isPending` 与 `isError` 即把 `data` 收窄为 `TData`**（`if (isPending || isError) return ...`、顺序两条 if 或 `if (!isPending && !isError)` 均可，对象访问同样适用）；**只排除 `isPending` 不收窄**（error 分支同为 `isPending: false`），需再排除 `isError` 或判 `isSuccess`。需要"保证非空"的渲染时改用 `useSuspenseQuery`
 
 ## 2. useMutation
 
@@ -99,7 +99,7 @@ const mutation = useMutation({
 - `mutate` 在组件卸载后回调不会执行——组件外逻辑用 `mutateAsync` 或 mutationCache 全局回调
 - 同一组件多次快速 `mutate` 只保留最后一次结果的状态
 - `onSuccess` 里手动 `setQueryData` 同步多个列表是维护噩梦，优先 `invalidateQueries`
-- mutation 回调与 MutationCache 全局回调都能拿到 client（v5 在回调 context 注入 `context.client`，MutationCache 回调经 `mutation.client` 获取）——组件内也常先 `const queryClient = useQueryClient()`（见上文示例），或用 `useMutationState` 做全局观测
+- mutation 回调与 MutationCache 全局回调都能拿到 client——v5 两类回调的末位参数注入 `context`（`MutationFunctionContext`），`context.client` 即当前 QueryClient（MutationCache 的 `onSuccess`/`onError` 为第 5 参、`onSettled` 为第 6 参；`mutation` 实例上没有 `client` 属性）——组件内也常先 `const queryClient = useQueryClient()`（见上文示例），或用 `useMutationState` 做全局观测
 
 ## 3. QueryClient 方法全表
 
@@ -112,7 +112,7 @@ const mutation = useMutation({
 | `fetchQuery({ queryKey, queryFn })` | 取数并返回 Promise（进缓存） | 事件回调中预取 |
 | `prefetchQuery({ queryKey, queryFn })` | fetchQuery 的静默版 | 路由预加载 |
 | `getQueryData(key)` | 同步读缓存 | 乐观更新读快照 |
-| `setQueryData(key, updater)` | 同步写缓存（updater 返回 `undefined` 会清空条目） | 乐观更新写预测值 |
+| `setQueryData(key, updater)` | 同步写缓存（updater 返回 `undefined` 是 no-op，不写入也不清空；移除条目用 `removeQueries`） | 乐观更新写预测值 |
 | `getQueryState(key)` | 读状态元信息 | 判断是否正在取数 |
 | `cancelQueries({ queryKey })` | 取消进行中的请求 | 乐观更新前防覆盖 |
 | `removeQueries({ queryKey })` | 物理删除缓存条目 | 登出清数据 |

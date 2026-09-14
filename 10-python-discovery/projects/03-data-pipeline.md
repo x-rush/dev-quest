@@ -82,6 +82,7 @@ import csv
 import json
 import logging
 from collections import Counter
+from decimal import Decimal
 from pathlib import Path
 from models import Order
 from transform import classify

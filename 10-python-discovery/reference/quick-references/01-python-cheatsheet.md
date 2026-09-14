@@ -68,7 +68,7 @@ value if value is not None else fallback   # 精确 None 判断
 Path("f.txt").read_text(encoding="utf-8").splitlines()    # 读行列表
 Path("out.txt").write_text("\n".join(lines), encoding="utf-8")
 with open("f.json", encoding="utf-8") as f: json.load(f)  # 读 JSON
-[line for line in open("big.log") if "ERROR" in line]     # 惰性过滤大文件
+(line for line in open("big.log") if "ERROR" in line)     # 生成器惰性逐行
 ```
 
 ## 6. 常用内置组合

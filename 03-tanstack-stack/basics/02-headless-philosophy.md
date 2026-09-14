@@ -59,6 +59,7 @@ UI 定制     = 你的 JSX + 你的样式方案（Tailwind / CSS Modules / 任�
 // 状态逻辑全部就绪，DOM 结构完全自主
 const features = tableFeatures({
   rowSortingFeature,                        // 排序特性（逻辑层）
+  columnVisibilityFeature,                  // 可见性特性：row.getVisibleCells() 需注册本特性
   sortedRowModel: createSortedRowModel(),   // 排序逻辑，不是 UI
 })
 const table = useTable({ data, columns, features })

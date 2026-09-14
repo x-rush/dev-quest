@@ -210,6 +210,7 @@ model Tenant {
   settings      Json     @default("{}")
   branding      Json     @default("{}")
   status        TenantStatus @default(ACTIVE)
+  stripeCustomerId String?  // Stripe 客户 ID（业务代码写入）
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
 
@@ -1019,8 +1020,9 @@ export class SubscriptionService {
         planId,
         stripeSubscriptionId: stripeSubscription.id,
         status: this.mapStripeStatus(stripeSubscription.status),
-        currentPeriodStart: new Date(stripeSubscription.current_period_start * 1000),
-        currentPeriodEnd: new Date(stripeSubscription.current_period_end * 1000),
+        // Stripe dahlia 起 current_period_* 移至 SubscriptionItem
+        currentPeriodStart: new Date(stripeSubscription.items.data[0].current_period_start * 1000),
+        currentPeriodEnd: new Date(stripeSubscription.items.data[0].current_period_end * 1000),
         trialEnd: stripeSubscription.trial_end
           ? new Date(stripeSubscription.trial_end * 1000)
           : null,
@@ -1100,8 +1102,8 @@ export class SubscriptionService {
       data: {
         planId: planId || subscription.planId,
         status: this.mapStripeStatus(updatedStripeSubscription.status),
-        currentPeriodStart: new Date(updatedStripeSubscription.current_period_start * 1000),
-        currentPeriodEnd: new Date(updatedStripeSubscription.current_period_end * 1000),
+        currentPeriodStart: new Date(updatedStripeSubscription.items.data[0].current_period_start * 1000),
+        currentPeriodEnd: new Date(updatedStripeSubscription.items.data[0].current_period_end * 1000),
         metadata: updatedStripeSubscription.metadata,
       },
       include: {

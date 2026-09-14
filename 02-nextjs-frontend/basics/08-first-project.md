@@ -555,7 +555,7 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     if (error instanceof z.ZodError) {
       return NextResponse.json(
-        { error: '输入数据无效', details: error.errors },
+        { error: '输入数据无效', details: error.issues },
         { status: 400 }
       )
     }
@@ -737,7 +737,7 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     if (error instanceof z.ZodError) {
       return NextResponse.json(
-        { error: '输入数据无效', details: error.errors },
+        { error: '输入数据无效', details: error.issues },
         { status: 400 }
       )
     }
@@ -968,14 +968,12 @@ export const useTheme = () => {
 // next.config.js
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  experimental: {
-    // 启用Turbopack
-    turbo: {
-      rules: {
-        '*.svg': {
-          loaders: ['@svgr/webpack'],
-          as: '*.js',
-        },
+  // Turbopack 配置（顶层键）
+  turbopack: {
+    rules: {
+      '*.svg': {
+        loaders: ['@svgr/webpack'],
+        as: '*.js',
       },
     },
   },

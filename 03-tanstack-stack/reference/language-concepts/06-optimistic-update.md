@@ -30,7 +30,7 @@ useMutation({
 |------|------|------|
 | `cancelQueries` | `(filters) => Promise` | 必须先 `await`，否则竞态会覆盖乐观值 |
 | `getQueryData` | `(key) => TData \| undefined` | 同步读缓存做快照 |
-| `setQueryData` | `(key, updater) => void` | updater 返回 `undefined` 会清空条目 |
+| `setQueryData` | `(key, updater) => void` | updater 返回 `undefined` 是 no-op（不写入也不清空） |
 | context（第 3 参数） | `onMutate` 的返回值 | 携带快照等回滚材料 |
 
 ## 💡 示例
@@ -67,7 +67,7 @@ export function useToggleTodo() {
 ## ⚠️ 常见陷阱
 
 - ❌ **不做** `await cancelQueries` 就直写缓存：进行中的旧请求完成后会把乐观值覆盖回旧数据
-- ❌ `setQueryData` 的 updater 返回 `undefined`：该缓存条目被清空，UI 反而消失
+- ❌ 误以为 `setQueryData` 的 updater 返回 `undefined` 能"清空"条目：实际是 no-op（不写入也不清空），移除条目用 `removeQueries`/`query.remove()`
 - ❌ 在 `onSuccess` 里用 `setQueryData` 手工"缝合"所有相关列表：把自己变成缓存同步器，优先 `invalidateQueries`
 - ✅ 回滚材料通过 `onMutate` 返回值（context）传递，不要依赖外部可变变量
 - ✅ 高频写需聚合展示时用 `useMutationState` 订阅全局 mutation 状态（见 Mutation 状态条目）

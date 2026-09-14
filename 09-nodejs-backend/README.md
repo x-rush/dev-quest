@@ -35,7 +35,7 @@
 | 象限 | 回答的问题 | 目录 | 内容 |
 |------|-----------|------|------|
 | **教程** | "带我入门，走一遍" | `basics/` | 8 篇渐进教程：环境 → 服务器 → 模块 → 异步 → 路由 → 错误 → 流 → 首项目 |
-| **字典** | "X 的语法/参数是什么" | `reference/` | 12 篇全量参考：语言概念 6 / 框架速查 2 / 库指南 2 / 速查排错 2 |
+| **字典** | "X 的语法/参数是什么" | `reference/` | 22 篇全量参考：语言概念 9 / 框架速查 2 / 库指南 9 / 速查排错 2 |
 | **操作指南** | "怎么完成这个任务" | `frameworks/` `projects/` `testing/` `deployment/` | Hono 与生态 4 篇 · 实战项目 4 个 · 测试 3 篇 · 部署 3 篇 |
 | **解释** | "为什么这样设计" | `advanced-topics/` | 架构 1 · 性能 2 · 安全 1，均 ⭐⭐⭐ |
 
@@ -78,13 +78,23 @@
 │   │   ├── 03-node-core-api.md              # Node 核心模块 API 速查
 │   │   ├── 04-streams-api.md                # Stream API 速查
 │   │   ├── 05-typescript-patterns.md        # Node + TypeScript 常用模式
-│   │   └── 06-esm-module-resolution.md      # ESM 与模块解析速查
+│   │   ├── 06-esm-module-resolution.md      # ESM 与模块解析速查
+│   │   ├── 07-js-core-semantics.md          # JS 核心语义：原型链、this、闭包与生成器
+│   │   ├── 08-type-coercion-collections.md  # 类型转换、相等性与内置集合
+│   │   └── 09-globals-reference.md          # 全局对象速查
 │   ├── framework-essentials/                # 框架核心要点
 │   │   ├── 01-hono-essentials.md            # Hono 4 核心速查
 │   │   └── 02-fastify-nestjs.md             # 框架选型对比：Fastify、NestJS 与 Express
 │   ├── library-guides/                      # 标准库与三方库
 │   │   ├── 01-core-modules.md               # 内置模块导航表
-│   │   └── 02-ecosystem-libs.md             # 后端生态库精选
+│   │   ├── 02-ecosystem-libs.md             # 后端生态库精选
+│   │   ├── 03-crypto.md                     # node:crypto 加密速查
+│   │   ├── 04-child-process.md              # node:child_process 子进程速查
+│   │   ├── 05-buffer.md                     # node:buffer 二进制速查
+│   │   ├── 06-util.md                       # node:util 工具集速查
+│   │   ├── 07-process-lifecycle.md          # 进程生命周期与信号速查
+│   │   ├── 08-test-runner.md                # node:test 测试运行器速查
+│   │   └── 09-zlib.md                       # node:zlib 压缩速查
 │   └── quick-references/                    # 纯速查表
 │       ├── 01-node-cheatsheet.md            # Node 一行式速查
 │       └── 02-troubleshooting.md            # 常见故障排除
@@ -136,7 +146,7 @@
 ## 🔄 进度跟踪
 
 - [x] Node.js 基础（basics 8 篇）
-- [x] 知识字典（reference 12 篇）
+- [x] 知识字典（reference 22 篇）
 - [x] 框架与生态（frameworks 4 篇）
 - [x] 实战项目（projects 4 个）
 - [x] 测试工程（testing 3 篇）

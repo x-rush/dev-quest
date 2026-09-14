@@ -64,7 +64,7 @@ php start.php start
 
 - **`$worker->count` 控制进程数**：CPU 密集服务 ≈ CPU 核数；I/O 密集可更高；有连接状态的 WebSocket 服务通常设 1（连接归属单一进程，见"陷阱"）
 - **多进程 = 多份内存**：与协程共享内存不同，worker 之间不共享变量，跨进程通信要用 Redis/Queue/UnixSocket 等外部通道
-- **平滑重启（reload）**：master 先启动新 worker、再让旧 worker 处理完存量请求后退出，实现不中断服务的代码更新
+- **平滑重启（reload）**：master 让旧 worker 处理完存量请求后退出，每退出一个即 fork 一个新 worker 补位，逐个置换实现不中断服务的代码更新
 
 ### 概念三：连接管理——Connection 对象与 TCP 粘包
 

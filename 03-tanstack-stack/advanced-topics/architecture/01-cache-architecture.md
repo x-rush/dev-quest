@@ -96,7 +96,7 @@ invalidateQueries(['todos'])
 
 ## 5. 多标签页与内存账单
 
-- **Broadcast Channel 同步**：同源多标签页共享缓存动作（失效、mutation 结果通过聚焦校验对齐），这是 `refetchOnWindowFocus` 的底层协同
+- **跨标签页无内建缓存广播**：query-core 不含 BroadcastChannel——各标签页独立持缓存，仅在窗口聚焦时经 focusManager 重取 stale 查询（`refetchOnWindowFocus`）；需要真同步得自建 BroadcastChannel 方案（对端收消息后失效或 `setQueryData`）
 - **内存账单**：条目大小 × 保留时长 × 条目数。无限列表用 `maxPages` 封顶；大对象列表瘦身要在 queryFn 或服务端做（`select` 只省渲染不省内存，数据仍在缓存里）
 - **多租户隔离**：租户 ID 进键（`['projects', { tenant: 'acme' }]`）之外，登出时 `queryClient.clear()` 是最后的保险丝
 

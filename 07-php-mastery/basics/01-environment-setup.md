@@ -110,8 +110,8 @@ Xdebug 是 PHP 最主流的调试与性能分析扩展，3.x 版本用 `xdebug.m
 # 通过 PECL 安装（需要 php-dev / phpize）
 pecl install xdebug
 
-# macOS Homebrew
-brew install pecl && pecl install xdebug
+# macOS：Homebrew 无 pecl formula，且其官方 PHP 已移除 PECL 支持
+# 用 shivammathur/php tap 安装的 PHP 自带 pecl，或自备含 pecl 的 PHP 发行版
 ```
 
 ### 配置

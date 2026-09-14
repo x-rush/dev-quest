@@ -504,7 +504,7 @@ const nextConfig = {
   },
 
   // 输出配置
-  output: 'standalone', // 或 'export', 'static'
+  output: 'standalone', // 或 'export'
 
   // 严格模式
   reactStrictMode: true,

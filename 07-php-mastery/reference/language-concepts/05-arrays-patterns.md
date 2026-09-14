@@ -27,7 +27,7 @@ $mixed2 = [1 => 'a', '1' => 'b', 1.8 => 'c'];   // ⚠️ 全部归并为键 1�
 var_dump($mixed2);   // [1 => 'c']
 ```
 
-**陷阱**: 含整数字符串的键会被强制转 int；浮点键截断为 int；8.1 起 `null` 键改为保留（此前会转空串）。
+**陷阱**: 含整数字符串的键会被强制转 int；浮点键截断为 int。
 
 ## 2. map：逐元素变换
 
@@ -61,7 +61,7 @@ $pairs = array_map(null, $names, $ages);   // [['Ada',36], ['Alan',41]]
 ```php
 $nums = [0, 1, 2, '', 'a', null, false, true];
 
-array_filter($nums);                        // 无回调：剔除弱 false 值 → [1=>1, 4=>'a', 7=>true]
+array_filter($nums);                        // 无回调：剔除弱 false 值 → [1=>1, 2=>2, 4=>'a', 7=>true]
 array_filter($nums, fn($v) => $v !== null); // 严格剔除 null
 
 $users = [['age' => 15], ['age' => 22], ['age' => 8]];
@@ -138,7 +138,7 @@ $paidTotal = array_reduce(
 
 | 目标 | reduce 手写 | 更直接的内建 |
 |------|------------|-------------|
-| 求和 | `array_reduce(..., '+')` | `array_sum()` |
+| 求和 | `array_reduce($nums, fn($c, $n) => $c + $n, 0)` | `array_sum()` |
 | 计数 | reduce 累加 | `count()` |
 | 首个满足 | filter + reset | `array_find()`（8.4+） |
 | 去重 | — | `array_unique()` / `array_flip()` 技巧 |

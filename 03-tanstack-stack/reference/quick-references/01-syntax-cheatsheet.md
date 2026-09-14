@@ -69,14 +69,14 @@ const table = useTable({
 
 // 渲染
 table.getHeaderGroups().map(hg => hg.headers.map(h => flexRender(h.column.columnDef.header, h.getContext())))
-table.getRowModel().rows.map(row => row.getVisibleCells().map(c => flexRender(c.column.columnDef.cell, c.getContext())))
+table.getRowModel().rows.map(row => row.getVisibleCells().map(c => flexRender(c.column.columnDef.cell, c.getContext())))  // getVisibleCells 需注册 columnVisibilityFeature（无门槛替代：getAllCells）
 
 // 常用实例方法（v9：方法须经实例调用，解构会丢上下文）
 table.state / table.setSorting(updater)
 header.column.getToggleSortingHandler() / header.column.getIsSorted() // 'asc'|'desc'|false
 header.column.setFilterValue(v)
 table.nextPage() / table.previousPage() / table.getCanNextPage()
-row.getIsSelected() / row.toggleSelected() / row.toggleExpanded()
+row.getIsSelected() / row.toggleSelected() / row.toggleExpanded()  // getIsSelected/toggleSelected 需注册 rowSelectionFeature
 ```
 
 ## 3. Router（@tanstack/react-router）

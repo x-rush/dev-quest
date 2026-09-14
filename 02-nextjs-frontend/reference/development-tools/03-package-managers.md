@@ -398,9 +398,9 @@ yarn cache clean                # 清理缓存
 yarn cache list                 # 列出缓存
 
 # 全局包管理
-yarn global add nodemon
-yarn global remove nodemon
-yarn global list
+# 注意：Yarn 2+（berry）已移除 yarn global，全局安装用 npm i -g，一次性执行用 yarn dlx
+npm install -g nodemon
+yarn dlx nodemon --version
 
 # 离线模式
 yarn add --offline react
@@ -419,7 +419,7 @@ yarn constraints
 # 全局安装 pnpm
 npm install -g pnpm
 
-# 或者使用 npm 安装
+# 或者使用 corepack（Node 16+ 自带）
 corepack enable pnpm
 
 # 项目中使用 pnpm
@@ -434,11 +434,11 @@ pnpm -r install                 # 在所有工作区安装
 pnpm -r run build               # 在所有工作区运行脚本
 ```
 
-### .pnpmrc 配置
-**pnpm 配置文件**
+### .npmrc 配置
+**pnpm 配置文件**（pnpm 复用 npm 的 `.npmrc`，并无独立 `.pnpmrc`）
 
 ```ini
-# .pnpmrc
+# .npmrc
 # 注册表配置
 registry=https://registry.npmjs.org/
 

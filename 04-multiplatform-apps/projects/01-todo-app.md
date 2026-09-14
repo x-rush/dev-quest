@@ -53,9 +53,9 @@ npm install zustand react-native-mmkv
 // store/todos.ts —— 业务与持久化一体化
 import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
-import { MMKV } from 'react-native-mmkv';
+import { createMMKV } from 'react-native-mmkv';
 
-const storage = new MMKV(); // 全局唯一实例
+const storage = createMMKV(); // 全局唯一实例
 
 export interface Todo {
   id: string;
@@ -91,7 +91,7 @@ export const useTodoStore = create<TodoState>()(
       storage: createJSONStorage(() => ({     // 把 MMKV 适配成 zustand 存储接口
         getItem: (k) => storage.getString(k) ?? null,
         setItem: (k, v) => storage.set(k, v),
-        removeItem: (k) => storage.delete(k),
+        removeItem: (k) => storage.remove(k),
       })),
     }
   )

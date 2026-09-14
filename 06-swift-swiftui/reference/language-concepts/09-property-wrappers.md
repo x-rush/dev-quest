@@ -61,8 +61,10 @@ struct Player {
 player.stamina = 150                      // 实际存为 100
 
 // projectedValue：$ 前缀访问包装器暴露的"另一个东西"
-$player.stamina                           // 0...100（本例中是合法范围）
+player.$stamina                           // 0...100（本例中是合法范围）
 ```
+
+注意 `$` 前缀加在**实例名**上（`player.$stamina`），不是包装器属性名上。
 
 ### projectedValue 的语义由包装器决定
 

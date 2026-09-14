@@ -483,17 +483,17 @@ export const doubleSubmitProtection = new DoubleSubmitCookieProtection()
 import NextAuth from 'next-auth'
 import CredentialsProvider from 'next-auth/providers/credentials'
 import GoogleProvider from 'next-auth/providers/google'
-import { PrismaAdapter } from '@next-auth/prisma-adapter'
-import { jwt } from '@hapi/jwt'
+import { PrismaAdapter } from '@auth/prisma-adapter'
+import JWT from '@hapi/jwt'
 import bcrypt from 'bcryptjs'
 
-// JWT验证中间件
+// JWT验证中间件（@hapi/jwt v3：decode 后需显式校验签名与时间窗，verify() 为 hapi 插件用法）
 async function verifyJWT(token: string, secret: string) {
   try {
-    const { decoded } = jwt.verify(token, secret, {
-      algorithms: ['HS256']
-    })
-    return decoded.payload
+    const artifacts = JWT.token.decode(token)
+    JWT.token.verifySignature(artifacts, secret)
+    JWT.token.verifyTime(artifacts) // 校验 exp/nbf
+    return artifacts.decoded.payload
   } catch (error) {
     throw new Error('Invalid token')
   }
@@ -596,8 +596,8 @@ export const authConfig = {
       iss: 'your-app',
       aud: 'your-users',
       exp: 1800, // 30分钟
-      nbf: true
-      iat: true
+      nbf: true,
+      iat: true,
       jti: true
     }
   },
@@ -806,7 +806,7 @@ export const authConfig = {
     async redirect({ url, baseUrl }) {
       // 根据用户角色重定向
       if (url.includes('/auth/callback')) {
-        const session = await getServerSession()
+        const session = await auth()
         if (session?.user?.role === 'admin') {
           return '/admin/dashboard'
         } else if (session?.user?.role === 'moderator') {
@@ -845,7 +845,8 @@ export const authConfig = {
   debug: process.env.NODE_ENV === 'development'
 }
 
-export default NextAuth(authConfig)
+// NextAuth v5：实例化并导出路由处理器与会话工具
+export const { handlers, auth, signIn, signOut } = NextAuth(authConfig)
 ```
 
 ### 🔐 角色权限管理

@@ -50,10 +50,10 @@ if 0 <= score <= 100:
 `match-case`（3.10+）处理多分支结构与解构：
 
 ```python
-def handle(command: str, args: list[str]) -> str:
-    match command:
-        case "add" | "new":            # 或模式
-            return f"添加 {args[0]}"
+def handle(command: str) -> str:
+    match command.split():
+        case ["add" | "new", arg]:     # 或模式
+            return f"添加 {arg}"
         case ["rm", *targets]:         # 序列解构模式
             return f"删除 {len(targets)} 项"
         case _:

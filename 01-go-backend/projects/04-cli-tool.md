@@ -320,6 +320,26 @@ import (
 	"go.uber.org/zap"
 )
 
+// Task/Taskfile 与 cmd 包中 loadTaskfile 解析的类型一致（分块展示，此处内联定义）
+type Task struct {
+	Name        string            `yaml:"name"`
+	Desc        string            `yaml:"desc"`
+	Deps        []string          `yaml:"deps"`
+	Cmds        []string          `yaml:"cmds"`
+	Env         map[string]string `yaml:"env"`
+	Sources     []string          `yaml:"sources"`
+	Generates   []string          `yaml:"generates"`
+	Dir         string            `yaml:"dir"`
+	IgnoreError bool              `yaml:"ignore_error"`
+	Parallel    bool              `yaml:"parallel"`
+}
+
+type Taskfile struct {
+	Version string            `yaml:"version"`
+	Env     map[string]string `yaml:"env"`
+	Tasks   map[string]*Task  `yaml:"tasks"`
+}
+
 type TaskExecutor struct {
 	logger      *zap.Logger
 	taskfile    *Taskfile
@@ -616,9 +636,9 @@ func (e *TaskExecutor) shouldRun(task *Task) bool {
 package plugin
 
 import (
+	"context"
 	"fmt"
 	"plugin"
-	"reflect"
 
 	"go.uber.org/zap"
 )
@@ -724,6 +744,7 @@ import (
 	"fmt"
 	"os"
 	"strings"
+	"time"
 
 	"github.com/fatih/color"
 	"github.com/schollz/progressbar/v3"
@@ -761,6 +782,14 @@ func (o *Output) Info(format string, args ...interface{}) {
 	if o.verbose {
 		fmt.Println(Info(format, args...))
 	}
+}
+
+// Task 任务信息（对应 cmd 包中 Taskfile 解析出的任务）
+type Task struct {
+	Name string
+	Desc string
+	Deps []string
+	Cmds []string
 }
 
 func (o *Output) PrintTaskList(tasks []Task) {

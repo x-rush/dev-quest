@@ -106,7 +106,7 @@ npx create-next-app@latest corporate-landing --typescript --tailwind --eslint --
 cd corporate-landing
 
 # 安装必要依赖
-npm install @next-intl/next-intl zustand react-hook-form @hookform/resolvers zod
+npm install next-intl zustand react-hook-form @hookform/resolvers zod
 npm install @vercel/analytics @types/node lucide-react framer-motion
 npm install -D @types/react @types/react-dom
 ```
@@ -246,7 +246,7 @@ export const localeNames = {
 import { headers } from 'next/headers';
 import { Locale } from './config';
 
-export function getLocale(): Locale {
+export async function getLocale(): Promise<Locale> {
   const headersList = await headers();
   const acceptLanguage = headersList.get('accept-language');
 
@@ -1295,7 +1295,7 @@ export async function POST(request: NextRequest) {
 
     if (error instanceof z.ZodError) {
       return NextResponse.json(
-        { message: 'Invalid form data', errors: error.errors },
+        { message: 'Invalid form data', errors: error.issues },
         { status: 400 }
       );
     }
@@ -1424,7 +1424,7 @@ const createJestConfig = nextJest({
 const customJestConfig = {
   setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
   testEnvironment: 'jest-environment-jsdom',
-  moduleNameMapping: {
+  moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/$1',
   },
   collectCoverageFrom: [
@@ -1643,7 +1643,7 @@ jobs:
     - name: Setup Node.js
       uses: actions/setup-node@v4
       with:
-        node-version: '18'
+        node-version: '20'
         cache: 'npm'
 
     - name: Install dependencies

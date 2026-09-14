@@ -131,7 +131,7 @@ class BorrowServiceTest {
 }
 ```
 
-**陷阱**: mock 返回类型为 Optional/集合时必须显式 stub（不会自动给"空 Optional"）；过度 mock 私有细节 = 测试与实现强耦合。
+**陷阱**: mock 返回类型为 Optional/集合/Map 时默认即返回"空值"（`Optional.empty()`/空集合/空 Map），无需显式 stub，仅在需要特定值时才 stub；过度 mock 私有细节 = 测试与实现强耦合。
 
 ## 🗺️ MapStruct - 编译期 Bean 映射
 

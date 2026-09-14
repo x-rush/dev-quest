@@ -65,8 +65,8 @@ export async function apiFetch<T>(path: string, init?: RequestInit): Promise<T> 
 
 ```ts
 // services/api/outbox.ts —— 写操作离线队列：失败入队，恢复网络后重放
-import { MMKV } from 'react-native-mmkv';
-const outbox = new MMKV({ id: 'outbox' });
+import { createMMKV } from 'react-native-mmkv';
+const outbox = createMMKV({ id: 'outbox' });
 
 export function enqueue(method: string, path: string, body: unknown) {
   const list = JSON.parse(outbox.getString('ops') ?? '[]');
@@ -79,7 +79,7 @@ export async function flushOutbox() {
   for (const op of list) {           // 顺序重放，保证写序
     await apiFetch(op.path, { method: op.method, body: JSON.stringify(op.body) });
   }
-  outbox.delete('ops');
+  outbox.remove('ops');
 }
 // 在 NetInfo 的 isConnected 回调中触发 flushOutbox（库选择见 reference/library-guides/02）
 ```

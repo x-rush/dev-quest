@@ -172,7 +172,7 @@ tasksApp.post("/", async (c) => {
 
 tasksApp.get("/:id", async (c) => {
   const task = await prisma.task.findUnique({ where: { id: c.req.param("id") } });
-  if (!task) throw new HttpError(404, "TASK_NOT_FOUND", "任务不存在");
+  if (!task) throw new HttpError(404, "任务不存在", "TASK_NOT_FOUND");
   return c.json(task);
 });
 
@@ -251,7 +251,7 @@ test("分页查询串自动强转", async () => {
 ```
 
 ```bash
-node --test test/    # 原生测试命令，无需额外测试框架
+node --test          # 原生测试命令，无需额外测试框架（递归匹配 *.test.*，目录参数是 glob：node --test "test/**/*.test.ts"）
 ```
 
 ## 🎨 最佳实践

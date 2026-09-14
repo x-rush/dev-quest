@@ -32,7 +32,7 @@ Next.js 16 与 React 19 的服务端组件架构代表了现代Web开发的重�
 
 ```typescript
 // types/server-component.ts
-import { ReactNode, ComponentProps, CacheableComponent } from 'react';
+import { ReactNode, ComponentProps } from 'react';
 
 // 服务端组件元数据
 export interface ServerComponentMetadata {

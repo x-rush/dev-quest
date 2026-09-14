@@ -72,7 +72,7 @@ var_dump(array_any($users, fn(array $u): bool => $u['age'] > 21));    // true
 str_contains('Hello PHP', 'PHP');     // true：包含判断（8.0）
 str_starts_with('v8.3.0', 'v8');      // true：前缀判断（8.0）
 str_ends_with('a.tar.gz', '.gz');     // true：后缀判断（8.0）
-str_contains('abc', '');              // true（8.3 起）：空串恒为包含
+str_contains('abc', '');              // true（8.0 起）：空串恒为包含
 ```
 
 ### 截取、分割与拼接
@@ -152,7 +152,7 @@ echo $a->getTimestamp(), PHP_EOL;     // Unix 时间戳
 abs(-5);            // 5
 max(1, 2, 3);       // 3，也接受数组
 min([4, 2, 9]);     // 2
-round(2.675, 2);    // ⚠️ 2.67：浮点精度问题，金额用 int 分或 BCMath
+var_dump(0.1 + 0.2);   // ⚠️ float(0.30000000000000004)：浮点精度问题，金额用 int 分或 BCMath
 floor(4.9); ceil(4.1);
 intdiv(7, 2);       // 3：整数除法，除零抛 DivisionByZeroError
 random_int(1, 6);   // 密码学安全随机整数（⚠️ 不要再用 rand/mt_rand 于安全场景）
@@ -174,7 +174,7 @@ scandir($dir);                        // 列目录（含 . 与 ..）
 
 ## 陷阱速查
 
-- **严格模式不影响内置函数弱转换**：`str_contains(123, '1')` 在严格模式仍按字符串处理——类型自律靠声明与静态分析
+- **严格模式同样约束内置函数**：`strict_types=1` 下 `str_contains(123, '1')` 直接抛 `TypeError`——内置函数与用户函数一视同仁，弱转换仅发生在非严格模式
 - **false 歧义返回**：`strpos`/`array_search`/`file_get_contents` 失败返回 `false`，判断一律 `!== false` / `=== false`
 - **多字节函数**：处理中文/Emoji 必须用 `mb_*` 家族，确保 `mbstring` 扩展已启用
 - **浮点金额**：`round`/`floor` 受 IEEE 754 限制，金额计算用整数分、BCMath 或 `brick/math` 库

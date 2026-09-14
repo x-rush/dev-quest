@@ -39,7 +39,7 @@ async def fetch_all(urls: list[str]) -> list[dict]:
         return [r.json() for r in rs]
 ```
 
-**陷阱**: 两个库都不默认超时（**必须显式 `timeout=`**）；`raise_for_status()` 忘调则 404 也当成功解析；生产重试交给 `tenacity` 或 httpx 传输层。
+**陷阱**: requests 无默认超时（**必须显式 `timeout=`**）；httpx 默认 5 秒超时，长耗时请求需显式调大；`raise_for_status()` 忘调则 404 也当成功解析；生产重试交给 `tenacity` 或 httpx 传输层。
 
 ---
 

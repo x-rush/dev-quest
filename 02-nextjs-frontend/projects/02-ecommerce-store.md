@@ -250,7 +250,8 @@ model Cart {
   userId    String?    @unique
   sessionId String?    @unique
   items     CartItem[]
-  expiresAt DateTime   @default(dbnow()) + interval '7 days'
+  // 过期时间由应用层写入（now() + 7 天），Prisma @default 不支持 SQL 表达式运算
+  expiresAt DateTime
   createdAt DateTime   @default(now())
   updatedAt DateTime   @updatedAt
 
@@ -555,13 +556,28 @@ export default config
 #### 2.1 实现认证系统
 **lib/auth/config.ts**:
 ```typescript
-import { NextAuthConfig } from 'next-auth'
+import NextAuth, { type NextAuthConfig, type DefaultSession } from 'next-auth'
 import { PrismaAdapter } from '@auth/prisma-adapter'
 import Google from 'next-auth/providers/google'
 import Credentials from 'next-auth/providers/credentials'
 import { z } from 'zod'
 import { prisma } from '@/lib/db/prisma'
 import bcrypt from 'bcryptjs'
+
+declare module 'next-auth' {
+  interface User {
+    role?: string
+  }
+  interface Session {
+    user: { id?: string; role?: string } & DefaultSession['user']
+  }
+}
+
+declare module 'next-auth/jwt' {
+  interface JWT {
+    role?: string
+  }
+}
 
 const credentialsSchema = z.object({
   email: z.string().email(),
@@ -638,16 +654,16 @@ export const authConfig: NextAuthConfig = {
     strategy: 'jwt',
   },
 }
+
+// NextAuth v5：实例化并导出路由处理器与会话工具
+export const { handlers, auth, signIn, signOut } = NextAuth(authConfig)
 ```
 
 **app/api/auth/[...nextauth]/route.ts**:
 ```typescript
-import NextAuth from 'next-auth'
-import { authConfig } from '@/lib/auth/config'
+import { handlers } from '@/lib/auth/config'
 
-const handler = NextAuth(authConfig)
-
-export { handler as GET, handler as POST }
+export const { GET, POST } = handlers
 ```
 
 #### 2.2 实现商品管理
@@ -821,7 +837,7 @@ export async function POST(request: NextRequest) {
     console.error('Create product error:', error)
     if (error instanceof z.ZodError) {
       return NextResponse.json(
-        { error: 'Invalid data', details: error.errors },
+        { error: 'Invalid data', details: error.issues },
         { status: 400 }
       )
     }
@@ -837,8 +853,7 @@ export async function POST(request: NextRequest) {
 **lib/cart/cart.ts**:
 ```typescript
 import { prisma } from '@/lib/db/prisma'
-import { getServerSession } from 'next-auth'
-import { authConfig } from '@/lib/auth/config'
+import { auth } from '@/lib/auth/config'
 import { cookies } from 'next/headers'
 
 export interface CartItem {
@@ -869,7 +884,7 @@ export interface Cart {
 }
 
 export async function getCart(): Promise<Cart> {
-  const session = await getServerSession(authConfig)
+  const session = await auth()
   const cookieStore = await cookies()
   const cartId = cookieStore.get('cartId')?.value
 
@@ -960,7 +975,7 @@ export async function addToCart(
   quantity: number,
   productVariantId?: string
 ): Promise<Cart> {
-  const session = await getServerSession(authConfig)
+  const session = await auth()
   const cookieStore = await cookies()
   const cartId = cookieStore.get('cartId')?.value
 
@@ -1089,7 +1104,7 @@ export async function removeFromCart(itemId: string): Promise<Cart> {
 }
 
 export async function clearCart(): Promise<void> {
-  const session = await getServerSession(authConfig)
+  const session = await auth()
   const cookieStore = await cookies()
   const cartId = cookieStore.get('cartId')?.value
 
@@ -1156,7 +1171,7 @@ export async function POST(request: NextRequest) {
     console.error('Add to cart error:', error)
     if (error instanceof z.ZodError) {
       return NextResponse.json(
-        { error: 'Invalid data', details: error.errors },
+        { error: 'Invalid data', details: error.issues },
         { status: 400 }
       )
     }
@@ -1175,7 +1190,7 @@ import Stripe from 'stripe'
 import { prisma } from '@/lib/db/prisma'
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: '2024-06-20',
+  apiVersion: '2026-08-26.dahlia', // stripe SDK v22 LatestApiVersion
 })
 
 export interface CreatePaymentIntentParams {
@@ -1393,8 +1408,7 @@ async function handlePaymentFailed(paymentIntent: Stripe.PaymentIntent) {
 **app/api/payments/create-intent/route.ts**:
 ```typescript
 import { NextRequest, NextResponse } from 'next/server'
-import { getServerSession } from 'next-auth'
-import { authConfig } from '@/lib/auth/config'
+import { auth } from '@/lib/auth/config'
 import { createPaymentIntent } from '@/lib/payments/stripe'
 import { prisma } from '@/lib/db/prisma'
 import { z } from 'zod'
@@ -1405,7 +1419,7 @@ const createIntentSchema = z.object({
 
 export async function POST(request: NextRequest) {
   try {
-    const session = await getServerSession(authConfig)
+    const session = await auth()
     if (!session?.user?.id) {
       return NextResponse.json(
         { error: 'Unauthorized' },
@@ -1453,7 +1467,7 @@ export async function POST(request: NextRequest) {
     console.error('Create payment intent error:', error)
     if (error instanceof z.ZodError) {
       return NextResponse.json(
-        { error: 'Invalid data', details: error.errors },
+        { error: 'Invalid data', details: error.issues },
         { status: 400 }
       )
     }
@@ -2516,7 +2530,7 @@ NEXT_PUBLIC_GA_ID="G-XXXXXXXXXX"
 **Dockerfile**:
 ```dockerfile
 # 多阶段构建
-FROM node:18-alpine AS base
+FROM node:20-alpine AS base
 
 # 安装依赖阶段
 FROM base AS deps
@@ -2525,7 +2539,7 @@ WORKDIR /app
 
 # 复制包管理文件
 COPY package.json package-lock.json* ./
-RUN npm ci --only=production
+RUN npm ci --omit=dev
 
 # 构建阶段
 FROM base AS builder

@@ -25,7 +25,7 @@ function findUser(int $id): ?User     // 可能返回 null
 function setName(?string $name): void // 可传 null
 ```
 
-**陷阱**: PHP 8.4 起 `T|null` 与 `?T` 可自由混用（此前两者不能混写）；`null` 默认值自动使类型可空。
+**陷阱**: `?T` 与 `T|null` 自 8.0 起完全等价；但 `?T` 不能与其他类型组成联合（`?int|string` 直接解析错误）。`T $x = null` 的隐式可空默认值 8.4 起弃用，必须显式写 `?T` 或 `T|null`。
 
 ### 联合类型 Union Types（8.0+）
 
@@ -58,7 +58,7 @@ function render(Countable&Stringable $widget): string
 **定义**: 联合与交叉的组合，形式为 `(A&B)|C`，括号内只能交叉、括号间只能联合。
 
 ```php
-function process(Traversable&Countable|ArrayAccess $data): void
+function process((Traversable&Countable)|ArrayAccess $data): void
 {
     // 要么"可遍历且可计数"，要么"数组式访问"
 }

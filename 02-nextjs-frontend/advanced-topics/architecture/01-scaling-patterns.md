@@ -482,7 +482,7 @@ class HealthChecker {
     try {
       const response = await fetch(`${instanceUrl}${this.healthCheckPath}`, {
         method: 'GET',
-        timeout: 5000
+        signal: AbortSignal.timeout(5000) // fetch 无 timeout 选项
       })
       return response.ok && response.status === 200
     } catch (error) {
@@ -591,14 +591,20 @@ class VerticalScalingManager {
   }
 
   private async getCPUMetrics(): Promise<CPUMetrics> {
-    // 使用Node.js performance API或系统监控API
+    // process.cpuUsage() 仅含 user/system（微秒）；idle 需从 os.cpus() 时间片聚合
     const cpuUsage = process.cpuUsage()
-    const hrtime = process.hrtime()
+    const times = require('os').cpus().reduce(
+      (acc: { idle: number; total: number }, cpu: any) => ({
+        idle: acc.idle + cpu.times.idle,
+        total: acc.total + cpu.times.user + cpu.times.nice + cpu.times.sys + cpu.times.idle + cpu.times.irq,
+      }),
+      { idle: 0, total: 0 }
+    )
 
     return {
       usage: cpuUsage.user + cpuUsage.system,
-      idle: cpuUsage.idle,
-      percentage: ((cpuUsage.user + cpuUsage.system) / (cpuUsage.user + cpuUsage.system + cpuUsage.idle)) * 100,
+      idle: times.idle,
+      percentage: (1 - times.idle / times.total) * 100,
       loadAverage: this.getLoadAverage()
     }
   }
@@ -611,7 +617,7 @@ class VerticalScalingManager {
     return {
       used: memUsage.heapUsed,
       total: memUsage.heapTotal,
-      external: memUsage.heapExternal,
+      external: memUsage.external,
       systemUsed: totalMemory - freeMemory,
       systemTotal: totalMemory,
       percentage: ((totalMemory - freeMemory) / totalMemory) * 100
@@ -629,22 +635,15 @@ class VerticalScalingManager {
   }
 
   private async getNetworkMetrics(): Promise<NetworkMetrics> {
-    const networkInterfaces = require('os').networkInterfaces()
+    // 注意：os.networkInterfaces() 不提供 rx_bytes/tx_bytes 字节计数，
+    // 网卡流量需读取 /proc/net/dev（Linux）或系统监控工具
     let totalBytesIn = 0
     let totalBytesOut = 0
-
-    for (const interfaceName in networkInterfaces) {
-      const networkInterface = networkInterfaces[interfaceName]
-      for (const stat of networkInterface) {
-        totalBytesIn += stat.rx_bytes
-        totalBytesOut += stat.tx_bytes
-      }
-    }
 
     return {
       bytesIn: totalBytesIn,
       bytesOut: totalBytesOut,
-      bandwidth: (totalBytesIn + totalBytesOut) / 1024 / 1024 // MB/s
+      bandwidth: (totalBytesIn + totalBytesOut) / 1024 / 1024 // MB
     }
   }
 
@@ -1215,7 +1214,7 @@ class HealthChecker {
       const healthUrl = `${server.url}/health`
       const response = await fetch(healthUrl, {
         method: 'GET',
-        timeout: 5000,
+        signal: AbortSignal.timeout(5000), // fetch 无 timeout 选项
         headers: {
           'User-Agent': 'HealthChecker/1.0'
         }

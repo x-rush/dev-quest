@@ -157,7 +157,7 @@ const resp = await fetch("/api/heavy", { signal: controller.signal });
 // 模式二：超时自动取消（最常用）
 const resp2 = await fetch("/api/data", { signal: AbortSignal.timeout(3_000) });
 
-// 模式三：组合多个信号——任一触发即取消（定时器也支持 { signal } 取消）
+// 模式三：组合多个信号——任一触发即取消（node:timers/promises 的 setTimeout 也支持 { signal } 取消）
 const combined = AbortSignal.any([
   controller.signal,
   AbortSignal.timeout(5_000),
@@ -167,10 +167,12 @@ const combined = AbortSignal.any([
 给自定义异步函数接入取消协议：
 
 ```ts
+import { setTimeout } from "node:timers/promises"; // 全局 setTimeout 的第三参是传给回调的展开参数，不支持 { signal }
+
 async function poll(check: () => boolean, signal: AbortSignal): Promise<void> {
   signal.throwIfAborted(); // 若已取消，立即抛出
   while (!check()) {
-    await new Promise((r) => setTimeout(r, 1_000, { signal }));
+    await setTimeout(1_000, undefined, { signal }); // 取消时以 AbortError 拒绝
   }
 }
 ```
@@ -208,7 +210,7 @@ async function poll(check: () => boolean, signal: AbortSignal): Promise<void> {
 - 实现 `pollUntil(checkFn, intervalMs, signal)`：按间隔轮询，signal 触发时立即停止
 - 再加一个全局超时：`AbortSignal.any` 组合 30s 超时信号
 
-**提示**: `setTimeout` 的第三参可传 `{ signal }`。
+**提示**: 用 `node:timers/promises` 的 `setTimeout(delay, value, { signal })`——全局 `setTimeout` 不支持 `{ signal }`。
 
 ---
 

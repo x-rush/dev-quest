@@ -125,7 +125,7 @@ $text = (string) 100;       // '100'
 // 弱比较 vs 严格比较 —— 面试与 bug 高发区
 var_dump(0 == 'a');          // PHP 8 起为 false（8.0 改变了字符串转数字规则）
 var_dump(0 === 'a');         // false，恒为 false
-var_dump('10' == '1e1');     // false（8.0 起）：字符串间 == 也要数字格式匹配
+var_dump('10' == '1e1');     // true：两边均为数值字符串时按数值比较（PHP 8 只改字符串 vs 数字的比较）
 var_dump('10' === '10');     // true
 ```
 

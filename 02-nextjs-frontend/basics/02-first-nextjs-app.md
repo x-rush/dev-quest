@@ -45,7 +45,7 @@ Next.js 16 是基于 React 19 的全栈框架，提供了强大的开发体验�
 ### 第一步：环境准备
 
 ```bash
-# 检查Node.js版本 (需要Node.js 18.17+)
+# 检查Node.js版本 (需要Node.js 20.9+)
 node --version
 
 # 检查npm版本
@@ -502,15 +502,12 @@ npm run type-check
 // next.config.js
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // 实验性功能
-  experimental: {
-    // 启用Turbopack (Next.js 16)
-    turbo: {
-      rules: {
-        '*.svg': {
-          loaders: ['@svgr/webpack'],
-          as: '*.js',
-        },
+  // Turbopack 配置（Next.js 16 为顶层键，不再是 experimental.turbo）
+  turbopack: {
+    rules: {
+      '*.svg': {
+        loaders: ['@svgr/webpack'],
+        as: '*.js',
       },
     },
   },

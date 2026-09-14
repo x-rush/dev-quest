@@ -628,12 +628,27 @@ export default config
 #### 2.1 实现认证系统
 **lib/auth/config.ts**:
 ```typescript
-import { NextAuthConfig } from 'next-auth'
+import { type NextAuthConfig, type DefaultSession } from 'next-auth'
 import { PrismaAdapter } from '@auth/prisma-adapter'
 import Credentials from 'next-auth/providers/credentials'
 import { z } from 'zod'
 import { prisma } from '@/lib/db/prisma'
 import bcrypt from 'bcryptjs'
+
+declare module 'next-auth' {
+  interface User {
+    role?: string
+  }
+  interface Session {
+    user: { id?: string; role?: string } & DefaultSession['user']
+  }
+}
+
+declare module 'next-auth/jwt' {
+  interface JWT {
+    role?: string
+  }
+}
 
 const credentialsSchema = z.object({
   email: z.string().email(),
@@ -3392,7 +3407,7 @@ module.exports = nextConfig
 **Dockerfile**:
 ```dockerfile
 # 多阶段构建
-FROM node:18-alpine AS base
+FROM node:20-alpine AS base
 
 # 安装依赖阶段
 FROM base AS deps
@@ -3401,7 +3416,7 @@ WORKDIR /app
 
 # 复制包管理文件
 COPY package.json package-lock.json* ./
-RUN npm ci --only=production
+RUN npm ci --omit=dev
 
 # 构建阶段
 FROM base AS builder

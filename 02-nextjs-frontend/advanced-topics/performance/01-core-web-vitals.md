@@ -47,11 +47,10 @@ interface CoreWebVitals {
   // 辅助指标
   fcp: FirstContentfulPaint;         // 首次内容绘制
   ttfb: TimeToFirstByte;             // 首字节时间
-  ttfb: TimeToInteractive;           // 可交互时间
+  tti: TimeToInteractive;            // 可交互时间
 
   // 新增指标
   inp: InteractionToNextPaint;       // 交互到下次绘制
-  fcp: FirstContentfulPaint;        // 首次内容绘制
 }
 
 // 性能目标配置

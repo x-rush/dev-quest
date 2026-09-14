@@ -485,20 +485,22 @@ func (s *UserServiceGRPC) ListUsers(ctx context.Context, req *pb.ListUsersReques
 package discovery
 
 import (
-    "consul"
+    "fmt"
     "log"
-    "time"
+
+    "github.com/gin-gonic/gin"
+    api "github.com/hashicorp/consul/api"
 )
 
 type ConsulClient struct {
-    client *consul.Client
+    client *api.Client
 }
 
 func NewConsulClient(address string) (*ConsulClient, error) {
-    config := consul.DefaultConfig()
+    config := api.DefaultConfig()
     config.Address = address
 
-    client, err := consul.NewClient(config)
+    client, err := api.NewClient(config)
     if err != nil {
         return nil, err
     }
@@ -508,12 +510,12 @@ func NewConsulClient(address string) (*ConsulClient, error) {
 
 // 注册服务
 func (c *ConsulClient) RegisterService(serviceID, serviceName, address string, port int, healthCheckURL string) error {
-    registration := &consul.AgentServiceRegistration{
+    registration := &api.AgentServiceRegistration{
         ID:      serviceID,
         Name:    serviceName,
         Address: address,
         Port:    port,
-        Check: &consul.AgentServiceCheck{
+        Check: &api.AgentServiceCheck{
             HTTP:                           healthCheckURL,
             Interval:                       "10s",
             Timeout:                        "5s",
@@ -530,7 +532,7 @@ func (c *ConsulClient) DeregisterService(serviceID string) error {
 }
 
 // 发现服务
-func (c *ConsulClient) DiscoverService(serviceName string) ([]*consul.ServiceEntry, error) {
+func (c *ConsulClient) DiscoverService(serviceName string) ([]*api.ServiceEntry, error) {
     services, _, err := c.client.Health().Service(serviceName, "", true, nil)
     if err != nil {
         return nil, err
@@ -571,7 +573,7 @@ func ServiceRegistrationMiddleware(consulClient *ConsulClient, serviceName, serv
 package client
 
 import (
-    "consul"
+    "fmt"
     "log"
     "math/rand"
     "sync"
@@ -972,7 +974,8 @@ package circuit
 
 import (
     "context"
-    "errors"
+    "log"
+    "net/http"
     "sync"
     "time"
 
@@ -997,7 +1000,9 @@ func DefaultCircuitBreaker(name string) *CircuitBreaker {
         Interval:    10 * time.Second,
         Timeout:     30 * time.Second,
         ReadyToTrip: func(counts gobreaker.Counts) bool {
-            return counts.ConsecutiveFailures > 5 || counts.FailureRate > 0.6
+            // Counts 没有 FailureRate 字段，用 TotalFailures/Requests 自行计算
+            return counts.ConsecutiveFailures > 5 ||
+                float64(counts.TotalFailures)/float64(counts.Requests) > 0.6
         },
         OnStateChange: func(name string, from gobreaker.State, to gobreaker.State) {
             log.Printf("CircuitBreaker '%s' changed from %s to %s", name, from, to)
@@ -1017,7 +1022,7 @@ func (cb *CircuitBreaker) Execute(ctx context.Context, fn func() (interface{}, e
 }
 
 // HTTP客户端熔断器
-type C HTTPClient struct {
+type CircuitHTTPClient struct {
     client     *http.Client
     breakers   map[string]*CircuitBreaker
     mutex      sync.RWMutex

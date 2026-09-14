@@ -151,7 +151,7 @@ GitHub Actions 的 `ubuntu-latest` 自带 Docker；受限环境可给集成测�
 
 ### Q3: 消费者/定时任务在测试里乱跑？
 
-测试 profile 里关闭调度：`spring.task.scheduling.enabled=false`，或用 `@MockitoSpyBean` 精确控制。
+定时任务用 `@TestConfiguration` 提供空转的 `TaskScheduler` Bean 替换默认实现（Boot 4 无 `spring.task.scheduling.enabled` 属性）；消费者用 `@MockitoSpyBean` 精确控制。
 
 ## 🎨 最佳实践
 

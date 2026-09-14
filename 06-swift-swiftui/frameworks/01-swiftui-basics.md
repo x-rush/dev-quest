@@ -41,7 +41,7 @@ struct GreetingCard: View {
     }
 }
 
-#Preview {                                // Xcode 16+ 宏，替代 PreviewProvider
+#Preview {                                // Xcode 15+ 宏，替代 PreviewProvider
     GreetingCard(name: "Dev Quest")
 }
 ```

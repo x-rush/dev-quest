@@ -46,6 +46,7 @@ on:
   pull_request:
   push:
     branches: [main]
+  workflow_call:   # 允许 release.yml 以 uses: 复用本流水线作为门禁
 
 jobs:
   check:

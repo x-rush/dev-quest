@@ -105,14 +105,17 @@ app.use(logger());
 // 自定义认证中间件
 import type { MiddlewareHandler } from "hono";
 
-const requireAuth: MiddlewareHandler = async (c, next) => {
+// Context 变量需要显式类型：中间件与 app 标注同一 Env 泛型（全局增强写法见 [TypeScript 模式](../reference/language-concepts/05-typescript-patterns.md)）
+type Env = { Variables: { user: User } };
+
+const requireAuth: MiddlewareHandler<Env> = async (c, next) => {
   const token = c.req.header("Authorization")?.replace("Bearer ", "");
   if (!token) return c.json({ error: "未认证" }, 401);
   c.set("user", verifyToken(token));   // 写入 Context 变量
   await next();
 };
 
-// 作用域挂载：只保护某个路由组
+// 作用域挂载：只保护某个路由组（app 需以同一 Env 创建：new Hono<Env>()）
 app.use("/api/admin/*", requireAuth);
 // 或路由级
 app.get("/me", requireAuth, (c) => c.json({ user: c.get("user") }));

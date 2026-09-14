@@ -2341,11 +2341,13 @@ import (
     "github.com/prometheus/client_golang/prometheus"
     "github.com/prometheus/client_golang/prometheus/promauto"
     "github.com/prometheus/client_golang/prometheus/promhttp"
+    "github.com/sirupsen/logrus"
+    dto "github.com/prometheus/client_model/go"
     "go.opentelemetry.io/contrib/instrumentation/github.com/gin-gonic/gin/otelgin"
     "go.opentelemetry.io/otel"
-    "go.opentelemetry.io/otel/exporter/jaeger"
+    "go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracehttp"
     "go.opentelemetry.io/otel/sdk/resource"
-    "go.opentelemetry.io/otel/sdk/trace"
+    sdktrace "go.opentelemetry.io/otel/sdk/trace"
     semconv "go.opentelemetry.io/otel/semconv/v1.4.0"
     "go.opentelemetry.io/otel/trace"
 )
@@ -2471,11 +2473,11 @@ func NewMonitoringService(logger *logrus.Logger) (*MonitoringService, error) {
 }
 
 // initTracerProvider 初始化追踪提供者
-func initTracerProvider() (*trace.TracerProvider, error) {
-    // 创建Jaeger导出器
-    exporter, err := jaeger.New(jaeger.WithCollectorEndpoint())
+func initTracerProvider() (*sdktrace.TracerProvider, error) {
+    // 创建OTLP HTTP导出器（jaeger exporter 已废弃移除，改用 OTLP 上报到 Jaeger >= 1.35）
+    exporter, err := otlptracehttp.New(context.Background())
     if err != nil {
-        return nil, fmt.Errorf("failed to create Jaeger exporter: %w", err)
+        return nil, fmt.Errorf("failed to create OTLP exporter: %w", err)
     }
 
     // 创建资源
@@ -2490,9 +2492,9 @@ func initTracerProvider() (*trace.TracerProvider, error) {
     }
 
     // 创建追踪提供者
-    tp := trace.NewTracerProvider(
-        trace.WithBatcher(exporter),
-        trace.WithResource(res),
+    tp := sdktrace.NewTracerProvider(
+        sdktrace.WithBatcher(exporter),
+        sdktrace.WithResource(res),
     )
 
     // 设置为全局默认追踪提供者
@@ -2629,12 +2631,22 @@ func (ms *MonitoringService) metricsOverview(c *gin.Context) {
             },
         },
         "http": gin.H{
-            "active_connections": activeConnections.Get(),
+            // prometheus.Gauge 没有 Get 方法，通过 Write 读取当前值
+            "active_connections": gaugeValue(activeConnections),
         },
         "timestamp": time.Now().Unix(),
     }
 
     c.JSON(http.StatusOK, overview)
+}
+
+// gaugeValue 读取 Gauge 的当前值
+func gaugeValue(g prometheus.Gauge) float64 {
+    var metric dto.Metric
+    if err := g.Write(&metric); err != nil {
+        return 0
+    }
+    return metric.GetGauge().GetValue()
 }
 ```
 

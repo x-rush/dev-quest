@@ -270,7 +270,7 @@ describe("Validation Schemas", () => {
       const result = userSchema.safeParse(invalidUser)
       expect(result.success).toBe(false)
       if (!result.success) {
-        expect(result.error.errors[0].message).toContain("邮箱")
+        expect(result.error.issues[0].message).toContain("邮箱")
       }
     })
 
@@ -284,7 +284,7 @@ describe("Validation Schemas", () => {
       const result = userSchema.safeParse(youngUser)
       expect(result.success).toBe(false)
       if (!result.success) {
-        expect(result.error.errors[0].message).toContain("年龄")
+        expect(result.error.issues[0].message).toContain("年龄")
       }
     })
 
@@ -334,7 +334,7 @@ describe("Validation Schemas", () => {
       const result = postSchema.safeParse(postWithManyTags)
       expect(result.success).toBe(false)
       if (!result.success) {
-        expect(result.error.errors[0].message).toContain("标签")
+        expect(result.error.issues[0].message).toContain("标签")
       }
     })
   })

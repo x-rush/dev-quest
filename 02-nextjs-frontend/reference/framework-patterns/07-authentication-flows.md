@@ -146,7 +146,7 @@ graph TB
     "react-dom": "^19.0.0",
     "next-auth": "^5.0.0-beta.4",
     "@prisma/client": "^5.10.0",
-    "@prisma/adapter-sqlite": "^1.0.0",
+    "@auth/prisma-adapter": "^2.0.0",
     "bcrypt": "^5.1.1",
     "zod": "^3.23.8",
     "speakeasy": "^2.0.0",
@@ -175,13 +175,13 @@ graph TB
 
 ```typescript
 import NextAuth from "next-auth"
-import type { NextAuthOptions } from "next-auth"
+import type { NextAuthConfig } from "next-auth"
 import CredentialsProvider from "next-auth/providers/credentials"
 import GoogleProvider from "next-auth/providers/google"
 import GitHubProvider from "next-auth/providers/github"
 import MicrosoftProvider from "next-auth/providers/microsoft"
 import AppleProvider from "next-auth/providers/apple"
-import { PrismaAdapter } from "@prisma/adapter-sqlite"
+import { PrismaAdapter } from "@auth/prisma-adapter"
 import { prisma } from "@/lib/prisma"
 import bcrypt from "bcrypt"
 import { z } from "zod"
@@ -189,7 +189,7 @@ import { validatePasswordStrength } from "@/lib/security"
 import { detectThreat, logSecurityEvent } from "@/lib/security"
 import { authenticateWithTOTP } from "@/lib/mfa"
 
-export const authOptions: NextAuthOptions = {
+export const authConfig: NextAuthConfig = {
   // Prisma适配器支持数据库持久化
   adapter: PrismaAdapter(prisma),
 
@@ -274,11 +274,9 @@ export const authOptions: NextAuthOptions = {
 
     // 入场回调
     async signIn({ user, account, profile, email, credentials }) {
-      // 威胁检测
+      // 威胁检测（signIn 回调无 request 参数，IP/UA 采集移至 middleware 层）
       const threatResult = await detectThreat({
-        email: email!,
-        ip: request?.ip || "unknown",
-        userAgent: request?.headers.get("user-agent") || "unknown"
+        email: email!
       })
 
       if (threatResult.blocked) {
@@ -684,7 +682,8 @@ async function rateLimit(key: string, options: { windowMs: number; max: number; 
   return { success: true }
 }
 
-export default NextAuth(authOptions)
+// NextAuth v5：实例化并导出路由处理器与会话工具
+export const { handlers, auth, signIn, signOut } = NextAuth(authConfig)
 ```
 
 ### 2. Prisma 数据模型
@@ -711,14 +710,14 @@ model User {
   name            String?
   image           String?
   role            UserRole   @default(USER)
-  permissions     String[]
+  permissions     String    // JSON数组字符串
   password        String
   emailVerified   Boolean   @default(false)
   isActive        Boolean   @default(true)
   lockedUntil     DateTime?
   mfaEnabled      Boolean   @default(false)
   mfaSecret       String?
-  backupCodes     String[]   @default([])
+  backupCodes     String    @default("[]") // JSON数组字符串
   lastLoginAt     DateTime?
   lastLoginIp     String?
   lastLoginUserAgent String?
@@ -743,12 +742,12 @@ model Account {
   type              String
   provider          String
   providerAccountId  String
-  refresh_token     String? @db.Text
-  access_token      String? @db.Text
+  refresh_token     String?
+  access_token      String?
   expires_at        Int?
   token_type        String?
   scope             String?
-  id_token          String? @db.Text
+  id_token          String?
   session_state     String?
 
   // 关系
@@ -786,9 +785,9 @@ model SecuritySettings {
   id                   String   @id @default(cuid())
   userId               String   @unique
   enableIPWhitelist    Boolean  @default(false)
-  ipWhitelist          String[]  // JSON数组
+  ipWhitelist          String   // JSON数组字符串
   enableGeoBlocking    Boolean  @default(false)
-  blockedCountries     String[]  // ISO国家代码
+  blockedCountries     String   // JSON数组字符串（ISO国家代码）
   enableSuspiciousLogin Boolean  @default(true)
   suspiciousLoginThreshold Int      @default(3)
   sessionTimeout       Int      @default(30) // 分钟
@@ -845,6 +844,9 @@ model AuditLog {
   userAgent   String?
   timestamp   DateTime   @default(now())
 
+  // 关系
+  user User? @relation(fields: [userId], references: [id], onDelete: SetNull)
+
   @@map("audit_logs")
 }
 
@@ -859,13 +861,33 @@ model JWTBlacklist {
   @@map("jwt_blacklist")
 }
 
+// IP黑名单模型
+model BlacklistedIP {
+  id        String   @id @default(cuid())
+  ip        String   @unique
+  reason    String?
+  createdAt DateTime  @default(now())
+
+  @@map("blacklisted_ips")
+}
+
+// 用户代理黑名单模型
+model BlacklistedUserAgent {
+  id        String   @id @default(cuid())
+  userAgent String   @unique
+  reason    String?
+  createdAt DateTime  @default(now())
+
+  @@map("blacklisted_user_agents")
+}
+
 // 用户权限模型
 model Permission {
   id          String   @id @default(cuid())
   name        String   @unique
   description String?
   resource    String
-  actions     String[]  // ['read', 'write', 'delete', 'admin']
+  actions     String   // JSON数组字符串，如 ["read","write","delete","admin"]
   createdAt   DateTime  @default(now())
 
   @@map("permissions")
@@ -1176,6 +1198,10 @@ export function generateSecureToken(length: number = 32): string {
 
 // 验证密码强度
 export function validatePasswordStrength(password: string): {
+  isValid: boolean
+  errors: string[]
+  strength: "weak" | "medium" | "strong"
+} {
   const errors: string[] = []
 
   if (password.length < 8) {

@@ -170,14 +170,7 @@ const nextConfig = {
   },
 
   // 性能优化配置
-  experimental: {
-    // 启用App Router (Next.js 13+)
-    appDir: true,
-    // 优化字体加载
-    fontLoaders: [
-      { loader: 'next/font/google', options: { subsets: ['latin'] } },
-    ],
-  },
+  // App Router 默认启用，无需 experimental.appDir；字体经 next/font 自动优化，Next 16 无 fontLoaders 键
 
   // 图片优化
   images: {
@@ -350,7 +343,7 @@ main().catch(console.error)
 
 ```typescript
 // lib/vitals.ts
-import { getCLS, getFID, getFCP, getLCP, getTTFB } from 'web-vitals'
+import { onCLS, onINP, onFCP, onLCP, onTTFB } from 'web-vitals'
 
 function sendToAnalytics(metric: any) {
   // 发送到分析服务
@@ -369,11 +362,11 @@ function sendToAnalytics(metric: any) {
 }
 
 export function reportWebVitals() {
-  getCLS(sendToAnalytics)
-  getFID(sendToAnalytics)
-  getFCP(sendToAnalytics)
-  getLCP(sendToAnalytics)
-  getTTFB(sendToAnalytics)
+  onCLS(sendToAnalytics)
+  onINP(sendToAnalytics)
+  onFCP(sendToAnalytics)
+  onLCP(sendToAnalytics)
+  onTTFB(sendToAnalytics)
 }
 
 // 自定义性能指标
@@ -1498,7 +1491,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [18.x, 20.x]
+        node-version: [20.x, 22.x]
 
     steps:
       - name: Checkout code
@@ -1542,7 +1535,7 @@ jobs:
           k6 run tests/load/k6-test.js
 
       - name: Upload performance reports
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: performance-reports
           path: |
@@ -1582,7 +1575,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Download performance reports
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: performance-reports
 

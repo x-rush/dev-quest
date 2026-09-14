@@ -121,7 +121,7 @@ echo $gen->send(5), PHP_EOL;     // 5
 echo $gen->send(3), PHP_EOL;     // 8
 ```
 
-⚠️ **常见陷阱**: `send()` 在生成器尚未开始时必须先 `current()`/`rewind()` 启动；`yield` 的"接收值"语义容易被误读为参数。
+⚠️ **常见陷阱**: `send()` 可直接启动尚未运行的生成器，传入值即首个 `yield` 表达式的结果；`yield` 的"接收值"语义容易被误读为参数。
 
 🔗 **相关条目**: [Fibers](./03-types-oop-modern.md)（需要"任意调用栈深度暂停"时用 Fiber 而非 Generator）
 

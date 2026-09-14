@@ -691,7 +691,7 @@ export default function GlobalError({ error }: { error: Error }) {
 npm install web-vitals
 
 // app/layout.tsx
-import { getCLS, getFID, getFCP, getLCP, getTTFB } from "web-vitals"
+import { onCLS, onINP, onFCP, onLCP, onTTFB } from "web-vitals"
 
 export function reportWebVitals(metric: any) {
   // 发送到分析服务

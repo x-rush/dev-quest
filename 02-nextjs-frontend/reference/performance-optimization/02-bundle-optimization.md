@@ -962,8 +962,8 @@ const nextConfig = {
       { protocol: 'https', hostname: 'cdn.example.com' },
     ],
 
-    // 图片质量
-    quality: 85,
+    // 图片质量（Next 16 起 quality 单值改为 qualities 数组）
+    qualities: [85],
 
     // 最小化缓存时间
     minimumCacheTTL: 60,

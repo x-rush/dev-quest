@@ -76,8 +76,8 @@ final class MetricsSubscriber: NSObject, MXMetricManagerSubscriber {
             if let launch = payload.applicationLaunchMetrics {
                 record("启动耗时直方图", launch.histogrammedTimeToFirstDraw)
             }
-            if let scroll = payload.applicationScrollHitchTimeRatioMetrics {
-                record("滚动卡顿比", scroll.scrollHitchTimeRatio)
+            if let responsiveness = payload.applicationResponsivenessMetrics {
+                record("响应卡顿直方图", responsiveness.histogrammedApplicationHangTime)
             }
         }
         // 把 payload JSON 归档/上报到自己的后端
@@ -102,7 +102,7 @@ final class MetricsSubscriber: NSObject, MXMetricManagerSubscriber {
 }
 ```
 
-**解读要点**：`scrollHitchTimeRatio` 低于 5ms/s 属良好；启动看 P90 分位而不是均值。指标劣化的代码级排查见 [01-rendering-performance.md](../advanced-topics/performance/01-rendering-performance.md)。
+**解读要点**：直方图指标看 P90 分位而不是均值；指标劣化的代码级排查见 [01-rendering-performance.md](../advanced-topics/performance/01-rendering-performance.md)。iOS 27 起 MetricKit 提供 `MetricReport` 等新 API（含 `HitchTimeMetric` 等原生指标，旧 `MXAppResponsivenessMetric` 同步弃用），新代码建议关注。
 
 ## 🛠️ 任务三：崩溃上报与符号化
 

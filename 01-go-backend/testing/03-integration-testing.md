@@ -291,6 +291,7 @@ func TestUserRepositoryIntegration(t *testing.T) {
 package database
 
 import (
+	"context"
 	"database/sql"
 	"testing"
 	"time"
@@ -675,7 +676,9 @@ func TestUserAPIIntegration(t *testing.T) {
 package external
 
 import (
+	"bytes"
 	"encoding/json"
+	"fmt"
 	"io"
 	"net/http"
 	"net/http/httptest"
@@ -1081,8 +1084,8 @@ func TestMessageQueueIntegration(t *testing.T) {
 package service
 
 import (
-	"context"
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"net/http/httptest"
 	"testing"

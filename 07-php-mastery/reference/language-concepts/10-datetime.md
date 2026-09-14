@@ -161,12 +161,12 @@ echo $utc->format('c'), PHP_EOL;         // 2026-09-11T06:00:00+00:00
 
 ## 条目 5：比较与时间戳
 
-📌 **定义**: 两个 `DateTimeInterface` 可直接用比较运算符（8.0+ 内置比较语义）；与 Unix 时间戳互转用 `getTimestamp()`/`'@ts'` 构造。
+📌 **定义**: 两个 `DateTimeInterface` 可直接用比较运算符（5.2 起内置比较语义）；与 Unix 时间戳互转用 `getTimestamp()`/`'@ts'` 构造。
 
 📖 **语法/签名**:
 
 ```php
-$a < $b            // DateTimeInterface 直接比较（8.0+）
+$a < $b            // DateTimeInterface 直接比较（5.2 起）
 $a->getTimestamp(): int
 new DateTimeImmutable('@' . time())      // @ 前缀按 UTC 创建
 DateTimeImmutable::createFromFormat('U', (string) time())
@@ -190,7 +190,7 @@ $left = $now->diff($deadline);
 printf('还剩 %d 天 %d 小时%s', $left->d, $left->h, PHP_EOL);
 ```
 
-⚠️ **常见陷阱**: 8.0 以前"对象比较不可靠"的老文章结论已失效；`time()`/`getTimestamp()` 是秒级，毫秒要用 `microtime(true)` 或 `format('v')`；`'@ts'` 构造的对象时区是 UTC，展示前先 `setTimezone`。
+⚠️ **常见陷阱**: 比较运算符 5.2 起即可用，"对象比较不可靠"的老文章结论早已失效；`time()`/`getTimestamp()` 是秒级，毫秒要用 `microtime(true)` 或 `format('v')`；`'@ts'` 构造的对象时区是 UTC，展示前先 `setTimezone`。
 
 🔗 **相关条目**: [时区](#条目-4时区datetimezone)、[DateInterval 与 DatePeriod](#条目-3dateinterval-与-dateperiod)
 

@@ -120,9 +120,9 @@ function CartBadge() {
 
 ```ts
 // MMKV：同步 API 直接读写，适合高频小数据（设置项、缓存）
-import { MMKV } from 'react-native-mmkv';
+import { createMMKV } from 'react-native-mmkv';
 
-export const storage = new MMKV();          // 实例全局唯一即可
+export const storage = createMMKV();        // 实例全局唯一即可
 storage.set('theme', 'dark');
 const theme = storage.getString('theme');   // 同步返回，无 await
 ```

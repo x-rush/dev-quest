@@ -1783,7 +1783,7 @@ func BatchUpdateWithCase(db *gorm.DB, updates []struct {
     `,
         strings.Join(nameCases, " "),
         strings.Join(emailCases, " "),
-        strings.Join(strings.Repeat("?", len(updates)), ","),
+        strings.TrimRight(strings.Repeat("?,", len(updates)), ","),
     )
 
     return db.Exec(query, ids...).Error
@@ -2071,7 +2071,7 @@ func (u *User) AfterDelete(tx *gorm.DB) error {
 // 查询后钩子
 func (u *User) AfterFind(tx *gorm.DB) error {
     // 计算文章数量
-    tx.Model(&Post{}).Where("user_id = ?", u.ID).Count(int64(&u.PostCount))
+    tx.Model(&Post{}).Where("user_id = ?", u.ID).Count(&u.PostCount)
 
     // 隐藏敏感信息
     u.Password = ""
@@ -2195,8 +2195,8 @@ type SoftDeleteModel struct {
     DeleteReason string      `gorm:"size:255"` // 删除原因
 }
 
-// 扩展软删除方法
-func (db *gorm.DB) SoftDeleteWithReason(model interface{}, userID uint, reason string) error {
+// 扩展软删除方法（Go 不允许为其他包的类型定义方法，用普通函数）
+func SoftDeleteWithReason(db *gorm.DB, model interface{}, userID uint, reason string) error {
     return db.Model(model).Updates(map[string]interface{}{
         "deleted_at":    time.Now(),
         "deleted_by":    userID,
@@ -2205,12 +2205,12 @@ func (db *gorm.DB) SoftDeleteWithReason(model interface{}, userID uint, reason s
 }
 
 // 查询软删除记录
-func (db *gorm.DB) FindSoftDeletedRecords(model interface{}, dest interface{}) error {
+func FindSoftDeletedRecords(db *gorm.DB, model interface{}, dest interface{}) error {
     return db.Unscoped().Model(model).Where("deleted_at IS NOT NULL").Find(dest).Error
 }
 
 // 恢复软删除记录
-func (db *gorm.DB) RestoreSoftDeletedRecord(model interface{}, id uint) error {
+func RestoreSoftDeletedRecord(db *gorm.DB, model interface{}, id uint) error {
     return db.Unscoped().Model(model).Where("id = ?", id).Updates(map[string]interface{}{
         "deleted_at":    nil,
         "deleted_by":    nil,
@@ -2229,7 +2229,7 @@ type User struct {
 func DeleteUserWithReason(db *gorm.DB, userID, operatorID uint, reason string) error {
     return db.Transaction(func(tx *gorm.DB) error {
         // 软删除用户
-        if err := tx.SoftDeleteWithReason(&User{}, operatorID, reason).Error; err != nil {
+        if err := SoftDeleteWithReason(tx, &User{}, operatorID, reason); err != nil {
             return err
         }
 
@@ -2430,7 +2430,7 @@ func getFunctionName(ctx context.Context) string {
 func SetupCustomLogger(db *gorm.DB) *gorm.DB {
     customLogger := NewCustomLogger(logger.Info)
 
-    return db.Session(&gorm.Config{
+    return db.Session(&gorm.Session{
         Logger: customLogger,
     })
 }

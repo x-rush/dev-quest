@@ -1374,7 +1374,7 @@ const ChartComponent = createViewportLazyComponent(
 
 ```typescript
 // src/lib/performance/PerformanceMonitor.ts
-import { getCLS, getFID, getFCP } from 'web-vitals'
+import { onCLS, onINP, onFCP } from 'web-vitals'
 import { reportWebVitals } from 'web-vitals'
 
 interface PerformanceMetrics {

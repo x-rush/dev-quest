@@ -50,12 +50,12 @@ npm install --save-dev jest @types/jest   # 确保 jest 本体与类型在
 // jest.setup.ts —— 全局 mock 噪音源
 jest.mock('react-native-mmkv', () => ({
   // 用内存 Map 模拟 MMKV，测试之间互不污染
-  MMKV: jest.fn().mockImplementation(() => {
+  createMMKV: jest.fn(() => {
     const map = new Map<string, string>();
     return {
       set: (k: string, v: string) => map.set(k, v),
       getString: (k: string) => map.get(k) ?? undefined,
-      delete: (k: string) => map.delete(k),
+      remove: (k: string) => map.delete(k), // v4 中删除键的方法为 remove（返回是否删除）
     };
   }),
 }));

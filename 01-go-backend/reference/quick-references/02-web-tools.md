@@ -126,7 +126,7 @@ func main() {
 ### 热重载工具
 ```bash
 # 安装air
-go install github.com/cosmtrek/air@latest
+go install github.com/air-verse/air@latest
 
 # 创建.air.toml配置
 air init

@@ -132,7 +132,7 @@ const nextConfig = {
     if (!isServer) {
       config.plugins.push(
         // Bundle Analyzer
-        new webpack.BundleAnalyzerPlugin({
+        new (require('webpack-bundle-analyzer').BundleAnalyzerPlugin)({
           analyzerMode: 'disabled',
           openAnalyzer: false,
         })
@@ -1219,11 +1219,10 @@ module.exports = {
   },
 };
 
-// Esbuild 缓存
+// Esbuild（注意：esbuild 无持久缓存选项，增量构建仅靠进程内缓存）
 const esbuild = require('esbuild');
 
 esbuild.build({
-  cache: true,
   entryPoints: ['src/index.js'],
   bundle: true,
   outfile: 'dist/bundle.js',

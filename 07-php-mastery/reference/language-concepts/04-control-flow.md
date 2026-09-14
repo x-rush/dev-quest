@@ -41,7 +41,7 @@ if ($a > $b) {
 
 ```php
 $label = $ok ? 'yes' : 'no';
-$label ??= 'default';                 // null 时赋值（7.0+）
+$label ??= 'default';                 // null 时赋值（7.4+）
 $page = $_GET['p'] ?? $fallback ?? 1; // 链式兜底，无需 isset
 ```
 

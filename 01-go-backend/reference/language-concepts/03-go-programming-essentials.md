@@ -2504,8 +2504,8 @@ func TestUserService_Integration(t *testing.T) {
     })
 }
 
-func setupDatabase(host string, port int) (*sql.DB, error) {
-    dsn := fmt.Sprintf("root:password@tcp(%s:%d)/testdb?parseTime=true", host, port)
+func setupDatabase(host string, port string) (*sql.DB, error) {
+    dsn := fmt.Sprintf("root:password@tcp(%s:%s)/testdb?parseTime=true", host, port)
 
     // 等待数据库就绪
     var db *sql.DB
@@ -2999,7 +2999,7 @@ checks = [
 ]
 
 # 忽略某些检查
-# //staticcheck:ignore ST1000
+# //lint:ignore ST1000 占位示例函数，暂未使用
 func unused_function() {
     // ...
 }
@@ -3399,7 +3399,7 @@ jobs:
 ### Q4: Go的垃圾回收有什么特点？
 **A**: Go GC特点：
 - **并发标记清除**: GC与应用程序并发执行
-- **分代收集**: 优先回收年轻对象
+- **非分代、非移动**: 不按对象年龄分代，标记后原地清除、不搬移存活对象
 - **可调参数**: 可以通过GOGC调整GC激进程度
 - **低延迟**: 适合延迟敏感的应用
 

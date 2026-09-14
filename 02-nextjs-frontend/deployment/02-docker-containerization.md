@@ -98,7 +98,7 @@ WORKDIR /app
 COPY package.json package-lock.json* ./
 
 # 安装依赖
-RUN npm ci --only=production && npm cache clean --force
+RUN npm ci --omit=dev && npm cache clean --force
 
 # 构建阶段
 FROM node:20-alpine AS builder
@@ -183,7 +183,7 @@ WORKDIR /app
 COPY package.json package-lock.json* ./
 
 # 安装依赖
-RUN npm ci --only=production && npm cache clean --force
+RUN npm ci --omit=dev && npm cache clean --force
 
 # 构建阶段
 FROM node:20-alpine AS builder

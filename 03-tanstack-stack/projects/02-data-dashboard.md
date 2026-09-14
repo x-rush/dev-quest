@@ -102,7 +102,10 @@ export function useUserTable(search: DashboardSearch) {
 
 ```tsx
 // src/components/user-table.tsx
-import { flexRender, globalFilteringFeature, tableFeatures, useTable } from '@tanstack/react-table'
+import {
+  columnFilteringFeature, columnVisibilityFeature, flexRender, globalFilteringFeature,
+  rowPaginationFeature, rowSortingFeature, tableFeatures, useTable,
+} from '@tanstack/react-table'
 import { Route } from '@/routes/dashboard'
 import { useUserTable } from '../hooks/use-user-table'
 import { columns } from './user-columns'
@@ -112,9 +115,15 @@ export function UserTable() {
   const navigate = Route.useNavigate()
   const { data, isPlaceholderData, isPending, isError } = useUserTable(search)
 
-  // v9：全局筛选状态对应的特性需注册；服务端模式无需本地行模型
+  // v9：manual*/state.* 用到的每个能力都要注册对应特性（globalFilteringFeature 还强制要求 columnFilteringFeature）；服务端模式无需本地行模型
   const table = useTable({
-    features: tableFeatures({ globalFilteringFeature }),
+    features: tableFeatures({
+      globalFilteringFeature,
+      rowSortingFeature,
+      columnFilteringFeature,
+      columnVisibilityFeature,
+      rowPaginationFeature,
+    }),
     data: data?.rows ?? [],
     columns,
     manualPagination: true, // 三 Manual：一切由服务端裁决

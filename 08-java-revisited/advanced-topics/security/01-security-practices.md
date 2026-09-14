@@ -116,9 +116,10 @@ management:
   endpoint:
     health:
       show-details: never
-server:
-  error:
-    include-stacktrace: never  # 异常细节不给客户端
+spring:
+  web:
+    error:
+      include-stacktrace: never  # 异常细节不给客户端（Boot 4.0 起 server.error.* 迁入 spring.web.error.*）
 ```
 
 ### 密码与密钥

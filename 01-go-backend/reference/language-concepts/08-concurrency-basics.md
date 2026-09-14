@@ -92,7 +92,7 @@ case <-time.After(2 * time.Second):
 - ✅ **正确做法**：`go func(n int){...}(i)` 显式传参（或使用循环内局部副本），语义与旧版本行为差异无关，永远显式最安全。
 - ❌ **错误做法**：从不关闭 channel，接收方的 `range` 永不结束。
 - ✅ **正确做法**：由发送方在"不会再发"时 `close(ch)`，一条管道一个关闭者。
-- ❌ **错误做法**：`wg.Done()` 忘记 defer，goroutine panic 后 Wait 永久阻塞。
+- ❌ **错误做法**：`wg.Done()` 忘记 defer，goroutine 提前 return 导致 Wait 永久阻塞；未 recover 的 goroutine panic 更严重——直接终止整个程序。
 - ✅ **正确做法**：进入 goroutine 第一行 `defer wg.Done()`。
 - ❌ **错误做法**：向已关闭的 channel 发送、或对 nil channel 收发（永久阻塞）。
 - ✅ **正确做法**：发送责任方唯一化；nil channel 只应出现在 select 中用于禁用分支。

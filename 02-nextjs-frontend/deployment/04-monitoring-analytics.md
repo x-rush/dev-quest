@@ -95,7 +95,7 @@ Sentry.init({
   replaysOnErrorSampleRate: 1.0,
   replaysSessionSampleRate: 0.1,
   integrations: [
-    new Sentry.Replay({
+    Sentry.replayIntegration({
       maskAllText: true,
       blockAllMedia: true,
     }),
@@ -130,8 +130,7 @@ Sentry.init({
   tracesSampleRate: process.env.NODE_ENV === 'production' ? 0.1 : 1.0,
   debug: false,
   integrations: [
-    new Sentry.Integrations.Http({ tracing: true }),
-    new Sentry.Integrations.Express({ app }),
+    // @sentry/nextjs v8+：HTTP 与框架追踪已默认启用，无需手动注册 Integrations.Http/Express
   ],
 })
 ```
@@ -179,11 +178,6 @@ export class ErrorTracking {
     if (typeof window !== 'undefined') {
       window.gtag?.('event', action, properties)
     }
-  }
-
-  // 追踪性能指标
-  static trackPerformance(metricName: string, value: number, unit: string = 'ms') {
-    Sentry.metrics.timing(metricName, value, { unit })
   }
 
   // 设置用户信息
@@ -361,11 +355,11 @@ export class AlertManager {
 #### 🎯 Core Web Vitals 配置
 ```typescript
 // lib/web-vitals.ts
-import { getCLS, getFID, getFCP, getLCP, getTTFB } from 'web-vitals'
+import { onCLS, onINP, onFCP, onLCP, onTTFB } from 'web-vitals'
 
 export interface WebVitalsMetrics {
   CLS: number // Cumulative Layout Shift
-  FID: number // First Input Delay
+  INP: number // Interaction to Next Paint
   FCP: number // First Contentful Paint
   LCP: number // Largest Contentful Paint
   TTFB: number // Time to First Byte
@@ -384,11 +378,11 @@ export class WebVitalsTracker {
 
   // 初始化追踪
   init() {
-    getCLS(this.handleMetric.bind(this, 'CLS'))
-    getFID(this.handleMetric.bind(this, 'FID'))
-    getFCP(this.handleMetric.bind(this, 'FCP'))
-    getLCP(this.handleMetric.bind(this, 'LCP'))
-    getTTFB(this.handleMetric.bind(this, 'TTFB'))
+    onCLS(this.handleMetric.bind(this, 'CLS'))
+    onINP(this.handleMetric.bind(this, 'INP'))
+    onFCP(this.handleMetric.bind(this, 'FCP'))
+    onLCP(this.handleMetric.bind(this, 'LCP'))
+    onTTFB(this.handleMetric.bind(this, 'TTFB'))
   }
 
   // 处理指标数据
@@ -433,7 +427,7 @@ export class WebVitalsTracker {
   private checkThresholds(name: keyof WebVitalsMetrics, metric: any) {
     const thresholds = {
       CLS: 0.1,
-      FID: 100,
+      INP: 200,
       FCP: 1800,
       LCP: 2500,
       TTFB: 800,

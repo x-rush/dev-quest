@@ -198,8 +198,8 @@ function getUserInfo() {
 const [name, age, email] = getUserInfo()
 
 // 交换变量（无需临时变量）
-let a = 1, b = 2
-[a, b] = [b, a]
+// 注意：赋值解构须与上一语句同行（或前置分号），否则行首 [ 会被 ASI 误解析而抛 ReferenceError
+let a = 1, b = 2; [a, b] = [b, a]
 console.log(a, b) // 2, 1
 ```
 

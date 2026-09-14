@@ -454,9 +454,11 @@ networks:
 FROM golang:1.25-alpine AS builder
 
 # 设置构建参数
+# 注意：ARG 只做字面量赋值，不会执行 $(...) 命令替换；
+# BUILD_TIME/GIT_COMMIT 需在构建时通过 --build-arg 注入（见下方构建命令）
 ARG VERSION=dev
-ARG BUILD_TIME=$(date -u +'%Y-%m-%dT%H:%M:%SZ')
-ARG GIT_COMMIT=$(git rev-parse --short HEAD)
+ARG BUILD_TIME=unknown
+ARG GIT_COMMIT=unknown
 
 # 安装必要的系统依赖
 RUN apk add --no-cache git
@@ -520,6 +522,15 @@ HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
 
 # 运行应用
 CMD ["./main"]
+```
+
+构建时注入版本信息（时间戳与提交号在宿主机上取值，经 `--build-arg` 传入）：
+```bash
+docker build -f Dockerfile.prod \
+  --build-arg VERSION=$(git describe --tags --always) \
+  --build-arg BUILD_TIME=$(date -u +'%Y-%m-%dT%H:%M:%SZ') \
+  --build-arg GIT_COMMIT=$(git rev-parse --short HEAD) \
+  -t myapp:1.0.0 .
 ```
 
 #### 环境变量配置
@@ -754,6 +765,8 @@ import (
     "expvar"
     "net/http"
     "net/http/pprof"
+
+    "github.com/gin-gonic/gin"
 )
 
 func main() {
@@ -761,7 +774,7 @@ func main() {
     router := gin.Default()
 
     // 添加监控端点
-    router.GET("/metrics", expvar.Handler())
+    router.GET("/metrics", gin.WrapH(expvar.Handler()))
 
     // 添加pprof端点
     router.GET("/debug/pprof/", gin.WrapH(http.HandlerFunc(pprof.Index)))

@@ -57,7 +57,7 @@ function SavingIndicator() {
 ## ⚠️ 常见陷阱
 
 - ❌ 用 `filters.mutationKey` 却从未声明 `mutationKey`：永远匹配不到——想被全局筛选的 mutation 必须显式声明键
-- ❌ 在 `MutationCache` 回调里引用未定义的 `queryClient` 变量：回调拿不到组件作用域的变量——v5 的 mutation 回调 context 与 MutationCache 回调入参都注入了 client（`context.client` / `mutation.client`），或闭包引用模块作用域自己创建的 client
+- ❌ 在 `MutationCache` 回调里引用未定义的 `queryClient` 变量：回调拿不到组件作用域的变量——v5 的 MutationCache 回调在末位注入 `context`（`onSuccess`/`onError` 为第 5 参、`onSettled` 为第 6 参），`context.client` 即当前 client，或闭包引用模块作用域自己创建的 client
 - ❌ 依赖"组件卸载后回调仍会执行"：`useMutation` 的回调做不到；跨生命周期的副作用交给 `MutationCache` 全局回调或 `mutateAsync`
 - ❌ `select` 未收窄导致全站 mutation 任一变化都重渲染：只 select 需要的字段
 - ✅ 同一 mutation 高频并发时，用 `useMutationState` 聚合展示比在每个调用点各自管理 loading 更可控

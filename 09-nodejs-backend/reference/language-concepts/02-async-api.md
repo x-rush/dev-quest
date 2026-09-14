@@ -131,7 +131,7 @@ AbortSignal.abort(reason);                   // 预先取消的信号
 
 // 支持信号的常用 API
 fetch(url, { signal });
-setTimeout(fn, ms, { signal });              // timers/promises
+await setTimeout(ms, value, { signal });     // 仅 timers/promises 版支持；全局 setTimeout 第三参是传给回调的展开参数
 eventEmitter.on(evt, fn, { signal });        // 自动解绑
 fsPromises.readFile(p, { signal });
 ```
@@ -153,8 +153,8 @@ import { AsyncLocalStorage } from "node:async_hooks";
 
 const requestContext = new AsyncLocalStorage<{ requestId: string }>();
 
-// 中间件中绑定
-app.use((req, res, next) => {
+// 中间件中绑定（Hono 中间件签名：c + next）
+app.use((c, next) => {
   requestContext.run({ requestId: crypto.randomUUID() }, next);
 });
 

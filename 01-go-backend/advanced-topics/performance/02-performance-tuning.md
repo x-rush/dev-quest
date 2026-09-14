@@ -74,9 +74,13 @@
 package main
 
 import (
-    _ "net/http/pprof"
+    "fmt"
+    "log"
+    "net/http"
+    _ "net/http/pprof" // 注册 pprof HTTP 处理器到默认 mux
     "os"
     "runtime"
+    pprof "runtime/pprof"
     "time"
 )
 
@@ -142,7 +146,7 @@ func (p *BufferPool) Get() []byte {
 }
 
 func (p *BufferPool) Put(buf []byte) {
-    if cap(buf) < 1024*10 { // 避免保留过大的缓冲区
+    if cap(buf) > 1024*10 { // 避免保留过大的缓冲区
         return
     }
     p.pool.Put(buf[:0])

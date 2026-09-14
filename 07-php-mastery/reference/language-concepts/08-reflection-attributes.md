@@ -172,7 +172,7 @@ foreach ($type->getTypes() as $t) {             // 联合类型逐个看
 }
 ```
 
-⚠️ **常见陷阱**: PHP 8.4 起 `?T` 与 `T|null` 混写统一为联合类型形态，不要假设"可空必是 NamedType"；`static` 返回类型经 `getName()` 得 `'static'`，需按调用类解析。
+⚠️ **常见陷阱**: `?T` 与 `T|null` 完全等价，反射均为 `ReflectionNamedType`（`allowsNull()` 为 true）；只有非空成员不少于两个的联合（如 `int|string|null`）才是 `ReflectionUnionType`；`static` 返回类型经 `getName()` 得 `'static'`，需按调用类解析。
 
 🔗 **相关条目**: [类型系统全表](./03-types-oop-modern.md)、[方法与参数反射](#条目-2reflectionmethod-与-reflectionparameter)
 

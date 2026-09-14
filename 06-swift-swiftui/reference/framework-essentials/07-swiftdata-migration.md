@@ -38,7 +38,7 @@ import SwiftData
 // 旧版本（已发版，只读，永不修改）
 enum SchemaV1: VersionedSchema {
     static var versionIdentifier = Schema.Version(1, 0, 0)
-    static var schemas: [any VersionedSchema.Type] { [SchemaV1.self] }
+    static var models: [any PersistentModel.Type] { [SchemaV1.Note.self] }
 
     @Model
     final class Note {
@@ -56,7 +56,7 @@ enum SchemaV1: VersionedSchema {
 // 新版本（当前开发）
 enum SchemaV2: VersionedSchema {
     static var versionIdentifier = Schema.Version(2, 0, 0)
-    static var schemas: [any VersionedSchema.Type] { [SchemaV2.self] }
+    static var models: [any PersistentModel.Type] { [SchemaV2.Note.self] }
 
     @Model
     final class Note {
@@ -166,7 +166,7 @@ static let migrationV2toV3 = MigrationStage.custom(
 
 ## ⚠️ 高频陷阱速查
 
-- **`schemas` 数组漏了历史版本**：只写最新版，框架无法完成"旧 store → 新 schema"的链路，启动即迁移失败
+- **迁移计划的 `schemas` 数组漏了历史版本**（指 SchemaMigrationPlan，VersionedSchema 用的是 `models`）：只写最新版，框架无法完成"旧 store → 新 schema"的链路，启动即迁移失败
 - **改了模型忘递增 `versionIdentifier`**：新代码配旧版本号，store 判断"无需迁移"却对不上结构，行为不可预期
 - **随手改已发版的旧枚举**：SchemaV1 是历史快照，动了它 = 伪造历史，老用户迁移必然错乱
 - **无默认值的必填新字段**：不属于可自动推断的变化，轻量迁移会失败——新字段一律给默认值或设为可选

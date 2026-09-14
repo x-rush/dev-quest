@@ -103,12 +103,21 @@ export function useStarCity() {
 ### 步骤三：列定义 `columns.tsx`
 
 ```tsx
-import { createColumnHelper } from '@tanstack/react-table'
+import {
+  createColumnHelper, columnVisibilityFeature, createSortedRowModel,
+  rowSortingFeature, tableFeatures,
+} from '@tanstack/react-table'
 import { Weather } from './api'
 
-const columnHelper = createColumnHelper<Weather>()
+// v9：createColumnHelper 需要两个泛型（TFeatures、TData），且 TFeatures 要与 App.tsx 中 useTable 注册的 features 一致
+const features = tableFeatures({
+  rowSortingFeature,
+  columnVisibilityFeature,
+  sortedRowModel: createSortedRowModel(),
+})
+const columnHelper = createColumnHelper<typeof features, Weather>()
 
-// v9：用 columnHelper 声明，保留每列的取值类型
+// 用 columnHelper 声明，保留每列的取值类型
 export const columns = columnHelper.columns([
   { accessorKey: 'city', header: '城市' },
   {
@@ -126,7 +135,7 @@ export const columns = columnHelper.columns([
 ```tsx
 import { useMemo, useState } from 'react'
 import {
-  createSortedRowModel, flexRender,
+  columnVisibilityFeature, createSortedRowModel, flexRender,
   rowSortingFeature, SortingState, tableFeatures, useTable,
 } from '@tanstack/react-table'
 import { useWeather, useStarCity } from './hooks'
@@ -162,12 +171,13 @@ export default function App() {
     onSortingChange: setSorting,
     features: tableFeatures({
       rowSortingFeature,
+      columnVisibilityFeature, // row.getVisibleCells() 需注册本特性
       sortedRowModel: createSortedRowModel(),
     }),
   })
 
-  if (isPending || data === undefined) return <p>加载天气中...</p>  // 解构布尔无法收窄 data，补 undefined 判定
-  if (isError) return <p>加载失败 <button onClick={() => refetch()}>重试</button></p>
+  if (isPending) return <p>加载天气中...</p>
+  if (isError) return <p>加载失败 <button onClick={() => refetch()}>重试</button></p>  // 同时排除 isPending 与 isError 后，data 收窄为 Weather[]
 
   return (
     <main className="mx-auto max-w-2xl p-6">

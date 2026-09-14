@@ -119,7 +119,7 @@ const fetchUsers = async (): Promise<User[]> => {
 
 ### 陷阱
 
-- Axios 错误对象不是 `Error` 实例，Query 的 `error` 分支要适配（或像上例在拦截器统一转换）
+- AxiosError 是 `Error` 的子类（`instanceof Error === true`），Query 的 `error` 分支用 `axios.isAxiosError(e)` 判别（或像上例在拦截器统一转换）
 - 取消（AbortSignal）需要手动接到 Axios 配置，否则 `cancelQueries` 无法取消 Axios 请求
 
 ## 4. GraphQL Request：queryFn 中的 GraphQL 客户端

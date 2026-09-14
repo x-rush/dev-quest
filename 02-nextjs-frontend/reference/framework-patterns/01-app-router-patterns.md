@@ -481,6 +481,8 @@ function PageLoadingSkeleton() {
 
 ```typescript
 // app/template.tsx
+'use client';
+
 import { ReactNode, useEffect, useRef } from 'react';
 import { usePathname } from 'next/navigation';
 

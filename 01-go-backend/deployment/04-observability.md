@@ -154,7 +154,6 @@ func getStatusRange(status int) string {
 package middleware
 
 import (
-    "strconv"
     "time"
 
     "github.com/gin-gonic/gin"
@@ -351,7 +350,7 @@ import (
     "time"
 
     "go.opentelemetry.io/otel"
-    "go.opentelemetry.io/otel/exporters/jaeger"
+    "go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracehttp"
     "go.opentelemetry.io/otel/exporters/prometheus"
     "go.opentelemetry.io/otel/propagation"
     "go.opentelemetry.io/otel/sdk/metric"
@@ -360,7 +359,7 @@ import (
     semconv "go.opentelemetry.io/otel/semconv/v1.4.0"
 )
 
-func InitProvider(serviceName, jaegerURL string) (func(), error) {
+func InitProvider(serviceName, otlpEndpoint string) (func(), error) {
     // 设置资源属性
     res, err := resource.New(context.Background(),
         resource.WithAttributes(
@@ -373,8 +372,8 @@ func InitProvider(serviceName, jaegerURL string) (func(), error) {
         return nil, err
     }
 
-    // Jaeger导出器
-    jaegerExporter, err := jaeger.New(jaeger.WithCollectorEndpoint(jaeger.WithEndpoint(jaegerURL)))
+    // OTLP HTTP导出器（jaeger 导出器已自 otel-go 移除，改用 OTLP 协议上报，Jaeger 原生支持）
+    traceExporter, err := otlptracehttp.New(context.Background(), otlptracehttp.WithEndpointURL(otlpEndpoint))
     if err != nil {
         return nil, err
     }
@@ -387,7 +386,7 @@ func InitProvider(serviceName, jaegerURL string) (func(), error) {
 
     // 创建TracerProvider
     tracerProvider := trace.NewTracerProvider(
-        trace.WithBatcher(jaegerExporter),
+        trace.WithBatcher(traceExporter),
         trace.WithResource(res),
         trace.WithSampler(trace.AlwaysSample()),
     )
@@ -511,6 +510,7 @@ import (
     "os"
     "time"
 
+    "github.com/gin-gonic/gin"
     "go.uber.org/zap"
     "go.uber.org/zap/zapcore"
 )
@@ -749,7 +749,7 @@ func (s *OrderService) processPayment(order *Order) error {
 package logging
 
 import (
-    "context"
+    "bytes"
     "encoding/json"
     "fmt"
     "net/http"
@@ -890,6 +890,7 @@ package pprof
 import (
     "net/http"
     "net/http/pprof"
+    "runtime"
 
     "github.com/gin-gonic/gin"
 )
@@ -972,6 +973,7 @@ package profiling
 
 import (
     "context"
+    "fmt"
     "os"
     "runtime/pprof"
     "time"
@@ -1078,6 +1080,8 @@ func (p *Profiler) AutoProfile(ctx context.Context, duration time.Duration) {
 package monitoring
 
 import (
+    "fmt"
+    "sort"
     "sync"
     "time"
 
@@ -1218,7 +1222,7 @@ groups:
       description: "Memory usage is {{ $value | humanizePercentage }}"
 
   - alert: DatabaseConnectionsHigh
-    expr: go_sql_stats_max_open_connections / go_sql_stats_max_open_connections > 0.8
+    expr: go_sql_open_connections / go_sql_max_open_connections > 0.8
     for: 5m
     labels:
       severity: warning
@@ -1449,16 +1453,12 @@ func (s *AlertStore) GetAll() []*Alert {
 package main
 
 import (
-    "context"
-    "net/http"
-    "time"
-
     "github.com/gin-gonic/gin"
     "github.com/prometheus/client_golang/prometheus/promhttp"
     "go.uber.org/zap"
 
     "your-project/logging"
-    "your-project/metrics"
+    "your-project/middleware"
     "your-project/pprof"
     "your-project/telemetry"
 )

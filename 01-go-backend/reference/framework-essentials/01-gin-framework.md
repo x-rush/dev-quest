@@ -72,7 +72,6 @@ func main() {
 ### 2.2 路由参数
 - **命名参数**：`/user/:id`
 - **通配符参数**：`/user/*action`
-- **可选参数**：`/user/:id?`
 - **参数获取**：`c.Param("id")`, `c.Query("name")`
 - **参数验证**：参数类型和存在性检查
 
@@ -266,10 +265,8 @@ func CreateUser(c *gin.Context) {
 
 **示例**：
 ```go
-// 自定义验证器
-func CustomValidator() validator.StructValidator {
-    v := validator.New()
-
+// 自定义验证器（注册到 gin 内置的 binding 校验引擎）
+if v, ok := binding.Validator.Engine().(*validator.Validate); ok {
     // 注册自定义验证函数
     v.RegisterValidation("custom_password", func(fl validator.FieldLevel) bool {
         password := fl.Field().String()
@@ -278,8 +275,6 @@ func CustomValidator() validator.StructValidator {
                strings.ContainsAny(password, "ABCDEFGHIJKLMNOPQRSTUVWXYZ") &&
                strings.ContainsAny(password, "abcdefghijklmnopqrstuvwxyz")
     })
-
-    return v
 }
 
 // 使用自定义验证器
@@ -641,11 +636,11 @@ func MetricsMiddleware() gin.HandlerFunc {
         status := c.Writer.Status()
 
         // 记录指标
-        prometheus.Observe(histogram, duration)
-        prometheus.Increment(counter)
+        histogram.Observe(duration.Seconds())
+        counter.Inc()
 
         if status >= 400 {
-            prometheus.Increment(errorCounter)
+            errorCounter.Inc()
         }
     }
 }

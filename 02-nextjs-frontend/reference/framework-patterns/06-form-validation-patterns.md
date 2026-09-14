@@ -139,7 +139,7 @@ graph TB
     "form-storybook": "storybook -p 6006"
   },
   "dependencies": {
-    "next": "^15.0.0",
+    "next": "^16.3.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-hook-form": "^7.51.0",
@@ -166,8 +166,8 @@ graph TB
     "lucide-react": "^0.363.0"
   },
   "devDependencies": {
-    "@types/react": "^18.2.74",
-    "@types/react-dom": "^18.2.22",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
     "@types/node": "^20.12.7",
     "@types/file-saver": "^2.0.7",
     "@types/lodash": "^4.14.202",
@@ -194,11 +194,11 @@ graph TB
 #### lib/form-config.ts - 表单配置核心
 
 ```typescript
-import { ReactNode } from "react"
+import { ReactNode, useState, useCallback, useMemo, useEffect } from "react"
 import { z } from "zod"
-import { UseFormReturn, UseFormHandle } from "react-hook-form"
+import { useForm, UseFormReturn } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { clsx } from "clsx"
+import { clsx, type ClassValue } from "clsx"
 import { twMerge } from "tailwind-merge"
 
 // 类型安全的样式合并
@@ -285,7 +285,7 @@ export function useFormState<T extends z.ZodSchema>(
   schema: T,
   defaultValues?: Partial<z.infer<T>>
 ) {
-  const form = useHookForm<z.infer<T>>({
+  const form = useForm<z.infer<T>>({
     resolver: zodResolver(schema),
     defaultValues,
     mode: "onChange",
@@ -301,7 +301,7 @@ export function useDynamicForm<T extends z.ZodSchema>(
   initialDefaultValues?: Partial<z.infer<T>>
 ) {
   const [schema, setSchema] = useState(initialSchema)
-  const [form, formMethods] = useFormState(schema, initialDefaultValues)
+  const formMethods = useFormState(schema, initialDefaultValues)
   const [fields, setFields] = useState<AdvancedFormField[]>([])
 
   const addField = useCallback((field: AdvancedFormField) => {
@@ -332,7 +332,7 @@ export function useDynamicForm<T extends z.ZodSchema>(
     schema,
     setSchema,
     fields,
-    form,
+    form: formMethods,
     formMethods,
     addField,
     removeField,
@@ -729,7 +729,7 @@ export const usernameSchema = stringSchema
     "用户名只能包含字母、数字、下划线和连字符"
   )
 
-export const companySchema = stringSchema
+export const companyNameSchema = stringSchema
   .min(2, "公司名称至少需要2个字符")
   .max(100, "公司名称不能超过100个字符")
 
@@ -798,7 +798,7 @@ export const profileSchema = z.object({
 
 // 企业信息表单 Schema
 export const companySchema = z.object({
-  companyName: companySchema,
+  companyName: companyNameSchema,
   companyType: z.enum(["tech", "finance", "retail", "other"], {
     errorMap: (issue) => ({
       message: "请选择公司类型"

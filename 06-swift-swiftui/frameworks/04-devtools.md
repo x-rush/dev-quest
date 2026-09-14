@@ -50,7 +50,7 @@ struct TagPicker: View {
     }
 }
 
-#Preview {                                   // Xcode 16+：#Preview 宏即写即用
+#Preview {                                   // Xcode 15+：#Preview 宏即写即用
     TagPicker()
 }
 

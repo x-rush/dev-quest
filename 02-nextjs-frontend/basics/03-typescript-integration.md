@@ -767,7 +767,7 @@ export function safeValidateCreateUser(input: unknown): {
   } else {
     return {
       success: false,
-      error: result.error.errors.map(e => e.message).join(', ')
+      error: result.error.issues.map(e => e.message).join(', ')
     }
   }
 }
