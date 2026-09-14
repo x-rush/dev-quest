@@ -46,7 +46,8 @@ class B(A):
 class C(A):
     def who(self): return "C|" + super().who()
 
-class D(B, C): pass
+class D(B, C):
+    def who(self): return "D|" + super().who()
 
 D.mro()      # [<class D>, <class B>, <class C>, <class A>, <class 'object'>]（实测）
 D().who()    # 'D|B|C|A' —— 每个类的方法恰好参与一次
@@ -115,7 +116,7 @@ s.z = 3                   # AttributeError: ... has no attribute 'z' and no __di
 hasattr(s, "__dict__")    # False —— 不再为每个实例挂属性字典
 ```
 
-收益：省内存（本机实测空 slots 实例 40 字节 vs 普通 48 字节，`__dict__` 免除后多属性场景差距更大）、属性访问更快。dataclass 一行开启：`@dataclass(slots=True)`，详见 [13-dataclasses](./13-dataclasses.md)。
+收益：省内存（本机 3.14.7 实测：空实例两种写法均 48 字节；普通实例赋属性后惰性创建 296 字节的 `__dict__`，合计 344 vs 48，slots 实例始终保持 48 字节且无 `__dict__`）、属性访问更快。dataclass 一行开启：`@dataclass(slots=True)`，详见 [13-dataclasses](./13-dataclasses.md)。
 
 ### object 基类
 

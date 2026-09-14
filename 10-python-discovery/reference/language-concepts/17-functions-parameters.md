@@ -97,7 +97,7 @@ FastAPI 风格的签名设计：位置参数收主数据，仅关键字防布尔
 
 ```python
 def create_user(
-    name: str, /
+    name: str, /,                       # 仅位置参数：调用方不能写 name=
     *,                                  # 之后必须写名调用
     email: str = "",
     is_admin: bool = False,
