@@ -211,6 +211,154 @@ useEffect(() => {
 }, [])
 ```
 
+### 其余 Hooks 补遗（并发 / 外部存储 / 指令式 / 工具）
+
+> 签名摘自 `@types/react@19.3`。React 19 四个异步 Hooks（`use` / `useOptimistic` / `useActionState` / `useFormStatus`）详见 **[React 19 关键 Hooks](./06-react-19-hooks.md)**。
+
+#### useTransition - 非阻塞过渡更新
+```tsx
+const [isPending, startTransition] = useTransition()
+// isPending: boolean - 过渡更新进行中
+// startTransition(cb) - 把 cb 内的 setState 标记为低优先级"过渡"，可被紧急更新打断
+
+function SearchBox() {
+  const [query, setQuery] = useState('')
+  const [list, setList] = useState<Item[]>([])
+  const [isPending, startTransition] = useTransition()
+
+  function onChange(e: React.ChangeEvent<HTMLInputElement>) {
+    setQuery(e.target.value)              // 紧急更新：输入框立即响应
+    startTransition(() => {
+      setList(filterList(e.target.value)) // 过渡更新：列表渲染可被打断，不卡输入
+    })
+  }
+  return (
+    <>
+      <input value={query} onChange={onChange} />
+      {isPending && <span>筛选中…</span>}
+      <List items={list} />
+    </>
+  )
+}
+```
+
+#### useDeferredValue - 值的延迟副本
+```tsx
+function useDeferredValue<T>(value: T, initialValue?: T): T
+// React 19 新增第二参 initialValue：首次渲染用初值，避免首帧就被慢计算阻塞
+
+function Results({ query }: { query: string }) {
+  const deferredQuery = useDeferredValue(query, '')
+  // query（急）与 deferredQuery（缓）会得到两个渲染优先级，React 自动让 urgent 先行
+  return <List query={deferredQuery} />
+}
+// 场景：没有把 setState 包进自己代码的机会时（props 来自父组件），代替 useTransition
+```
+
+#### useId - SSR 安全的稳定唯一 ID
+```tsx
+function useId(): string
+
+function Field() {
+  const id = useId()
+  return (
+    <>
+      <label htmlFor={id}>邮箱</label>
+      <input id={id} type="email" />
+    </>
+  )
+}
+// 服务端与客户端渲染出相同 ID（水合一致）；Math.random()/自增计数器会导致 SSR 不匹配
+```
+
+#### useSyncExternalStore - 订阅外部存储（唯一 SSR 安全的 store Hook）
+```tsx
+function useSyncExternalStore<Snapshot>(
+  subscribe: (onStoreChange: () => void) => () => void, // 订阅并返回取消订阅函数
+  getSnapshot: () => Snapshot,                           // 读取当前快照
+  getServerSnapshot?: () => Snapshot,                    // 服务端渲染用的快照
+): Snapshot
+
+function useOnlineStatus() {
+  return useSyncExternalStore(
+    (onChange) => {
+      window.addEventListener('online', onChange)
+      window.addEventListener('offline', onChange)
+      return () => {
+        window.removeEventListener('online', onChange)
+        window.removeEventListener('offline', onChange)
+      }
+    },
+    () => navigator.onLine, // 原始值天然引用稳定
+    () => true,             // 服务端快照（避免水合不匹配）
+  )
+}
+```
+
+> ⚠️ **getSnapshot 一致性陷阱**：React 会反复调用 `getSnapshot` 比对结果——在 store 真正变化前它必须返回**同一个引用**。若每次返回新对象/新数组（如 `() => ({ online: navigator.onLine })` 或 `() => store.items.slice()`），快照永远"变了"，触发无限重渲染。✅ 快照必须缓存在 store 内部，只在 store 真正变更时更新引用。
+
+#### useLayoutEffect - DOM 提交后、浏览器绘制前同步执行
+```tsx
+function useLayoutEffect(effect: EffectCallback, deps?: DependencyList): void
+// 时机：DOM 变更 → useLayoutEffect（同步）→ 浏览器绘制；useEffect 则在绘制后异步
+
+function Tooltip({ target }: { target: HTMLElement }) {
+  const ref = useRef<HTMLDivElement>(null)
+  useLayoutEffect(() => {
+    const rect = target.getBoundingClientRect() // 绘制前测量并定位，用户看不到跳动
+    if (ref.current) ref.current.style.top = `${rect.bottom + 8}px`
+  }, [target])
+  return <div ref={ref}>提示</div>
+}
+// 场景：测量布局并同步修改样式（tooltip 定位、虚拟列表测量）
+// 陷阱：SSR 下不执行并告警——Next.js 中默认首选 useEffect，仅测量/定位类需求用本 Hook
+```
+
+#### useImperativeHandle - 自定义 ref 暴露的接口
+```tsx
+function useImperativeHandle<T, R extends T>(
+  ref: Ref<T> | undefined,
+  init: () => R,
+  deps?: DependencyList,
+): void
+
+interface TextInputHandle { focus(): void; clear(): void }
+
+const TextInput = forwardRef<TextInputHandle>(function TextInput(_props, ref) {
+  const inputRef = useRef<HTMLInputElement>(null)
+  useImperativeHandle(ref, () => ({
+    focus: () => inputRef.current?.focus(),
+    clear: () => { if (inputRef.current) inputRef.current.value = '' },
+  }), [])
+  return <input ref={inputRef} />
+})
+// 父组件只能调 focus()/clear()，拿不到整个 DOM —— 暴露受控 API 而非内部实现
+// React 19：函数组件可直接把 ref 作为 prop 接收，不再必须包 forwardRef
+```
+
+#### useInsertionEffect - CSS-in-JS 注入专用（库作者用）
+```tsx
+function useInsertionEffect(effect: EffectCallback, deps?: DependencyList): void
+// 执行时机早于 useLayoutEffect（DOM 变更前），设计给 css-in-js 库在渲染期注入 <style> 规则
+
+useInsertionEffect(() => {
+  injectRule('.btn-primary', 'background: blue') // styled-components 等库的内部行为示意
+}, [])
+// 业务代码几乎用不到：数据请求/订阅用 useEffect，测量定位用 useLayoutEffect
+```
+
+#### useDebugValue - DevTools 中显示自定义 Hook 标签
+```tsx
+function useDebugValue<T>(value: T, format?: (value: T) => any): void
+
+function useWindowSize() {
+  const [w] = useState(() => (typeof window !== 'undefined' ? window.innerWidth : 0))
+  useDebugValue(w, (width) => `${width}px`) // DevTools 显示 "WindowSize: 1920px"
+  return w
+}
+// 仅影响调试显示，无运行时行为；format 只在 DevTools 打开时才被调用
+```
+
 ### 自定义Hook
 ```tsx
 // 自定义Hook规则：以use开头
@@ -522,6 +670,14 @@ function NameForm() {
 - `useCallback()` - 函数缓存优化
 - `useMemo()` - 值缓存优化
 - `useRef()` - 引用操作
+- `useTransition()` - 非阻塞过渡更新（并发）
+- `useDeferredValue()` - 值的延迟副本（并发）
+- `useId()` - SSR 安全的稳定唯一 ID
+- `useSyncExternalStore()` - 订阅外部存储（SSR 安全）
+- `useLayoutEffect()` - DOM 提交后、绘制前同步副作用
+- `useImperativeHandle()` - 自定义 ref 暴露的接口
+- `useInsertionEffect()` - css-in-js 注入专用（库作者用）
+- `useDebugValue()` - DevTools 自定义 Hook 标签
 - `use()` - 读取Promise/Context (React 19)
 - `useActionState()` - 表单Action状态管理 (React 19)
 - `useOptimistic()` - 乐观更新 (React 19)

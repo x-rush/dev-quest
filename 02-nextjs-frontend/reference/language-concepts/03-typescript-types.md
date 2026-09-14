@@ -428,6 +428,11 @@ const roles: UserRoles = {
   john: 'admin',
   jane: 'user'
 }
+
+// Readonly<T> - 所有属性变为只读
+type ReadonlyUser = Readonly<User>
+const readonlyUser: ReadonlyUser = { id: 1, name: 'John', email: 'j@ex.com', age: 30 }
+// readonlyUser.id = 2 // 错误：Cannot assign to 'id' because it is a read-only property
 ```
 
 ### 转换工具类型
@@ -459,6 +464,59 @@ function createUser(name: string, age: number): User {
   return {} as User
 }
 type CreateUserParams = Parameters<typeof createUser> // [string, number]
+```
+
+### 构造器与异步工具类型
+```typescript
+// InstanceType<T> - 获取类的实例类型
+class UserRepo {
+  findById(id: number) { return { id } }
+}
+type Repo = InstanceType<typeof UserRepo>
+const repo: Repo = new UserRepo()
+repo.findById(1)
+
+// ConstructorParameters<T> - 获取构造函数参数元组类型
+class Box {
+  constructor(public value: string, public limit?: number) {}
+}
+type BoxArgs = ConstructorParameters<typeof Box>
+// 结果: [value: string, limit?: number | undefined]
+const args: BoxArgs = ['hello', 10]
+
+// 常见组合：反射一个依赖类（构造参数 + 实例类型一起拿到）
+type RepoCtor = new (...args: ConstructorParameters<typeof UserRepo>) => InstanceType<typeof UserRepo>
+
+// Awaited<T> - 解开 Promise 嵌套，取最终 resolve 的类型（TS 4.5+）
+type A1 = Awaited<Promise<number>>           // number
+type A2 = Awaited<Promise<Promise<string>>>  // string
+async function fetchUser(): Promise<User> { return {} as User }
+type FetchedUser = Awaited<ReturnType<typeof fetchUser>>  // User —— async 函数返回值的标准取法
+```
+
+### 推断控制工具类型
+```typescript
+// ThisType<T> - 指定对象字面量内 this 的上下文类型（需 noImplicitThis，strict 默认开启）
+type CounterState = { count: number }
+type CounterApi = {
+  inc(): void
+  reset(): void
+} & ThisType<CounterState & CounterApi>
+
+function createCounter(): CounterState & CounterApi {
+  return {
+    count: 0,
+    inc() { this.count += 1 },   // this 被推断为 CounterState & CounterApi
+    reset() { this.count = 0 },
+  }
+}
+
+// NoInfer<T> - 阻止该位置的类型参与推断，只能由其他参数"喂"进来（TS 5.4+）
+function createPair<T>(first: T, second: NoInfer<T>): [T, T] {
+  return [first, second]
+}
+const pair1 = createPair('a', 'b')   // T 由 first 推断为 string，second 必须同为 string
+// const pair2 = createPair('a', 42) // 错误：42 不能赋给 string（second 不再反向影响 T）
 ```
 
 ### 高级工具类型
@@ -765,6 +823,7 @@ function Button({ variant }: { variant: keyof typeof buttonVariants }) {
 ### 工具类型
 - `Partial<T>` - 所有属性可选
 - `Required<T>` - 所有属性必需
+- `Readonly<T>` - 所有属性只读
 - `Pick<T, K>` - 选择特定属性
 - `Omit<T, K>` - 排除特定属性
 - `Record<K, T>` - 创建对象类型
