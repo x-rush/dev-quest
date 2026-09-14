@@ -84,7 +84,7 @@
 
 ## 02 Next.js前端开发
 
-> 模块入口: [02-nextjs-frontend/README.md](../../02-nextjs-frontend/README.md) | 已按标准结构建设（54篇）
+> 模块入口: [02-nextjs-frontend/README.md](../../02-nextjs-frontend/README.md) | 已按标准结构建设（62篇）
 
 ### 📖 基础概念 (basics/)
 | 文档 | 说明 |
@@ -127,10 +127,11 @@
 ### 📚 知识字典 (reference/)
 | 分类 | 文档 |
 |------|------|
-| [语言概念](../../02-nextjs-frontend/reference/language-concepts/01-react-syntax-cheatsheet.md) | React语法、Next.js API、TS类型、React 19 Hooks等6篇 |
-| [框架模式](../../02-nextjs-frontend/reference/framework-patterns/01-app-router-patterns.md) | 路由、组件、缓存、异步API、proxy等11篇 |
+| [语言概念](../../02-nextjs-frontend/reference/language-concepts/01-react-syntax-cheatsheet.md) | React语法（含全量 Hooks 补遗）、Next.js API、TS类型与收窄、TS声明、JS核心语义、Web平台API等9篇 |
+| [框架模式](../../02-nextjs-frontend/reference/framework-patterns/01-app-router-patterns.md) | 路由、组件、缓存、异步API、proxy、Metadata/script、路由段配置、环境变量等14篇 |
 | [开发工具](../../02-nextjs-frontend/reference/development-tools/01-testing-tools.md) | 测试、样式、包管理、调试工具4篇 |
 | [性能优化](../../02-nextjs-frontend/reference/performance-optimization/01-rendering-optimization.md) | 渲染、包体积、图片字体优化3篇 |
+| [库指南](../../02-nextjs-frontend/reference/library-guides/03-ecosystem-map.md) | 生态依赖地图 1篇 |
 
 ### 🔧 测试与部署
 | 分类 | 文档 |
@@ -142,12 +143,12 @@
 
 ## 03 TanStack全家桶
 
-> 模块入口: [03-tanstack-stack/README.md](../../03-tanstack-stack/README.md) | 已按标准结构建设（47篇）
+> 模块入口: [03-tanstack-stack/README.md](../../03-tanstack-stack/README.md) | 已按标准结构建设（58篇）
 
 | 目录 | 象限 | 篇数 | 入口 |
 |------|------|------|------|
 | 📖 [basics/](../../03-tanstack-stack/basics/) | 教程 | 8 | [环境搭建](../../03-tanstack-stack/basics/01-environment-setup.md) |
-| 📚 [reference/](../../03-tanstack-stack/reference/) | 字典 | 20 | [language-concepts/](../../03-tanstack-stack/reference/language-concepts/) |
+| 📚 [reference/](../../03-tanstack-stack/reference/) | 字典 | 31 | [language-concepts/](../../03-tanstack-stack/reference/language-concepts/) |
 | 🏗️ [frameworks/](../../03-tanstack-stack/frameworks/) | 操作指南 | 4 | [Query入门](../../03-tanstack-stack/frameworks/01-tanstack-query-basics.md) |
 | 🚀 [projects/](../../03-tanstack-stack/projects/) | 操作指南 | 4 | [TODO应用](../../03-tanstack-stack/projects/01-todo-app.md) |
 | 🧪 [testing/](../../03-tanstack-stack/testing/) | 操作指南 | 4 | [单元测试](../../03-tanstack-stack/testing/01-unit-testing.md) |
@@ -236,12 +237,12 @@
 
 ### 09 Node.js后端探索
 
-> 模块入口: [09-nodejs-backend/README.md](../../09-nodejs-backend/README.md) | 已按标准结构建设（38篇）
+> 模块入口: [09-nodejs-backend/README.md](../../09-nodejs-backend/README.md) | 已按标准结构建设（48篇）
 
 | 目录 | 象限 | 篇数 | 入口 |
 |------|------|------|------|
 | 📖 [basics/](../../09-nodejs-backend/basics/) | 教程 | 8 | [环境搭建](../../09-nodejs-backend/basics/01-environment-setup.md) |
-| 📚 [reference/](../../09-nodejs-backend/reference/) | 字典 | 12 | [language-concepts/](../../09-nodejs-backend/reference/language-concepts/) |
+| 📚 [reference/](../../09-nodejs-backend/reference/) | 字典 | 22 | [language-concepts/](../../09-nodejs-backend/reference/language-concepts/) |
 | 🏗️ [frameworks/](../../09-nodejs-backend/frameworks/) | 操作指南 | 4 | [Hono入门](../../09-nodejs-backend/frameworks/01-hono-basics.md) |
 | 🚀 [projects/](../../09-nodejs-backend/projects/) | 操作指南 | 4 | [TODO API](../../09-nodejs-backend/projects/01-todo-api.md) |
 | 🧪 [testing/](../../09-nodejs-backend/testing/) | 操作指南 | 3 | [单元测试](../../09-nodejs-backend/testing/01-unit-testing.md) |
