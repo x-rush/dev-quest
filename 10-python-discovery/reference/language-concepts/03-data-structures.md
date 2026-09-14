@@ -50,6 +50,43 @@ nums[::-1]     # 反转副本
 copy = nums[:] # 浅拷贝
 ```
 
+### 切片详解 — 负索引、step、越界与 slice 对象
+
+`seq[起:止:步]` 三参数均可省略，规则：**含头不含尾**、下标可为负（`-1` 是末尾，本机 3.14.7 实测）：
+
+```python
+s = [0, 1, 2, 3, 4, 5]
+s[2:4]      # [2, 3]              含头不含尾
+s[-3:]      # [3, 4, 5]           负下标从尾部倒数
+s[::2]      # [0, 2, 4]           step=2 隔一个取一个
+s[::-1]     # [5, 4, 3, 2, 1, 0]  step=-1 反转副本
+s[1:100]    # [1, 2, 3, 4, 5]     越界不报错，取到哪算哪
+s[10:]      # []                  完全越界得空序列
+```
+
+**越界不报错**是切片与下标访问的本质区别：`s[100]` 抛 `IndexError`，而切片先按 `slice.indices(len())` 收缩到合法范围（实测 `slice(-2, None).indices(6)` → `(4, 6, 1)`）——这是"先切后处理"惯用法安全的根源。
+
+**浅拷贝**：`b = a[:]` 与 `b = a.copy()` 都只复制最外层容器，嵌套对象仍共享（完整演示见第 5 节）。要彻底独立用 `copy.deepcopy(a)`。
+
+**slice 对象与自定义类**：`a[1:3]` 只是 `a[slice(1, 3)]` 的语法糖（内置 [`slice`](./02-built-in-functions.md) 生成）。自定义类想支持切片，在 `__getitem__` 里判断参数类型；`slice.indices(len)` 负责把负数与 step 换算成绝对下标（实测）：
+
+```python
+class Window:
+    def __init__(self, data):
+        self.data = data
+
+    def __getitem__(self, key):
+        if isinstance(key, slice):
+            start, stop, step = key.indices(len(self.data))
+            return [self.data[i] for i in range(start, stop, step)]
+        return self.data[key]
+
+w = Window("abcdef")
+w[1:4]      # ['b', 'c', 'd']
+w[-2:]      # ['e', 'f']
+w[::2]      # ['a', 'c', 'e']
+```
+
 **陷阱**: `+` 拼接列表每次都建新对象，循环内累积用 `append`/`extend`；切片是浅拷贝，嵌套列表的内部对象仍共享。
 
 ---

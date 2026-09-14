@@ -39,6 +39,8 @@ Point = namedtuple("Point", ["x", "y"]); p = Point(1, 2)
 
 **陷阱**: `defaultdict` 读取不存在的键会**写入**默认值，只读场景用 `dict.get(k, default)`。
 
+> 🌐 官方文档：[collections — 容器数据类型](https://docs.python.org/3/library/collections.html)
+
 ---
 
 ## 2. itertools — 迭代 algebra
@@ -54,6 +56,8 @@ combinations([1, 2, 3], 2)         # 组合；count(n, step) 无限计数器配 
 ```
 
 **陷阱**: `groupby` 只对**相邻**相同元素分组，忘记先 `sorted(key=...)` 是头号错误。
+
+> 🌐 官方文档：[itertools — 迭代函数库](https://docs.python.org/3/library/itertools.html)
 
 ---
 
@@ -75,6 +79,8 @@ Path("out").mkdir(parents=True, exist_ok=True)
 
 **要点**: 全面替代 `os.path` 字符串拼接；小文件直接 `read_text`/`write_text`，大文件仍用 `open` 流式处理。
 
+> 🌐 官方文档：[pathlib — 面向对象的文件系统路径](https://docs.python.org/3/library/pathlib.html)
+
 ---
 
 ## 4. json — 序列化标准
@@ -87,6 +93,8 @@ obj = json.loads(text)                     # 文件版用 json.load(f)
 ```
 
 **陷阱**: `datetime`/`Decimal`/自定义类默认不可序列化——`default=str` 兜底或转字符串；`ensure_ascii=False` 才能保存中文原貌；`json.dump`（文件）与 `json.dumps`（字符串）一字之差。
+
+> 🌐 官方文档：[json — JSON 编解码器](https://docs.python.org/3/library/json.html)
 
 ---
 
@@ -110,6 +118,8 @@ except Exception:
 
 **要点**: 库代码只 `getLogger(__name__)`，不 `basicConfig`（配置权归应用）；`log.exception` 只能在 except 块内用。
 
+> 🌐 官方文档：[logging — 日志工具](https://docs.python.org/3/library/logging.html)
+
 ---
 
 ## 6. re — 正则表达式
@@ -125,6 +135,8 @@ pattern = re.compile(r"^\w+$")    # 高频使用先编译
 ```
 
 **陷阱**: `match` 只锚定开头，全文匹配用 `fullmatch`；贪婪量词 `.*` 常吃过头，用 `.*?` 惰性。
+
+> 🌐 官方文档：[re — 正则表达式操作](https://docs.python.org/3/library/re.html)
 
 ---
 
@@ -142,24 +154,26 @@ date.today().strftime("%Y-%m-%d")
 
 **陷阱**: `datetime.now()`（无参）返回**本地时间 naive 对象**，存储/传输一律 `timezone.utc`；naive 与 aware 比较抛 TypeError。
 
+> 🌐 官方文档：[datetime — 日期与时间类型](https://docs.python.org/3/library/datetime.html)
+
 ---
 
 ## 8. 其他必知模块速览
 
-| 模块 | 一句话 | 代表 API |
-|------|--------|---------|
-| `os` / `sys` | 系统接口与解释器 | `os.environ`、`sys.argv`、`sys.exit` |
-| `subprocess` | 调外部命令 | `subprocess.run(["ls", "-la"], capture_output=True, check=True)` |
-| `argparse` | CLI 解析基线 | 能读懂即可，新项目用 typer |
-| `typing` | 类型工具 | 见 [typing 全表](../language-concepts/05-typing-annotations.md) |
-| `functools` | 函数工具 | `@wraps`、`@lru_cache`、`partial` |
-| `dataclasses` | 数据类 | `@dataclass`、`field`、`asdict` |
-| `contextlib` | 上下文工具 | `@contextmanager`、`suppress` |
-| `sqlite3` | 内置数据库 | `sqlite3.connect("app.db")` |
-| `unittest.mock` | 测试替身 | 新项目用 `pytest` + `mocker` |
-| `random` / `secrets` | 随机数 | 随机值用 `random`，安全用途（令牌）必须 `secrets` |
-| `csv` | 表格文本 | `csv.DictReader(f)` |
-| `hashlib` / `shutil` | 摘要 / 文件操作 | `shutil.copytree`、`hashlib.sha256` |
+| 模块 | 一句话 | 代表 API | 官方链接 |
+|------|--------|---------|----------|
+| `os` / `sys` | 系统接口与解释器 | `os.environ`、`sys.argv`、`sys.exit` | [os](https://docs.python.org/3/library/os.html) · [sys](https://docs.python.org/3/library/sys.html) |
+| `subprocess` | 调外部命令 | `subprocess.run(["ls", "-la"], capture_output=True, check=True)` | [subprocess](https://docs.python.org/3/library/subprocess.html) |
+| `argparse` | CLI 解析基线 | 能读懂即可，新项目用 typer | [argparse](https://docs.python.org/3/library/argparse.html) |
+| `typing` | 类型工具 | 见 [typing 全表](../language-concepts/05-typing-annotations.md) | [typing](https://docs.python.org/3/library/typing.html) |
+| `functools` | 函数工具 | `@wraps`、`@lru_cache`、`partial` | [functools](https://docs.python.org/3/library/functools.html) |
+| `dataclasses` | 数据类 | `@dataclass`、`field`、`asdict` | [dataclasses](https://docs.python.org/3/library/dataclasses.html) |
+| `contextlib` | 上下文工具 | `@contextmanager`、`suppress` | [contextlib](https://docs.python.org/3/library/contextlib.html) |
+| `sqlite3` | 内置数据库 | `sqlite3.connect("app.db")` | [sqlite3](https://docs.python.org/3/library/sqlite3.html) |
+| `unittest.mock` | 测试替身 | 新项目用 `pytest` + `mocker` | [unittest.mock](https://docs.python.org/3/library/unittest.mock.html) |
+| `random` / `secrets` | 随机数 | 随机值用 `random`，安全用途（令牌）必须 `secrets` | [random](https://docs.python.org/3/library/random.html) · [secrets](https://docs.python.org/3/library/secrets.html) |
+| `csv` | 表格文本 | `csv.DictReader(f)` | [csv](https://docs.python.org/3/library/csv.html) |
+| `hashlib` / `shutil` | 摘要 / 文件操作 | `shutil.copytree`、`hashlib.sha256` | [hashlib](https://docs.python.org/3/library/hashlib.html) · [shutil](https://docs.python.org/3/library/shutil.html) |
 
 `functools.lru_cache` 一行加缓存：
 
@@ -169,6 +183,8 @@ from functools import lru_cache
 @lru_cache(maxsize=1024)
 def fetch_user(uid: int) -> dict: ...
 ```
+
+> 🧭 深入专篇：[os 与 sys](./04-os-sys.md) · [enum](./05-enum-module.md) · [functools 与 subprocess](./06-functools-subprocess.md)
 
 ---
 

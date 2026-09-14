@@ -24,7 +24,7 @@
 
 ## 01 Go后端开发
 
-> 模块入口: [01-go-backend/README.md](../../01-go-backend/README.md) | 已按标准结构建设（54篇）
+> 模块入口: [01-go-backend/README.md](../../01-go-backend/README.md) | 已按标准结构建设（74篇）
 
 ### 📖 基础概念 (basics/)
 | 文档 | 说明 |
@@ -69,9 +69,9 @@
 ### 📚 知识字典 (reference/)
 | 分类 | 文档 |
 |------|------|
-| [语言核心概念](../../01-go-backend/reference/language-concepts/01-go-keywords.md) | Go关键字、错误处理、并发、泛型等9篇 |
+| [语言核心概念](../../01-go-backend/reference/language-concepts/01-go-keywords.md) | Go关键字、错误处理、并发、泛型及 slice/map/channel/interface/defer/nil 核心语义等15篇 |
 | [框架核心要点](../../01-go-backend/reference/framework-essentials/01-gin-framework.md) | Gin、GORM、sqlc/GORM/ent 数据层对比、路由器选型、Mongo/Redis驱动等6篇 |
-| [库指南](../../01-go-backend/reference/library-guides/01-go-standard-library.md) | 标准库、三方库与net/http 3篇 |
+| [库指南](../../01-go-backend/reference/library-guides/01-go-standard-library.md) | 标准库、三方库、net/http 及 encoding/json/context/sync/database/sql 等包导览与 std 包地图 17篇 |
 | [快速参考](../../01-go-backend/reference/quick-references/01-syntax-cheatsheet.md) | 语法速查、Web工具、故障排查3篇 |
 
 ### 🔧 测试与部署
@@ -208,12 +208,12 @@
 
 ### 07 PHP精通之路
 
-> 模块入口: [07-php-mastery/README.md](../../07-php-mastery/README.md) | 已按标准结构建设（48篇）
+> 模块入口: [07-php-mastery/README.md](../../07-php-mastery/README.md) | 已按标准结构建设（59篇）
 
 | 目录 | 象限 | 篇数 | 入口 |
 |------|------|------|------|
 | 📖 [basics/](../../07-php-mastery/basics/) | 教程 | 8 | [环境搭建](../../07-php-mastery/basics/01-environment-setup.md) |
-| 📚 [reference/](../../07-php-mastery/reference/) | 字典 | 18 | [language-concepts/](../../07-php-mastery/reference/language-concepts/) |
+| 📚 [reference/](../../07-php-mastery/reference/) | 字典 | 29 | [language-concepts/](../../07-php-mastery/reference/language-concepts/) |
 | 🏗️ [frameworks/](../../07-php-mastery/frameworks/) | 操作指南 | 4 | [Laravel入门](../../07-php-mastery/frameworks/01-laravel-basics.md) |
 | 🚀 [projects/](../../07-php-mastery/projects/) | 操作指南 | 4 | [TODO API](../../07-php-mastery/projects/01-todo-api.md) |
 | 🧪 [testing/](../../07-php-mastery/testing/) | 操作指南 | 3 | [单元测试](../../07-php-mastery/testing/01-unit-testing.md) |
@@ -250,12 +250,12 @@
 
 ### 10 Python发现之旅
 
-> 模块入口: [10-python-discovery/README.md](../../10-python-discovery/README.md) | 已按标准结构建设（48篇）
+> 模块入口: [10-python-discovery/README.md](../../10-python-discovery/README.md) | 已按标准结构建设（54篇）
 
 | 目录 | 象限 | 篇数 | 入口 |
 |------|------|------|------|
 | 📖 [basics/](../../10-python-discovery/basics/) | 教程 | 8 | [环境搭建](../../10-python-discovery/basics/01-environment-setup.md) |
-| 📚 [reference/](../../10-python-discovery/reference/) | 字典 | 22 | [language-concepts/](../../10-python-discovery/reference/language-concepts/) |
+| 📚 [reference/](../../10-python-discovery/reference/) | 字典 | 28 | [language-concepts/](../../10-python-discovery/reference/language-concepts/) |
 | 🏗️ [frameworks/](../../10-python-discovery/frameworks/) | 操作指南 | 4 | [FastAPI入门](../../10-python-discovery/frameworks/01-fastapi-basics.md) |
 | 🚀 [projects/](../../10-python-discovery/projects/) | 操作指南 | 4 | [TODO API](../../10-python-discovery/projects/01-todo-api.md) |
 | 🧪 [testing/](../../10-python-discovery/testing/) | 操作指南 | 3 | [单元测试](../../10-python-discovery/testing/01-unit-testing.md) |
