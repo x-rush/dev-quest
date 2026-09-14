@@ -67,7 +67,7 @@
 | `null` / `undefined` | `'null'` / `'undefined'` |
 | `[1,2]` | `'1,2'`（join） |
 | `{}` | `'[object Object]'` |
-| `Symbol('s')` | **TypeError**（模板字符串里也会抛） |
+| `Symbol('s')` | `String(Symbol('s'))` 显式转换得 `'Symbol(s)'`；隐式转换仍抛 **TypeError**（模板字符串插值、`+` 拼接） |
 
 ### ToBoolean：唯一值得背的 falsy 八个
 `false`、`0`、`-0`、`0n`、`''`、`null`、`undefined`、`NaN`。其余全为真——包括 `{} `、`[]`、`'0'`、`'false'`。

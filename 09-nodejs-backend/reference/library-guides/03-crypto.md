@@ -26,7 +26,7 @@
 | API | 签名 | 用途 |
 |-----|------|------|
 | `createHash(algorithm)` | `.update(data).digest('hex')` | 文件校验、内容寻址（sha256） |
-| `hash(algorithm, data)` | 一次性返回 Buffer | Node 21.7+ 单发计算，无流开销 |
+| `hash(algorithm, data, outputEncoding?)` | 默认返回 hex 字符串；传 `'buffer'` 得 Buffer | Node 21.7+ 单发计算，无流开销 |
 | `createHmac(algorithm, key)` | `.update(data).digest('hex')` | API 签名、Webhook 验签 |
 
 ### 示例
@@ -35,7 +35,7 @@
 import { createHash, createHmac, hash } from "node:crypto";
 
 createHash("sha256").update("hello").digest("hex");   // 64 位十六进制
-hash("sha256", "hello");                              // 等价的一次性写法
+hash("sha256", "hello");                              // 等价的一次性写法（默认也返回 hex 字符串，第三参传 'buffer' 得 Buffer）
 
 // Webhook 验签（GitHub/Stripe 模式）
 const expected = createHmac("sha256", process.env.WEBHOOK_SECRET!)
@@ -102,7 +102,7 @@ const plaintext = Buffer.concat([decipher.update(ciphertext), decipher.final()])
 ### 陷阱
 - ❌ **IV 复用**（同一 key 下重复 IV）——GCM 下会泄露认证密钥，等同密码学灾难
 - ✅ IV 用 `randomBytes(12)` 每次生成，与密文一起存储（IV 不是秘密）
-- ❌ 忘记 `setAuthTag` 就 `final()`——抛错；tag 长度必须完整 16 字节
+- ❌ 忘记 `setAuthTag` 就 `final()`——抛错；新代码 tag 必须完整 16 字节（12 字节等旧长度实测可用，但非 128-bit tag 已弃用——DEP0182，Node 22.15.0 起）
 - ❌ ECB/CBC 无认证模式自行拼 HMAC——能选 GCM 就选 GCM，不要手搓组合
 
 ## 4. 密码散列：scrypt
