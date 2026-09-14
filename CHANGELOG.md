@@ -2,6 +2,20 @@
 
 本项目遵循 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/) 格式。
 
+## [2.7.0] - 2026-09-14
+
+### Fixed
+- **全仓收尾审计**（对基线 d9def1d 之前写就、从未全量审过的 459 篇老文档做最后一轮全审：2 波 13 路并行 agent 逐篇通读 + 工具链实测/官方文档比对，产出约 197 项确认级问题；6 路修复 agent 修复约 194 项，1 项审计建议被官方文档否决保留原文、2 项经复核超范围/已正确）：老文档错误密度（约 197 项）显著高于 2.6.0 新增文档（38 项），印证"写于工具链时代之前、断言从未实测"的根因判断；至此全仓文档均经至少一轮全量审计
+  - 01-go（64 项，go 1.25.14 全部编译验证）：gqlgen 定性纠为 schema-first（SDL 生成代码）并按 gqlparser/v2 ast 重写深度限制示例、dataloader `WithMaxBatch`→`WithBatchCapacity`、gin 可选参数/gorm `ChangedFields`/prometheus `Observe` 等虚构 API 修正、批量补缺失 import
+  - 02-nextjs（59 项，37 文件）：next-auth v5 全面迁移（`NextAuthOptions`→`NextAuthConfig`、Prisma 适配器改 `@auth/prisma-adapter`、`handlers/auth/signIn/signOut` 解构导出、signIn 回调无 request 参数）；历史扩展清零：artifact@v3（10 处）、zod `.errors`（17 处）、web-vitals onFID→onINP
+  - 03-tanstack + 09-node（18 项）：`setQueryData` updater 返回 undefined 实为 no-op 非清空（query-core 源码短路）、MutationCache 回调末位注入 `context.client`（`mutation` 实例无 `client` 属性）、node API 语义 3 处
+  - 04-rn + 10-python（11+3 项）：react-native-mmkv v4 值导出为 `createMMKV()` 工厂且 `delete` 改名 `remove`（tsc TS2339 实证，审计"仍存在"结论被纠偏）、httpx 默认 5 秒超时、Pydantic 校验器深拷贝语义、match-case 死分支
+  - 06-swift（6 项）：`MetricReport` 实为 iOS 27 引入非 26、`VersionedSchema.models` 与 `SchemaMigrationPlan.schemas` 辨析（均经 Apple 官方文档实证，2 项审计建议被否决保留原文）
+  - 07-php + 08-java（26 项）：PHP `int|null` 反射归一化为 `ReflectionNamedType`（8.5.10 实测改写）、Mockito 默认返回空 Optional/集合（2.x 起）、ZGC JDK 15 转正、`case null` 与 default 可共存
+  - **05-kotlin 零确认级问题**（10 模块中唯一）
+- **README 索引滞后补齐**（5 模块）：2.6.0 扩展后 document-index 已同步而模块 README 目录树/篇数声明漏更——01 21→41、02 24→32（含统计表 Knowledge Points 23→32、总计 53→62）、03 补 11 篇（含 17-flexrender）、07 18→29、10 22→28
+- 全仓 4392 条本地链接 0 断链
+
 ## [2.6.1] - 2026-09-14
 
 ### Fixed
