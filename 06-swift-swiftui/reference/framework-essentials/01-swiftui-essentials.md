@@ -35,6 +35,7 @@
 | `ProgressView` | 进度 | `value:total:`；不确定态无参 |
 | `Gauge` | 仪表（iOS 16+） | `value:in:` + gaugeStyle |
 | `ContentUnavailableView` | 空状态（iOS 17+） | `Label` + description + actions |
+| `ForEach` | 数据驱动渲染（集合→视图） | 元素需 `Identifiable` 或传 `id:`；`id: \.self` 用值本身作标识 |
 
 ---
 

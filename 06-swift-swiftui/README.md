@@ -44,7 +44,7 @@
 | 象限 | 目录 | 内容 | 访问方式 |
 |------|------|------|---------|
 | **📖 教程** | [basics/](./basics/01-environment-setup.md) | 环境搭建 → Swift 语法 → SwiftUI 视图/状态/布局/导航 → 并发入门 → 首个项目，共 8 篇按序学习 | 从头到尾按编号走 |
-| **📚 字典** | [reference/](./reference/quick-references/01-swift-swiftui-cheatsheet.md) | 语言概念（11 篇）/ 框架要点（7 篇）/ 库指南（2 篇）/ 速查与故障排除（2 篇），共 22 篇全量参考 | **无难度门槛**，任意跳入查询 |
+| **📚 字典** | [reference/](./reference/quick-references/01-swift-swiftui-cheatsheet.md) | 语言概念（16 篇，含构造/关键字总索引/正则/URLSession/包地图）/ 框架要点（8 篇，含手势）/ 库指南（2 篇）/ 速查与故障排除（2 篇），共 28 篇全量参考 | **无难度门槛**，任意跳入查询 |
 | **🛠️ 操作指南** | [frameworks/](./frameworks/01-swiftui-basics.md) [projects/](./projects/01-notes-app.md) [testing/](./testing/01-unit-testing.md) [deployment/](./deployment/01-app-release.md) | 框架任务指南 4 篇 · 实战项目 4 个（⭐ 递进）· 测试工程 3 篇 · 部署运维 3 篇 | 面向目标，按需照做 |
 | **🎓 解释** | [advanced-topics/](./advanced-topics/architecture/01-app-architecture.md) | 应用架构、渲染性能、并发深度、安全实践，共 4 篇深度专题（均 ⭐⭐⭐） | 有实践困惑后带着问题读 |
 

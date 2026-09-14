@@ -164,6 +164,7 @@ WindowGroup { Root() }.environment(store)
 | `@AppStorage` | UserDefaults 绑定 | `@AppStorage("theme") var theme = "system"` |
 | `@SceneStorage` | 状态恢复（每场景独立） | 文本草稿、选中 tab |
 | `@FocusState` | 键盘焦点 | `@FocusState var focused: Field?` |
+| `@GestureState` | 手势进行中的临时值，**手势结束自动复位** | `@GestureState var s: CGFloat = 1` + `.gesture(g.updating($s) { v, s, _ in s = v.magnification })` — 详见 [08-gestures.md](../framework-essentials/08-gestures.md) |
 
 ---
 
