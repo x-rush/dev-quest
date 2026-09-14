@@ -6,7 +6,7 @@
 
 ## 📌 定义
 
-路由段配置是从 `page.tsx`/`layout.tsx`/`route.ts` 直接 `export const` 的常量，用来声明该段的渲染与缓存行为（`dynamic`、`revalidate`、`fetchCache` 等）。**它们属于 Next.js 16 之前的"隐式缓存模型"**：未启用 `cacheComponents` 时仍可用（官方文档已将其移入"Caching and Revalidating (Previous Model)"指南）；而启用 Cache Components（`cacheComponents: true`，16 的缓存新方向）后，`dynamic`/`dynamicParams`/`revalidate`/`fetchCache` 四项**被移除**，缓存一律改由 `"use cache"` 显式声明。运行环境类配置（`runtime`、`dynamicParams`、`maxDuration`）不受此影响。
+路由段配置是从 `page.tsx`/`layout.tsx`/`route.ts` 直接 `export const` 的常量，用来声明该段的渲染与缓存行为（`dynamic`、`revalidate`、`fetchCache` 等）。**它们属于 Next.js 16 之前的"隐式缓存模型"**：未启用 `cacheComponents` 时仍可用（官方文档已将其移入"Caching and Revalidating (Previous Model)"指南）；而启用 Cache Components（`cacheComponents: true`，16 的缓存新方向）后，`dynamic`/`dynamicParams`/`revalidate`/`fetchCache` 四项**被移除**，缓存一律改由 `"use cache"` 显式声明。运行环境类配置（`runtime`、`maxDuration`）不受此影响。
 
 ## 📖 语法/签名
 
@@ -14,7 +14,6 @@
 
 | 选项 | 类型 | 默认 | 语义 |
 |------|------|------|------|
-| `dynamicParams` | `boolean` | `true` | 配合 `generateStaticParams`：未预生成的动态段参数，`true` 按需动态渲染，`false` 直接 404 |
 | `runtime` | `'nodejs' \| 'edge'` | `'nodejs'` | 段的运行时；**`'edge'` 已弃用** |
 | `preferredRegion` | `'auto' \| 'global' \| 'home' \| string \| string[]` | `'auto'` | 部署区域偏好；**已弃用** |
 | `maxDuration` | `number`（秒） | 由部署平台设定 | 服务端执行最大时长（serverless 超时上限） |
@@ -28,6 +27,7 @@
 | | `'force-dynamic'` | | 强制每请求动态渲染，等效于所有 fetch `cache: 'no-store'` + `revalidate: 0` + `fetchCache = 'force-no-store'` |
 | | `'error'` | | 强制预渲染：任何组件用了请求时 API 或未缓存数据即报错（等效 pages 时代的 `getStaticProps`） |
 | | `'force-static'` | | 强制静态：`cookies()`/`headers()`/`useSearchParams()` 返回空值 |
+| `dynamicParams` | `boolean` | `true` | 配合 `generateStaticParams`：未预生成的动态段参数，`true` 按需动态渲染，`false` 直接 404 |
 | `revalidate` | `false` | `false` | 语义≈`Infinity`：fetch 缓存不过期（个别 fetch 仍可自行绕过） |
 | | `0` | | 该段始终动态渲染 |
 | | `number`（秒） | | 该段默认重验证周期；**取全路由最小值**；必须静态可分析（`600` 合法，`60 * 10` 不合法）；开发模式永远按需渲染 |

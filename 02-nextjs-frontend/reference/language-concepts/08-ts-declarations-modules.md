@@ -92,7 +92,7 @@ s.describe()        // "area=9"
 
 - ❌ **在 Next.js 项目里用 `const enum` 跨文件共享成员**：Next.js 生成的 tsconfig 默认开启 `isolatedModules`（Turbopack/SWC 按单文件转译，无法做跨文件内联）。本机 tsc 7.0.2 实测：普通 `const enum` 在 `isolatedModules` 下仍可编译（SWC 按常规枚举处理），但 `declare const enum` 直接报 **TS2748: Cannot access ambient const enums when 'isolatedModules' is enabled**；纯转译模式下环境 const enum 成员运行时根本不存在，访问得到 `undefined`。✅ 跨文件共享常量用 `as const` 对象或字符串/数字字面量联合类型，`enum`（常规枚举）用于需要运行时对象（反向映射、遍历）的场景。
 - ❌ **以为 TS 7 移除了枚举**：本机 `tsc 7.0.2`（2026-09 npm 当前版）实测 `enum`、`const enum`、`declare global`、`declare module` 扩充、`abstract` 类全部照常支持，错误行为与 5.9.3 一致——"7.0 基线"改变的是编译器实现与性能，不是这些语言特性的可用性。
-- ❌ **用相对路径做模块扩充**：`declare module './mods/lib'` 报 **TS2664: Invalid module name in augmentation**（本机实测）——扩充只能针对裸模块名（`'next-auth'`、`'react'`）。✅ 扩充包名；本地文件直接改源码或用交叉类型。
+- ❌ **用相对路径做模块扩充**：`declare module './mods/lib'` 实测报 **TS2436: Ambient module declaration cannot specify relative module name**（本机 tsc 7.0.2 实测；若文件带 `import`/`export` 处于扩充上下文则报 TS2664）——两种上下文都不允许相对路径，扩充只能针对裸模块名（`'next-auth'`、`'react'`）。✅ 扩充包名；本地文件直接改源码或用交叉类型。
 - ❌ **在 `.d.ts` 里写实现**：声明文件只允许类型与 `declare` 声明；函数体、赋值语句会被忽略或报错。✅ 实现放 `.ts`，形状放 `.d.ts`。
 - ❌ **模块化的 `.d.ts` 忘了包 `declare global`**：一旦声明文件里有 `import`/`export`，它就是模块文件，顶层声明不再是全局的——想让 `Window` 等全局接口生效必须写进 `declare global { }`。✅ 纯全局声明文件（无 import/export）才可直接写顶层 `interface`。
 - ❌ **把 `import type` 当运行时导入**：`import type` 编译后完全消失，用它导入的"值"在运行时是 `undefined`——拿它导入组件/常量会静默得到空值。✅ 类型用 `import type`（或内联 `import { type AppConfig }`），值用普通导入。

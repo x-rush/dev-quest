@@ -111,7 +111,7 @@ channel.postMessage({ type: 'logout' })  // 广播给所有同源、同 name 的
 - ❌ **忘接 `AbortSignal` 导致请求无法取消**：快速切换筛选条件时旧请求后返回覆盖新结果（race condition）。✅ 每次 useEffect 发请求创建 `AbortController`，清理函数里 `abort()`；或直接用 `AbortSignal.timeout(ms)` 限超时。
 - ❌ **手拼查询串不编码**：`'/search?q=' + keyword` 遇到 `&`、`+`、中文直接坏。✅ 一律用 `new URL(...)` 或 `new URLSearchParams(...)` 生成。
 - ❌ **服务端代码里调 `localStorage`/`window`**：Server Component / route handler / `next build` 预渲染阶段没有 `window`，直接引用即抛 `ReferenceError`。✅ 客户端组件内使用；确需顶层判断时用 `typeof window === 'undefined'` 守卫。
-- ❌ **给 localStorage 存对象没序列化**：值会被强转成 `"[object Object]"`；读取不判 `null` 直接 `JSON.parse` 会抛异常。✅ 写入 `JSON.stringify`，读取 `try/catch` + 判空；敏感信息不要进 localStorage（XSS 可读）。
+- ❌ **给 localStorage 存对象没序列化**：值会被强转成 `"[object Object]"`；读取不判空直接 `JSON.parse` 有两种坑——空串/`undefined` 抛 SyntaxError，而 `null` 静默返回 `null` 不抛，两种情形都需防御。✅ 写入 `JSON.stringify`，读取 `try/catch` + 判空；敏感信息不要进 localStorage（XSS 可读）。
 - ❌ **用 `JSON.parse(JSON.stringify(obj))` 深拷贝**：`Date` 变字符串、`Map/Set` 变空对象、`undefined` 字段丢失、循环引用直接抛错。✅ 用 `structuredClone`（函数与 DOM 节点仍不可克隆，需自行处理）。
 - ❌ **手设 FormData 的 `Content-Type`**：手动写 `multipart/form-data` 会丢失 boundary，服务端解析失败。✅ 交给浏览器自动生成，什么都不写。
 - ❌ **在 Server Component 里 new BroadcastChannel**：它是浏览器跨标签页机制；Node 里虽有同名构造器，语义完全不同。✅ 只在客户端组件/事件处理器中使用，并做 SSR 守卫。
