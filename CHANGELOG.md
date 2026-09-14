@@ -2,6 +2,22 @@
 
 本项目遵循 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/) 格式。
 
+## [2.6.1] - 2026-09-14
+
+### Fixed
+- **终极审计修复**（2.6.0 新增 74 篇全量审 + 老文档高风险子集抽审，4 路并行审计约 690 条实测断言产出 38 个确认级问题，4 路修复全部实测验证）：10 模块 32 文件，按语言工具链实测（Swift 6.3.3 首次纳入、RN 经 tsc 类型层、kotlinc/php/jshell/tsc/go 回放）
+  - 01-go：`sync.Once` panic 后不重试语义反转（源码 + 实测：done 照样置位），附 mutex 可重试模式；`flag.Value` 实测输出
+  - 02-nextjs：`dynamicParams` 归组（旧缓存模型已被移除）、TS2664→TS2436 适用域、`JSON.parse(null)` 返回 null 不抛
+  - 03-tanstack：`useQueries` 条目 `placeholderData`（含 `keepPreviousData`）换 key 收不到旧数据是空操作（QueriesObserver 按 queryHash 匹配，query-core 运行时实测），平滑过渡改 `queryClient.getQueryData` 缓存取值法；`persistQueryClient` `onError` 签名
+  - 04-rn：`InteractionManager` 已从 0.87 核心移除——reference 迁移指引重写（requestIdleCallback / startTransition）+ advanced-topics 两篇同根因残留 4 处同步；FlashList v1 `estimatedItemSize` 写法按 v2 重写（该 prop 已不存在，JS-only 实现）
+  - 05-kotlin：`detectTransformGestures` `onGesture` 返回 Unit；硬关键字补 `as?`（30→31）
+  - 06-swift：正则替换与贪婪语义归属、`Optional` 调试输出、`mutating pop`、手势速度类型、`Map` 版本门槛等 10 项（Swift 6.3.3 Linux 工具链首次全量实测）
+  - 07-php：弱比较矩阵 49 格全量重测后修正 `"0" == false` 两格
+  - 08-java：正则 `lookingAt` 结论 / `quoteReplacement` 输出 / 裸 `$` 抛异常、时间格式 `S` 位数、`DecimalFormat` 边界、`getRecordComponents` Java 16+ 等（JDK 21 实测）
+  - 09-node：`crypto.hash` 第三参实为 `outputEncoding` 字符串非 options 对象（实测纠偏）；`String(Symbol)` 2026 规范行为
+  - 10-python：仅位置参数语法示例；`__slots__` 内存数据按 3.14.7 实测改写
+- 全仓 4384 条本地链接 0 断链
+
 ## [2.6.0] - 2026-09-14
 
 ### Added
