@@ -181,6 +181,59 @@ Modifier.clickable { }.padding(16.dp)    // 水波纹铺满含 padding 的整个
 Modifier.padding(16.dp).clickable { }    // 水波纹只在文字区域
 ```
 
+## 10. HorizontalPager / VerticalPager - 翻页
+
+### 定义
+按页滑动的容器（引导页、轮播图、左右切换的面板）：一次显示一页，手势或代码驱动翻页，页与页互不测量（性能接近 Lazy）。
+
+### 语法和示例
+```kotlin
+// pageCount 是 lambda：页数可依赖状态，重组时懒求值
+val pagerState = rememberPagerState(pageCount = { pages.size })
+
+HorizontalPager(
+    state = pagerState,
+    pageSpacing = 8.dp,                          // 页间距
+    contentPadding = PaddingValues(horizontal = 32.dp),   // 露出相邻页边缘
+    key = { pages[it].id },                      // ⭐ 页身份（增删页时状态不错位）
+) { page ->
+    PageContent(pages[page])
+}
+
+VerticalPager(state = pagerState) { page -> /* 纵向翻页 */ }
+
+// 程序化翻页（副作用里调用）
+scope.launch { pagerState.animateScrollToPage(2) }
+
+// 观察翻页状态
+val current = pagerState.currentPage        // 稳定停靠的页
+val settled = pagerState.settledPage        // 动画完全落定的页
+val target  = pagerState.targetPage         // 正在滑向的页
+pagerState.isScrollInProgress               // 是否正在滚动
+```
+
+### 陷阱
+- 读 `currentPage` 做"到第 3 页才允许继续"的判断会因滑动中的中间值提前成立——用 `settledPage`（落定）或 `targetPage`（意向）
+- `pageCount` 是 `() -> Int`，直接传 `pages.size` 编译不过（旧版 API 已移除）
+- 翻页内容里放 `LaunchedEffect(page)` 可做每页首次曝光埋点，不要在页面 lambda 里直接发副作用
+
+## 11. BackHandler - 拦截系统返回
+
+### 定义
+`androidx.activity.compose.BackHandler` 注册系统返回（返回键/手势）回调：组合中 `enabled = true` 即接管返回，`onBack` 执行；`enabled = false` 时放行系统默认行为。多个同时启用的 handler 由**组合顺序**决定——后组合（更内层）的优先。
+
+### 语法和示例
+```kotlin
+BackHandler(enabled = showDialog) {     // 仅弹窗打开时接管返回
+    showDialog = false                  // 点返回 = 关弹窗而非退页面
+}
+```
+
+### 陷阱
+- NavHost 内的目的地**自带返回处理**（自动 popBackStack），只有"临时覆盖返回语义"（关弹窗/清搜索）才需要 BackHandler
+- `enabled` 条件忘写会导致永远拦截、用户退不出页面
+- 想在拦截后真正退出页面，回调里调 `navController.popBackStack()`（见 [Navigation Compose 组件速查](./06-navigation-components.md)）
+
 ---
 
 ## 组件选型速查
@@ -195,12 +248,16 @@ Modifier.padding(16.dp).clickable { }    // 水波纹只在文字区域
 | 轻量反馈 | `Snackbar` |
 | 顶部标题栏 | `TopAppBar` / `CenterAlignedTopAppBar` |
 | 底部标签 | `NavigationBar` |
+| 翻页（引导页/轮播/左右面板） | `HorizontalPager` / `VerticalPager` |
+| 拦截系统返回键 | `BackHandler` |
 
 ---
 
 ## 相关文档
 
 - 📄 **[Material 3 主题系统](./02-compose-material3.md)** - colorScheme/typography/shapes 深入
+- 📄 **[Navigation Compose 组件速查](./06-navigation-components.md)** - BackHandler 与导航返回的分工
+- 📄 **[手势 API](./09-gestures.md)** - clickable 之外的自定义手势
 - 📄 **[布局系统](../../basics/05-layouts.md)** - Column/Row/Box/LazyColumn 教程
 - 📄 **[Compose 状态 API 详解](../language-concepts/04-compose-state-api.md)** - 组件状态来源
 - 📖 **[Compose Material 3 API 参考](https://developer.android.com/reference/kotlin/androidx/compose/material3/package-summary)** - 全量组件文档

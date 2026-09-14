@@ -1,6 +1,6 @@
 # Kotlin 关键字与修饰符详解
 
-> Compose/Android 开发高频的 Kotlin 关键字速查字典：按"声明 → 继承 → 并发 → 其他"分组，每个词条包含定义、语法、示例与陷阱
+> Compose/Android 开发高频的 Kotlin 关键字速查字典：官方关键字总索引 + 按"声明 → 继承 → 并发 → 其他"分组的高频词条，每个词条包含定义、语法、示例与陷阱。标注（实测）的断言均经本机 kotlinc 2.4.20 编译运行验证
 
 | 属性 | 内容 |
 |------|------|
@@ -9,6 +9,18 @@
 | **难度** | ⭐⭐ |
 | **标签** | `#关键字` `#修饰符` `#Kotlin` `#语言概念` |
 | **更新日期** | `2026年9月` |
+
+## 关键字总索引（官方分类）
+
+按 [官方 Keyword reference](https://kotlinlang.org/docs/keyword-reference.html) 分类：**硬关键字**在任何位置都保留，作标识符必须反引号转义（`` `fun` ``）；**软关键字/修饰符关键字**仅在匹配其语法角色的上下文中保留，可直接作标识符。
+
+| 类别 | 关键字 |
+|------|--------|
+| 硬关键字（30） | `as` `break` `class` `continue` `do` `else` `false` `for` `fun` `if` `in` `!in` `interface` `is` `!is` `null` `object` `package` `return` `super` `this` `throw` `true` `try` `typealias` `typeof`* `val` `var` `when` `while` |
+| 软关键字（18） | `by` `catch` `constructor` `delegate` `dynamic` `field` `file` `finally` `get` `import` `init` `param` `property` `receiver` `set` `setparam` `value` `where` |
+| 修饰符关键字（29） | `abstract` `actual` `annotation` `companion` `const` `crossinline` `data` `enum` `expect` `external` `final` `infix` `inline` `inner` `internal` `lateinit` `noinline` `open` `operator` `out` `override` `private` `protected` `public` `reified` `sealed` `suspend` `tailrec` `vararg` |
+
+> \* `typeof` 为官方保留字，当前无用途。§1-18 覆盖高频词条，§19-35 补全其余硬关键字与常用修饰符。
 
 ---
 
@@ -328,6 +340,321 @@ val label = when {
     else -> "不及格"
 }
 ```
+
+## 19. for / while / do - 循环
+
+### 定义
+`for` 遍历任何提供 `iterator()` 的对象（没有 C 风格三段式循环）；`while` / `do while` 与 Java 同形，`do while` 先执行一次再判断。
+
+### 语法和示例
+```kotlin
+for (i in 1..3) print(i)                       // 123
+for ((index, item) in list.withIndex()) { }    // 下标 + 元素解构
+for (c in "abc") print(c)                      // 字符串可迭代
+while (x < 10) { x++ }
+do { loadPage() } while (hasMore)
+```
+
+### 陷阱
+- 倒序/跳步用区间运算（`for (i in 10 downTo 1 step 2)`），不要手写索引循环
+- `do while` 的条件里可以使用**循环体内声明的变量**（官方语法作用域规则，Java 做不到）
+
+## 20. in / !in / is / !is - 归属与类型判断
+
+### 定义
+`in` 判断成员/区间归属（正向调用 `contains`），`!in` 取反；`is` 做类型判断并在通过后**智能转换**，`!is` 取反。四者均为硬关键字；泛型处 `in`/`out` 是型变修饰符（见 [泛型与委托属性](./05-generics-delegates.md)）。
+
+### 语法和示例
+```kotlin
+"a" in listOf("a", "b")            // true
+3 !in 1..2                          // true
+
+val v: Any = "text"
+check(v !is Int)                    // （实测）
+if (v is String) check(v.length == 5)   // is 通过后 v 已智能转换为 String
+when (v) { is Int -> ...; is String -> ... }
+```
+
+### 陷阱
+智能转换在属性可能被别处修改（自定义 getter、open 属性）时失效——必要时用局部变量中转或显式 `as`。
+
+## 21. as / as? - 类型转换
+
+### 定义
+`as` 不安全转换，失败抛异常（类型不符实测抛 `ClassCastException`）；`as?` 安全转换，失败返回 null。
+
+### 语法和示例
+```kotlin
+val s = obj as String                 // 失败即抛（实测 ClassCastException）
+val len = (obj as? String)?.length    // 失败得到 null（实测）
+val t = n as? String ?: "<unknown>"   // 安全转换 + Elvis 兜底
+```
+
+### 陷阱
+- 可空目标写 `as String?`——`as` 转非空类型遇到 null 也会抛异常
+- `as? ... !!` 连用是坏味道：先想想为什么编译器的类型推断不知道这个类型
+
+## 22. try / catch / finally / throw - 异常
+
+### 定义
+`try` 是**表达式**（取 try 体或首个命中的 catch 分支的值）；`throw` 也是表达式（类型 `Nothing`，常与 Elvis 搭配）。Kotlin 没有受检异常；`catch`/`finally` 是软关键字。
+
+### 语法和示例
+```kotlin
+val n = try { input.toInt() } catch (e: NumberFormatException) { 0 }   // try 取值
+
+val name = raw ?: throw IllegalArgumentException("name 必填")          // throw 作表达式
+```
+
+### 陷阱
+- `finally` 中 `return` 会吞掉 try/catch 的返回值与异常——只放清理逻辑
+- `catch (e: Exception)` 一网打尽再静默吞掉，等于把崩溃推迟到更难定位的地方
+
+## 23. return / break / continue - 跳转与标签
+
+### 定义
+三者在任意循环/lambda 前加 `label@` 标签即可精确跳转：`return@label` / `break@label` / `continue@label`。inline 函数的 lambda 里裸 `return` 直接退出外层函数（非局部返回，见 §12）。
+
+### 语法和示例
+```kotlin
+// 标签跳转（实测：hits == 2）
+var hits = 0
+loop@ for (i in 1..5) {
+    for (j in 1..5) {
+        if (j == 3) continue@loop     // 直接进入外层下一轮
+        if (i == 2) break@loop        // 连外层一起跳出
+        hits++
+    }
+}
+
+// 非局部返回：forEach 是 inline，return 退出整个函数
+fun findUser(id: Long): User? {
+    users.forEach { if (it.id == id) return it }
+    return null
+}
+```
+
+### 陷阱
+- 非 inline lambda 里裸 `return` 编译错误——用 `return@函数名`（隐式标签）或自定义标签返回到 lambda
+- 隐式标签默认与接收 lambda 的函数同名（`return@forEach`）；多层嵌套时显式命名标签更可读
+
+## 24. this / super - 自引用与父类引用
+
+### 定义
+`this` 指当前接收者；多个接收者（扩展函数、inner 类、带接收者的 lambda）并存时用 `this@标签` 限定。`super` 调用父类实现；多接口都提供同名默认实现时用 `super<接口名>.成员` 显式选择。
+
+### 语法和示例
+```kotlin
+class Outer2 {
+    val tag = "outer"
+    inner class Inner2 {
+        fun who() = this@Outer2.tag        // 限定到外层接收者（实测）
+    }
+}
+
+interface A { fun who() = "A" }
+interface B { fun who() = "B" }
+class C : A, B {
+    override fun who() = super<A>.who() + super<B>.who()   // 实测 == "AB"
+}
+```
+
+### 陷阱
+两个接口提供同名默认实现而**不写** `super<A>` 时直接编译报错——编译器强制你表态，不会随机选一个。
+
+## 25. package / import - 包与导入
+
+### 定义
+`package`（硬关键字）声明归属；`import`（软关键字）导入声明，支持 `as` 别名。`kotlin.*`、`kotlin.io.*` 等标准包与 JVM 平台的 `java.lang` 默认已导入。
+
+### 语法和示例
+```kotlin
+package com.example.app
+
+import androidx.compose.runtime.Composable
+import kotlin.math.PI as PI2      // 别名：与项目内已有 PI 冲突时改名使用
+```
+
+### 陷阱
+- Kotlin 没有 Java 的 `import static`——顶层函数/属性直接 `import 包名.声明名`
+- 编译器不强制包与目录一致，但跨模块协作请保持惯例一致
+
+## 26. true / false / null - 字面量关键字
+
+### 定义
+`true`/`false` 是 `Boolean` 的两个字面量；`null` 是所有可空类型的"空值"字面量，只能赋给可空类型——这是空安全系统的基石（详见 [可空性与集合 API](./02-null-safety-collections.md)）。
+
+### 语法和示例
+```kotlin
+val ok: Boolean = true
+val no: Boolean = false
+val name: String? = null            // 非空类型不能赋 null
+```
+
+## 27. typealias - 类型别名
+
+### 定义
+为既有类型起新名字（硬关键字，1.7 起从修饰符升级）。别名**不引入新类型**，与原类型完全等价互换；给复杂函数类型命名是最常见用法。
+
+### 语法和示例
+```kotlin
+typealias Handler = (Int, String) -> Unit        // 顶层（实测）
+typealias Users = Map<String, User>
+
+class Repo {
+    typealias Callback = (Boolean) -> Unit       // 类内嵌套（1.7+ 稳定）
+}
+
+// fun f() { typealias Local = Int }             // 函数体内：实验特性，需 -Xlocal-type-aliases（实测编译错误）
+```
+
+### 陷阱
+别名不是新类型：`typealias Meters = Double` 后两者可互相赋值、类型检查不拦——要"零开销 + 类型安全"用 `@JvmInline value class`（§28）。
+
+## 28. value class - 值类
+
+### 定义
+`@JvmInline value class`（软关键字 `value`）包装单个 `val` 属性，编译器尽量把包装**内联消除**（不分配对象），以零运行时开销获得类型安全包装。
+
+### 语法和示例
+```kotlin
+@JvmInline value class Meters(val value: Double)   // 实测
+@JvmInline value class TaskId(val id: Long)
+
+fun fetch(id: TaskId) { /* 参数层即文档：Double 传不进来 */ }
+```
+
+### 陷阱
+- 只能有一个主构造属性；**不能声明为局部类或内部类**（实测编译错误：value class cannot be local or inner）
+- 实现为接口/被当 `Any?` 使用等场景会触发实际装箱，`===` 身份语义随之改变——语义敏感处以官方内联规则为准
+
+## 29. inner - 内部类
+
+### 定义
+Kotlin 嵌套类**默认不持有外部实例**（≈ Java 静态嵌套类）；`inner` 让嵌套类持有外部实例引用并可访问其成员。
+
+### 语法和示例
+```kotlin
+class Outer {
+    private val tag = "outer"
+    inner class Inner {
+        fun ping() = tag            // inner 才能访问外部实例成员（实测）
+    }
+}
+// 无 inner 的嵌套类访问不到外部实例成员，直接编译错误
+```
+
+### 陷阱
+`inner` 类隐式持有外部引用，外部实例生命周期被内部对象拉长即泄漏（Android 经典问题）——不需要外部实例就不加 `inner`。
+
+## 30. vararg - 可变参数
+
+### 定义
+标记"可变数量"参数，函数体内类型为 `Array<out T>`（基本类型为对应 `IntArray` 等）；调用处用展开运算符 `*` 传入数组，并可与普通实参混用。
+
+### 语法和示例
+```kotlin
+fun total(vararg nums: Int) = nums.sum()
+
+total(1, 2, 3)
+val arr = intArrayOf(4, 5)
+total(*arr, 6)                     // 展开 + 追加实参（实测 == 15）
+```
+
+### 陷阱
+- 一个函数只能有一个 `vararg` 参数；若不在末位，其后的参数必须命名传参
+- `vararg xs: String` 在函数体内是 `Array<out String>`，遍历取值前先记住这一点，避免当 `List` 用
+
+## 31. tailrec - 尾递归
+
+### 定义
+`tailrec` 让编译器把**尾调用递归**改写成循环，深递归不再消耗栈。函数须真正尾调用（最后一步是调用自身），否则编译器警告并按普通递归处理。
+
+### 语法和示例
+```kotlin
+tailrec fun gcd(a: Long, b: Long): Long = if (b == 0L) a else gcd(b, a % b)   // 实测
+tailrec fun countDown(n: Int): Int = if (n == 0) n else countDown(n - 1)
+```
+
+### 陷阱
+递归调用外再包 `try/catch`/后续计算就不满足尾调用，`tailrec` 只会得到编译警告——检查"最后一步"是否真的是调用自身。
+
+## 32. expect / actual - 多平台声明
+
+### 定义
+Kotlin Multiplatform 的成对关键字：`expect` 在公共源集声明"各平台需提供的 API"（只有声明无函数体），各平台源集用 `actual` 给出实现。
+
+### 语法和示例
+```kotlin
+// commonMain
+expect fun platformName(): String
+
+// androidMain
+actual fun platformName(): String = "Android"
+
+// iosMain
+actual fun platformName(): String = "iOS"
+```
+
+### 陷阱
+`expect` 无对应 `actual` 直接编译错误——纯 JVM/Android 单平台项目用不上它，写普通声明即可。
+
+## 33. annotation - 注解类
+
+### 定义
+`annotation class`（修饰符关键字）声明注解类型；用 `@Target` 限制可标注位置，`@Retention` 决定保留层级。
+
+### 语法和示例
+```kotlin
+@Target(AnnotationTarget.CLASS, AnnotationTarget.FUNCTION)
+@Retention(AnnotationRetention.RUNTIME)
+annotation class Route(val path: String)
+
+@Route("/detail")
+class DetailScreen
+```
+
+### 陷阱
+注解参数只能是编译期常量（`val`，无 `var`）；Kotlin 注解默认保留到**运行时**（Java 默认只到字节码）——不想进运行时显式 `@Retention(AnnotationRetention.BINARY)`。
+
+## 34. constructor - 次构造函数
+
+### 定义
+软关键字，声明次构造函数。类有主构造函数时，每个次构造必须直接或间接（委托链）委托给主构造：`: this(...)`。
+
+### 语法和示例
+```kotlin
+class User(val name: String) {
+    var age = 0
+    constructor(name: String, age: Int) : this(name) { this.age = age }
+}
+
+val u = User("Ada", 30)
+```
+
+### 陷阱
+初始化逻辑优先用主构造默认值 + `init` 块；次构造委托链过长难追踪，通常两个构造就到头。
+
+## 35. field / get / set - 幕后字段与访问器
+
+### 定义
+自定义访问器中用 `field`（软关键字）引用幕后字段——没有它，setter 里对属性名赋值会递归调用 setter 自身。`get()` / `set(value)` 分别定制读取与写入。
+
+### 语法和示例
+```kotlin
+class Thermostat {
+    var temperature = 50                   // 初始化直写幕后字段——不走 setter（实测：读到 50 而非 40）
+        set(value) { field = value.coerceAtMost(40) }
+}
+// 之后 thermostat.temperature = 99 → 读到 40（实测）
+
+var score = 0
+    get() = field.coerceIn(0, 100)         // getter 里用 field 即有幕后字段
+```
+
+### 陷阱
+- **属性初始化器直写幕后字段、绕过自定义 setter**（实测：上例初始值 50 而非 40）——初始约束放 `init` 块或工厂函数
+- 访问器里不引用 `field` 则该属性没有幕后字段（纯计算属性）；此时写 `field` 编译错误
 
 ---
 

@@ -41,6 +41,43 @@ navController.popBackStack()
 navController.navigate("home") { popUpTo("home") { inclusive = true } }
 ```
 
+### 查询参数（可选参数）
+
+路由模板用 `?key={key}` 声明查询参数：**可省略**，不传走 `defaultValue`——与路径参数（`detail/{noteId}`，必填、参与路由唯一性）互补，适合过滤/排序等修饰位。
+
+```kotlin
+composable(
+    route = "list?filter={filter}",
+    arguments = listOf(navArgument("filter") {
+        type = NavType.StringType
+        defaultValue = "all"          // 不传时的兜底值
+    }),
+) { backStackEntry ->
+    ListScreen(filter = backStackEntry.arguments?.getString("filter"))
+}
+// navController.navigate("list")              → filter = "all"
+// navController.navigate("list?filter=done")  → filter = "done"
+```
+
+### 嵌套导航图
+
+`navigation(startDestination, route)` 把一组目的地聚合为子图：子图 route 可整体跳转、整体出栈、整体挂深链——登录/注册流的"一次清干净"靠它。
+
+```kotlin
+NavHost(navController, startDestination = "splash") {
+    navigation(startDestination = "login", route = "auth") {
+        composable("login") { LoginScreen(onDone = { navController.navigate("register") }) }
+        composable("register") { RegisterScreen() }
+    }
+    composable("home") { HomeScreen() }
+}
+
+// 登录成功进 home：把整个 auth 子图出栈——login/register 不留返回栈
+navController.navigate("home") {
+    popUpTo("auth") { inclusive = true }   // popUpTo 指向子图 route，inclusive 连子图一起弹
+}
+```
+
 核心组件：
 
 | 组件 | 职责 |
@@ -76,6 +113,16 @@ NavigationBar {
 }
 ```
 
+`popUpTo` + `launchSingleTop` + `restoreState`（配合 `saveState`）是官方底部导航标准姿势，四个选项各司其职：
+
+| 选项 | 作用 |
+|------|------|
+| `popUpTo(findStartDestination().id) { saveState = true }` | 弹掉起始目的地之上的所有目的地（起始目的地本身保留），弹出前保存其状态 |
+| `launchSingleTop = true` | 目的地已在栈顶则不重复入栈（连点防重） |
+| `restoreState = true` | 重新进入该 tab 时恢复先前保存的栈状态 |
+
+三项都不加的效果：每个 tab 反复入栈、切走即丢状态、返回时要按入栈次数逐层退——这正是很多"底部栏越点越深"问题的根源。
+
 ## ⚠️ 常见陷阱
 
 - 路由字符串里传的参数类型必须与 `navArgument` 声明一致（Long 传成 String 会在运行时崩溃）。
@@ -84,10 +131,12 @@ NavigationBar {
 - 底部栏切换不加 `saveState` / `restoreState` 会丢失各 tab 状态。
 - "带结果返回"不要用全局单例事件——用后备栈条目的 SavedStateHandle 或共享 ViewModel。
 - 深链三处必须一致：Manifest 的 intent-filter、`deepLinks` 声明、路由模板。
+- 可选查询参数必须给 `defaultValue` 且类型在 `navArgument` 里声明——从深链进入缺参时没有兜底即出错。
 
 ## 🔗 相关条目
 
 - 📄 教程：[页面导航](../../basics/06-navigation.md)
+- 📄 [Compose 核心组件速查](./01-compose-essentials.md) - BackHandler 拦截返回与导航返回的分工
 - 📄 [Compose 状态 API](../language-concepts/04-compose-state-api.md)
 - 📄 [副作用 API](./03-side-effects.md) — 导航触发即副作用
 - 📄 [AndroidX 官方库指南](../library-guides/01-androidx-libraries.md)
