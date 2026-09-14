@@ -48,7 +48,7 @@
 | `Keyboard` | 编程式收起键盘、监听键盘事件 | [核心 API 字典](./01-rn-core-api.md) |
 | `Alert` / `ToastAndroid` | 系统弹窗 / Android 吐司 | [核心 API 字典](./01-rn-core-api.md) |
 | `Share` | 调起系统分享面板 | [Share 文档](https://reactnative.dev/docs/share) |
-| `InteractionManager` | 把耗时任务推迟到交互完成后执行 | [核心 API 字典](./01-rn-core-api.md) |
+| ~~`InteractionManager`~~（已移除） | 把耗时任务推迟到交互完成后执行——**RN 0.87 起从核心移除**，替代：`requestIdleCallback` / `startTransition` | [核心 API 字典](./01-rn-core-api.md) |
 | 核心组件（View/Text/Image/ScrollView/FlatList/Pressable/Modal…） | UI 骨架与列表 | [Props 全表](./02-components-props.md) |
 
 ## 📖 Expo SDK 模块（本仓库实际使用范围，SDK 57）

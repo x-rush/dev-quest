@@ -23,7 +23,7 @@ FlatList 的核心是**虚拟化（windowing）**：只渲染视口附近的一�
 - **渲染窗口**：视口高度 × `windowSize`，窗口内的条目保持挂载，窗口外被卸载
 - **首批渲染**：挂载即渲染 `initialNumToRender` 条，建立首屏
 - **增量批次**：滚动接近窗口边缘时，每 `updateCellsBatchingPeriod`（ms）补一批 `maxToRenderPerBatch` 条
-- **"回收"的语义**：FlatList 的回收发生在 **JS 层**——视口外 cell 被卸载、原位置留空白占位，滚回时组件重新挂载（React 实例不复用）。真正的**原生视图池复用**（cell 复用同一批原生视图、只换内容）是 FlashList 的机制，这是两者最大的模型差异
+- **"回收"的语义**：FlatList 的回收发生在 **JS 层**——视口外 cell 被卸载、原位置留空白占位，滚回时组件重新挂载（React 实例不复用）。FlashList 的回收实现随版本不同：v1 在**原生层**做视图池复用（cell 复用同一批原生视图、只换内容），v2 起转为 **JS-only 实现**（回收仍在，挪到 JS 层）；这是它与 FlatList 最大的模型差异
 
 ### 性能参数逐项
 
@@ -71,7 +71,7 @@ const ITEM_H = 64; // 行高严格一致（含分隔线）
 />
 ```
 
-**何时换 FlashList**：条目上千、行结构复杂、`windowSize`/批次调参后白屏仍明显。FlashList 用原生回收视图池换内容，行高可预测是前提（`estimatedItemSize` 必须认真给，回收机制依赖行高估计准确）。Expo 工程用 `npx expo install @shopify/flash-list` 安装版本对齐的包；用法差异与实测对比见 [渲染性能](../../advanced-topics/performance/01-rendering-performance.md)。
+**何时换 FlashList**：条目上千、行结构复杂、`windowSize`/批次调参后白屏仍明显。FlashList v2（新架构专用）已转为 **JS-only 实现**：不再要求行高估计（v1 的 `estimatedItemSize` 在 v2 已不存在，无需提供），视图回收复用仍保留——只是从 v1 的原生视图池挪到了 JS 层。Expo 工程用 `npx expo install @shopify/flash-list` 安装版本对齐的包（新架构工程装 2.x；v1→v2 还有 blankArea 语义等多项差异，升级前对照官方 v2 迁移说明）；用法差异与实测对比见 [渲染性能](../../advanced-topics/performance/01-rendering-performance.md)。
 
 ## ⚠️ 常见陷阱
 

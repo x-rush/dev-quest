@@ -267,28 +267,33 @@ sub.remove();
 - "深色模式部分页面不生效"多半是颜色写死：先查硬编码色值，再查 Hook 是否覆盖该页
 - 主题对象用 `useMemo` 缓存，避免每次渲染重建导致子组件级联重渲染；主题切换事件本身不触发未使用 Hook 的组件更新
 
-## InteractionManager — 延后耗时任务
+## InteractionManager — 已从核心移除（迁移指引）
 
 ### 描述
-把耗时任务推迟到当前动画/交互完成之后执行，缓解启动页与转场期间的掉帧（任务仍在 JS 线程跑，只是错峰）。
+`InteractionManager.runAfterInteractions` 曾用于把耗时任务推迟到当前动画/交互完成之后执行。**RN 0.87 已从核心移除该 API**：`index.js` 在 `__DEV__` 下对它的任何访问都会 invariant 报错（"InteractionManager has been removed from react-native core. Please refactor long tasks into smaller ones, and use 'requestIdleCallback' instead."），TypeScript 类型层也无此导出。旧代码按下述替代方案迁移。
 
 ### 语法和示例
 ```tsx
-import { useEffect } from 'react';
-import { InteractionManager } from 'react-native';
+import { useEffect, startTransition } from 'react';
 
+// 替代 1：requestIdleCallback（运行时全局函数，无需 import）——低优先级任务放到空闲期
 useEffect(() => {
-  const task = InteractionManager.runAfterInteractions(() => {
-    warmUpCache(); // 首屏动画结束后再执行的重活
+  const id = requestIdleCallback(() => {
+    warmUpCache(); // 首屏空闲时再执行的重活
   });
-  return () => task.cancel(); // 组件卸载时取消未执行的任务
+  return () => cancelIdleCallback(id); // 组件卸载时取消未执行的任务
 }, []);
+
+// 替代 2：startTransition——把非紧急的状态更新降级，不阻塞交互响应
+startTransition(() => {
+  setQuery(nextQuery);
+});
 ```
 
 ### 陷阱
-- 任务仍占用 JS 线程，只是延后——不能把死循环重活变轻；真正的长任务移 UI 线程（Reanimated worklet）或原生侧
-- 新架构下优先考虑 `startTransition` / `useDeferredValue` 把更新降级为非紧急（见 [Hooks 速查](./03-hooks-reference.md) 与 [渲染性能](../../advanced-topics/performance/01-rendering-performance.md)）
-- 忘记 `cancel()` 会在组件卸载后仍执行回调，引发"已卸载组件更新"类问题
+- `requestIdleCallback` 的任务仍占用 JS 线程，只是错峰——不能把死循环重活变轻；真正的长任务移 UI 线程（Reanimated worklet）或原生侧
+- 非紧急**更新**优先 `startTransition` / `useDeferredValue`（见 [Hooks 速查](./03-hooks-reference.md) 与 [渲染性能](../../advanced-topics/performance/01-rendering-performance.md)）
+- 官方建议的第一步是把长任务拆小，这两个 API 只是排队机制，不是提速手段
 
 ## 其他常用速览
 
@@ -306,7 +311,7 @@ useEffect(() => {
 - 📄 **[组件 Props 全表](./02-components-props.md)**: 核心组件属性字典
 - 📄 **[Hooks 速查](./03-hooks-reference.md)**: `useColorScheme`/`useWindowDimensions` 等对应 Hook
 - 📄 **[新架构术语字典](./11-new-architecture-terms.md)**: 本篇 API 背后的架构术语
-- 📄 **[列表性能模型](./12-list-performance-model.md)**: `InteractionManager` 延后任务与列表掉帧的关系
+- 📄 **[列表性能模型](./12-list-performance-model.md)**: 列表掉帧归因、调参与 FlashList 选型
 - 📄 **[平台 API 地图](./13-platform-api-map.md)**: 按用途找 API 的总入口
 - 📄 **[RNOH 架构](./05-harmonyos-rnoh-api.md)**: 鸿蒙平台判断与差异化 API
 - 📄 **[故障排除](../quick-references/02-troubleshooting.md)**: 深链/权限相关报错

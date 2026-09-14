@@ -90,12 +90,11 @@ const HeavyList = memo(function HeavyList({ results }: Props) { /* … */ });
 | `SectionList` | 分组包装 | 联系人/分组场景 |
 
 ```tsx
-// FlashList：回收机制要求行高可预测，这是与 FlatList 最大的用法差异
+// FlashList v2：JS-only 实现，无需 v1 的 estimatedItemSize（该 prop 已不存在）
 import { FlashList } from '@shopify/flash-list';
 
 <FlashList
   data={messages}
-  estimatedItemSize={72}        // 必填：预估行高，回收池按它预分配
   keyExtractor={(m) => m.id}
   renderItem={renderItem}
   // 可预测行高时补 getItemLayout，滚动定位零测量
@@ -135,14 +134,14 @@ function Spinner() {
 
 - ✅ **先归因后优化**：JS 帧率 vs UI 帧率决定完全不同的药方
 - ✅ **重渲染是万恶之源**：状态下放 > 稳定引用 > memo，顺序不能乱
-- ✅ **千行以上列表上 FlashList**，`estimatedItemSize` 必须认真给
+- ✅ **千行以上列表上 FlashList**（v2 已无需行高估计，用法见 [列表性能模型](../../reference/language-concepts/12-list-performance-model.md)）
 - ❌ **不要在生产验证前轻信 dev 数据**：dev 包 JS 执行慢数倍，结论不可信
 - ❌ **不要优化没有基线的东西**：先测量、再优化、后复测，否则是玄学
 
 ## ❓ 常见问题
 
 **Q1: 交互触发后两三帧才响应？**
-A: 典型 JS 线程拥塞。用 `InteractionManager.runAfterInteractions` 延后重活，或 `startTransition` 降级更新。
+A: 典型 JS 线程拥塞。把非紧急更新用 `startTransition`/`useDeferredValue` 降级，重活用 `requestIdleCallback` 错峰（`InteractionManager` 已从 RN 0.87 移除，见 [RN 核心 API](../../reference/language-concepts/01-rn-core-api.md)）。
 
 **Q2: 图片滚动时闪/卡？**
 A: 用 `expo-image`（内存/磁盘缓存 + 降采样）；确认给了明确宽高，避免解码后二次布局。

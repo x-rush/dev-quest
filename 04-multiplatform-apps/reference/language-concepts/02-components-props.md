@@ -167,12 +167,10 @@
 | Prop | 类型 | 说明 |
 |------|------|------|
 | `barStyle` | `'default' \| 'light-content' \| 'dark-content'` | 状态栏前景内容颜色 |
-| `backgroundColor` | string | 背景色，**仅 Android 生效** |
-| `translucent` | boolean | Android 半透明沉浸式（内容绘制到状态栏下） |
 | `hidden` | boolean | 隐藏状态栏 |
 | `animated` | boolean | 属性变化时加过渡动画 |
 
-**陷阱**: `backgroundColor`/`translucent` 是 Android 专属，iOS 静默忽略——"设置了没效果"先看平台；沉浸式行为与系统版本相关，逐端验证；Expo 工程推荐 `expo-status-bar` 封装（跨端语义统一）。
+**陷阱**: `backgroundColor` / `translucent` **已从核心移除**（RN 0.87 起，Android 15 强制 edge-to-edge 后状态栏不再提供独立背景色/半透明沉浸式），旧代码里写这两个 Prop 类型层直接报错。布局按 edge-to-edge 设计：内容延伸到状态栏之下，用 `react-native-safe-area-context` 的 insets 补内边距；前景样式仍用 `barStyle`，Expo 工程用 `expo-status-bar` 封装（跨端语义统一）。
 
 ## RefreshControl
 

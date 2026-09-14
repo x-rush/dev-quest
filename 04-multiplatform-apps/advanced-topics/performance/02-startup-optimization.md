@@ -86,22 +86,22 @@ function Dashboard() {
 
 ```tsx
 // 延迟初始化样板：把重 SDK 挪出启动路径
+// （InteractionManager 已从 RN 0.87 核心移除，改用 requestIdleCallback）
 import { useEffect } from 'react';
-import { InteractionManager } from 'react-native';
 
 useEffect(() => {
-  // 交互完成后（或首屏渲染后）再初始化非关键 SDK
-  const task = InteractionManager.runAfterInteractions(() => {
+  // 首屏空闲期再初始化非关键 SDK
+  const id = requestIdleCallback(() => {
     initAnalytics();
     initPush();
   });
-  return () => task.cancel();
+  return () => cancelIdleCallback(id);
 }, []);
 ```
 
 ## 🖼️ 阶段三：首屏渲染提速
 
-1. **骨架屏替代转圈**：布局占位（FlashList `estimatedItemSize` + 骨架组件）比 spinner 感知更快
+1. **骨架屏替代转圈**：布局占位（骨架组件 + FlashList 渲染，见 [列表性能模型](../../reference/language-concepts/12-list-performance-model.md)）比 spinner 感知更快
 2. **首屏数据缓存优先**：TanStack Query 的 `staleTime`/持久化缓存让二次启动秒开（用法见 [天气应用](../../projects/02-weather-app.md)）
 3. **首屏图片**：固定宽高防抖动 + 本地占位图；远程头图预加载
 4. **避免首帧同步重计算**：列表初始渲染条数 `initialNumToRender` 压到 6-10
