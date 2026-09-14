@@ -16,7 +16,7 @@
 
 | 类别 | 关键字 |
 |------|--------|
-| 硬关键字（30） | `as` `break` `class` `continue` `do` `else` `false` `for` `fun` `if` `in` `!in` `interface` `is` `!is` `null` `object` `package` `return` `super` `this` `throw` `true` `try` `typealias` `typeof`* `val` `var` `when` `while` |
+| 硬关键字（31） | `as` `as?` `break` `class` `continue` `do` `else` `false` `for` `fun` `if` `in` `!in` `interface` `is` `!is` `null` `object` `package` `return` `super` `this` `throw` `true` `try` `typealias` `typeof`* `val` `var` `when` `while` |
 | 软关键字（18） | `by` `catch` `constructor` `delegate` `dynamic` `field` `file` `finally` `get` `import` `init` `param` `property` `receiver` `set` `setparam` `value` `where` |
 | 修饰符关键字（29） | `abstract` `actual` `annotation` `companion` `const` `crossinline` `data` `enum` `expect` `external` `final` `infix` `inline` `inner` `internal` `lateinit` `noinline` `open` `operator` `out` `override` `private` `protected` `public` `reified` `sealed` `suspend` `tailrec` `vararg` |
 

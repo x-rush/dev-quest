@@ -31,7 +31,7 @@ Compose 手势 API 分三层，**能上不上**：
 | `detectTapGestures(onPress, onDoubleTap, onLongPress, onTap)` | 四个回调均可选（尾 lambda 即 `onTap`）；存在 `onDoubleTap` 时单击会延迟一拍 | 点按/双击/长按 |
 | `detectDragGestures(onDragStart, onDragEnd, onDragCancel, onDrag)` | `onDrag: (change: PointerInputChange, dragAmount: Offset) -> Unit`，任意方向 | 自由拖拽 |
 | `detectDragGesturesAfterLongPress` | 同上，但长按后才进入拖拽 | 列表排序手柄 |
-| `detectTransformGestures(panZoomLock, onGesture)` | `onGesture: (centroid: Offset, pan: Offset, zoom: Float, rotation: Float) -> Boolean`，返回 true 表示已消费 | 双指缩放/旋转 |
+| `detectTransformGestures(panZoomLock, onGesture)` | `onGesture: (centroid: Offset, pan: Offset, zoom: Float, rotation: Float) -> Unit`（无返回值；事件消费由检测器内部处理，回调不接收消费标记） | 双指缩放/旋转 |
 
 ```kotlin
 Modifier.pointerInput(Unit) {
