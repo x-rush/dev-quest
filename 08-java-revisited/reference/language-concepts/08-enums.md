@@ -79,9 +79,9 @@ public class EnumDemo {
 
     public static void main(String[] args) {
         // 基本成员
-        Color.valueOf("GREEN") == Color.GREEN;          // true
-        Color.values().length;                          // 3，顺序 = 声明顺序
-        Color.RED.ordinal();                            // 0
+        System.out.println(Color.valueOf("GREEN") == Color.GREEN);   // true
+        System.out.println(Color.values().length);                   // 3，顺序 = 声明顺序
+        Color.RED.ordinal();                                         // 0（合法表达式语句）
 
         // EnumSet / EnumMap：内部位向量/数组实现，迭代按声明顺序
         var primary = EnumSet.of(Color.RED, Color.BLUE);        // 常用集合首选

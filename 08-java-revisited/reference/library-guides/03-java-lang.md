@@ -70,7 +70,7 @@ Class<? extends String> c = name.getClass();
 c.getSimpleName();                          // "String"
 Method len = String.class.getMethod("length");
 len.invoke("reflect-me");                   // 10（实测）
-Point.class.getRecordComponents();          // record 组件数组（Java 15+）
+Point.class.getRecordComponents();          // record 组件数组（Java 16+）
 ```
 
 `setAccessible(true)` 可绕过 private（受 JPMS `opens` 限制）；反射有安全与性能成本，框架代码才用。

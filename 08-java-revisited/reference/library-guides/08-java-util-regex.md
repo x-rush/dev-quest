@@ -39,7 +39,7 @@ while (m.find()) {
 | 方法 | 语义 | `Pattern "\\d{4}-\\d{2}"` 对 `id=2026-09` |
 |------|------|------|
 | `matches()` | **整个**输入序列匹配 | false |
-| `lookingAt()` | 从**开头**前缀匹配（不要求到尾） | true（对 `2026-09x` 亦 true） |
+| `lookingAt()` | 从**开头**前缀匹配（不要求到尾，但必须从 index 0 起） | false（前缀 `id=` 不匹配；对 `2026-09x` 为 true，实测） |
 | `find()` | 输入序列中**任意位置**查找，可迭代多次 | `"id=2026-09 and 2025-12"` 迭代 2 次（实测） |
 
 ### 分组
@@ -93,7 +93,7 @@ public class RegexDemo {
         System.out.println("a.b".split(Pattern.quote(".")).length); // 2
 
         // 替换中的 $ 与 \ 是特殊字符（实测）
-        System.out.println("a$b".replaceAll("a", Matcher.quoteReplacement("$"))); // $b
+        System.out.println("a$b".replaceAll("a", Matcher.quoteReplacement("$"))); // $$b（"a"→"$" 后拼上原串的 "$b"）
     }
 }
 ```
@@ -114,7 +114,7 @@ public class RegexDemo {
   ✅ 循环外 `Pattern.compile` 一次，循环内复用。
 - ❌ **`split` 直接传标点**：`.` `|` 等是元字符，`"a.b".split(".")` 得到空数组（实测）。
   ✅ `split("\\.")` 或 `split(Pattern.quote("."))`。
-- ❌ **`replaceAll` 替换串里写裸 `$` 或 `\`**：被当分组引用/转义解析（实测裸 `$` 抛 `IndexOutOfBoundsException` 类异常）。
+- ❌ **`replaceAll` 替换串里写裸 `$` 或 `\`**：被当分组引用/转义解析（实测裸 `$` 抛 `IllegalArgumentException: Illegal group reference: group index is missing`；而 `$N` 引用不存在的分组才抛 `IndexOutOfBoundsException: No group N`）。
   ✅ 用户输入作替换串时包 `Matcher.quoteReplacement(...)`；模式串用 `Pattern.quote(...)`。
 - ❌ **Matcher 跨线程共享**：内部有游标状态。
   ✅ Pattern 共享、每线程各自 `pattern.matcher(input)`。
