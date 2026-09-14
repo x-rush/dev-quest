@@ -134,8 +134,20 @@ func main() {
 - ✅ **正确做法**：`go vet` 报 copylocks；统一传指针，锁字段不导出。
 - ❌ **错误做法**：读写争用严重时仍坚持 RWMutex（写饥饿）。
 - ✅ **正确做法**：临界区极短时 Mutex 反而更快；RWMutex 适合读占绝对多数且临界区不短的场景。
-- ❌ **错误做法**：Once.Do 里 panic 后以为"试过了不会再进"。
-- ✅ **正确做法**：Do 中 panic 视为初始化失败，后续调用仍会重新尝试执行函数（成功完成才标记完成）。
+- ❌ **错误做法**：Do 中 panic 后指望"下次调用会重新执行初始化"——panic 后 Do 视为已返回，done 照样置位。
+- ✅ **正确做法**：panic 后后续调用**不会重试**（实测 go1.25.14：f 只执行 1 次）；Once 语义是"恰好执行一次"，不区分成败。需要失败可重试须自建 mutex + 标志位：
+
+  ```go
+  var initMu sync.Mutex
+  var ready bool
+
+  func ensureInit() error {
+  	initMu.Lock(); defer initMu.Unlock()
+  	if ready { return nil }
+  	if err := doInit(); err != nil { return err } // 失败不置位，下次调用重试
+  	ready = true; return nil
+  }
+  ```
 - ❌ **错误做法**：Cond.Wait 不在持有锁时调用，或不用循环检查条件。
 - ✅ **正确做法**：标准模式 `for !condition() { c.Wait() }`；Broadcast 前后都持锁，防虚假唤醒。
 - ❌ **错误做法**：用 atomic 保护多个相关字段。

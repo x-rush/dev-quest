@@ -72,7 +72,7 @@ func main() {
 }
 ```
 
-运行实测（go1.25）：`./prog -port=9000 -verbose -tags "a, b" pos1 pos2` → `9000 true 3 [a b]` + `[pos1 pos2]`。
+运行实测（go1.25.14）：`./prog -port=9000 -verbose -tags "a, b" pos1 pos2` → `9000 true 3 a,b` + `位置参数: [pos1 pos2]`（tags 打印的是自定义 `String()` 的逗号连接，不是切片格式）。
 
 **子命令骨架**：
 
