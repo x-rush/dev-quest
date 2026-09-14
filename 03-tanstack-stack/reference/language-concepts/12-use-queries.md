@@ -24,12 +24,12 @@ const results = useQueries({
 
 | 陷阱位 | 事实 |
 |--------|------|
-| 条目内 `placeholderData` 函数式写法 | 签名固定为 `(previousData: undefined, previousQuery: undefined) => ...`——**永远收不到上一份数据**（与单条 `useQuery` 不同），要沿用旧数据请用 `keepPreviousData` |
+| 条目内 `placeholderData`（含 `keepPreviousData`） | `keepPreviousData` 本质就是 `(prev) => prev`，但换 key 时**同样收不到旧数据，是空操作**（与单条 `useQuery` 不同）：QueriesObserver 按 `queryHash` 匹配，新 key 必定新建 Observer，prev 恒传 `undefined`。平滑过渡需自行从缓存取（`queryClient.getQueryData`）或保留旧 key 条目 |
 
 ## 💡 示例
 
 ```tsx
-import { useQueries, keepPreviousData } from '@tanstack/react-query'
+import { useQueries } from '@tanstack/react-query'
 
 // 静态列表 + combine 聚合
 function ProfileCard() {
@@ -65,12 +65,13 @@ function TodoTitles({ ids }: { ids: number[] }) {
   return <div>{pending ? '...' : results.map((r) => r.data?.title).join(', ')}</div>
 }
 
-// placeholderData 在 useQueries 条目内的正确写法
+// placeholderData 在 useQueries 条目内：换 key 时收不到旧数据（与单条 useQuery 不同）
+// 平滑过渡：自行从缓存取旧值（key 固定时），或保留旧 key 条目
 const results = useQueries({
   queries: [{
     queryKey: ['todo', 1],
     queryFn: () => fetchTodo(1),
-    placeholderData: keepPreviousData, // 而不是 (prev) => prev——prev 恒为 undefined
+    placeholderData: queryClient.getQueryData(['todo', 1]), // ✅ 静态占位值取自缓存
   }],
 })
 ```
@@ -78,11 +79,11 @@ const results = useQueries({
 ## ⚠️ 常见陷阱
 
 - ❌ 在 `map`/循环里调 `useQuery`：违反 Hooks 规则——动态数量请交给 `useQueries`
-- ❌ 以为条目内的 `placeholderData: (previousData) => previousData` 能拿到旧数据：useQueries 条目中该函数签名固定 `(previousData: undefined, previousQuery: undefined)`，永远传 `undefined`——改用 `keepPreviousData`
+- ❌ 以为条目内的 `placeholderData: (previousData) => previousData`（或 `keepPreviousData`）能拿到旧数据：useQueries 条目中该函数签名固定 `(previousData: undefined, previousQuery: undefined)`，换 key 后永远传 `undefined`（QueriesObserver 按 queryHash 匹配，新 key 新建 Observer）——平滑过渡需自行 `queryClient.getQueryData` 取缓存或保留旧 key 条目
 - ❌ 动态列表的 key 不含变量：`queryKey: ['todo']` + 固定条目数会串数据，变量必须进 key
 - ❌ `combine` 里返回每次都不同的新引用（如新建数组后又在内部变化）：会把"聚合对象变化"放大成整页重渲染，聚合值尽量是原始值或稳定结构
 - ✅ 结果数组顺序恒等于 `queries` 顺序，`combine` 用解构 `([user, todos])` 或下标取用
-- ✅ `combine` 返回什么，Hook 就返回什么（v5.8+ 类型自动推断），适合把多个 `isPending` 收敛成一个
+- ✅ `combine` 返回什么，Hook 就返回什么（v5 全系可用，类型自动推断），适合把多个 `isPending` 收敛成一个
 
 ## 🔗 相关条目
 

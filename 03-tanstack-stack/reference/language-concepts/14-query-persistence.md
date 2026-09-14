@@ -20,7 +20,7 @@
     hydrateOptions?: object,
   }}
   onSuccess?: () => void  // 恢复完成后
-  onError?: (e) => void
+  onError?: () => void    // 不接收参数（实际签名 () => Promise<unknown> | unknown），拿不到错误对象
 />
 
 // —— 整缓存：存储层 ——
