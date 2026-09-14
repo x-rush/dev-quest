@@ -11,7 +11,7 @@ TanStack 官方生态除五大核心库外还有一批"小而美"的周边库。
 | **模块** | `03-tanstack-stack` |
 | **象限** | 字典 |
 | **难度** | ⭐ |
-| **标签** | `#Devtools` `#persist-client` `#Virtual` `#Ranger` `#Store` |
+| **标签** | `#Devtools` `#persist-client` `#FormDevtools` `#Virtual` `#Ranger` `#Store` |
 | **更新日期** | `2026年9月` |
 
 ---
@@ -71,6 +71,26 @@ const persister = createSyncStoragePersister({
 >
   <App />
 </PersistQueryClientProvider>
+```
+
+异步存储（IndexedDB 封装）换 persister 即可，Provider 结构不变：
+
+```bash
+pnpm add @tanstack/query-async-storage-persister
+```
+
+```tsx
+import { createAsyncStoragePersister } from '@tanstack/query-async-storage-persister'
+
+const asyncPersister = createAsyncStoragePersister({
+  // AsyncStorage 接口：三个方法都返回 Promise
+  storage: {
+    getItem: async (key) => (await idbGet(key)) ?? null,
+    setItem: async (key, value) => { await idbSet(key, value) },
+    removeItem: async (key) => { await idbRemove(key) },
+  },
+  key: 'app-query-cache-idb',
+})
 ```
 
 ### 陷阱
@@ -160,8 +180,45 @@ const rangerInstance = useRanger<HTMLDivElement>({
 - **`@tanstack/store`**：框架无关的极简响应式 store，TanStack 内部多库的状态基座。`new Store(0)` 创建、`setState` 更新，React 侧用 `useStore(s)` 订阅；跨服务端渲染需按请求隔离实例。
 - **`@tanstack/pacer`**：框架无关的防抖/节流/限速工具集，如 `debounce((q) => api.suggest(q), { wait: 300 })`；与 Form 内置 `onChangeDebounceMs` 功能重叠，同一场景别叠两层防抖。
 
+## 6. Form Devtools
+
+### 定义
+
+`@tanstack/react-form-devtools` 提供 Form 表单状态面板（字段值、校验错误、提交状态）。两种挂法：作为插件挂进统一的 `@tanstack/react-devtools` 壳（与 Query/Router 面板同处一地），或单独渲染 `FormDevtoolsPanel`。
+
+### 安装与语法
+
+```bash
+pnpm add @tanstack/react-form-devtools @tanstack/react-devtools
+```
+
+```tsx
+import { TanStackDevtools } from '@tanstack/react-devtools'
+import {
+  formDevtoolsPlugin,      // 插件形态：挂进 Devtools 壳
+  FormDevtoolsPanel,       // 面板形态：单独渲染
+} from '@tanstack/react-form-devtools'
+
+function DevtoolsRoot() {
+  // 插件挂法：与 Query/Router 面板并列出现在同一个壳里
+  return <TanStackDevtools plugins={[formDevtoolsPlugin()]} />
+}
+
+function PanelOnly() {
+  return <FormDevtoolsPanel />
+}
+```
+
+### 陷阱
+
+- 主入口是开发版实现；生产构建请从 `/production` 子路径导入（NoOp 实现，零开销）：
+  `import { formDevtoolsPlugin } from '@tanstack/react-form-devtools/production'`
+- 插件形态依赖 `@tanstack/react-devtools` 壳（`plugins` 数组）；只想在页面角落开面板用 `FormDevtoolsPanel` 即可
+
 ## 相关文档
 
 - 📄 **[环境搭建](../../basics/01-environment-setup.md)** - Devtools 安装步骤
 - 📄 **[Table 核心 API](../language-concepts/02-table-core-api.md)** - 与 Virtual 组合的行模型
+- 📄 **[缓存持久化](../language-concepts/14-query-persistence.md)** - persister 模式的字典级参考
+- 📄 **[Form 核心 API](../language-concepts/04-form-core-api.md)** - 面板中各状态的来源
 - 📄 **[相关库搭配](./02-related-libs.md)** - Zustand/Jotai 等三方选择
