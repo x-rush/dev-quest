@@ -70,7 +70,7 @@ var nums = [3, 1, 2]
 nums[0]                       // 下标越界会崩溃
 nums.first                    // 3（Optional）
 nums.last                     // 2（Optional）
-nums.first(where: { $0 > 1 }) // Optional(2)
+nums.first(where: { $0 > 1 }) // Optional(3) —— 第一个满足条件的元素
 nums.count; nums.isEmpty
 ```
 
@@ -91,7 +91,7 @@ nums.sorted()                        // 升序新数组
 nums.sorted { $0 > $1 }              // 自定义降序
 nums.sort()                          // 原地排序（var 需要）
 nums.contains(1); nums.contains { $0 > 5 }
-nums.firstIndex(of: 2)               // Optional(1)
+nums.firstIndex(of: 2)               // Optional(2)
 nums.min(); nums.max()
 ```
 

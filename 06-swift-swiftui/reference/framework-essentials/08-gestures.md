@@ -87,7 +87,7 @@ content
 | `predictedEndTranslation` | CGSize | 按速度预测的落点位移（惯性/翻页判断） |
 | `predictedEndLocation` | CGPoint | 预测终点 |
 | `time` | Date | 手势开始时间 |
-| `velocity` | CGVector | 速度（**iOS 17+**） |
+| `velocity` | CGSize | 速度（**iOS 17+**） |
 
 ## 4. 挂载修饰符与简写分工
 

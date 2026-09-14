@@ -60,6 +60,7 @@ unowned let owner: Owner
 ```swift
 final class Screen {
     var onClose: (() -> Void)?            // 强引用闭包
+    func dismiss() {}                     // 示例占位方法（真实 dismiss 通常由导航层提供）
     deinit { print("释放") }
 }
 

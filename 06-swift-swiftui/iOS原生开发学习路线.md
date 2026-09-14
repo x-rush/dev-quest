@@ -22,7 +22,7 @@ MVVM + Coordinator          // 现代架构模式
 
 // 开发工具
 Xcode 26.x                  // 官方 IDE（基线 26.6，内含 Swift 6.3.3）
-Swift Package Manager       // 依赖管理（Swift 6.3 起默认使用开源的 Swift Build 构建后端）
+Swift Package Manager       // 依赖管理（6.3 起 Swift Build 以 preview 形式集成，可选启用、尚未成为默认）
 TestFlight                   // 测试分发
 
 // 跨平台（了解即可，详见 04-multiplatform-apps 模块）

@@ -61,7 +61,7 @@ let builder = Regex {
 ```swift
 let log = "req=42ms cost=108ms"
 if let m = log.firstMatch(of: /cost=(\d+)/) {
-    m.0              // "cost=108ms"（.0 恒为整段匹配）
+    m.0              // "cost=108"（.0 恒为整段匹配；\d+ 在 "ms" 前停止）
     m.1              // "108"（第一个捕获组）
 }
 log.wholeMatch(of: /\d+/)      // nil：整串不是纯数字
@@ -126,7 +126,26 @@ if let m = "3xlarge".firstMatch(of: quantity) {
 }
 ```
 
-**贪婪语义**: 量词默认贪婪（eager），`repetitionBehavior(.reluctant)` 可改惰性。
+**贪婪语义**: 量词默认贪婪（eager），可改惰性。注意 `repetitionBehavior(_:)` 是**整体 `Regex`** 上的方法（`extension Regex`），不能挂在单个构件上；组件侧改惰性用量词的构造参数：
+
+```swift
+import RegexBuilder
+
+// ✅ ① 链式：挂在整体 Regex 上
+let lazy1 = Regex {
+    OneOrMore(.digit)
+    "ms"
+}.repetitionBehavior(.reluctant)
+
+// ✅ ② 组件侧等价写法：量词构造参数
+let lazy2 = Regex {
+    OneOrMore(.digit, .reluctant)
+    "ms"
+}
+
+// ❌ OneOrMore(.digit).repetitionBehavior(.reluctant)
+//    组件对象没有 repetitionBehavior 成员，编译错误
+```
 
 ## 4. Swift 6 语义与并发
 

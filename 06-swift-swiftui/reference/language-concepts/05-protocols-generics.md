@@ -70,14 +70,14 @@ extension Array where Element: Drawable {          // 条件扩展
 protocol Stack {
     associatedtype Element
     mutating func push(_ item: Element)
-    func pop() -> Element?
+    mutating func pop() -> Element?    // popLast 改写 self，协议要求也须 mutating
 }
 
 struct IntStack: Stack {
     typealias Element = Int          // 可省略，编译器可推断
     private var items: [Int] = []
     mutating func push(_ item: Int) { items.append(item) }
-    func pop() -> Int? { items.popLast() }
+    mutating func pop() -> Int? { items.popLast() }
 }
 ```
 

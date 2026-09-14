@@ -233,13 +233,14 @@ bump(&score)     // 10
 
 ### 5.3 borrowing / consuming（所有权修饰，Swift 5.9+，SE-0377）
 
-**定义**: 显式声明参数所有权——`borrowing` 只借用不接管（不延长生命周期），`consuming` 接管所有权（调用方之后不可再用）。
+**定义**: 显式声明参数所有权——`borrowing` 只借用不接管（不延长生命周期）；`consuming` 仅约束函数体内不得隐式拷贝参数，**对可拷贝类型（如 String）调用方不受影响**，`~Copyable` 类型才真正移转所有权。
 
 ```swift
 func inspect(_ s: borrowing String) { print(s.count) }   // 只读借用，零拷贝
-func take(_ s: consuming String) { /* 接管 */ }
+func take(_ s: consuming String) { print(s.count) }      // 函数体内接管
 let name = "swift"
 inspect(name)      // 之后 name 仍可用
+take(name)        // 可拷贝类型：之后 name 同样仍可用（SE-0377）
 ```
 
 普通参数默认按"拷贝或写时复制共享"传递；这两个修饰符用于热路径上避免多余拷贝。更深入的 `~Copyable` 非拷贝类型体系（SE-0427）超出本篇范围。

@@ -60,7 +60,7 @@
 | [Security](https://developer.apple.com/documentation/security) | Keychain 安全存储与证书 | `SecItemAdd`、`SecItemCopyMatching` |
 | [BackgroundTasks](https://developer.apple.com/documentation/backgroundtasks) | 后台刷新与处理任务调度 | `BGAppRefreshTask`（iOS 13+） |
 | [ActivityKit](https://developer.apple.com/documentation/activitykit) | 实时活动（灵动岛/锁屏直播态） | `Activity.request`（iOS 16.1+） |
-| [MapKit](https://developer.apple.com/documentation/mapkit) | 地图展示与地理数据 | SwiftUI `Map`（iOS 17 新 API） |
+| [MapKit](https://developer.apple.com/documentation/mapkit) | 地图展示与地理数据 | SwiftUI `Map`（iOS 14+；iOS 17 起 MapContentBuilder 新 API 并弃用旧 init） |
 | [os](https://developer.apple.com/documentation/os) | 结构化日志与性能标记 | `Logger`（iOS 14+）、`Signposter` |
 
 ## 5. 标准库低频工具
