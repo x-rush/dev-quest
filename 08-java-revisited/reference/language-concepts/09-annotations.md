@@ -1,0 +1,134 @@
+# 注解详解
+
+> **文档简介**: 注解机制全景——内置注解、元注解（@Retention/@Target/@Inherited/@Repeatable）、自定义注解定义、注解的两种处理时机（编译期处理器 vs 运行时反射），以及与 Spring 等框架注解的关系
+>
+> **目标读者**: 需要读懂并自定义注解、理解框架注解背后发生了什么的开发者
+>
+> **前置知识**: 反射基础见 [java.lang 导览](../library-guides/03-java-lang.md)
+
+## 📚 文档元数据
+
+| 属性 | 内容 |
+|------|------|
+| **模块** | `08-java-revisited` |
+| **象限** | 字典 |
+| **难度** | ⭐⭐ |
+| **标签** | `#注解` `#Annotation` `#反射` `#语言概念` |
+| **更新日期** | `2026年9月` |
+
+## 📌 定义
+
+注解（`@interface`）是挂在包/类/方法/字段等声明上的**元数据标记**，本身不执行任何行为——它的价值完全来自**读取它的工具**：编译器检查（`@Override`）、编译期注解处理器（Lombok/MapStruct）、运行时反射（JUnit/Spring）。
+
+> 💡 本文行为断言均在本机 JDK 21（javac 21.0.12.1）下编译运行验证。
+
+## 📖 语法 / 签名
+
+### 内置注解
+
+| 注解 | 用途 | 要点 |
+|------|------|------|
+| `@Override` | 声明重写父方法 | 编译器强制校验签名；SOURCE 保留（反射读不到，实测） |
+| `@Deprecated(since, forRemoval)` | 标记废弃 | `forRemoval=true` 表示未来会删，IDE/静态工具分级告警 |
+| `@FunctionalInterface` | 声明函数式接口 | 强制编译器校验"只有一个抽象方法"，非必需但强烈推荐 |
+| `@SuppressWarnings("...")` | 压制告警 | 值如 `"unchecked"` `"deprecation"`，范围尽量小 |
+| `@SafeVarargs` | 断言泛型可变参数安全 | 仅可用于 static/private/final 方法与构造器 |
+
+### 元注解（贴在注解定义上的注解）
+
+| 元注解 | 作用 | 实测要点 |
+|--------|------|---------|
+| `@Retention` | 保留策略：`SOURCE`（仅源码）/ `CLASS`（默认，到 class 文件）/ `RUNTIME`（反射可见） | 未标注时**默认 CLASS**——运行时反射读不到（实测） |
+| `@Target` | 可标注位置：`TYPE`/`METHOD`/`FIELD`/`PARAMETER`/`PACKAGE`/`TYPE_PARAMETER` 等 | 贴错位置编译报错 |
+| `@Inherited` | 子类反射读取父类的**类级**注解 | 只对类有效；接口方法/字段注解不继承（实测） |
+| `@Repeatable` | 允许同一位置重复标注 | 需指定容器注解；读取用 `getAnnotationsByType` |
+| `@Documented` | 进入 javadoc | 文档类注解标配 |
+
+### 自定义注解定义
+
+```java
+import java.lang.annotation.*;
+
+@Retention(RetentionPolicy.RUNTIME)      // 运行时反射要读 → 必须 RUNTIME
+@Target(ElementType.METHOD)
+@Repeatable(Tags.class)                  // 允许重复
+public @interface Tag {
+    String value();                      // 属性名 value，使用时可省略 "value ="
+}
+
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.METHOD)
+public @interface Tags {                 // 容器注解，持有 Tag 数组
+    Tag[] value();
+}
+```
+
+属性类型只能是：基本类型、`String`、`Class`、枚举、注解类型，以及它们的一维数组（JLS 9.6.1）。属性可用 `default` 给默认值。
+
+## 💡 示例
+
+```java
+import java.lang.annotation.*;
+import java.lang.reflect.Method;
+
+public class AnnotationDemo {
+    @Retention(RetentionPolicy.RUNTIME)
+    @Target(ElementType.TYPE)
+    @Inherited
+    @interface Marker { String value() default ""; }
+
+    @Marker("base-marker")
+    static class Base {}
+    static class Child extends Base {}          // 未自己标注
+
+    @Tag("fast") @Tag("cache")                  // 同一位置重复标注
+    void run() {}
+
+    public static void main(String[] args) throws Exception {
+        // @Inherited：子类反射可读到父类注解（实测）
+        Marker m = Child.class.getAnnotation(Marker.class);
+        System.out.println(m.value());           // base-marker
+        // Child.class.getDeclaredAnnotation(Marker.class) 则为 null（只查自身）
+
+        // 可重复注解：必须用 getAnnotationsByType（实测）
+        Method run = AnnotationDemo.class.getDeclaredMethod("run");
+        for (Tag tag : run.getAnnotationsByType(Tag.class)) {
+            System.out.println(tag.value());     // fast / cache
+        }
+        // run.getAnnotation(Tag.class) 在多个重复注解存在时返回 null（实测观察）
+    }
+}
+```
+
+### 两种处理时机
+
+| 时机 | 机制 | 代表 |
+|------|------|------|
+| **编译期** | 注解处理器（`javax.annotation.processing`，javac 钩子），扫描源码生成/修改代码 | Lombok、MapStruct |
+| **运行时** | 反射读取 RUNTIME 保留的注解，据此驱动逻辑 | JUnit `@Test`、Spring `@Component`/`@Autowired` |
+
+框架注解（如 Spring 的 `@Component`）本质就是"RUNTIME 保留的自定义注解 + 容器反射扫描"——你定义的注解与框架注解在机制上完全同级。
+
+## ⚠️ 常见陷阱
+
+- ❌ **自定义注解忘了写 `@Retention(RUNTIME)`**：默认 CLASS 保留，运行时反射永远读不到（实测：未标注时 `getAnnotation(Retention.class)` 为 null，标注过的类运行时不可见）。
+  ✅ 需要反射读取的注解一律显式 `@Retention(RetentionPolicy.RUNTIME)`。
+- ❌ **用 `getAnnotation(Tag.class)` 读可重复注解**：多个存在时返回 null（实测）。
+  ✅ 统一用 `getAnnotationsByType(Tag.class)`。
+- ❌ **指望 `@Inherited` 继承方法/接口上的注解**：它只作用于类继承链的类级注解。
+  ✅ 方法注解需自己沿父类/接口向上查找（Spring 的 `AnnotatedElementUtils` 已封装）。
+- ❌ **删掉 `@Override` 让编译器"闭嘴"**：失去重写签名校验，拼错方法名变成新增方法。
+  ✅ 所有重写都保留 `@Override`。
+- ❌ **注解里放"任意类型"属性**：类型受限（见上），放不了任意对象。
+  ✅ 复杂数据用 `Class` 引用 + `String`/数组组合。
+
+## 🔗 相关条目
+
+- 📄 **[接口语义](./10-interface-semantics.md)** — `@FunctionalInterface` 与 SAM 判定
+- 📄 **[java.lang 导览](../library-guides/03-java-lang.md)** — Class/Method 反射 API 基础
+- 📄 **[IoC/DI 要点](../framework-essentials/03-ioc-di-essentials.md)** — Spring 注解驱动的容器机制
+- 🌐 **[java.lang.annotation (Javadoc 21)](https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/annotation/package-summary.html)** — 权威来源
+
+---
+
+*最后更新: 2026年9月 | 本条目为模块知识字典的一部分，概念完整解释以此处为单一事实来源*

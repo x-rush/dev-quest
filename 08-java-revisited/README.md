@@ -33,7 +33,7 @@
 | 象限 | 目录 | 内容 | 用法 |
 |------|------|------|------|
 | **教程** | [basics/](basics/) | 8 篇按序学习：环境 → 语法 → OOP/Record → 控制流 → 异常 → 现代特性 → 项目 | 零散时间按序过一遍 |
-| **字典** | [reference/](reference/) | 18 篇全量参考：语言概念（含异常/资源）、Spring 核心（IoC/DI、AOP、事务、Security、REST 客户端）、Boot 3→4 迁移速查、标准库、故障排除 | 查字典，任意跳入 |
+| **字典** | [reference/](reference/) | 29 篇全量参考：语言核心概念（含字符串常量池/枚举/注解/接口语义）、Spring 核心（IoC/DI、AOP、事务、Security、REST 客户端）、Boot 3→4 迁移速查、标准库包导览与 JDK 包地图、故障排除 | 查字典，任意跳入 |
 | **操作指南** | [frameworks/](frameworks/) [projects/](projects/) [testing/](testing/) [deployment/](deployment/) | Spring Boot 生态 4 篇 · 实战项目 4 个 · 测试工程 3 篇 · 部署运维 3 篇 | 面向任务，照做即成 |
 | **解释** | [advanced-topics/](advanced-topics/) | 架构演进 · JVM/GC · 虚拟线程 · 安全实践 | 深挖"为什么" |
 
