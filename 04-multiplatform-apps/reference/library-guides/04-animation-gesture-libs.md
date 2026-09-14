@@ -74,6 +74,25 @@ function ParallaxHeader() {
 }
 ```
 
+## 内置 Animated vs Reanimated 边界
+
+`react-native` 内置的 `Animated` 与 `react-native-reanimated` 是两套独立驱动体系，选型的分界线是**"要不要跟手"**：
+
+| 维度 | 内置 Animated | Reanimated |
+|------|--------------|------------|
+| 驱动线程 | `useNativeDriver: true` 时插值在原生线程，否则全在 JS 线程（每帧过通信通道） | worklet 常驻 UI 线程，每帧更新不过 React |
+| 手势/滚动联动 | 事件回调回到 JS 侧处理，跟手有限 | Gesture Handler 事件流直达 worklet，逐帧跟手 |
+| 动画中断接力 | 中断后需手动衔接 | `withSpring` 等物理动画自动接管当前值 |
+| 典型场景 | 入场淡入、一次性过渡、简单循环 | 跟手抽屉、视差滚动、手势打断、复杂编排 |
+| 创建入口 | `new Animated.Value()` 或 Hook `useAnimatedValue` | `useSharedValue` |
+
+选型两条硬规则：
+
+1. **简单一次性动画用内置 Animated 足够**——记得始终给 `useNativeDriver: true`（仅支持非布局属性：transform/opacity 等），布局属性动画留给布局重排或换实现
+2. **跟手、滚动帧级联动、可中断动画一律 Reanimated**——内置 Animated 的事件通道延迟做不了逐帧反馈
+
+**混用禁令**：同一节点不要同时挂两套动画驱动（如 `Animated.View` 又接 Reanimated style），驱动时序不可控；两套体系可以共存于**不同**组件节点。`Animated.ScrollView` 等内置滚动容器要与 Reanimated 的 `useAnimatedScrollHandler` 联动时，改用 Reanimated 导出的 `Animated.ScrollView`。
+
 ## ⚠️ 常见陷阱
 
 - **worklet 内 setState / 读外部可变量**：闭包捕获的是快照，且每帧 setState 会击穿 React；跨线程传值用共享值与 `runOnJS`

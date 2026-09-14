@@ -109,6 +109,45 @@ function ThemedHeader() {
 }
 ```
 
+### useColorScheme 详解
+
+### 描述
+订阅系统深浅色模式，返回 `'light' | 'dark' | null`。系统在设置里切换外观时自动触发组件重渲染，是主题适配的第一入口（对应的命令式 `Appearance` API 见 [核心 API 字典](./01-rn-core-api.md)，留给非组件环境使用）。
+
+### 语法和示例
+```tsx
+import { useMemo } from 'react';
+import { useColorScheme } from 'react-native';
+
+const scheme = useColorScheme();          // 'light' | 'dark' | null
+const dark = scheme === 'dark';
+const theme = useMemo(() => (dark ? darkColors : lightColors), [dark]); // 主题对象缓存
+```
+
+### 陷阱
+- 启动早期/部分 Android 设备首帧返回 `null`，按 `'light'` 兜底，勿对返回值直接做字符串操作
+- 主题对象不 `useMemo` 会让每个消费者级联重渲染
+- "深色模式部分页面不生效"先查硬编码色值，再查该页是否真的消费了 Hook
+
+### useWindowDimensions 详解
+
+### 描述
+响应式窗口尺寸，返回 `{ width, height, scale, fontScale }`。旋转/分屏/窗口变化时自动触发重渲染，是 `Dimensions.get('window')` 一次性快照的 Hook 替代品。
+
+### 语法和示例
+```tsx
+import { useWindowDimensions } from 'react-native';
+
+const { width, fontScale } = useWindowDimensions();
+const cols = width > 600 ? 3 : 1;        // 断点随旋转/分屏自动重算
+const fontSize = 16 * fontScale;          // 跟随系统字体缩放
+```
+
+### 陷阱
+- 每次窗口变化都重渲染：别把它塞进与尺寸无关的高频计算路径
+- 模块顶层调用 `Dimensions.get` 拿到的是加载时快照（见 [核心 API 字典](./01-rn-core-api.md) Dimensions 词条）；组件内一律用本 Hook
+- 大字号适配依赖 `fontScale`，与布局断点分开处理
+
 ## React Navigation Hooks
 
 | Hook | 用途 |

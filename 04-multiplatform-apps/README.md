@@ -47,7 +47,7 @@
 | 象限 | 目录 | 内容定位 | 文档 |
 |------|------|---------|------|
 | **教程** | `basics/` | 按序学习的入门教程，从环境搭建到第一个完整项目 | 8 篇 |
-| **字典** | `reference/` | 全量参考条目，无难度门槛，任意跳入查阅 | 20 篇 |
+| **字典** | `reference/` | 全量参考条目，无难度门槛，任意跳入查阅 | 23 篇 |
 | **操作指南** | `frameworks/` | React Native 框架从入门到进阶的任务式指南 + 生态集成 + 调试工具 | 4 篇 |
 | **操作指南** | `projects/` | 四个递进实战项目：待办 → 天气 → 聊天 → 生产级 | 4 篇 |
 | **操作指南** | `testing/` | Jest 单测 / RNTL 组件测试 / Maestro E2E 三层测试体系 | 3 篇 |
@@ -78,7 +78,7 @@
 
 [新架构解析：Fabric/TurboModules/JSI](advanced-topics/architecture/01-new-architecture.md) → [渲染性能](advanced-topics/performance/01-rendering-performance.md) → [启动优化](advanced-topics/performance/02-startup-optimization.md) → [OTA 更新与可观测性](deployment/03-ota-updates-observability.md) → [安全实践](advanced-topics/security/01-security-practices.md) → [实战：生产级移动应用](projects/04-production-mobile-app.md)
 
-> 💡 字典（reference/）不在任何路径中——它陪伴全程：遇到概念随时查 [核心 API](reference/language-concepts/01-rn-core-api.md)、[组件 Props](reference/language-concepts/02-components-props.md)、[Hooks 速查](reference/language-concepts/03-hooks-reference.md)、[组件生命周期](reference/language-concepts/06-component-lifecycle.md)、[状态管理模型](reference/language-concepts/07-state-management.md)、[桥接与原生通信原理](reference/language-concepts/08-bridge-principles.md)、[导航模型](reference/language-concepts/09-navigation-model.md)、[CLI 与调试速查](reference/quick-references/01-cli-and-debug-cheatsheet.md)。
+> 💡 字典（reference/）不在任何路径中——它陪伴全程：遇到概念随时查 [核心 API](reference/language-concepts/01-rn-core-api.md)、[组件 Props](reference/language-concepts/02-components-props.md)、[Hooks 速查](reference/language-concepts/03-hooks-reference.md)、[组件生命周期](reference/language-concepts/06-component-lifecycle.md)、[状态管理模型](reference/language-concepts/07-state-management.md)、[桥接与原生通信原理](reference/language-concepts/08-bridge-principles.md)、[导航模型](reference/language-concepts/09-navigation-model.md)、[新架构术语](reference/language-concepts/11-new-architecture-terms.md)、[列表性能模型](reference/language-concepts/12-list-performance-model.md)、[平台 API 地图](reference/language-concepts/13-platform-api-map.md)、[CLI 与调试速查](reference/quick-references/01-cli-and-debug-cheatsheet.md)。
 
 ## 📁 实际文件树
 
@@ -106,7 +106,10 @@
 │   │   ├── 07-state-management.md              # 状态管理模型
 │   │   ├── 08-bridge-principles.md             # 桥接与原生通信原理
 │   │   ├── 09-navigation-model.md              # 导航模型
-│   │   └── 10-styling-model.md                 # 样式与布局模型
+│   │   ├── 10-styling-model.md                 # 样式与布局模型
+│   │   ├── 11-new-architecture-terms.md        # 新架构术语
+│   │   ├── 12-list-performance-model.md        # 列表性能模型
+│   │   └── 13-platform-api-map.md              # 平台 API 地图
 │   ├── framework-essentials/
 │   │   ├── 01-expo-essentials.md               # Expo 要点（Router/EAS）
 │   │   ├── 02-navigation-essentials.md         # React Navigation 速查
@@ -156,7 +159,7 @@
 
 ---
 
-**模块状态**: ✅ 双轨结构完整（basics 8 篇 + reference 20 篇 + 第二波 15 篇）
+**模块状态**: ✅ 双轨结构完整（basics 8 篇 + reference 23 篇）
 **最后更新**: 2026年9月11日
 **维护团队**: Dev Quest Team
 

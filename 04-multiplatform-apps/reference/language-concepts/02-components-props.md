@@ -9,7 +9,7 @@
 | **模块** | `04-multiplatform-apps` |
 | **象限** | 字典 |
 | **难度** | ⭐ |
-| **标签** | `#Props` `#View` `#Text` `#Image` `#FlatList` `#ScrollView` |
+| **标签** | `#Props` `#View` `#Text` `#Image` `#FlatList` `#ScrollView` `#KeyboardAvoidingView` `#StatusBar` |
 | **更新日期** | `2026年9月` |
 
 ## View
@@ -136,6 +136,56 @@
 
 **陷阱**: Pressable 是官方推荐的新触控组件；TouchableOpacity 内不要再包 Pressable 造成双击态。
 
+## KeyboardAvoidingView
+
+| Prop | 类型 | 说明 |
+|------|------|------|
+| `behavior` | `'height' \| 'position' \| 'padding'` | 避让策略三模式：iOS 常用 `padding`（整体上移）；`position` 按绝对布局移动；`height` 压缩自身高度。Android 一般不走本组件，交给 manifest 的 `windowSoftInputMode: adjustResize` |
+| `keyboardVerticalOffset` | number | 视图与键盘的额外偏移，补偿导航头部等高度 |
+| `enabled` | boolean | 是否启用避让，常配 `Platform.OS` 条件开关 |
+
+```tsx
+<KeyboardAvoidingView
+  behavior={Platform.OS === 'ios' ? 'padding' : undefined} // Android 交给系统 adjustResize
+  keyboardVerticalOffset={headerHeight}
+  style={{ flex: 1 }}
+>
+```
+
+**陷阱**: 三端避让机制不同，`behavior` 按 `Platform.select` 分支，勿一套通吃；嵌套两层 KeyboardAvoidingView 会双重避让，只保留最外层（见 [核心 API 字典](./01-rn-core-api.md) Keyboard 词条）。
+
+## SafeAreaView
+
+| Prop | 类型 | 说明 |
+|------|------|------|
+| （继承 View 全部 Props） | — | 本身是 View 的安全区特化，无独立 Prop |
+
+**陷阱**: RN 内置 `SafeAreaView` 仅在 iOS 实现，只覆盖刘海，不处理底部 home indicator 与 Android 边到边；跨端通用方案是 `react-native-safe-area-context` 的 `SafeAreaProvider` / `SafeAreaView` / `useSafeAreaInsets()`（Expo 模板默认自带），内边距与缺口判断都从它取。
+
+## StatusBar（组件形态）
+
+| Prop | 类型 | 说明 |
+|------|------|------|
+| `barStyle` | `'default' \| 'light-content' \| 'dark-content'` | 状态栏前景内容颜色 |
+| `backgroundColor` | string | 背景色，**仅 Android 生效** |
+| `translucent` | boolean | Android 半透明沉浸式（内容绘制到状态栏下） |
+| `hidden` | boolean | 隐藏状态栏 |
+| `animated` | boolean | 属性变化时加过渡动画 |
+
+**陷阱**: `backgroundColor`/`translucent` 是 Android 专属，iOS 静默忽略——"设置了没效果"先看平台；沉浸式行为与系统版本相关，逐端验证；Expo 工程推荐 `expo-status-bar` 封装（跨端语义统一）。
+
+## RefreshControl
+
+| Prop | 类型 | 说明 |
+|------|------|------|
+| `refreshing` | boolean | 受控刷新状态，**结束后必须置回 false**，否则指示器永转 |
+| `onRefresh` | function | 下拉触发回调 |
+| `tintColor` / `titleColor`（iOS） | color | iOS 指示器与标题颜色 |
+| `colors` / `progressBackgroundColor`（Android） | color[] / color | Android 指示器颜色组与背景 |
+| `progressViewOffset` | number | 指示器垂直偏移，嵌套吸顶头部时修正位置 |
+
+**陷阱**: FlatList/ScrollView 自带 `onRefresh` + `refreshing` 受控属性已托管刷新指示器，不要同时又给 `refreshControl` prop 手挂组件，造成两套状态与重复触发。
+
 ## Switch / ActivityIndicator / Modal 速览
 
 | 组件 | 关键 Props | 备注 |
@@ -148,6 +198,7 @@
 
 - 📄 **[RN 核心 API 字典](./01-rn-core-api.md)**: Platform/Dimensions 等 API
 - 📄 **[Hooks 速查](./03-hooks-reference.md)**: 列表场景常用 Hook 组合
+- 📄 **[列表性能模型](./12-list-performance-model.md)**: FlatList 虚拟化原理、白屏成因与换 FlashList 判断
 - 📄 **[CLI 与调试速查](../quick-references/01-cli-and-debug-cheatsheet.md)**: 列表掉帧的调试手法
 - 📄 **[核心组件与样式教程](../../basics/03-components-jsx.md)**: 这些组件的系统化学习路径
 
