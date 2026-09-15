@@ -12,6 +12,7 @@
 - 🤖 **[05 Kotlin Compose](#05-kotlin-compose)** - Android官方原生开发 (已建设)
 - 🍎 **[06 SwiftUI](#06-swiftui)** - iOS官方原生开发 (已建设)
 - 🐘 **[07-10 技术探索系列](#技术探索系列-07-10)** - PHP/Java/Node.js/Python (已建设)
+- 🧪 **[工程质量工具](#工程质量工具)** - 代码块全量机器验证管线 (code-block-verify)
 
 ### 按内容类型
 - 📖 **[基础概念](#基础概念)** - 入门基础内容
@@ -262,6 +263,12 @@
 | 🧪 [testing/](../../10-python-discovery/testing/) | 操作指南 | 3 | [单元测试](../../10-python-discovery/testing/01-unit-testing.md) |
 | 🚀 [deployment/](../../10-python-discovery/deployment/) | 操作指南 | 3 | [容器化部署](../../10-python-discovery/deployment/01-docker-deployment.md) |
 | 🎓 [advanced-topics/](../../10-python-discovery/advanced-topics/) | 解释 | 4 | [项目架构](../../10-python-discovery/advanced-topics/architecture/01-project-architecture.md) |
+
+---
+
+## 🧪 工程质量工具
+
+- **[code-block-verify 全仓代码块机器验证管线](code-block-verify/README.md)**：提取器 + 三层验证（L1 语法 / L2 运行 / L3 agent 裁决），对全仓 Markdown 围栏代码块做全量（非抽样）验证；全量报告与数据归档见 `refactor-archives/completed/code-block-verification/`
 
 ---
 

@@ -1,0 +1,6 @@
+manifest.jsonl
+manifest.jsonl.index.json
+results.jsonl
+results.jsonl.sample
+l3_worklist.jsonl
+__pycache__/
