@@ -324,12 +324,16 @@ interface OptimizedEventHandlerOptions {
   capture?: boolean
 }
 
-export function useOptimizedEventHandler<T extends Event>(
+export function useOptimizedEventHandler<T>(
   handler: (event: T) => void,
   options: OptimizedEventHandlerOptions = {}
 ) {
   const handlerRef = useRef(handler)
   handlerRef.current = handler
+  // 防抖/节流定时器属于 Hook 实例状态：必须在 Hook 函数体内用 useRef 声明，
+  // 模块级声明会违反 Hook 规则（运行时抛 Invalid hook call）且被所有组件实例共享
+  const debounceTimerRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined)
+  const throttleRef = useRef<boolean>(false)
 
   return useCallback((event: T) => {
     const { debounce = 0, throttle = 0, passive = false } = options
@@ -337,7 +341,7 @@ export function useOptimizedEventHandler<T extends Event>(
     if (debounce > 0) {
       // 防抖处理
       clearTimeout(debounceTimerRef.current)
-      debounceTimerRef.current = window.setTimeout(() => {
+      debounceTimerRef.current = setTimeout(() => {
         handlerRef.current(event)
       }, debounce)
     } else if (throttle > 0) {
@@ -356,12 +360,9 @@ export function useOptimizedEventHandler<T extends Event>(
   }, [options.debounce, options.throttle, options.passive])
 }
 
-const debounceTimerRef = useRef<NodeJS.Timeout>()
-const throttleRef = useRef<boolean>(false)
-
 // 使用示例
 export function OptimizedButton() {
-  const handleClick = useOptimizedEventHandler((event: MouseEvent) => {
+  const handleClick = useOptimizedEventHandler((event: React.MouseEvent) => {
     console.log('Button clicked!', event)
   }, {
     debounce: 100, // 100ms防抖
@@ -399,12 +400,9 @@ export function AspectRatioContainer({
     <div
       className={`relative ${className}`}
       style={{
-        aspectRatio: aspectRatio.toString(),
-        // 旧浏览器回退
-        '@supports not (aspect-ratio: 1/1)': {
-          paddingBottom: `${(1 / aspectRatio) * 100}%`,
-          height: 0
-        }
+        aspectRatio: aspectRatio.toString()
+        // 旧浏览器回退：内联样式无法表达 @supports 条件，
+        // 需通过 CSS 类中的 @supports not (aspect-ratio: 1/1) 规则提供 padding-bottom 兜底
       }}
     >
       <div className="absolute inset-0">
@@ -415,7 +413,14 @@ export function AspectRatioContainer({
 }
 
 // 图片容器组件
-export function ImageContainer({ src, alt, ...props }) {
+interface ImageContainerProps {
+  src: string
+  alt: string
+  // 其余属性透传给 OptimizedImage
+  [key: string]: unknown
+}
+
+export function ImageContainer({ src, alt, ...props }: ImageContainerProps) {
   return (
     <AspectRatioContainer aspectRatio={16 / 9} className="w-full">
       <OptimizedImage
@@ -446,7 +451,6 @@ export function FontLoadingStrategy({
   fallbackFont = 'system-ui, -apple-system, sans-serif'
 }: FontLoadingStrategyProps) {
   const [fontsLoaded, setFontsLoaded] = useState(false)
-  const [fontDisplaySwap, setFontDisplaySwap] = useState(true)
 
   useEffect(() => {
     // 监听字体加载完成
@@ -462,10 +466,6 @@ export function FontLoadingStrategy({
       )
     ).then(() => {
       setFontsLoaded(true)
-      // 短暂延迟后移除font-display: swap
-      setTimeout(() => {
-        setFontDisplaySwap(false)
-      }, 100)
     })
   }, [])
 
@@ -473,7 +473,9 @@ export function FontLoadingStrategy({
     <div
       style={{
         fontFamily: fontsLoaded ? 'var(--font-inter)' : fallbackFont,
-        fontDisplay: fontDisplaySwap ? 'swap' : 'block',
+        // 注意：font-display 是 @font-face 描述符而非元素 CSS 属性，
+        // 不能作为内联样式使用；字体渲染策略应在 @font-face 规则内声明，
+        // 或使用 next/font 的 display 选项
         transition: 'font-family 0.3s ease'
       }}
     >

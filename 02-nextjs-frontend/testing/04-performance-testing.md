@@ -108,8 +108,8 @@ brew install k6  # macOS
 
 ### 1. Lighthouse CI配置
 
-```yaml
-# .lighthouserc.js
+```javascript
+// .lighthouserc.js
 module.exports = {
   ci: {
     collect: {
@@ -390,7 +390,10 @@ export function measurePageLoad() {
 ```
 
 ```typescript
-// pages/_app.tsx
+// pages/_app.tsx（Pages Router 写法；App Router 项目应在 app/layout.tsx
+// 配合 instrumentation.ts 上报 vitals）
+import { useEffect } from 'react'
+import type { AppProps } from 'next/app'
 import { reportWebVitals, measurePageLoad } from '@/lib/vitals'
 
 function MyApp({ Component, pageProps }: AppProps) {

@@ -354,7 +354,7 @@ export function MemoryOptimizedDataTable({ data }: { data: any[] }) {
 
 ```typescript
 // app/components/ConcurrentRenderer.tsx
-import { Suspense, useTransition, useDeferredValue, startTransition } from 'react'
+import { Fragment, Suspense, useState, useMemo, useTransition, useDeferredValue, startTransition } from 'react'
 
 interface ConcurrentRendererProps {
   data: any[]
@@ -404,9 +404,9 @@ export function ConcurrentRenderer({
       <Suspense fallback={fallback}>
         <div className="results-container">
           {filteredData.map((item, index) => (
-            <React.Fragment key={item.id}>
+            <Fragment key={item.id}>
               {renderItem(item, index)}
-            </React.Fragment>
+            </Fragment>
           ))}
         </div>
       </Suspense>

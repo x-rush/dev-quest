@@ -45,7 +45,7 @@ Next.js 16为性能优化提供了强大的工具和策略，从构建时优化�
 ```typescript
 // src/components/performance/LCPOptimizer.tsx
 import Image from 'next/image'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 
 interface LCPMetric {
   element: HTMLElement | null
@@ -83,7 +83,10 @@ export class LCPOptimizer {
               element,
               renderTime: lcpEntry.startTime,
               size: this.getElementSize(element),
-              url: element?.src || element?.backgroundImage || ''
+              url:
+                element instanceof HTMLImageElement
+                  ? element.src
+                  : element?.getAttribute('src') || ''
             }
             resolve(this.metrics)
           }
@@ -233,11 +236,11 @@ interface CLSMetric {
   layoutShiftElements: LayoutShift[]
 }
 
-interface LayoutShift {
+interface LayoutShift extends PerformanceEntry {
   value: number
   sources: PerformanceEntry[]
-  startTime: number
   endTime: number
+  hadRecentInput: boolean
 }
 
 export class CLSOptimizer {
@@ -254,14 +257,14 @@ export class CLSOptimizer {
       }
 
       let clsValue = 0
-      const sessionValue = 0
-      const sessionEntries: PerformanceEntry[] = []
+      let sessionValue = 0
+      const sessionEntries: LayoutShift[] = []
 
       const observer = new PerformanceObserver((entryList) => {
         for (const entry of entryList.getEntries()) {
-          if (!(entry as PerformanceEntry).hadRecentInput) {
+          if (!(entry as LayoutShift).hadRecentInput) {
             sessionValue += (entry as LayoutShift).value
-            sessionEntries.push(entry)
+            sessionEntries.push(entry as LayoutShift)
           }
         }
 
@@ -1212,12 +1215,12 @@ export function usePrefetch() {
 // src/components/performance/LazyComponentLoader.tsx
 'use client'
 
-import { Suspense, lazy, ComponentType } from 'react'
-import { ErrorBoundary } from 'react-error-boundary'
+import { Suspense, lazy, useState, useEffect, useRef, ComponentType } from 'react'
+import { ErrorBoundary, FallbackProps } from 'react-error-boundary'
 
 interface LazyComponentOptions {
   fallback?: React.ReactNode
-  errorFallback?: ComponentType<{ error: Error; retry: () => void }>
+  errorFallback?: ComponentType<FallbackProps>
   delay?: number
   rootMargin?: string
   threshold?: number
@@ -1228,9 +1231,9 @@ export function createLazyComponent<T extends ComponentType<any>>(
   importFunc: () => Promise<{ default: T }>,
   options: LazyComponentOptions = {}
 ) {
-  const LazyComponent = lazy(importFunc, {
-    loading: () => options.fallback || <div>Loading...</div>
-  })
+  // React.lazy 只接受加载函数一个参数（loading 选项属于 next/dynamic），
+  // 加载态由下方 Suspense 的 fallback 兜底
+  const LazyComponent = lazy(importFunc)
 
   return function LazyComponentWrapper(props: React.ComponentProps<T>) {
     return (
@@ -1255,7 +1258,7 @@ export function createLazyComponent<T extends ComponentType<any>>(
 // 延迟加载组件
 function DelayedComponent({
   delay,
-  component: Component
+  component
 }: {
   delay: number
   component: React.ReactElement
@@ -1321,14 +1324,14 @@ function createViewportLazyComponent<T extends ComponentType<any>>(
   return ViewportLazyComponent
 }
 
-// 默认错误边界
-function DefaultErrorFallback({ error, retry }: { error: Error; retry: () => void }) {
+// 默认错误边界（FallbackProps 为 react-error-boundary 注入的 props）
+function DefaultErrorFallback({ error, resetErrorBoundary }: FallbackProps) {
   return (
     <div className="p-4 bg-red-50 border border-red-200 rounded-lg">
       <h3 className="text-red-800 font-medium">组件加载失败</h3>
       <p className="text-red-600 text-sm mt-1">{error.message}</p>
       <button
-        onClick={retry}
+        onClick={() => resetErrorBoundary()}
         className="mt-2 px-3 py-1 bg-red-600 text-white text-sm rounded hover:bg-red-700"
       >
         重试
@@ -1374,8 +1377,11 @@ const ChartComponent = createViewportLazyComponent(
 
 ```typescript
 // src/lib/performance/PerformanceMonitor.ts
-import { onCLS, onINP, onFCP } from 'web-vitals'
-import { reportWebVitals } from 'web-vitals'
+import { onCLS, onFID, onFCP, onINP, onLCP, onTTFB } from 'web-vitals'
+import { useState, useEffect } from 'react'
+
+// gtag 是 GA 全局注入的函数（未安装 @types/gtag.js 时需手动声明）
+declare function gtag(command: string, ...args: unknown[]): void
 
 interface PerformanceMetrics {
   lcp: number
@@ -1383,10 +1389,21 @@ interface PerformanceMetrics {
   cls: number
   fcp: number
   ttfb: number
+  inp: number
   tti: number
   clsr: number
   si: number
   timestamp: string
+}
+
+// 指标阈值类型（config 与 generateRecommendations 共用）
+interface PerformanceThresholds {
+  lcp: number
+  fid: number
+  cls: number
+  fcp: number
+  ttfb: number
+  tti: number
 }
 
 export class PerformanceMonitor {
@@ -1418,28 +1435,19 @@ export class PerformanceMonitor {
 
   // 开始监控
   private startMonitoring(): void {
-    // 监听Core Web Vitals
-    reportWebVitals({
-      onPerfEntry: this.handlePerfEntry.bind(this),
-      onCLS: this.handleCLS.bind(this),
-      onFID: this.handleFID.bind(this),
-      onLCP: this.handleLCP.bind(this),
-      onTTFB: this.handleTTFB.bind(this),
-      onFCP: this.handleFCP.bind(this),
-      onINP: this.handleINP.bind(this),
-      onTTFB: this.handleTTFB.bind(this),
-      onLCP: this.handleLCP.bind(this)
-    })
+    // 监听Core Web Vitals：web-vitals 为每项指标提供独立的注册函数，
+    // 不存在聚合式的 reportWebVitals 导出
+    onCLS(this.handleCLS.bind(this))
+    onFID(this.handleFID.bind(this))
+    onLCP(this.handleLCP.bind(this))
+    onTTFB(this.handleTTFB.bind(this))
+    onFCP(this.handleFCP.bind(this))
+    onINP(this.handleINP.bind(this))
 
     // 定期报告
     setInterval(() => {
       this.reportMetrics()
     }, this.config.reportInterval)
-  }
-
-  // 处理性能条目
-  private handlePerfEntry = (metric: any): void => {
-    console.log('Performance Entry:', metric)
   }
 
   private handleCLS = (metric: any): void => {
@@ -1527,7 +1535,7 @@ export class PerformanceMonitor {
   // 生成优化建议
   private generateRecommendations(
     metrics: PerformanceMetrics,
-    thresholds: typeof PerformanceMonitor['config']['thresholds']
+    thresholds: PerformanceThresholds
   ): string[] {
     const recommendations: string[] = []
 
@@ -1558,15 +1566,13 @@ export class PerformanceMonitor {
   private sendToAnalytics(report: any): void {
     // 发送到分析服务
     if (typeof gtag !== 'undefined') {
-      gtag('event', 'web_vitals', 'performance_report', {
-        custom_map: {
-          event_category: 'Performance',
-          event_label: 'Web Vitals Report',
-          custom_page_location: window.location.href,
-          value: report.metrics.lcp,
-          metric_value: report.metrics.fid,
-          metric_value: report.metrics.cls
-        }
+      gtag('event', 'web_vitals', {
+        event_category: 'Performance',
+        event_label: 'Web Vitals Report',
+        custom_page_location: window.location.href,
+        value: report.metrics.lcp.value,
+        fid: report.metrics.fid.value,
+        cls: report.metrics.cls.value
       })
     }
 
@@ -1585,7 +1591,7 @@ export class PerformanceMonitor {
   // 显示性能警告
   private showPerformanceWarnings(report: any): void {
     const needsImprovement = Object.values(report.metrics)
-      .filter(metric => metric.status === 'needs-improvement')
+      .filter((metric: any) => metric.status === 'needs-improvement')
 
     if (needsImprovement.length > 0) {
       console.group('🚨 Performance Issues Detected')
@@ -1775,16 +1781,16 @@ export function PerformanceDashboard() {
           <div
             className="bg-green-600 h-4 rounded-full"
             style={{
-              width: `${Math.max(0, 100 - Object.values({
+              width: `${Math.max(0, Object.values({
                 lcp: Math.max(0, 100 - (metrics.lcp / 4000) * 100),
                 fid: Math.max(0, 100 - (metrics.fid / 200) * 100),
                 cls: Math.max(0, 100 - (metrics.cls / 0.5) * 100),
                 fcp: Math.max(0, 100 - (metrics.fcp / 3000) * 100)
-              })}%)`
-            />
+              }).reduce((sum, score) => sum + score, 0) / 4)}%`
+            }}
+          />
           </div>
         </div>
-      </div>
     </div>
   )
 }

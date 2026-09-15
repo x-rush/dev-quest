@@ -956,14 +956,12 @@ export const Card: React.FC<CardProps> = ({ title, description, className }) => 
 };
 
 // 带有动态属性的组件
-const dynamicStyles = css`
+// 注意：基于 props 的动态插值只能写在 styled`` 模板中（编译为 CSS 变量），
+// @linaria/core 的 css`` 仅支持构建期静态提取，不支持 props 函数插值
+const DynamicText = styled.span`
   color: ${props => props.color || '#171717'};
   font-size: ${props => props.size === 'large' ? '1.5rem' : '1rem'};
   font-weight: ${props => props.bold ? '600' : '400'};
-`;
-
-const DynamicText = styled.span`
-  ${dynamicStyles};
 `;
 
 interface DynamicTextProps {

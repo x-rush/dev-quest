@@ -243,12 +243,11 @@ registry=https://registry.npmjs.org/
 # proxy=http://proxy.company.com:8080
 # https-proxy=http://proxy.company.com:8080
 
-# 认证配置
-# //registry.npmjs.org/:_authToken=${NPM_TOKEN}
+# 认证配置（NPM_TOKEN 由 CI 注入，勿将真实令牌提交进仓库）
+# //registry.npmjs.org/:_authToken=NPM_TOKEN
 
 # 缓存配置
 cache=/path/to/cache
-cache-max=86400000
 
 # 工作区配置
 workspaces=true
@@ -268,17 +267,14 @@ save-exact=false
 # 包锁文件
 package-lock=true
 
-# 工作区设置
-workspace-linker=workspace
-
 # 忽略脚本
 ignore-scripts=false
 
 # 脚本 Shell
 script-shell=bash
 
-# 算法
-algorithm=shallow
+# 依赖树安装策略
+install-strategy=shallow
 
 # 元数据更新
 update-notifier=true
@@ -447,7 +443,6 @@ registry=https://registry.npmjs.org/
 
 # 严格模式
 strict-peer-dependencies=true
-strict-peer-dependencies=true
 
 # 存储配置
 store-dir=~/.pnpm-store
@@ -455,7 +450,6 @@ virtual-store-dir=node_modules/.pnpm
 
 # 符号链接策略
 shamefully-hoist=false
-shamefully-hoist=true
 
 # 自动安装对等依赖
 auto-install-peers=true
@@ -467,29 +461,18 @@ prefer-workspace-packages=true
 # 更新检查
 update-notifier=true
 
-# 进度显示
+# 锁文件行为（锁文件满足 package.json 时优先执行冻结安装）
 prefer-frozen-lockfile=true
-save-exact=false
-
-# 保存前缀
-save-prefix="^"
-
-# 完整安装
-prefer-frozen-lockfile=true
-
-# 忽略开发依赖
-dev-dependencies=true
-
-# 纯净安装
 frozen-lockfile=false
 
-# 忽略可选依赖
-optional-dependencies=true
+# 保存配置
+save-prefix="^"
+save-exact=false
 
 # 锁文件格式
 lockfile-version=6
 
-# 纯净安装
+# 固定 Node 版本
 use-node-version=18
 
 # 激活配置
@@ -501,9 +484,9 @@ loglevel=info
 # 并发数
 child-concurrency=4
 
-# 网络超时
+# 网络超时与重试
 fetch-timeout=60000
-fetch-retry-max=2
+fetch-retries=2
 fetch-retry-mintimeout=10000
 
 # 代理配置

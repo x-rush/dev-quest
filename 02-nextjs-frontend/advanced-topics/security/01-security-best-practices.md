@@ -311,14 +311,16 @@ export function createEditorSecurityConfig() {
 ```typescript
 // app/lib/csrf-protection.ts
 import { generateRandomString } from './crypto-utils'
+import { NextRequest, NextResponse } from 'next/server'
 
 class CSRFProtection {
   private tokenLength = 32
   private cookieName = 'csrf-token'
   private headerName = 'X-CSRF-Token'
-  private secure = true
-  private httpOnly = true
-  private sameSite: 'strict' as 'strict' | 'lax' | 'none'
+  // secure/httpOnly/sameSite 需在子类 DoubleSubmitCookieProtection 中复用，故为 protected
+  protected secure = true
+  protected httpOnly = true
+  protected sameSite: 'strict' | 'lax' | 'none' = 'strict'
 
   // 生成CSRF Token
   generateToken(): string {
@@ -349,8 +351,8 @@ class CSRFProtection {
     return result === 0
   }
 
-  // 设置CSRF Cookie
-  setCSRFCookie(response: Response, token: string): void {
+  // 设置CSRF Cookie（Response/Request 的 .cookies 属性仅 NextResponse/NextRequest 提供）
+  setCSRFCookie(response: NextResponse, token: string): void {
     response.cookies.set(this.cookieName, token, {
       httpOnly: this.httpOnly,
       secure: this.secure,
@@ -361,7 +363,7 @@ class CSRFProtection {
   }
 
   // 从Cookie获取Token
-  getTokenFromCookie(request: Request): string | undefined {
+  getTokenFromCookie(request: NextRequest): string | undefined {
     return request.cookies.get(this.cookieName)?.value
   }
 
@@ -371,14 +373,14 @@ class CSRFProtection {
   }
 
   // 生成并设置CSRF Token
-  generateAndSetToken(response: Response): string {
+  generateAndSetToken(response: NextResponse): string {
     const token = this.generateToken()
     this.setCSRFCookie(response, token)
     return token
   }
 
   // 验证请求中的CSRF Token
-  validateRequest(request: Request): boolean {
+  validateRequest(request: NextRequest): boolean {
     // GET、HEAD、OPTIONS请求不需要CSRF保护
     const method = request.method.toUpperCase()
     if (['GET', 'HEAD', 'OPTIONS'].includes(method)) {
@@ -402,7 +404,7 @@ class CSRFProtection {
   }
 
   // CSRF中间件
-  middleware(request: Request): Response | null {
+  middleware(request: NextRequest): Response | null {
     // 验证CSRF Token
     if (!this.validateRequest(request)) {
       return new Response('CSRF token validation failed', {
@@ -433,7 +435,7 @@ class DoubleSubmitCookieProtection extends CSRFProtection {
   }
 
   // 设置双重提交Cookie
-  setDoubleSubmitCookies(response: Response, csrfToken: string, actionToken: string): void {
+  setDoubleSubmitCookies(response: NextResponse, csrfToken: string, actionToken: string): void {
     // 设置主CSRF Token
     this.setCSRFCookie(response, csrfToken)
 
@@ -448,7 +450,7 @@ class DoubleSubmitCookieProtection extends CSRFProtection {
   }
 
   // 验证双重提交
-  validateDoubleSubmit(request: Request): boolean {
+  validateDoubleSubmit(request: NextRequest): boolean {
     const cookieToken = this.getTokenFromCookie(request)
     const actionToken = request.cookies.get(this.actionTokenCookie)?.value
 
@@ -460,7 +462,7 @@ class DoubleSubmitCookieProtection extends CSRFProtection {
   }
 
   // 生成双重提交Tokens
-  generateDoubleSubmitTokens(response: Response): { csrfToken: string; actionToken: string } {
+  generateDoubleSubmitTokens(response: NextResponse): { csrfToken: string; actionToken: string } {
     const csrfToken = this.generateToken()
     const actionToken = this.generateActionToken()
 

@@ -37,7 +37,11 @@ let value: undefined = undefined
 let anyValue: any = "anything" // 任意类型（避免使用）
 let unknownValue: unknown = "unknown" // 未知类型（类型安全）
 let voidValue: void = undefined // 无返回值
-let neverValue: never = // 永不返回的值
+// never：表示永不返回的值（如总是抛出错误的函数）
+function fail(): never {
+  throw new Error("never")
+}
+let neverValue: never = fail()
 
 // 字面量类型
 let direction: "up" | "down" | "left" | "right" = "up"

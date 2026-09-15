@@ -296,7 +296,7 @@ export interface RouteConfig {
 
 // types/module-federation.d.ts
 declare module '@module-federation/nextjs-mf' {
-  interface Module federation {
+  interface ModuleFederationConfig {
     name: string;
     filename: string;
     exposes?: Record<string, string>;
@@ -318,6 +318,8 @@ import dynamic from 'next/dynamic';
 import { MicroAppLoader } from '../components/MicroAppLoader';
 import { AuthProvider } from '../providers/AuthProvider';
 import { ThemeProvider } from '../providers/ThemeProvider';
+import { Header } from '../components/Header';
+import { Footer } from '../components/Footer';
 
 // 动态导入微应用组件
 const ProductApp = dynamic(
@@ -336,8 +338,36 @@ const UserApp = dynamic(
   }
 );
 
+const OrderApp = dynamic(
+  () => import('orderApp/OrderRoutes'),
+  {
+    loading: () => <div>Loading Order App...</div>,
+    ssr: false
+  }
+);
+
 function MyApp({ Component, pageProps }: AppProps) {
   const router = useRouter();
+  const { pathname } = router;
+
+  // 路由匹配逻辑（useRouter 是 Hook，只能在组件内调用；
+  // Component/pageProps 也仅存在于 MyApp 的 props 作用域内）
+  const renderRoute = () => {
+    if (pathname.startsWith('/products')) {
+      return <ProductApp />;
+    }
+
+    if (pathname.startsWith('/user') || pathname.startsWith('/profile')) {
+      return <UserApp />;
+    }
+
+    if (pathname.startsWith('/orders')) {
+      return <OrderApp />;
+    }
+
+    // 默认主应用路由
+    return <Component {...pageProps} />;
+  };
 
   return (
     <ThemeProvider>
@@ -357,27 +387,6 @@ function MyApp({ Component, pageProps }: AppProps) {
       </AuthProvider>
     </ThemeProvider>
   );
-}
-
-function renderRoute() {
-  const router = useRouter();
-  const { pathname } = router;
-
-  // 路由匹配逻辑
-  if (pathname.startsWith('/products')) {
-    return <ProductApp />;
-  }
-
-  if (pathname.startsWith('/user') || pathname.startsWith('/profile')) {
-    return <UserApp />;
-  }
-
-  if (pathname.startsWith('/orders')) {
-    return <OrderApp />;
-  }
-
-  // 默认主应用路由
-  return <Component {...pageProps} />;
 }
 
 export default MyApp;

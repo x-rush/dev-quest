@@ -358,9 +358,19 @@ async function clearUserCache(userId: string) {
 
 ```typescript
 // src/lib/auth/permissions.ts
+import { useCallback } from 'react'
 import { NextRequest } from 'next/server'
 import { getToken } from 'next-auth/jwt'
+import { useSession } from 'next-auth/react'
 import { prisma } from '@/lib/db'
+
+// 扩展 next-auth 的 User 类型：会话用户携带自定义 permissions / role 字段
+declare module 'next-auth' {
+  interface User {
+    permissions?: Permission[]
+    role?: string
+  }
+}
 
 // 权限定义
 export const PERMISSIONS = {
@@ -395,42 +405,46 @@ export const PERMISSIONS = {
 
 export type Permission = typeof PERMISSIONS[keyof typeof PERMISSIONS]
 
+// 用户角色基础权限（独立常量：避免对象字面量初始化期间自引用引发的 TDZ ReferenceError）
+const USER_PERMISSIONS: Permission[] = [
+  PERMISSIONS.USER_READ,
+  PERMISSIONS.USER_UPDATE_OWN,
+  PERMISSIONS.USER_DELETE_OWN,
+  PERMISSIONS.ARTICLE_READ,
+  PERMISSIONS.ARTICLE_CREATE,
+  PERMISSIONS.ARTICLE_UPDATE_OWN,
+  PERMISSIONS.ARTICLE_DELETE_OWN,
+  PERMISSIONS.COMMENT_READ,
+  PERMISSIONS.COMMENT_CREATE,
+  PERMISSIONS.COMMENT_UPDATE_OWN,
+  PERMISSIONS.COMMENT_DELETE_OWN
+]
+
 // 角色权限映射
-export const ROLE_PERMISSIONS = {
+export const ROLE_PERMISSIONS: Record<string, Permission[]> = {
   guest: [],
 
-  user: [
-    PERMISSIONS.USER_READ,
-    PERMISSIONS.USER_UPDATE_OWN,
-    PERMISSIONS.USER_DELETE_OWN,
-    PERMISSIONS.ARTICLE_READ,
-    PERMISSIONS.ARTICLE_CREATE,
-    PERMISSIONS.ARTICLE_UPDATE_OWN,
-    PERMISSIONS.ARTICLE_DELETE_OWN,
-    PERMISSIONS.COMMENT_READ,
-    PERMISSIONS.COMMENT_CREATE,
-    PERMISSIONS.COMMENT_UPDATE_OWN,
-    PERMISSIONS.COMMENT_DELETE_OWN
-  ],
+  user: USER_PERMISSIONS,
 
   moderator: [
-    ...ROLE_PERMISSIONS.user,
+    ...USER_PERMISSIONS,
     PERMISSIONS.COMMENT_DELETE_ANY
   ],
 
   author: [
-    ...ROLE_PERMISSIONS.user,
+    ...USER_PERMISSIONS,
     PERMISSIONS.ARTICLE_PUBLISH
   ],
 
   editor: [
-    ...ROLE_PERMISSIONS.author,
+    ...USER_PERMISSIONS,
+    PERMISSIONS.ARTICLE_PUBLISH,
     PERMISSIONS.ARTICLE_UPDATE_ANY,
     PERMISSIONS.ARTICLE_DELETE_ANY
   ],
 
   admin: Object.values(PERMISSIONS)
-} as const
+}
 
 // 权限检查中间件
 export async function requireAuth(

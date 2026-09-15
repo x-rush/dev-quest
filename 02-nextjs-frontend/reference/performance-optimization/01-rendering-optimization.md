@@ -420,6 +420,10 @@ export function ConditionalLoad({
 
 // 路由组件懒加载
 // app/dashboard/analytics/page.tsx
+// 页面文件默认是 Server Component，使用 useState 必须声明 'use client'
+'use client';
+
+import { useState } from 'react';
 import { ConditionalLoad } from '@/components/performance/ConditionalLoad';
 
 export default function AnalyticsPage() {

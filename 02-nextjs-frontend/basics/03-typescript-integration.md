@@ -363,6 +363,7 @@ export type MetadataGenerator = (props: PageProps) => Metadata | Promise<Metadat
 ```typescript
 // src/app/posts/[id]/page.tsx
 import { notFound } from 'next/navigation'
+import type { Metadata } from 'next'
 import { PageProps } from '@/types/pages'
 
 interface Post {

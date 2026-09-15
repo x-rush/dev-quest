@@ -135,7 +135,7 @@ model User {
   phone     String?
   address   Address[]
   orders    Order[]
-  cartItems CartItem[]
+  // 购物车项经 Cart 关联（User → Cart → CartItem），CartItem 不直接挂在 User 上
   wishlist  WishlistItem[]
   reviews   Review[]
   createdAt DateTime @default(now())
@@ -155,7 +155,9 @@ model Address {
   country    String
   isDefault  Boolean @default(false)
   user       User    @relation(fields: [userId], references: [id], onDelete: Cascade)
-  orders     Order[]
+  // Order 有 shipping/billing 两个指向 Address 的关联，必须用命名关系消除配对歧义
+  shippingOrders Order[] @relation("OrderShippingAddress")
+  billingOrders  Order[] @relation("OrderBillingAddress")
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
 
@@ -245,6 +247,29 @@ model ProductImage {
   @@map("product_images")
 }
 
+model Inventory {
+  id                String   @id @default(cuid())
+  productId         String   @unique
+  product           Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  quantity          Int      @default(0)
+  reserved          Int      @default(0)
+  lowStockThreshold Int      @default(10)
+  updatedAt         DateTime @updatedAt
+
+  @@map("inventories")
+}
+
+model ProductTag {
+  id        String   @id @default(cuid())
+  productId String
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  name      String
+  createdAt DateTime @default(now())
+
+  @@unique([productId, name])
+  @@map("product_tags")
+}
+
 model Cart {
   id        String     @id @default(cuid())
   userId    String?    @unique
@@ -289,8 +314,11 @@ model Order {
   shipping        Float
   discount        Float      @default(0)
   total           Float
-  shippingAddress Address?
-  billingAddress  Address?
+  // 两个 Address 关联使用命名关系 + 显式外键（与下单代码中的 shippingAddressId 一致）
+  shippingAddressId String?
+  shippingAddress   Address? @relation("OrderShippingAddress", fields: [shippingAddressId], references: [id])
+  billingAddressId  String?
+  billingAddress    Address? @relation("OrderBillingAddress", fields: [billingAddressId], references: [id])
   items           OrderItem[]
   transactions    PaymentTransaction[]
   createdAt       DateTime   @default(now())
@@ -2539,7 +2567,9 @@ WORKDIR /app
 
 # 复制包管理文件
 COPY package.json package-lock.json* ./
-RUN npm ci --omit=dev
+# 完整安装含 devDependencies：builder 阶段的 npx prisma generate 与 next build
+# 需要 Prisma CLI、TypeScript 等构建工具（standalone 产物自带最小运行时依赖）
+RUN npm ci
 
 # 构建阶段
 FROM base AS builder

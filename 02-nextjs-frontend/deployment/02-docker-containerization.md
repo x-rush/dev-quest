@@ -97,8 +97,8 @@ WORKDIR /app
 # 复制package文件
 COPY package.json package-lock.json* ./
 
-# 安装依赖
-RUN npm ci --omit=dev && npm cache clean --force
+# 安装依赖（完整安装含 devDependencies，builder 阶段的 next build 需要 TypeScript/Tailwind 等构建工具）
+RUN npm ci && npm cache clean --force
 
 # 构建阶段
 FROM node:20-alpine AS builder
@@ -172,18 +172,14 @@ CMD ["node", "server.js"]
 # 构建阶段
 FROM node:20-alpine AS deps
 
-# 使用特定用户
-RUN addgroup --system --gid 1001 nodejs
-RUN adduser --system --uid 1001 builder
-
 # 设置工作目录
 WORKDIR /app
 
-# 复制package文件
-COPY package.json package-lock.json* ./
+# 复制package文件（含私有 registry 凭据 .npmrc，npm ci 访问内部源需要）
+COPY package.json package-lock.json* .npmrc* ./
 
-# 安装依赖
-RUN npm ci --omit=dev && npm cache clean --force
+# 安装依赖（完整安装含 devDependencies，builder 阶段的 next build 需要）
+RUN npm ci && npm cache clean --force
 
 # 构建阶段
 FROM node:20-alpine AS builder
@@ -761,6 +757,19 @@ server {
         add_header Cache-Control "public, immutable";
         add_header Vary Accept-Encoding;
         try_files $uri @app;
+    }
+
+    # 静态资源未命中时的回退（命名 location，供上面 try_files 引用）
+    location @app {
+        proxy_pass http://app;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_cache_bypass $http_upgrade;
     }
 
     # Next.js静态文件

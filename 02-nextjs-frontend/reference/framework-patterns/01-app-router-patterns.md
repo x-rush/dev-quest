@@ -318,11 +318,11 @@ export const metadata: Metadata = {
   category: 'education',
   classification: 'educational platform',
 
-  // 验证标签
+  // 验证标签（Bing 无专用键，需经 other 写原始 meta 名，生成 <meta name="msvalidate.01">）
   verification: {
     google: 'your-google-verification-code',
     yandex: 'your-yandex-verification-code',
-    bing: 'your-bing-verification-code',
+    other: { 'msvalidate.01': 'your-bing-verification-code' },
   },
 
   // 图标
@@ -438,8 +438,12 @@ export default function RootLayout({
   );
 }
 
-// 错误边界组件
-function GlobalErrorBoundary() {
+// 错误边界组件：包含 onClick 事件处理器，必须放在带 'use client' 的
+// 独立客户端文件中，不能内联在服务端布局文件里（布局默认是 Server Component）
+// app/components/error/global-error-boundary.tsx
+'use client';
+
+export function GlobalErrorBoundary() {
   return (
     <div className="min-h-screen flex items-center justify-center">
       <div className="text-center">
@@ -671,8 +675,8 @@ export async function generateMetadata({
     keywords: [category?.name, author?.name, post.tags?.join(', ')].filter(Boolean),
     authors: [{ name: author?.name }],
     creator: author?.name,
-    publishTime: publishedDate,
-    modifiedTime: post.updatedAt ? new Date(post.updatedAt).toISOString() : publishedDate,
+    // Metadata 顶层没有 publishTime/modifiedTime 字段，文章时间只通过 openGraph 的
+    // publishedTime/modifiedTime 表达（见下方 openGraph.type: 'article'）
 
     openGraph: {
       title,
@@ -824,8 +828,19 @@ export default async function BlogPostPage({
   );
 }
 
-// 错误处理
-export function ErrorBoundary({ error }: { error: Error }) {
+// 错误与加载兜底不能作为页面文件的命名导出（next build 类型检查会报
+// not a valid Page export field），必须使用独立文件约定 error.tsx / loading.tsx
+
+// app/blog/[slug]/error.tsx
+'use client';
+
+export default function BlogError({
+  error,
+  reset,
+}: {
+  error: Error & { digest?: string };
+  reset: () => void;
+}) {
   return (
     <div className="min-h-screen flex items-center justify-center">
       <div className="text-center">
@@ -838,9 +853,15 @@ export function ErrorBoundary({ error }: { error: Error }) {
         <p className="text-sm text-gray-500 mb-6">
           错误详情: {error.message}
         </p>
+        <button
+          onClick={() => reset()}
+          className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+        >
+          重试
+        </button>
         <a
           href="/blog"
-          className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+          className="ml-2 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
         >
           返回博客列表
         </a>
@@ -849,8 +870,8 @@ export function ErrorBoundary({ error }: { error: Error }) {
   );
 }
 
-// 加载状态
-export function Loading() {
+// app/blog/[slug]/loading.tsx
+export default function BlogLoading() {
   return (
     <div className="min-h-screen">
       <div className="container mx-auto px-4 py-8">

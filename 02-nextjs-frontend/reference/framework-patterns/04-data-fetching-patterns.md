@@ -943,7 +943,7 @@ export function useOptimisticMutation<TData, TVariables, TError = Error>(
         queryClient.setQueryData(options.invalidateQueries, context.snapshot);
       }
 
-      options.onError?.(error, variables, context);
+      options.onError?.(error as TError, variables, context);
     },
 
     onSettled: (data, error, variables, context) => {
@@ -952,7 +952,7 @@ export function useOptimisticMutation<TData, TVariables, TError = Error>(
         queryClient.invalidateQueries({ queryKey: options.invalidateQueries });
       }
 
-      options.onSettled?.(data, error, variables, context);
+      options.onSettled?.(data, error as TError | null, variables, context);
     },
 
     onSuccess: options.onSuccess,
@@ -1020,7 +1020,7 @@ export function useCreateTask() {
       queryClient.setQueryData(['tasks'], (old: Task[] | undefined) => {
         if (!old) return [newTask];
         return old.map(task =>
-          task.id === context?.id ? newTask : task
+          task.id === context?.optimisticData?.id ? newTask : task
         );
       });
     },

@@ -1419,8 +1419,10 @@ const TabList: React.FC<TabListProps> = ({ children, className = '' }) => {
     >
       {React.Children.map(children, child => {
         if (React.isValidElement(child) && child.type === Tab) {
-          return React.cloneElement(child, {
-            isActive: child.props.id === activeTab
+          // React 19 类型下 ReactElement.props 为 unknown，cloneElement 前需断言
+          const tabChild = child as React.ReactElement<TabProps>;
+          return React.cloneElement(tabChild, {
+            isActive: tabChild.props.id === activeTab
           });
         }
         return child;
@@ -1482,8 +1484,10 @@ const TabPanels: React.FC<TabPanelsProps> = ({ children, className = '' }) => {
     <div className={`tab-panels ${className}`}>
       {React.Children.map(children, child => {
         if (React.isValidElement(child) && child.type === TabPanel) {
-          return React.cloneElement(child, {
-            isActive: child.props.id === activeTab
+          // 同上：props 为 unknown，断言为具体 Props 后再 cloneElement
+          const panelChild = child as React.ReactElement<TabPanelProps>;
+          return React.cloneElement(panelChild, {
+            isActive: panelChild.props.id === activeTab
           });
         }
         return child;
@@ -1527,7 +1531,16 @@ interface CompoundTabComponentProps {
   children: React.ReactNode;
 }
 
-export const CompoundTabComponent: React.FC<CompoundTabComponentProps> = ({
+// 设置子组件：React.FC 不能直接添加属性（TS2339），需声明
+// 带子组件属性的类型，并用 Object.assign 挂载
+type CompoundTabComponentType = React.FC<CompoundTabComponentProps> & {
+  List: typeof TabList;
+  Tab: typeof Tab;
+  Panels: typeof TabPanels;
+  Panel: typeof TabPanel;
+};
+
+const CompoundTabComponentBase: React.FC<CompoundTabComponentProps> = ({
   defaultTab,
   className = '',
   children
@@ -1541,11 +1554,10 @@ export const CompoundTabComponent: React.FC<CompoundTabComponentProps> = ({
   );
 };
 
-// 设置子组件
-CompoundTabComponent.List = TabList;
-CompoundTabComponent.Tab = Tab;
-CompoundTabComponent.Panels = TabPanels;
-CompoundTabComponent.Panel = TabPanel;
+export const CompoundTabComponent: CompoundTabComponentType = Object.assign(
+  CompoundTabComponentBase,
+  { List: TabList, Tab: Tab, Panels: TabPanels, Panel: TabPanel }
+);
 
 // 使用示例
 export const TabExample: React.FC = () => {
@@ -1605,6 +1617,7 @@ import React, {
   useState,
   useEffect,
   useCallback,
+  useRef,
   ComponentType
 } from 'react';
 
@@ -1696,6 +1709,7 @@ export function AdvancedDataFetcher<T>({
   url,
   cacheKey,
   cacheTime = 5 * 60 * 1000, // 5分钟
+  children,
   ...props
 }: AdvancedDataFetcherProps<T>) {
   // 简单的内存缓存实现

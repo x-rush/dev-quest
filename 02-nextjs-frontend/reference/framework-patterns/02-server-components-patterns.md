@@ -225,24 +225,21 @@ export async function PostComponent({
   }
 }
 
-// 辅助函数
-async function getAuthorData(authorId: string) {
-  return cache(async (id: string) => {
-    const response = await fetch(`${process.env.API_URL}/authors/${id}`, {
-      next: { revalidate: 86400, tags: [`author-${id}`] } // 24小时缓存
-    });
-    return response.json();
-  })(authorId);
-}
+// 辅助函数：cache() 必须在模块顶层创建——若写在函数体内，每次调用
+// 都会新建 memoization 包装实例，React 的请求级去重将完全失效
+const getAuthorData = cache(async (authorId: string) => {
+  const response = await fetch(`${process.env.API_URL}/authors/${authorId}`, {
+    next: { revalidate: 86400, tags: [`author-${authorId}`] } // 24小时缓存
+  });
+  return response.json();
+});
 
-async function getRelatedPosts(postId: string, limit = 5) {
-  return cache(async (id: string) => {
-    const response = await fetch(`${process.env.API_URL}/posts/${id}/related?limit=${limit}`, {
-      next: { revalidate: 3600, tags: [`related-${id}`] }
-    });
-    return response.json();
-  })(postId);
-}
+const getRelatedPosts = cache(async (postId: string, limit = 5) => {
+  const response = await fetch(`${process.env.API_URL}/posts/${postId}/related?limit=${limit}`, {
+    next: { revalidate: 3600, tags: [`related-${postId}`] }
+  });
+  return response.json();
+});
 ```
 
 #### 1.2 高级数据获取模式
@@ -813,7 +810,7 @@ export async function SmartCacheComponent({
 
 ```typescript
 // components/streaming-components.tsx
-import { Suspense } from 'react';
+import React, { Suspense } from 'react';
 import { notFound } from 'next/navigation';
 
 // 流式数据加载组件

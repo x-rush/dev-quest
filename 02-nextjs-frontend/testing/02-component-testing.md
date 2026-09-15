@@ -295,6 +295,8 @@ describe("Button Component", () => {
 
 ```typescript
 // components/ContactForm.tsx
+import { useState } from 'react'
+
 interface ContactFormProps {
   onSubmit: (data: { name: string; email: string; message: string }) => void
 }
@@ -477,7 +479,8 @@ describe("ContactForm Component", () => {
     render(<ContactForm onSubmit={mockOnSubmit} />)
 
     const form = screen.getByTestId("contact-form")
-    expect(form).toHaveAttribute("role", "form")
+    // <form> 未显式写 role 属性，用 toHaveRole 断言（支持隐式 ARIA role）
+    expect(form).toHaveRole("form")
 
     const nameInput = screen.getByLabelText(/name/i)
     expect(nameInput).toHaveAttribute("aria-invalid", "false")
@@ -530,10 +533,10 @@ export const UserProfile: React.FC<{ userId: number }> = ({ userId }) => {
 // __tests__/components/UserProfile.test.tsx
 import { describe, it, expect, beforeEach } from "vitest"
 import { render, screen, waitFor } from "@testing-library/react"
-import { QueryClient } from "@tanstack/react-query"
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import { UserProfile } from "@/components/UserProfile"
 import { server } from "../setup"
-import { rest } from "msw"
+import { http, HttpResponse } from "msw"
 
 describe("UserProfile Component", () => {
   let queryClient: QueryClient
@@ -565,8 +568,8 @@ describe("UserProfile Component", () => {
     }
 
     server.use(
-      rest.get("/api/users/1", (req, res, ctx) => {
-        return res(ctx.json(mockUser))
+      http.get("/api/users/1", () => {
+        return HttpResponse.json(mockUser)
       })
     )
 
@@ -587,8 +590,8 @@ describe("UserProfile Component", () => {
 
   it("displays error message when fetch fails", async () => {
     server.use(
-      rest.get("/api/users/1", (req, res, ctx) => {
-        return res(ctx.status(500), ctx.json({ error: "Server error" }))
+      http.get("/api/users/1", () => {
+        return HttpResponse.json({ error: "Server error" }, { status: 500 })
       })
     )
 
@@ -605,8 +608,8 @@ describe("UserProfile Component", () => {
 
   it("shows not found when user does not exist", async () => {
     server.use(
-      rest.get("/api/users/999", (req, res, ctx) => {
-        return res(ctx.status(404), ctx.json({}))
+      http.get("/api/users/999", () => {
+        return HttpResponse.json({}, { status: 404 })
       })
     )
 
@@ -737,6 +740,14 @@ describe("useLocalStorage Hook", () => {
 
 ```typescript
 // context/AuthContext.tsx
+import { createContext, useContext, useState } from 'react'
+
+interface User {
+  id: number
+  email: string
+  name: string
+}
+
 interface AuthContextType {
   user: User | null
   login: (email: string, password: string) => Promise<boolean>
@@ -800,7 +811,7 @@ import { render, screen, fireEvent, waitFor } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
 import { AuthProvider, useAuth } from "@/context/AuthContext"
 import { server } from "../setup"
-import { rest } from "msw"
+import { http, HttpResponse, delay } from "msw"
 
 // 测试组件
 const TestComponent = () => {
@@ -848,8 +859,8 @@ describe("AuthContext", () => {
 
   it("handles successful login", async () => {
     server.use(
-      rest.post("/api/auth/login", (req, res, ctx) => {
-        return res(ctx.json(mockUser))
+      http.post("/api/auth/login", () => {
+        return HttpResponse.json(mockUser)
       })
     )
 
@@ -869,8 +880,8 @@ describe("AuthContext", () => {
 
   it("handles login failure", async () => {
     server.use(
-      rest.post("/api/auth/login", (req, res, ctx) => {
-        return res(ctx.status(401), ctx.json({ error: "Invalid credentials" }))
+      http.post("/api/auth/login", () => {
+        return HttpResponse.json({ error: "Invalid credentials" }, { status: 401 })
       })
     )
 
@@ -890,8 +901,8 @@ describe("AuthContext", () => {
 
   it("handles logout", async () => {
     server.use(
-      rest.post("/api/auth/login", (req, res, ctx) => {
-        return res(ctx.json(mockUser))
+      http.post("/api/auth/login", () => {
+        return HttpResponse.json(mockUser)
       })
     )
 
@@ -918,8 +929,9 @@ describe("AuthContext", () => {
 
   it("shows loading state during login", async () => {
     server.use(
-      rest.post("/api/auth/login", (req, res, ctx) => {
-        return res(ctx.delay(100), ctx.json(mockUser))
+      http.post("/api/auth/login", async () => {
+        await delay(100)
+        return HttpResponse.json(mockUser)
       })
     )
 
@@ -947,6 +959,8 @@ describe("AuthContext", () => {
 
 ```typescript
 // components/DataTable.tsx
+import { useState } from 'react'
+
 interface Column<T> {
   key: keyof T
   title: string
@@ -1172,6 +1186,7 @@ describe("DataTable Component", () => {
 
 ```typescript
 // components/SearchInput.tsx
+import { useState, useEffect } from 'react'
 import { useDebounce } from "@/hooks/useDebounce"
 
 interface SearchInputProps {
@@ -1336,6 +1351,8 @@ describe("SearchInput Component", () => {
 
 ```typescript
 // components/ErrorBoundary.tsx
+import React from 'react'
+
 interface ErrorBoundaryState {
   hasError: boolean
   error?: Error
@@ -1432,15 +1449,15 @@ describe("ErrorBoundary Component", () => {
 
     expect(screen.getByTestId("error-boundary")).toBeInTheDocument()
 
-    // 点击重置按钮
-    fireEvent.click(screen.getByText("Try again"))
-
-    // 重新渲染不抛错的组件
+    // 先重新渲染不抛错的子组件（rerender 不会重置类组件的错误状态）
     rerender(
       <ErrorBoundary>
         <ThrowError shouldThrow={false} />
       </ErrorBoundary>
     )
+
+    // 再点击重置按钮清除错误状态
+    fireEvent.click(screen.getByText("Try again"))
 
     expect(screen.queryByTestId("error-boundary")).not.toBeInTheDocument()
     expect(screen.getByText("No error")).toBeInTheDocument()
@@ -1907,26 +1924,36 @@ export const generateTestReport = async (): Promise<TestMetrics> => {
 **组件性能测试**:
 ```typescript
 // __tests__/performance/ComponentPerformance.test.tsx
-import { render, measurePerformance } from "@testing-library/react"
+// 注意：@testing-library/react 没有 measurePerformance 导出，用 performance.now 自行计时
+import { render, act } from "@testing-library/react"
 import { HeavyComponent } from "@/components/HeavyComponent"
 
+// 数据集提升到 describe 顶层，供各用例共享
+const largeDataSet = Array.from({ length: 10000 }, (_, i) => ({
+  id: i,
+  name: `Item ${i}`,
+}))
+
+const measureRenderPerformance = (ui: React.ReactElement) => {
+  const start = performance.now()
+  act(() => {
+    render(ui)
+  })
+  return performance.now() - start
+}
+
 describe("Component Performance", () => {
-  it("renders within acceptable time", async () => {
-    const { duration } = await measurePerformance(() =>
-      render(<HeavyComponent data={largeDataSet} />)
+  it("renders within acceptable time", () => {
+    const duration = measureRenderPerformance(
+      <HeavyComponent data={largeDataSet} />
     )
 
     expect(duration).toBeLessThan(100) // 100ms阈值
   })
 
-  it("handles large datasets efficiently", async () => {
-    const largeDataSet = Array.from({ length: 10000 }, (_, i) => ({
-      id: i,
-      name: `Item ${i}`,
-    }))
-
-    const { duration } = await measurePerformance(() =>
-      render(<HeavyComponent data={largeDataSet} />)
+  it("handles large datasets efficiently", () => {
+    const duration = measureRenderPerformance(
+      <HeavyComponent data={largeDataSet} />
     )
 
     expect(duration).toBeLessThan(500) // 大数据集阈值

@@ -246,8 +246,9 @@ export interface FormProps<T extends z.ZodSchema> extends Omit<FormConfig, "fiel
   error?: string
 }
 
-// 高级表单字段配置
-export interface AdvancedFormField extends FormField {
+// 高级表单字段配置（Omit 后重写 type，否则收窄失败：
+// 接口继承要求子属性类型可赋给父属性类型，扩宽联合必须先剔除原字段）
+export interface AdvancedFormField extends Omit<FormField, "type"> {
   type: FormField["type"] | "select" | "textarea" | "checkbox" | "radio" | "date" | "file" | "range" | "custom"
   options?: Array<{ label: string; value: any; disabled?: boolean }>
   multiple?: boolean
@@ -645,10 +646,10 @@ export function useFormPersistence<T extends z.ZodSchema>(
 }
 
 // 防抖函数
-function debounce<T extends (...args: any[]) => (
+function debounce<T extends (...args: any[]) => void>(
   callback: (...args: T[]) => void,
   delay: number
-) => {
+) {
   let timeoutId: NodeJS.Timeout
   return (...args: T[]) => {
     clearTimeout(timeoutId)

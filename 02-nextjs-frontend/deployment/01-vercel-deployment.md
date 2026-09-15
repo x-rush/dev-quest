@@ -548,6 +548,7 @@ export default function RootLayout({
 
 ```typescript
 // 动态导入组件
+import { useState } from "react"
 import dynamic from "next/dynamic"
 
 // 懒加载重型组件
@@ -562,13 +563,13 @@ const AdminPanel = dynamic(
   { ssr: false }
 )
 
-// 带错误处理的动态导入
+// 带错误处理的动态导入：next/dynamic 不支持 onError 选项，
+// 加载失败需用 React ErrorBoundary 包裹动态组件处理
 const ChartComponent = dynamic(
   () => import("@/components/ChartComponent"),
   {
     loading: () => <div>加载图表...</div>,
     ssr: false,
-    onError: () => <div>加载失败</div>,
   }
 )
 
