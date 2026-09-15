@@ -59,7 +59,7 @@ import { createSyncStoragePersister } from '@tanstack/query-sync-storage-persist
 const persister = createSyncStoragePersister({
   storage: window.localStorage,
   key: 'app-query-cache',
-})
+});
 
 <PersistQueryClientProvider
   client={queryClient}

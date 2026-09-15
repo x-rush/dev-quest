@@ -62,7 +62,7 @@ const features = tableFeatures({
   columnVisibilityFeature,                  // 可见性特性：row.getVisibleCells() 需注册本特性
   sortedRowModel: createSortedRowModel(),   // 排序逻辑，不是 UI
 })
-const table = useTable({ data, columns, features })
+const table = useTable({ data, columns, features });
 
 // 渲染层完全由你掌控——可以是 <table>，也可以是 <div> 网格
 <table className="w-full border-collapse">

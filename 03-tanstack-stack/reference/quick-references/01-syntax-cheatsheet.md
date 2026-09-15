@@ -92,7 +92,7 @@ createRouter({ routeTree, defaultPreload: 'intent', context })
       activeProps={{ className: 'active' }} preload="intent" />
 <Outlet />                            // 子路由出口
 throw redirect({ to: '/login' })      // beforeLoad 守卫
-<Redirect to="..." />                 // 组件内跳转
+<Navigate to="..." />                 // 组件内跳转
 
 Route.useParams() / Route.useSearch() / Route.useLoaderData() / Route.useNavigate()
 useNavigate()({ to, params, search }) / useRouter() / useBlocker()

@@ -24,7 +24,7 @@ TanStack Table v9 的三个 API 层：`ColumnDef`（列声明）、`useTable` + 
 
 ### 语法
 
-```ts
+```tsx
 type Person = { id: number; name: string; age: number; tags: string[] }
 
 const columnHelper = createColumnHelper<CoreFeatures, Person>()  // v9 双泛型：特性集 + 数据类型（basics/04 有完整写法）
@@ -38,7 +38,7 @@ const columns = columnHelper.columns([
     cell: (info) => info.getValue<string>(), // 自定义单元格渲染
     footer: '合计',
     enableSorting: true,              // 是否可排序
-    enableFiltering: true,            // 是否可筛选
+    enableColumnFilter: true,         // 是否可筛选（v9 键名，列级过滤开关）
     enableHiding: false,              // 是否可隐藏
     filterFn: (row, id, value) => row.getValue<string>(id).includes(value), // v9 传函数更省事；字符串名（'includesString'）需先在 features 的 filterFns 槽位注册
     sortFn: 'basic',                  // v9 更名：v8 的 sortingFn → sortFn（字符串名同理需经 sortFns 槽位注册）

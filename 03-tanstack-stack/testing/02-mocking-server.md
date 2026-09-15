@@ -134,7 +134,7 @@ import { handlers } from './handlers'
 export const worker = setupWorker(...handlers)
 ```
 
-```ts
+```tsx
 // src/main.tsx —— 仅在 mock 模式启用
 async function enableMocking() {
   if (import.meta.env.VITE_ENABLE_MOCK !== 'true') return

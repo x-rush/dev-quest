@@ -11,7 +11,7 @@ Router 的 UI 挂载点分两层：`<Outlet />` 渲染下一层匹配到的子�
 ```tsx
 // 路由级
 createRootRoute({
-  component: () => (<nav /><Outlet />),  // 不渲染 Outlet 子路由不出现
+  component: () => (<><nav /><Outlet /></>),  // 不渲染 Outlet 子路由不出现
   notFoundComponent: NotFound,           // 匹配不到/抛 notFound() 时
   errorComponent: ErrorCard,             // 组件树抛错时（false 可关闭兜底 UI）
 })

@@ -62,7 +62,7 @@ Router 的 `preload` 让导航目标在**用户感知之前**就开始加载 loa
 ### 语法
 
 ```tsx
-const router = createRouter({ routeTree, defaultPreload: 'intent' }) // 全局：hover 即预加载
+const router = createRouter({ routeTree, defaultPreload: 'intent' }); // 全局：hover 即预加载
 <Link to="/posts/$postId" params={{ postId: id }} preload="viewport" /> // 单链接覆盖
 ```
 
