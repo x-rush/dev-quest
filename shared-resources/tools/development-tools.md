@@ -208,9 +208,9 @@ go install golang.org/x/tools/cmd/godoc@latest
 go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
 
 # 推荐IDE配置
-- VS Code + Go插件
-- GoLand (专业IDE)
-- Vim/Neovim + vim-go
+# - VS Code + Go插件
+# - GoLand (专业IDE)
+# - Vim/Neovim + vim-go
 ```
 
 ### Next.js 前端开发工具链
@@ -221,9 +221,9 @@ npm install -g typescript
 npm install -g @typescript-eslint/cli
 
 # 推荐工具
-- Vite (快速构建)
-- PostCSS (CSS处理)
-- Tailwind CSS (样式框架)
+# - Vite (快速构建)
+# - PostCSS (CSS处理)
+# - Tailwind CSS (样式框架)
 ```
 
 ### React Native 移动开发工具链
@@ -232,9 +232,9 @@ npm install -g @typescript-eslint/cli
 npm install -g @react-native-community/cli
 
 # 平台特定工具
-- Android Studio + Android SDK
-- Xcode (macOS)
-- DevEco Studio (鸿蒙开发)
+# - Android Studio + Android SDK
+# - Xcode (macOS)
+# - DevEco Studio (鸿蒙开发)
 ```
 
 ## 💡 工具选择和使用建议
