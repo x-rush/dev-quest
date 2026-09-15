@@ -24,7 +24,7 @@ RN 样式模型 = **CSS 子集 + 无级联**，由 Yoga 布局引擎在 C++ 层�
 
 ## 📖 语法/签名
 
-```ts
+```tsx
 // StyleSheet.create：类型检查 + 常量化（对象字面量 key 即样式名）
 const styles = StyleSheet.create({
   card: { flexDirection: 'row', padding: 12, gap: 8 },   // 默认主轴是纵向，显式改横向

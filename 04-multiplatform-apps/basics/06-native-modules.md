@@ -96,7 +96,12 @@ RN iOS 模块以 ObjC 文件承载（Swift 需桥接文件，初学建议先 Obj
 #import <React/RCTBridgeModule.h>
 #import <UIKit/UIKit.h>
 
-@interface RCT_EXTERN_MODULE(DeviceModule, NSObject)
+@interface DeviceModule : NSObject <RCTBridgeModule>
+@end
+
+@implementation DeviceModule
+
+RCT_EXPORT_MODULE(); // 不传名字时，模块名默认取类名（即 DeviceModule）
 
 RCT_EXPORT_METHOD(getDeviceName:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject)

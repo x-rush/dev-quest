@@ -37,7 +37,8 @@ graph TD
 ## 📊 技术栈架构
 
 ### 核心技术栈 (基于已有基础)
-```javascript
+```json
+// 依赖版本示意（非完整 package.json，不可直接编译/安装）
 // React Native 核心 (2025年推荐版本)
 "react": "^18.2.0",
 "react-native": "^0.73.0",
@@ -61,9 +62,8 @@ graph TD
 "react-native-vector-icons": "^10.0.0",
 "react-native-paper": "^5.11.0",
 
-// 网络请求 (与Go后端集成)
+// 网络请求 (与Go后端集成；RN 直接使用官方 axios 包)
 "axios": "^1.6.0",
-"@react-native-community/axios": "^1.0.0",
 
 // 原生功能桥接
 "react-native-permissions": "^3.10.0",

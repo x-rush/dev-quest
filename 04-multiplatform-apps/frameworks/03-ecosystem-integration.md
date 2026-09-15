@@ -97,7 +97,7 @@ npx expo install expo-image expo-secure-store expo-haptics expo-location
 # 注意：Expo 生态包优先用 expo install（版本与 SDK 对齐），而非 npm install
 ```
 
-```ts
+```tsx
 // zustand store：几行定义一个全局状态
 import { create } from 'zustand';
 
