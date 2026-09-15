@@ -131,7 +131,7 @@ val current by nav.currentBackStackEntryAsState()          // 驱动底部导航
 @Composable fun Input(value: String, onChange: (String) -> Unit, modifier: Modifier = Modifier) { }
 
 // UiState 三态建模
-sealed interface UiState<T> { data object Loading : UiState<T>; data class Ok<T>(val data: List<T>) : UiState<T>; data class Err<T>(val msg: String) : UiState<T> }
+sealed interface UiState<T> { data object Loading : UiState<Nothing>; data class Ok<T>(val data: List<T>) : UiState<T>; data class Err<T>(val msg: String) : UiState<T> }
 
 // 一次性事件（防旋转重放）
 private val _events = MutableSharedFlow<Event>(extraBufferCapacity = 1)

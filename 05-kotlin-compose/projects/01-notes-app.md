@@ -67,7 +67,7 @@ class NotesViewModel(private val dao: NoteDao) : ViewModel() {
     private val queryFlow = MutableStateFlow("")
 
     // 搜索词防抖 300ms，再映射为数据库查询
-    @OptIn(FlowPreview::class)
+    @OptIn(FlowPreview::class, ExperimentalCoroutinesApi::class)
     private val notesFlow = queryFlow
         .debounce(300)
         .flatMapLatest { q -> dao.observeNotes(q).map { list -> list.map { it.toDomain() } } }

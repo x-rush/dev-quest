@@ -79,9 +79,11 @@ suspend fun saveToken(token: String) {
 
 ```xml
 <!-- network_security_config.xml：仅对调试用地址放行明文 -->
-<domain-config cleartextTrafficPermitted="true">
-    <domain includeSubdomains="false">10.0.2.2</domain>
-</domain-config>
+<network-security-config>
+    <domain-config cleartextTrafficPermitted="true">
+        <domain includeSubdomains="false">10.0.2.2</domain>
+    </domain-config>
+</network-security-config>
 ```
 
 ## 3️⃣ 组件暴露面
