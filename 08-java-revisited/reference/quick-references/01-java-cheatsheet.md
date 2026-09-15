@@ -19,7 +19,9 @@
 ## 🔤 字符串
 
 ```java
-var multiline = """...""";                          // 文本块
+var multiline = """
+    第一行
+    """;                                             // 文本块（开定界符 """ 后必须换行，不能单行书写）
 "%s-%d".formatted("id", 1);                          // 格式化
 "a,b,,c".split(",", -1);                             // 保留尾部空串
 " abc ".strip();                                     // Unicode 感知 trim
