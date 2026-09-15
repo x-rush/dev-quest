@@ -112,7 +112,7 @@ function charge(int $cents): void
             throw new InvalidArgumentException('amount must be positive');
         }
         throw new RuntimeException('gateway timeout');
-    } catch (RuntimeException $e) {
+    } catch (Exception $e) {
         // ✅ 关键：previous 保留根因，日志里能看到完整链条
         throw new PaymentFailed('支付失败', 0, $e);
     } finally {

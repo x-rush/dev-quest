@@ -121,10 +121,12 @@ pecl install xdebug
 ```ini
 [xdebug]
 zend_extension=xdebug
-xdebug.mode=debug           # debug=断点调试，develop=错误提示增强
+; debug=断点调试，develop=错误提示增强
+xdebug.mode=debug
 xdebug.start_with_request=yes
 xdebug.client_host=127.0.0.1
-xdebug.client_port=9003     # Xdebug 3 默认端口从 9000 改为 9003
+; Xdebug 3 默认端口从 9000 改为 9003
+xdebug.client_port=9003
 ```
 
 ### 验证

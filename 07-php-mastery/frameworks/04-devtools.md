@@ -96,8 +96,10 @@ Laravel 13 项目推荐同时使用 **Laravel Pint**（自动代码风格修复�
 ```ini
 ; php.ini 片段（Docker/本地通用）
 zend_extension=xdebug
-xdebug.mode=debug          # 调试模式；profile 为性能分析
-xdebug.client_host=host.docker.internal   # Docker 内指向宿主机
+; 调试模式；profile 为性能分析
+xdebug.mode=debug
+; Docker 内指向宿主机
+xdebug.client_host=host.docker.internal
 xdebug.client_port=9003
 xdebug.start_with_request=yes
 ```
