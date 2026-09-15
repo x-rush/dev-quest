@@ -2,6 +2,16 @@
 
 本项目遵循 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/) 格式。
 
+## [2.8.0] - 2026-09-15
+
+### Added
+- **全仓代码块全量机器验证（无抽样）**：4263 个围栏块中 125 个非代码块（text/mermaid/markdown/txt）跳过，其余 **4138 个代码块 100% 取得终态**——L1 语法层（可验证语言全覆盖）→ L2 运行层（自包含块，go/python/php 过安全三道闸实际执行）→ L3 agent 裁决（全部机器失败块 17+1 路并行逐块裁决）。终态矩阵：PASS_L1L2 245 / PASS_L1 2409 / GATED_L2 291 / L2_TIMEOUT 2 / TEACHING 705 / ENV 279 / FALSEPOSITIVE 129 / REAL_FIXED 78。验证管线沉淀入仓 `shared-resources/tools/code-block-verify/`（提取器+主驱动+Go 语法 runner，ts/go 第三方依赖按各模块技术基线 pin 拉取全量验证）；报告与 manifest/results 归档 `refactor-archives/completed/code-block-verification/`
+- 至此"实测覆盖"从抽样背书升级为 **100% 机器验证 + 逐块 agent 裁决**，方法学限制（TSX-as-TS 伪影/kotlin 包装梯盲区/jshell 无桩等）在报告中如实声明
+
+### Fixed
+- **78 处 REAL 真实错误全修复**（全部本机工具链实证：tsc 零错/go run+vet/kotlinc+coroutines 1.11.0/jshell/php 实跑/prisma validate/node --check）：02-nextjs 44（MSW v1 API 过时、App Router 缺 'use client'、Docker --omit=dev 缺 devDeps、虚构 API 等）/ 01-go 10（bufio Split advance=0 死循环、gin 路由写法等）/ 03-tanstack 7（enableColumnFilter 命名等）/ 04-rn 4 / 05-kotlin 3 / 07-php 3 / 10-python 3 / shared-resources 3 / 08-java 1；另含裁决遗漏追加修复 13 处（02373 bing 验证键、03532 @OptIn 等）
+- 06-swift / 09-node 零 REAL；05-kotlin 延续零确认级问题标杆
+
 ## [2.7.0] - 2026-09-14
 
 ### Fixed
