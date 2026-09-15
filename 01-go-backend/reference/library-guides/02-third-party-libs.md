@@ -347,7 +347,7 @@ func main() {
     }
 
     fmt.Println("启动服务器在 :8080")
-    // fasthttp.ListenAndServe(":8080", requestHandler)
+    fasthttp.ListenAndServe(":8080", requestHandler)
 }
 ```
 

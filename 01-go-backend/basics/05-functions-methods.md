@@ -677,11 +677,12 @@ func main() {
         userInput.email,
         ValidateEmail,
         ValidatePhone,
-        userInput.password,
-        ValidatePassword,
     )
 
     fmt.Printf("用户输入验证: %t\n", isValid)
+
+    // 密码单独校验
+    fmt.Printf("密码强度满足要求: %t\n", ValidatePassword(userInput.password))
 }
 ```
 

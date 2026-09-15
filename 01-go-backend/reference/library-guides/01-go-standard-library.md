@@ -386,7 +386,6 @@ import (
     "fmt"
     "os"
     "os/exec"
-    "path/filepath"
 )
 
 func main() {
@@ -493,7 +492,6 @@ import (
     "bytes"
     "fmt"
     "io"
-    "os"
     "strings"
 )
 
@@ -588,6 +586,7 @@ package main
 import (
     "bufio"
     "fmt"
+    "io"
     "os"
     "strings"
 )
@@ -639,7 +638,11 @@ func main() {
                 return i + 1, data[:i], nil
             }
         }
-        return 0, data, nil
+        // 未找到分隔符：数据末尾返回剩余内容，否则请求更多数据
+        if atEOF && len(data) > 0 {
+            return len(data), data, nil
+        }
+        return 0, nil, nil
     })
 
     for customScanner.Scan() {

@@ -412,10 +412,10 @@ func main() {
 ```
 函数开始
 函数执行中...
-main函数继续执行
 函数结束 (3)
 函数结束 (2)
 函数结束 (1)
+main函数继续执行
 ```
 
 ### 2. defer的实际应用
@@ -482,7 +482,6 @@ import (
     "bufio"
     "fmt"
     "os"
-    "strconv"
     "strings"
 )
 
@@ -604,7 +603,6 @@ package main
 
 import (
     "fmt"
-    "strings"
 )
 
 // 过滤函数
