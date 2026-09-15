@@ -105,7 +105,7 @@ user.pop("email", None)        # 弹出并返回，可给默认值
 "name" in user                 # 成员判断（只查键）
 
 # 遍历三件套
-for key in user:                       # 默认遍历键
+for key in user: ...                   # 默认遍历键
 for k, v in user.items(): ...          # 键值对
 for v in user.values(): ...
 

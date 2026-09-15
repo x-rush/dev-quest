@@ -16,13 +16,15 @@ Python 的一切异常都是 `BaseException` 子类的**对象**：捕获即按�
 
 ## 📖 语法 / 签名
 
-```python
-# 继承主干（捕获时写 Exception 及其子类，不裸捕 BaseException）
+```text
+继承主干（捕获时写 Exception 及其子类，不裸捕 BaseException）
 BaseException
 ├── KeyboardInterrupt / SystemExit / GeneratorExit
 └── Exception
     ├── ValueError / KeyError / TypeError / OSError ...
+```
 
+```python
 try:
     risky()
 except (ValueError, KeyError) as e:     # 多类型一组

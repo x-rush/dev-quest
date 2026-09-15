@@ -94,6 +94,7 @@ class Bookmark:
 ```python
 """JSON 文件存储 + 模块异常体系。"""
 import json
+from dataclasses import asdict
 from pathlib import Path
 from .models import Bookmark
 
