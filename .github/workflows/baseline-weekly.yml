@@ -1,0 +1,77 @@
+# 周报：外链健康 + 基线漂移盘点（报告性，不门禁）
+#
+# - lychee 扫全仓 .md 外链：断链只进 summary/artifact，不影响 CI 状态
+#   （外链死活不受本仓控制，仅作维护信号；action 用法以官方 README 为准）
+# - baseline_check.py 批量比对各模块技术基线与 registry 最新版（CI 网络环境 +
+#   GITHUB_TOKEN 提额），输出 DRIFT 报告到 summary；处置走季度基线对齐 ritual
+# - 周日 UTC 02:23 错峰运行（≈北京时间 10:23）
+name: weekly-health-report
+
+on:
+  schedule:
+    - cron: '23 2 * * 0'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  external-links:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: 外链健康检查（lychee，报告不门禁）
+        uses: lycheeverse/lychee-action@v1
+        with:
+          args: >-
+            --no-progress
+            --max-retries 2
+            --exclude '^https://github\.com/.*/(issues|pull)/\d+'
+            --format markdown
+            './**/*.md'
+          output: lychee-report.md
+          fail: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: 汇入 job summary
+        if: always()
+        run: |
+          {
+            echo "## 🔗 外链健康周报"
+            echo
+            if [ -f lychee-report.md ]; then
+              head -100 lychee-report.md
+            else
+              echo "lychee 未产出报告（可能全绿或运行失败，见上方日志）"
+            fi
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: lychee-report
+          path: lychee-report.md
+          if-no-files-found: ignore
+
+  baseline-drift:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: 基线版本漂移比对（baseline-check）
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          {
+            echo "## 📅 基线漂移周报（baseline-check）"
+            echo
+            python3 shared-resources/tools/baseline-check/baseline_check.py
+          } >> "$GITHUB_STEP_SUMMARY"

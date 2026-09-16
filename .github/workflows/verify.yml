@@ -1,0 +1,60 @@
+# 知识库质量门禁：全仓代码块机器验证 + 站内链接检查
+#
+# 方法学说明（与 shared-resources/tools/code-block-verify/README.md 对齐）：
+# - 门禁语义 = 「无新增未裁决失败」：FAIL 块的内容哈希若在 adjudicated-fails.jsonl
+#   （2.8.0 全仓 + 2.10.0 rust 全量裁决）中则放行，新增失败才拦截
+# - kotlin / swift 需本地工具链（kotlinc / swiftc），runner 无工具时自动
+#   SKIP_NOTOOL 移交本地验证，不计失败
+# - ts 族以入仓 ts-projects 脚手架（stubs 通配、无 node_modules）做 tsc 验证，
+#   语义级错误（TS2xxx）属预期噪声，门禁仅拦 TS1xxx 语法错误码
+name: verify
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+concurrency:
+  group: verify-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  code-blocks-and-links:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version: stable
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - name: 安装 protobuf 编译器
+        run: sudo apt-get update && sudo apt-get install -y protobuf-compiler
+
+      - name: 安装 pyyaml
+        run: pip install pyyaml
+
+      - name: 编译 parsego（Go 语法 runner）
+        run: |
+          mkdir -p /tmp/dq-verify/parsego
+          cd shared-resources/tools/code-block-verify/parsego
+          go build -o /tmp/dq-verify/parsego/parsego .
+
+      - name: 提取全仓代码块
+        run: python3 shared-resources/tools/code-block-verify/extract_blocks.py .
+
+      - name: 代码块全量验证（L1 语法 + L2 运行，--strict 门禁）
+        run: python3 shared-resources/tools/code-block-verify/verify.py --strict
+
+      - name: 站内链接检查（0 断链门禁）
+        run: python3 shared-resources/tools/code-block-verify/link_check.py . --strict

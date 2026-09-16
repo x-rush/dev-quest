@@ -4,3 +4,4 @@ results.jsonl
 results.jsonl.sample
 l3_worklist.jsonl
 __pycache__/
+ts-projects/*/src/

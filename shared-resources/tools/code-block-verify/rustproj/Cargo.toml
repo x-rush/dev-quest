@@ -1,0 +1,26 @@
+# rust L2 第三方依赖工程脚手架：verify.py 按需自举到 /tmp/dq-verify/rustproj，
+# 第三方 rust 代码块落 v_b{id} 子包做 cargo build 编译级验证。
+# 版本 pin 自 11-rust-cross-platform/README.md 技术基线（2026-09-16 实核）。
+# tauri 排除：需系统 webkit2gtk，相关块仍走 ENV 裁决。
+[workspace]
+resolver = "2"
+members = ["v_*"]
+
+[workspace.dependencies]
+tokio = { version = "1.53", features = ["full"] }
+axum = { version = "0.8", features = ["ws"] }
+serde = { version = "1.0.229", features = ["derive"] }
+serde_json = "1"
+anyhow = "1"
+thiserror = "2"
+clap = { version = "4.6", features = ["derive"] }
+reqwest = { version = "0.13", features = ["json"] }
+sqlx = { version = "0.9", features = ["runtime-tokio", "sqlite", "macros"] }
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+tower-http = { version = "0.7", features = ["fs", "trace"] }
+tokio-stream = "0.1"
+jsonwebtoken = "11"
+chrono = "0.4"
+criterion = "0.7"
+wasm-bindgen = "0.2"

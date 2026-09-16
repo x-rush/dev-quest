@@ -107,6 +107,28 @@ def run(cmd, timeout=60, cwd=None, stdin_text=None, env=None):
         return 127, "tool-not-found: " + cmd[0]
 
 
+def tool_availability():
+    """环境工具探测：CI/新环境缺工具链的语言标 SKIP_NOTOOL 而非 FAIL。"""
+    try:
+        import yaml as _yaml  # noqa: F401
+        yaml_ok = True
+    except ImportError:
+        yaml_ok = False
+    return {
+        "go": os.path.exists(PARSEGO) and shutil.which("go"),
+        "php": shutil.which("php"),
+        "bash": shutil.which("bash"),
+        "kotlin": shutil.which("kotlinc"),
+        "swift": os.path.exists(SWIFTC),
+        "java": shutil.which("jshell"),
+        "rust_l1": shutil.which("rustfmt"),
+        "rust_l2": shutil.which("rustc"),
+        "yaml": yaml_ok,
+        "protobuf": shutil.which("protoc"),
+        "ts": shutil.which("npx"),
+    }
+
+
 # ---------------- L1 ----------------
 
 def verify_go_l1(recs):
@@ -338,6 +360,15 @@ def verify_ts_l1(recs, results, log):
         groups.setdefault(proj, []).append(b)
     for proj, items in sorted(groups.items()):
         proj_dir = os.path.join(WORK, proj)
+        if not os.path.exists(os.path.join(proj_dir, "tsconfig.json")):
+            # 回退到入仓脚手架（无 node_modules，stubs 通配降级为语法级验证）
+            proj_dir = os.path.join(HERE, "ts-projects", proj)
+        if not os.path.exists(os.path.join(proj_dir, "tsconfig.json")):
+            log(f"ts {proj}: 无 tsconfig，{len(items)} 块 SKIP_NOTOOL")
+            for b in items:
+                results[b["id"]]["l1"] = {"status": "SKIP_NOTOOL",
+                                          "detail": f"缺 tsc 项目 {proj}"}
+            continue
         for i in range(0, len(items), 60):
             batch = items[i:i + 60]
             src_dir = os.path.join(proj_dir, "src")
@@ -384,6 +415,8 @@ def verify_ts_l1(recs, results, log):
                     results[b["id"]]["l1"] = {"status": "PASS", "detail": ""}
             log(f"ts {proj} batch {i//60+1}: rc={rc}, {len(errs)}/{len(batch)} 块有错")
         shutil.rmtree(src_dir, ignore_errors=True)
+        if proj_dir.startswith(HERE):
+            shutil.rmtree(os.path.join(proj_dir, "src"), ignore_errors=True)
 
 
 # ---------------- L2 ----------------
@@ -528,30 +561,83 @@ def verify_rust_l1(recs, results):
             results[futs[fu]["id"]]["l1"] = fu.result()
 
 
-def verify_rust_l2(recs, results):
-    """rust L2：自包含块（有 fn main 且仅 std/core/alloc/crate 内部 use）编译并运行。
-    第三方依赖块跳过（编译失败演示块会 FAIL，交 L3 按文档标注裁决）。"""
+RUSTPROJ_EXCLUDE = {"tauri", "wry", "tao"}  # 需系统 webkit2gtk，无法沙箱编译
+
+# rustproj 依赖 pin：与入仓脚手架 rustproj/Cargo.toml [workspace.dependencies] 一致
+RUSTPROJ_DEPS = {
+    "tokio": "tokio", "axum": "axum", "serde": "serde", "serde_json": "serde_json",
+    "anyhow": "anyhow", "thiserror": "thiserror", "clap": "clap",
+    "reqwest": "reqwest", "sqlx": "sqlx", "tracing": "tracing",
+    "tracing_subscriber": "tracing-subscriber", "tower_http": "tower-http",
+    "tokio_stream": "tokio-stream", "jsonwebtoken": "jsonwebtoken",
+    "chrono": "chrono", "criterion": "criterion", "wasm_bindgen": "wasm-bindgen",
+}
+
+
+def _rust_third_crates(src):
+    """返回块引用的第三方 crate use 名列表（attribute/extern crate 已折算）。"""
+    third = []
+    for m in re.finditer(r"^\s*(?:pub\s+)?use\s+([\w:]+)::", src, re.M):
+        head = m.group(1)
+        if not (head.startswith(RUST_STD_USE_PREFIXES)
+                or head in ("std", "core", "alloc")):
+            third.append(head)
+    for m in re.finditer(r"^#!?\[\s*([a-z_]\w+)::", src, re.M):
+        head = m.group(1)
+        if head not in ("derive", "cfg", "cfg_attr", "allow", "deny",
+                        "warn", "test", "repr", "doc", "macro_export",
+                        "macro_use", "no_mangle", "used", "deprecated",
+                        "inline", "cold", "must_use", "non_exhaustive"):
+            third.append(head)
+    if re.search(r"^\s*extern\s+crate\s+(?!self\b)\w+", src, re.M):
+        third.append("extern crate")
+    return third
+
+
+def _rustproj_dir():
+    """rustproj 工作区：/tmp 有则用，否则自举入仓脚手架。"""
+    proj = os.path.join(WORK, "rustproj")
+    if not os.path.exists(os.path.join(proj, "Cargo.toml")):
+        os.makedirs(proj, exist_ok=True)
+        scaffold = os.path.join(HERE, "rustproj", "Cargo.toml")
+        if os.path.exists(scaffold):
+            shutil.copy(scaffold, os.path.join(proj, "Cargo.toml"))
+    return proj
+
+
+def verify_rust_l2(recs, results, log=print):
+    """rust L2：自包含块（有 fn main 且仅 std 系 use）rustc 编译并运行；
+    第三方依赖块落 rustproj 子包 cargo build 编译级验证（tauri 系排除）。
+    编译失败演示块会 FAIL，交 L3 按文档标注裁决。"""
+    proj = _rustproj_dir()
     for b in recs:
         src = b["content"]
         if not re.search(r"\bfn\s+main\s*\(", src):
             continue
-        third = []
-        for m in re.finditer(r"^\s*(?:pub\s+)?use\s+([\w:]+)::", src, re.M):
-            head = m.group(1)
-            if not (head.startswith(RUST_STD_USE_PREFIXES)
-                    or head in ("std", "core", "alloc")):
-                third.append(head)
-        # attribute 引用的 crate（如 #[tokio::main]）也是第三方依赖信号
-        for m in re.finditer(r"^#!?\[\s*([a-z_]\w+)::", src, re.M):
-            head = m.group(1)
-            if head not in ("derive", "cfg", "cfg_attr", "allow", "deny",
-                            "warn", "test", "repr", "doc", "macro_export",
-                            "macro_use", "no_mangle", "used", "deprecated",
-                            "inline", "cold", "must_use", "non_exhaustive"):
-                third.append(f"#[{head}::…]")
-        if re.search(r"^\s*extern\s+crate\s+(?!self\b)\w+", src, re.M):
-            third.append("extern crate")
+        third = _rust_third_crates(src)
         if third:
+            if any(t in RUSTPROJ_EXCLUDE for t in third):
+                continue
+            dep_names = sorted({RUSTPROJ_DEPS[t] for t in third if t in RUSTPROJ_DEPS})
+            if not dep_names or any(t not in RUSTPROJ_DEPS for t in third):
+                continue  # 依赖超出 pin 清单，维持跳过语义
+            name = f"v_b{b['id']}"
+            d = os.path.join(proj, name)
+            os.makedirs(os.path.join(d, "src"), exist_ok=True)
+            with open(os.path.join(d, "Cargo.toml"), "w", encoding="utf-8") as f:
+                f.write(f'[package]\nname = "{name}"\nversion = "0.1.0"\n'
+                        f'edition = "2024"\npublish = false\n\n[dependencies]\n'
+                        + "".join(f'{dep} = {{ workspace = true }}\n' for dep in dep_names))
+            with open(os.path.join(d, "src", "main.rs"), "w", encoding="utf-8") as f:
+                f.write(src)
+            env = dict(os.environ, CARGO_TARGET_DIR=os.path.join(proj, "target"))
+            rc, err = run(["cargo", "build", "--quiet"], timeout=600, cwd=d, env=env)
+            if rc == 0:
+                results[b["id"]]["l2"] = {"status": "PASS",
+                                          "detail": "rustproj build: " + ",".join(dep_names)}
+                continue
+            results[b["id"]]["l2"] = {"status": "FAIL",
+                                      "detail": "[cargo] " + _rust_first_err(err)[:300]}
             continue
         d = tempfile.mkdtemp(prefix="rustrun_")
         rs = os.path.join(d, "main.rs")
@@ -584,6 +670,7 @@ def main():
         globals()["ROOT"] = root
     langs_filter = None
     sample = 0
+    strict = "--strict" in args
     if "--langs" in args:
         langs_filter = set(args[args.index("--langs") + 1].split(","))
     if "--sample" in args:
@@ -607,23 +694,39 @@ def main():
     for b in recs:
         by_lang.setdefault(b["lang"], []).append(b)
 
+    tools = tool_availability()
+
+    def skip_lang(langs, tool):
+        """环境缺工具：该语言未覆盖的块 L1 标 SKIP_NOTOOL，不计失败。"""
+        n = 0
+        for lang in langs:
+            for b in by_lang.get(lang, []):
+                if results[b["id"]]["l1"] is None:
+                    results[b["id"]]["l1"] = {"status": "SKIP_NOTOOL",
+                                              "detail": f"环境缺工具 {tool}"}
+                    n += 1
+        if n:
+            log(f"{tool} 不可用: {n} 块 SKIP_NOTOOL")
+
     results = {b["id"]: {"id": b["id"], "lang": b["lang"], "module": b["module"],
                          "file": b["file"], "start": b["start"], "end": b["end"],
                          "l1": None, "l2": None} for b in recs}
 
     # L1
-    if "go" in by_lang:
+    if "go" in by_lang and tools["go"]:
         log(f"L1 go: {len(by_lang['go'])}")
         go_res = verify_go_l1(by_lang["go"])
         for k, (ok, e) in go_res.items():
             bid = k[1:-3]  # b{id}.go
             if bid in results:
                 results[bid]["l1"] = {"status": "PASS" if ok else "FAIL", "detail": e}
+    skip_lang(["go"], "go/parsego")
 
     phplike = by_lang.get("php", [])
-    if phplike:
+    if phplike and tools["php"]:
         log(f"L1 php: {len(phplike)}")
         verify_phplike_l1(phplike, results)
+    skip_lang(["php"], "php")
 
     if "python" in by_lang:
         log(f"L1 python: {len(by_lang['python'])}")
@@ -633,35 +736,46 @@ def main():
         log(f"L1 bash: {len(by_lang['bash'])}")
         verify_bash_l1(by_lang["bash"], results)
 
-    if "kotlin" in by_lang:
+    if "kotlin" in by_lang and tools["kotlin"]:
         log(f"L1 kotlin: {len(by_lang['kotlin'])}")
         verify_kotlin_l1(by_lang["kotlin"], results)
+    skip_lang(["kotlin"], "kotlinc")
 
-    if "swift" in by_lang:
+    if "swift" in by_lang and tools["swift"]:
         log(f"L1 swift: {len(by_lang['swift'])}")
         verify_swift_l1(by_lang["swift"], results)
+    skip_lang(["swift"], "swiftc")
 
-    if "java" in by_lang:
+    if "java" in by_lang and tools["java"]:
         log(f"L1 java: {len(by_lang['java'])}")
         verify_java_l1(by_lang["java"], results)
+    skip_lang(["java"], "jshell")
 
-    if "rust" in by_lang:
+    if "rust" in by_lang and tools["rust_l1"]:
         log(f"L1 rust: {len(by_lang['rust'])}")
         verify_rust_l1(by_lang["rust"], results)
+    skip_lang(["rust"], "rustfmt")
 
     datafmt = [b for b in recs if b["lang"] in ("yaml", "json", "jsonc", "json5", "toml")]
-    if datafmt:
+    if datafmt and (tools["yaml"] or any(b["lang"] != "yaml" for b in datafmt)):
         log(f"L1 datafmt: {len(datafmt)}")
         verify_datafmt_l1(datafmt, results)
+    if datafmt and not tools["yaml"]:
+        for b in datafmt:
+            if b["lang"] == "yaml" and results[b["id"]]["l1"] is None:
+                results[b["id"]]["l1"] = {"status": "SKIP_NOTOOL",
+                                          "detail": "环境缺 python yaml 模块"}
 
-    if "protobuf" in by_lang:
+    if "protobuf" in by_lang and tools["protobuf"]:
         log(f"L1 protobuf: {len(by_lang['protobuf'])}")
         verify_protobuf_l1(by_lang["protobuf"], results)
+    skip_lang(["protobuf"], "protoc")
 
     tslangs = [b for b in recs if b["lang"] in TS_LANGS]
-    if tslangs:
+    if tslangs and tools["ts"]:
         log(f"L1 ts族: {len(tslangs)}")
         verify_ts_l1(tslangs, results, log)
+    skip_lang(list(TS_LANGS), "npx/tsc")
 
     # 其余语言 → SKIP_NOTOOL
     handled = {"go", "php", "python", "bash", "kotlin", "swift", "java", "rust",
@@ -675,15 +789,15 @@ def main():
                                           "detail": f"lang={b['lang']} 无机器验证器"}
 
     # L2
-    if "go" in by_lang:
+    if "go" in by_lang and tools["go"]:
         verify_go_l2(by_lang["go"], results, log)
     if "python" in by_lang:
         log("L2 python")
         verify_python_l2(by_lang["python"], results)
-    if "php" in by_lang:
+    if "php" in by_lang and tools["php"]:
         log("L2 php")
         verify_php_l2(by_lang["php"], results)
-    if "rust" in by_lang:
+    if "rust" in by_lang and tools["rust_l2"]:
         log("L2 rust")
         verify_rust_l2(by_lang["rust"], results)
 
@@ -699,6 +813,40 @@ def main():
     log(f"L2 终态: {dict(c2)}")
     log(f"results: {RESULTS}")
     assert len(results) == len(recs), "results 与 manifest 数量不一致"
+
+    if strict:
+        # 门禁：任何 FAIL 块若其内容哈希不在已裁决清单（2.8.0 全仓 + 2.10.0 rust）
+        # 中，即为新增未裁决失败 → 退出码 1。已裁决内容复现 FAIL 不拦
+        # （教学示意/环境缺失/工具伪影此前已 100% 归因）。
+        # ts 族例外：stubs-only 环境（无 node_modules）语义错误（TS2xxx/TS3xxx）
+        # 属预期噪声，仅 TS1xxx 语法错误码计入门禁。
+        allow = set()
+        allowfile = os.path.join(HERE, "adjudicated-fails.jsonl")
+        if os.path.exists(allowfile):
+            with open(allowfile, encoding="utf-8") as f:
+                allow = {json.loads(l)["hash"] for l in f if l.strip()}
+        id2hash = {b["id"]: b.get("hash", "") for b in recs}
+        id2lang = {b["id"]: b["lang"] for b in recs}
+
+        def gate_fail(r):
+            if "FAIL" not in [s["status"] for s in (r["l1"], r["l2"]) if s]:
+                return False
+            if id2hash[r["id"]] in allow:
+                return False
+            if id2lang[r["id"]] in TS_LANGS:
+                det = " ".join(s.get("detail", "") for s in (r["l1"], r["l2"]) if s)
+                return bool(re.search(r"\bTS1\d{3}\b", det))
+            return True
+
+        all_fails = sum(1 for r in results.values()
+                        if "FAIL" in [s["status"] for s in (r["l1"], r["l2"]) if s])
+        new_fails = [r for r in results.values() if gate_fail(r)]
+        log(f"门禁: FAIL 块 {all_fails}，其中新增未裁决 {len(new_fails)}")
+        for r in new_fails[:50]:
+            sts = [s["status"] for s in (r["l1"], r["l2"]) if s]
+            log(f"NEW-FAIL {r['module']}/{r['file']}:{r['start']} (b{r['id']}) {sts}")
+        if new_fails:
+            sys.exit(1)
 
 
 if __name__ == "__main__":
