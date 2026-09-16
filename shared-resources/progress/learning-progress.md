@@ -242,7 +242,7 @@ graph LR
 - [ ] **智能自动化**: AI驱动工具、智能脚本
 
 #### 11. Rust 跨平台开发
-**模块入口**: [11-rust-cross-platform/README.md](../../11-rust-cross-platform/README.md)（含入门/进阶/精通三路径视图，规划中 47 篇）
+**模块入口**: [11-rust-cross-platform/README.md](../../11-rust-cross-platform/README.md)（含入门/进阶/精通三路径视图，47 篇已建成 2026-09）
 - [ ] **Rust 语言基础**: 所有权与借用、trait 与泛型、生命周期、async/.await
 - [ ] **Tauri 2 跨端应用**: 桌面+移动框架、IPC 命令、插件体系、前端集成
 - [ ] **Axum 后端**: Tokio 生态、tower 中间件、SQLx 数据库
@@ -265,6 +265,7 @@ graph LR
 - [ ] 08. Java 知识回顾: ___% (___/___ 项完成)
 - [ ] 09. Node.js 后端探索: ___% (___/___ 项完成)
 - [ ] 10. Python 发现之旅: ___% (___/___ 项完成)
+- [ ] 11. Rust 跨平台开发: ___% (___/___ 项完成)
 ```
 
 ## 📝 学习记录模板

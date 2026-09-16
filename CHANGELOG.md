@@ -2,6 +2,20 @@
 
 本项目遵循 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/) 格式。
 
+## [2.10.0] - 2026-09-16
+
+### Added
+- **11-rust 正文全量建成（47 篇）**：basics 10 / reference 14（language-concepts 8 + framework-essentials 3 + library-guides 3）/ frameworks 7 / projects 5 / testing 3 / deployment 4 / advanced-topics 4，与 README 四象限规划一一对应。版本纪律全程执行：正文只引用模块基线表（Rust 1.98.1 / Tauri 2.11 / Axum 0.8 / Tokio 1.53 / SQLx 0.9 等），基线外库一律不落版本号；关键 API 经 docs.rs / 官方文档核证（Axum 0.8 `{param}` 语法、SQLx 0.9 SqlSafeStr 破坏性变化、Tauri capabilities/updater 配置字段等）
+- **写作期本机实测**：10 路并行写作 agent 对自包含 rust 块 `rustc --edition 2024` 编译运行后才入文（含错误码演示块逐字复核 E0382/E0502/E0038/E0597/E0106 等）；Clap 用真装 4.6 端到端实测、serde/tokio/thiserror/anyhow crates.io 实拉断言级验证；实测纠错入文（edition 2024 `static_mut_refs` 硬错误、`#[should_panic]` 对 Result 风格函数必失败、`tests/common.rs` 会被当测试执行等）
+- **code-block-verify 管线新增 rust 验证器**：L1 rustfmt 解析校验 + `fn main` 包装梯（纯语法层，编译失败演示块不误报）；L2 自包含块编译运行（use/attribute/extern crate 三路第三方探测）。管线用法与环境依赖同步更新 README
+
+### Verified
+- **11-rust 全量代码块机器验证（无抽样，管线当次实跑）**：345 围栏块中 39 非代码（mermaid/text/markdown）+ 6 无标注块目检（均为目录树/错误信息摘录/权限映射表，标注正确）+ dockerfile 2 / sql 1 目检通过；其余 **297 块 100% 取得终态**——L1 295 PASS / 2 FAIL（同函数跨块拆分，拼接后 rustfmt 通过证实，FALSEPOSITIVE）；rust L2 74 PASS / 12 FAIL（7 处为文档明确标注的编译失败演示且错误码吻合，5 处 ENV/拆分裁决，**0 REAL**）；ts 族 17 / bash 49 / toml 26 / json 14 / yaml 4 全部 PASS
+- **链接 0 断链**：模块内 402 条 + 全仓指向 11-rust 链接，新增篇目 10 处文件名/层级断链当日修复复检归零
+
+### Changed
+- 模块 README 四象限状态 ⬜→✅；document-index 11-rust 节改实链形态、根 README/CLAUDE.md 口径更新（11-rust 由"规划中"转建设层）；learning-progress 补第 11 模块完成度项
+
 ## [2.9.0] - 2026-09-16
 
 ### Added

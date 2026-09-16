@@ -20,17 +20,17 @@
 
 **收录判据**（详见 [tech-adoption-checklist](../shared-resources/standards/tech-adoption-checklist.md)）：语言层半衰期 10 年+（edition 系统保证）、Tauri 2 为跨端赛道活跃主流（GitHub ⭐111k 级，2026-09 核实）、Axum/Tokio 为 Rust 后端事实标准。放弃收录的：Actix Web（vs Axum 生态收敛）、Rocket（迭代慢）、WASM 框架（Yew/Leptos 竞争未收敛，仅 advanced 单篇视野）。
 
-## 🗺️ 四象限导览（47 篇规划，建设状态随篇目更新）
+## 🗺️ 四象限导览（47 篇，2026-09-16 全量建成；rust 块经本机 rustc edition 2024 实测）
 
 | 象限 | 目录 | 篇数 | 状态 |
 |------|------|-----:|------|
-| 📖 教程（按序入门） | `basics/` | 10 | ⬜ 未建设 |
-| 📚 字典（全量参考） | `reference/` | 14 | ⬜ 未建设 |
-| 🛠️ 指南（框架生态） | `frameworks/` | 7 | ⬜ 未建设 |
-| 🚀 指南（实战项目） | `projects/` | 5 | ⬜ 未建设 |
-| 🔧 指南（测试工程） | `testing/` | 3 | ⬜ 未建设 |
-| 🔧 指南（部署运维） | `deployment/` | 4 | ⬜ 未建设 |
-| 💡 解释（高级主题） | `advanced-topics/` | 4 | ⬜ 未建设 |
+| 📖 教程（按序入门） | `basics/` | 10 | ✅ 已建成 |
+| 📚 字典（全量参考） | `reference/` | 14 | ✅ 已建成 |
+| 🛠️ 指南（框架生态） | `frameworks/` | 7 | ✅ 已建成 |
+| 🚀 指南（实战项目） | `projects/` | 5 | ✅ 已建成 |
+| 🔧 指南（测试工程） | `testing/` | 3 | ✅ 已建成 |
+| 🔧 指南（部署运维） | `deployment/` | 4 | ✅ 已建成 |
+| 💡 解释（高级主题） | `advanced-topics/` | 4 | ✅ 已建成 |
 
 ### 📖 basics/ 教程（编号即学习顺序）
 

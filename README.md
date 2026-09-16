@@ -139,7 +139,7 @@ dev-quest/
 │   ├── 08-java-revisited/                # Java 知识回顾与现代化
 │   ├── 09-nodejs-backend/                # Node.js 后端开发技术探索
 │   ├── 10-python-discovery/              # Python 发现之旅
-│   └── 11-rust-cross-platform/           # Rust 跨平台开发 (Tauri 2 + Axum，规划中)
+│   └── 11-rust-cross-platform/           # Rust 跨平台开发 (Tauri 2 + Axum)
 │
 ├── 📚 共享资源和工具
 │   ├── standards/                        # 项目规范标准

@@ -12,7 +12,7 @@
 - 🤖 **[05 Kotlin Compose](#05-kotlin-compose)** - Android官方原生开发 (已建设)
 - 🍎 **[06 SwiftUI](#06-swiftui)** - iOS官方原生开发 (已建设)
 - 🐘 **[07-10 技术探索系列](#技术探索系列-07-10)** - PHP/Java/Node.js/Python (已建设·维护冻结)
-- 🦀 **[11 Rust跨平台开发](#11-rust跨平台开发)** - Rust + Tauri 2 + Axum (规划中)
+- 🦀 **[11 Rust跨平台开发](#11-rust跨平台开发)** - Rust + Tauri 2 + Axum
 - 🧠 **[AI 协议层](#ai-协议层)** - MCP 协议精要 + Agent 模式语言 (框架无关)
 - 🧪 **[工程质量工具](#工程质量工具)** - 代码块全量机器验证 (code-block-verify) + 基线漂移检查 (baseline-check)
 
@@ -268,19 +268,19 @@
 
 ---
 
-## 11 Rust跨平台开发
+### 11 Rust跨平台开发
 
-> 模块入口: [11-rust-cross-platform/README.md](../../11-rust-cross-platform/README.md) | 规划中（47 篇规划，未建设）
+> 模块入口: [11-rust-cross-platform/README.md](../../11-rust-cross-platform/README.md) | 已按标准结构建设（47篇）
 
-| 目录 | 象限 | 篇数 | 状态 |
-|------|------|-----:|------|
-| 📖 basics/ | 教程 | 10 | ⬜ |
-| 📚 reference/ | 字典 | 14 | ⬜ |
-| 🏗️ frameworks/ | 操作指南 | 7 | ⬜ |
-| 🚀 projects/ | 操作指南 | 5 | ⬜ |
-| 🧪 testing/ | 操作指南 | 3 | ⬜ |
-| 🚀 deployment/ | 操作指南 | 4 | ⬜ |
-| 🎓 advanced-topics/ | 解释 | 4 | ⬜ |
+| 目录 | 象限 | 篇数 | 入口 |
+|------|------|------|------|
+| 📖 [basics/](../../11-rust-cross-platform/basics/) | 教程 | 10 | [环境搭建](../../11-rust-cross-platform/basics/01-environment-setup.md) |
+| 📚 [reference/](../../11-rust-cross-platform/reference/) | 字典 | 14 | [language-concepts/](../../11-rust-cross-platform/reference/language-concepts/) · [framework-essentials/](../../11-rust-cross-platform/reference/framework-essentials/) · [library-guides/](../../11-rust-cross-platform/reference/library-guides/) |
+| 🏗️ [frameworks/](../../11-rust-cross-platform/frameworks/) | 操作指南 | 7 | [Tauri 2 架构](../../11-rust-cross-platform/frameworks/01-tauri-2-architecture.md) |
+| 🚀 [projects/](../../11-rust-cross-platform/projects/) | 操作指南 | 5 | [CLI 工具](../../11-rust-cross-platform/projects/01-cli-tool.md) |
+| 🧪 [testing/](../../11-rust-cross-platform/testing/) | 操作指南 | 3 | [单元与集成测试](../../11-rust-cross-platform/testing/01-unit-integration-tests.md) |
+| 🚀 [deployment/](../../11-rust-cross-platform/deployment/) | 操作指南 | 4 | [交叉编译 targets](../../11-rust-cross-platform/deployment/01-cross-compilation-targets.md) |
+| 🎓 [advanced-topics/](../../11-rust-cross-platform/advanced-topics/) | 解释 | 4 | [内存布局与性能](../../11-rust-cross-platform/advanced-topics/01-memory-layout-performance.md) |
 
 ---
 
@@ -420,4 +420,4 @@ graph TD
 **最后更新**: 2026年9月
 **维护团队**: Dev Quest Team
 
-> 💡 **提示**: 本索引与实际目录结构对齐，01-10 全部模块已按 Diátaxis 双轴标准建设（basics 教程 + reference 字典 + 工程域 + advanced-topics），11-rust 已立项待建设。建议结合[学习进度](../progress/learning-progress.md)选择合适的模块开始学习！
+> 💡 **提示**: 本索引与实际目录结构对齐，01-11 全部模块已按 Diátaxis 双轴标准建设（basics 教程 + reference 字典 + 工程域 + advanced-topics）。建议结合[学习进度](../progress/learning-progress.md)选择合适的模块开始学习！
