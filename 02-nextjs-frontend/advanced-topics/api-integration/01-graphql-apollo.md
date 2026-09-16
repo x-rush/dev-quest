@@ -4,7 +4,7 @@
 
 > **目标读者**: 具备Next.js基础的高级开发者，需要构建现代API架构的后端工程师和全栈开发者
 
-> **前置知识**: Next.js 16深度掌握、GraphQL基础、Apollo Client、TypeScript 5、API设计、数据库概念
+> **前置知识**: Next.js 16深度掌握、GraphQL基础、Apollo Client、TypeScript 7、API设计、数据库概念
 
 > **预计时长**: 8-12小时
 

@@ -34,3 +34,5 @@ python3 baseline_check.py [--json OUT.json]
 ## 2026-09-16 首跑结论（10 模块 46 行基线）
 
 漂移 5 处：**02-nextjs TypeScript 5.x → 实际 7.0（主版本级）**、01-go Go 1.25 → 1.27.1（官方支持窗口外）、04-rn React 19.2 → 19.3、05-kotlin Compose BOM 2026.08 → 2026.09、06-swift Swift 6.3 → 6.4.0（待 swift.org Linux 工具链确认）。其余 23 行 OK、10 行 NOTE（人工）、8 行当时限额未查完（第 2 轮已证 Spring 全家桶 7.x/Hibernate 7.4/JUnit 6 均为最新）。漂移处置不在本工具范围，由基线对齐 ritual 决策。
+
+**2026-09-16 漂移处置结果**：TS 7.0.2（npm/GitHub Releases 实核，Go 原生编译器 GA）与 Go 1.27.1（go.dev/dl 实核）已升级基线并同步散文引用；Compose BOM 2026.09.00（Google Maven 实核）、Swift 6.4.0（swift.org API 实核，Linux 工具链可用）已升级基线，模块正文注明"内容基于 6.3 编写仍成立"；04-rn React 判定为**依赖锁版本**（随 Expo SDK 57/RN 0.86 锁 19.2.3），不改版本、加注解待 SDK 58 一并刷新。

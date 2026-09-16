@@ -7,10 +7,11 @@
 ### Added
 - **第 11 模块立项：Rust 跨平台开发**（`11-rust-cross-platform/`）：以 Rust 全量参考为根基、Tauri 2 跨端应用为旗舰方向、Axum 后端为辅线；47 篇四象限规划（basics 10 / reference 14 / frameworks 7 / projects 5 / testing 3 / deployment 4 / advanced 4，全部未建设）。技术基线 9 行经 crates.io API 与 rust-lang 官方 stable channel 实核（Rust 1.98.1 / Tauri 2.11 / Tokio 1.53 / Axum 0.8 等，2026-09-16）
 - **AI 协议层沉淀**（`shared-resources/ai-protocols/`）：AI/LLM 应用层框架竞争未收敛，只收协议与模式层、不收框架教程——01 MCP 协议精要（2026-07-28 规范实核：无状态自包含请求、MRTR、Roots 弃用、官方扩展体系）+ 02 Agent 模式语言（7 核心模式 + 跨框架不变量）
-- **baseline-check 基线版本漂移检查工具**（`shared-resources/tools/baseline-check/`）：解析各模块 README「技术基线」区块批量比对 registry 最新版（go proxy / GitHub API / npm / PyPI / crates.io / Google Maven），输出 OK/DRIFT/UNKNOWN/NOTE 报告；2026-09-16 首跑 10 模块 46 行，漂移 5 处（02-nextjs TS 5.x→7.0 主版本级等，处置待基线对齐 ritual 决策）
+- **baseline-check 基线版本漂移检查工具**（`shared-resources/tools/baseline-check/`）：解析各模块 README「技术基线」区块批量比对 registry 最新版（go proxy / GitHub API / npm / PyPI / crates.io / Google Maven），输出 OK/DRIFT/UNKNOWN/NOTE 报告；2026-09-16 首跑 10 模块 46 行，漂移 5 处并**当日完成处置**（见 Changed）
 - **技术收录 Checklist**（`shared-resources/standards/tech-adoption-checklist.md`）：收录判据清单（半衰期 / registry 与 GitHub 实核 / 模块关系 / 协议优先于框架 / 维护成本）+ 拒绝项记录表（Actix / Rocket / Yew-Leptos / AI SDK 教程）
 
 ### Changed
+- **基线漂移 5 处全部处置**（registry/官方源当日实核）：02-nextjs TypeScript 5.x→**7.0**（npm + GitHub Releases 实核：Go 原生编译器 GA，2026-08-20；散文引用 41 处同步 7，"新特性"节标题改版本中立——const 断言/satisfies 等实为 4.9+ 特性不可绑 7）；01-go 1.25→**1.27.1**（go.dev/dl 实核，1.25/1.26 已出支持窗口；"1.25 引入"类事实陈述与实测记录保留）；05-kotlin Compose BOM→**2026.09.00**（Google Maven 实核）；06-swift→**6.4.0**（swift.org API 实核 2026-09-14，Linux 工具链可用，正文注明"基于 6.3 编写仍成立"）；04-rn React 判定**依赖锁版本**不升级（随 Expo SDK 57 锁 19.2.3，加注解待 SDK 58 一并刷新）
 - **模式不变量层工程化**：`documentation-guidelines.md` 新增「模式不变量小结」规范条款（框架/版本绑定类文档文末必附 3-5 条框架无关架构原则，版本升级只核 API 层）；02-nextjs `reference/framework-patterns/` 全部 14 篇首批落地
 - **维护强度分层**：`module-development-standards.md` 新增冻结策略——01-06 + 11 为建设层全速建设，07-10 探索系列维护冻结（只修确认级错误，不主动扩展）
 - 根 README / CLAUDE.md / document-index / learning-progress 同步 11 模块口径与 AI 协议层、baseline-check 登记

@@ -10,11 +10,11 @@
 
 ## 🧪 技术基线
 
-> 本模块所有文档的版本基线，核实日期 **2026-09-11**，来源为各项目官方发布页。正文中旧版本引用以本基线为准对齐。
+> 本模块所有文档的版本基线，核实日期 **2026-09-16**，来源为各项目官方发布页。正文中旧版本引用以本基线为准对齐。
 
 | 技术 | 版本 | 核实日期 | 来源 |
 |------|------|---------|------|
-| Go | 1.25（补丁至 1.25.14；注：Go 1.26 已于 2026-02-10 发布，1.25 仍在官方支持窗口内，故基线取 1.25） | 2026-09-11 | [go.dev/blog/go1.25](https://go.dev/blog/go1.25) |
+| Go | 1.27（1.27.1；go.dev/dl 官方版本 JSON 实核，1.25/1.26 已出官方支持窗口，1.25.x 旧断言以本基线为准对齐） | 2026-09-16 | [go.dev/dl](https://go.dev/dl/) |
 | Gin | 1.12.0（满足 ≥1.10 基线） | 2026-09-11 | [gin-gonic/gin releases](https://github.com/gin-gonic/gin/releases) |
 | GORM | v1.31.2（最新稳定版；v1.30.0 起提供 `gorm.G[T]` 泛型 API） | 2026-09-11 | [pkg.go.dev/gorm.io/gorm](https://pkg.go.dev/gorm.io/gorm) |
 | MongoDB Go Driver | v2.9.1（最新稳定版；v1 路径已进入维护模式，新项目使用 `/v2`） | 2026-09-11 | [mongodb/mongo-go-driver releases](https://github.com/mongodb/mongo-go-driver/releases) |
@@ -184,7 +184,7 @@
 ## 🛠️ 技术栈概览
 
 ### 核心技术（版本基线 2026-09-11，详见上方「技术基线」区块）
-- **语言**: Go 1.25+
+- **语言**: Go 1.27+
 - **Web框架**: Gin 1.12+ (HTTP路由、中间件、模板引擎)
 - **ORM**: GORM 1.31+ (MySQL, PostgreSQL, SQLite)
 - **缓存**: Redis (go-redis/v9 客户端)

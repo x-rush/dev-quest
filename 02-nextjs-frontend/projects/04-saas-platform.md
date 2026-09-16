@@ -12,7 +12,7 @@
 | **模块** | `02-nextjs-frontend` |
 | **分类** | `projects` |
 | **难度** | ⭐⭐⭐ (精通)|
-| **标签** | `Next.js 16` `React 19` `TypeScript 5` `SaaS` `多租户` `订阅计费` `Stripe Billing` |
+| **标签** | `Next.js 16` `React 19` `TypeScript 7` `SaaS` `多租户` `订阅计费` `Stripe Billing` |
 | **更新日期** | `2026年9月` |
 | **作者** | Dev Quest Team |
 | **状态** | ✅ 已完成 |
@@ -46,7 +46,7 @@ SaaS（Software as a Service）是现代软件行业的重要商业模式，需�
 
 ### 技术栈
 - **前端框架**: Next.js 16 + React 19
-- **开发语言**: TypeScript 5
+- **开发语言**: TypeScript 7
 - **UI组件库**: Shadcn/ui + Tailwind CSS
 - **状态管理**: Zustand + React Query
 - **数据库**: PostgreSQL + Prisma ORM

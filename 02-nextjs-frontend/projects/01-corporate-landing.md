@@ -12,7 +12,7 @@
 | **模块** | `02-nextjs-frontend` |
 | **分类** | `projects` |
 | **难度** | ⭐⭐⭐ (精通)|
-| **标签** | `Next.js 16` `React 19` `TypeScript 5` `企业级应用` `SEO优化` |
+| **标签** | `Next.js 16` `React 19` `TypeScript 7` `企业级应用` `SEO优化` |
 | **更新日期** | `2026年9月` |
 | **作者** | Dev Quest Team |
 | **状态** | ✅ 已完成 |
@@ -42,7 +42,7 @@
 
 ### 技术栈
 - **前端框架**: Next.js 16 + React 19
-- **开发语言**: TypeScript 5
+- **开发语言**: TypeScript 7
 - **样式方案**: Tailwind CSS + CSS Modules
 - **状态管理**: Zustand (轻量级状态管理)
 - **内容管理**: Strapi Headless CMS
@@ -88,7 +88,7 @@ corporate-landing/
 
 ### 技术选型理由
 1. **Next.js 16**: 最新的App Router提供更好的性能和开发体验
-2. **TypeScript 5**: 类型安全和更好的开发工具支持
+2. **TypeScript 7**: 类型安全和更好的开发工具支持
 3. **Tailwind CSS**: 快速响应式设计和维护性
 4. **Strapi**: 灵活的内容管理和API生成
 5. **Zustand**: 轻量级状态管理，避免过度复杂

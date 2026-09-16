@@ -4,7 +4,7 @@
 
 > **目标读者**: 具备React基础的中高级开发者，需要掌握React 19新特性和Next.js深度集成的技术架构师
 
-> **前置知识**: React基础、Next.js 16基础、TypeScript 5、异步编程、现代Web性能优化
+> **前置知识**: React基础、Next.js 16基础、TypeScript 7、异步编程、现代Web性能优化
 
 > **预计时长**: 10-12小时
 

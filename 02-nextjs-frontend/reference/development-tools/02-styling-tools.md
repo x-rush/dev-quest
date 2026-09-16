@@ -4,7 +4,7 @@
 
 > **目标读者**: 具备基础CSS知识的前端开发者，需要掌握Next.js 16现代样式工具链的UI/UX工程师
 
-> **前置知识**: Next.js 16基础、TypeScript 5、CSS3、响应式设计基础、JavaScript ES6+
+> **前置知识**: Next.js 16基础、TypeScript 7、CSS3、响应式设计基础、JavaScript ES6+
 
 > **预计时长**: 6-8小时
 

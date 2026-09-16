@@ -2,16 +2,16 @@
 
 > **文档简介**: 05-kotlin-compose 模块总览——面向有 Go 后端与现代前端经验的学习者的 Android 原生开发完整学习路径
 >
-> **技术栈基线**: Kotlin 2.4（K2 编译器）· Jetpack Compose（BOM 2026.08.00）+ Material 3 · Android Studio（Quail 或更新）· Gradle Kotlin DSL——具体版本见下方「技术基线」
+> **技术栈基线**: Kotlin 2.4（K2 编译器）· Jetpack Compose（BOM 2026.09.00）+ Material 3 · Android Studio（Quail 或更新）· Gradle Kotlin DSL——具体版本见下方「技术基线」
 >
 > **更新日期**: 2026年9月
 
-## 📐 技术基线（核实日期 2026-09-11）
+## 📐 技术基线（核实日期 2026-09-16）
 
 | 技术 | 当前稳定版本 | 说明 |
 |------|------------|------|
 | **Kotlin** | 2.4（2.4.0 于 2026-06-03 发布，最新补丁 2.4.20） | K2 编译器唯一引擎，已移除 K1 与 `-language-version=1.9`；上下文参数、显式后备字段转正 |
-| **Jetpack Compose BOM** | 2026.08.00 | 2026 年 8 月版，核心库（Animation/Foundation/Runtime/UI）统一 1.12.x |
+| **Jetpack Compose BOM** | 2026.09.00 | 2026 年 9 月版（Google Maven group-index 实核），核心库（Animation/Foundation/Runtime/UI）统一 1.12.x |
 | **Material 3** | 1.4.0（随 BOM 分发） | Compose 依赖一律走 BOM，不单独写版本号 |
 | **AGP** | 9.4.0（2026-09-01） | 要求 Gradle 9.6.0、JDK 17；最高支持 compileSdk 37 |
 | **Android Studio** | Quail（2026.1.4） | 兼容 AGP 7.1–9.4 |

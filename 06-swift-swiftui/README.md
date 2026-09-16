@@ -8,11 +8,11 @@
 
 ## 🧪 技术基线
 
-本模块内容基于以下版本快照编写（核实日期：**2026-09-11**）。工具链请以你本机 `swift --version` 与 Xcode 实际输出为准。
+本模块内容基于以下版本快照编写（核实日期：**2026-09-16**）。工具链请以你本机 `swift --version` 与 Xcode 实际输出为准。
 
 | 技术 | 当前版本 | 核实要点 |
 |------|---------|---------|
-| Swift | **6.3**（补丁至 6.3.3，6.4 开发中） | 2026-03-24 发布；Swift 6 严格并发为默认语言模式；6.3 起附带首个官方 **Swift SDK for Android**（跨 iOS/Android 分享 Swift 代码的里程碑） |
+| Swift | **6.4.0**（2026-09-14 发布，swift.org 官方 API 实核，Linux 工具链可用；本模块文档基于 6.3 编写，6.3 内容仍然成立） | Swift 6 严格并发为默认语言模式；6.3 起附带首个官方 **Swift SDK for Android**（跨 iOS/Android 分享 Swift 代码的里程碑） |
 | Xcode | **26.6** | 内含 Swift 6.3.3 工具链，SDK 覆盖 iOS 26.5 等 |
 | iOS SDK | **iOS 26** | SwiftUI / SwiftData 随 SDK 一体发布，无独立版本号；标志性变化为 Liquid Glass 设计与 `.glassEffect()` 等 SwiftUI 新 API |
 | 构建系统 | Swift Build（开源） | Swift 6.3 起 Swift Build 以 preview 形式集成进 SPM（官方邀请试用反馈，尚未成为默认） |

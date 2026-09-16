@@ -4,7 +4,7 @@
 
 > **目标读者**: 具备React基础的中高级开发者，需要构建复杂状态管理系统的前端架构师
 
-> **前置知识**: Next.js 16基础、React 19状态概念、TypeScript 5、异步编程、RESTful API
+> **前置知识**: Next.js 16基础、React 19状态概念、TypeScript 7、异步编程、RESTful API
 
 > **预计时长**: 8-12小时
 

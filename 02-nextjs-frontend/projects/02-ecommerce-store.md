@@ -12,7 +12,7 @@
 | **模块** | `02-nextjs-frontend` |
 | **分类** | `projects` |
 | **难度** | ⭐⭐⭐ (精通)|
-| **标签** | `Next.js 16` `React 19` `TypeScript 5` `电商系统` `支付集成` `Stripe` |
+| **标签** | `Next.js 16` `React 19` `TypeScript 7` `电商系统` `支付集成` `Stripe` |
 | **更新日期** | `2026年9月` |
 | **作者** | Dev Quest Team |
 | **状态** | ✅ 已完成 |
@@ -43,7 +43,7 @@
 
 ### 技术栈
 - **前端框架**: Next.js 16 + React 19
-- **开发语言**: TypeScript 5
+- **开发语言**: TypeScript 7
 - **状态管理**: Zustand + React Query
 - **UI组件库**: Radix UI + Tailwind CSS
 - **数据库**: PostgreSQL + Prisma ORM

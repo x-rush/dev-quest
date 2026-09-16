@@ -4,7 +4,7 @@
 
 > **目标读者**: 具备Next.js基础的中高级开发者，需要深入掌握Next.js 16企业级应用开发的前端架构师
 
-> **前置知识**: Next.js基础、React 19、TypeScript 5、Web性能优化、部署运维基础
+> **前置知识**: Next.js基础、React 19、TypeScript 7、Web性能优化、部署运维基础
 
 > **预计时长**: 12-16小时
 

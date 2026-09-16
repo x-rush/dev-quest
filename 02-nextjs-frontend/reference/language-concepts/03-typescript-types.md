@@ -1,6 +1,6 @@
 # TypeScript 类型速查手册
 
-> **文档简介**: TypeScript 5核心类型和实用类型快速参考，涵盖基础类型、高级类型、工具类型等
+> **文档简介**: TypeScript 7核心类型和实用类型快速参考，涵盖基础类型、高级类型、工具类型等
 >
 > **目标读者**: TypeScript开发者，需要快速查阅类型语法的开发者
 >
@@ -686,7 +686,7 @@ const errorResponse = createApiResponse(null, false, "Not found")
 
 ---
 
-## 🔧 TypeScript 5 新特性
+## 🔧 现代类型系统特性
 
 ### const 断言
 ```typescript
@@ -803,7 +803,7 @@ function Button({ variant }: { variant: keyof typeof buttonVariants }) {
 ## 🔗 外部资源
 
 ### 官方文档
-- 📖 **[TypeScript 5 官方文档](https://www.typescriptlang.org/docs/)**: 完整TypeScript文档和类型系统说明
+- 📖 **[TypeScript 7 官方文档](https://www.typescriptlang.org/docs/)**: 完整TypeScript文档和类型系统说明
 - 📖 **[React + TypeScript 手册](https://react-typescript-cheatsheet.netlify.app/)**: React TypeScript完整指南
 - 📖 **[TypeScript 深入理解](https://basarat.gitbook.io/typescript/)**: TypeScript深度学习资料
 
@@ -832,7 +832,7 @@ function Button({ variant }: { variant: keyof typeof buttonVariants }) {
 - `Omit<T, K>` - 排除特定属性
 - `Record<K, T>` - 创建对象类型
 
-### TypeScript 5 新特性
+### 现代类型系统特性
 - `const` 断言 - 创建不可变类型
 - `satisfies` 操作符 - 类型验证但不改变类型
 - Template Literal 类型 - 动态字符串类型

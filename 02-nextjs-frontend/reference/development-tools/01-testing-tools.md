@@ -4,7 +4,7 @@
 
 > **目标读者**: 具备基础测试知识的前端开发者，需要掌握Next.js 16现代测试工具链的工程师
 
-> **前置知识**: Next.js 16基础、TypeScript 5、测试基础概念、JavaScript ES6+
+> **前置知识**: Next.js 16基础、TypeScript 7、测试基础概念、JavaScript ES6+
 
 > **预计时长**: 6-8小时
 
