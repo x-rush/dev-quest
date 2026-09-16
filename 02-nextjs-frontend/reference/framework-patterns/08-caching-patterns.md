@@ -70,6 +70,14 @@ export async function createPost(formData: FormData) {
 - `unstable_cache` 官方已标记为**不推荐新项目使用**（16.3 中仍可导入，但生态方向是 `"use cache"` 模型，新代码直接采用后者）；Next.js 16 已**移除** experimental PPR 标志与 `experimental_ppr` 段配置，如需 PPR 语义请关注后续版本的 `"use cache"` 生态
 - 旧的隐式缓存（`fetch` 默认缓存、路由段默认静态）在 16 中不再存在，升级后页面可能"突然变动态"，应主动为热点页面补上 `"use cache"`
 
+## 模式不变量
+
+- **缓存是显式契约而非默认行为**：缓存意图必须逐处显式声明、缓存键由声明处的输入推导，未声明即按请求时执行（对照 `"use cache"` 指令与 `cacheComponents` 开关的 opt-in 模型）。
+- **缓存边界归服务端所有**：缓存声明只存在于服务端语境（Server Components / Server Actions / route handler），客户端只消费缓存结果而不参与失效决策（对照 `"use cache"` 的适用范围限制）。
+- **可缓存的必须可失效**：缓存条目必须携带失效标识才能被精准作废，否则只能等待整体过期（对照 `cacheTag` 配合 `revalidateTag` / `updateTag` 的按需失效）。
+- **进入缓存边界的数据必须可序列化**：参数与返回值以可序列化为前提，非序列化类型无法跨越缓存边界（对照 "use cache" 的序列化陷阱）。
+- **写后读一致性由写入方负责**：写操作完成后的读取一致性由写入动作显式触发失效或刷新，而非被动等待缓存过期（对照 Server Actions 中的 `updateTag` / `refresh`）。
+
 ## 🔗 相关条目
 
 - [异步请求 APIs](./09-async-request-apis.md) —— 动态数据如何以请求时执行方式接入

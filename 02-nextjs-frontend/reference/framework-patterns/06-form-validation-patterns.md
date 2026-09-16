@@ -1037,6 +1037,16 @@ export function createConditionalSchema(
 
 ---
 
+## 模式不变量
+
+- **Schema 是验证规则的唯一事实来源**：字段类型从 schema 推断、错误消息随规则声明、客户端与服务端共享同一套约束——规则只写一遍，组件只负责呈现（对照 Zod 模式验证库与 `useFormState` 的 resolver 接线）。
+- **验证时机是 UX 决策，验证规则不是**：`onBlur`/`onChange`/`onSubmit` 只决定何时反馈，规则本身不随触发时机变化，提交时无条件全量复核（对照 form-config 的 `mode`/`reValidateMode` 与 `useFormSubmit` 的 `trigger`）。
+- **跨字段与条件规则在数据形状层表达**：密码确认、条件必填等约束以 refine/条件 schema 声明在数据结构上，而非散落在组件事件处理里（对照 `userRegistrationSchema` 的 refine 与 `createConditionalSchema`）。
+- **昂贵验证与击键解耦**：异步/远程验证经订阅触发、可退订清理，持久化等高频副作用必须防抖——验证过程不得阻塞输入本身（对照 `useAsyncValidation` 的 watch 订阅与表单持久化的 debounce）。
+- **字段的存在性、值与验证规则三者同生命周期**：动态增删字段时，注册/注销、默认值与 schema 覆盖必须成对同步，不允许出现"有值无字段"或"有字段无规则"的中间态（对照 `useDynamicForm` 的 addField/removeField）。
+
+---
+
 ## 🔄 文档交叉引用
 
 ### 相关文档

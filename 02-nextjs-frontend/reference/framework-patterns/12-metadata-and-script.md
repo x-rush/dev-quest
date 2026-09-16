@@ -124,6 +124,14 @@ export default function Dashboard() {
 - ❌ **在 Server Component 里用 `onLoad`/`onReady`/`onError`**：这三个回调只在客户端组件可用。✅ 放脚本的页面打 `'use client'`，或把 Script 抽进客户端子组件。
 - ❌ **启用 Cache Components 后还在页面级用请求时数据渲染 metadata 却不缓存**：`generateMetadata` 访问 `cookies()`/`headers()`/未缓存数据时会推迟到请求时执行（与组件同一规则）。✅ 静态可预渲染的页面让 `generateMetadata` 保持无动态行为，或对数据用 `'use cache'`（见 [Cache Components 与 "use cache" 指令](./08-caching-patterns.md)）。
 
+## 模式不变量
+
+- **元数据是服务端渲染产物**：进入 HTML 头部的信息必须在服务端生成并写入初始 HTML，因此只能由服务端组件定义（对照 `metadata` / `generateMetadata` 仅 Server Component 可用的约束）。
+- **跨层级配置的合并是显式契约而非直觉继承**：配置从根到叶逐段求值、同名键整体替换，需要继承的字段必须显式展开，而不是假设深层结构自动合并（对照 `openGraph` 浅合并陷阱、`title.template` 只作用于子段）。
+- **第三方脚本的加载时机按其对用户的关键度分档**：外部代码的注入时机分为"先于交互 / 交互后 / 空闲时"三档，排布原则是用户优先于第三方（对照 `beforeInteractive` / `afterInteractive` / `lazyOnload` 三档策略）。
+- **文档级一次性资源与页面级资源作用域不同**：每文档生命周期只执行一次的脚本属于根布局作用域，随页面挂载的脚本属于页面作用域，客户端导航不重跑前者（对照 `beforeInteractive` 必须放根 layout 的陷阱）。
+- **依赖浏览器事件时机的逻辑必须位于水合后的客户端语境**：脚本的加载/就绪/失败回调只能在客户端组件中挂载（对照 `onLoad`/`onReady`/`onError` 仅客户端可用的陷阱）。
+
 ## 🔗 相关条目
 
 - [Cache Components 与 "use cache" 指令](./08-caching-patterns.md) —— `generateMetadata` 的缓存模型
