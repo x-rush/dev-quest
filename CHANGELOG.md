@@ -2,6 +2,22 @@
 
 本项目遵循 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/) 格式。
 
+## [2.11.0] - 2026-09-16
+
+### Added
+- **知识库质量门禁 CI（`.github/workflows/verify.yml`）**：push/PR 自动跑全仓代码块 L1/L2 验证（`verify.py --strict`）+ 站内链接 0 断链（`link_check.py --strict`）。门禁语义 = **无新增未裁决失败**：FAIL 块内容哈希在 `adjudicated-fails.jsonl`（974 条 2.8.0 全仓 + 2.10.0/2.11.0 rust 全量裁决归档）中则放行，新增失败才拦截；kotlin/swift 无 runner 工具链自动 SKIP_NOTOOL 移交本地；verify.py 新增环境工具探测与 `--strict` 退出码
+- **站内链接检查工具 link_check.py**（`shared-resources/tools/code-block-verify/`）：剥围栏代码块/行内代码后提取相对链接（逐行剥反引号防跨行错位拼接假链接）、模板占位符 allowlist、`--strict` 断链退出码 1；首跑全仓 6412 链接，修复 15 处历史断链后 0 断链
+- **ts 项目脚手架入仓（`ts-projects/ts-02/03/04/09`）**：tsconfig + stubs 通配声明（无 node_modules 语法级验证），verify.py 在 /tmp 项目缺失时自动回退，CI 与新环境可复现；stubs-only 环境语义错误（TS2xxx）属预期噪声，门禁仅拦 TS1xxx 语法错误码
+- **rust L2 第三方依赖工程（rustproj）**：workspace 脚手架入仓（`rustproj/Cargo.toml` pin 11-rust 基线：axum 0.8(+ws)/tokio 1.53/serde 1.0.229/sqlx 0.9/clap 4.6/jsonwebtoken 11 等），verify.py 按需自举到 /tmp，第三方块落 `v_b{id}` 子包 `cargo build` 编译级验证（tauri 系需系统 webkit2gtk 维持排除）
+- **周报 workflow（`.github/workflows/baseline-weekly.yml`）**：周日错峰 cron，lychee 外链健康 + baseline-check registry 级版本漂移比对（CI 网络环境 + GITHUB_TOKEN 提额），均报告不门禁
+
+### Verified
+- **rust L2 第三方依赖全量复验（11-rust 188 rust 块，rustproj 实跑）**：L2 78 PASS / 13 FAIL，新增 2 处裁决入册——02753 多文件工程语义（文档明示 `src/main.rs`+`src/users.rs` 分块）、02842 拼接实证 FALSEPOSITIVE（02841 AppState 定义块 + 本块 rustfmt 解析通过；axum `ws` feature 缺失为管线 pin 问题已补）；其余 11 处沿 2.10.0 裁决（7 演示块错误码吻合 + 拆分/预期行为）；2 处 L1 拆分块 02843+02846 拼接 rustfmt 通过实证
+- **全仓 strict 门禁本机彩排**：L1 PASS 2700 / FAIL 809（全部命中裁决哈希）/ SKIP_NOTOOL 937（kotlin/swift/无验证器语言），L2 PASS 236，**新增未裁决 0**，门禁退出码 0
+
+### Fixed
+- 02-nextjs 重构归档 2 文件 15 处历史断链修复（目录层级升一档 + go-backend→01-go-backend 模块改名残留）
+
 ## [2.10.0] - 2026-09-16
 
 ### Added
