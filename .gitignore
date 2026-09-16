@@ -1,3 +1,6 @@
 # Claude Code configuration
 .claude/
 .remember/
+
+# Serena MCP project-local config
+.serena/
