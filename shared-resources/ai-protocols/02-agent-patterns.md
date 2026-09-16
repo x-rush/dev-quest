@@ -54,4 +54,5 @@ Agent = **LLM + 工具循环**：模型决定调用什么工具 → 环境执行
 ## 相关
 
 - [01-mcp-protocol.md](./01-mcp-protocol.md) — 工具接入的协议标准（MCP 2026-07-28 精要）
+- [03-agent-skills.md](./03-agent-skills.md) — 静态规程的开放格式标准（Agent Skills，渐进式披露是上下文工程的协议化）
 - 官方规范与各框架文档见各自上游；本仓不收录框架教程

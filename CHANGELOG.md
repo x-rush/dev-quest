@@ -6,7 +6,7 @@
 
 ### Added
 - **第 11 模块立项：Rust 跨平台开发**（`11-rust-cross-platform/`）：以 Rust 全量参考为根基、Tauri 2 跨端应用为旗舰方向、Axum 后端为辅线；47 篇四象限规划（basics 10 / reference 14 / frameworks 7 / projects 5 / testing 3 / deployment 4 / advanced 4，全部未建设）。技术基线 9 行经 crates.io API 与 rust-lang 官方 stable channel 实核（Rust 1.98.1 / Tauri 2.11 / Tokio 1.53 / Axum 0.8 等，2026-09-16）
-- **AI 协议层沉淀**（`shared-resources/ai-protocols/`）：AI/LLM 应用层框架竞争未收敛，只收协议与模式层、不收框架教程——01 MCP 协议精要（2026-07-28 规范实核：无状态自包含请求、MRTR、Roots 弃用、官方扩展体系）+ 02 Agent 模式语言（7 核心模式 + 跨框架不变量）
+- **AI 协议层沉淀**（`shared-resources/ai-protocols/`）：AI/LLM 应用层框架竞争未收敛，只收协议与模式层、不收框架教程——01 MCP 协议精要（2026-07-28 规范实核：无状态自包含请求、MRTR、Roots 弃用、官方扩展体系）+ 02 Agent 模式语言（7 核心模式 + 跨框架不变量）+ 03 Agent Skills 规范精要（agentskills.io 开放标准实核：SKILL.md 格式、渐进式披露、与 MCP 互补；2025-12-18 开放标准 + 40+ 工具采用实证收录，Claude Code 插件/marketplace 等单一产品机制不收录）
 - **baseline-check 基线版本漂移检查工具**（`shared-resources/tools/baseline-check/`）：解析各模块 README「技术基线」区块批量比对 registry 最新版（go proxy / GitHub API / npm / PyPI / crates.io / Google Maven），输出 OK/DRIFT/UNKNOWN/NOTE 报告；2026-09-16 首跑 10 模块 46 行，漂移 5 处并**当日完成处置**（见 Changed）
 - **技术收录 Checklist**（`shared-resources/standards/tech-adoption-checklist.md`）：收录判据清单（半衰期 / registry 与 GitHub 实核 / 模块关系 / 协议优先于框架 / 维护成本）+ 拒绝项记录表（Actix / Rocket / Yew-Leptos / AI SDK 教程）
 

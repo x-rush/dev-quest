@@ -290,6 +290,7 @@
 
 - **[MCP 协议精要](../ai-protocols/01-mcp-protocol.md)** — Model Context Protocol 2026-07-28 规范要点：无状态请求、MRTR、传输层、安全原则
 - **[Agent 模式语言](../ai-protocols/02-agent-patterns.md)** — 工具循环 / 计划-执行 / 反思 / 编排 / 记忆分层 / 护栏 / 上下文工程，跨框架不变量
+- **[Agent Skills 规范精要](../ai-protocols/03-agent-skills.md)** — 开放格式标准（agentskills.io）：SKILL.md 格式、渐进式披露、与 MCP 互补、安全原则
 
 ---
 

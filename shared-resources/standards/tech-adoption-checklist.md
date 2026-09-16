@@ -51,6 +51,9 @@
 | Rocket | 2026-09 | 迭代慢，6 个月无 release | 2-活跃度红线 |
 | Yew / Leptos（WASM UI） | 2026-09 | 框架战争未收敛 | 1-一票否决 |
 | AI/LLM 应用框架（各 SDK 教程） | 2026-09 | 过时风险高，只收协议/模式层（见 `shared-resources/ai-protocols/`） | 4-形态判断 |
+| Claude Code 插件 / marketplace 机制 | 2026-09 | 单一产品私有机制，非开放标准 | 1-半衰期 / 4-形态判断 |
+
+> **修正记录**：Agent Skills 曾被初步归入"AI/LLM 应用层待观察"，经 2026-09-16 复核——2025-12-18 已发布为开放标准（agentskills.io），40+ 竞品工具采用（OpenAI Codex / Gemini CLI / GitHub Copilot / Cursor 等），满足判据 1/2/4，**收录**为协议层文档 [03-agent-skills.md](../ai-protocols/03-agent-skills.md)。教训：拒绝项也应定期复核，标准的收敛速度可能快于直觉。
 
 ## 四、收录后义务
 
