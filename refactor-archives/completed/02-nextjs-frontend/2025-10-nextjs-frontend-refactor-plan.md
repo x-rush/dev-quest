@@ -4,7 +4,7 @@
 >
 > **现状问题**: 60个文件存在内容分散、技术栈过时、学习路径不清晰等问题
 >
-> **重构原则**: 严格遵循[shared-resources/standards/module-structure-guide.md](../../shared-resources/standards/module-structure-guide.md)标准，建立现代化、高质量的前端学习模块
+> **重构原则**: 严格遵循[shared-resources/standards/module-structure-guide.md](../../../shared-resources/standards/module-structure-guide.md)标准，建立现代化、高质量的前端学习模块
 >
 > **重构日期**: 2025年10月
 
@@ -102,7 +102,7 @@
 ## 📋 执行策略
 
 ### 📁 严格遵循标准结构
-基于Go重构成功经验，完全按照[`module-structure-guide.md`](../../shared-resources/standards/module-structure-guide.md)标准：
+基于Go重构成功经验，完全按照[`module-structure-guide.md`](../../../shared-resources/standards/module-structure-guide.md)标准：
 
 ```
 02-nextjs-frontend/                              # 🏗️ Next.js全栈开发学习模块
@@ -435,13 +435,13 @@
 ## 🔄 参考资源
 
 ### 标准文档
-- [`../../shared-resources/standards/module-structure-guide.md`](../../shared-resources/standards/module-structure-guide.md) - 模块结构设计指南
-- [`../../shared-resources/standards/module-development-standards.md`](../../shared-resources/standards/module-development-standards.md) - 模块开发标准
-- [`../../shared-resources/templates/document-template.md`](../../shared-resources/templates/document-template.md) - 文档模板标准
+- [`../../shared-resources/standards/module-structure-guide.md`](../../../shared-resources/standards/module-structure-guide.md) - 模块结构设计指南
+- [`../../shared-resources/standards/module-development-standards.md`](../../../shared-resources/standards/module-development-standards.md) - 模块开发标准
+- [`../../shared-resources/templates/document-template.md`](../../../shared-resources/templates/document-template.md) - 文档模板标准
 
 ### 成功案例
-- [`../completed/go-backend/2025-10-go-backend-refactor-plan.md`](../completed/go-backend/2025-10-go-backend-refactor-plan.md) - Go Backend重构计划
-- [`../completed/go-backend/2025-10-go-backend-refactor-log.md`](../completed/go-backend/2025-10-go-backend-refactor-log.md) - Go重构执行日志
+- [`../completed/go-backend/2025-10-go-backend-refactor-plan.md`](../01-go-backend/2025-10-go-backend-refactor-plan.md) - Go Backend重构计划
+- [`../completed/go-backend/2025-10-go-backend-refactor-log.md`](../01-go-backend/2025-10-go-backend-refactor-log.md) - Go重构执行日志
 
 ### 技术文档
 - [Next.js 15官方文档](https://nextjs.org/docs)
