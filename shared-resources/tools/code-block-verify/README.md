@@ -15,7 +15,7 @@
 
 ## 环境依赖
 
-- 本机工具链：go / node+tsc / python3 / php / kotlinc / swiftc（完整路径）/ jshell (JDK 21) / protoc
+- 本机工具链：go / node+tsc / python3 / php / kotlinc / swiftc（完整路径）/ jshell (JDK 21) / rustc + rustfmt / protoc
 - `/tmp/dq-verify/` 下（验证工作区，不入仓）：
   - `parsego/parsego` — 由 `parsego/main.go` 编译（`go build -o parsego .`）
   - `ts-02/ ts-03/ ts-04/ ts-09/` — 四个 tsc 项目，依赖版本按各模块 README 技术基线 pin（02-nextjs / 03-tanstack / 04-rn / 09-nodejs + 其余模块），`tsconfig`：`strict:false + skipLibCheck + jsx:react-jsx + moduleResolution:bundler`，include `src/**`，`stubs.d.ts` 提供 `@/*` 通配
@@ -40,11 +40,12 @@ cd parsego && go build -o /tmp/dq-verify/parsego/parsego .
 
 ## 层级与安全边界
 
-- **L1 语法层**（可验证语言 100%）：go（parsego 包装梯）/ ts 族（tsc 分项目分批）/ php（`php -l`，无 `<?php` 补前缀）/ python（`ast.parse`）/ kotlin（kotlinc 包装梯：import 保留+其余包进 `fun _s(){}`）/ swift（`swiftc -swift-version 6 -parse`，对齐仓库 Swift 6 基线，不做 sema）/ java（jshell stdin，剥 package 行）/ bash（**仅 `bash -n`，绝不执行**）/ yaml / json（首行 `//` 注释惯例容忍：纯解析失败时按 jsonc 剥注释重试）/ jsonc（剥注释）/ toml / protobuf（protoc）
+- **L1 语法层**（可验证语言 100%）：go（parsego 包装梯）/ ts 族（tsc 分项目分批）/ php（`php -l`，无 `<?php` 补前缀）/ python（`ast.parse`）/ kotlin（kotlinc 包装梯：import 保留+其余包进 `fun _s(){}`）/ swift（`swiftc -swift-version 6 -parse`，对齐仓库 Swift 6 基线，不做 sema）/ java（jshell stdin，剥 package 行）/ rust（rustfmt 解析校验 + `fn main` 包装梯；纯语法层不 type-check，编译失败演示块不误报）/ bash（**仅 `bash -n`，绝不执行**）/ yaml / json（首行 `//` 注释惯例容忍：纯解析失败时按 jsonc 剥注释重试）/ jsonc（剥注释）/ toml / protobuf（protoc）
 - **L2 运行层**（自包含块）：
   - go：`has_package && has_func_main`；stdlib-only `go run`（timeout 15s），第三方 import 走 goproj 子目录 `go vet`
   - python 三道闸：import 白名单 → AST 禁 eval/exec/open 等危险调用与危险模块 → `-I` 隔离 + PYTHONSAFEPATH=1 + timeout 10s + 临时 cwd
   - php：完整脚本（含 `<?php`）且无危险 token（exec/system/unlink/include 等）且非 PHPUnit 测试类才执行
+  - rust：有 `fn main` 且 use/attribute 仅引用 std 系与编译器内置（`use`/`#[crate::…]`/`extern crate` 三路探测第三方）→ `rustc --edition 2024` 编译 + 运行（timeout 10s）；编译失败演示块会 FAIL，按文档标注裁决
 - **不可执行即 GATED**；无验证器的语言（dockerfile/nginx/blade 等）标 `SKIP_NOTOOL` 交 L3 目检
 - TS 方法学限制：`strict:false` 降噪下属性级错误（TS2339/TS2551）不可靠，此类失败块**永不自动放行**，一律 L3 深查
 

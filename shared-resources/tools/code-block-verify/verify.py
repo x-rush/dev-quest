@@ -10,9 +10,9 @@
 
 层级:
   L1 语法层: go(包装梯)/ts(tsc)/php(php -l)/python(ast)/kotlin(kotlinc 包装梯)
-            swift(swiftc -parse)/java(jshell)/bash(bash -n 绝不执行)
+            swift(swiftc -parse)/java(jshell)/rust(rustfmt 解析+fn main 包装梯)/bash(bash -n 绝不执行)
             yaml/json/jsonc/toml(解析器)/protobuf(protoc)
-  L2 运行层: go(has_package+has_func_main → go run/vet)、python(三道闸)、php(危险 token 过滤)
+  L2 运行层: go(has_package+has_func_main → go run/vet)、python(三道闸)、php(危险 token 过滤)、rust(fn main+仅 std use → rustc 编译运行)
 其余语言 → status=SKIP_NOTOOL（dockerfile/nginx/blade 等交 L3 目检）
 """
 import ast
@@ -70,7 +70,7 @@ EXT = {"go": "go", "php": "php", "python": "py", "kotlin": "kt", "swift": "swift
        "java": "java", "bash": "sh", "yaml": "yaml", "yml": "yaml",
        "json": "json", "jsonc": "json", "json5": "json", "toml": "toml",
        "protobuf": "proto", "ts": "ts", "tsx": "tsx", "typescript": "ts",
-       "js": "js", "jsx": "jsx", "javascript": "js"}
+       "js": "js", "jsx": "jsx", "javascript": "js", "rust": "rs"}
 TS_LANGS = {"ts", "tsx", "typescript", "js", "jsx", "javascript"}
 
 
@@ -489,6 +489,92 @@ def verify_php_l2(recs, results):
                                       "detail": (err.strip().splitlines() or [""])[-1][:300]}
 
 
+RUST_STD_USE_PREFIXES = ("std::", "core::", "alloc::", "crate::", "self::",
+                         "super::", "crate", "self", "super")
+
+
+def wrap_rust_main(src):
+    return "fn main() {\n" + src + "\n}\n"
+
+
+def _rust_first_err(err):
+    for l in err.splitlines():
+        if "error" in l.lower():
+            return l.strip()
+    return (err.strip().splitlines() or [""])[-1] if err.strip() else "rc!=0"
+
+
+def verify_rust_l1(recs, results):
+    """rust L1：rustfmt 解析校验（纯语法层，不 type-check——编译失败演示块不误报）。
+    二级包装梯：原样 → 全部包进 fn main(){}（语句片段）。"""
+    def work(b):
+        src = open(block_path(b), encoding="utf-8").read()
+        cands = [src, wrap_rust_main(src)]
+        for c in cands:
+            tmp = os.path.join(WORK, f"rust_l1_b{b['id']}.rs")
+            with open(tmp, "w", encoding="utf-8") as f:
+                f.write(c)
+            rc, err = run(["rustfmt", "--edition", "2024", "--emit", "stdout", tmp],
+                          timeout=30)
+            if rc == 0:
+                return {"status": "PASS", "detail": ""}
+            if rc > 1:
+                return {"status": "FAIL", "detail": f"rustfmt rc={rc}: {err[:200]}"}
+        return {"status": "FAIL", "detail": _rust_first_err(err)[:300]}
+
+    with ThreadPoolExecutor(max_workers=6) as ex:
+        futs = {ex.submit(work, b): b for b in recs}
+        for fu in as_completed(futs):
+            results[futs[fu]["id"]]["l1"] = fu.result()
+
+
+def verify_rust_l2(recs, results):
+    """rust L2：自包含块（有 fn main 且仅 std/core/alloc/crate 内部 use）编译并运行。
+    第三方依赖块跳过（编译失败演示块会 FAIL，交 L3 按文档标注裁决）。"""
+    for b in recs:
+        src = b["content"]
+        if not re.search(r"\bfn\s+main\s*\(", src):
+            continue
+        third = []
+        for m in re.finditer(r"^\s*(?:pub\s+)?use\s+([\w:]+)::", src, re.M):
+            head = m.group(1)
+            if not (head.startswith(RUST_STD_USE_PREFIXES)
+                    or head in ("std", "core", "alloc")):
+                third.append(head)
+        # attribute 引用的 crate（如 #[tokio::main]）也是第三方依赖信号
+        for m in re.finditer(r"^#!?\[\s*([a-z_]\w+)::", src, re.M):
+            head = m.group(1)
+            if head not in ("derive", "cfg", "cfg_attr", "allow", "deny",
+                            "warn", "test", "repr", "doc", "macro_export",
+                            "macro_use", "no_mangle", "used", "deprecated",
+                            "inline", "cold", "must_use", "non_exhaustive"):
+                third.append(f"#[{head}::…]")
+        if re.search(r"^\s*extern\s+crate\s+(?!self\b)\w+", src, re.M):
+            third.append("extern crate")
+        if third:
+            continue
+        d = tempfile.mkdtemp(prefix="rustrun_")
+        rs = os.path.join(d, "main.rs")
+        binp = os.path.join(d, "bin")
+        with open(rs, "w", encoding="utf-8") as f:
+            f.write(src)
+        rc, err = run(["rustc", "--edition", "2024", "-o", binp, rs], timeout=60)
+        if rc != 0:
+            shutil.rmtree(d, ignore_errors=True)
+            results[b["id"]]["l2"] = {"status": "FAIL",
+                                      "detail": "[compile] " + _rust_first_err(err)[:300]}
+            continue
+        rc, err = run([binp], timeout=10, cwd=d)
+        shutil.rmtree(d, ignore_errors=True)
+        if rc == 0:
+            results[b["id"]]["l2"] = {"status": "PASS", "detail": ""}
+        elif rc == 124:
+            results[b["id"]]["l2"] = {"status": "TIMEOUT", "detail": "timeout 10s"}
+        else:
+            results[b["id"]]["l2"] = {"status": "FAIL",
+                                      "detail": "[run] " + (err.strip().splitlines() or [""])[-1][:300]}
+
+
 # ---------------- main ----------------
 
 def main():
@@ -559,6 +645,10 @@ def main():
         log(f"L1 java: {len(by_lang['java'])}")
         verify_java_l1(by_lang["java"], results)
 
+    if "rust" in by_lang:
+        log(f"L1 rust: {len(by_lang['rust'])}")
+        verify_rust_l1(by_lang["rust"], results)
+
     datafmt = [b for b in recs if b["lang"] in ("yaml", "json", "jsonc", "json5", "toml")]
     if datafmt:
         log(f"L1 datafmt: {len(datafmt)}")
@@ -574,7 +664,7 @@ def main():
         verify_ts_l1(tslangs, results, log)
 
     # 其余语言 → SKIP_NOTOOL
-    handled = {"go", "php", "python", "bash", "kotlin", "swift", "java",
+    handled = {"go", "php", "python", "bash", "kotlin", "swift", "java", "rust",
                "yaml", "json", "jsonc", "json5", "toml", "protobuf"} | TS_LANGS
     for b in recs:
         if results[b["id"]]["l1"] is None:
@@ -593,6 +683,9 @@ def main():
     if "php" in by_lang:
         log("L2 php")
         verify_php_l2(by_lang["php"], results)
+    if "rust" in by_lang:
+        log("L2 rust")
+        verify_rust_l2(by_lang["rust"], results)
 
     with open(RESULTS, "w", encoding="utf-8") as f:
         for b in recs:
