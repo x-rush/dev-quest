@@ -241,6 +241,13 @@ graph LR
 - [ ] **云原生Python**: Serverless、容器化、自动化
 - [ ] **智能自动化**: AI驱动工具、智能脚本
 
+#### 11. Rust 跨平台开发
+**模块入口**: [11-rust-cross-platform/README.md](../../11-rust-cross-platform/README.md)（含入门/进阶/精通三路径视图，规划中 47 篇）
+- [ ] **Rust 语言基础**: 所有权与借用、trait 与泛型、生命周期、async/.await
+- [ ] **Tauri 2 跨端应用**: 桌面+移动框架、IPC 命令、插件体系、前端集成
+- [ ] **Axum 后端**: Tokio 生态、tower 中间件、SQLx 数据库
+- [ ] **工程化**: 交叉编译、CI/CD、签名与自动更新、FFI/wasm 高级主题
+
 ## 📈 学习进度可视化
 
 ### 🎯 进度统计模板

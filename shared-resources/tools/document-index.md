@@ -11,8 +11,10 @@
 - 📱 **[04 React Native三端原生App](#04-react-native三端原生app)** - Android+iOS+鸿蒙原生开发 (已建设)
 - 🤖 **[05 Kotlin Compose](#05-kotlin-compose)** - Android官方原生开发 (已建设)
 - 🍎 **[06 SwiftUI](#06-swiftui)** - iOS官方原生开发 (已建设)
-- 🐘 **[07-10 技术探索系列](#技术探索系列-07-10)** - PHP/Java/Node.js/Python (已建设)
-- 🧪 **[工程质量工具](#工程质量工具)** - 代码块全量机器验证管线 (code-block-verify)
+- 🐘 **[07-10 技术探索系列](#技术探索系列-07-10)** - PHP/Java/Node.js/Python (已建设·维护冻结)
+- 🦀 **[11 Rust跨平台开发](#11-rust跨平台开发)** - Rust + Tauri 2 + Axum (规划中)
+- 🧠 **[AI 协议层](#ai-协议层)** - MCP 协议精要 + Agent 模式语言 (框架无关)
+- 🧪 **[工程质量工具](#工程质量工具)** - 代码块全量机器验证 (code-block-verify) + 基线漂移检查 (baseline-check)
 
 ### 按内容类型
 - 📖 **[基础概念](#基础概念)** - 入门基础内容
@@ -266,9 +268,35 @@
 
 ---
 
+## 11 Rust跨平台开发
+
+> 模块入口: [11-rust-cross-platform/README.md](../../11-rust-cross-platform/README.md) | 规划中（47 篇规划，未建设）
+
+| 目录 | 象限 | 篇数 | 状态 |
+|------|------|-----:|------|
+| 📖 basics/ | 教程 | 10 | ⬜ |
+| 📚 reference/ | 字典 | 14 | ⬜ |
+| 🏗️ frameworks/ | 操作指南 | 7 | ⬜ |
+| 🚀 projects/ | 操作指南 | 5 | ⬜ |
+| 🧪 testing/ | 操作指南 | 3 | ⬜ |
+| 🚀 deployment/ | 操作指南 | 4 | ⬜ |
+| 🎓 advanced-topics/ | 解释 | 4 | ⬜ |
+
+---
+
+## AI 协议层
+
+框架无关的协议与模式沉淀（AI/LLM 应用层框架竞争未收敛，只收协议/模式层，判据见 [tech-adoption-checklist](../standards/tech-adoption-checklist.md)）：
+
+- **[MCP 协议精要](../ai-protocols/01-mcp-protocol.md)** — Model Context Protocol 2026-07-28 规范要点：无状态请求、MRTR、传输层、安全原则
+- **[Agent 模式语言](../ai-protocols/02-agent-patterns.md)** — 工具循环 / 计划-执行 / 反思 / 编排 / 记忆分层 / 护栏 / 上下文工程，跨框架不变量
+
+---
+
 ## 🧪 工程质量工具
 
 - **[code-block-verify 全仓代码块机器验证管线](code-block-verify/README.md)**：提取器 + 三层验证（L1 语法 / L2 运行 / L3 agent 裁决），对全仓 Markdown 围栏代码块做全量（非抽样）验证；全量报告与数据归档见 `refactor-archives/completed/code-block-verification/`
+- **[baseline-check 基线版本漂移检查](baseline-check/README.md)**：解析各模块 README「技术基线」区块，批量比对 registry 最新版输出漂移报告；配套季度基线对齐 ritual 使用
 
 ---
 
@@ -391,4 +419,4 @@ graph TD
 **最后更新**: 2026年9月
 **维护团队**: Dev Quest Team
 
-> 💡 **提示**: 本索引与实际目录结构对齐，01-10 全部模块已按 Diátaxis 双轴标准建设（basics 教程 + reference 字典 + 工程域 + advanced-topics）。建议结合[学习进度](../progress/learning-progress.md)选择合适的模块开始学习！
+> 💡 **提示**: 本索引与实际目录结构对齐，01-10 全部模块已按 Diátaxis 双轴标准建设（basics 教程 + reference 字典 + 工程域 + advanced-topics），11-rust 已立项待建设。建议结合[学习进度](../progress/learning-progress.md)选择合适的模块开始学习！

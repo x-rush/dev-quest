@@ -63,6 +63,7 @@ graph LR
     G[PHP精通之路] --> H[Java知识回顾]
     H --> I[Node.js后端探索]
     I --> J[Python发现之旅]
+    I --> K[Rust跨平台开发]
 ```
 
 ## 📁 完整目录结构
@@ -137,14 +138,19 @@ dev-quest/
 │   ├── 07-php-mastery/                   # PHP 精通之路
 │   ├── 08-java-revisited/                # Java 知识回顾与现代化
 │   ├── 09-nodejs-backend/                # Node.js 后端开发技术探索
-│   └── 10-python-discovery/              # Python 发现之旅
+│   ├── 10-python-discovery/              # Python 发现之旅
+│   └── 11-rust-cross-platform/           # Rust 跨平台开发 (Tauri 2 + Axum，规划中)
 │
 ├── 📚 共享资源和工具
 │   ├── standards/                        # 项目规范标准
 │   │   ├── module-structure-guide.md     # 模块结构设计指南
-│   │   ├── module-development-standards.md # 模块开发标准
+│   │   ├── module-development-standards.md # 模块开发标准（含维护冻结策略）
 │   │   ├── documentation-guidelines.md   # 文档规范指南
+│   │   ├── tech-adoption-checklist.md    # 技术收录判据 checklist
 │   │   └── cross-reference-system.md     # 交叉引用系统
+│   ├── ai-protocols/                     # AI 协议层（框架无关）
+│   │   ├── 01-mcp-protocol.md            # MCP 协议精要
+│   │   └── 02-agent-patterns.md          # Agent 模式语言
 │   ├── templates/                        # 文档模板
 │   │   ├── document-template.md          # 标准文档模板
 │   │   └── quick-template.md              # 快速应用模板
@@ -196,6 +202,7 @@ dev-quest/
 - [ ] 08. Java 知识回顾 - Java现代化学习
 - [ ] 09. Node.js 后端探索 - Node.js技术栈
 - [ ] 10. Python 发现之旅 - Python多领域应用
+- [ ] 11. [Rust 跨平台开发](11-rust-cross-platform/README.md) - Rust + Tauri 2 + Axum
 
 ## 🛠️ 技术栈概览
 

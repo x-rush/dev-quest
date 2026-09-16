@@ -4,10 +4,10 @@
 
 ## 项目定位
 
-Dev Quest 是一个**个人学习路径仓库**（纯文档项目，无可运行代码），采用双轨制学习模式组织 10 个技术模块：
+Dev Quest 是一个**个人学习路径仓库**（纯文档项目，无可运行代码），采用双轨制学习模式组织 11 个技术模块：
 
 - **应用帝国矩阵（核心重点）**: `01-go-backend`、`02-nextjs-frontend`、`03-tanstack-stack`、`04-multiplatform-apps`、`05-kotlin-compose`、`06-swift-swiftui`
-- **技术探索系列（零散时间）**: `07-php-mastery`、`08-java-revisited`、`09-nodejs-backend`、`10-python-discovery`
+- **技术探索系列（零散时间）**: `07-php-mastery`、`08-java-revisited`、`09-nodejs-backend`、`10-python-discovery`（维护冻结：只修确认级错误，不主动扩展）、`11-rust-cross-platform`（规划中）
 
 ## 模块结构规范
 
