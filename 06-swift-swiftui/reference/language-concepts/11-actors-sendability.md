@@ -50,25 +50,48 @@ let data = await cache.data(for: url)
 ### MainActor：UI 的专属隔离域
 
 ```swift
-// 三种等价的标注位置
-@MainActor func refresh() { … }                          // 函数
-@MainActor final class AppModel: Observable { … }        // 整个类型
-await MainActor.run { title = "完成" }                    // 一次性闭包
+import Foundation
+
+// 三种标注位置；MainActor.run 必须从 async 上下文调用。
+@MainActor func refresh() { print("刷新 UI") }            // 函数
+@MainActor final class AppModel {
+    var title = "加载中"
+    func finish() { title = "完成" }
+}                                                         // 整个类型
+func finish(_ model: AppModel) async {
+    await MainActor.run { model.finish() }                // 一次性闭包
+}
 ```
 
 ### Sendable 与跨越边界
 
 ```swift
-// 值类型（全 Sendable 成员）自动 Sendable
+import Foundation
+
+// 所有成员满足 Sendable，编译器可以验证此声明。
 struct Note: Sendable { let id: UUID; var title: String }
 
 // 手写声明 + 编译器验证
 final class Config: Sendable {
     let apiKey: String        // let 不可变属性可安全共享
+    init(apiKey: String) { self.apiKey = apiKey }
 }
 
-// 自负其责的逃生门：你保证线程安全
-final class AtomicBox: @unchecked Sendable { … }
+// 自负其责的逃生门：锁保护全部可变状态；新增状态也必须在同一锁下访问。
+final class AtomicBox<Value: Sendable>: @unchecked Sendable {
+    private let lock = NSLock()
+    private var storage: Value
+    init(_ value: Value) { storage = value }
+    func withValue<Result: Sendable>(_ body: (inout Value) -> Result) -> Result {
+        lock.lock()
+        defer { lock.unlock() }
+        return body(&storage)
+    }
+}
+
+let counter = AtomicBox(0)
+let next = counter.withValue { value in value += 1; return value }
+print(next) // 1；闭包必须同步完成，不要在里面再次访问同一个 box（NSLock 不可重入）。
 
 // nonisolated：把 actor 内的成员排除出隔离域（只读/不碰状态时）
 actor Store {

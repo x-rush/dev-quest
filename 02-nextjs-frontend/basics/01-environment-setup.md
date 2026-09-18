@@ -693,8 +693,9 @@ source ~/.bashrc
 # 查找使用端口3000的进程
 lsof -i :3000
 
-# 终止进程
-kill -9 <PID>
+# 确认是自己的开发服务后，填入 lsof 输出中的进程号再发送终止信号
+TARGET_PID=""
+kill -TERM "${TARGET_PID:?请先填写开发服务的PID}"
 
 # 或者使用不同端口
 npm run dev -- -p 3001

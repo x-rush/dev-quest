@@ -155,6 +155,7 @@
   keyboardVerticalOffset={headerHeight}
   style={{ flex: 1 }}
 >
+</KeyboardAvoidingView>
 ```
 
 **陷阱**: 三端避让机制不同，`behavior` 按 `Platform.select` 分支，勿一套通吃；嵌套两层 KeyboardAvoidingView 会双重避让，只保留最外层（见 [核心 API 字典](./01-rn-core-api.md) Keyboard 词条）。

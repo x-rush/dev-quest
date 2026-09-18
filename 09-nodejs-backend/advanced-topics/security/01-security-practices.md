@@ -126,8 +126,8 @@ const filePath = path.join(path.resolve(UPLOAD_DIR), id);
 
 ```typescript
 // 启动即校验（见 projects/04 的 env.ts），这里补充密钥的专用检查
-JWT_ACCESS_SECRET: z.string().min(32)
-  .refine((s) => !/^(test|dev|change|secret)/i.test(s), '禁止使用示例密钥'),
+const jwtAccessSecret = z.string().min(32)
+  .refine((s) => !/^(test|dev|change|secret)/i.test(s), '禁止使用示例密钥');
 ```
 
 配套纪律：

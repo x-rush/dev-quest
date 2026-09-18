@@ -81,10 +81,12 @@ export default function App() {
 ### 1.3 配合测试的技巧
 
 ```tsx
-// 测试环境隐藏花朵按钮，避免干扰 DOM 快照
-<ReactQueryDevtools initialIsOpen={false} />
-// CI 中可通过环境变量整体关闭
-<ReactQueryDevtools initialIsOpen={import.meta.env.MODE === 'development'} />
+// initialIsOpen 只控制面板初始展开状态，不会隐藏入口按钮
+const closedPanel = <ReactQueryDevtools initialIsOpen={false} />;
+// Vite 项目只在开发环境挂载整个组件，测试/生产环境不渲染入口
+const developmentPanel = import.meta.env.MODE === 'development'
+  ? <ReactQueryDevtools initialIsOpen={false} />
+  : null;
 ```
 
 ---

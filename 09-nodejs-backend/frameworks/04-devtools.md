@@ -67,8 +67,8 @@ pnpm 默认内容寻址存储省磁盘、安装快、依赖结构严格（杜绝
 pnpm add hono               # 添加生产依赖
 pnpm add -D vitest          # 添加开发依赖
 pnpm up --latest            # 升级全部依赖
-pnpm why <pkg>              # 追溯某个依赖为什么被安装
-pnpm dlx <cli-tool>         # 免安装临时运行 CLI 工具
+pnpm why hono              # 追溯某个依赖为什么被安装
+pnpm dlx npm-check-updates         # 免安装临时运行 CLI 工具
 ```
 
 ## 2. 开发热重载：tsx 优先，nodemon 兜底

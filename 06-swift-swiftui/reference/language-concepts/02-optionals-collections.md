@@ -112,8 +112,27 @@ nums.dropFirst(); nums.prefix(2); nums.suffix(2)   // 非破坏性切片
 ### 2.5 与 SwiftUI 配合
 
 ```swift
-ForEach(items) { item in … }        // 需要元素 Identifiable
-List(viewModel.items.filter(\.isPinned)) { … }
+import SwiftUI
+
+struct ListItem: Identifiable {
+    let id: UUID
+    var title: String
+    var isPinned: Bool
+}
+
+struct PinnedItemsView: View {
+    let items: [ListItem]
+    var body: some View {
+        List {
+            Section("全部") {
+                ForEach(items) { item in Text(item.title) }
+            }
+            Section("已置顶") {
+                ForEach(items.filter(\.isPinned)) { item in Text(item.title) }
+            }
+        }
+    }
+}
 ```
 
 **陷阱**: `ForEach` 依赖 `id` 稳定性。用 `indices` 或随机 id 做 id 会导致增删动画错乱，见 [02-troubleshooting.md](../quick-references/02-troubleshooting.md)。

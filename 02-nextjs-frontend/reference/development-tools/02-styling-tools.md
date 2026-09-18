@@ -78,7 +78,7 @@ export default { plugins: { '@tailwindcss/postcss': {} } };
 字体族声明不会下载字体，需用 next/font 或已有字体文件。旧 JavaScript 配置在 v4 不会自动检测，迁移时可用 @config 显式加载受支持部分；corePlugins、separator 等旧选项不能直接沿用。容器查询已内建，按实际需要添加 forms/typography 插件，避免堆叠未使用依赖。
 ### 自定义组件库
 
-```typescript
+```tsx
 // components/ui/button.tsx
 import { Slot } from '@radix-ui/react-slot';
 import { cva, type VariantProps } from 'class-variance-authority';
@@ -329,8 +329,10 @@ export const darkTheme = css`
 
   --radius: 0.5rem;
 `;
+```
 
 // src/styles/globals.css
+```css
 /* 普通 CSS 不能 import TS 对象或使用模板插值，以下使用真实 CSS 变量 */
 :root {
   --color-background: #ffffff;
@@ -413,7 +415,7 @@ body {
 
 ### Emotion 组件示例
 
-```typescript
+```tsx
 // src/components/Button/Button.tsx
 import { css } from '@/styles/emotion';
 import styled from '@emotion/styled';
@@ -714,7 +716,7 @@ module.exports = {
 
 ### Linaria 组件示例
 
-```typescript
+```tsx
 // src/components/Card/Card.tsx
 import { styled } from '@linaria/react';
 import { css } from '@linaria/core';
@@ -968,7 +970,7 @@ export default nextConfig;
 }
 ```
 
-```typescript
+```tsx
 // src/components/Button/Button.tsx
 import React from 'react';
 import styles from './Button.module.css';
@@ -1076,7 +1078,7 @@ export const useBreakpoint = (breakpoint: Breakpoint) => {
 
 ### 响应式组件示例
 
-```typescript
+```tsx
 // src/components/Grid/Grid.tsx
 import React from 'react';
 import styled from '@emotion/styled';
@@ -1246,7 +1248,7 @@ export const GridExample: React.FC = () => {
 
 ### 主题提供者
 
-```typescript
+```tsx
 // src/styles/ThemeProvider.tsx
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { lightTheme, darkTheme } from './theme';

@@ -102,7 +102,7 @@
 - 资源之间的关系通过链接表达
 
 **示例**:
-```go
+```http
 // 用户资源
 GET    /api/v1/users           // 获取用户列表
 GET    /api/v1/users/{id}      // 获取特定用户
@@ -129,7 +129,7 @@ POST   /api/v1/users/{id}/orders     // 为用户创建订单
 **定义**: 使用HTTP状态码准确表达操作结果
 
 **常用状态码**:
-```go
+```http
 // 成功响应
 200 OK                 // 请求成功
 201 Created           // 资源创建成功
@@ -748,7 +748,7 @@ func getUsers(ctx *gin.Context) {
 ```
 
 **避免深层嵌套资源**
-```go
+```http
 // ❌ 避免过深的嵌套
 /api/v1/users/1/orders/2/items/3/reviews
 

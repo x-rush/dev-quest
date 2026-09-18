@@ -369,7 +369,7 @@ async function clearUserCache(userId: string) {
 
 ### 高级权限管理
 
-```typescript
+```tsx
 // src/lib/auth/permissions.ts
 import { useCallback } from 'react'
 import { NextRequest } from 'next/server'

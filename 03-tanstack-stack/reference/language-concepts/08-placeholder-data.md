@@ -9,12 +9,15 @@
 ## 📖 语法 / 签名
 
 ```ts
+type PlaceholderData<TData> =
+  | TData
+  | ((previousData: TData | undefined, previousQuery: unknown) => TData | undefined);
+
+const placeholderData: PlaceholderData<unknown> = (previousData) => previousData;
 useQuery({
   queryKey,
   queryFn,
-  placeholderData:
-    | TData                                  // 静态占位值（不写入查询缓存）
-    | ((previousData: TData | undefined, previousQuery) => TData | undefined),
+  placeholderData, // 静态值或函数；占位值不会写入查询缓存
 })
 // 返回值额外提供：
 // isPlaceholderData: boolean —— 当前展示的 data 是占位值而非真实缓存

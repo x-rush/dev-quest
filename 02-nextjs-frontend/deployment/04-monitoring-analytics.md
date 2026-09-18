@@ -82,10 +82,12 @@ Next.js 16 应用在生产环境中需要全面的监控和分析体系来确保
 ### Sentry 集成配置
 
 #### 🛠️ 基础配置
-```typescript
-// 安装 Sentry
+```bash
+# 安装 Sentry
 npm install @sentry/nextjs
+```
 
+```typescript
 // sentry.client.config.ts
 import * as Sentry from '@sentry/nextjs'
 
@@ -123,6 +125,9 @@ Sentry.init({
   },
 })
 
+```
+
+```typescript
 // sentry.server.config.ts
 import * as Sentry from '@sentry/nextjs'
 
@@ -355,7 +360,7 @@ export class AlertManager {
 ### Web Vitals 追踪
 
 #### 🎯 Core Web Vitals 配置
-```typescript
+```tsx
 // lib/web-vitals.ts
 import { onCLS, onINP, onFCP, onLCP, onTTFB } from 'web-vitals'
 
@@ -638,7 +643,7 @@ export class PerformanceMonitor {
 ### 事件追踪系统
 
 #### 🎯 自定义事件追踪
-```typescript
+```tsx
 // lib/analytics.ts
 export interface AnalyticsEvent {
   event: string
@@ -931,7 +936,7 @@ export const standardFunnels: FunnelDefinition[] = [
 ### 自定义仪表板
 
 #### 📈 实时监控仪表板
-```typescript
+```tsx
 // components/Dashboard/RealTimeMetrics.tsx
 'use client'
 

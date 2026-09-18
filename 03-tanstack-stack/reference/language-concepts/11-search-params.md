@@ -9,17 +9,46 @@ TanStack Router 的 `validateSearch` 把 URL 查询参数解析为**类型安全
 ## 📖 语法 / 签名
 
 ```tsx
-createFileRoute('/path')({
-  validateSearch: (search: Record<string, unknown>) => SearchSchema
+import { Link, createFileRoute } from '@tanstack/react-router'
+
+function validateDashboardSearch(search: Record<string, unknown>) {
+  if (search.page === undefined) return { page: 1 }
+
+  const page = typeof search.page === 'string' || typeof search.page === 'number'
+    ? Number(search.page)
+    : Number.NaN
+  if (!Number.isInteger(page) || page < 1) {
+    throw new Error('page 必须是正整数')
+  }
+
+  return { page }
+}
+
+// 文件路由模块：由 TanStack Router 插件/CLI 生成 routeTree.gen.ts 后才会被应用加载。
+export const Route = createFileRoute('/dashboard')({
+  validateSearch: validateDashboardSearch,
+  component: DashboardPage,
   // search：解析后的未验证参数（可以是数字、布尔值、数组等）
-  // 返回值：类型化的搜索状态对象；抛出 ZodError 等即导航被拒绝
+  // 返回值：类型化的搜索状态对象；抛出错误即导航被拒绝
 })
 
-// 读取与写入
-Route.useSearch()                       // 组件内读取（类型化）
-Route.useNavigate()({ search: next })   // 编程式写入（触发数据流）
-<Link to="." search={{ page: 2 }} />    // 声明式写入
+function DashboardPage() {
+  const search = Route.useSearch() // 组件内读取（类型化）
+  const navigate = Route.useNavigate()
+
+  return (
+    <>
+      <p>当前第 {search.page} 页</p>
+      <button onClick={() => void navigate({ search: (prev) => ({ ...prev, page: prev.page + 1 }) })}>
+        下一页
+      </button>
+      <Link to="/dashboard" search={{ page: 1 }}>回到第一页</Link>
+    </>
+  )
+}
 ```
+
+此片段是文件路由模块，必须由 TanStack Router 的文件路由插件或 CLI 生成 `routeTree.gen.ts` 并接入 `createRouter`；在普通组件文件中单独复制 `createFileRoute` 不能形成可访问的路由。
 
 | 要素 | 类型 | 说明 |
 |------|------|------|

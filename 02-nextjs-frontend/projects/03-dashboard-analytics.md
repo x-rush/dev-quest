@@ -1009,7 +1009,7 @@ export class DataProcessor {
 
 **改造前：客户端瀑布（反面示例）**
 
-```typescript
+```tsx
 // components/dashboard/MetricsPanel.tsx
 'use client'
 
@@ -1066,7 +1066,7 @@ export async function getDashboardMetrics(dashboardId: string) {
 
 第二步——页面成为 Server Component，Promise 传递给交互组件、由 `<Suspense>` 流式兜底：
 
-```typescript
+```tsx
 // app/(dashboard)/dashboard/page.tsx
 import { Suspense } from 'react'
 import { getDashboardMetrics } from '@/lib/analytics/queries'
@@ -1089,7 +1089,7 @@ export default async function DashboardPage() {
 
 第三步——交互下沉：Client Component 通过 props 接收服务端 Promise，用 React 19 的 `use()` 解包：
 
-```typescript
+```tsx
 // components/dashboard/MetricsPanel.tsx（改造后）
 'use client'
 
@@ -1184,7 +1184,7 @@ export async function generateMetadata({ params }: UserPageProps): Promise<Metad
 
 **加载兜底（app/(dashboard)/dashboard/loading.tsx）**——路由段挂起时自动生效：
 
-```typescript
+```tsx
 export default function Loading() {
   return (
     <div className="animate-pulse space-y-6">
@@ -1201,7 +1201,7 @@ export default function Loading() {
 
 **错误边界（app/(dashboard)/dashboard/error.tsx）**——必须是客户端组件：
 
-```typescript
+```tsx
 'use client'
 
 export default function DashboardError({
@@ -1230,7 +1230,7 @@ export default function DashboardError({
 
 **404 约定（app/(dashboard)/dashboard/users/[userId]/not-found.tsx）**：
 
-```typescript
+```tsx
 import Link from 'next/link'
 
 export default function UserNotFound() {
@@ -1254,7 +1254,7 @@ export default function UserNotFound() {
 
 #### 2.5 实现图表组件
 **components/charts/LineChart.tsx**:
-```typescript
+```tsx
 'use client'
 
 import {
@@ -1420,7 +1420,7 @@ export function LineChart({
 ```
 
 **components/charts/BarChart.tsx**:
-```typescript
+```tsx
 'use client'
 
 import {
@@ -1573,7 +1573,7 @@ export function BarChart({
 ```
 
 **components/charts/PieChart.tsx**:
-```typescript
+```tsx
 'use client'
 
 import {
@@ -1991,7 +1991,7 @@ export function useRealTimeData({
 
 #### 2.7 实现高级过滤器
 **components/filters/AdvancedFilters.tsx**:
-```typescript
+```tsx
 'use client'
 
 import { useState, useEffect } from 'react'
@@ -2693,7 +2693,7 @@ export class ExportService {
 
 #### 3.2 实现仪表板布局系统
 **components/dashboard/DashboardGrid.tsx**:
-```typescript
+```tsx
 'use client'
 
 import { useState, useCallback } from 'react'

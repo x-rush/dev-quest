@@ -1,0 +1,35 @@
+{
+  "total": 4401,
+  "classification": {
+    "NEEDS_REVIEW": 1615,
+    "NOT_VERIFIED": 230,
+    "PASS_CHECKED_SCOPE": 2556
+  },
+  "l1": {
+    "FAIL": 1481,
+    "NOT_VERIFIED": 19,
+    "PASS": 2690,
+    "SKIP_NOTOOL": 211
+  },
+  "l2": {
+    "FAIL": 136,
+    "GATED": 89,
+    "NOT_VERIFIED": 3905,
+    "PASS": 271
+  },
+  "evidence_runs": [
+    "container-final",
+    "core-final",
+    "python-final",
+    "rust-final",
+    "swift-recheck",
+    "php-final",
+    "kotlin-recheck",
+    "go-recheck"
+  ],
+  "match_key": [
+    "file",
+    "lang",
+    "sha256(manifest.content UTF-8)"
+  ]
+}

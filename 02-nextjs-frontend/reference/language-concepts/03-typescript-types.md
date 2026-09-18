@@ -139,7 +139,7 @@ interface Dictionary {
 ## ⚛️ React + TypeScript 类型
 
 ### 组件类型
-```typescript
+```tsx
 import React, { useState, useEffect, ReactNode } from 'react'
 
 // 函数组件类型
@@ -231,7 +231,7 @@ const timerRef = useRef<NodeJS.Timeout | null>(null)
 ```
 
 ### 事件类型
-```typescript
+```tsx
 // 表单事件
 function FormComponent() {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
@@ -757,7 +757,7 @@ const userPath: UserPath = "/api/users/123"
 ```
 
 ### satisfies 操作符 (TypeScript 4.9+)
-```typescript
+```tsx
 // satisfies 操作符 - 验证类型但不改变类型
 const palette = {
   red: "#ff0000",

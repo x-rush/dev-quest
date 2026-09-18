@@ -45,7 +45,7 @@ Next.js 16 结合现代测试工具链提供了全面的质量保证解决方案
 
 ### 基础配置
 
-```typescript
+```tsx
 // vitest.config.ts
 import { defineConfig } from 'vitest/config';
 import react from '@vitejs/plugin-react';
@@ -268,7 +268,7 @@ describe('slugify', () => {
 
 ### 组件测试模式
 
-```typescript
+```tsx
 // src/components/Button/Button.tsx
 import React from 'react';
 import { cn } from '@/lib/utils';
@@ -1012,7 +1012,7 @@ afterAll(() => server.close());
 
 ### 组件测试中的MSW使用
 
-```typescript
+```tsx
 // src/test/components/ProductCard/ProductCard.test.tsx
 import { describe, it, expect, beforeAll, afterEach } from 'vitest';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';

@@ -159,7 +159,7 @@ mvn clean verify                  # Maven 构建
 java -jar app.jar                 # 运行 fat jar
 java -Xmx512m -Xms256m Foo        # 堆参数
 jps -l                           # 列出进程
-jstack <pid>                     # 查看指定进程线程
+jstack "${TARGET_PID:?先从jps输出中选择Java进程并设置TARGET_PID}"                     # 查看指定进程线程
 ```
 
 <!-- full-library-explanation -->

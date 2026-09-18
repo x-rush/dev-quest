@@ -70,7 +70,7 @@ harmony/
 
 ### Index.ets 最小骨架（示意）
 
-```ts
+```arkts
 // entry/src/main/ets/pages/Index.ets
 import { RNApp } from '@rnoh/react-native-openharmony';
 

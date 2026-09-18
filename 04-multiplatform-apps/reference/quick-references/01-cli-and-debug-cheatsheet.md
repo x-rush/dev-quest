@@ -34,8 +34,8 @@ npx expo run:android           # Android 编译安装
 npm run android                # bare Android；iOS 另执行 npm run ios
 
 # 依赖管理
-npx expo install <pkg>          # Expo：自动装与 SDK 匹配的版本
-npm uninstall <pkg> && npm i    # 修改原生依赖后需重新构建
+npx expo install expo-device          # Expo：自动装与 SDK 匹配的版本
+npm uninstall expo-device && npm i    # 修改原生依赖后需重新构建
 
 # 原生工程生成/同步
 npx expo prebuild               # 从 app.json 生成 android/ ios/
@@ -83,7 +83,7 @@ xcrun simctl status_bar booted override --time "9:41"  # 改状态栏（截图�
 ```bash
 hdc list targets                             # 设备列表
 hdc install entry-default-signed.hap         # 安装 HAP
-hdc hilog | grep <tag>                       # 日志
+hdc hilog | grep -F "MyApp"                       # 日志
 hdc rport tcp:8081 tcp:8081                  # 反向端口转发（真机连 Metro）
 hdc file send local remote                   # 推文件
 ```

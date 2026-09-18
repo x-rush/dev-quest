@@ -1,0 +1,302 @@
+[
+  {
+    "path": "current-manifest.jsonl",
+    "bytes": 7470910,
+    "sha256": "9363d74d3df4c709e6f7f2977f859b633e9b2780fa8903564802529056778087",
+    "included": true
+  },
+  {
+    "path": "current-manifest.jsonl.index.json",
+    "bytes": 5907,
+    "sha256": "5e9a2dade9a0c3a87fd26e30338c7c0044fe720d9755cd3274ef22d54383412f",
+    "included": true
+  },
+  {
+    "path": "ci-validation.Dockerfile",
+    "bytes": 1328,
+    "sha256": "c9bc208bfe62fa3a8e1fc7a916c9b9f4e4676bd0c7769a81fee829df82c2aaa8",
+    "included": true
+  },
+  {
+    "path": "run-ci-validation.sh",
+    "bytes": 1028,
+    "sha256": "712f193ef51d2eaf71a533773b10a2f281be1225877117507115312fa53a8c77",
+    "included": true
+  },
+  {
+    "path": "run-core-validation.sh",
+    "bytes": 1125,
+    "sha256": "f7042e1ae68ea47c0d5cf22f208cf226b4cc5d16e242e6f4f277f18d781a390d",
+    "included": true
+  },
+  {
+    "path": "run-kotlin-recheck.sh",
+    "bytes": 497,
+    "sha256": "c5cac33d3b73115e8413a2b4ba4e9702c065524d193de9226130473bf4e751ec",
+    "included": true
+  },
+  {
+    "path": "run-php-validation.sh",
+    "bytes": 261,
+    "sha256": "6383e3729f11852309fe540e186cda23604d199c137916b1b4f7bffe4b30c083",
+    "included": true
+  },
+  {
+    "path": "run-rust-validation.sh",
+    "bytes": 1041,
+    "sha256": "3c63158f947887cdca1492ae7f10cd5c44998e9ffa77489f645c6803aa167dcf",
+    "included": true
+  },
+  {
+    "path": "run-swift-validation.sh",
+    "bytes": 330,
+    "sha256": "f98f884b74fc61649e7ba2c7bd7f5880349d695d1eff2a8ddddf881a899867f9",
+    "included": true
+  },
+  {
+    "path": "container-final/manifest.jsonl",
+    "bytes": 7446601,
+    "sha256": "bda7fa1ea49bf6b338ca84f56538df3fc6210c83b226fea11eeb143fc2f148e2",
+    "included": true
+  },
+  {
+    "path": "container-final/results.jsonl",
+    "bytes": 2347451,
+    "sha256": "25c74337068a834589ac9c23683c72b4da02a0d6d0a48efa854eef5ffe674dcd",
+    "included": true
+  },
+  {
+    "path": "container-final/summary.json",
+    "bytes": 1657,
+    "sha256": "57fdabce6ce3f2852e776b83612ae9d8e6acb97616ff1a897fcdefef47e8a372",
+    "included": true
+  },
+  {
+    "path": "container-final/commands.jsonl",
+    "bytes": 777230555,
+    "sha256": "272acbd2a9ac2dd22d69ac1db8410bde01ca6a9cffa2c5d39e71d5d7574e5a3c",
+    "included": false
+  },
+  {
+    "path": "container-final/run.log",
+    "bytes": 15378,
+    "sha256": "b363364f19ae89b4fda9a9a9b624664086a5662fa7b0a7447c5b32abcd72ea7a",
+    "included": true
+  },
+  {
+    "path": "container-final/exit-code.txt",
+    "bytes": 2,
+    "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+    "included": true
+  },
+  {
+    "path": "core-final/manifest.jsonl",
+    "bytes": 7464108,
+    "sha256": "e4912e69b2dd7c3da040a27daeaea400e3231af3667e25c162e3f1091ac4ecc4",
+    "included": true
+  },
+  {
+    "path": "core-final/results.jsonl",
+    "bytes": 1776848,
+    "sha256": "0ede43dcafd3afc97fe3f236e10c83e7e2da0142105e54499163872b59b6f44a",
+    "included": true
+  },
+  {
+    "path": "core-final/summary.json",
+    "bytes": 1632,
+    "sha256": "e30063b6cccc6c3d4bc87b423dfec902669587a8bd81e84ac6da487568085576",
+    "included": true
+  },
+  {
+    "path": "core-final/commands.jsonl",
+    "bytes": 627226215,
+    "sha256": "e2b4c8baec07f628dd7df0a7d6fc1aee7fa5621dc14aa2c88030f5af270125c7",
+    "included": false
+  },
+  {
+    "path": "core-final/run.log",
+    "bytes": 7433,
+    "sha256": "0bdff2a361e906dfe0c6fd26496889c3b565a759beaa3feac1d41e10ede57d3d",
+    "included": true
+  },
+  {
+    "path": "core-final/exit-code.txt",
+    "bytes": 2,
+    "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+    "included": true
+  },
+  {
+    "path": "python-final/manifest.jsonl",
+    "bytes": 7451295,
+    "sha256": "7c4a7fd064fd47bd6fddf02d273d027150dc0a3d1d5edda9d82c03e442d15b09",
+    "included": true
+  },
+  {
+    "path": "python-final/results.jsonl",
+    "bytes": 128046,
+    "sha256": "9518ed4810300f79f93d1832c68e6a8274338d5f33662c5c8288fa61f9b196ad",
+    "included": true
+  },
+  {
+    "path": "python-final/summary.json",
+    "bytes": 633,
+    "sha256": "2eced4e6d628f9ef091db05527fc39cdfd1e062f998440eb252f2dad7739ab6a",
+    "included": true
+  },
+  {
+    "path": "python-final/commands.jsonl",
+    "bytes": 48210,
+    "sha256": "67c280f760679cf18078eb3e909b936bc7a4a2a9e998a0fed98194330edf37ec",
+    "included": true
+  },
+  {
+    "path": "python-final/run.log",
+    "bytes": 1598,
+    "sha256": "aa8e0869870b4f06eed72bcc4c1958233b67f0a0b4464bd8dabeb9df58eec551",
+    "included": true
+  },
+  {
+    "path": "rust-final/manifest.jsonl",
+    "bytes": 7457882,
+    "sha256": "97717f3f5d1912986aeabf49c1f16b2e980cdafafca711619d9ebd5a6d6c335b",
+    "included": true
+  },
+  {
+    "path": "rust-final/results.jsonl",
+    "bytes": 88745,
+    "sha256": "659530ef5938a86d1342971f267ce1cff4a8cd8a2e93e62c056dcc95560cc33e",
+    "included": true
+  },
+  {
+    "path": "rust-final/summary.json",
+    "bytes": 1628,
+    "sha256": "a7d129aee3b06d126ba5937ad74f8acd9436f16a3f29c8eac420596f5c4e2fd3",
+    "included": true
+  },
+  {
+    "path": "rust-final/commands.jsonl",
+    "bytes": 235821,
+    "sha256": "169360f2a1b499ccddd3cd8af14c9b117c9905021cd2e86214f9524c14bef39f",
+    "included": true
+  },
+  {
+    "path": "rust-final/run.log",
+    "bytes": 654,
+    "sha256": "e98db581163a4b3025160212499eefb470acd87ed194429887ff02c6bc8c71ae",
+    "included": true
+  },
+  {
+    "path": "rust-final/exit-code.txt",
+    "bytes": 2,
+    "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+    "included": true
+  },
+  {
+    "path": "swift-recheck/manifest.jsonl",
+    "bytes": 7419912,
+    "sha256": "b36606bf9b9bb6c52ccfc2f6d70ca615e5c4d65abc7256f3837e2ef188d81abb",
+    "included": true
+  },
+  {
+    "path": "swift-recheck/results.jsonl",
+    "bytes": 112898,
+    "sha256": "d6761c98904ba95cd714d7a734722afbd8ce8ea35e173612b2108f6a679770a8",
+    "included": true
+  },
+  {
+    "path": "swift-recheck/summary.json",
+    "bytes": 220,
+    "sha256": "a7d85079b235aec5f937b1afa7139047d30bedfbc84e1e8fc8b53f1f9d5d6d46",
+    "included": true
+  },
+  {
+    "path": "swift-recheck/commands.jsonl",
+    "bytes": 34970,
+    "sha256": "d3ff5d0252c3538ab6899813d4b57b092e7f97611e517133ded2b072846afe50",
+    "included": true
+  },
+  {
+    "path": "php-final/manifest.jsonl",
+    "bytes": 432398,
+    "sha256": "13148686ee0b89f07a2a96472ff8a043341b481bf5a59d90ced810890ba41469",
+    "included": true
+  },
+  {
+    "path": "php-final/results.jsonl",
+    "bytes": 137530,
+    "sha256": "b9cee3f9226e9be61506f34c98a30bce1140d5b5bb9387985f7a6f64d7e4be97",
+    "included": true
+  },
+  {
+    "path": "php-final/summary.json",
+    "bytes": 418,
+    "sha256": "e530d8f99346d5a45c94630ca49caa69f5919fdabc8b058dc75c8700a502aefc",
+    "included": true
+  },
+  {
+    "path": "php-final/commands.jsonl",
+    "bytes": 45337,
+    "sha256": "fd88a24f03742fe23d75720d4f451d2bee1cb7fbabadf33faf29d0921ee3e2cd",
+    "included": true
+  },
+  {
+    "path": "kotlin-recheck/manifest.jsonl",
+    "bytes": 6102,
+    "sha256": "d5e55d38eac4620f32b9da75080357784119b2ff74c71685172f2febcbb0272e",
+    "included": true
+  },
+  {
+    "path": "kotlin-recheck/results.jsonl",
+    "bytes": 1921,
+    "sha256": "2827fe859037b6335d7b0a785db870c489fbd5a934a3783c3be3ac65e7931c44",
+    "included": true
+  },
+  {
+    "path": "kotlin-recheck/summary.json",
+    "bytes": 1602,
+    "sha256": "a984de5132777c77667db2191f84748d8ac6df4059093fd2bda31c45a29ddc1c",
+    "included": true
+  },
+  {
+    "path": "kotlin-recheck/commands.jsonl",
+    "bytes": 9010,
+    "sha256": "e402c818661545f39bae58d06a394044563608729f6bbf6ccdfa5f4562eef294",
+    "included": true
+  },
+  {
+    "path": "kotlin-recheck/run.log",
+    "bytes": 206,
+    "sha256": "7f63d88023fc11407810fb97e1376e7ebb8a9ecfb2b5452f873436dba9b0367c",
+    "included": true
+  },
+  {
+    "path": "go-recheck/manifest.jsonl",
+    "bytes": 9405,
+    "sha256": "60aabe24696d980548889b1313a13ff81827b6ab11d76fc5f5337b64e0f9c622",
+    "included": true
+  },
+  {
+    "path": "go-recheck/results.jsonl",
+    "bytes": 1636,
+    "sha256": "9dcdb94fc61ab969d0e18d1ac0cc3667609f4cd10dd5774a0cd09411ed8d0cfb",
+    "included": true
+  },
+  {
+    "path": "go-recheck/summary.json",
+    "bytes": 562,
+    "sha256": "5db08836cdd0a5ac3ad45ca353df45199015286e16e068e07c80d4f96e2c93e1",
+    "included": true
+  },
+  {
+    "path": "go-recheck/commands.jsonl",
+    "bytes": 3044,
+    "sha256": "0dac3145e15b5bae28b624818aac5868e94e2e01c1d3808570ea0b4e009a8098",
+    "included": true
+  },
+  {
+    "path": "go-recheck/verify_selected.py",
+    "bytes": 4268,
+    "sha256": "5999249858d6ad93141f45a1c84944b51a26fe78f110047cd60630a7ff0d2b71",
+    "included": true
+  }
+]

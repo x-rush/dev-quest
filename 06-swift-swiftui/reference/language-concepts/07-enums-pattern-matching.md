@@ -78,11 +78,17 @@ for case .failed(let e) in history { log(e) }
 ### @unknown default
 
 ```swift
-switch alignment {
-case .left: …
-case .center: …
-case .right: …
-@unknown default: …   // 只用于他人库中可能新增 case 的枚举
+import UIKit // iOS 示例；Linux Swift 工具链没有 UIKit
+
+func describe(_ alignment: NSTextAlignment) -> String {
+    switch alignment {
+    case .left: return "左对齐"
+    case .center: return "居中"
+    case .right: return "右对齐"
+    case .justified: return "两端对齐"
+    case .natural: return "按书写方向对齐"
+    @unknown default: return "使用系统默认对齐" // 为未来 SDK 新 case 提供回退
+    }
 }
 ```
 

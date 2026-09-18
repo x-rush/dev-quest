@@ -65,9 +65,30 @@ do {
 
 ### typed throws：缩小抛出范围
 
+以下沿用上一节的 `ApiError`。无论 JSON 解码因字段缺失还是格式错误失败，函数都映射为领域错误 `.decoding`；调用方因此不必依赖底层解码器的错误类型。
+
 ```swift
-// 声明只抛 ApiError，调用方 catch 时无需兜底分支
-func parse(_ data: Data) throws(ApiError) -> Note { … }
+import Foundation
+
+struct Note: Decodable {
+    let id: UUID
+    let title: String
+}
+
+// 声明只抛 ApiError：把 Decoder 的任意 Error 映射为稳定的领域错误。
+func parse(_ data: Data) throws(ApiError) -> Note {
+    do {
+        return try JSONDecoder().decode(Note.self, from: data)
+    } catch {
+        throw .decoding
+    }
+}
+
+do {
+    _ = try parse(Data("{bad json}".utf8))
+} catch {
+    print(error)
+}
 ```
 
 ### Result：把成败当普通值

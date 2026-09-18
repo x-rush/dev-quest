@@ -49,7 +49,7 @@
 
 在项目目录执行 `uv run python`（或 `uv run python -q` 简化输出）进入交互式解释器：
 
-```python
+```pycon
 >>> 2 ** 10
 1024
 >>> name = "python"
@@ -59,6 +59,8 @@
 ['h', 'n', 'o', 'p', 't', 'y']
 >>> help(str.replace)   # 随时查阅文档
 ```
+
+上面是 REPL 会话记录（提示符与输出均属于交互式解释器），不是可直接保存为 `.py` 的脚本。
 
 REPL 的高效用法：
 

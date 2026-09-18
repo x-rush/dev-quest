@@ -286,7 +286,7 @@ export const config = {
 
 #### 2.2 创建基础布局组件
 **app/[locale]/layout.tsx**:
-```typescript
+```tsx
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages, getTranslations } from 'next-intl/server';
 import { Inter } from 'next/font/google';
@@ -343,7 +343,7 @@ export default async function RootLayout({
 
 #### 2.3 实现导航组件
 **components/layout/Navbar.tsx**:
-```typescript
+```tsx
 'use client';
 
 import { useState, useEffect } from 'react';
@@ -503,7 +503,7 @@ export function Navbar() {
 
 #### 2.4 实现首页Hero区域
 **components/sections/Hero.tsx**:
-```typescript
+```tsx
 'use client';
 
 import { useState, useEffect } from 'react';
@@ -602,7 +602,7 @@ export function Hero() {
 
 #### 2.5 实现服务展示组件
 **components/sections/Services.tsx**:
-```typescript
+```tsx
 'use client';
 
 import { useState } from 'react';
@@ -835,7 +835,7 @@ export const cmsClient = new CmsClient();
 
 #### 3.2 实现博客列表页面
 **app/[locale]/blog/page.tsx**:
-```typescript
+```tsx
 import { Metadata } from 'next';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { notFound } from 'next/navigation';
@@ -975,7 +975,7 @@ export default async function BlogPage({ params, searchParams }: BlogPageProps) 
 
 #### 3.3 实现联系表单
 **components/forms/ContactForm.tsx**:
-```typescript
+```tsx
 'use client';
 
 import { useState } from 'react';
@@ -1356,7 +1356,7 @@ export async function generateMetadata({
 
 **加载兜底（app/[locale]/about/loading.tsx）**——营销页视觉素材多，进入时给骨架：
 
-```typescript
+```tsx
 export default function Loading() {
   return (
     <div className="mx-auto max-w-5xl animate-pulse space-y-8 px-4 py-16">
@@ -1374,7 +1374,7 @@ export default function Loading() {
 
 **错误边界（app/[locale]/error.tsx）**——必须是客户端组件：
 
-```typescript
+```tsx
 'use client';
 
 export default function LocaleError({
@@ -1402,7 +1402,7 @@ export default function LocaleError({
 
 **404 约定（app/[locale]/not-found.tsx）**——承接 3.2 中 CMS 查不到数据时调用的 `notFound()`：
 
-```typescript
+```tsx
 import Link from 'next/link';
 
 export default function LocaleNotFound() {
@@ -1489,7 +1489,7 @@ jest.mock('next-intl', () => ({
 
 #### 4.2 组件测试示例
 **__tests__/components/Navbar.test.tsx**:
-```typescript
+```tsx
 import { render, screen, fireEvent } from '@testing-library/react'
 import { Navbar } from '@/components/layout/Navbar'
 

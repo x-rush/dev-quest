@@ -193,10 +193,20 @@ c = copy.deepcopy(a)    # 此处由整数和列表构成，嵌套列表会复制
 判空、判存、判等的惯用法：
 
 ```python
+items = [1, 2]
+mapping = {"name": "Ada"}
+key = "name"
+a = [1, 2]
+b = a.copy()
+
 if items:                       # 非空
+    print("列表有内容")
 if key in mapping:              # 键存在
+    print(mapping[key])         # Ada
 if a == b:                      # 值相等
+    print("内容相等")
 if a is b:                      # 同一对象；不限于单例，但不能代替值比较
+    print("引用同一对象")         # 本例不会执行：copy 创建了新列表
 ```
 
 ---

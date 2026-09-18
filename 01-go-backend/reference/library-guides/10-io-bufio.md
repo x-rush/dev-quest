@@ -9,29 +9,70 @@ io 包用两个极小接口定义了 Go 的**流世界**：`Reader`（`Read(p []
 ## 📖 语法 / 签名
 
 ```go
-// 两大接口
-type Reader interface { Read(p []byte) (n int, err error) }
-type Writer interface { Write(p []byte) (n int, err error) }
-// Read 可能短读；n > 0 与 err != nil 可以同时出现，先处理 p[:n] 再判断 err
+package main
 
-// 组合接口表达能力
-rwc io.ReadWriteCloser   // 同时可读写且可关闭
-rc  io.ReadCloser        // HTTP body 的典型类型
+import (
+	"bufio"
+	"bytes"
+	"fmt"
+	"io"
+	"strings"
+)
 
-// 高频工具函数
-io.Copy(dst Writer, src Reader) (n int64, err error)  // 拷到 EOF（EOF 不算错）
-io.ReadAll(r Reader) ([]byte, error)                  // 一次读尽（内容大时慎用）
-io.ReadFull(r Reader, buf []byte) (int, error)        // 恰好填满 buf 或报错
-io.MultiReader(rs ...Reader) Reader                   // 逻辑串联多个流
-io.TeeReader(r Reader, w Writer) Reader               // 边读边写（旁路记录）
-strings.NewReader(s) / bytes.NewBuffer(b)             // 内存流适配器
+type memoryReadWriteCloser struct{ *bytes.Buffer }
 
-// bufio：缓冲
-br := bufio.NewReader(r)            // 默认 4096 字节缓冲
-bw := bufio.NewWriter(w)            // 攒够或 Flush 才真正写出
-sc := bufio.NewScanner(r)           // 行/token 扫描（默认按行）
-sc.Buffer(buf, maxCap)              // 调大 token 上限
-sc.Split(bufio.ScanWords)           // 换分词规则
+func (memoryReadWriteCloser) Close() error { return nil }
+
+func main() {
+	// Reader/Writer 是 Read/Write 小接口；Read 可能短读，n > 0 与 err != nil 可以同时出现。
+	var reader io.Reader = strings.NewReader("hello")
+	var writer io.Writer = &bytes.Buffer{}
+	n, err := io.Copy(writer, reader) // 拷到 EOF；EOF 不算 Copy 的错误
+	fmt.Println(n, err, writer.(*bytes.Buffer).String())
+
+	var rc io.ReadCloser = io.NopCloser(strings.NewReader("body")) // HTTP body 的典型能力
+	defer rc.Close()
+	var rwc io.ReadWriteCloser = memoryReadWriteCloser{bytes.NewBufferString("rw")}
+	_, _ = rwc.Write([]byte("c"))
+	_ = rwc.Close()
+
+	all, err := io.ReadAll(strings.NewReader("small input")) // 内容大时慎用
+	fmt.Println(string(all), err)
+	full := make([]byte, 3)
+	_, err = io.ReadFull(strings.NewReader("abc"), full) // 恰好填满 buf 或报错
+	fmt.Println(string(full), err)
+
+	multi := io.MultiReader(strings.NewReader("A"), strings.NewReader("B"))
+	teeDestination := &bytes.Buffer{}
+	tee := io.TeeReader(multi, teeDestination) // 边读边写（旁路记录）
+	teeData, err := io.ReadAll(tee)
+	fmt.Println(string(teeData), teeDestination.String(), err)
+
+	br := bufio.NewReader(strings.NewReader("buffered read")) // 默认 4096 字节缓冲
+	word, err := br.ReadString(' ')
+	fmt.Println(word, err)
+
+	var output bytes.Buffer
+	bw := bufio.NewWriter(&output) // 攒够或 Flush 才真正写到 output
+	_, err = bw.WriteString("buffered write")
+	if err != nil {
+		panic(err)
+	}
+	if err := bw.Flush(); err != nil { // 必须检查 Flush
+		panic(err)
+	}
+	fmt.Println(output.String())
+
+	sc := bufio.NewScanner(strings.NewReader("one two three"))
+	sc.Buffer(make([]byte, 0, 64*1024), 200*1024) // 调大 token 上限
+	sc.Split(bufio.ScanWords)                      // 换分词规则
+	for sc.Scan() {
+		fmt.Println(sc.Text())
+	}
+	if err := sc.Err(); err != nil {
+		panic(err)
+	}
+}
 ```
 
 **Scanner 默认 64K 上限**：`bufio.Scanner` 内部缓冲默认最大 token 约 64 KB（`bufio.MaxScanTokenSize`）；更长的行会触发 `bufio.Scanner: token too long` 且**静默停止**（Scan 返回 false）。处理大行必须 `sc.Buffer(make([]byte, 0, 64*1024), max)` 显式调大。

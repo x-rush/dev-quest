@@ -30,7 +30,11 @@
 # 安装Vitest
 npm install -D vitest @vitest/ui jsdom @vitest/coverage-v8 @vitejs/plugin-react
 
-# 配置测试脚本
+```
+
+在 `package.json` 的 `scripts` 中合并以下配置，保留已有的开发和构建命令：
+
+```json
 {
   "scripts": {
     "test": "vitest",
@@ -347,7 +351,7 @@ describe("Validation Schemas", () => {
 
 ### 1. 基础组件测试
 
-```typescript
+```tsx
 // src/components/ui/button.tsx
 import * as React from "react"
 import { cva, type VariantProps } from "class-variance-authority"
@@ -401,7 +405,7 @@ Button.displayName = "Button"
 export { Button, buttonVariants }
 ```
 
-```typescript
+```tsx
 // __tests__/components/ui/button.test.tsx
 import { render, screen } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
@@ -469,7 +473,7 @@ describe("Button Component", () => {
 
 ### 2. 复杂组件测试
 
-```typescript
+```tsx
 // src/components/forms/contact-form.tsx
 "use client"
 
@@ -601,7 +605,7 @@ export function ContactForm({ onSubmit }: ContactFormProps) {
 }
 ```
 
-```typescript
+```tsx
 // __tests__/components/forms/contact-form.test.tsx
 import { render, screen, waitFor } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"

@@ -108,6 +108,7 @@ const styles = StyleSheet.create({
 import { Image } from 'react-native';
 
 // 1. 本地静态资源（构建期打包，必须用 require 且路径为字面量）
+const imageExamples = <>
 <Image source={require('./assets/logo.png')} style={{ width: 40, height: 40 }} />
 
 // 2. 网络图片（必须显式声明宽高）
@@ -118,6 +119,7 @@ import { Image } from 'react-native';
 
 // 3. base64 / data URI
 <Image source={{ uri: 'data:image/png;base64,iVBORw0KG...' }} style={{ width: 24, height: 24 }} />
+</>;
 ```
 
 ## 💻 ScrollView vs FlatList

@@ -9,21 +9,41 @@ Go 把错误当**普通值**：`error` 是单方法接口，函数用最后一�
 ## 📖 语法 / 签名
 
 ```go
-// error 接口
-type error interface { Error() string }
+package main
 
-// 三种构造
-errors.New("boom")                      // 匿名错误（动态消息，不宜做 sentinel 比较）
-fmt.Errorf("read %s: %w", path, err)    // %w 包装：保留原错误形成链
-myErr{...}                              // 自定义类型（可携带结构化字段）
+import (
+	"errors"
+	"fmt"
+)
 
-// 三个判读工具（1.13+）
-errors.Is(err, target)    // 链上是否"等于" target（== 或 Is(target error) bool 方法）
-errors.As(err, &target)   // 链上是否能"提取为"某具体类型
-errors.Unwrap(err)        // 仅调用 Unwrap() error；不展开 Join 的 Unwrap() []error
+// customError 是可携带结构化字段的自定义 error 类型。
+type customError struct {
+	Path string
+}
 
-// 多错误合并（Go 1.20+）
-joined := errors.Join(err1, err2)   // 全 nil 则返回 nil；Is/As 可穿透各成员
+func (e *customError) Error() string { return "cannot read " + e.Path }
+
+func main() {
+	path := "config.json"
+	target := errors.New("boom") // 匿名错误；动态消息不宜重新构造后做 sentinel 比较
+	err := fmt.Errorf("read %s: %w", path, target) // %w 保留原错误形成链
+
+	// Is 沿包装链匹配 sentinel；Unwrap 只调用 Unwrap() error。
+	fmt.Println(errors.Is(err, target))
+	fmt.Println(errors.Unwrap(err))
+
+	structured := fmt.Errorf("request failed: %w", &customError{Path: path})
+	var extracted *customError
+	fmt.Println(errors.As(structured, &extracted), extracted.Path) // 提取具体类型
+
+	err1 := errors.New("cache failed")
+	err2 := &customError{Path: "metrics"}
+	joined := errors.Join(err1, err2) // Go 1.20+；全 nil 时返回 nil，Is/As 能穿透成员
+	fmt.Println(errors.Is(joined, err1))
+	var joinedCustom *customError
+	fmt.Println(errors.As(joined, &joinedCustom), joinedCustom.Path)
+	fmt.Println(errors.Unwrap(joined) == nil) // Join 的 Unwrap() []error 不由 errors.Unwrap 展开
+}
 ```
 
 **Sentinel error 模式**：包级导出的预声明错误值（`var ErrNotFound = errors.New("not found")`），调用方用 `errors.Is(err, ErrNotFound)` 识别。命名惯例：导出为 `ErrXxx`。

@@ -154,8 +154,8 @@ def main():
                 if not fn.endswith(".md"):
                     continue
                 path = os.path.join(dirpath, fn)
-                rel = os.path.relpath(path, root)
-                parts = rel.split(os.sep)
+                rel = os.path.relpath(path, root).replace(os.sep, "/")
+                parts = rel.split("/")
                 module = parts[0] if len(parts) > 1 else "(root)"
                 for b in extract_file(path):
                     seq += 1

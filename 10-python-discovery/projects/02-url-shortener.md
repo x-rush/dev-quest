@@ -157,9 +157,11 @@ uv run uvicorn main:app --reload
 curl -s -X POST localhost:8000/urls -H 'content-type: application/json' \
   -d '{"url": "https://docs.python.org/3.14/"}'
 # 跳转（-i 看 307 与 Location 头）
-curl -s -i localhost:8000/<code>
+# 将创建接口返回的短码填入 SHORT_CODE
+SHORT_CODE=""
+curl -s -i "localhost:8000/${SHORT_CODE:?请先填写创建接口返回的短码}"
 # 统计（clicks 随跳转增长）
-curl -s localhost:8000/urls/<code>/stats
+curl -s "localhost:8000/urls/${SHORT_CODE:?请先填写短码}/stats"
 ```
 
 集成测试写法（TestClient + 依赖覆盖）见[集成测试](../testing/02-integration-testing.md)。

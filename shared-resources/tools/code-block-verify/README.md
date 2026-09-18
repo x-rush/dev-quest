@@ -2,6 +2,8 @@
 
 验证的目标是让每个代码块都有可解释的状态，不是让每个教学片段独立运行成功。任何 PASS 都只能说明记录的检查通过，不能代替内容审查或真实框架集成测试。
 
+本轮实际扫描、修补和环境边界见[2026-09-18 全库验证报告](../document-quality/reports/verification-2026-09-18/README.md)。报告包含当前内容哈希匹配的逐块证据，并分别呈现纯语法检查、运行检查与缺少项目上下文的诊断。
+
 ## 日常自动检查
 
 `.github/workflows/verify.yml` 在推送 main 和 PR 时只运行快速文档完整性检查：本地文件链接、GitHub 风格章节锚点、代码围栏闭合。三个步骤独立执行，某一步失败不会跳过其余检查，报告上传到 `document-integrity` artifact。
@@ -11,6 +13,8 @@
 手动全量 job 使用 PHP 8.5，并在开始验证前检查主次版本，避免 Ubuntu 24.04 默认 PHP 8.3 误报新语法；通过 [setup-php 的官方项目说明](https://github.com/shivammathur/setup-php#tada-php-support)指定版本。Rust 使用 runner 当前工具链并显式安装 `rustfmt` 组件，然后检查其可执行版本；只有 rustup 代理存在不代表组件可用。组件管理依据 [Rustup 文档](https://rust-lang.github.io/rustup/concepts/components.html)。这些依赖安装只在手动全量 job 执行，日常快速门禁不安装多语言环境。
 
 Python 检查器使用 3.14，与 Python 模块的语法基线一致，避免旧解释器把 t-string、类型参数默认值等新语法判为错误。
+
+Kotlin 使用官方 2.4.20 编译器发布包，并验证下载内容 SHA-256。Swift 仍须查看报告中实际工具版本；Linux 的 Swift 解析不包含 Apple SDK 构建验证。
 
 周报 `baseline-weekly.yml` 继续报告外链和版本漂移，不代表自动批准技术版本升级。
 

@@ -128,7 +128,9 @@ ScrollView {
 ```swift
 // 反例：每次求值都排序 + 过滤 O(n log n)
 var body: some View {
-    List(habits.filter { $0.streak > 0 }.sorted { $0.streak > $1.streak }) { ... }
+    List(habits.filter { $0.streak > 0 }.sorted { $0.streak > $1.streak }) { habit in
+        HabitRow(habit: habit)
+    }
 }
 
 // 仅提取计算属性改善可读性；这仍然没有缓存，不能当性能修复
@@ -138,7 +140,7 @@ struct TopHabitsView: View {
         habits.filter { $0.streak > 0 }
               .sorted { $0.streak > $1.streak }
     }
-    var body: some View { List(topHabits) { ... } }
+    var body: some View { List(topHabits) { habit in HabitRow(habit: habit) } }
 }
 ```
 
@@ -170,8 +172,8 @@ struct StreakBadge: View {
 
 ```swift
 // ForEach 的 id 必须稳定：用数据库 ID，别用数组下标
-ForEach(habits) { habit in ... }              // @Model 自带 persistentModelID ✅
-ForEach(Array(habits.enumerated()), id: \.offset) { ... }   // ❌ 增删时全表错位
+ForEach(habits) { habit in HabitRow(habit: habit) }              // @Model 自带 persistentModelID ✅
+ForEach(Array(habits.enumerated()), id: \.offset) { _, habit in HabitRow(habit: habit) }   // ❌ 增删时全表错位
 
 // 图片等昂贵子视图：确保输入不变时结构不变，SwiftUI 自动跳过重绘
 HabitThumbnail(url: habit.iconURL)            // 保持稳定输入有助于优化，但不保证无其他依赖更新

@@ -104,7 +104,7 @@ export function createDataFetchingStrategy(config: {
 ### 1. 高级静态生成 (SSG)
 **企业级静态内容生成**
 
-```typescript
+```tsx
 // app/posts/page.tsx
 import { notFound } from 'next/navigation';
 import { cache } from 'react';
@@ -380,7 +380,7 @@ export async function POST(request: NextRequest) {
 ### 3. 流式服务器端渲染
 **高性能流式内容传输**
 
-```typescript
+```tsx
 // app/dashboard/loading.tsx
 import { Skeleton } from '@/components/ui/skeleton';
 
@@ -516,13 +516,13 @@ function StatsCardsSkeleton() {
 ### 1. 企业级 SWR 配置
 **高级数据同步和缓存**
 
-```typescript
+```tsx
 // lib/swr-config.ts
 import useSWR, { SWRConfig, SWRConfiguration } from 'swr';
 import type { ReactNode } from 'react';
 
 // 自定义 fetcher
-const fetcher = async <T>(url: string): Promise<T> => {
+const fetcher = async <T,>(url: string): Promise<T> => {
   const response = await fetch(url);
 
   if (!response.ok) {
@@ -752,7 +752,7 @@ export function useBatchData<T>(urls: string[], options?: {
 ### 2. TanStack Query 企业级配置
 **强大的数据管理解决方案**
 
-```typescript
+```tsx
 // lib/query-client.ts
 import { QueryClient } from '@tanstack/react-query';
 import { Component } from 'react';

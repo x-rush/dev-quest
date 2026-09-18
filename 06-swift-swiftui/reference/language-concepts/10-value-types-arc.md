@@ -81,7 +81,10 @@ func demo() {
 ### SwiftUI 中的标准分工
 
 ```swift
-// 值类型：数据快照，传给谁都不怕被改
+import Foundation
+import Observation
+
+// 值类型：复制本例结构后，修改副本的字段不会修改原值
 struct Note: Identifiable, Codable {
     let id: UUID
     var title: String
@@ -92,7 +95,10 @@ struct Note: Identifiable, Codable {
 @MainActor @Observable
 final class NotesModel {
     var notes: [Note] = []          // 数组元素是值类型
-    func toggle(_ id: UUID) { … }
+    func toggle(_ id: UUID) {
+        guard let index = notes.firstIndex(where: { $0.id == id }) else { return }
+        notes[index].done.toggle()
+    }
 }
 ```
 

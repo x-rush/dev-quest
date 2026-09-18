@@ -31,7 +31,9 @@ jobs:
           python-version: '3.14'
       - run: mkdir -p /tmp/dq-reports
       - name: Verifier regression tests
-        run: python -m unittest discover -s shared-resources/tools/code-block-verify -p 'test_verifier.py'
+        run: |
+          python -m unittest discover -s shared-resources/tools/code-block-verify -p 'test_verifier.py'
+          python -m unittest discover -s shared-resources/tools/code-block-verify -p 'test_merge_evidence.py'
       - name: Pipeline exit-status regression
         run: python shared-resources/tools/code-block-verify/test_pipeline.py
       - name: Local file links
@@ -85,17 +87,29 @@ jobs:
           rustup component add rustfmt
           rustfmt --version
           php -r 'exit(PHP_MAJOR_VERSION === 8 && PHP_MINOR_VERSION === 5 ? 0 : 1);'
+      - name: Install Kotlin matching the documentation baseline
+        run: |
+          curl --fail --location --retry 3 https://github.com/JetBrains/kotlin/releases/download/v2.4.20/kotlin-compiler-2.4.20.zip -o "$RUNNER_TEMP/kotlin.zip"
+          echo "59e9ca74c7904ef2c122b12114937673ccce68de820a663f0ed66ccf8799e0b7  $RUNNER_TEMP/kotlin.zip" | sha256sum --check
+          unzip -q "$RUNNER_TEMP/kotlin.zip" -d "$RUNNER_TEMP/kotlin"
+          echo "$RUNNER_TEMP/kotlin/kotlinc/bin" >> "$GITHUB_PATH"
+          "$RUNNER_TEMP/kotlin/kotlinc/bin/kotlinc" -version
       - name: Build and test runners
         run: |
           mkdir -p /tmp/dq-verify/parsego
           go build -o /tmp/dq-verify/parsego/parsego shared-resources/tools/code-block-verify/parsego/main.go
           python shared-resources/tools/code-block-verify/test_parsego.py /tmp/dq-verify/parsego/parsego
           python -m unittest discover -s shared-resources/tools/code-block-verify -p 'test_verifier.py'
+          python -m unittest discover -s shared-resources/tools/code-block-verify -p 'test_merge_evidence.py'
+          TYPESCRIPT_PATH="$(npm root -g)/typescript" node --test shared-resources/tools/code-block-verify/test_tsjs_syntax.mjs
       - name: Extract inventory
         run: python shared-resources/tools/code-block-verify/extract_blocks.py .
+      - name: Parse TS and JS using the documented fence languages
+        run: TYPESCRIPT_PATH="$(npm root -g)/typescript" node shared-resources/tools/code-block-verify/verify_tsjs_syntax.mjs
       # Only a disposable hosted runner: checkout credentials are not persisted,
       # no repository secrets are passed, and contents permission stays read-only.
       - name: Verify and retain actual exit status
+        if: success() || failure()
         env:
           EXECUTE: ${{ inputs.execute_examples }}
         run: |
@@ -124,3 +138,5 @@ jobs:
             shared-resources/tools/code-block-verify/summary.json
             shared-resources/tools/code-block-verify/report.md
             shared-resources/tools/code-block-verify/run.log
+            shared-resources/tools/code-block-verify/tsjs-syntax-results.jsonl
+            shared-resources/tools/code-block-verify/tsjs-syntax-report.md

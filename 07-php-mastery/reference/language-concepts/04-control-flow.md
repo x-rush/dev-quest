@@ -34,10 +34,14 @@ if ($a > $b) {
     echo 'b 大';
 }
 
-// 替代语法（PHP 模板常用）
-// <?php if ($ok): ?>
-//     <p>通过</p>
-// <?php endif; ?>
+```
+
+替代语法用于 PHP 模板文件：
+
+```html
+<?php if ($ok): ?>
+    <p>通过</p>
+<?php endif; ?>
 ```
 
 **陷阱**: PHP 中严格写作 `elseif`（`else if` 分开写也合法但语义是嵌套 if）；条件内赋值 `if ($x = f())` 合法但高危。

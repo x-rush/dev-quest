@@ -73,8 +73,6 @@ public class TimingAspect {
                      (System.nanoTime() - start) / 1_000_000);
         }
     }
-}
-
 // 自定义注解 + @annotation：按需启用审计
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
@@ -84,6 +82,8 @@ public @interface Audited { String action(); }
 public Object audit(ProceedingJoinPoint pjp, Audited audited) throws Throwable {
     auditLog.record(audited.action()); // 只记录明确允许的元数据，避免直接输出所有参数
     return pjp.proceed();
+}
+
 }
 ```
 

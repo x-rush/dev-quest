@@ -129,6 +129,8 @@ val c by lazy(LazyThreadSafetyMode.NONE)         { compute() }  // 不提供并�
 **定义**: 可观察属性——值变化时收到回调；`vetoable` 还可否决赋值。
 
 ```kotlin
+import kotlin.properties.Delegates
+
 var score: Int by Delegates.observable(0) { _, old, new ->
     println("分数 $old → $new")                  // 类似 JS setter 拦截
 }
@@ -167,6 +169,9 @@ val Context.settingsStore by preferencesDataStore(name = "settings")
 **定义**: 实现 `ReadOnlyProperty`/`ReadWriteProperty` 即可发明自己的属性行为。
 
 ```kotlin
+import kotlin.properties.ReadWriteProperty
+import kotlin.reflect.KProperty
+
 class NotEmptyString(initial: String) : ReadWriteProperty<Any?, String> {
     private var value = initial.trim().also { require(it.isNotEmpty()) }
     override fun getValue(thisRef: Any?, property: KProperty<*>): String = value

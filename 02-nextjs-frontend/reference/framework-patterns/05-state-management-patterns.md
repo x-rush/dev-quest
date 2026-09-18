@@ -105,7 +105,7 @@ export function createStateStrategy(config: {
 ### 1. 高级 useState 模式
 **智能状态管理 hooks**
 
-```typescript
+```tsx
 // hooks/use-advanced-state.ts
 import { useState, useCallback, useRef, useEffect } from 'react';
 

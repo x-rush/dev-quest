@@ -35,7 +35,7 @@ Next.js 16 与 React 19 结合提供了强大的客户端组件生态系统。�
 
 **全面的组件分类和管理策略**
 
-```typescript
+```tsx
 // types/client-component.ts
 import { ComponentType, ReactNode, DetailedHTMLProps, HTMLAttributes } from 'react';
 
@@ -103,7 +103,7 @@ export interface AdvancedClientComponentProps<T = {}>
 
 #### 1.1 函数式客户端组件
 
-```typescript
+```tsx
 // components/basic-client-component.tsx
 'use client';
 
@@ -208,7 +208,7 @@ export const BasicClientComponent: React.FC<
 
 #### 1.2 高阶客户端组件模式
 
-```typescript
+```tsx
 // components/higher-order-client-component.tsx
 'use client';
 
@@ -305,7 +305,7 @@ export const EnhancedComponent = withLoading(
 
 #### 2.1 本地状态管理
 
-```typescript
+```tsx
 // components/local-state-component.tsx
 'use client';
 
@@ -539,7 +539,7 @@ export const UserProfileComponent: React.FC = () => {
 
 #### 2.2 全局状态集成
 
-```typescript
+```tsx
 // components/global-state-component.tsx
 'use client';
 
@@ -697,7 +697,7 @@ export const GlobalStateComponent: React.FC<GlobalStateComponentProps> = ({
 
 #### 3.1 综合事件处理
 
-```typescript
+```tsx
 // components/event-handling-component.tsx
 'use client';
 
@@ -1043,7 +1043,7 @@ export const EventHandlingComponent: React.FC = () => {
 
 #### 1.1 React.memo 和 useMemo 优化
 
-```typescript
+```tsx
 // components/performance-optimized-component.tsx
 'use client';
 
@@ -1183,7 +1183,7 @@ export const PerformanceOptimizedComponent: React.FC = () => {
 
 #### 1.2 虚拟化列表组件
 
-```typescript
+```tsx
 // components/virtualized-list.tsx
 'use client';
 
@@ -1353,7 +1353,7 @@ export const VirtualizedListExample: React.FC = () => {
 
 #### 2.1 Tab 组件组合
 
-```typescript
+```tsx
 // components/compound-tab-component.tsx
 'use client';
 
@@ -1611,7 +1611,7 @@ export const TabExample: React.FC = () => {
 
 #### 3.1 数据获取 Render Props
 
-```typescript
+```tsx
 // components/render-props-data-fetcher.tsx
 'use client';
 

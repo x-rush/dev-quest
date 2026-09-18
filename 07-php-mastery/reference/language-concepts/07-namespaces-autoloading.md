@@ -67,7 +67,7 @@ use App\Service\Invoice;                    // 类别名
 use App\Service\Invoice as Contract;        // 显式别名
 use function App\helpers\json_dump;         // 函数（5.6+）
 use const App\MAX_RETRY;                    // 常量（5.6+）
-use App\{Invoice, Order, Model\User};       // 分组 use（7.0+）
+use App\{Order, Model\User};                // 分组 use（7.0+）
 ```
 
 💡 **示例**:

@@ -17,20 +17,37 @@
 ## 1. Kotlin 基础
 
 ```kotlin
-val name = "Compose"                          // 只读 + 类型推断
-var count = 0                                 // 可变
-fun add(a: Int, b: Int = 1): Int = a + b      // 默认参数 + 单表达式
-val label = if (ok) "是" else "否"             // if 是表达式
-val grade = when { score >= 90 -> "A"; else -> "B" }   // when 表达式
-val msg = nickname ?: "匿名"                   // Elvis 默认值
-val len = user?.name?.length ?: 0             // 安全调用链
-data class User(val id: Long, val name: String)         // 数据类
-val u2 = u1.copy(name = "Bob")                // 不可变更新
-val (id, name) = u1                           // 解构
+data class User(val id: Long, val name: String)
+sealed interface State {
+    data object Loading : State
+    data class Data(val v: Int) : State
+}
+fun add(a: Int, b: Int = 1): Int = a + b       // 默认参数与单表达式
 fun String.shout() = uppercase() + "!"        // 扩展函数
-sealed interface State { data object Loading : State; data class Data(val v: Int) : State }
-listOf(1, 2, 3).map { it * 2 }.filter { it > 2 }        // 集合链
-val tag by lazy { expensive() }               // 该属性首次成功读取后缓存
+
+fun main() {
+    val name = "Compose"                      // 只读与类型推断
+    var count = 0
+    count += 1
+    val ok = true
+    val score = 95
+    val nickname: String? = null
+    val u1 = User(1L, "Ada")
+    val user: User? = u1
+    val label = if (ok) "是" else "否"         // if 是表达式
+    val grade = when { score >= 90 -> "A"; else -> "B" }
+    val msg = nickname ?: "匿名"               // Elvis 默认值
+    val len = user?.name?.length ?: 0         // 安全调用链
+    val u2 = u1.copy(name = "Bob")            // 创建新值，u1 不变
+    val (id, userName) = u1                   // 解构；避免与 name 重名
+    val doubled = listOf(1, 2, 3).map { it * 2 }.filter { it > 2 }
+    val tag by lazy { println("初始化一次"); name.shout() }
+    println(listOf(count, label, grade, msg, len, id, userName, u2.name))
+    println(doubled)                          // [4, 6]
+    println(tag)                             // 首次读取时初始化
+    println(tag)                             // 复用缓存结果
+}
+
 ```
 
 ## 2. 协程

@@ -2322,7 +2322,7 @@ export async function generateMetadata({ params }: ProductPageProps): Promise<Me
 
 **商品列表加载兜底（app/products/loading.tsx）**：
 
-```typescript
+```tsx
 export default function Loading() {
   return (
     <div className="mx-auto grid max-w-7xl grid-cols-1 gap-6 px-4 py-8 sm:grid-cols-2 lg:grid-cols-4">
@@ -2340,7 +2340,7 @@ export default function Loading() {
 
 **错误边界（app/products/[slug]/error.tsx）**——必须是客户端组件：
 
-```typescript
+```tsx
 'use client';
 
 export default function ProductError({
@@ -2365,7 +2365,7 @@ export default function ProductError({
 
 **404 约定（app/products/[slug]/not-found.tsx）**——承接上方 `generateMetadata` 中的 `notFound()`：
 
-```typescript
+```tsx
 import Link from 'next/link';
 
 export default function ProductNotFound() {

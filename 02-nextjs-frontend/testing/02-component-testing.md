@@ -148,7 +148,7 @@ afterAll(() => server.close());
 
 ### 3. 测试工具配置
 
-```typescript
+```tsx
 // __tests__/utils/test-utils.tsx
 import { ReactElement } from "react"
 import { render, RenderOptions } from "@testing-library/react"
@@ -227,7 +227,7 @@ export { customRender as render }
 
 #### 1. 简单组件测试
 
-```typescript
+```tsx
 // components/Button.tsx
 interface ButtonProps {
   children: React.ReactNode
@@ -254,7 +254,7 @@ export const Button: React.FC<ButtonProps> = ({
 }
 ```
 
-```typescript
+```tsx
 // __tests__/components/Button.test.tsx
 import { describe, it, expect, vi } from "vitest"
 import { render, screen, fireEvent } from "@testing-library/react"
@@ -290,7 +290,7 @@ describe("Button Component", () => {
 
 #### 2. 表单组件测试
 
-```typescript
+```tsx
 // components/ContactForm.tsx
 import { useState } from 'react'
 
@@ -393,7 +393,7 @@ export const ContactForm: React.FC<ContactFormProps> = ({ onSubmit }) => {
 }
 ```
 
-```typescript
+```tsx
 // __tests__/components/ContactForm.test.tsx
 import { describe, it, expect, vi } from "vitest"
 import { render, screen, fireEvent, waitFor } from "@testing-library/react"
@@ -489,7 +489,7 @@ describe("ContactForm Component", () => {
 
 #### 1. 异步组件测试
 
-```typescript
+```tsx
 // components/UserProfile.tsx
 import { useQuery } from "@tanstack/react-query"
 
@@ -526,7 +526,7 @@ export const UserProfile: React.FC<{ userId: number }> = ({ userId }) => {
 }
 ```
 
-```typescript
+```tsx
 // __tests__/components/UserProfile.test.tsx
 import { describe, it, expect, beforeEach } from "vitest"
 import { render, screen, waitFor } from "@testing-library/react"
@@ -735,7 +735,7 @@ describe("useLocalStorage Hook", () => {
 
 #### 3. Context Provider测试
 
-```typescript
+```tsx
 // context/AuthContext.tsx
 import { createContext, useContext, useState } from 'react'
 
@@ -801,7 +801,7 @@ export const useAuth = () => {
 }
 ```
 
-```typescript
+```tsx
 // __tests__/context/AuthContext.test.tsx
 import { describe, it, expect, beforeEach } from "vitest"
 import { render, screen, fireEvent, waitFor } from "@testing-library/react"
@@ -954,7 +954,7 @@ describe("AuthContext", () => {
 
 #### 1. 数据表格组件
 
-```typescript
+```tsx
 // components/DataTable.tsx
 import { useState } from 'react'
 
@@ -1046,7 +1046,7 @@ export function DataTable<T extends Record<string, any>>({
 }
 ```
 
-```typescript
+```tsx
 // __tests__/components/DataTable.test.tsx
 import { describe, it, expect, vi } from "vitest"
 import { render, screen, fireEvent, waitFor } from "@testing-library/react"
@@ -1181,7 +1181,7 @@ describe("DataTable Component", () => {
 
 #### 1. 防抖搜索组件
 
-```typescript
+```tsx
 // components/SearchInput.tsx
 import { useState, useEffect } from 'react'
 import { useDebounce } from "@/hooks/useDebounce"
@@ -1225,7 +1225,7 @@ export const SearchInput: React.FC<SearchInputProps> = ({
 }
 ```
 
-```typescript
+```tsx
 // __tests__/components/SearchInput.test.tsx
 import { describe, it, expect, vi, beforeEach } from "vitest"
 import { render, screen, fireEvent, waitFor } from "@testing-library/react"
@@ -1346,7 +1346,7 @@ describe("SearchInput Component", () => {
 
 ### 错误边界测试
 
-```typescript
+```tsx
 // components/ErrorBoundary.tsx
 import React from 'react'
 
@@ -1390,7 +1390,7 @@ export class ErrorBoundary extends React.Component<
 }
 ```
 
-```typescript
+```tsx
 // __tests__/components/ErrorBoundary.test.tsx
 import { describe, it, expect, vi } from "vitest"
 import { render, screen, fireEvent } from "@testing-library/react"
@@ -1567,7 +1567,7 @@ export const handlers = [
 ```
 
 **组件Mock策略**:
-```typescript
+```tsx
 // Mock子组件
 vi.mock("@/components/ChildComponent", () => ({
   ChildComponent: ({ children }: { children: React.ReactNode }) => (
@@ -1902,7 +1902,7 @@ export const generateTestReport = async (): Promise<TestMetrics> => {
 ### 性能基准测试
 
 **组件性能测试**:
-```typescript
+```tsx
 // __tests__/performance/ComponentPerformance.test.tsx
 // 注意：@testing-library/react 没有 measurePerformance 导出，用 performance.now 自行计时
 import { render, act } from "@testing-library/react"

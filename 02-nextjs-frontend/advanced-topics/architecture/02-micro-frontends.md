@@ -312,7 +312,7 @@ declare module '@module-federation/nextjs-mf' {
 
 #### 主应用路由设计
 
-```typescript
+```tsx
 // pages/_app.tsx (主应用)
 import { AppProps } from 'next/app';
 import { useRouter } from 'next/router';
@@ -396,7 +396,7 @@ export default MyApp;
 
 #### 微应用路由实现
 
-```typescript
+```tsx
 // apps/product/pages/routes.tsx
 import { lazy, Suspense } from 'react';
 import { useRouter } from 'next/router';
@@ -572,7 +572,7 @@ function showFallbackUI(event: any) {
 
 ### 2. 微应用适配
 
-```typescript
+```tsx
 // apps/product/src/qiankun/index.ts
 import { createRoot } from 'react-dom/client';
 // React 18+ 已移除 ReactDOM.render/unmountComponentAtNode，改用 createRoot
@@ -603,7 +603,7 @@ if (!window.__POWERED_BY_QIANKUN__) {
 }
 ```
 
-```typescript
+```html
 // apps/product/public/index.html
 <!DOCTYPE html>
 <html>
@@ -1023,7 +1023,7 @@ start({
 
 ### 2. 微应用入口
 
-```typescript
+```tsx
 // apps/product/src/single-spa/main.ts
 import React from 'react';
 import ReactDOM from 'react-dom';

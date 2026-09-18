@@ -436,7 +436,10 @@ func AuthDirective(ctx context.Context, obj interface{}, next graphql.Resolver, 
     return next(ctx)
 }
 
-// 在schema中使用指令
+// 在 schema 中使用指令（以下是 GraphQL SDL，不是 Go）
+```
+
+```graphql
 directive @auth(role: String) on FIELD_DEFINITION
 directive @hasRole(role: String!) on FIELD_DEFINITION
 ```

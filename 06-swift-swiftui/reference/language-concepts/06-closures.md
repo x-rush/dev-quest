@@ -68,8 +68,22 @@ Button {
 ### escaping 与捕获列表
 
 ```swift
-// @escaping：闭包生命周期超出函数调用（存储起来稍后调用）
-func observe(onUpdate: @escaping () -> Void) { … }
+// @escaping：闭包生命周期超出函数调用；Observer 明确拥有并稍后触发它。
+final class Observer {
+    private var onUpdate: (() -> Void)?
+
+    func observe(onUpdate: @escaping () -> Void) {
+        self.onUpdate = onUpdate
+    }
+
+    func notify() {
+        onUpdate?()
+    }
+}
+
+let observer = Observer()
+observer.observe { print("数据已更新") }
+observer.notify()
 
 // 非逃逸（默认）：闭包不能逃出这次调用；是否执行由函数实现决定，不能承诺零开销
 func twice(_ work: () -> Void) { work(); work() }

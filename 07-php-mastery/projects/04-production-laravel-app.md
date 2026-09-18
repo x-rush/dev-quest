@@ -63,7 +63,11 @@ final class CreateOrderAction
     public function execute(User $user, OrderData $data): Order
     {
         return DB::transaction(function () use ($user, $data): Order {
-            $order = $user->orders()->create([...]);   // 核心规则（示意）
+            $order = $user->orders()->create([
+                'product_id' => $data->productId,
+                'quantity'   => $data->quantity,
+                'coupon_code' => $data->couponCode,
+            ]);
 
             CreateOrderAudit::dispatch($order);        // 副作用全部异步
 

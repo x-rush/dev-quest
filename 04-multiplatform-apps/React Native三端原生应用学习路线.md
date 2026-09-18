@@ -39,43 +39,49 @@ graph TD
 ## 📊 技术栈架构
 
 ### 核心技术栈 (基于已有基础)
-```json
-// 依赖版本示意（非完整 package.json，不可直接编译/安装）
-// React Native 核心 (2025年推荐版本)
-"react": "^18.2.0",
-"react-native": "^0.73.0",
-"@react-native-async-storage/async-storage": "^1.21.0",
-"@react-native-community/netinfo": "^9.4.0",
-"@react-navigation/native": "^6.1.0",
-"@react-navigation/stack": "^6.3.0",
-"@react-navigation/bottom-tabs": "^6.5.0",
+这些版本保留作旧工程迁移对照，不代表当前兼容组合。新建工程按[模块版本基线与学习入口](./README.md)使用对应模板，再逐项加入依赖；不要直接复制下面的旧版本集合安装。
 
-// TypeScript 5.x (已有经验)
-"typescript": "^5.0.0",
-"@types/react": "^18.0.0",
-"@types/react-native": "^0.72.0",
+```jsonc
+{
+  "dependencies": {
+    // 历史依赖结构：用于识别旧工程，不是新项目安装清单
+    // 旧版 React Native 核心依赖
+    "react": "^18.2.0",
+    "react-native": "^0.73.0",
+    "@react-native-async-storage/async-storage": "^1.21.0",
+    "@react-native-community/netinfo": "^9.4.0",
+    "@react-navigation/native": "^6.1.0",
+    "@react-navigation/stack": "^6.3.0",
+    "@react-navigation/bottom-tabs": "^6.5.0",
 
-// 状态管理 (与Next.js项目保持一致)
-"zustand": "^4.4.0",
-"@tanstack/react-query": "^5.0.0",
+    // TypeScript 5.x (已有经验)
+    "typescript": "^5.0.0",
+    "@types/react": "^18.0.0",
+    "@types/react-native": "^0.72.0",
 
-// UI组件库
-"react-native-elements": "^3.4.0",
-"react-native-vector-icons": "^10.0.0",
-"react-native-paper": "^5.11.0",
+    // 状态管理 (与Next.js项目保持一致)
+    "zustand": "^4.4.0",
+    "@tanstack/react-query": "^5.0.0",
 
-// 网络请求 (与Go后端集成；RN 直接使用官方 axios 包)
-"axios": "^1.6.0",
+    // UI组件库
+    "react-native-elements": "^3.4.0",
+    "react-native-vector-icons": "^10.0.0",
+    "react-native-paper": "^5.11.0",
 
-// 原生功能桥接
-"react-native-permissions": "^3.10.0",
-"react-native-camera": "^4.2.0",
-"react-native-geolocation-service": "^5.3.0",
+    // 网络请求 (与Go后端集成；RN 直接使用官方 axios 包)
+    "axios": "^1.6.0",
 
-// 开发工具
-"@react-native-community/cli": "^12.0.0",
-"metro-react-native-babel-preset": "^0.77.0",
-"flipper": "^0.207.0"
+    // 原生功能桥接
+    "react-native-permissions": "^3.10.0",
+    "react-native-camera": "^4.2.0",
+    "react-native-geolocation-service": "^5.3.0",
+
+    // 开发工具
+    "@react-native-community/cli": "^12.0.0",
+    "metro-react-native-babel-preset": "^0.77.0",
+    "flipper": "^0.207.0"
+  }
+}
 ```
 
 ### 平台特定技术栈
@@ -95,9 +101,9 @@ dependencies {
 }
 ```
 
-```swift
-// iOS 原生模块 (Swift)
-// Podfile
+```ruby
+# iOS 原生依赖配置（CocoaPods 的 Ruby DSL，不是 Swift 源码）
+# Podfile 中的依赖条目；实际工程以所用 React Native 模板为准
 pod 'React-Core', :path => '../node_modules/react-native/React'
 pod 'React-DevSupport', :path => '../node_modules/react-native/React'
 pod 'React-RCTActionSheet', :path => '../node_modules/react-native/Libraries/ActionSheetIOS'

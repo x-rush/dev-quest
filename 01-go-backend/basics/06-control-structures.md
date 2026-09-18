@@ -499,6 +499,8 @@ package main
 import (
     "bufio"
     "fmt"
+    "io"
+    "unicode/utf8"
     "os"
     "strings"
 )
@@ -511,26 +513,31 @@ func validateInput(input string) (bool, string) {
         return false, "输入不能为空"
     }
 
-    if len(input) > 100 {
+    if utf8.RuneCountInString(input) > 100 {
         return false, "输入过长（最多100字符）"
     }
 
     return true, "输入有效"
 }
 
-func getUserInput(prompt string) string {
-    reader := bufio.NewReader(os.Stdin)
+func getUserInput(reader *bufio.Reader, prompt string) (string, error) {
     fmt.Print(prompt)
 
-    input, _ := reader.ReadString('\n')
-    return strings.TrimSpace(input)
+    input, err := reader.ReadString('\n')
+    if err != nil && len(input) == 0 { return "", err }
+    return strings.TrimSpace(input), nil
 }
 
 func main() {
     fmt.Println("=== 用户输入验证系统 ===")
 
+    reader := bufio.NewReader(os.Stdin) // 复用缓冲区，避免丢失已预读的下一行
     for {
-        input := getUserInput("请输入内容（输入'quit'退出）: ")
+        input, err := getUserInput(reader, "请输入内容（输入'quit'退出）: ")
+        if err != nil {
+            if err != io.EOF { fmt.Fprintln(os.Stderr, "读取失败:", err) }
+            break // 关闭输入时退出，不能把 EOF 当空字符串反复重试
+        }
 
         if input == "quit" {
             break
@@ -553,47 +560,60 @@ func main() {
 ```go
 package main
 
-import "fmt"
+import (
+    "bufio"
+    "fmt"
+    "io"
+    "os"
+    "strconv"
+    "strings"
+)
 
 func displayMenu() {
     fmt.Println("=== 计算器菜单 ===")
-    fmt.Println("1. 加法")
-    fmt.Println("2. 减法")
-    fmt.Println("3. 乘法")
-    fmt.Println("4. 除法")
-    fmt.Println("5. 退出")
+    fmt.Println("1. 加法\n2. 减法\n3. 乘法\n4. 除法\n5. 退出")
     fmt.Print("请选择操作 (1-5): ")
 }
 
-func getNumbers() (float64, float64) {
-    var a, b float64
-    fmt.Print("请输入第一个数字: ")
-    fmt.Scanln(&a)
-    fmt.Print("请输入第二个数字: ")
-    fmt.Scanln(&b)
-    return a, b
+func readNumber(scanner *bufio.Scanner, prompt string) (float64, error) {
+    fmt.Print(prompt)
+    if !scanner.Scan() {
+        if err := scanner.Err(); err != nil { return 0, err }
+        return 0, io.EOF
+    }
+    return strconv.ParseFloat(strings.TrimSpace(scanner.Text()), 64)
+}
+
+func getNumbers(scanner *bufio.Scanner) (float64, float64, error) {
+    a, err := readNumber(scanner, "请输入第一个数字: ")
+    if err != nil { return 0, 0, err }
+    b, err := readNumber(scanner, "请输入第二个数字: ")
+    return a, b, err
 }
 
 func main() {
-    var choice int
-    var a, b float64
-
+    scanner := bufio.NewScanner(os.Stdin)
     for {
         displayMenu()
-        fmt.Scanln(&choice)
-
+        if !scanner.Scan() {
+            if err := scanner.Err(); err != nil { fmt.Fprintln(os.Stderr, err) }
+            break // 输入流已关闭；不会进入无休止的菜单循环
+        }
+        choice, err := strconv.Atoi(strings.TrimSpace(scanner.Text()))
+        if err != nil || choice < 1 || choice > 5 {
+            fmt.Println("无效选择，请输入1到5")
+            continue
+        }
         if choice == 5 {
             fmt.Println("感谢使用，再见！")
             break
         }
-
-        if choice < 1 || choice > 5 {
-            fmt.Println("无效选择，请重新输入")
+        a, b, err := getNumbers(scanner)
+        if err != nil {
+            if err == io.EOF { break }
+            fmt.Println("数字无效，请重新选择操作:", err)
             continue
         }
-
-        a, b = getNumbers()
-
         switch choice {
         case 1:
             fmt.Printf("%.2f + %.2f = %.2f\n", a, b, a+b)
@@ -602,14 +622,10 @@ func main() {
         case 3:
             fmt.Printf("%.2f × %.2f = %.2f\n", a, b, a*b)
         case 4:
-            if b != 0 {
+            if b == 0 { fmt.Println("错误：除数不能为0") } else {
                 fmt.Printf("%.2f ÷ %.2f = %.2f\n", a, b, a/b)
-            } else {
-                fmt.Println("错误：除数不能为0")
             }
         }
-
-        fmt.Println() // 空行分隔
     }
 }
 ```

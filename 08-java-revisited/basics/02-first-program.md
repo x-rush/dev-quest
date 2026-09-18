@@ -90,25 +90,23 @@ java Hello.java    # 直接运行
 
 ## 🐚 JShell：交互式学习利器（Java 9+）
 
+先在终端执行：
+
 ```bash
-$ jshell
-jshell> 1 + 1
-$1 ==> 2
-
-jshell> var list = new java.util.ArrayList<String>()
-list ==> []
-
-jshell> list.add("hello")
-$3 ==> true
-
-jshell> String greet(String name) { return "Hi, " + name; }
-|  已创建 方法 greet(String)
-
-jshell> greet("Java")
-$5 ==> "Hi, Java"
-
-jshell> /exit
+jshell
 ```
+
+进入 `jshell>` 提示符后，逐条输入以下 Java 代码（不要复制提示符）：
+
+```java
+1 + 1
+var list = new java.util.ArrayList<String>();
+list.add("hello");
+String greet(String name) { return "Hi, " + name; }
+greet("Java");
+```
+
+依次可观察到加法结果 `2`、空列表、添加成功的 `true`、方法创建提示，以及 `"Hi, Java"`。最后在 JShell 内输入 `/exit` 退出。
 
 常用命令：
 

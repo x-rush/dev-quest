@@ -9,36 +9,51 @@
 ## 📖 语法 / 签名
 
 ```go
-// slices：查找与比较
-slices.Contains(s []E, v E) bool              // 是否含 v（需 comparable）
-slices.Index(s []E, v E) int                  // 首个下标，无则 -1
-slices.Equal(s1, s2 []E) bool                 // 同长且逐元素相等
-slices.EqualFunc(s1, s2, cmp) bool            // 自定义相等
-slices.Compare(s1, s2 []E) int                // 字典序：-1/0/1
+package main
 
-// slices：排序与搜索（需 cmp.Ordered）
-slices.Sort(s []E)                            // 升序（< > 比较）
-slices.SortFunc(s, cmp)                       // 自定义比较器
-slices.IsSorted(s) bool
-slices.BinarySearch(s, v) (int, bool)         // 需已排序
+import (
+	"cmp"
+	"fmt"
+	"maps"
+	"slices"
+	"strings"
+)
 
-// slices：构造与变形
-slices.Clone(s []E) []E                       // 浅拷贝（新底层数组）
-slices.Delete(s, i, j) []E                    // 原地删 [i,j)，移动尾部元素
-slices.DeleteFunc(s, func(e) bool) []E        // 函数返回 true 的删除
-slices.Insert(s, i, vs...) []E                // 插入并返回结果，容量不足时可能分配
-slices.Grow(s, n) []E                         // 预扩容
-slices.Compact(s) []E                         // 相邻重复压缩
-slices.Reverse(s)                             // 原地反转
-slices.Max(s) / slices.Min(s) E               // 需 Ordered，空切片 panic
+func main() {
+	values := []int{5, 2, 8, 2, 9}
+	fmt.Println(slices.Contains(values, 8), slices.Index(values, 2)) // comparable 查找
+	fmt.Println(slices.Equal(values, []int{5, 2, 8, 2, 9}))
+	fmt.Println(slices.EqualFunc([]string{"Go"}, []string{"go"}, strings.EqualFold))
+	fmt.Println(slices.Compare([]int{1, 2}, []int{1, 3})) // 字典序：-1/0/1
 
-// maps
-maps.Keys(m) iter.Seq[K]                      // 1.23+ 返回迭代器（见下）
-maps.Values(m) iter.Seq[V]
-maps.Clone(m) map[K]V                         // 浅拷贝
-maps.Copy(dst, src)                           // src 并入 dst（键冲突覆盖）
-maps.DeleteFunc(m, func(k, v) bool)           // 按条件删除
-maps.Equal(m1, m2) bool
+	slices.Sort(values) // 升序（需 Ordered）
+	slices.SortFunc(values, func(a, b int) int { return cmp.Compare(b, a) })
+	fmt.Println(values, slices.IsSorted(values))
+	slices.Sort(values)
+	index, found := slices.BinarySearch(values, 8) // BinarySearch 前必须已排序
+	fmt.Println(index, found)
+
+	copyOfValues := slices.Clone(values) // 浅拷贝，新底层数组
+	copyOfValues = slices.Insert(copyOfValues, 0, 100)
+	copyOfValues = slices.Delete(copyOfValues, 0, 1) // 删 [i,j)，移动尾部元素
+	copyOfValues = slices.DeleteFunc(copyOfValues, func(value int) bool { return value%2 == 0 })
+	copyOfValues = slices.Grow(copyOfValues, 4)
+	compacted := slices.Compact([]int{1, 1, 2, 2, 3})
+	slices.Reverse(compacted) // 原地反转
+	fmt.Println(copyOfValues, compacted, slices.Max(values), slices.Min(values)) // 空切片 Max/Min 会 panic
+
+	first := map[string]int{"a": 1, "b": 2}
+	second := maps.Clone(first) // 浅拷贝
+	maps.Copy(second, map[string]int{"b": 20, "c": 3})
+	fmt.Println(maps.Equal(first, second))
+	maps.DeleteFunc(second, func(key string, value int) bool { return value > 2 })
+	for key := range maps.Keys(second) { // Go 1.23+：Keys 返回 iter.Seq
+		fmt.Println(key)
+	}
+	for value := range maps.Values(second) {
+		fmt.Println(value)
+	}
+}
 ```
 
 **迭代器要点（Go 1.23+）**：标准库在 Go 1.23 新增的 `maps.Keys/Values` 返回迭代器而非切片，而是 `iter.Seq`（可 `for k := range maps.Keys(m)` 直接遍历）；需要切片时用 `slices.Collect(maps.Keys(m))`。

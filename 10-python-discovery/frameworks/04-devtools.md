@@ -119,7 +119,7 @@ uv add --dev ipython
 uv run ipython                 # 增强版 REPL：Tab 补全、? 帮助、魔法命令
 ```
 
-```python
+```console
 # IPython 中的常用手法
 In [1]: from decimal import Decimal
 In [2]: Decimal("0.1") + Decimal("0.2")        # 快速验证语言/库行为
@@ -127,6 +127,8 @@ Out[2]: Decimal('0.3')
 
 In [3]: %timeit [x**2 for x in range(1000)]    # 微基准（系统剖析见性能专题）
 ```
+
+上面是 IPython 会话记录；`In [n]:`、`Out[n]:` 与 `%timeit` 属于 IPython 宿主，不是 Python 脚本语法。
 
 - **事后调试**：程序抛异常后，在 IPython 里执行 `%debug` 直接跳进异常现场检查变量
 - **断点调试**：代码中写 `breakpoint()`（内建函数，见[内置函数字典](../reference/language-concepts/02-built-in-functions.md)），进入 pdb/IPython 调试器

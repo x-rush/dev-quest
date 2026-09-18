@@ -414,9 +414,11 @@ exit($exit);
 php bin/task add "完成PHP模块第一篇" --priority high
 php bin/task add "阅读Go关键字文档"
 php bin/task list
-php bin/task done <上面输出的id>
+# 将列表中实际的任务 ID 填入 TASK_ID
+TASK_ID=""
+php bin/task done "${TASK_ID:?请先填写任务ID}"
 php bin/task list --all
-php bin/task remove <id>
+php bin/task remove "${TASK_ID:?请先填写任务ID}"
 ```
 
 每一步输出都符合预期、`tasks.json` 内容正确，即项目完成。

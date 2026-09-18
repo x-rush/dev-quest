@@ -489,11 +489,13 @@ function handleSubmit(event: React.FormEvent) {
 }
 
 // JSX中使用
+const eventExamples = <>
 <button onClick={handleClick}>Click</button>
 <button onClick={() => handleDelete(item.id)}>Delete</button>
 <form onSubmit={handleSubmit}>
   <button type="submit">Submit</button>
 </form>
+</>;
 ```
 
 ### 样式处理

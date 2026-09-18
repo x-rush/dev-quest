@@ -232,7 +232,7 @@ npm install react-hot-toast react-syntax-highlighter
 
 ### 环境配置
 
-```typescript
+```dotenv
 // .env.local
 # 数据库
 DATABASE_URL="file:./dev.db"

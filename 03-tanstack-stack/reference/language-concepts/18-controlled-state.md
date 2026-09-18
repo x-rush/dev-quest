@@ -14,15 +14,15 @@ type OnChangeFn<T> = (updaterOrValue: Updater<T>) => void
 
 useTable({
   data, columns, features,
-  state?: { sorting?, pagination?, columnFilters?, ... },  // 受控切片集中传入
-  onSortingChange?: OnChangeFn<SortingState>,              // 与 state.sorting 成对
-  onPaginationChange?: OnChangeFn<PaginationState>,
-  onColumnFiltersChange?: OnChangeFn<ColumnFiltersState>,
-  initialState?: { /* 仅非受控切片的初值 */ },
-  autoResetPageIndex?: boolean,                            // 数据变化后重置页码，默认 true
-  manualPagination?: boolean,                              // 关闭本地分页计算
-  manualSorting?: boolean,                                 // 关闭本地排序计算
-  pageCount?: number,                                      // manualPagination 时的总页数
+  state: { sorting, pagination, columnFilters },  // 受控切片集中传入
+  onSortingChange,                                // 与 state.sorting 成对
+  onPaginationChange,
+  onColumnFiltersChange,
+  initialState: {},                               // 仅非受控切片的初值
+  autoResetPageIndex: true,                       // 数据变化后重置页码
+  manualPagination: false,                        // 关闭本地分页计算
+  manualSorting: false,                            // 关闭本地排序计算
+  pageCount: 1,                                   // manualPagination 时的总页数
 })
 ```
 

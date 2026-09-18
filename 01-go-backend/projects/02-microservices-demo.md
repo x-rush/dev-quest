@@ -1542,7 +1542,6 @@ package middleware
 
 import (
 	"net/http"
-	"time"
 
 	"github.com/gin-gonic/gin"
 	"golang.org/x/time/rate"
@@ -1568,7 +1567,7 @@ package middleware
 
 import (
 	"net/http"
-	"sync/atomic"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/sony/gobreaker"

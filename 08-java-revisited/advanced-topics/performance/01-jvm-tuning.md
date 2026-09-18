@@ -94,7 +94,7 @@ java -Xlog:gc*:file=/logs/gc.log:time,uptime:filecount=5,filesize=20m -jar app.j
 ### 3. 堆转储分析
 
 ```bash
-jmap -dump:live,format=b,file=heap.hprof <pid>
+jmap -dump:live,format=b,file=heap.hprof "${TARGET_PID:?先设置目标Java进程的PID}"
 # 或 OOM 时自动：-XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/logs
 ```
 

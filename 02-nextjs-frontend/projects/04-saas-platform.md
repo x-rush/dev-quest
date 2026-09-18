@@ -2907,7 +2907,7 @@ export class IntegrationService {
 
 **工作区布局元数据（app/[workspace]/layout.tsx）**——`generateMetadata` 读取租户品牌配置：
 
-```typescript
+```tsx
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { getWorkspaceBySlug } from '@/lib/tenant';
@@ -2942,7 +2942,7 @@ export default async function WorkspaceLayout({ children, params }: WorkspaceLay
 
 **加载兜底（app/[workspace]/dashboard/loading.tsx）**：
 
-```typescript
+```tsx
 export default function Loading() {
   return (
     <div className="animate-pulse space-y-6 p-8">
@@ -2960,7 +2960,7 @@ export default function Loading() {
 
 **错误边界（app/[workspace]/error.tsx）**——必须是客户端组件，文案区分权限与故障：
 
-```typescript
+```tsx
 'use client';
 
 export default function WorkspaceError({
@@ -2986,7 +2986,7 @@ export default function WorkspaceError({
 
 **404 约定（app/[workspace]/not-found.tsx）**——承接上方 `generateMetadata` 中的 `notFound()`，也覆盖租户访问他人资源被 `getWorkspaceBySlug` 拒绝的场景：
 
-```typescript
+```tsx
 import Link from 'next/link';
 
 export default function WorkspaceNotFound() {
@@ -3004,7 +3004,7 @@ export default function WorkspaceNotFound() {
 
 **应用级最后防线（app/global-error.tsx）**——替换整个根布局，必须自带 `<html>`/`<body>`：
 
-```typescript
+```tsx
 'use client';
 
 export default function GlobalError({

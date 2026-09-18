@@ -90,10 +90,12 @@ struct Row: View { let item: Item; var body: some View { Text(item.title) } }
 ## 3. 布局一行式
 
 ```swift
-VStack(alignment: .leading, spacing: 12) { … }         // 垂直排列
+VStack(alignment: .leading, spacing: 12) { Text("标题"); Text("正文") }         // 垂直排列
 HStack { Text("左"); Spacer(); Text("右") }             // 两端对齐
 ZStack(alignment: .bottom) { Img(); Caption() }        // 叠加贴底
-LazyVGrid(columns: [GridItem(.adaptive(minimum: 120))]) { … }  // 自适应网格
+LazyVGrid(columns: [GridItem(.adaptive(minimum: 120))]) {
+    ForEach(items) { item in Text(item.title) }
+}  // 自适应网格
 .frame(maxWidth: .infinity)                            // 占满宽
 .frame(maxWidth: 480)                                  // iPad 限宽
 .padding(16)                                           // 内边距
@@ -108,7 +110,7 @@ LazyVGrid(columns: [GridItem(.adaptive(minimum: 120))]) { … }  // 自适应网
 
 ```swift
 List(items) { item in Text(item.title) }               // Identifiable 列表
-List { Section("A") { … }; Section("B") { … } }        // 分组
+List { Section("A") { Text("第一组") }; Section("B") { Text("第二组") } }        // 分组
 ForEach(items) { item in NavigationLink(value: item) { Row(item: item) } }
 .navigationDestination(for: Item.self) { Detail($0) }  // 值驱动目标
 .navigationTitle("标题").navigationBarTitleDisplayMode(.inline)

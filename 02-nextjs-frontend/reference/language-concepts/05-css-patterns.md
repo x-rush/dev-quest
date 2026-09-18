@@ -31,7 +31,9 @@
 
 ### 基础类名
 ```jsx
-// 文本样式
+const styleExample1 = (
+  <>
+{/* 文本样式 */}
 <h1 className="text-4xl font-bold text-gray-900 mb-4">
   标题文本
 </h1>
@@ -40,7 +42,7 @@
   正文内容，使用基础字号和灰色文本
 </p>
 
-// 颜色系统
+{/* 颜色系统 */}
 <div className="bg-blue-500 text-white p-4 rounded-lg">
   蓝色背景白色文本的卡片
 </div>
@@ -49,37 +51,41 @@
   按钮组件
 </button>
 
-// 间距系统
+{/* 间距系统 */}
 <div className="p-4 m-2">
-  // padding: 1rem, margin: 0.5rem
+  {/* padding: 1rem, margin: 0.5rem */}
   <div className="px-6 py-3">
-    // padding-x: 1.5rem, padding-y: 0.75rem
+    {/* padding-x: 1.5rem, padding-y: 0.75rem */}
     内容区域
   </div>
 </div>
+  </>
+);
 ```
 
 ### 响应式设计
 ```jsx
-// 响应式前缀
+const styleExample2 = (
+  <>
+{/* 响应式前缀 */}
 <div className="w-full md:w-1/2 lg:w-1/3">
-  // mobile: 全宽
-  // medium: 一半宽度
-  // large: 三分之一宽度
+  {/* mobile: 全宽 */}
+  {/* medium: 一半宽度 */}
+  {/* large: 三分之一宽度 */}
 </div>
 
-// 响应式文本
+{/* 响应式文本 */}
 <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl">
   响应式标题
 </h1>
 
-// 响应式布局
+{/* 响应式布局 */}
 <div className="flex flex-col md:flex-row gap-4">
   <div className="flex-1">左侧内容</div>
   <div className="flex-1">右侧内容</div>
 </div>
 
-// 响应式显示/隐藏
+{/* 响应式显示/隐藏 */}
 <div className="hidden md:block">
   只在medium及以上显示
 </div>
@@ -87,27 +93,31 @@
 <div className="block md:hidden">
   只在mobile显示
 </div>
+  </>
+);
 ```
 
 ### 状态和变体
 ```jsx
-// 悬停状态
+const styleExample3 = (
+  <>
+{/* 悬停状态 */}
 <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
   Hover效果
 </button>
 
-// 焦点状态
+{/* 焦点状态 */}
 <input
   className="border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 rounded-md px-3 py-2"
   placeholder="输入框"
 />
 
-// 激活状态
+{/* 激活状态 */}
 <button className="bg-green-500 active:bg-green-600 text-white px-4 py-2 rounded">
   点击按钮
 </button>
 
-// 禁用状态
+{/* 禁用状态 */}
 <button
   className="bg-gray-400 text-gray-200 cursor-not-allowed px-4 py-2 rounded"
   disabled
@@ -115,7 +125,7 @@
   禁用按钮
 </button>
 
-// 组合状态
+{/* 组合状态 */}
 <button className="
   bg-blue-500
   hover:bg-blue-600
@@ -132,6 +142,8 @@
 ">
   完整状态按钮
 </button>
+  </>
+);
 ```
 
 ### 组件样式
@@ -195,7 +207,7 @@ function Button({ variant = 'primary', size = 'medium', children, ...props }) {
 ## 🎯 CSS Modules
 
 ### 基础用法
-```jsx
+```css
 // styles.module.css
 .container {
   max-width: 1200px;
@@ -237,6 +249,9 @@ function Button({ variant = 'primary', size = 'medium', children, ...props }) {
   background: #2563eb;
 }
 
+```
+
+```jsx
 // 组件中使用
 import styles from './styles.module.css'
 
@@ -254,7 +269,7 @@ function Card({ title, content }) {
 ```
 
 ### 组合和条件类名
-```jsx
+```css
 // styles.module.css
 .button {
   padding: 0.5rem 1rem;
@@ -290,6 +305,9 @@ function Card({ title, content }) {
   cursor: not-allowed;
 }
 
+```
+
+```jsx
 // 组件中使用 clsx 或 classnames
 import clsx from 'clsx'
 import styles from './Button.module.css'
@@ -321,7 +339,7 @@ function Button({
 ```
 
 ### CSS Variables 和 Modules
-```jsx
+```css
 // styles.module.css
 :root {
   --color-primary: #3b82f6;
@@ -346,6 +364,9 @@ function Button({
   --color-primary-hover: #059669;
 }
 
+```
+
+```jsx
 // 组件中使用
 import styles from './Card.module.css'
 
@@ -615,10 +636,13 @@ function Card({ title, children }) {
 ```jsx
 // Tailwind CSS 移动优先
 <div className="w-full md:w-3/4 lg:w-1/2 xl:w-1/3">
-  <!-- 默认全宽，medium屏幕75%，large屏幕50%，xlarge屏幕33% -->
+  {/* 默认全宽，medium屏幕75%，large屏幕50%，xlarge屏幕33% */}
 </div>
 
-// CSS Modules 响应式
+```
+
+```css
+/* CSS Modules 响应式：styles.module.css */
 /* styles.module.css */
 .container {
   width: 100%;
@@ -639,6 +663,9 @@ function Card({ title, children }) {
   }
 }
 
+```
+
+```tsx
 // Styled Components 响应式
 const ResponsiveGrid = styled.div`
   display: grid;
@@ -656,9 +683,8 @@ const ResponsiveGrid = styled.div`
 ```
 
 ### 容器查询
-```jsx
-// CSS容器查询
-/* styles.module.css */
+```css
+/* CSS容器查询：styles.module.css */
 .cardContainer {
   container-type: inline-size;
 }
@@ -676,6 +702,9 @@ const ResponsiveGrid = styled.div`
   }
 }
 
+```
+
+```jsx
 // 组件中使用
 function Card({ title, content, image }) {
   return (
@@ -697,8 +726,8 @@ function Card({ title, content, image }) {
 ## 🎨 高级CSS技巧
 
 ### CSS变量动态主题
-```jsx
-// 主题变量定义
+```css
+/* 主题变量定义 */
 :root {
   --color-primary: #3b82f6;
   --color-primary-hover: #2563eb;
@@ -715,6 +744,9 @@ function Card({ title, content, image }) {
   --color-text: #f9fafb;
 }
 
+```
+
+```jsx
 // React组件中使用
 function ThemedButton({ children, ...props }) {
   const [theme, setTheme] = useState('light')
@@ -757,8 +789,10 @@ function ThemedButton({ children, ...props }) {
   动画按钮
 </button>
 
-// CSS Modules 动画
-/* styles.module.css */
+```
+
+```css
+/* CSS Modules 动画：styles.module.css */
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -774,6 +808,9 @@ function ThemedButton({ children, ...props }) {
   animation: fadeIn 0.3s ease-out;
 }
 
+```
+
+```tsx
 // Styled Components 动画
 const AnimatedCard = styled.div`
   background: white;
@@ -823,12 +860,17 @@ const Button = styled.button`
 ```jsx
 // 静态规则可复用类名；动态值使用内联样式也合理
 // 下面两种写法按需求选择
-<div style={{ backgroundColor: '#3b82f6', padding: '1rem' }}>
+const inlineStyle = <div style={{ backgroundColor: '#3b82f6', padding: '1rem' }} />;
+```
 
+```jsx
 // ✅ 推荐
-<div className="bg-blue-500 p-4">
+const reusableClass = <div className="bg-blue-500 p-4" />;
+
+```
 
 // 使用CSS变量减少重复
+```css
 :root {
   --spacing-1: 0.25rem;
   --spacing-2: 0.5rem;

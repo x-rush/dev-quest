@@ -63,6 +63,12 @@ const outcome = await result; // 检查 error、code、signal
 `exec`/`execFile` 把子进程 stdout/stderr 全量缓冲进内存，超过程度默认 **1 MiB** 即抛错终止——这是它们与流式 `spawn` 的根本分野。
 
 ```ts
+import { execFile } from "node:child_process";
+import { promisify } from "node:util";
+
+const pExecFile = promisify(execFile);
+
+async function demonstrateMaxBuffer() {
 // 实测：2MB 输出触发错误
 try {
   await pExecFile("node", ["-e", 'process.stdout.write("x".repeat(2*1024*1024))']);
@@ -72,6 +78,7 @@ try {
 
 // 已知输出较大时显式上调（内存自担）
 await pExecFile("pandoc", ["doc.md"], { maxBuffer: 10 * 1024 * 1024 });
+}
 ```
 
 - 输出可能超过几 MB → 不调 maxBuffer，**直接改用 `spawn` 流式处理**

@@ -139,7 +139,7 @@ module.exports = nextConfig
 ### 自动代码分割
 
 #### 📄 基于路由的分割
-```typescript
+```tsx
 // app/dashboard/page.tsx - 自动分割
 import { Suspense } from 'react'
 import DashboardLayout from '@/components/dashboard/DashboardLayout'
@@ -161,7 +161,7 @@ export default function DashboardPage() {
 ```
 
 #### 🧩 基于组件的分割
-```typescript
+```tsx
 // components/lazy/HeavyComponent.tsx
 'use client'
 
@@ -211,7 +211,7 @@ export default function HeavyPage() {
 ### 动态导入模式
 
 #### 🎯 按需加载
-```typescript
+```tsx
 // lib/dynamic-imports.ts
 export const loadChartLibrary = () => import('chart.js')
 export const loadEditor = () => import('@/components/editor/AdvancedEditor')
@@ -274,7 +274,7 @@ export default function DynamicChart({ type, data }: ChartProps) {
 ```
 
 #### 📱 基于设备条件的加载
-```typescript
+```tsx
 // components/device/DetectDevice.tsx
 'use client'
 
@@ -468,7 +468,9 @@ const nextConfig = {
 }
 
 module.exports = withBundleAnalyzer(nextConfig)
+```
 
+```json
 // package.json scripts
 {
   "scripts": {
@@ -791,7 +793,7 @@ module.exports = nextConfig
 ```
 
 #### 🔄 动态依赖加载
-```typescript
+```tsx
 // lib/dynamic-vendor.ts
 export const loadChartJs = () => import('chart.js')
 export const loadMonacoEditor = () => import('monaco-editor')
@@ -844,7 +846,7 @@ export default function ReportGenerator() {
 ### 图片优化
 
 #### 🖼️ Next.js Image优化
-```typescript
+```tsx
 // components/images/OptimizedImage.tsx
 import Image from 'next/image'
 import { useState } from 'react'
@@ -910,7 +912,7 @@ export function ProductGallery({ images }: { images: string[] }) {
 ```
 
 #### 📸 响应式图片策略
-```typescript
+```tsx
 // components/images/ResponsiveImage.tsx
 import Image from 'next/image'
 
@@ -978,7 +980,7 @@ module.exports = nextConfig
 ### 字体优化
 
 #### 🔤 字体加载策略
-```typescript
+```tsx
 // app/layout.tsx
 import { Inter } from 'next/font/google'
 
@@ -1071,7 +1073,7 @@ optimizeFonts()
 ### 实时监控
 
 #### 📈 Bundle大小监控
-```typescript
+```tsx
 // lib/bundle-monitor.ts
 export interface BundleMetrics {
   name: string
@@ -1234,7 +1236,7 @@ function formatBytes(bytes: number): string {
 ### 微前端架构
 
 #### 🧩 模块联邦
-```typescript
+```tsx
 // webpack.config.js (主应用)
 const ModuleFederationPlugin = require('@module-federation/webpack')
 
@@ -1283,7 +1285,7 @@ export default function ShellApp() {
 ### 服务端组件优化
 
 #### 🔄 智能缓存策略
-```typescript
+```tsx
 // app/components/ServerComponent.tsx
 import { cache } from 'react'
 

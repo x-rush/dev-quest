@@ -159,11 +159,16 @@ export const Route = createFileRoute('/weather')({
 ```tsx
 // 服务器组件片段；需导入 QueryClient/dehydrate/HydrationBoundary
 // queryKey、queryFn 与 ClientPage 由具体页面提供
-const queryClient = new QueryClient()
-await queryClient.prefetchQuery({ queryKey, queryFn })
-return <HydrationBoundary state={dehydrate(queryClient)}>
-  <ClientPage />
-</HydrationBoundary>
+export default async function WeatherPage() {
+  const queryClient = new QueryClient()
+  await queryClient.prefetchQuery({ queryKey, queryFn })
+
+  return (
+    <HydrationBoundary state={dehydrate(queryClient)}>
+      <ClientPage />
+    </HydrationBoundary>
+  )
+}
 ```
 
 > Next.js 集成的完整指南见 02-nextjs-frontend 模块相关文档。

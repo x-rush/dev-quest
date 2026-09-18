@@ -10,16 +10,16 @@
 
 ```tsx
 // 组件形式：cell / header / footer 三个 prop 三选一（类型为判别联合，其余 prop 是 never）
-<FlexRender header={header} />          // 渲染 header.column.columnDef.header
-<FlexRender cell={cell} />              // 渲染 cell.column.columnDef.cell
-<FlexRender footer={footer} />          // 渲染 footer.column.columnDef.footer
+const headerNode = <FlexRender header={header} />; // 渲染 header.column.columnDef.header
+const cellNode = <FlexRender cell={cell} />; // 渲染 cell.column.columnDef.cell
+const footerNode = <FlexRender footer={footer} />; // 渲染 footer.column.columnDef.footer
 
 // 函数形式（组件形式的底层）：
 flexRender(cell.column.columnDef.cell, cell.getContext())
 flexRender(header.column.columnDef.header, header.getContext())
 
 // 实例便捷形态（等价组件形式，无需再导入）：
-<table.FlexRender cell={cell} />
+const instanceNode = <table.FlexRender cell={cell} />;
 ```
 
 | CellContext 成员 | 说明 |
@@ -129,7 +129,7 @@ function InstanceFlexTable() {
         <tr key={row.id}>
           {row.getVisibleCells().map((cell) => (
             <td key={cell.id}>
-              <table.FlexRender cell={cell} />
+              const instanceNode = <table.FlexRender cell={cell} />;
             </td>
           ))}
         </tr>

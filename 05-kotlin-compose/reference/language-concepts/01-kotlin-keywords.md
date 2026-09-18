@@ -379,8 +379,12 @@ do { loadPage() } while (hasMore)
 
 val v: Any = "text"
 check(v !is Int)                    // （实测）
-if (v is String) check(v.length == 5)   // is 通过后 v 已智能转换为 String
-when (v) { is Int -> ...; is String -> ... }
+if (v is String) check(v.length == 4)   // is 通过后 v 已智能转换为 String
+when (v) {
+    is Int -> println(v + 1)
+    is String -> println(v.uppercase()) // TEXT
+    else -> println("其他类型")
+}
 ```
 
 ### 陷阱

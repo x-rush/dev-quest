@@ -9,8 +9,9 @@
 ## 📖 语法 / 签名
 
 ```ts
-useIsFetching(filters?: QueryFilters): number
-useIsMutating(filters?: MutationFilters): number
+// 库中导出的函数签名（QueryFilters/MutationFilters 由 @tanstack/react-query 导出）：
+declare const useIsFetching: (filters?: QueryFilters) => number
+declare const useIsMutating: (filters?: MutationFilters) => number
 // 用法示意，不抄写或重新声明库的完整泛型签名
 const pendingTimes = useMutationState({
   filters: { status: "pending" },

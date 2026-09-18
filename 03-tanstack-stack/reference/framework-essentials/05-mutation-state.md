@@ -9,19 +9,30 @@ useMutation 暴露调用处的观察状态，底层 mutation 保存在 MutationC
 ## 📖 语法 / 签名
 
 ```ts
+import { MutationCache, useMutationState } from '@tanstack/react-query'
+
+type CreateTodoVariables = { title: string }
+
 // 组件内：按过滤条件订阅全局 mutation 状态
-useMutationState({
-  filters: {
-    mutationKey?: ['create-todo'],       // 需在 useMutation 声明 mutationKey 才可定位
-    status?: 'pending' | 'success' | 'error',
-    predicate?: (mutation) => boolean,   // 自定义筛选
-  },
-  select?: (mutation) => T,              // 只取需要的字段，缩小重渲染面
-})
+function PendingTodoMutations() {
+  const pendingTodos = useMutationState({
+    filters: {
+      mutationKey: ['create-todo'], // 需在 useMutation 声明 mutationKey 才可定位
+      status: 'pending',
+    },
+    // 只取展示待保存项所需字段，避免订阅整个 Mutation 对象。
+    select: (mutation) => ({
+      submittedAt: mutation.state.submittedAt,
+      variables: mutation.state.variables as CreateTodoVariables,
+    }),
+  })
+
+  return pendingTodos
+}
 
 // 全局：在 MutationCache 上挂事件回调
-new MutationCache({
-  onMutate, onSuccess, onError, onSettled,
+const mutationCache = new MutationCache({
+  onMutate: () => {}, onSuccess: () => {}, onError: () => {}, onSettled: () => {},
   // 全局回调额外收到 mutation 等上下文，签名与 useMutation 并非完全相同；以安装版本类型为准
 })
 ```

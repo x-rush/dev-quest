@@ -222,7 +222,7 @@ export interface InputProps extends BaseComponentProps {
 
 ### 类型安全的组件实现
 
-```typescript
+```tsx
 // src/components/Button.tsx
 import { ButtonHTMLAttributes, forwardRef } from 'react'
 import { cn } from '@/lib/utils'
@@ -289,7 +289,7 @@ export default Button
 
 ### 泛型组件
 
-```typescript
+```tsx
 // src/components/List.tsx
 import { ReactNode } from 'react'
 
@@ -378,7 +378,7 @@ export type MetadataGenerator = (props: PageProps) => Metadata | Promise<Metadat
 
 ### 类型安全的页面组件
 
-```typescript
+```tsx
 // src/app/posts/[id]/page.tsx
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'

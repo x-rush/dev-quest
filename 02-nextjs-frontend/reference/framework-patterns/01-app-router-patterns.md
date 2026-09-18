@@ -211,7 +211,7 @@ app/
 
 **企业级根布局实现**
 
-```typescript
+```tsx
 // app/layout.tsx
 import type { Metadata, Viewport } from 'next';
 import { Inter, JetBrains_Mono } from 'next/font/google';
@@ -488,7 +488,7 @@ function PageLoadingSkeleton() {
 
 **状态保持的模板组件**
 
-```typescript
+```tsx
 // app/template.tsx
 'use client';
 
@@ -559,7 +559,7 @@ function NotificationCenter() {
 
 **类型安全的动态路由处理**
 
-```typescript
+```tsx
 // app/blog/[slug]/page.tsx
 import { notFound, permanentRedirect } from 'next/navigation';
 import { Metadata } from 'next';
@@ -900,7 +900,7 @@ export default function BlogLoading() {
 
 **复杂的仪表板并行路由**
 
-```typescript
+```tsx
 // app/dashboard/layout.tsx
 import { ReactNode } from 'react';
 import { DashboardSidebar } from '@/components/dashboard/dashboard-sidebar';
@@ -1063,7 +1063,7 @@ export default function ReportsSlot() {
 
 **模态框和覆盖层的拦截路由**
 
-```typescript
+```tsx
 // app/dashboard/@modal/(..)reports/[id]/page.tsx
 import { notFound } from 'next/navigation';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';

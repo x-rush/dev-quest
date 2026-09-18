@@ -22,21 +22,24 @@ uv 是 Rust 编写的 Python 包与项目管理器：替代 pip/venv/pip-tools �
 ## 📖 语法 / 签名
 
 ```bash
-# 项目生命周期
-uv init [--app|--lib] [--python 3.14]  # 生成 pyproject.toml、.python-version、main.py
-uv add <pkg> [--dev]                   # 安装并写入 dependencies / dependency-groups
-uv remove <pkg>                        # 移除依赖
-uv lock [--upgrade]                    # 解析并生成/升级 uv.lock
-uv sync [--locked|--frozen] [--no-dev] # locked 检查声明一致性；frozen 跳过锁文件更新检查
-uv run <cmd>                           # 在项目环境中执行任意命令（自动同步）
+# 项目生命周期：以下为具体示例，按当前任务选择命令，不必整块连续执行
+uv init --app --python 3.14  # 应用项目；库项目改用 --lib
+uv add httpx                # 生产依赖；开发依赖如 uv add --dev pytest
+uv remove httpx             # 移除依赖
+uv lock                     # 解析并生成 uv.lock；主动升级时加 --upgrade
+uv sync --locked            # 声明与锁文件不一致时失败；部署可再加 --no-dev
+# --frozen 直接使用现有锁文件，不检查它是否与声明一致
+uv run python main.py       # 在项目环境中运行命令，必要时自动同步依赖
 
 # 解释器管理
-uv python install 3.14                 # 安装指定版本解释器
-uv python list / find                  # 列出可用版本 / 定位路径
+uv python install 3.14
+uv python list              # 列出解释器
+uv python find              # 定位当前使用的解释器
 
 # 工具与兼容层
-uvx <tool> [args]                      # 临时环境运行 CLI 工具（等价 uv tool run）
-uv pip install <pkg>                   # 兼容 pip 习惯用法的接口
+uvx ruff check .            # 临时工具环境；等价于 uv tool run ruff check .
+uv pip install httpx        # pip 兼容接口；与 uv add 不同，不更新项目依赖声明
+
 ```
 
 PEP 723 内联脚本元数据：单文件脚本头部写 `# /// script` 块声明依赖，`uv run script.py` 自动为其建环境。

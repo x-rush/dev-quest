@@ -9,18 +9,54 @@ channel 是 goroutine 之间的**类型安全通信管道**，遵循 CSP 模型�
 ## 📖 语法 / 签名
 
 ```go
-ch := make(chan int)      // 无缓冲：发送阻塞到有接收者就绪
-ch := make(chan int, 5)   // 有缓冲：缓冲满时发送才阻塞
+package main
 
-ch <- v          // 发送
-v := <-ch        // 接收（丢弃第二返回值）
-v, ok := <-ch    // ok=false 表示 channel 已关闭且缓冲已空
-for v := range ch { ... } // 循环接收直到 channel 关闭
-close(ch)        // 由确认不再发送的责任方关闭；只能关一次
+import "fmt"
 
-// 单向 channel：约束在类型层面，常用于函数签名
-func produce(out chan<- int)   // 只能发送
-func consume(in <-chan int)    // 只能接收
+// 单向 channel：约束在类型层面，常用于函数签名。
+func produce(out chan<- int) { // 只能发送
+	out <- 100
+	close(out) // 由确认不再发送的责任方关闭；只能关一次
+}
+
+func consume(in <-chan int) { // 只能接收
+	for value := range in { // 循环接收直到 channel 关闭
+		fmt.Println("消费", value)
+	}
+}
+
+func main() {
+	// 无缓冲：发送阻塞到有接收者就绪；所以用另一个 goroutine 配对接收。
+	unbuffered := make(chan int)
+	go func() { unbuffered <- 7 }()
+	fmt.Println("无缓冲接收", <-unbuffered)
+
+	// 有缓冲：缓冲满时发送才阻塞。关闭后仍会先读出缓冲中的值。
+	buffered := make(chan int, 2)
+	buffered <- 1
+	buffered <- 2
+	close(buffered)
+	value, ok := <-buffered
+	fmt.Println(value, ok) // 1 true
+	for value := range buffered {
+		fmt.Println(value) // 2；range 在关闭且缓冲耗尽后结束，不会死锁
+	}
+	value, ok = <-buffered
+	fmt.Println(value, ok) // 0 false
+
+	feed := make(chan int, 1)
+	go produce(feed)
+	consume(feed)
+
+	// nil channel 只能用在 select 中屏蔽分支；它会永久阻塞，不能替代无缓冲 channel。
+	var disabled <-chan int
+	select {
+	case <-disabled:
+		fmt.Println("不会执行")
+	default:
+		fmt.Println("nil channel 分支被屏蔽")
+	}
+}
 ```
 
 **阻塞与 panic 规则总表**（自 Go 1 起稳定语义）：

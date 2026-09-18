@@ -8,6 +8,20 @@ import verify
 from build_report import classify
 
 class VerifierTests(unittest.TestCase):
+    def test_manifest_paths_and_modules_are_portable(self):
+        import contextlib
+        import io
+        import extract_blocks
+        with tempfile.TemporaryDirectory() as d:
+            root=Path(d); module=root/'01-example'; module.mkdir()
+            (module/'demo.md').write_text('```python\nprint(1)\n```\n',encoding='utf8')
+            output=root/'manifest.jsonl'
+            with patch.object(verify.sys,'argv',['extract_blocks.py',str(root),str(output)]), contextlib.redirect_stdout(io.StringIO()):
+                extract_blocks.main()
+            row=verify.json.loads(output.read_text(encoding='utf8'))
+            self.assertEqual(row['file'],'01-example/demo.md')
+            self.assertEqual(row['module'],'01-example')
+
     @unittest.skipUnless(shutil.which('tsc'), 'TypeScript compiler not installed')
     def test_independent_fences_do_not_share_names(self):
         with tempfile.TemporaryDirectory() as d:

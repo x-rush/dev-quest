@@ -34,7 +34,7 @@ node -e "setInterval(()=>{const m=process.memoryUsage();console.log(m.rss/1024**
 # 上面仅演示采样 API；诊断真实服务应把同样采样接入目标进程
 
 # 2) 抓堆快照（DevTools Memory 面板对比两份快照的 Retained Size）
-kill -USR1 <pid>          # 开调试端口后用 chrome://inspect 抓快照
+kill -USR1 "${TARGET_PID:?先设置目标Node进程的PID}"          # 开调试端口后用 chrome://inspect 抓快照
 node --heap-prof server.js
 
 # 3) 查 GC 行为

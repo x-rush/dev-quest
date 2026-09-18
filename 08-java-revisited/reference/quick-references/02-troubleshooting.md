@@ -100,7 +100,7 @@ mapper.readValue(json, new TypeReference<List<User>>() {});
 
 **解决**:
 ```bash
-jstack <pid>   # 定位死锁线程与锁持有链
+jstack "${TARGET_PID:?先设置目标Java进程的PID}"   # 定位死锁线程与锁持有链
 ```
 ```java
 // 计数竞态 → 原子类

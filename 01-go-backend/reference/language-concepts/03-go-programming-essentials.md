@@ -2787,7 +2787,7 @@ func CleanupTestDB(t *testing.T, db *sql.DB) {
 ### Go Modules最佳实践
 
 #### 版本管理策略
-```go
+```gomod
 // go.mod
 module github.com/yourcompany/yourproject
 
@@ -2864,7 +2864,7 @@ export GOPROXY=https://proxy.golang.org,https://your-private-proxy.company.com,d
 ```
 
 #### 使用私有模块
-```go
+```gomod
 // go.mod
 module github.com/yourcompany/yourproject
 
@@ -2977,8 +2977,11 @@ gofmt -w .
 # 自动导入和删除未使用的导入
 goimports -w .
 
-# 在保存时自动格式化（编辑器配置）
-# VSCode settings.json
+```
+
+在 VS Code 的 `settings.json` 中合并以下配置，使保存操作触发格式化和导入整理：
+
+```json
 {
     "go.formatTool": "goimports",
     "editor.formatOnSave": true,
@@ -2996,15 +2999,22 @@ go install honnef.co/go/tools/cmd/staticcheck@latest
 # 运行staticcheck
 staticcheck ./...
 
-# 配置staticcheck（.staticcheck.conf)
+```
+
+在项目根目录的 `staticcheck.conf` 中配置检查项（TOML 格式）：
+
+```toml
 checks = [
     "all",
-    "-ST1000",  // 禁用某些检查
+    "-ST1000",  # 禁用指定检查；应在团队约定后使用
     "-ST1003",
 ]
+```
 
-# 忽略某些检查
-# //lint:ignore ST1000 占位示例函数，暂未使用
+如需忽略某个局部诊断，将指令写在对应 Go 声明前；以下是插入已有 Go 文件的片段：
+
+```go
+//lint:ignore U1000 演示保留的占位函数，后续会使用
 func unused_function() {
     // ...
 }

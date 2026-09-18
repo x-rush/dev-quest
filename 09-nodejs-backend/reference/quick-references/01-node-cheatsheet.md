@@ -116,7 +116,7 @@ node -p "process.env.PATH"               # 查看变量
 node -p "process.version"                        # 版本
 node -p "JSON.stringify(process.versions)"       # 全家桶版本（v8/openssl…）
 node -p "process.execPath"                       # node 二进制路径
-kill -USR1 <pid>                                 # 对运行中进程开启调试端口
+kill -USR1 "${TARGET_PID:?先设置目标Node进程的PID}"                                 # 对运行中进程开启调试端口
 lsof -i :3000                                    # 查端口占用
 ulimit -n                                        # Unix：先查看当前文件句柄限制，结合泄漏排查再调整
 NODE_DEBUG=http,net node server.js               # 内置模块 debug 日志

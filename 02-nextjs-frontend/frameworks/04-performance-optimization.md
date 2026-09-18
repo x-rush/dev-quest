@@ -55,7 +55,7 @@ Next.js 16为性能优化提供了强大的工具和策略，从构建时优化�
 
 ### LCP (Largest Contentful Paint) 优化
 
-```typescript
+```tsx
 // src/components/performance/LCPOptimizer.tsx
 import Image from 'next/image'
 import { useState, useEffect, useMemo } from 'react'
@@ -240,7 +240,7 @@ export function OptimizedImage({
 
 ### CLS (Cumulative Layout Shift) 优化
 
-```typescript
+```tsx
 // src/components/performance/CLSOptimizer.tsx
 import { useEffect, useState, useRef } from 'react'
 
@@ -444,7 +444,7 @@ export function AdPlaceholder({ className = '', width, height, onLoad }: AdPlace
 
 ### FID (First Input Delay) 优化
 
-```typescript
+```tsx
 // src/components/performance/FIDOptimizer.tsx
 import { useEffect, useState } from 'react'
 
@@ -1224,7 +1224,7 @@ export function usePrefetch() {
 
 ### 智能组件加载
 
-```typescript
+```tsx
 // src/components/performance/LazyComponentLoader.tsx
 'use client'
 
@@ -1388,7 +1388,7 @@ const ChartComponent = createViewportLazyComponent(
 
 ### 实时性能监控
 
-```typescript
+```tsx
 // src/lib/performance/PerformanceMonitor.ts
 import { onCLS, onFID, onFCP, onINP, onLCP, onTTFB } from 'web-vitals'
 import { useState, useEffect } from 'react'

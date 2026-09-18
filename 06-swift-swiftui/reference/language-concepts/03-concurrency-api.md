@@ -134,9 +134,18 @@ let n = await c.count                        // 读也要 await
 ### 4.2 MainActor 常用写法
 
 ```swift
-@MainActor func updateUI() { … }                    // 函数级
-@MainActor final class Store { … }                  // 类型级
-await MainActor.run { label.text = "ok" }           // 代码块级（桥接旧代码）
+@MainActor final class Store {                      // 类型级：状态只在 MainActor 修改
+    var title = "等待"
+}
+
+@MainActor func updateUI(_ store: Store) {           // 函数级
+    store.title = "已更新"
+}
+
+func finishLoading(_ store: Store) async {
+    await updateUI(store)                           // 跨隔离域调用
+    await MainActor.run { store.title = "就绪" }     // 代码块级；闭包内不能 await
+}
 ```
 
 **陷阱**: 在非隔离 async 函数中直接写 `@MainActor` 属性会编译报错；要么整个函数标 `@MainActor`，要么在 `MainActor.run` 内修改。

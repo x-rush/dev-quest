@@ -147,7 +147,11 @@ filesApp.post('/:id/confirm', requireAuth, async (c) => {
 
 ```typescript
 // 两段式直传
-const { fileId, uploadUrl } = await fetch('/files/upload-url', { method: 'POST', ... }).then(r => r.json());
+const { fileId, uploadUrl } = await fetch('/files/upload-url', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({ mimetype: fileBlob.type, sizeBytes: fileBlob.size }),
+}).then(r => r.json());
 await fetch(uploadUrl, { method: 'PUT', body: fileBlob, headers: { 'Content-Type': fileBlob.type } });
 await fetch(`/files/${fileId}/confirm`, { method: 'POST' });
 ```

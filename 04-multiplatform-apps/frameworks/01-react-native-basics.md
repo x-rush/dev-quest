@@ -92,6 +92,7 @@ const styles = StyleSheet.create({
 });
 
 // 1. 数组合并（后者覆盖前者）
+const styleExamples = <>
 <View style={[styles.base, styles.primary]} />
 
 // 2. 条件拼接
@@ -99,6 +100,7 @@ const styles = StyleSheet.create({
 
 // 3. StyleSheet.compose —— 与数组等价，利于调试器展示
 <View style={StyleSheet.compose(styles.base, styles.primary)} />
+</>;
 
 // 4. 平台专属样式文件：styles.ios.ts / styles.android.ts
 //    Metro 按扩展名自动解析，import 语句保持不变；鸿蒙端（RNOH）命中 .android.ts

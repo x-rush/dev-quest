@@ -116,7 +116,7 @@ export interface AdvancedServerComponentProps<T = {}>
 
 #### 1.1 基础数据获取组件
 
-```typescript
+```tsx
 // components/basic-data-fetcher.tsx
 import { cache } from 'react';
 
@@ -257,7 +257,7 @@ const getRelatedPosts = cache(async (postId: string, limit = 5) => {
 
 #### 1.2 高级数据获取模式
 
-```typescript
+```tsx
 // components/advanced-data-fetcher.tsx
 // Next.js 16：unstable_cache 已弃用，改用 "use cache" 显式缓存
 import { cacheLife, cacheTag } from 'next/cache';
@@ -534,7 +534,7 @@ function FullPost({
 
 #### 2.1 多层缓存架构
 
-```typescript
+```tsx
 // components/multi-layer-cache.tsx
 import { cacheLife, cacheTag } from 'next/cache';
 import { Redis } from '@upstash/redis';
@@ -821,7 +821,7 @@ export async function SmartCacheComponent({
 
 #### 3.1 Suspense 和流式组件
 
-```typescript
+```tsx
 // components/streaming-components.tsx
 import React, { Suspense } from 'react';
 import { notFound } from 'next/navigation';
@@ -1176,7 +1176,7 @@ export default async function StreamingDemoPage() {
 
 #### 4.1 安全数据处理
 
-```typescript
+```tsx
 // components/secure-server-components.tsx
 import { headers } from 'next/headers';
 import { redirect } from 'next/navigation';
