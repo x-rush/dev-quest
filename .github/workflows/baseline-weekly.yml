@@ -17,10 +17,10 @@ permissions:
 
 jobs:
   external-links:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 20
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: 外链健康检查（lychee，报告不门禁）
         uses: lycheeverse/lychee-action@v1
@@ -57,12 +57,12 @@ jobs:
           if-no-files-found: ignore
 
   baseline-drift:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 15
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v5
         with:
           node-version: '22'
 

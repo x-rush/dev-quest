@@ -19,7 +19,7 @@
 
 - 本机工具链：go / node+tsc / python3 / php / kotlinc / swiftc（完整路径）/ jshell (JDK 21) / rustc + rustfmt + cargo（rust L2 第三方需网络拉 crates）/ protoc
 - `/tmp/dq-verify/` 下（验证工作区，不入仓）：
-  - `parsego/parsego` — 由 `parsego/main.go` 编译（`go build -o parsego .`）
+  - `parsego/parsego` — 由 `parsego/main.go` 编译（`go build -o parsego main.go`）；这是仅依赖标准库的单文件工具，无 `go.mod`，不能使用包目录形式的 `go build .`。
   - `ts-02/ ts-03/ ts-04/ ts-09/` — 四个 tsc 项目，依赖版本按各模块 README 技术基线 pin（02-nextjs / 03-tanstack / 04-rn / 09-nodejs + 其余模块），`tsconfig`：`strict:false + skipLibCheck + jsx:react-jsx + moduleResolution:bundler`，include `src/**`，`stubs.d.ts` 提供 `@/*` 通配
   - `goproj/` — go.mod + 全量第三方依赖（`go get` 按技术基线），供含第三方 import 的自包含块 `go vet` 编译级验证
   - `venv/` — pyyaml（yaml 解析）
@@ -35,7 +35,9 @@ push/PR 自动跑：全仓代码块 L1/L2（`verify.py --strict`）+ 站内链�
 python3 extract_blocks.py [REPO_ROOT] [OUTPUT_JSONL]
 
 # 2. 编译 parsego（首次）
-cd parsego && go build -o /tmp/dq-verify/parsego/parsego .
+mkdir -p /tmp/dq-verify/parsego
+go build -o /tmp/dq-verify/parsego/parsego parsego/main.go
+python3 test_parsego.py /tmp/dq-verify/parsego/parsego
 
 # 3. 样本试跑 / 全量批跑
 /tmp/dq-verify/venv/bin/python verify.py --langs tsx --sample 20

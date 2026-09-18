@@ -20,20 +20,22 @@ concurrency:
 
 jobs:
   code-blocks-and-links:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 60
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
-      - uses: actions/setup-go@v5
+      - uses: actions/setup-go@v6
         with:
           go-version: stable
+          # parsego 仅依赖标准库，没有 go.mod/go.sum 可作为依赖缓存键。
+          cache: false
 
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v6
         with:
           python-version: '3.12'
 
-      - uses: actions/setup-java@v4
+      - uses: actions/setup-java@v5
         with:
           distribution: temurin
           java-version: '21'
@@ -48,7 +50,10 @@ jobs:
         run: |
           mkdir -p /tmp/dq-verify/parsego
           cd shared-resources/tools/code-block-verify/parsego
-          go build -o /tmp/dq-verify/parsego/parsego .
+          go build -o /tmp/dq-verify/parsego/parsego main.go
+
+      - name: parsego 回归检查（完整程序、片段与语法错误）
+        run: python3 shared-resources/tools/code-block-verify/test_parsego.py /tmp/dq-verify/parsego/parsego
 
       - name: 提取全仓代码块
         run: python3 shared-resources/tools/code-block-verify/extract_blocks.py .
