@@ -16,6 +16,10 @@
 其余语言 → status=SKIP_NOTOOL（dockerfile/nginx/blade 等交 L3 目检）
 """
 import ast
+import argparse
+import threading
+import platform
+from pathlib import Path
 import json
 import os
 import re
@@ -26,15 +30,21 @@ import tempfile
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-ROOT = sys.argv[1] if len(sys.argv) > 1 else os.path.dirname(
-    os.path.dirname(os.path.dirname(HERE)))
+ROOT = os.path.dirname(os.path.dirname(os.path.dirname(HERE)))
 MANIFEST = os.path.join(HERE, "manifest.jsonl")
 RESULTS = os.path.join(HERE, "results.jsonl")
-WORK = "/tmp/dq-verify"
+WORK = os.environ.get("DQ_WORK", "/tmp/dq-verify")
 BLOCKS = os.path.join(WORK, "blocks")
 PARSEGO = os.path.join(WORK, "parsego", "parsego")
-SWIFTC = os.path.expanduser(
-    "~/.asdf/installs/swift/6.3.3/versions/6.3.3/usr/bin/swiftc")
+# Go build appends .exe on Windows. Keep the documented Unix path while using
+# the actual executable when the same DQ_WORK directory is reused on Windows.
+if os.name == "nt" and os.path.exists(PARSEGO + ".exe"):
+    PARSEGO += ".exe"
+SWIFTC = shutil.which("swiftc") or "swiftc"
+TSC = shutil.which("tsc") or "tsc"
+ALLOW_EXECUTION = False
+COMMANDS = []
+COMMAND_LOCK = threading.Lock()
 
 TS_PROJECT = {
     "02-nextjs-frontend": "ts-02",
@@ -97,14 +107,37 @@ def write_blocks(recs):
 
 
 def run(cmd, timeout=60, cwd=None, stdin_text=None, env=None):
+    """Keep both output streams in full; short per-block detail is only a preview."""
+    # A .cmd shim is discoverable by shutil.which on Windows but is not a
+    # CreateProcess executable. Invoke it through cmd.exe while preserving the
+    # exact command's exit status and captured streams.
+    if os.name == "nt" and str(cmd[0]).lower().endswith((".cmd", ".bat")):
+        cmd = ["cmd.exe", "/d", "/s", "/c", subprocess.list2cmdline(list(map(str, cmd)))]
     try:
-        p = subprocess.run(cmd, capture_output=True, text=True, timeout=timeout,
-                           cwd=cwd, input=stdin_text, env=env)
-        return p.returncode, (p.stderr or p.stdout or "")[:600]
-    except subprocess.TimeoutExpired:
-        return 124, "timeout"
-    except FileNotFoundError:
-        return 127, "tool-not-found: " + cmd[0]
+        # Tool diagnostics often use UTF-8 even on a Windows host configured for
+        # a legacy console code page.  Decoding with the host default can crash
+        # the reader thread and turn a real compiler result into empty evidence.
+        p = subprocess.run(cmd, capture_output=True, text=True, encoding="utf-8",
+                           errors="replace", timeout=timeout, cwd=cwd,
+                           input=stdin_text, env=env)
+        rc, out, err = p.returncode, p.stdout or "", p.stderr or ""
+    except subprocess.TimeoutExpired as e:
+        rc = 124
+        out = e.stdout or ""
+        err = e.stderr or ""
+        if isinstance(out, bytes): out = out.decode("utf8", "replace")
+        if isinstance(err, bytes): err = err.decode("utf8", "replace")
+        err += f"\ntimeout after {timeout}s"
+    except OSError as e:
+        rc, out, err = 127, "", str(e)
+    record = {"command": list(map(str, cmd)), "cwd": cwd, "exit_code": rc,
+              "stdout": out, "stderr": err, "stdin": stdin_text}
+    with COMMAND_LOCK:
+        COMMANDS.append(record)
+        # Flush each invocation so timeout/cancellation does not lose all evidence.
+        with open(os.path.join(HERE, "commands.jsonl"), "a", encoding="utf8") as f:
+            f.write(json.dumps(record, ensure_ascii=False) + "\n")
+    return rc, err + ("\n" if err and out else "") + out
 
 
 def tool_availability():
@@ -119,13 +152,13 @@ def tool_availability():
         "php": shutil.which("php"),
         "bash": shutil.which("bash"),
         "kotlin": shutil.which("kotlinc"),
-        "swift": os.path.exists(SWIFTC),
+        "swift": shutil.which(SWIFTC),
         "java": shutil.which("jshell"),
-        "rust_l1": shutil.which("rustfmt"),
+        "rust_l1": bool(shutil.which("rustfmt")) and run(["rustfmt", "--version"], timeout=15)[0] == 0,
         "rust_l2": shutil.which("rustc"),
         "yaml": yaml_ok,
         "protobuf": shutil.which("protoc"),
-        "ts": shutil.which("npx"),
+        "ts": shutil.which("tsc"),
     }
 
 
@@ -136,12 +169,8 @@ def verify_go_l1(recs):
     with open(flist, "w") as f:
         for b in recs:
             f.write(block_path(b) + "\n")
-    try:
-        p = subprocess.run([PARSEGO, flist], capture_output=True, text=True,
-                           timeout=600)
-        lines = p.stdout.splitlines()
-    except subprocess.TimeoutExpired:
-        lines = []
+    rc, output = run([PARSEGO, flist], timeout=600)
+    lines = output.splitlines() if rc == 0 else []
     results = {}
     for line in lines:
         r = json.loads(line)
@@ -155,10 +184,10 @@ def verify_go_l1(recs):
 
 def verify_phplike_l1(recs, results):
     for b in recs:
-        src = open(block_path(b), encoding="utf-8").read()
+        src = Path(block_path(b)).read_text(encoding="utf-8")
         if "<?php" not in src:
             src = "<?php\n" + src
-        tmp = os.path.join(WORK, "tmp.php")
+        tmp = os.path.join(WORK, f"b{b['id']}.lint.php")
         with open(tmp, "w", encoding="utf-8") as f:
             f.write(src)
         rc, err = run(["php", "-l", tmp], timeout=30)
@@ -169,7 +198,7 @@ def verify_phplike_l1(recs, results):
 
 def verify_python_l1(recs, results):
     for b in recs:
-        src = open(block_path(b), encoding="utf-8").read()
+        src = Path(block_path(b)).read_text(encoding="utf-8")
         try:
             ast.parse(src)
             results[b["id"]]["l1"] = {"status": "PASS", "detail": ""}
@@ -201,7 +230,7 @@ def wrap_kotlin(src):
 
 def verify_kotlin_l1(recs, results):
     def work(b):
-        src = open(block_path(b), encoding="utf-8").read()
+        src = Path(block_path(b)).read_text(encoding="utf-8")
         cand = [src, wrap_kotlin(src)]
         last = ""
         for i, c in enumerate(cand):
@@ -241,7 +270,7 @@ def verify_swift_l1(recs, results):
 
 def verify_java_l1(recs, results):
     def work(b):
-        src = open(block_path(b), encoding="utf-8").read()
+        src = Path(block_path(b)).read_text(encoding="utf-8")
         lines = [l for l in src.splitlines()
                  if not l.strip().startswith("package ")]
         rc, err = run(["jshell", "-q", "-"], timeout=60,
@@ -310,16 +339,22 @@ def _parse_jsonc(src):
 
 
 def verify_datafmt_l1(recs, results):
-    import yaml
+    try:
+        import yaml
+    except ImportError:
+        yaml = None
     try:
         import tomllib
     except ImportError:
         tomllib = None
     for b in recs:
         lang = b["lang"]
-        src = open(block_path(b), encoding="utf-8").read()
+        src = Path(block_path(b)).read_text(encoding="utf-8")
         try:
             if lang == "yaml":
+                if yaml is None:
+                    results[b["id"]]["l1"] = {"status": "SKIP_NOTOOL", "detail": "missing PyYAML"}
+                    continue
                 list(yaml.safe_load_all(src))
             elif lang in ("json", "jsonc", "json5"):
                 # json 块允许首行 `// 文件名` 注释惯例：纯解析失败则按 jsonc 剥注释重试
@@ -362,7 +397,7 @@ def verify_ts_l1(recs, results, log):
         proj_dir = os.path.join(WORK, proj)
         if not os.path.exists(os.path.join(proj_dir, "tsconfig.json")):
             # 回退到入仓脚手架（无 node_modules，stubs 通配降级为语法级验证）
-            proj_dir = os.path.join(HERE, "ts-projects", proj)
+            shutil.copytree(os.path.join(HERE, "ts-projects", proj), proj_dir, dirs_exist_ok=True)
         if not os.path.exists(os.path.join(proj_dir, "tsconfig.json")):
             log(f"ts {proj}: 无 tsconfig，{len(items)} 块 SKIP_NOTOOL")
             for b in items:
@@ -385,21 +420,20 @@ def verify_ts_l1(recs, results, log):
                 manifest_lines.append({"id": b["id"], "file": name})
             with open(os.path.join(src_dir, "_batch.json"), "w") as f:
                 json.dump(manifest_lines, f)
-            try:
-                p = subprocess.run(["npx", "tsc", "-p", proj_dir, "--noEmit",
-                                    "--pretty", "false"], capture_output=True,
-                                   text=True, timeout=600, cwd=proj_dir)
-                rc, err = p.returncode, (p.stderr or "") + (p.stdout or "")
-            except subprocess.TimeoutExpired:
-                rc, err = 124, "tsc timeout"
+            # Each fence is an independent example. Do not let top-level names
+            # leak into another fence through TypeScript's global script scope.
+            rc, err = run([TSC, "-p", proj_dir, "--noEmit", "--pretty", "false",
+                           "--moduleDetection", "force"],
+                          timeout=600, cwd=proj_dir)
             if rc == 0:
                 for b in batch:
                     results[b["id"]]["l1"] = {"status": "PASS", "detail": ""}
                 continue
             per_block = {m["id"]: m["file"] for m in manifest_lines}
             errs = {}
+            unassigned_errors = []
             for line in err.splitlines():
-                m = re.match(r"^(?:src/)([\w.]+)\((\d+),\d+\):\s*error\s+(TS\d+):(.*)$",
+                m = re.match(r"^(?:.*[/\\])?([\w.]+)\((\d+),\d+\):\s*error\s+(TS\d+):(.*)$",
                              line)
                 if m:
                     fname, ecode, msg = m.group(1), m.group(3), m.group(4).strip()
@@ -407,12 +441,19 @@ def verify_ts_l1(recs, results, log):
                                None)
                     if bid:
                         errs.setdefault(bid, []).append(f"{ecode}: {msg}")
+                    else:
+                        unassigned_errors.append(line)
+                elif re.search(r"error\s+TS\d+:", line):
+                    unassigned_errors.append(line)
             for b in batch:
                 if b["id"] in errs:
                     results[b["id"]]["l1"] = {"status": "FAIL",
-                                              "detail": " | ".join(errs[b["id"]][:3])[:300]}
+                                              "detail": " | ".join(errs[b["id"]])}
                 else:
-                    results[b["id"]]["l1"] = {"status": "PASS", "detail": ""}
+                    # A compiler crash/configuration error is not a passing block.
+                    complete = bool(errs) and not unassigned_errors and rc in (1, 2)
+                    results[b["id"]]["l1"] = {"status": "PASS" if complete else "ERROR_TOOL",
+                        "detail": "" if complete else err}
             log(f"ts {proj} batch {i//60+1}: rc={rc}, {len(errs)}/{len(batch)} 块有错")
         shutil.rmtree(src_dir, ignore_errors=True)
         if proj_dir.startswith(HERE):
@@ -509,9 +550,9 @@ def verify_php_l2(recs, results):
             results[b["id"]]["l2"] = {"status": "GATED", "detail": "PHPUnit 测试类"}
             continue
         d = tempfile.mkdtemp(prefix="phprun_")
-        with open(os.path.join(d, "main.php"), "w", encoding="utf-8") as f:
+        with open(os.path.join(d, f"b{b['id']}.php"), "w", encoding="utf-8") as f:
             f.write(src)
-        rc, err = run(["php", os.path.join(d, "main.php")], timeout=10, cwd=d)
+        rc, err = run(["php", os.path.join(d, f"b{b['id']}.php")], timeout=10, cwd=d)
         shutil.rmtree(d, ignore_errors=True)
         if rc == 0:
             results[b["id"]]["l2"] = {"status": "PASS", "detail": ""}
@@ -541,7 +582,7 @@ def verify_rust_l1(recs, results):
     """rust L1：rustfmt 解析校验（纯语法层，不 type-check——编译失败演示块不误报）。
     二级包装梯：原样 → 全部包进 fn main(){}（语句片段）。"""
     def work(b):
-        src = open(block_path(b), encoding="utf-8").read()
+        src = Path(block_path(b)).read_text(encoding="utf-8")
         cands = [src, wrap_rust_main(src)]
         for c in cands:
             tmp = os.path.join(WORK, f"rust_l1_b{b['id']}.rs")
@@ -664,17 +705,18 @@ def verify_rust_l2(recs, results, log=print):
 # ---------------- main ----------------
 
 def main():
-    args = sys.argv[1:]
-    root = next((a for a in args if not a.startswith("--")), None)
-    if root:
-        globals()["ROOT"] = root
-    langs_filter = None
-    sample = 0
-    strict = "--strict" in args
-    if "--langs" in args:
-        langs_filter = set(args[args.index("--langs") + 1].split(","))
-    if "--sample" in args:
-        sample = int(args[args.index("--sample") + 1])
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("root", nargs="?", default=ROOT)
+    parser.add_argument("--strict", action="store_true")
+    parser.add_argument("--langs", default="")
+    parser.add_argument("--sample", type=int, default=0)
+    parser.add_argument("--execute", action="store_true", help="Run L2 and Java JShell only in an isolated disposable environment")
+    args = parser.parse_args()
+    globals()["ROOT"] = os.path.abspath(args.root)
+    globals()["ALLOW_EXECUTION"] = args.execute
+    langs_filter = set(args.langs.split(",")) if args.langs else None
+    sample, strict = args.sample, args.strict
+    open(os.path.join(HERE, "commands.jsonl"), "w").close()
     log = lambda m: print(m, flush=True)
     global RESULTS
     if sample:
@@ -746,9 +788,12 @@ def main():
         verify_swift_l1(by_lang["swift"], results)
     skip_lang(["swift"], "swiftc")
 
-    if "java" in by_lang and tools["java"]:
+    if "java" in by_lang and tools["java"] and ALLOW_EXECUTION:
         log(f"L1 java: {len(by_lang['java'])}")
         verify_java_l1(by_lang["java"], results)
+    for b in by_lang.get("java", []):
+        if results[b["id"]]["l1"] is None and tools["java"]:
+            results[b["id"]]["l1"] = {"status": "NOT_VERIFIED", "detail": "JShell executes code; requires --execute in isolation"}
     skip_lang(["java"], "jshell")
 
     if "rust" in by_lang and tools["rust_l1"]:
@@ -788,18 +833,25 @@ def main():
                 results[b["id"]]["l1"] = {"status": "SKIP_NOTOOL",
                                           "detail": f"lang={b['lang']} 无机器验证器"}
 
-    # L2
-    if "go" in by_lang and tools["go"]:
-        verify_go_l2(by_lang["go"], results, log)
-    if "python" in by_lang:
-        log("L2 python")
-        verify_python_l2(by_lang["python"], results)
-    if "php" in by_lang and tools["php"]:
-        log("L2 php")
-        verify_php_l2(by_lang["php"], results)
-    if "rust" in by_lang and tools["rust_l2"]:
-        log("L2 rust")
-        verify_rust_l2(by_lang["rust"], results)
+    # L2 is opt-in; token filters are not a sandbox.
+    if ALLOW_EXECUTION:
+        if "go" in by_lang and tools["go"]:
+            verify_go_l2(by_lang["go"], results, log)
+        if "python" in by_lang:
+            log("L2 python")
+            verify_python_l2(by_lang["python"], results)
+        if "php" in by_lang and tools["php"]:
+            log("L2 php")
+            verify_php_l2(by_lang["php"], results)
+        if "rust" in by_lang and tools["rust_l2"]:
+            log("L2 rust")
+            verify_rust_l2(by_lang["rust"], results)
+
+    for r in results.values():
+        if r["l2"] is None:
+            r["l2"] = {"status": "NOT_VERIFIED", "detail": "execution disabled or no eligible runtime case"}
+    from build_report import build_report
+    build_report(recs, results, HERE, COMMANDS, tools, ALLOW_EXECUTION)
 
     with open(RESULTS, "w", encoding="utf-8") as f:
         for b in recs:
@@ -829,8 +881,10 @@ def main():
         id2lang = {b["id"]: b["lang"] for b in recs}
 
         def gate_fail(r):
-            if "FAIL" not in [s["status"] for s in (r["l1"], r["l2"]) if s]:
+            if not any(s["status"] in {"FAIL", "ERROR_TOOL", "MISS", "TIMEOUT"} for s in (r["l1"], r["l2"]) if s):
                 return False
+            if any(s["status"] in {"ERROR_TOOL", "MISS", "TIMEOUT"} for s in (r["l1"], r["l2"]) if s):
+                return True
             if id2hash[r["id"]] in allow:
                 return False
             if id2lang[r["id"]] in TS_LANGS:
@@ -842,9 +896,9 @@ def main():
                         if "FAIL" in [s["status"] for s in (r["l1"], r["l2"]) if s])
         new_fails = [r for r in results.values() if gate_fail(r)]
         log(f"门禁: FAIL 块 {all_fails}，其中新增未裁决 {len(new_fails)}")
-        for r in new_fails[:50]:
+        for r in new_fails:
             sts = [s["status"] for s in (r["l1"], r["l2"]) if s]
-            log(f"NEW-FAIL {r['module']}/{r['file']}:{r['start']} (b{r['id']}) {sts}")
+            log(f"NEW-FAIL {r['file']}:{r['start']} (b{r['id']}) {sts}")
         if new_fails:
             sys.exit(1)
 

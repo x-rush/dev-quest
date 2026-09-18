@@ -5,3 +5,8 @@ results.jsonl.sample
 l3_worklist.jsonl
 __pycache__/
 ts-projects/*/src/
+
+commands.jsonl
+summary.json
+report.md
+run.log

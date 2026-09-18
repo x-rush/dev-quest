@@ -39,7 +39,7 @@ def main():
     for line in open(RESULTS, encoding="utf-8"):
         r = json.loads(line)
         l1, l2 = r["l1"], r.get("l2")
-        if l1["status"] == "PASS" and (l2 is None or l2["status"] in ("PASS", "GATED", "TIMEOUT")):
+        if l1["status"] == "PASS" and (l2 is not None and l2["status"] == "PASS"):
             continue
         b = meta[r["id"]]
         content = b.get("content", "")

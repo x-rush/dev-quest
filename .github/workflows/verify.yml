@@ -1,65 +1,126 @@
-# 知识库质量门禁：全仓代码块机器验证 + 站内链接检查
-#
-# 方法学说明（与 shared-resources/tools/code-block-verify/README.md 对齐）：
-# - 门禁语义 = 「无新增未裁决失败」：FAIL 块的内容哈希若在 adjudicated-fails.jsonl
-#   （2.8.0 全仓 + 2.10.0 rust 全量裁决）中则放行，新增失败才拦截
-# - kotlin / swift 需本地工具链（kotlinc / swiftc），runner 无工具时自动
-#   SKIP_NOTOOL 移交本地验证，不计失败
-# - ts 族以入仓 ts-projects 脚手架（stubs 通配、无 node_modules）做 tsc 验证，
-#   语义级错误（TS2xxx）属预期噪声，门禁仅拦 TS1xxx 语法错误码
 name: verify
-
 on:
   push:
     branches: [main]
   pull_request:
-
+  workflow_dispatch:
+    inputs:
+      execute_examples:
+        description: 'Run eligible examples in the disposable CI runner (never on a trusted workstation)'
+        type: boolean
+        default: false
+defaults:
+  run:
+    # GitHub invokes explicit bash with -e -o pipefail; tee cannot hide a failed check.
+    shell: bash
+permissions:
+  contents: read
 concurrency:
-  group: verify-${{ github.ref }}
+  group: verify-${{ github.ref }}-${{ github.event_name }}
   cancel-in-progress: true
-
 jobs:
-  code-blocks-and-links:
+  document-integrity:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.14'
+      - run: mkdir -p /tmp/dq-reports
+      - name: Verifier regression tests
+        run: python -m unittest discover -s shared-resources/tools/code-block-verify -p 'test_verifier.py'
+      - name: Pipeline exit-status regression
+        run: python shared-resources/tools/code-block-verify/test_pipeline.py
+      - name: Local file links
+        if: always()
+        run: python shared-resources/tools/code-block-verify/link_check.py . --strict | tee /tmp/dq-reports/links.txt
+      - name: Heading anchors
+        if: always()
+        run: python shared-resources/tools/document-quality/check_anchors.py --report /tmp/dq-reports/anchors.json
+      - name: Closed code fences
+        if: always()
+        run: python shared-resources/tools/document-quality/check_fences.py | tee /tmp/dq-reports/fences.json
+      - uses: actions/upload-artifact@v6
+        if: always()
+        with:
+          name: document-integrity
+          path: /tmp/dq-reports/
+  code-inventory:
+    if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-24.04
     timeout-minutes: 60
     steps:
       - uses: actions/checkout@v5
-
+        with:
+          persist-credentials: false
       - uses: actions/setup-go@v6
         with:
-          go-version: stable
-          # parsego 仅依赖标准库，没有 go.mod/go.sum 可作为依赖缓存键。
+          go-version: '1.27.1'
           cache: false
-
       - uses: actions/setup-python@v6
         with:
-          python-version: '3.12'
-
+          python-version: '3.14'
       - uses: actions/setup-java@v5
         with:
           distribution: temurin
           java-version: '21'
-
-      - name: 安装 protobuf 编译器
-        run: sudo apt-get update && sudo apt-get install -y protobuf-compiler
-
-      - name: 安装 pyyaml
-        run: pip install pyyaml
-
-      - name: 编译 parsego（Go 语法 runner）
+      - uses: actions/setup-node@v5
+        with:
+          node-version: '24'
+      - name: Set up PHP matching the documented baseline
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.5'
+          coverage: none
+          tools: none
+      - name: Install verification dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y protobuf-compiler
+          pip install pyyaml==6.0.3
+          npm install -g typescript@5.9.3
+          rustup component add rustfmt
+          rustfmt --version
+          php -r 'exit(PHP_MAJOR_VERSION === 8 && PHP_MINOR_VERSION === 5 ? 0 : 1);'
+      - name: Build and test runners
         run: |
           mkdir -p /tmp/dq-verify/parsego
-          cd shared-resources/tools/code-block-verify/parsego
-          go build -o /tmp/dq-verify/parsego/parsego main.go
-
-      - name: parsego 回归检查（完整程序、片段与语法错误）
-        run: python3 shared-resources/tools/code-block-verify/test_parsego.py /tmp/dq-verify/parsego/parsego
-
-      - name: 提取全仓代码块
-        run: python3 shared-resources/tools/code-block-verify/extract_blocks.py .
-
-      - name: 代码块全量验证（L1 语法 + L2 运行，--strict 门禁）
-        run: python3 shared-resources/tools/code-block-verify/verify.py --strict
-
-      - name: 站内链接检查（0 断链门禁）
-        run: python3 shared-resources/tools/code-block-verify/link_check.py . --strict
+          go build -o /tmp/dq-verify/parsego/parsego shared-resources/tools/code-block-verify/parsego/main.go
+          python shared-resources/tools/code-block-verify/test_parsego.py /tmp/dq-verify/parsego/parsego
+          python -m unittest discover -s shared-resources/tools/code-block-verify -p 'test_verifier.py'
+      - name: Extract inventory
+        run: python shared-resources/tools/code-block-verify/extract_blocks.py .
+      # Only a disposable hosted runner: checkout credentials are not persisted,
+      # no repository secrets are passed, and contents permission stays read-only.
+      - name: Verify and retain actual exit status
+        env:
+          EXECUTE: ${{ inputs.execute_examples }}
+        run: |
+          args=()
+          if [ "$EXECUTE" = true ]; then args+=(--execute); fi
+          python shared-resources/tools/code-block-verify/verify.py --strict "${args[@]}" | tee shared-resources/tools/code-block-verify/run.log
+      - name: Publish summary
+        if: always()
+        run: |
+          if [ -f shared-resources/tools/code-block-verify/summary.json ]; then
+            echo '## Code inventory result' >> "$GITHUB_STEP_SUMMARY"
+            echo 'Download code-verification for every block, complete diagnostics and tool versions.' >> "$GITHUB_STEP_SUMMARY"
+            cat shared-resources/tools/code-block-verify/summary.json >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo 'Verification did not finish; download partial logs. This is not a passing verification.' >> "$GITHUB_STEP_SUMMARY"
+          fi
+      - uses: actions/upload-artifact@v6
+        if: always()
+        with:
+          name: code-verification
+          retention-days: 14
+          path: |
+            shared-resources/tools/code-block-verify/manifest.jsonl*
+            shared-resources/tools/code-block-verify/results.jsonl*
+            shared-resources/tools/code-block-verify/commands.jsonl
+            shared-resources/tools/code-block-verify/summary.json
+            shared-resources/tools/code-block-verify/report.md
+            shared-resources/tools/code-block-verify/run.log

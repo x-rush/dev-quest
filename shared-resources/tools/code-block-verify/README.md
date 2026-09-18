@@ -1,67 +1,76 @@
-# code-block-verify 全仓代码块机器验证管线
+# 教学知识库的代码与文档验证
 
-对全仓 Markdown 围栏代码块做**全量（非抽样）**三层验证：L1 语法层 → L2 运行/编译层 → L3 agent 裁决（由审计流程人工/agent 执行，不在本目录脚本范围内）。
+验证的目标是让每个代码块都有可解释的状态，不是让每个教学片段独立运行成功。任何 PASS 都只能说明记录的检查通过，不能代替内容审查或真实框架集成测试。
 
-## 组件
+## 日常自动检查
 
-| 文件 | 用途 |
-|------|------|
-| `extract_blocks.py` | 提取器：扫描全仓 `.md` 围栏代码块（手写状态机，支持嵌套围栏/`~` 围栏/未闭合兜底），输出 `manifest.jsonl` + `manifest.jsonl.index.json` |
-| `verify.py` | 主驱动：读 manifest，按语言分发 L1/L2 验证，输出 `results.jsonl` |
-| `prefilter.py` | L3 预分流：读 results+manifest，产出失败块分类工作清单 `l3_worklist.jsonl`（likely-teaching / likely-env / force-deep / needs-review；TS2339/TS2551 永不自动放行） |
-| `link_check.py` | 站内链接全量检查：剥离围栏代码块/行内代码后提取相对链接，校验目标存在；跳过外链与模板占位符；`--strict` 断链退出码 1（CI 门禁用） |
-| `parsego/main.go` | Go 语法 runner（`go/parser` 三级包装梯：原样 → 补 `package p` → 包进 `func _s(){}`），编译后供 verify.py 调用 |
-| `rustproj/Cargo.toml` | rust L2 第三方依赖工程脚手架（workspace pin 11-rust 基线版本）；verify.py 按需自举到 `/tmp/dq-verify/rustproj`，第三方块落 `v_b{id}` 子包 `cargo build` 编译级验证；tauri 系（需系统 webkit2gtk）排除 |
+`.github/workflows/verify.yml` 在推送 main 和 PR 时只运行快速文档完整性检查：本地文件链接、GitHub 风格章节锚点、代码围栏闭合。三个步骤独立执行，某一步失败不会跳过其余检查，报告上传到 `document-integrity` artifact。
 
-> `manifest.jsonl` / `results.jsonl` / `l3_worklist.jsonl` 为运行产物，不入仓（见 `.gitignore`）；2.8.0 全量验证的快照归档于 `refactor-archives/completed/code-block-verification/`。
+全仓多语言检查改为 Actions 页面手动触发 `verify`。默认只检查 L1；`execute_examples` 明确选中才执行符合规则的 L2 和 Java JShell。代码检查与文档检查是独立 job。手动检查仍保留真实失败退出码，不使用 continue-on-error 掩盖失败。
 
-## 环境依赖
+手动全量 job 使用 PHP 8.5，并在开始验证前检查主次版本，避免 Ubuntu 24.04 默认 PHP 8.3 误报新语法；通过 [setup-php 的官方项目说明](https://github.com/shivammathur/setup-php#tada-php-support)指定版本。Rust 使用 runner 当前工具链并显式安装 `rustfmt` 组件，然后检查其可执行版本；只有 rustup 代理存在不代表组件可用。组件管理依据 [Rustup 文档](https://rust-lang.github.io/rustup/concepts/components.html)。这些依赖安装只在手动全量 job 执行，日常快速门禁不安装多语言环境。
 
-- 本机工具链：go / node+tsc / python3 / php / kotlinc / swiftc（完整路径）/ jshell (JDK 21) / rustc + rustfmt + cargo（rust L2 第三方需网络拉 crates）/ protoc
-- `/tmp/dq-verify/` 下（验证工作区，不入仓）：
-  - `parsego/parsego` — 由 `parsego/main.go` 编译（`go build -o parsego main.go`）；这是仅依赖标准库的单文件工具，无 `go.mod`，不能使用包目录形式的 `go build .`。
-  - `ts-02/ ts-03/ ts-04/ ts-09/` — 四个 tsc 项目，依赖版本按各模块 README 技术基线 pin（02-nextjs / 03-tanstack / 04-rn / 09-nodejs + 其余模块），`tsconfig`：`strict:false + skipLibCheck + jsx:react-jsx + moduleResolution:bundler`，include `src/**`，`stubs.d.ts` 提供 `@/*` 通配
-  - `goproj/` — go.mod + 全量第三方依赖（`go get` 按技术基线），供含第三方 import 的自包含块 `go vet` 编译级验证
-  - `venv/` — pyyaml（yaml 解析）
+Python 检查器使用 3.14，与 Python 模块的语法基线一致，避免旧解释器把 t-string、类型参数默认值等新语法判为错误。
 
-## 用法
+周报 `baseline-weekly.yml` 继续报告外链和版本漂移，不代表自动批准技术版本升级。
 
-### CI 门禁（.github/workflows/verify.yml）
+## 代码块的维护约定
 
-push/PR 自动跑：全仓代码块 L1/L2（`verify.py --strict`）+ 站内链接 0 断链（`link_check.py --strict`）。门禁语义 = **无新增未裁决失败**：FAIL 块内容哈希在 `adjudicated-fails.jsonl`（2.8.0 全仓 + 2.10.0/2.11.0 rust 全量裁决归档）中则放行；kotlin/swift 无 runner 工具链自动 SKIP_NOTOOL；ts 族走入仓 `ts-projects/` 脚手架（stubs 通配、无 node_modules），仅 TS1xxx 语法错误码计入门禁。周报（`.github/workflows/baseline-weekly.yml`）：lychee 外链健康 + [baseline-check](../baseline-check/README.md) registry 级版本漂移比对，均报告不门禁。
+1. **完整可运行示例**：写出文件名、工具版本、依赖安装、命令与预期输出。涉及服务时说明启动和清理方法。
+2. **局部片段**：正文明确它接在哪个完整示例中，哪些变量或服务由上文提供。用准确围栏标记语言，JSX 应使用 tsx/jsx。
+3. **故意错误的反例**：正文写清“预期失败”、触发原因与应出现的错误，再给正确版本。失败不是可以无理由豁免的依据。
+4. **平台或环境依赖**：缺少 Android/iOS SDK、数据库、浏览器或框架依赖时记作未验证。语法通过不能当作框架可运行。
+5. **伪代码与终端输出**：明确标注，不把真实代码改成 text 以绕过检查。
+
+新例外必须按具体文件、完整内容哈希、教学目的、预期错误和复核依据记录。当前 `adjudicated-fails.jsonl` 是历史仅含短哈希的名单，缺少这些信息；暂时保持原有兼容性，但报告会显式显示 `legacy_hash_exception`。本次没有批量增补名单，历史名单也不能视作内容质量证明。
+
+## 本地与隔离环境运行
 
 ```bash
-# 1. 提取
-python3 extract_blocks.py [REPO_ROOT] [OUTPUT_JSONL]
+python shared-resources/tools/code-block-verify/extract_blocks.py .
+python shared-resources/tools/code-block-verify/verify.py --strict
+python shared-resources/tools/code-block-verify/prefilter.py
+```
 
-# 2. 编译 parsego（首次）
+默认不会运行文章中的 Python/PHP/Go/Rust 程序。旧 Java L1 使用 JShell，实际上会执行代码，所以现在只有显式 `--execute` 才启用，否则记录 NOT_VERIFIED。L2 的导入白名单/危险词过滤不是安全沙箱：必须使用不挂载凭证的临时容器或专用临时 CI runner；本地工作站不要启用。编译器本身仍需要合理的资源和时间限制。
+
+```bash
+# 仅限可丢弃的隔离环境
+python shared-resources/tools/code-block-verify/verify.py --strict --execute
+# 有针对性的诊断，不应被报告成全量验证
+python shared-resources/tools/code-block-verify/verify.py --langs python,json --sample 3
+```
+
+Go 语法工具仅依赖标准库，无需 go.mod/go.sum：
+
+```bash
 mkdir -p /tmp/dq-verify/parsego
-go build -o /tmp/dq-verify/parsego/parsego parsego/main.go
-python3 test_parsego.py /tmp/dq-verify/parsego/parsego
-
-# 3. 样本试跑 / 全量批跑
-/tmp/dq-verify/venv/bin/python verify.py --langs tsx --sample 20
-/tmp/dq-verify/venv/bin/python verify.py
+go build -o /tmp/dq-verify/parsego/parsego shared-resources/tools/code-block-verify/parsego/main.go
+python shared-resources/tools/code-block-verify/test_parsego.py /tmp/dq-verify/parsego/parsego
+python -m unittest discover -s shared-resources/tools/code-block-verify -p 'test_verifier.py'
 ```
 
-`--langs` 逗号分隔过滤语言；`--sample N` 每语言抽 N 块（结果写 `results.jsonl.sample`，不污染全量结果）。
+`DQ_WORK` 可覆盖默认 `/tmp/dq-verify`。安装在 PATH 的 `tsc` 被直接调用，避免 npx 在验证途中隐式下载。TS 脚手架复制到工作目录，不修改仓库内脚手架。当前脚手架使用 stubs，语义诊断保留在报告中；原有 strict 兼容策略只把 TS1xxx 语法错误作为门禁，不能据此宣称完整 TypeScript 类型检查通过。Kotlin、Swift 缺少工具时保留未验证状态。
 
-```bash
-# 4. 站内链接检查（CI 门禁同样依赖）
-python3 link_check.py [REPO_ROOT] --strict
-```
+TypeScript 批次使用 `--moduleDetection force`，使每个围栏拥有独立作用域；一个示例的 `const c` 不会改变另一个示例中 `c` 的类型。顶层 await 因此按模块片段检查，读者实际运行时仍须使用 ES 模块环境。批次中出现无法归属代码块的编译器配置错误时，未报局部诊断的块也标为 `ERROR_TOOL`，不推断为通过。
 
-## 层级与安全边界
+## 报告与退出状态
 
-- **L1 语法层**（可验证语言 100%）：go（parsego 包装梯）/ ts 族（tsc 分项目分批）/ php（`php -l`，无 `<?php` 补前缀）/ python（`ast.parse`）/ kotlin（kotlinc 包装梯：import 保留+其余包进 `fun _s(){}`）/ swift（`swiftc -swift-version 6 -parse`，对齐仓库 Swift 6 基线，不做 sema）/ java（jshell stdin，剥 package 行）/ rust（rustfmt 解析校验 + `fn main` 包装梯；纯语法层不 type-check，编译失败演示块不误报）/ bash（**仅 `bash -n`，绝不执行**）/ yaml / json（首行 `//` 注释惯例容忍：纯解析失败时按 jsonc 剥注释重试）/ jsonc（剥注释）/ toml / protobuf（protoc）
-- **L2 运行层**（自包含块）：
-  - go：`has_package && has_func_main`；stdlib-only `go run`（timeout 15s），第三方 import 走 goproj 子目录 `go vet`
-  - python 三道闸：import 白名单 → AST 禁 eval/exec/open 等危险调用与危险模块 → `-I` 隔离 + PYTHONSAFEPATH=1 + timeout 10s + 临时 cwd
-  - php：完整脚本（含 `<?php`）且无危险 token（exec/system/unlink/include 等）且非 PHPUnit 测试类才执行
-  - rust：有 `fn main` 且 use/attribute 仅引用 std 系与编译器内置（`use`/`#[crate::…]`/`extern crate` 三路探测第三方）→ `rustc --edition 2024` 编译 + 运行（timeout 10s）；第三方依赖块改走 rustproj 子包 `cargo build` 编译级验证（tauri 系排除）；编译失败演示块会 FAIL，按文档标注裁决
-- **不可执行即 GATED**；无验证器的语言（dockerfile/nginx/blade 等）标 `SKIP_NOTOOL` 交 L3 目检
-- TS 方法学限制：`strict:false` 降噪下属性级错误（TS2339/TS2551）不可靠，此类失败块**永不自动放行**，一律 L3 深查
+手动 CI 的 `code-verification` artifact 包含：
 
-## 终态枚举
+- `manifest.jsonl` 与索引：全部提取的代码/非代码块、源路径、行号和内容。
+- `results.jsonl`：每块 L1/L2 原始状态、完整内容 SHA-256、分类及历史例外标记。
+- `commands.jsonl`：命令、工作目录、退出码、完整 stdout/stderr（不截断）。逐条落盘，长任务中断时仍保留已完成的证据。Go/TS 批处理命令通过生成的 block ID 关联；Python AST、JSON/YAML/TOML 等是进程内解析。
+- `summary.json`：工具版本、覆盖数量、是否启用执行。
+- `report.md`：全部检查项与所有待审诊断，不再只显示前 50 项。
+- `run.log`：运行过程。如果摘要不存在，说明本轮没有完成，不能视为成功。
 
-`PASS`（L1）/ L2 附加：`PASS` / `TIMEOUT` / `FAIL` / `GATED` / `SKIP_NOTOOL`；L3 裁决终态由审计报告归档（TEACHING / ENV / REAL / FALSEPOSITIVE）。
+`PASS_CHECKED_SCOPE` 只表示相应范围通过；`NOT_VERIFIED` 表示缺环境/未执行；`NEEDS_REVIEW` 表示错误、超时、工具失败或漏检。GATED 是未运行，不是通过。`prefilter.py` 的教学/环境分类只是排查建议，不是自动裁决。预期失败和片段必须人工核实，不能仅凭“syntax error”或省略号自动放行。
+
+完整报告保留真实 FAIL；`--strict` 沿用历史短哈希兼容规则，但新失败、工具异常和超时会失败退出。编译器非零退出且没有可归属的诊断时标为 ERROR_TOOL，不能把整个批次当 PASS。
+
+## 维护检查器
+
+调整编译器、提取规则或例外规则时，先运行检查器测试，再选定小样本验证，最后全量扫描。不要根据“CI 变绿”反推所有内容正确。报告有错时先修检查器，不为检查器误判篡改教学内容。没有平台环境的剩余项应保留清单和复验命令。
+
+`test_pipeline.py` 面向具备 `python3` 的 Linux 或 Git Bash 环境，每个子进程限时 30 秒；Windows 上不要依赖可能指向 WSL 的同名 `bash` 隐式运行。
