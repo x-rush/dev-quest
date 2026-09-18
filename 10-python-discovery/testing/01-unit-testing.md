@@ -6,6 +6,9 @@
 >
 > **前置知识**: [开发工具链](../frameworks/04-devtools.md)（uv 工作流）
 
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
+
 ## 📚 文档元数据
 
 | 属性 | 内容 |
@@ -15,6 +18,8 @@
 | **难度** | ⭐⭐ |
 | **标签** | `#pytest` `#fixture` `#参数化` `#覆盖率` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ## 🎯 学习目标
 
@@ -135,10 +140,9 @@ uv run pytest --cov=pkg --cov-report=term  # 覆盖率报告
 
 ## ✅ 最佳实践
 
-- 测试名描述行为：`test_expired_token_returns_401`，而非 `test_3`
-- 单元测试不碰网络/数据库——外部依赖交给 [Mock 测试](./03-mocking-testing.md)
-- 每修一个 bug，先写复现测试再修复，让回归永久留下
-- 测试代码同样过 ruff（CI 门禁见[CI/CD](../deployment/02-ci-cd-pipelines.md)）
+为业务规则写可理解的测试名，并用独立数据验证正常、边界和失败行为。网络与时间可用受控依赖；需要验证真实数据库或协议时，应另设相应集成测试，不靠 mock 证明未执行的部分。
+
+修复 bug 时尽可能先记录能复现的失败测试，检查修复后通过且相关行为不退化。覆盖率与风格检查提供线索，但真正标准是错误行为会被断言发现。
 
 ## ❓ 常见问题
 
@@ -157,3 +161,16 @@ autouse fixture 重置全局状态 + 每测试新建夹具实例；永远不要�
 - 🚀 **[项目：TODO API](../projects/01-todo-api.md)** — 本篇知识的实战落地
 - 📄 **[开发工具链](../frameworks/04-devtools.md)** — pytest 安装与 uv 工作流
 - 📖 **[故障排除](../reference/quick-references/02-troubleshooting.md)** — 测试环境问题速查
+
+
+<!-- acceptance-exercise -->
+## 练习与验收：用 fixture 验证隔离与清理
+
+为写文件函数使用 tmp_path，断言正常写入内容，再让被测代码抛错，确认测试资源不污染下个案例。对空输入与非法输入参数化，写出不同预期，不能只断言函数没有异常。验收把实现改成总写空串时测试失败，恢复后通过；调换测试顺序和单独运行时结果一致。
+
+以上是在个人或隔离测试环境中的练习，不是本轮已执行记录；实际运行范围见仓库文档质量报告。
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../LEARNING_GUIDE.md) · [完整目录与版本](../README.md) · [通用术语](../../shared-resources/glossary.md)

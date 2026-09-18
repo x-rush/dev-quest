@@ -1,10 +1,10 @@
 # testing - 测试与基准框架
 
-> **模块**: `01-go-backend` | **类型**: 字典条目（无难度门槛，支持任意跳入查阅）
+> **模块**: `01-go-backend` | **类型**: 字典条目（可独立查阅，按主题准备前置知识，支持任意跳入查阅）
 
 ## 📌 定义
 
-testing 包是 Go 内建的测试框架：`go test` 扫描 `*_test.go`（与被测代码同目录、同包），按约定自动发现 `TestXxx(t *testing.T)`、`BenchmarkXxx(b *testing.B)`、`FuzzXxx(f *testing.F)` 与 `ExampleXxx()`。零依赖、零注解——测试就是普通函数，断言就是 `if + t.Errorf`。
+testing 包是 Go 内建的测试框架：`go test` 扫描 `*_test.go`（通常与被测代码同目录，可使用同包或包名加 _test 的外部测试包），按约定自动发现 `TestXxx(t *testing.T)`、`BenchmarkXxx(b *testing.B)`、`FuzzXxx(f *testing.F)` 与 `ExampleXxx()`。零依赖、零注解——测试就是普通函数，断言就是 `if + t.Errorf`。
 
 ## 📖 语法 / 签名
 
@@ -29,12 +29,13 @@ func TestName(t *testing.T) {
 
 **表驱动测试**（Go 测试的标志性模式）：用匿名 struct 切片列出用例，`t.Run(name, ...)` 起子测试——单个用例失败可 `-run TestXxx/subname` 单独重跑，失败名可读。
 
-**TestMain**：每包最多一个 `func TestMain(m *testing.M)`，接管整包测试的生命周期（连接测试库、全局 setup/teardown），最后必须 `os.Exit(m.Run())`。
+**TestMain**：每包最多一个 `func TestMain(m *testing.M)`，接管整包测试的生命周期（连接测试库、全局 setup/teardown），调用 m.Run 执行测试。可以显式使用它的退出码退出，也可以正常返回，此时生成的测试入口使用 m.Run 的结果作为退出码。
 
 ## 💡 示例
 
 ```go
-// mathx.go 存放 Add；本文件为 mathx_test.go，go test -v ./... 运行
+// 本示例整体保存为 mathx_test.go，先 go mod init example/mathx，再 go test -v ./...
+// 实际项目将 Add 移到 mathx.go，只保留一个定义。
 package mathx
 
 import (
@@ -97,7 +98,7 @@ func TestMain(m *testing.M) {
 	// 全局 setup：如启动测试容器、加载 fixture
 	code := m.Run() // 跑全部测试
 	// 全局 teardown
-	os.Exit(code) // 必须显式退出
+	os.Exit(code) // 显式传递退出码；也可在调用 m.Run 后正常返回
 }
 ```
 
@@ -109,12 +110,21 @@ func TestMain(m *testing.M) {
 - ✅ **正确做法**：`b.ResetTimer()` 或 `b.StopTimer()/b.StartTimer()` 隔离非被测代码；小心编译器把无副作用调用优化掉（消费结果变量，或用 `b.Loop`）。
 - ❌ **错误做法**：并行测试共享可变全局（同一 map、同一临时文件名）。
 - ✅ **正确做法**：共享资源用互斥或每用例独立目录（`t.TempDir()` 自动清理）；循环变量传参（Go 1.22+ 自动按迭代绑定）。
-- ❌ **错误做法**：TestMain 里忘记 `os.Exit(m.Run())`。
-- ✅ **正确做法**：TestMain 接管退出权，不调用则测试"跑了"但退出码恒 0。
+- ❌ **错误做法**：TestMain 中漏掉 m.Run，或无条件调用 os.Exit(0) 掩盖失败。
+- ✅ **正确做法**：确保调用 m.Run；若显式 os.Exit，传递其结果。正常返回也会由生成的测试入口使用该结果退出。os.Exit 不执行 defer，显式退出前完成清理。
 - ❌ **错误做法**：辅助函数里报错，行号指不进用户代码。
 - ✅ **正确做法**：辅助函数开头 `t.Helper()`；失败信息用 `t.Errorf` 给出"got vs want"。
 - ❌ **错误做法**：断言失败一律 t.Fatal，导致后续用例被跳过。
 - ✅ **正确做法**：Fatal 只在"继续无意义"（如 fixture 加载失败）时用；资源清理交给 t.Cleanup。
+
+<!-- full-library-explanation -->
+## 测试必须有机会发现实现错误
+
+前置是函数、切片与错误值。示例 FuzzAdd 展示 fuzz API 的形状，但把 Add(a,b) 与同一个 a+b 表达式比较，发现业务错误的能力很弱。实际测试应来自独立规则：价格不得为负、解析与格式化往返后保留约定信息、失败写入不应留下半条记录。覆盖率只表示代码被经过，不表示这些规则被验证。
+
+测试外部可观察行为时可使用 package mathx_test，以调用者身份只访问导出 API；需要检查内部状态时才使用同包测试。文件测试用 t.TempDir 为每个测试提供独立目录；环境变量修改是进程级状态，不能随意与并行测试混用。t.Cleanup 在测试及其子测试完成后执行，适合登记共享夹具的清理。
+
+练习：把 Add 故意改成减法，确认 go test 返回非零退出码；恢复实现后再运行。为一个解析端口的函数测试空字符串、非数字、0、65535、65536，预期来自端口范围约定，不能调用被测函数计算 want。最后只运行一个子测试，确认失败信息包含输入、实际结果和预期结果，做到失败后能直接定位行为。
 
 ## 🔗 相关条目
 
@@ -128,3 +138,9 @@ func TestMain(m *testing.M) {
 ---
 
 *最后更新: 2026年9月 | 本条目为模块知识字典的一部分，概念完整解释以此处为单一事实来源*
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

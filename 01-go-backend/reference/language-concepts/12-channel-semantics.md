@@ -1,6 +1,6 @@
 # channel 语义
 
-> **模块**: `01-go-backend` | **类型**: 字典条目（无难度门槛，支持任意跳入查阅）
+> **模块**: `01-go-backend` | **类型**: 字典条目（可独立查阅，按主题准备前置知识，支持任意跳入查阅）
 
 ## 📌 定义
 
@@ -16,7 +16,7 @@ ch <- v          // 发送
 v := <-ch        // 接收（丢弃第二返回值）
 v, ok := <-ch    // ok=false 表示 channel 已关闭且缓冲已空
 for v := range ch { ... } // 循环接收直到 channel 关闭
-close(ch)        // 只能由发送方关闭；只能关一次
+close(ch)        // 由确认不再发送的责任方关闭；只能关一次
 
 // 单向 channel：约束在类型层面，常用于函数签名
 func produce(out chan<- int)   // 只能发送
@@ -110,9 +110,18 @@ func produce(out chan<- int) {
 - ❌ **错误做法**：忘记消费 channel 导致发送方永远阻塞、goroutine 泄漏。
 - ✅ **正确做法**：谁创建 channel，谁保证有消费路径；用 `context` 取消 + select 写法保证发送可中断。
 - ❌ **错误做法**：以为 select 多个就绪分支按书写顺序执行。
-- ✅ **正确做法**：select 在就绪分支中**均匀随机**选择（防饥饿）；需要优先级就先单独 try-default 再 select。
+- ✅ **正确做法**：select 在就绪分支中均匀伪随机选择；不构成严格优先级或有限等待保证；需要优先级就先单独 try-default 再 select。
 - ❌ **错误做法**：`ch == nil` 当作"空"并 close 它。
 - ✅ **正确做法**：close nil 或已关闭的 channel 都 panic；关闭权唯一化：只让一个发送者在确定时刻 close 一次。
+
+<!-- full-library-explanation -->
+## 关闭表达发送完成，不是释放一块资源
+
+前置是 goroutine 与阻塞。channel 不像文件那样必须靠 close 释放操作系统句柄；关闭的用途是通知接收方不会再有值。能够证明不会再发送的责任方决定关闭时机，多发送者通常由协调者等待所有发送者结束再关闭。
+
+练习向容量为 2 的 channel 写入 0、7 后关闭，连续接收三次并打印 ok：应得到 `0 true`、`7 true`、`0 false`。只看零值无法区分合法消息与结束，range 则会消费存量后结束。
+
+select 在多个就绪分支中选择一个，不提供严格的优先级或有限时间内绝不饥饿的保证。已经关闭且取空的接收分支会一直就绪；需要退出循环或将该 channel 变量设为 nil，避免反复处理结束信号。
 
 ## 🔗 相关条目
 
@@ -126,3 +135,9 @@ func produce(out chan<- int) {
 ---
 
 *最后更新: 2026年9月 | 本条目为模块知识字典的一部分，概念完整解释以此处为单一事实来源*
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

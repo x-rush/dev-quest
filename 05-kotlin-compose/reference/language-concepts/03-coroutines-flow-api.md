@@ -1,5 +1,13 @@
 # 协程与 Flow API 全表
 
+## 从工作与结果的关系选 API
+
+前置：挂起函数、作用域和取消。launch 返回 Job，表示一项工作；async 返回 Deferred，表示一项有结果的工作；suspend 函数允许挂起，却不说明在哪个线程执行。
+
+Flow 表达一串随时间产生的数据。冷 Flow 通常每次 collect 重新执行上游；StateFlow 持有当前状态并向订阅者发出更新。把网络请求放进冷 Flow 后收集两次，可能做两次请求；不能把 Flow 当作天然缓存。
+
+自测：两个页面共享同一份 StateFlow，与每个页面重新创建并收集 cold flow 有何区别？检查上游执行次数与状态归属。取消时要保留协作式取消语义，不要用宽泛 catch 把 CancellationException 当普通可恢复错误吞掉。
+
 > CoroutineScope/Job/Dispatcher/Flow 操作符/StateFlow/SharedFlow 的字典式全表速查：每个 API 一条，含定义、示例与陷阱
 
 | 属性 | 内容 |
@@ -195,3 +203,9 @@ _events.tryEmit(Event.ShowToast("已保存"))
 - 📄 **[Compose 状态 API 详解](./04-compose-state-api.md)** - collectAsStateWithLifecycle 与 UI 收集
 - 📄 **[协程与 Flow 基础](../../basics/07-coroutines-flow-basics.md)** - 教程视角的系统学习
 - 📖 **[Kotlin Flow 官方文档](https://kotlinlang.org/docs/flow.html)** - 语言级权威参考
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

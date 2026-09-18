@@ -4,6 +4,9 @@
 
 Django 是"全家桶"（ORM/模板/Admin/认证内置），Flask 是"微内核"（路由+模板，其余自由组装）。本条目并排呈现两者的核心机制与选型判断。
 
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
+
 ## 📚 文档元数据
 
 | 属性 | 内容 |
@@ -13,6 +16,8 @@ Django 是"全家桶"（ORM/模板/Admin/认证内置），Flask 是"微内核"�
 | **难度** | ⭐⭐ |
 | **标签** | `#Django` `#Flask` `#Web` `#ORM` `#对比` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ## 选型一分钟
 
@@ -125,7 +130,7 @@ def health(): ...
 app.register_blueprint(api)
 ```
 
-**要点**: Flask 用装饰器注册路由，请求上下文（`request`/`g`）是线程本地代理；扩展生态按需引入（`flask-sqlalchemy`、`flask-login`）。
+**要点**: Flask 用装饰器注册路由，请求上下文中的 request 以及应用上下文中的 g 是上下文本地代理，现代实现基于 contextvars；不能把它们当成普通全局对象或任意跨线程传递；扩展生态按需引入（`flask-sqlalchemy`、`flask-login`）。
 
 ---
 
@@ -135,7 +140,7 @@ app.register_blueprint(api)
 |------|--------|-------|
 | 路径参数 | `path("<int:pk>/")` + 位置传参 | `@app.get("/b/<int:pk>")` |
 | 查询参数 | `request.GET.get("q")` | `request.args.get("q")` |
-| 请求体 | `request.POST` / DRF `serializer` | `request.get_json()` |
+| 请求体 | 表单用 request.POST；JSON 读取 request.body 后解析，或使用 DRF 的请求解析与 serializer | request.get_json() 解析 JSON，业务字段另行验证 |
 | 返回 JSON | `JsonResponse` | `jsonify` |
 | 模板 | `render(request, "x.html", ctx)` | `render_template("x.html", **ctx)` |
 | 表单 | `django.forms` 全家桶 | 手动或 `flask-wtf` |
@@ -147,7 +152,7 @@ app.register_blueprint(api)
 
 **Django**:
 - 改模型忘 `makemigrations`/`migrate`，报"no such column"
-- `filter()` 返回 QuerySet 是惰性的，循环外重复遍历会重复查询——用 `list(qs)` 物化
+- QuerySet 通常惰性求值，同一已求值实例可复用缓存；重新构造查询、切片或 iterator 等行为需分别检查
 - N+1 查询：外键遍历配 `select_related`（外键）/`prefetch_related`（多对多）
 - `settings.DEBUG = True` 不能上生产（错误页泄漏源码）
 
@@ -158,8 +163,25 @@ app.register_blueprint(api)
 
 ---
 
+<!-- full-library-explanation -->
+## 先比较同一个任务，再比较框架名称
+
+前置知识是 HTTP 请求、函数路由和数据库表。选择框架时，先写出要交付的功能：若需要用户、管理后台、表单和数据库迁移，Django 提供较多统一机制；若希望自行组装一个小服务，Flask 的较小核心给出更大选择空间，但相关集成也由项目负责。
+
+练习只做“按 ID 读取书签”，输入存在和不存在的 ID，分别验收 JSON 200 与 JSON 404。再加“标题必填”的创建操作，比较数据校验、错误格式、事务和测试放在哪里。框架大小不能替代这些行为的定义。
+
+Django 文中的模型与视图是局部片段：需要把应用加入 INSTALLED_APPS、导入模型和视图、创建模板并执行迁移；涉及 owner/tags 的查询还需要定义相应关联字段。Flask 的 store 也需要单独实现，不能将两个片段都称为可直接启动的完整应用。
+
+查询优化时观察真实 SQL 次数：同一个已求值 QuerySet 通常复用结果缓存，重新构造的 QuerySet 或特定求值方式可能再次查询；“重复循环一定重复查询”不能作为判断依据。[Django 查询说明](https://docs.djangoproject.com/en/stable/topics/db/queries/)解释了缓存边界。
+
 ## 🔗 相关文档
 
 - 📄 **[FastAPI 核心速查](./01-fastapi-essentials.md)** — API 场景的现代首选
 - 📄 **[标准库导航](../library-guides/01-standard-library.md)** — 框架之下共用的基础能力
 - 📄 **[typing 注解全表](../language-concepts/05-typing-annotations.md)** — 三框架共同依赖的类型系统
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

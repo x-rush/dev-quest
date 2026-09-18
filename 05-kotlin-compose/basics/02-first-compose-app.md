@@ -1,10 +1,26 @@
 # 第一个 Compose 应用 - 从零到运行
 
+## 先理解，再动手
+
+Activity 是系统入口，setContent 建立 Compose 界面内容。Composable 描述界面，Preview 帮助预览但不能代替真实生命周期。
+
+**本节自测**：把欢迎文本换成按钮，点击后显示次数。
+
+<details>
+<summary>预期结果与参考思路（先尝试再展开）</summary>
+
+设备上可交互；只在 Preview 看见按钮不代表运行时行为已验证。
+
+</details>
+
 > **文档简介**: 创建你的第一个 Jetpack Compose 项目，理解 Composable 函数、`setContent` 入口与 `@Preview`，并厘清 Compose 与传统 View 体系的关系
 >
 > **目标读者**: 已完成环境搭建的 Android 初学者，希望快速看到声明式 UI 跑起来的开发者
 >
 > **前置知识**: 已安装 Android Studio 与模拟器（见[环境搭建](./01-environment-setup.md)）；了解基本编程概念
+
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
 
 ## 📚 文档元数据
 
@@ -16,6 +32,8 @@
 | **标签** | `#Jetpack-Compose` `#Composable` `#Preview` `#声明式UI` |
 | **更新日期** | `2026年9月` |
 
+</details>
+
 ## 🎯 学习目标
 
 - ✅ 通过官方模板创建一个 Compose 项目并跑在模拟器上
@@ -26,13 +44,13 @@
 
 ## 📋 目录
 
-- [创建 Compose 项目](#创建-compose-项目)
-- [项目结构解析](#项目结构解析)
-- [编写第一个 Composable](#编写第一个-composable)
-- [用 @Preview 实时预览](#用-preview-实时预览)
-- [Compose 与传统 View 的关系](#compose-与传统-view-的关系)
-- [常见问题](#常见问题)
-- [练习与实践](#练习与实践)
+- [创建 Compose 项目](#-创建-compose-项目)
+- [项目结构解析](#-项目结构解析)
+- [编写第一个 Composable](#️-编写第一个-composable)
+- [用 @Preview 实时预览](#-用-preview-实时预览)
+- [Compose 与传统 View 的关系](#-compose-与传统-view-的关系)
+- [常见问题](#-常见问题)
+- [练习与实践](#-练习与实践)
 
 ---
 
@@ -204,3 +222,9 @@ fun GreetingPreview() {
 - 📄 **[Composable 与状态](./04-composables-state.md)** - 理解声明式 UI 的核心机制：状态与重组
 - 📄 **[Compose 核心组件速查](../reference/framework-essentials/01-compose-essentials.md)** - 常用组件字典式索引
 - 📖 **[Jetpack Compose Basics Codelab](https://developer.android.com/codelabs/jetpack-compose-basics)** - 官方入门教程
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../LEARNING_GUIDE.md) · [完整目录与版本](../README.md) · [通用术语](../../shared-resources/glossary.md)

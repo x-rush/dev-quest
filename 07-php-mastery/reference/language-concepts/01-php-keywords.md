@@ -2,7 +2,10 @@
 
 ## 概述
 
-PHP 关键字（如 `class`、`function`、`enum`）是语言结构，不区分大小写（`TRUE`/`true` 等价，但规范统一小写）；保留字（如 `__halt_compiler()`、软保留的 `match` 早期版本）暂不可用作类名/函数名。部分关键字在不同上下文中语义不同（如 `static`、`list`），本条目按用途归类说明。
+PHP 关键字（如 `class`、`function`、`enum`）是语言结构，不区分大小写（`TRUE`/`true` 等价，但规范统一小写）；保留标识符在类、函数、方法等位置有不同限制；应按当前版本的官方列表检查。部分关键字在不同上下文中语义不同（如 `static`、`list`），本条目按用途归类说明。
+
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
 
 ## 📚 文档元数据
 
@@ -14,11 +17,13 @@ PHP 关键字（如 `class`、`function`、`enum`）是语言结构，不区分�
 | **标签** | `#关键字` `#保留字` `#语法基础` |
 | **更新日期** | `2026年9月` |
 
+</details>
+
 ## 1. 结构与声明类
 
 ### declare
 
-**定义**: 为代码块设置编译/执行指令，必须是文件或代码块的第一条语句。
+**定义**: 为代码块或文件设置指令；strict_types 等指令有文件位置限制，不能推广为所有 declare 都必须在首行。
 
 **语法与示例**:
 ```php
@@ -56,7 +61,7 @@ enum Level: int
 }
 ```
 
-**陷阱**: 枚举隐式 final，不可 `new`、不可继承；backed 枚举值必须是 int 或 string 且全局唯一。
+**陷阱**: 枚举隐式 final，不可 `new`、不可继承；backed 枚举统一使用 int 或 string，值必须在该枚举内唯一。
 
 ## 2. 类与 OOP 类
 
@@ -90,7 +95,7 @@ final class UserRepository extends BaseRepository
 
 ### readonly（PHP 8.1+）
 
-**定义**: 声明后属性只能在声明处（提升参数或同类内一次初始化）赋值，此后只读。
+**定义**: readonly 属性在允许的写入作用域内初始化后不能再次修改，具体作用域与克隆规则随版本演进。
 
 ```php
 final class Point
@@ -102,7 +107,7 @@ final class Point
 }
 ```
 
-**陷阱**: `readonly` 与动态属性、8.4 非对称可见性 `(set)` 互斥；`clone with`（8.5+，RFC clone_with_v2）是批量覆盖 readonly 对象的途径——8.3 引入的只是 `__clone` 方法内对 readonly 属性的再初始化。
+**陷阱**: readonly 属性必须声明类型；PHP 8.4 可与非对称可见性组合，默认写入可见性为 protected(set)；`clone with`（8.5+，RFC clone_with_v2）是批量覆盖 readonly 对象的途径——8.3 引入的只是 `__clone` 方法内对 readonly 属性的再初始化。
 
 ### final / abstract / static / instanceof
 
@@ -145,7 +150,7 @@ class Account
 }
 ```
 
-**陷阱**: 与 `readonly` 不能组合；可见性是编译期约束，反射可绕过（`ReflectionProperty::setAccessible`）。
+**陷阱**: PHP 8.4 可与 readonly 组合；可见性也在运行时检查。反射有专门访问语义，不能把可见性当作进程内安全隔离。
 
 ## 4. 控制流程类
 
@@ -230,7 +235,7 @@ function counter(): int
 }
 ```
 
-**陷阱**: `static $n` 初始化表达式不能包含非常量（8.1 起放宽部分场景）；对象属性不可用 `static` 声明。
+**陷阱**: PHP 8.3 起静态局部变量可用动态初始化表达式；类可声明 static 属性，它属于类而不是每个实例。
 
 ## 6. 异常与流程类
 
@@ -252,7 +257,7 @@ try {
 
 | 关键字 | 用途 | 备注 |
 |--------|------|------|
-| `const` | 编译期常量（类内/文件顶层） | 8.3 起支持类型化 `const int X = 1` |
+| `const` | 编译期常量（类内/文件顶层） | 8.3 起类常量支持类型声明；文件顶层 const 不使用同样的类型化语法 |
 | `as` | `use ... as 别名`、trait 冲突消解 | — |
 | `insteadof` | trait 同名方法取舍 | trait 冲突必用 |
 | `callable` / `iterable` / `mixed` / `never` / `void` | 类型关键字 | 详见 [类型系统全表](./03-types-oop-modern.md) |
@@ -262,7 +267,7 @@ try {
 ## 陷阱速查
 
 - **大小写**：关键字不区分大小写，但 `TRUE`/`False` 风格不符合 PSR-12，统一小写
-- **类名保留**：`enum`、`match` 等曾是软保留字，8.0/8.1 后完全保留——旧代码若以其为类名需改名
+- **类名保留**：不要把“有关键字用途”与“所有标识符位置都禁用”混同；类名、方法名等按当前版本规则分别核对
 - **`list()` vs `[]`**：解构推荐 `[]` 形式；`list` 在 `foreach (… as list(…))` 中已随 PHP 7.1 支持 `[]` 而淡出
 
 ## 相关文档
@@ -270,3 +275,20 @@ try {
 - 📄 **[类型系统与现代 OOP](./03-types-oop-modern.md)** — 类型关键字（联合/交叉/DNF/never 等）权威条目
 - 📄 **[控制结构全表](./04-control-flow.md)** — `match`/`if`/循环的完整语法
 - 📄 **[综合练习：CLI 任务管理工具](../../basics/08-first-project.md)** — 在真实项目中运用关键字
+
+
+<!-- full-library-explanation -->
+## 同一个词要放回语法位置理解
+
+前置是变量、函数与类。use 在文件顶部建立名称别名，在类体组合 trait，在匿名函数后声明捕获变量；三者不互相替代。static 可以声明类级属性或方法，也可以让函数局部变量在多次调用间保留，还能表达后期静态绑定。速查时先识别位置，再判断语义。
+
+strict_types 主要约束标量参数与返回类型的转换规则，不会自动验证数组结构、HTTP 输入或数据库记录。调用方文件是否启用严格模式会影响用户函数参数的标量转换，int 传入 float 等规则还有例外；不能把它当成全局“所有值都完全严格”的开关。
+
+**练习**：在两个文件中定义接收 int 的函数，分别从严格与非严格文件传入字符串 '12'，观察差异；再传入数组，两者都不应将它当成合法整数。把一个静态局部计数器调用三次，预期依次得到 1、2、3；重新启动 CLI 进程后从 1 开始，不能据此实现跨请求的持久编号。
+
+关键字清单与标识符限制应查 [PHP 保留字](https://www.php.net/manual/en/reserved.php)；版本相关属性规则参见 [属性文档](https://www.php.net/manual/en/language.oop5.properties.php)。
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

@@ -6,6 +6,9 @@
 
 > **前置知识**: [Hono 4 核心速查](./01-hono-essentials.md)
 
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
+
 ## 📚 文档元数据
 
 | 属性 | 内容 |
@@ -15,6 +18,8 @@
 | **难度** | ⭐⭐ |
 | **标签** | `#Fastify` `#NestJS` `#Express` `#框架对比` `#选型` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ## 0. 四框架定位与选型总览
 
@@ -27,11 +32,11 @@ Node.js 后端框架的竞争本质是三种架构哲学的取舍：**轻量内�
 |------|---------------|-----------|-----------|-----------|
 | 心智模型 | Web 标准 + 洋葱中间件 | 插件 + 钩子 + JSON Schema | 模块/控制器/依赖注入 | 中间件管道 |
 | 定位一句话 | 轻量、极快、跨运行时 | Node 原生性能旗舰 | 大型工程结构框架 | 历史事实标准 |
-| 类型支持 | 内置且推断优秀 | 优秀（泛型推断） | 优秀（装饰器一等公民） | 社区类型包，滞后 |
+| 类型支持 | 内置且推断优秀 | 优秀（泛型推断） | 优秀（装饰器一等公民） | 社区维护的 @types/express |
 | 请求校验 | Zod validator 中间件 | 内置 JSON Schema + AJV | ValidationPipe（class-validator/Zod 适配） | 自己配 Zod 等手接 |
-| 性能梯队 | 第一梯队（Routing 引擎极快） | 第一梯队 | 中游（抽象层开销） | 末游 |
+| 性能评估 | 测量运行时适配器与中间件 | 测量 schema、日志和插件 | 测量底层适配器与拦截器 | 测量中间件与业务负载 |
 | 生态位 | API 服务、边缘/Serverless、跨运行时 | 重 I/O Node 单体、Schema-first 团队 | 大型团队、微服务、DDD 分层 | 遗留系统维护 |
-| **何时选它** | 新项目默认首选：类型好、依赖少、测试内置、可迁移到边缘 | schema-first 是硬需求、深度依赖 Fastify 插件生态、纯 Node 单体追求吞吐 | 团队 5 人以上、模块边界即治理需求、招聘需要统一结构 | 只为维护存量代码——2026 年新项目没有选择它的理由 |
+| **何时选它** | 适合偏好 Web 标准与轻量组合的项目；跨运行时仍需检查依赖 | schema-first 是硬需求、深度依赖 Fastify 插件生态、纯 Node 单体追求吞吐 | 需要统一模块、依赖注入和协作约定 | 团队熟悉其中间件生态，愿意自行制定结构与验证规范 |
 
 ### 一句话决策
 
@@ -43,7 +48,7 @@ Node.js 后端框架的竞争本质是三种架构哲学的取舍：**轻量内�
 ## 1. Fastify：性能与插件生态
 
 ### 定义
-以插件系统、内置 JSON Schema 校验/序列化为核心的高性能 Node 框架。与 Hono 同属"性能第一梯队"，差异在路线：Fastify 深耕 Node 原生生态，Hono 押注 Web 标准与跨运行时。
+以插件系统、内置 JSON Schema 校验/序列化为核心的高性能 Node 框架。与 Hono 的主要差异在组织方式与运行时取向：Fastify 深耕 Node 原生生态，Hono 押注 Web 标准与跨运行时。
 
 ### 核心用法
 
@@ -67,11 +72,12 @@ const createUserOpts = {
       required: ["name", "email"],
       properties: { name: { type: "string", minLength: 1 }, email: { type: "string", format: "email" } },
     },
-    response: { 201: { /* 响应 schema */ } },
+    response: { 201: { type: "object", required: ["id", "name", "email"],
+      properties: { id: { type: "number" }, name: { type: "string" }, email: { type: "string" } } } },
   },
 } as const;
 
-app.post("/users", createUserOpts, async (req, reply) => {
+app.post<{ Body: { name: string; email: string } }>("/users", createUserOpts, async (req, reply) => {
   reply.code(201);
   return { id: 1, ...req.body };
 });
@@ -88,7 +94,7 @@ await app.register(import("./routes/users.js"), { prefix: "/users" }); // 插件
 
 ### 陷阱
 - Fastify 对未知 Content-Type 默认报 415，JSON 之外的格式需 `addContentTypeParser`
-- 路由前缀冲突启动即抛错（Hono/Express 是按序命中），重复注册路径同样启动失败
+- 同一方法和实际路由重复注册会失败；共享前缀本身是正常组织方式
 - `async` 钩子必须 `await`，漏掉的 rejection 会让插件加载失败
 
 ### 何时选它
@@ -148,7 +154,7 @@ export class TasksService {
 // main.ts 全局校验管道（配 class-validator 或 Zod 适配器）
 app.useGlobalPipes(new ValidationPipe({
   whitelist: true,        // 剥离未声明的字段
-  transform: true,        // 按 DTO 类型自动转换（string → number）
+  transform: true,        // 转换为 DTO 实例；属性转换仍需显式配置，不是所有字符串都会自动变数字
 }));
 ```
 
@@ -158,7 +164,7 @@ app.useGlobalPipes(new ValidationPipe({
 - `NotFoundException` 等框架异常抛在 Service 层是惯例；控制器里 try/catch 吞掉它们会破坏统一错误映射
 
 ### 与 Hono 的定位差异（写透）
-- **结构来源**：Nest 把"分层、依赖、边界"写进框架——目录即架构，新人零培训上手同一结构；Hono 把这些留给项目自定（见 [服务架构与模块化单体](../../advanced-topics/architecture/01-service-architecture.md)），代价是纪律靠自觉
+- **结构来源**：Nest 把"分层、依赖、边界"写进框架——提供统一装配约定；新人仍需理解 provider 作用域与业务边界；Hono 把这些留给项目自定（见 [服务架构与模块化单体](../../advanced-topics/architecture/01-service-architecture.md)），代价是纪律靠自觉
 - **抽象成本**：Nest 的装饰器/DI/反射层让小项目显得笨重、启动慢、调试栈深；Hono 几乎无魔法，代码即所见
 - **规模拐点**：当"接手的人多过写代码的人"时，Nest 的强约定开始产生净收益；独立开发者与两三人小团队的临界点通常远比想象中晚
 - **混用策略**：大项目也可以"Hono 做网关 + 领域逻辑自管"——结构治理未必需要 Nest 全家桶
@@ -171,14 +177,13 @@ app.useGlobalPipes(new ValidationPipe({
 ## 3. Express：历史定位与 2026 年的现实
 
 ### 定义
-Node.js 生态的第一代事实标准：极简内核 + 中间件管道。2024 年发布的 v5 修复了安全与长期悬置的 Bug（path-to-regexp v8、async rejection 自动转发），但架构形态停留在 2014 年。
+Node.js 生态的第一代事实标准：极简内核 + 中间件管道。2024 年发布的 v5 修复了安全与长期悬置的 Bug（path-to-regexp v8、async rejection 自动转发），并保留以中间件为核心的组织方式。
 
-### 为什么 2026 年新项目不再首选
-- **性能**：中间件管道与 `req`/`res` 副作用模型在基准测试中稳定垫底；Hono/Fastify 的开销低一个量级
-- **类型体验**：TypeScript 支持是社区外挂（`@types/express`），泛型链与推断远不如 Hono/Fastify 原生
-- **能力密度**：JSON 解析、静态文件、安全头、Cookie、测试客户端全靠外部包拼装（body-parser、serve-static、helmet、cookie-parser、supertest）；Hono 内建以上全部
-- **运行时**：绑定 Node 的 `req`/`res`，无法迁移到边缘/Serverless；Hono 的 Web 标准 API 天生可移植
-- **仍有价值的场景**：维护十年以上的存量服务；团队强制要求"招聘简历上人人都写过的框架"；大量老教程/SO 答案以它为基准
+### 如何判断 Express 是否合适
+
+Express 5 仍可用于新项目，适合已有中间件经验、希望保持简单请求管道的团队。它内置 `express.json()`、`express.urlencoded()` 和 `express.static()`；安全头、Cookie 解析、测试工具等可另行组合。能否部署到某个 Serverless 平台取决于平台的 Node 支持和适配器，不能把 Serverless 与边缘运行时混为一谈。
+
+选择它的成本是自行约定验证、错误响应、模块边界与类型扩展；选择其他框架也有迁移和学习成本。没有相同硬件、业务逻辑、日志与数据库负载的测量，不能断言某框架快一个数量级。参见 [Express 5 API](https://expressjs.com/en/5x/api.html)。
 
 ### 陷阱
 - v5 与 v4 语法有破坏性差异（通配符 `/{*splat}`、移除正则路由）——网上老教程混杂两代写法，照抄会踩坑
@@ -200,9 +205,26 @@ Node.js 生态的第一代事实标准：极简内核 + 中间件管道。2024 �
 
 ---
 
+<!-- full-library-explanation -->
+## 用同一个小需求比较框架，而不是比较宣传词
+
+先实现“创建任务”：只接受非空 title，返回不含内部字段的 JSON；非法请求返回 400；缺少身份返回 401；数据库失败返回 500 并留下关联日志。比较注册路由、运行时验证、依赖替换和测试所需的代码，再决定框架是否适合团队。
+
+Fastify 的 schema 执行运行时校验与序列化，Type Provider 才进一步把 schema 连接到 TypeScript 推断。`as` 类型断言不会安装校验器。Nest 的模块管理 provider 的可见性，但不会自动阻止任意文件 import，也不会替你决定业务边界；DTO 的属性声明本身不会验证输入，仍须校验装饰器与管道。
+
+**练习**：选两个框架实现上述接口，为多余字段、缺字段及数据库拒绝写相同断言。记录差异来自默认行为、你写的代码还是外接插件。性能比较应再加入真实序列化和数据库延迟，不能根据 hello-world 排名替代工程选型。
+
+参考：[Fastify Type Providers](https://fastify.dev/docs/latest/Reference/Type-Providers/)。本页 Nest 片段用于解释职责，repo、DTO 和启动装配需由项目提供。
+
 ## 🔗 相关文档
 
 - 📄 **[Hono 4 核心速查](./01-hono-essentials.md)** — 本模块主角的 API 字典
 - 📄 **[服务架构与模块化单体](../../advanced-topics/architecture/01-service-architecture.md)** — 不依赖框架的结构治理方案
 - 📄 **[生态库精选](../library-guides/02-ecosystem-libs.md)** — Zod/pino 等跨框架配套库
 - 📄 **[第一个完整项目](../../basics/08-first-project.md)** — 用 Hono 实现的同款 CRUD
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

@@ -6,6 +6,9 @@
 >
 > **前置知识**: [开发工具链](../frameworks/04-devtools.md) 的构建脚本、Docker 基本概念
 
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
+
 ## 📚 文档元数据
 
 | 属性 | 内容 |
@@ -15,6 +18,8 @@
 | **难度** | ⭐⭐ |
 | **标签** | `#docker` `#multi-stage` `#prisma` `#生产镜像` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ## 🎯 本节目标
 
@@ -151,10 +156,9 @@ docker image ls | grep api        # 检查镜像体积
 
 ## ✅ 最佳实践与陷阱
 
-- ✅ 先 COPY 依赖清单再 `pnpm install`——源码改动不触发依赖重装
-- ✅ `--frozen-lockfile` 锁定依赖树，保证可复现构建
-- ❌ 在 Dockerfile 里 `COPY . .` 到 deps 阶段——任何文件改动都打碎缓存
-- ❌ 用 `latest` 基础镜像——用 `node:24-alpine` 明确锁定
+把依赖清单与锁文件先复制进构建阶段，使只改业务源码时有机会复用依赖层；后续指令与安装脚本仍可能影响缓存和产物。冻结锁文件固定依赖解析，但运行时、平台和外部下载也属于复现条件。
+
+node:24-alpine 仍是可移动标签，不是精确不可变锁定；需要严格追溯时记录镜像摘要，并维护安全更新流程。检查 native addon 与目标 libc/架构兼容性，不能只因为镜像小就选择 Alpine。
 
 ## 🔗 相关文档
 
@@ -162,3 +166,16 @@ docker image ls | grep api        # 检查镜像体积
 - 📄 [生产级 Node.js API](../projects/04-production-nodejs-api.md) — 优雅关闭与探针的来源
 - 📖 [常见故障排除](../reference/quick-references/02-troubleshooting.md) — 容器内常见报错
 - 📄 [端到端 API 测试](../testing/03-e2e-api-testing.md) — 用同一镜像做 E2E
+
+
+<!-- acceptance-exercise -->
+## 练习与验收：把进程生命周期纳入容器验收
+
+用锁文件构建并启动测试镜像，完成一条 HTTP 业务请求，再在请求未完成时发 SIGTERM。预期入口停止接新工作，在宽限期内结束在途任务、关闭连接池并退出。检查容器 PID 1 是否能把信号送达应用。验收再在只读根文件系统或非特权用户条件下试运行，确认需要写入的目录已明确配置；成功 build 不保证这些条件成立。
+
+以上是在个人或隔离测试环境中的练习，不是本轮已执行记录；实际运行范围见仓库文档质量报告。
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../LEARNING_GUIDE.md) · [完整目录与版本](../README.md) · [通用术语](../../shared-resources/glossary.md)

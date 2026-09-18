@@ -1,5 +1,18 @@
 # Next.js 16 状态管理基础完整指南
 
+## 先理解，再动手
+
+状态按拥有者分层：输入框文本在本地，分享筛选在 URL，服务器记录以远端为准。复制一份远端数据到全局 store 会增加同步责任。
+
+**本节自测**：给搜索页列出输入草稿、已提交关键词、查询结果的归属。
+
+<details>
+<summary>预期结果与参考思路（先尝试再展开）</summary>
+
+草稿可用组件状态；可分享的关键词进入 URL；结果由查询层保存并根据关键词区分。
+
+</details>
+
 > **文档简介**: Next.js 16 现代状态管理完整教程，涵盖React状态、Context API、Zustand、服务器状态、表单状态等企业级状态管理解决方案
 
 > **目标读者**: 具备React基础的开发者，需要掌握现代状态管理模式的前端工程师
@@ -7,6 +20,9 @@
 > **前置知识**: React组件基础、JavaScript ES6+、TypeScript基础、异步编程概念
 
 > **预计时长**: 4-5小时
+
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
 
 ## 📚 文档元数据
 
@@ -19,6 +35,8 @@
 | **更新日期** | `2026年9月` |
 | **作者** | Dev Quest Team |
 | **状态** | ✅ 已完成 |
+
+</details>
 
 ## 🎯 学习目标
 
@@ -1182,7 +1200,7 @@ interface CartItem {
 - 📄 **[相关的reference文档](../reference/language-concepts/01-react-syntax-cheatsheet.md)**: 快速参考React Hook和状态管理语法
 
 ### 参考章节
-- 📖 **[本模块其他章节]**: [数据获取基础](./06-data-fetching-basics.md#服务器状态管理) | [完整项目实战](./08-first-project.md#状态管理系统实现)
+- 📖 **[本模块其他章节]**: [数据获取基础](./06-data-fetching-basics.md#-client-components-数据获取) | [完整项目实战](./08-first-project.md#主题提供者)
 - 📖 **[Knowledge Points快速参考]**: [状态管理模式](../reference/framework-patterns/05-state-management-patterns.md) | [React语法速查](../reference/language-concepts/01-react-syntax-cheatsheet.md)
 
 ## 📝 总结
@@ -1220,3 +1238,8 @@ interface CartItem {
 **文档状态**: ✅ 已完成
 **最后更新**: 2026年9月
 **版本**: v1.0.0
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../LEARNING_GUIDE.md) · [完整目录与版本](../README.md) · [通用术语](../../shared-resources/glossary.md)

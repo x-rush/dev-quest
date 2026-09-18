@@ -6,6 +6,9 @@
 
 > **前置知识**: [模块系统](../../basics/03-modules-esm.md)（ESM 导入方式）
 
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
+
 ## 📚 文档元数据
 
 | 属性 | 内容 |
@@ -16,10 +19,12 @@
 | **标签** | `#fs` `#path` `#events` `#process` `#http` `#worker_threads` `#核心模块` |
 | **更新日期** | `2026年9月` |
 
+</details>
+
 ## 1. node:fs / node:fs/promises
 
 ### 定义
-文件系统操作。`node:fs/promises` 提供全部异步 API 的 Promise 版本，是默认选择。
+文件系统操作。`node:fs/promises` 提供常用文件操作的 Promise API；文件流等接口仍在 node:fs 中，是默认选择。
 
 ### 语法与示例
 
@@ -78,7 +83,15 @@ import { once } from "node:events";
 const [payload] = await once(bus, "task:done");
 
 // 带取消信号的监听（自动解绑）
-bus.on("tick", handler, { signal: controller.signal });
+// EventEmitter.on 没有第三个 signal 选项；使用可取消的异步迭代工具
+import { on } from "node:events";
+try {
+  for await (const args of on(bus, "tick", { signal: controller.signal })) {
+    handler(...args);
+  }
+} catch (error) {
+  if (!controller.signal.aborted) throw error;
+}
 ```
 
 ### 陷阱
@@ -95,7 +108,7 @@ bus.on("tick", handler, { signal: controller.signal });
 ```ts
 import process from "node:process";
 
-process.env.PORT;                    // 环境变量（值全是 string）
+process.env.PORT;                    // 环境变量（存在时为 string，未设置为 undefined）
 process.exit(1);                     // 立即退出（有未刷写输出可能丢失）
 process.exitCode = 1;                // 更温和：让进程自然结束后以此码退出
 process.pid;
@@ -135,7 +148,7 @@ os.EOL;                      // 换行符（win 是 \r\n）
 ## 6. node:url 与全局 URL
 
 ### 定义
-URL 解析与构造；现代代码直接用全局 `URL` 类，`node:url` 仅剩 `fileURLToPath` 等桥接工具。
+URL 解析与构造；现代代码直接用全局 `URL` 类，node:url 还提供 fileURLToPath、pathToFileURL、域名转换等工具，不只一个桥接函数。
 
 ### 语法与示例
 
@@ -229,8 +242,35 @@ worker.terminate();                            // 强制终止（不等待）
 
 ---
 
+<!-- full-library-explanation -->
+## 为每个资源指定创建者与清理者
+
+前置是 Promise、ESM 与异常。文件句柄、事件监听器、HTTP 响应体和 Worker 都有生命周期：谁创建，谁负责在成功、失败和取消路径释放。readFile 适合有大小上限的小文件，流式读取用于大数据；路径拼接只能规范字符串，不能证明路径位于允许目录或不经过符号链接。删除和写入前应明确目标来自可信配置还是用户输入。
+
+EventEmitter.emit 同步调用当前监听器，监听器不会因为返回 Promise 就自动被等待。下面是独立实验，保存为 events.mjs 后运行：
+
+```js
+import { EventEmitter } from 'node:events';
+const bus = new EventEmitter();
+bus.on('work', async () => {
+  console.log('start');
+  await Promise.resolve();
+  console.log('after await');
+});
+bus.emit('work');
+console.log('emit returned');
+```
+
+预期顺序是 start、emit returned、after await。练习：让监听器返回拒绝的 Promise，解释为什么同步包住 emit 的 try/catch 不能捕获稍后的拒绝；在监听器内处理错误，或按契约配置 captureRejections 与 error 监听。清理监听时 off 必须使用原来的函数引用，重新写一个同样的箭头函数不是同一个监听器。
+
 ## 🔗 相关文档
 
 - 📄 **[Stream API 速查](./04-streams-api.md)** — fs 流式读写的深入条目
 - 📄 **[内置模块导航表](../library-guides/01-core-modules.md)** — 全部内置模块总览
 - 📄 **[Stream 与 Worker 教程](../../basics/07-streams-workers.md)** — os 核数与多线程的实战
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

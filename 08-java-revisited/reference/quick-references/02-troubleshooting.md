@@ -6,6 +6,9 @@
 >
 > **前置知识**: 对应主题的基础（每条目内链接到详解文档）
 
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
+
 ## 📚 文档元数据
 
 | 属性 | 内容 |
@@ -15,6 +18,8 @@
 | **难度** | ⭐⭐ |
 | **标签** | `#故障排除` `#NPE` `#泛型擦除` `#并发陷阱` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ## 1. NullPointerException
 
@@ -28,16 +33,17 @@
 // 根治：Optional 契约 + 快速失败
 var user = findUser(id).orElseThrow(() -> new UserNotFoundException(id));
 Objects.requireNonNull(input, "input 不能为空");
-int n = map.getOrDefault(key, 0);                 // 免判空读取
+Integer value = map.get(key);
+int n = value == null ? 0 : value;                  // 明确把缺失和 null 都映射为 0
 ```
 
 **预防**: 对外接口返回 Optional；参数入口 `Objects.requireNonNull`；不要用返回 null 的方法签名。详见[变量与类型](../../basics/03-variables-types.md)。
 
 ## 2. 包装类型 == 比较失效
 
-**现象**: `Integer.valueOf(128) == Integer.valueOf(128)` 为 false，而 127 时为 true。
+**现象**: `Integer.valueOf(128) == Integer.valueOf(128)` 可能为 false，而 127 时为 true。
 
-**原因**: 包装类型 `==` 比较引用；-128~127 有缓存池，超范围是不同对象。
+**原因**: 包装类型 `==` 比较引用；-128~127 有缓存池，超出保证缓存范围后的身份不应依赖；实现可能缓存更大范围。
 
 **解决**: 包装类型一律 `equals`/`compareTo`；数值比较可拆箱 `a.intValue() == b.intValue()`。
 
@@ -63,7 +69,7 @@ while (it.hasNext()) { if (it.next().isStale()) it.remove(); }  // 迭代器删�
 
 **现象**: `instanceof List<String>` 编译不过；`new T()`/`new T[]` 编译不过；强转后运行时 `ClassCastException`（堆污染）。
 
-**原因**: 类型擦除——运行时只有 `List.class`，没有参数化信息。
+**原因**: 类型擦除——普通对象不携带完整泛型实参供这种检查；类与成员声明的泛型签名仍可能通过反射读取。
 
 **解决**:
 ```java
@@ -71,7 +77,7 @@ while (it.hasNext()) { if (it.next().isStale()) it.remove(); }  // 迭代器删�
 static <T> List<T> parse(String json, Class<T> type) { ... }
 // 泛型集合反序列化：超类型令牌
 mapper.readValue(json, new TypeReference<List<User>>() {});
-// 检查元素而非集合：list instanceof List && list.get(0) instanceof String
+// 验证外部集合时需检查全部元素并明确空集合语义，不能只看首元素
 ```
 
 **预防**: 不做原始类型（raw type）操作；泛型可变参数方法谨慎暴露（`@SafeVarargs`）。详见[集合框架与泛型](../language-concepts/02-collections-generics.md)。
@@ -159,7 +165,7 @@ java -verbose:class Foo    # 观察类加载来源
 
 ## 12. 虚拟线程"钉住"（Pinning）
 
-**现象**: 虚拟线程吞吐不及预期，`jcmd <pid> Thread.dump_to_file` 显示大量虚拟线程卡在 `synchronized`。
+**现象**: 虚拟线程吞吐不及预期，`jcmd <pid> Thread.dump_to_file -format=json threads.json` 显示大量虚拟线程卡在 `synchronized`。
 
 **原因**: Java 21 中在 `synchronized` 块内阻塞会钉住载体线程（Java 24 起已修复）。
 
@@ -169,9 +175,24 @@ java -verbose:class Foo    # 观察类加载来源
 
 ---
 
+<!-- full-library-explanation -->
+## 不要把报错名当作唯一根因
+
+定位顺序是保存完整异常及 cause、找到第一处属于本项目的调用、记录触发输入和版本，再做最小复现。例如 NoClassDefFoundError 可能是运行时缺包，也可能是类的静态初始化此前已经失败；反复补依赖无法解决初始化里读取错误配置的问题。
+
+并发修改异常不证明存在多线程，一个线程边遍历边直接删除也能触发；没有异常也不证明线程安全，fail-fast 只是尽力检测。LongAdder 适合高并发统计，其 sum 不提供多个并发操作的原子快照，不能直接用它实现严格配额或唯一编号。
+
+**练习**：建立含 null 值的 Map，说明 getOrDefault 后拆箱为何仍可能 NPE；把原因修在输入契约而不是到处吞异常。再模拟静态初始化失败，保留第一次根因和后续加载错误，比较两者。排障输出应包含“证据、假设、复现实验、改动后验证”，不能只写“升级版本试试”。
+
 ## 🔗 相关文档
 
 - 📄 **[现代 Java 一行式速查](./01-java-cheatsheet.md)** - 正确写法对照
 - 📄 **[集合框架与泛型](../language-concepts/02-collections-generics.md)** - 集合/泛型语义
 - 📄 **[并发 API 速查](../language-concepts/04-concurrency-api.md)** - 并发工具正确用法
 - 📄 **[JPA 核心速查](../framework-essentials/02-jpa-essentials.md)** - LazyInitializationException 专题
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

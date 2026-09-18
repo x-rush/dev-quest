@@ -6,6 +6,9 @@
 >
 > **前置知识**: [Compose 进阶](../../frameworks/02-compose-advanced.md)、[Compose 状态 API 详解](../../reference/language-concepts/04-compose-state-api.md)、[应用架构](../architecture/01-app-architecture.md)
 
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
+
 ## 📚 文档元数据
 
 | 属性 | 内容 |
@@ -15,6 +18,8 @@
 | **难度** | ⭐⭐⭐ |
 | **标签** | `#recomposition` `#stability` `#derived-state` `#lazy-list` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ---
 
@@ -134,20 +139,18 @@ Baseline Profile 让核心路径（首屏、列表滚动）预编译，冷启动
 
 ## 🎨 最佳实践
 
-### ✅ 推荐
+重组本身是更新界面的正常机制；优化前先找出哪个交互掉帧，以及哪段计算或布局占时。列表 key 表示项目身份，插入或移动后应继续对应同一数据，不能为了“稳定”给所有行相同 key。
 
-- 稳定性问题在**模型层**解决（@Immutable 模型/不可变集合），不在调用点打补丁
-- Lazy 列表项一律提供稳定 `key`
-- 每次优化前后用同一组指标（重组计数/帧数据）对比验收
-
-### ❌ 避免陷阱
-
-- 到处加 `@Stable` 说谎——契约破坏后跳过机制会产出**错误 UI**，比慢更糟
-- 无差别 `derivedStateOf`/多层 `remember`：复杂度暴涨而收益趋零
-- 在 `@Composable` 里 new 出 List/Filter 链却不加 remember key，重组即重算
+Stable/Immutable 注解表达必须履行的契约，不会把可变对象自动变不可变。remember 的依赖应覆盖计算输入，derivedStateOf 适合输入频繁变化但输出较少变化的情况；给简单计算层层包裹也有成本。用同一设备和操作比较帧表现，重组次数下降只是辅助证据。
 
 ## 🔗 相关文档
 
 - 📖 概念字典：[Compose 状态 API 详解](../../reference/language-concepts/04-compose-state-api.md) ｜ [重组与稳定性](../../reference/framework-essentials/04-recomposition.md) ｜ [Compose 核心组件速查](../../reference/framework-essentials/01-compose-essentials.md)
 - 📖 操作指南：[开发工具链](../../frameworks/04-devtools.md)（度量工具） ｜ [新闻阅读器](../../projects/03-news-reader.md)（key 实战）
 - 🎓 延伸解释：[启动与内存优化](02-startup-memory.md) ｜ [应用架构](../architecture/01-app-architecture.md)
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

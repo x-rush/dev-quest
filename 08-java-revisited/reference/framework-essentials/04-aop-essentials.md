@@ -6,6 +6,9 @@
 >
 > **前置知识**: [IoC/DI 速查](./03-ioc-di-essentials.md)
 
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
+
 ## 📚 文档元数据
 
 | 属性 | 内容 |
@@ -15,6 +18,8 @@
 | **难度** | ⭐⭐ |
 | **标签** | `#AOP` `#切点表达式` `#代理` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ## 📌 定义
 
@@ -77,7 +82,7 @@ public @interface Audited { String action(); }
 
 @Around("@annotation(audited)")
 public Object audit(ProceedingJoinPoint pjp, Audited audited) throws Throwable {
-    auditLog.record(audited.action(), pjp.getArgs());
+    auditLog.record(audited.action()); // 只记录明确允许的元数据，避免直接输出所有参数
     return pjp.proceed();
 }
 ```
@@ -85,10 +90,21 @@ public Object audit(ProceedingJoinPoint pjp, Audited audited) throws Throwable {
 ## ⚠️ 常见陷阱
 
 - **自调用失效**：同类内 `this.method()` 不经过代理 → 该方法上的 `@Transactional`/缓存/自定义切面**全部失效**。解法：拆到另一个 Bean，或经 `ObjectProvider<Self>` 注入自身代理
-- **final 类 / final 方法无法被 CGLIB 代理**：切面静默不生效；`private` 方法同样不拦截
+- **final 类 / final 方法无法被 CGLIB 代理**：final 类无法创建子类代理，通常会导致配置或启动失败；final 方法不能被子类代理重写，private 方法也不能被拦截
 - **通知内抛异常**：会向业务调用方传播——`@Around` 的收尾逻辑放在 `finally` 里
 - **切点过宽**：`..*.*(..)` 匹配一切方法，性能开销与误伤并存；生产切点要收窄
-- **record 不适用**：AOP 只面向方法调用，无法改造 record 组件访问器
+- **record 与代理方式**：record 是 final，不能用子类代理；若实现接口且调用走 JDK 接口代理，可增强接口暴露的方法。不要用 record 作为需要子类代理的服务 Bean
+
+<!-- full-library-explanation -->
+## 画出代理边界就能判断哪些调用被增强
+
+调用者拿到代理对象，代理先执行通知，再调用目标对象。目标对象内部的 this.method() 直接访问自身，不会重新穿过代理。于是同一个方法从其他 Bean 调用有事务，从本类调用却没有新增事务边界；若外层已有事务，内层仍在外层事务中，不能笼统说“事务全部消失”。
+
+Around 通知决定是否调用 proceed、调用几次以及返回什么。重试切面多次调用 proceed 会重复执行副作用，需要幂等设计。计时切面对返回 CompletableFuture 或响应式 Publisher 的方法，默认只量到方法返回，不等于异步任务完成。日志也不应直接序列化所有参数，密码和令牌需要排除。
+
+**练习**：为一个方法添加计数切面，分别通过注入 Bean 和 this 调用，记录通知次数。再让业务方法抛错，确认 finally 的计时执行且原异常继续传播。审计失败是否应阻止业务，要由需求明确决定；把日志放入 finally 不会自动防止日志异常覆盖业务异常。
+
+依据：[Spring 代理机制](https://docs.spring.io/spring-framework/reference/core/aop/proxying.html)。
 
 ## 🔗 相关条目
 
@@ -96,3 +112,9 @@ public Object audit(ProceedingJoinPoint pjp, Audited audited) throws Throwable {
 - 📄 **[IoC/DI 速查](./03-ioc-di-essentials.md)** - 代理 Bean 由容器创建
 - 📄 **[Spring Boot 核心速查](./01-spring-boot-essentials.md)** - 自动代理开启
 - 📄 **[生产级 Spring Boot 应用](../../projects/04-production-spring-app.md)** - 审计/指标切面实战
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

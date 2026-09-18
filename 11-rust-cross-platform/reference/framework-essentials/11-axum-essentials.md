@@ -6,6 +6,9 @@
 >
 > **前置知识**: async/.await 与 Tokio 运行时（见 [12-tokio-guide](../library-guides/12-tokio-guide.md)）；Serde derive
 
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
+
 ## 📚 文档元数据
 
 | 属性 | 内容 |
@@ -15,6 +18,8 @@
 | **难度** | ⭐⭐ |
 | **标签** | `#rust` `#axum` `#reference` `#web` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 > 版本基线：Axum **0.8** / Tokio **1.53**（见模块 [README](../../README.md) 技术基线区块）。
 
@@ -338,15 +343,9 @@ serde_json = "1.0"
 
 ## 🎨 最佳实践
 
-### ✅ 推荐做法
-- **每个功能模块一个 `routes() -> Router<AppState>`**：根路由器只做 nest/merge/with_state，路径冲突在启动即 panic 暴露
-- **鉴权走 `route_layer` + Extension**：404 不被鉴权保护逻辑影响，handler 通过 `Extension` 拿身份
-- **统一 AppError + `?`**：handler 签名统一为 `Result<impl IntoResponse, AppError>`，错误路径零样板
+组合 Router 时明确当前还缺少什么 State，再通过合适位置提供状态；with_state 后并非永远不能添加路由，类型是否匹配由完整组合决定。路径冲突和旧捕获语法通常在构建路由的运行阶段暴露，不应混称 rustc 编译错误。
 
-### ❌ 避免陷阱
-- **手写旧 `:param` 语法**：0.8 构建期直接报错；错误信息会提示花括号写法
-- **`with_state` 提前调用**：后续 `.route()` 的 `State<T>` 全部对不上类型，报出深层 trait bound 错误
-- **把内部错误回给客户端**：`anyhow` 错误链可能含 SQL/路径细节，只回固定文案，细节进日志
+认证中间件与 extractor 可以按应用需要组织，重点是身份验证不会遗漏，资源授权仍执行。错误响应保持稳定且不暴露内部原因，用真实请求验证合法路径、缺身份、无权限和未匹配路径的行为。
 
 ## ❓ 常见问题
 
@@ -395,3 +394,9 @@ serde_json = "1.0"
 **文档版本**: v1.0.0
 **最后更新**: 2026年9月
 **维护团队**: Dev Quest Team
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

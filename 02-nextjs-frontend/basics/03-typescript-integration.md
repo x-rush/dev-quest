@@ -1,5 +1,18 @@
 # Next.js 16 + TypeScript 7 集成配置完整指南
 
+## 先理解，再动手
+
+TypeScript 在开发时检查代码关系，不会自动验证服务器返回的 JSON。把任意数据断言成 User 只是告诉编译器信任你。
+
+**本节自测**：给待办定义 id/title/done 类型；再模拟返回缺少 title 的对象，解释静态类型能否阻止网络输入。
+
+<details>
+<summary>预期结果与参考思路（先尝试再展开）</summary>
+
+自己写错属性能被检查，外部 JSON 仍需运行时校验；类型断言不会补出缺失字段。
+
+</details>
+
 > **文档简介**: Next.js 16 与 TypeScript 7 深度集成教程，涵盖类型系统配置、类型检查、类型定义、泛型编程等企业级TypeScript开发
 
 > **目标读者**: 具备JavaScript基础的开发者，需要掌握Next.js中TypeScript应用的前端工程师
@@ -7,6 +20,9 @@
 > **前置知识**: JavaScript ES6+、基础编程概念、Next.js基础
 
 > **预计时长**: 3-4小时
+
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
 
 ## 📚 文档元数据
 
@@ -19,6 +35,8 @@
 | **更新日期** | `2026年9月` |
 | **作者** | Dev Quest Team |
 | **状态** | ✅ 已完成 |
+
+</details>
 
 ## 🎯 学习目标
 
@@ -874,7 +892,7 @@ TypeScript为Next.js开发带来了强大的类型安全保障，让代码更加
 - 📄 **[相关的framework-patterns文档](../reference/framework-patterns/02-server-components-patterns.md)**: 深入了解服务端组件的类型安全模式
 
 ### 参考章节
-- 📖 **[本模块其他章节]**: [环境搭建配置](./01-environment-setup.md#typescript配置) | [布局路由设计](./04-layouts-routing.md#动态路由)
+- 📖 **[本模块其他章节]**: [环境搭建配置](./01-environment-setup.md#2-tsconfigjson) | [布局路由设计](./04-layouts-routing.md#-动态路由)
 - 📖 **[Knowledge Points快速参考]**: [TypeScript类型参考](../reference/language-concepts/03-typescript-types.md) | [JavaScript现代语法](../reference/language-concepts/04-javascript-modern.md)
 
 ## 📝 总结
@@ -912,3 +930,8 @@ TypeScript为Next.js开发带来了强大的类型安全保障，让代码更加
 **文档状态**: ✅ 已完成
 **最后更新**: 2026年9月
 **版本**: v1.0.0
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../LEARNING_GUIDE.md) · [完整目录与版本](../README.md) · [通用术语](../../shared-resources/glossary.md)

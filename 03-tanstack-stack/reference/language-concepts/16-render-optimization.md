@@ -1,6 +1,6 @@
 # 渲染优化：select、notifyOnChangeProps 与 structuralSharing
 
-> **模块**: `03-tanstack-stack` | **类型**: 字典条目（无难度门槛，支持任意跳入查阅）
+> **模块**: `03-tanstack-stack` | **类型**: 字典条目（可独立查阅，按主题准备前置知识，支持任意跳入查阅）
 
 ## 📌 定义
 
@@ -66,15 +66,15 @@ function CustomStructuralSharing() {
     queryKey: ['todos'],
     queryFn: fetchTodos,
     structuralSharing: (oldData, newData) => {
-      return Array.isArray(oldData) && Array.isArray(newData) && oldData.length === newData.length
-        ? oldData
-        : newData
+      // 演示保守策略：不因数组等长就丢弃新内容。
+      // 普通 JSON 数据优先删除此自定义配置，使用默认结构共享。
+      return newData
     },
   })
   return <div>{q.data?.length}</div>
 }
 
-// 关闭结构共享：列表总长度变化等"只关心新引用"的场景
+// 关闭结构共享：特殊非 JSON 数据需自行评估；仅关心长度并不是关闭理由
 function DisableStructuralSharing() {
   const q = useQuery({
     queryKey: ['todos'],
@@ -93,7 +93,20 @@ function DisableStructuralSharing() {
 - ❌ 自定义 `structuralSharing` 里把参数当具体类型用：两个参数类型是 `unknown | undefined` / `unknown`，需 `Array.isArray` 等断言后才能操作
 - ❌ `structuralSharing: false` 误以为是性能优化：它让每次结果都换新引用，下游 `memo`/`useEffect` 依赖全部失效，默认 `true` 才是常态
 - ❌ 在 `select` 里做副操作（写 store、打日志）：select 时机跟随订阅重算，不是稳定副作用点
-- ✅ 复杂派生先在缓存外算好（写进 queryKey/数据层），或 select 返回原始标量
+- ✅ 复杂派生保持纯函数并测量成本；queryKey 放查询身份与输入，不应塞入整份派生结果
+
+<!-- full-library-explanation -->
+## 派生显示不能丢掉新事实
+
+先修：对象引用、不可变更新。两份数组长度相同，元素仍可能完全不同；用“长度相同就返回旧数组”实现 structuralSharing 会把真实更新吃掉。默认结构共享更适合普通 JSON 数据，特殊数据结构才需要完整自定义比较。
+
+select 在观察者层转换，缓存仍保存 queryFn 的原始结果。因此一个组件订阅任务数量，另一个订阅任务标题，可以共享请求却展示不同投影。select 函数引用改变时可能重新计算，必要时使用稳定函数或 useCallback，同时保留正确依赖。
+
+默认属性追踪已经能发现 dataUpdatedAt 被读取，不需要仅为了显示这个字段就改成 notifyOnChangeProps:'all'。对象 rest 解构会读取更多属性，可能扩大订阅范围。
+
+**练习：** 缓存两个任务，保持数组长度不变但修改其中一个标题。验收：标题组件更新，数量组件显示仍为 2；getQueryData 中包含新标题。然后故意使用长度比较反例，说明数据为何错误。
+
+参考[官方渲染优化说明](https://tanstack.com/query/latest/docs/framework/react/guides/render-optimizations)。
 
 ## 🔗 相关条目
 
@@ -106,3 +119,9 @@ function DisableStructuralSharing() {
 ---
 
 *最后更新: 2026年9月 | 本条目为模块知识字典的一部分，概念完整解释以此处为单一事实来源*
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

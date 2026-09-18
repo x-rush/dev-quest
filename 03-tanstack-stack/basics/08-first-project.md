@@ -1,10 +1,26 @@
 # 第一个项目：城市天气数据面板
 
+## 先理解，再动手
+
+天气面板应先把“城市决定查询”做好，再叠加表格和表单。切换城市时，正在返回的旧结果不应冒充新城市的数据。
+
+**本节自测**：快速从城市 A 切换到 B，让 A 更晚返回。
+
+<details>
+<summary>预期结果与参考思路（先尝试再展开）</summary>
+
+当前界面仍对应 B；键包含城市是隔离结果的关键，旧数据占位要明确标记。
+
+</details>
+
 > **文档简介**: 综合实战——用 TanStack Query 取数 + TanStack Table 排序渲染，搭建一个可排序、可刷新、带乐观收藏的城市天气数据面板
 >
 > **目标读者**: 已完成 01-06 全部教程，准备把 Query 与 Table 串成完整链路的学习者（进阶写法可对照 [高级特性](./07-advanced-features.md)）
 >
 > **前置知识**: [Query 基础](./03-query-fundamentals.md)、[Table 基础](./04-table-fundamentals.md)
+
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
 
 ## 📚 文档元数据
 
@@ -15,6 +31,8 @@
 | **难度** | ⭐ |
 | **标签** | `#综合项目` `#Query` `#Table` `#数据面板` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ## 🎯 学习目标
 
@@ -234,3 +252,9 @@ export default function App() {
 ---
 
 **最后更新**: 2026年9月 | Dev Quest · 03-tanstack-stack
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../LEARNING_GUIDE.md) · [完整目录与版本](../README.md) · [通用术语](../../shared-resources/glossary.md)

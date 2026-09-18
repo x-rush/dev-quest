@@ -1,5 +1,8 @@
 # GraphQL APIs - gqlgen框架实战指南
 
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
+
 ## 📚 文档元数据
 
 | 属性 | 内容 |
@@ -12,8 +15,10 @@
 | **作者** | Dev Quest Team |
 | **状态** | ✅ 已完成 |
 
+</details>
+
 ## 概述
-gqlgen是Go语言中最流行的GraphQL服务器库，它采用schema优先（schema first）的方式，通过编写GraphQL SDL定义自动生成对应的Go代码。gqlgen提供了强类型支持、高性能和良好的开发体验，是构建现代GraphQL API的理想选择。
+gqlgen 是 Go 生态采用 schema 优先方式的 GraphQL 服务器库，它采用schema优先（schema first）的方式，通过编写GraphQL SDL定义自动生成对应的Go代码。gqlgen提供了强类型支持、高性能和良好的开发体验，是构建现代GraphQL API的理想选择。
 
 ## 核心特性
 - **Schema优先**: 基于GraphQL SDL定义自动生成Go代码
@@ -1117,3 +1122,17 @@ gqlgen作为Go语言中最流行的GraphQL服务器库，提供了完整的Graph
 - [GraphQL最佳实践](https://graphql.org/learn/best-practices/)
 
 *最后更新: 2025年9月*
+
+<!-- full-library-explanation -->
+## 从字段解析理解成本、权限与空值
+
+前置是 HTTP、结构体、接口和数据库查询。Schema 描述客户端能请求什么形状，resolver 决定怎样拿到字段值。一个查询返回 20 个用户，每个用户字段再单独读取文章，便产生 1+20 次数据库查询；请求级 DataLoader 可以收集键并批量读取，再按原键顺序分发结果。缓存应绑定请求或明确权限范围，不能把带用户权限的数据无条件放进全局 loader。
+
+Non-null 的感叹号是对结果的承诺。如果解析 user.name 失败且 name 不可空，null 会向最近可空的父字段传播；因此 HTTP 200 下仍可能出现 errors 与部分 data。测试不能只断言传输状态，必须检查 GraphQL 响应体。认证中间件识别用户身份之后，每个敏感字段和资源仍须授权，客户端可以请求某字段不意味着它有权读取。
+
+按 0→1 顺序练习：先通过 gqlgen init 得到与固定版本匹配的项目，只实现 hello 查询；再加入单用户查询、一个 mutation、数据访问接口，最后才加入批量加载与订阅。验收包含未知字段被 schema 拒绝、无权限字段不泄露、复杂度上限生效、订阅取消后 goroutine 退出。本文各节模型和 resolver 是主题片段，不能全部拼接成一个可运行项目；以 gqlgen.yml 和生成的接口为准填入实现，避免手写与生成结构冲突。
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

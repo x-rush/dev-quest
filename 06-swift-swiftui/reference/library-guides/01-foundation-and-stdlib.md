@@ -6,6 +6,9 @@
 >
 > **前置知识**: 无；集合类型详见 [02-optionals-collections.md](../language-concepts/02-optionals-collections.md)
 
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
+
 ## 📚 文档元数据
 
 | 属性 | 内容 |
@@ -15,6 +18,8 @@
 | **难度** | ⭐ |
 | **标签** | `#Foundation` `#标准库` `#String` `#Date` `#Codable` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ---
 
@@ -45,9 +50,9 @@ score.formatted(.number.precision(.fractionLength(2))) // "92.46"
 ```swift
 12345.formatted()                                   // 按区域格式化
 12345.formatted(.number.grouping(.never))
-let price = Decimal(49.9)
+let price = Decimal(string: "49.9")! // 固定合法示例；用户输入应 guard let
 price.formatted(.currency(code: "CNY"))             // ¥49.90
-20.minutes.formatted()                              // "20 分钟"
+Duration.seconds(1200).formatted(.units(allowed: [.minutes]))                              // "20 分钟"
 ```
 
 ---
@@ -96,7 +101,8 @@ struct User: Codable {
     let avatarURL: URL?          // URL 类型自动解析字符串
 }
 
-let data = try JSONEncoder().encode(user)
+let original = User(id: 1, name: "小林", avatarURL: nil)
+let data = try JSONEncoder().encode(original)
 let user = try JSONDecoder().decode(User.self, from: data)
 ```
 
@@ -124,7 +130,7 @@ decoder.keyDecodingStrategy = .convertFromSnakeCase
 struct Payload: Codable {
     let users: [User]
 }
-// 解码失败排查：打印错误 localizedDescription 会指明缺失键路径
+// 解码失败排查：匹配 DecodingError 并检查 context.codingPath；localizedDescription 不保证给出完整路径
 ```
 
 **陷阱**: Swift 的 Codable 无"缺失键给默认值"——服务器可能省略的字段要声明为 Optional，或手写 `init(from:)`。
@@ -155,7 +161,7 @@ let text = try String(contentsOf: fileURL, encoding: .utf8)
 
 ---
 
-## 5. 标准库补充
+## 5. 标准库与 Foundation 补充
 
 | 类型/函数 | 用途 | 示例 |
 |-----------|------|------|
@@ -168,7 +174,7 @@ let text = try String(contentsOf: fileURL, encoding: .utf8)
 ## ⚠️ 高频陷阱速查
 
 - **String.count ≠ 字节数**：含 emoji 时 UTF-8 长度远大于 count；网络传输量看 `utf8.count`
-- **DateFormatter 线程与开销**：实例缓存复用；解析用户输入优先 `Date.ISO8601FormatStyle`
+- **DateFormatter 线程与开销**：实例缓存复用；接口约定 ISO 8601 时使用相应解析器；用户本地化日期应按实际 Locale 与格式解析
 - **Double 存金额**：用 Decimal 或以"分"为单位的 Int
 - **URL(string:) 返回 Optional**：合法输入也用 `guard let` 解包，硬解包 `!` 是崩溃源
 - **UserDefaults 存大对象**：只存配置小值；结构化数据进 SwiftData/文件
@@ -178,3 +184,36 @@ let text = try String(contentsOf: fileURL, encoding: .utf8)
 - 📄 [02-optionals-collections.md](../language-concepts/02-optionals-collections.md) — Array/Dictionary/Set 全表
 - 📄 [02-third-party-libs.md](./02-third-party-libs.md) — 三方库生态
 - 📄 [03-concurrency-api.md](../language-concepts/03-concurrency-api.md) — 异步 IO 与 Foundation 的配合
+
+
+<!-- full-library-explanation -->
+## 把文本与 JSON 当不可信输入处理
+
+```swift
+import Foundation
+
+struct Profile: Decodable {
+    let name: String
+    let visits: Int
+    enum CodingKeys: String, CodingKey { case name, visits }
+    init(from decoder: Decoder) throws {
+        let values = try decoder.container(keyedBy: CodingKeys.self)
+        name = try values.decode(String.self, forKey: .name)
+        visits = try values.decodeIfPresent(Int.self, forKey: .visits) ?? 0
+    }
+}
+let input = Data(#"{"name":"小林"}"#.utf8)
+let profile = try JSONDecoder().decode(Profile.self, from: input)
+print(profile.name, profile.visits) // 小林 0
+```
+
+把 visits 改为字符串 `"many"` 时应解码失败，不能用缺省值掩盖类型错误。捕获 DecodingError 后查看其 context.codingPath、debugDescription；不要把包含用户原文的整个 payload 打进日志。默认属性值不等于合成 Decodable 会在缺键时自动采用该值。
+
+String 的索引使用 String.Index，字符、UTF-16 单元和 UTF-8 字节长度并不相等。日期存储与传输约定应固定，显示则按 Locale/Calendar/时区格式化；“明天同一当地时刻”使用日历运算，不一定等于加 86400 秒。金额从十进制字符串或整数最小单位进入，避免先经过 Double 再期待 Decimal 消除已经发生的误差。
+
+验收：包含 emoji 的姓名不被截断、缺省访问数为 0、错误类型报告失败、跨夏令时日期仍符合产品约定。本轮没有 Swift 运行记录。
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

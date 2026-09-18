@@ -6,6 +6,9 @@
 >
 > **前置知识**: [缓存架构与数据流](../architecture/01-cache-architecture.md)、[Query 基础](../../frameworks/01-tanstack-query-basics.md)
 
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
+
 ## 📚 文档元数据
 
 | 属性 | 内容 |
@@ -15,6 +18,8 @@
 | **难度** | ⭐⭐⭐ |
 | **标签** | `#性能优化` `#staleTime` `#prefetch` `#placeholderdata` |
 | **更新日期** | 2026年9月 |
+
+</details>
 
 ---
 
@@ -37,11 +42,11 @@
 
 ## 2. staleTime：最大的一个杠杆
 
-`staleTime: 0`（默认）意味着**每次组件挂载都是一次网络请求**。按数据变化频率分配策略：
+`staleTime: 0`（默认）表示数据立即可被视为过期；是否请求还取决于 enabled、缓存、在途去重和 refetchOnMount 等。按数据变化频率分配策略：
 
 | 数据类型 | staleTime 建议 | 理由 |
 |----------|----------------|------|
-| 配置/枚举/权限矩阵 | 30min ~ Infinity | 几乎不变 |
+| 公开配置/稳定枚举（权限策略另行设计） | 30min ~ Infinity | 几乎不变 |
 | 用户资料、看板结构 | 5~10min | 低频变化 |
 | 业务列表（订单/用户） | 30s~2min | 中频变化 |
 | 实时行情/协作文档 | 0 + 定向失效 | 靠失效与订阅，不靠 staleTime |
@@ -55,11 +60,11 @@ const queryClient = new QueryClient({
 useQuery({
   queryKey: ['enums', 'order-status'],
   queryFn: fetchOrderStatus,
-  staleTime: Infinity, // 枚举永不过期：登录后取一次即可
+  staleTime: Infinity, // 不会因时间自然过期；失效、回收后重新挂载等仍可能取数
 })
 ```
 
-**同时收敛触发器**：如果 staleTime 内不希望"聚焦回页面"也重新请求，再关 `refetchOnWindowFocus`。先调 staleTime，再动触发器。
+**同时收敛触发器**：默认聚焦重取通常只针对过期数据；若业务连过期数据也不希望聚焦刷新，再考虑关闭 refetchOnWindowFocus。先调 staleTime，再动触发器。
 
 ---
 
@@ -129,13 +134,24 @@ const { data: todoCount } = useQuery({
 
 ## 6. 验证优化的仪表
 
-- Network 面板：优化前后同路径请求次数对比（目标：重复请求归零）
+- Network 面板：优化前后同路径请求次数对比（目标：减少无用请求且维持所需新鲜度）
 - TanStack Devtools：观察条目 fresh/stale 占比与 gcTime 后消失的时机
 - Web Vitals：LCP/INP 变化（见 [可观测性](../../deployment/03-observability.md)）
 
 **一次只动一个旋钮**：staleTime → 预取 → placeholderData 的顺序做完再测，避免归因混乱。
 
 ---
+
+<!-- full-library-explanation -->
+## 一次优化先定义正确性预算
+
+先修：查询键、新鲜度、失效。商品介绍可以允许一分钟陈旧，库存与权限判定可能不能。前端 staleTime 只影响刷新策略，服务器仍要在下单或授权时检查最新事实。
+
+先记录用户路径、请求数、等待时间与显示内容，再选择一个变化。预取可能减少点击后的等待，却增加未访问页面的请求；placeholder 可以减少空白，却暂时显示旧页。收益与成本应分别记录。
+
+**练习：** 对列表→详情→返回列表路径做三轮测量：默认配置、延长 staleTime、增加详情预取。验收：解释每个请求为何发生，并测试写入后读到新结果。目标是删除无用工作，不能为了请求数为零牺牲新鲜度。
+
+乐观更新还要验证失败回滚和并发写入顺序。用户看到即时结果只代表预测已显示，不代表服务器已经接受；失败时必须有可理解的反馈。
 
 ## 🔗 相关文档
 
@@ -144,3 +160,9 @@ const { data: todoCount } = useQuery({
 - 📄 **[渲染性能](./02-rendering-performance.md)** - 请求优化之后的前端瓶颈
 - 📄 **[数据看板](../../projects/02-data-dashboard.md)** - placeholderData 的完整应用
 - 📄 **[协作看板](../../projects/03-collaborative-kanban.md)** - 乐观更新的高频写场景
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

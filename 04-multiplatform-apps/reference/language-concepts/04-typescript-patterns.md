@@ -2,6 +2,9 @@
 
 > **难度**: ⭐⭐ | **前置**: TS 基础 + React Navigation 使用经验
 
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
+
 ## 📚 文档元数据
 
 | 属性 | 内容 |
@@ -11,6 +14,8 @@
 | **难度** | ⭐⭐ |
 | **标签** | `#TypeScript` `#类型推导` `#Codegen` `#泛型` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ## 模式一：导航参数类型（ParamList）
 
@@ -42,7 +47,8 @@ type DetailProps = NativeStackScreenProps<RootStackParamList, 'Detail'>;
 
 export default function Detail({ route, navigation }: DetailProps) {
   const { itemId, from } = route.params; // 自动推导，无需断言
-  navigation.navigate('Home');           // 参数类型受 ParamList 约束
+  // 导航应由事件触发，不能在每次渲染时无条件跳转。
+  return null;
 }
 ```
 
@@ -58,7 +64,7 @@ RN 组件的样式类型来自 `react-native` 导出的 `StyleProp<T>` 系列，
 ### 语法和示例
 ```tsx
 import type { ReactNode } from 'react';
-import type { StyleProp, ViewStyle, TextStyle } from 'react-native';
+import { StyleSheet, type StyleProp, type ViewStyle, type TextStyle } from 'react-native';
 
 interface CardProps {
   title: string;
@@ -126,13 +132,13 @@ export function useApp() {
 ```
 
 ### 陷阱
-- 默认值不要用对象字面量（每次渲染新引用），用 `null` + 抛错模式
+- 模块级 createContext 的默认对象不会每次渲染重建；若缺少 Provider 属于错误，可用 null + 抛错显式暴露
 - Hook 抛错信息写清 Provider 名称，降低排障成本
 
 ## 模式五：TurboModule 规约（Codegen）
 
 ### 描述
-新架构下用 TypeScript 规约（Spec）声明原生接口，Codegen 据此生成三端胶水代码——类型即契约。
+新架构下用 TypeScript 规约（Spec）声明原生接口，Codegen 据此生成受支持平台的接口代码，RNOH 的生成与注册须核对其工具链——类型即契约。
 
 ### 语法和示例
 ```ts
@@ -179,6 +185,25 @@ const initialTheme: Theme = Platform.select<Theme>({
 });
 ```
 
+<!-- full-library-explanation -->
+## 类型约束在哪一刻有效
+
+ParamList 检查你写出的导航调用；服务端 JSON、深链和磁盘旧数据进入程序时没有自动获得该保证。`as DetailParams` 只是告诉编译器相信你，不会拒绝空 ID。对外部值先校验，再构造内部类型。
+
+```ts
+// 纯 TypeScript，可在 strict 模式下单独检查
+type DetailParams = { id: string };
+function parseDetail(input: unknown): DetailParams | null {
+  if (typeof input !== 'object' || input === null || !('id' in input)) return null;
+  return typeof input.id === 'string' && input.id.trim() !== ''
+    ? { id: input.id } : null;
+}
+console.log(parseDetail({ id: '42' }), parseDetail({ id: 42 }));
+// { id: '42' }、null
+```
+
+练习：新增 Row 的 `loading` 分支，令 switch 的 default 调用接收 never 的穷尽检查函数。验收：遗漏新分支会得到编译错误；将网络响应改成错误形状时，由解析函数返回可处理的失败，而不是依赖编译器发现运行时数据问题。
+
 ## 🔗 相关文档
 
 - 📄 **[Hooks 速查](./03-hooks-reference.md)**: 自定义 Hook 与类型结合
@@ -187,3 +212,9 @@ const initialTheme: Theme = Platform.select<Theme>({
 - 📄 **[故障排除](../quick-references/02-troubleshooting.md)**: 类型相关构建报错
 
 *相关教程: [导航类型推导实战](../../basics/05-navigation.md)*
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

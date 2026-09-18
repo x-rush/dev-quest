@@ -1,5 +1,7 @@
 # 可空性与集合 API 速查
 
+> **阅读准备**：Kotlin val/var、函数与类型标注；从可空值的分支处理开始，再读集合操作。
+
 > Kotlin 空安全操作符与集合/Sequence/Flow 变换 API 的字典式速查：定义 → 语法 → 示例 → 陷阱
 
 | 属性 | 内容 |
@@ -52,7 +54,7 @@ fun requireUser(u: User?): User = u ?: throw IllegalArgumentException("无用户
 val forced: String = nullableName!!       // ⚠️ 最后手段
 ```
 
-**陷阱**: Compose/Android 中 `!!` 几乎总是可用 `?:`、`let` 或更早的非空建模替代；唯一常见合理场景是 `lateinit` 配合框架回调顺序。
+**陷阱**: Compose/Android 中 `!!` 几乎总是可用 `?:`、`let` 或更早的非空建模替代；`lateinit` 是独立机制，未初始化访问会抛异常，也不需要靠 !! 读取。
 
 ### 5. let 与安全调用组合
 
@@ -122,7 +124,7 @@ users.any { it.age > 28 }                // true（存在性）
 users.all { it.age > 20 }                // true（全称）
 users.maxByOrNull { it.age }             // User?（空集合返回 null ⭐）
 users.fold(0) { acc, u -> acc + u.age }  // 带初值折叠
-users.reduce { acc, u -> acc + u.age }   // 无初值（空集合抛异常）
+users.map { it.age }.reduce { acc, age -> acc + age }   // 无初值（空集合抛异常）
 ```
 
 ### 4. 分组与关联
@@ -171,7 +173,7 @@ listOf(1, 2, 3, 4, 5).asSequence()
 
 ## 四、与 Flow 的对应关系
 
-**定义**: Flow 操作符与集合操作符语义一致，差别仅在"值随时间异步到达"。
+**定义**: Flow 与集合有相似的变换名称，但取消、并发、冷/热流以及时间操作会改变行为，不能视为完全等价。
 
 ```kotlin
 // 集合：同步一次性
@@ -188,7 +190,7 @@ taskFlow
 
 | 集合 | Flow 等价/对应 | 差异点 |
 |------|----------------|--------|
-| `map`/`filter`/`flatMap` | 同名 | Flow 版 lambda 可挂起 |
+| `map`/`filter`/`flatMap` | map/filter；展平需选择 flatMapConcat/Latest/Merge 等 | Flow 还要明确取消与并发语义 |
 | `first()` | `first()` | 等第一个发射值 |
 | `distinct()` | `distinctUntilChanged()` | 比较相邻发射值 |
 | — | `debounce`/`sample` | 时间维度，集合无 |
@@ -201,3 +203,29 @@ taskFlow
 - 📄 **[Kotlin 关键字详解](./01-kotlin-keywords.md)** - 语言关键字层速查
 - 📄 **[协程与 Flow API 全表](./03-coroutines-flow-api.md)** - Flow 时间维度操作符全表
 - 📄 **[Kotlin 语法基础](../../basics/03-kotlin-syntax-essentials.md)** - 空安全入门教程
+
+
+<!-- full-library-explanation -->
+## 不要让默认值掩盖缺失原因
+
+`null`、空集合和请求失败通常是三种状态。搜索无结果可以是空列表，尚未加载不能直接假装无结果；用户 ID 缺失也不能随手用 0 替代。先确定业务契约，再选择 `?:` 的右侧是默认值、返回还是异常。
+
+```kotlin
+// 可独立放入 Main.kt；只依赖 Kotlin 标准库
+fun main() {
+    val source = mutableListOf("A")
+    val view: List<String> = source
+    val snapshot = source.toList()
+    source.add("B")
+    println(view)      // [A, B]：只读接口不是冻结对象
+    println(snapshot)  // [A]：列表结构快照，元素若可变仍是浅复制
+    println(emptyList<Int>().all { it > 0 }) // true
+}
+```
+
+练习：为“接口未加载、加载成功但为空、失败”建一个 sealed 类型，并分别渲染。验收：不用 `null.orEmpty()` 抹掉失败原因，能解释空集合的 all 为什么为 true。对 Java 平台类型在边界处收窄，比到处添加 `!!` 更容易定位问题。
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

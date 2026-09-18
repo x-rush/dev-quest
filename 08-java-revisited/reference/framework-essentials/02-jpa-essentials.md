@@ -6,6 +6,9 @@
 >
 > **前置知识**: 关系型数据库基础；Spring 注入见 [Spring Boot 核心速查](./01-spring-boot-essentials.md)
 
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
+
 ## 📚 文档元数据
 
 | 属性 | 内容 |
@@ -15,6 +18,8 @@
 | **难度** | ⭐⭐ |
 | **标签** | `#JPA` `#Hibernate` `#SpringData` `#事务` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ## 🏛️ 实体注解速查
 
@@ -131,15 +136,18 @@ List<Book> findByStatus(BookStatus status);
 
 ## ✅ 最佳实践 / ❌ 陷阱清单
 
-- ✅ 实体字段用 `java.time`（LocalDate/Instant），Hibernate 6 起原生映射（7.x 沿用）
-- ✅ 枚举一律 `@Enumerated(EnumType.STRING)`
-- ✅ 批量插入用 `saveAll` + `spring.jpa.properties.hibernate.jdbc.batch_size=50`（配 SEQUENCE 主键）
-- ❌ 不要让 `@ManyToOne` 保持默认 EAGER；关联显式 LAZY
-- ❌ 不要用实体做 API 响应体——用 record DTO 投影，防字段泄漏与懒加载连带触发
-- ❌ 不要依赖 open-in-view 掩盖懒加载问题
+日期类型按语义选择：LocalDate 表示日期，Instant 表示时间点，不能不分时区需求互换。枚举存字符串便于理解，却仍需计划重命名后的旧数据迁移；存数字也要明确稳定映射，不能依赖随意调整的顺序。
+
+saveAll 不保证自动产生高效 JDBC 批处理，效果受主键策略、驱动、批大小和 flush 行为影响。通过实际 SQL 与相同数据量的耗时验证。响应使用所需字段的 DTO，并检查关联加载，避免序列化才触发一串查询。
 
 ## 🔗 相关文档
 
 - 📄 **[Spring Boot 核心速查](./01-spring-boot-essentials.md)** - 注入与配置上下文
 - 📄 **[异常处理](../../basics/06-exceptions.md)** - 事务回滚与异常类型的契约
 - 📄 **[三方库指南](../library-guides/02-third-party-libs.md)** - MapStruct 做 实体↔DTO 映射
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

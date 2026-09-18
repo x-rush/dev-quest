@@ -1,10 +1,23 @@
 # 精通项目 - 生产级 Android 应用
 
+## 分阶段练习与验收
+
+**最小阶段**：选一条已有业务流程完成发布前检查。
+
+**验收结果**：发行构建可安装并完成流程，配置与日志不依赖开发电脑。
+
+**扩展顺序**：混淆、签名、监控和数据迁移分项验收，不能只检查 Debug 构建。
+
+建议保存一份正常输入、一份失败输入、实际输出和对应测试。先完成以上阶段再扩展正文中的完整设计；遇到省略实现或未定义依赖，应按文档上下文补齐，不能把代码片段拼接后当作已经验证的完整工程。
+
 > **文档简介**: 以发布一个真实应用为终点的集成指南：多模块架构、错误体系、离线优先、发布加固、可观测性，把前面所有项目经验收敛为工程能力
 >
 > **目标读者**: 已完成三个递进项目、准备把应用推向真实用户的进阶学习者
 >
 > **前置知识**: [新闻阅读器](03-news-reader.md)、[应用架构](../advanced-topics/architecture/01-app-architecture.md)，建议同步阅读 testing/ 与 deployment/ 全部文档
+
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
 
 ## 📚 文档元数据
 
@@ -15,6 +28,8 @@
 | **难度** | ⭐⭐⭐ |
 | **标签** | `#multi-module` `#error-handling` `#offline-first` `#release` `#observability` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ---
 
@@ -144,3 +159,9 @@ android {
 - 📖 深度解释：[应用架构与 UDF](../advanced-topics/architecture/01-app-architecture.md) ｜ [安全实践](../advanced-topics/security/01-security-practices.md)
 - 🧪 测试：[单元测试](../testing/01-unit-testing.md) ｜ [UI 测试](../testing/02-ui-testing.md) ｜ [集成与端到端](../testing/03-integration-e2e-testing.md)
 - 🚀 发布：[发布构建](../deployment/01-release-build.md) ｜ [Play Store 上架](../deployment/02-play-store-release.md) ｜ [CI/CD 与可观测性](../deployment/03-ci-cd-observability.md)
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../LEARNING_GUIDE.md) · [完整目录与版本](../README.md) · [通用术语](../../shared-resources/glossary.md)

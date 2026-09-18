@@ -1,10 +1,13 @@
 # SwiftData 与 Observation 框架速查
 
-> **文档简介**: SwiftData（@Model/@ModelContext/ModelContainer/关系查询）与 Observation（@Observable 追踪机制）两大现代框架的条目式参考
+> **文档简介**: SwiftData（@Model/ModelContext/ModelContainer/关系查询）与 Observation（@Observable 追踪机制）两大现代框架的条目式参考
 >
 > **目标读者**: 需要查阅持久化与响应式数据细节的中级学习者
 >
 > **前置知识**: [basics/08-first-project.md](../../basics/08-first-project.md) 有完整实战；[basics/04-views-state.md](../../basics/04-views-state.md) 有数据流基础
+
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
 
 ## 📚 文档元数据
 
@@ -15,6 +18,8 @@
 | **难度** | ⭐⭐ |
 | **标签** | `#SwiftData` `#Observation` `#持久化` `#数据建模` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ---
 
@@ -30,7 +35,7 @@ import SwiftData
 @Model
 final class Note {
     var title: String
-    var body: String?            // body 是合法属性名（真正的保留名是 description）
+    var body: String?            // 正文；模型字段命名还需避免与生成成员冲突
     var createdAt: Date
     var priority: Int = 0
 
@@ -53,7 +58,7 @@ final class Note {
 | `@Transient` | 跳过持久化 |
 | `#Index<Note>([\.title], [\.createdAt])`（iOS 18+） | 建索引加速查询 |
 
-**支持的属性类型**: String、数值、Bool、Date、Data、UUID、RawRepresentable 枚举、其他 @Model（关系）、`[Model]`（一对多）。
+**支持的属性类型**: String、数值、Bool、Date、Data、UUID、满足持久化要求的 Codable 枚举/值类型、其他 @Model（关系）、`[Model]`（一对多）。
 
 ### 1.2 模型关系
 
@@ -61,13 +66,13 @@ final class Note {
 @Model
 final class Project {
     var name: String
-    @Relationship(deleteRule: .cascade, inverse: \Task.project)
-    var tasks: [Task] = []
+    @Relationship(deleteRule: .cascade, inverse: \TaskItem.project)
+    var tasks: [TaskItem] = []
     init(name: String) { self.name = name }
 }
 
 @Model
-final class Task {
+final class TaskItem {
     var title: String
     var project: Project?
     init(title: String) { self.title = title }
@@ -100,8 +105,8 @@ let container = try ModelContainer(for: Note.self, configurations: config)
 
 context.insert(note)          // 插入
 context.delete(note)          // 删除
-try context.save()            // 手动保存（默认 autosave 开启）
-context.fetchCount(descriptor) // 计数
+try context.save()            // 手动保存（mainContext 通常启用 autosave；手动创建的上下文需检查配置）
+try context.fetchCount(descriptor) // 计数
 try context.fetch(descriptor)  // 查询
 ```
 
@@ -130,7 +135,7 @@ private var hot: [Note]
 final class Session {
     var user: User?              // 被读取 → 被追踪
     var tokenCount = 0
-    let launchDate = Date.now    // let 不可写，仍可读追踪
+    let launchDate = Date.now    // 不可变值，不产生属性修改通知
 
     private var _cache: [String: Int] = [:]   // private 属性同样参与
 }
@@ -155,9 +160,9 @@ final class Router {
 
 | 需求 | 做法 |
 |------|------|
-| 新模型 | 一律 `@Observable` |
+| 新模型 | 部署目标支持时考虑 `@Observable`，并确定所有者与隔离方式 |
 | 桥接旧 ObservableObject | 视图包 `@StateObject`/`@ObservedObject` 维持旧机制 |
-| 时序事件流 | AsyncSequence/AsyncStream（见 [03-concurrency-api.md](../language-concepts/03-concurrency-api.md)），不再引入 Combine |
+| 时序事件流 | AsyncSequence/AsyncStream（见 [03-concurrency-api.md](../language-concepts/03-concurrency-api.md)），或按已有 Publisher 管线选择 Combine |
 
 **组合模式分工**：**SwiftData 管持久化事实，Observation store 管 UI 瞬时状态**（选中项、过滤器、加载相）——一个 `@MainActor @Observable` store 持有 `ModelContext` 与筛选字段即可，不重复存同一份数据。
 
@@ -165,7 +170,7 @@ final class Router {
 
 ## ⚠️ 高频陷阱速查
 
-- **`description` 属性名不可用**：PersistentModel 自带 `description` 成员，@Model 类不能声明同名存储属性；`body` 等名字没有保留限制，可正常使用
+- **生成成员冲突**：不要凭名字猜测保留规则；出现宏展开诊断时检查当前 SDK 的生成成员，用更具体的业务字段名消除歧义
 - **unique + CloudKit 冲突**：`.automatic` 同步不支持 `@Attribute(.unique)`
 - **@Query 硬编码谓词**：谓词在 init 求值一次；想"随筛选条件变"的查询，改用 `context.fetch` + `.onChange`，或 `init(filter:)` 传入
 - **@Observable 属性在非隔离线程写**：被 UI 追踪的属性应由 `@MainActor` 上下文写入（store 标 @MainActor）
@@ -176,3 +181,20 @@ final class Router {
 - 📄 [03-concurrency-api.md](../language-concepts/03-concurrency-api.md) — ModelActor 并发查询
 - 📄 [07-swiftdata-migration.md](./07-swiftdata-migration.md) — 模型变更后的版本化迁移
 - 📄 [01-foundation-and-stdlib.md](../library-guides/01-foundation-and-stdlib.md) — Data/UUID 等基础类型
+
+
+<!-- full-library-explanation -->
+## 从内存对象到可恢复的数据
+
+修改 Note.title 先改变上下文管理的对象；save 成功才是可以向用户报告“已保存”的明确边界。Observation 负责通知依赖该属性的视图更新，不保证磁盘写入成功。网络上传成功、界面显示成功、本地保存成功是三件不同的事。
+
+练习：用内存 ModelContainer 写测试，插入两条笔记、save、按 priority 查询、修改再查询、删除再查询。随后改用测试磁盘库，结束进程后重启验证持久化。内存库只能证明 CRUD 逻辑，不证明重启恢复。保存失败要保留用户草稿并展示可重试错误，不使用 try? 吞掉失败。
+
+跨 actor 工作时传持久标识或 Sendable 值快照，在目标隔离域自己的上下文重新取对象；不要把同一个可变 ModelContext 或 @Model 实例交给任意后台任务。查询过滤必须被存储层支持，FetchDescriptor 不会使任意 Swift 函数自动可用于谓词。
+
+最低系统版本、CloudKit 的 schema 限制与迁移路径需要一起设计。唯一约束、关系和自定义 Codable 字段都要用真实目标存储测试，不能仅凭预览成功认定兼容。参考 [SwiftData](https://developer.apple.com/documentation/swiftdata)。本轮未运行 SwiftData 测试。
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

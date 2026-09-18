@@ -1,10 +1,23 @@
 # 高级项目：协作看板（乐观更新 + 实时同步）
 
+## 分阶段练习与验收
+
+**最小阶段**：先做单用户卡片状态变更，再模拟两个用户。
+
+**验收结果**：旧响应不会覆盖新操作，失败后客户端与服务器重新一致。
+
+**扩展顺序**：拖拽外观放在状态与并发规则之后，冲突策略必须可解释。
+
+建议保存一份正常输入、一份失败输入、实际输出和对应测试。先完成以上阶段再扩展正文中的完整设计；遇到省略实现或未定义依赖，应按文档上下文补齐，不能把代码片段拼接后当作已经验证的完整工程。
+
 > **文档简介**: 构建多人协作 Kanban：拖拽秒响应（乐观更新）+ 服务端 SSE 广播其他成员变更（setQueryData 增量合并），并给出冲突处理方案。
 >
 > **目标读者**: 已掌握乐观更新模式、要挑战多客户端状态一致性的进阶开发者
 >
 > **前置知识**: [Query 进阶](../frameworks/02-tanstack-query-advanced.md)、[Query 高级特性教程](../basics/07-advanced-features.md)
+
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
 
 ## 📚 文档元数据
 
@@ -15,6 +28,8 @@
 | **难度** | ⭐⭐ |
 | **标签** | `#实战项目` `#乐观更新` `#实时同步` `#sse` `#协同` |
 | **更新日期** | 2026年9月 |
+
+</details>
 
 ## 🎯 项目目标
 
@@ -218,3 +233,9 @@ export function useBoardSync(boardId: string) {
 - 📄 **[Query 缓存架构与数据流](../advanced-topics/architecture/01-cache-architecture.md)** - 为什么缓存能当事实来源
 - 📄 **[集成测试](../testing/03-integration-testing.md)** - 拖拽与 SSE 的测试策略
 - 📄 **[SaaS 后台](../projects/04-saas-admin-platform.md)** - 更大规模的生产级整合
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../LEARNING_GUIDE.md) · [完整目录与版本](../README.md) · [通用术语](../../shared-resources/glossary.md)

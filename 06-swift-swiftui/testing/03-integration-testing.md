@@ -6,6 +6,9 @@
 >
 > **前置知识**: [01-unit-testing.md](./01-unit-testing.md)（Swift Testing）、[frameworks/03-ecosystem-integration.md](../frameworks/03-ecosystem-integration.md)（SwiftData + URLSession 链路）
 
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
+
 ## 📚 文档元数据
 
 | 属性 | 内容 |
@@ -15,6 +18,8 @@
 | **难度** | ⭐⭐ |
 | **标签** | `#集成测试` `#SwiftData` `#内存容器` `#Stub` `#数据迁移` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ## 🎯 本指南解决什么问题
 
@@ -177,9 +182,9 @@ func lightweightMigration() throws {
 
 ## ✅ 最佳实践
 
-- ✅ 集成断言**重新查库**验证，不信任内存对象（内存里删了库未必删了）
-- ✅ Stub 返回的数据结构与生产 API 完全一致，字段值用可识别的合成值
-- ✅ 每条测试独立容器，`SetUp` 里建、不跨用例复用
+持久化集成测试应从新的查询上下文读取结果，必要时重建存储实例，避免只验证内存里的对象已经变化。模拟 API 使用能反映真实契约的合成数据，并包含缺字段、错误状态和延迟。
+
+隔离测试容器或明确清理数据，保证每条用例独立。对一次失败保存检查没有留下半条记录，再对重启后的读取作断言，才能证明协作链满足要求。
 
 ## ❌ 避免陷阱
 
@@ -207,3 +212,9 @@ func lightweightMigration() throws {
 - 📄 [02-ui-testing.md](./02-ui-testing.md) — UI 层旅程测试（本篇的下游）
 - 📄 [03-ecosystem-integration.md](../frameworks/03-ecosystem-integration.md) — 被测数据链路的搭建指南
 - 📄 [03-concurrency-api.md](../reference/language-concepts/03-concurrency-api.md) — 并发测试涉及的 API 字典
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../LEARNING_GUIDE.md) · [完整目录与版本](../README.md) · [通用术语](../../shared-resources/glossary.md)

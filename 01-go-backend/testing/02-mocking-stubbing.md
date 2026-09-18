@@ -8,6 +8,9 @@
 
 > **预计时长**: 4-6小时完整学习
 
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
+
 ## 📚 文档元数据
 
 | 属性 | 内容 |
@@ -20,11 +23,13 @@
 | **作者** | Dev Quest Team |
 | **状态** | ✅ 已完成 |
 
+</details>
+
 ## 🎯 学习目标
 
 ### 核心技能
 - **Mock概念**: 理解Mock、Stub、Fake、Spy的区别和使用场景
-- **gomock框架**: 掌握官方gomock工具的使用方法
+- **gomock框架**: 掌握 gomock 风格的 mock 生成与期望验证
 - **testify/mock**: 熟练使用testify框架的mock功能
 - **接口设计**: 学会设计可测试的接口和依赖注入
 
@@ -48,6 +53,7 @@ type MockDatabase struct {
 
 func (m *MockDatabase) GetUser(id int) (*User, error) {
     args := m.Called(id)
+    if args.Get(0) == nil { return nil, args.Error(1) }
     return args.Get(0).(*User), args.Error(1)
 }
 ```
@@ -91,7 +97,7 @@ func (f *FakeUserRepository) GetUser(id int) (*User, error) {
 #### 1. 安装gomock工具
 ```bash
 # 安装gomock工具和mockgen
-# （golang 组织下的原 mock 仓库已归档，官方延续版为 go.uber.org/mock，API 完全兼容）
+# （golang 组织下的原 mock 仓库已归档，社区维护的后续项目为 go.uber.org/mock；迁移时核对导入路径与版本说明）
 go install go.uber.org/mock/mockgen@latest
 
 # 验证安装
@@ -853,3 +859,17 @@ type UserRepository interface {
 > - 保持Mock测试的简单和可维护性
 > - 不要过度Mock，只在需要隔离外部依赖时使用
 > - 定期检查Mock测试的有效性，避免测试与实现脱节
+
+<!-- full-library-explanation -->
+## 替身模拟的是边界，不是另一个生产系统
+
+前置是接口与单元测试。Stub 提供固定响应，适合制造超时、未找到等分支；Fake 有可工作的简化实现，例如内存仓储；Mock 验证约定交互，如发送通知是否只发生一次。不同工具并无高低之分，优先选择能说明测试意图的最简单替身。一个小接口往往只需几十行手写实现，不必为了使用 mock 框架扩大生产接口。
+
+替身容易与真实系统行为漂移。内存 map 不能模拟数据库唯一约束、事务隔离和 SQL 方言；HTTP stub 不证明 TLS 与代理配置正确。因此业务规则用替身快速验证，适配器再用集成测试检验真实契约。生成 mock 时固定生成器版本，接口改动后检查生成文件同步，不能以“编译通过”代替语义正确。
+
+练习：为支付服务写一个返回超时的 Stub，验证上层不会把超时显示成成功；再用 Spy 记录通知参数，要求支付未确认成功时不发“已付款”。若业务允许重试，明确幂等键是否沿用，而不是只断言调用次数恰好为一。测试失败应说明业务后果，不应只给出框架的复杂参数匹配错误。
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../LEARNING_GUIDE.md) · [完整目录与版本](../README.md) · [通用术语](../../shared-resources/glossary.md)

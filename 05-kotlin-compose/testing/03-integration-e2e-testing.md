@@ -6,6 +6,9 @@
 >
 > **前置知识**: [单元测试](01-unit-testing.md)、[Compose UI 测试](02-ui-testing.md)、[生态集成](../frameworks/03-ecosystem-integration.md)
 
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
+
 ## 📚 文档元数据
 
 | 属性 | 内容 |
@@ -15,6 +18,8 @@
 | **难度** | ⭐⭐⭐ |
 | **标签** | `#hilt-test` `#mockwebserver` `#room-in-memory` `#e2e` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ---
 
@@ -145,20 +150,25 @@ E2E 实践要点：
 
 ## 🎨 最佳实践
 
-### ✅ 推荐
+集成测试保留本次要验证的协作链，例如 Repository 与真实 DAO，网络则可由受控服务返回成功或错误数据。每条测试建立可预测状态并清理资源，允许单独或换序运行。
 
-- 集成测试聚焦 Repository/DAO 层；页面级依赖注入走 Hilt `@TestInstallIn`
-- 每个测试重置状态：内存库每次新建、MockWebServer 每测重启
-- 失败信息可读：断言消息写清"期望什么、实际什么"
-
-### ❌ 避免陷阱
-
-- E2E 试图覆盖所有分支——成本爆炸，分支归单元测试
-- 集成测试共享单例状态，测试顺序依赖导致"单独跑绿、全量跑红"
-- 过度断言网络请求次数等实现细节（MockWebServer 的 requestCount 适度使用）
+断言应覆盖最终数据及失败影响。请求次数在“防止重复提交”等契约中有意义，其余场景不必绑定实现细节。E2E 选择跨层风险高的少数旅程；数据库细节和业务组合优先在反馈更快的层验证。
 
 ## 🔗 相关文档
 
 - 📖 概念字典：[AndroidX 官方库指南](../reference/library-guides/01-androidx-libraries.md) ｜ [常见错误与故障排除](../reference/quick-references/02-troubleshooting.md)
 - 🧪 同级指南：[单元测试](01-unit-testing.md) ｜ [Compose UI 测试](02-ui-testing.md)
 - 🚀 实战应用：[天气应用的 MockWebServer 先行](../projects/02-weather-app.md) ｜ [生产级应用的质量门禁](../projects/04-production-android-app.md)
+
+
+<!-- acceptance-exercise -->
+## 练习与验收：验证数据库与页面之间的真实边界
+
+在独立测试库中创建记录，通过页面修改后重新查询数据库，确认持久化值改变；再以旧 schema 测试库启动升级流程，检查记录数和关键字段。预期测试失败时仍清理本轮资源。验收再测试进程重建后的页面恢复；只重组一次或旋转屏幕，不能替代真正的进程重建与磁盘恢复验证。
+
+以上是在个人或隔离测试环境中的练习，不是本轮已执行记录；实际运行范围见仓库文档质量报告。
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../LEARNING_GUIDE.md) · [完整目录与版本](../README.md) · [通用术语](../../shared-resources/glossary.md)

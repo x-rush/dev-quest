@@ -6,6 +6,9 @@
 >
 > **前置知识**: [单元测试](../testing/01-unit-testing.md)、[端到端测试](../testing/04-e2e-testing.md)
 
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
+
 ## 📚 文档元数据
 
 | 属性 | 内容 |
@@ -15,6 +18,8 @@
 | **难度** | ⭐⭐ |
 | **标签** | `#github-actions` `#ci` `#cd` `#工程化` |
 | **更新日期** | 2026年9月 |
+
+</details>
 
 ## 🎯 完成后你将能够
 
@@ -158,10 +163,9 @@ npx tsr generate && git diff --exit-code
 
 ## 🎨 最佳实践速查
 
-- ✅ `actions/setup-node` 的 `cache: npm` 一行省下大半安装时间
-- ✅ `concurrency.cancel-in-progress` 防止队列堆积
-- ❌ 不要在 CI 里跑 `npm install`——必须 `npm ci` 保证锁文件一致性
-- ❌ 不要把密钥写进 `VITE_*`——所有打进前端产物的变量都是公开的
+CI 使用与项目一致的包管理器和锁文件；npm 项目用 npm ci，pnpm 项目用冻结锁文件的安装方式。缓存主要减少重复下载，实际收益需比较冷缓存与热缓存运行时间，不能承诺固定倍数。
+
+取消旧任务适用于可重跑的分支检查；正在迁移数据库或切换生产流量的发布不能不加区分地取消。构建前端时验证产物里没有秘密：VITE_ 等注入客户端的变量应按公开数据处理，部署凭据只提供给获授权的发布步骤。
 
 ---
 
@@ -172,3 +176,16 @@ npx tsr generate && git diff --exit-code
 - 📄 **[Vercel 部署](./02-vercel-deployment.md)** - 构建之后的交付环节
 - 📄 **[可观测性](./03-observability.md)** - 上线后的第二道防线
 - 📄 **[SaaS 后台](../projects/04-saas-admin-platform.md)** - 本流水线服务的完整项目
+
+
+<!-- acceptance-exercise -->
+## 练习与验收：让四道门禁分别失败一次
+
+在练习分支依次制造 lint 错误、TypeScript 错误、失败测试和构建期缺失公开配置，每次只保留一种问题。预期相应阶段失败且发布 job 不执行。修复后用冻结锁文件重跑，并确认生成的路由树没有未提交差异。验收报告写出每个错误在哪道门被发现；若错误仍能部署，说明依赖关系或条件配置没有形成门禁。
+
+以上是在个人或隔离测试环境中的练习，不是本轮已执行记录；实际运行范围见仓库文档质量报告。
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../LEARNING_GUIDE.md) · [完整目录与版本](../README.md) · [通用术语](../../shared-resources/glossary.md)

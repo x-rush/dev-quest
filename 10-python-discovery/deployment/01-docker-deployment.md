@@ -6,6 +6,9 @@
 >
 > **前置知识**: [开发工具链（uv）](../frameworks/04-devtools.md)、Docker 基本概念
 
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
+
 ## 📚 文档元数据
 
 | 属性 | 内容 |
@@ -15,6 +18,8 @@
 | **难度** | ⭐⭐ |
 | **标签** | `#Docker` `#uv` `#多阶段构建` `#Compose` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ## 🎯 学习目标
 
@@ -41,16 +46,15 @@ WORKDIR /app
 
 # 先只拷依赖清单：代码改动时不重装依赖（利用层缓存）
 COPY pyproject.toml uv.lock ./
-RUN uv sync --frozen --no-dev --no-install-project
+RUN uv sync --locked --no-dev --no-install-project
 
 COPY . .
-RUN uv sync --frozen --no-dev
+RUN uv sync --locked --no-dev
 
 # ---- 运行阶段 ----
 FROM python:3.14-slim-bookworm
 RUN groupadd -r app && useradd -r -g app app      # 非 root 运行
 WORKDIR /app
-COPY --from=builder --chown=app:app /app/.venv /app/.venv
 COPY --from=builder --chown=app:app /app /app
 ENV PATH="/app/.venv/bin:$PATH"
 USER app
@@ -63,7 +67,7 @@ CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000", "--workers", 
 
 **要点**：
 
-- `--frozen` 强制按 `uv.lock` 安装，镜像与 CI 完全一致（锁文件工作流见[开发工具链](../frameworks/04-devtools.md)）
+- `--locked` 要求依赖声明与锁文件一致；镜像还受系统库、基础镜像与目标平台影响（锁文件工作流见[开发工具链](../frameworks/04-devtools.md)）
 - `--no-dev` 排除 pytest/ruff 等开发依赖
 - `--no-install-project` + 二次 `uv sync` 的组合让依赖层与代码层分离，改代码不再触发依赖重装
 - worker 数按 CPU 核数与异步占比调整，别照抄 2
@@ -77,6 +81,8 @@ tests
 __pycache__
 *.pyc
 .env
+.env.*
+*.pem
 data/
 ```
 
@@ -132,6 +138,15 @@ docker compose up --build      # 本地一键起全栈
 
 ---
 
+<!-- full-library-explanation -->
+## 容器成功启动之后还要验证什么
+
+前置是已有可启动的 main:app、依赖锁文件和 /health 路由。本文 Dockerfile 是这些条件下的打包模板，数据库迁移、持久卷和业务配置仍由应用提供。多阶段构建隔离构建工具，但复制虚拟环境还要求构建与运行镜像的解释器、路径及系统库兼容。
+
+练习依次验证：镜像构建成功；容器进程以预期用户运行；健康端点返回 200；创建数据后重建容器，确认数据是否仍存在。若 SQLite 文件只保存在容器可写层，删除容器后丢失是预期生命周期，持久化需要外部卷或数据库服务。
+
+健康检查通过只能说明该检查所覆盖的条件成立。进程活着、能接请求、数据库可用是不同状态；不要让每次活性检查执行昂贵的完整业务流程。基础镜像标签与系统包也影响构建结果，锁定 Python 依赖并不能独自保证镜像字节级一致。
+
 ## 🔗 相关文档
 
 - 📄 **[开发工具链](../frameworks/04-devtools.md)** — uv.lock 与 `--frozen` 的来源
@@ -139,3 +154,9 @@ docker compose up --build      # 本地一键起全栈
 - 🚀 **[项目：生产级应用](../projects/04-production-fastapi-app.md)** — Dockerfile 的完整工程上下文
 - 🎓 **[安全实践](../advanced-topics/security/01-security-practices.md)** — 密钥注入与镜像安全
 - 📖 **[故障排除](../reference/quick-references/02-troubleshooting.md)** — 构建报错速查
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../LEARNING_GUIDE.md) · [完整目录与版本](../README.md) · [通用术语](../../shared-resources/glossary.md)

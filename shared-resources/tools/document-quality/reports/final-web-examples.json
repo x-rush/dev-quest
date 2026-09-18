@@ -1,0 +1,54 @@
+{
+  "runtime": "v24.19.0",
+  "typescript": "5.9.3",
+  "results": [
+    {
+      "case": "LRU demo and eviction/update/invalid-capacity assertions",
+      "output": "undefined 1 3",
+      "status": "PASS"
+    },
+    {
+      "case": "Query dehydrate JSON hydrate round trip",
+      "status": "PASS"
+    },
+    {
+      "case": "pageNumber unknown input and range rejection",
+      "status": "PASS"
+    },
+    {
+      "case": "DataFetcher and pageNumber TypeScript strict with actual dependencies",
+      "status": "PASS"
+    },
+    {
+      "case": "Old response cannot overwrite new URL even when mock ignores abort",
+      "status": "PASS"
+    },
+    {
+      "case": "HTTP failure reaches error state",
+      "status": "PASS"
+    },
+    {
+      "case": "Unmount cancels and ignores late completion",
+      "status": "PASS"
+    }
+  ],
+  "sources": [
+    {
+      "path": "02-nextjs-frontend/advanced-topics/performance/02-advanced-optimization.md",
+      "sha256": "970a0c3f885d646adf9def6542e2b5db76ecfa6621cf623a23a3ff134cc7b1f7"
+    },
+    {
+      "path": "03-tanstack-stack/reference/framework-essentials/04-prefetch-ssr.md",
+      "sha256": "c0a6803dc710cd6ed9beba27a7735dd1deab62850ddcb64f6e4448ec86105823"
+    },
+    {
+      "path": "03-tanstack-stack/reference/language-concepts/11-search-params.md",
+      "sha256": "3f1bb4d4083aef4f4d8f84b25d055b0459a7ae882cc610f9a7c4b85342ff1276"
+    },
+    {
+      "path": "02-nextjs-frontend/reference/framework-patterns/03-client-components-patterns.md",
+      "sha256": "5a8cf1708aad5ff3161a7fd6a411be1142383ee4c046619914b89946f8a91569"
+    }
+  ],
+  "scope": "Selected extracted examples only. jsdom does not verify browser layout, actual network, Next.js build, polling policy, or full historical snippets."
+}

@@ -6,6 +6,9 @@
 >
 > **前置知识**: [错误与异常](../basics/06-error-exceptions.md)、[Composer 生态](../reference/library-guides/02-composer-ecosystem.md)
 
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
+
 ## 📚 文档元数据
 
 | 属性 | 内容 |
@@ -15,6 +18,8 @@
 | **难度** | ⭐⭐ |
 | **标签** | `#PHPUnit` `#单元测试` `#Mock` `#质量工程` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ## 🎯 学习目标
 
@@ -68,7 +73,7 @@ final class PriceCalculatorTest extends TestCase
 ```
 
 ```bash
-./vendor/bin/phpunit --testsuite Unit   # 单元测试应在毫秒级跑完
+./vendor/bin/phpunit --testsuite Unit   # 记录套件耗时；纯单元测试应避免网络、磁盘和数据库等待
 ```
 
 ## 2. 数据提供器：一次测试多组输入
@@ -85,7 +90,7 @@ public static function discountProvider(): array
     ];
 }
 
-/** @dataProvider discountProvider */
+#[\PHPUnit\Framework\Attributes\DataProvider('discountProvider')]
 public function test_final_price_for_various_inputs(int $base, int $discount, int $expected): void
 {
     $this->assertSame($expected, (new PriceCalculator())->finalPriceCents($base, $discount));
@@ -117,7 +122,12 @@ final readonly class OrderNotifier
 ```
 
 ```php
-// tests/Unit/OrderNotifierTest.php —— Mock 掉 Mailer，只测编排逻辑
+// tests/Unit/OrderNotifierTest.php —— 只测编排逻辑
+namespace Tests\Unit;
+
+use App\Services\Mailer;
+use App\Services\OrderNotifier;
+use PHPUnit\Framework\TestCase;
 final class OrderNotifierTest extends TestCase
 {
     public function test_sends_shipped_notice(): void
@@ -132,7 +142,7 @@ final class OrderNotifierTest extends TestCase
 }
 ```
 
-Mock 使用纪律：**只 mock 你拥有的接口**（Mailer 而非第三方 SDK 类）；一次测试最多一个 mock 对象，超过说明该拆分了。
+Mock 使用纪律：**只 mock 你拥有的接口**（Mailer 而非第三方 SDK 类）；替身数量不是硬限制；若大量断言内部调用顺序，应重新检查测试是否过度绑定实现。
 
 ## 4. 单元测试与 Laravel 专属测试的边界
 
@@ -149,9 +159,44 @@ A: 每个测试方法都跑在独立实例上（setUp 重建）；不要用静�
 **Q: 该测私有方法吗？**
 A: 不测。私有逻辑通过公共接口驱动覆盖；若公共入口难以触达该私有逻辑，说明职责该拆分。
 
+<!-- full-library-explanation -->
+## 先定义价格规则，再让测试约束实现
+
+前置是类、整数与异常。测试里的 999 分打 99 折得到 989 分，隐含了舍入规则；仅写 assertSame 而不声明规则会让不同实现都显得合理。本例采用对非负金额向下取整，折扣必须是 0–100 的整数，并限定基础金额防止乘法溢出。将下面类保存到 app/Services/PriceCalculator.php，确认 Composer 的 App\ 前缀映射到 app/。
+
+```php
+<?php
+namespace App\Services;
+
+final class PriceCalculator
+{
+    public function finalPriceCents(int $baseCents, int $discountPercent): int
+    {
+        if ($baseCents < 0 || $baseCents > intdiv(PHP_INT_MAX, 100)
+            || $discountPercent < 0 || $discountPercent > 100) {
+            throw new \DomainException('invalid price or discount');
+        }
+        return intdiv($baseCents * (100 - $discountPercent), 100);
+    }
+}
+```
+
+**练习**：补充 100% 折扣、负金额、负折扣和整数边界案例。临时把范围判断删除，预期错误输入的测试变红；恢复后转绿。这比只追求覆盖率数字更能证明测试会识别缺陷。Mail 接口与 OrderNotifier 应各自放入同名 PSR-4 文件，测试文件明确导入它们；示例邮件服务只是替身，不验证真实投递。
+
+依据：[PHPUnit 13](https://phpunit.de/announcements/phpunit-13.html)、[数据提供器属性](https://docs.phpunit.de/en/12.5/attributes.html)。
+
+
+本轮未在本机执行 PHP 片段；文中的输出为预期值，版本相关行为请用项目运行时验证。
+
 ## 🔗 相关文档
 
 - 📄 [内置函数速查](../reference/language-concepts/02-built-in-functions.md) — 断言中常用数组/字符串函数
 - 📄 [Composer 生态](../reference/library-guides/02-composer-ecosystem.md) — dev 依赖管理
 - 📄 [Pest 测试](./02-pest-testing.md) — 同一套件的现代写法
 - 📄 [TODO API](../projects/01-todo-api.md) — 给入门项目补上测试
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../LEARNING_GUIDE.md) · [完整目录与版本](../README.md) · [通用术语](../../shared-resources/glossary.md)

@@ -1,10 +1,26 @@
 # 原生模块桥接 — Android/iOS 实现与 TurboModules 概念
 
+## 先理解，再动手
+
+原生模块是 JavaScript 与平台能力之间的边界。参数、结果、线程与错误都要约定；不是把一个 JS 函数改名就能调用系统 API。
+
+**本节自测**：先列出读取系统信息的输入、输出、平台可用性和失败方式。
+
+<details>
+<summary>预期结果与参考思路（先尝试再展开）</summary>
+
+缺失原生实现或权限时有明确错误；普通 JS 刷新不会补出未编译的原生模块。
+
+</details>
+
 > **文档简介**: 手写一个 Android（Kotlin）与 iOS（Swift/ObjC）原生模块，理解 JSI 通信模型，并认识新架构下 TurboModules 与 Codegen 的角色
 >
 > **目标读者**: 已能完成常规页面开发、需要调用设备系统能力的开发者
 >
 > **前置知识**: 完成 [05-navigation](./05-navigation.md)，具备基本的 Kotlin/Swift 读码能力
+
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
 
 ## 📚 文档元数据
 
@@ -15,6 +31,8 @@
 | **难度** | ⭐⭐ |
 | **标签** | `#原生模块` `#TurboModules` `#JSI` `#Kotlin` `#Swift` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ## 🎯 学习目标
 
@@ -144,15 +162,9 @@ export default TurboModuleRegistry.getEnforcing<Spec>('DeviceModule');
 
 ## 🎨 最佳实践
 
-### ✅ 推荐做法
-- **接口设计为异步**: 即使原生实现是同步的，也用 Promise，避免阻塞 JS 线程
-- **模块职责单一**: 一个能力一个模块，命名与平台目录保持一致
-- **错误必须 reject**: 用错误码 + 消息，JS 侧才能统一 try/catch
+原生接口先声明输入、结果和失败形式，例如读取文件返回内容或“无权限”错误。Promise 描述异步结果，并不会自动把耗时原生计算移出 UI 线程；线程安排由原生实现及所用架构决定，应在各平台分别核对。
 
-### ❌ 避免陷阱
-- **忘记重新编译原生**: 只改原生代码就等热更新——永远不会生效，必须重跑 `npm run android/ios`
-- **在 UI 线程做重活**: 原生方法默认跑在 NativeModules 线程，更新 UI 需切到主线程（Android 主线程 Handler、iOS 主队列）
-- **直接用 `NativeModules` 散落各处**: 统一封装成 TS 模块再导出，方便后续迁移 TurboModule
+用一个 TypeScript 包装层统一参数和错误映射，页面只调用业务能力。修改原生代码通常需要重新编译客户端，JS 热更新不能替换已经编译的原生实现。验证成功、用户拒绝权限和组件离开后三种情况，确保资源能释放。
 
 ## ❓ 常见问题
 
@@ -194,3 +206,9 @@ export default TurboModuleRegistry.getEnforcing<Spec>('DeviceModule');
 - 📄 **[TS 类型模式](../reference/language-concepts/04-typescript-patterns.md)**: Codegen 规约的类型写法
 
 > 💡 **学习建议**: 原生模块是 RN 开发的"深水区"，先熟练调用三方库，把自研留到真正没有现成方案的时候——90% 的功能不该碰这一层。
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../LEARNING_GUIDE.md) · [完整目录与版本](../README.md) · [通用术语](../../shared-resources/glossary.md)

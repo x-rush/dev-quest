@@ -1,179 +1,184 @@
-# Query 基础：useQuery 与 useMutation
+# Query 基础：从一次读取到写入后的同步
 
-> **文档简介**: 上手 TanStack Query v5 的三大入口——useQuery 声明式取数、useMutation 写操作、useQueryClient 缓存控制，并建立"服务端状态缓存"的心智模型
->
-> **目标读者**: 已完成环境搭建，第一次接触服务端状态管理的 React 开发者
->
-> **前置知识**: React Hooks 基础、fetch/Promise 基本用法、[QueryClientProvider 已接入](./01-environment-setup.md)
+> 前置：React 组件与 Hooks、Promise；已完成[环境搭建](./01-environment-setup.md)。适用 TanStack Query v5。目标是亲手验证读取、错误、写入、失效四个行为。
 
-## 📚 文档元数据
+## 先理解，再动手
 
-| 属性 | 内容 |
-|------|------|
-| **模块** | `03-tanstack-stack` |
-| **象限** | 教程 |
-| **难度** | ⭐ |
-| **标签** | `#useQuery` `#useMutation` `#缓存` `#服务端状态` |
-| **更新日期** | `2026年9月` |
+Query 保存远端结果快照；queryKey 标识“哪一个问题的答案”，queryFn 负责获取。写操作成功后，需要明确哪些答案已经过期。
 
-## 🎯 学习目标
+**本节自测**：分别查询用户 1 与用户 2 的待办；把用户 ID 加入请求和键。
 
-完成本文档后，你将能够：
+<details>
+<summary>预期结果与参考思路（先尝试再展开）</summary>
 
-- ✅ 区分"服务端状态"与"客户端状态"
-- ✅ 用 `useQuery` 声明式获取并渲染远程数据
-- ✅ 用 `useMutation` 提交写操作并触发列表刷新
-- ✅ 解释 queryKey 如何决定缓存的存与取
+两份列表不串缓存；只改 URL 不改键仍可能复用错误结果。错误分支必须能在无 data 时显示。
 
----
+</details>
 
-## 🔍 服务端状态是一种特殊的状态
+## 先分清两种状态
 
-`useState` 管理的是**客户端状态**（主题、弹窗开关），特征是：应用是唯一事实来源。
+输入框正在编辑的标题由当前组件决定，放在 useState。服务器保存的待办可能被其他客户端修改，本地只能缓存一份快照，由 Query 管理。Query 不替你存数据库，也不会自动知道写入影响哪条列表。
 
-接口返回的是**服务端状态**，特征是：事实来源在远端，本地持有的只是一份**随时会过期的快照**。手写 `useEffect + useState` 取数会陷入三大泥潭：缓存、去重、重新同步。TanStack Query 就是为此而生。
+本课使用内存模拟 API：保留 Promise 边界和真实写入效果，去掉网络安装变量。它不是实际 HTTP 服务，刷新页面会重置数据。这样可以先证明缓存流程，再接自己的后端。公共 JSONPlaceholder 会模拟写入响应而不持久保存，不能用它证明“删除后重新查询记录消失”。参见[其使用说明](https://jsonplaceholder.typicode.com/guide/)。
 
-## 📥 useQuery：声明式取数
+## 一个文件跑通
+
+在上一课的 React 工程中替换 `src/App.tsx`，依赖为 `react` 与 `@tanstack/react-query`。本例自己提供 QueryClientProvider；入口只渲染 App 即可。按工程 package.json 中的开发脚本启动。以下是完整组件文件，没有隐藏的 api、TodoList 或数据库定义。
 
 ```tsx
-import { useQuery } from '@tanstack/react-query'
+import { useState } from 'react'
+import {
+  QueryClient,
+  QueryClientProvider,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from '@tanstack/react-query'
 
-type Todo = { userId: number; id: number; title: string; completed: boolean }
+type Todo = { id: number; title: string }
+let rows: Todo[] = [{ id: 1, title: '理解缓存的身份' }]
+let nextId = 2
+let failNextRead = false
+const delay = () => new Promise<void>((resolve) => setTimeout(resolve, 300))
 
-async function fetchTodos(): Promise<Todo[]> {
-  const res = await fetch('https://jsonplaceholder.typicode.com/todos')
-  if (!res.ok) throw new Error(`请求失败: ${res.status}`)
-  return res.json()
+async function readTodos(): Promise<Todo[]> {
+  await delay()
+  if (failNextRead) {
+    failNextRead = false
+    throw new Error('模拟读取失败，请重试')
+  }
+  return rows.map((row) => ({ ...row }))
 }
 
-function TodoList() {
-  // queryKey 是缓存的"地址"，queryFn 是"取货方式"
-  const { data, isPending, isError, error, refetch, isFetching } = useQuery({
-    queryKey: ['todos'],
-    queryFn: fetchTodos,
-  })
-
-  // 注意：解构出的 isPending 是普通布尔，无法把 data 收窄成非空——
-  // 判 data === undefined（pending 阶段 data 为 undefined）才能通过 strict 类型检查
-  if (isPending || data === undefined) return <p>加载中...</p>  // 首次加载且无缓存
-  if (isError) return <p>出错了: {error.message}</p>
-
-  return (
-    <section>
-      {/* isFetching 表示后台正在重新验证，可与内容并存 */}
-      <button onClick={() => refetch()}>刷新{isFetching ? '...' : ''}</button>
-      <ul>
-        {data.map((todo) => (
-          <li key={todo.id}>{todo.title}</li>
-        ))}
-      </ul>
-    </section>
-  )
+async function createTodo(title: string): Promise<Todo> {
+  await delay()
+  const normalized = title.trim()
+  if (!normalized) throw new Error('标题不能为空')
+  const todo = { id: nextId++, title: normalized }
+  rows = [...rows, todo]
+  return { ...todo }
 }
-```
 
-**关键点解析**：
+// 模块级实例在这份纯客户端练习中保持稳定；SSR 需要按请求隔离。
+const client = new QueryClient()
 
-- `isPending`：还没有数据；v5 中此状态下 `data` 是 `undefined`，判空后再渲染才能通过类型检查（注意解构出的 `isPending` 布尔**无法**收窄 `data` 的类型，须显式判 `data === undefined`，或用对象访问 `query.isPending` 保留判别联合；`isLoading` 现在等于 `isPending && isFetching`，即首次加载）
-- `data` 类型由 `fetchTodos` 的返回值**自动推断**，无需手写泛型
-- 挂载即取数；组件卸载后缓存仍在，再次挂载**瞬间命中缓存**
-
-## 🗄️ 缓存心智模型
-
-每个 `queryKey` 对应一条缓存条目，核心三阶段：
-
-```text
-fresh（新鲜） --staleTime 到期--> stale（陈旧） --gcTime 无组件使用--> 垃圾回收
-```
-
-- **fresh**：组件挂载直接用缓存，不发请求
-- **stale**：默认任何"触发时机"（重新挂载、窗口聚焦、断网重连）都会后台重新请求，旧数据先展示（stale-while-revalidate）
-- **gcTime**：没有任何组件使用该查询后，缓存保留 5 分钟（默认）再被清除
-
-> 参数细节（默认值、覆盖方式）见 [缓存键、staleTime 与失效策略](../reference/framework-essentials/01-query-essentials.md)。
-
-## ✍️ useMutation：写操作
-
-```tsx
-import { useMutation, useQueryClient } from '@tanstack/react-query'
-
-function AddTodo() {
+function TodoPage() {
+  const [title, setTitle] = useState('')
   const queryClient = useQueryClient()
-
+  const query = useQuery({
+    queryKey: ['todos'],
+    queryFn: readTodos,
+    staleTime: 10_000,
+    retry: false, // 练习时立即观察错误；生产环境另定重试策略
+  })
   const mutation = useMutation({
-    mutationFn: (title: string) =>
-      fetch('https://jsonplaceholder.typicode.com/todos', {
-        method: 'POST',
-        body: JSON.stringify({ title }),
-      }).then((res) => res.json()),
-    onSuccess: () => {
-      // 让 ['todos'] 前缀下的所有查询失效并重新获取
-      queryClient.invalidateQueries({ queryKey: ['todos'] })
+    mutationFn: createTodo,
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: ['todos'] })
+      setTitle('')
     },
   })
 
-  return (
-    <button
-      disabled={mutation.isPending}
-      onClick={() => mutation.mutate('新任务')}
-    >
-      {mutation.isPending ? '提交中...' : '添加任务'}
-    </button>
-  )
+  if (query.isPending) return <p>首次加载中...</p>
+  // 无数据的失败也必须进入错误分支，不能被 data === undefined 吞掉。
+  if (query.isError && query.data === undefined) {
+    return <div role="alert">
+      <p>{query.error.message}</p>
+      <button onClick={() => void query.refetch()}>重试</button>
+    </div>
+  }
+
+  return <main>
+    <h1>待办</h1>
+    {query.isFetching && <p>正在同步...</p>}
+    {query.isError && <p role="alert">{query.error.message}；保留上次结果</p>}
+    {query.data?.length === 0 && <p>还没有待办</p>}
+    <ul>{query.data?.map((todo) => <li key={todo.id}>{todo.title}</li>)}</ul>
+    <form onSubmit={(event) => {
+      event.preventDefault()
+      mutation.mutate(title)
+    }}>
+      <label>标题 <input value={title} onChange={(e) => setTitle(e.target.value)} /></label>
+      <button disabled={mutation.isPending}>
+        {mutation.isPending ? '提交并同步中...' : '添加'}
+      </button>
+    </form>
+    {mutation.isError && <p role="alert">{mutation.error.message}</p>}
+    <button disabled={query.isFetching} onClick={() => {
+      failNextRead = true
+      void query.refetch()
+    }}>模拟下一次读取失败</button>
+    <button disabled={query.isFetching} onClick={() => void query.refetch()}>重新读取</button>
+  </main>
+}
+
+export default function App() {
+  return <QueryClientProvider client={client}><TodoPage /></QueryClientProvider>
 }
 ```
 
-**关键点解析**：
+## 沿着一次操作理解代码
 
-- mutation 不会自动执行，必须调用 `mutate(variables)`；variables 类型由 `mutationFn` 参数推断
-- 写操作完成后**手动失效**受影响的读查询——Query 不会自动猜你要刷新什么
-- `isError` / `error` 可用于渲染提交失败提示
+1. 组件订阅 `['todos']`，没有数据时进入 pending，queryFn 返回 Promise。
+2. 读取成功后，结果进入这条键对应的缓存，界面显示初始记录。
+3. 输入由 useState 保存；点击添加才调用 mutation，读取不会替你触发写入。
+4. 写入成功改变模拟服务的 rows，但读取缓存不会凭空知道它已改变。
+5. onSuccess 使列表失效；活跃查询重新获取数据。返回并等待这个 Promise，让 mutation 的等待阶段覆盖同步过程。
 
-## 🎛️ useQueryClient：缓存的遥控器
+注意：写成功与随后刷新成功是两个结果。如果真实后端已经创建成功而重取失败，应允许重试读取；直接再次提交可能创建重复记录。
 
-`useQueryClient()` 返回顶层的 `QueryClient` 实例，常用方法：
+## 缓存的两个维度
+
+| 问题 | 对应概念 | 本例中的含义 |
+|---|---|---|
+| 这份答案属于谁？ | queryKey | `['todos']`；按用户过滤时必须把用户 ID 也放进键 |
+| 是否需要重新确认？ | staleTime / invalidate | 十秒内视为新鲜；显式失效可以提前要求重新确认 |
+| 是否还有人使用？ | 活跃与非活跃查询 | 当前页面使用列表，所以失效后通常会重新读取 |
+| 没人使用后留多久？ | gcTime | 管非活跃缓存回收，与“新鲜多久”不是同一计时器 |
+
+不是 staleTime 一到就立即发请求；通常还需要挂载、重新聚焦等触发条件。也不是先 stale 才能回收：回收关注是否无人使用。详见[缓存参考](../reference/framework-essentials/01-query-essentials.md)。
+
+## 类型与错误为什么这样判断
+
+现代 TypeScript 可以保留 const 解构后的判别联合关系。`const { data, isSuccess } = useQuery(...)` 后，在 isSuccess 分支中 data 可以收窄；“解构就一定丢失收窄”是不正确的。只排除 pending 仍可能剩下 error，才是 data 可能为空的原因。[TanStack 类型说明](https://tanstack.com/query/latest/docs/framework/react/typescript)和[TypeScript 4.6 说明](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-4-6.html)给出了这一机制。
+
+本例保留查询对象以便阅读。首次失败且无数据显示错误；后台失败且有历史数据则显示错误并保留结果。错误不能被统一的“没数据就加载”分支遮住。
+
+## 换成 HTTP 时补上什么
+
+以下是替换 readTodos 的局部片段。前提是你的后端确实实现了同源 `/api/todos`，返回符合 Todo 数组的 JSON；实际外部输入还应做运行时结构校验。
 
 ```tsx
-const queryClient = useQueryClient()
-
-queryClient.invalidateQueries({ queryKey: ['todos'] })        // 失效并重取
-queryClient.getQueryData<Todo[]>(['todos'])                   // 只读缓存
-queryClient.setQueryData<Todo[]>(['todos'], (old) => old ?? []) // 直接写入（updater 返回 undefined 是 no-op，不会清空条目）
+async function readTodos(): Promise<Todo[]> {
+  const response = await fetch('/api/todos')
+  if (!response.ok) throw new Error(`读取失败：HTTP ${response.status}`)
+  return response.json()
+}
 ```
 
-完整方法表见 [Query 核心 API](../reference/language-concepts/01-query-core-api.md)。
+创建请求还要指定方法、Content-Type、请求体，检查响应状态。fetch 收到 400/500 通常仍成功得到 Response，不检查 ok 就可能把错误响应当成业务成功。
 
-## ✅ 最佳实践
+## 练习与验收
 
-- ✅ **key 用数组层级**：`['todos', 'list', { page: 2 }]`，让失效可以按前缀批量命中
-- ✅ **读与写分开**：列表用 `useQuery`，创建/更新/删除用 `useMutation`
-- ✅ **把非请求逻辑放进 queryFn**：token 注入、错误归一化都在 fetcher 里处理
-- ❌ **避免** 用 `useEffect` 手动同步 Query 的结果到 `useState`，直接渲染 `data` 即可
-- ❌ **避免** 在 `queryFn` 里吞掉错误——抛出异常才能让 `isError` 生效
+| 操作 | 预期结果 | 它验证什么 |
+|---|---|---|
+| 首次打开 | 加载后显示一条记录 | 读取与成功分支 |
+| 输入空格并提交 | 标题不能为空，列表不增加 | mutation 错误与业务校验 |
+| 添加“写一个测试” | 等待后列表增加，输入清空 | 写入、失效和重取 |
+| 点击模拟读取失败 | 显示错误且保留旧列表 | 后台错误不覆盖历史结果 |
+| 点击重新读取 | 恢复正常 | 可恢复错误 |
+| 刷新浏览器 | 恢复初始数据 | 内存模拟服务的生命周期 |
 
----
+扩展：实现删除 mutation。提示是先按 ID 修改模拟 rows，再失效同一键；验收为重取后该记录消失。完成后阅读[Table 基础](./04-table-fundamentals.md)或查[Query API](../reference/language-concepts/01-query-core-api.md)。
 
-## 🎯 练习与实践
+## 模式不变量
 
-### 练习一：读操作
+- 远端事实、查询快照和输入草稿的拥有者不同。
+- 缓存身份必须涵盖影响结果的输入。
+- 写入成功后需要确定受影响的读取范围。
+- 首次失败与有历史数据的后台失败需要分别设计界面。
 
-- [ ] 实现 `useQuery` 请求 `/todos?_limit=10`，渲染列表并处理加载/错误态
-- [ ] 给查询加 `staleTime: 10_000`，10 秒内来回切换页面，观察 Devtools 中缓存状态从 `fresh` 到 `stale`
+<!-- learning-navigation -->
+## 阅读导航
 
-### 练习二：写操作
-
-- [ ] 实现删除按钮：`useMutation` 调用 `DELETE /todos/:id`，成功后失效列表
-- [ ] 在 Devtools 中确认失效后列表自动重新获取
-
----
-
-## 🔗 相关文档
-
-- 📄 **[Table 基础](./04-table-fundamentals.md)** - 下一篇：把 Query 取到的数据装进表格
-- 📄 **[Query 核心 API](../reference/language-concepts/01-query-core-api.md)** - 参数与返回值完整字典
-- 📄 **[缓存键、staleTime 与失效策略](../reference/framework-essentials/01-query-essentials.md)** - 缓存设计进阶
-- 📄 **[高级特性](./07-advanced-features.md)** - 乐观更新、无限查询、依赖查询
-
----
-
-**最后更新**: 2026年9月 | Dev Quest · 03-tanstack-stack
+[本模块理解地图](../LEARNING_GUIDE.md) · [完整目录与版本](../README.md) · [通用术语](../../shared-resources/glossary.md)

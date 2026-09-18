@@ -6,6 +6,9 @@
 >
 > **前置知识**: 建议先学 [03-state-driven-views.md](./03-state-driven-views.md) 与 [basics/04-views-state.md](../../basics/04-views-state.md)
 
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
+
 ## 📚 文档元数据
 
 | 属性 | 内容 |
@@ -15,6 +18,8 @@
 | **难度** | ⭐⭐ |
 | **标签** | `#单向数据流` `#Environment` `#依赖注入` `#EnvironmentKey` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ---
 
@@ -59,6 +64,8 @@ WindowGroup { RootView() }.environment(appModel)
 ### 自定义环境键
 
 ```swift
+enum Theme: Sendable { case system, dark }
+
 private struct ThemeKey: EnvironmentKey {
     static let defaultValue: Theme = .system   // 必须提供默认值
 }
@@ -88,8 +95,9 @@ extension EnvironmentValues {
 ```swift
 @MainActor @Observable
 final class CartModel {
-    var items: [String] = []
-    func add(_ item: String) { items.append(item) }   // 意图只进模型方法
+    struct Item: Identifiable { let id = UUID(); let name: String }
+    private(set) var items: [Item] = []
+    func add(_ item: String) { items.append(Item(name: item)) }   // 意图只进模型方法
 }
 
 struct CartRoot: View {
@@ -102,7 +110,7 @@ struct CartRoot: View {
 struct CartList: View {
     @Environment(CartModel.self) private var cart   // 读取：免层层传参
     var body: some View {
-        List(cart.items, id: \.self) { Text($0) }
+        List(cart.items) { Text($0.name) }
         Button("加一件") { cart.add("笔") }   // 意图回写：只调模型方法
     }
 }
@@ -126,8 +134,17 @@ struct DetailSheet: View {
 | 忘记注入就读取 | 运行时崩溃（模型类环境） | Preview 与根视图都要注入；开发期立刻暴露 |
 | @Environment 直接改值 | 环境读取通道只读 | 改共享模型请调用其方法 |
 | 注入位置在消费者下层 | 读取不到或读到默认值 | 注入必须在消费视图的祖先（如 NavigationStack 外层） |
-| 把巨型模型塞进环境 | 任何字段变化大面积重算 | 模型保持字段级可观察；按域拆分小模型 |
+| 把巨型模型塞进环境 | 依赖难追踪；Observation 本身仍按实际读取的属性追踪 | 模型保持字段级可观察；按域拆分小模型 |
 | 环境值当配置库 | 万物皆环境导致依赖关系不可见 | 只放真正的"横切依赖"（主题、上下文、dismiss） |
+
+<!-- full-library-explanation -->
+## 依赖注入不是隐藏所有参数
+
+向孩子传值适合只读展示，Binding 适合简单表单编辑，事件闭包适合表达删除、提交等意图，Environment 适合整个子树共享的服务。选择依据是依赖范围与写入权限，不是传参越少越好。
+
+购物车练习：先在列表和徽章中显示同一 cart 的数量，添加两支同名笔时应出现两个有不同 id 的项目；再为其中一支增加删除按钮，确保徽章同步减一。不要把数量复制成第二个 @State，否则两处容易不同步。编辑订单涉及校验时通过模型方法修改，而不是让任意视图直接改全部字段。
+
+预览应显式提供测试模型；生产请求服务可以替换成内存服务，以验证加载、空态与失败。dismiss 应从被呈现的视图环境读取，父视图取得的 dismiss 不一定对应想关闭的 sheet。
 
 ## 🔗 相关条目
 
@@ -135,3 +152,9 @@ struct DetailSheet: View {
 - 📄 [03-state-driven-views.md](./03-state-driven-views.md) — 数据流的地基：状态驱动渲染
 - 📄 [09-property-wrappers.md](../language-concepts/09-property-wrappers.md) — @Environment 的包装器机制
 - 📄 [frameworks/02-swiftui-advanced.md](../../frameworks/02-swiftui-advanced.md) — Observation 与导航的进阶任务
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

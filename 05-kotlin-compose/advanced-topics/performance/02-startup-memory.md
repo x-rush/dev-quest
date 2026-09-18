@@ -6,6 +6,9 @@
 >
 > **前置知识**: [重组优化](01-recomposition-optimization.md)、[生态集成](../../frameworks/03-ecosystem-integration.md)、[CI/CD 与可观测性](../../deployment/03-ci-cd-observability.md)
 
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
+
 ## 📚 文档元数据
 
 | 属性 | 内容 |
@@ -15,6 +18,8 @@
 | **难度** | ⭐⭐⭐ |
 | **标签** | `#cold-startup` `#baseline-profile` `#memory-leak` `#profiling` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ---
 
@@ -136,20 +141,18 @@ DisposableEffect(lifecycleOwner) {
 
 ## 🎨 最佳实践
 
-### ✅ 推荐
+先区分冷启动、温启动和恢复，固定设备与操作后记录启动耗时和内存。把非首屏必要的初始化延后可能改善首屏，但要验证用户进入相关功能时仍有加载与失败反馈。
 
-- 启动预算纳入 CI：Macrobenchmark 基线超阈值即失败（联动 [质量门禁](../../projects/04-production-android-app.md)）
-- 所有 `DisposableEffect` 成对写注销，代码评审时作为固定检查项
-- 常驻 `collectAsStateWithLifecycle`，杜绝后台无用功
-
-### ❌ 避免陷阱
-
-- 只优化真机不测低端机：启动与内存问题在低端设备放大 5-10 倍
-- 把"加缓存"当万能药：缓存 = 更长的持有链 = 更难发现的泄漏
-- Baseline Profile 生成后不再更新，UI 变化后热路径失效
+监听器或资源的生命周期应明确结束；生命周期感知的 UI 收集可以在后台停止收集，但上游任务是否停止还取决于其共享策略。缓存会延长对象持有时间，新增缓存后观察内存是否回落。不要引用没有本项目测量依据的“低端设备慢 5–10 倍”。
 
 ## 🔗 相关文档
 
 - 📖 概念字典：[Compose 状态 API 详解](../../reference/language-concepts/04-compose-state-api.md) ｜ [协程与 Flow API 全表](../../reference/language-concepts/03-coroutines-flow-api.md)
 - 📖 操作指南：[开发工具链](../../frameworks/04-devtools.md) ｜ [CI/CD 与可观测性](../../deployment/03-ci-cd-observability.md)
 - 🎓 延伸解释：[重组优化](01-recomposition-optimization.md) ｜ [应用架构](../architecture/01-app-architecture.md)
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

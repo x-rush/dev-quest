@@ -4,6 +4,9 @@
 
 命名空间把代码组织成可寻址的"路径"，自动加载把"类名 → 文件"的映射交给约定（PSR-4）与 Composer。两者合起来是现代 PHP 工程的地基，属语言稳定层（namespace 5.3+、PSR-4 通行至今）。
 
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
+
 ## 📚 文档元数据
 
 | 属性 | 内容 |
@@ -14,9 +17,11 @@
 | **标签** | `#命名空间` `#PSR-4` `#自动加载` `#Composer` |
 | **更新日期** | `2026年9月` |
 
+</details>
+
 ## 条目 1：namespace 声明与完全限定名
 
-📌 **定义**: `namespace` 为该文件内的类/接口/函数/常量声明所属空间；完全限定名（FQCN）形如 `App\Service\Invoice`，对应 PSR-4 下的文件路径 `App/Service/Invoice.php`。
+📌 **定义**: `namespace` 为该文件内的类/接口/函数/常量声明所属空间；完全限定名（FQCN）形如 `App\Service\Invoice`，实际文件路径由 Composer 中的前缀到目录映射决定。
 
 📖 **语法/签名**:
 
@@ -47,7 +52,7 @@ final class Invoice
 $invoice = new \App\Service\Invoice();   // 完全限定名（带根 \）
 ```
 
-⚠️ **常见陷阱**: 一个文件原则上一个命名空间一个类（PSR-4 硬约定）；命名空间没有"继承"——每个文件都要自己写 `use`。
+⚠️ **常见陷阱**: 为可预测的 PSR-4 类定位，通常一类一文件；PHP 语言本身允许多个声明；命名空间没有"继承"——每个文件都要自己写 `use`。
 
 🔗 **相关条目**: [use 与别名](#条目-2use-与别名)
 
@@ -60,8 +65,8 @@ $invoice = new \App\Service\Invoice();   // 完全限定名（带根 \）
 ```php
 use App\Service\Invoice;                    // 类别名
 use App\Service\Invoice as Contract;        // 显式别名
-use function App\helpers\json_dump;         // 函数（7.0+）
-use const App\MAX_RETRY;                    // 常量（7.0+）
+use function App\helpers\json_dump;         // 函数（5.6+）
+use const App\MAX_RETRY;                    // 常量（5.6+）
 use App\{Invoice, Order, Model\User};       // 分组 use（7.0+）
 ```
 
@@ -126,7 +131,7 @@ require __DIR__ . '/vendor/autoload.php';
 $invoice = new App\Service\Invoice();   // Composer 按映射找到 app/Service/Invoice.php
 ```
 
-⚠️ **常见陷阱**: 新建类后报 "class not found"，九成是命名空间与目录/前缀不一致，其次才是忘了 `dump-autoload`；`files` 里的函数文件不走 PSR-4，每次加载无条件执行。
+⚠️ **常见陷阱**: 新建类后报 "class not found"，先检查命名空间与目录/前缀是否一致，其次才是忘了 `dump-autoload`；files 中的文件在 Composer 加载阶段引入，通常在同一次运行中做重复加载防护；其中顶层副作用仍会执行。
 
 🔗 **相关条目**: [spl_autoload_register](#条目-4spl_autoload_register-与加载原理)、[Composer 生态](../library-guides/02-composer-ecosystem.md)
 
@@ -217,3 +222,18 @@ final class Validator
 **文档版本**: v2.0.0
 **最后更新**: 2026年9月
 **维护团队**: Dev Quest Team
+
+
+<!-- full-library-explanation -->
+## 类名存在、文件存在和加载成功是不同检查
+
+前置是 require、类与项目目录。namespace 只定义名字，不创建目录；PSR-4 再把名字前缀映射到目录。若 App\ 映射到 src/，App\Service\Invoice 对应 src/Service/Invoice.php，而不是固定的 App/Service 路径。Windows 本地文件名大小写宽松时，更要检查 Linux 部署会使用的精确大小写。
+
+use 只建立当前文件的别名，Composer autoload 则注册加载规则。普通 PSR-4 新文件通常可按现有映射找到；修改映射或使用权威 classmap 后新增类，需要重新生成加载数据。函数不会因调用未定义函数自动走类加载器，autoload.files 用于显式加载这类辅助声明。
+
+**练习**：创建 src/Service/Invoice.php 并配置 App\ 到 src/，从根目录入口 require vendor/autoload.php 后实例化。依次故意改错 namespace、文件名大小写、映射前缀，记录不同故障；恢复后再用 Invoice::class 得到完整类名。动态 new 的字符串不采用 use 别名，应传完整名称。
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

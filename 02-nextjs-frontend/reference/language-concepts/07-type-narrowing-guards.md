@@ -1,12 +1,12 @@
 # TypeScript 类型收窄与类型守卫
 
 > **模块**: `02-nextjs-frontend`
-> **类型**: 字典条目（无难度门槛）
+> **类型**: 字典条目（可独立查阅，按主题准备前置知识）
 > **分类**: `language-concepts`
 
 ## 📌 定义
 
-**类型收窄（Narrowing）** 是 TypeScript 编译器基于控制流分析，把联合类型（`A | B | C`）在分支内自动缩小为更具体成员的机制——你不需要写任何运行时代码，只要用 `if`/`switch` 做了"可判定"的检查，类型就跟着变窄。**类型守卫（Type Guard）** 是触发收窄的检查手段：语言内置的 `typeof`/`instanceof`/`in`/字面量相等，以及你自己编写的 `x is T` 守卫函数与 `asserts` 断言函数。收窄是 TypeScript 安全性的核心一环：它让"先判断、再使用"的代码获得精确类型，而不需要 `as` 强转。
+**类型收窄（Narrowing）** 是 TypeScript 编译器基于控制流分析，把联合类型（`A | B | C`）在分支内自动缩小为更具体成员的机制——不需要额外类型转换，但仍需运行时检查，例如用 `if`/`switch` 做了"可判定"的检查，类型就跟着变窄。**类型守卫（Type Guard）** 是触发收窄的检查手段：语言内置的 `typeof`/`instanceof`/`in`/字面量相等，以及你自己编写的 `x is T` 守卫函数与 `asserts` 断言函数。收窄是 TypeScript 安全性的核心一环：它让"先判断、再使用"的代码获得精确类型，而不需要 `as` 强转。
 
 ## 📖 语法/签名
 
@@ -19,7 +19,7 @@
 | `in` | `'fly' in a` | 按属性存在性收窄到含该属性的成员 |
 | 字面量相等 | `x.kind === 'circle'` / `switch` | **判别联合**收窄，最常用 |
 | 真值判断 | `if (x)` | 排除 `null`/`undefined`，但也会排除 `0`/`''`/`false` |
-| 自定义守卫 | `function f(x): x is T` | 返回 `boolean` 时把参数收窄为 `T` |
+| 自定义守卫 | `function f(x): x is T` | 返回 true 的分支把参数收窄为 T |
 | 断言函数 | `function f(x): asserts x is T` | 通过则收窄，不通过则抛错 |
 | `never` 赋值 | `const _e: never = x` | 穷尽性检查：漏分支时编译报错 |
 
@@ -112,17 +112,38 @@ if (pending) {
 }
 ```
 
-> **版本事实（本机实测）**：TS 4.4 起支持"别名判别量"分析——**先解构判别量、再判断，父对象与关联属性仍会收窄**。本机 `tsc 5.9.3` 与 `7.0.2` 实测上述写法均收窄成功。老资料中"解构会破坏判别联合收窄"的说法描述的是 TS 4.4（2022 年）之前的行为。
+> **版本边界**：TS 4.4 支持条件别名分析；TS 4.6 扩展了对解构判别联合的控制流分析。const 解构以及未重新赋值的解构参数可以保留关联，不能泛化为任何可变变量或任意别名都能同步收窄。
 
 ## ⚠️ 常见陷阱
 
-- ❌ **通过第二个引用访问，收窄失效**：`const alias = e; if (e.kind === 'circle') { alias.radius }` —— 收窄只绑定到被检查的引用 `e`，别名 `alias` 仍是完整联合（本机 tsc 7.0.2 实测报 TS2339）。✅ 始终用同一引用访问，或把收窄后的引用存入新变量：`if (e.kind === 'circle') { const c = e }`。
-- ❌ **在参数位置解构非共有属性**：`function f({ kind, payload }: Shape)` —— `payload` 若不存在于所有变体，解构本身就报 TS2339（联合类型尚未收窄，无法解构其成员）。✅ 先判别、再在分支内解构：`function f(s: Shape) { if (s.kind === 'circle') { const { payload } = s; ... } }`。
-- ❌ **把判别比较包进函数后期待收窄**：`const isA = () => e.t === 'a'; if (isA()) { e.x }` —— 编译器无法跨函数调用分析布尔值（本机实测不收窄）。✅ 直接比较，或存为布尔别名：`const isA = e.t === 'a'`（TS 4.4+ 支持别名条件收窄）。
-- ❌ **以为收窄能跨函数边界**：在 `if` 里调用 `assertDefined` 之外的自定义检查函数（返回普通 `boolean`）不会收窄调用方。✅ 用 `x is T` 谓词签名声明守卫函数，或用 `asserts` 断言函数。
+- ❌ **通过第二个引用访问，收窄失效**：`const alias = e; if (e.kind === 'circle') { alias.radius }` —— 收窄只绑定到被检查的引用 `e`，别名 `alias` 仍是完整联合（应在实际编译配置中验证）。✅ 始终用同一引用访问，或把收窄后的引用存入新变量：`if (e.kind === 'circle') { const c = e }`。
+- ❌ **在参数位置解构非共有属性**：`function f({ kind, payload }: Shape)` —— `payload` 若不存在于所有变体，解构本身就报 TS2339（联合类型尚未收窄，无法解构其成员）。✅ 先判别、再在分支内解构：`function f(s: Shape) { if (s.kind === 'circle') { const { radius } = s; ... } }`。
+- ❌ **把判别比较包进函数后期待收窄**：`const isA = () => e.t === 'a'; if (isA()) { e.x }` —— 编译器无法跨函数调用分析布尔值（闭包读取外部变量不等于参数类型谓词）。✅ 直接比较，或存为布尔别名：`const isA = e.t === 'a'`（TS 4.4+ 支持别名条件收窄）。
+- ❌ **以为收窄能跨函数边界**：在 `if` 里调用 `assertDefined` 之外的自定义检查函数（显式声明返回普通 boolean）不会提供类型谓词；TS 5.5+ 能对满足条件的函数推断谓词。✅ 用 `x is T` 谓词签名声明守卫函数，或用 `asserts` 断言函数。
 - ❌ **用真值收窄处理数值/字符串**：`if (x)` 会把 `0`、`''`、`false` 一并排除——`count !== 0` 的合法数据被当空值。✅ 用 `x != null` 或 `x !== undefined` 做"排除空值"的收窄。
 - ❌ **忘记 `typeof null === 'object'`**：对 `unknown` 做 `typeof u === 'object'` 收窄后，`u` 仍可能是 `null`。✅ 标配写法：`if (typeof u === 'object' && u !== null)`。
 - ❌ **穷尽检查漏掉 `default` 里的返回**：`never` 检查只有赋值给 `never` 类型变量（或 `s satisfies never`）才会触发；只在 `default` 里 `return 0` 则新变体会静默走到默认值。✅ default 中固定写 `const _e: never = s` 或 `s satisfies never`。
+
+<!-- full-library-explanation -->
+## 守卫函数本身也是需要验证的程序
+
+前置是联合类型、unknown 与 JavaScript 条件判断。编译器信任你声明的 x is T，却不会证明函数逻辑真的识别了 T；写成 return true 也可能通过类型检查。外部 JSON 应从 unknown 开始，逐项检查对象非空、字段类型及业务范围，再进入有类型的内部代码。
+
+```ts
+type Product = { id: string; price: number };
+function isProduct(value: unknown): value is Product {
+  return typeof value === 'object' && value !== null
+    && 'id' in value && typeof value.id === 'string'
+    && 'price' in value && typeof value.price === 'number'
+    && Number.isFinite(value.price) && value.price >= 0;
+}
+console.log(isProduct({ id: 'p1', price: 0 })); // true
+console.log(isProduct({ id: 'p1', price: '0' })); // false
+```
+
+**练习**：增加 null、空对象、NaN、负价格输入，预期全部 false。再给判别联合新增一种状态，确认 never 分支让遗漏的处理成为编译错误。穷尽性只约束已声明的联合，来自网络的未知 kind 仍要先验证；as Shape 不会制造运行时保障。
+
+依据：[TypeScript 4.6 解构联合收窄](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-4-6.html)、[收窄](https://www.typescriptlang.org/docs/handbook/2/narrowing.html)。本轮没有复现原文声称的各编译器版本测试，以下结论以机制与官方说明为依据。
 
 ## 🔗 相关条目
 
@@ -133,3 +154,9 @@ if (pending) {
 
 ---
 *最后更新: 2026年9月 | 本条目为模块知识字典的一部分，概念完整解释以此处为单一事实来源*
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

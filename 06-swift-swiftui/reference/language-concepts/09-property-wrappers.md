@@ -6,6 +6,9 @@
 >
 > **前置知识**: 建议先学 [basics/04-views-state.md](../../basics/04-views-state.md)
 
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
+
 ## 📚 文档元数据
 
 | 属性 | 内容 |
@@ -15,6 +18,8 @@
 | **难度** | ⭐⭐ |
 | **标签** | `#propertyWrapper` `#wrappedValue` `#projectedValue` `#State` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ---
 
@@ -57,6 +62,7 @@ struct Player {
     @Clamped(0...100) var stamina = 100   // 初值经 init(wrappedValue:) 进入包装器
 }
 
+var player = Player()
 // wrappedValue：直接访问
 player.stamina = 150                      // 实际存为 100
 
@@ -64,7 +70,7 @@ player.stamina = 150                      // 实际存为 100
 player.$stamina                           // 0...100（本例中是合法范围）
 ```
 
-注意 `$` 前缀加在**实例名**上（`player.$stamina`），不是包装器属性名上。
+`$` 加在属性名之前：实例访问写 player.$stamina；它投影 stamina，而不是投影 player。
 
 ### projectedValue 的语义由包装器决定
 
@@ -74,7 +80,7 @@ player.$stamina                           // 0...100（本例中是合法范围�
 | `@Binding` | 当前值 | `Binding<Value>` 本身 |
 | `@Bindable`（包装 @Observable 模型） | 当前值 | 绑定工厂 |
 | `@AppStorage` | 持久化值 | `Binding<Value>` |
-| `@Query`（SwiftData） | 结果集合 | 查询配置 |
+| `@Query`（SwiftData） | 结果集合 | 不应假设有可用的 $query；按具体 SDK 的公开 API 查询和初始化配置 |
 
 ### 初始化约定速记
 
@@ -133,9 +139,24 @@ struct ToggleRow: View {
 | 包装器内存储引用类型并全局共享 | 状态散落、难追踪 | 共享模型走 Environment 注入 |
 | 忘记 wrappedValue 的 setter 逻辑 | 每次写入都经过包装器 | 副作用放 didSet 而非包装器（或反之），统一约定 |
 
+<!-- full-library-explanation -->
+## 包装器不自动提供观察与并发安全
+
+Clamped 只钳制写入范围；它没有通知 SwiftUI，也不提供锁。UserDefault 示例只演示 getter/setter 转发，Value 并非任意类型都能直接写入 UserDefaults，且这不是凭证存储方案。生产包装器还要处理格式迁移与跨线程访问约定。
+
+练习：创建 `var player = Player()`，依次写入 -1、50、150，预期读取 0、50、100，并检查 `$stamina` 返回范围。验收：能分别指出包装器本体 `_stamina`、被包装值 stamina 和投影 `$stamina` 的类型；不把所有 `$` 都当 Binding。
+
+初始化 `State(initialValue:)` 只提供该视图身份的初值，父参数变化后若要同步，应重新考虑状态归属或 Binding，而不是重复在 init 中覆盖子视图私有状态。
+
 ## 🔗 相关条目
 
 - 📄 [04-swiftui-state-api.md](./04-swiftui-state-api.md) — SwiftUI 状态包装器全表
 - 📄 [02-swiftdata-observability.md](../framework-essentials/02-swiftdata-observability.md) — @Query 与 @Observable 的机制
 - 📄 [05-data-flow.md](../framework-essentials/05-data-flow.md) — 包装器在数据流中的角色
 - 📄 [basics/04-views-state.md](../../basics/04-views-state.md) — 状态管理教程
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

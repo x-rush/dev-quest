@@ -1,10 +1,26 @@
 # 环境搭建 — Node/RN CLI/Expo 与三端工具链
 
+## 先理解，再动手
+
+先选择一个平台跑通工具链。JavaScript 依赖、Android/iOS 原生构建依赖与设备连接问题应分开排查。
+
+**本节自测**：记录设备平台与运行方式，修改欢迎文案并重新加载。
+
+<details>
+<summary>预期结果与参考思路（先尝试再展开）</summary>
+
+应在目标设备看到修改；浏览器预览成功不能代替原生平台验收。
+
+</details>
+
 > **文档简介**: 一次配置好 React Native 三端（Android + iOS + 鸿蒙 HarmonyOS）开发所需的全部环境，包括 Node、RN CLI、Expo、Android Studio、Xcode 与 DevEco Studio
 >
 > **目标读者**: 有 React/TypeScript 基础、准备进入移动端开发的工程师
 >
 > **前置知识**: JavaScript/TypeScript 基础，了解 npm 包管理，最好有一门原生开发经验
+
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
 
 ## 📚 文档元数据
 
@@ -15,6 +31,8 @@
 | **难度** | ⭐ |
 | **标签** | `#环境搭建` `#Expo` `#Android Studio` `#Xcode` `#DevEco Studio` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ## 🎯 学习目标
 
@@ -146,15 +164,9 @@ npx expo start
 
 ## 🎨 最佳实践
 
-### ✅ 推荐做法
-- **用 nvm 类工具管理 Node 版本**，避免全局版本漂移导致构建突然失败
-- **Android 环境变量写进 shell 配置文件**并 `source` 一次，IDE 与终端共用
-- **三端 SDK 版本记录在项目 README**，新成员可按文档复现环境
+环境问题先核对实际执行的 Node、JDK、SDK 和构建插件版本，IDE 与终端可能使用不同路径。把项目采用的版本和检查命令写下来，再让新终端执行一次干净构建，验证文档是否足够复现。
 
-### ❌ 避免陷阱
-- **JDK 版本不匹配**: 现行 RN 工具链（AGP 9）需要 JDK 17+，装错大版本会出现莫名其妙的构建异常
-- **只在模拟器上验证**: 真机（尤其华为鸿蒙真机）与模拟器行为差异大，环境搭好后尽早连真机
-- **跳过 CocoaPods**: bare 工程 iOS 侧漏跑 `pod install` 会出现头文件找不到的编译错误
+JDK、Gradle、AGP 及原生依赖要按工程兼容表组合，不能把“某个最低版本以上”视为任意新版都兼容。模拟器适合快速迭代，涉及权限、相机、推送和性能的能力还要在目标真机验证；iOS 原生依赖按该工程的安装流程处理。
 
 ## ❓ 常见问题
 
@@ -197,3 +209,9 @@ npx expo start
 - 📄 **[故障排除](../reference/quick-references/02-troubleshooting.md)**: 环境类报错的对照表
 
 > 💡 **学习建议**: 环境搭建是三端开发中"一次性成本最高"的环节，值得花半天时间把三端全部打通并记录踩坑日志——之后每个新项目都能直接复用这套配置。
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../LEARNING_GUIDE.md) · [完整目录与版本](../README.md) · [通用术语](../../shared-resources/glossary.md)

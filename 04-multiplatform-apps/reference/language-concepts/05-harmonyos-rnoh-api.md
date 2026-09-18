@@ -2,6 +2,9 @@
 
 > **难度**: ⭐⭐ | **前置**: 已理解 RN 渲染链路与原生模块（[06-native-modules](../../basics/06-native-modules.md)）
 
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
+
 ## 📚 文档元数据
 
 | 属性 | 内容 |
@@ -11,6 +14,8 @@
 | **难度** | ⭐⭐ |
 | **标签** | `#鸿蒙` `#RNOH` `#ArkTS` `#DevEco Studio` `#HarmonyOS NEXT` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ## RNOH 是什么
 
@@ -23,20 +28,20 @@ React Native for OpenHarmony（RNOH）是华为/OpenHarmony 社区维护的 RN �
 |-----------|---------|
 | `react-native-harmony` | 与工程 `react-native` 版本一一对应（查 RNOH 仓库版本映射表） |
 | DevEco Studio + HarmonyOS SDK | 与 RNOH 发布说明标注的 API 版本匹配（API 12+） |
-| 三方库 | 必须使用 `@react-native-oh-tpl/` 或 `@react-native-ohos/` 下的 harmony 适配版 |
+| 三方库 | 纯 JS 与原生依赖分别评估；原生库检查目标 RNOH 版本的适配实现 |
 
 ```bash
 # 安装鸿蒙适配核心包（版本以 RNOH 发布页为准）
 npm i @react-native-ohos/react-native-harmony
 ```
 
-**陷阱**: 直接把社区库装最新版（未经 harmony 适配）在鸿蒙真机必然报错；先查 RNOH 的三方库适配列表。
+**陷阱**: 含未适配原生代码的社区库可能无法构建或运行；纯 JS 库不能一概而论；先查 RNOH 的三方库适配列表。
 
 ## 架构总览
 
 ```
 ┌────────────────────────────────────────────┐
-│  JS 业务代码（与 Android/iOS 完全共享）        │
+│  JS 业务代码（可共享，平台能力另行适配）        │
 ├────────────────────────────────────────────┤
 │  Hermes 引擎（JS Bundle → 字节码执行）        │
 ├────────────────────────────────────────────┤
@@ -48,7 +53,7 @@ npm i @react-native-ohos/react-native-harmony
 └────────────────────────────────────────────┘
 ```
 
-**组件映射关系**: `View → Stack/Column`、`Text → Text`、`Image → Image`、`ScrollView → Scroll`、`FlatList → WaterFlow/Grid`（视配置）。Fabric 渲染下组件树由 C++ 管线提交给 ArkTS 挂载到 ArkUI。
+**组件实现**：RN 的组件语义由 RNOH 适配到平台能力；不要推断 FlatList 必然映射成 WaterFlow/Grid。具体实现路径和支持范围须阅读目标版本文档与源码。
 
 ## 壳工程结构（harmony/）
 
@@ -100,7 +105,7 @@ struct Index {
 ## ArkTS 混合开发要点
 
 ### 描述
-鸿蒙原生模块用 ArkTS（TS 超集 + 声明式 UI）实现，通过 RNOH 的 TurboModule 机制暴露给 JS。
+鸿蒙原生模块用 ArkTS（基于 TypeScript 并带有自身约束及声明式 UI 能力）实现，通过 RNOH 的 TurboModule 机制暴露给 JS。
 
 ### 语法和示例
 
@@ -154,11 +159,22 @@ NativeModules.DeviceModule.getDeviceName().then(console.log);
 ## 适配检查清单
 
 - ✅ `react-native-harmony` 版本与 RN 版本对齐（查 RNOH 版本映射表）
-- ✅ 三方库全部替换为 `@react-native-ohos`/`@react-native-oh-tpl` 适配版
+- ✅ 逐一检查带原生实现的依赖，采用经过目标版本验证的适配方案
 - ✅ `module.json5` 声明了全部所需权限
 - ✅ `appKey` 与 `AppRegistry.registerComponent` 名称一致
 - ✅ 真机上 `hdc rport` 端口转发后 Metro 可连通
 - ✅ 三端回归：深色模式、安全区、返回手势逐项验证
+
+<!-- full-library-explanation -->
+## 把“可共享”拆成可验证的四层
+
+纯业务算法、React 组件、带原生依赖的库、系统服务要分别评估。纯 JS 工具库通常不需要特定命名空间的适配包；相机、数据库或支付库则可能包含平台实现。npm 包能安装，只证明依赖解析成功。
+
+上文 RNApp 与 TurboModule 片段是架构示意，未提供可独立编译的壳工程。应从目标 RNOH 发行版的示例工程开始，保留它的 SDK、构建配置、注册方式，再逐步替换业务页面；不要直接把这些字段复制到任意最新 SDK。参考 [RNOH 官方仓库](https://gitee.com/openharmony-sig/ohos_react_native)的对应版本文档。
+
+练习：建立能力表，记录“文本布局、网络请求、本地数据库、通知”在 Android/iOS/OpenHarmony 上的实现、版本、权限、验证设备和失败行为。先验证一个最小页面，再逐个加入依赖。验收：能够指出失败出在 JS 打包、原生链接、模块注册还是运行时权限，而不是只写“三端兼容”。
+
+OpenHarmony 与面向具体商业设备的 HarmonyOS SDK/服务并非任意互换；平台识别值也要以选定适配版本实际返回为准，不要假设始终冒充 Android。
 
 ## 🔗 相关文档
 
@@ -169,3 +185,9 @@ NativeModules.DeviceModule.getDeviceName().then(console.log);
 - 📄 **[环境搭建教程](../../basics/01-environment-setup.md)**: DevEco Studio 安装步骤
 
 *延伸: 华为开发者官网 HarmonyOS 文档 · RNOH 仓库（Gitee openharmony-sig/ohos_react_native）*
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

@@ -1,10 +1,21 @@
 # Stream / Optional / Collector API 速查
 
+## 把管道与值的缺失分开理解
+
+前置：集合、lambda 与泛型。Stream 描述一次消费的数据处理，Optional 表达可能没有单个结果。filter/map 等中间步骤通常等终结操作才执行，不能依赖 peek 的副作用完成业务工作。
+
+找第一位成年用户时，Stream 负责筛选，findFirst 返回 Optional。没有成年用户是合法的缺失，不应直接 get 后崩溃；选择 orElse、orElseGet 或 orElseThrow 要根据业务含义决定。
+
+自测：为什么昂贵的默认值更适合 orElseGet(() -> loadDefault())？orElse(loadDefault()) 的参数会在调用前求值，即使已有结果也可能执行；Supplier 让需要回退时才计算。Stream 消费后不能再用同一个实例重跑，应重新从集合创建。
+
 > **文档简介**: Stream 创建/中间/终止操作、Collector 收集器、原始类型流与 Optional 全 API 的条目式速查，含并行流与常见误用陷阱
 >
 > **目标读者**: 已会基本用法、需要按 API 名快速检索的开发者
 >
 > **前置知识**: Lambda 基础（见 [现代 Java 特性](../../basics/07-modern-features.md)）
+
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
 
 ## 📚 文档元数据
 
@@ -15,6 +26,8 @@
 | **难度** | ⭐⭐ |
 | **标签** | `#Stream` `#Optional` `#Collector` `#函数式` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ## 🏗️ Stream 创建
 
@@ -140,3 +153,9 @@ bigList.parallelStream()            // 或 stream().parallel()
 - 📄 **[并发 API 速查](./04-concurrency-api.md)** - 并行流之外的并发选择
 - 📄 **[现代 Java 特性](../../basics/07-modern-features.md)** - 教程式入门
 - 📄 **[常见错误排查](../quick-references/02-troubleshooting.md)** - 流复用等运行时错误
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

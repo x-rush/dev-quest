@@ -8,6 +8,9 @@
 >
 > **预计时长**: 15-30分钟
 
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
+
 ## 📚 文档元数据
 
 | 属性 | 内容 |
@@ -19,6 +22,8 @@
 | **更新日期** | `2026年9月` |
 | **作者** | Dev Quest Team |
 | **状态** | ✅ 已完成 |
+
+</details>
 
 ---
 
@@ -44,7 +49,7 @@ function UserCard({ name, age }: Props) {
   return (
     <div>
       <h2>{name}</h2>
-      {age && <p>Age: {age}</p>}
+      {age != null && <p>Age: {age}</p>}
     </div>
   )
 }
@@ -93,7 +98,7 @@ import { useEffect } from 'react'
 // 基础用法
 useEffect(() => {
   console.log('组件挂载')
-}, []) // 空依赖数组，只运行一次
+}, []) // 每次挂载建立副作用；开发 StrictMode 还会额外执行建立/清理检查
 
 // 依赖项监听
 useEffect(() => {
@@ -229,7 +234,7 @@ function SearchBox() {
   function onChange(e: React.ChangeEvent<HTMLInputElement>) {
     setQuery(e.target.value)              // 紧急更新：输入框立即响应
     startTransition(() => {
-      setList(filterList(e.target.value)) // 过渡更新：列表渲染可被打断，不卡输入
+      setList(filterList(e.target.value)) // 列表状态更新标记为过渡；filterList 本身仍同步执行，昂贵计算仍可能阻塞
     })
   }
   return (
@@ -271,7 +276,7 @@ function Field() {
 // 服务端与客户端渲染出相同 ID（水合一致）；Math.random()/自增计数器会导致 SSR 不匹配
 ```
 
-#### useSyncExternalStore - 订阅外部存储（唯一 SSR 安全的 store Hook）
+#### useSyncExternalStore - 订阅外部存储（React 提供的外部存储订阅协议）
 ```tsx
 function useSyncExternalStore<Snapshot>(
   subscribe: (onStoreChange: () => void) => () => void, // 订阅并返回取消订阅函数
@@ -300,7 +305,7 @@ function useOnlineStatus() {
 #### useLayoutEffect - DOM 提交后、浏览器绘制前同步执行
 ```tsx
 function useLayoutEffect(effect: EffectCallback, deps?: DependencyList): void
-// 时机：DOM 变更 → useLayoutEffect（同步）→ 浏览器绘制；useEffect 则在绘制后异步
+// 时机：DOM 变更 → useLayoutEffect（同步）→ 浏览器绘制；useEffect 通常在绘制后运行，但交互触发时可能在绘制前，不能作为严格时序保证
 
 function Tooltip({ target }: { target: HTMLElement }) {
   const ref = useRef<HTMLDivElement>(null)
@@ -339,7 +344,7 @@ const TextInput = forwardRef<TextInputHandle>(function TextInput(_props, ref) {
 #### useInsertionEffect - CSS-in-JS 注入专用（库作者用）
 ```tsx
 function useInsertionEffect(effect: EffectCallback, deps?: DependencyList): void
-// 执行时机早于 useLayoutEffect（DOM 变更前），设计给 css-in-js 库在渲染期注入 <style> 规则
+// 在布局 Effect 前插入样式；不要依赖 DOM 是否已更新，此时不是渲染函数体
 
 useInsertionEffect(() => {
   injectRule('.btn-primary', 'background: blue') // styled-components 等库的内部行为示意
@@ -356,7 +361,7 @@ function useWindowSize() {
   useDebugValue(w, (width) => `${width}px`) // DevTools 显示 "WindowSize: 1920px"
   return w
 }
-// 仅影响调试显示，无运行时行为；format 只在 DevTools 打开时才被调用
+// 用于调试显示，不应承载业务逻辑；format 只在 DevTools 打开时才被调用
 ```
 
 ### 自定义Hook
@@ -694,3 +699,19 @@ function NameForm() {
 **文档状态**: ✅ 已完成 | 🚧 进行中 | 📋 计划中
 **最后更新**: 2026年9月
 **版本**: v1.0.0
+
+<!-- full-library-explanation -->
+## 渲染、事件与 Effect 分别承担什么
+
+前置是闭包、不可变更新和函数调用。渲染根据当前 props/state 计算 UI，应保持纯粹；点击提交属于事件；订阅外部系统属于 Effect。setState 更新的是下一次渲染的状态，本次函数中的变量仍是这次渲染的快照。连续递增应使用 prev => prev + 1，不能假定调用后 count 立即改变。
+
+Hook 必须在组件或自定义 Hook 的合法位置调用，速查中顶层展示的 useState/useEffect 是组件体片段，不能放到模块顶层执行。useMemo/useCallback 是性能工具，缓存可能被 React 丢弃，不能拿它们保证业务只执行一次。列表 key 应来自数据身份，useId 用于无障碍关联而不是生成列表键。
+
+**练习**：在一次点击中连续调用三次 setCount(count + 1)，观察只增加 1；改用三次函数更新，应增加 3。开启 StrictMode 检查订阅是否出现重复连接，修复方式是成对清理而不是关闭检查。再给 age 传 0，确认条件渲染显示年龄而不是意外渲染一个裸 0。
+
+依据：[状态快照](https://react.dev/learn/state-as-a-snapshot)、[Effect](https://react.dev/reference/react/useEffect)、[Insertion Effect](https://react.dev/reference/react/useInsertionEffect)。
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

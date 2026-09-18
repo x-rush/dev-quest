@@ -4,6 +4,9 @@
 
 Python 的对象行为由双下划线方法（dunder methods）定义，语法结构（for/with/+）只是协议调用的糖。本条目按协议分组，给出触发场景、最小实现与陷阱。
 
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
+
 ## 📚 文档元数据
 
 | 属性 | 内容 |
@@ -13,6 +16,8 @@ Python 的对象行为由双下划线方法（dunder methods）定义，语法�
 | **难度** | ⭐⭐ |
 | **标签** | `#魔术方法` `#协议` `#迭代器` `#描述符` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ## 协议总览
 
@@ -49,18 +54,18 @@ class Point:
 ## 2. 比较与哈希
 
 ```python
+from dataclasses import dataclass
+
+@dataclass(frozen=True, order=True)
 class Point:
-    def __eq__(self, other: object) -> bool:
-        return isinstance(other, Point) and (self.x, self.y) == (other.x, other.y)
+    x: int
+    y: int
 
-    def __hash__(self) -> int:        # 定义了才可放入 set/dict 键
-        return hash((self.x, self.y))
-
-    def __lt__(self, other: "Point") -> bool:   # 使 sorted() 可用
-        return (self.x, self.y) < (other.x, other.y)
+print(Point(1, 2) == Point(1, 2))  # True
+print(len({Point(1, 2), Point(1, 2)}))  # 1
 ```
 
-**规则**: `__eq__` 与 `__hash__` 必须一致——相等的对象哈希必须相等；定义 `__eq__` 后默认 `__hash__` 被置 None（不可哈希），需要时必须同时实现。用 `@dataclass(order=True, eq=True)` 可自动生成。
+**规则**：相等对象必须有相等哈希值；作为集合元素或字典键期间，参与哈希的状态不能变化。上例用整数和冻结字段保持该约束。默认可变 dataclass 通常不可哈希；`order=True` 本身不会生成可用哈希。手写 `__eq__` 遇到不支持的类型时可返回 `NotImplemented`，让对方的比较实现有机会参与。
 
 ---
 
@@ -108,7 +113,7 @@ class Playlist:
         return song in self._songs
 ```
 
-**要点**: 只实现 `__getitem__` 就能 for 遍历与切片（回落机制）；`__bool__` 缺省回落 `__len__`（0 为假）。
+**要点**: 按序列约定实现 `__getitem__` 可支持 for 的索引回退；切片还要求实现能够接收并处理 slice 对象；`__bool__` 缺省回落 `__len__`（0 为假）。
 
 ---
 
@@ -117,6 +122,8 @@ class Playlist:
 **定义**: `__enter__` 返回值绑定给 `as` 变量；`__exit__` 保证清理，返回 True 吞异常。
 
 ```python
+import time
+
 class Timer:
     def __enter__(self) -> "Timer":
         self.start = time.perf_counter()
@@ -141,6 +148,8 @@ class Positive:
         self.name = "_" + name
 
     def __get__(self, obj, objtype=None):
+        if obj is None:
+            return self
         return getattr(obj, self.name)
 
     def __set__(self, obj, value: float) -> None:
@@ -164,15 +173,45 @@ class Product:
 | 陷阱 | 说明 |
 |------|------|
 | 只写 `__str__` | 容器/调试场景仍显示内存地址，补 `__repr__` |
-| 定义 `__eq__` 忘 `__hash__` | 对象进 set/dict 键即 TypeError |
+| 为可变值对象强加哈希 | 不可哈希往往是正确选择；只有能保证哈希状态稳定时才设计哈希实现 |
 | 迭代器被复用 | 耗尽后为空；或 `__iter__` 每次返回新迭代器 |
 | `__exit__` 返回 True | 静默吞掉所有异常 |
 | `__getattribute__` 递归 | 内部用 `super().__getattribute__` |
 
 ---
 
+<!-- full-library-explanation -->
+## 协议是调用约定，不是方法名的装饰
+
+前置知识是实例、方法与异常。实现 `__len__` 后，`len(obj)` 会按语言协议调用它；实现 `__getitem__` 后，索引访问会传入整数或切片对象。方法必须满足相应契约，例如长度为非负整数，序列索引耗尽时抛出 `IndexError`，不能只定义同名方法而返回任意值。
+
+完整实验保存为 `protocol.py`，运行 `python protocol.py`：
+
+```python
+class Playlist:
+    def __init__(self, songs):
+        self.songs = list(songs)
+    def __len__(self):
+        return len(self.songs)
+    def __getitem__(self, index):
+        return self.songs[index]
+
+p = Playlist(["intro", "outro"])
+print(len(p), bool(p))
+print(list(p))
+print(p[:1])
+```
+
+输出 `2 True`、`['intro', 'outro']`、`['intro']`。这里切片能工作，是因为方法把 `slice` 对象交给了内部列表，不是所有自定义 `__getitem__` 都天然支持切片。练习：改为只接受整数并对其他类型抛 `TypeError`，解释为什么遍历仍可工作而切片失败。
+
 ## 🔗 相关文档
 
 - 📄 **[函数与类](../../basics/04-functions-oop.md)** — 面向对象入门教程
 - 📄 **[typing 注解全表](./05-typing-annotations.md)** — Protocol：协议的静态类型表达
 - 📄 **[内置函数全表](./02-built-in-functions.md)** — 协议触发表（内置函数 ↔ dunder）
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

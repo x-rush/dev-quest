@@ -1,6 +1,6 @@
 # useMatch / useMatches / router.invalidate：匹配读取与刷新重校验
 
-> **模块**: `03-tanstack-stack` | **类型**: 字典条目（无难度门槛，支持任意跳入查阅）
+> **模块**: `03-tanstack-stack` | **类型**: 字典条目（可独立查阅，按主题准备前置知识，支持任意跳入查阅）
 
 ## 📌 定义
 
@@ -11,7 +11,7 @@
 ```ts
 useMatch({ from: '/posts/$postId' })              // from 指定路由；不匹配则抛错
 useMatch({ from: '/posts/$postId', select: (m) => m.status })  // 只订阅 select 结果
-useMatch({ strict: false })                       // 最近匹配，找不到也不抛错
+useMatch({ strict: false })                       // 最近匹配，放宽类型；允许缺失须另设 shouldThrow:false
 
 useMatches()                                      // RouteMatch[]，匹配链
 useMatches({ select: (ms) => ms.map((m) => m.routeId) })
@@ -82,12 +82,28 @@ function Breadcrumbs() {
 ## ⚠️ 常见陷阱
 
 - ❌ 无参调用 `useMatch()`：options 是必填——取最近匹配写 `useMatch({ strict: false })`
-- ❌ `useMatch({ from: '/other' })` 在非该路由下渲染：默认 strict 模式直接抛错（找不到匹配）——跨路由读取用 `strict: false`
+- ❌ `useMatch({ from: '/other' })` 在非该路由下渲染：默认 strict 模式直接抛错（找不到匹配）——允许未匹配时使用 `shouldThrow: false` 并处理 undefined
 - ❌ 把 `router.invalidate()` 当 Query 缓存失效：它只重跑**当前 URL 匹配到的路由**的 loader/beforeLoad；Query 缓存要用 `queryClient.invalidateQueries`
-- ❌ `loaderData` 解构后判空收窄：与 Query 同理，保留对象访问或判 `status === 'success'`
+- ❌ 忽略 loaderData 的实际可选性：按路由状态与返回类型收窄；现代 TypeScript 并非所有解构都会丢失关联
 - ❌ `select` 返回不稳定新对象：`useMatches({ select: (ms) => ms.map(...) })` 每次映射都生成新数组会放大重渲染——select 出原始值或稳定结构
 - ❌ 判断加载用 `m.isFetching === true`：其类型是 `false | 'beforeLoad' | 'loader'`，判断"没在加载"应为 `=== false`
 - ✅ `filter` 按 `routeId` 精确圈定要重跑的匹配，避免整页 loader 重放
+
+<!-- full-library-explanation -->
+## 宽松类型与允许缺失是两个选项
+
+先修：嵌套路由和可选值。strict:false 放宽所选路由的类型约束，不等同于“找不到时一定不抛错”。需要可选匹配时使用 shouldThrow:false，并处理返回 undefined。
+
+```tsx
+const post = useMatch({ from: '/posts/$postId', shouldThrow: false });
+return post ? <span>文章详情中</span> : <span>其他页面</span>;
+```
+
+这是组件内片段，要求对应路由已注册。from 使用路由 ID，不一定等于浏览器完整 URL；无路径布局的 ID 也可能包含布局段。
+
+router.invalidate 影响 Router 的匹配与加载生命周期，Query 的失效需要单独处理。若 loader 只是 ensureQueryData，重新调用它仍可能拿到旧缓存。写入后根据实际数据流更新 Query，再按需重载路由上下文。
+
+**练习：** 把可选匹配组件放在全局导航中，在详情与首页切换，确认不抛异常；分别执行两种 invalidate，观察 loader 与 HTTP 请求次数。验收：解释“函数重跑但没有网络请求”的原因。参考[useMatch 选项](https://tanstack.com/router/latest/docs/framework/react/api/router/useMatchHook)。
 
 ## 🔗 相关条目
 
@@ -100,3 +116,9 @@ function Breadcrumbs() {
 ---
 
 *最后更新: 2026年9月 | 本条目为模块知识字典的一部分，概念完整解释以此处为单一事实来源*
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

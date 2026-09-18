@@ -6,6 +6,9 @@
 >
 > **前置知识**: 已完成 [商店上架](./02-app-store-release.md)；了解 [EAS Build 构建流程](./01-eas-build.md)
 
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
+
 ## 📚 文档元数据
 
 | 属性 | 内容 |
@@ -15,6 +18,8 @@
 | **难度** | ⭐⭐⭐ |
 | **标签** | `#OTA` `#EASUpdate` `#Sentry` `#崩溃监控` `#可观测性` |
 | **更新日期** | 2026年9月 |
+
+</details>
 
 ## 🎯 学习目标
 
@@ -114,12 +119,9 @@ Sentry.init({
 
 ## ✅ 最佳实践
 
-- ✅ **OTA 只修不改**：热修限定 bugfix，新功能走商店版本，规避审核风险
-- ✅ **runtimeVersion 策略交给 Expo**，不要手写自研匹配逻辑
-- ✅ **Sentry release 关联版本号**，崩溃自动归因到具体构建
-- ✅ **内测分支先行**：`eas update --branch preview` 验证 24h 再进 production
-- ❌ **不要用 OTA 绕过审核推原生行为变化**，违反商店政策可致下架
-- ❌ **不要把 `reloadAsync` 做成日常自动行为**，用户正在输入时重载是灾难
+OTA 能更新什么取决于新 JS/资源是否兼容已安装的原生运行时；加入新的原生模块通常需要新客户端。runtimeVersion 用来表达这个兼容边界，不只是一个随意填写的版本标签。
+
+先向受控群体验证启动、关键操作和恢复路径，观察窗口按风险和用户量决定，不能固定等待 24 小时就算安全。记录更新 ID 与客户端构建的对应关系；应用重载前处理未保存输入，准备停止分发或发布修复更新的流程。
 
 ## ❓ 常见问题
 
@@ -142,3 +144,16 @@ A: RNOH 接入 Sentry 需要社区适配层，成熟度低于双端；过渡期�
 - 📄 [商店上架](./02-app-store-release.md) — 与 OTA 互补的商店通道
 - 🎓 [启动优化](../advanced-topics/performance/02-startup-optimization.md) — 启动红线指标的优化方法
 - 🎓 [安全实践](../advanced-topics/security/01-security-practices.md) — OTA 通道的安全约束
+
+
+<!-- acceptance-exercise -->
+## 练习与验收：验证更新兼容与失败恢复
+
+准备两个测试安装包，使用不同 runtimeVersion，在测试 channel 发布只匹配其中一个运行时的 JS 更新。预期兼容包按配置获取更新，不兼容包不会把无法运行的 bundle 当作有效更新。再让更新请求断网，旧版核心页面仍可打开。验收记录包版本、update ID、运行时和冷启动结果；修改原生依赖时重新构建，不能以 JS 更新替代原生二进制。
+
+以上是在个人或隔离测试环境中的练习，不是本轮已执行记录；实际运行范围见仓库文档质量报告。
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../LEARNING_GUIDE.md) · [完整目录与版本](../README.md) · [通用术语](../../shared-resources/glossary.md)

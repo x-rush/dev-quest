@@ -1,10 +1,26 @@
 # 状态管理 — useState/useEffect 与自定义 Hook
 
+## 先理解，再动手
+
+useState 保存组件状态，useEffect 用于与外部系统同步。派生值可以直接计算，不必用 effect 再写回另一份状态。
+
+**本节自测**：保存待办数组，直接计算未完成数量；再实现一项可清理的订阅。
+
+<details>
+<summary>预期结果与参考思路（先尝试再展开）</summary>
+
+列表变化后数量自动一致；卸载时订阅被清理，重新进入不会重复收到事件。
+
+</details>
+
 > **文档简介**: 掌握 React Hooks 在移动端的正确用法：useState/useEffect、自定义 Hook 封装设备能力，以及 Context 处理全局状态
 >
 > **目标读者**: 会写静态界面的 RN 初学者，希望理解"状态驱动 UI"
 >
 > **前置知识**: 完成 [03-components-jsx](./03-components-jsx.md)，有 React Hooks 基础概念
+
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
 
 ## 📚 文档元数据
 
@@ -15,6 +31,8 @@
 | **难度** | ⭐ |
 | **标签** | `#Hooks` `#useState` `#useEffect` `#Context` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ## 🎯 学习目标
 
@@ -154,15 +172,9 @@ export function useTheme() {
 
 ## 🎨 最佳实践
 
-### ✅ 推荐做法
-- **副作用分层**: 组件内只留"页面级"副作用，可复用逻辑全部抽成自定义 Hook
-- **每个订阅都配清理**: `addEventListener` 与 `remove`/`unsubscribe` 成对出现
-- **依赖数组如实填写**: 用 ESLint 插件 `eslint-plugin-react-hooks` 强制检查
+useState 可以接收对象或数组，React 不会每次渲染都重新采用初始值；只有创建初始值的计算昂贵时，惰性初始化才有实际收益。更新对象时生成新的值，并明确哪些组件需要共享它。[React 的 useState 说明](https://react.dev/reference/react/useState)区分了初始参数与后续更新。
 
-### ❌ 避免陷阱
-- **在 useEffect 里直接 setState 无限循环**: 忘写依赖数组或依赖了每次变化的对象
-- **对象/数组作为 useState 初始值**: 每次渲染新建引用，应惰性初始化 `useState(() => heavyInit())`
-- **Context value 忘记 useMemo**: 导致整棵子树级联重渲染
+Effect 用于同步订阅等外部系统，注册后应清理；循环更新要查“Effect 修改的状态是否又改变依赖”。Context value 的变化会影响相应消费者，但不能概括成必然重渲染整棵树。先复现一次不必要更新，再决定是否用 memo。
 
 ## ❓ 常见问题
 
@@ -204,3 +216,9 @@ export function useTheme() {
 - 📄 **[TS 类型模式](../reference/language-concepts/04-typescript-patterns.md)**: Context 的类型安全写法
 
 > 💡 **学习建议**: 把"每个订阅都要有清理"当成肌肉记忆——移动端页面频繁进出，泄漏会累积成卡顿甚至崩溃。
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../LEARNING_GUIDE.md) · [完整目录与版本](../README.md) · [通用术语](../../shared-resources/glossary.md)

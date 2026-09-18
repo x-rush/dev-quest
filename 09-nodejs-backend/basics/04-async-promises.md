@@ -1,10 +1,26 @@
 # 异步编程：事件循环、Promise 与取消
 
+## 先理解，再动手
+
+Promise 表示以后得到的结果，await 暂停当前异步流程。两个独立操作可以重叠等待，但依赖前一步结果的操作必须保持顺序。
+
+**本节自测**：用两个延迟 Promise 比较连续 await 与 Promise.all，并让其中一个失败。
+
+<details>
+<summary>预期结果与参考思路（先尝试再展开）</summary>
+
+并发完成更接近较长等待；all 遇到失败会拒绝，但不会自动取消另一个已经启动的操作。
+
+</details>
+
 > **文档简介**: 系统掌握 Node.js 异步模型——事件循环阶段、Promise/async-await、超时与 AbortController 取消模式
 
 > **目标读者**: 有回调/Promise 使用经验但对其原理模糊的开发者
 
 > **前置知识**: [模块系统与 ESM](./03-modules-esm.md)，基本的 JS 函数概念
+
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
 
 ## 📚 文档元数据
 
@@ -15,6 +31,8 @@
 | **难度** | ⭐ |
 | **标签** | `#事件循环` `#Promise` `#async-await` `#AbortController` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ## 🎯 学习目标
 
@@ -39,27 +57,20 @@ Node 是单线程执行 JS 的，靠事件循环调度 I/O 回调实现并发。
      ↓ 进入下一轮（tick）
 ```
 
-两个关键插队规则：
+先分清执行上下文：`process.nextTick` 使用 Node 特有队列，Promise.then 与 queueMicrotask 使用微任务队列。不能背诵“nextTick 永远在 Promise 前面”；ESM 顶层求值与普通 CommonJS 顶层有差别。
 
-- **微任务**（Promise 回调、`queueMicrotask`、`process.nextTick`）在**每个阶段之间**全部清空后才进入下一阶段
-- `process.nextTick` 优先级高于 Promise 微任务
+完整示例：保存为 `order.cjs`，再把相同内容保存为 `order.mjs`，分别用 `node order.cjs` 与 `node order.mjs` 运行。这里没有 import，所以两种模块格式都合法。
 
-用一段代码验证执行顺序：
-
-```ts
-// order.ts —— 预测输出后再运行
-console.log("1: 同步代码");
-
-setTimeout(() => console.log("4: setTimeout (timers 阶段)"), 0);
-setImmediate(() => console.log("5: setImmediate (check 阶段)"));
-
-queueMicrotask(() => console.log("3: queueMicrotask (微任务)"));
-process.nextTick(() => console.log("2: nextTick (插队王)"));
-
-Promise.resolve().then(() => console.log("3.5: Promise.then (微任务)"));
+```js
+console.log('sync')
+process.nextTick(() => console.log('nextTick'))
+queueMicrotask(() => console.log('microtask'))
+Promise.resolve().then(() => console.log('promise'))
 ```
 
-输出顺序：同步 → nextTick → 微任务 → timers/check → 下一轮。**`setTimeout(0)` 与 `setImmediate` 在主模块中顺序不确定，但在 I/O 回调内 setImmediate 恒先执行**。
+在本文所讨论的现代 Node 版本中，CJS 顶层的预期顺序为 sync、nextTick、microtask、promise；ESM 顶层通常为 sync、microtask、promise、nextTick，因为模块求值本身已在异步处理上下文中。不要把任意回调内部的顺序也直接套成这两个列表。官方解释见 [process 队列说明](https://nodejs.org/api/process.html#when-to-use-queuemicrotask-vs-processnexttick)。
+
+setTimeout(0) 表示到期后可被调度，不是立刻执行；与 setImmediate 在主模块中的先后不作为可靠业务约定。任务顺序应通过 await、回调或明确依赖建立。
 
 ## 🛠️ Promise 与 async/await
 
@@ -69,7 +80,7 @@ Node 核心模块提供回调式与 Promise 式两套 API，优先用后者：
 
 ```ts
 import { readFile } from "node:fs/promises";      // ✅ Promise 版
-import { readFile as cbReadFile } from "node:fs"; // ❌ 回调版，仅在流式场景使用
+// 回调式 readFile 同样是合法选择，但不是流式读取；本课统一使用 Promise 风格。
 
 const content = await readFile("config.json", "utf-8");
 ```
@@ -79,7 +90,7 @@ const content = await readFile("config.json", "utf-8");
 `async` 函数返回 Promise；`await` 暂停当前函数（不阻塞线程），把后续代码变为微任务。
 
 ```ts
-// 三种错误处理写法，等价且都正确
+// 两种传播策略：有本地上下文时包装错误，否则自然向上传播；fetchUser 由业务工程提供
 async function loadUser(id: string) {
   // 1) try/catch
   try {
@@ -102,7 +113,7 @@ async function getUser(id: string) {
 const a = await fetchUser("1");
 const b = await fetchUser("2");
 
-// ✅ 并行：总耗时 = max(每个请求)
+// ✅ 并行：等待可重叠，理想耗时接近最长请求；仍受服务端与连接资源限制
 const [userA, userB] = await Promise.all([
   fetchUser("1"),
   fetchUser("2"),
@@ -126,6 +137,9 @@ async function mapPool<T, R>(
   limit: number,
   fn: (item: T) => Promise<R>,
 ): Promise<R[]> {
+  if (!Number.isInteger(limit) || limit < 1) {
+    throw new RangeError("limit 必须是正整数");
+  }
   const results: R[] = new Array(items.length);
   let next = 0;
 
@@ -140,6 +154,7 @@ async function mapPool<T, R>(
   return results;
 }
 
+// 接入片段：urls 与 fetchPage 由调用工程提供
 const pages = await mapPool(urls, 5, (u) => fetchPage(u));
 // 也可用 p-limit 等成熟库，原理相同
 ```
@@ -151,11 +166,11 @@ Node 24 中 `AbortController` 是取消异步操作的标准协议，原生 fetc
 ```ts
 // 模式一：手动取消
 const controller = new AbortController();
-const resp = await fetch("/api/heavy", { signal: controller.signal });
+const resp = await fetch("http://localhost:3000/api/heavy", { signal: controller.signal });
 // 任意时刻: controller.abort() → fetch 抛 AbortError
 
 // 模式二：超时自动取消（最常用）
-const resp2 = await fetch("/api/data", { signal: AbortSignal.timeout(3_000) });
+const resp2 = await fetch("http://localhost:3000/api/data", { signal: AbortSignal.timeout(3_000) });
 
 // 模式三：组合多个信号——任一触发即取消（node:timers/promises 的 setTimeout 也支持 { signal } 取消）
 const combined = AbortSignal.any([
@@ -163,6 +178,8 @@ const combined = AbortSignal.any([
   AbortSignal.timeout(5_000),
 ]);
 ```
+
+以上是接入已有本地服务的片段，需先启动 localhost:3000 对应接口。Node 中没有浏览器页面地址可供相对 URL 解析。
 
 给自定义异步函数接入取消协议：
 
@@ -179,11 +196,9 @@ async function poll(check: () => boolean, signal: AbortSignal): Promise<void> {
 
 ## 🎨 最佳实践
 
-- ✅ **async 函数内必须处理错误**：要么 try/catch 要么向上抛，禁止吞掉
-- ✅ **独立任务用 `Promise.all` 并行**：串行 await 是最常见的性能 bug
-- ✅ **所有出站请求加 `AbortSignal.timeout`**：没有超时的请求是事故温床
-- ❌ **不要用 `new Promise` 包装已返回 Promise 的函数**（Promise 反模式）
-- ❌ **不要在热路径回调里做 CPU 重活**：会阻塞事件循环，超过 ~10ms 的计算考虑 Worker Threads（见 [07-streams-workers](./07-streams-workers.md)）
+async 函数可以把失败传播给调用方，不需要每一层重复 try/catch；只有能恢复、补充上下文或转换边界语义时再捕获。独立任务可以并发，但仍要控制并发量、超时与取消，Promise.all 拒绝并不会自动取消其他任务。
+
+已经返回 Promise 的函数通常直接 await 即可；回调 API 才可能需要包装。CPU 重活是否交给 worker 由任务成本、传输开销和延迟预算共同决定，不设通用毫秒门槛。
 
 ## ❓ 常见问题
 
@@ -219,3 +234,9 @@ async function poll(check: () => boolean, signal: AbortSignal): Promise<void> {
 - 📄 **[异步 API 全表](../reference/language-concepts/02-async-api.md)** — Promise 静态方法与定时器字典
 - 📄 **[Stream 与 Worker](./07-streams-workers.md)** — CPU 密集任务的出路
 - 📄 **[TypeScript 异步模式](../reference/language-concepts/05-typescript-patterns.md)** — 类型安全的异步封装
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../LEARNING_GUIDE.md) · [完整目录与版本](../README.md) · [通用术语](../../shared-resources/glossary.md)

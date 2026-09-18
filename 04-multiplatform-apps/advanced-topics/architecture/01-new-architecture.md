@@ -1,138 +1,50 @@
-# 新架构解析 — Fabric、TurboModules 与 JSI
+# 新架构解析：一次点击如何变成屏幕更新
 
-> **文档简介**: 深入 React Native 新架构的三大支柱：JSI 如何取代 Bridge、Fabric 渲染器的 C++ 共享树、TurboModules 的懒加载机制，理解"为什么"才能写出正确的性能代码
->
-> **目标读者**: 已有完整 RN 开发经验、希望理解底层机制与做技术决策的资深开发者
->
-> **前置知识**: 已完成 [框架进阶](../../frameworks/02-react-native-advanced.md)；建议先读 [原生模块桥接](../../basics/06-native-modules.md) 建立感性认识
+前置：能写一个带状态的 React Native 组件。目标：遇到卡顿、原生模块缺失或平台差异时，知道检查哪一层。本文讲机制；具体版本兼容性以项目锁文件和库的支持矩阵为准。
 
-## 📚 文档元数据
+## 从计数器理解渲染过程
 
-| 属性 | 内容 |
-|------|------|
-| **模块** | `04-multiplatform-apps` |
-| **象限** | 解释（advanced-topics） |
-| **难度** | ⭐⭐⭐ |
-| **标签** | `#JSI` `#Fabric` `#TurboModules` `#架构` `#Hermes` |
-| **更新日期** | 2026年9月 |
+点击“加一”后，事件处理函数调用状态 setter。React 再执行相关组件，得到新的元素描述；渲染器据此产生 Shadow Tree（保存布局等信息的内部树），计算布局，最后把差异应用到平台视图。组件函数执行不等于整个屏幕重建，也不等于每个 View 都对应一个独立原生视图。
 
-## 🎯 学习目标
-
-- ✅ 画出新旧架构的通信模型并解释差异
-- ✅ 解释 JSI "宿主对象"如何实现 JS 与原生的同步直调
-- ✅ 理解 Fabric 双树（Shadow Tree）渲染机制
-- ✅ 据此对第三方库选型、性能问题归因做出正确判断
-
-## 🧩 全景：为什么要有新架构
-
-旧架构（0.68 前）的核心瓶颈是 **JSON 消息桥**：
-
-```
-旧架构：JS ──(异步 JSON 序列化)──▶ Bridge 队列 ──▶ Native
-         （跨语言全靠序列化，批量异步，无法同步取值）
+```text
+点击 → 更新状态 → React 计算元素 → Shadow Tree / 布局 → 平台视图更新
+         JS 工作           渲染工作                    UI 工作
 ```
 
-三大痛点：序列化开销（大列表布局抖动）、异步独占（`measure` 必须回调）、模块全量注册（启动时把 200 个原生模块全初始化）。新架构用三个组件逐一解决：
+要区分可调度的渲染计算与将视图变更应用到屏幕的阶段。不能把“支持并发渲染”解释成“任意原生提交都能中途暂停”。文本测量、系统控件与挂载仍有平台差异，共享 C++ 实现不保证不同系统像素一致。[官方渲染流程](https://reactnative.dev/architecture/render-pipeline)给出了各阶段的职责。
 
-```
-新架构：JS(Hermes) ⇄ JSI 直调 ⇄ C++ 层 ⇄ { TurboModules | Fabric }
-         （类型安全、可同步、按需初始化）
-```
+## 四个名称分别解决什么问题
 
-## 🔌 JSI：一切的地基
+| 名称 | 解决的问题 | 不负责什么 |
+|---|---|---|
+| JSI | 为原生代码与 JS 引擎提供交互接口，可暴露宿主对象和函数 | 不自动校验网络 JSON，不自动把重计算放到后台 |
+| Fabric | 管理 React Native 的渲染与平台视图更新 | 不替业务决定列表项是否昂贵 |
+| TurboModules | 定义和访问原生模块，支持按需加载 | Promise 返回值不保证实现内部没有阻塞 |
+| Codegen | 根据受支持的类型规格生成接口代码，减少两端签名不一致 | 不证明算法正确、权限充足或设备支持某硬件 |
 
-**JSI（JavaScript Interface）** 是用 C++ 写的轻量 JS 引擎抽象层，让原生代码能"看见并持有" JS 对象，反之亦然。
+Hermes 是执行 JavaScript 的引擎。它与渲染器、模块系统处于不同职责层次；启用某个引擎不等于所有性能问题已经解决。旧架构也使用过 Yoga，不应把两代架构区别写成“旧版不用 C++ 布局”。
 
-```cpp
-// 概念示意（非完整代码）：宿主对象 = 原生侧暴露给 JS 的对象
-class NativeMath : public jsi::HostObject {
-  jsi::Value get(jsi::Runtime& rt, const jsi::PropNameID& name) override {
-    if (name.utf8(rt) == "sqrt") {
-      // 返回一个可直接被 JS 调用的函数 —— 无序列化、无队列
-      return jsi::Function::createFromHostFunction(
-        rt, name, 1,
-        [](jsi::Runtime& rt, const jsi::Value&, const jsi::Value* args, size_t) {
-          return jsi::Value(std::sqrt(args[0].asNumber())); // 同步返回！
-        });
-    }
-    return jsi::Value::undefined();
-  }
-};
-```
+## 同步能力为什么既有用又危险
 
-**JSI 的三重意义**：
-1. **引擎无关**：Hermes/JSC/V8 皆可对接（Hermes 默认引擎，AOT 字节码带来启动与内存优势）
-2. **同步调用成为可能**：测量、手势、布局读取不再需要"回调地狱"
-3. **类型安全**：C++ 层强类型直调，序列化错误类 bug 从根上消失
+读取一个内存中的开关可以快速同步返回；扫描大文件即使经 JSI 调用，仍可能阻塞调用线程。异步 API 要同时设计工作线程、结果返回、取消及对象生命周期。把计算放进 Reanimated worklet 也不是通用后台方案：占满 UI 线程同样会卡住动画。
 
-**鸿蒙侧注**：RNOH 在新架构下同样基于 JSI 模型对接 ArkTS 侧，实现细节与版本对齐见 [RNOH 字典](../../reference/language-concepts/05-harmonyos-rnoh-api.md)。
+Expo Modules API 提供 Kotlin/Swift 的模块声明方式。不要把它理解为自动生成所有 TurboModule 规格；应按其独立的模块 API 和线程规则开发。[Expo Module API](https://docs.expo.dev/modules/module-api/)说明了同步与异步函数的声明。
 
-## 🎨 Fabric：渲染器重构
+## 如何作出迁移和性能决策
 
-**核心思想**：布局计算（C++）与绘制（各平台）解耦，JS 树与原生 Shadow Tree 通过不可变快照对齐。
+先记录 RN、Expo SDK、目标平台和原生依赖版本，再逐个确认原生库是否支持该组合。互操作支持有范围，不能仅凭“旧库”就判定一定无法运行，也不能仅凭 npm 安装成功就判定已经适配。
 
-```
-JS 组件树            C++ Shadow Tree            平台视图树
-   │  (Yoga 同步计算布局)   │                        │
-   ├─▶ commit A ──────────▶ 快照 A ───────────────▶ 挂载 A
-   ├─▶ commit B（JS 中断）   快照 B ───────────────▶ 挂载 B
-   └─▶ commit C ──────────▶ 快照 C ───────────────▶ 挂载 C
-```
+卡顿时分别观察 JS 长任务、布局/绘制成本、图片解码和原生 I/O。`startTransition` 只影响更新优先级，不能把事件函数里同步执行的十万次计算自动变成后台任务。升级架构后的启动收益也必须在同一设备、同一构建模式下测量。
 
-**与旧渲染器（Paper）的关键差异**：
+## 练习与反馈
 
-| 维度 | Paper（旧） | Fabric（新） |
-|------|------------|-------------|
-| 布局计算 | Java/ObjC 各自实现 | 统一 C++ + Yoga，三端一致 |
-| 通信 | 异步批量经桥 | 同步直调 + 优先级提交 |
-| 可中断 | 不支持 | 支持（React 并发特性可用） |
-| 视图拍平 | 平台各自实现 | C++ 统一 View Flattening |
+在已有计数器页面中，分别加入一次昂贵的同步 JS 计算和一张超大图片，使用 release 构建记录点击到反馈的延迟。一次只修改一个因素，再比较移除计算或缩小图片后的变化。
 
-**开发侧收益**：`startTransition`/Suspense 生效、渲染提交可被高优交互打断；代价是渲染时序更敏感——"等一帧"类 hack 全部失效，这也解释了 [渲染性能](../performance/01-rendering-performance.md) 中的优化手法。
+验收：能指出延迟发生在 JS 执行还是资源/视图工作阶段，不能只写“桥慢”。若没有设备和分析工具，先画出上述数据流，标出测量点；这属于推演，不应记录为实测性能。
 
-## 📦 TurboModules：按需原生
+继续阅读：[通信模型](../../reference/language-concepts/08-bridge-principles.md)、[术语字典](../../reference/language-concepts/11-new-architecture-terms.md)、[渲染性能](../performance/01-rendering-performance.md)。
 
-**旧 NativeModules**：启动时全量注册 + 桥上异步调用。**TurboModule** 的三个变化：
+<!-- learning-navigation -->
+## 阅读导航
 
-1. **懒加载**：JS 首次 `requireNativeModule` 时才实例化原生模块（200 个模块中只用 5 个 → 启动只付 5 个的钱）
-2. **Codegen 类型安全**：从 TS 规格文件生成原生接口，编译期校验两端一致
-3. **JSI 直调**：方法调用不再排队，支持同步返回值
-
-对开发流程的影响已在 [框架进阶](../../frameworks/02-react-native-advanced.md) 展开：优先 Expo Modules API（它构建于 TurboModule 之上并自动化了 Codegen），手写规格文件留给库作者。
-
-## 🗺️ 迁移与决策要点
-
-- **新架构自 RN 0.76 起默认启用、0.82 起成为唯一架构**（旧架构不再可启用，Legacy 组件在 0.84–0.85 陆续移除）——新项目无需决策，存量项目只能迁移
-- **库选型看适配状态**：`RCTBridge` 时代 API 的库不再维护即弃用；优先 Expo SDK 与声明支持新架构的库
-- **性能归因升级**：桥延迟类问题消失后，瓶颈集中在 JS 执行与渲染提交，分析工具见 [渲染性能](../performance/01-rendering-performance.md)
-- **启动收益立现**：TurboModules 懒加载 + Hermes 字节码是启动优化两大杠杆（详见 [启动优化](../performance/02-startup-optimization.md)）
-
-## ✅ 要点回顾
-
-- ✅ **JSI 是地基**，同步/类型安全/引擎无关三性质派生出其余一切
-- ✅ **Fabric 把布局收进 C++**，三端一致 + 可中断渲染，React 并发特性因此可用
-- ✅ **TurboModules 把启动成本改为按需付费**，第三方库未适配即技术债
-- ❌ **不要再写"等一帧/桥延迟"时代的补丁代码**，假设已失效
-- ❌ **不要把新架构理解成"更快的桥"**，它是通信模型的更换，不是量变
-
-## ❓ 常见问题
-
-**Q1: 新架构下 JS 与原生完全同步了吗？**
-A: 调用通道同步了，但 JS 线程仍是单线程；长任务阻塞照旧，重活移 UI 线程（Reanimated）或原生。
-
-**Q2: 混用旧架构库会怎样？**
-A: 旧架构组件的互操作层（interop layer）可供短期过渡，但有性能与稳定性折损，且旧架构的模块注册通道本身已移除；核心链路库必须完成新架构适配。
-
-**Q3: 如何验证应用真的跑在新架构？**
-A: 现行 RN 无需检查开关——旧架构配置项已随 Legacy 组件移除；确认方式为 React Native DevTools 启动日志与所用库的新架构适配说明。
-
----
-
-## 🔗 相关文档
-
-- 📖 [RNOH 字典 — 鸿蒙适配](../../reference/language-concepts/05-harmonyos-rnoh-api.md) — 新架构在第三端的落地形态
-- 📖 [TypeScript 类型模式](../../reference/language-concepts/04-typescript-patterns.md) — Codegen 规格文件的 TS 写法
-- 📄 [框架进阶 — 新架构、原生模块与动画](../../frameworks/02-react-native-advanced.md) — 本文的"怎么用"篇
-- 📄 [原生模块桥接](../../basics/06-native-modules.md) — 手写模块的感性入口
-- 🎓 [渲染性能](../performance/01-rendering-performance.md) — Fabric 渲染管线上的优化实践
-- 🎓 [启动优化](../performance/02-startup-optimization.md) — TurboModules/Hermes 的启动红利兑现
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

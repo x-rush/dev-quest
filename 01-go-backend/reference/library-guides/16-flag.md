@@ -1,6 +1,6 @@
 # flag - 命令行参数解析
 
-> **模块**: `01-go-backend` | **类型**: 字典条目（无难度门槛，支持任意跳入查阅）
+> **模块**: `01-go-backend` | **类型**: 字典条目（可独立查阅，按主题准备前置知识，支持任意跳入查阅）
 
 ## 📌 定义
 
@@ -108,11 +108,20 @@ func main() {
 - ❌ **错误做法**：混合位置参数与 flags，期望 flag 自动跳过。
 - ✅ **正确做法**：遇到第一个位置参数后 flag 停止解析（后续 `-x` 也进 `flag.Args()`）；约定用户把 flags 放最前，或自己用 NewFlagSet 分段解析。
 - ❌ **错误做法**：flag.Value 的 Set 返回 nil 但内部没校验。
-- ✅ **正确做法**：Set 是唯一校验点，非法输入返回 error（flag 自动打印 usage 并退出）；String() 仅用于 usage 展示。
+- ✅ **正确做法**：Set 负责自定义值转换，可拒绝非法格式；Parse 后还要校验业务范围与参数组合。错误后是返回、退出还是 panic 取决于 FlagSet 的错误处理模式；String 也可被调用者直接使用，不仅用于帮助文本。
 - ❌ **错误做法**：子命令直接 `flag.Parse()` 复用默认集合。
 - ✅ **正确做法**：每个子命令用 `flag.NewFlagSet` 独立集合；`flag.ExitOnError` 出错自动退出，`ContinueOnError` 由代码接管。
 - ❌ **错误做法**：默认 flag 包的错误输出与 usage 无法定制。
 - ✅ **正确做法**：`flag.CommandLine.SetOutput(w)`、`flag.Usage = func(){}` 可整体接管；或自建 FlagSet 设置同名字段。
+
+<!-- full-library-explanation -->
+## 把参数解析做成可测试的输入边界
+
+前置是指针、错误返回值与 os.Args。注册 flag 只是为名称绑定存储位置和转换规则，不检查所有业务约束。flag.Int 能解析 -1，但重试次数可能要求非负；两个参数之间的依赖也应在 Parse 成功后统一验证。默认值应该可解释，例如超时不能静默采用零而导致无限等待。
+
+可测试的命令入口通常为每次调用创建 FlagSet，使用 ContinueOnError，接收 []string 并返回配置和错误，让最外层 main 决定退出码。这样测试不用修改全局 os.Args，也不会因 ExitOnError 直接结束整个测试进程。SetOutput 可将帮助文本写入缓冲区，验证错误反馈是否包含可用参数。
+
+练习：分别解析 `-port 9000 file.txt`、`file.txt -port 9000` 和 `-verbose false`。第一项 port 为 9000、位置参数只有 file.txt；第二项从 file.txt 起都成为位置参数，port 保持默认；第三项 verbose 为 true，而 false 是位置参数。再为 0 和 65536 端口增加明确的业务校验测试。自定义 Set 若追加切片，应说明重复传入 -tags 是累加还是覆盖，避免用户只能试错发现规则。
 
 ## 🔗 相关条目
 
@@ -126,3 +135,9 @@ func main() {
 ---
 
 *最后更新: 2026年9月 | 本条目为模块知识字典的一部分，概念完整解释以此处为单一事实来源*
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

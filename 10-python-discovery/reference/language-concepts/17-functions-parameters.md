@@ -1,5 +1,8 @@
 # 函数参数 — 位置/关键字、*args/**kwargs 与默认值时机
 
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
+
 ## 📚 文档元数据
 
 | 属性 | 内容 |
@@ -10,13 +13,15 @@
 | **标签** | `#函数` `#参数` `#keyword-only` `#positional-only` `#默认值` `#注解` |
 | **更新日期** | `2026年9月` |
 
+</details>
+
 ## 📌 定义
 
-参数形态决定"调用方能怎么传"。Python 共四种形态（PEP 570 / PEP 3102 落地的仅位置与仅关键字）：`/` 前仅位置、中间位置或关键字、`*` 后仅关键字、外加收集用的 `*args`/`**kwargs`。默认值在**函数定义时求值一次**——这是可变默认参数陷阱的根源，也是修复 late binding 的武器。
+参数形态决定"调用方能怎么传"。按 inspect.Parameter 的分类，Python 有五种参数种类（PEP 570 / PEP 3102 落地的仅位置与仅关键字）：`/` 前仅位置、中间位置或关键字、`*` 后仅关键字、外加收集用的 `*args`/`**kwargs`。默认值在**函数定义时求值一次**——这是可变默认参数陷阱的根源，也是修复 late binding 的武器。
 
 ## 📖 语法 / 详解
 
-### 四种形态一张图
+### 参数位置与分隔符
 
 ```python
 def f(pos_only, /, normal, *, kw_only):
@@ -89,11 +94,11 @@ area(*shape, **opt)             # '12 cm2'（实测）—— 序列解包 + 字�
 
 ### 类型注解
 
-注解在定义时存入 `f.__annotations__`（实测 `{'a': <class 'int'>, 'b': <class 'str'>, 'return': list[int]}`），运行时**不强制**——传 str 给 int 参数照常执行。它们是给 IDE、mypy 与 FastAPI/Pydantic 这类"注解驱动框架"看的。写法全表见 [05-typing-annotations](./05-typing-annotations.md)。
+注解可从 `f.__annotations__` 读取；求值时机随 Python 版本和 future 设置变化（实测 `{'a': <class 'int'>, 'b': <class 'str'>, 'return': list[int]}`），运行时**不强制**——传 str 给 int 参数照常执行。它们是给 IDE、mypy 与 FastAPI/Pydantic 这类"注解驱动框架"看的。写法全表见 [05-typing-annotations](./05-typing-annotations.md)。
 
 ## 💡 示例
 
-FastAPI 风格的签名设计：位置参数收主数据，仅关键字防布尔误传，注解驱动校验：
+下面是普通 Python 函数的签名设计示例：位置参数收主数据，仅关键字减少选项误传。注解本身不执行校验，也不应直接把仅位置参数签名照搬成框架路由：
 
 ```python
 def create_user(
@@ -104,7 +109,7 @@ def create_user(
     tags: list[str] | None = None,      # 可变默认值的正确替代
 ) -> dict:
     return {"name": name, "email": email, "is_admin": is_admin,
-            "tags": tags or []}
+            "tags": [] if tags is None else tags}
 
 create_user("ada", email="a@x.io")
 # {'name': 'ada', 'email': 'a@x.io', 'is_admin': False, 'tags': []}（实测）
@@ -125,6 +130,28 @@ create_user("ada", True)
 - ❌ **给仅关键字参数传位置值**：`f(1, 2, 3)` 抛 TypeError。
   ✅ `*` 之后一律写名，让布尔/选项参数在调用点可读。
 
+<!-- full-library-explanation -->
+## 签名约束与业务约束各自验证
+
+前置知识是函数调用与字典解包。`/` 和 `*` 约束参数如何传入，函数体判断值是否可用；注解描述静态契约。三者不会互相替代。
+
+保存为 `parameters.py` 后运行：
+
+```python
+def add_tag(tag, /, *, target=None):
+    if target is None:
+        target = []
+    target.append(tag)
+    return target
+
+print(add_tag("a"))
+print(add_tag("b"))
+shared = []
+print(add_tag("c", target=shared) is shared)
+```
+
+输出 `['a']`、`['b']`、`True`。省略 target 时各次调用独立，显式传入列表时函数修改调用方的对象。练习：若 API 承诺不修改传入列表，应在入口复制它；此时最后一行应变成 False，shared 应仍为空。
+
 ## 🔗 相关条目
 
 - 📄 **[装饰器](./06-decorators.md)** — `*args/**kwargs` 透传签名的标准场景
@@ -136,3 +163,9 @@ create_user("ada", True)
 ---
 
 *最后更新: 2026年9月 | 本条目为模块知识字典的一部分，概念完整解释以此处为单一事实来源*
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

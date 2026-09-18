@@ -6,6 +6,9 @@
 >
 > **前置知识**: [认证服务实战](../../projects/02-auth-service.md)、[Hono 进阶](../../frameworks/02-hono-advanced.md)
 
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
+
 ## 📚 文档元数据
 
 | 属性 | 内容 |
@@ -16,13 +19,15 @@
 | **标签** | `#security` `#secure-headers` `#injection` `#secrets` `#owasp` |
 | **更新日期** | `2026年9月` |
 
+</details>
+
 ## 🎯 阅读目标
 
-- 一小时内建立"公网可用"的安全基线（本文清单可直接照做）
+- 理解常见防护的作用与限制，并为具体服务建立可验证的安全基线
 - 理解注入类攻击的共同原理：**数据与代码的边界被打破**
 - 建立密钥管理的纪律：不进代码、不进日志、可轮换
 
-## 1. 安全头与中间件基线（十分钟做完）
+## 1. 安全头与中间件基线
 
 ```bash
 # 无需额外安装：hono/secure-headers、hono/cors、hono/body-limit 全部内置
@@ -34,7 +39,9 @@ import { secureHeaders } from 'hono/secure-headers';
 import { cors } from 'hono/cors';
 import { bodyLimit } from 'hono/body-limit';
 
-app.use(secureHeaders()); // 一次设置 CSP、HSTS、X-Frame-Options 等安全响应头
+app.use(secureHeaders({
+  contentSecurityPolicy: { defaultSrc: ["'none'"], frameAncestors: ["'none'"] },
+})); // 纯 API 响应示例；提供 HTML 页面时应按实际资源配置 CSP
 
 app.use('/api/*', cors({
   origin: ['https://app.example.com'], // 白名单，绝不用 '*' 配合凭据
@@ -46,7 +53,7 @@ app.use('/api/*', cors({
 app.use('/api/*', bodyLimit({ maxSize: 100 * 1024 })); // 100kb
 ```
 
-`secureHeaders()` 默认值已覆盖 OWASP 安全头建议；遇到前端资源加载报 CSP 错误时，按需放宽单项而非整体关闭。
+`secureHeaders()` 默认并不设置适合所有应用的 CSP，需要显式配置；遇到前端资源加载报 CSP 错误时，按需放宽单项而非整体关闭。
 
 ## 2. 注入防护：统一原理是"数据不当代码执行"
 
@@ -71,7 +78,7 @@ const users = await prisma.$queryRaw`
 `;
 ```
 
-排序字段白名单：`orderBy` 无法参数化，用枚举映射而非透传用户输入：
+原始 SQL 的列名不能用值占位符代替。ORM 的 `orderBy` 对象由框架解释；动态字段仍应限制在业务允许的白名单中：
 
 ```typescript
 const SORTABLE = { createdAt: 'createdAt', title: 'title' } as const;
@@ -84,9 +91,9 @@ const field = SORTABLE[validated.sort as keyof typeof SORTABLE] ?? 'createdAt';
 // ❌ 反例：用户输入直接拼进 shell
 exec(`convert ${userInput}.png out.jpg`);
 
-// ✅ 正解：execFile 不经过 shell，参数按字面传递
+// execFile 默认不经过 shell，但仍须防工具自身的选项、路径或协议注入
 import { execFile } from 'node:child_process';
-execFile('convert', [`${userInput}.png`, 'out.jpg']); // 即便输入是 "; rm -rf /" 也只是个文件名
+execFile('convert', [validatedInputPath, validatedOutputPath]); // 两个路径需由服务端按受控文件 ID 生成
 ```
 
 ### 路径穿越
@@ -95,16 +102,18 @@ execFile('convert', [`${userInput}.png`, 'out.jpg']); // 即便输入是 "; rm -
 // ❌ 反例：拼接用户提供的文件名
 const filePath = path.join(UPLOAD_DIR, c.req.param('name')); // "../../.env" 直接逃逸
 
-// ✅ 正解：解析后强制校验仍在基目录内
-const filePath = path.resolve(UPLOAD_DIR, path.basename(c.req.param('name')));
-if (!filePath.startsWith(UPLOAD_DIR + path.sep)) throw new HttpError(400, '非法路径');
+// 使用服务端生成的固定格式 ID；UPLOAD_DIR 必须为受控目录。
+const id = c.req.param('name');
+if (!/^[a-f0-9]{32}$/.test(id)) throw new HttpError(400, '非法文件 ID');
+// 此处还必须查询文件所有者并验证当前用户的访问权限。
+const filePath = path.join(path.resolve(UPLOAD_DIR), id);
 ```
 
 登录、文件上传、JWT 的专项实现见认证服务与 Hono 进阶文档；限流防暴力破解见生产级 API。
 
 ## 3. 密钥管理全生命周期
 
-**铁律：密钥只存在于运行时环境。** 提交进 git 的密钥等于公开：
+**密钥由专门的密钥存储管理，应用仅在必要的运行时范围读取。** 提交进 git 的密钥等于公开：
 
 ```text
 生产密钥的正确旅程：
@@ -132,6 +141,7 @@ JWT_ACCESS_SECRET: z.string().min(32)
 jwt.verify(token, env.JWT_ACCESS_SECRET, {
   algorithms: ['HS256'], // 不写 algorithms 时某些库接受攻击者指定的算法
   audience: 'todo-api',
+  issuer: 'https://auth.example.com',
 });
 ```
 
@@ -142,7 +152,7 @@ pnpm audit --prod                        # 已知漏洞扫描，CI 中定期执�
 pnpm outdated                            # 过时依赖清单
 ```
 
-- 固定基础镜像版本（`node:24-alpine` 非 `latest`）
+- 选择受支持的基础镜像；`node:24-alpine` 仍会移动，需要可重复部署时锁定摘要并制定更新流程
 - 容器非 root 运行 + 资源限额（见 [`../../deployment/01-docker-deployment.md`](../../deployment/01-docker-deployment.md)）
 - 错误响应不回堆栈与内部路径——500 只说"服务器内部错误"
 
@@ -151,11 +161,22 @@ pnpm outdated                            # 过时依赖清单
 - [ ] secureHeaders() 已挂载，CSP 按业务最小放宽
 - [ ] CORS 白名单，未开启通配凭据
 - [ ] 全部 SQL 经参数化；原生查询已审计
-- [ ] 文件名/路径经 `basename` + 前缀校验
-- [ ] 子进程一律 `execFile`，零字符串拼接
+- [ ] 文件使用受控 ID 映射，完成所有权校验，并明确符号链接与目录写入权限
+- [ ] 子进程避免 shell 拼接，限制可执行文件、参数选项和可访问路径
 - [ ] 限流覆盖全站 + 认证接口独立收紧
 - [ ] 密钥零落库零落码零落日志，轮换预案可执行
 - [ ] `pnpm audit` 无高危未修复项
+
+<!-- full-library-explanation -->
+## 从攻击输入走到明确的拒绝条件
+
+防护必须对应具体边界。参数化 SQL 隔离值与 SQL 语法，但不能代替对象授权：`WHERE id = ?` 很安全地查询出别人的订单，仍然是越权。CORS 限制浏览器读取跨源响应，不能阻止脚本客户端调用接口，也不能单独防 CSRF。
+
+路径校验需要先确定接口接受的是文件 ID 还是相对路径。本页采用服务器生成的 ID，并把它映射到受控目录；该目录不允许不可信用户建立符号链接。若允许任意目录层级或存在并发写入者，字符串前缀检查不足以解决符号链接和检查后替换问题。
+
+**练习**：用两个用户分别创建文件，验证用户 B 即使知道用户 A 的合法文件 ID 也无法下载；再尝试 `../`、带前导 `-` 的命令参数、无效 JWT 与缺少受众的 JWT。验收需要具体拒绝状态及服务端日志，不记录原始令牌。32 个重复字符可以通过长度检查，却不代表密钥具有足够随机性；密钥应由密码学安全随机源产生。
+
+参考：[Hono 安全头默认项](https://hono.dev/docs/middleware/builtin/secure-headers)、[OWASP 授权原则](https://cheatsheetseries.owasp.org/cheatsheets/Authorization_Cheat_Sheet.html)。
 
 ## 🔗 相关文档
 
@@ -163,3 +184,9 @@ pnpm outdated                            # 过时依赖清单
 - 📄 [生产级 Node.js API](../../projects/04-production-nodejs-api.md) — 限流与配置校验
 - 📄 [可观测性](../../deployment/03-observability.md) — 日志脱敏与告警
 - 📖 [后端生态库精选](../../reference/library-guides/02-ecosystem-libs.md) — 安全相关库速查
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

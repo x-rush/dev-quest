@@ -1,10 +1,13 @@
 # node:crypto 加密速查
 
-> **文档简介**: `node:crypto` 高频 API 的字典式速查——哈希摘要、HMAC、安全随机、AES-GCM 加解密闭环、scrypt 密码散列与时序安全比较，全部用法在 Node 24 实测通过
+> **文档简介**: `node:crypto` 高频 API 的字典式速查——哈希摘要、HMAC、安全随机、AES-GCM 加解密闭环、scrypt 密码散列与时序安全比较，示例以 Node 24 API 为背景，当前运行验证范围以质量报告为准
 
 > **目标读者**: 需要落地上传校验、签名、加密存储的开发者
 
 > **前置知识**: [内置模块导航表](./01-core-modules.md)（`node:` 前缀导入）
+
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
 
 ## 📚 文档元数据
 
@@ -15,6 +18,8 @@
 | **难度** | ⭐⭐ |
 | **标签** | `#crypto` `#哈希` `#AES-GCM` `#scrypt` `#安全随机` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ## 1. 哈希与 HMAC
 
@@ -94,7 +99,7 @@ decipher.setAuthTag(tag);
 const plaintext = Buffer.concat([decipher.update(ciphertext), decipher.final()])
   .toString("utf8");                      // "秘密消息"
 
-// 篡改检测：密文翻转 1 位后解密直接抛错（认证失败），不会解出脏数据
+// 篡改检测：密文翻转 1 位后解密直接抛错（认证失败）；update 的输出在 final 成功前不能使用
 ```
 
 存储布局惯例：`iv ‖ tag ‖ ciphertext` 三段拼在一起落库，解密时按固定长度切出。
@@ -102,7 +107,7 @@ const plaintext = Buffer.concat([decipher.update(ciphertext), decipher.final()])
 ### 陷阱
 - ❌ **IV 复用**（同一 key 下重复 IV）——GCM 下会泄露认证密钥，等同密码学灾难
 - ✅ IV 用 `randomBytes(12)` 每次生成，与密文一起存储（IV 不是秘密）
-- ❌ 忘记 `setAuthTag` 就 `final()`——抛错；新代码 tag 必须完整 16 字节（12 字节等旧长度实测可用，但非 128-bit tag 已弃用——DEP0182，Node 22.15.0 起）
+- ❌ 忘记 `setAuthTag` 就 `final()`——抛错；本例使用 16 字节标签；若协议使用其他受支持长度，必须核对 authTagLength 及版本要求，不能把“未显式指定长度的兼容行为弃用”误读为所有短标签 API 一概不可用
 - ❌ ECB/CBC 无认证模式自行拼 HMAC——能选 GCM 就选 GCM，不要手搓组合
 
 ## 4. 密码散列：scrypt
@@ -124,12 +129,12 @@ timingSafeEqual(candidate, derived);             // true/false
 
 - 同一密码 + 同一盐 → 结果确定（可复算），换盐则完全不同
 - scrypt 还有 N/r/p 成本参数与 `node:crypto` 的异步版本（`scrypt`），高并发注册场景用异步避免阻塞
-- 新项目也可以评估 argon2id（需依赖库）；内置标准库内 scrypt 是默认答案
+- Argon2id 的内置支持与稳定性需按具体 Node 版本核对；选择 KDF 时同时评估成本、实现成熟度与迁移方案
 
 ## 5. 时序安全比较：timingSafeEqual
 
 ### 定义
-普通 `===` 逐字符短路返回，攻击者可通过响应耗时逐位猜出密钥；`timingSafeEqual` 恒定时间比较，消除时序侧信道。
+普通字符串比较没有恒定时间保证；timingSafeEqual 为等长字节提供时序安全比较，但完整协议的其他步骤仍可能形成侧信道。
 
 ```ts
 import { timingSafeEqual } from "node:crypto";
@@ -149,6 +154,15 @@ timingSafeEqual(norm(a), norm(b));
 
 - 适用对象：API 密钥、签名、token 校验；普通业务字段比较不需要
 
+<!-- full-library-explanation -->
+## 加密流程的安全性取决于协议与密钥生命周期
+
+前置是 Buffer、随机数和错误处理。哈希不提供身份认证，攻击者可以同时修改消息和普通摘要；HMAC 需要双方妥善保管共享密钥。Webhook 验签应使用协议指定的原始字节和签名布局，不能将解析后的 JSON 再 stringify 后假定字节相同；还要检查时间戳、事件 ID 与重放窗口。
+
+GCM 解密时 update 可能先返回尚未认证的明文字节，只有 final 成功才能接受整条消息，因此不要在认证完成前处理或发送这些字节。记录格式要包含算法版本、密钥标识、IV、认证标签和密文，方便轮换；IV 在同一密钥下必须避免重复，随机生成仍需控制每个密钥的使用量。timingSafeEqual 只约束比较操作，不会让周围的查询、错误分支和日志自动具有恒定时间。
+
+练习：对闭环示例的密文、标签、IV 分别翻转一个字节，解密都应拒绝；错误路径不得返回 update 得到的部分明文。再让两份格式不同但语义相同的 JSON 参与 HMAC，摘要应不同，借此理解原始字节的重要性。密码散列保存算法、成本参数、盐与结果，登录成功后可按策略迁移成本；对外服务优先异步 KDF 并限制并发，不能让攻击者耗尽线程池。
+
 ## 🔗 相关文档
 
 - 📄 **[全局对象速查](../language-concepts/09-globals-reference.md)** — WebCrypto `crypto` 全局与 `node:crypto` 的分工
@@ -159,3 +173,9 @@ timingSafeEqual(norm(a), norm(b));
 ---
 
 *最后更新: 2026年9月 | 本条目为模块知识字典的一部分，概念完整解释以此处为单一事实来源*
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

@@ -1,10 +1,26 @@
 # Table 基础：列模型与数据行
 
+## 先理解，再动手
+
+表格的 data 是原始记录，列定义描述如何读值和渲染。排序、筛选和分页应明确是在当前数据上计算还是由服务端完成。
+
+**本节自测**：用 5 行记录、每页 2 行，排序后翻页，预测三页内容。
+
+<details>
+<summary>预期结果与参考思路（先尝试再展开）</summary>
+
+应得到 2、2、1 行；只排序当前页和全表排序后分页结果可能不同，要与产品需求一致。
+
+</details>
+
 > **文档简介**: 掌握 TanStack Table v9 的核心三角——data、columns、table 实例，学会用 ColumnDef 声明列、用 features 注册特性，并用 flexRender 渲染出一张完整表格
 >
 > **目标读者**: 已理解 Headless 理念，想动手渲染第一张 TanStack 表格的开发者
 >
 > **前置知识**: [Headless 设计哲学](./02-headless-philosophy.md)、React 列表渲染基础
+
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
 
 ## 📚 文档元数据
 
@@ -15,6 +31,8 @@
 | **难度** | ⭐ |
 | **标签** | `#TanStack-Table` `#ColumnDef` `#flexRender` `#Headless` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ## 🎯 学习目标
 
@@ -165,11 +183,9 @@ const table = useTable({
 
 ## ✅ 最佳实践
 
-- ✅ **columns 定义在组件外或 useMemo 中**，避免每次渲染生成新引用
-- ✅ **data 引用要稳定**：来自 `useQuery` 的 `data` 天然稳定，本地拼接需 `useMemo`
-- ✅ **派生列必须给 `id`**：没有 `accessorKey` 时 id 是唯一标识
-- ❌ **避免** 忘传 `features` 或漏注册行模型槽位——对应能力静默失效，表格渲染空白
-- ❌ **避免** 手动遍历 `data` 渲染行——一切渲染都应经过 `table.getRowModel()`
+表格先从 data 和 columns 建立行、列的含义，再由行模型应用排序、筛选与分页；如果直接遍历原始 data 渲染，就可能绕过这些处理，出现“按钮变了，行顺序没变”。改变排序后检查屏幕行序，是比“已注册功能”更直接的验收。
+
+不要在每次渲染时无条件创建相同的派生数组，导致表格重复处理；可将固定列放到组件外，把昂贵派生计算按实际依赖记忆化。Query 对符合条件的数据会做结构共享，但不是所有 data 永远引用相同。列身份要稳定，无法从 accessor 或标题推导时显式设置 id；功能注册方式按本文对应 Table 版本核对，不能把某版本配置当通用 API。
 
 ---
 
@@ -196,3 +212,9 @@ const table = useTable({
 ---
 
 **最后更新**: 2026年9月 | Dev Quest · 03-tanstack-stack
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../LEARNING_GUIDE.md) · [完整目录与版本](../README.md) · [通用术语](../../shared-resources/glossary.md)

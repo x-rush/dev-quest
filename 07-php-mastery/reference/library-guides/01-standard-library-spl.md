@@ -4,6 +4,9 @@
 
 SPL（Standard PHP Library）随 PHP 内核发布，提供数据结构、迭代器、异常与文件处理工具；本文同时覆盖 `ArrayAccess`/`Countable`/`Iterator` 等核心接口与常用内置扩展（mbstring、JSON、PCRE）。全部内容无需 Composer 安装。
 
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
+
 ## 📚 文档元数据
 
 | 属性 | 内容 |
@@ -13,6 +16,8 @@ SPL（Standard PHP Library）随 PHP 内核发布，提供数据结构、迭代�
 | **难度** | ⭐⭐ |
 | **标签** | `#SPL` `#标准库` `#迭代器` `#数据结构` `#扩展` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ## 1. SPL 数据结构
 
@@ -36,7 +41,7 @@ echo $queue->dequeue(), PHP_EOL;  // task-1：先进先出
 
 ### SplFixedArray
 
-**定义**: 定长数值索引数组，内存占用约为普通数组的一半，键固定 0..n-1。
+**定义**: 定长数值索引数组，内存表现取决于元素类型、数量和 PHP 版本，键固定 0..n-1。
 
 ```php
 $arr = new SplFixedArray(3);
@@ -50,7 +55,7 @@ $plain = $arr->toArray();
 $fixed = SplFixedArray::fromArray([1, 2, 3]);
 ```
 
-**陷阱**: 不支持字符串键——需要映射语义时用普通数组或 `SplObjectStorage`；扩容是复制操作，频繁 resize 失去性能意义。
+**陷阱**: 不支持字符串键——字符串键映射用普通数组；对象身份映射可用 `SplObjectStorage`；扩容是复制操作，频繁 resize 失去性能意义。
 
 ### SplObjectStorage
 
@@ -126,7 +131,7 @@ foreach ($files as $file) {
 }
 ```
 
-**陷阱**: 迭代器是惰性的——foreach 中途修改底层集合行为未定义；需要快照时先 `iterator_to_array($it)`。
+**陷阱**: 迭代器可以延迟取值，但具体实现也可能提前加载；遍历期间修改底层集合的行为取决于实现；需要快照时先 `iterator_to_array($it)`。
 
 ## 3. 核心接口（让类"像"内置类型）
 
@@ -142,7 +147,10 @@ final class Bag implements ArrayAccess, Countable, Stringable
     // ArrayAccess：$bag['k'] 语法
     public function offsetExists(mixed $offset): bool { return isset($this->data[$offset]); }
     public function offsetGet(mixed $offset): mixed { return $this->data[$offset]; }
-    public function offsetSet(mixed $offset, mixed $value): void { $this->data[$offset] = $value; }
+    public function offsetSet(mixed $offset, mixed $value): void {
+        if ($offset === null) { $this->data[] = $value; }
+        else { $this->data[$offset] = $value; }
+    }
     public function offsetUnset(mixed $offset): void { unset($this->data[$offset]); }
 
     // Countable：count($bag)
@@ -151,7 +159,7 @@ final class Bag implements ArrayAccess, Countable, Stringable
     // Stringable：(string) $bag
     public function __toString(): string
     {
-        return json_encode($this->data, JSON_UNESCAPED_UNICODE);
+        return json_encode($this->data, JSON_UNESCAPED_UNICODE | JSON_THROW_ON_ERROR);
     }
 }
 
@@ -221,3 +229,23 @@ bin2hex(random_bytes(8));                       // 16 位随机 hex
 - 📄 **[常用内置函数分类全表](../language-concepts/02-built-in-functions.md)** — 函数级速查
 - 📄 **[Composer 生态精选](./02-composer-ecosystem.md)** — SPL 之外的三方标准库
 - 📄 **[类型系统与现代 OOP](../language-concepts/03-types-oop-modern.md)** — Countable 等接口在交叉类型中的应用
+
+
+<!-- full-library-explanation -->
+## 从集合的行为选择工具
+
+前置是数组、对象身份与 foreach。队列强调先进先出，栈强调后进先出；选择它们首先是让操作意图明确，性能还需按数据规模测量。SplObjectStorage 持有对象的强引用，对象即使离开其他作用域也不会因此释放；若缓存不应延长对象生命，研究 WeakMap 的语义。
+
+IteratorAggregate 每次可以返回新的迭代器，而生成器对象具有自己的当前位置。需要重复遍历时要明确返回的是新游标还是共享游标。iterator_to_array 默认保留键，重复键可能覆盖旧值；希望保留每个值应显式传 false。
+
+**练习**：用两个属性相同的新对象作为 SplObjectStorage 的键，预期 count 为 2；把同一个实例放入两次，预期为 1。再让生成器两次 yield 相同键，比较 iterator_to_array 的第二参数为 true/false 的结果。解释“去重”到底按键、值还是对象身份进行。
+
+扩展随 PHP 分发不等于部署已启用。mbstring 等需要在实际 CLI/FPM 环境分别确认，使用 extension_loaded 和 Composer ext-* 平台依赖声明。依据：[SPL](https://www.php.net/manual/en/book.spl.php)。
+
+
+本轮未在本机执行 PHP 片段；文中的输出为预期值，版本相关行为请用项目运行时验证。
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

@@ -8,6 +8,9 @@
 >
 > **预计时长**: 20-35分钟
 
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
+
 ## 📚 文档元数据
 
 | 属性 | 内容 |
@@ -19,6 +22,8 @@
 | **更新日期** | `2026年9月` |
 | **作者** | Dev Quest Team |
 | **状态** | ✅ 已完成 |
+
+</details>
 
 ---
 
@@ -112,7 +117,7 @@ const person = {
   },
 
   arrowMethod: () => {
-    console.log(this.name) // ❌ undefined（箭头函数作为方法时，this 指向全局）
+    console.log(this.name) // ❌ undefined（箭头函数捕获外层 this；模块顶层为 undefined，访问属性会报错）
   }
 }
 
@@ -393,6 +398,7 @@ async function displayUserPosts(userId) {
 
 // 使用 for...of 循环和 Promise
 async function processBatch(items, batchSize = 5) {
+  if (!Number.isInteger(batchSize) || batchSize <= 0) throw new RangeError('batchSize must be positive')
   for (let i = 0; i < items.length; i += batchSize) {
     const batch = items.slice(i, i + batchSize)
     const results = await Promise.all(
@@ -441,7 +447,7 @@ console.log(merged) // { a: 1, b: 3, c: 4, d: 5 }
 
 // 展开运算符合并对象
 const mergedWithSpread = { ...target, ...source1, ...source2 }
-console.log(mergedWithSpread) // { a: 1, b: 2, c: 4, d: 5 }
+console.log(mergedWithSpread) // { a: 1, b: 3, c: 4, d: 5 }
 
 // Object.keys, Object.values, Object.entries
 const user = { id: 1, name: 'John', age: 30 }
@@ -519,7 +525,7 @@ const janeIndex = users.findIndex(user => user.name === 'Jane')
 
 // some 和 every
 const hasAdults = users.some(user => user.age >= 18) // true
-const allAdults = users.every(user => user.age >= 18) // false
+const allAdults = users.every(user => user.age >= 18) // true
 
 // 展开运算符复制和合并数组
 const numbersCopy = [...numbers]
@@ -597,7 +603,7 @@ const userInfo = `
 // 标签模板字符串
 function highlight(strings, ...values) {
   return strings.reduce((result, string, i) => {
-    const value = values[i] ? `<mark>${values[i]}</mark>` : ''
+    const value = i < values.length ? `<mark>${String(values[i])}</mark>` : '' // 仅展示模板机制；未经 HTML 编码，不可插入不可信内容
     return result + string + value
   }, '')
 }
@@ -628,7 +634,7 @@ const paddedEnd = number.padEnd(6, '0') // '420000'
 
 const name = 'John'
 const centered = name.padStart(10, ' ').padEnd(20, ' ')
-// '    John      '
+// 左侧 6 个空格、右侧 10 个空格，总长度 20
 
 // trimStart 和 trimEnd (ES2019)
 const spaced = '   Hello, world!   '
@@ -866,3 +872,26 @@ console.log(composed(5)) // "Result: 12" ((5 + 1) * 2 = 12)
 **文档状态**: ✅ 已完成
 **最后更新**: 2026年9月
 **版本**: v1.0.0
+
+<!-- full-library-explanation -->
+## 先分清语法简写有没有改变行为
+
+前置是函数、对象引用与异步返回值。解构默认值只在 undefined 时生效，null 会保留；对象展开只复制一层，嵌套对象仍共享引用。Promise.all 聚合已经启动的任务，不提供并发数量限制，一项拒绝也不会取消其他任务。race 超时只是先得到拒绝结果，取消网络请求还要把 AbortSignal 传给 fetch。
+
+```js
+const original = { nested: { count: 1 } };
+const copied = { ...original };
+copied.nested.count = 2;
+const { value = 9 } = { value: null };
+console.log(original.nested.count, value); // 2 null
+console.log([].some(Boolean), [].every(Boolean)); // false true
+```
+
+**练习**：先预测上面输出，再执行；把 nested 也展开复制，确认修改副本不再改变原对象。对 HTTP 404 与断网分别调用 fetch，前者需要检查 ok，后者走拒绝路径。浏览器 DOM 示例放在浏览器执行，顶层 await 放在模块中；各速查片段有重复变量名，应独立实验，不能拼成一个脚本。
+
+参考：[JavaScript 核心参考](./09-js-core-semantics.md)、[内置对象与函数](../../../shared-resources/javascript-builtins.md)、[关键词](../../../shared-resources/javascript-keywords.md)。
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

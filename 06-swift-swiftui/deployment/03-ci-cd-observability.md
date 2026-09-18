@@ -6,6 +6,9 @@
 >
 > **前置知识**: [02-app-store-release.md](./02-app-store-release.md)（熟悉 App Store Connect）、[frameworks/04-devtools.md](../frameworks/04-devtools.md)（Xcode 构建体系）
 
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
+
 ## 📚 文档元数据
 
 | 属性 | 内容 |
@@ -15,6 +18,8 @@
 | **难度** | ⭐⭐⭐ |
 | **标签** | `#XcodeCloud` `#CI-CD` `#MetricKit` `#崩溃上报` `#可观测性` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ## 🎯 本指南解决什么问题
 
@@ -138,9 +143,9 @@ final class MetricsSubscriber: NSObject, MXMetricManagerSubscriber {
 
 ## ✅ 最佳实践
 
-- ✅ 流水线从第一天就跑测试，**没有测试支撑的 CI 只是打包机器**
-- ✅ dSYM 与版本一一归档，崩溃符号化不过夜
-- ✅ 指标看趋势不看单点，周同比比日波动有意义
+CI 要给出可解释的反馈：编译失败、测试失败和签名失败分别保留日志，不能只有一个“打包失败”。归档对应构建的符号文件，并用受控异常确认能还原到源码。
+
+监控按版本、设备与用户旅程分析趋势，同时保留严重单次事件的调查入口。同比有助于比较，但不能忽略发布后立即出现的错误峰值；根据影响与样本量决定告警。
 
 ## ❌ 避免陷阱
 
@@ -168,3 +173,9 @@ final class MetricsSubscriber: NSObject, MXMetricManagerSubscriber {
 - 📄 [04-devtools.md](../frameworks/04-devtools.md) — 本地侧工具链（Instruments/调试器）
 - 📄 [01-rendering-performance.md](../advanced-topics/performance/01-rendering-performance.md) — 指标劣化后的优化方法论
 - 📄 [03-integration-testing.md](../testing/03-integration-testing.md) — 让 CI 测试关卡更扎实的集成测试
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../LEARNING_GUIDE.md) · [完整目录与版本](../README.md) · [通用术语](../../shared-resources/glossary.md)

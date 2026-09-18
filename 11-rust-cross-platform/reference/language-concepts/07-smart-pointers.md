@@ -4,6 +4,9 @@
 
 智能指针是**实现 `Deref`（透明访问内部值）与 `Drop`（确定性释放）的封装结构体**，在栈指针之外携带元数据（引用计数、锁、能力标记）。Rust 的选择逻辑：先问**所有权独占还是共享**，再问**要不要内部可变性**，最后问**单线程还是多线程**。本篇给出 std 全量对比与各类型速查。基线 Rust 1.98.1 / edition 2024（见[模块 README](../../README.md)）。
 
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
+
 ## 📚 文档元数据
 
 | 属性 | 内容 |
@@ -13,6 +16,8 @@
 | **难度** | ⭐⭐ |
 | **标签** | `#rust` `#reference` `#智能指针` `#Rc-Arc` `#内部可变性` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ## 条目 1：全量对比总表
 
@@ -24,11 +29,11 @@
 |------|-----------|---------|-----------|------|---------|
 | `Box<T>` | 独占，堆上单值 | 随 `T` | 无 | 一次指针解引，无计数 | 递归类型、大值、`dyn Trait` |
 | `Rc<T>` | 共享（克隆只加计数） | ✗ 非原子计数 | 无 | 非原子计数增减 | 单线程共享只读数据 |
-| `Arc<T>` | 共享 | ✓ 原子计数 | 无 | 原子计数（跨核同步成本） | 多线程共享只读数据 |
-| `Cell<T>` | 独占 | `!Sync` | ✓ 仅 `Copy` 类型（get/set 整值替换） | 无锁，极低 | `Copy` 类型内部可变 |
+| `Arc<T>` | 共享 | T: Send + Sync 时可跨线程；原子计数 | 无 | 原子计数（跨核同步成本） | 多线程共享只读数据 |
+| `Cell<T>` | 独占 | `!Sync` | ✓ get 要求 Copy；set/replace 可用于非 Copy 值 | 无锁，极低 | `Copy` 类型内部可变 |
 | `RefCell<T>` | 独占 | `!Sync` | ✓ 任意 `T`（运行时借用规则） | 运行时借用计数 | 单线程共享可变 |
 | `Mutex<T>` | 独占 | ✓（`T: Send`） | ✓ 阻塞式互斥 | 系统锁（futex 级） | 多线程互斥写 |
-| `RwLock<T>` | 独占 | ✓（`T: Send`） | ✓ 多读单写 | 读写锁，常态高于 Mutex | 读多写少 |
+| `RwLock<T>` | 独占 | Send 要求 T: Send；Sync 要求 T: Send + Sync | ✓ 多读单写 | 读写锁，常态高于 Mutex | 读多写少 |
 | `Cow<'a, B>` | 借用**或**拥有（枚举） | 随 `B` | 无（写时整体克隆） | 一个枚举判别 + 分支 | 读多写少、免拷贝 API |
 | `Weak<T>` | 不拥有（观察者） | 随 Rc/Arc | 无 | 计数的 weak 侧 | 破环、缓存 |
 
@@ -45,7 +50,7 @@
 
 ⚠️ **常见陷阱**: `Rc`/`Arc` 共享的是**只读访问**——"共享 + 改"必须叠内部可变性（RefCell/Mutex）；两层 `Deref` 解引（`&**rc`）源于先解 `Rc` 再解内部值。
 
-🔗 **相关条目**: [条目 2：Box](#条目-2box)、[条目 3：Rc 与 Weak](#条目-3rc-与-weak-循环引用-breaking)
+🔗 **相关条目**: [条目 2：Box](#条目-2box)、[条目 3：Rc 与 Weak](#条目-3rc-与-weak循环引用-breaking)
 
 ## 条目 2：Box
 
@@ -53,7 +58,7 @@
 
 📖 **语法/签名**: `Box::new(value)`；递归类型用 `Box<Next>` 提供间接层；`Box<dyn Trait>` 是 trait 对象载体（动态分发）。
 
-💡 **示例**（本块经 rustc edition 2024 实测通过）:
+💡 **示例**（edition 2024 示例，本轮未运行）:
 
 ```rust
 // Box 突破递归类型的无限大小：直接内嵌 List 会报 E0072
@@ -83,7 +88,7 @@ fn main() {
 
 **关键点解析**:
 - 递归类型必须经 `Box`（或引用/`Rc`）打断"类型大小含自身"的无限递归，否则 E0072。
-- `Box::leak` 可把 `Box<T>` 转成 `&'static mut T`（进程级泄漏换取静态生命周期，慎用）。
+- Box::leak 返回的引用生命周期受 T 中已有借用限制；T 满足 static 约束时才可选择 static 生命周期（进程级泄漏换取静态生命周期，慎用）。
 
 ⚠️ **常见陷阱**: "值太大所以 Box"多数是过早优化——大数组直接放 `Box<[u8; 10000]>` 有意义，几十字节的 struct 没有；`Box<dyn Trait>` 有虚表分发成本，热路径泛型（静态分发）优先。
 
@@ -95,7 +100,7 @@ fn main() {
 
 📖 **计数规则**: `strong_count` = 拥有者数量（归零才释放）；`weak_count` = 观察者数量（不影响释放，仅保活控制块）。
 
-💡 **示例**（本块经 rustc edition 2024 实测通过）:
+💡 **示例**（edition 2024 示例，本轮未运行）:
 
 ```rust
 use std::cell::RefCell;
@@ -165,7 +170,7 @@ fn main() {
 
 `try_borrow()` / `try_borrow_mut()` 返回 `Result`，不 panic；守卫 `Ref`/`RefMut` drop 时释放借用（RAII）。
 
-💡 **示例**（与条目 5 共用一块，经 rustc edition 2024 实测通过）:
+💡 **示例**（与条目 5 共用一块，edition 2024 示例，本轮未运行）:
 
 ```rust
 use std::borrow::Cow;
@@ -198,15 +203,15 @@ fn main() {
 
 **关键点解析**:
 - 借用守卫的作用域就是锁的作用域：把 `borrow_mut()` 压进最小块，共享借用随 `Ref` 存活。
-- `Cell<T>` 是 `RefCell` 的 `Copy` 特化版：`get()` 拷出、`set()` 整值替换，无 panic 可能。
+- Cell 不通过借用守卫访问内部值；get 要求 T: Copy，set/replace 可以操作非 Copy 值，take 要求 Default。它不是 RefCell 的 Copy 特化版。
 
 ⚠️ **常见陷阱**: 借用守卫存活期间再 `borrow_mut()` 是运行时 panic——尤其中间夹着一个看似无害的 `borrow()`（守卫还活着）；`RefCell` 让"编译期发现"退化为"运行期发现"，仅在没有更好的类型方案时使用。
 
-🔗 **相关条目**: [条目 3：Rc 与 Weak](#条目-3rc-与-weak-循环引用-breaking)、[条目 6：Arc + Mutex/RwLock](#条目-6arc--mutexrwlock)
+🔗 **相关条目**: [条目 3：Rc 与 Weak](#条目-3rc-与-weak循环引用-breaking)、[条目 6：Arc + Mutex/RwLock](#条目-6arc--mutexrwlock)
 
 ## 条目 5：Cow（写时克隆）
 
-📌 **定义**: `Cow<'a, B>`（Clone on Write）是枚举：`Borrowed(&'a B)` 或 `Owned(B::Owned)`。读路径零拷贝透传借用；只有真正要修改时（`to_mut()` 或构造 `Owned`）才克隆。Deref 到 `B::Owned`，调用方几乎无感。
+📌 **定义**: `Cow<'a, B>`（Clone on Write）是枚举：`Borrowed(&'a B)` 或 `Owned(B::Owned)`。读路径零拷贝透传借用；只有真正要修改时（`to_mut()` 或构造 `Owned`）才克隆。Deref 到借用目标 B，调用方几乎无感。
 
 📖 **语法/签名**: `enum Cow<'a, B: ToOwned + ?Sized>`；关键方法 `to_mut()`（Borrowed 分支触发克隆并转 Owned）、`into_owned()`（取得拥有值，按需克隆）；常见 `B`：`str`、`[T]`、`Path`。
 
@@ -216,7 +221,7 @@ fn main() {
 - 函数多数输入**不改**、少数要改 → 返回 `Cow`，把克隆决定权留给数据本身
 - 配置/词法分析等"模式匹配后偶尔改写"的管线是高发区
 
-⚠️ **常见陷阱**: `Cow` 不是延迟拷贝缓存——每次 `to_mut()` 都可能克隆；对 `Borrowed` 调 `to_mut()` 会**复制整个值**（意外大拷贝）；不需要"有时不改"就别上 `Cow`，直接 `String`/`&str` 更直白。
+⚠️ **常见陷阱**: `Cow` 不是延迟拷贝缓存——第一次从 Borrowed 转为 Owned 时克隆，已经 Owned 后再次 to_mut 不会因此重新克隆；对 `Borrowed` 调 `to_mut()` 会**复制整个值**（意外大拷贝）；不需要"有时不改"就别上 `Cow`，直接 `String`/`&str` 更直白。
 
 🔗 **相关条目**: [条目 1：全量对比总表](#条目-1全量对比总表)
 
@@ -226,7 +231,7 @@ fn main() {
 
 📖 **语法/签名**: `Arc::clone(&arc)`（别 `.clone()` 顺手拷错对象）、`lock().unwrap()` 得 `MutexGuard`、`read().unwrap()` 可并发多份、`write().unwrap()` 独占。
 
-💡 **示例**（本块经 rustc edition 2024 实测通过）:
+💡 **示例**（edition 2024 示例，本轮未运行）:
 
 ```rust
 use std::sync::{Arc, Mutex, RwLock};
@@ -268,7 +273,7 @@ fn main() {
 
 ⚠️ **常见陷阱**: `std::sync::MutexGuard` 是 `!Send`——**跨 `.await` 持锁**会让整个 Future 变 `!Send`，在 Tokio 多线程调度下编译失败（异步场景换 `tokio::sync::Mutex`，见 [Future·Pin·Waker](./08-async-internals.md)）；嵌套锁两把 `Mutex` 顺序不一致即死锁，全工程固定加锁顺序。
 
-🔗 **相关条目**: [条目 3：Rc 与 Weak](#条目-3rc-与-weak-循环引用-breaking)、[并发与异步教程](../../basics/09-concurrency-async.md)
+🔗 **相关条目**: [条目 3：Rc 与 Weak](#条目-3rc-与-weak循环引用-breaking)、[并发与异步教程](../../basics/09-concurrency-async.md)
 
 ## 条目 7：陷阱速查
 
@@ -300,3 +305,18 @@ fn main() {
 **文档版本**: v2.0.0
 **最后更新**: 2026年9月
 **维护团队**: Dev Quest Team
+
+
+<!-- full-library-explanation -->
+## 先回答共享、修改与跨线程三个问题
+
+前置是所有权与借用。Box 解决独占拥有的间接存储，Rc/Arc 解决多个所有者共享，Cell/RefCell/Mutex 等解决不同约束下的内部可变性。Arc 只让引用计数操作可跨线程，并不会把不满足 Send/Sync 的内部对象变成线程安全。先判断是否真的共享，再决定是否要计数和同步，避免为一个局部值叠加多层包装。
+
+Clone 也要看克隆谁。Arc::clone 增加同一分配的引用计数，内部 T 的 clone 才可能复制数据；Cow::to_mut 在借用分支需要获得拥有值，已经处于 Owned 时不会每次再次克隆。RefCell 的借用守卫在作用域结束才释放，借用冲突可用 try_borrow 系列返回错误，而不是总让 panic 终止流程。
+
+练习：克隆一个 Rc<RefCell<Vec<i32>>>，通过一个句柄修改后另一个应看到变化；再直接克隆其中的 Vec，修改应互不影响。画一个父子节点的强引用图，父持有子、子用 Weak 观察父，丢弃最后一个父强引用后 upgrade 应得到 None。跨 await 前尽量释放普通锁守卫；即使异步 Mutex 允许持锁等待，也要判断长时间独占是否阻塞其他任务。
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

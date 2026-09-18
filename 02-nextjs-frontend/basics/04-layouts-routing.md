@@ -1,5 +1,18 @@
 # Next.js 16 布局和路由设计完整指南
 
+## 先理解，再动手
+
+URL 决定页面身份，嵌套布局决定共享范围。路由参数、查询参数与组件内部状态用途不同；需要分享或刷新保留的筛选往往属于 URL。
+
+**本节自测**：设计 /notes/42?mode=preview，分别说出资源 ID 与展示模式，并测试刷新。
+
+<details>
+<summary>预期结果与参考思路（先尝试再展开）</summary>
+
+42 是路径参数，mode 是查询参数；不能只用内存变量保存期待刷新后还在的地址状态。
+
+</details>
+
 > **文档简介**: Next.js 16 App Router 布局和路由系统深入教程，涵盖文件系统路由、嵌套布局、动态路由、路由组、并行路由等现代路由设计模式
 
 > **目标读者**: 具备Next.js基础的开发者，需要掌握现代路由设计和布局架构的前端工程师
@@ -7,6 +20,9 @@
 > **前置知识**: Next.js基础、React组件基础、TypeScript基础、文件系统概念
 
 > **预计时长**: 4-5小时
+
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
 
 ## 📚 文档元数据
 
@@ -19,6 +35,8 @@
 | **更新日期** | `2026年9月` |
 | **作者** | Dev Quest Team |
 | **状态** | ✅ 已完成 |
+
+</details>
 
 ## 🎯 学习目标
 
@@ -1039,7 +1057,7 @@ Next.js 16的路由系统为现代Web应用提供了强大而灵活的架构基�
 - 📄 **[相关的reference文档](../reference/framework-patterns/03-client-components-patterns.md)**: 快速参考客户端组件的路由模式
 
 ### 参考章节
-- 📖 **[本模块其他章节]**: [TypeScript集成](./03-typescript-integration.md#页面和路由的类型安全) | [样式设计](./05-styling-with-tailwind.md#响应式设计系统)
+- 📖 **[本模块其他章节]**: [TypeScript集成](./03-typescript-integration.md#️-页面和路由的类型安全) | [样式设计](./05-styling-with-tailwind.md#-响应式设计系统)
 - 📖 **[Knowledge Points快速参考]**: [App Router模式](../reference/framework-patterns/01-app-router-patterns.md) | [Next.js API参考](../reference/language-concepts/02-nextjs-api-reference.md)
 
 ## 📝 总结
@@ -1077,3 +1095,8 @@ Next.js 16的路由系统为现代Web应用提供了强大而灵活的架构基�
 **文档状态**: ✅ 已完成
 **最后更新**: 2026年9月
 **版本**: v1.0.0
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../LEARNING_GUIDE.md) · [完整目录与版本](../README.md) · [通用术语](../../shared-resources/glossary.md)

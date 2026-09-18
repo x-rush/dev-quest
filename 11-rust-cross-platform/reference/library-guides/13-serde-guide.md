@@ -6,6 +6,9 @@
 >
 > **前置知识**: [结构体、枚举与模式匹配](../../basics/03-structs-enums-patterns.md)、trait 基础
 
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
+
 ## 📚 文档元数据
 
 | 属性 | 内容 |
@@ -15,6 +18,8 @@
 | **难度** | ⭐⭐ 进阶 |
 | **标签** | `#rust` `#serde` `#json` `#reference` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 **版本基线**: Serde **1.0.229**（核实日期 2026-09-16，单一事实来源见[模块 README 技术基线](../../README.md)）。后端 crate（serde_json/toml 等）未列入基线，本文不标版本号。
 
@@ -27,14 +32,14 @@
 
 ## 📋 目录
 
-- [核心概念：数据模型与两端](#核心概念数据模型与两端)
-- [容器属性全表](#容器属性全表)
-- [字段属性全表](#字段属性全表)
-- [枚举的四种表示](#枚举的四种表示)
-- [后端：json 与 toml](#后端json-与-toml)
-- [自定义序列化](#自定义序列化)
-- [最佳实践与陷阱](#最佳实践与陷阱)
-- [常见问题](#常见问题)
+- [核心概念：数据模型与两端](#-核心概念数据模型与两端)
+- [容器属性全表](#-容器属性全表structenum-级)
+- [字段属性全表](#️-字段属性全表)
+- [枚举的四种表示](#-枚举的四种表示)
+- [后端：json 与 toml](#️-后端json-与-toml)
+- [自定义序列化](#️-自定义序列化)
+- [最佳实践与陷阱](#-最佳实践与陷阱)
+- [常见问题](#-常见问题)
 
 ---
 
@@ -283,17 +288,9 @@ struct Wrapper(#[serde(with = "point_as_str")] Point);
 
 ## 🎨 最佳实践与陷阱
 
-### ✅ 推荐做法
-- **对外 API 用 `rename_all = "camelCase"`**：Rust 命名风格与 JSON 惯例解耦，一处声明全局生效。
-- **可选字段统一 `skip_serializing_if = "Option::is_none"`**：保持载荷干净；`Option` 字段缺失时反序列化自动得 `None`，无需 `default`。
-- **边界类型手写、内部类型 derive**：`remote` + `from` 组合为第三方类型做桥。
+序列化字段名、null 与缺失是接口契约，camelCase 和省略 None 都不是普遍规定。例如 PATCH 中“未提供”与“主动清空”可能不同，需要显式建模，不能只靠一个 Option 草率合并。
 
-### ❌ 避免陷阱
-- **`skip` 字段不是"必填校验"**：skip 字段反序列化时用 `Default::default()` 填充，不会报错。
-- **`untagged` 挨个试变体**：变体多时解析慢且错误信息模糊，性能敏感路径慎用。
-- **`flatten` 与 `deny_unknown_fields` 互斥**：拍平语义下"未知键"概念已不存在。
-- **`deny_unknown_fields` 配 API 演进**：服务端加字段会直接打挂老客户端，宽松消费端慎用。
-- **忘记 `SerializeStruct` 导入**：`serialize_field` 是 trait 方法，需 `use serde::ser::SerializeStruct;`。
+derive 适合类型结构与格式一致的场景，特殊边界可使用转换或自定义实现。untagged 的匹配顺序与错误反馈需测试，flatten 与 deny_unknown_fields 按 Serde 支持限制使用；未知字段仍有概念，不能把配置不兼容解释成未知键不存在。
 
 ## ❓ 常见问题
 
@@ -330,3 +327,9 @@ struct Wrapper(#[serde(with = "point_as_str")] Point);
 4. **手写实现是逃生舱**：`serialize_struct` + Visitor + `with` 契约覆盖其余一切需求。
 
 **文档版本**: v1.0.0 | **最后更新**: 2026年9月 | **维护团队**: Dev Quest Team
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

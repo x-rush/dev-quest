@@ -1,5 +1,40 @@
 # 装饰器 — 函数包装与元编程入口
 
+## 从普通函数调用理解装饰器
+
+前置：[函数参数](./17-functions-parameters.md)与[闭包](./15-closures-and-scope.md)。把函数当参数传递只是在传一个可调用对象，不会立即执行函数体；装饰器接收这个对象，决定返回原对象还是另一个包装对象。
+
+完整示例，保存为 `decorator_lab.py` 并运行：
+
+```python
+from functools import wraps
+
+def announce(function):
+    @wraps(function)
+    def wrapper(*args, **kwargs):
+        print("开始")
+        value = function(*args, **kwargs)
+        print("完成")
+        return value
+    return wrapper
+
+def greet(name):
+    return f"你好，{name}"
+
+greet = announce(greet)
+print(greet("Ada"))
+print(greet.__name__)
+```
+
+预期依次输出“开始”“完成”“你好，Ada”“greet”。`announce(greet)` 构造包装器时不执行问候；随后 `greet("Ada")` 才经过 wrapper 调用原函数。`@announce` 是这一重新绑定的简写。
+
+删除 wrapper 的 return 再预测结果：开始和完成仍会打印，但最外层 print 得到 None。去掉 wraps 则名称变为 wrapper。两者分别影响返回契约和元信息，不是同一个功能。
+
+重试装饰器属于进一步的工程主题：次数需为正整数，要选择可重试异常并考虑退避与幂等。下面的 retry 片段用于展示嵌套结构，不能直接作为网络重试方案。异步函数是否需要 async 包装取决于是否要 await 其结果及框架检查方式，不能说所有同步包装都会让协程失效。
+
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
+
 ## 📚 文档元数据
 
 | 属性 | 内容 |
@@ -9,6 +44,8 @@
 | **难度** | ⭐⭐ |
 | **标签** | `#装饰器` `#高阶函数` `#functools` `#元编程` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ## 📌 定义
 
@@ -93,3 +130,9 @@ def fetch(url: str) -> str: ...
 - 📄 **[生成器与迭代器](./07-generators-iterators.md)** — 同属函数进阶主题
 - 📄 **[FastAPI 核心速查](../framework-essentials/01-fastapi-essentials.md)** — 路由装饰器的生产级用法
 - 📄 **[生态库精选](../library-guides/02-ecosystem-libs.md)** — tenacity 等装饰器型库
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

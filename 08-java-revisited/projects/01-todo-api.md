@@ -1,184 +1,267 @@
-# 项目实战 01 - TODO REST API（入门）
+# 项目实战 01：能逐步验收的 TODO REST API
 
-> **文档简介**: 从零构建一个完整可运行的 TODO REST API：单表 CRUD + 参数校验 + 全局异常处理 + 单元测试，是本模块第一个"端到端能跑"的项目
->
-> **目标读者**: 刚学完 Spring Boot 入门、需要综合演练的入门者
->
-> **前置知识**: 已完成 [Spring Boot 入门](../frameworks/01-spring-boot-basics.md) 与 [第一个项目](../basics/08-first-project.md)
+## 分阶段练习与验收
 
-## 📚 文档元数据
+**最小阶段**：先完成创建、查询与非法输入处理，再补更新删除。
 
-| 属性 | 内容 |
-|------|------|
-| **模块** | `08-java-revisited` |
-| **象限** | 操作指南 |
-| **难度** | ⭐ |
-| **标签** | `#REST` `#CRUD` `#参数校验` `#入门项目` |
-| **更新日期** | `2026年9月` |
+**验收结果**：每个声明的接口都有实现与可执行验收，重启清空内存的限制明确。
 
-## 🎯 项目目标
+**扩展顺序**：先运行单元和 HTTP 检查，再提取仓库接口和数据库实现。
 
-- 功能：TODO 的增删改查、完成状态切换、按状态过滤
-- 技术栈：Java 21 + Spring Boot 4.x + Spring Web MVC + Validation（先用内存存储，专注分层）
-- 产出：可 `curl` 全流程验证的 API + 一套单元测试
+建议保存一份正常输入、一份失败输入、实际输出和对应测试。先完成以上阶段再扩展正文中的完整设计；遇到省略实现或未定义依赖，应按文档上下文补齐，不能把代码片段拼接后当作已经验证的完整工程。
 
-## 🏗️ 一、需求与接口设计
+> 前置：[Spring Boot 入门](../frameworks/01-spring-boot-basics.md)、Java record、集合与异常。适用：Java 21、Spring Boot 4.x 的 Spring Web MVC 与 Validation。项目层级：入门。
 
-| 方法 | 路径 | 说明 |
-|------|------|------|
-| `GET` | `/api/todos?done=` | 列表，可按完成状态过滤 |
-| `POST` | `/api/todos` | 新建，校验标题非空 |
-| `GET` | `/api/todos/{id}` | 详情，404 语义 |
-| `PUT` | `/api/todos/{id}` | 更新标题 |
-| `PATCH` | `/api/todos/{id}/toggle` | 切换完成状态 |
-| `DELETE` | `/api/todos/{id}` | 删除，204 |
+## 本次只做什么
 
-## 🛠️ 二、分层实现
+做一个内存待办服务：创建、列表、详情、改标题、设完成状态与删除。进程重启后数据清空，不包含登录、数据库和部署。先证明 HTTP、校验、业务和存储能连起来，再在[下一项目](./02-library-management.md)替换存储。
 
-### 2.1 领域模型（Record 表达不可变视图）
+旧版此处省略了仓库方法和若干接口，却声称可以完整运行。本版给出全部必要类、导入、文件位置与调用步骤。当前文档增强环境没有 JDK，本轮未执行本工程；下面的启动、编译与行为验收是读者和后续 CI 需要执行的检查，不冒充已通过结果。
+
+## 1. 创建工程
+
+使用 [Spring Initializr](https://start.spring.io) 创建 Maven / Java / Jar 工程，Java 选择 21，Spring Boot 选择与[模块基线](../README.md)相符的稳定 4.x，加入 Spring Web 与 Validation。Group 为 `example`，Artifact 为 `todo`，Package name 为 `example.todo`。保留生成的 Maven Wrapper 与 pom.xml，并记录具体版本。
+
+解压到独立练习目录。在 `src/main/java/example/todo/TodoApplication.java` 放下方完整文件，替换模板同名类，不保留两个启动类。先使用一个文件中的嵌套类型降低文件跳转；职责已经分开，练习末尾再拆文件。
+
+## 2. 完整实现
 
 ```java
-// 领域对象：用 record 表达"创建请求"与"响应视图"
-public record Todo(Long id, String title, boolean done,
-                   Instant createdAt) {
-    public Todo {
-        Objects.requireNonNull(title); // 紧凑构造器兜底校验
+package example.todo;
+
+import java.time.Instant;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicLong;
+import java.util.function.UnaryOperator;
+
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.*;
+
+@SpringBootApplication
+public class TodoApplication {
+    public static void main(String[] args) {
+        SpringApplication.run(TodoApplication.class, args);
     }
 
-    public Todo toggle() {
-        return new Todo(id, title, !done, createdAt); // 返回新实例
-    }
-}
-```
+    public record Todo(long id, String title, boolean done, Instant createdAt) {}
+    public record TitleRequest(@NotBlank @Size(max = 100) String title) {}
+    public record DoneRequest(@NotNull Boolean done) {}
 
-> Record 的语义与模式匹配详见 [Record / Sealed / 模式匹配速查](../reference/language-concepts/05-records-sealed-patterns.md)。
-
-### 2.2 存储层（内存版，接口先行）
-
-```java
-// 先定义接口：后续换 JPA 实现时上层零改动
-public interface TodoRepository {
-    Todo save(Todo todo);
-    Optional<Todo> findById(Long id);
-    List<Todo> findAll();
-    void deleteById(Long id);
-}
-
-@Repository
-public class InMemoryTodoRepository implements TodoRepository {
-
-    private final Map<Long, Todo> store = new ConcurrentHashMap<>();
-    private final AtomicLong seq = new AtomicLong();
-
-    @Override
-    public Todo save(Todo todo) {
-        if (todo.id() == null) {
-            var created = new Todo(seq.incrementAndGet(),
-                    todo.title(), todo.done(), Instant.now());
-            store.put(created.id(), created);
-            return created;
+    public static final class NotFound extends RuntimeException {
+        private final long id;
+        public NotFound(long id) {
+            super("Todo not found: " + id);
+            this.id = id;
         }
-        store.put(todo.id(), todo);
-        return todo;
+        public long id() { return id; }
     }
-    // 其余方法省略
+
+    @Service
+    public static class TodoService {
+        private final ConcurrentHashMap<Long, Todo> rows = new ConcurrentHashMap<>();
+        private final AtomicLong sequence = new AtomicLong();
+
+        private String normalizedTitle(String title) {
+            if (title == null || title.isBlank() || title.length() > 100) {
+                throw new IllegalArgumentException("标题需为 1 到 100 字符的非空白文本");
+            }
+            return title.strip();
+        }
+
+        public Todo create(String title) {
+            String normalized = normalizedTitle(title);
+            long id = sequence.incrementAndGet();
+            Todo todo = new Todo(id, normalized, false, Instant.now());
+            rows.put(id, todo);
+            return todo;
+        }
+
+        public List<Todo> list(Boolean done) {
+            return rows.values().stream()
+                    .filter(todo -> done == null || todo.done() == done)
+                    .sorted(Comparator.comparingLong(Todo::id))
+                    .toList();
+        }
+
+        public Todo get(long id) {
+            Todo todo = rows.get(id);
+            if (todo == null) throw new NotFound(id);
+            return todo;
+        }
+
+        private Todo update(long id, UnaryOperator<Todo> operation) {
+            return rows.compute(id, (key, old) -> {
+                if (old == null) throw new NotFound(id);
+                return operation.apply(old);
+            });
+        }
+
+        public Todo rename(long id, String title) {
+            String normalized = normalizedTitle(title);
+            return update(id, old -> new Todo(id, normalized, old.done(), old.createdAt()));
+        }
+
+        public Todo setDone(long id, boolean done) {
+            return update(id, old -> new Todo(id, old.title(), done, old.createdAt()));
+        }
+
+        public void delete(long id) {
+            if (rows.remove(id) == null) throw new NotFound(id);
+        }
+    }
+
+    @RestController
+    @RequestMapping("/api/todos")
+    public static class TodoController {
+        private final TodoService service;
+        public TodoController(TodoService service) { this.service = service; }
+
+        @GetMapping
+        public List<Todo> list(@RequestParam(name = "done", required = false) Boolean done) {
+            return service.list(done);
+        }
+
+        @PostMapping
+        @ResponseStatus(HttpStatus.CREATED)
+        public Todo create(@RequestBody @Valid TitleRequest request) {
+            return service.create(request.title());
+        }
+
+        @GetMapping("/{id}")
+        public Todo get(@PathVariable("id") long id) { return service.get(id); }
+
+        @PutMapping("/{id}/title")
+        public Todo rename(@PathVariable("id") long id, @RequestBody @Valid TitleRequest request) {
+            return service.rename(id, request.title());
+        }
+
+        @PutMapping("/{id}/done")
+        public Todo setDone(@PathVariable("id") long id, @RequestBody @Valid DoneRequest request) {
+            return service.setDone(id, request.done());
+        }
+
+        @DeleteMapping("/{id}")
+        @ResponseStatus(HttpStatus.NO_CONTENT)
+        public void delete(@PathVariable("id") long id) { service.delete(id); }
+    }
+
+    @RestControllerAdvice
+    public static class ErrorHandler {
+        @ExceptionHandler(NotFound.class)
+        @ResponseStatus(HttpStatus.NOT_FOUND)
+        public Map<String, Object> notFound(NotFound error) {
+            return Map.of("error", "TODO_NOT_FOUND", "id", error.id());
+        }
+
+        @ExceptionHandler(IllegalArgumentException.class)
+        @ResponseStatus(HttpStatus.BAD_REQUEST)
+        public Map<String, String> invalid(IllegalArgumentException error) {
+            return Map.of("error", "INVALID_TITLE", "message", error.getMessage());
+        }
+    }
 }
 ```
 
-### 2.3 服务层（业务规则集中地）
+## 3. 为什么这样分工
+
+请求 JSON 先由框架转成请求 record，`@Valid` 执行输入约束；Controller 将有效输入交给 Service。Service 仍验证标题，因为它也可能被命令行或测试直接调用。业务对象不携带 HTTP 状态码，ErrorHandler 在 HTTP 边界把 NotFound 映射成 404。
+
+ConcurrentHashMap 保护单次映射操作；“读取后修改再写回”并不会因为使用并发容器就自动成为原子操作，因此本例用 compute 处理同一 ID 的更新。列表是弱一致视图，不提供跨记录事务快照。
+
+设置 done=true 使用明确目标状态，而不使用“每次反转”。同一设置重复两次仍是完成状态，较容易理解幂等；这不意味着 POST 创建也自动幂等。时间与 ID 会随执行变化，不用硬编码 createdAt 作为断言。
+
+## 4. 启动与手工验收
+
+在包含 pom.xml 的工程根目录运行。Windows PowerShell：
+
+```powershell
+.\mvnw.cmd test
+.\mvnw.cmd spring-boot:run
+```
+
+macOS/Linux 使用 `./mvnw test` 与 `./mvnw spring-boot:run`。服务默认在 8080，另开终端请求。PowerShell 用下列完整流程，避免把 Bash 的反斜杠续行复制到 PowerShell：
+
+```powershell
+$todoBase = 'http://localhost:8080/api/todos'
+$todoCreated = Invoke-RestMethod -Method Post -Uri $todoBase -ContentType 'application/json' -Body '{"title":"Read a chapter"}'
+$todoId = $todoCreated.id
+Invoke-RestMethod -Uri "$todoBase/$todoId"
+Invoke-RestMethod -Method Put -Uri "$todoBase/$todoId/done" -ContentType 'application/json' -Body '{"done":true}'
+Invoke-RestMethod -Uri "${todoBase}?done=true"
+Invoke-WebRequest -Method Delete -Uri "$todoBase/$todoId"
+```
+
+| 验收动作 | 预期 | 未满足时先查 |
+|---|---|---|
+| 创建正常标题 | 201，返回 id/title/done=false/createdAt | 路由、请求 JSON 与 Content-Type |
+| 空白或缺少标题 | 400，不新增记录 | Validation 依赖与 @Valid |
+| 查询不存在 ID | 404，error=TODO_NOT_FOUND | 异常映射 |
+| 两次设置 done=true | 两次都保持 true | 是否错误实现为 toggle |
+| 按 done=true 查询 | 只返回已完成项，按 ID 排序 | 筛选条件 |
+| 删除已存在项 | 204，无响应正文 | 状态码注解 |
+| 删除后再查 | 404 | 是否真的移除 |
+| 停服重启后查原 ID | 404 | 本例只有进程内存，没有数据库 |
+
+PowerShell 默认对非成功 HTTP 状态抛出异常，这是客户端工具对 400/404 的表现。可用 try/catch 查看响应状态；不要因终端显示红字就判定服务崩溃。
+
+## 5. 业务测试：正常路径和失败路径一起验证
+
+放在 `src/test/java/example/todo/TodoServiceTest.java`。Initializr 生成的测试依赖提供 JUnit Jupiter；保留该依赖。执行 Maven test。
 
 ```java
-@Service
-public class TodoService {
+package example.todo;
 
-    private final TodoRepository repo;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
 
-    public TodoService(TodoRepository repo) { this.repo = repo; }
-
-    public Todo create(String title) {
-        return repo.save(new Todo(null, title.strip(), false, Instant.now()));
+class TodoServiceTest {
+    @Test
+    void createCompleteAndDelete() {
+        var service = new TodoApplication.TodoService();
+        var todo = service.create("  Learn Java  ");
+        assertEquals("Learn Java", todo.title());
+        assertFalse(todo.done());
+        assertTrue(service.setDone(todo.id(), true).done());
+        assertTrue(service.setDone(todo.id(), true).done());
+        assertEquals(1, service.list(true).size());
+        service.delete(todo.id());
+        assertThrows(TodoApplication.NotFound.class, () -> service.get(todo.id()));
     }
 
-    public Todo toggle(Long id) {
-        return repo.findById(id)
-                .map(Todo::toggle)
-                .map(repo::save)
-                .orElseThrow(() -> new TodoNotFoundException(id));
-    }
-}
-```
-
-### 2.4 Web 层与全局异常
-
-```java
-@RestController
-@RequestMapping("/api/todos")
-public class TodoController {
-
-    private final TodoService service;
-    public TodoController(TodoService service) { this.service = service; }
-
-    public record CreateTodoRequest(
-            @NotBlank(message = "标题不能为空") @Size(max = 100) String title) {}
-
-    @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public Todo create(@RequestBody @Valid CreateTodoRequest req) {
-        return service.create(req.title());
-    }
-
-    @GetMapping("/{id}")
-    public Todo get(@PathVariable Long id) { return service.get(id); }
-}
-
-@RestControllerAdvice
-class TodoExceptionHandler {
-
-    @ExceptionHandler(TodoNotFoundException.class)
-    @ResponseStatus(HttpStatus.NOT_FOUND)   // 404：资源不存在
-    public Map<String, Object> notFound(TodoNotFoundException e) {
-        return Map.of("error", "TODO_NOT_FOUND", "id", e.getId());
+    @Test
+    void rejectsInvalidInputWithoutCreatingData() {
+        var service = new TodoApplication.TodoService();
+        assertThrows(IllegalArgumentException.class, () -> service.create("   "));
+        assertThrows(IllegalArgumentException.class, () -> service.create(null));
+        assertTrue(service.list(null).isEmpty());
+        assertThrows(TodoApplication.NotFound.class, () -> service.setDone(99, true));
     }
 }
 ```
 
-## 🧪 三、验证
+这些单元测试没有启动 HTTP，不能证明 JSON 绑定、Validation 或状态码配置正确；还需执行上一节 HTTP 验收，并可继续做[接口测试](../testing/03-api-testing.md)。
 
-```bash
-# 新建
-curl -X POST localhost:8080/api/todos \
-  -H 'Content-Type: application/json' -d '{"title": "学完 Java 21"}'
+## 6. 适量扩展与参考思路
 
-# 切换状态 → 详情 → 删除（期望 204）
-curl -X PATCH localhost:8080/api/todos/1/toggle
-curl localhost:8080/api/todos/1
-curl -X DELETE -i localhost:8080/api/todos/1
-```
+必做：给重命名增加测试，证明修改标题后 id、createdAt 和 done 不变。再测试同一 ID 重复删除；本项目约定第二次 404，而非 204，只要接口契约明确即可。
 
-再为 `TodoService` 写一组单元测试（方法见 [单元测试](../testing/01-unit-testing.md)），覆盖"找不到时抛 404"分支。
+选做：把嵌套类型拆到同包多个文件，保留测试通过；然后提取存储接口，用数据库实现替换。替换前先决定事务、唯一性、排序与并发语义，不能仅凭“有接口”宣称上层永远零改动。
 
-## 🎨 最佳实践
+本例尚无认证与持久化，不用于真实多用户服务。业务异常的自定义 JSON 与框架校验错误的默认响应形状可能不同；统一错误协议可作为下一步练习。
 
-### ✅ 推荐
-- Repository 定义成接口：本项目第二版换 JPA 时上层无感
-- 状态码语义化：201 创建 / 204 删除 / 404 不存在
-- 校验注解放在请求 DTO 上，服务层只做业务校验
+参考：[Spring REST 入门](https://spring.io/guides/gs/rest-service/)解释 Controller 与自动配置，[输入校验指南](https://spring.io/guides/gs/validating-form-input/)解释 Validation 的接入。具体依赖以生成工程为准。
 
-### ❌ 陷阱
-- Controller 里写业务规则（本项目所有规则都在 Service）
-- 直接返回内部实现类，破坏封装
-- 忘记处理 `id` 不存在场景，返回 500 而非 404
+<!-- learning-navigation -->
+## 阅读导航
 
-## 🚀 下一步
-
-- 数据落到真实数据库 → [图书管理系统](./02-library-management.md)（JPA + 认证）
-- 为本项目补充接口级测试 → [MockMvc 与 REST Assured](../testing/03-api-testing.md)
-
-## 🔗 相关文档
-
-### 本模块
-- 📖 [Spring Boot 核心速查](../reference/framework-essentials/01-spring-boot-essentials.md) — 注解与配置条目
-- 📖 [Stream 与 Optional 速查](../reference/language-concepts/03-streams-optional.md) — `map`/`orElseThrow` 链式用法
-- 📄 [Spring Boot 入门](../frameworks/01-spring-boot-basics.md) — 依赖注入与 Controller 基础
-- 📄 [单元测试](../testing/01-unit-testing.md) — 给本项目补测试
-- 📄 [图书管理系统](./02-library-management.md) — 下一篇：接入真实数据库
+[本模块理解地图](../LEARNING_GUIDE.md) · [完整目录与版本](../README.md) · [通用术语](../../shared-resources/glossary.md)

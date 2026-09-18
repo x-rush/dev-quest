@@ -1,10 +1,21 @@
 # SwiftUI 基础任务指南 — 视图、状态与布局
 
+## 先看框架承担哪部分职责
+
+**SwiftUI 核心**：View 是界面描述，状态身份由框架关联到视图层级。布局、状态与副作用应各自有明确来源。
+
+**最小练习与预期结果**：写一个只依赖参数的展示视图和一个拥有 State 的父视图；同样参数应给出同样界面内容。
+
+具体 API 与安装版本以[模块基线](../README.md)和本篇官方来源为准。先完成这条数据路径，再展开后面的高级配置；框架名称变化后，输入边界、状态归属和失败处理仍是需要理解的机制。
+
 > **文档简介**: 面向任务的 SwiftUI 快速上手指南：从第一个视图出发，掌握 `@State`/`@Binding` 状态管理与三大布局容器的组合套路
 >
 > **目标读者**: 已有其他平台 UI 开发经验（如 React/Compose）、要在 Xcode 中实际搭建界面的学习者
 >
 > **前置知识**: [basics/03-swift-syntax-essentials.md](../basics/03-swift-syntax-essentials.md)（struct、闭包）
+
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
 
 ## 📚 文档元数据
 
@@ -15,6 +26,8 @@
 | **难度** | ⭐ |
 | **标签** | `#SwiftUI` `#View` `#State` `#Binding` `#布局` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ## 🎯 本指南解决什么问题
 
@@ -145,9 +158,9 @@ struct ProfileCard: View {
 
 ## ✅ 最佳实践
 
-- ✅ `@State` 一律 `private`，编译器会阻止外部误改
-- ✅ 界面能拆就拆成小 View，SwiftUI 按 struct 做增量求值，拆分反而更快
-- ✅ 常量数据用 `let` 传入，不要为了"方便"全塞进状态
+State 通常设为 private，用来表明这是当前 View 管理的状态，外部协作通过参数或 Binding 表达；private 是访问控制选择，不是 State 强制的语法要求。已有常量用 let 传递，不要额外复制到状态形成两个来源。
+
+抽取子 View 可以让依赖和职责更清楚，但 SwiftUI 不按“每个 struct 固定只更新一次”工作，拆得更多也不保证更快。通过真实状态变化验证界面正确，再用性能工具定位昂贵求值。[State 官方说明](https://developer.apple.com/documentation/swiftui/state)解释了其所有权用途。
 
 ## ❌ 避免陷阱
 
@@ -175,3 +188,9 @@ struct ProfileCard: View {
 - 📄 [04-swiftui-state-api.md](../reference/language-concepts/04-swiftui-state-api.md) — 属性包装器全表
 - 📄 [01-swiftui-essentials.md](../reference/framework-essentials/01-swiftui-essentials.md) — 视图与修饰符字典
 - 📄 [04-views-state.md](../basics/04-views-state.md) — 教程侧的状态管理讲解
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../LEARNING_GUIDE.md) · [完整目录与版本](../README.md) · [通用术语](../../shared-resources/glossary.md)

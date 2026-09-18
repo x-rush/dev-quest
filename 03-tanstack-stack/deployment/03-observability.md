@@ -6,6 +6,9 @@
 >
 > **前置知识**: [Vercel 部署](./02-vercel-deployment.md)、[SaaS 后台的错误处理](../projects/04-saas-admin-platform.md)
 
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
+
 ## 📚 文档元数据
 
 | 属性 | 内容 |
@@ -15,6 +18,8 @@
 | **难度** | ⭐⭐⭐ |
 | **标签** | `#sentry` `#web-vitals` `#监控` `#可观测性` |
 | **更新日期** | 2026年9月 |
+
+</details>
 
 ## 🎯 完成后你将能够
 
@@ -149,10 +154,9 @@ onCLS(report); onINP(report); onLCP(report); onTTFB(report)
 
 ## 🎨 最佳实践速查
 
-- ✅ release 版本号贯穿"构建 → 上报 → source map"三处，否则错误无法归版
-- ✅ 采样率分级：错误 100%，性能 10~20%，回放 1%
-- ❌ 不要把 Sentry DSN 当密钥藏——它本来就是公开的，靠项目级权限控制
-- ❌ 不要在 onError 里既 toast 又直接 captureException 又打日志——收敛为一个 reportError 入口
+错误记录要能定位到实际发布产物，因此 release 标识、构建产物和对应 source map 应一起归档。先制造一个可控错误，确认能还原到正确版本的源码位置，再认为错误采集已经接通。
+
+采样率由流量、预算和排障需求决定，不预设所有项目必须使用某组百分比。客户端 DSN 通常是公开接入标识，但仍需防滥用与控制上报内容；会话回放尤其需要脱敏。一个错误可以同时有用户提示和诊断记录，但要集中管理，避免多个回调重复上报。
 
 ---
 
@@ -163,3 +167,16 @@ onCLS(report); onINP(report); onLCP(report); onTTFB(report)
 - 📄 **[渲染性能](../advanced-topics/performance/02-rendering-performance.md)** - INP/CLS 恶化的根因分析
 - 📄 **[SaaS 后台](../projects/04-saas-admin-platform.md)** - 错误处理架构总图
 - 📄 **[故障排除](../reference/quick-references/02-troubleshooting.md)** - 本地复现线上错误的排查路径
+
+
+<!-- acceptance-exercise -->
+## 练习与验收：区分一次业务失败与多次尝试
+
+让一个查询前两次失败、第三次成功，记录 Network 请求数、Query 最终状态与上报事件数。预期界面最终恢复，不会为每次底层重试弹一个用户错误。再让全部尝试失败，确认上报含版本与可诊断上下文但不含秘密查询参数。验收还包括关闭采集服务后业务继续运行、上传对应 source map 后定位正确行；阈值应按自己的流量建立，不能直接复制示例数字。
+
+以上是在个人或隔离测试环境中的练习，不是本轮已执行记录；实际运行范围见仓库文档质量报告。
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../LEARNING_GUIDE.md) · [完整目录与版本](../README.md) · [通用术语](../../shared-resources/glossary.md)

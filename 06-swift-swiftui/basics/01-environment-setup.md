@@ -1,10 +1,26 @@
 # 环境搭建 - Xcode 与 Swift 工具链
 
+## 先理解，再动手
+
+Xcode 包含平台 SDK、编译与签名工具。模拟器运行、真机签名和商店发布是不同阶段。
+
+**本节自测**：创建 SwiftUI 模板，选定模拟器运行并修改首页文本。
+
+<details>
+<summary>预期结果与参考思路（先尝试再展开）</summary>
+
+记录运行目标和系统版本；通过构建不代表签名与真机发布都已完成。
+
+</details>
+
 > **文档简介**: 搭建完整的 iOS 原生开发环境：安装 Xcode、配置 Swift 工具链、熟悉模拟器，并了解开发者账号体系
 >
 > **目标读者**: 有其他语言基础、首次接触 macOS/iOS 开发的学习者
 >
 > **前置知识**: 一台运行 macOS 的 Mac 电脑；了解基本编程概念
+
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
 
 ## 📚 文档元数据
 
@@ -15,6 +31,8 @@
 | **难度** | ⭐ |
 | **标签** | `#Xcode` `#环境搭建` `#模拟器` `#开发者账号` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ## 🎯 学习目标
 
@@ -139,11 +157,9 @@ xcrun simctl erase "iPhone 17 Pro"
 
 ## ✅ 最佳实践
 
-- ✅ **推荐**：从 App Store 安装 Xcode，自动更新；从 developer.apple.com 下载的 .xip 适合锁定特定版本
-- ✅ **推荐**：为每个项目使用独立的 Organization Identifier，避免后续 Bundle ID 冲突
-- ✅ **推荐**：熟悉 `xcrun simctl`，它在 CI 与脚本化场景中不可替代
-- ❌ **避免**：同时安装多个 Xcode 版本却不了解 `xcode-select` 切换机制
-- ❌ **避免**：在学习初期就购买付费账号——模拟器 + 免费真机调试足以覆盖全部入门内容
+先确认项目实际使用哪个 Xcode 和命令行工具路径，再创建并运行一个最小应用；多版本并存时把所选版本记录在工程说明和 CI 中。自动更新方便个人试学，团队复现构建则需要明确升级时机。
+
+Organization Identifier 可以由多个项目共用，完整 Bundle Identifier 才用于区分应用。模拟器足以开始界面学习，真机和开发者计划需求由具体能力与分发方式决定，不预先承诺免费配置能覆盖所有功能。
 
 ## ❓ 常见问题
 
@@ -179,3 +195,9 @@ Command Line Tools 未安装或未指向 Xcode。执行 `xcode-select --install`
 - 📄 [02-first-swiftui-app.md](./02-first-swiftui-app.md) — 在此环境上写下第一个 SwiftUI App
 - 📄 [参考：Swift+SwiftUI 速查](../reference/quick-references/01-swift-swiftui-cheatsheet.md) — 常用命令与代码片段速查
 - 📄 [参考：故障排除](../reference/quick-references/02-troubleshooting.md) — 签名、模拟器等环境问题汇总
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../LEARNING_GUIDE.md) · [完整目录与版本](../README.md) · [通用术语](../../shared-resources/glossary.md)

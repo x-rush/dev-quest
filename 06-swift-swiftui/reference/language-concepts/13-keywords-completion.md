@@ -1,10 +1,13 @@
-# Swift 关键字全量分组清单
+# Swift 常用关键字与相关语法分组清单
 
-> **文档简介**: Swift 关键字的完整分组索引：按声明/类型转换/语句控制流/访问控制/所有权与并发五组收录，每条一行定义 + 最小示例；与 [01-swift-keywords.md](./01-swift-keywords.md) 语义精讲互补不重复
+> **文档简介**: Swift 常用关键字的分组索引：按声明/类型转换/语句控制流/访问控制/所有权与并发五组收录，每条一行定义 + 最小示例；与 [01-swift-keywords.md](./01-swift-keywords.md) 语义精讲互补不重复
 >
 > **目标读者**: 查"这个关键字是什么/长什么样"的全体学习者（字典条目，可任意跳入）
 >
 > **前置知识**: 无；重点关键字的深入讲解见各互链条目
+
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
 
 ## 📚 文档元数据
 
@@ -16,9 +19,11 @@
 | **标签** | `#关键字` `#索引` `#Swift6` `#语言概念` |
 | **更新日期** | `2026年9月` |
 
+</details>
+
 ## 📌 定义
 
-本篇是关键字**总清单**：已收进 01 篇的关键字只做索引互链，不重写；本篇补齐 01 未收的全部常用关键字。
+本篇是常用语法**导航清单**：已收进 01 篇的关键字只做索引互链，不重写；本篇补齐 01 未收的全部常用关键字。
 
 ---
 
@@ -105,7 +110,7 @@ extension Int {
 5 <> 9      // 7
 ```
 
-`prefix`/`postfix` 声明前缀/后缀运算符（如 `prefix operator ++`）；运算符实现必须是 `static`（类型成员）。
+`prefix`/`postfix` 声明前缀/后缀运算符（如 `prefix operator ++`）；运算符可以由全局函数实现；写在类型内时使用 static 成员函数。
 
 ### 1.6 import
 
@@ -160,7 +165,7 @@ let up: any Shape = Circle() as any Shape          // 向上转型
 **定义**: `self` 指当前实例；`Self` 指动态类型（类中为实际运行时类型，协议/扩展中指"遵循该协议的类型"）。
 
 ```swift
-protocol Copyable {
+protocol Duplicable {
     func duplicated() -> Self           // 返回"与自己同类型"的实例
 }
 ```
@@ -182,7 +187,8 @@ defer { cleanup() }        // 按声明逆序执行；即使 throw/guard 退出�
 01 §4 已给出六个访问级别与 `final` 的一句话定义，这里只补最易错对比：
 
 ```swift
-public struct Engine {        // public：跨模块可用，但不可跨模块子类化/重写
+public struct Engine {        // struct 本就不能被继承；对外构造入口仍需声明
+    public init() {}
     public func run() {}
 }
 
@@ -207,7 +213,7 @@ class Timer {
 
 ### 5.1 weak / unowned
 
-**定义**: 打破引用循环的弱引用修饰——`weak` 必须是可选 `var`，对象释放后自动置 nil；`unowned` 非可选，假定对象始终存活，悬垂访问即崩溃。
+**定义**: 打破引用循环的弱引用修饰——`weak` 必须是可选 `var`，对象释放后自动置 nil；`unowned` 可以是非可选或可选引用，但不会像 weak 一样在对象释放后自动清零，必须由程序保证有效生命周期。
 
 ```swift
 class Parent { var child: Child? }
@@ -229,14 +235,14 @@ var score = 9
 bump(&score)     // 10
 ```
 
-**约束**: 不能被逃逸闭包捕获，不能跨 `await` 挂起点持有。
+**约束**: inout 受独占访问规则约束，不能被逃逸闭包捕获。异步函数可以有 inout 参数，但不能因此绕过 actor 隔离或制造重叠访问；不要把 actor 隔离的可变属性直接借给跨挂起调用。
 
 ### 5.3 borrowing / consuming（所有权修饰，Swift 5.9+，SE-0377）
 
-**定义**: 显式声明参数所有权——`borrowing` 只借用不接管（不延长生命周期）；`consuming` 仅约束函数体内不得隐式拷贝参数，**对可拷贝类型（如 String）调用方不受影响**，`~Copyable` 类型才真正移转所有权。
+**定义**: 显式声明参数所有权——`borrowing` 借用参数，`consuming` 使被调函数取得参数值的所有权。可拷贝值可能通过隐式拷贝满足 consuming 调用，因此调用方随后仍能使用；非拷贝值不能靠这种拷贝保留第二份所有权。
 
 ```swift
-func inspect(_ s: borrowing String) { print(s.count) }   // 只读借用，零拷贝
+func inspect(_ s: borrowing String) { print(s.count) }   // 只读借用；实际性能需要测量
 func take(_ s: consuming String) { print(s.count) }      // 函数体内接管
 let name = "swift"
 inspect(name)      // 之后 name 仍可用
@@ -268,12 +274,39 @@ describe(1, "two", 3.0)     // "1-two-3.0"
   ✅ 运行时来源不确定的数据一律 `as?` + `guard let`。
 - ❌ **`unowned` 当 `weak` 用**：对象提前释放后访问即崩溃，且无法判空
   ✅ 引用方与被引用方生命周期无严格保证时选 `weak`。
-- ❌ **inout 实参接逃逸闭包/跨 await**：编译错误或悬垂写回
-  ✅ 同步短作用域内使用；并发场景传值或改用类引用。
+- ❌ **inout 实参制造重叠访问或捕获到逃逸闭包**：违反访问规则
+  ✅ 优先保持短的独占访问；并发场景使用值快照或隔离 API，改成类引用不会自动安全。
 - ❌ **给 struct 写 `convenience init`**：convenience 是类专属，值类型写直接报错
   ✅ 值类型用普通 `init` + `self.init(...)` 委派（见 [12-initialization.md](./12-initialization.md)）。
 - ❌ **`Self` 与 `self` 混写**：`Self` 是类型标注、`self` 是实例；协议扩展里签名写 `-> Self` 才满足多态
   ✅ 记口诀：小写拿实例，大写当类型。
+
+<!-- full-library-explanation -->
+## 从索引进入语义：控制流与成员修饰
+
+这是一份常用词法入口，不替代特定编译器版本的完整语法规范。`Sendable` 是协议，`@MainActor` 是全局 actor 属性，不能因为常一起出现就都称为关键字。
+
+| 写法 | 解决的问题 | 最小读法 |
+|---|---|---|
+| `break` / `continue` | 提前结束循环 / 跳过本次迭代 | 在搜索命中时 break；忽略空项时 continue |
+| `case` / `default` / `fallthrough` | 分支匹配 / 兜底 / 显式继续下一分支 | Swift switch 默认不会穿透；fallthrough 不重新检查下一 case 条件 |
+| `do` / `catch` / `rethrows` | 捕获错误 / 根据传入闭包是否抛错决定调用要求 | rethrows 不是“任意地方都可以 throw” |
+| `mutating` / `nonmutating` | 值类型成员能否修改 self | 修改 struct 的存储属性通常要求 mutating 方法 |
+| `get` / `set` / `willSet` / `didSet` | 计算访问 / 存储变化观察 | set 中可用 newValue，didSet 中可用 oldValue |
+| `override` / `required` / `convenience` | 重写 / 子类构造契约 / 类内便利委派 | 见构造过程章节，不能套用于所有值类型 |
+| `package` | 同一 Swift package 内跨模块访问 | 不等同于对所有依赖者 public |
+
+```swift
+var total = 0
+for value in [2, -1, 4, 0, 9] {
+    if value < 0 { continue }
+    if value == 0 { break }
+    total += value
+}
+print(total) // 6：负数跳过，0 结束循环，9 不处理
+```
+
+自测：把 break 改成 continue，预期变为 15；把 `var total` 改成 `let`，应因修改常量而失败。学习关键字应能预测执行路径，而不只记中文名。版本新增词法以 [官方词法参考](https://docs.swift.org/swift-book/documentation/the-swift-programming-language/lexicalstructure/)为准；本文示例未在本轮 Swift 编译器执行。
 
 ## 🔗 相关条目
 
@@ -286,3 +319,9 @@ describe(1, "two", 3.0)     // "1-two-3.0"
 ---
 
 *最后更新: 2026年9月 | 本条目为模块知识字典的一部分，概念完整解释以此处为单一事实来源*
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

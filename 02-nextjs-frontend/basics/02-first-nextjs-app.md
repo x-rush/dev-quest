@@ -1,5 +1,18 @@
 # Next.js 16 第一个应用创建完整指南
 
+## 先理解，再动手
+
+App Router 用文件组织路由。page 定义页面入口，layout 提供共享外壳；组件函数返回的是界面描述。
+
+**本节自测**：增加 /about 页面，让主页与 about 共享一个标题，并直接打开 /about。
+
+<details>
+<summary>预期结果与参考思路（先尝试再展开）</summary>
+
+共享部分放 layout；直接访问和点击导航都成功，说明不是只在客户端状态里模拟换页。
+
+</details>
+
 > **文档简介**: Next.js 16 从零开始创建第一个应用的完整教程，涵盖项目初始化、页面创建、路由配置、基础开发等入门知识
 
 > **目标读者**: Next.js初学者，需要从零开始学习Next.js开发的前端开发者
@@ -7,6 +20,9 @@
 > **前置知识**: 基础HTML/CSS/JavaScript、命令行操作、Git基础
 
 > **预计时长**: 3-4小时
+
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
 
 ## 📚 文档元数据
 
@@ -19,6 +35,8 @@
 | **更新日期** | `2026年9月` |
 | **作者** | Dev Quest Team |
 | **状态** | ✅ 已完成 |
+
+</details>
 
 ## 🎯 学习目标
 
@@ -662,7 +680,7 @@ npm start
 - 📄 **[相关的framework-patterns文档](../reference/framework-patterns/01-app-router-patterns.md)**: 深入了解App Router的设计模式和最佳实践
 
 ### 参考章节
-- 📖 **[本模块其他章节]**: [TypeScript集成配置](./03-typescript-integration.md#typescript项目配置) | [布局和路由设计](./04-layouts-routing.md#app-router基础架构)
+- 📖 **[本模块其他章节]**: [TypeScript集成配置](./03-typescript-integration.md#️-typescript项目配置) | [布局和路由设计](./04-layouts-routing.md#️-app-router基础架构)
 - 📖 **[Knowledge Points快速参考]**: [React语法速查](../reference/language-concepts/01-react-syntax-cheatsheet.md) | [Next.js API参考](../reference/language-concepts/02-nextjs-api-reference.md)
 
 ## 📝 总结
@@ -700,3 +718,8 @@ npm start
 **文档状态**: ✅ 已完成
 **最后更新**: 2026年9月
 **版本**: v1.0.0
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../LEARNING_GUIDE.md) · [完整目录与版本](../README.md) · [通用术语](../../shared-resources/glossary.md)

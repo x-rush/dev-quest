@@ -2,7 +2,10 @@
 
 ## 概述
 
-PHP 数组是有序哈希表（可当列表也可当映射），配合 `array_*` 函数族可表达绝大多数集合运算。本文收录核心函数与 map/filter/reduce 组合范式，所有示例兼容 PHP 8.3+。
+PHP 数组是有序哈希表（可当列表也可当映射），配合 `array_*` 函数族可表达绝大多数集合运算。本文收录核心函数与 map/filter/reduce 组合范式，主要示例面向 PHP 8.3+；array_find/array_any/array_all 明确需要 PHP 8.4+。
+
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
 
 ## 📚 文档元数据
 
@@ -13,6 +16,8 @@ PHP 数组是有序哈希表（可当列表也可当映射），配合 `array_*`
 | **难度** | ⭐⭐ |
 | **标签** | `#数组` `#集合操作` `#map` `#filter` `#reduce` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ## 1. 数组基础形态速览
 
@@ -27,7 +32,7 @@ $mixed2 = [1 => 'a', '1' => 'b', 1.8 => 'c'];   // ⚠️ 全部归并为键 1�
 var_dump($mixed2);   // [1 => 'c']
 ```
 
-**陷阱**: 含整数字符串的键会被强制转 int；浮点键截断为 int。
+**陷阱**: 符合特定十进制整数形式的字符串键会转为 int，例如 "1"，但 "01" 保持字符串；浮点键转 int 丢失精度在现代 PHP 会产生弃用通知。
 
 ## 2. map：逐元素变换
 
@@ -92,7 +97,8 @@ $nums = [1, 2, 3, 4];
 // 求和
 $sum = array_reduce($nums, fn(int $c, int $n): int => $c + $n, 0);   // 10
 
-// 构建映射：reduce 出"数组"也完全合法
+// 独立输入：每条记录需要 id，重复 id 的 + 合并保留先出现的记录。
+$users = [['id' => 1, 'name' => 'Ada', 'age' => 36], ['id' => 2, 'name' => 'Alan', 'age' => 41]];
 $byId = array_reduce(
     $users,
     fn(array $c, array $u): array => $c + [$u['id'] => $u],   // + 合并保留数字键
@@ -107,7 +113,7 @@ $counts = array_reduce($words, function (array $c, string $w): array {
 }, []);   // ['php' => 3, 'go' => 1, 'rust' => 1]
 ```
 
-**陷阱**: 初始值省略时第一轮 `$carry` 为 `null`，对 `int` 运算直接 TypeError——**永远显式传初始值**；纯计数/求和优先用 `count`/`array_sum`。
+**陷阱**: 初始值省略时第一轮 carry 为 null，若回调参数声明为非可空 int 会触发类型错误；无类型算术的行为不能混为一谈——**永远显式传初始值**；纯计数/求和优先用 `count`/`array_sum`。
 
 ## 5. 组合范式：管道式数据处理
 
@@ -164,7 +170,7 @@ $order = ['high' => 0, 'normal' => 1, 'low' => 2];
 usort($tasks, fn($a, $b) => $order[$a['priority']] <=> $order[$b['priority']]);
 ```
 
-**陷阱**: `usort` 比较函数必须**全序且对称**（8.0 起违反会抛异常）；排序是原地修改，需要不可变风格时先对副本排序。
+**陷阱**: `usort` 比较函数必须返回负数、零或正数，并满足一致的排序关系；PHP 不会完整验证比较器的传递性，也不保证违反时抛异常；排序是原地修改，需要不可变风格时先对副本排序。
 
 ## 7. 实用工具函数集
 
@@ -194,3 +200,18 @@ $deep    = array_merge_recursive($a, $b);            // ⚠️ 同名键递归�
 - 📄 **[常用内置函数分类全表](./02-built-in-functions.md)** — 数组之外的全量函数速查
 - 📄 **[类型系统与现代 OOP](./03-types-oop-modern.md)** — 一等公民 callable 与回调类型
 - 📄 **[教程：控制流程](../../basics/05-control-flow.md)** — 循环与集合操作的取舍
+
+
+<!-- full-library-explanation -->
+## 数组变换还要跟踪键与冲突规则
+
+前置是数组键值与回调。array_filter 保留键，所以过滤列表后可能出现 0、2、5；JSON 编码可能把它当作对象。只有业务确实要求列表时才用 array_values，若键是用户 ID 就应保留。array_map 传一个数组时保留键，传多个数组时结果重新编号；不能只看元素值判断转换是否保持数据结构。
+
+`$left + $right` 的同名键由左侧获胜，array_merge 的字符串键由后侧覆盖，数字键重新编号。为重复 ID 建索引时，必须决定首次优先、末次优先还是拒绝冲突。reduce 每轮复制不断增长的累加数组可能很贵，直接 foreach 累加通常更清楚，不必把所有循环改成函数链。
+
+**练习**：过滤 [0,1,2] 中的 1，比较直接 json_encode 与 array_values 后编码，预期分别是对象形状和列表形状。再合并两个都含字符串键 name 和数字键 0 的数组，对照 + 与 array_merge。将合法值 '0' 加入样本，确认无回调 array_filter 会移除它，显式 null 过滤则保留。
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

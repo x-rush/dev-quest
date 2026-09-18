@@ -6,6 +6,9 @@
 >
 > **前置知识**: [SaaS 后台的认证流](../../projects/04-saas-admin-platform.md)、[Router 框架要点](../../reference/framework-essentials/02-router-essentials.md)
 
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
+
 ## 📚 文档元数据
 
 | 属性 | 内容 |
@@ -15,6 +18,8 @@
 | **难度** | ⭐⭐⭐ |
 | **标签** | `#安全` `#xss` `#csrf` `#认证授权` `#token` |
 | **更新日期** | 2026年9月 |
+
+</details>
 
 ---
 
@@ -44,7 +49,7 @@ Content-Security-Policy:
   frame-ancestors 'none';
 ```
 
-Vite 构建的内联脚本需 `'unsafe-inline'` 或 nonce 方案——nonce 成本更低，Vercel 边缘中间件可自动注入。
+先检查 Vite 实际产物是否包含内联脚本；需要时选择哈希或 nonce 等策略。不要无依据加入 unsafe-inline，也不要假定平台自动注入 nonce。
 
 - **依赖供应链**：`npm audit` 进 CI；Lockfile 提交；关键脚本（MSW 的 worker、Sentry loader）走官方渠道或自托管
 
@@ -61,7 +66,7 @@ Vite 构建的内联脚本需 `'unsafe-inline'` 或 nonce 方案——nonce 成�
 
 ## 3. CSRF：Cookie 方案的必修课
 
-仅当认证凭据走 Cookie 时相关：
+自动携带的认证凭据会带来 CSRF 风险，Cookie 是常见情况：
 
 - `Set-Cookie: session=...; HttpOnly; Secure; SameSite=Lax`——Lax 挡住绝大多数跨站 POST
 - 写操作加 CSRF token（服务端下发、`X-CSRF-Token` 头回传），或改用自定义头 + CORS 白名单的双校验
@@ -97,7 +102,7 @@ Query 缓存会持久驻留内存，还会被 Devtools 完整展示：
 - **登出/切换账号必 `queryClient.clear()`**——防止下一用户从缓存读到前任数据（含乐观快照）
 - **敏感字段前端脱敏**：缓存里只存展示需要的数据（服务端裁剪返回），不存全量对象
 - **SSR/Start 场景的 dehydrate**：序列化进 HTML 的缓存会出现在页面源码里——敏感键务必排除（按键前缀过滤 dehydratedState）
-- **共享电脑场景**：`gcTime` 再长也不能替代登出清理；金融/医疗类应用考虑 `sessionStorage` 级生命周期
+- **共享电脑场景**：`gcTime` 再长也不能替代登出清理；sessionStorage 仅改变生命周期，同样能被同源脚本读取，不能作为敏感数据的安全保证
 
 ---
 
@@ -115,6 +120,17 @@ Query 缓存会持久驻留内存，还会被 Devtools 完整展示：
 
 ---
 
+<!-- full-library-explanation -->
+## 从账号切换验证缓存隔离
+
+先修：Cookie、HTTP 授权、Query 生命周期。建立 A/B 两个测试账号，A 登录时发起延迟请求，随后退出并登录 B。清理旧缓存后，如果 A 的在途响应仍可写回，B 仍可能看到旧数据。因此要同时设计取消、查询键身份、持久化清理与服务端授权。
+
+敏感字段必须在服务器响应前裁剪。浏览器收到完整对象后再隐藏字段，无法撤回已经发送的数据。dehydrate 的过滤也要在服务端完成，不能等页面加载后才清理 HTML 中的秘密。
+
+CSP nonce 需要与当前响应中的脚本标记匹配；静态 SPA、动态 SSR 与 CDN 缓存的部署方式不同，不存在自动适用所有项目的注入方案。先采用实际构建产物所需策略，再用浏览器报告验证。
+
+**练习：** A 访问 B 的资源 ID、登出后重放写请求、切账号时让旧请求晚返回。验收：服务端拒绝越权，客户端不显示旧账号数据，日志不含令牌。参考[OWASP 授权](https://cheatsheetseries.owasp.org/cheatsheets/Authorization_Cheat_Sheet.html)与[CSRF 防护](https://cheatsheetseries.owasp.org/cheatsheets/Cross-Site_Request_Forgery_Prevention_Cheat_Sheet.html)。
+
 ## 🔗 相关文档
 
 - 📄 **[SaaS 后台](../../projects/04-saas-admin-platform.md)** - 本清单的工程载体
@@ -122,3 +138,9 @@ Query 缓存会持久驻留内存，还会被 Devtools 完整展示：
 - 📄 **[缓存架构与数据流](../architecture/01-cache-architecture.md)** - 敏感数据驻留内存的机制
 - 📄 **[可观测性](../../deployment/03-observability.md)** - 安全事件的发现通道
 - 📄 **[环境搭建](../../basics/01-environment-setup.md)** - 依赖安装的供应链起点
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

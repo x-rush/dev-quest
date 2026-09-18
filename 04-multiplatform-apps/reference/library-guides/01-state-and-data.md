@@ -2,6 +2,9 @@
 
 > **难度**: ⭐⭐ | **前置**: Context 与 Hooks 用法（[04-state-hooks](../../basics/04-state-hooks.md)）
 
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
+
 ## 📚 文档元数据
 
 | 属性 | 内容 |
@@ -11,6 +14,8 @@
 | **难度** | ⭐⭐ |
 | **标签** | `#Zustand` `#Redux Toolkit` `#TanStack Query` `#AsyncStorage` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ## 选型决策表
 
@@ -22,7 +27,7 @@
 | 表单局部状态 | 组件内 useState | 别为表单引入全局 store |
 | 本地持久化 | AsyncStorage / expo-secure-store | 与上述库配合而非替代 |
 
-**核心心法**: 服务端数据不进 Zustand/Redux——交给 TanStack Query；全局 store 只存"客户端状态"。
+**核心心法**: 服务端缓存优先交给专门机制，例如 TanStack Query 或 RTK Query；自行实现时须承担失效、去重和同步职责。
 
 ## Zustand
 
@@ -121,7 +126,11 @@ const queryClient = new QueryClient();
 function TodoList() {
   const { data, isLoading, error } = useQuery({
     queryKey: ['todos'],
-    queryFn: () => fetch('https://api.example.com/todos').then((r) => r.json()),
+    queryFn: async ({ signal }) => {
+      const r = await fetch('https://api.example.com/todos', { signal });
+      if (!r.ok) throw new Error(`HTTP ${r.status}`);
+      return r.json(); // 实际项目继续校验响应结构
+    },
     staleTime: 60_000,
   });
   return null;
@@ -131,8 +140,13 @@ function TodoList() {
 function useAddTodo() {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: (title: string) =>
-      fetch('https://api.example.com/todos', { method: 'POST', body: JSON.stringify({ title }) }),
+    mutationFn: async (title: string) => {
+      const r = await fetch('https://api.example.com/todos', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ title }),
+      });
+      if (!r.ok) throw new Error(`HTTP ${r.status}`);
+    },
     onSuccess: () => qc.invalidateQueries({ queryKey: ['todos'] }),
   });
 }
@@ -148,8 +162,17 @@ function useAddTodo() {
 |------|------|------|
 | `@react-native-async-storage/async-storage` | 键值 JSON | 事实标准；鸿蒙用 RNOH 适配版 |
 | `expo-secure-store` | 敏感小数据 | 加密存储（token/密钥） |
-| `react-native-mmkv` | 高频读写 | 同步 API + C++，性能最好；鸿蒙需适配版 |
+| `react-native-mmkv` | 高频读写 | 同步 API，适合有界小数据读写，性能按实际负载测量；鸿蒙需适配版 |
 | SQLite（expo-sqlite / op-sqlite） | 关系数据 | 离线优先应用的存储层 |
+
+<!-- full-library-explanation -->
+## 缓存、草稿与持久化如何协作
+
+本页 Zustand 示例管理本地待办；如果改为服务端待办，就要决定谁处理重试、失效、冲突和离线同步。RTK Query 也提供服务端缓存能力，并非选 Redux 就必须手写所有请求。根据已有工程与团队能力选择，避免为了同时展示库而维护两份相同数据。
+
+原生应用的前后台和网络事件需要接入 Query 的 focusManager/onlineManager；页面聚焦与 App 前台不是一回事。持久化恢复也有等待阶段，不能让用户在旧数据尚未载入时编辑空列表，再用恢复结果覆盖新输入。
+
+练习：模拟恢复延迟一秒，打开页面后立即编辑；再让新增接口返回 500。验收：恢复过程有明确 UI，失败不会触发成功提示或错误地清空草稿；重新进入页面后缓存按设计重新校验。
 
 ## 🔗 相关文档
 
@@ -160,3 +183,9 @@ function useAddTodo() {
 - 📄 **[综合练习教程](../../basics/08-first-project.md)**: AsyncStorage 实战
 
 *延伸: zustand 文档 · TanStack Query 官方文档（与 Web 侧同源）*
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

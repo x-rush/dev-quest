@@ -1,5 +1,7 @@
 # 常见错误与故障排除
 
+> **阅读准备**：能获取完整编译错误、Logcat 与依赖版本；按具体故障查阅，不需先通读全部参考。
+
 > Compose/Kotlin 开发高频故障的症状→原因→修复速查：重组死循环、状态丢失、协程泄漏、性能陷阱与构建问题
 
 | 属性 | 内容 |
@@ -63,7 +65,7 @@ class VM : ViewModel() { val query = MutableStateFlow("") }
 ```
 
 ### 陷阱
-大列表（几百 KB+）塞 `rememberSaveable` 会因 Bundle 体积限制崩溃（TransactionTooLargeException）——大数据放 ViewModel。
+大列表（几百 KB+）塞 `rememberSaveable` 会因 Bundle 体积限制崩溃（TransactionTooLargeException）——大数据可由 ViewModel 在内存持有；跨进程恢复仍需数据库等持久化。
 
 ---
 
@@ -89,7 +91,7 @@ val b = remember { mutableIntStateOf(0) }         // 基本类型直接用专用
 离开页面后 Toast 还在弹、数据库还在写、甚至 NPE 崩溃。
 
 ### 原因
-1. 用 `GlobalScope` 启动业务协程（永不取消）
+1. 用 `GlobalScope` 启动业务协程（没有页面级自动取消关系）
 2. 自己 `CoroutineScope(Dispatchers.Main)` 却从不 cancel
 3. `catch` 吞掉了 `CancellationException`，破坏取消机制
 
@@ -158,7 +160,7 @@ Layout Inspector / Recomposition Counts 显示一个输入每帧触发整页重�
 |------|------|
 | 状态读取过早（页面级读取，全局传递） | 把读取下沉到需要的最小子组件；或传 lambda 延迟读取 |
 | 高频源直接驱动低频 UI | `derivedStateOf` 收敛（如滚动位置 → 是否显示按钮） |
-| 参数不稳定（`List`/lambda 每次新实例） | 参数用不可变 data class；lambda 稳定化（`remember` 或 `rememberUpdatedState`） |
+| 参数不稳定（`List`/lambda 每次新实例） | 参数用不可变 data class；结合编译器模式和捕获检查 lambda；rememberUpdatedState 用于长期任务读取最新值，不是通用跳过开关 |
 | LazyColumn 的 item lambda 捕获易变状态 | item 内只依赖 item 数据，事件经稳定回调上抛 |
 
 ```kotlin
@@ -176,7 +178,7 @@ TopButton(visible = showTop)
 ## 8. LaunchedEffect 不执行 / 重复执行
 
 ### 症状
-- 请求永远不发 → key 恒为 false 或收集缺失
+- 请求未执行 → 检查是否进入组合、协程是否立即取消/失败；false 也可作为合法 key，不是禁用开关
 - 请求发了两次 → key 抖动
 
 ### 原因与修复
@@ -241,7 +243,7 @@ KSP 已改用**独立版本号**（如 `2.3.11`），不再使用 `kotlin版本-
 ```toml
 [versions]
 kotlin = "2.4.20"
-ksp = "2.3.11"            # 独立版本号，升级 Kotlin 后无需强改
+ksp = "2.3.11"            # 独立版本号，升级时仍须核对兼容性
 ```
 
 ### 关联问题
@@ -275,3 +277,18 @@ ksp = "2.3.11"            # 独立版本号，升级 Kotlin 后无需强改
 - 📄 **[Compose 状态 API 详解](../language-concepts/04-compose-state-api.md)** - remember/Saveable/derivedStateOf 原理
 - 📄 **[协程与 Flow API 全表](../language-concepts/03-coroutines-flow-api.md)** - 取消与异常传播机制
 - 📖 **[Compose 性能官方指南](https://developer.android.com/develop/ui/compose/performance)** - 性能问题权威排查
+
+
+<!-- full-library-explanation -->
+## 最小复现要保留触发条件
+
+“旋转后丢失”先记录 Activity 是否重建、ViewModel 属于哪个 owner、数据是否只在内存；“请求两次”先记录收集者数量、Effect key 与进出组合次数。错误表列出候选原因，不证明每个同名症状都来自同一个根因。
+
+练习：为一个请求加资源 ID 与任务编号日志，模拟快速切换 A/B 和后台恢复。验收：能从日志定位任务由谁启动、何时取消、哪个结果写入当前状态。避免记录 token 或用户正文；不要仅用时间戳猜两个请求是否同一次任务。
+
+SideEffect 中无条件增加被 UI 读取的计数同样可能造成循环。把代码搬出组合体不是充分修复，必须解释这次状态变化为什么发生、由哪个输入触发，以及最终是否能稳定下来。
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

@@ -8,6 +8,9 @@
 >
 > **预计时长**: 20-40分钟
 
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
+
 ## 📚 文档元数据
 
 | 属性 | 内容 |
@@ -19,6 +22,8 @@
 | **更新日期** | `2026年9月` |
 | **作者** | Dev Quest Team |
 | **状态** | ✅ 已完成 |
+
+</details>
 
 ---
 
@@ -234,7 +239,10 @@ async function getPost(id: string) {
   return res.json()
 }
 
-// 在客户端组件中获取数据
+```
+
+```tsx
+// components/PostList.tsx：独立客户端文件
 'use client'
 
 import { useEffect, useState } from 'react'
@@ -298,8 +306,13 @@ const res = await fetch('https://api.example.com/posts', {
 import { revalidatePath, updateTag } from 'next/cache'
 
 export async function createPost(formData: FormData) {
-  const title = formData.get('title') as string
-  const content = formData.get('content') as string
+  // 项目还需在此校验身份和发布权限，db 是项目数据访问依赖
+  const title = formData.get('title')
+  const content = formData.get('content')
+  if (typeof title !== 'string' || !title.trim() || title.length > 200
+      || typeof content !== 'string' || content.length > 100000) {
+    return { success: false, message: 'invalid post' }
+  }
 
   // 数据库操作
   await db.post.create({
@@ -313,7 +326,10 @@ export async function createPost(formData: FormData) {
   return { success: true, message: 'Post created successfully' }
 }
 
-// 在组件中使用
+```
+
+```tsx
+// components/CreatePostForm.tsx：独立客户端文件
 'use client'
 
 import { createPost } from './actions'
@@ -434,7 +450,7 @@ function ClientInteractiveComponent({ initialData }: { initialData: any[] }) {
 ```javascript
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Turbopack配置（Next 16：顶层 turbopack 键；experimental.turbo 仅为兼容别名）
+  // Turbopack配置（Next 16：顶层 turbopack 键；旧 experimental.turbo 配置应按升级指南迁移）
   turbopack: {
     rules: {
       '*.svg': {
@@ -458,7 +474,7 @@ const nextConfig = {
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
   },
 
-  // 环境变量
+  // 公开构建期变量：不要放密钥
   env: {
     CUSTOM_KEY: process.env.CUSTOM_KEY,
   },
@@ -741,6 +757,17 @@ function isAuthenticated(request: NextRequest): boolean {
 
 ---
 
+<!-- full-library-explanation -->
+## 从调用位置判断 API 是否适用
+
+前置是 App Router 文件约定、服务端与客户端组件。next/navigation 的客户端路由 Hook 管理浏览器导航，redirect/notFound 是服务端控制流；Route Handler 接受 HTTP 请求，Server Action 是仍需认证授权的服务器调用入口。相似函数名不代表相同执行位置。
+
+router.refresh 会重新请求并合并服务端组件结果，同时保留合适的客户端状态，不等于浏览器整页重载，也不直接清空服务端数据缓存。写数据后要按缓存来源选择 revalidatePath/updateTag 等机制。配置中的 env 会把值纳入构建替换，绝不能放秘密；standalone 与 export 也不是可随意互换的输出模式，静态导出不支持需要运行时服务器的功能。
+
+**练习**：为同一个列表分别触发客户端 refresh、标签失效和浏览器完整刷新，记录组件状态是否保留以及数据源是否被调用。并行路由补 default.tsx，比较软导航与直接刷新进入子路径的行为。各文件示例单独保存，use client/use server 必须位于相应文件或函数的有效指令位置。
+
+依据：[useRouter](https://nextjs.org/docs/app/api-reference/functions/use-router)、[静态导出](https://nextjs.org/docs/app/guides/static-exports)、[并行路由](https://nextjs.org/docs/app/api-reference/file-conventions/parallel-routes)。
+
 ## 🔗 相关文档
 
 - 📄 **[Next.js 16 官方文档](https://nextjs.org/docs)**: 完整Next.js文档
@@ -862,3 +889,8 @@ const realtime = await fetch('https://api.example.com/realtime', {
 **文档状态**: ✅ 已完成 | 🚧 进行中 | 📋 计划中
 **最后更新**: 2026年9月
 **版本**: v1.0.0
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

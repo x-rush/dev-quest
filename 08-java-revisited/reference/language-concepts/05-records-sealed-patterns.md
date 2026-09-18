@@ -6,6 +6,9 @@
 >
 > **前置知识**: 类与接口基础（教程见 [类、接口与 Record](../../basics/04-classes-records.md)、[控制流程](../../basics/05-control-flow.md)）
 
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
+
 ## 📚 文档元数据
 
 | 属性 | 内容 |
@@ -15,6 +18,8 @@
 | **难度** | ⭐⭐ |
 | **标签** | `#Record` `#Sealed` `#模式匹配` `#现代特性` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ## 📦 Record
 
@@ -139,12 +144,9 @@ String cityOf(Order order) {
 
 ## ✅ 最佳实践 / ❌ 陷阱清单
 
-- ✅ 领域模型"is-a 关系封闭"时用 sealed（支付方式、事件类型、AST 节点）
-- ✅ 模式匹配 switch 处理 sealed 层级时省略 default，获得增量编译检查
-- ✅ record 作为方法多返回值、Map key（自带 equals/hashCode）
-- ❌ 不要把 record 当"少写代码的 class"用于有状态服务
-- ❌ 不要在模式守卫 `when` 中修改状态
-- ❌ 不要对非密封层级写类型模式 switch——没有穷举保证，等于高级 if-else
+sealed 适合已知且受控的类型集合，例如一组领域事件；新增成员时，穷尽处理能提醒相关分支更新。开放类型层级也可以使用模式匹配，但需要相应兜底，不能因无法穷尽就认定语法无用。
+
+record 适合数据载体，自动生成相等比较不等于内部成员深度不可变。若可变集合影响 hashCode，把 record 用作 Map key 后再修改成员可能破坏查找；采用不可变成员或复制，并测试这一边界。
 
 ## 🔗 相关文档
 
@@ -152,3 +154,9 @@ String cityOf(Order order) {
 - 📄 **[集合框架与泛型](./02-collections-generics.md)** - 泛型 record 与边界
 - 📄 **[控制流程](../../basics/05-control-flow.md)** - 模式匹配教程
 - 📄 **[现代 Java 特性](../../basics/07-modern-features.md)** - Sealed 教程
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

@@ -4,6 +4,9 @@
 
 TanStack Table v9 的三个 API 层：`ColumnDef`（列声明）、`useTable` + `features`（实例配置，v9 新增必填选项）、Table/Row/Column 实例方法（读取状态与行模型）。教程见 [Table 基础](../../basics/04-table-fundamentals.md)。
 
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
+
 ## 📚 文档元数据
 
 | 属性 | 内容 |
@@ -13,6 +16,8 @@ TanStack Table v9 的三个 API 层：`ColumnDef`（列声明）、`useTable` + 
 | **难度** | ⭐⭐ |
 | **标签** | `#ColumnDef` `#RowModel` `#features` `#Table状态` `#API字典` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ---
 
@@ -67,7 +72,7 @@ const columns = columnHelper.columns([
 
 ### 陷阱
 
-- 用了 `accessorFn` 而没有 `id` 时运行时报错——函数无法推出字段名
+- accessorFn 列需要稳定标识：可提供 id，也可由纯字符串 header 推导；可翻译标题宜另配固定 id
 - `cell` 里读整行数据用 `ctx.row.original`，不要 `getValue()` 强转对象
 - v9 中列宽/列尺寸与"列拖拽调整"拆成两个特性：只要静态宽度注册 `columnSizingFeature`，要拖拽再加 `columnResizingFeature`
 
@@ -111,7 +116,7 @@ const table = useTable({
   onSortingChange: setSorting,
   onColumnFiltersChange: setColumnFilters,
   onPaginationChange: setPagination,
-  getRowId: (row) => row.id,     // 稳定行 id，行选择/展开强烈推荐
+  getRowId: (row) => String(row.id),     // 稳定行 id，行选择/展开强烈推荐
   enableRowSelection: true,
   initialState: { sorting: [{ id: 'age', desc: true }] },
 })
@@ -135,8 +140,8 @@ const table = useTable({
 ### 陷阱
 
 - v9 中行/单元格/列/表头的方法挂在**原型**上——解构方法或把它们当裸回调传递会丢失实例上下文；始终通过实例调用（`row.getValue('name')`、`column.getCanSort()`）
-- `data` 或 `columns` 每次渲染都是新引用 → 行模型反复重算 → "Maximum update depth" 报错
-- 用非受控模式时排序等状态默认存在实例内部，组件外无法读取
+- `data` 或 `columns` 每次渲染都是新引用可能造成重复计算；结合状态回调与自动重置时才可能形成更新循环
+- 非受控状态由实例管理，仍可通过状态与订阅 API 读取；需要外部驱动时再提升为受控
 
 ## 3. 状态类型与读取
 
@@ -213,3 +218,22 @@ header.isPlaceholder                     // 分组表头占位，需跳过渲染
 - 📄 **[TypeScript 模式](./05-typescript-patterns.md)** - ColumnDef 泛型推断
 - 📄 **[生态集成：Virtual](../library-guides/01-ecosystem-integrations.md)** - 大数据量虚拟滚动
 - 📄 **[故障排除](../quick-references/02-troubleshooting.md)** - 表格空白/无限重渲染排查
+
+
+<!-- full-library-explanation -->
+## 从原始数据到用户看到的行
+
+先修：数组、React 渲染、排序和筛选。本页采用 Table v9，安装 v8 时不能直接复制 useTable/features API。首先建立 `data → 核心行 → 筛选 → 排序 → 分页 → 渲染` 的顺序概念，再逐项启用实际需要的特性。
+
+列的 accessor 定义参与计算的值，cell 定义显示方式。例如金额 accessor 返回数字，cell 再格式化为带货币符号的文本；若 accessor 直接返回格式化字符串，排序就可能按字符串而非数值进行。
+
+本页列定义大块是选项目录，不是能直接复制运行的单个完整表格。不要同时填写 accessorKey 与 accessorFn，不要给普通叶子列同时加 columns，也不要在受控 sorting 之外再配置同名 initialState。排序、分页、选择等选项还要求匹配的 features。
+
+**练习：** 用三条人员数据先显示原始顺序，再启用年龄排序，最后加每页两条。验收：能分别打印每个阶段的行顺序，并解释为什么服务端只返回当前页时，不应再做本地全量排序。
+
+**边界：** 表格选择状态可以保留不在当前页的 ID，但 getSelectedRowModel 只能据现有数据构造行。批量操作应使用稳定业务 ID，并在服务端重新授权。参考[列定义](https://tanstack.com/table/latest/docs/guide/column-defs)。
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

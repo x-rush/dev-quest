@@ -1,10 +1,21 @@
 # Compose 入门核心 - Composable 函数、状态与布局
 
+## 先看框架承担哪部分职责
+
+**Compose 核心**：Composable 描述当前状态下的 UI，事件回调改变状态。Modifier 参与布局和交互，顺序可能改变效果。
+
+**最小练习与预期结果**：将一个计数器拆成状态持有者和纯展示组件；两个预览输入不同 count 应显示不同值而无网络或存储副作用。
+
+具体 API 与安装版本以[模块基线](../README.md)和本篇官方来源为准。先完成这条数据路径，再展开后面的高级配置；框架名称变化后，输入边界、状态归属和失败处理仍是需要理解的机制。
+
 > **文档简介**: 以任务视角掌握 Jetpack Compose 三大基石——Composable 函数、状态管理与基础布局
 >
 > **目标读者**: 完成 basics 教程后、希望按任务快速落地 Compose 核心能力的 Android 初学者
 >
 > **前置知识**: Kotlin 基础语法、[Composable 与状态](../basics/04-composables-state.md)、[布局系统](../basics/05-layouts.md) 的基本概念
+
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
 
 ## 📚 文档元数据
 
@@ -15,6 +26,8 @@
 | **难度** | ⭐ |
 | **标签** | `#jetpack-compose` `#composable` `#状态管理` `#布局` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ## 🎯 本篇任务清单
 
@@ -143,20 +156,18 @@ fun ProfileCard() {
 
 ## 🎨 最佳实践
 
-### ✅ 推荐
+状态提升是把共享状态交给共同使用者的合适所有者，例如父组件保存选择值，子组件接收值和 onSelect。只属于单个控件的状态可以留在本地；不要为了分层把所有东西推到 ViewModel。
 
-- **无状态优先**：组件设计为"状态提升"形态，预览与 UI 测试都因此变简单（见 [Compose UI 测试](../testing/02-ui-testing.md)）
-- **样式走主题**：用 `MaterialTheme.typography/color`，不硬编码 sp/Color（主题速查见 [Material 3 主题系统](../reference/framework-essentials/02-compose-material3.md)）
-- **状态尽量上提**：提到最近需要共享的祖先，或直接提到 ViewModel（见 [生态集成](03-ecosystem-integration.md)）
-
-### ❌ 避免陷阱
-
-- 在 Composable 内做 IO、改全局单例等副作用——用[侧效应 API](02-compose-advanced.md) 表达
-- 组合期间直接启动协程（用 `LaunchedEffect` / `rememberCoroutineScope`）
-- 嵌套超过 3 层不拆分，导致重组范围过大、可读性差
+Composable 描述界面，网络或订阅由具备生命周期的机制管理，避免重新组合时重复启动工作。拆组件以职责和复用为依据，不用嵌套三层作为性能定律。主题统一颜色与文字样式后，还要实际检查深色和大字体。
 
 ## 🔗 相关文档
 
 - 📖 概念字典：[Compose 状态 API 详解](../reference/language-concepts/04-compose-state-api.md) ｜ [Compose 核心组件速查](../reference/framework-essentials/01-compose-essentials.md)
 - 📖 前置教程：[Composable 与状态](../basics/04-composables-state.md) ｜ [布局系统](../basics/05-layouts.md)
 - 🚀 后续学习：[Compose 进阶：侧效应、导航与动画](02-compose-advanced.md) ｜ [入门项目：本地笔记应用](../projects/01-notes-app.md)
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../LEARNING_GUIDE.md) · [完整目录与版本](../README.md) · [通用术语](../../shared-resources/glossary.md)

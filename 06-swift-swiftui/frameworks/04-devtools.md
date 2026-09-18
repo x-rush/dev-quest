@@ -1,10 +1,21 @@
 # Xcode 工具链任务指南 — Preview、Instruments 与调试器
 
+## 先看框架承担哪部分职责
+
+**Xcode 工具**：Preview 用来快速检查视图，Instruments 用来观察实际资源与耗时。用真机重现的证据才能支持真机性能结论。
+
+**最小练习与预期结果**：选择一个重复进入退出的页面，检查任务、对象与内存是否按预期释放；保留测量条件和操作步骤。
+
+具体 API 与安装版本以[模块基线](../README.md)和本篇官方来源为准。先完成这条数据路径，再展开后面的高级配置；框架名称变化后，输入边界、状态归属和失败处理仍是需要理解的机制。
+
 > **文档简介**: 面向任务的 Xcode 日常工具指南：用 Preview 即时预览界面、用 Instruments 定位性能问题、用 LLDB 调试器查状态找 bug
 >
 > **目标读者**: 刚配置好 Xcode 环境、需要在开发循环中高效排错与调优的学习者
 >
 > **前置知识**: [basics/01-environment-setup.md](../basics/01-environment-setup.md)（环境已就绪）、[basics/02-first-swiftui-app.md](../basics/02-first-swiftui-app.md)（跑通过第一个 App）
+
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
 
 ## 📚 文档元数据
 
@@ -15,6 +26,8 @@
 | **难度** | ⭐ |
 | **标签** | `#Xcode` `#Preview` `#Instruments` `#LLDB` `#调试` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ## 🎯 本指南解决什么问题
 
@@ -118,9 +131,9 @@ var body: some View {
 
 ## ✅ 最佳实践
 
-- ✅ 每个 UI 组件文件都留一个 `#Preview`，改动即时可见，减少全量编译
-- ✅ 查"视图为什么刷新"优先 `Self._printChanges()`，比猜快得多
-- ✅ 性能问题先测量（Instruments）再优化，禁止凭感觉
+预览使用可控数据覆盖加载、错误、空态和长文本，不能只展示最理想的一屏。复杂界面的入口可以负责依赖装配，子 View 接收状态，从而让预览不必启动整个应用环境。
+
+刷新异常先记录什么状态变化、哪些视图读取它，再用诊断工具观察；下划线调试 API 不应成为生产契约。优化前后用 Instruments 在同一场景比较，保留设备和构建模式以便复现。
 
 ## ❌ 避免陷阱
 
@@ -148,3 +161,9 @@ var body: some View {
 - 📄 [02-troubleshooting.md](../reference/quick-references/02-troubleshooting.md) — 常见报错与故障排除字典
 - 📄 [01-environment-setup.md](../basics/01-environment-setup.md) — 环境搭建教程
 - 📄 [01-rendering-performance.md](../advanced-topics/performance/01-rendering-performance.md) — 渲染性能深度解释
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../LEARNING_GUIDE.md) · [完整目录与版本](../README.md) · [通用术语](../../shared-resources/glossary.md)

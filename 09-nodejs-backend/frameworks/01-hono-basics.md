@@ -1,10 +1,21 @@
 # Hono 4 快速上手：路由、中间件与请求响应处理
 
+## 先看框架承担哪部分职责
+
+**Hono 入门**：Hono 面向 Request/Response 契约组织路由与中间件，具体监听端口由运行时适配层承担。框架对象与网络服务器不是同一个职责。
+
+**最小练习与预期结果**：只用一条 GET 与一条 POST 验证 JSON、状态码与错误输入；然后解释适配器如何让请求进入 app。
+
+具体 API 与安装版本以[模块基线](../README.md)和本篇官方来源为准。先完成这条数据路径，再展开后面的高级配置；框架名称变化后，输入边界、状态归属和失败处理仍是需要理解的机制。
+
 > **文档简介**: 以任务为导向掌握 Hono 4 的三大核心——子应用路由拆分、中间件链与请求/响应处理，读完即可独立搭建结构清晰的 REST API 服务
 >
 > **目标读者**: 已完成 basics 学习路径、准备用 Hono 编写真实后端服务的初级后端开发者
 >
 > **前置知识**: Node.js 基础、TypeScript 基本语法、HTTP 协议常识
+
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
 
 ## 📚 文档元数据
 
@@ -15,6 +26,8 @@
 | **难度** | ⭐ |
 | **标签** | `#hono` `#routing` `#middleware` `#rest-api` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 > Hono 的完整 API 字典（Context 方法、内置中间件清单、路径语法）见 [`../reference/framework-essentials/01-hono-essentials.md`](../reference/framework-essentials/01-hono-essentials.md)，本文只讲"怎么用"。
 
@@ -176,11 +189,9 @@ export function fail(c: Context, message: string, status = 400) {
 
 ## ✅ 最佳实践与陷阱
 
-- ✅ app 与 server 分离文件，测试可 `import app` 并用内置 `app.request()`，不占端口
-- ✅ 路由文件只做"接请求、调服务、返响应"，业务逻辑下沉到 service 层（见 [`../advanced-topics/architecture/01-service-architecture.md`](../advanced-topics/architecture/01-service-architecture.md)）
-- ❌ 中间件里忘记 `await next()` 导致请求悬挂
-- ❌ 在 `await next()` 之前就想读 `c.res`——响应此时还没生成；修改响应头/状态必须放在 `next()` 之后
-- ❌ 把 `@hono/node-server` 当成"另一个 Web 框架"——它只是运行时适配器，业务代码永远只依赖 `hono` 主包
+app 与运行适配器分开，路由测试可以直接调用请求入口；依赖 Node 特有资源的功能仍需相应运行环境测试，不能声称业务永远只依赖框架主包。
+
+中间件应明确选择继续执行并等待 next，或直接返回响应。需要观察最终响应的逻辑放在下游完成后，设置某些响应头则可以按框架约定提前声明，不是所有修改都只能在 next 之后。通过日志记录前后顺序并测试提前拒绝分支。
 
 ## 🔗 相关文档
 
@@ -188,3 +199,9 @@ export function fail(c: Context, message: string, status = 400) {
 - 📄 [第一个 HTTP 服务器](../basics/02-first-server.md) — 原生 http 与 Hono 的对照入门
 - 📄 [路由、中间件与请求校验](../basics/05-http-routing.md) — basics 层面的渐进教程
 - 📄 [Hono 进阶：错误处理、认证与文件上传](02-hono-advanced.md) — 本文的进阶续篇
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../LEARNING_GUIDE.md) · [完整目录与版本](../README.md) · [通用术语](../../shared-resources/glossary.md)

@@ -1,10 +1,26 @@
 # 路由、中间件与请求校验
 
+## 先理解，再动手
+
+路由定位处理者，中间件提供公共前后处理，校验把不可信输入转成业务可用值。TypeScript 类型不会验证请求体。
+
+**本节自测**：POST 接收标题，分别发合法 JSON、空标题和损坏 JSON。
+
+<details>
+<summary>预期结果与参考思路（先尝试再展开）</summary>
+
+应有不同的解析或校验失败路径；服务函数只在输入满足契约后运行。
+
+</details>
+
 > **文档简介**: 掌握 Hono 路由组织、洋葱中间件的执行模型，以及用 Zod 做类型安全的请求校验
 
 > **目标读者**: 已跑通第一个 Hono 服务、准备构建真实 API 的开发者
 
 > **前置知识**: [第一个服务器](./02-first-server.md)，TypeScript 基本类型
+
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
 
 ## 📚 文档元数据
 
@@ -15,6 +31,8 @@
 | **难度** | ⭐ |
 | **标签** | `#路由` `#中间件` `#Zod` `#请求校验` `#Hono` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ## 🎯 学习目标
 
@@ -174,11 +192,9 @@ app.post("/users", zValidator("json", CreateUserSchema), (c) => {
 
 ## 🎨 最佳实践
 
-- ✅ **子应用按资源拆分**：单文件路由超过 ~150 行就该拆了
-- ✅ **校验失败返回 400/422 + 结构化 issues**：让前端能精确提示字段错误
-- ✅ **Zod schema 放在离使用处最近的位置**并可复用推导类型
-- ❌ **不要信任 `c.req.json()`/`c.req.query()`/`c.req.param()`**：全部来自客户端，必须校验
-- ❌ **不要在业务处理函数里做认证**：横切关注点交给中间件
+路由按资源或业务边界组织，读请求、校验、调用服务和写响应各有明确责任，不用文件超过某行数就强制拆分。客户端的 JSON、路径和查询参数都属于待验证输入，转换成功还要检查范围及业务合法性。
+
+中间件适合提取和验证身份，但“当前用户能否修改这条记录”的授权通常还涉及业务数据。统一字段错误响应让前端能定位输入问题；用非法参数、无身份、跨用户和成功请求分别验收。
 
 ## ❓ 常见问题
 
@@ -214,3 +230,9 @@ app.post("/users", zValidator("json", CreateUserSchema), (c) => {
 - 📄 **[错误处理](./06-error-handling.md)** — 校验错误与业务错误的统一出口
 - 📄 **[Hono 4 核心速查](../reference/framework-essentials/01-hono-essentials.md)** — 路由/中间件 API 字典
 - 📄 **[TypeScript 模式](../reference/language-concepts/05-typescript-patterns.md)** — zValidator 类型推导与泛型处理器
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../LEARNING_GUIDE.md) · [完整目录与版本](../README.md) · [通用术语](../../shared-resources/glossary.md)

@@ -1,10 +1,26 @@
 # Composable 与状态 - 声明式 UI 的核心
 
+## 先理解，再动手
+
+remember 负责保留值，mutableStateOf 负责被观察的读写。重组重复计算界面描述，不应该在计算过程中发请求或改业务数据。
+
+**本节自测**：加入重置按钮，再把同一状态传给两个子组件。
+
+<details>
+<summary>预期结果与参考思路（先尝试再展开）</summary>
+
+两处数字一致；旋转后是否保留取决于状态保存方式，不能把 remember 当数据库。
+
+</details>
+
 > **文档简介**: 理解 Jetpack Compose 的心脏机制：`@Composable` 函数如何响应 `remember`/`mutableStateOf` 状态变化并自动重组（recomposition），以及状态提升（State Hoisting）设计模式
 >
 > **目标读者**: 已能跑通 Compose 项目、想搞懂"为什么改个变量界面就会刷新"的开发者
 >
 > **前置知识**: [Kotlin 语法基础](./03-kotlin-syntax-essentials.md)（lambda、data class）
+
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
 
 ## 📚 文档元数据
 
@@ -16,6 +32,8 @@
 | **标签** | `#Composable` `#State` `#Recomposition` `#状态提升` |
 | **更新日期** | `2026年9月` |
 
+</details>
+
 ## 🎯 学习目标
 
 - ✅ 理解 `UI = f(state)` 的声明式模型
@@ -26,13 +44,13 @@
 
 ## 📋 目录
 
-- [什么是 @Composable](#什么是-composable)
-- [第一个可交互组件：计数器](#第一个可交互组件计数器)
-- [重组 Recomposition](#重组-recomposition)
-- [remember 与状态持久性](#remember-与状态持久性)
-- [状态提升](#状态提升)
-- [常见误区](#常见误区)
-- [练习与实践](#练习与实践)
+- [什么是 @Composable](#-什么是-composable)
+- [第一个可交互组件：计数器](#-第一个可交互组件计数器)
+- [重组 Recomposition](#-重组-recomposition)
+- [remember 与状态持久性](#-remember-与状态持久性)
+- [状态提升](#️-状态提升)
+- [常见误区](#️-常见误区)
+- [练习与实践](#-练习与实践)
 
 ---
 
@@ -95,8 +113,8 @@ fun Counter() {
 
 | 特性 | 说明 |
 |------|------|
-| **智能范围** | 只重新执行"读取了变化状态"的最小函数，而不是整个界面 |
-| **可跳过** | 参数未变化（`equals` 相等且稳定）的 Composable 会被整体跳过 |
+| **智能范围** | 使读取状态的相关重组作用域失效；实际执行与跳过还取决于编译器、稳定性和读取位置 |
+| **可跳过** | 符合跳过条件的 Composable 可能被跳过；比较与稳定性规则取决于编译配置，不能据此保证执行次数 |
 | **可能频繁** | 动画、滚动、输入每帧都可能触发，因此 Composable 应轻量 |
 | **顺序不定** | 不要依赖多个 Composable 的执行顺序，也不要依赖重组次数 |
 
@@ -125,7 +143,7 @@ var query2 by rememberSaveable { mutableStateOf("") }           // 还能存活�
 
 - **`remember`**: 重组不丢，但旋转屏幕、进程被杀后丢失
 - **`rememberSaveable`**: 自动把值写入 `Bundle`，能扛住配置变更（需可序列化类型）
-- **ViewModel**: 需要跨配置变更且包含业务逻辑的状态，应放到 ViewModel 中（见[协程与 Flow 基础](./07-coroutines-flow-basics.md)）
+- **ViewModel**: 需要跨配置变更且包含业务逻辑的状态可放到 ViewModel；ViewModel 本身不保证进程重建后恢复（见[协程与 Flow 基础](./07-coroutines-flow-basics.md)）
 
 一个常见递进：简单 UI 状态用 `remember` → 需要跨配置变更 → `rememberSaveable` → 涉及业务 → ViewModel + `StateFlow`。
 
@@ -182,7 +200,7 @@ fun Broken() {
 }
 ```
 
-修正：状态变更只能发生在事件回调（`onClick`）或副作用 API（`LaunchedEffect`）中。
+修正：由事件、业务状态持有者或合适的副作用 API 发起变化，避免在描述 UI 时直接写入自己正在读取的状态。
 
 ### 误区二：普通变量当状态用
 
@@ -195,7 +213,7 @@ fun AlsoBroken() {
 ```
 
 ### 误区三：副作用直接写在函数体里
-发送网络请求、写数据库等操作请放入 `LaunchedEffect`/ViewModel，保证"只在进入组合时执行一次"而非每次重组都执行。
+发送网络请求、写数据库等操作请放入 `LaunchedEffect`/ViewModel，明确工作生命周期：LaunchedEffect 在进入组合及 key 改变时启动，离开组合时取消；ViewModel 的工作遵循自身作用域。
 
 > 更多疑难现象（重组死循环、状态丢失、协程泄漏）的排查手册见[故障排除速查](../reference/quick-references/02-troubleshooting.md)。
 
@@ -222,3 +240,9 @@ fun AlsoBroken() {
 - 📄 **[布局系统](./05-layouts.md)** - 把状态组件放进 Column/LazyColumn
 - 📄 **[Compose 核心组件速查](../reference/framework-essentials/01-compose-essentials.md)** - TextField/Button 等组件参数速查
 - 📖 **[State and Jetpack Compose](https://developer.android.com/develop/ui/compose/state)** - 官方状态文档
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../LEARNING_GUIDE.md) · [完整目录与版本](../README.md) · [通用术语](../../shared-resources/glossary.md)

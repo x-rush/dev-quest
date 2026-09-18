@@ -1,10 +1,21 @@
 # TanStack Query 基础：QueryClient 配置与核心用法
 
+## 先看框架承担哪部分职责
+
+**Query 配置**：QueryClient 的默认项影响一组查询，单个查询可以覆盖。需要先确定缓存生命周期与失败策略，再把参数写进配置。
+
+**最小练习与预期结果**：同一查询键在两个组件中读取，移除一个再重新挂载；用 Devtools 区分条目保留、数据陈旧与正在请求。
+
+具体 API 与安装版本以[模块基线](../README.md)和本篇官方来源为准。先完成这条数据路径，再展开后面的高级配置；框架名称变化后，输入边界、状态归属和失败处理仍是需要理解的机制。
+
 > **文档简介**: 在真实项目中落地 TanStack Query v5：完成 QueryClient 的生产级配置，掌握 useQuery 与 useMutation 的标准用法与键设计。
 >
 > **目标读者**: 已了解 Query 基本概念、需要在项目中实际接入的 React 19 开发者
 >
 > **前置知识**: React Hooks 基础、TypeScript 基础、[Query 基础教程](../basics/03-query-fundamentals.md)
+
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
 
 ## 📚 文档元数据
 
@@ -15,6 +26,8 @@
 | **难度** | ⭐ |
 | **标签** | `#tanstack-query` `#react19` `#queryclient` `#usequery` `#usemutation` |
 | **更新日期** | 2026年9月 |
+
+</details>
 
 ## 🎯 完成后你将能够
 
@@ -195,17 +208,9 @@ export function useTodoDetail(id: number) {
 
 ## 🎨 最佳实践速查
 
-### ✅ 推荐
+queryKey 描述结果的身份：分页、筛选条件、租户等会改变结果的输入都应进入键。可序列化对象可以作为键的一部分，新建但内容等价的对象不会仅因引用变化就变成另一份缓存；函数等不能稳定序列化的值则不适合。见[官方查询键规则](https://tanstack.com/query/latest/docs/framework/react/guides/query-keys)。
 
-- 把 queryFn 写成独立函数或集中到 api 层，Hook 只做键与配置的编排
-- 写操作成功后用 `invalidateQueries` 而不是手动 `setQueryData` 拼数据（乐观更新除外）
-- 在 Hook 层封装 `useXxxQuery` / `useXxxMutation`，组件不直接写键字符串
-
-### ❌ 避免
-
-- 把派生数据存进缓存：用 `select` 或组件内 useMemo 派生
-- 在键里放不稳定的引用（函数、每轮渲染新建的对象字面量）
-- 用过时的 API 名写 v5 代码：`isLoading`（作为主要分支判断）、`cacheTime`（v5 已移除）、`keepPreviousData` 选项（v4 的它已在 v5 移除，改用 `placeholderData: (prev) => prev` 或内置 `keepPreviousData` 帮助函数）
+写入成功后有两条常用路径：接口返回完整新对象时可用 setQueryData 更新对应缓存；返回信息不足或影响多份列表时，可使相关查询失效并重取。两者按结果契约选，不必禁用其中之一。将多处复用的键和请求逻辑集中维护，并验证更新详情后列表也一致；v5 的 isLoading 仍存在，其含义要与 isPending、isFetching 区分。
 
 ---
 
@@ -217,3 +222,9 @@ export function useTodoDetail(id: number) {
 - 📄 **[TanStack Query 进阶](./02-tanstack-query-advanced.md)** - 无限查询与乐观更新
 - 📄 **[开发工具链](./04-devtools.md)** - Devtools 与 ESLint 插件配置
 - 📄 **[入门项目：Todo App](../projects/01-todo-app.md)** - 用本文内容完成的完整项目
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../LEARNING_GUIDE.md) · [完整目录与版本](../README.md) · [通用术语](../../shared-resources/glossary.md)

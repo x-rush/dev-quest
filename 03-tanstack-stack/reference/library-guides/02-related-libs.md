@@ -4,6 +4,9 @@
 
 TanStack 各库职责清晰但不垄断：Query 管"服务端状态"，客户端状态、请求层、Schema 层仍需其他库配合。本篇给出主流组合的分工边界与最小示例。
 
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
+
 ## 📚 文档元数据
 
 | 属性 | 内容 |
@@ -13,6 +16,8 @@ TanStack 各库职责清晰但不垄断：Query 管"服务端状态"，客户端
 | **难度** | ⭐⭐ |
 | **标签** | `#Zustand` `#Jotai` `#Axios` `#GraphQL` `#技术选型` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ---
 
@@ -41,7 +46,7 @@ const useUiStore = create<{ sidebarOpen: boolean; toggle: () => void }>((set) =>
   toggle: () => set((s) => ({ sidebarOpen: !s.sidebarOpen })),
 }))
 
-// 登录态也是客户端状态（token 来自接口，但"当前用户会话"是本地事实）
+// 客户端只保存会话展示状态；服务端仍必须验证令牌与权限
 const useAuthStore = create<{ token: string | null; login: (t: string) => void }>(
   (set) => ({
     token: null,
@@ -80,7 +85,7 @@ const userAtom = atomWithQuery((get) => ({
 ### 陷阱
 
 - `atomWithQuery` 会把 key 藏进 atom，Devtools 里的 key 需要与键工厂对齐，否则失效时对不上
-- 团队同时用 Zustand 与 Jotai 是常见反模式——二选一
+- 同时引入多个状态库会增加维护成本；是否保留应根据既有架构与具体职责判断
 
 ## 3. Axios：作为 queryFn 的请求层
 
@@ -100,14 +105,15 @@ export const http = axios.create({
 })
 
 http.interceptors.request.use((config) => {
-  config.headers.Authorization = `Bearer ${getAccessToken()}`
+  const token = getAccessToken()
+  if (token) config.headers.Authorization = `Bearer ${token}`
   return config
 })
 
 // 拦截器统一抛 Error（401 跳登录等全局逻辑放这里）
 http.interceptors.response.use(
   (res) => res,
-  (err) => Promise.reject(new Error(err.response?.data?.message ?? '请求失败')),
+  (err) => Promise.reject(err) // 保留 AxiosError 的 status/code，UI 再映射用户文案,
 )
 
 // queryFn 只做取数与解析
@@ -147,7 +153,7 @@ const POSTS_QUERY = gql`
 `
 
 const fetchPosts = async (page: number): Promise<Post[]> => {
-  const { posts } = await client.request(POSTS_QUERY, { page })
+  const { posts } = await client.request<{ posts: Post[] }>(POSTS_QUERY, { page })
   return posts
 }
 
@@ -160,21 +166,38 @@ useQuery({
 ### 陷阱
 
 - 不需要缓存/订阅的简单场景，`graphql-request` + Query 足够；需要规范化缓存与订阅时再上 Apollo/urql
-- GraphQL 错误在 `errors` 数组里而非 HTTP 状态码，queryFn 里要显式抛出
+- GraphQL 可在 HTTP 200 中返回 errors；graphql-request 默认错误策略通常会拒绝 Promise，自定义策略时需检查是否仍将失败传给 Query
 
 ## 5. 选型速记
 
 | 需求 | 推荐 |
 |------|------|
-| 服务端数据缓存 | TanStack Query（唯一答案） |
+| 服务端数据缓存 | TanStack Query、SWR 或现有框架数据层，按需求选择 |
 | 简单客户端状态 | Zustand |
 | 复杂依赖图、细粒度更新 | Jotai |
 | HTTP 请求层 | 原生 fetch / Axios / ky |
 | GraphQL | graphql-request（轻）/ urql（重） |
-| SWR vs Query | 小项目 SWR 够用；需要 mutation/乐观更新/离线则 Query |
+| SWR vs Query | 比较缓存、变更、恢复策略与团队经验；SWR 也支持 mutation 和乐观更新，不能按是否具备它们简单划分 |
 
 ## 相关文档
 
 - 📄 **[Query 核心 API](../language-concepts/01-query-core-api.md)** - 请求层的宿主 API
 - 📄 **[Query 框架要点](../framework-essentials/01-query-essentials.md)** - 与请求层配合的缓存语义
 - 📄 **[TypeScript 模式](../language-concepts/05-typescript-patterns.md)** - zod 推断与判别联合
+
+
+<!-- full-library-explanation -->
+## 用一个编辑页面划分状态所有者
+
+先修：组件状态、HTTP、Query 缓存。文章详情来自服务器，由 Query 管理；正在输入而尚未保存的草稿由表单或本地状态管理；弹窗开关可以直接用 useState。只有确实跨组件共享时，才考虑额外全局 store。
+
+登录展示状态可以缓存在客户端，但身份是否有效由服务器判断。清空 Query 缓存也不能替代会话失效、取消旧账号请求、清除持久化数据与权限重新检查。
+
+HTTP 客户端的泛型不校验响应内容。Axios `get<User[]>` 与 GraphQL 的静态返回类型都可能和真实服务不一致；数据进入业务前应按可信程度做运行时解析。错误转换要保留状态码等重试依据，不能统一 new Error 后把分类信息全丢掉。
+
+**练习：** 构造成功响应、HTTP 401、HTTP 500 和结构错误响应，记录请求层、Query 和 UI 各自处理什么。验收：认证失败不反复重试，结构错误不进入正常渲染，草稿不会因后台刷新被无提示覆盖。
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

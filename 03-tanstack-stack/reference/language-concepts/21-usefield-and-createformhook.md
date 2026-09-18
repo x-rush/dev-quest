@@ -1,6 +1,6 @@
 # useField 与 createFormHook：字段复用与表单工厂
 
-> **模块**: `03-tanstack-stack` | **类型**: 字典条目（无难度门槛，支持任意跳入查阅）
+> **模块**: `03-tanstack-stack` | **类型**: 字典条目（可独立查阅，按主题准备前置知识，支持任意跳入查阅）
 
 ## 📌 定义
 
@@ -33,7 +33,7 @@ formHook.withForm({ defaultValues, onSubmit, props, render }) // 跨组件拆分
 |------|------|
 | `form.AppField` | render prop 内的 `field` 对象携带已注册字段组件（`field.TextField`） |
 | `form.AppForm` | 子树注入 formContext，表单组件经 `form.SubmitButton` 调用 |
-| `formHook.withForm` | 声明式渲染切片；**必须在此重复声明** `defaultValues`/`onSubmit` 才有类型 |
+| `formHook.withForm` | 声明式渲染切片；使用一致的表单选项获得类型，可提取共享 formOptions 复用 |
 | `useField` | 独立于工厂可用；`form.useField` 形式不存在（v1.33 时代） |
 
 ## 💡 示例
@@ -88,7 +88,9 @@ function TextField({ label }: { label: string }) {
 
 function SubmitButton({ label }: { label: string }) {
   const form = useFormContext()
-  return <button type="submit" disabled={!form.state.canSubmit}>{label}</button>
+  return <form.Subscribe selector={(state) => [state.canSubmit, state.isSubmitting] as const}>
+    {([canSubmit, isSubmitting]) => <button type="submit" disabled={!canSubmit || isSubmitting}>{label}</button>}
+  </form.Subscribe>
 }
 
 const formHook = createFormHook({
@@ -117,7 +119,7 @@ function FactoryForm() {
   )
 }
 
-// —— withForm：把渲染切片拆成独立"组件"，不经过 JSX prop 传 form ——
+// —— withForm：把渲染切片拆成独立"组件"，通过 form prop 传入有类型的表单实例 ——
 const SubmitSection = formHook.withForm({
   defaultValues: { username: '', age: 0 },  // 重复声明以获得类型
   onSubmit: ({ value }) => console.log(value.username),
@@ -126,7 +128,9 @@ const SubmitSection = formHook.withForm({
     <div>
       <span>{note}</span>
       <form.SubmitButton label="保存" />
-      <span>{form.state.values.username}</span>
+      <form.Subscribe selector={(state) => state.values.username}>
+        {(username) => <span>{username}</span>}
+      </form.Subscribe>
     </div>
   ),
 })
@@ -136,19 +140,32 @@ function WithFormParent() {
     defaultValues: { username: '', age: 0 },
     onSubmit: ({ value }) => console.log(value),
   })
-  return <SubmitSection form={form} note="保存后不可撤销" />
+  return <form onSubmit={(event) => { event.preventDefault(); void form.handleSubmit(); }}>
+    <form.AppForm><SubmitSection form={form} note="请检查输入后保存" /></form.AppForm>
+  </form>
 }
 ```
 
 ## ⚠️ 常见陷阱
 
 - ❌ 找 `form.useField(...)` 绑定方法：不存在——独立 Hook 是 `useField({ form, name })`
-- ❌ 字段组件仍用 props 传 `form`：工厂形式的意义就是 Context 注入；需要跨树传 form 时才用 `withForm`
-- ❌ `withForm` 里不声明 `defaultValues`/`onSubmit`：类型推断失败，`form.state.values` 退化为 unknown——声明式重复是官方约定
+- ❌ 混用不匹配的 Context：字段和工厂必须使用同一组 createFormHookContexts；简单组件通过 props 传 form 也可以是合理选择
+- 类型复用：用一致的表单选项（可提取共享 formOptions）帮助 withForm 推断；不要为每个渲染切片重复实现提交逻辑，具体泛型以所用版本为准。
 - ❌ `useFieldContext()` 不写泛型：值类型推断为未知——`useFieldContext<string>()` 显式标注
 - ❌ 在普通 `useForm` 的树里用 `<field.TextField>`：扩展属性只在 `useAppForm` + `AppField` 组合下存在
 - ❌ 渲染 `meta.errors` 不做 key/序列化：错误项可能是对象（validator 返回值），直接当 ReactNode 用会告警
-- ✅ 表单组件读 `form.state.canSubmit`/`isSubmitting` 控制按钮禁用
+- ✅ 表单组件通过 form.Subscribe 订阅 canSubmit/isSubmitting 后控制按钮禁用
+
+<!-- full-library-explanation -->
+## 复用边界：字段 UI、表单上下文和提交入口
+
+先修：Form Field、React Context、Subscribe。createFormHook 注册通用字段组件，AppField 提供对应字段上下文；AppForm 提供表单上下文，但不会自动生成 HTML form，也不会自动绑定提交事件。
+
+useFieldContext<string> 表达该输入组件期待字符串，不能运行时验证任意字段都真是字符串。数字组件应有独立的转换与空值规则，不要用同一个 TextField 强制吞掉不同值类型。
+
+withForm 是让拆分组件保留表单类型的工具，父组件仍通过 form prop 传入实例。共享 formOptions 可减少重复声明；不能为了类型提示在子片段重复实现一套提交业务。
+
+**练习：** 两个表单复用同一用户名字段与提交按钮，各自输入不同值。验收：上下文不串表单，按钮会响应提交状态，按 Enter 与点击按钮触发同一提交路径。参考[表单组合](https://tanstack.com/form/latest/docs/framework/react/guides/form-composition)。
 
 ## 🔗 相关条目
 
@@ -161,3 +178,9 @@ function WithFormParent() {
 ---
 
 *最后更新: 2026年9月 | 本条目为模块知识字典的一部分，概念完整解释以此处为单一事实来源*
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

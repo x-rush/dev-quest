@@ -6,6 +6,9 @@
 >
 > **前置知识**: [basics/04-views-state.md](../../basics/04-views-state.md)（视图与数据流）；实战见 [projects/03-habit-tracker.md](../../projects/03-habit-tracker.md)
 
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
+
 ## 📚 文档元数据
 
 | 属性 | 内容 |
@@ -15,6 +18,8 @@
 | **难度** | ⭐⭐ |
 | **标签** | `#SwiftUI` `#Charts` `#可视化` `#iOS16+` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ---
 
@@ -47,7 +52,7 @@ Chart {
         BarMark(x: .value("日期", item.day, unit: .day),
                 y: .value("次数", item.count))
     }
-    RuleMark(y: .value("每周目标", 5))
+    RuleMark(y: .value("每日目标", 5))
         .foregroundStyle(.orange)
 }
 ```
@@ -56,7 +61,7 @@ Chart {
 
 - `.value("标签", 值)` 构造 `PlottableValue`：字符串只是无障碍/图例描述，**真正决定标度的是值的类型**——`String` 走类别轴、`Date` 走时间轴、数值走数字轴
 - `Date` 值可带 `unit:`（`.day` / `.hour` / `.month` …）按时间单位分桶；不写 unit 则按连续时间点处理
-- 可绘图类型须符合 `Plottable`（`Double`、`Int`、`String`、`Date`、`Decimal` 等基础类型直接可用）
+- 可绘图类型须符合 `Plottable`（常用如 Double、Int、String、Date；其他类型需检查当前 SDK 的一致性或转换后绘制）
 
 ## 2. 四大基础 Mark
 
@@ -82,7 +87,7 @@ LineMark(x: .value("日期", r.day), y: .value("完成率", r.rate))
     .foregroundStyle(.orange)
 
 RuleMark(y: .value("目标", 5))
-    .annotation(position: .top) { Text("周目标").font(.caption) }
+    .annotation(position: .top) { Text("每日目标").font(.caption) }
 ```
 
 ## 3. 坐标轴与标度定制
@@ -156,7 +161,7 @@ struct WeeklyChart: View {
             .foregroundStyle(item.done ? .green : .gray.opacity(0.25))
         }
         .chartYScale(domain: 0...1)
-        .chartYAxis(.hidden)                       // 是/否语义已在颜色里，隐藏 Y 轴
+        .chartYAxis(.hidden)                       // 隐藏轴后仍需提供文本/无障碍状态，不能只靠颜色
         .chartXAxis {
             AxisMarks(values: .stride(by: .day)) { _ in
                 AxisValueLabel(format: .dateTime.weekday(.narrow))
@@ -172,7 +177,7 @@ struct WeeklyChart: View {
 - **元组数据不给 `id:`**：`Chart(habit.dailyCounts(...))` 直接传元组数组编译报错——元组不满足 `Identifiable`，必须 `id: \.day`
 - **忘写 `unit: .day`**：`Date` 不带 unit 会按连续时间标度布点，7 天打卡变成长短不一的散柱
 - **值类型不可绘图**：`y: .value("完成", item.done)`（Bool 不是 `Plottable`）会编译失败——先映射成 `1/0` 或 `Double`
-- **把 Mark 修饰写在 Chart 容器上**：`.cornerRadius` / `.lineStyle` 是 Mark 的方法，挂在 `Chart` 外层不生效
+- **把 Mark 修饰写在 Chart 容器上**：Mark 的 cornerRadius/lineStyle 调整柱与线；容器上同名 View 修饰可能只改变整体外观，并非修改各个 Mark
 - **图例莫名出现**：用了 `foregroundStyle(by:)` 就自动出图例；单系列不需要时 `.chartLegend(.hidden)`
 
 ## 相关文档
@@ -184,3 +189,18 @@ struct WeeklyChart: View {
 ---
 
 *最后更新: 2026年9月 | 本条目为模块知识字典的一部分，Charts 概念完整解释以此处为单一事实来源*
+
+
+<!-- full-library-explanation -->
+## 先定义统计口径，再画图
+
+同一天两次打卡究竟算 1 天完成还是 2 次事件，要在聚合阶段决定。Chart 的 unit: .day 表示时间区间语义，不会替你完成任意去重与业务聚合。先把数据按指定 Calendar/时区归到日桶，再生成完整七天序列，区分“记录为零”与“数据缺失”。
+
+练习：准备周一 2 次、周二 0 次、周三缺数据三种情况。为图旁边提供文本列表，明确显示 2、0、未知；不要把未知转换为 0 后声称周完成率降低。日目标参考线使用“每天目标”名称，周目标需画在周累计图上，避免单位混用。
+
+折线数据先按时间排序；同一日期多系列使用稳定的系列标识。柱状图通常从零起，截断坐标轴应明确标注。验收包含大字体、VoiceOver、色觉差异以及空数据，颜色不能是表达完成状态的唯一渠道。本页前面的 habit/data 等是项目集成片段，需配套模型，不是独立可运行文件。
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

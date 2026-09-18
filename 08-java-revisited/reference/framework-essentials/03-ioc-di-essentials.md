@@ -6,6 +6,9 @@
 >
 > **前置知识**: [Spring Boot 入门](../../frameworks/01-spring-boot-basics.md)
 
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
+
 ## 📚 文档元数据
 
 | 属性 | 内容 |
@@ -15,6 +18,8 @@
 | **难度** | ⭐⭐ |
 | **标签** | `#IoC` `#DI` `#Bean作用域` `#条件装配` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ## 📌 定义
 
@@ -41,7 +46,7 @@ public class AppConfig {
 
 | 方式 | 写法 | 适用 |
 |------|------|------|
-| 构造器注入 | `private final BookRepository repo;` + 单构造器（可省 `@Autowired`）| **默认选择**：不可变、依赖显式、便于测试 |
+| 构造器注入 | `private final BookRepository repo;` + 单构造器（可省 `@Autowired`）| **默认选择**：依赖引用可设 final、依赖显式、便于测试；不保证依赖对象不可变 |
 | setter 注入 | `@Autowired void setX(...)` | 可选依赖/可替换依赖 |
 | 字段注入 | `@Autowired BookRepository repo;` | 仅原型代码——隐藏依赖、无法 `final`、脱离容器难测试 |
 
@@ -85,7 +90,7 @@ class ReportRunner {
 
     ReportRunner(ObjectProvider<Report> reports) { this.reports = reports; }
 
-    void run() { reports.getObject().generate(); }      // 每次获取新实例
+    void run() { reports.getObject().generate(); }      // Report 必须声明 prototype，才会每次创建
 }
 ```
 
@@ -95,7 +100,16 @@ class ReportRunner {
 - **singleton 注入 prototype**：注入那一刻固定，之后永远同一个实例——改用 `ObjectProvider`
 - **构造器循环依赖直接启动失败**（Boot 2.6+ 默认禁止循环引用）：正确解法是重新划分类的职责，而非 `@Lazy` 绕过
 - **在 `@PostConstruct` 里假设其他 Bean 已完成业务初始化**：只保证自身依赖已注入，兄弟 Bean 的 `@PostConstruct` 顺序不确定
-- **`@ConditionalOnMissingBean` 写在业务配置里**：普通 `@Configuration` 加载顺序不定，该条件只在自动配置类中可靠
+- **`@ConditionalOnMissingBean` 写在业务配置里**：普通 `@Configuration` 加载顺序不定，该条件只检查已经处理的 Bean 定义；自动配置通常在用户配置之后处理，更适合此用途
+
+<!-- full-library-explanation -->
+## 容器装配和普通 new 的区别
+
+构造器注入可以脱离 Spring 使用：`new BorrowService(fakeRepo, fixedClock)` 已经是依赖注入。容器额外负责选择实现、创建顺序和生命周期，并可能把对象包装成代理。自己 new 出来的对象不会自动获得事务、方法安全或容器回调，除非显式经过相应基础设施。
+
+singleton 表示每个 Bean 定义在相应容器范围内通常共享一个实例，不是全 JVM 只能有一个，更不保证线程安全。把本次请求的用户、订单或临时列表存入单例字段，会让并发请求互相影响。prototype 则按获取时创建；注入单例构造器时只获取一次，ObjectProvider 每次是否新建取决于目标 Bean 的 scope。容器也不会像单例那样自动负责 prototype 的完整销毁过程。
+
+**练习**：注入固定 Clock，验证借阅到期日不依赖真实时间；再准备两个同类型仓储 Bean，观察未消歧时的错误，使用 Qualifier 明确选择。为 prototype 对象打印身份值，对比直接注入与每次 provider.getObject 的行为。验收应说明对象由谁创建、共享到哪里、谁负责关闭资源。
 
 ## 🔗 相关条目
 
@@ -104,3 +118,9 @@ class ReportRunner {
 - 📄 **[事务传播与隔离速查](./05-transaction-essentials.md)** - 事务 Bean 的代理机制
 - 📄 **[JPA 核心速查](./02-jpa-essentials.md)** - Repository Bean
 - 📄 **[TODO API 项目](../../projects/01-todo-api.md)** - 分层注入实战
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

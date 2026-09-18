@@ -1,10 +1,23 @@
 # 实战项目二：天气应用（网络 + CoreLocation）
 
+## 分阶段练习与验收
+
+**最小阶段**：先查询固定地点天气，再增加定位与刷新。
+
+**验收结果**：权限拒绝有替代入口，快速切换地点不会出现旧结果覆盖。
+
+**扩展顺序**：Task 取消与界面身份分开检查，主界面不做阻塞处理。
+
+建议保存一份正常输入、一份失败输入、实际输出和对应测试。先完成以上阶段再扩展正文中的完整设计；遇到省略实现或未定义依赖，应按文档上下文补齐，不能把代码片段拼接后当作已经验证的完整工程。
+
 > **文档简介**: 构建一个获取定位、请求天气 API、缓存到 SwiftData 的天气应用，打通"定位 → 网络 → 持久化 → UI"完整数据链路
 >
 > **目标读者**: 做过入门项目、要掌握异步数据流与系统能力集成的学习者
 >
 > **前置知识**: [frameworks/03-ecosystem-integration.md](../frameworks/03-ecosystem-integration.md)（SwiftData + URLSession）、[basics/07-concurrency-async-await.md](../basics/07-concurrency-async-await.md)
+
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
 
 ## 📚 文档元数据
 
@@ -15,6 +28,8 @@
 | **难度** | ⭐⭐ |
 | **标签** | `#URLSession` `#CoreLocation` `#async-await` `#SwiftData` `#错误处理` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ## 🎯 项目目标
 
@@ -218,3 +233,9 @@ struct WeatherView: View {
 - 📄 [03-ecosystem-integration.md](../frameworks/03-ecosystem-integration.md) — 本项目依赖的集成指南
 - 📄 [03-concurrency-api.md](../reference/language-concepts/03-concurrency-api.md) — Task/取消语义字典
 - 📄 [02-troubleshooting.md](../reference/quick-references/02-troubleshooting.md) — 定位/网络报错速查
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../LEARNING_GUIDE.md) · [完整目录与版本](../README.md) · [通用术语](../../shared-resources/glossary.md)

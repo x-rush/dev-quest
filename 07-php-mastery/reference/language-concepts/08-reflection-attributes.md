@@ -4,6 +4,9 @@
 
 反射（Reflection）让程序在运行时检视类/方法/参数/类型的结构，是容器自动装配、序列化器、验证器等框架设施的地基；属性注解（Attributes，8.0+）是可被反射读取的语言级元数据。两者合起来构成"声明式 PHP"的闭环。属语言稳定层。
 
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
+
 ## 📚 文档元数据
 
 | 属性 | 内容 |
@@ -13,6 +16,8 @@
 | **难度** | ⭐⭐ |
 | **标签** | `#反射` `#Reflection` `#属性注解` `#Attributes` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ## 条目 1：ReflectionClass 与成员检视
 
@@ -32,7 +37,7 @@ $ref = new ReflectionClass(App\Model\Order::class);
 $ref->getName();                 // 完整类名
 $ref->isFinal();                 // 是否 final
 $ref->getInterfaces();           // ReflectionClass[]：实现的接口
-$ref->getParentClass();          // ?ReflectionClass
+$ref->getParentClass();          // ReflectionClass|false，无父类返回 false
 $ref->getProperties();           // ReflectionProperty[]
 $ref->getMethods();              // ReflectionMethod[]
 $ref->getConstructor();          // ?ReflectionMethod（构造器）
@@ -52,7 +57,7 @@ $ref->isInstance($obj);          // 类型判断
 
 ```php
 new ReflectionMethod(class-string|object $class, string $method)
-new ReflectionFunction(callable $fn)
+new ReflectionFunction(Closure|string $fn)
 $method->getParameters(): ReflectionParameter[]
 $param->getType(): ?ReflectionType
 $param->isDefaultValueAvailable(): bool
@@ -67,27 +72,38 @@ $param->getDefaultValue(): mixed
 declare(strict_types=1);
 
 // 模拟容器的核心：解析构造器依赖链
-function build(string $class): object
+function build(string $class, array $chain = []): object
 {
-    $ref = new ReflectionClass($class);
-    $ctor = $ref->getConstructor();
-    if ($ctor === null) {
-        return new $class();
+    if (in_array($class, $chain, true)) {
+        throw new LogicException('循环依赖: ' . implode(' -> ', [...$chain, $class]));
     }
-
+    $ref = new ReflectionClass($class);
+    if (!$ref->isInstantiable()) {
+        throw new LogicException("需要为接口或抽象类配置实现: {$class}");
+    }
     $args = [];
-    foreach ($ctor->getParameters() as $param) {
+    foreach ($ref->getConstructor()?->getParameters() ?? [] as $param) {
+        if ($param->isDefaultValueAvailable()) {
+            $args[] = $param->getDefaultValue();
+            continue;
+        }
         $type = $param->getType();
-        // 类型必须且只能是类/接口类型才能自动装配
-        $args[] = build($type->getName());
+        if (!$type instanceof ReflectionNamedType || $type->isBuiltin() || $param->isVariadic()) {
+            throw new LogicException("不支持自动解析参数: {$param->getName()}");
+        }
+        $name = $type->getName();
+        if ($name === 'self' || $name === 'parent') {
+            throw new LogicException('教学容器不解析相对类型，请显式配置工厂');
+        }
+        $args[] = build($name, [...$chain, $class]);
     }
     return $ref->newInstanceArgs($args);
 }
 ```
 
-⚠️ **常见陷阱**: `getType()` 返回 `ReflectionNamedType|ReflectionUnionType|ReflectionIntersectionType` 三态，取 `getName()` 前必须先 `instanceof ReflectionNamedType`；内置类型（int 等）不能当依赖装配。
+⚠️ **常见陷阱**: `getType() 可能返回 null、ReflectionNamedType、ReflectionUnionType 或 ReflectionIntersectionType，取 `getName()` 前必须先 `instanceof ReflectionNamedType`；内置类型（int 等）不能当依赖装配。
 
-🔗 **相关条目**: [类型反射](#条目-4类型反射-reflectiontype)
+🔗 **相关条目**: [类型反射](#条目-4类型反射reflectiontype)
 
 ## 条目 3：属性注解的读取
 
@@ -151,7 +167,7 @@ foreach ($method->getAttributes(Route::class) as $attr) {
 $type->allowsNull(): bool                       // ?T / 显式 null
 $named->getName(): string                       // 类名或内置类型名
 ReflectionNamedType|ReflectionUnionType|ReflectionIntersectionType
-// 联合：getTypes(): ReflectionNamedType[]
+// 联合 getTypes() 的成员在 DNF 类型中还可能包含 ReflectionIntersectionType
 ```
 
 💡 **示例**:
@@ -178,7 +194,7 @@ foreach ($type->getTypes() as $t) {             // 联合类型逐个看
 
 ## 条目 5：使用原则
 
-📌 **定义**: 反射昂贵且破坏封装，工程纪律是**启动期一次、运行期零反射**：框架在启动时把注解/签名扫描结果编译成普通数组/闭包，请求路径直接用编译产物。
+📌 **定义**: 反射昂贵且破坏封装，可优先在启动或构建期缓存稳定扫描结果，再根据实际性能决定请求路径是否需要进一步优化：框架在启动时把注解/签名扫描结果编译成普通数组/闭包，请求路径直接用编译产物。
 
 📖 **语法/签名**: 无新 API；原则条目。
 
@@ -197,7 +213,11 @@ foreach (['App\\Http\\Controller\\HomeController'] as $class) {
     foreach ((new ReflectionClass($class))->getMethods() as $method) {
         foreach ($method->getAttributes(Route::class) as $attr) {
             $route = $attr->newInstance();
-            $routes[$route->path] = [$class, $method->getName()];
+            foreach ($route->methods as $verb) {
+                $key = strtoupper($verb) . " " . $route->path;
+                if (isset($routes[$key])) { throw new LogicException("重复路由: {$key}"); }
+                $routes[$key] = [$class, $method->getName()];
+            }
         }
     }
 }
@@ -208,7 +228,7 @@ file_put_contents(
 // 运行期：require routes.php，纯数组查表，零反射
 ```
 
-⚠️ **常见陷阱**: 反射结果不缓存是性能事故首因；用反射调私有方法做测试是坏味道，说明设计该改。
+⚠️ **常见陷阱**: 重复扫描可能带来开销，应结合缓存失效与实际剖析评估；用反射调私有方法做测试是坏味道，说明设计该改。
 
 🔗 **相关条目**: [属性注解的读取](#条目-3属性注解的读取)
 
@@ -223,3 +243,18 @@ file_put_contents(
 **文档版本**: v2.0.0
 **最后更新**: 2026年9月
 **维护团队**: Dev Quest Team
+
+
+<!-- full-library-explanation -->
+## 反射只能读取结构，不能猜出业务配置
+
+前置是构造器、联合类型和接口。看到参数 MailerInterface，并不能推断应实例化 SMTP、测试替身还是外部 API 实现；看到 string $host，也不能知道配置来自哪里。真正容器还需要绑定表、生命周期、工厂与错误报告。本页 build 仅演示具体类的递归构造，并显式拒绝不支持的情况，不是生产 DI 容器。
+
+读取 Attribute 的描述不等于执行它；newInstance 会调用属性类构造器，构造器可以抛异常或产生副作用。只扫描可信代码中的元数据，定义重复路由、重复标记和无效参数的处理规则。缓存结果时要明确何时失效，否则代码更新后旧路由仍可能生效。
+
+**练习**：建立无参类、依赖具体类的类、需要接口的类和循环依赖类，让 build 前两种成功、后两种给出清晰失败。再定义一个构造时递增计数器的 Attribute，对比 getAttributes 与 newInstance，确认行为何时发生。性能优化应基于剖析结果，不能把每次反射都直接定性为事故。
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

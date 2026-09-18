@@ -1,10 +1,21 @@
 # Laravel 进阶：Eloquent 关系、队列与事件
 
+## 先看框架承担哪部分职责
+
+**Eloquent 与异步任务**：关系访问可能触发 SQL，队列任务会在另一个时刻和进程执行。不能把同步内存对象的假设带进队列。
+
+**最小练习与预期结果**：观察列表查询是否产生 N+1；再让任务失败并重试，证明不会重复产生不可撤销的业务结果。
+
+具体 API 与安装版本以[模块基线](../README.md)和本篇官方来源为准。先完成这条数据路径，再展开后面的高级配置；框架名称变化后，输入边界、状态归属和失败处理仍是需要理解的机制。
+
 > **文档简介**: 系统掌握 Eloquent 关系声明与高级查询构建，学会用队列削峰、用事件解耦业务逻辑
 >
 > **目标读者**: 完成 Laravel 入门、需要构建多表业务系统的中级开发者
 >
 > **前置知识**: [Laravel 入门](./01-laravel-basics.md)、[PHP 高级特性](../basics/07-advanced-features.md)
+
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
 
 ## 📚 文档元数据
 
@@ -15,6 +26,8 @@
 | **难度** | ⭐⭐ |
 | **标签** | `#Laravel` `#Eloquent` `#队列` `#事件` `#预加载` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ## 🎯 学习目标
 
@@ -179,3 +192,9 @@ A: 迁移中确认中间表名（默认按模型字母序拼接 `post_tag`）与
 - 📄 [类型系统与现代 OOP](../reference/language-concepts/03-types-oop-modern.md) — 枚举 casts 等现代语法
 - 📄 [生态集成：迁移、缓存与认证](./03-ecosystem-integration.md) — 队列驱动与缓存后端配置
 - 📄 [博客平台实战](../projects/02-blog-platform.md) — 本文知识点的完整落地项目
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../LEARNING_GUIDE.md) · [完整目录与版本](../README.md) · [通用术语](../../shared-resources/glossary.md)

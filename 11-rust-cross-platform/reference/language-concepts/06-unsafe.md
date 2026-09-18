@@ -2,7 +2,10 @@
 
 ## 概述
 
-Rust 的安全承诺是：**不写 unsafe 就不会有未定义行为（UB）**。`unsafe` 并不关闭借用检查、也不改变类型系统，只是**开放五种编译器无法自动验证的操作**，把正确性责任从编译器转移到程序员，并要求用"安全封装"把风险约束在边界内。本篇覆盖超能力清单、裸指针、Send/Sync 实现边界、安全封装模式与典型 UB。基线 Rust 1.98.1 / edition 2024（见[模块 README](../../README.md)）。
+Rust 的安全承诺是：健全的安全 Rust 代码不会自行引入未定义行为（UB）；但依赖库内部不健全的 unsafe、FFI 或编译器缺陷仍可能破坏这一保证。`unsafe` 并不关闭借用检查、也不改变类型系统，只是**开放五种编译器无法自动验证的操作**，把正确性责任从编译器转移到程序员，并要求用"安全封装"把风险约束在边界内。本篇覆盖超能力清单、裸指针、Send/Sync 实现边界、安全封装模式与典型 UB。基线 Rust 1.98.1 / edition 2024（见[模块 README](../../README.md)）。
+
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
 
 ## 📚 文档元数据
 
@@ -14,9 +17,11 @@ Rust 的安全承诺是：**不写 unsafe 就不会有未定义行为（UB）**�
 | **标签** | `#rust` `#reference` `#unsafe` `#裸指针` `#Send-Sync` |
 | **更新日期** | `2026年9月` |
 
+</details>
+
 ## 条目 1：unsafe 关键字与五种超能力
 
-📌 **定义**: `unsafe` 标记"此处依赖程序员担保"的三种语法位置——**unsafe 块**、**unsafe fn**、**unsafe trait**。edition 2024 下，unsafe fn 体内执行 unsafe 操作同样需要显式 unsafe 块（`unsafe_op_in_unsafe_fn` 默认告警，本机 rustc 实证）。
+📌 **定义**: `unsafe` 标记"此处依赖程序员担保"的三种语法位置——**unsafe 块**、**unsafe fn**、**unsafe trait**。edition 2024 下，unsafe fn 体内执行 unsafe 操作同样需要显式 unsafe 块（`unsafe_op_in_unsafe_fn` 默认告警，依赖对应 edition 的 lint 配置）。
 
 📖 **五种超能力全表**:
 
@@ -28,9 +33,9 @@ Rust 的安全承诺是：**不写 unsafe 就不会有未定义行为（UB）**�
 | 4 | 实现 unsafe trait | `unsafe impl Send for T` | 契约是类型级承诺（如线程约束） |
 | 5 | 读 union 字段 | `u.field` | 当前活跃变体只有程序员知道 |
 
-**static mut 特别注记**（edition 2024，本机 rustc 实证）：经引用访问 `static mut`（`&COUNTER`）为**硬错误**（`static_mut_refs` deny）；取地址须用 `&raw const` / `&raw mut` 或 `addr_of!`，跨线程计数场景直接改用原子类型（`AtomicUsize`）。
+**static mut 特别注记**（edition 2024，依赖对应 edition 的 lint 配置）：经引用访问 `static mut`（`&COUNTER`）为**硬错误**（`static_mut_refs` deny）；取地址须用 `&raw const` / `&raw mut` 或 `addr_of!`，跨线程计数场景直接改用原子类型（`AtomicUsize`）。
 
-💡 **示例**（unsafe trait + unsafe fn，本块经 rustc edition 2024 实测通过）:
+💡 **示例**（unsafe trait + unsafe fn，edition 2024 示例，本轮未运行）:
 
 ```rust
 // unsafe trait：实现者必须担保契约
@@ -63,13 +68,13 @@ fn main() {
 
 ## 条目 2：裸指针 `*const T` / `*mut T`
 
-📌 **定义**: 裸指针是无生命周期、无别名保证、可为空/悬垂的地址。**创建不需要 unsafe**（借用随转换立即结束），**解引用需要**。`*const T` 不可写，`*mut T` 可写；两者默认 `!Send` `!Sync`。
+📌 **定义**: 裸指针是无生命周期、无别名保证、可为空/悬垂的地址。通常创建裸指针本身不需要 unsafe，但原始引用与别名约束不会因转换而自动消失，**解引用需要**。`*const T` 不可写，`*mut T` 可写；两者默认 `!Send` `!Sync`。
 
 📖 **创建途径**（均为安全操作）:
 
 | 写法 | 语义 |
 |------|------|
-| `&x as *const T` / `&mut x as *mut T` | 从引用提升（借用随转换结束，最常用） |
+| `&x as *const T` / `&mut x as *mut T` | 从引用转换；之后访问仍须满足来源、有效性与别名规则 |
 | `&raw const x` / `&raw mut x`、`addr_of!` / `addr_of_mut!` | 不经中间引用取地址（绕开对齐/初始化限制，edition 2024 下访问 `static mut` 的正道） |
 | `slice::as_ptr()` / `as_mut_ptr()` | 取切片首元素地址 |
 | `Box::into_raw(b)` | 转出所有权，此后须 `Box::from_raw` 手动释放 |
@@ -85,15 +90,15 @@ fn main() {
 | `read()` / `write()` | unsafe | 按值读/写（对齐不保证时用 `read_unaligned` 等变体） |
 | `copy_nonoverlapping()` / `copy()` | unsafe | 内存搬运（memcpy / memmove 语义） |
 
-💡 **示例**（本块经 rustc edition 2024 实测通过）:
+💡 **示例**（edition 2024 示例，本轮未运行）:
 
 ```rust
 fn main() {
     let mut x: i32 = 5;
 
-    // 创建裸指针不需要 unsafe：借用随转换立即结束
-    let pc = &x as *const i32; // 等价写法：std::ptr::addr_of!(x)
-    let pm = &mut x as *mut i32;
+    // 创建裸指针本身是安全操作，访问时仍必须证明别名和有效性
+    let pm = &raw mut x;
+    let pc = pm as *const i32; // 两者源自同一可写位置；以下按顺序访问
 
     unsafe {
         // 超能力 1：解引用裸指针
@@ -132,14 +137,16 @@ fn main() {
 
 **标准库例证**：`Box`/`Vec`/`String` 内部都是这类封装；`Vec::set_len` 是 unsafe fn，其文档列出的安全性前置条件就是"封装契约"的样板。
 
-💡 **示例**（手写 Box，本块经 rustc edition 2024 实测通过）:
+💡 **示例**（手写 Box，edition 2024 示例，本轮未运行）:
 
 ```rust
 use std::ops::Deref;
+use std::marker::PhantomData;
 
 // 手写 Box：演示"unsafe 面最小化 + 不变量集中在构造/析构"的安全封装模式
 struct MyBox<T> {
     ptr: *mut T,
+    _owns: PhantomData<T>,
 }
 
 impl<T> MyBox<T> {
@@ -147,6 +154,7 @@ impl<T> MyBox<T> {
         // 不变量在这里建立：ptr 永远来自 Box::into_raw（非空、独占、可安全释放）
         MyBox {
             ptr: Box::into_raw(Box::new(value)),
+            _owns: PhantomData,
         }
     }
 }
@@ -192,7 +200,8 @@ fn main() {
 | `Rc<T>` | ✗ | ✗ | 非原子计数 |
 | `RefCell<T>` / `Cell<T>` | ✓（T: Send） | ✗ | 运行时借用检查非线程安全 |
 | `*const T` / `*mut T` | ✗ | ✗ | 手动 unsafe impl 的对象 |
-| `Mutex<T>` / `RwLock<T>` | ✓（T: Send） | ✓（T: Send） | 锁提供同步 |
+| `Mutex<T>` | ✓（T: Send） | ✓（T: Send） | 独占访问由锁保护 |
+| `RwLock<T>` | ✓（T: Send） | ✓（T: Send + Sync） | 并行共享读取还要求 T: Sync |
 | `Arc<T>` | ✓ | ✓ | 要求 `T: Send + Sync` |
 
 **unsafe impl 契约清单**（实现前逐条自证）:
@@ -202,47 +211,24 @@ fn main() {
 3. 跨线程的可见性/同步由谁保证（锁？原子？join 的 happens-before？）
 4. 不做平台相关的布局假设（`repr(Rust)` 布局不承诺字段偏移）
 
-💡 **示例**（本块经 rustc edition 2024 实测通过；含一个实测踩到的陷阱）:
+💡 **示例**（edition 2024 示例，本轮未运行；含一个实测踩到的陷阱）:
 
 ```rust
 use std::thread;
 
-// 含裸指针的结构体 → 自动推导为 !Send（不能直接交给 thread::spawn）
-struct RawSlice {
-    ptr: *mut u8,
-    len: usize,
-}
-
-// SAFETY: ptr 指向的分配在 join() 返回前不会被其他线程访问；
-//         RawSlice 只搬运"指针+长度"，不拥有分配本身
-unsafe impl Send for RawSlice {}
-
-// 通过函数调用整体传值 → 闭包整体捕获 RawSlice（否则 edition 2021+ 的
-// 分离捕获会只捕获 *mut u8 字段，unsafe impl Send 失效）
-fn double_all(raw: RawSlice) {
-    // SAFETY: 0..len 均在分配范围内，且 main 线程在 join 前不触碰 data
-    unsafe {
-        for i in 0..raw.len {
-            *raw.ptr.add(i) *= 2;
-        }
-    }
-}
-
 fn main() {
     let mut data = vec![1u8, 2, 3];
-    let raw = RawSlice {
-        ptr: data.as_mut_ptr(),
-        len: data.len(),
-    };
-
-    let handle = thread::spawn(move || double_all(raw));
-    handle.join().unwrap();
-
+    // 作用域线程保证借用在线程结束前有效，不必手写裸指针 Send 承诺。
+    thread::scope(|scope| {
+        scope.spawn(|| {
+            for value in &mut data { *value *= 2; }
+        });
+    });
     println!("{:?}", data); // [2, 4, 6]
 }
 ```
 
-**分离捕获陷阱**（实测确认）：edition 2021 起闭包按**字段**捕获——`move || { 用到 raw.ptr }` 捕获的是 `*mut u8` 本身而非 `RawSlice`，`unsafe impl Send for RawSlice` 完全不生效，编译照样失败。让包装类型整体进入线程须经函数调用传值或 `let raw2 = raw;` 整体移动。
+**分离捕获陷阱**（规则说明）：edition 2021 起闭包按**字段**捕获——`move || { 用到 raw.ptr }` 捕获的是 `*mut u8` 本身而非 `RawSlice`，`unsafe impl Send for RawSlice` 完全不生效，编译照样失败。包装类型的整体移动也不能替代对所有权与生命周期的证明。本例改用 scoped thread 表达借用边界，避免为可用安全 API 完成的任务手写 Send。
 
 ⚠️ **常见陷阱**: `unsafe impl Send` 只该出现在"编译器无法看到、但人类可以证明"的场合（指针所有权语义、join 同步）；给"只是懒得重构"的场景开这个口子 = 把数据竞争编译通过。
 
@@ -264,10 +250,10 @@ fn main() {
 | 6 | 无效值解引用 | `bool` 非 0/1、枚举判别值不在定义内、空 `&T` |
 | 7 | 数据竞争 | 多线程无同步地并发写写/读写同一位置 |
 | 8 | 移动已 Pin 的数据 | 破坏 `Pin` 承诺，自引用悬垂（见 [Future·Pin·Waker](./08-async-internals.md)） |
-| 9 | 双重释放 | `Box::from_raw` 同一指针两次 / 泄漏（永不释放） |
+| 9 | 双重释放 | Box::from_raw 对同一分配恢复所有权两次；内存泄漏本身不是 UB |
 | 10 | 布局越权 | 对 `repr(Rust)` 类型做字段偏移指针算术（布局不受承诺） |
 
-**检测工具**: Miri（rustup 官方组件，nightly 解释执行，逐条检测上表违规）是 unsafe 代码的必跑关卡；`-Z sanitizer=thread`（thread-sanitizer）补充多线程竞争检测。
+**检测工具**: Miri（rustup 官方组件，在支持的环境解释执行，检测所执行路径中的多种 UB）是 unsafe 代码的必跑关卡；`-Z sanitizer=thread`（thread-sanitizer）补充多线程竞争检测。
 
 ⚠️ **常见陷阱**: "测试跑通了"对 UB 无意义——优化级别变化（`-O`）就可能让潜伏 UB 爆炸；对 unsafe 代码的正确验证顺序是 Miri → release 构建 → 压测。
 
@@ -283,3 +269,18 @@ fn main() {
 **文档版本**: v2.0.0
 **最后更新**: 2026年9月
 **维护团队**: Dev Quest Team
+
+
+<!-- full-library-explanation -->
+## 安全封装需要对所有合法调用成立
+
+前置是所有权、生命周期、布局与指针。unsafe 块只表示由人证明前置条件，不能把“这一次 main 中没有出错”推广成安全 API。对一个裸指针构成的切片，需要同时说明分配仍存活、对齐正确、范围有效、元素初始化、别名权限和线程同步。长度在范围内只是其中一项；从任意地址构造指针并不建立这些保证。
+
+审查一个拥有裸指针的类型时，先画出创建、移动、借用和析构路径。析构应恰好恢复一次所有权，panic 及提前返回也不能留下双重释放。需要声明其逻辑拥有 T 的封装，还应考虑 PhantomData<T> 对 drop checking、variance 和自动 trait 推导的影响。暴露裸指针本身不一定不安全，但任何能从安全调用进入 UB 的路径都说明封装不健全。
+
+练习：对 split_at_mut 的实现写出 mid<=len 与两段不重叠的证明，包含 mid=0 和 mid=len。优先使用标准库已有实现；手写练习用于理解契约，不应用作替换库实现的理由。Miri 可以发现被执行路径上的多种未定义行为，但不是全程序正确性证明，还受平台和 FFI 支持限制。正确性依据首先是安全契约及其证明，再用测试、Miri 和适用的 sanitizer 增加证据。
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

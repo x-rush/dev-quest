@@ -1,5 +1,13 @@
 # Tauri 2 前端集成：React + TypeScript 与 invoke 类型封装
 
+## 先看框架承担哪部分职责
+
+**Tauri 前端**：invoke 返回 Promise，Rust Result 的错误需要转成前端能够展示的契约。TypeScript 泛型标注并不验证 Rust 实际返回结构。
+
+**最小练习与预期结果**：调用一个会失败的命令，在 UI 显示恢复操作；不要把拒绝的 Promise 当空字符串继续渲染。
+
+具体 API 与安装版本以[模块基线](../README.md)和本篇官方来源为准。先完成这条数据路径，再展开后面的高级配置；框架名称变化后，输入边界、状态归属和失败处理仍是需要理解的机制。
+
 > **文档简介**: 把 React + TypeScript 前端工程化地接进 Tauri 2——双根目录结构、全应用唯一的 invoke 类型封装层、事件订阅的 React Hook 化，以及 devUrl 热更新与 frontendDist 生产嵌入两套刷新语义。
 >
 > **目标读者**: 有 React/TS 经验、已在跑 Tauri 工程的前端向开发者
@@ -7,6 +15,9 @@
 > **前置知识**: [Tauri 2 架构](./01-tauri-2-architecture.md)（invoke/event 模型）、React Hooks 基础
 >
 > **预计时长**: 3-4 小时
+
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
 
 ## 📚 文档元数据
 
@@ -17,6 +28,8 @@
 | **难度** | ⭐⭐ 进阶 |
 | **标签** | `#rust` `#tauri` `#react` `#typescript` `#ipc` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 > 版本基线见模块 [README](../README.md)（Tauri 2.11，2026-09-16 核实）。React 基线参照 [02-nextjs-frontend](../../02-nextjs-frontend/README.md) 模块（React 19）。
 
@@ -31,13 +44,13 @@
 
 ## 📋 目录
 
-- [核心概念](#核心概念)
-- [实践指南](#实践指南)
-- [代码示例](#代码示例)
-- [最佳实践](#最佳实践)
-- [常见问题](#常见问题)
-- [模式不变量](#模式不变量)
-- [相关资源](#相关资源)
+- [核心概念](#-核心概念)
+- [实践指南](#️-实践指南)
+- [代码示例](#-代码示例)
+- [最佳实践](#-最佳实践)
+- [常见问题](#-常见问题)
+- [模式不变量](#-模式不变量)
+- [相关资源](#-相关资源)
 
 ---
 
@@ -282,17 +295,9 @@ pub fn list_notes(state: tauri::State<'_, crate::NoteStore>) -> Result<Vec<NoteR
 
 ## 🎨 最佳实践
 
-### ✅ 推荐做法
+将命令名、参数和错误转换集中在可查阅的前端模块，组件就能表达“保存笔记”而不是反复拼装 IPC。invoke 的泛型帮助静态使用，不会自动验证 Rust 实际返回形状；契约变化应联动两端测试。
 
-- **invoke 只有一层出口**: 收口进 `api/` 的收益是审计容易（grep 一处）、mock 容易（测试替换 `api` 对象）、错误统一
-- **DTO 注明来源命令**: 每个接口上方注释对应 Rust 命令名，改签名时能顺藤摸瓜
-- **事件命名加域前缀**: `notes-changed` 而非 `changed`——事件是全局命名空间
-
-### ❌ 避免陷阱
-
-- **在渲染路径里 invoke 高频命令**: 每次跨进程都有序列化开销，列表类数据一次批量拉取，增量靠事件推送
-- **忘记退订事件**: 直接 `useEffect` 里裸调 `listen` 不清理，卸载后回调仍执行——必现"内存泄漏 + setState on unmounted"
-- **把 devUrl 提交成生产配置**: `tauri build` 只认 `frontendDist`，devUrl 仅在 dev 生效；但 CI 打包前务必确认 `beforeBuildCommand` 正确产出前端产物
+订阅事件需要清理，尤其 listen 异步完成可能晚于组件卸载；应处理这种时序而非只在同步返回里假设句柄已存在。批量读取与事件更新减少重复跨界，验收快速进入离开页面后不会积累重复响应。
 
 ---
 
@@ -357,3 +362,9 @@ pub fn list_notes(state: tauri::State<'_, crate::NoteStore>) -> Result<Vec<NoteR
 **文档版本**: v1.0.0
 **最后更新**: 2026年9月
 **维护团队**: Dev Quest Team
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../LEARNING_GUIDE.md) · [完整目录与版本](../README.md) · [通用术语](../../shared-resources/glossary.md)

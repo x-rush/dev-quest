@@ -8,6 +8,9 @@
 >
 > **预计时长**: 30分钟速查
 
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
+
 ## 📚 文档元数据
 
 | 属性 | 内容 |
@@ -19,6 +22,8 @@
 | **更新日期** | `2026年9月` |
 | **作者** | Dev Quest Team |
 | **状态** | ✅ 已完成 |
+
+</details>
 
 ## 🎯 快速索引
 
@@ -98,7 +103,7 @@ var arr2 = [...]string{"a", "b", "c"} // 自动推断长度
 ```go
 // 动态长度的切片
 var slice []int = []int{1, 2, 3}
-slice := make([]int, 5, 10) // 长度5，容量10
+slice = make([]int, 5, 10) // 长度5，容量10
 
 // 切片操作
 slice = append(slice, 4)    // 添加元素
@@ -148,6 +153,46 @@ func increment(p *int) {
 }
 ```
 
+### 函数
+
+函数也是值，可作为参数或返回值。相同参数与返回类型组成同一种函数类型；未赋值的函数变量为 nil，调用会 panic。
+
+```go
+apply := func(x int, transform func(int) int) int { return transform(x) }
+double := func(x int) int { return x * 2 }
+fmt.Println(apply(3, double)) // 6；放入已导入 fmt 的 main 函数
+```
+
+### 接口
+
+接口规定方法集合，具体类型满足集合即可隐式实现。接口值同时具有动态类型与动态值；装有 nil 指针的接口不等于 nil 接口。详见 [接口语义](13-interface-semantics.md)。
+
+### 通道
+
+channel 用于发送和接收有类型的值；`chan T` 可收发，`<-chan T` 只接收，`chan<- T` 只发送。方向约束表达 API 权限，不会复制底层通道。无缓冲通道需要发送与接收配对，缓冲通道满时发送阻塞；nil 通道的收发一直阻塞。关闭由负责发送生命周期的一方协调，接收方用 `value, ok := <-ch` 区分关闭后的零值。
+
+<!-- full-library-explanation -->
+## 值被复制时，哪些数据仍共享
+
+前置是变量、赋值与函数参数。Go 的赋值和传参复制值；数组复制全部元素，切片复制描述底层存储的视图，指针复制地址。因此“传值”不能推出“修改永远互不影响”。本页原有代码是语法片段，含替代声明，不能直接串成一个 main 函数。
+
+下面是完整程序，保存为 main.go，运行 go run main.go：
+
+```go
+package main
+import "fmt"
+func main() {
+    a := [2]int{1, 2}
+    b := a
+    b[0] = 9
+    s := a[:]
+    s[0] = 7
+    fmt.Println(a, b, s)
+}
+```
+
+输出 `[7 2] [9 2] [7 2]`。b 与 a 是两个数组，s 则指向 a 的存储。练习：把 s 改为通过 make 和 copy 创建，a 应保留 `[1 2]`。另外，byte 是 uint8 别名，rune 是 int32 别名；string 存储字节，len 返回字节数，不保证等于文字数量。
+
 ## 🔗 相关资源
 
 - **深入学习**: [basics/03-variables-constants.md](../../basics/03-variables-constants.md)
@@ -157,3 +202,9 @@ func increment(p *int) {
 ---
 
 **更新日志**: 2026年9月 - 创建基础数据类型速查手册
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

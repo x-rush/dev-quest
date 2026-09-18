@@ -1,0 +1,82 @@
+[
+  {
+    "path": "07-php-mastery/advanced-topics/performance/02-caching-queues.md",
+    "before": "$orders = Cache::get($cacheKey) ?? /* 回源查询 */;",
+    "after": "$orders = Cache::get($cacheKey) ?? Order::where('user_id', $userId)\n                ->latest()->forPage($page, 20)->get();"
+  },
+  {
+    "path": "07-php-mastery/advanced-topics/performance/02-caching-queues.md",
+    "before": "$orders = /* 短暂等待重试或返回过期数据 */;   // 容忍短暂旧值胜过 DB 雪崩",
+    "after": "abort(503, '缓存正在重建，请稍后重试'); // 明确失败；应用可另设有界重试或旧值存储"
+  },
+  {
+    "path": "03-tanstack-stack/reference/language-concepts/21-usefield-and-createformhook.md",
+    "before": "- ❌ `withForm` 里不声明 `defaultValues`/`onSubmit`：类型推断失败，`form.state.values` 退化为 unknown——声明式重复是官方约定",
+    "after": "- 类型复用：用一致的表单选项（可提取共享 formOptions）帮助 withForm 推断；不要为每个渲染切片重复实现提交逻辑，具体泛型以所用版本为准。"
+  },
+  {
+    "path": "03-tanstack-stack/reference/language-concepts/13-use-is-fetching-use-is-mutating.md",
+    "before": "useMutationState<TResult, TState = Mutation>(opts: {\n  filters?: MutationFilters\n  select?: (mutation: Mutation) => TState\n}): TResult[]",
+    "after": "// 用法示意，不抄写或重新声明库的完整泛型签名\nconst pendingTimes = useMutationState({\n  filters: { status: \"pending\" },\n  select: mutation => mutation.state.submittedAt,\n}) // 推断为 number[]；省略 select 时返回 state 数组"
+  },
+  {
+    "path": "02-nextjs-frontend/reference/development-tools/01-testing-tools.md",
+    "before": "    // 监听模式配置\n    watchExclude: [\n      'node_modules/',\n      'dist/',\n      '**/*.log'\n    ]",
+    "after": "    // 监听忽略使用所用 Vite/Vitest 版本支持的 server.watch 配置；\n    // 不把旧版本 watchExclude 当作通用配置。"
+  },
+  {
+    "path": "09-nodejs-backend/reference/library-guides/07-process-lifecycle.md",
+    "before": "```ts\n// Node 24 实测：SIGTERM 后输出 got SIGTERM -> closed-clean，退出码 0\nimport { createServer } from \"node:http\";\n\nconst server = createServer(handler);\nserver.listen(3000);\n\nlet closing = false;\nasync function shutdown(signal: string) {\n  if (closing) return;            // 第二次信号去重\n  closing = true;\n  console.log(`got ${signal}`);\n\n  // 1) 停止接新连接，等待存量请求完成\n  server.close(() => {\n    console.log(\"closed-clean\");\n    process.exit(0);\n  });\n\n  // 2) 兜底：宽限期内关不完就强退（unref 不阻止进程只等这一个定时器）\n  setTimeout(() => {\n    console.error(\"grace period exceeded, force exit\");\n    process.exit(1);\n  }, 10_000).unref();\n\n  // 3) 视需要：断开数据库连接池、刷新指标、通知注册中心\n}\nprocess.on(\"SIGTERM\", () => shutdown(\"SIGTERM\"));\nprocess.on(\"SIGINT\", () => shutdown(\"SIGINT\"));\n```",
+    "after": "```ts\n// 集成模板：handler 与 closeDependencies 由应用提供；此模板未在本轮执行\nimport { createServer } from \"node:http\";\n\nconst server = createServer(handler);\nserver.listen(3000);\nlet closing = false;\n\nasync function shutdown(signal: string) {\n  if (closing) return;\n  closing = true;\n  console.log(`got ${signal}`);\n  const deadline = setTimeout(() => {\n    console.error(\"grace period exceeded\");\n    process.exit(1); // 最后兜底，可能截断剩余工作\n  }, 10_000);\n  try {\n    await new Promise<void>((resolve, reject) => {\n      server.close(error => error ? reject(error) : resolve());\n    });\n    await closeDependencies(); // 应用实现：关闭池、消费者、定时器并刷新输出\n    process.exitCode = 0; // 清理后自然退出，不提前截断\n    console.log(\"closed-clean\");\n    deadline.unref(); // 若遗留句柄阻止退出，期限到仍会强退\n  } catch (error) {\n    console.error(\"shutdown failed\", error);\n    process.exitCode = 1;\n    deadline.unref();\n  }\n}\nprocess.on(\"SIGTERM\", () => { void shutdown(\"SIGTERM\"); });\nprocess.on(\"SIGINT\", () => { void shutdown(\"SIGINT\"); });\n```"
+  },
+  {
+    "path": "09-nodejs-backend/reference/library-guides/07-process-lifecycle.md",
+    "before": "## 3. 优雅退出模式（实测模板）",
+    "after": "## 3. 优雅退出模式（应用集成模板）"
+  },
+  {
+    "path": "02-nextjs-frontend/reference/framework-patterns/03-client-components-patterns.md",
+    "before": "payload: Omit<Notification, 'id' | 'timestamp'>",
+    "after": "payload: Notification"
+  },
+  {
+    "path": "02-nextjs-frontend/reference/framework-patterns/03-client-components-patterns.md",
+    "before": "            ...action.payload,\n            id: Date.now().toString(),\n            timestamp: new Date()",
+    "after": "            ...action.payload // id 与时间由事件处理器生成，reducer 保持可重放"
+  },
+  {
+    "path": "02-nextjs-frontend/reference/framework-patterns/03-client-components-patterns.md",
+    "before": "payload: { type: 'success', message: '登录成功' }",
+    "after": "payload: { id: crypto.randomUUID(), timestamp: new Date(), type: 'success', message: '登录成功' }"
+  },
+  {
+    "path": "02-nextjs-frontend/reference/framework-patterns/03-client-components-patterns.md",
+    "before": "payload: { type: 'info', message: '已退出登录' }",
+    "after": "payload: { id: crypto.randomUUID(), timestamp: new Date(), type: 'info', message: '已退出登录' }"
+  },
+  {
+    "path": "02-nextjs-frontend/reference/framework-patterns/03-client-components-patterns.md",
+    "before": "  const fetchData = useCallback(async () => {\n    setState(prev => ({ ...prev, loading: true, error: null }));\n\n    try {\n      const response = await fetch(url);\n\n      if (!response.ok) {\n        throw new Error(`HTTP error! status: ${response.status}`);\n      }\n\n      const data = await response.json();\n\n      setState({\n        data,\n        loading: false,\n        error: null\n      });\n\n      onSuccess?.(data);\n    } catch (error) {\n      const errorObj = error instanceof Error ? error : new Error('Unknown error');\n\n      setState({\n        data: null,\n        loading: false,\n        error: errorObj\n      });\n\n      onError?.(errorObj);\n    }\n  }, [url, onSuccess, onError]);\n\n  useEffect(() => {\n    void fetchData(); // URL 或回调依赖变化时重新加载，不能把已有数据当作跳过新 URL 的理由\n\n    if (refetchInterval) {\n      const interval = setInterval(fetchData, refetchInterval);\n      return () => clearInterval(interval);\n    }\n  }, [fetchData, refetchInterval]);\n\n",
+    "after": "  const callbacks = useRef({ onSuccess, onError });\n  useEffect(() => { callbacks.current = { onSuccess, onError }; }, [onSuccess, onError]);\n\n  useEffect(() => {\n    let active = true;\n    let sequence = 0;\n    let controller: AbortController | undefined;\n    setState({ data: null, loading: true, error: null }); // URL 切换不展示旧资源\n    const fetchData = async () => {\n      controller?.abort();\n      const current = ++sequence;\n      controller = new AbortController();\n      const signal = controller.signal;\n      setState(prev => ({ ...prev, loading: true, error: null }));\n      let data: T;\n      try {\n        const response = await fetch(url, { signal });\n        if (!response.ok) throw new Error(`HTTP ${response.status}`);\n        data = await response.json(); // 示例信任接口；真实边界还需 schema 校验\n      } catch (cause) {\n        if (!active || signal.aborted || current !== sequence) return;\n        const error = cause instanceof Error ? cause : new Error('Unknown error');\n        setState(prev => ({ ...prev, loading: false, error }));\n        callbacks.current.onError?.(error);\n        return;\n      }\n      if (!active || signal.aborted || current !== sequence) return;\n      setState({ data, loading: false, error: null });\n      callbacks.current.onSuccess?.(data);\n    };\n    // 回调自身抛错属于调用方错误，不冒充 HTTP 失败\n    const run = () => { void fetchData().catch(console.error); };\n    run();\n    const interval = refetchInterval && refetchInterval > 0\n      ? setInterval(run, refetchInterval) : undefined;\n    return () => {\n      active = false;\n      controller?.abort();\n      if (interval !== undefined) clearInterval(interval);\n    };\n  }, [url, refetchInterval]);\n\n"
+  },
+  {
+    "path": "02-nextjs-frontend/reference/framework-patterns/03-client-components-patterns.md",
+    "before": "下方 DataFetcher 展示 Render Props，但原始轮询示意尚不具备完整取消、响应顺序和缓存失效协议，不能直接当作生产请求库。改造时让每次请求拥有 AbortController 和请求序号，卸载、URL 变化或新请求开始时取消旧请求，写入前再检查序号。",
+    "after": "上方 DataFetcher 展示 Render Props，并加入 AbortController、请求序号与对称清理；共享缓存、重试、schema 校验仍不完整，不能当作生产请求库。练习重点是验证卸载、URL 切换和新请求开始后，旧结果不再写入。"
+  },
+  {
+    "path": "02-nextjs-frontend/testing/03-e2e-testing.md",
+    "before": "    // 获取所有图片\n    const images = await page.locator(\"img[data-src]\").count()\n    expect(images).toBeGreaterThan(0)\n\n    // 验证初始状态\n    const initialImages = await page.locator(\"img[src]\").count()\n    expect(initialImages).toBeLessThan(images)\n\n    // 滚动页面\n    await page.evaluate(() => {\n      window.scrollTo(0, document.body.scrollHeight)\n    })\n\n    // 等待图片加载\n    await expect.poll(async () => page.locator(\"img[src]\").count()).toBeGreaterThanOrEqual(images) // 此自定义 data-src 示例还需检查 naturalWidth；next/image 并不依赖 data-src\n\n    // 验证懒加载图片已加载\n    const loadedImages = await page.locator(\"img[src]\").count()\n    expect(loadedImages).toBeGreaterThanOrEqual(images)",
+    "after": "    // 示例约定产品图片都有 data-testid=\"product-image\"。\n    // next/image 不依赖 data-src；浏览器也可能提前加载临近视口图片。\n    const images = page.getByTestId(\"product-image\")\n    expect(await images.count()).toBeGreaterThan(0)\n    const last = images.last()\n    await last.scrollIntoViewIfNeeded()\n    await expect.poll(() => last.evaluate((node: HTMLImageElement) =>\n      node.complete && node.naturalWidth > 0\n    )).toBe(true)\n    // 此断言证明滚到目标后图片成功解码；不能单独证明初始请求被延迟。"
+  },
+  {
+    "path": "04-multiplatform-apps/reference/language-concepts/01-rn-core-api.md",
+    "before": "'ios' | 'android'（RNOH 环境下仍返回 'android'，鸿蒙判断见 RNOH 词条）",
+    "after": "常见为 'ios' | 'android'；RNOH 取值与扩展类型按适配版本核对，见 RNOH 词条"
+  },
+  {
+    "path": "04-multiplatform-apps/reference/language-concepts/01-rn-core-api.md",
+    "before": "`Platform.OS` 不覆盖鸿蒙，RNOH 项目中鸿蒙特征用其注入的标记判断",
+    "after": "RNOH 的平台标识与声明文件以适配版本为准，不把鸿蒙固定判断为 android，也不要依赖未经文档确认的注入标记"
+  }
+]

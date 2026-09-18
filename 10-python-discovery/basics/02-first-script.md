@@ -1,10 +1,26 @@
 # 第一个 Python 脚本 — REPL 与 `__main__` 惯用法
 
+## 先理解，再动手
+
+模块被导入时会执行顶层代码。__name__ 判断帮助区分“直接运行入口”和“作为工具被导入”。
+
+**本节自测**：写带 main 的脚本，分别直接运行与从另一个脚本导入。
+
+<details>
+<summary>预期结果与参考思路（先尝试再展开）</summary>
+
+只有直接运行时执行受保护的入口；未保护的顶层副作用导入时仍会发生。
+
+</details>
+
 > **文档简介**: 从交互式 REPL 到可执行脚本，理解 Python 代码的两种运行方式与 `if __name__ == "__main__"` 背后的模块机制
 >
 > **目标读者**: 已完成环境搭建、想跑通第一段 Python 代码的开发者
 >
 > **前置知识**: 已安装 Python 3.14 与 uv（见[环境搭建](./01-environment-setup.md)）
+
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
 
 ## 📚 文档元数据
 
@@ -15,6 +31,8 @@
 | **难度** | ⭐ |
 | **标签** | `#REPL` `#脚本` `#模块机制` `#入口函数` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ## 🎯 学习目标
 
@@ -150,12 +168,9 @@ if __name__ == "__main__":
 
 ## ✅ 最佳实践
 
-- ✅ **入口统一命名为 `main()`** 并返回退出码
-- ✅ **`if __name__ == "__main__"` 里用 `raise SystemExit(main())`**，退出码可测试
-- ✅ **为函数写 docstring**（第一行一句话即可）
-- ❌ **避免**：模块顶层写副作用代码（读文件、发请求）
-- ❌ **避免**：`if __name__ == "__main__"` 里堆业务逻辑
-- 💡 **技巧**：`uv run python -i hello.py` 脚本跑完后进入 REPL，可接着调用其中函数
+把可复用逻辑放函数中，入口负责解析参数、调用和返回退出码。__main__ 判断避免模块被导入时就执行命令；main 是约定名称，不是解释器要求。
+
+docstring 说明输入约束、结果和可能失败之处，避免复述函数名。用导入测试确认没有意外读写，再分别验证正常执行与失败时的退出状态，便于脚本和 CI 可靠调用。
 
 ---
 
@@ -190,3 +205,9 @@ if __name__ == "__main__":
 - 📄 **[变量与类型](./03-variables-types.md)** — 理解 `str`、`list[str]` 的类型世界
 - 📄 **[内置函数全表](../reference/language-concepts/02-built-in-functions.md)** — `print`、`help` 等内建能力速查
 - 📄 **[Python 一行式速查](../reference/quick-references/01-python-cheatsheet.md)** — REPL 常用表达集锦
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../LEARNING_GUIDE.md) · [完整目录与版本](../README.md) · [通用术语](../../shared-resources/glossary.md)

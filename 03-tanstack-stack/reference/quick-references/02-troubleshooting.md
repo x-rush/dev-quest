@@ -4,6 +4,9 @@
 
 收录 TanStack 五库的高频故障：症状 → 原因 → 解决。遇到"明明照文档写的却不工作"时先查此表，再回到对应核心 API 字典。
 
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
+
 ## 📚 文档元数据
 
 | 属性 | 内容 |
@@ -13,6 +16,8 @@
 | **难度** | ⭐⭐ |
 | **标签** | `#排查` `#无限重渲染` `#缓存键` `#水合不匹配` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ---
 
@@ -26,15 +31,15 @@ Network 面板请求循环发出；Devtools 中该查询反复进入 fetching。
 
 | 原因 | 判断方式 | 解决 |
 |------|---------|------|
-| key 含不稳定引用（内联对象/数组/new Date()） | key 每次渲染都变 | 把变量提为 useMemo/组件外常量再进 key |
-| queryFn 每次返回新对象且 select 再造引用 | Devtools 数据一直"更新" | 派生逻辑用 useMemo 包住或移出 select |
+| key 内容持续变化（当前时间/随机数等） | 比较实际键的序列化内容 | 只保留影响查询结果的稳定业务输入 |
+| 重试、焦点重取或轮询被误认为循环 | 记录失败次数与触发时机 | 按业务调整 retry/refetch 配置 |
 | 手动在渲染期调用 setQueryData/refetch | 渲染函数里出现副作用调用 | 移入事件回调或 useEffect |
 
 ```tsx
-// ❌ 内联对象每次渲染都是新 key
+// ✅ 普通内联对象只要内容相同，仍命中同一个键
 useQuery({ queryKey: ['todos', { page, sort }], queryFn })
 
-// ✅ 稳定化后再用
+// 可选：useMemo 对 Query 键身份不是必需，只在其他引用需求下使用
 const filters = useMemo(() => ({ page, sort }), [page, sort])
 useQuery({ queryKey: ['todos', filters], queryFn })
 ```
@@ -80,7 +85,7 @@ function Layout() {
 ### 原因与解决
 
 - v9 忘传 `features`（或行模型槽位未在 `tableFeatures()` 中注册）——核心行模型自动内置，其余行模型按需显式接通
-- `data` 初始为 `undefined` 直接传入——用 `data ?? []`，并在加载态分支提前 return
+- `data` 初始为 `undefined` 直接传入——提供稳定的空数组回退，并保持 Hook 调用顺序；不要在部分 Hook 前条件 return
 - 表头渲染了 `header.isPlaceholder === true` 的占位（分组表头）——按 `flexRender` 前置判空
 - `columns`/`data` 在组件体内每次渲染重建新引用 → 行模型重算死循环——提为模块常量或 `useMemo`
 
@@ -106,7 +111,7 @@ function Layout() {
 ### 原因与解决
 
 - 校验器挂在 `onBlur` 但用户没失焦就点了提交——补 `onSubmit` 校验兜底
-- 函数校验器返回了 `null` 而不是 `undefined`——返回 `undefined` 才表示通过
+- 确认校验器真实返回错误信息；undefined 通常表示通过，官方表单级示例也支持 null
 - Standard Schema 的错误对象渲染成 `[object Object]`——取 `errors[i].message`
 - 字段 `name` 与 `defaultValues` 键名不一致导致错误挂不上
 
@@ -152,3 +157,20 @@ function Layout() {
 - 📄 **[缓存键、staleTime 与失效策略](../framework-essentials/01-query-essentials.md)** - 键与失效规则
 - 📄 **[Table 核心 API](../language-concepts/02-table-core-api.md)** - 行模型与状态
 - 📄 **[Router 核心 API](../language-concepts/03-router-core-api.md)** - 路由树与类型注册
+
+
+<!-- full-library-explanation -->
+## 先收集能排除假设的证据
+
+先修：浏览器 Network 与各库 Devtools。保存一份最小复现：依赖版本、操作步骤、实际 queryKey、status/fetchStatus、请求次数与错误文本。一次只改一个条件，避免把重试、焦点刷新和业务轮询混成“无限请求”。
+
+Query 对键内容做确定性哈希，内联普通对象不因引用变动就变成新查询。相反，当前时间、随机数、不断变化的业务输入会改变键。select 返回新对象影响计算与渲染，不会单独决定重新发送 HTTP 请求。
+
+表格空白先检查 data 与最终行模型，再检查 HTML 渲染；表单按钮不更新先检查订阅，再检查校验。SSR 错误先比较服务端 HTML 与首次客户端输出，不要直接隐藏全部内容来掩盖不一致。
+
+**练习：** 为同一个小页面分别制造字符串/数字 ID 错配、缺 Provider、渲染期 refetch 三种问题，每次记录一项能区分它们的证据。验收：修复后对应故障消失，正常操作与失败提示仍可用。
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

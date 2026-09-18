@@ -1,10 +1,26 @@
 # 综合练习 - 控制台图书管理系统
 
+## 先理解，再动手
+
+控制台项目先验证领域行为，再添加输入界面。存储接口可以从最简单的集合开始，不必为每个菜单引入框架。
+
+**本节自测**：新增图书、查询已存在与未知 ID、删除，再测试重复操作。
+
+<details>
+<summary>预期结果与参考思路（先尝试再展开）</summary>
+
+结果与异常语义一致；未做文件或数据库存储时明确重启会清空。
+
+</details>
+
 > **文档简介**: 用现代 Java 风格实现一个控制台图书管理系统，综合运用 record、switch 表达式、Optional、Stream、try-with-resources 与简单文件持久化
 >
 > **目标读者**: 已学完本模块 basics 01-07 的学习者，需要一个综合落点
 >
 > **前置知识**: [现代 Java 特性](./07-modern-features.md)全部内容
+
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
 
 ## 📚 文档元数据
 
@@ -15,6 +31,8 @@
 | **难度** | ⭐ |
 | **标签** | `#综合项目` `#图书管理` `#Stream` `#Record` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ## 🎯 学习目标
 
@@ -218,3 +236,9 @@ public void save(Path file) throws IOException {
 - 📄 **[现代 Java 特性](./07-modern-features.md)** - 本项目特性来源
 - 📄 **[现代 Java 速查](../reference/quick-references/01-java-cheatsheet.md)** - 写代码时的案头速查
 - 📄 **[标准库核心](../reference/library-guides/01-standard-library.md)** - Files/Path 与 java.time 用法
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../LEARNING_GUIDE.md) · [完整目录与版本](../README.md) · [通用术语](../../shared-resources/glossary.md)

@@ -1,7 +1,7 @@
 # JavaScript 核心语义（事件循环 / 闭包 / 原型链 / this / 可迭代协议）
 
 > **模块**: `02-nextjs-frontend`
-> **类型**: 字典条目（无难度门槛）
+> **类型**: 字典条目（可独立查阅，按主题准备前置知识）
 > **分类**: `language-concepts`
 
 ## 📌 定义
@@ -12,7 +12,7 @@
 
 ### 事件循环执行模型
 
-每轮循环：**执行完当前同步代码 → 清空全部微任务队列 → 取一个宏任务执行 → 重复**。微任务包括 `Promise.then/catch/finally`、`queueMicrotask`；宏任务包括 `setTimeout`/`setInterval`、I/O、UI 渲染、事件回调。Node 与浏览器的差别一句话：Node 在此模型上多了 `process.nextTick` 队列（优先级高于 Promise 微任务）与 timers/poll/check 阶段划分，浏览器只有宏/微任务两分。
+每轮循环：**执行完当前同步代码 → 清空全部微任务队列 → 取一个宏任务执行 → 重复**。微任务包括 `Promise.then/catch/finally`、`queueMicrotask`；宏任务包括 `setTimeout`/`setInterval`、I/O、UI 渲染、事件回调。Node 与浏览器的差别一句话：Node 有额外的 process.nextTick 队列与 timers/poll/check 等阶段；nextTick 与 Promise 的先后还受 CJS/ESM 顶层上下文影响。浏览器另有渲染机会，不应简化成每次任务后必定绘制。
 
 ### this 绑定四条规则（优先级从高到低）
 
@@ -113,7 +113,7 @@ const range = {
 - ❌ **以为闭包捕获"值"**：闭包捕获的是**变量绑定**（引用）——循环里 `var i` + 回调读到最终值，多个闭包共享同一个 `let` 变量。✅ 每次迭代要独立快照时用 `let`（块级作用域逐次创建绑定）或在循环体内立即捕获 `const snapshot = i`。
 - ❌ **在类字段里给原型共享可变引用**：字段初始化写在实例上（`class A { items = [] }` 每个实例一份）；而写在方法内的默认参数或原型上手工赋值的对象会被所有实例共享。✅ 可变状态一律放实例字段或构造函数。
 - ❌ **对普通对象用 `for...of`**：对象默认不实现 `Symbol.iterator`，`for...of {}` 直接抛 `TypeError: not iterable`。✅ 迭代对象用 `Object.keys/entries/values`（返回数组，天然可迭代），或给对象实现 `[Symbol.iterator]`。
-- ❌ **混淆 nextTick 与微任务（Node）**：`process.nextTick` 队列优先于 Promise 微任务执行，递归 `nextTick` 会饿死 I/O——这是 Node 服务端代码特有的坑。✅ 通用异步调度统一用 `queueMicrotask`/`setImmediate`，避免 `nextTick` 递归。
+- ❌ **混淆 nextTick 与微任务（Node）**：常见 CJS 顶层中 nextTick 先执行，但 ESM 顶层可不同；递归 nextTick 还可能饿死 I/O——这是 Node 服务端代码特有的坑。✅ 通用异步调度统一用 `queueMicrotask`/`setImmediate`，避免 `nextTick` 递归。
 
 ## 🔗 相关条目
 
@@ -125,3 +125,9 @@ const range = {
 
 ---
 *最后更新: 2026年9月 | 本条目为模块知识字典的一部分，概念完整解释以此处为单一事实来源*
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

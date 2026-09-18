@@ -6,6 +6,9 @@
 >
 > **前置知识**: [FastAPI 进阶（依赖注入）](../../frameworks/02-fastapi-advanced.md)、[SQLAlchemy 集成](../../frameworks/03-ecosystem-integration.md)
 
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
+
 ## 📚 文档元数据
 
 | 属性 | 内容 |
@@ -15,6 +18,8 @@
 | **难度** | ⭐⭐⭐ |
 | **标签** | `#架构` `#领域建模` `#分层` `#依赖倒置` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ## 1. 问题：路由里长出业务逻辑
 
@@ -52,8 +57,8 @@ class OrderService:
         self.repo = repo
 
     async def place_order(self, user_id: int, amount: Decimal) -> Order:
-        if amount > USER_DAILY_LIMIT:
-            raise DomainError("超出单日限额")
+        if amount > ORDER_AMOUNT_LIMIT:
+            raise DomainError("超出单笔金额限额")
         return await self.repo.create(user_id, amount)
 ```
 
@@ -77,7 +82,7 @@ async def place_order(
 from dataclasses import dataclass
 from decimal import Decimal
 
-@dataclass(frozen=True)                      # 不可变 = 值对象
+@dataclass(frozen=True)                      # 用值表达金额；冻结只是实现手段之一
 class Money:
     amount: Decimal
     currency: str = "CNY"
@@ -134,6 +139,15 @@ def get_order_service(session: SessionDep) -> OrderService:
 
 ---
 
+<!-- full-library-explanation -->
+## 用一个失败用例检验分层是否有用
+
+本文各层代码是设计片段，尚未组成完整工程。阅读时先追踪“输入订单金额 → 校验规则 → 写存储 → 映射 HTTP 响应”，再决定哪些职责要拆开。依赖倒置讨论的是源代码依赖方向：业务依赖自己定义的存储协议，数据库适配器实现协议；运行时调用仍会到数据库，不能把两种方向混在一起。
+
+练习为 OrderService 传入内存存储，记录 create 被调用的次数。合法金额应调用一次，超过限额的金额应抛业务异常且调用零次。再模拟存储抛错，确认服务不返回成功。这个实验能说明分层隔离了什么，单纯数目录层数不能。
+
+单笔金额小于限额不等于满足“每日累计限额”。若规则确实是每日总额，需要在可信身份、当日累计查询和并发写入的共同事务边界内检查。两个请求各自先查后写可能同时通过，仓储接口应表达所需的原子操作或锁策略，不能靠多加一个 service 类消除竞争。
+
 ## 🔗 相关文档
 
 - 🚀 **[项目：生产级 FastAPI 应用](../../projects/04-production-fastapi-app.md)** — 本篇思想的完整落地实现
@@ -141,3 +155,9 @@ def get_order_service(session: SessionDep) -> OrderService:
 - 📄 **[FastAPI 进阶](../../frameworks/02-fastapi-advanced.md)** — 依赖注入：分层的机制基础
 - 📖 **[OOP 协议字典](../../reference/language-concepts/04-oop-protocols.md)** — dataclass/Protocol/抽象基类速查
 - 🧪 **[单元测试](../../testing/01-unit-testing.md)** — 领域对象的纯函数测试
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

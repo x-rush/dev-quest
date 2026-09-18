@@ -1,8 +1,73 @@
 # 内置函数全表（分类速查）
 
+## 阅读准备：名字、函数与协议
+
+前置：函数调用、列表与异常。内置名称无需 import，但可以被局部变量遮蔽；把变量命名为 list 后，list(...) 就可能不再调用内置类型。关键字如 for 参与语法解析，len 是可调用对象，math.sqrt 则来自需要导入的标准库。
+
+读签名时注意 `/` 之前的参数只能按位置传入，`*` 后的参数只能按名字传入。比如 next(iterator, None) 合法，next(iterator, default=None) 不合法。不是所有带默认值的参数都允许关键字写法。
+
+## 先运行一个完整的数据处理例子
+
+保存为 `builtins_lab.py`，运行 `python builtins_lab.py`。只依赖 Python 标准运行时，本例不读取网络或个人文件。
+
+```python
+raw = [" 7 ", "2", "10"]
+numbers = list(map(int, raw))
+ordered = sorted(numbers)
+print(numbers, ordered)
+print(sum(numbers), min(numbers), max(numbers))
+print(list(enumerate(ordered, start=1)))
+
+stream = iter(ordered)
+print(next(stream), next(stream), next(stream), next(stream, "结束"))
+print(any([]), all([]))
+print(bool("False"), bool(""))
+```
+
+预期输出：
+
+```text
+[7, 2, 10] [2, 7, 10]
+19 2 10
+[(1, 2), (2, 7), (3, 10)]
+2 7 10 结束
+False True
+True False
+```
+
+map 逐项转换，list 消费迭代结果；sorted 创建新列表，没有修改 numbers。next 每调用一次就消耗一个元素。any 空集合没有真值证据，all 空集合没有反例，因此分别为 False 与 True。非空文本 "False" 仍是真值：bool 不解析英文布尔文本。
+
+## 容易缺失的契约
+
+| 调用 | 输入与输出 | 选择与边界 |
+|---|---|---|
+| `map(function, iterable)` | 将每项交给函数，返回迭代器 | 转换错误在消费时出现；需要复用结果时显式物化 |
+| `filter(predicate, iterable)` | 保留谓词为真的项，返回迭代器 | predicate 为 None 时按真值过滤，0、空串也会被过滤 |
+| `iter(callable, sentinel)` | 反复无参调用，遇到与 sentinel 相等的值停止 | 与 iter(container) 是不同重载，适合分块读取 |
+| `next(iterator, default)` | 返回下一项，耗尽时返回默认值 | 无默认值则抛 StopIteration；默认值按位置传 |
+| `min(items, default=...)` | 返回最小项，空迭代器可用 default | 多个位置参数形式不支持这个空集合默认值 |
+| `sorted(items, key=...)` | 返回新列表，key 提取排序依据 | 不修改原列表；与 list.sort 原地修改且返回 None 区分 |
+| `getattr(obj, name, default)` | 按名称读取属性，缺失时返回默认值 | 属性访问可能触发 property 逻辑，不一定只是读字典 |
+| `hasattr(obj, name)` | 尝试属性访问，遇 AttributeError 返回 False | 不能据此保证属性读取没有副作用 |
+| `hash(obj)` | 获得哈希整数 | 可哈希不意味着无碰撞；不能把跨进程 hash 当持久 ID |
+| `type(obj)` / `type(name, bases, namespace)` | 查询类型 / 动态构造类 | 第二种是元编程入口；日常类型兼容判断多用 isinstance |
+| `vars(obj)` | 返回对象的属性字典 | 没有 __dict__ 的对象可能失败；它不是所有对象的万能序列化 |
+| `memoryview(buffer)` | 对缓冲区建立视图 | 不等于独立副本；释放视图与底层对象的生命周期需要协调 |
+
+上表是常用重载的简写，不冒充每个函数的完整签名。以下分类正文加上本表覆盖官方内置函数索引中的名称；异常类与内置常量另有各自分类，不能用 dir(builtins) 的总数充当函数数量。
+
+## 小练习：预测失败发生在哪一步
+
+执行 `converted = map(int, ["1", "bad"])` 时通常还没触发转换错误；执行 `list(converted)` 消费到 "bad" 时才抛 ValueError。请改成逐项 try/except，只保留合法整数，同时记录非法项。
+
+验收：输入 `["1", "bad", "3"]` 得到合法数 `[1, 3]` 与一条非法项记录；不能捕获错误后直接返回空列表而丢掉合法结果。这检查的是惰性消费与错误边界，不是记住 map 的拼写。
+
 ## 概述
 
 Python 内置函数共 70 余个，无需导入即可使用。本表按用途分类，每个条目给出签名、示例与陷阱。可用 `dir(builtins)` 列出全部名字。
+
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
 
 ## 📚 文档元数据
 
@@ -13,6 +78,8 @@ Python 内置函数共 70 余个，无需导入即可使用。本表按用途分
 | **难度** | ⭐ |
 | **标签** | `#内置函数` `#速查` `#标准库` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ---
 
@@ -32,7 +99,7 @@ Python 内置函数共 70 余个，无需导入即可使用。本表按用途分
 | `ord(c)` / `chr(n)` | 字符 ↔ 码点 |
 | `bin(n)` / `hex(n)` / `oct(n)` | 进制字符串：`bin(5)` → `'0b101'`、`hex(255)` → `'0xff'`、`oct(8)` → `'0o10'` |
 | `ascii(obj)` | 同 `repr` 但非 ASCII 字符转义：`ascii("café")` → `"'caf\xe9'"` |
-| `bytearray(b"ab")` | 可变字节串：支持原地增改（`ba[0] = 65` → `b'Abc'`） |
+| `bytearray(b"ab")` | 可变字节串：支持原地增改（`ba[0] = 65` → `bytearray(b'Ab')`） |
 | `memoryview(obj)` | 零拷贝缓冲区视图；视图存活期间原对象禁止扩缩容（实测抛 `BufferError`），`mv.release()` 或 with 释放 |
 | `slice(start, stop, step)` | 切片对象：`a[1:3]` 即 `a[slice(1, 3)]`，详见[数据结构速查](./03-data-structures.md) |
 
@@ -44,7 +111,7 @@ Python 内置函数共 70 余个，无需导入即可使用。本表按用途分
 
 ```python
 abs(-3.5)                    # 3.5
-round(2.675, 2)              # 2.67 —— 银行家舍入（.5 取偶），非四舍五入
+round(2.675, 2)              # 2.67：2.675 的二进制浮点近似影响十进制舍入
 divmod(17, 5)                # (3, 2) 商与余数一次返回
 pow(2, 10, 100)              # 24 三参数取模幂
 sum(nums, start=0)           # 求和，可给初始值
@@ -67,9 +134,9 @@ reversed(seq)                # 反向迭代器
 sorted(it, key=..., reverse=True)   # 返回新列表
 any(pred(x) for x in it)     # 存在真值
 all(pred(x) for x in it)     # 全部为真
-next(it, default=None)       # 手动推进迭代器，可给默认值
+next(it, None)       # 手动推进迭代器，可给默认值
 iter(obj)                    # 获取迭代器
-aiter(ait) / anext(ait, default=None)   # 异步版 iter/next（3.10+）：需 await，如 await anext(ait)
+aiter(ait) / anext(ait, None)   # 异步版 iter/next（3.10+）：需 await，如 await anext(ait)
 ```
 
 **陷阱**: `zip` 默认长度不齐时**静默截断**，要求严格对齐传 `strict=True`。
@@ -117,7 +184,7 @@ class Kelvin(Temperature):
 
 继承、MRO 与 `super()` 的完整展开见[类与继承](./16-classes-and-inheritance.md)。
 
-**陷阱**: `type(x) == int` 不认子类，判断类型统一用 `isinstance`。
+**陷阱**: `type(x) == int` 不认子类，需要接受子类时用 `isinstance`；只接受精确类型时可用 `type(x) is int`，例如排除作为 int 子类的 bool。
 
 ---
 
@@ -146,7 +213,7 @@ open(path, mode="r", encoding="utf-8")   # 文件，一律显式 encoding
 format(value, spec)          # 等价 f-string 的 format 规格
 ```
 
-**陷阱**: `input` 返回字符串，`int(input())` 在非数字输入时抛异常；`open` 不写 `encoding` 在 Windows 上默认 GBK，跨平台文件必乱码。
+**陷阱**: `input` 返回字符串，`int(input())` 在非数字输入时抛异常；文本模式的默认编码受 Python 版本、UTF-8 模式和系统区域设置影响；双方约定 UTF-8 时显式写 `encoding="utf-8"`，二进制模式不传 encoding。
 
 ---
 
@@ -171,7 +238,9 @@ format(value, spec)          # 等价 f-string 的 format 规格
 
 ```python
 # 计数统计（无 Counter 时）
-counts = {w: words.count(w) for w in set(words)}
+counts = {}
+for word in words:
+    counts[word] = counts.get(word, 0) + 1
 
 # 优雅排序
 ranked = sorted(scores.items(), key=lambda kv: kv[1], reverse=True)
@@ -193,7 +262,7 @@ nums = list(map(int, raw_strings))    # 等价 [int(s) for s in raw_strings]
 |------|------|
 | `round` 银行家舍入 | `round(0.5) == 0`，精确舍入用 `decimal` |
 | `zip` 静默截断 | 加 `strict=True` |
-| `open` 缺 encoding | Windows 默认非 UTF-8 |
+| `open` 缺 encoding | 默认值依赖解释器与环境，文本交换应明确编码 |
 | `isinstance` vs `type` | 判断类型用前者 |
 | 可变对象做默认值 | 与内置无关但最高频，见[排查手册](../quick-references/02-troubleshooting.md) |
 
@@ -204,3 +273,11 @@ nums = list(map(int, raw_strings))    # 等价 [int(s) for s in raw_strings]
 - 📄 **[Python 关键字详解](./01-python-keywords.md)** — 与内置函数相对的保留字
 - 📄 **[数据结构速查](./03-data-structures.md)** — 容器类型的完整操作面
 - 📄 **[标准库导航](../library-guides/01-standard-library.md)** — 需要导入的能力清单
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)
+
+本轮语义核对来源：[Python 内置函数签名](https://docs.python.org/3/library/functions.html)（2026-09-18；不等同于本地完整工程运行验证）。

@@ -4,6 +4,9 @@
 
 PHP 7+ 把引擎错误与用户异常统一到 `Throwable` 之下：`Error` 表达程序级错误（类型、值域），`Exception` 表达业务与运行时异常。本文收录层级结构、常用异常类、处理语法与全局钩子，属语言稳定层（Throwable 体系 7.0+）。
 
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
+
 ## 📚 文档元数据
 
 | 属性 | 内容 |
@@ -14,9 +17,11 @@ PHP 7+ 把引擎错误与用户异常统一到 `Throwable` 之下：`Error` 表�
 | **标签** | `#异常` `#Error` `#Throwable` `#错误处理` |
 | **更新日期** | `2026年9月` |
 
+</details>
+
 ## 条目 1：Throwable 层级
 
-📌 **定义**: 所有可抛出对象实现 `Throwable` 接口，下设两棵树：`Error`（引擎/编程错误，通常不应捕获后继续跑）与 `Exception`（可预期的业务异常）。`catch (Throwable $e)` 才能兜住一切。
+📌 **定义**: 所有可抛出对象实现 `Throwable` 接口，下设两棵树：`Error`（引擎/编程错误，通常不应捕获后继续跑）与 `Exception`（可预期的业务异常）。catch (Throwable $e) 可捕获两棵可抛出对象层级，但不能捕获所有 warning、内存耗尽或进程终止。
 
 📖 **语法/签名**:
 
@@ -25,16 +30,18 @@ Throwable
 ├── Error
 │   ├── TypeError                 类型不匹配
 │   ├── ValueError                值不在合法域（8.0+）
-│   ├── DivisionByZeroError       除零
 │   ├── UnhandledMatchError       match 无命中且无 default（8.0+）
-│   ├── ArithmeticError           数学运算越界（如 int 移位溢出）
+│   ├── ArithmeticError           算术错误，例如负移位数；普通整数溢出不统一抛该异常
+│   │   └── DivisionByZeroError   除零
 │   └── AssertionError            assert() 失败（zend.assertions=-1 时关闭）
 └── Exception
     ├── LogicException            程序逻辑错误（应修代码）
     │   ├── InvalidArgumentException
     │   ├── OutOfRangeException / DomainException / LengthException ...
-    ├── RuntimeException          运行环境故障（可重试/降级）
-    ├── PDOException / JsonException / RandomException(8.2+) ...
+    ├── RuntimeException          运行环境故障，是否可重试需按原因判断
+    │   ├── PDOException
+    │   └── Random\RandomException (8.2+)
+    ├── JsonException
     └── 自定义异常（业务层从两棵树派生）
 ```
 
@@ -74,13 +81,13 @@ try {
 }
 ```
 
-⚠️ **常见陷阱**: "致命错误不能捕获"的旧结论已过时——8.x 中 `TypeError` 等都是 Throwable 可捕获，但**捕获后进程状态可能已损坏**，捕获 Error 要谨慎；内存耗尽等真正的 fatal error 依然不可捕获。
+⚠️ **常见陷阱**: "致命错误不能捕获"的旧结论已过时——8.x 中 `TypeError` 等都是 Throwable 可捕获，但**捕获后仍需检查操作是否部分执行，不能据此假定业务已成功**，捕获 Error 要谨慎；内存耗尽等真正的 fatal error 依然不可捕获。
 
 🔗 **相关条目**: [try/catch/finally 与异常链](#条目-2trycatchfinally-与异常链)、[教程：错误与异常](../../basics/06-error-exceptions.md)
 
 ## 条目 2：try/catch/finally 与异常链
 
-📌 **定义**: `try` 包裹风险代码，`catch` 按子类优先顺序匹配（可多个类型用 `|` 联合捕获），`finally` 无条件执行（清理资源）；构造新异常时把原异常传入 `$previous` 参数保留因果链。
+📌 **定义**: `try` 包裹风险代码，`catch` 按子类优先顺序匹配（可多个类型用 `|` 联合捕获），finally 在普通控制流离开 try/catch 时执行；exit 与进程级终止属于例外；构造新异常时把原异常传入 `$previous` 参数保留因果链。
 
 📖 **语法/签名**:
 
@@ -116,7 +123,7 @@ function charge(int $cents): void
         // ✅ 关键：previous 保留根因，日志里能看到完整链条
         throw new PaymentFailed('支付失败', 0, $e);
     } finally {
-        echo '连接已释放', PHP_EOL;      // 抛出前也执行
+        echo 'finally 执行', PHP_EOL; // 此示例没有真实连接，生产代码应实际调用资源清理
     }
 }
 
@@ -181,7 +188,7 @@ try {
 
 ## 条目 4：全局钩子与错误等级
 
-📌 **定义**: `set_error_handler` 把 warning/notice 等转为可处理对象（通常转抛 `ErrorException`），`set_exception_handler` 兜底未捕获异常；`error_reporting` 控制哪些等级进入处理器。
+📌 **定义**: `set_error_handler` 把 warning/notice 等转为可处理对象（通常转抛 `ErrorException`），`set_exception_handler` 兜底未捕获异常；set_error_handler 的等级参数控制其接收范围；自定义处理器还需自行检查 error_reporting 位掩码。
 
 📖 **语法/签名**:
 
@@ -244,6 +251,9 @@ function findUser(int $id): ?array
 // ✅ 不可预期/违反契约：直接抛
 function withdraw(int $balance, int $amount): int
 {
+    if ($amount <= 0 || $balance < 0) {
+        throw new \InvalidArgumentException('金额必须为正且余额不能为负');
+    }
     if ($amount > $balance) {
         throw new \DomainException('余额不足');    // 违反业务不变量
     }
@@ -269,3 +279,18 @@ function withdraw(int $balance, int $amount): int
 **文档版本**: v2.0.0
 **最后更新**: 2026年9月
 **维护团队**: Dev Quest Team
+
+
+<!-- full-library-explanation -->
+## 捕获错误之后先决定是否仍能履行契约
+
+前置是函数、返回值与 finally。捕获 TypeError 不意味着 PHP 进程已损坏，但说明某次调用违反类型契约；不能把它吞掉后返回成功。数据库断连可能重试，参数无效通常不能靠重试修复；发生支付超时还要先确认是否已经扣款，因此“RuntimeException 都能重试”同样不成立。
+
+finally 适合释放已经成功取得的资源，普通 return/throw 路径会经过它；exit、进程终止与部分致命故障不能用同一保证描述。finally 里只打印“已关闭”不等于真正关闭资源。全局异常处理器是请求结束的兜底，不能让程序回到抛错位置继续执行。
+
+**练习**：在工作函数中抛异常并包装 previous，检查外层业务消息与底层原因均可读取；再在 finally 中返回值，观察原异常如何被遮住。CLI 失败应设置非零退出码，HTTP 失败应设置相应状态并避免暴露堆栈。日志记录一次明确责任边界，避免每层重复打印同一异常，也不要把已处理的预期分支都记为系统故障。
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

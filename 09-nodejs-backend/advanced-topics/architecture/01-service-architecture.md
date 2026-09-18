@@ -6,6 +6,9 @@
 >
 > **前置知识**: [生产级 Node.js API](../../projects/04-production-nodejs-api.md)、TypeScript 接口与泛型
 
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
+
 ## 📚 文档元数据
 
 | 属性 | 内容 |
@@ -15,6 +18,8 @@
 | **难度** | ⭐⭐⭐ |
 | **标签** | `#architecture` `#layered` `#modular-monolith` `#di` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ## 🎯 阅读目标
 
@@ -37,7 +42,7 @@ repositories（数据层）← 持久化知识：Prisma 查询、缓存读写
 为什么值得付出这个约束？
 
 - **可测试**：业务层不感知任何 Web 框架，单元测试不需要 HTTP（见 [`../../testing/01-unit-testing.md`](../../testing/01-unit-testing.md)）
-- **可替换**：换 ORM、换传输协议（REST→gRPC）时业务层不动
+- **可替换**：将协议与持久化细节隔离后，可减少换 ORM 或传输协议时对业务层的影响
 - **可定位**：Bug 的层级即修复的层级，减少"全文件搜索"式排障
 
 ```typescript
@@ -51,11 +56,11 @@ ordersApp.post('/orders', async (c) => {
 // 业务层：厚——规则都在这里
 export async function createOrder(input: CreateOrderInput, userId: string) {
   const cart = await cartRepo.findByUser(userId);
-  if (!cart?.items.length) throw new HttpError(400, '购物车为空');
+  if (!cart?.items.length) throw new Error('EMPTY_CART');
 
   const total = cart.items.reduce((sum, i) => sum + i.price * i.qty, 0);
   if (total > (await userRepo.getCreditLimit(userId))) {
-    throw new HttpError(402, '超出信用额度'); // 业务规则，而不是 HTTP 逻辑
+    throw new Error('CREDIT_LIMIT_EXCEEDED'); // 接口层将领域错误映射为响应
   }
   return orderRepo.create({ userId, items: cart.items, total });
 }
@@ -87,7 +92,7 @@ export type { AuthUser } from './types.js';
 // routes.ts、repo.ts 故意不导出：外部模块禁止绕过 service 直连内部
 ```
 
-**与微服务的边界**：模块化单体 = 一个进程 + 硬边界；微服务 = 多个进程 + 网络边界。判断标准：
+**与微服务的边界**：模块化单体 = 一个部署单元 + 约定并检查模块边界；微服务 = 多个进程 + 网络边界。判断标准：
 
 | 信号 | 选择了模块化单体 |
 |------|----------------|
@@ -96,7 +101,7 @@ export type { AuthUser } from './types.js';
 | 跨域调用频繁、事务跨越多域 | ✅ 单体内的本地调用更简单 |
 | 域间必须独立发布/独立故障隔离 | ❌ 拆服务 |
 
-**演进路径**：模块内的 `service.ts` 就是未来的微服务原型——先在同一进程内用接口解耦，等扩缩容压力出现再把该模块连同其 repo 一起搬出去。这比一开始就微服务（分布式单体的灾难）便宜一个数量级。
+**演进路径**：模块内的 `service.ts` 就是未来的微服务原型——先在同一进程内用接口解耦，等扩缩容压力出现再把该模块连同其 repo 一起搬出去。这可以推迟分布式通信的成本，但具体收益需要结合团队与负载评估。
 
 ## 3. 依赖注入：不引框架的轻量做法
 
@@ -140,9 +145,26 @@ const orderService = new OrderService(new PrismaOrderRepo(prisma), new StripeGat
 - ❌ **跨域 import 内部文件**：直接 import 另一个模块的 `repo.ts`——破坏边界，公共出口是唯一通道
 - ❌ 过早微服务：团队、运维、可观测性没跟上时，拆分只会放大复杂度
 
+<!-- full-library-explanation -->
+## 从调用链理解分层，而不是先背目录
+
+创建订单可以拆成三个可观察步骤：HTTP 层把请求变成 `CreateOrderInput`，业务层判断库存和额度，仓储层保存订单。依赖注入是把仓储对象作为参数交给业务层，因此测试可以传入记录调用的假仓储，不必启动数据库。接口只规定能做什么，不会自动保证事务、重试或权限正确。
+
+例如支付成功后数据库更新失败，简单地重试 `create()` 可能重复扣款。应该先定义订单状态和支付幂等键，再选择事务、事务发件箱或补偿流程；本地数据库事务不能撤销外部支付。上文的支付调用仅展示依赖关系，不能直接充当结算流程。
+
+目录也不会阻止跨模块导入。公共出口需要配合代码评审、导入限制或独立包边界；拆服务后还要处理网络超时、部分失败和数据所有权，不能只把目录搬到另一进程。
+
+**练习**：给订单服务注入会抛错的支付网关。断言失败后订单的状态，并让同一个请求重试两次。验收应明确“没有重复扣款、状态可追踪”，而非只断言返回 500。
+
 ## 🔗 相关文档
 
 - 📄 [事件循环原理](../performance/01-event-loop.md) — 架构决策背后的运行时约束
 - 📄 [认证服务实战](../../projects/02-auth-service.md) — auth 模块的完整样例
 - 📖 [Node + TypeScript 常用模式](../../reference/language-concepts/05-typescript-patterns.md) — 依赖注入的类型基础
 - 📄 [单元测试](../../testing/01-unit-testing.md) — 分层带来的可测试性收益
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

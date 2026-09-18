@@ -6,6 +6,9 @@
 >
 > **前置知识**: [集成测试](./03-integration-testing.md)、[CI/CD 流水线](../deployment/01-ci-cd-pipelines.md)
 
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
+
 ## 📚 文档元数据
 
 | 属性 | 内容 |
@@ -15,6 +18,8 @@
 | **难度** | ⭐⭐ |
 | **标签** | `#playwright` `#e2e` `#端到端` `#验收` |
 | **更新日期** | 2026年9月 |
+
+</details>
 
 ## 🎯 完成后你将能够
 
@@ -172,10 +177,9 @@ test('返回列表页命中缓存不闪烁', async ({ page }) => {
 
 ## 🎨 最佳实践速查
 
-- ✅ 选择器优先 getByRole/getByLabel（贴近用户视角，顺带覆盖可访问性）
-- ✅ 每个用例独立、可重跑（幂等），失败重试才有效
-- ❌ 不要用 E2E 测表单校验细节——那是集成测试的活
-- ❌ 不要对真实第三方 API 跑 E2E——一律拦截或 mock
+E2E 优先覆盖用户风险高的完整旅程，例如登录后创建记录并在刷新后看到它；字段的详细排列组合可放在更快的测试层。通过 role/label 查找控件能靠近用户操作，但仍需额外验证键盘与读屏体验。
+
+大多数 CI 用例应使用受控数据和隔离服务，减少第三方波动；支付等真实集成可另设有授权的沙箱契约测试。失败时保存页面、请求和日志证据，先定位原因，不把无限重试当修复。
 
 ---
 
@@ -186,3 +190,9 @@ test('返回列表页命中缓存不闪烁', async ({ page }) => {
 - 📄 **[CI/CD 流水线](../deployment/01-ci-cd-pipelines.md)** - E2E 的流水线位置
 - 📄 **[Vercel 部署](../deployment/02-vercel-deployment.md)** - 预览环境冒烟的部署侧
 - 📄 **[数据看板](../projects/02-data-dashboard.md)** - 本文被测页面来源
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../LEARNING_GUIDE.md) · [完整目录与版本](../README.md) · [通用术语](../../shared-resources/glossary.md)

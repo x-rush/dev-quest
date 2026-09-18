@@ -6,6 +6,9 @@
 >
 > **前置知识**: 无；配套教程见 [basics/03-swift-syntax-essentials.md](../../basics/03-swift-syntax-essentials.md)
 
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
+
 ## 📚 文档元数据
 
 | 属性 | 内容 |
@@ -15,6 +18,8 @@
 | **难度** | ⭐ |
 | **标签** | `#Optional` `#Array` `#Dictionary` `#Set` `#集合API` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ---
 
@@ -32,16 +37,16 @@
 | 可选链 | `user?.profile?.name` | 连续访问 | 整体为 nil |
 | map | `name.map { $0.count }` | 有值才转换 | nil |
 | 强制解包 | `name!` | 100% 确定有值 | **崩溃** |
-| as? / try? | `try? fetch()` | 错误转 nil | nil |
+| as? / try? | `value as? T` / `try? fetch()` | 条件转换失败 / 抛错分别转 nil | nil |
 
 ### 1.2 可选链与整体 nil
 
 ```swift
-struct User { var address: Address? }
+struct User { var name: String = "匿名"; var address: Address? }
 struct Address { var city: String? }
 
 let user = User(address: nil)
-let city = user.address?.city ?? "未知"     // Optional 链短路，整体 Optional<String>
+let city = user.address?.city ?? "未知"     // Optional 链短路，合并后 city 为 String
 let upper = user.address?.city?.uppercased() // 链可以任意长
 ```
 
@@ -91,7 +96,7 @@ nums.sorted()                        // 升序新数组
 nums.sorted { $0 > $1 }              // 自定义降序
 nums.sort()                          // 原地排序（var 需要）
 nums.contains(1); nums.contains { $0 > 5 }
-nums.firstIndex(of: 2)               // Optional(2)
+nums.firstIndex(of: 2)               // 前面 sort 后数组为 [1,2,3]，得到 Optional(1)
 nums.min(); nums.max()
 ```
 
@@ -133,7 +138,7 @@ scores.removeValue(forKey: "bob")    // Optional(75)
 scores.mapValues { $0 + 5 }          // 全部 +5
 scores.filter { $0.value > 80 }      // 过滤（得到 Dictionary）
 Dictionary(grouping: users, by: \.city)   // 按键分组 → [City: [User]]
-scores.merge([carol: 80]) { max($0, $1) } // 合并并解决键冲突
+scores.merge(["carol": 80]) { max($0, $1) } // 合并并解决键冲突
 ```
 
 ### 3.3 典型模式：计数器
@@ -177,3 +182,23 @@ a.contains(2)        // true —— 哈希查找，O(1)
 - 📄 [01-swift-keywords.md](./01-swift-keywords.md) — guard/if 等关键字语义
 - 📄 [05-protocols-generics.md](./05-protocols-generics.md) — Sequence/Collection 协议体系
 - 📄 [01-foundation-and-stdlib.md](../library-guides/01-foundation-and-stdlib.md) — Foundation 类型补充
+
+
+<!-- full-library-explanation -->
+## Optional 表达哪一种缺失
+
+`Int("abc")` 返回 nil 可以表示解析失败；字典找不到键也返回 nil，但原因不同。不要一律用 `?? 0` 抹掉差别。若加载可能失败且错误需要展示，使用 throws 或枚举，而不是把所有失败都压成 nil。
+
+```swift
+let texts = ["1", "bad", "3"]
+let parsed = texts.map(Int.init)       // [Int?]，保留输入位置
+let valid = texts.compactMap(Int.init) // [Int]，丢弃失败项
+print(parsed.count, valid.count)       // 3 2
+```
+
+练习：为导入清单保留每个失败项的行号和原因。验收：不能用 compactMap 静默删除坏数据后宣布“全部导入成功”。另测字典值本身为 Optional 时的缺键与存储 nil，必要时用 updateValue 或显式枚举表达。
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

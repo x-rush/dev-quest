@@ -1,10 +1,23 @@
 # 标准库核心速查 - java.util / java.time / java.nio
 
+## 以输入输出和资源边界选标准库
+
+前置：字符串、集合、异常与 try-with-resources。java.lang 的常用类型通常自动可见，java.util、java.time、java.nio.file 等通过 import 使用；它们与 Spring、Jackson 等外部库不是同一层。
+
+读 API 时先判断是否产生资源、是否返回视图、是否创建独立值。例如 Files.readString 一次读完整文本，Files.lines 返回需要关闭的 Stream；Collections.unmodifiableList 是不可修改视图，原列表改变仍可能反映到视图，List.copyOf 则建立不可修改的元素引用快照，二者都不保证元素深度不可变。
+
+自测：从可变列表建立 unmodifiableList 后修改原列表，观察视图；再比较 copyOf。验收是能解释“不能通过此入口修改”“不会反映列表结构的后续改变”“元素自身不可变”三个不同承诺。不要只用一个“不可变”把它们合并。
+
+时间也要区分：Instant 表示时间线上的时刻，LocalDate 表示无时区的日期，ZonedDateTime 带时区规则。预约当地早上 9 点与记录请求发生时间需要的模型不同；先确定业务意义，再选格式化方法。
+
 > **文档简介**: 标准库最常用模块的条目式速查：String 现代方法、java.util 工具类、java.time 日期时间、java.nio 文件 IO 与 java.net.http 客户端
 >
 > **目标读者**: 需要按 API 快速检索、并了解"旧类 → 新 API"对照的开发者
 >
 > **前置知识**: 基本语法；集合细节见 [集合框架与泛型](../language-concepts/02-collections-generics.md)
+
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
 
 ## 📚 文档元数据
 
@@ -15,6 +28,8 @@
 | **难度** | ⭐⭐ |
 | **标签** | `#标准库` `#java.time` `#java.nio` `#字符串` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ## 🔤 String 与文本
 
@@ -140,14 +155,18 @@ bd.equals(new BigDecimal("1.0"));                  // ❌ false：equals 连 sca
 
 ## ✅ 最佳实践 / ❌ 陷阱清单
 
-- ✅ 日期时间全部 java.time；边界处与遗留 `Date` 显式互转
-- ✅ 文件流（lines/walk）全部 try-with-resources
-- ✅ `HttpClient` 全局单例复用
-- ❌ 不要用 `SimpleDateFormat`（非线程安全）——`DateTimeFormatter` 线程安全可静态共享
-- ❌ 不要用 `double`/`float` 做钱——`BigDecimal` + 字符串构造
+时间 API 按时间点、日期、时区和时长区分；不要在业务中把所有时间都压成一个本地字符串。Files.lines/walk 等持有资源的流要关闭，普通内存 Stream 则不是同一种资源责任。
+
+HTTP 客户端按相同配置复用，不同代理或身份配置可有独立实例。十进制金额明确精度与舍入，BigDecimal 从字符串构造可避免先经过二进制浮点；线程间共享格式化器则检查其线程安全契约。
 
 ## 🔗 相关文档
 
 - 📄 **[集合框架与泛型](../language-concepts/02-collections-generics.md)** - java.util 集合主战场
 - 📄 **[并发 API 速查](../language-concepts/04-concurrency-api.md)** - HttpClient 与虚拟线程配合
 - 📄 **[综合练习：图书管理系统](../../basics/08-first-project.md)** - Files/Path 实战
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

@@ -1,10 +1,13 @@
 # 启动优化 — 冷启动与首屏时间
 
-> **文档简介**: 拆解 RN 应用的启动链路：从进程创建到用户可交互的每个阶段、对应瓶颈与优化手段，目标把冷启动控制在 2 秒内并建立线上度量
+> **文档简介**: 拆解 RN 应用的启动链路：从进程创建到用户可交互的每个阶段、对应瓶颈与优化手段，建立明确的启动指标，再根据目标设备和业务制定预算
 >
 > **目标读者**: 已完成功能开发、需要把启动体验做到生产级水准的开发者
 >
 > **前置知识**: 已读 [新架构解析](../architecture/01-new-architecture.md)；了解 [EAS Build](../../deployment/01-eas-build.md)（release 包产出）
+
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
 
 ## 📚 文档元数据
 
@@ -15,6 +18,8 @@
 | **难度** | ⭐⭐⭐ |
 | **标签** | `#启动` `#Hermes` `#懒加载` `#TTI` `#性能` |
 | **更新日期** | 2026年9月 |
+
+</details>
 
 ## 🎯 学习目标
 
@@ -27,7 +32,7 @@
 
 ```
 [进程创建/原生初始化] ─▶ [JS 引擎启动] ─▶ [Bundle 加载执行] ─▶ [首屏渲染] ─▶ [可交互 TTI]
-      ~200-500ms            ~50ms          ★优化主战场         ★           ★
+      需实测               需实测        需实测         ★           ★
 ```
 
 **度量定义**：`TTI`（Time To Interactive）= 从点击图标到首屏可流畅响应用户输入。Android 快速测量：
@@ -61,7 +66,7 @@ import Home from '@/features/home';
 import Admin from '@/features/admin';      // 用户 99% 不进后台，却先付了钱
 import Charts from '@/features/charts';    // 图表库巨大
 
-// 正确姿势：expo-router 的页面本就按路由拆包；重依赖再显式懒加载
+// 可选策略：延迟重组件求值；不要假设所有原生生产构建自动按路由拆包
 import { lazy, Suspense } from 'react';
 const Charts = lazy(() => import('@/features/charts'));
 
@@ -114,14 +119,14 @@ useEffect(() => {
 | 提交前 | release 包真机手测 | dev 包数据不可信（JS 执行慢数倍） |
 | 线上 | Sentry Performance / Play Vitals | P50/P90 冷启动分布与版本对比 |
 
-**准出红线**：P90 冷启动 < 2s（中端机）；超出则立项，按时间线逐段归因——先看 Bundle 阶段（占比通常最大）。
+**练习预算示例**：可暂设目标设备的 P90 业务可用时间小于 2s，但它不是行业统一红线。先收集足够样本，再按耗时占比分配工作。
 
 ## ✅ 要点回顾
 
 - ✅ **Hermes + TurboModules 是地基红利**，确认开启是第 0 步
 - ✅ **首屏只付首屏的钱**：懒加载路由与重 SDK，启动路径零额外负担
 - ✅ **二次启动秒开靠缓存**，首启骨架屏撑感知
-- ❌ **不要在根布局同步 import 一切**，expo-router 的拆包红利会被一个 import 毁掉
+- ❌ **不要在根布局同步 import 一切**，顶层求值的昂贵依赖可能进入关键路径，需检查构建和执行结果
 - ❌ **不要用 dev 包做启动决策**，release 包 + 真机才有意义
 
 ## ❓ 常见问题
@@ -130,12 +135,23 @@ useEffect(() => {
 A: 分段打点：原生 onCreate → JS bundle 执行完 → 首帧 commit，各自埋点对表；白屏长多在 bundle 执行段（回到阶段二）。首帧类异常见 [故障排除](../../reference/quick-references/02-troubleshooting.md)。
 
 **Q2: `fallbackToCacheTimeout` 设大一点"等最新版"行吗？**
-A: 不行，等于每次启动加网络 RTT；标准做法是 0 + 后台下载下一启生效。
+A: 这是新鲜度与启动等待的权衡；较长等待可能拖慢弱网启动。一般先以可用缓存启动，再按产品需求检查更新，并验证离线兜底。
 
 **Q3: 鸿蒙端启动有专项差异吗？**
 A: RNOH 的启动链路多一段 ArkTS 容器初始化，版本对齐影响显著，见 [RNOH 字典](../../reference/language-concepts/05-harmonyos-rnoh-api.md)。
 
 ---
+
+<!-- full-library-explanation -->
+## 区分首次显示与真正可用
+
+首帧出现可能只是一张启动图。对待办应用，可把“列表和新增按钮可操作”作为可用点；对离线地图，可把“本地地图可拖动”作为可用点。指标定义必须写下来，否则减少启动图显示时间也可能只是把等待转移到白屏。
+
+冷启动、后台恢复、安装后首次启动分别测量。Android `am start -W` 的结果用于活动启动观察，不是业务 TTI；已有进程未停止时也不能声称测到了冷启动。不得在生产用户设备上为测量清空数据。
+
+练习：在同一测试机上各做五次冷启动与恢复，记录原生启动、JS 执行、首屏显示、业务可用四个点。先延后一个非必要 SDK，再重复。反馈：若首屏更快但首次点击支付卡顿，需要把成本转移也写入结论；若断网时永久停在 Splash，要先修失败路径。
+
+`React.lazy` 延迟组件加载/求值与生产原生包是否真正拆分成多个可下载文件是不同问题。应查看 Metro/Expo 对目标平台和构建方式的支持，并检查产物，不能套用 Web 路由拆包经验。
 
 ## 🔗 相关文档
 
@@ -145,3 +161,9 @@ A: RNOH 的启动链路多一段 ArkTS 容器初始化，版本对齐影响显�
 - 📄 [天气应用实战](../../projects/02-weather-app.md) — staleTime 缓存秒开示例
 - 🎓 [渲染性能](./01-rendering-performance.md) — 首屏渲染深水区
 - 🎓 [新架构解析](../architecture/01-new-architecture.md) — 启动优化的原理底座
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

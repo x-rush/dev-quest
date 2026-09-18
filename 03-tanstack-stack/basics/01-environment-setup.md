@@ -1,10 +1,26 @@
 # 环境搭建与项目初始化
 
+## 先理解，再动手
+
+QueryClient 保存查询缓存，Provider 让组件访问同一个实例。每次渲染都创建新实例，会让缓存身份变得不稳定。
+
+**本节自测**：在入口提供一个稳定 QueryClient，两个组件查询相同键，观察 Devtools。
+
+<details>
+<summary>预期结果与参考思路（先尝试再展开）</summary>
+
+两个组件应共享同一缓存条目；不要据此推断任何配置下都只发生一次网络请求。
+
+</details>
+
 > **文档简介**: 从零搭建集成 TanStack Query、Devtools 与 Vite 的 React + TypeScript 开发环境，为后续所有 TanStack 学习奠定工程基座
 >
 > **目标读者**: 已具备 React 基础、初次接触 TanStack 生态的前端开发者
 >
 > **前置知识**: React 组件与 Hooks 基础、包管理器（npm/pnpm）基本操作
+
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
 
 ## 📚 文档元数据
 
@@ -15,6 +31,8 @@
 | **难度** | ⭐ |
 | **标签** | `#环境搭建` `#Vite` `#pnpm` `#Devtools` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ## 🎯 学习目标
 
@@ -153,11 +171,9 @@ function Home() {
 
 ## ✅ 最佳实践
 
-- ✅ **统一包管理器**：在 `package.json` 中用 `packageManager` 字段锁定 pnpm 版本
-- ✅ **QueryClient 单例**：应用生命周期内只创建一次
-- ✅ **staleTime 从小值起步**：先设 30 秒感受缓存行为，再按业务调优
-- ❌ **避免** 手动编辑 `routeTree.gen.ts`，它是插件生成的产物
-- ❌ **避免** 在 `QueryClientProvider` 之外调用 `useQuery`
+同一工程的开发机与 CI 应使用约定的 Node 和包管理器版本，并实际配置安装流程读取该约定；只写一个版本字段不会自动改变所有人的环境。生成的路由树由插件重建，路由修改应落在源文件，否则下次生成会覆盖手工更改。
+
+浏览器中保持 QueryClient 实例稳定，避免重渲染时丢缓存；SSR 则要隔离不同请求，不能让全局客户端把用户数据混在一起。staleTime 表示数据多久仍被视为新鲜，实验时可以比较 0 与 30 秒下返回页面的请求次数，再按业务容忍的旧数据时间决定。[官方 SSR 说明](https://tanstack.com/query/latest/docs/framework/react/guides/ssr)给出了客户端作用域的区别。
 
 ## ❓ 常见问题
 
@@ -196,3 +212,9 @@ function Home() {
 ---
 
 **最后更新**: 2026年9月 | Dev Quest · 03-tanstack-stack
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../LEARNING_GUIDE.md) · [完整目录与版本](../README.md) · [通用术语](../../shared-resources/glossary.md)

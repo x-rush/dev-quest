@@ -1,5 +1,7 @@
 # Compose 测试 API 速查
 
+> **阅读准备**：基础单元测试、Composable 与语义树；设备测试还需要正确的测试 runner 和模拟器/设备。
+
 > Jetpack Compose UI 测试的字典式速查：测试规则、依赖坐标、语义树查找器、断言、交互与主线程时钟
 
 | 属性 | 内容 |
@@ -146,10 +148,10 @@ rule.waitUntil(timeoutMillis = 5_000) {
 ## 6. 陷阱
 
 - ❌ 文本做唯一标识但列表多行同文案 → ✅ 稳定节点一律 `testTag`；文本匹配留给用户可见行为断言
-- ❌ `contentDescription = null` 的装饰图标想按它查找 → ✅ null 即无语义节点；可交互图标必须给描述
+- ❌ `contentDescription = null` 的装饰图标想按它查找 → ✅ null 不提供该图标的文字描述，但不能据此推断整个节点一定没有其他语义；可交互图标必须给描述
 - ❌ 断言前 `Thread.sleep(2000)` 等加载 → ✅ `waitUntil` 条件等待；重组本身已自动同步
 - ❌ 动画没完就断言，或无限动画让测试超时 → ✅ `mainClock.autoAdvance = false` + 手动走帧
-- ❌ 测试直接改 ViewModel 内部状态 → ✅ 走 UI 交互（performClick 等），测真实链路
+- ❌ 交互测试直接改 ViewModel 内部状态会绕过事件链 → ✅ 行为测试走 UI；独立状态渲染测试可注入明确状态
 
 ---
 
@@ -159,3 +161,40 @@ rule.waitUntil(timeoutMillis = 5_000) {
 - 📄 **[Compose 状态 API 详解](../language-concepts/04-compose-state-api.md)** - 被测状态的数据来源
 - 📄 **[重组与稳定性速查](./04-recomposition.md)** - 理解自动同步的就是重组
 - 📖 **[Compose 测试官方文档](https://developer.android.com/develop/ui/compose/testing)** - 全量 API 参考
+
+
+<!-- full-library-explanation -->
+## 一个完整的行为断言
+
+将下例放入已配置测试依赖的 `src/androidTest/.../CounterTest.kt`。它在设备或模拟器中运行，本轮未在 Android 工具链执行。
+
+```kotlin
+import androidx.compose.material3.Button
+import androidx.compose.material3.Text
+import androidx.compose.runtime.*
+import androidx.compose.ui.test.*
+import androidx.compose.ui.test.junit4.createComposeRule
+import org.junit.Rule
+import org.junit.Test
+
+class CounterBehaviorTest {
+    @get:Rule val rule = createComposeRule()
+    @Test fun clickChangesVisibleCount() {
+        rule.setContent {
+            var count by remember { mutableIntStateOf(0) }
+            Button(onClick = { count++ }) { Text("计数：$count") }
+        }
+        rule.onNodeWithText("计数：0").performClick()
+        rule.onNodeWithText("计数：1").assertIsDisplayed()
+    }
+}
+```
+
+这个测试验证用户可见变化，不验证某个内部变量恰好等于 1。真实业务把计数器替换成被测组件即可。网络、数据库和其他调度器并不都受 Compose mainClock 控制；使用可控依赖和条件等待，不要指望推进动画时钟就完成网络请求。
+
+练习：把 onClick 改成空操作，测试应失败；再给屏幕增加两个同文案按钮，改用明确的层级或语义选择器。验收：测试不会因匹配错节点而“绿灯”，也不把 testTag 当作替代无障碍标签的产品信息。
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

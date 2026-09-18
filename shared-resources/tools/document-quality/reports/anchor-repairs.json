@@ -1,0 +1,3181 @@
+[
+  {
+    "source": "02-nextjs-frontend/README.md",
+    "line": 54,
+    "target": "#模块概览",
+    "new_target": "#️-模块概览"
+  },
+  {
+    "source": "02-nextjs-frontend/README.md",
+    "line": 55,
+    "target": "#学习路径",
+    "new_target": "#-学习路径"
+  },
+  {
+    "source": "02-nextjs-frontend/README.md",
+    "line": 56,
+    "target": "#技术栈",
+    "new_target": "#️-技术栈"
+  },
+  {
+    "source": "02-nextjs-frontend/README.md",
+    "line": 58,
+    "target": "#学习建议",
+    "new_target": "#-学习建议"
+  },
+  {
+    "source": "02-nextjs-frontend/README.md",
+    "line": 59,
+    "target": "#相关资源",
+    "new_target": "#-相关资源"
+  },
+  {
+    "source": "01-go-backend/frameworks/02-gin-framework-advanced.md",
+    "line": 50,
+    "target": "#gin中间件深度开发",
+    "new_target": "#-gin中间件深度开发"
+  },
+  {
+    "source": "01-go-backend/frameworks/02-gin-framework-advanced.md",
+    "line": 51,
+    "target": "#高级路由技术",
+    "new_target": "#️-高级路由技术"
+  },
+  {
+    "source": "01-go-backend/frameworks/02-gin-framework-advanced.md",
+    "line": 52,
+    "target": "#gin性能调优",
+    "new_target": "#-gin性能调优"
+  },
+  {
+    "source": "01-go-backend/frameworks/02-gin-framework-advanced.md",
+    "line": 53,
+    "target": "#gin源码解析",
+    "new_target": "#-gin源码解析"
+  },
+  {
+    "source": "01-go-backend/frameworks/02-gin-framework-advanced.md",
+    "line": 54,
+    "target": "#gin高级应用案例",
+    "new_target": "#-gin高级应用案例"
+  },
+  {
+    "source": "01-go-backend/frameworks/02-gin-framework-advanced.md",
+    "line": 55,
+    "target": "#企业级最佳实践",
+    "new_target": "#-企业级最佳实践"
+  },
+  {
+    "source": "01-go-backend/frameworks/02-gin-framework-advanced.md",
+    "line": 56,
+    "target": "#常见问题与解决方案",
+    "new_target": "#-常见问题与解决方案"
+  },
+  {
+    "source": "01-go-backend/frameworks/03-gorm-orm-complete.md",
+    "line": 48,
+    "target": "#gorm概述",
+    "new_target": "#-gorm概述"
+  },
+  {
+    "source": "01-go-backend/frameworks/03-gorm-orm-complete.md",
+    "line": 49,
+    "target": "#快速开始",
+    "new_target": "#-快速开始"
+  },
+  {
+    "source": "01-go-backend/frameworks/03-gorm-orm-complete.md",
+    "line": 50,
+    "target": "#模型定义",
+    "new_target": "#-模型定义"
+  },
+  {
+    "source": "01-go-backend/frameworks/03-gorm-orm-complete.md",
+    "line": 51,
+    "target": "#数据库连接",
+    "new_target": "#-数据库连接"
+  },
+  {
+    "source": "01-go-backend/frameworks/03-gorm-orm-complete.md",
+    "line": 52,
+    "target": "#基础操作",
+    "new_target": "#-基础操作"
+  },
+  {
+    "source": "01-go-backend/frameworks/03-gorm-orm-complete.md",
+    "line": 53,
+    "target": "#查询构建器",
+    "new_target": "#-查询构建器"
+  },
+  {
+    "source": "01-go-backend/frameworks/03-gorm-orm-complete.md",
+    "line": 54,
+    "target": "#关联关系",
+    "new_target": "#-关联关系"
+  },
+  {
+    "source": "01-go-backend/frameworks/03-gorm-orm-complete.md",
+    "line": 55,
+    "target": "#数据库迁移",
+    "new_target": "#-数据库迁移"
+  },
+  {
+    "source": "01-go-backend/frameworks/03-gorm-orm-complete.md",
+    "line": 56,
+    "target": "#事务处理",
+    "new_target": "#-事务处理"
+  },
+  {
+    "source": "01-go-backend/frameworks/03-gorm-orm-complete.md",
+    "line": 57,
+    "target": "#性能优化",
+    "new_target": "#-性能优化"
+  },
+  {
+    "source": "01-go-backend/frameworks/03-gorm-orm-complete.md",
+    "line": 58,
+    "target": "#高级特性",
+    "new_target": "#-高级特性"
+  },
+  {
+    "source": "01-go-backend/frameworks/03-gorm-orm-complete.md",
+    "line": 59,
+    "target": "#最佳实践",
+    "new_target": "#-最佳实践"
+  },
+  {
+    "source": "01-go-backend/frameworks/03-gorm-orm-complete.md",
+    "line": 60,
+    "target": "#常见问题",
+    "new_target": "#-常见问题"
+  },
+  {
+    "source": "01-go-backend/frameworks/03-gorm-orm-complete.md",
+    "line": 3343,
+    "target": "#模型定义",
+    "new_target": "#-模型定义"
+  },
+  {
+    "source": "01-go-backend/frameworks/03-gorm-orm-complete.md",
+    "line": 3344,
+    "target": "#查询构建器",
+    "new_target": "#-查询构建器"
+  },
+  {
+    "source": "01-go-backend/frameworks/03-gorm-orm-complete.md",
+    "line": 3345,
+    "target": "#最佳实践",
+    "new_target": "#-最佳实践"
+  },
+  {
+    "source": "01-go-backend/reference/language-concepts/03-go-programming-essentials.md",
+    "line": 40,
+    "target": "#go语言设计哲学",
+    "new_target": "#-go语言设计哲学"
+  },
+  {
+    "source": "01-go-backend/reference/language-concepts/03-go-programming-essentials.md",
+    "line": 41,
+    "target": "#代码组织与规范",
+    "new_target": "#-代码组织与规范"
+  },
+  {
+    "source": "01-go-backend/reference/language-concepts/03-go-programming-essentials.md",
+    "line": 42,
+    "target": "#接口设计与抽象",
+    "new_target": "#-接口设计与抽象"
+  },
+  {
+    "source": "01-go-backend/reference/language-concepts/03-go-programming-essentials.md",
+    "line": 43,
+    "target": "#错误处理最佳实践",
+    "new_target": "#️-错误处理最佳实践"
+  },
+  {
+    "source": "01-go-backend/reference/language-concepts/03-go-programming-essentials.md",
+    "line": 44,
+    "target": "#并发编程模式",
+    "new_target": "#-并发编程模式"
+  },
+  {
+    "source": "01-go-backend/reference/language-concepts/03-go-programming-essentials.md",
+    "line": 45,
+    "target": "#性能优化技巧",
+    "new_target": "#-性能优化技巧"
+  },
+  {
+    "source": "01-go-backend/reference/language-concepts/03-go-programming-essentials.md",
+    "line": 46,
+    "target": "#内存管理策略",
+    "new_target": "#-内存管理策略"
+  },
+  {
+    "source": "01-go-backend/reference/language-concepts/03-go-programming-essentials.md",
+    "line": 47,
+    "target": "#测试与质量保证",
+    "new_target": "#-测试与质量保证"
+  },
+  {
+    "source": "01-go-backend/reference/language-concepts/03-go-programming-essentials.md",
+    "line": 48,
+    "target": "#包管理与依赖",
+    "new_target": "#-包管理与依赖"
+  },
+  {
+    "source": "01-go-backend/reference/language-concepts/03-go-programming-essentials.md",
+    "line": 49,
+    "target": "#工具链与工程化",
+    "new_target": "#️-工具链与工程化"
+  },
+  {
+    "source": "01-go-backend/reference/language-concepts/03-go-programming-essentials.md",
+    "line": 3547,
+    "target": "#并发编程模式",
+    "new_target": "#-并发编程模式"
+  },
+  {
+    "source": "01-go-backend/reference/language-concepts/03-go-programming-essentials.md",
+    "line": 3548,
+    "target": "#错误处理最佳实践",
+    "new_target": "#️-错误处理最佳实践"
+  },
+  {
+    "source": "01-go-backend/reference/language-concepts/03-go-programming-essentials.md",
+    "line": 3549,
+    "target": "#性能优化技巧",
+    "new_target": "#-性能优化技巧"
+  },
+  {
+    "source": "02-nextjs-frontend/basics/01-environment-setup.md",
+    "line": 793,
+    "target": "./02-first-nextjs-app.md#项目创建流程",
+    "new_target": "./02-first-nextjs-app.md#️-项目创建流程"
+  },
+  {
+    "source": "02-nextjs-frontend/basics/01-environment-setup.md",
+    "line": 793,
+    "target": "./03-typescript-integration.md#typescript项目配置",
+    "new_target": "./03-typescript-integration.md#️-typescript项目配置"
+  },
+  {
+    "source": "02-nextjs-frontend/basics/02-first-nextjs-app.md",
+    "line": 683,
+    "target": "./03-typescript-integration.md#typescript项目配置",
+    "new_target": "./03-typescript-integration.md#️-typescript项目配置"
+  },
+  {
+    "source": "02-nextjs-frontend/basics/02-first-nextjs-app.md",
+    "line": 683,
+    "target": "./04-layouts-routing.md#app-router基础架构",
+    "new_target": "./04-layouts-routing.md#️-app-router基础架构"
+  },
+  {
+    "source": "02-nextjs-frontend/basics/03-typescript-integration.md",
+    "line": 895,
+    "target": "./04-layouts-routing.md#动态路由",
+    "new_target": "./04-layouts-routing.md#-动态路由"
+  },
+  {
+    "source": "02-nextjs-frontend/basics/04-layouts-routing.md",
+    "line": 1060,
+    "target": "./03-typescript-integration.md#页面和路由的类型安全",
+    "new_target": "./03-typescript-integration.md#️-页面和路由的类型安全"
+  },
+  {
+    "source": "02-nextjs-frontend/basics/04-layouts-routing.md",
+    "line": 1060,
+    "target": "./05-styling-with-tailwind.md#响应式设计系统",
+    "new_target": "./05-styling-with-tailwind.md#-响应式设计系统"
+  },
+  {
+    "source": "02-nextjs-frontend/basics/05-styling-with-tailwind.md",
+    "line": 1124,
+    "target": "./06-data-fetching-basics.md#客户端数据获取",
+    "new_target": "./06-data-fetching-basics.md#基础客户端数据获取"
+  },
+  {
+    "source": "02-nextjs-frontend/basics/06-data-fetching-basics.md",
+    "line": 1102,
+    "target": "./07-state-management.md#服务器状态管理",
+    "new_target": "./07-state-management.md#-服务器状态管理"
+  },
+  {
+    "source": "02-nextjs-frontend/reference/development-tools/01-testing-tools.md",
+    "line": 1202,
+    "target": "#vitest-单元测试配置",
+    "new_target": "#-vitest-单元测试配置"
+  },
+  {
+    "source": "02-nextjs-frontend/reference/development-tools/01-testing-tools.md",
+    "line": 1203,
+    "target": "#react-testing-library-组件测试",
+    "new_target": "#-react-testing-library-组件测试"
+  },
+  {
+    "source": "02-nextjs-frontend/reference/development-tools/01-testing-tools.md",
+    "line": 1204,
+    "target": "#playwright-e2e测试",
+    "new_target": "#-playwright-e2e-测试"
+  },
+  {
+    "source": "02-nextjs-frontend/reference/development-tools/01-testing-tools.md",
+    "line": 1205,
+    "target": "#msw-api模拟",
+    "new_target": "#-msw-api-模拟"
+  },
+  {
+    "source": "02-nextjs-frontend/reference/development-tools/02-styling-tools.md",
+    "line": 1351,
+    "target": "#tailwind-css-4-企业级配置",
+    "new_target": "#-tailwind-css-4-企业级配置"
+  },
+  {
+    "source": "02-nextjs-frontend/reference/development-tools/02-styling-tools.md",
+    "line": 1353,
+    "target": "#linaria-零运行时-css-in-js",
+    "new_target": "#-linaria-零运行时-css-in-js"
+  },
+  {
+    "source": "02-nextjs-frontend/reference/development-tools/02-styling-tools.md",
+    "line": 1354,
+    "target": "#css-modules-最佳实践",
+    "new_target": "#-css-modules-最佳实践"
+  },
+  {
+    "source": "02-nextjs-frontend/reference/development-tools/02-styling-tools.md",
+    "line": 1355,
+    "target": "#响应式设计系统",
+    "new_target": "#-响应式设计系统"
+  },
+  {
+    "source": "02-nextjs-frontend/reference/development-tools/03-package-managers.md",
+    "line": 902,
+    "target": "#npm-使用指南",
+    "new_target": "#-npm-使用指南"
+  },
+  {
+    "source": "02-nextjs-frontend/reference/development-tools/03-package-managers.md",
+    "line": 903,
+    "target": "#yarn-使用指南",
+    "new_target": "#-yarn-使用指南"
+  },
+  {
+    "source": "02-nextjs-frontend/reference/development-tools/03-package-managers.md",
+    "line": 904,
+    "target": "#pnpm-使用指南",
+    "new_target": "#-pnpm-使用指南"
+  },
+  {
+    "source": "02-nextjs-frontend/reference/development-tools/03-package-managers.md",
+    "line": 905,
+    "target": "#monorepo-管理",
+    "new_target": "#-monorepo-管理"
+  },
+  {
+    "source": "02-nextjs-frontend/reference/development-tools/03-package-managers.md",
+    "line": 906,
+    "target": "#工具集成",
+    "new_target": "#-工具集成"
+  },
+  {
+    "source": "02-nextjs-frontend/reference/development-tools/04-debugging-tools.md",
+    "line": 1283,
+    "target": "#webpack-配置",
+    "new_target": "#-webpack-配置"
+  },
+  {
+    "source": "02-nextjs-frontend/reference/development-tools/04-debugging-tools.md",
+    "line": 1284,
+    "target": "#rollup-配置",
+    "new_target": "#-rollup-配置"
+  },
+  {
+    "source": "02-nextjs-frontend/reference/development-tools/04-debugging-tools.md",
+    "line": 1285,
+    "target": "#esbuild-配置",
+    "new_target": "#-esbuild-配置"
+  },
+  {
+    "source": "02-nextjs-frontend/reference/development-tools/04-debugging-tools.md",
+    "line": 1287,
+    "target": "#构建工具对比",
+    "new_target": "#-构建工具对比"
+  },
+  {
+    "source": "02-nextjs-frontend/reference/framework-patterns/05-state-management-patterns.md",
+    "line": 1957,
+    "target": "./03-client-components-patterns.md#状态管理",
+    "new_target": "./03-client-components-patterns.md#21-本地状态管理"
+  },
+  {
+    "source": "02-nextjs-frontend/reference/framework-patterns/06-form-validation-patterns.md",
+    "line": 1061,
+    "target": "./03-client-components-patterns.md#事件处理模式",
+    "new_target": "./03-client-components-patterns.md#3-事件处理模式"
+  },
+  {
+    "source": "02-nextjs-frontend/reference/performance-optimization/02-bundle-optimization.md",
+    "line": 1380,
+    "target": "#nextjs-16-打包架构概览",
+    "new_target": "#️-nextjs-16-打包架构概览"
+  },
+  {
+    "source": "02-nextjs-frontend/reference/performance-optimization/02-bundle-optimization.md",
+    "line": 1381,
+    "target": "#代码分割策略",
+    "new_target": "#-代码分割策略"
+  },
+  {
+    "source": "02-nextjs-frontend/reference/performance-optimization/02-bundle-optimization.md",
+    "line": 1382,
+    "target": "#tree-shaking-优化",
+    "new_target": "#-tree-shaking-优化"
+  },
+  {
+    "source": "02-nextjs-frontend/reference/performance-optimization/02-bundle-optimization.md",
+    "line": 1384,
+    "target": "#高级优化技术",
+    "new_target": "#-高级优化技术"
+  },
+  {
+    "source": "05-kotlin-compose/basics/01-environment-setup.md",
+    "line": 47,
+    "target": "#工具链总览",
+    "new_target": "#-工具链总览"
+  },
+  {
+    "source": "05-kotlin-compose/basics/01-environment-setup.md",
+    "line": 48,
+    "target": "#安装-android-studio",
+    "new_target": "#️-安装-android-studio"
+  },
+  {
+    "source": "05-kotlin-compose/basics/01-environment-setup.md",
+    "line": 49,
+    "target": "#配置-android-sdk",
+    "new_target": "#-配置-android-sdk"
+  },
+  {
+    "source": "05-kotlin-compose/basics/01-environment-setup.md",
+    "line": 50,
+    "target": "#创建模拟器-avd",
+    "new_target": "#-创建模拟器-avd"
+  },
+  {
+    "source": "05-kotlin-compose/basics/01-environment-setup.md",
+    "line": 51,
+    "target": "#验证开发环境",
+    "new_target": "#-验证开发环境"
+  },
+  {
+    "source": "05-kotlin-compose/basics/01-environment-setup.md",
+    "line": 52,
+    "target": "#常见问题",
+    "new_target": "#-常见问题"
+  },
+  {
+    "source": "05-kotlin-compose/basics/01-environment-setup.md",
+    "line": 53,
+    "target": "#练习与实践",
+    "new_target": "#-练习与实践"
+  },
+  {
+    "source": "05-kotlin-compose/basics/02-first-compose-app.md",
+    "line": 47,
+    "target": "#创建-compose-项目",
+    "new_target": "#-创建-compose-项目"
+  },
+  {
+    "source": "05-kotlin-compose/basics/02-first-compose-app.md",
+    "line": 48,
+    "target": "#项目结构解析",
+    "new_target": "#-项目结构解析"
+  },
+  {
+    "source": "05-kotlin-compose/basics/02-first-compose-app.md",
+    "line": 49,
+    "target": "#编写第一个-composable",
+    "new_target": "#️-编写第一个-composable"
+  },
+  {
+    "source": "05-kotlin-compose/basics/02-first-compose-app.md",
+    "line": 50,
+    "target": "#用-preview-实时预览",
+    "new_target": "#-用-preview-实时预览"
+  },
+  {
+    "source": "05-kotlin-compose/basics/02-first-compose-app.md",
+    "line": 51,
+    "target": "#compose-与传统-view-的关系",
+    "new_target": "#-compose-与传统-view-的关系"
+  },
+  {
+    "source": "05-kotlin-compose/basics/02-first-compose-app.md",
+    "line": 52,
+    "target": "#常见问题",
+    "new_target": "#-常见问题"
+  },
+  {
+    "source": "05-kotlin-compose/basics/02-first-compose-app.md",
+    "line": 53,
+    "target": "#练习与实践",
+    "new_target": "#-练习与实践"
+  },
+  {
+    "source": "05-kotlin-compose/basics/03-kotlin-syntax-essentials.md",
+    "line": 47,
+    "target": "#变量与函数",
+    "new_target": "#-变量与函数"
+  },
+  {
+    "source": "05-kotlin-compose/basics/03-kotlin-syntax-essentials.md",
+    "line": 48,
+    "target": "#空安全",
+    "new_target": "#️-空安全"
+  },
+  {
+    "source": "05-kotlin-compose/basics/03-kotlin-syntax-essentials.md",
+    "line": 49,
+    "target": "#data-class-与状态建模",
+    "new_target": "#-data-class-与状态建模"
+  },
+  {
+    "source": "05-kotlin-compose/basics/03-kotlin-syntax-essentials.md",
+    "line": 50,
+    "target": "#sealed-interface-与枚举状态",
+    "new_target": "#-sealed-interface-与枚举状态"
+  },
+  {
+    "source": "05-kotlin-compose/basics/03-kotlin-syntax-essentials.md",
+    "line": 51,
+    "target": "#扩展函数",
+    "new_target": "#-扩展函数"
+  },
+  {
+    "source": "05-kotlin-compose/basics/03-kotlin-syntax-essentials.md",
+    "line": 52,
+    "target": "#lambda-与尾随-lambda",
+    "new_target": "#-lambda-与尾随-lambda"
+  },
+  {
+    "source": "05-kotlin-compose/basics/03-kotlin-syntax-essentials.md",
+    "line": 53,
+    "target": "#作用域函数速览",
+    "new_target": "#-作用域函数速览"
+  },
+  {
+    "source": "05-kotlin-compose/basics/03-kotlin-syntax-essentials.md",
+    "line": 54,
+    "target": "#练习与实践",
+    "new_target": "#-练习与实践"
+  },
+  {
+    "source": "05-kotlin-compose/basics/04-composables-state.md",
+    "line": 47,
+    "target": "#什么是-composable",
+    "new_target": "#-什么是-composable"
+  },
+  {
+    "source": "05-kotlin-compose/basics/04-composables-state.md",
+    "line": 48,
+    "target": "#第一个可交互组件计数器",
+    "new_target": "#-第一个可交互组件计数器"
+  },
+  {
+    "source": "05-kotlin-compose/basics/04-composables-state.md",
+    "line": 49,
+    "target": "#重组-recomposition",
+    "new_target": "#-重组-recomposition"
+  },
+  {
+    "source": "05-kotlin-compose/basics/04-composables-state.md",
+    "line": 50,
+    "target": "#remember-与状态持久性",
+    "new_target": "#-remember-与状态持久性"
+  },
+  {
+    "source": "05-kotlin-compose/basics/04-composables-state.md",
+    "line": 51,
+    "target": "#状态提升",
+    "new_target": "#️-状态提升"
+  },
+  {
+    "source": "05-kotlin-compose/basics/04-composables-state.md",
+    "line": 52,
+    "target": "#常见误区",
+    "new_target": "#️-常见误区"
+  },
+  {
+    "source": "05-kotlin-compose/basics/04-composables-state.md",
+    "line": 53,
+    "target": "#练习与实践",
+    "new_target": "#-练习与实践"
+  },
+  {
+    "source": "05-kotlin-compose/basics/05-layouts.md",
+    "line": 47,
+    "target": "#三大基础布局",
+    "new_target": "#-三大基础布局"
+  },
+  {
+    "source": "05-kotlin-compose/basics/05-layouts.md",
+    "line": 48,
+    "target": "#主轴与交叉轴",
+    "new_target": "#️-主轴与交叉轴"
+  },
+  {
+    "source": "05-kotlin-compose/basics/05-layouts.md",
+    "line": 49,
+    "target": "#modifier-修饰符",
+    "new_target": "#-modifier-修饰符"
+  },
+  {
+    "source": "05-kotlin-compose/basics/05-layouts.md",
+    "line": 50,
+    "target": "#weight-权重分配",
+    "new_target": "#️-weight-权重分配"
+  },
+  {
+    "source": "05-kotlin-compose/basics/05-layouts.md",
+    "line": 51,
+    "target": "#lazycolumn-长列表",
+    "new_target": "#-lazycolumn-长列表"
+  },
+  {
+    "source": "05-kotlin-compose/basics/05-layouts.md",
+    "line": 52,
+    "target": "#布局选型速查",
+    "new_target": "#️-布局选型速查"
+  },
+  {
+    "source": "05-kotlin-compose/basics/05-layouts.md",
+    "line": 53,
+    "target": "#练习与实践",
+    "new_target": "#-练习与实践"
+  },
+  {
+    "source": "05-kotlin-compose/basics/06-navigation.md",
+    "line": 47,
+    "target": "#添加依赖",
+    "new_target": "#-添加依赖"
+  },
+  {
+    "source": "05-kotlin-compose/basics/06-navigation.md",
+    "line": 48,
+    "target": "#核心三件套",
+    "new_target": "#-核心三件套"
+  },
+  {
+    "source": "05-kotlin-compose/basics/06-navigation.md",
+    "line": 49,
+    "target": "#路由传参",
+    "new_target": "#-路由传参"
+  },
+  {
+    "source": "05-kotlin-compose/basics/06-navigation.md",
+    "line": 50,
+    "target": "#返回栈控制",
+    "new_target": "#️-返回栈控制"
+  },
+  {
+    "source": "05-kotlin-compose/basics/06-navigation.md",
+    "line": 51,
+    "target": "#底部导航",
+    "new_target": "#-底部导航"
+  },
+  {
+    "source": "05-kotlin-compose/basics/06-navigation.md",
+    "line": 52,
+    "target": "#嵌套导航图",
+    "new_target": "#️-嵌套导航图"
+  },
+  {
+    "source": "05-kotlin-compose/basics/06-navigation.md",
+    "line": 53,
+    "target": "#练习与实践",
+    "new_target": "#-练习与实践"
+  },
+  {
+    "source": "05-kotlin-compose/basics/07-coroutines-flow-basics.md",
+    "line": 47,
+    "target": "#为什么需要协程",
+    "new_target": "#-为什么需要协程"
+  },
+  {
+    "source": "05-kotlin-compose/basics/07-coroutines-flow-basics.md",
+    "line": 48,
+    "target": "#协程基础launchasync-与-suspend",
+    "new_target": "#-协程基础launchasync-与-suspend"
+  },
+  {
+    "source": "05-kotlin-compose/basics/07-coroutines-flow-basics.md",
+    "line": 49,
+    "target": "#调度器与线程切换",
+    "new_target": "#-调度器与线程切换"
+  },
+  {
+    "source": "05-kotlin-compose/basics/07-coroutines-flow-basics.md",
+    "line": 50,
+    "target": "#结构化并发与-viewmodelscope",
+    "new_target": "#-结构化并发与-viewmodelscope"
+  },
+  {
+    "source": "05-kotlin-compose/basics/07-coroutines-flow-basics.md",
+    "line": 51,
+    "target": "#flow异步数据流",
+    "new_target": "#-flow异步数据流"
+  },
+  {
+    "source": "05-kotlin-compose/basics/07-coroutines-flow-basics.md",
+    "line": 52,
+    "target": "#stateflow-与-ui-状态",
+    "new_target": "#-stateflow-与-ui-状态"
+  },
+  {
+    "source": "05-kotlin-compose/basics/07-coroutines-flow-basics.md",
+    "line": 53,
+    "target": "#在-compose-中收集",
+    "new_target": "#️-在-compose-中收集"
+  },
+  {
+    "source": "05-kotlin-compose/basics/07-coroutines-flow-basics.md",
+    "line": 54,
+    "target": "#练习与实践",
+    "new_target": "#-练习与实践"
+  },
+  {
+    "source": "05-kotlin-compose/basics/08-first-project.md",
+    "line": 46,
+    "target": "#项目目标",
+    "new_target": "#-项目目标"
+  },
+  {
+    "source": "05-kotlin-compose/basics/08-first-project.md",
+    "line": 47,
+    "target": "#架构总览",
+    "new_target": "#️-架构总览"
+  },
+  {
+    "source": "05-kotlin-compose/basics/08-first-project.md",
+    "line": 48,
+    "target": "#第一步数据层",
+    "new_target": "#️-第一步数据层"
+  },
+  {
+    "source": "05-kotlin-compose/basics/08-first-project.md",
+    "line": 49,
+    "target": "#第二步repository",
+    "new_target": "#-第二步repository"
+  },
+  {
+    "source": "05-kotlin-compose/basics/08-first-project.md",
+    "line": 50,
+    "target": "#第三步viewmodel",
+    "new_target": "#-第三步viewmodel"
+  },
+  {
+    "source": "05-kotlin-compose/basics/08-first-project.md",
+    "line": 51,
+    "target": "#第四步compose-界面",
+    "new_target": "#️-第四步compose-界面"
+  },
+  {
+    "source": "05-kotlin-compose/basics/08-first-project.md",
+    "line": 52,
+    "target": "#运行验证",
+    "new_target": "#-运行验证"
+  },
+  {
+    "source": "05-kotlin-compose/basics/08-first-project.md",
+    "line": 53,
+    "target": "#进阶挑战",
+    "new_target": "#-进阶挑战"
+  },
+  {
+    "source": "07-php-mastery/reference/language-concepts/08-reflection-attributes.md",
+    "line": 106,
+    "target": "#条目-4类型反射-reflectiontype",
+    "new_target": "#条目-4类型反射reflectiontype"
+  },
+  {
+    "source": "07-php-mastery/reference/language-concepts/09-strings-regex.md",
+    "line": 52,
+    "target": "#条目-2现代字符串判断函数8-0",
+    "new_target": "#条目-2现代字符串判断函数80"
+  },
+  {
+    "source": "11-rust-cross-platform/advanced-topics/01-memory-layout-performance.md",
+    "line": 37,
+    "target": "#核心概念",
+    "new_target": "#-核心概念"
+  },
+  {
+    "source": "11-rust-cross-platform/advanced-topics/01-memory-layout-performance.md",
+    "line": 38,
+    "target": "#实践指南",
+    "new_target": "#️-实践指南"
+  },
+  {
+    "source": "11-rust-cross-platform/advanced-topics/01-memory-layout-performance.md",
+    "line": 39,
+    "target": "#代码示例",
+    "new_target": "#-代码示例"
+  },
+  {
+    "source": "11-rust-cross-platform/advanced-topics/01-memory-layout-performance.md",
+    "line": 40,
+    "target": "#最佳实践",
+    "new_target": "#-最佳实践"
+  },
+  {
+    "source": "11-rust-cross-platform/advanced-topics/01-memory-layout-performance.md",
+    "line": 41,
+    "target": "#常见问题",
+    "new_target": "#-常见问题"
+  },
+  {
+    "source": "11-rust-cross-platform/advanced-topics/01-memory-layout-performance.md",
+    "line": 42,
+    "target": "#相关资源",
+    "new_target": "#-相关资源"
+  },
+  {
+    "source": "11-rust-cross-platform/advanced-topics/02-ffi-bindgen.md",
+    "line": 37,
+    "target": "#核心概念",
+    "new_target": "#-核心概念"
+  },
+  {
+    "source": "11-rust-cross-platform/advanced-topics/02-ffi-bindgen.md",
+    "line": 38,
+    "target": "#实践指南",
+    "new_target": "#️-实践指南"
+  },
+  {
+    "source": "11-rust-cross-platform/advanced-topics/02-ffi-bindgen.md",
+    "line": 39,
+    "target": "#代码示例",
+    "new_target": "#-代码示例"
+  },
+  {
+    "source": "11-rust-cross-platform/advanced-topics/02-ffi-bindgen.md",
+    "line": 40,
+    "target": "#最佳实践",
+    "new_target": "#-最佳实践"
+  },
+  {
+    "source": "11-rust-cross-platform/advanced-topics/02-ffi-bindgen.md",
+    "line": 41,
+    "target": "#常见问题",
+    "new_target": "#-常见问题"
+  },
+  {
+    "source": "11-rust-cross-platform/advanced-topics/02-ffi-bindgen.md",
+    "line": 42,
+    "target": "#相关资源",
+    "new_target": "#-相关资源"
+  },
+  {
+    "source": "11-rust-cross-platform/advanced-topics/03-wasm32-target.md",
+    "line": 37,
+    "target": "#核心概念",
+    "new_target": "#-核心概念"
+  },
+  {
+    "source": "11-rust-cross-platform/advanced-topics/03-wasm32-target.md",
+    "line": 38,
+    "target": "#实践指南",
+    "new_target": "#️-实践指南"
+  },
+  {
+    "source": "11-rust-cross-platform/advanced-topics/03-wasm32-target.md",
+    "line": 39,
+    "target": "#代码示例",
+    "new_target": "#-代码示例"
+  },
+  {
+    "source": "11-rust-cross-platform/advanced-topics/03-wasm32-target.md",
+    "line": 40,
+    "target": "#最佳实践",
+    "new_target": "#-最佳实践"
+  },
+  {
+    "source": "11-rust-cross-platform/advanced-topics/03-wasm32-target.md",
+    "line": 41,
+    "target": "#常见问题",
+    "new_target": "#-常见问题"
+  },
+  {
+    "source": "11-rust-cross-platform/advanced-topics/03-wasm32-target.md",
+    "line": 42,
+    "target": "#相关资源",
+    "new_target": "#-相关资源"
+  },
+  {
+    "source": "11-rust-cross-platform/advanced-topics/04-security-practices.md",
+    "line": 37,
+    "target": "#核心概念",
+    "new_target": "#-核心概念"
+  },
+  {
+    "source": "11-rust-cross-platform/advanced-topics/04-security-practices.md",
+    "line": 38,
+    "target": "#实践指南",
+    "new_target": "#️-实践指南"
+  },
+  {
+    "source": "11-rust-cross-platform/advanced-topics/04-security-practices.md",
+    "line": 39,
+    "target": "#代码示例",
+    "new_target": "#-代码示例"
+  },
+  {
+    "source": "11-rust-cross-platform/advanced-topics/04-security-practices.md",
+    "line": 40,
+    "target": "#最佳实践",
+    "new_target": "#-最佳实践"
+  },
+  {
+    "source": "11-rust-cross-platform/advanced-topics/04-security-practices.md",
+    "line": 41,
+    "target": "#常见问题",
+    "new_target": "#-常见问题"
+  },
+  {
+    "source": "11-rust-cross-platform/advanced-topics/04-security-practices.md",
+    "line": 42,
+    "target": "#相关资源",
+    "new_target": "#-相关资源"
+  },
+  {
+    "source": "11-rust-cross-platform/basics/01-environment-setup.md",
+    "line": 46,
+    "target": "#核心概念",
+    "new_target": "#-核心概念"
+  },
+  {
+    "source": "11-rust-cross-platform/basics/01-environment-setup.md",
+    "line": 47,
+    "target": "#实践指南",
+    "new_target": "#️-实践指南"
+  },
+  {
+    "source": "11-rust-cross-platform/basics/01-environment-setup.md",
+    "line": 48,
+    "target": "#代码示例",
+    "new_target": "#-代码示例"
+  },
+  {
+    "source": "11-rust-cross-platform/basics/01-environment-setup.md",
+    "line": 49,
+    "target": "#最佳实践",
+    "new_target": "#-最佳实践"
+  },
+  {
+    "source": "11-rust-cross-platform/basics/01-environment-setup.md",
+    "line": 50,
+    "target": "#常见问题",
+    "new_target": "#-常见问题"
+  },
+  {
+    "source": "11-rust-cross-platform/basics/01-environment-setup.md",
+    "line": 51,
+    "target": "#交叉引用",
+    "new_target": "#-交叉引用"
+  },
+  {
+    "source": "11-rust-cross-platform/basics/01-environment-setup.md",
+    "line": 52,
+    "target": "#总结",
+    "new_target": "#-总结"
+  },
+  {
+    "source": "11-rust-cross-platform/basics/02-ownership-borrowing.md",
+    "line": 46,
+    "target": "#核心概念",
+    "new_target": "#-核心概念"
+  },
+  {
+    "source": "11-rust-cross-platform/basics/02-ownership-borrowing.md",
+    "line": 47,
+    "target": "#实践指南",
+    "new_target": "#️-实践指南"
+  },
+  {
+    "source": "11-rust-cross-platform/basics/02-ownership-borrowing.md",
+    "line": 48,
+    "target": "#代码示例",
+    "new_target": "#-代码示例"
+  },
+  {
+    "source": "11-rust-cross-platform/basics/02-ownership-borrowing.md",
+    "line": 49,
+    "target": "#最佳实践",
+    "new_target": "#-最佳实践"
+  },
+  {
+    "source": "11-rust-cross-platform/basics/02-ownership-borrowing.md",
+    "line": 50,
+    "target": "#常见问题",
+    "new_target": "#-常见问题"
+  },
+  {
+    "source": "11-rust-cross-platform/basics/02-ownership-borrowing.md",
+    "line": 51,
+    "target": "#交叉引用",
+    "new_target": "#-交叉引用"
+  },
+  {
+    "source": "11-rust-cross-platform/basics/02-ownership-borrowing.md",
+    "line": 52,
+    "target": "#总结",
+    "new_target": "#-总结"
+  },
+  {
+    "source": "11-rust-cross-platform/basics/03-structs-enums-patterns.md",
+    "line": 46,
+    "target": "#核心概念",
+    "new_target": "#-核心概念"
+  },
+  {
+    "source": "11-rust-cross-platform/basics/03-structs-enums-patterns.md",
+    "line": 47,
+    "target": "#实践指南",
+    "new_target": "#️-实践指南"
+  },
+  {
+    "source": "11-rust-cross-platform/basics/03-structs-enums-patterns.md",
+    "line": 48,
+    "target": "#代码示例",
+    "new_target": "#-代码示例"
+  },
+  {
+    "source": "11-rust-cross-platform/basics/03-structs-enums-patterns.md",
+    "line": 49,
+    "target": "#最佳实践",
+    "new_target": "#-最佳实践"
+  },
+  {
+    "source": "11-rust-cross-platform/basics/03-structs-enums-patterns.md",
+    "line": 50,
+    "target": "#常见问题",
+    "new_target": "#-常见问题"
+  },
+  {
+    "source": "11-rust-cross-platform/basics/03-structs-enums-patterns.md",
+    "line": 51,
+    "target": "#交叉引用",
+    "new_target": "#-交叉引用"
+  },
+  {
+    "source": "11-rust-cross-platform/basics/03-structs-enums-patterns.md",
+    "line": 52,
+    "target": "#总结",
+    "new_target": "#-总结"
+  },
+  {
+    "source": "11-rust-cross-platform/basics/04-traits-generics.md",
+    "line": 46,
+    "target": "#核心概念",
+    "new_target": "#-核心概念"
+  },
+  {
+    "source": "11-rust-cross-platform/basics/04-traits-generics.md",
+    "line": 47,
+    "target": "#实践指南",
+    "new_target": "#️-实践指南"
+  },
+  {
+    "source": "11-rust-cross-platform/basics/04-traits-generics.md",
+    "line": 48,
+    "target": "#代码示例",
+    "new_target": "#-代码示例"
+  },
+  {
+    "source": "11-rust-cross-platform/basics/04-traits-generics.md",
+    "line": 49,
+    "target": "#最佳实践",
+    "new_target": "#-最佳实践"
+  },
+  {
+    "source": "11-rust-cross-platform/basics/04-traits-generics.md",
+    "line": 50,
+    "target": "#常见问题",
+    "new_target": "#-常见问题"
+  },
+  {
+    "source": "11-rust-cross-platform/basics/04-traits-generics.md",
+    "line": 51,
+    "target": "#交叉引用",
+    "new_target": "#-交叉引用"
+  },
+  {
+    "source": "11-rust-cross-platform/basics/04-traits-generics.md",
+    "line": 52,
+    "target": "#总结",
+    "new_target": "#-总结"
+  },
+  {
+    "source": "11-rust-cross-platform/basics/05-error-handling.md",
+    "line": 46,
+    "target": "#核心概念",
+    "new_target": "#-核心概念"
+  },
+  {
+    "source": "11-rust-cross-platform/basics/05-error-handling.md",
+    "line": 47,
+    "target": "#实践指南",
+    "new_target": "#️-实践指南"
+  },
+  {
+    "source": "11-rust-cross-platform/basics/05-error-handling.md",
+    "line": 48,
+    "target": "#代码示例",
+    "new_target": "#-代码示例"
+  },
+  {
+    "source": "11-rust-cross-platform/basics/05-error-handling.md",
+    "line": 49,
+    "target": "#最佳实践",
+    "new_target": "#-最佳实践"
+  },
+  {
+    "source": "11-rust-cross-platform/basics/05-error-handling.md",
+    "line": 50,
+    "target": "#常见问题",
+    "new_target": "#-常见问题"
+  },
+  {
+    "source": "11-rust-cross-platform/basics/05-error-handling.md",
+    "line": 51,
+    "target": "#交叉引用",
+    "new_target": "#-交叉引用"
+  },
+  {
+    "source": "11-rust-cross-platform/basics/05-error-handling.md",
+    "line": 52,
+    "target": "#总结",
+    "new_target": "#-总结"
+  },
+  {
+    "source": "11-rust-cross-platform/basics/06-collections-iterators.md",
+    "line": 48,
+    "target": "#核心概念",
+    "new_target": "#-核心概念"
+  },
+  {
+    "source": "11-rust-cross-platform/basics/06-collections-iterators.md",
+    "line": 49,
+    "target": "#实践指南",
+    "new_target": "#️-实践指南"
+  },
+  {
+    "source": "11-rust-cross-platform/basics/06-collections-iterators.md",
+    "line": 50,
+    "target": "#代码示例",
+    "new_target": "#-代码示例"
+  },
+  {
+    "source": "11-rust-cross-platform/basics/06-collections-iterators.md",
+    "line": 51,
+    "target": "#最佳实践",
+    "new_target": "#-最佳实践"
+  },
+  {
+    "source": "11-rust-cross-platform/basics/06-collections-iterators.md",
+    "line": 52,
+    "target": "#常见问题",
+    "new_target": "#-常见问题"
+  },
+  {
+    "source": "11-rust-cross-platform/basics/06-collections-iterators.md",
+    "line": 53,
+    "target": "#相关资源",
+    "new_target": "#-相关资源"
+  },
+  {
+    "source": "11-rust-cross-platform/basics/06-collections-iterators.md",
+    "line": 54,
+    "target": "#练习与实践",
+    "new_target": "#-练习与实践"
+  },
+  {
+    "source": "11-rust-cross-platform/basics/07-lifetimes.md",
+    "line": 48,
+    "target": "#核心概念",
+    "new_target": "#-核心概念"
+  },
+  {
+    "source": "11-rust-cross-platform/basics/07-lifetimes.md",
+    "line": 49,
+    "target": "#实践指南",
+    "new_target": "#️-实践指南"
+  },
+  {
+    "source": "11-rust-cross-platform/basics/07-lifetimes.md",
+    "line": 50,
+    "target": "#代码示例",
+    "new_target": "#-代码示例"
+  },
+  {
+    "source": "11-rust-cross-platform/basics/07-lifetimes.md",
+    "line": 51,
+    "target": "#最佳实践",
+    "new_target": "#-最佳实践"
+  },
+  {
+    "source": "11-rust-cross-platform/basics/07-lifetimes.md",
+    "line": 52,
+    "target": "#常见问题",
+    "new_target": "#-常见问题"
+  },
+  {
+    "source": "11-rust-cross-platform/basics/07-lifetimes.md",
+    "line": 53,
+    "target": "#相关资源",
+    "new_target": "#-相关资源"
+  },
+  {
+    "source": "11-rust-cross-platform/basics/07-lifetimes.md",
+    "line": 54,
+    "target": "#练习与实践",
+    "new_target": "#-练习与实践"
+  },
+  {
+    "source": "11-rust-cross-platform/basics/08-smart-pointers.md",
+    "line": 48,
+    "target": "#核心概念",
+    "new_target": "#-核心概念"
+  },
+  {
+    "source": "11-rust-cross-platform/basics/08-smart-pointers.md",
+    "line": 49,
+    "target": "#实践指南",
+    "new_target": "#️-实践指南"
+  },
+  {
+    "source": "11-rust-cross-platform/basics/08-smart-pointers.md",
+    "line": 50,
+    "target": "#代码示例",
+    "new_target": "#-代码示例"
+  },
+  {
+    "source": "11-rust-cross-platform/basics/08-smart-pointers.md",
+    "line": 51,
+    "target": "#最佳实践",
+    "new_target": "#-最佳实践"
+  },
+  {
+    "source": "11-rust-cross-platform/basics/08-smart-pointers.md",
+    "line": 52,
+    "target": "#常见问题",
+    "new_target": "#-常见问题"
+  },
+  {
+    "source": "11-rust-cross-platform/basics/08-smart-pointers.md",
+    "line": 53,
+    "target": "#相关资源",
+    "new_target": "#-相关资源"
+  },
+  {
+    "source": "11-rust-cross-platform/basics/08-smart-pointers.md",
+    "line": 54,
+    "target": "#练习与实践",
+    "new_target": "#-练习与实践"
+  },
+  {
+    "source": "11-rust-cross-platform/basics/09-concurrency-async.md",
+    "line": 48,
+    "target": "#核心概念",
+    "new_target": "#-核心概念"
+  },
+  {
+    "source": "11-rust-cross-platform/basics/09-concurrency-async.md",
+    "line": 49,
+    "target": "#实践指南",
+    "new_target": "#️-实践指南"
+  },
+  {
+    "source": "11-rust-cross-platform/basics/09-concurrency-async.md",
+    "line": 50,
+    "target": "#代码示例",
+    "new_target": "#-代码示例"
+  },
+  {
+    "source": "11-rust-cross-platform/basics/09-concurrency-async.md",
+    "line": 51,
+    "target": "#最佳实践",
+    "new_target": "#-最佳实践"
+  },
+  {
+    "source": "11-rust-cross-platform/basics/09-concurrency-async.md",
+    "line": 52,
+    "target": "#常见问题",
+    "new_target": "#-常见问题"
+  },
+  {
+    "source": "11-rust-cross-platform/basics/09-concurrency-async.md",
+    "line": 53,
+    "target": "#相关资源",
+    "new_target": "#-相关资源"
+  },
+  {
+    "source": "11-rust-cross-platform/basics/09-concurrency-async.md",
+    "line": 54,
+    "target": "#练习与实践",
+    "new_target": "#-练习与实践"
+  },
+  {
+    "source": "11-rust-cross-platform/basics/10-cargo-testing.md",
+    "line": 48,
+    "target": "#核心概念",
+    "new_target": "#-核心概念"
+  },
+  {
+    "source": "11-rust-cross-platform/basics/10-cargo-testing.md",
+    "line": 49,
+    "target": "#实践指南",
+    "new_target": "#️-实践指南"
+  },
+  {
+    "source": "11-rust-cross-platform/basics/10-cargo-testing.md",
+    "line": 50,
+    "target": "#代码示例",
+    "new_target": "#-代码示例"
+  },
+  {
+    "source": "11-rust-cross-platform/basics/10-cargo-testing.md",
+    "line": 51,
+    "target": "#最佳实践",
+    "new_target": "#-最佳实践"
+  },
+  {
+    "source": "11-rust-cross-platform/basics/10-cargo-testing.md",
+    "line": 52,
+    "target": "#常见问题",
+    "new_target": "#-常见问题"
+  },
+  {
+    "source": "11-rust-cross-platform/basics/10-cargo-testing.md",
+    "line": 53,
+    "target": "#相关资源",
+    "new_target": "#-相关资源"
+  },
+  {
+    "source": "11-rust-cross-platform/basics/10-cargo-testing.md",
+    "line": 54,
+    "target": "#练习与实践",
+    "new_target": "#-练习与实践"
+  },
+  {
+    "source": "11-rust-cross-platform/deployment/01-cross-compilation-targets.md",
+    "line": 35,
+    "target": "#核心概念",
+    "new_target": "#-核心概念"
+  },
+  {
+    "source": "11-rust-cross-platform/deployment/01-cross-compilation-targets.md",
+    "line": 36,
+    "target": "#实践指南",
+    "new_target": "#️-实践指南"
+  },
+  {
+    "source": "11-rust-cross-platform/deployment/01-cross-compilation-targets.md",
+    "line": 37,
+    "target": "#tauri-多端打包对-target-的要求",
+    "new_target": "#-tauri-多端打包对-target-的要求"
+  },
+  {
+    "source": "11-rust-cross-platform/deployment/01-cross-compilation-targets.md",
+    "line": 38,
+    "target": "#代码示例",
+    "new_target": "#-代码示例"
+  },
+  {
+    "source": "11-rust-cross-platform/deployment/01-cross-compilation-targets.md",
+    "line": 39,
+    "target": "#最佳实践",
+    "new_target": "#-最佳实践"
+  },
+  {
+    "source": "11-rust-cross-platform/deployment/01-cross-compilation-targets.md",
+    "line": 40,
+    "target": "#常见问题",
+    "new_target": "#-常见问题"
+  },
+  {
+    "source": "11-rust-cross-platform/deployment/01-cross-compilation-targets.md",
+    "line": 41,
+    "target": "#相关资源",
+    "new_target": "#-相关资源"
+  },
+  {
+    "source": "11-rust-cross-platform/deployment/02-github-actions-ci.md",
+    "line": 35,
+    "target": "#核心概念",
+    "new_target": "#-核心概念"
+  },
+  {
+    "source": "11-rust-cross-platform/deployment/02-github-actions-ci.md",
+    "line": 36,
+    "target": "#实践指南",
+    "new_target": "#️-实践指南"
+  },
+  {
+    "source": "11-rust-cross-platform/deployment/02-github-actions-ci.md",
+    "line": 37,
+    "target": "#tauri-官方-action-概览",
+    "new_target": "#-tauri-官方-action-概览"
+  },
+  {
+    "source": "11-rust-cross-platform/deployment/02-github-actions-ci.md",
+    "line": 38,
+    "target": "#最佳实践",
+    "new_target": "#-最佳实践"
+  },
+  {
+    "source": "11-rust-cross-platform/deployment/02-github-actions-ci.md",
+    "line": 39,
+    "target": "#常见问题",
+    "new_target": "#-常见问题"
+  },
+  {
+    "source": "11-rust-cross-platform/deployment/02-github-actions-ci.md",
+    "line": 40,
+    "target": "#相关资源",
+    "new_target": "#-相关资源"
+  },
+  {
+    "source": "11-rust-cross-platform/deployment/03-signing-auto-update.md",
+    "line": 35,
+    "target": "#核心概念",
+    "new_target": "#-核心概念"
+  },
+  {
+    "source": "11-rust-cross-platform/deployment/03-signing-auto-update.md",
+    "line": 36,
+    "target": "#实践指南",
+    "new_target": "#️-实践指南"
+  },
+  {
+    "source": "11-rust-cross-platform/deployment/03-signing-auto-update.md",
+    "line": 37,
+    "target": "#平台签名流程概览",
+    "new_target": "#️-平台签名流程概览"
+  },
+  {
+    "source": "11-rust-cross-platform/deployment/03-signing-auto-update.md",
+    "line": 38,
+    "target": "#最佳实践",
+    "new_target": "#-最佳实践"
+  },
+  {
+    "source": "11-rust-cross-platform/deployment/03-signing-auto-update.md",
+    "line": 39,
+    "target": "#常见问题",
+    "new_target": "#-常见问题"
+  },
+  {
+    "source": "11-rust-cross-platform/deployment/03-signing-auto-update.md",
+    "line": 40,
+    "target": "#相关资源",
+    "new_target": "#-相关资源"
+  },
+  {
+    "source": "11-rust-cross-platform/deployment/04-containerized-services.md",
+    "line": 35,
+    "target": "#核心概念",
+    "new_target": "#-核心概念"
+  },
+  {
+    "source": "11-rust-cross-platform/deployment/04-containerized-services.md",
+    "line": 36,
+    "target": "#实践指南",
+    "new_target": "#️-实践指南"
+  },
+  {
+    "source": "11-rust-cross-platform/deployment/04-containerized-services.md",
+    "line": 37,
+    "target": "#代码示例",
+    "new_target": "#-代码示例"
+  },
+  {
+    "source": "11-rust-cross-platform/deployment/04-containerized-services.md",
+    "line": 38,
+    "target": "#最佳实践",
+    "new_target": "#-最佳实践"
+  },
+  {
+    "source": "11-rust-cross-platform/deployment/04-containerized-services.md",
+    "line": 39,
+    "target": "#常见问题",
+    "new_target": "#-常见问题"
+  },
+  {
+    "source": "11-rust-cross-platform/deployment/04-containerized-services.md",
+    "line": 40,
+    "target": "#相关资源",
+    "new_target": "#-相关资源"
+  },
+  {
+    "source": "11-rust-cross-platform/frameworks/01-tauri-2-architecture.md",
+    "line": 47,
+    "target": "#核心概念",
+    "new_target": "#-核心概念"
+  },
+  {
+    "source": "11-rust-cross-platform/frameworks/01-tauri-2-architecture.md",
+    "line": 48,
+    "target": "#实践指南",
+    "new_target": "#️-实践指南"
+  },
+  {
+    "source": "11-rust-cross-platform/frameworks/01-tauri-2-architecture.md",
+    "line": 49,
+    "target": "#代码示例",
+    "new_target": "#-代码示例"
+  },
+  {
+    "source": "11-rust-cross-platform/frameworks/01-tauri-2-architecture.md",
+    "line": 50,
+    "target": "#最佳实践",
+    "new_target": "#-最佳实践"
+  },
+  {
+    "source": "11-rust-cross-platform/frameworks/01-tauri-2-architecture.md",
+    "line": 51,
+    "target": "#常见问题",
+    "new_target": "#-常见问题"
+  },
+  {
+    "source": "11-rust-cross-platform/frameworks/01-tauri-2-architecture.md",
+    "line": 52,
+    "target": "#模式不变量",
+    "new_target": "#-模式不变量"
+  },
+  {
+    "source": "11-rust-cross-platform/frameworks/01-tauri-2-architecture.md",
+    "line": 53,
+    "target": "#相关资源",
+    "new_target": "#-相关资源"
+  },
+  {
+    "source": "11-rust-cross-platform/frameworks/02-tauri-plugins.md",
+    "line": 47,
+    "target": "#核心概念",
+    "new_target": "#-核心概念"
+  },
+  {
+    "source": "11-rust-cross-platform/frameworks/02-tauri-plugins.md",
+    "line": 48,
+    "target": "#实践指南",
+    "new_target": "#️-实践指南"
+  },
+  {
+    "source": "11-rust-cross-platform/frameworks/02-tauri-plugins.md",
+    "line": 49,
+    "target": "#代码示例",
+    "new_target": "#-代码示例"
+  },
+  {
+    "source": "11-rust-cross-platform/frameworks/02-tauri-plugins.md",
+    "line": 50,
+    "target": "#最佳实践",
+    "new_target": "#-最佳实践"
+  },
+  {
+    "source": "11-rust-cross-platform/frameworks/02-tauri-plugins.md",
+    "line": 51,
+    "target": "#常见问题",
+    "new_target": "#-常见问题"
+  },
+  {
+    "source": "11-rust-cross-platform/frameworks/02-tauri-plugins.md",
+    "line": 52,
+    "target": "#模式不变量",
+    "new_target": "#-模式不变量"
+  },
+  {
+    "source": "11-rust-cross-platform/frameworks/02-tauri-plugins.md",
+    "line": 53,
+    "target": "#相关资源",
+    "new_target": "#-相关资源"
+  },
+  {
+    "source": "11-rust-cross-platform/frameworks/03-tauri-frontend-react.md",
+    "line": 47,
+    "target": "#核心概念",
+    "new_target": "#-核心概念"
+  },
+  {
+    "source": "11-rust-cross-platform/frameworks/03-tauri-frontend-react.md",
+    "line": 48,
+    "target": "#实践指南",
+    "new_target": "#️-实践指南"
+  },
+  {
+    "source": "11-rust-cross-platform/frameworks/03-tauri-frontend-react.md",
+    "line": 49,
+    "target": "#代码示例",
+    "new_target": "#-代码示例"
+  },
+  {
+    "source": "11-rust-cross-platform/frameworks/03-tauri-frontend-react.md",
+    "line": 50,
+    "target": "#最佳实践",
+    "new_target": "#-最佳实践"
+  },
+  {
+    "source": "11-rust-cross-platform/frameworks/03-tauri-frontend-react.md",
+    "line": 51,
+    "target": "#常见问题",
+    "new_target": "#-常见问题"
+  },
+  {
+    "source": "11-rust-cross-platform/frameworks/03-tauri-frontend-react.md",
+    "line": 52,
+    "target": "#模式不变量",
+    "new_target": "#-模式不变量"
+  },
+  {
+    "source": "11-rust-cross-platform/frameworks/03-tauri-frontend-react.md",
+    "line": 53,
+    "target": "#相关资源",
+    "new_target": "#-相关资源"
+  },
+  {
+    "source": "11-rust-cross-platform/frameworks/04-axum-web-stack.md",
+    "line": 47,
+    "target": "#核心概念",
+    "new_target": "#-核心概念"
+  },
+  {
+    "source": "11-rust-cross-platform/frameworks/04-axum-web-stack.md",
+    "line": 48,
+    "target": "#实践指南",
+    "new_target": "#️-实践指南"
+  },
+  {
+    "source": "11-rust-cross-platform/frameworks/04-axum-web-stack.md",
+    "line": 49,
+    "target": "#代码示例",
+    "new_target": "#-代码示例"
+  },
+  {
+    "source": "11-rust-cross-platform/frameworks/04-axum-web-stack.md",
+    "line": 50,
+    "target": "#最佳实践",
+    "new_target": "#-最佳实践"
+  },
+  {
+    "source": "11-rust-cross-platform/frameworks/04-axum-web-stack.md",
+    "line": 51,
+    "target": "#常见问题",
+    "new_target": "#-常见问题"
+  },
+  {
+    "source": "11-rust-cross-platform/frameworks/04-axum-web-stack.md",
+    "line": 52,
+    "target": "#模式不变量",
+    "new_target": "#-模式不变量"
+  },
+  {
+    "source": "11-rust-cross-platform/frameworks/04-axum-web-stack.md",
+    "line": 53,
+    "target": "#相关资源",
+    "new_target": "#-相关资源"
+  },
+  {
+    "source": "11-rust-cross-platform/frameworks/05-state-and-database-sqlx.md",
+    "line": 47,
+    "target": "#核心概念",
+    "new_target": "#-核心概念"
+  },
+  {
+    "source": "11-rust-cross-platform/frameworks/05-state-and-database-sqlx.md",
+    "line": 48,
+    "target": "#实践指南",
+    "new_target": "#️-实践指南"
+  },
+  {
+    "source": "11-rust-cross-platform/frameworks/05-state-and-database-sqlx.md",
+    "line": 49,
+    "target": "#代码示例",
+    "new_target": "#-代码示例"
+  },
+  {
+    "source": "11-rust-cross-platform/frameworks/05-state-and-database-sqlx.md",
+    "line": 50,
+    "target": "#最佳实践",
+    "new_target": "#-最佳实践"
+  },
+  {
+    "source": "11-rust-cross-platform/frameworks/05-state-and-database-sqlx.md",
+    "line": 51,
+    "target": "#常见问题",
+    "new_target": "#-常见问题"
+  },
+  {
+    "source": "11-rust-cross-platform/frameworks/05-state-and-database-sqlx.md",
+    "line": 52,
+    "target": "#模式不变量",
+    "new_target": "#-模式不变量"
+  },
+  {
+    "source": "11-rust-cross-platform/frameworks/05-state-and-database-sqlx.md",
+    "line": 53,
+    "target": "#相关资源",
+    "new_target": "#-相关资源"
+  },
+  {
+    "source": "11-rust-cross-platform/frameworks/06-auth-middleware.md",
+    "line": 47,
+    "target": "#核心概念",
+    "new_target": "#-核心概念"
+  },
+  {
+    "source": "11-rust-cross-platform/frameworks/06-auth-middleware.md",
+    "line": 48,
+    "target": "#实践指南",
+    "new_target": "#️-实践指南"
+  },
+  {
+    "source": "11-rust-cross-platform/frameworks/06-auth-middleware.md",
+    "line": 49,
+    "target": "#代码示例",
+    "new_target": "#-代码示例"
+  },
+  {
+    "source": "11-rust-cross-platform/frameworks/06-auth-middleware.md",
+    "line": 50,
+    "target": "#最佳实践",
+    "new_target": "#-最佳实践"
+  },
+  {
+    "source": "11-rust-cross-platform/frameworks/06-auth-middleware.md",
+    "line": 51,
+    "target": "#常见问题",
+    "new_target": "#-常见问题"
+  },
+  {
+    "source": "11-rust-cross-platform/frameworks/06-auth-middleware.md",
+    "line": 52,
+    "target": "#模式不变量",
+    "new_target": "#-模式不变量"
+  },
+  {
+    "source": "11-rust-cross-platform/frameworks/06-auth-middleware.md",
+    "line": 53,
+    "target": "#相关资源",
+    "new_target": "#-相关资源"
+  },
+  {
+    "source": "11-rust-cross-platform/frameworks/07-desktop-packaging.md",
+    "line": 47,
+    "target": "#核心概念",
+    "new_target": "#-核心概念"
+  },
+  {
+    "source": "11-rust-cross-platform/frameworks/07-desktop-packaging.md",
+    "line": 48,
+    "target": "#实践指南",
+    "new_target": "#️-实践指南"
+  },
+  {
+    "source": "11-rust-cross-platform/frameworks/07-desktop-packaging.md",
+    "line": 49,
+    "target": "#代码示例",
+    "new_target": "#-代码示例"
+  },
+  {
+    "source": "11-rust-cross-platform/frameworks/07-desktop-packaging.md",
+    "line": 50,
+    "target": "#最佳实践",
+    "new_target": "#-最佳实践"
+  },
+  {
+    "source": "11-rust-cross-platform/frameworks/07-desktop-packaging.md",
+    "line": 51,
+    "target": "#常见问题",
+    "new_target": "#-常见问题"
+  },
+  {
+    "source": "11-rust-cross-platform/frameworks/07-desktop-packaging.md",
+    "line": 52,
+    "target": "#模式不变量",
+    "new_target": "#-模式不变量"
+  },
+  {
+    "source": "11-rust-cross-platform/frameworks/07-desktop-packaging.md",
+    "line": 53,
+    "target": "#相关资源",
+    "new_target": "#-相关资源"
+  },
+  {
+    "source": "11-rust-cross-platform/projects/01-cli-tool.md",
+    "line": 56,
+    "target": "#总结",
+    "new_target": "#-总结"
+  },
+  {
+    "source": "11-rust-cross-platform/projects/02-tauri-notes-app.md",
+    "line": 55,
+    "target": "#总结",
+    "new_target": "#-总结"
+  },
+  {
+    "source": "11-rust-cross-platform/projects/03-axum-rest-api.md",
+    "line": 55,
+    "target": "#总结",
+    "new_target": "#-总结"
+  },
+  {
+    "source": "11-rust-cross-platform/projects/04-websocket-realtime.md",
+    "line": 55,
+    "target": "#总结",
+    "new_target": "#-总结"
+  },
+  {
+    "source": "11-rust-cross-platform/projects/05-multiplatform-release.md",
+    "line": 56,
+    "target": "#总结",
+    "new_target": "#-总结"
+  },
+  {
+    "source": "11-rust-cross-platform/testing/01-unit-integration-tests.md",
+    "line": 37,
+    "target": "#核心概念",
+    "new_target": "#-核心概念"
+  },
+  {
+    "source": "11-rust-cross-platform/testing/01-unit-integration-tests.md",
+    "line": 38,
+    "target": "#实践指南",
+    "new_target": "#️-实践指南"
+  },
+  {
+    "source": "11-rust-cross-platform/testing/01-unit-integration-tests.md",
+    "line": 39,
+    "target": "#代码示例",
+    "new_target": "#-代码示例"
+  },
+  {
+    "source": "11-rust-cross-platform/testing/01-unit-integration-tests.md",
+    "line": 40,
+    "target": "#最佳实践",
+    "new_target": "#-最佳实践"
+  },
+  {
+    "source": "11-rust-cross-platform/testing/01-unit-integration-tests.md",
+    "line": 41,
+    "target": "#常见问题",
+    "new_target": "#-常见问题"
+  },
+  {
+    "source": "11-rust-cross-platform/testing/01-unit-integration-tests.md",
+    "line": 42,
+    "target": "#相关资源",
+    "new_target": "#-相关资源"
+  },
+  {
+    "source": "11-rust-cross-platform/testing/02-criterion-benchmarks.md",
+    "line": 37,
+    "target": "#核心概念",
+    "new_target": "#-核心概念"
+  },
+  {
+    "source": "11-rust-cross-platform/testing/02-criterion-benchmarks.md",
+    "line": 38,
+    "target": "#实践指南",
+    "new_target": "#️-实践指南"
+  },
+  {
+    "source": "11-rust-cross-platform/testing/02-criterion-benchmarks.md",
+    "line": 39,
+    "target": "#代码示例",
+    "new_target": "#-代码示例"
+  },
+  {
+    "source": "11-rust-cross-platform/testing/02-criterion-benchmarks.md",
+    "line": 40,
+    "target": "#最佳实践",
+    "new_target": "#-最佳实践"
+  },
+  {
+    "source": "11-rust-cross-platform/testing/02-criterion-benchmarks.md",
+    "line": 41,
+    "target": "#常见问题",
+    "new_target": "#-常见问题"
+  },
+  {
+    "source": "11-rust-cross-platform/testing/02-criterion-benchmarks.md",
+    "line": 42,
+    "target": "#相关资源",
+    "new_target": "#-相关资源"
+  },
+  {
+    "source": "11-rust-cross-platform/testing/03-tauri-e2e-webdriver.md",
+    "line": 37,
+    "target": "#核心概念",
+    "new_target": "#-核心概念"
+  },
+  {
+    "source": "11-rust-cross-platform/testing/03-tauri-e2e-webdriver.md",
+    "line": 38,
+    "target": "#实践指南",
+    "new_target": "#️-实践指南"
+  },
+  {
+    "source": "11-rust-cross-platform/testing/03-tauri-e2e-webdriver.md",
+    "line": 39,
+    "target": "#代码示例",
+    "new_target": "#-代码示例"
+  },
+  {
+    "source": "11-rust-cross-platform/testing/03-tauri-e2e-webdriver.md",
+    "line": 40,
+    "target": "#最佳实践",
+    "new_target": "#-最佳实践"
+  },
+  {
+    "source": "11-rust-cross-platform/testing/03-tauri-e2e-webdriver.md",
+    "line": 41,
+    "target": "#常见问题",
+    "new_target": "#-常见问题"
+  },
+  {
+    "source": "11-rust-cross-platform/testing/03-tauri-e2e-webdriver.md",
+    "line": 42,
+    "target": "#相关资源",
+    "new_target": "#-相关资源"
+  },
+  {
+    "source": "11-rust-cross-platform/reference/language-concepts/01-ownership-dictionary.md",
+    "line": 28,
+    "target": "#一三条基本规则",
+    "new_target": "#-一三条基本规则"
+  },
+  {
+    "source": "11-rust-cross-platform/reference/language-concepts/01-ownership-dictionary.md",
+    "line": 29,
+    "target": "#二move-语义表",
+    "new_target": "#-二move-语义表"
+  },
+  {
+    "source": "11-rust-cross-platform/reference/language-concepts/01-ownership-dictionary.md",
+    "line": 30,
+    "target": "#三copy-与-clone",
+    "new_target": "#-三copy-与-clone"
+  },
+  {
+    "source": "11-rust-cross-platform/reference/language-concepts/01-ownership-dictionary.md",
+    "line": 31,
+    "target": "#四借用规则矩阵",
+    "new_target": "#-四借用规则矩阵"
+  },
+  {
+    "source": "11-rust-cross-platform/reference/language-concepts/01-ownership-dictionary.md",
+    "line": 32,
+    "target": "#五nll借用区间--创建点到最后使用点",
+    "new_target": "#-五nll借用区间--创建点到最后使用点"
+  },
+  {
+    "source": "11-rust-cross-platform/reference/language-concepts/01-ownership-dictionary.md",
+    "line": 33,
+    "target": "#六drop-顺序",
+    "new_target": "#-六drop-顺序"
+  },
+  {
+    "source": "11-rust-cross-platform/reference/language-concepts/01-ownership-dictionary.md",
+    "line": 34,
+    "target": "#七部分移动与字段级借用",
+    "new_target": "#-七部分移动与字段级借用"
+  },
+  {
+    "source": "11-rust-cross-platform/reference/language-concepts/01-ownership-dictionary.md",
+    "line": 35,
+    "target": "#八错误码速查表",
+    "new_target": "#-八错误码速查表"
+  },
+  {
+    "source": "11-rust-cross-platform/reference/language-concepts/01-ownership-dictionary.md",
+    "line": 37,
+    "target": "#-常见陷阱",
+    "new_target": "#️-常见陷阱"
+  },
+  {
+    "source": "11-rust-cross-platform/reference/language-concepts/02-trait-objects.md",
+    "line": 28,
+    "target": "#一定义与胖指针",
+    "new_target": "#-一定义与胖指针"
+  },
+  {
+    "source": "11-rust-cross-platform/reference/language-concepts/02-trait-objects.md",
+    "line": 29,
+    "target": "#二dyn-兼容性规则表",
+    "new_target": "#-二dyn-兼容性规则表"
+  },
+  {
+    "source": "11-rust-cross-platform/reference/language-concepts/02-trait-objects.md",
+    "line": 30,
+    "target": "#三vtable-机制",
+    "new_target": "#-三vtable-机制"
+  },
+  {
+    "source": "11-rust-cross-platform/reference/language-concepts/02-trait-objects.md",
+    "line": 31,
+    "target": "#四静态分发-vs-动态分发对比表",
+    "new_target": "#-四静态分发-vs-动态分发对比表"
+  },
+  {
+    "source": "11-rust-cross-platform/reference/language-concepts/02-trait-objects.md",
+    "line": 33,
+    "target": "#六trait-对象的默认生命周期",
+    "new_target": "#-六trait-对象的默认生命周期"
+  },
+  {
+    "source": "11-rust-cross-platform/reference/language-concepts/02-trait-objects.md",
+    "line": 34,
+    "target": "#七supertrait-与向上转型自动-trait",
+    "new_target": "#-七supertrait-与向上转型自动-trait"
+  },
+  {
+    "source": "11-rust-cross-platform/reference/language-concepts/02-trait-objects.md",
+    "line": 35,
+    "target": "#八enum-封闭集合-vs-dyn-开放集合",
+    "new_target": "#-八enum-封闭集合-vs-dyn-开放集合"
+  },
+  {
+    "source": "11-rust-cross-platform/reference/language-concepts/02-trait-objects.md",
+    "line": 36,
+    "target": "#九错误码e0038",
+    "new_target": "#-九错误码e0038"
+  },
+  {
+    "source": "11-rust-cross-platform/reference/language-concepts/02-trait-objects.md",
+    "line": 38,
+    "target": "#-常见陷阱",
+    "new_target": "#️-常见陷阱"
+  },
+  {
+    "source": "11-rust-cross-platform/reference/language-concepts/03-const-generics.md",
+    "line": 28,
+    "target": "#一定义与语法",
+    "new_target": "#-一定义与语法"
+  },
+  {
+    "source": "11-rust-cross-platform/reference/language-concepts/03-const-generics.md",
+    "line": 29,
+    "target": "#二允许的参数类型",
+    "new_target": "#-二允许的参数类型"
+  },
+  {
+    "source": "11-rust-cross-platform/reference/language-concepts/03-const-generics.md",
+    "line": 30,
+    "target": "#三数组与固定长度抽象",
+    "new_target": "#-三数组与固定长度抽象"
+  },
+  {
+    "source": "11-rust-cross-platform/reference/language-concepts/03-const-generics.md",
+    "line": 31,
+    "target": "#四常量参数在-trait--impl-中",
+    "new_target": "#-四常量参数在-trait--impl-中"
+  },
+  {
+    "source": "11-rust-cross-platform/reference/language-concepts/03-const-generics.md",
+    "line": 32,
+    "target": "#五与类型参数对比表",
+    "new_target": "#-五与类型参数对比表"
+  },
+  {
+    "source": "11-rust-cross-platform/reference/language-concepts/03-const-generics.md",
+    "line": 33,
+    "target": "#六类型级身份与实参推断",
+    "new_target": "#-六类型级身份与实参推断"
+  },
+  {
+    "source": "11-rust-cross-platform/reference/language-concepts/03-const-generics.md",
+    "line": 34,
+    "target": "#七稳定版限制清单",
+    "new_target": "#-七稳定版限制清单"
+  },
+  {
+    "source": "11-rust-cross-platform/reference/language-concepts/03-const-generics.md",
+    "line": 35,
+    "target": "#八运行期容量-vs-类型级容量",
+    "new_target": "#-八运行期容量-vs-类型级容量"
+  },
+  {
+    "source": "11-rust-cross-platform/reference/language-concepts/03-const-generics.md",
+    "line": 37,
+    "target": "#-常见陷阱",
+    "new_target": "#️-常见陷阱"
+  },
+  {
+    "source": "11-rust-cross-platform/reference/language-concepts/04-advanced-lifetimes.md",
+    "line": 36,
+    "target": "#一定位生命周期约束引用不改变值",
+    "new_target": "#-一定位生命周期约束引用不改变值"
+  },
+  {
+    "source": "11-rust-cross-platform/reference/language-concepts/04-advanced-lifetimes.md",
+    "line": 37,
+    "target": "#二子类型static--a",
+    "new_target": "#-二子类型static--a"
+  },
+  {
+    "source": "11-rust-cross-platform/reference/language-concepts/04-advanced-lifetimes.md",
+    "line": 38,
+    "target": "#三变型表",
+    "new_target": "#-三变型表"
+  },
+  {
+    "source": "11-rust-cross-platform/reference/language-concepts/04-advanced-lifetimes.md",
+    "line": 40,
+    "target": "#五static-与-t-static-两种含义",
+    "new_target": "#-五static-与-t-static-两种含义"
+  },
+  {
+    "source": "11-rust-cross-platform/reference/language-concepts/04-advanced-lifetimes.md",
+    "line": 41,
+    "target": "#六struct--impl-中的生命周期与省略规则",
+    "new_target": "#-六struct--impl-中的生命周期与省略规则"
+  },
+  {
+    "source": "11-rust-cross-platform/reference/language-concepts/04-advanced-lifetimes.md",
+    "line": 42,
+    "target": "#七dropck-约束简述",
+    "new_target": "#-七dropck-约束简述"
+  },
+  {
+    "source": "11-rust-cross-platform/reference/language-concepts/04-advanced-lifetimes.md",
+    "line": 43,
+    "target": "#八错误码速查表",
+    "new_target": "#-八错误码速查表"
+  },
+  {
+    "source": "11-rust-cross-platform/reference/language-concepts/04-advanced-lifetimes.md",
+    "line": 45,
+    "target": "#-常见陷阱",
+    "new_target": "#️-常见陷阱"
+  },
+  {
+    "source": "11-rust-cross-platform/reference/language-concepts/07-smart-pointers.md",
+    "line": 53,
+    "target": "#条目-3rc-与-weak-循环引用-breaking",
+    "new_target": "#条目-3rc-与-weak循环引用-breaking"
+  },
+  {
+    "source": "11-rust-cross-platform/reference/language-concepts/07-smart-pointers.md",
+    "line": 210,
+    "target": "#条目-3rc-与-weak-循环引用-breaking",
+    "new_target": "#条目-3rc-与-weak循环引用-breaking"
+  },
+  {
+    "source": "11-rust-cross-platform/reference/language-concepts/07-smart-pointers.md",
+    "line": 276,
+    "target": "#条目-3rc-与-weak-循环引用-breaking",
+    "new_target": "#条目-3rc-与-weak循环引用-breaking"
+  },
+  {
+    "source": "11-rust-cross-platform/reference/library-guides/12-tokio-guide.md",
+    "line": 35,
+    "target": "#runtime-创建与进入",
+    "new_target": "#️-runtime创建与进入"
+  },
+  {
+    "source": "11-rust-cross-platform/reference/library-guides/12-tokio-guide.md",
+    "line": 36,
+    "target": "#任务-spawn-与-joinhandle",
+    "new_target": "#-任务-spawn-与-joinhandle"
+  },
+  {
+    "source": "11-rust-cross-platform/reference/library-guides/12-tokio-guide.md",
+    "line": 37,
+    "target": "#同步原语四兄弟",
+    "new_target": "#-同步原语四兄弟"
+  },
+  {
+    "source": "11-rust-cross-platform/reference/library-guides/12-tokio-guide.md",
+    "line": 38,
+    "target": "#select-宏",
+    "new_target": "#-select-宏"
+  },
+  {
+    "source": "11-rust-cross-platform/reference/library-guides/12-tokio-guide.md",
+    "line": 39,
+    "target": "#time-定时器",
+    "new_target": "#️-time-定时器"
+  },
+  {
+    "source": "11-rust-cross-platform/reference/library-guides/12-tokio-guide.md",
+    "line": 40,
+    "target": "#io-trait-异步读写",
+    "new_target": "#-io-trait异步读写"
+  },
+  {
+    "source": "11-rust-cross-platform/reference/library-guides/12-tokio-guide.md",
+    "line": 41,
+    "target": "#stream-适配tokio-stream",
+    "new_target": "#-stream-适配tokio-stream"
+  },
+  {
+    "source": "11-rust-cross-platform/reference/library-guides/12-tokio-guide.md",
+    "line": 42,
+    "target": "#最佳实践与陷阱",
+    "new_target": "#-最佳实践与陷阱"
+  },
+  {
+    "source": "11-rust-cross-platform/reference/library-guides/13-serde-guide.md",
+    "line": 35,
+    "target": "#核心概念数据模型与两端",
+    "new_target": "#-核心概念数据模型与两端"
+  },
+  {
+    "source": "11-rust-cross-platform/reference/library-guides/13-serde-guide.md",
+    "line": 37,
+    "target": "#字段属性全表",
+    "new_target": "#️-字段属性全表"
+  },
+  {
+    "source": "11-rust-cross-platform/reference/library-guides/13-serde-guide.md",
+    "line": 38,
+    "target": "#枚举的四种表示",
+    "new_target": "#-枚举的四种表示"
+  },
+  {
+    "source": "11-rust-cross-platform/reference/library-guides/13-serde-guide.md",
+    "line": 39,
+    "target": "#后端json-与-toml",
+    "new_target": "#️-后端json-与-toml"
+  },
+  {
+    "source": "11-rust-cross-platform/reference/library-guides/13-serde-guide.md",
+    "line": 40,
+    "target": "#自定义序列化",
+    "new_target": "#️-自定义序列化"
+  },
+  {
+    "source": "11-rust-cross-platform/reference/library-guides/13-serde-guide.md",
+    "line": 41,
+    "target": "#最佳实践与陷阱",
+    "new_target": "#-最佳实践与陷阱"
+  },
+  {
+    "source": "11-rust-cross-platform/reference/library-guides/13-serde-guide.md",
+    "line": 42,
+    "target": "#常见问题",
+    "new_target": "#-常见问题"
+  },
+  {
+    "source": "11-rust-cross-platform/reference/library-guides/14-error-libraries.md",
+    "line": 43,
+    "target": "#std-error-trait-与错误链",
+    "new_target": "#-std-error-trait-与错误链"
+  },
+  {
+    "source": "11-rust-cross-platform/reference/library-guides/14-error-libraries.md",
+    "line": 45,
+    "target": "#thiserror派生宏属性表",
+    "new_target": "#️-thiserror派生宏属性表"
+  },
+  {
+    "source": "11-rust-cross-platform/reference/library-guides/14-error-libraries.md",
+    "line": 46,
+    "target": "#anyhow应用层错误",
+    "new_target": "#-anyhow应用层错误"
+  },
+  {
+    "source": "11-rust-cross-platform/reference/library-guides/14-error-libraries.md",
+    "line": 47,
+    "target": "#选型矩阵",
+    "new_target": "#️-选型矩阵"
+  },
+  {
+    "source": "11-rust-cross-platform/reference/library-guides/14-error-libraries.md",
+    "line": 48,
+    "target": "#最佳实践与陷阱",
+    "new_target": "#-最佳实践与陷阱"
+  },
+  {
+    "source": "11-rust-cross-platform/reference/library-guides/14-error-libraries.md",
+    "line": 49,
+    "target": "#常见问题",
+    "new_target": "#-常见问题"
+  },
+  {
+    "source": "shared-resources/tools/document-index.md",
+    "line": 31,
+    "target": "#工程质量工具",
+    "new_target": "#-工程质量工具"
+  },
+  {
+    "source": "shared-resources/tools/document-index.md",
+    "line": 37,
+    "target": "#知识字典-reference",
+    "new_target": "#-知识字典-reference"
+  },
+  {
+    "source": "shared-resources/tools/document-index.md",
+    "line": 38,
+    "target": "#测试与部署",
+    "new_target": "#-测试与部署"
+  },
+  {
+    "source": "02-nextjs-frontend/README.md",
+    "line": 57,
+    "target": "#文档结构",
+    "candidates": [
+      "-advanced-topics---高级主题6个文件",
+      "-api-integration---api集成1个文件",
+      "-basics---渐进式学习路径8个文件",
+      "-deployment---现代应用部署4个文件",
+      "-development-tools---开发工具4个文件",
+      "-language-concepts---语言概念10个文件",
+      "-library-guides---常用库指南1个文件",
+      "-performance---性能优化2个文件",
+      "-performance-optimization---性能优化3个文件",
+      "-projects---实战项目4个文件",
+      "-reference---知识字典32个文件",
+      "-security---安全实践1个文件",
+      "-testing---现代测试工程4个文件",
+      "-下一步行动",
+      "-内容贡献",
+      "-合理选择路径",
+      "-外部资源",
+      "-学习反馈",
+      "-学习建议",
+      "-学习目标",
+      "-学习计划建议",
+      "-学习资源",
+      "-学习路径",
+      "-官方文档",
+      "-官方文档-1",
+      "-快速参考路径有经验开发者",
+      "-总结",
+      "-技术基线",
+      "-文档交叉引用",
+      "-文档元数据",
+      "-时间分配建议",
+      "-明确学习目标",
+      "-核心学习资源",
+      "-模块统计",
+      "-目录",
+      "-目录结构",
+      "-相关资源",
+      "-社区资源",
+      "-系统学习路径初学者推荐",
+      "-贡献与反馈",
+      "-贡献与反馈-1",
+      "-质量保证体系",
+      "-项目实践资源",
+      "-高级进阶主题",
+      "nextjs-全栈开发学习模块",
+      "内容改进",
+      "学习反馈",
+      "学习成果",
+      "学习成果检查",
+      "学习策略",
+      "开发工具",
+      "时间安排",
+      "核心技术",
+      "核心特色",
+      "核心要点回顾",
+      "部署运维",
+      "️-architecture---架构设计2个文件",
+      "️-framework-patterns---框架模式14个文件",
+      "️-frameworks---框架深度学习4个文件",
+      "️-实践优先",
+      "️-开发工具",
+      "️-开发工具-1",
+      "️-技术栈",
+      "️-模块概览",
+      "️-部署运维资源"
+    ],
+    "new_target": "#-目录结构",
+    "method": "manual topic mapping"
+  },
+  {
+    "source": "02-nextjs-frontend/basics/03-typescript-integration.md",
+    "line": 895,
+    "target": "./01-environment-setup.md#typescript配置",
+    "candidates": [
+      "-下一步",
+      "-交叉引用",
+      "-学习目标",
+      "-安装步骤",
+      "-常见问题解决",
+      "-开发工作流程",
+      "-开发最佳实践",
+      "-快速入门检查清单",
+      "-总结",
+      "-文档交叉引用",
+      "-文档元数据",
+      "-概述",
+      "-系统要求",
+      "-贡献与反馈",
+      "-附加资源",
+      "-高级配置",
+      "1-eslint配置",
+      "1-nodejs版本问题",
+      "1-packagejson",
+      "1-packagejson中的自定义脚本",
+      "1-安装nodejs",
+      "1-日常开发命令",
+      "2-git工作流程",
+      "2-prettier配置",
+      "2-tsconfigjson",
+      "2-安装包管理器",
+      "2-权限问题",
+      "2-环境特定配置",
+      "3-git配置",
+      "3-nextconfigjs",
+      "3-安装代码编辑器",
+      "3-端口冲突",
+      "3-项目结构",
+      "4-envlocal",
+      "4-vs-code工作区配置",
+      "4-内存问题",
+      "4-创建nextjs项目",
+      "5-依赖问题",
+      "5-配置开发环境",
+      "linux-ubuntudebian",
+      "macos-使用homebrew",
+      "nextjs-16-开发环境搭建完整指南",
+      "vs-code安装",
+      "windows-使用winget",
+      "使用create-next-app",
+      "先理解再动手",
+      "内容改进",
+      "参考章节",
+      "启动开发服务器",
+      "学习反馈",
+      "学习成果检查",
+      "安装项目依赖",
+      "工具和扩展",
+      "必需的vs-code扩展",
+      "推荐pnpm",
+      "推荐配置",
+      "文档",
+      "替代方案yarn如果偏好",
+      "替代方案使用node版本管理器nvm",
+      "最低要求",
+      "核心要点回顾",
+      "相关文档",
+      "社区资源",
+      "配置npm镜像中国大陆用户",
+      "阅读导航",
+      "项目选项说明",
+      "️-开发工具配置",
+      "️-环境配置文件"
+    ],
+    "new_target": "./01-environment-setup.md#2-tsconfigjson",
+    "method": "manual topic mapping"
+  },
+  {
+    "source": "02-nextjs-frontend/basics/06-data-fetching-basics.md",
+    "line": 1102,
+    "target": "./05-styling-with-tailwind.md#加载组件",
+    "candidates": [
+      "-下一步学习",
+      "-主题系统实现",
+      "-企业级开发能力",
+      "-响应式设计系统",
+      "-基础样式模式",
+      "-学习目标",
+      "-性能优化策略",
+      "-总结",
+      "-总结-1",
+      "-文档交叉引用",
+      "-文档元数据",
+      "-概述",
+      "-现代样式系统掌握",
+      "-贡献与反馈",
+      "-高级样式模式",
+      "nextjs-16--tailwind-css-4-企业级样式开发完整指南",
+      "purgecss配置优化",
+      "tailwindconfigts-完整配置",
+      "主题切换组件",
+      "先理解再动手",
+      "内容改进",
+      "卡片组件样式",
+      "参考章节",
+      "响应式图片",
+      "响应式容器",
+      "学习反馈",
+      "学习成果检查",
+      "按钮样式系统",
+      "文本样式系统",
+      "暗色模式配置",
+      "样式分离和关键css",
+      "核心要点回顾",
+      "渐变和图案",
+      "玻璃态效果",
+      "相关文档",
+      "移动优先布局",
+      "自动集成配置",
+      "阅读导航",
+      "️-tailwind-css-4-项目配置"
+    ],
+    "new_target": "./06-data-fetching-basics.md#加载组件",
+    "method": "manual topic mapping"
+  },
+  {
+    "source": "02-nextjs-frontend/basics/07-state-management.md",
+    "line": 1203,
+    "target": "./06-data-fetching-basics.md#服务器状态管理",
+    "candidates": [
+      "-client-components-数据获取",
+      "-下一步学习",
+      "-加载状态和错误处理",
+      "-学习目标",
+      "-实际应用能力",
+      "-总结",
+      "-总结-1",
+      "-数据获取核心概念",
+      "-文档交叉引用",
+      "-文档元数据",
+      "-概述",
+      "-缓存策略和优化",
+      "-贡献与反馈",
+      "nextjs-16-数据获取基础完整指南",
+      "restful-api实现",
+      "先理解再动手",
+      "内容改进",
+      "加载组件",
+      "动态api路由",
+      "动态路由数据获取",
+      "参考章节",
+      "基础客户端数据获取",
+      "基础服务器组件数据获取",
+      "学习反馈",
+      "学习成果检查",
+      "实时数据同步",
+      "客户端错误处理",
+      "按需重新验证",
+      "数据缓存配置",
+      "数据获取分类",
+      "数据预加载模式",
+      "数据预取策略",
+      "核心要点回顾",
+      "相关文档",
+      "错误边界组件",
+      "阅读导航",
+      "高级数据获取hook",
+      "️-api路由开发",
+      "️-server-components-数据获取",
+      "️-数据获取架构概览"
+    ],
+    "new_target": "./06-data-fetching-basics.md#-client-components-数据获取",
+    "method": "manual topic mapping"
+  },
+  {
+    "source": "02-nextjs-frontend/basics/07-state-management.md",
+    "line": 1203,
+    "target": "./08-first-project.md#状态管理系统实现",
+    "candidates": [
+      "-下一步扩展",
+      "-主题和响应式设计",
+      "-内容管理",
+      "-学习目标",
+      "-总结",
+      "-文档交叉引用",
+      "-文档元数据",
+      "-文章管理系统",
+      "-概述",
+      "-用户体验",
+      "-用户认证系统",
+      "-认证系统",
+      "-贡献与反馈",
+      "-部署和运维",
+      "-项目初始化和配置",
+      "-项目总结",
+      "-项目构建能力",
+      "-项目部署",
+      "nextauthjs配置",
+      "nextjs-16-第一个完整项目实战指南",
+      "vercel部署配置",
+      "主题提供者",
+      "先理解再动手",
+      "内容改进",
+      "创建项目",
+      "参考章节",
+      "学习反馈",
+      "学习成果检查",
+      "数据库配置",
+      "文章api路由",
+      "文章组件",
+      "构建配置",
+      "核心要点回顾",
+      "环境配置",
+      "相关文档",
+      "认证api路由",
+      "阅读导航",
+      "项目功能需求",
+      "项目架构设计",
+      "️-实际开发技能",
+      "️-项目架构",
+      "️-项目规划和设计"
+    ],
+    "new_target": "./08-first-project.md#主题提供者",
+    "method": "manual topic mapping"
+  },
+  {
+    "source": "02-nextjs-frontend/reference/development-tools/02-styling-tools.md",
+    "line": 1352,
+    "target": "#emotion-css-in-js-解决方案",
+    "candidates": [
+      "-css-in-js-解决方案",
+      "-css-modules-最佳实践",
+      "-linaria-零运行时-css-in-js",
+      "-tailwind-css-4-企业级配置",
+      "-主题系统",
+      "-响应式设计系统",
+      "-外部资源",
+      "-总结",
+      "-文档交叉引用",
+      "-文档元数据",
+      "-概述",
+      "-贡献与反馈",
+      "css-modules-组件",
+      "css-modules-配置",
+      "emotion-组件示例",
+      "emotion-配置",
+      "linaria-组件示例",
+      "linaria-配置",
+      "nextjs-16-现代样式工具完整指南",
+      "主题提供者",
+      "内容改进",
+      "参考章节",
+      "响应式组件示例",
+      "基础配置",
+      "学习反馈",
+      "学习成果检查",
+      "官方文档",
+      "快速参考",
+      "断点系统",
+      "核心要点回顾",
+      "相关文档",
+      "自定义组件库",
+      "让样式工具的输出能被检查",
+      "阅读导航"
+    ],
+    "new_target": "#-css-in-js-解决方案",
+    "method": "manual topic mapping"
+  },
+  {
+    "source": "02-nextjs-frontend/reference/framework-patterns/01-app-router-patterns.md",
+    "line": 1814,
+    "target": "./04-data-fetching-patterns.md#服务端数据获取",
+    "candidates": [
+      "-api-路由设计模式",
+      "-server-actions-高级模式",
+      "-企业级数据获取清单",
+      "-客户端数据获取模式",
+      "-总结",
+      "-总结-1",
+      "-文档交叉引用",
+      "-文档元数据",
+      "-服务器端数据获取模式",
+      "-概述",
+      "-贡献与反馈",
+      "1-restful-api-架构",
+      "1-企业级-swr-配置",
+      "1-表单处理和数据验证",
+      "1-高级静态生成-ssg",
+      "2-graphql-api-集成",
+      "2-tanstack-query-企业级配置",
+      "2-增量静态再生-isr",
+      "3-流式服务器端渲染",
+      "企业级数据获取模式详解",
+      "内容改进",
+      "参考章节",
+      "学习反馈",
+      "学习成果检查",
+      "安全考虑",
+      "性能优化",
+      "数据获取分类体系",
+      "最佳实践",
+      "架构选择指南",
+      "核心特性",
+      "核心要点回顾",
+      "模式不变量",
+      "相关文档",
+      "错误处理",
+      "阅读导航",
+      "️-数据获取架构概览"
+    ],
+    "new_target": "./04-data-fetching-patterns.md#-服务器端数据获取模式",
+    "method": "manual topic mapping"
+  },
+  {
+    "source": "02-nextjs-frontend/reference/framework-patterns/02-server-components-patterns.md",
+    "line": 1552,
+    "target": "./01-app-router-patterns.md#布局系统",
+    "candidates": [
+      "-代理proxy与路由保护",
+      "-动态路由与参数处理",
+      "-性能优化模式",
+      "-总结",
+      "-总结-1",
+      "-拦截路由与模态框",
+      "-文档交叉引用",
+      "-文档元数据",
+      "-最佳实践清单",
+      "-根布局与模板系统",
+      "-概述",
+      "-贡献与反馈",
+      "nextjs-16-app-router-实战模式精要",
+      "企业级代理proxy实现",
+      "企业级特性",
+      "内容改进",
+      "参考章节",
+      "学习反馈",
+      "学习成果检查",
+      "并行路由实现",
+      "文件系统路由约定",
+      "最佳实践",
+      "核心模式",
+      "核心要点回顾",
+      "模式不变量",
+      "模板系统实现",
+      "相关文档",
+      "缓存策略与数据预获取",
+      "阅读导航",
+      "高级动态路由实现",
+      "高级拦截路由实现",
+      "高级根布局配置",
+      "️-app-router-架构基础"
+    ],
+    "new_target": "./01-app-router-patterns.md#-根布局与模板系统",
+    "method": "manual topic mapping"
+  },
+  {
+    "source": "02-nextjs-frontend/reference/framework-patterns/03-client-components-patterns.md",
+    "line": 1904,
+    "target": "./05-state-management-patterns.md#客户端状态管理",
+    "candidates": [
+      "-react-query-与服务器状态",
+      "-企业级状态管理清单",
+      "-全局状态管理模式",
+      "-总结",
+      "-总结-1",
+      "-持久化状态管理",
+      "-文档交叉引用",
+      "-文档元数据",
+      "-本地状态管理模式",
+      "-概述",
+      "-状态管理模式最佳实践",
+      "-贡献与反馈",
+      "1-indexeddb-状态管理",
+      "1-tanstack-query-企业级配置",
+      "1-zustand-企业级配置",
+      "1-状态选择优化",
+      "1-高级-usestate-模式",
+      "2-实时数据同步",
+      "2-智能-usereducer-模式",
+      "2-服务器状态持久化",
+      "2-错误处理和恢复",
+      "2-高级-store-模式",
+      "企业级状态管理模式详解",
+      "内容改进",
+      "参考章节",
+      "学习反馈",
+      "学习成果检查",
+      "安全考虑",
+      "性能优化",
+      "最佳实践",
+      "核心特性",
+      "核心要点回顾",
+      "模式不变量",
+      "状态分类体系",
+      "状态选择指南",
+      "相关文档",
+      "错误处理",
+      "阅读导航",
+      "️-状态管理架构概览"
+    ],
+    "new_target": "./05-state-management-patterns.md#-本地状态管理模式",
+    "method": "manual topic mapping"
+  },
+  {
+    "source": "02-nextjs-frontend/reference/framework-patterns/04-data-fetching-patterns.md",
+    "line": 2107,
+    "target": "./02-server-components-patterns.md#数据获取模式",
+    "candidates": [
+      "-总结",
+      "-文档交叉引用",
+      "-文档元数据",
+      "-核心服务端组件模式",
+      "-概述",
+      "-贡献与反馈",
+      "1-数据获取模式",
+      "11-基础数据获取组件",
+      "12-高级数据获取模式",
+      "2-缓存策略模式",
+      "21-多层缓存架构",
+      "3-流式渲染模式",
+      "31-suspense-和流式组件",
+      "4-安全性模式",
+      "41-安全数据处理",
+      "nextjs-16-服务端组件模式详解",
+      "先标出执行位置",
+      "内容改进",
+      "参考章节",
+      "学习反馈",
+      "学习成果检查",
+      "核心要点回顾",
+      "模式不变量",
+      "相关文档",
+      "组件分类体系",
+      "阅读导航",
+      "️-服务端组件架构概览"
+    ],
+    "new_target": "./02-server-components-patterns.md#1-数据获取模式",
+    "method": "manual topic mapping"
+  },
+  {
+    "source": "02-nextjs-frontend/reference/framework-patterns/07-authentication-flows.md",
+    "line": 1556,
+    "target": "./06-form-validation-patterns.md#动态表单系统",
+    "candidates": [
+      "-react-hook-form-v7-表单革命",
+      "-为什么选择-react-hook-form-v7--zod-3",
+      "-企业级表单架构",
+      "-学习目标",
+      "-总结",
+      "-文档交叉引用",
+      "-文档元数据",
+      "-概述",
+      "-贡献与反馈",
+      "-高级验证能力",
+      "1-核心安装和配置",
+      "2-zod-模式验证库",
+      "libform-configts---表单配置核心",
+      "libvalidationschemasts",
+      "nextjs-16-企业级表单验证完整指南",
+      "packagejson-依赖管理",
+      "传统表单方案-vs-现代化方案",
+      "内容改进",
+      "参考章节",
+      "学习反馈",
+      "学习成果检查",
+      "核心表单优势",
+      "核心要点回顾",
+      "模式不变量",
+      "相关文档",
+      "阅读导航",
+      "️-企业级最佳实践",
+      "️-企业级表单架构",
+      "️-企业级表单配置"
+    ],
+    "new_target": "./06-form-validation-patterns.md#️-企业级表单配置",
+    "method": "manual topic mapping"
+  },
+  {
+    "source": "11-rust-cross-platform/reference/language-concepts/02-trait-objects.md",
+    "line": 32,
+    "target": "#五载体选择dyn--boxdyn--rcarcdyn",
+    "candidates": [
+      "-一定义与胖指针",
+      "-七supertrait-与向上转型自动-trait",
+      "-三vtable-机制",
+      "-九错误码e0038",
+      "-二dyn-兼容性规则表",
+      "-五载体选择dyn--box--rcarc",
+      "-八enum-封闭集合-vs-dyn-开放集合",
+      "-六trait-对象的默认生命周期",
+      "-可运行示例",
+      "-四静态分发-vs-动态分发对比表",
+      "-文档元数据",
+      "-目录",
+      "-相关条目",
+      "-要点回顾",
+      "trait-对象与动态分发字典dyn-trait--对象安全--vtable",
+      "示例一异构集合与-dyn-传参",
+      "示例三胖指针宽度实证",
+      "示例二同一-trait-的两种分发",
+      "示例五让-box-可克隆clone_box-模式",
+      "示例四trait-向上转型",
+      "类型擦除之后哪些能力还保留",
+      "阅读导航",
+      "️-常见陷阱",
+      "️-编译失败演示"
+    ],
+    "new_target": "#-五载体选择dyn--box--rcarc",
+    "method": "manual topic mapping"
+  },
+  {
+    "source": "11-rust-cross-platform/reference/language-concepts/04-advanced-lifetimes.md",
+    "line": 39,
+    "target": "#四hrtbfora",
+    "candidates": [
+      "-一定位生命周期约束引用不改变值",
+      "-七dropck-约束简述",
+      "-三变型表",
+      "-二子类型static--a",
+      "-五static-与-t-static-两种含义",
+      "-八错误码速查表",
+      "-六struct--impl-中的生命周期与省略规则",
+      "-可运行示例",
+      "-四hrtbfor",
+      "-文档元数据",
+      "-目录",
+      "-相关条目",
+      "-要点回顾",
+      "示例一显式关联与省略规则nll-的组合",
+      "示例三hrtb-的-fn-指针与-fn-约束糖",
+      "示例二子类型与协变实证",
+      "示例四t-static-接受-owned",
+      "阅读准备先用一个反例确定本章的问题",
+      "阅读导航",
+      "高级生命周期字典变型--hrtb--static-两种含义",
+      "️-常见陷阱",
+      "️-编译失败演示"
+    ],
+    "new_target": "#-四hrtbfor",
+    "method": "manual topic mapping"
+  },
+  {
+    "source": "11-rust-cross-platform/reference/language-concepts/05-macros.md",
+    "line": 178,
+    "target": "#条目-5宏卫生",
+    "candidates": [
+      "-文档元数据",
+      "宏的正确性还包括求值次数和调用者环境",
+      "宏系统",
+      "条目-1宏两大家族总览",
+      "条目-2匹配器类型表",
+      "条目-3重复语法",
+      "条目-4递归宏",
+      "条目-5宏卫生hygiene",
+      "条目-6过程宏三类型概览",
+      "条目-7导出与调试",
+      "概述",
+      "相关文档",
+      "阅读导航"
+    ],
+    "new_target": "#条目-5宏卫生hygiene",
+    "method": "manual topic mapping"
+  },
+  {
+    "source": "11-rust-cross-platform/reference/library-guides/13-serde-guide.md",
+    "line": 36,
+    "target": "#容器属性全表",
+    "candidates": [
+      "-学习目标",
+      "-容器属性全表structenum-级",
+      "-常见问题",
+      "-总结",
+      "-文档元数据",
+      "-最佳实践与陷阱",
+      "-枚举的四种表示",
+      "-核心概念数据模型与两端",
+      "-模式不变量",
+      "-目录",
+      "-相关资源",
+      "q1-字段名撞-rust-关键字如-typeref怎么办",
+      "q2-什么时候需要手写-serializedeserialize",
+      "serde---序列化框架全量速查",
+      "serde_json-最小-api-面",
+      "toml-后端配置文件",
+      "with-模块契约",
+      "实测核心字段属性",
+      "手写-deserializevisitor-模式实测",
+      "手写-serialize实测",
+      "阅读导航",
+      "️-后端json-与-toml",
+      "️-字段属性全表",
+      "️-自定义序列化"
+    ],
+    "new_target": "#-容器属性全表structenum-级",
+    "method": "manual topic mapping"
+  },
+  {
+    "source": "11-rust-cross-platform/reference/library-guides/14-error-libraries.md",
+    "line": 44,
+    "target": "#手写范式",
+    "candidates": [
+      "-anyhow应用层错误",
+      "-std-error-trait-与错误链",
+      "-学习目标",
+      "-常见问题",
+      "-总结",
+      "-文档元数据",
+      "-最佳实践与陷阱",
+      "-模式不变量",
+      "-目录",
+      "-相关资源",
+      "q1--到底做了什么为什么有时不用写-from-也能传播",
+      "q2-泛型错误-e-error-和-trait-对象-box--anyhowerror-怎么选",
+      "依赖未列入基线不标版本",
+      "错误处理库---std-error--thiserror--anyhow",
+      "错误的传播描述与分类是三件事",
+      "阅读导航",
+      "️-thiserror派生宏属性表",
+      "️-手写范式纯-std实测",
+      "️-选型矩阵"
+    ],
+    "new_target": "#️-手写范式纯-std实测",
+    "method": "manual topic mapping"
+  },
+  {
+    "source": "shared-resources/tools/document-index.md",
+    "line": 34,
+    "target": "#基础概念",
+    "candidates": [
+      "-使用指南",
+      "-基础概念-basics",
+      "-基础概念-basics-1",
+      "-学习路径推荐",
+      "-工程质量工具",
+      "-快速导航",
+      "-智能搜索",
+      "-测试与部署",
+      "-测试与部署-1",
+      "-知识字典-reference",
+      "-知识字典-reference-1",
+      "-项目实战-projects",
+      "-项目实战-projects-1",
+      "-高级主题-advanced-topics",
+      "-高级主题-advanced-topics-1",
+      "01-go后端开发",
+      "02-nextjs前端开发",
+      "03-tanstack全家桶",
+      "04-react-native三端原生app",
+      "05-kotlin-compose",
+      "06-swiftui",
+      "07-php精通之路",
+      "08-java知识回顾",
+      "09-nodejs后端探索",
+      "10-python发现之旅",
+      "11-rust跨平台开发",
+      "ai-协议层",
+      "dev-quest-文档索引系统",
+      "从学习入口或参考入口进入",
+      "全栈开发路径-现代化技术栈",
+      "前端开发路径",
+      "后端开发路径",
+      "如何使用本索引",
+      "学习建议",
+      "技术探索系列-07-10",
+      "按内容类型",
+      "按学习目标搜索",
+      "按应用场景搜索",
+      "按技术标签搜索",
+      "按模块浏览",
+      "新补语言基础入口",
+      "移动开发路径-跨平台原生覆盖",
+      "️-框架工具-frameworks",
+      "️-框架工具-frameworks-1"
+    ],
+    "new_target": "#-基础概念-basics",
+    "method": "manual topic mapping"
+  },
+  {
+    "source": "shared-resources/tools/document-index.md",
+    "line": 35,
+    "target": "#框架工具",
+    "candidates": [
+      "-使用指南",
+      "-基础概念-basics",
+      "-基础概念-basics-1",
+      "-学习路径推荐",
+      "-工程质量工具",
+      "-快速导航",
+      "-智能搜索",
+      "-测试与部署",
+      "-测试与部署-1",
+      "-知识字典-reference",
+      "-知识字典-reference-1",
+      "-项目实战-projects",
+      "-项目实战-projects-1",
+      "-高级主题-advanced-topics",
+      "-高级主题-advanced-topics-1",
+      "01-go后端开发",
+      "02-nextjs前端开发",
+      "03-tanstack全家桶",
+      "04-react-native三端原生app",
+      "05-kotlin-compose",
+      "06-swiftui",
+      "07-php精通之路",
+      "08-java知识回顾",
+      "09-nodejs后端探索",
+      "10-python发现之旅",
+      "11-rust跨平台开发",
+      "ai-协议层",
+      "dev-quest-文档索引系统",
+      "从学习入口或参考入口进入",
+      "全栈开发路径-现代化技术栈",
+      "前端开发路径",
+      "后端开发路径",
+      "如何使用本索引",
+      "学习建议",
+      "技术探索系列-07-10",
+      "按内容类型",
+      "按学习目标搜索",
+      "按应用场景搜索",
+      "按技术标签搜索",
+      "按模块浏览",
+      "新补语言基础入口",
+      "移动开发路径-跨平台原生覆盖",
+      "️-框架工具-frameworks",
+      "️-框架工具-frameworks-1"
+    ],
+    "new_target": "#️-框架工具-frameworks",
+    "method": "manual topic mapping"
+  },
+  {
+    "source": "shared-resources/tools/document-index.md",
+    "line": 36,
+    "target": "#项目实战",
+    "candidates": [
+      "-使用指南",
+      "-基础概念-basics",
+      "-基础概念-basics-1",
+      "-学习路径推荐",
+      "-工程质量工具",
+      "-快速导航",
+      "-智能搜索",
+      "-测试与部署",
+      "-测试与部署-1",
+      "-知识字典-reference",
+      "-知识字典-reference-1",
+      "-项目实战-projects",
+      "-项目实战-projects-1",
+      "-高级主题-advanced-topics",
+      "-高级主题-advanced-topics-1",
+      "01-go后端开发",
+      "02-nextjs前端开发",
+      "03-tanstack全家桶",
+      "04-react-native三端原生app",
+      "05-kotlin-compose",
+      "06-swiftui",
+      "07-php精通之路",
+      "08-java知识回顾",
+      "09-nodejs后端探索",
+      "10-python发现之旅",
+      "11-rust跨平台开发",
+      "ai-协议层",
+      "dev-quest-文档索引系统",
+      "从学习入口或参考入口进入",
+      "全栈开发路径-现代化技术栈",
+      "前端开发路径",
+      "后端开发路径",
+      "如何使用本索引",
+      "学习建议",
+      "技术探索系列-07-10",
+      "按内容类型",
+      "按学习目标搜索",
+      "按应用场景搜索",
+      "按技术标签搜索",
+      "按模块浏览",
+      "新补语言基础入口",
+      "移动开发路径-跨平台原生覆盖",
+      "️-框架工具-frameworks",
+      "️-框架工具-frameworks-1"
+    ],
+    "new_target": "#-项目实战-projects",
+    "method": "manual topic mapping"
+  }
+]

@@ -1,12 +1,12 @@
 # Web 平台 API 速查（fetch / URL / FormData / Storage / Blob / structuredClone / BroadcastChannel）
 
 > **模块**: `02-nextjs-frontend`
-> **类型**: 字典条目（无难度门槛）
+> **类型**: 字典条目（可独立查阅，按主题准备前置知识）
 > **分类**: `language-concepts`
 
 ## 📌 定义
 
-七个不依赖任何框架、写前端必用的浏览器内置 API。它们与 Next.js 有一个共同交汇点：**全部只在客户端环境可用**（部分在 Node 24 也有同名全局实现，但语义以浏览器为准）——在 Server Component / 服务器代码里直接调用会在构建或运行时出错，是本模块最常见的 SSR 陷阱来源。
+七个不依赖任何框架、写前端必用的浏览器内置 API。它们与 Next.js 有一个共同交汇点：应按具体 API 区分运行环境；fetch、URL 等服务端也可用，而 window、DOM 表单与浏览器存储需要浏览器上下文，是本模块最常见的 SSR 陷阱来源。
 
 ## 📖 语法 / API 表
 
@@ -78,9 +78,10 @@ await fetch('/api/upload', { method: 'POST', body: fd })
 ```ts
 function loadDraft(key: string): unknown | null {
   if (typeof window === 'undefined') return null // SSR 保护
-  const raw = window.localStorage.getItem(key)
-  if (raw == null) return null
-  try { return JSON.parse(raw) } catch { return null }
+  try {
+    const raw = window.localStorage.getItem(key)
+    return raw == null ? null : JSON.parse(raw)
+  } catch { return null }
 }
 window.localStorage.setItem('draft', JSON.stringify({ text: 'hi' }))
 ```
@@ -102,19 +103,30 @@ const channel = new BroadcastChannel('auth')
 channel.onmessage = (e) => {
   if (e.data.type === 'logout') location.reload() // 其他标签页收到登出通知
 }
-channel.postMessage({ type: 'logout' })  // 广播给所有同源、同 name 的标签页
+channel.postMessage({ type: 'logout' })  // 广播给同源同存储分区、同 name 的其他 channel；不是向发送对象自身回送
 ```
 
 ## ⚠️ 常见陷阱
 
-- ❌ **以为 fetch 在 404/500 时 reject**：`fetch` 只在网络层失败（断网、DNS、CORS 拦截）时 reject；HTTP 错误状态会正常 resolve——`await fetch(...)` 后不检查 `res.ok` 就 `.json()`，错误响应体被当成功数据。✅ 每次请求后先 `if (!res.ok) throw ...` 或封装统一请求函数。
+- ❌ **以为 fetch 在 404/500 时 reject**：`fetch` 会因网络失败、取消、无效请求参数等原因 reject；HTTP 错误状态会正常 resolve——`await fetch(...)` 后不检查 `res.ok` 就 `.json()`，错误响应体被当成功数据。✅ 每次请求后先 `if (!res.ok) throw ...` 或封装统一请求函数。
 - ❌ **忘接 `AbortSignal` 导致请求无法取消**：快速切换筛选条件时旧请求后返回覆盖新结果（race condition）。✅ 每次 useEffect 发请求创建 `AbortController`，清理函数里 `abort()`；或直接用 `AbortSignal.timeout(ms)` 限超时。
 - ❌ **手拼查询串不编码**：`'/search?q=' + keyword` 遇到 `&`、`+`、中文直接坏。✅ 一律用 `new URL(...)` 或 `new URLSearchParams(...)` 生成。
-- ❌ **服务端代码里调 `localStorage`/`window`**：Server Component / route handler / `next build` 预渲染阶段没有 `window`，直接引用即抛 `ReferenceError`。✅ 客户端组件内使用；确需顶层判断时用 `typeof window === 'undefined'` 守卫。
+- ❌ **服务端代码里调 `localStorage`/`window`**：Server Component / route handler / `next build` 预渲染阶段没有 `window`，直接引用即抛 `ReferenceError`。✅ 客户端组件的 effect 或事件中使用，因为客户端组件也可能预渲染；环境判断用 `typeof window === 'undefined'` 守卫。
 - ❌ **给 localStorage 存对象没序列化**：值会被强转成 `"[object Object]"`；读取不判空直接 `JSON.parse` 有两种坑——空串/`undefined` 抛 SyntaxError，而 `null` 静默返回 `null` 不抛，两种情形都需防御。✅ 写入 `JSON.stringify`，读取 `try/catch` + 判空；敏感信息不要进 localStorage（XSS 可读）。
 - ❌ **用 `JSON.parse(JSON.stringify(obj))` 深拷贝**：`Date` 变字符串、`Map/Set` 变空对象、`undefined` 字段丢失、循环引用直接抛错。✅ 用 `structuredClone`（函数与 DOM 节点仍不可克隆，需自行处理）。
 - ❌ **手设 FormData 的 `Content-Type`**：手动写 `multipart/form-data` 会丢失 boundary，服务端解析失败。✅ 交给浏览器自动生成，什么都不写。
 - ❌ **在 Server Component 里 new BroadcastChannel**：它是浏览器跨标签页机制；Node 里虽有同名构造器，语义完全不同。✅ 只在客户端组件/事件处理器中使用，并做 SSR 守卫。
+
+<!-- full-library-explanation -->
+## 同名 API 仍要检查运行环境和生命周期
+
+前置是 Promise、组件副作用和请求响应。fetch、URL、FormData、Blob、structuredClone 在现代 Node 中也有实现；浏览器的 origin、Cookie、DOM 表单和存储分区却不能直接搬到服务端。服务器 fetch 常需绝对 URL，也不会自动代替用户转发浏览器会话。
+
+取消只表达调用方不再等待或继续读取，不保证服务器没有执行写操作。提交订单超时后应查询状态或用幂等键重试，不能简单认定创建失败。Response 的正文通常只能消费一次，先 json 再 text 会失败；需要两份消费时事先 clone，并注意缓冲成本。
+
+**练习**：用两个同源标签页广播普通消息，确认发送该消息的 channel 对象不会收到自己的广播，关闭页面组件时调用 close。测试浏览器禁止存储和额度耗尽，读取与写入都要处理异常。structuredClone 能复制多种内建数据，但不会完整保留自定义类原型与属性描述符；以类方法是否仍存在验证这一边界。
+
+依据：[Node 全局 API](https://nodejs.org/api/globals.html)、[HTML 结构化克隆与广播](https://html.spec.whatwg.org/multipage/structured-data.html)。
 
 ## 🔗 相关条目
 
@@ -126,3 +138,9 @@ channel.postMessage({ type: 'logout' })  // 广播给所有同源、同 name 的
 
 ---
 *最后更新: 2026年9月 | 本条目为模块知识字典的一部分，概念完整解释以此处为单一事实来源*
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

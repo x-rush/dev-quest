@@ -1,10 +1,26 @@
 # 第一个项目 - Compose + Room 笔记应用
 
+## 先理解，再动手
+
+Room 保存数据，ViewModel 组织页面状态，Composable 显示和发事件。三层用一条新增笔记流程连接，先别引入同步服务。
+
+**本节自测**：新增、查询、删除各做一次，关闭并重新启动应用。
+
+<details>
+<summary>预期结果与参考思路（先尝试再展开）</summary>
+
+查询反映保存结果，删除确实持久化；空标题失败不能留下半条记录。
+
+</details>
+
 > **文档简介**: 综合运用本模块所学，从零构建一个完整的本地笔记应用：Compose 界面 + ViewModel + StateFlow + Room 持久化，走通现代 Android 分层架构
 >
 > **目标读者**: 已完成 01-07 全部课程的学习者，准备把知识点串成完整应用
 >
 > **前置知识**: [协程与 Flow 基础](./07-coroutines-flow-basics.md)；[Navigation Compose](./06-navigation.md)（可选扩展用）
+
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
 
 ## 📚 文档元数据
 
@@ -16,6 +32,8 @@
 | **标签** | `#实战项目` `#Room` `#StateFlow` `#ViewModel` `#笔记应用` |
 | **更新日期** | `2026年9月` |
 
+</details>
+
 ## 🎯 学习目标
 
 - ✅ 独立搭建 UI → ViewModel → Repository → Room 四层数据通路
@@ -25,14 +43,14 @@
 
 ## 📋 目录
 
-- [项目目标](#项目目标)
-- [架构总览](#架构总览)
-- [第一步：数据层](#第一步数据层)
-- [第二步：Repository](#第二步repository)
-- [第三步：ViewModel](#第三步viewmodel)
-- [第四步：Compose 界面](#第四步compose-界面)
-- [运行验证](#运行验证)
-- [进阶挑战](#进阶挑战)
+- [项目目标](#-项目目标)
+- [架构总览](#️-架构总览)
+- [第一步：数据层](#️-第一步数据层)
+- [第二步：Repository](#-第二步repository)
+- [第三步：ViewModel](#-第三步viewmodel)
+- [第四步：Compose 界面](#️-第四步compose-界面)
+- [运行验证](#-运行验证)
+- [进阶挑战](#-进阶挑战)
 
 ---
 
@@ -337,3 +355,9 @@ fun AddNoteDialog(onConfirm: (String, String) -> Unit, onDismiss: () -> Unit) {
 - 📄 **[协程与 Flow API 全表](../reference/language-concepts/03-coroutines-flow-api.md)** - stateIn/WhileSubscribed 原理
 - 📄 **[Material 3 主题系统](../reference/framework-essentials/02-compose-material3.md)** - 给应用换上自定义主题
 - 📖 **[Room 官方指南](https://developer.android.com/training/data-storage/room)** - 完整 Room 文档
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../LEARNING_GUIDE.md) · [完整目录与版本](../README.md) · [通用术语](../../shared-resources/glossary.md)

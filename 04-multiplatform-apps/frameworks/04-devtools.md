@@ -1,10 +1,21 @@
 # 开发工具链 — Expo Devtools、调试与性能工具
 
+## 先看框架承担哪部分职责
+
+**移动端调试**：JavaScript 异常、原生崩溃、网络失败和构建错误来自不同层。先找到能观察该层的工具，再修改代码。
+
+**最小练习与预期结果**：故意制造一个 JS 错误和一个请求失败；分别找调用栈与状态码，不把所有问题归为缓存。
+
+具体 API 与安装版本以[模块基线](../README.md)和本篇官方来源为准。先完成这条数据路径，再展开后面的高级配置；框架名称变化后，输入边界、状态归属和失败处理仍是需要理解的机制。
+
 > **文档简介**: 配置一套高效的移动端调试环境：Expo 开发服务器与 Devtools、Flipper 退役后的替代方案（React Native DevTools）、网络检查、日志与性能剖析
 >
 > **目标读者**: 正在进行日常功能开发、需要快速定位 UI/网络/性能问题的开发者
 >
 > **前置知识**: 已完成 [第一个 App](../basics/02-first-app.md)，理解 Metro 与 dev client 的关系
+
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
 
 ## 📚 文档元数据
 
@@ -15,6 +26,8 @@
 | **难度** | ⭐ |
 | **标签** | `#调试` `#DevTools` `#Flipper` `#性能分析` |
 | **更新日期** | 2026年9月 |
+
+</details>
 
 ## 🎯 学习目标
 
@@ -94,11 +107,9 @@ export const useStore = create(
 
 ## ✅ 最佳实践
 
-- ✅ **团队统一 dev client**，把调试依赖（Reactotron、自定义菜单）打进客户端，避免"我机器上能跑"
-- ✅ **崩溃先看 `adb logcat -s ReactNativeJS`**，再进 DevTools 复现，最后查 Sentry 聚合
-- ✅ **Profiler 用"录制交互"而非盯实时曲线**，数据可复现可对比
-- ❌ **不要在生产包里留 `console.log`**，用 babel 插件在构建时剥离
-- ❌ **不要用 `debugger` 硬断点代替 DevTools 断点**，前者在 release 包会直接抛错
+排查问题先分类：JS 异常看 JS 堆栈，原生崩溃看平台日志与符号，卡顿记录可重复交互的性能轨迹。只筛 ReactNativeJS 日志可能漏掉原生进程退出的原因。
+
+生产日志应控制体积并去除敏感字段，必要诊断仍有价值，不必机械删除一切输出。debugger 是调试语句，不能笼统声称 release 中会直接抛错。保留设备、系统、构建版本和复现步骤，让另一台机器也能定位同一问题。
 
 ## ❓ 常见问题
 
@@ -121,3 +132,9 @@ A: RNOH 提供 DevEco Studio 联调与 hdc 日志，命令差异见 [CLI 速查�
 - 📄 [第一个 App — 创建、Metro 与三端运行](../basics/02-first-app.md) — Metro 启动链路入门
 - 🎓 [渲染性能](../advanced-topics/performance/01-rendering-performance.md) — Profiler 数据的优化方法论
 - 🚀 [OTA 更新与可观测性](../deployment/03-ota-updates-observability.md) — 线上崩溃监控方案
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../LEARNING_GUIDE.md) · [完整目录与版本](../README.md) · [通用术语](../../shared-resources/glossary.md)

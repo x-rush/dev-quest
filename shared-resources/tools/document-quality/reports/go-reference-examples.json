@@ -1,0 +1,99 @@
+{
+  "runtime": "go version go1.27.1 windows/amd64",
+  "scope": "Selected programs only; no external database test, race run, deployment or whole-document compilation",
+  "passed": 13,
+  "blocked": 2,
+  "results": [
+    {
+      "path": "01-go-backend/reference/language-concepts/04-go-data-types.md",
+      "status": "passed",
+      "kind": "selected complete program",
+      "evidence": "Retained from exec sessions 80627 and 81893; no later rerun claimed"
+    },
+    {
+      "path": "01-go-backend/reference/library-guides/04-encoding-json.md",
+      "status": "passed",
+      "kind": "selected complete program",
+      "evidence": "Retained from exec sessions 80627 and 81893; no later rerun claimed"
+    },
+    {
+      "path": "01-go-backend/reference/library-guides/05-context.md",
+      "status": "passed",
+      "kind": "selected complete program",
+      "evidence": "Retained from exec sessions 80627 and 81893; no later rerun claimed"
+    },
+    {
+      "path": "01-go-backend/reference/library-guides/06-sync.md",
+      "status": "passed",
+      "kind": "selected complete program",
+      "evidence": "Retained from exec sessions 80627 and 81893; no later rerun claimed"
+    },
+    {
+      "path": "01-go-backend/reference/library-guides/07-database-sql.md",
+      "status": "passed",
+      "kind": "selected complete program",
+      "evidence": "Retained from exec sessions 80627 and 81893; no later rerun claimed",
+      "note": "database/sql program passed in first run; host blocked its second execution"
+    },
+    {
+      "path": "01-go-backend/reference/library-guides/08-time.md",
+      "status": "passed",
+      "kind": "selected complete program",
+      "evidence": "Retained from exec sessions 80627 and 81893; no later rerun claimed"
+    },
+    {
+      "path": "01-go-backend/reference/library-guides/09-errors.md",
+      "status": "passed",
+      "kind": "selected complete program",
+      "evidence": "Retained from exec sessions 80627 and 81893; no later rerun claimed"
+    },
+    {
+      "path": "01-go-backend/reference/library-guides/10-io-bufio.md",
+      "status": "passed",
+      "kind": "selected complete program",
+      "evidence": "Retained from exec sessions 80627 and 81893; no later rerun claimed"
+    },
+    {
+      "path": "01-go-backend/reference/library-guides/11-os.md",
+      "status": "passed",
+      "kind": "selected complete program",
+      "evidence": "Retained from exec sessions 80627 and 81893; no later rerun claimed"
+    },
+    {
+      "path": "01-go-backend/reference/library-guides/13-slices-maps.md",
+      "status": "blocked",
+      "kind": "selected complete program",
+      "evidence": "Retained from exec sessions 80627 and 81893; no later rerun claimed"
+    },
+    {
+      "path": "01-go-backend/reference/library-guides/14-strconv.md",
+      "status": "passed",
+      "kind": "selected complete program",
+      "evidence": "Retained from exec sessions 80627 and 81893; no later rerun claimed"
+    },
+    {
+      "path": "01-go-backend/reference/library-guides/15-log-slog.md",
+      "status": "passed",
+      "kind": "selected complete program",
+      "evidence": "Retained from exec sessions 80627 and 81893; no later rerun claimed"
+    },
+    {
+      "path": "01-go-backend/reference/library-guides/16-flag.md",
+      "status": "passed",
+      "kind": "selected complete program",
+      "evidence": "Retained from exec sessions 80627 and 81893; no later rerun claimed"
+    },
+    {
+      "path": "01-go-backend/reference/library-guides/12-testing.md",
+      "status": "passed",
+      "kind": "table tests and fuzz seeds; not a duration fuzz campaign",
+      "evidence": "session 81893 test command returned success before HTTP test"
+    },
+    {
+      "path": "01-go-backend/reference/library-guides/03-net-http.md",
+      "status": "blocked",
+      "kind": "HTTP route tests compiled; execution blocked by Windows Application Control",
+      "evidence": "session 81893; no bypass attempted"
+    }
+  ]
+}

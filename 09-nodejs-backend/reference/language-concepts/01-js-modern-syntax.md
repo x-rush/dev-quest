@@ -6,6 +6,9 @@
 
 > **前置知识**: JavaScript 基础语法
 
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
+
 ## 📚 文档元数据
 
 | 属性 | 内容 |
@@ -15,6 +18,8 @@
 | **难度** | ⭐ |
 | **标签** | `#解构` `#可选链` `#私有字段` `#语法速查` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ## 1. 解构赋值
 
@@ -67,7 +72,7 @@ const { password, ...safeUser } = user;
 
 ### 陷阱
 - **浅拷贝**：嵌套对象仍共享引用，深结构需 `structuredClone(value)`（Node 17+ 全局可用）
-- 展开大型数组（10 万+ 项）可能触发调用栈限制，批量场景用循环
+- 将大型数组展开为函数实参（如 fn(...items)）可能触发参数数量限制；[...items] 创建数组属于不同场景，但同样要考虑内存
 
 ## 3. 可选链（?.）与空值合并（??）
 
@@ -87,7 +92,7 @@ const dbUrl = process.env.DATABASE_URL ?? "postgres://localhost:5432/app";
 ```
 
 ### 陷阱
-- `?.` 遇到中间层为 `null` 返回 `undefined`，链尾若接 `.length` 之类需继续 `?.`
+- 可选链在被检查对象为 null/undefined 时短路整段连续链；若未被可选检查的后续属性本身可能缺失，需在相应位置使用 ?.。括号会截断连续链，例如 (obj?.a).b 仍可能报错
 - `??` 与 `||` 不同：`0`、`""`、`false` 是合法值，用 `||` 会被误覆盖
 
 ## 4. 私有字段（#field）
@@ -192,8 +197,33 @@ try {
 
 ---
 
+<!-- full-library-explanation -->
+## 简写语法不会替你决定缺失值的含义
+
+前置是对象、数组与函数。解构默认值只处理 undefined，?? 处理 null 和 undefined，|| 处理所有假值。选择哪一个取决于业务：重试次数允许 0 时用 || 会错误地改回默认次数；姓名空串应报错时，用 ?? 也不会自动验证它。可选链只避免特定的空值访问，不保证函数存在且可调用，也不会吞掉函数内部异常。
+
+完整实验保存为 syntax.mjs，运行 node syntax.mjs：
+
+```js
+const settings = { retries: 0, label: null };
+const { label = 'untitled' } = settings;
+console.log(settings.retries || 3, settings.retries ?? 3, label);
+const original = { tags: ['node'] };
+const copy = { ...original };
+copy.tags.push('js');
+console.log(original.tags.join(','));
+```
+
+预期输出 `3 0 null` 和 `node,js`。第二行说明展开只复制外层属性，嵌套数组仍共享。练习：改成 structuredClone 后，原数组应保留 node；再给对象加入函数，观察该克隆方法并非适用于所有对象。对象展开枚举自身可枚举属性，与数组展开所需的迭代协议是两种不同机制，不应混为“任意对象都能展开成数组”。
+
 ## 🔗 相关文档
 
 - 📄 **[模块系统与 ESM](../../basics/03-modules-esm.md)** — import 语法与模块解析教程
 - 📄 **[TypeScript 模式](./05-typescript-patterns.md)** — 类型层面的 Node 常用模式
 - 📄 **[异步 API 全表](./02-async-api.md)** — 异步语法与 API 字典
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

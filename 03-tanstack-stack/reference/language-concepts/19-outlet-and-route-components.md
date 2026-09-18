@@ -1,6 +1,6 @@
 # Outlet 与路由组件：notFoundComponent / errorComponent / pendingComponent
 
-> **模块**: `03-tanstack-stack` | **类型**: 字典条目（无难度门槛，支持任意跳入查阅）
+> **模块**: `03-tanstack-stack` | **类型**: 字典条目（可独立查阅，按主题准备前置知识，支持任意跳入查阅）
 
 ## 📌 定义
 
@@ -115,11 +115,22 @@ declare module '@tanstack/react-router' {
 
 - ❌ 布局组件忘了渲染 `<Outlet />`：子路由匹配成功也无处渲染，页面空白
 - ❌ `errorComponent` 里直接 `error.message`：`error` 类型是 unknown（任何值都可 throw）——先 `instanceof Error` 收窄
-- ❌ 把数据加载失败当成 `errorComponent` 职责：loader/beforeLoad 抛错走 errorComponent；常规"失败态重试"更适合在组件内用 `useMatch` 读匹配的 `error` 自行渲染（见 [useMatch 系列](./20-use-match-hooks.md)）
+- ❌ 忽略路由 errorComponent：loader/beforeLoad 抛错可由它处理；在该错误界面提供数据重载，而不是依赖未挂载的成功组件（见 [useMatch 系列](./20-use-match-hooks.md)）
 - ❌ 以为 `notFound()` 只影响当前路由：它向上冒泡到**最近一层**声明了 `notFoundComponent` 的路由
 - ❌ 每个路由都重复写三个状态组件：先给 `createRouter` 配 `default*`，个别路由再覆写
 - ❌ pending UI 无延迟直接闪现：`defaultPendingMs` 默认 1000ms 内不显示；`defaultPendingMinMs` 保证最短停留防抖动
 - ✅ `errorComponent: false` 可显式关闭某路由的错误兜底 UI
+
+<!-- full-library-explanation -->
+## 区分不存在、失败和等待
+
+先修：父子路由与 Promise。不存在表示目标资源或路径无法提供；失败表示本来可能存在，但加载或渲染发生异常；等待表示工作尚未完成。分别用 notFoundComponent、errorComponent、pendingComponent 表达，便于用户采取正确操作。
+
+父组件写了自定义布局却省略 Outlet，子页面没有渲染位置。状态组件也应保留适当导航，让用户能返回其他页面。pendingMs 是显示等待界面的延迟，pendingMinMs 是显示后的最短时间，两者不改变接口本身的速度。
+
+errorComponent 的 reset 主要重置错误边界；loader 失败后需要重新加载路由数据时，应使用 router.invalidate 等对应机制。不要把失败入口藏在只有成功页面才会挂载的组件中。
+
+**练习：** 为同一路由模拟慢响应、抛 Error、抛 notFound，记录三种 UI。验收：重试后可恢复，父导航仍可用，404 不显示内部堆栈。参考[数据加载错误处理](https://tanstack.com/router/latest/docs/framework/react/guide/data-loading)。
 
 ## 🔗 相关条目
 
@@ -132,3 +143,9 @@ declare module '@tanstack/react-router' {
 ---
 
 *最后更新: 2026年9月 | 本条目为模块知识字典的一部分，概念完整解释以此处为单一事实来源*
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

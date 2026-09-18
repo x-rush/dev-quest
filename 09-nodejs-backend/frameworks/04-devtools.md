@@ -1,10 +1,21 @@
 # 开发工具链：pnpm、tsx/nodemon 与 ESLint + Prettier
 
+## 先看框架承担哪部分职责
+
+**Node 工具**：pnpm 管依赖，tsx 等工具运行 TypeScript 开发代码，类型检查器单独证明类型关系，格式化器只统一表达。
+
+**最小练习与预期结果**：故意写一个能转译但类型错误的例子，比较开发运行与 tsc 结果；CI 同时执行必要的检查与行为测试。
+
+具体 API 与安装版本以[模块基线](../README.md)和本篇官方来源为准。先完成这条数据路径，再展开后面的高级配置；框架名称变化后，输入边界、状态归属和失败处理仍是需要理解的机制。
+
 > **文档简介**: 配置一套顺手的 Node.js 24 开发工作流——pnpm 包管理、tsx 热重载运行 TypeScript、ESLint 9 + Prettier 统一代码风格
 >
 > **目标读者**: 开始搭建个人/团队 Node 项目的初级后端开发者
 >
 > **前置知识**: [环境搭建](../basics/01-environment-setup.md) 中的 fnm 与 pnpm 安装
+
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
 
 ## 📚 文档元数据
 
@@ -15,6 +26,8 @@
 | **难度** | ⭐ |
 | **标签** | `#pnpm` `#tsx` `#eslint` `#prettier` `#dx` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 CLI 命令的一行式速查见 [`../reference/quick-references/01-node-cheatsheet.md`](../reference/quick-references/01-node-cheatsheet.md)。
 
@@ -144,10 +157,9 @@ VS Code 中用 `JavaScript Debug Terminal` 直接 `pnpm dev`，断点即可命�
 
 ## ✅ 最佳实践与陷阱
 
-- ✅ 把 `check`（typecheck + lint）挂到 CI，本地依赖编辑器集成
-- ✅ `engines.node` 锁定 24 LTS（当前 Active LTS；22 已进入 Maintenance，新项目不要选），配合 `.npmrc` 的 `engine-strict=true`
-- ❌ 用 `ts-node`——维护停滞且慢，新项目一律 tsx
-- ❌ ESLint 与 Prettier 各自管理格式导致互相打架——加 `eslint-config-prettier`
+先确认工具各负责哪件事：编译或类型检查验证静态契约，lint 检查配置规则，格式化统一文本。若多个工具修改相同格式，需协调配置并让本地与 CI 使用一致命令。
+
+运行时与 TS 执行器依据维护政策、工程兼容性和构建需求选择，不以“一律禁用某工具”替代比较。engines 字段是否强制取决于安装器配置；用干净环境执行一次安装、检查和启动，才能确认版本约定真正生效。
 
 ## 🔗 相关文档
 
@@ -155,3 +167,9 @@ VS Code 中用 `JavaScript Debug Terminal` 直接 `pnpm dev`，断点即可命�
 - 📖 [Node 一行式速查](../reference/quick-references/01-node-cheatsheet.md) — CLI 与脚本速查
 - 📖 [常见故障排除](../reference/quick-references/02-troubleshooting.md) — 工具链疑难杂症
 - 📄 [单元测试（Vitest）](../testing/01-unit-testing.md) — 工具链的下一站
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../LEARNING_GUIDE.md) · [完整目录与版本](../README.md) · [通用术语](../../shared-resources/glossary.md)

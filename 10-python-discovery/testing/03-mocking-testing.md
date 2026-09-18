@@ -6,6 +6,9 @@
 >
 > **前置知识**: [单元测试](./01-unit-testing.md)
 
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
+
 ## 📚 文档元数据
 
 | 属性 | 内容 |
@@ -15,6 +18,8 @@
 | **难度** | ⭐⭐ |
 | **标签** | `#monkeypatch` `#mock` `#pytest-mock` `#respx` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ## 🎯 学习目标
 
@@ -131,10 +136,9 @@ async def test_fetch_exchange_rate():
 
 ## ✅ 最佳实践
 
-- 先验证交互（`assert_called_once_with`），再验证返回值被正确使用
-- Mock 返回值要贴近真实形状，否则测试通过、线上报错
-- FastAPI 里优先考虑 `app.dependency_overrides`——它替换整层依赖，比 patch 更贴近真实行为（见[集成测试](./02-integration-testing.md)）
-- 不确定是否该 mock 时问一句：这个依赖会让测试变慢、不稳定或有真实副作用吗？
+先明确依赖契约再替换：输入什么，可能返回哪些形状，什么时候抛错。断言返回结果或副作用，再在“必须恰好调用一次”属于业务承诺时检查调用次数，避免只演练 mock 脚本。
+
+FastAPI 的 dependency_overrides 可替换依赖，但测试结束要恢复，防止污染其他用例。patch 则要作用在被测代码实际查找名称的位置。为替身加入一次失败返回，确认被测逻辑确实处理它。
 
 ## ❓ 常见问题
 
@@ -153,3 +157,16 @@ async def test_fetch_exchange_rate():
 - 📄 **[FastAPI 进阶](../frameworks/02-fastapi-advanced.md)** — 依赖注入：可替换性的设计来源
 - 📖 **[故障排除](../reference/quick-references/02-troubleshooting.md)** — 常见 mock 报错速查
 - 🚀 **[项目：短链接服务](../projects/02-url-shortener.md)** — AsyncMock 模拟 Redis 的实战对象
+
+
+<!-- acceptance-exercise -->
+## 练习与验收：让替身同时模拟成功与失败
+
+为异步汇率服务建立 AsyncMock：一次返回符合契约的数据，一次抛超时，一次返回缺字段结果。预期正常路径计算正确，超时与非法响应进入不同的错误处理；使用 assert_awaited 验证确实等待异步调用，而非只创建协程。验收在被测模块实际查找名称的位置 patch，结束后恢复依赖，避免下个测试继续使用替身。
+
+以上是在个人或隔离测试环境中的练习，不是本轮已执行记录；实际运行范围见仓库文档质量报告。
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../LEARNING_GUIDE.md) · [完整目录与版本](../README.md) · [通用术语](../../shared-resources/glossary.md)

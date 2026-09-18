@@ -1,10 +1,26 @@
 # 布局系统 - Column/Row/Box 与 LazyColumn
 
+## 先理解，再动手
+
+布局先接收父级约束，再测量孩子并放置。Modifier 的顺序会改变测量和点击范围，不能当成无顺序的样式字典。
+
+**本节自测**：交换 padding 与 background 的顺序，观察背景覆盖范围。
+
+<details>
+<summary>预期结果与参考思路（先尝试再展开）</summary>
+
+两种结果可能不同；通过可见边界解释内外间距，而不是背固定组合。
+
+</details>
+
 > **文档简介**: 掌握 Compose 三大基础布局容器、Modifier 修饰符链与列表利器 LazyColumn，能搭建典型页面结构
 >
 > **目标读者**: 已理解状态与重组、开始搭建真实页面的 Compose 初学者
 >
 > **前置知识**: [Composable 与状态](./04-composables-state.md)；了解 dp/参数默认值等基础语法
+
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
 
 ## 📚 文档元数据
 
@@ -16,6 +32,8 @@
 | **标签** | `#布局` `#Column` `#Row` `#Box` `#Modifier` `#LazyColumn` |
 | **更新日期** | `2026年9月` |
 
+</details>
+
 ## 🎯 学习目标
 
 - ✅ 用 Column/Row/Box 组合出常见页面结构（对标 LinearLayout/FrameLayout）
@@ -26,13 +44,13 @@
 
 ## 📋 目录
 
-- [三大基础布局](#三大基础布局)
-- [主轴与交叉轴](#主轴与交叉轴)
-- [Modifier 修饰符](#modifier-修饰符)
-- [weight 权重分配](#weight-权重分配)
-- [LazyColumn 长列表](#lazycolumn-长列表)
-- [布局选型速查](#布局选型速查)
-- [练习与实践](#练习与实践)
+- [三大基础布局](#-三大基础布局)
+- [主轴与交叉轴](#️-主轴与交叉轴)
+- [Modifier 修饰符](#-modifier-修饰符)
+- [weight 权重分配](#️-weight-权重分配)
+- [LazyColumn 长列表](#-lazycolumn-长列表)
+- [布局选型速查](#️-布局选型速查)
+- [练习与实践](#-练习与实践)
 
 ---
 
@@ -223,3 +241,9 @@ fun TaskList(tasks: List<Task>, onDelete: (Task) -> Unit) {
 - 📄 **[Material 3 主题系统](../reference/framework-essentials/02-compose-material3.md)** - 让布局用上主题颜色与字体
 - 📄 **[Navigation Compose](./06-navigation.md)** - 下一篇：多页面切换
 - 📖 **[Layouts in Compose](https://developer.android.com/develop/ui/compose/layouts)** - 官方布局文档
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../LEARNING_GUIDE.md) · [完整目录与版本](../README.md) · [通用术语](../../shared-resources/glossary.md)

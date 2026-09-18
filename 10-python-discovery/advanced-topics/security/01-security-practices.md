@@ -6,6 +6,9 @@
 >
 > **前置知识**: [生产级 FastAPI 应用](../../projects/04-production-fastapi-app.md)、[生态集成](../../frameworks/03-ecosystem-integration.md)
 
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
+
 ## 📚 文档元数据
 
 | 属性 | 内容 |
@@ -16,11 +19,14 @@
 | **标签** | `#安全` `#SQL注入` `#密钥管理` `#依赖安全` |
 | **更新日期** | `2026年9月` |
 
+</details>
+
 ## 1. 依赖安全：你的供应链比你想象的脆弱
 
 ```bash
-# 审计已知漏洞（对照 uv.lock 全量检查传递依赖）
-uvx pip-audit
+# 从锁文件导出生产依赖，再显式交给审计工具；不要审计 uvx 自己的隔离环境
+uv export --locked --no-dev --no-emit-project --format requirements-txt --output-file requirements-audit.txt
+uvx pip-audit -r requirements-audit.txt
 ```
 
 - `uv.lock` 锁定传递依赖的精确版本，审计才有意义——**务必提交锁文件**（工作流见[开发工具链](../../frameworks/04-devtools.md)）
@@ -62,12 +68,13 @@ subprocess.run(["convert", user_file + ".png", "out.jpg"], check=True)
 p = Path(BASE_DIR) / user_path
 
 # ✅ 解析后校验仍在基目录内
-p = (BASE_DIR / user_path).resolve()
-if not p.is_relative_to(BASE_DIR):
+base = Path(BASE_DIR).resolve()
+p = (base / user_path).resolve()
+if not p.is_relative_to(base):
     raise PermissionError("非法路径")
 ```
 
-**要点**：ORM/参数绑定解决 SQL 注入；`shell=False` 解决命令注入；`resolve()` + `is_relative_to()` 解决路径穿越。三者共同原则：**数据永远当数据处理，不当代码执行**。
+**要点**：参数绑定保护作为值传入的 SQL 参数；动态表名与排序标识仍需白名单。shell=False 避免常规 shell 解析但不防程序选项注入；路径归一化与包含检查也依赖文件系统边界和竞争条件。三者共同原则：**数据永远当数据处理，不当代码执行**。
 
 ## 3. 密钥管理
 
@@ -110,7 +117,7 @@ JWT 三条铁律：
 
 ## 6. 上线前安全清单
 
-- [ ] `uvx pip-audit` 零高危，Dependabot 已开启
+- [ ] 审计明确的项目依赖清单，记录无法审计的包与处置结果；依赖更新机制已配置
 - [ ] 无 f-string SQL / `shell=True` / 未校验的路径拼接
 - [ ] 密钥全部环境变量注入，`.gitignore` 覆盖 `.env`，历史无泄漏
 - [ ] bcrypt 哈希密码、JWT 校验 `exp`/`alg`、短有效期
@@ -119,6 +126,15 @@ JWT 三条铁律：
 
 ---
 
+<!-- full-library-explanation -->
+## 把防护放在实际信任边界上
+
+前置知识是 HTTP 身份、SQL 参数和文件路径。输入验证检查结构与业务范围，参数绑定隔离 SQL 值，授权确认当前身份能否操作具体对象。即使输入完全合法，用户 A 仍不应读取用户 B 的私有记录；这个场景需要对象级授权测试。
+
+练习创建两个测试用户，各有一条记录。分别验证未登录、自己的 ID、他人的 ID、不存在的 ID，确认错误响应符合约定且没有泄漏他人的正文。再用相同请求重复提交，检查系统是否需要幂等处理。安全验证应围绕操作与结果，而不是只检查中间件是否安装。
+
+路径校验示例要求基目录也先 resolve，并且目录结构由可信代码控制。若攻击者可以在检查后替换符号链接，单次字符串比较仍有检查与使用之间的竞争。命令参数列表同样不能替代目标程序选项校验。依赖审计只覆盖已知公告，零报告不能证明代码或依赖没有风险。
+
 ## 🔗 相关文档
 
 - 🚀 **[项目：生产级 FastAPI 应用](../../projects/04-production-fastapi-app.md)** — 本篇的工程化落地
@@ -126,3 +142,9 @@ JWT 三条铁律：
 - 🚀 **[容器化部署](../../deployment/01-docker-deployment.md)** — .env 不进镜像的部署面
 - 📄 **[生态集成](../../frameworks/03-ecosystem-integration.md)** — pydantic-settings 配置管理
 - 📖 **[内置函数字典](../../reference/language-concepts/02-built-in-functions.md)** — 输入校验相关内建工具
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

@@ -1,10 +1,21 @@
 # SwiftUI 进阶任务指南 — Observation、NavigationStack 与动画
 
+## 先看框架承担哪部分职责
+
+**SwiftUI 进阶**：Observation 跟踪属性读取，导航维护位置，动画描述状态变化如何呈现。它们协作但不能互相替代。
+
+**最小练习与预期结果**：同一个模型注入两个视图，修改属性后相关内容更新；另建一个模型应是独立状态，能解释差异。
+
+具体 API 与安装版本以[模块基线](../README.md)和本篇官方来源为准。先完成这条数据路径，再展开后面的高级配置；框架名称变化后，输入边界、状态归属和失败处理仍是需要理解的机制。
+
 > **文档简介**: 面向任务的 SwiftUI 进阶指南：用 `@Observable` 建领域模型、用 `NavigationStack` 组织多页导航、用动画 API 让状态变化"动起来"
 >
 > **目标读者**: 已能搭建单页 SwiftUI 界面、要构建多视图数据驱动应用的中级学习者
 >
 > **前置知识**: [01-swiftui-basics.md](./01-swiftui-basics.md)（@State/@Binding、布局容器）
+
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
 
 ## 📚 文档元数据
 
@@ -15,6 +26,8 @@
 | **难度** | ⭐⭐ |
 | **标签** | `#Observable` `#NavigationStack` `#动画` `#过渡` `#数据流` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ## 🎯 本指南解决什么问题
 
@@ -177,9 +190,9 @@ struct Banner: View {
 
 ## ✅ 最佳实践
 
-- ✅ `@Observable` 类中，派生数据写计算属性，不手动同步第二份变量
-- ✅ 导航用**值驱动**（路由值/路径数组），导航状态可序列化、可还原
-- ✅ 动画只挂在**驱使变化的状态值**上，避免全局 `.animation()` 旧 API
+派生属性尽量由已有状态计算，避免保存一份 filteredItems 后每次又手动同步。若计算昂贵，应明确缓存输入和失效时机，而不是默认计算属性没有成本。
+
+数据驱动导航便于测试和恢复，但路径值还需可编码且能处理已删除资源。动画绑定到实际变化的状态并验证中断、快速操作和减少动态效果设置，避免整棵界面的无关变化一起动。
 
 ## ❌ 避免陷阱
 
@@ -207,3 +220,9 @@ struct Banner: View {
 - 📄 [02-swiftdata-observability.md](../reference/framework-essentials/02-swiftdata-observability.md) — Observation 追踪机制字典
 - 📄 [06-navigation.md](../basics/06-navigation.md) — 教程侧导航讲解
 - 📄 [04-views-state.md](../basics/04-views-state.md) — 数据流基础教程
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../LEARNING_GUIDE.md) · [完整目录与版本](../README.md) · [通用术语](../../shared-resources/glossary.md)

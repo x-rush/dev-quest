@@ -1,10 +1,23 @@
 # 进阶项目 — 数据处理管道
 
+## 分阶段练习与验收
+
+**最小阶段**：先读取一份小输入，完成清洗与输出。
+
+**验收结果**：合法行保留，非法行有记录，重复执行策略明确。
+
+**扩展顺序**：大数据量再用流式处理，检查编码、内存和中断后的恢复。
+
+建议保存一份正常输入、一份失败输入、实际输出和对应测试。先完成以上阶段再扩展正文中的完整设计；遇到省略实现或未定义依赖，应按文档上下文补齐，不能把代码片段拼接后当作已经验证的完整工程。
+
 > **文档简介**: 搭建一条"读取 → 校验 → 转换 → 汇总 → 定时执行"的数据管道，练习 Pydantic 数据校验、match 结构化分支与 APScheduler 定时任务
 >
 > **目标读者**: 想用 Python 做数据清洗与自动化任务的开发者
 >
 > **前置知识**: [高级特性](../basics/07-advanced-features.md)、[Pydantic 模型](../frameworks/01-fastapi-basics.md)
+
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
 
 ## 📚 文档元数据
 
@@ -15,6 +28,8 @@
 | **难度** | ⭐⭐ |
 | **标签** | `#数据处理` `#match` `#定时任务` `#Pydantic` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ## 🎯 项目目标
 
@@ -169,3 +184,9 @@ cat data/out/report.json
 - 📄 **[FastAPI 入门](../frameworks/01-fastapi-basics.md)** — Pydantic 校验的框架用法
 - 🚀 **[项目：生产级 FastAPI 应用](./04-production-fastapi-app.md)** — 终极关：工程化整合
 - 🧪 **[单元测试](../testing/01-unit-testing.md)** — 给 classify/run 写参数化测试
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../LEARNING_GUIDE.md) · [完整目录与版本](../README.md) · [通用术语](../../shared-resources/glossary.md)

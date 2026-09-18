@@ -1,6 +1,6 @@
 # errors - 错误值工程
 
-> **模块**: `01-go-backend` | **类型**: 字典条目（无难度门槛，支持任意跳入查阅）
+> **模块**: `01-go-backend` | **类型**: 字典条目（可独立查阅，按主题准备前置知识，支持任意跳入查阅）
 
 ## 📌 定义
 
@@ -18,9 +18,9 @@ fmt.Errorf("read %s: %w", path, err)    // %w 包装：保留原错误形成链
 myErr{...}                              // 自定义类型（可携带结构化字段）
 
 // 三个判读工具（1.13+）
-errors.Is(err, target)    // 链上是否"等于" target（== 或 Is(target) error 方法）
+errors.Is(err, target)    // 链上是否"等于" target（== 或 Is(target error) bool 方法）
 errors.As(err, &target)   // 链上是否能"提取为"某具体类型
-errors.Unwrap(err)        // 剥掉一层上下文，返回内层错误（无包装则 nil）
+errors.Unwrap(err)        // 仅调用 Unwrap() error；不展开 Join 的 Unwrap() []error
 
 // 多错误合并（Go 1.20+）
 joined := errors.Join(err1, err2)   // 全 nil 则返回 nil；Is/As 可穿透各成员
@@ -28,7 +28,7 @@ joined := errors.Join(err1, err2)   // 全 nil 则返回 nil；Is/As 可穿透�
 
 **Sentinel error 模式**：包级导出的预声明错误值（`var ErrNotFound = errors.New("not found")`），调用方用 `errors.Is(err, ErrNotFound)` 识别。命名惯例：导出为 `ErrXxx`。
 
-**错误链工作方式**：`%w` 生成的 `*fmt.wrapError` 实现 `Unwrap() error`；`Is/As` 沿链递归。自定义类型想定制匹配，可实现 `Is(target error) bool` / `As(any) bool` 方法。
+**错误链工作方式**：单个 `%w` 的包装可通过 Unwrap() error 展开；多个 `%w` 或 Join 可以形成分支，Is/As 遍历错误树。内部具体类型名不是应依赖的 API。自定义类型想定制匹配，可实现 `Is(target error) bool` / `As(any) bool` 方法。
 
 ## 💡 示例
 
@@ -96,7 +96,7 @@ func main() {
 - ❌ **错误做法**：`err == ErrNotFound` 直接比较包装过的错误。
 - ✅ **正确做法**：`errors.Is(err, ErrNotFound)`；中间层一旦用 `%w` 包装，`==` 永远 false。
 - ❌ **错误做法**：`fmt.Errorf("...: %v", err)` 丢弃错误链后再想 Is 识别。
-- ✅ **正确做法**：需要可识别性就用 `%w`（每层只包一个 `%w`）；确定顶层拦截、不暴露根因的场景才用 `%v`。
+- ✅ **正确做法**：需要可识别性就用 `%w`（Go 1.20 起一次 Errorf 可以包含多个 `%w`）；确定顶层拦截、不暴露根因的场景才用 `%v`。
 - ❌ **错误做法**：用 `errors.New(fmt.Sprintf(...))` 拼动态消息。
 - ✅ **正确做法**：直接 `fmt.Errorf(...)`；动态消息错误只用于展示，不用于 Is 判定。
 - ❌ **错误做法**：每次请求都 `errors.New` 当 sentinel，两处代码"长得一样"却永不相等。
@@ -104,7 +104,16 @@ func main() {
 - ❌ **错误做法**：panic 代替 error 向上传业务失败。
 - ✅ **正确做法**：可预期失败一律 error（见 defer/panic 条目的分工）。
 - ❌ **错误做法**：As 的目标是值类型 `var ve ValidationError` 但链上装的是 `*ValidationError`。
-- ✅ **正确做法**：As 目标类型必须与装包类型完全一致（指针对指针）；按实现方的方法集决定（指针方法 → 指针类型）。
+- ✅ **正确做法**：As 要求找到的错误可赋给目标类型，也支持接口目标；target 本身要是合法的非 nil 指针。此例错误的动态类型为 *ValidationError，因此使用 var ve *ValidationError，再传 &ve。
+
+<!-- full-library-explanation -->
+## 错误匹配是一项对调用者的承诺
+
+前置是接口、指针和多返回值。errors.Is 用来询问“这个失败是否属于我需要处理的情况”，errors.As 用来提取结构化细节；打印错误文本给人看，不适合作为稳定控制流。若向外包装某个数据库驱动的具体错误，调用者可能开始依赖它，未来换驱动就会受约束。可在仓储边界将已知情况转换为领域错误，未知情况保留内部日志与关联 ID，避免把连接串或 SQL 原样发给用户。
+
+Join 形成的是错误树，不一定是一条单链。errors.Is 和 errors.As 能遍历它，errors.Unwrap 只处理 Unwrap() error，不会拆开 Unwrap() []error。自测：创建 a := errors.New("a")，再对 errors.Join(a, errors.New("b")) 分别调用 Is(joined, a) 和 Unwrap(joined)，预期是 true 和 nil。nil 并不意味着 joined 没有子错误，只是该工具不处理这种展开方法。
+
+练习：把示例 loadUser 的错误包装两层，在 HTTP 适配层将 ErrNotFound 映射为 404，将未知错误映射为 500。断言状态分类而非整段错误字符串；为错误添加“load user 42”上下文后，分类测试仍应通过。错误处理本身还要决定是否重试，不能因为所有错误都实现 error 接口就统一重试。
 
 ## 🔗 相关条目
 
@@ -118,3 +127,9 @@ func main() {
 ---
 
 *最后更新: 2026年9月 | 本条目为模块知识字典的一部分，概念完整解释以此处为单一事实来源*
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

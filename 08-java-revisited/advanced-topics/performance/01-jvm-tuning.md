@@ -6,6 +6,9 @@
 >
 > **前置知识**: 已完成 [Docker 部署](../../deployment/01-docker-deployment.md)；并发背景见 [并发 API 速查](../../reference/language-concepts/04-concurrency-api.md)
 
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
+
 ## 📚 文档元数据
 
 | 属性 | 内容 |
@@ -15,6 +18,8 @@
 | **难度** | ⭐⭐⭐ |
 | **标签** | `#JVM` `#GC` `#G1` `#ZGC` `#调优` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ## 🎯 学习目标
 
@@ -116,15 +121,9 @@ Grafana 重点看板：
 
 ## 🎨 最佳实践
 
-### ✅ 推荐
-- 生产必配：`-XX:+HeapDumpOnOutOfMemoryError`、GC 日志滚动、`MaxRAMPercentage`
-- 每次只改一个参数，前后对比同一时段的 GC 日志
-- 灰度环境先验证：GC 行为与流量形态强相关
+调 JVM 前先区分堆耗尽、原生内存、线程和容器配额问题；只增加堆可能挤压其他内存。GC 日志与必要的堆转储能帮助定位，但转储可能很大且含敏感数据，需限制保存位置、容量和访问。
 
-### ❌ 陷阱
-- 照抄网上的"-Xms=-Xmx + Full GC 参数组合"，忽略自己的流量形态
-- 用 `System.gc()` "清理内存"：触发全停顿，治标且伤身
-- 忽视元空间与直接内存：容器里只盯着堆
+在可比负载下每次改变一个参数，观察吞吐、延迟与暂停分布。System.gc 是请求，实际行为依 GC 与配置而异，不应靠它定时“修复泄漏”。完成分析后找到对象为何仍被引用，而不是只把故障推迟。
 
 ## 🔗 相关文档
 
@@ -134,3 +133,9 @@ Grafana 重点看板：
 - 📄 [Docker 部署](../../deployment/01-docker-deployment.md) — 容器内存参数落地
 - 📄 [K8s 部署](../../deployment/02-kubernetes-deployment.md) — limits 与 JVM 协同
 - 📄 [虚拟线程并发模型](./02-virtual-threads.md) — 内存模型的并发侧延伸
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

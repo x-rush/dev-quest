@@ -1,0 +1,162 @@
+[
+  {
+    "path": "01-go-backend/advanced-topics/architecture/01-microservices-design.md",
+    "reading_prerequisites": "先完成一个带数据库的单体 HTTP 服务，能解释事务、网络超时和服务部署；未遇到跨服务问题时先保留单体结构。"
+  },
+  {
+    "path": "01-go-backend/basics/01-environment-setup.md",
+    "reading_prerequisites": "会创建文件、打开终端并理解命令退出状态即可；本章不要求先掌握 Go 语法，安装后用最小程序验证工具链。"
+  },
+  {
+    "path": "01-go-backend/deployment/01-containerization.md",
+    "reading_prerequisites": "已有可在本机启动的 Go 服务，理解端口、环境变量与进程退出，并具备可运行的 Docker 环境。"
+  },
+  {
+    "path": "01-go-backend/deployment/03-kubernetes-deployment.md",
+    "reading_prerequisites": "先能构建和运行服务镜像，理解 Service/Pod 的区别；练习使用独立集群或测试命名空间。"
+  },
+  {
+    "path": "01-go-backend/frameworks/01-gin-framework-basics.md",
+    "reading_prerequisites": "掌握 Go 函数、结构体、接口和错误返回；知道 HTTP 请求的方法、路径、状态码与 JSON 各承担什么。"
+  },
+  {
+    "path": "01-go-backend/projects/01-rest-api-server.md",
+    "reading_prerequisites": "已完成 Gin 路由与数据库基础；先实现单资源创建和查询，再加入认证、缓存等扩展。"
+  },
+  {
+    "path": "01-go-backend/projects/02-microservices-demo.md",
+    "reading_prerequisites": "先完成单体 API，理解 HTTP 超时、服务发现和事务边界；本项目需要独立的本地依赖环境。"
+  },
+  {
+    "path": "01-go-backend/projects/03-real-time-app.md",
+    "reading_prerequisites": "理解 HTTP、goroutine、channel 与取消；先实现单进程连接管理，再考虑跨实例消息分发。"
+  },
+  {
+    "path": "01-go-backend/projects/04-cli-tool.md",
+    "reading_prerequisites": "掌握函数、文件读写与错误处理，知道标准输入、标准输出和退出码；无需先学 Web 框架。"
+  },
+  {
+    "path": "01-go-backend/reference/framework-essentials/01-gin-framework.md",
+    "reading_prerequisites": "会写 Go handler，理解 HTTP、JSON 与中间件调用顺序；首次使用者先看 basics 与 Gin 基础教程。"
+  },
+  {
+    "path": "02-nextjs-frontend/testing/04-performance-testing.md",
+    "reading_prerequisites": "已有可稳定复现的页面与操作路径，理解发布构建、网络请求与浏览器主线程；先记录测试设备和数据规模。"
+  },
+  {
+    "path": "03-tanstack-stack/reference/quick-references/01-syntax-cheatsheet.md",
+    "reading_prerequisites": "熟悉 React Hook、TypeScript 泛型和对应 TanStack 包的基本职责；片段需要所在项目的 Provider、类型与依赖上下文。"
+  },
+  {
+    "path": "04-multiplatform-apps/React Native三端原生应用学习路线.md",
+    "reading_prerequisites": "会 JavaScript 基本编程；尚不熟 React 时先学习组件、props、state 和 effect，再进入原生构建与平台适配。"
+  },
+  {
+    "path": "05-kotlin-compose/Android原生开发学习路线.md",
+    "reading_prerequisites": "会基本编程即可进入路线；Kotlin 语法、Android 生命周期与 Compose 分阶段学习，不要求提前熟悉整个技术栈。"
+  },
+  {
+    "path": "06-swift-swiftui/iOS原生开发学习路线.md",
+    "reading_prerequisites": "会基本编程；语言基础阶段不要求 Apple 开发经验，界面与真机实践需要匹配的 macOS/Xcode 环境。"
+  },
+  {
+    "path": "07-php-mastery/reference/quick-references/01-php-cheatsheet.md",
+    "reading_prerequisites": "理解 PHP 变量、数组、函数和异常；片段按所在章节补 import、依赖与输入，不应整页拼成一个脚本。"
+  },
+  {
+    "path": "05-kotlin-compose/reference/framework-essentials/01-compose-essentials.md",
+    "reading_prerequisites": "Kotlin 函数与 lambda、@Composable、State 与事件回调。"
+  },
+  {
+    "path": "05-kotlin-compose/reference/framework-essentials/02-compose-material3.md",
+    "reading_prerequisites": "基础 Compose 布局与 Modifier；理解主题参数向子树传递，准备好 Material 3 依赖。"
+  },
+  {
+    "path": "05-kotlin-compose/reference/framework-essentials/03-side-effects.md",
+    "reading_prerequisites": "组合/重组/离开组合的区别，以及 Kotlin 协程与取消。"
+  },
+  {
+    "path": "05-kotlin-compose/reference/framework-essentials/04-recomposition.md",
+    "reading_prerequisites": "会用 remember 和 mutableStateOf，能区分普通变量与被观察的状态读取。"
+  },
+  {
+    "path": "05-kotlin-compose/reference/framework-essentials/05-animation-core.md",
+    "reading_prerequisites": "State 驱动的 UI 与协程；知道动画中的当前值、目标值和速度不是同一个量。"
+  },
+  {
+    "path": "05-kotlin-compose/reference/framework-essentials/06-navigation-components.md",
+    "reading_prerequisites": "Composable、状态所有权和 Android 页面生命周期；理解路由参数不是可随意共享的对象容器。"
+  },
+  {
+    "path": "05-kotlin-compose/reference/framework-essentials/07-compose-testing.md",
+    "reading_prerequisites": "基础单元测试、Composable 与语义树；设备测试还需要正确的测试 runner 和模拟器/设备。"
+  },
+  {
+    "path": "05-kotlin-compose/reference/framework-essentials/08-composition-model.md",
+    "reading_prerequisites": "先理解 State 读取和重组，再区分组合、测量布局、绘制与视图身份。"
+  },
+  {
+    "path": "05-kotlin-compose/reference/framework-essentials/09-gestures.md",
+    "reading_prerequisites": "Modifier、协程与事件回调；掌握局部坐标、位移和最终位置的区别。"
+  },
+  {
+    "path": "05-kotlin-compose/reference/framework-essentials/10-canvas-drawing.md",
+    "reading_prerequisites": "Compose 布局与状态，知道 dp 和像素不同；绘图还需理解坐标、路径与绘制顺序。"
+  },
+  {
+    "path": "05-kotlin-compose/reference/language-concepts/02-null-safety-collections.md",
+    "reading_prerequisites": "Kotlin val/var、函数与类型标注；从可空值的分支处理开始，再读集合操作。"
+  },
+  {
+    "path": "05-kotlin-compose/reference/language-concepts/04-compose-state-api.md",
+    "reading_prerequisites": "Kotlin 属性、lambda 与 Composable；先明确数据所有者，再选择保存与恢复机制。"
+  },
+  {
+    "path": "05-kotlin-compose/reference/language-concepts/05-generics-delegates.md",
+    "reading_prerequisites": "Kotlin 类、接口和函数类型；泛型约束与属性委托分别阅读，不需要一次掌握全部高级语法。"
+  },
+  {
+    "path": "05-kotlin-compose/reference/language-concepts/06-extension-functions.md",
+    "reading_prerequisites": "Kotlin 函数、类与继承，能区分变量的声明类型和运行时对象类型。"
+  },
+  {
+    "path": "05-kotlin-compose/reference/language-concepts/07-scope-functions.md",
+    "reading_prerequisites": "Kotlin lambda、接收者、返回值与可空类型；读代码时先找 it/this 指向谁。"
+  },
+  {
+    "path": "05-kotlin-compose/reference/language-concepts/08-lambdas-higher-order.md",
+    "reading_prerequisites": "普通函数、参数和返回值；理解函数可以作为值传递，再学习接收者 lambda。"
+  },
+  {
+    "path": "05-kotlin-compose/reference/language-concepts/09-collections-operations.md",
+    "reading_prerequisites": "List/Set/Map、lambda 与可变/只读接口的区别；练习时为每步写出输入和输出类型。"
+  },
+  {
+    "path": "05-kotlin-compose/reference/language-concepts/10-sequences.md",
+    "reading_prerequisites": "集合 map/filter 和 Iterator；先理解惰性处理何时开始，才能判断是否节省工作。"
+  },
+  {
+    "path": "05-kotlin-compose/reference/language-concepts/11-text-and-regex.md",
+    "reading_prerequisites": "Kotlin String、转义与可空返回；复杂校验先明确整串匹配还是提取一段。"
+  },
+  {
+    "path": "05-kotlin-compose/reference/library-guides/01-androidx-libraries.md",
+    "reading_prerequisites": "Android 生命周期、Kotlin 协程与 Flow；按持久化、后台工作、分页等需求分别选库。"
+  },
+  {
+    "path": "05-kotlin-compose/reference/library-guides/02-third-party-libs.md",
+    "reading_prerequisites": "Gradle 依赖、协程、HTTP 与 JSON；先能用系统能力完成小功能，再比较库提供的额外价值。"
+  },
+  {
+    "path": "05-kotlin-compose/reference/library-guides/03-ksp-configuration.md",
+    "reading_prerequisites": "Gradle Kotlin DSL、插件与依赖配置，理解编译期生成代码和运行时反射的区别。"
+  },
+  {
+    "path": "05-kotlin-compose/reference/quick-references/01-kotlin-compose-cheatsheet.md",
+    "reading_prerequisites": "已读 Kotlin 和 Compose 入门；这是查阅片段，导入、状态声明和调用作用域仍由项目提供。"
+  },
+  {
+    "path": "05-kotlin-compose/reference/quick-references/02-troubleshooting.md",
+    "reading_prerequisites": "能获取完整编译错误、Logcat 与依赖版本；按具体故障查阅，不需先通读全部参考。"
+  }
+]

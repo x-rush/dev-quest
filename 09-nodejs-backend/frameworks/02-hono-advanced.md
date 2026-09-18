@@ -1,10 +1,21 @@
 # Hono 4 进阶：错误处理、认证中间件与文件上传
 
+## 先看框架承担哪部分职责
+
+**Hono 进阶**：认证、上传和异常处理都位于输入边界。异常统一映射可以稳定协议，但不能把业务无权限与未知错误合成同一种成功响应。
+
+**最小练习与预期结果**：分别模拟无令牌、无效令牌、超限上传和未知异常；每种都有可解释的状态与日志。
+
+具体 API 与安装版本以[模块基线](../README.md)和本篇官方来源为准。先完成这条数据路径，再展开后面的高级配置；框架名称变化后，输入边界、状态归属和失败处理仍是需要理解的机制。
+
 > **文档简介**: 掌握 Hono 后端最常用的三块工程能力——集中式错误处理（onError 与 HTTPException）、JWT 认证中间件与受控文件上传，并给出可直接复用的代码骨架
 >
 > **目标读者**: 已会搭建基础路由、需要为真实项目补齐健壮性的中级后端开发者
 >
 > **前置知识**: [Hono 基础](01-hono-basics.md)、TypeScript 泛型与类型扩展、JWT 基本概念
+
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
 
 ## 📚 文档元数据
 
@@ -15,6 +26,8 @@
 | **难度** | ⭐⭐ |
 | **标签** | `#hono` `#error-handling` `#auth` `#file-upload` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 错误传播模型的概念解释见 [`../basics/06-error-handling.md`](../basics/06-error-handling.md)，本文聚焦 Hono 层的落地写法。
 
@@ -211,11 +224,9 @@ export const avatarsApp = new Hono()
 
 ## ✅ 最佳实践与陷阱
 
-- ✅ 错误处理只有 `app.onError` 一个出口；中间件里直接 `throw`，不要 `try/catch` 后吞错
-- ✅ 用户上传文件一律重命名，禁止拼接原始文件名（路径穿越风险）
-- ❌ `jwt({ secret })` 漏写 `alg`——注册时即抛 `JWT auth middleware requires options for "alg"`，该选项必填且应与 `verify()` 的第三参一致（如 `'HS256'`）
-- ❌ 在 `await next()` 之前抛错会让洋葱"内侧"的中间件全部跳过——需要清理逻辑时用 `try/finally` 包住 `next()`
-- ❌ 把 JWT 密钥硬编码——应走环境变量（密钥管理见 [`../advanced-topics/security/01-security-practices.md`](../advanced-topics/security/01-security-practices.md)）
+认证中间件验证令牌算法、签名和相关声明，授权仍要检查目标资源。算法配置遵循所安装版本的明确契约，并用过期、错误签名和错误受众的测试验证；环境变量只是传递秘密的渠道，还需要访问与轮换管理。
+
+上传文件的存储 key 由服务端生成，原文件名只作为经验证的元数据，不直接拼接路径。资源清理覆盖成功、拒绝和异常路径，finally 能表达自己的清理责任；不要捕获后吞掉错误让请求看似成功。
 
 ## 🔗 相关文档
 
@@ -223,3 +234,9 @@ export const avatarsApp = new Hono()
 - 📄 [错误处理与进程稳定性](../basics/06-error-handling.md) — 错误传播模型与进程级兜底
 - 📄 [Node + TypeScript 常用模式](../reference/language-concepts/05-typescript-patterns.md) — ContextVariableMap 类型扩展与泛型处理器
 - 📄 [认证服务实战](../projects/02-auth-service.md) — 完整的 JWT + 刷新令牌项目
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../LEARNING_GUIDE.md) · [完整目录与版本](../README.md) · [通用术语](../../shared-resources/glossary.md)

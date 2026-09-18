@@ -2,6 +2,9 @@
 
 > **难度**: ⭐ | **前置**: 已读过导航教程（[05-navigation](../../basics/05-navigation.md)）
 
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
+
 ## 📚 文档元数据
 
 | 属性 | 内容 |
@@ -11,6 +14,8 @@
 | **难度** | ⭐ |
 | **标签** | `#ReactNavigation` `#深链` `#linking` `#API速查` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ## NavigationContainer / linking 配置
 
@@ -53,7 +58,7 @@ const linking = {
 
 | 方法 | 行为 |
 |------|------|
-| `navigate(name, params)` | 去重跳转：栈内已有同名页则回退到它 |
+| `navigate(name, params)` | 按导航器、版本及路由身份导航；不保证回退到栈内任意同名页 |
 | `push(name, params)` | 无条件压栈 |
 | `replace(name, params)` | 替换当前页（登录后跳首页用） |
 | `goBack()` | 返回上一层 |
@@ -103,6 +108,7 @@ navigation.replace('Main');
 ```tsx
 // Tab 切回刷新的正确姿势（useEffect 不响应 Tab 切换）
 import { useFocusEffect } from '@react-navigation/native';
+import { useCallback } from 'react';
 
 useFocusEffect(
   useCallback(() => {
@@ -112,7 +118,7 @@ useFocusEffect(
 );
 ```
 
-**陷阱**: Stack 返回不销毁页面组件（保留滚动位置），Tab 页常驻——依赖"卸载清理"的逻辑在这两处不成立，需用 focus/blur 事件。
+**陷阱**: Stack push 后原页面通常保持挂载，而 pop 会移除被弹出的页面；Tab 页面通常保持挂载——依赖"卸载清理"的逻辑在这两处不成立，需用 focus/blur 事件。
 
 ## 深链调试速查
 
@@ -127,6 +133,17 @@ xcrun simctl openurl booted "myapp://detail/42"
 hdc shell aa start -a EntryAbility -b com.example.app
 ```
 
+<!-- full-library-explanation -->
+## 路由身份与页面生命周期
+
+路由参数优先传 `itemId`，页面再按 ID 读数据。把整个可变对象塞入 params 容易产生过期副本，也不利于深链和状态持久化。类型声明用于开发检查；外部链接输入仍需运行时校验。
+
+假设栈为 Home → Detail(1) → Detail(2)：push 会添加新路由；goBack 弹出顶部；replace 替换当前路由。`navigate` 是否复用、切换或新增要看导航器、版本和 getId 等配置，不能一律解释成回到栈中任意同名页。需要回到既有页面时，核对当前版本的 popTo 等明确操作。
+
+练习：记录上述每次操作后的 route key、参数和栈长度，再测试冷启动深链。验收：能解释“同名页面”和“同一个路由实例”的区别；离开页面后轮询暂停，返回后只恢复一份。非顶部的已挂载页面不能只靠卸载事件停止工作。
+
+参考：[React Navigation 迁移说明](https://reactnavigation.org/docs/upgrading-from-6.x/)。
+
 ## 🔗 相关文档
 
 - 📄 **[Expo 要点](./01-expo-essentials.md)**: expo-router 曾基于本 API 构建（SDK 56 起已 fork React Navigation 内置）
@@ -135,3 +152,9 @@ hdc shell aa start -a EntryAbility -b com.example.app
 - 📄 **[导航基础教程](../../basics/05-navigation.md)**: 系统学习路径
 
 *延伸: React Navigation 官方文档 reactnavigation.org*
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

@@ -1,10 +1,23 @@
 # 进阶项目 - 天气应用（网络 + 定位）
 
+## 分阶段练习与验收
+
+**最小阶段**：先通过城市名请求，再逐步接定位和缓存。
+
+**验收结果**：加载、权限拒绝、请求失败与过期数据有独立界面。
+
+**扩展顺序**：ViewModel 管页面状态，Composable 不在重组中重复请求。
+
+建议保存一份正常输入、一份失败输入、实际输出和对应测试。先完成以上阶段再扩展正文中的完整设计；遇到省略实现或未定义依赖，应按文档上下文补齐，不能把代码片段拼接后当作已经验证的完整工程。
+
 > **文档简介**: 构建"定位 → 请求天气 API → 渲染"的天气应用，掌握网络栈、运行时权限与异步状态机的完整协作
 >
 > **目标读者**: 完成[入门项目](01-notes-app.md)、想掌握网络与系统能力集成的进阶学习者
 >
 > **前置知识**: [生态集成](../frameworks/03-ecosystem-integration.md)、[Compose 进阶](../frameworks/02-compose-advanced.md)、协程与 Flow 基础
+
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
 
 ## 📚 文档元数据
 
@@ -15,6 +28,8 @@
 | **难度** | ⭐⭐ |
 | **标签** | `#retrofit` `#location` `#runtime-permission` `#sealed-state` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ---
 
@@ -180,3 +195,9 @@ fun WeatherScreen(viewModel: WeatherViewModel = hiltViewModel()) {
 - 📖 概念字典：[协程与 Flow API 全表](../reference/language-concepts/03-coroutines-flow-api.md) ｜ [第三方库指南](../reference/library-guides/02-third-party-libs.md)
 - 📖 前置教程：[页面导航](../basics/06-navigation.md) ｜ [协程与 Flow 基础](../basics/07-coroutines-flow-basics.md)
 - 🚀 进阶项目：[新闻阅读器：分页 + 缓存](03-news-reader.md) ｜ 精通挑战：[生产级 Android 应用](04-production-android-app.md)
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../LEARNING_GUIDE.md) · [完整目录与版本](../README.md) · [通用术语](../../shared-resources/glossary.md)

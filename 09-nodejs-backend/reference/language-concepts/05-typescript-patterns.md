@@ -6,6 +6,9 @@
 
 > **前置知识**: TypeScript 泛型基础，[路由与中间件](../../basics/05-http-routing.md)
 
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
+
 ## 📚 文档元数据
 
 | 属性 | 内容 |
@@ -16,10 +19,12 @@
 | **标签** | `#TypeScript` `#泛型` `#环境变量` `#类型扩展` |
 | **更新日期** | `2026年9月` |
 
+</details>
+
 ## 1. 类型安全的环境变量
 
 ### 定义
-启动时集中解析并校验环境变量，导出不可变的强类型配置对象。
+启动时集中解析并校验环境变量，导出校验后的强类型配置对象；若需运行时不可变还要另行约束。
 
 ### 语法与示例
 
@@ -29,7 +34,7 @@ import { z } from "zod";
 
 const EnvSchema = z.object({
   NODE_ENV: z.enum(["development", "test", "production"]).default("development"),
-  PORT: z.coerce.number().int().default(3000),
+  PORT: z.coerce.number().int().min(1).max(65535).default(3000),
   DATABASE_URL: z.string().url(),
   JWT_SECRET: z.string().min(32),
 });
@@ -142,8 +147,23 @@ if (result.error instanceof z.ZodError) { /* 校验错误分支 */ }
 
 ---
 
+<!-- full-library-explanation -->
+## 静态类型与运行时校验在边界交接
+
+前置是 TypeScript 联合类型、泛型和 JSON。interface 描述程序期望的形状，编译后通常被擦除；as User 只是告诉检查器相信你，不会检查网络返回的数据。把外部值先作为 unknown，经过 schema 或类型守卫验证，再进入业务代码，才能把“编译器允许访问”与“实际数据确实存在”连接起来。
+
+环境变量应在启动时一次解析，给出清楚的缺失、格式和范围错误；避免打印包含密钥的整个配置。z.coerce.number 会接受空串为 0，因此正整数端口还要检查范围，不能只调用 int。schema.parse 返回值也不会因为 export const 就变成深度不可变，const 只固定绑定，嵌套对象是否可修改是另一项约定。
+
+练习：对端口输入 undefined、空串、abc、0、3000、70000 做表驱动校验。若应用只允许 1–65535，只有缺失时采用默认值及 3000 应成功。再把未知 JSON 强制断言成 User，与真正运行 schema 校验的结果比较；测试应在缺少 id 时明确失败。依赖注入只需要把数据库或时钟接口传给构造函数，不必先引入复杂容器。
+
 ## 🔗 相关文档
 
 - 📄 **[路由与中间件](../../basics/05-http-routing.md)** — zValidator 的教程式讲解
 - 📄 **[现代 JS 语法速查](./01-js-modern-syntax.md)** — 类型守卫与判空语法
 - 📄 **[第一个项目](../../basics/08-first-project.md)** — 本页模式的完整落地实例
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

@@ -6,6 +6,9 @@
 >
 > **前置知识**: [projects/04-production-ios-app.md](../projects/04-production-ios-app.md)（生产化改造完成）、有效的 Apple Developer 账号
 
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
+
 ## 📚 文档元数据
 
 | 属性 | 内容 |
@@ -15,6 +18,8 @@
 | **难度** | ⭐⭐ |
 | **标签** | `#代码签名` `#Archive` `#TestFlight` `#Profile` `#分发` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ## 🎯 本指南解决什么问题
 
@@ -92,9 +97,9 @@ Organizer → 选择归档 → **Distribute App**：
 
 ## ✅ 最佳实践
 
-- ✅ Build 号交给脚本或 Xcode Cloud 自动递增，杜绝手动忘改
-- ✅ 每个功能分支合并前先走一遍 Release 构建，别让签名问题堆到发布日
-- ✅ 外部测试用公开链接 + 独立测试组，按功能线分组管理
+将构建编号、源码提交、签名配置和产物关联保存，自动递增工具帮助避免重复编号，但要确认多个发布分支不会冲突。用可安装的 Release 产物走通核心流程，因为调试成功不能覆盖签名和优化构建差异。
+
+测试组与分发链接按访问范围管理，明确测试数据环境和反馈渠道。先验证一名新测试者能安装并完成任务，再扩大发放范围。
 
 ## ❌ 避免陷阱
 
@@ -122,3 +127,9 @@ Organizer → 选择归档 → **Distribute App**：
 - 📄 [04-devtools.md](../frameworks/04-devtools.md) — Xcode 工具链（Organizer 与构建产物）
 - 📄 [04-production-ios-app.md](../projects/04-production-ios-app.md) — 发布前的生产化检查清单
 - 📄 [02-troubleshooting.md](../reference/quick-references/02-troubleshooting.md) — 签名与上传报错速查
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../LEARNING_GUIDE.md) · [完整目录与版本](../README.md) · [通用术语](../../shared-resources/glossary.md)

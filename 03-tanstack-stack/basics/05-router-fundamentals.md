@@ -1,10 +1,26 @@
 # Router 基础：路由树、文件式路由与导航
 
+## 先理解，再动手
+
+路由把位置变成可保存、可分享的状态。搜索参数来自文本，需要解析与校验，不能因 TypeScript 类型存在就信任地址栏输入。
+
+**本节自测**：直接访问带 page=abc 的地址，并为缺少 page 设置默认值。
+
+<details>
+<summary>预期结果与参考思路（先尝试再展开）</summary>
+
+非法参数应有确定降级或错误提示；刷新与页面内跳转应采用同一规则。
+
+</details>
+
 > **文档简介**: 上手 TanStack Router v1——理解"文件结构即路由树"，用 createFileRoute 定义路由，用类型安全的 Link 与 Outlet 搭建导航骨架
 >
 > **目标读者**: 已用过 React Router 或 Next.js 文件路由，想体验 100% 类型安全路由的开发者
 >
 > **前置知识**: [环境搭建](./01-environment-setup.md)中已配置 `TanStackRouterVite` 插件
+
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
 
 ## 📚 文档元数据
 
@@ -15,6 +31,8 @@
 | **难度** | ⭐ |
 | **标签** | `#TanStack-Router` `#文件路由` `#Link` `#Outlet` `#类型安全` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ## 🎯 学习目标
 
@@ -161,10 +179,9 @@ posts/$postId.tsx   → 详情内容
 
 ## ✅ 最佳实践
 
-- ✅ **从 `Route.useParams()` 取参**而非全局 hook，类型自动收窄
-- ✅ **activeProps 标记当前路由**，导航高亮一行搞定
-- ❌ **避免** 手动编辑 `routeTree.gen.ts`
-- ❌ **避免** 用字符串拼接构造 `to`——动态路径请传 `params` 对象
+路由参数属于某个路由契约。详情页读取该路由的类型化参数，导航时传入 params，能让拼错名称或漏参数更早暴露；参数在 URL 中出现仍不代表已通过业务验证。例如 id 有正确的字符串类型，也可能对应不存在的记录。
+
+文件路由项目修改源路由，不手改生成树。用一次“列表 → 详情 → 返回 → 直接刷新详情”的实验检查地址、选中导航和返回状态是否一致，不能只验证点击后出现了页面。
 
 ---
 
@@ -191,3 +208,9 @@ posts/$postId.tsx   → 详情内容
 ---
 
 **最后更新**: 2026年9月 | Dev Quest · 03-tanstack-stack
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../LEARNING_GUIDE.md) · [完整目录与版本](../README.md) · [通用术语](../../shared-resources/glossary.md)

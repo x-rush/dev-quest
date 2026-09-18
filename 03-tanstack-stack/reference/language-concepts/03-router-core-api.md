@@ -2,7 +2,10 @@
 
 ## 概述
 
-TanStack Router v1 的核心构建块：`createFileRoute` / `createRootRoute`（路由定义）、`createRouter`（实例）、`Link` / hooks（导航与读取）。类型安全来自 Vite 插件生成的 `routeTree.gen.ts`。教程见 [Router 基础](../../basics/05-router-fundamentals.md)。
+TanStack Router v1 的核心构建块：`createFileRoute` / `createRootRoute`（路由定义）、`createRouter`（实例）、`Link` / hooks（导航与读取）。文件式路由通过生成的 `routeTree.gen.ts` 串联类型；代码式路由也支持类型推断。教程见 [Router 基础](../../basics/05-router-fundamentals.md)。
+
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
 
 ## 📚 文档元数据
 
@@ -13,6 +16,8 @@ TanStack Router v1 的核心构建块：`createFileRoute` / `createRootRoute`（
 | **难度** | ⭐⭐ |
 | **标签** | `#createFileRoute` `#RouteTree` `#params` `#searchParams` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ---
 
@@ -53,8 +58,8 @@ function PostDetail() {
 
 ### 陷阱
 
-- params **永远是 string**（URL 语义），数字比较前要转换
-- `validateSearch` 未声明的 search 字段会被丢弃——这是特性不是 bug
+- 默认动态路径参数是字符串；配置 params.parse 后可得到转换类型，仍需验证非法输入
+- validateSearch 输出形状取决于校验函数或 schema 的行为；不能假定所有校验器都自动丢弃未知字段
 - 忘记 `declare module` 全局注册时，`<Link to>` 会退化成宽泛类型
 
 ## 2. RouteTree 与文件约定
@@ -97,7 +102,7 @@ declare module '@tanstack/react-router' {
 ### 陷阱
 
 - `routeTree.gen.ts` 未及时生成（新建文件后没保存/没重启）导致类型找不到路由
-- 目录下**只有** `$id.tsx` 没有 `index.tsx` 时，访问 `/posts` 会 404
+- 没有索引页时 `/posts` 的表现还取决于是否存在父路由与其组件；应检查生成树，不能只凭缺 index 断定 404
 
 ## 3. 导航与读取 API
 
@@ -144,3 +149,20 @@ navigate({ to: '/posts/$postId', params: { postId: '3' }, search: { page: 1 } })
 - 📄 **[Router 进阶要点](../framework-essentials/02-router-essentials.md)** - 守卫/预加载/SSR
 - 📄 **[Router 基础](../../basics/05-router-fundamentals.md)** - 教程入口
 - 📄 **[故障排除](../quick-references/02-troubleshooting.md)** - 路由类型报错排查
+
+
+<!-- full-library-explanation -->
+## 从文件名走到页面内容
+
+先修：React 组件、URL 路径和查询参数。文件式路由由生成器维护路由树；代码式路由也可以获得类型安全，并不强制依赖 Vite 插件。不要手改生成文件来绕过真实文件结构问题。
+
+一条 `/posts/3?page=2` 的路径参数来自 `$postId`，搜索状态来自 validateSearch，loader 的搜索依赖应通过 loaderDeps 声明。三者类型不同：URL 是可被用户修改的输入，TypeScript 不能替代运行时检查。
+
+根路由 context 类型应通过 createRootRouteWithContext 等机制定义；`auth: undefined!` 只是为稍后注入占位，不是认证实现。调用 RouterProvider 时必须提供真实状态，服务端还需按请求构造。
+
+**练习：** 新建文章详情与列表索引，分别直接访问、刷新、客户端跳转。验收：能从生成树找到父子关系，解释 Outlet 的位置，并处理非法参数。参考[路由概念](https://tanstack.com/router/latest/docs/framework/react/routing/routing-concepts)。
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

@@ -6,6 +6,9 @@
 >
 > **前置知识**: 无（字典条目，按现象跳入）
 
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
+
 ## 📚 文档元数据
 
 | 属性 | 内容 |
@@ -15,6 +18,8 @@
 | **难度** | ⭐ |
 | **标签** | `#故障排除` `#调试` `#并发警告` `#Preview` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ---
 
@@ -27,7 +32,7 @@
 **解决**:
 
 - 把输入草稿拆到独立小视图，父视图不读该 state
-- 重计算挪进 `@Observable` store 的计算属性（属性级追踪只刷新读取者）
+- 在数据变化边界预计算昂贵结果并管理失效；仅移进计算属性不会缓存
 - 长列表确认用了 List / LazyVStack
 
 ### 1.2 现象：改了模型属性，界面没刷新
@@ -56,7 +61,7 @@
 | 编译器消息 | 含义 | 解决 |
 |-----------|------|------|
 | `Mutation of captured var in concurrently-executing code` | 并发闭包捕获局部 var | 状态进 actor / 用 Task 返回值收集 |
-| `Type does not conform to the 'Sendable' protocol` | 跨隔离域传非安全类型 | 模型改 struct；或显式 `@unchecked Sendable` 并注明同步策略 |
+| `Type does not conform to the 'Sendable' protocol` | 跨隔离域传非安全类型 | 设计可发送值快照或明确隔离；struct 含引用成员仍可能不安全，unchecked 需要完整同步证明 |
 | `Expression is 'async' but is not marked with 'await'` | 漏 await | 按建议加 `await`/`try await` |
 | `Main actor-isolated property can not be referenced from a nonisolated context` | 后台代码碰 UI 状态 | 函数标 `@MainActor` 或 `await MainActor.run { … }` |
 | `Task-isolated value … never used` | 任务内捕获后未用且被推断转移 | 检查是否漏 `await`，或显式拷贝 |
@@ -71,7 +76,7 @@
 
 **原因**: 任务跑在非 MainActor。
 
-**解决**: 用 `.task`（自带 MainActor）；或 store 标 `@MainActor`；或 await 挂起点后自然回到主 actor。
+**解决**: 明确 UI store 的 @MainActor 隔离；任务继承行为取决于调用位置与声明，await 不会凭空赋予主 actor 隔离。
 
 ---
 
@@ -110,7 +115,7 @@
 
 ### 4.2 现象：视图高度为 0 / 完全消失
 
-**排查**: 是否放在了 `GeometryReader`（默认占满但不给子视图约束）？是否被 `if` 条件隐藏？`.frame(maxHeight: .infinity)` 意外吃掉空间？用 Debug 里的 **View Hierarchy**（`⌘⇧O` 输入 Debug View Hierarchy）看真实坐标。
+**排查**: 是否放在了 `GeometryReader`（默认占满但不给子视图约束）？是否被 `if` 条件隐藏？`.frame(maxHeight: .infinity)` 意外吃掉空间？用 Xcode 调试栏的 Debug View Hierarchy 检查实际布局；⌘⇧O 是快速打开，不是视图层级命令。
 
 ### 4.3 现象：键盘弹出击穿界面/遮挡输入框
 
@@ -134,11 +139,11 @@ Xcode **Settings > Accounts** 登录 Apple ID → 项目 **Signing & Capabilitie
 
 ### 5.3 现象：升级 Xcode 后大量并发报错
 
-Xcode 26 默认 Swift 6 语言模式。过渡方案：Target > Build Settings > **Strict Concurrency Checking** 调为 Minimal（Swift 5 模式），逐步修复后再切回。
+先核对当前 target 的 Swift Language Version、Strict Concurrency Checking 和默认 actor 隔离，不能仅凭 Xcode 版本推断语言模式。按首条隔离诊断修正所有权；临时迁移设置需记录计划，不能把关闭检查当最终修复。
 
 ### 5.4 现象：模拟器无法安装 App / 卡在 "Installing"
 
-`xcrun simctl erase "iPhone 16 Pro"` 重置设备；或删除 DerivedData；磁盘不足也是常见根因（保留 40GB+）。
+先检查可用空间、设备状态和安装日志，重启对应模拟器再试。erase 会删除该模拟器的数据，仅在已有备份且确认目标设备后作为最后手段；不要硬编码另一个人的设备名称。
 
 ---
 
@@ -169,3 +174,18 @@ assert(!items.isEmpty, "列表不应为空")
 - 📄 [01-swift-swiftui-cheatsheet.md](./01-swift-swiftui-cheatsheet.md) — 速查表
 - 📄 [04-swiftui-state-api.md](../language-concepts/04-swiftui-state-api.md) — 数据流包装器语义
 - 📄 [03-concurrency-api.md](../language-concepts/03-concurrency-api.md) — 并发 API 与取消语义
+
+
+<!-- full-library-explanation -->
+## 一次只检验一个原因
+
+先记录 Xcode、Swift 语言模式、默认 actor 隔离、目标系统和完整第一条错误；后面的很多报错可能只是连锁结果。缩成包含一个 View、一份模型、一个依赖的小例子，再逐项恢复功能。不要同时清缓存、升级依赖和重写状态管理，否则无法知道哪个动作有效。
+
+例如“输入卡顿”：先用静态数据替换网络；仍卡则查看 body/布局热点；热点是计算属性排序就统计每次读取次数并移到数据变化边界。把排序挪到另一个计算属性本身没有缓存效果。若只在键盘出现时发生，则检查布局提案、嵌套滚动与安全区，而不是先改并发设置。
+
+练习：构造一个缺环境注入的 Preview，保存原始错误，再只添加 environment 修复；构造一个不响应取消的循环，只增加 checkCancellation 后比较退出。验收记录现象、最小原因、唯一修改、复测结果四项，确保同一个用例既能复现旧问题又能证明修复。
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

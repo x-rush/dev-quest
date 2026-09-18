@@ -1,10 +1,26 @@
 # PHP 开发环境搭建 - PHP 8.5+ 与现代工具链
 
+## 先理解，再动手
+
+PHP 解释器运行脚本，扩展提供附加能力，Composer 管项目依赖。一个环境能运行 echo 不代表已启用数据库或多字节扩展。
+
+**本节自测**：查看 php -v、php -m 和 composer --version，运行最小脚本。
+
+<details>
+<summary>预期结果与参考思路（先尝试再展开）</summary>
+
+能指出缺失命令与缺失扩展的区别；只安装 Composer 不能替代 PHP。
+
+</details>
+
 > **文档简介**: 从零搭建现代化 PHP 开发环境，包括 PHP 8.5+ 运行时、Composer 依赖管理、Xdebug 调试器与 IDE 配置
 >
 > **目标读者**: 有其他语言基础、首次系统学习 PHP 的开发者，或需要把旧环境升级到 PHP 8.5+ 的 PHP 开发者
 >
 > **前置知识**: 基本命令行操作经验，了解任意一门编程语言
+
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
 
 ## 📚 文档元数据
 
@@ -15,6 +31,8 @@
 | **难度** | ⭐ |
 | **标签** | `#环境搭建` `#PHP8.5` `#Composer` `#Xdebug` `#工具链` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ## 🎯 学习目标
 
@@ -188,11 +206,9 @@ php check.php
 
 ## ✅ 最佳实践
 
-- ✅ **用版本管理器**：使用 `brew` 或 phpbrew/asdf 管理多个 PHP 版本，方便在不同项目间切换
-- ✅ **开发/生产配置分离**：本地用 `php.ini-development`（错误直接显示），生产环境必须用 production 配置并关闭 `display_errors`
-- ✅ **所有项目用 Composer 管理依赖**：不要手工下载类库或修改全局 `php.ini` 来"装库"
-- ❌ **避免使用 PHP 8.0 以下的版本**：枚举、属性注解、构造器属性提升等现代特性均需 8.1+
-- ❌ **不要用 `@` 错误抑制符**：现代 PHP 应通过异常处理与 `error_reporting` 管理错误
+先确认 CLI 与 Web 服务实际加载的 PHP 版本、扩展和 ini 文件，它们可能不同；“终端能跑”不足以证明 FPM 配置正确。项目依赖由 Composer 清单与锁文件记录，扩展则属于运行环境，不能混为一类。
+
+开发时需要充分诊断，生产错误细节进入受控日志而非响应。新语法按其引入版本和项目支持范围核对，例如属性与构造器提升并不是同枚举一起加入的。升级前执行语法、测试与依赖兼容检查，不只改版本号。
 
 ## ❓ 常见问题
 
@@ -224,3 +240,9 @@ php check.php
 - 📄 **[PHP 关键字详解](../reference/language-concepts/01-php-keywords.md)** — 阅读 `declare` 等语法的权威条目
 - 📄 **[Composer 生态精选](../reference/library-guides/02-composer-ecosystem.md)** — 依赖管理深入
 - 📄 **[常见错误排查](../reference/quick-references/02-troubleshooting.md)** — 环境问题速查
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../LEARNING_GUIDE.md) · [完整目录与版本](../README.md) · [通用术语](../../shared-resources/glossary.md)

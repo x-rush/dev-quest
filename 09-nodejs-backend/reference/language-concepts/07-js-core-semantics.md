@@ -6,6 +6,9 @@
 
 > **前置知识**: [现代 JS 语法速查](./01-js-modern-syntax.md)
 
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
+
 ## 📚 文档元数据
 
 | 属性 | 内容 |
@@ -15,6 +18,8 @@
 | **难度** | ⭐⭐ |
 | **标签** | `#原型链` `#this` `#闭包` `#私有字段` `#生成器` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ## 1. 原型链与 class
 
@@ -84,7 +89,7 @@ class Card {
 function f() { return this; }
 const obj = { f };
 
-f();            // undefined（ESM/TS 代码默认严格模式）
+f();            // undefined（ESM 自动采用严格模式；TS 还取决于输出格式与编译配置）
 obj.f();        // obj
 f.call(obj);    // obj
 new (function P() { this.ok = true; })().ok;  // true
@@ -152,6 +157,28 @@ for (const v of ids()) {}                     // for...of 消费
 
 与事件循环的配合见 [异步 API 全表](./02-async-api.md)（异步迭代 `for await...of`）。
 
+<!-- full-library-explanation -->
+## 共享方法、独立状态与回调接收者
+
+前置是对象、函数和赋值。类实例通常共享 prototype 上的方法，但实例字段各自存放；箭头类字段为每个实例创建一个函数，并捕获该实例的 this。它能解决回调丢失接收者的问题，也有分配与继承行为差异。class 仍建立在原型机制上，但严格模式、私有字段与构造调用规则不能简化为和普通函数完全等价。
+
+下面的完整 ESM 实验保存为 semantics.mjs：
+
+```js
+const counter = {
+  value: 1,
+  read() { return this.value; },
+};
+const bound = counter.read.bind(counter);
+counter.value = 2;
+console.log(bound());
+const callbacks = [];
+for (let i = 0; i < 3; i++) callbacks.push(() => i);
+console.log(callbacks.map(fn => fn()).join(','));
+```
+
+输出 2 和 0,1,2。bind 固定接收者，不是冻结对象的值；闭包保留变量绑定，也不是自动快照。练习：将 let 换成 var，输出应为 3,3,3；把 read 脱离对象直接调用，ESM 严格模式下 this 为 undefined。调试时先写出实际调用表达式，再判断 this，不能只看函数最初定义在哪个对象里。
+
 ## 🔗 相关文档
 
 - 📄 **[现代 JS 语法速查](./01-js-modern-syntax.md)** — 解构、可选链、空值合并等语法层细节
@@ -162,3 +189,9 @@ for (const v of ids()) {}                     // for...of 消费
 ---
 
 *最后更新: 2026年9月 | 本条目为模块知识字典的一部分，概念完整解释以此处为单一事实来源*
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

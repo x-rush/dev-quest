@@ -6,6 +6,9 @@
 
 > **前置知识**: [JS 核心语义](./07-js-core-semantics.md)
 
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
+
 ## 📚 文档元数据
 
 | 属性 | 内容 |
@@ -16,10 +19,12 @@
 | **标签** | `#相等性` `#类型转换` `#Map` `#JSON` `#RegExp` |
 | **更新日期** | `2026年9月` |
 
+</details>
+
 ## 1. 相等性：`===` / `Object.is` / `==`
 
 ### 定义
-三种相等语义精度递增：`==`（宽松，做类型转换）、`===`（严格，不做转换）、`Object.is`（同值，修正 NaN 与 ±0 特例）。
+三种相等语义适用于不同约定：`==`（宽松，做类型转换）、`===`（严格，不做转换）、`Object.is`（同值，修正 NaN 与 ±0 特例）。
 
 ### 三者差异速查
 
@@ -27,7 +32,7 @@
 |------|-------|-------------|
 | `NaN` vs `NaN` | `false` | **`true`** |
 | `+0` vs `-0` | **`true`** | `false` |
-| 其余同类型值 | 值比较 | 值比较 |
+| 其余同类型值 | 原始值按对应规则比较，对象按身份 | 原始值按对应规则比较，对象按身份 |
 
 `Object.is` 就是 `SameValue`；Map/Set 内部用的是 **SameValueZero**——与 `Object.is` 唯一区别是 ±0 视为同键。
 
@@ -46,7 +51,7 @@
 ## 2. 类型转换三件套
 
 ### 定义
-抽象操作 `ToNumber`/`ToString`/`ToBoolean` 是隐式转换的底层规则，显式写 `Number(x)`/`String(x)` 走同一套逻辑。
+抽象操作 `ToNumber`/`ToString`/`ToBoolean` 是隐式转换的底层规则，显式构造转换通常关联这些规则，但存在特殊允许行为，例如 String(Symbol())，不能一概视作与所有隐式转换等价。
 
 ### ToNumber 实测速查
 
@@ -92,7 +97,7 @@ m.set(-0, "neg");       m.get(0);            // "neg"：+0 与 -0 同键
 new Set([1, "1", NaN, NaN, -0, 0]).size;     // 4：NaN 与 ±0 各去重一次
 
 const wm = new WeakMap();
-wm.set("str", 1);                            // TypeError：键必须是对象
+wm.set("str", 1);                            // TypeError：键需为对象或受支持的未注册 Symbol
 const sym = Symbol("k");  wm.set(sym, 1);    // ✅ 未注册 Symbol 可作键
 ```
 
@@ -108,7 +113,7 @@ const sym = Symbol("k");  wm.set(sym, 1);    // ✅ 未注册 Symbol 可作键
 ## 4. JSON.stringify / parse
 
 ### 定义
-JSON 是 JS 对象字面量的子集：序列化会**静默丢弃**部分值，理解丢弃规则是排错关键。
+JSON 是独立的数据交换语法，不能把任意 JS 对象或表达式都按 JSON 处理：序列化会**静默丢弃**部分值，理解丢弃规则是排错关键。
 
 ### 序列化规则速查（Node 24 实测）
 
@@ -165,6 +170,22 @@ d.getFullYear();                             // 本地时区取值；getUTCFullY
 - 字符串解析除 ISO 8601 外**不保证跨引擎一致**，输入非 ISO 时先自行解析
 - 只做加减比较用毫秒时间戳（`Date.now()`）；涉及时区展示用 `Intl.DateTimeFormat` 或 Temporal（提案中）
 
+<!-- full-library-explanation -->
+## 输入校验需要显式区分缺失、空白和零
+
+前置是原始值、对象与条件语句。Number 是转换函数，不是“只接收用户输入的十进制整数”校验器；空白会变成 0，指数和某些进制前缀也可转换。若要求端口、年龄等特定格式，先规定文本语法，再检查数值范围。=== 与 Object.is 表达不同相等关系，不能说某一个在所有业务里更精确。
+
+完整实验保存为 values.mjs：
+
+```js
+console.log(Number(''), Number('  '), Number.isNaN(Number('12px')));
+const a = { id: 1 }, b = { id: 1 };
+console.log(a === b, new Set([a, b]).size);
+console.log(JSON.stringify({ missing: undefined, empty: null }));
+```
+
+预期为 `0 0 true`、`false 2` 和 `{"empty":null}`。对象键按身份比较，不会因为内容相同自动去重；按 id 去重应明确选第一个、最后一个还是拒绝冲突。练习：用 Map 保留每个 id 的最后一条记录，并验证输出顺序；再序列化 Map，观察默认不是期望的键值 JSON，需要显式转换并处理非字符串键语义。
+
 ## 🔗 相关文档
 
 - 📄 **[JS 核心语义](./07-js-core-semantics.md)** — 原型链、this 与闭包
@@ -175,3 +196,9 @@ d.getFullYear();                             // 本地时区取值；getUTCFullY
 ---
 
 *最后更新: 2026年9月 | 本条目为模块知识字典的一部分，概念完整解释以此处为单一事实来源*
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

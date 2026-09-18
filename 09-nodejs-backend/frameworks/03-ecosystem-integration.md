@@ -1,10 +1,21 @@
 # 生态集成：Prisma + PostgreSQL 与 Redis
 
+## 先看框架承担哪部分职责
+
+**Prisma 与 Redis**：Prisma 连接数据库事实，Redis 通常保存副本；一次写入后的失效顺序决定可能看见什么旧数据。连接池和迁移是运行条件。
+
+**最小练习与预期结果**：写入后立即读取，再模拟缓存不可用；说明一致性与降级策略，不把缓存失败误判成数据库写入失败。
+
+具体 API 与安装版本以[模块基线](../README.md)和本篇官方来源为准。先完成这条数据路径，再展开后面的高级配置；框架名称变化后，输入边界、状态归属和失败处理仍是需要理解的机制。
+
 > **文档简介**: 手把手把 Prisma ORM 接入 PostgreSQL、把 Redis 作为缓存层接入 Hono 4 服务，覆盖连接管理、事务与迁移的工程化实践
 >
 > **目标读者**: 已会写基础路由、需要接入持久化与缓存的中级后端开发者
 >
 > **前置知识**: SQL 基础、[Hono 基础](01-hono-basics.md)、环境变量管理
+
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
 
 ## 📚 文档元数据
 
@@ -15,6 +26,8 @@
 | **难度** | ⭐⭐ |
 | **标签** | `#prisma` `#postgresql` `#redis` `#cache` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 > Prisma 与生态库的条目式速查见 [`../reference/library-guides/02-ecosystem-libs.md`](../reference/library-guides/02-ecosystem-libs.md)。
 
@@ -188,10 +201,9 @@ app.get('/health', async (c) => {
 
 ## ✅ 最佳实践与陷阱
 
-- ✅ `prisma migrate deploy` 用于生产，`migrate dev` 只在开发使用
-- ✅ 缓存写路径"更新后失效"而非"更新缓存"，避免并发写不一致
-- ❌ 每次请求 `new PrismaClient()`——连接池迅速耗尽（症状见 [`../reference/quick-references/02-troubleshooting.md`](../reference/quick-references/02-troubleshooting.md)）
-- ❌ 把 Redis 当强一致存储：TTL 内读到旧数据是特性不是 Bug
+数据库客户端按其生命周期复用，避免每次请求创建新连接池；不同租户或环境的隔离需求另行设计。迁移在受控发布步骤执行，失败时停止后续依赖新结构的部署。
+
+缓存中的旧数据通常来自应用缓存协议，而不是 Redis 天生只能弱一致。删除缓存与更新缓存各有竞态，先明确写入顺序、失效策略和可接受延迟，再测试并发读写。TTL 只能限制部分旧值持续时间，不能独自证明一致性。
 
 ## 🔗 相关文档
 
@@ -199,3 +211,9 @@ app.get('/health', async (c) => {
 - 📄 [第一个完整项目：任务管理 REST API](../basics/08-first-project.md) — Prisma 在入门项目中的首次实践
 - 📖 [Node 核心模块 API 速查](../reference/language-concepts/03-node-core-api.md) — 进程与事件相关 API
 - 📄 [生产级 Node.js API](../projects/04-production-nodejs-api.md) — 生态集成的完整生产化应用
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../LEARNING_GUIDE.md) · [完整目录与版本](../README.md) · [通用术语](../../shared-resources/glossary.md)

@@ -1,10 +1,26 @@
 # 模块系统与 ESM
 
+## 先理解，再动手
+
+ESM 的 import 与 CommonJS 的 require 有不同解析和加载规则。扩展名、package type 与工具链共同决定文件怎样被解释。
+
+**本节自测**：拆出一个纯函数模块并导入；再故意拼错相对路径。
+
+<details>
+<summary>预期结果与参考思路（先尝试再展开）</summary>
+
+错误发生在模块解析阶段，函数还没执行；排查目录、扩展名和导出名称。
+
+</details>
+
 > **文档简介**: 理解 ESM 与 CommonJS 的差异、package.json 的 `exports` 字段以及 Node 的模块解析规则，这是读懂现代 Node 代码的基础
 
 > **目标读者**: 需要 import/export 写规范、发布库或排查"Cannot use import statement outside a module"类报错的开发者
 
 > **前置知识**: [环境搭建](./01-environment-setup.md)，对 `import`/`require` 有初步印象
+
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
 
 ## 📚 文档元数据
 
@@ -15,6 +31,8 @@
 | **难度** | ⭐ |
 | **标签** | `#ESM` `#CommonJS` `#模块解析` `#exports` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ## 🎯 学习目标
 
@@ -165,11 +183,9 @@ TypeScript 项目用 `.js` 后缀指向 `.ts` 源文件（编译期映射），�
 
 ## 🎨 最佳实践
 
-- ✅ **新项目一律 ESM**：`"type": "module"` + `.js` 全扩展名
-- ✅ **内置模块加 `node:` 前缀**：区分来源且未来兼容性更好
-- ✅ **发布库必写 `exports`**：显式控制 API 面，双格式（import/require）双构建
-- ❌ **不要在 ESM 里用 `__dirname`**：改用 `import.meta.dirname`（Node 20.11+ 稳定）
-- ❌ **不要在 ESM 文件里调用 `require`**：作用域中不存在，需用 `createRequire` 桥接
+模块格式按运行环境和依赖契约选择，ESM 与 CommonJS 互操作仍有边界。原生 Node ESM 的相对导入通常需要明确扩展名，TypeScript 构建工具又可能有不同解析规则，需区分源码与运行产物。
+
+exports 可限定包的公共入口，但仅在承诺支持两种消费方式时才需要相应双格式设计。ESM 中没有传统的 require/__dirname 绑定，使用适用版本的 import.meta 能力或标准桥接方式。编写一个真实消费者验证公开入口，避免只在库自己的目录里能导入。
 
 ## ❓ 常见问题
 
@@ -206,3 +222,9 @@ TypeScript 项目用 `.js` 后缀指向 `.ts` 源文件（编译期映射），�
 - 📄 **[Node 核心模块 API](../reference/language-concepts/03-node-core-api.md)** — `module` 与 `process` 相关 API
 - 📄 **[ESM 与模块解析速查](../reference/language-concepts/06-esm-module-resolution.md)** — exports/imports 字段、解析算法与 TS 策略的条目式字典
 - 📄 **[常见故障排除](../reference/quick-references/02-troubleshooting.md)** — ESM 兼容坑集中排查
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../LEARNING_GUIDE.md) · [完整目录与版本](../README.md) · [通用术语](../../shared-resources/glossary.md)

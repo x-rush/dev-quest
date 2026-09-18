@@ -6,6 +6,9 @@
 >
 > **前置知识**: [单元/集成测试](../testing/01-unit-testing.md)、[容器化部署](01-docker-deployment.md)
 
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
+
 ## 📚 文档元数据
 
 | 属性 | 内容 |
@@ -15,6 +18,8 @@
 | **难度** | ⭐⭐ |
 | **标签** | `#github-actions` `#ci-cd` `#pnpm` `#docker` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ## 🎯 本节目标
 
@@ -179,10 +184,9 @@ docker compose up -d --no-deps api
 
 ## ✅ 最佳实践与陷阱
 
-- ✅ `--frozen-lockfile` 是 CI 的纪律：锁文件与 package.json 不同步直接失败
-- ✅ 三个 job 并行，最慢的集成测试不阻塞 lint 反馈
-- ❌ 把部署密钥塞进 PR 流程——PR 可被 fork 触发，密钥只进 release
-- ❌ 用 `npm install` 替代 `pnpm install --frozen-lockfile`——依赖树漂移，构建不可复现
+CI 安装与本地使用相同包管理器，锁文件不一致时明确失败；lint、类型检查和测试可以在无依赖关系时并行，但部署必须使用通过全部必要检查的同一产物。
+
+不可信 PR 的检查任务不应获得生产凭据。将发布权限限制到可信分支或受控流程，并验证失败的测试确实会阻止发布；仅拆成多个 job 不自动形成正确门禁。
 
 ## 🔗 相关文档
 
@@ -190,3 +194,16 @@ docker compose up -d --no-deps api
 - 📄 [可观测性](03-observability.md) — 部署后的监控闭环
 - 📄 [端到端 API 测试](../testing/03-e2e-api-testing.md) — 发布门禁的最后一环
 - 📄 [生产级 Node.js API](../projects/04-production-nodejs-api.md) — 流水线服务的对象
+
+
+<!-- acceptance-exercise -->
+## 练习与验收：冻结依赖与发布产物的练习
+
+先让 package.json 与锁文件故意不一致，预期冻结安装阶段失败，而不是悄悄更新依赖。恢复后制造一个失败测试，发布步骤仍应被拦截。最后使用同一个已测试镜像摘要进入测试部署，不在部署 job 重新构建另一份产物。验收保存这三条运行证据，并确认普通外部 PR 不获得部署秘密。
+
+以上是在个人或隔离测试环境中的练习，不是本轮已执行记录；实际运行范围见仓库文档质量报告。
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../LEARNING_GUIDE.md) · [完整目录与版本](../README.md) · [通用术语](../../shared-resources/glossary.md)

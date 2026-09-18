@@ -6,6 +6,9 @@
 
 > **前置知识**: [路由与中间件](../../basics/05-http-routing.md)
 
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
+
 ## 📚 文档元数据
 
 | 属性 | 内容 |
@@ -16,6 +19,8 @@
 | **标签** | `#Prisma` `#Zod` `#pino` `#BullMQ` `#生态` |
 | **更新日期** | `2026年9月` |
 
+</details>
+
 ## 0. 分类总览
 
 | 类别 | 首选 | 备选 | 一句话理由 |
@@ -23,7 +28,7 @@
 | 校验 | **Zod** | joi、valibot、yup | schema 即 TS 类型，前后端同构 |
 | ORM | **Prisma** | Drizzle、TypeORM、Kysely | 类型安全 + 迁移工具链完整 |
 | 日志 | **pino** | winston | 极低开销、JSON 结构化 |
-| Redis 客户端 | ioredis | node-redis | 功能全、连接池成熟 |
+| Redis 客户端 | ioredis | node-redis | 支持多种 Redis 部署模式；连接复用方式需按客户端 API 配置 |
 | 队列 | **BullMQ** | Graphile Worker | 基于 Redis 的延迟/重试/优先级队列 |
 | 出站 HTTP | 全局 fetch | axios、got、ky | Node 24 原生支持，无需依赖 |
 | 限流 | rate-limiter-flexible | hono-rate-limiter（社区） | 多存储后端、分布式可用 |
@@ -57,7 +62,7 @@ UserSchema.parse(input);        // 抛 ZodError：适合"必须合法"的边界
 
 ### Zod vs joi
 
-joi 老牌稳定但无原生类型推导；TS 新项目一律 Zod，既有 joi 代码不必强行迁移。
+joi 老牌稳定但无原生类型推导；TS 项目可根据推导体验、包体积、现有 schema 与生态选择，既有 joi 代码不必强行迁移。
 
 ## 2. Prisma：类型安全 ORM
 
@@ -70,6 +75,7 @@ Schema 驱动的 ORM：声明模型 → 生成类型化客户端 → 迁移管�
 model User {
   id    String  @id @default(cuid())
   email String  @unique
+  name  String
   posts Post[]
 }
 
@@ -104,10 +110,10 @@ await prisma.user.upsert({ where: { email }, update: { name }, create: { email, 
 ```
 
 ### 陷阱
-- v7 schema 的 datasource 中 `url`/`directUrl` 已 deprecated（不推荐但不报错），连接配置移到 `prisma.config.ts`；客户端构造必须传 adapter
+- 采用 Prisma 7 的配置方式时，将连接配置放在 prisma.config.ts 并按当前生成器与连接模式配置 adapter；不要继续复制旧版 datasource 配置，迁移时按官方升级指南验证
 - 修改 schema 后需显式 `prisma generate`（v7 迁移不再自动生成），否则类型与运行时不一致
 - `include`/`select` 已做关联扁平化，但循环内单查仍是 N+1，注意查询模式
-- 唯一键冲突抛 `P2002`，错误中间件按 `err.code` 前缀 `P` 映射 4xx
+- 唯一约束冲突 P2002 可按具体业务映射为 409；数据库不可达等错误应按服务失败处理，不能按 P 前缀统一映射为 4xx
 
 ### Prisma vs Drizzle
 
@@ -180,8 +186,23 @@ await emailQueue.upsertJobRepeatable("daily-report", {}, { pattern: "0 9 * * *" 
 
 ---
 
+<!-- full-library-explanation -->
+## 让每个库负责一个可验证的边界
+
+前置是 HTTP、TypeScript、数据库与日志。Zod 负责校验值形状，不能证明调用者拥有对象权限；Prisma 负责数据访问与迁移工具链，不能自动消除所有 N+1；pino 负责输出结构化记录，不能自动决定哪些隐私允许记录；BullMQ 负责调度与重试，不能让非幂等业务自动获得“恰好一次”效果。把职责写清，才能知道失败应在哪层处理。
+
+新项目先做一条垂直流程：校验创建任务请求、写入数据库、输出带请求 ID 的日志，再用测试验证读取结果。只有确实需要延迟或后台处理时才加入队列；需要多实例共享限流时再引入相应存储。不要为了跟上生态而让第一次运行同时依赖四个服务。
+
+练习：给持久化写入制造唯一约束冲突、数据库断连和输入错误，分别返回冲突、服务失败和输入错误的语义，避免把所有 Prisma P 开头错误都当作 4xx。再让一个队列任务在业务写入后、确认完成前失败，重试应通过幂等键识别已经完成的业务。版本升级先核对生成器、客户端导入、驱动适配器和迁移配置这几个联动点，再复跑契约测试。
+
 ## 🔗 相关文档
 
 - 📄 **[内置模块导航表](./01-core-modules.md)** — 先查内置，再找三方
 - 📄 **[第一个项目](../../basics/08-first-project.md)** — Prisma+Zod+pino 组合实战
 - 📄 **[TypeScript 模式](../language-concepts/05-typescript-patterns.md)** — env 校验与类型守卫模式
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

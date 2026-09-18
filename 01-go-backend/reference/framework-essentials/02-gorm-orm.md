@@ -2,6 +2,9 @@
 
 GORM是Go语言中最流行的ORM库，提供了简洁的API和强大的功能。本文档详细介绍GORM框架的所有重要知识点，从基础使用到高级特性。
 
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
+
 ## 📚 文档元数据
 
 | 属性 | 内容 |
@@ -14,26 +17,21 @@ GORM是Go语言中最流行的ORM库，提供了简洁的API和强大的功能�
 | **作者** | Dev Quest Team |
 | **状态** | ✅ 已完成 |
 
+</details>
+
 ## 1. GORM基础
 
 ### 1.1 GORM简介
-- **GORM特点**：开发者友好的ORM库
-- **核心功能**：模型定义、CRUD操作、关联关系
-- **数据库支持**：MySQL, PostgreSQL, SQLite, SQL Server
-- **设计理念**：约定优于配置
+
+GORM 将 Go 模型与关系数据库操作连接起来，能减少常见 CRUD 的重复代码，但生成 SQL、事务和索引仍需开发者理解。数据库驱动决定具体能力与差异；模型约定方便默认映射，已有表结构则可通过显式配置适配。先完成创建、查询与错误处理再展开关联。
 
 ### 1.2 安装和配置
-- **安装GORM**：`go get -u gorm.io/gorm`
-- **安装驱动**：`go get gorm.io/driver/postgres`
-- **导入GORM**：`import "gorm.io/gorm"`
-- **版本管理**：GORM版本兼容性
+
+在 Go module 中加入 GORM 和目标数据库驱动，记录并测试所选版本组合。导入 gorm.io/gorm 只提供 ORM API，具体连接还需 postgres 等驱动。不要把 go get -u 当每次安装必需，它可能扩大依赖更新范围；已有工程先审阅升级差异。
 
 ### 1.3 数据库连接
-- **连接配置**：DSN字符串配置
-- **连接池**：连接池配置和优化
-- **连接测试**：连接健康检查
-- **多数据库**：多数据库配置
-- **连接管理**：连接生命周期管理
+
+DSN 说明地址、数据库与身份等连接参数，不应把生产密码提交到文档或代码。通过 GORM 取得底层 sql.DB 管理池，启动时验证必要连接，退出时关闭。多数据库各有连接、事务和一致性边界，不因为持有多个句柄就自动拥有跨库原子性。
 
 **示例**：
 ```go
@@ -77,25 +75,16 @@ func main() {
 ## 2. 模型定义
 
 ### 2.1 模型基础
-- **结构体定义**：GORM模型结构体
-- **字段标签**：GORM标签和数据库标签
-- **表名约定**：表名自动生成规则
-- **字段名约定**：字段名转换规则
-- **主键定义**：主键字段定义
+
+模型结构体描述字段，标签控制列名、主键或索引等映射，默认命名约定只是在没有显式设置时生效。先查看实际生成的表结构，确认 id、时间字段和可空性符合需求；HTTP 客户端能写哪些字段应另外用输入模型限制。
 
 ### 2.2 字段类型
-- **基本类型**：Go类型与数据库类型映射
-- **时间类型**：时间字段处理
-- **JSON类型**：JSON字段支持
-- **枚举类型**：枚举字段定义
-- **自定义类型**：自定义数据类型
+
+Go 值与数据库类型之间需明确缺失、零值和精度，例如 *string 或 nullable 类型可区分 NULL 与空串，金额不能随意转成 float。JSON、枚举与自定义类型依数据库和驱动支持，必要时实现 Scanner/Valuer 等契约。写入边界值再读回，检查没有精度或时区丢失。
 
 ### 2.3 模型标签
-- **主键标签**：`gorm:"primaryKey"`
-- **自增标签**：`gorm:"autoIncrement"`
-- **索引标签**：`gorm:"index"`
-- **唯一标签**：`gorm:"unique"`
-- **非空标签**：`gorm:"not null"`
+
+primaryKey 标识主键，autoIncrement 请求相应自增行为，index/unique/not null 表达索引或约束意图，最终支持取决于数据库与迁移执行。唯一约束才防止并发下重复插入，“先查询不存在再创建”本身有竞态。验证重复值和 NULL 的实际失败结果。
 
 **示例**：
 ```go
@@ -157,25 +146,16 @@ func (j *JSON) Scan(value interface{}) error {
 ## 3. 数据库迁移
 
 ### 3.1 自动迁移
-- **AutoMigrate**：自动迁移表结构
-- **Migrator接口**：迁移器接口使用
-- **迁移选项**：迁移配置选项
-- **迁移回滚**：迁移回滚支持
-- **迁移错误**：迁移错误处理
+
+AutoMigrate 根据模型尝试补齐受支持的 schema 变化，返回错误必须处理；它不是带版本历史与自动回滚的完整迁移系统，也不会为保护数据随意删除旧列。生产变更需审阅锁表、数据回填与兼容影响，参见[官方迁移说明](https://gorm.io/docs/migration.html)。
 
 ### 3.2 手动迁移
-- **创建表**：手动创建表
-- **修改表**：修改表结构
-- **删除表**：删除表操作
-- **索引管理**：索引创建和删除
-- **约束管理**：约束创建和管理
+
+Migrator 提供创建表、修改列和管理索引/约束的接口，但数据库对这些操作的能力与事务支持不同。删除列或表可能永久丢数据，迁移应包含前置检查和恢复设计。先对有代表性旧数据的测试库执行，并验证新旧应用过渡期间都能读写。
 
 ### 3.3 迁移策略
-- **开发环境**：开发环境迁移策略
-- **生产环境**：生产环境迁移策略
-- **版本控制**：迁移版本控制
-- **数据迁移**：数据迁移脚本
-- **迁移测试**：迁移测试验证
+
+开发期可以快速重建合成数据，生产则需要保留已应用变更历史并评估兼容窗口。通常先添加兼容结构、回填数据、切换代码，再移除旧结构；迁移失败后的继续或恢复步骤必须明确。验收同时覆盖空库创建和旧库升级，不能只验证本机新数据库。
 
 **示例**：
 ```go
@@ -259,32 +239,20 @@ func ColumnExists(db *gorm.DB, model interface{}, columnName string) (bool, erro
 ## 4. CRUD操作
 
 ### 4.1 创建记录
-- **Create方法**：创建单条记录
-- **批量创建**：批量创建记录
-- **创建选项**：创建配置选项
-- **默认值**：默认值处理
-- **钩子函数**：创建钩子函数
+
+Create 写入新记录，传入指针可取得回填的主键；传统链式 API 检查 Error，必要时检查 RowsAffected。批量创建减少往返但要控制批大小与失败语义。带默认值标签的字段要特别测试 0、false 等零值，确认数据库默认没有覆盖用户明确意图。
 
 ### 4.2 查询记录
-- **First方法**：查询第一条记录
-- **Find方法**：查询多条记录
-- **Where条件**：条件查询
-- **高级查询**：复杂查询条件
-- **查询链**：查询链调用
+
+First 取得一条记录且可能返回 ErrRecordNotFound，Find 查询集合时零行通常通过空结果/影响行数表达，不能统一按同一种错误判断。Where 与排序决定取到什么，未指定稳定顺序的“第一条”不适合作业务时间顺序承诺。查零条、一条和多条验证契约。
 
 ### 4.3 更新记录
-- **Save方法**：保存更新
-- **Update方法**：字段更新
-- **Updates方法**：批量更新
-- **更新选项**：更新配置
-- **钩子函数**：更新钩子函数
+
+Update 处理指定字段，Updates 可修改多个字段，目标是哪些行由 Model 与条件决定；“多字段”不等于必然“多行”。传统 API 的 struct Updates 默认忽略零值，map 或 Select 可显式写入 false/0。Save 的保存语义还可能涉及插入回退，避免在只允许更新的接口盲用，见[官方更新说明](https://gorm.io/docs/update.html)。
 
 ### 4.4 删除记录
-- **Delete方法**：删除记录
-- **批量删除**：批量删除
-- **软删除**：软删除功能
-- **永久删除**：永久删除
-- **钩子函数**：删除钩子函数
+
+Delete 需要明确目标条件，避免把空输入误解成全表删除。具有软删除字段的模型通常标记删除时间，普通查询过滤这些记录；Unscoped 等路径可能绕过保护或永久删除。软删除不等于隐私数据已擦除，恢复、保留期与清理要另设策略。
 
 **示例**：
 ```go
@@ -414,32 +382,20 @@ func (s *UserService) PermanentDeleteUser(id uint) error {
 ## 5. 查询构建
 
 ### 5.1 基本查询
-- **Where条件**：条件查询
-- **Order排序**：结果排序
-- **Limit限制**：结果限制
-- **Offset偏移**：分页偏移
-- **Count计数**：记录计数
+
+Where 筛选、Order 排序、Limit/Offset 分页、Count 统计各承担不同责任。分页需要稳定排序并控制最大页大小，深偏移可能越来越贵。先用固定数据验证各页不重复遗漏，再用实际执行计划判断性能，不以链式调用短就认为 SQL 高效。
 
 ### 5.2 高级查询
-- **Join查询**：表连接查询
-- **Group分组**：分组查询
-- **Having过滤**：分组过滤
-- **Distinct去重**：去重查询
-- **子查询**：子查询支持
+
+Join 组合表时可能把一条主记录展开成多行；Group 后 Having 过滤分组结果，而普通 Where 过滤参与分组的行。Distinct 的列集合决定什么算重复。先手工写出少量输入的预期行数，再检查生成 SQL 和 ORM 扫描结果，防止计数或分页被关联放大。
 
 ### 5.3 查询条件
-- **比较运算**：=, !=, >, <, >=, <=
-- **逻辑运算**：AND, OR, NOT
-- **范围查询**：IN, BETWEEN, LIKE
-- **空值查询**：IS NULL, IS NOT NULL
-- **复杂条件**：复杂条件组合
+
+参数值通过占位符绑定，列名和排序方向等不能当普通值绑定的部分用允许列表选择。SQL 的 NULL 判断使用 IS NULL 等语义，不等同普通等号；AND/OR 加括号明确优先关系。测试空列表、NULL 和组合条件，避免意外扩大可访问记录范围。
 
 ### 5.4 查询链
-- **链式调用**：查询链调用
-- **条件组合**：条件组合逻辑
-- **查询优化**：查询性能优化
-- **查询缓存**：查询结果缓存
-- **查询日志**：查询日志记录
+
+链式方法累积查询条件，执行方法触发 SQL；复用已带条件的对象时要了解会话行为，防止条件污染下一次查询。查看 SQL 和绑定参数帮助理解真正执行了什么，日志须脱敏。查询结果缓存不是所有 GORM 查询默认提供的功能，需要单独说明实现和失效策略。
 
 **示例**：
 ```go
@@ -597,32 +553,20 @@ type AgeGroupCount struct {
 ## 6. 关联关系
 
 ### 6.1 一对一关系
-- **Belongs To**：属于关系
-- **Has One**：拥有一对一关系
-- **外键定义**：外键字段定义
-- **预加载**：关联数据预加载
-- **关联查询**：关联数据查询
+
+Belongs To 与 Has One 的关键差别是外键放在哪一侧，例如订单持有 customer_id 表示属于客户，用户的 profile 可能由 profile.user_id 关联。Preload 显式加载关系，不应假定访问字段就自动发起懒查询。验证无关联记录时的结果形状。
 
 ### 6.2 一对多关系
-- **Has Many**：拥有一对多关系
-- **外键定义**：外键字段定义
-- **关联查询**：关联数据查询
-- **关联创建**：关联数据创建
-- **关联更新**：关联数据更新
+
+Has Many 表示一条主记录关联多条子记录，如用户与订单，子表外键说明归属。加载用户列表后逐个查询订单可能产生 N+1，按需求批量预加载并控制数据量。修改关联和删除子记录是不同操作，执行后重新查询数据库确认效果。
 
 ### 6.3 多对多关系
-- **Many to Many**：多对多关系
-- **中间表**：中间表定义
-- **关联查询**：关联数据查询
-- **关联创建**：关联数据创建
-- **关联更新**：关联数据更新
+
+多对多用中间表记录两端关系，例如学生与课程；若关系本身有成绩等属性，可显式建模中间表。唯一约束避免同一关系重复插入。解除关联通常只影响中间表，不等于删除课程或学生；分别测试添加、重复添加和解除关系。
 
 ### 6.4 关联选项
-- **外键约束**：外键约束配置
-- **级联操作**：级联删除和更新
-- **预加载策略**：预加载优化
-- **关联验证**：关联数据验证
-- **关联钩子**：关联钩子函数
+
+外键和级联由数据库约束保护，ORM 的关联保存是应用侧操作，两者不能互相代替。选择删除行为前明确是阻止、级联还是置空，并测试真实数据库结果。预加载会增加数据与查询成本，按接口需要选择字段和关系，而非一次加载所有关联。
 
 **示例**：
 ```go
@@ -801,48 +745,36 @@ func (s *CourseService) EnrollStudent(courseID, studentID uint, grade int) error
 }
 
 func (s *CourseService) GetStudentCourses(studentID uint) ([]*Course, error) {
-    var courses []*Course
+    var student Student
 
     if err := s.db.Model(&Student{}).
         Where("id = ?", studentID).
         Preload("Courses").
-        First(&courses).Error; err != nil {
+        First(&student).Error; err != nil {
         return nil, err
     }
 
-    return courses, nil
+    return student.Courses, nil
 }
 ```
 
 ## 7. 事务处理
 
 ### 7.1 事务基础
-- **Begin方法**：开始事务
-- **Commit方法**：提交事务
-- **Rollback方法**：回滚事务
-- **Savepoint**：保存点
-- **嵌套事务**：嵌套事务支持
+
+一个事务让一组数据库操作一起提交或回滚。使用 Transaction 回调时，内部都用收到的 tx，返回错误触发回滚；手工 Begin/Commit/Rollback 则要检查每一步错误并覆盖所有退出路径。SavePoint/RollbackTo 可回退局部操作，但仍属于外层事务，见[官方事务说明](https://gorm.io/docs/transactions.html)。
 
 ### 7.2 事务模式
-- **自动提交**：自动提交模式
-- **手动事务**：手动事务管理
-- **嵌套事务**：嵌套事务处理
-- **分布式事务**：分布式事务支持
-- **事务超时**：事务超时设置
+
+单次写入的默认事务不等于多次调用自动处在同一事务，需要显式包住完整业务步骤。嵌套事务通常通过保存点表达局部回退；跨数据库或消息系统的原子提交不由普通 GORM 事务自动提供。超时需通过 context/驱动与数据库配合，并确认失败后连接归还。
 
 ### 7.3 事务隔离
-- **隔离级别**：事务隔离级别
-- **脏读**：脏读防范
-- **不可重复读**：不可重复读防范
-- **幻读**：幻读防范
-- **死锁处理**：死锁检测和处理
+
+隔离级别约束并发事务可观察的变化，脏读、不可重复读与幻读分别关注未提交值、重复读值改变及结果集合变化，具体保证以数据库实现为准。更强隔离可能增加等待或重试；用两条并发事务实验验证余额/库存不变量，而不是仅写出级别名称。
 
 ### 7.4 事务最佳实践
-- **事务边界**：事务边界定义
-- **事务大小**：事务大小控制
-- **事务回滚**：事务回滚策略
-- **事务日志**：事务日志记录
-- **事务监控**：事务性能监控
+
+事务边界覆盖必须一致的写入，例如创建订单与扣库存，不把慢外部请求混入持锁阶段。死锁或序列化冲突可按数据库错误分类考虑重试，但每次应重新执行完整事务并限制次数；重复外部副作用不能随意重放。记录事务耗时与失败原因，测试第二步失败时第一步也撤销。
 
 **示例**：
 ```go
@@ -1033,254 +965,83 @@ func (s *OrderService) calculateTotalAmount(items []*OrderItem) float64 {
 ## 8. 钩子函数
 
 ### 8.1 生命周期钩子
-- **BeforeCreate**：创建前钩子
-- **AfterCreate**：创建后钩子
-- **BeforeUpdate**：更新前钩子
-- **AfterUpdate**：更新后钩子
-- **BeforeDelete**：删除前钩子
-- **AfterDelete**：删除后钩子
-- **BeforeFind**：查找前钩子
-- **AfterFind**：查找后钩子
+
+模型写入钩子包括 BeforeSave/BeforeCreate、AfterCreate/AfterSave 以及更新、删除对应阶段；查询模型钩子是 AfterFind，BeforeFind 不是同样自动识别的模型钩子。写入后的 hook 可能仍在提交之前，不能据其名称就发送不可撤销邮件。具体时序见[官方 hooks](https://gorm.io/docs/hooks.html)。
 
 ### 8.2 钩子使用
-- **钩子定义**：钩子函数定义
-- **钩子调用**：钩子函数调用时机
-- **钩子错误**：钩子函数错误处理
-- **钩子顺序**：钩子函数执行顺序
-- **钩子测试**：钩子函数测试
+
+钩子采用框架要求的方法签名，返回错误能中止相应操作并影响当前事务。调用哪些钩子与使用的写入方法、批量形式和跳过配置有关，要测试实际调用路径；把函数命名得像 hook 不会自动让框架调用它。验证一次成功和一次 hook 拒绝时数据库状态。
 
 ### 8.3 钩子最佳实践
-- **业务逻辑**：业务逻辑钩子
-- **数据验证**：数据验证钩子
-- **数据转换**：数据转换钩子
-- **审计日志**：审计日志钩子
-- **缓存更新**：缓存更新钩子
 
-**示例**：
+钩子适合靠近模型的不变量或同事务审计写入，不适合隐藏复杂网络副作用。发送邮件或更新外部缓存若发生在数据库提交之前，后续回滚可能留下错误通知；可靠发送需要提交协调与重试设计。不要在 hook 中启动 goroutine 继续使用 tx，它可能已经结束。
+
+**示例：在同一事务中校验任务并记录审计行**
+
+下面是模型文件，不是独立的 main 程序。调用方先迁移 `Task` 与 `TaskAudit`，再通过 `db.Create(&task)` 创建任务。审计记录使用传入的 `tx` 同步写入；审计失败会让本次创建返回错误。在默认写入事务或调用方显式事务中，两次写入一起提交或回滚。若关闭默认事务且没有外层事务，就不再拥有这个原子性保证。
+
 ```go
 package models
 
 import (
     "errors"
-    "time"
+    "strings"
+    "unicode/utf8"
+
     "gorm.io/gorm"
 )
 
-type User struct {
-    ID        uint           `gorm:"primaryKey"`
-    Name      string         `gorm:"size:100;not null"`
-    Email     string         `gorm:"size:100;unique;not null"`
-    Password  string         `gorm:"size:255;not null"`
-    Age       int            `gorm:"default:18"`
-    Active    bool           `gorm:"default:true"`
-    CreatedAt time.Time      `gorm:"autoCreateTime"`
-    UpdatedAt time.Time      `gorm:"autoUpdateTime"`
-    DeletedAt gorm.DeletedAt `gorm:"index"`
+type Task struct {
+    ID         uint   `gorm:"primaryKey"`
+    Title      string
+    TitleRunes int    `gorm:"-"` // 读取后计算，不保存到数据库
 }
 
-// 创建前钩子
-func (u *User) BeforeCreate(tx *gorm.DB) error {
-    // 密码加密
-    if u.Password != "" {
-        hashedPassword, err := hashPassword(u.Password)
-        if err != nil {
-            return err
-        }
-        u.Password = hashedPassword
-    }
+type TaskAudit struct {
+    ID     uint `gorm:"primaryKey"`
+    TaskID uint
+    Action string
+}
 
-    // 设置默认值
-    if u.Name == "" {
-        u.Name = "Anonymous"
+func (t *Task) BeforeCreate(tx *gorm.DB) error {
+    t.Title = strings.TrimSpace(t.Title)
+    if t.Title == "" {
+        return errors.New("task title must not be empty")
     }
-
-    // 验证邮箱
-    if !isValidEmail(u.Email) {
-        return errors.New("invalid email format")
-    }
-
     return nil
 }
 
-// 创建后钩子
-func (u *User) AfterCreate(tx *gorm.DB) error {
-    // 发送欢迎邮件
-    go sendWelcomeEmail(u.Email, u.Name)
+func (t *Task) AfterCreate(tx *gorm.DB) error {
+    return tx.Create(&TaskAudit{TaskID: t.ID, Action: "created"}).Error
+}
 
-    // 记录审计日志
-    go logAudit("USER_CREATED", u.ID, map[string]interface{}{
-        "name":  u.Name,
-        "email": u.Email,
-    })
-
+func (t *Task) AfterFind(tx *gorm.DB) error {
+    t.TitleRunes = utf8.RuneCountInString(t.Title)
     return nil
-}
-
-// 更新前钩子
-func (u *User) BeforeUpdate(tx *gorm.DB) error {
-    // 如果密码被修改，重新加密
-    if tx.Statement.Changed("Password") {
-        hashedPassword, err := hashPassword(u.Password)
-        if err != nil {
-            return err
-        }
-        u.Password = hashedPassword
-    }
-
-    // 如果邮箱被修改，验证新邮箱
-    if tx.Statement.Changed("Email") {
-        if !isValidEmail(u.Email) {
-            return errors.New("invalid email format")
-        }
-    }
-
-    return nil
-}
-
-// 更新后钩子
-func (u *User) AfterUpdate(tx *gorm.DB) error {
-    // 记录更新日志（gorm 无 ChangedFields()，需用 Statement.Changed 逐字段判定）
-    changes := make(map[string]interface{})
-
-    for _, field := range []string{"Name", "Email", "Password", "Age"} {
-        if tx.Statement.Changed(field) {
-            changes[field] = tx.Statement.ReflectValue.FieldByName(field).Interface()
-        }
-    }
-
-    if len(changes) > 0 {
-        go logAudit("USER_UPDATED", u.ID, changes)
-    }
-
-    return nil
-}
-
-// 删除前钩子
-func (u *User) BeforeDelete(tx *gorm.DB) error {
-    // 检查是否可以删除
-    if u.ID == 1 {
-        return errors.New("cannot delete admin user")
-    }
-
-    // 检查是否有未完成的订单
-    var orderCount int64
-    if err := tx.Model(&Order{}).Where("user_id = ? AND status = ?", u.ID, "pending").Count(&orderCount).Error; err != nil {
-        return err
-    }
-
-    if orderCount > 0 {
-        return errors.New("user has pending orders")
-    }
-
-    return nil
-}
-
-// 删除后钩子
-func (u *User) AfterDelete(tx *gorm.DB) error {
-    // 清理相关数据
-    go func() {
-        tx.Model(&Profile{}).Where("user_id = ?", u.ID).Delete(&Profile{})
-        tx.Model(&Session{}).Where("user_id = ?", u.ID).Delete(&Session{})
-    }()
-
-    // 记录删除日志
-    go logAudit("USER_DELETED", u.ID, nil)
-
-    return nil
-}
-
-// 查找前钩子
-func (u *User) BeforeFind(tx *gorm.DB) error {
-    // 自动包含软删除记录的条件
-    if !tx.Statement.Unscoped {
-        tx.Where("deleted_at IS NULL")
-    }
-
-    return nil
-}
-
-// 查找后钩子
-func (u *User) AfterFind(tx *gorm.DB) error {
-    // 加载额外数据
-    if u.ID > 0 {
-        var profile Profile
-        if err := tx.Model(&Profile{}).Where("user_id = ?", u.ID).First(&profile).Error; err == nil {
-            // 可以在这里做一些处理
-        }
-    }
-
-    return nil
-}
-
-// 辅助函数
-func hashPassword(password string) (string, error) {
-    // 实现密码加密逻辑
-    return "hashed_" + password, nil
-}
-
-func isValidEmail(email string) bool {
-    // 实现邮箱验证逻辑
-    return strings.Contains(email, "@")
-}
-
-func sendWelcomeEmail(email, name string) {
-    // 实现发送邮件逻辑
-    println("Sending welcome email to", email)
-}
-
-func logAudit(action string, userID uint, details map[string]interface{}) {
-    // 实现审计日志记录
-    println("Audit log:", action, userID, details)
-}
-
-// 全局钩子示例
-func SetupGlobalHooks(db *gorm.DB) {
-    // 全局创建钩子
-    db.Callback().Create().Before("gorm:create").Register("global_before_create", func(db *gorm.DB) {
-        println("Global before create hook")
-    })
-
-    // 全局更新钩子
-    db.Callback().Update().Before("gorm:update").Register("global_before_update", func(db *gorm.DB) {
-        println("Global before update hook")
-    })
-
-    // 全局删除钩子
-    db.Callback().Delete().Before("gorm:delete").Register("global_before_delete", func(db *gorm.DB) {
-        println("Global before delete hook")
-    })
 }
 ```
+
+这里的字符数是 Unicode 码点数量，不保证等于用户看到的字形数量。AfterFind 只计算字段，不额外查询关联数据，避免查询一页任务时偷偷增加一串数据库请求。
+
+验证时分别尝试：空白标题应返回错误且没有新任务；有效标题应同时产生任务和审计行；在外层 `db.Transaction` 中创建后主动返回错误，两张表都不应保留本次新增行。创建后钩子仍可能位于提交之前，因此发邮件等外部副作用不能照搬这个例子；可靠投递需要在事务里记录待发送事件，再由独立任务处理重试。
 
 ## 9. 性能优化
 
 ### 9.1 查询优化
-- **索引优化**：索引创建和使用
-- **查询缓存**：查询结果缓存
-- **预加载优化**：关联数据预加载
-- **批量操作**：批量操作优化
-- **查询分析**：查询性能分析
+
+先查看慢查询的 SQL、参数规模与执行计划，判断索引是否服务筛选和排序。预加载解决部分 N+1，但加载过多关联也浪费资源；批量操作减少往返却可能扩大单次锁与内存。结果缓存需要另建失效契约，不能把“使用 GORM”当作自动拥有缓存。
 
 ### 9.2 连接池优化
-- **连接池配置**：连接池参数调优
-- **连接复用**：连接复用策略
-- **连接监控**：连接池监控
-- **连接泄露**：连接泄露检测
-- **连接测试**：连接健康测试
+
+池参数从底层 sql.DB 调整，观察等待、使用中和空闲连接，再结合数据库与副本数量设预算。事务未结束、Rows 未关闭都可能延长连接占用。模拟请求取消和查询失败后观察使用中连接回落，不把“连接池设置了数字”当作优化完成。
 
 ### 9.3 事务优化
-- **事务大小**：事务大小控制
-- **事务隔离**：事务隔离级别
-- **死锁处理**：死锁检测和处理
-- **事务监控**：事务性能监控
-- **事务重试**：事务重试机制
+
+长事务会延长锁和连接持有，拆小前先确认业务是否允许分批成功。死锁可以通过统一锁顺序、减少范围等降低，重试只对已识别暂时性失败使用，并有上限与退避。比较同一负载下等待、失败与完成时间，而不单看每次事务的代码行数。
 
 ### 9.4 内存优化
-- **内存使用**：内存使用优化
-- **内存泄漏**：内存泄漏检测
-- **垃圾回收**：垃圾回收优化
-- **内存池**：内存池使用
-- **内存监控**：内存使用监控
+
+查询过多行和关联会同时增加数据库传输、扫描与 Go 堆分配。先限制结果范围或分批处理，记录峰值与持续负载后的内存，再判断是否存在长期持有。对象池有复用与清理成本，不能为所有模型默认添加；GC 参数也不能修复无界缓存。
 
 **示例**：
 ```go
@@ -1500,25 +1261,16 @@ type UserMinimalInfo struct {
 ## 10. 测试
 
 ### 10.1 单元测试
-- **模型测试**：模型定义测试
-- **关联测试**：关联关系测试
-- **钩子测试**：钩子函数测试
-- **验证测试**：数据验证测试
-- **业务逻辑测试**：业务逻辑测试
+
+不依赖数据库的校验和业务计算可以直接测输入输出；模型标签、实际 hook 调用和关系保存则需要相应 ORM/数据库路径验证。用可控失败检查业务没有留下部分状态，避免 mock 掉整个被测行为后只验证调用脚本。
 
 ### 10.2 集成测试
-- **数据库测试**：数据库操作测试
-- **事务测试**：事务处理测试
-- **迁移测试**：迁移功能测试
-- **性能测试**：性能基准测试
-- **并发测试**：并发安全测试
+
+集成测试使用与目标数据库语义相符的环境，验证事务回滚、唯一约束、迁移和并发修改。SQLite 方便小实验但不能自动代表 PostgreSQL/MySQL 的隔离、类型和 SQL 方言。每条测试隔离数据，发布迁移还要测试旧结构升级而不仅新库创建。
 
 ### 10.3 测试工具
-- **测试框架**：测试框架选择
-- **Mock对象**：Mock对象创建
-- **测试数据库**：测试数据库配置
-- **测试数据**：测试数据准备
-- **测试断言**：测试断言库
+
+Go testing 提供测试组织，断言库只改善表达，mock 用于明确的外部边界，容器数据库用于验证真实 SQL。夹具采用可识别合成数据，每例清理或重建。选择工具后先故意破坏一条约束，确认测试真的失败，而不是单纯检查命令退出成功。
 
 **示例**：
 ```go
@@ -1811,25 +1563,16 @@ func BenchmarkUserService_GetUser(b *testing.B) {
 ## 11. 错误处理
 
 ### 11.1 错误类型
-- **GORM错误**：GORM内置错误类型
-- **数据库错误**：数据库相关错误
-- **验证错误**：数据验证错误
-- **事务错误**：事务处理错误
-- **连接错误**：数据库连接错误
+
+区分未找到、唯一约束冲突、连接失败与业务验证错误，因为调用者的恢复动作不同。传统链式 API 通过 Error 取结果，支持的错误翻译还需相应配置；底层数据库错误仍按驱动契约识别。不要靠任意字符串包含关系决定是否重试。
 
 ### 11.2 错误处理
-- **错误检查**：错误检查和处理
-- **错误转换**：错误类型转换
-- **错误日志**：错误日志记录
-- **错误恢复**：错误恢复策略
-- **错误监控**：错误监控和告警
+
+发生错误后先判断能否恢复，再补充操作上下文并传播；事务中的失败不能被吞掉后返回 nil。HTTP 边界把内部错误翻译为稳定响应，日志记录必要原因并脱敏。对暂时故障重试前确认幂等和总时限，永久格式错误应及时返回给调用者。
 
 ### 11.3 自定义错误
-- **错误定义**：自定义错误类型
-- **错误包装**：错误信息包装
-- **错误链**：错误链追踪
-- **错误码**：错误码定义
-- **错误文档**：错误文档管理
+
+自定义错误保留稳定类别与必要上下文，包装时使用可追溯原因的方式，使 errors.Is/As 仍能判断底层问题。错误码用于客户端决策，文案用于解释，日志用于内部排查，三者不用共享同一条含 SQL 的字符串。为每个公开错误写一个可触发的请求例子。
 
 **示例**：
 ```go
@@ -2148,33 +1891,26 @@ myapp/
 ```
 
 ### 12.2 模型设计
-- **命名约定**：遵循GORM命名约定
-- **字段类型**：选择合适的字段类型
-- **索引设计**：合理的索引设计
-- **关联关系**：清晰的关联关系
-- **验证规则**：数据验证规则
+
+从查询与业务不变量反推模型：哪些字段可空、何者唯一、关联由谁拥有、删除后发生什么。索引根据实际筛选/排序建立，写入成本与存储成本也需考虑。应用校验改善反馈，数据库约束抵御并发竞态，两者共同验证重复值和越界状态。
 
 ### 12.3 查询优化
-- **索引使用**：合理使用索引
-- **查询简化**：简化查询逻辑
-- **批量操作**：使用批量操作
-- **预加载优化**：优化预加载
-- **缓存策略**：使用查询缓存
+
+选一个具体慢接口，保存其 SQL、执行计划、数据量与延迟基线；改变索引、投影字段或加载方式后在同等负载复测。不要把批量、预加载和缓存一次全部加入，否则难以知道哪个改动有效，也容易引入新的一致性问题。
 
 ### 12.4 事务管理
-- **事务边界**：明确事务边界
-- **错误处理**：完善的错误处理
-- **重试机制**：事务重试机制
-- **性能监控**：事务性能监控
-- **日志记录**：事务日志记录
+
+用一条失败实验定义事务承诺：扣库存成功后创建订单失败，最终库存应保持原值。确保两步使用同一个 tx，提交结果被检查。只有明确可重试的数据库冲突才重新执行整个业务单元，日志记录次数与最终结果而非秘密参数。
 
 ### 12.5 错误处理
-- **错误分类**：错误分类和处理
-- **错误恢复**：错误恢复策略
-- **错误日志**：错误日志记录
-- **错误监控**：错误监控告警
-- **用户反馈**：用户友好的错误信息
+
+错误处理的验收是调用方知道能否修改输入、重试或联系支持，运维能够查到真实原因。对未找到、冲突和连接失败分别编写用例，确认状态不同且未泄漏内部信息；恢复动作失败时继续传播，不用返回空列表掩盖数据库不可用。
 
 ---
 
 这个GORM ORM知识点文档涵盖了GORM框架的所有重要方面，从基础使用到高级特性，从开发实践到部署运维。掌握这些知识点将帮助你成为一名熟练的GORM框架开发者。
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

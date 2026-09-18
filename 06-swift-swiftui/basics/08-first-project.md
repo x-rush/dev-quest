@@ -1,10 +1,26 @@
 # 第一个完整项目 - 待办记账 App（SwiftUI + SwiftData）
 
+## 先理解，再动手
+
+SwiftData 负责持久化模型，SwiftUI 负责界面。先把一条记录存取做好，再增加关系、统计和同步。
+
+**本节自测**：创建记录、重启读取、删除后再次重启，另测空输入。
+
+<details>
+<summary>预期结果与参考思路（先尝试再展开）</summary>
+
+数据生命周期可解释；界面临时消失与数据库实际删除必须分别验证。
+
+</details>
+
 > **文档简介**: 综合运用前七课知识，从零构建一个带持久化的"待办 + 记账"App：SwiftData 建模、列表交互、并发加载与统计页，是入门路径的毕业项目
 >
 > **目标读者**: 已完成 01-07 课、希望用一个完整项目串联知识点的学习者
 >
 > **前置知识**: [04-views-state.md](./04-views-state.md)、[06-navigation.md](./06-navigation.md)、[07-concurrency-async-await.md](./07-concurrency-async-await.md)
+
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
 
 ## 📚 文档元数据
 
@@ -15,6 +31,8 @@
 | **难度** | ⭐ |
 | **标签** | `#实战项目` `#SwiftData` `#待办App` `#综合练习` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ## 🎯 学习目标
 
@@ -189,9 +207,9 @@ struct ExpenseSheet: View {
 
 ## ✅ 最佳实践
 
-- ✅ **推荐**：模型字段保持简单类型（String/Double/Date/Bool），复杂结构拆成关联模型
-- ✅ **推荐**：查询过滤交给 `@Query(filter:)` / `#Predicate`，别把全表拉进内存再筛
-- ❌ **避免**：把统计逻辑塞进 `body` 的闭包链里层层嵌套，抽成计算属性或 model 方法
+查询条件适合在存储层表达时，避免把整张表读出再筛选；少量已经加载的数据则可以本地派生，选择取决于数据量和查询支持。模型字段要表达业务含义，并考虑格式变更后旧数据怎样读取。
+
+把聚合与校验放到可独立测试的函数，body 负责展示结果。增加、修改、删除之后重新查询确认持久化状态，再测试一次重启；只看到当前内存界面变化还不能证明保存成功。
 
 ## ❓ 常见问题
 
@@ -217,3 +235,9 @@ struct ExpenseSheet: View {
 - 📄 进阶路径入口：`frameworks/`、`projects/`（后续补充，规划见 [模块 README](../README.md)）
 - 📄 [02-swiftdata-observability.md](../reference/framework-essentials/02-swiftdata-observability.md) — SwiftData 与 Observation 详解
 - 📄 [02-troubleshooting.md](../reference/quick-references/02-troubleshooting.md) — 项目调试排错手册
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../LEARNING_GUIDE.md) · [完整目录与版本](../README.md) · [通用术语](../../shared-resources/glossary.md)

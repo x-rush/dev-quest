@@ -2,7 +2,10 @@
 
 ## 概述
 
-TanStack 生态的类型体验建立在泛型推断、字面量类型与判别联合之上。本篇收录在 Query/Table/Form 中反复出现的五类 TS 模式，帮助写出"零 as 断言"的代码。
+TanStack 生态的类型体验建立在泛型推断、字面量类型与判别联合之上。本篇收录在 Query/Table/Form 中反复出现的五类 TS 模式，减少不必要的类型断言，并明确运行时验证边界。
+
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
 
 ## 📚 文档元数据
 
@@ -13,6 +16,8 @@ TanStack 生态的类型体验建立在泛型推断、字面量类型与判别�
 | **难度** | ⭐⭐ |
 | **标签** | `#泛型推断` `#类型安全` `#DiscriminatedUnion` `#satisfies` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ---
 
@@ -32,7 +37,7 @@ const { data } = useQuery({ queryKey: ['users'], queryFn: fetchUsers })
 // Table：v9 ColumnDef 双泛型 <TFeatures, TData>，TData 决定 accessorKey 的候选字段
 const features = tableFeatures({})
 const columns: ColumnDef<typeof features, User>[] = [
-  { accessorKey: 'name', header: '姓名' }, // 只能填 User 的键，写错编译报错
+  { accessorKey: 'name', header: '姓名' }, // 使用 User 字段名；具体 accessorKey 约束取决于 Table 版本，不能代替数据验证
   { accessorFn: (row) => row.age, header: '年龄' }, // row 自动是 User
 ]
 
@@ -159,7 +164,7 @@ const queryClient = new QueryClient({ /* ... */ })
 export type AppQueryClient = typeof queryClient
 
 const defaultSort: SortingState = [{ id: 'name', desc: false }]
-export type SortKey = (typeof defaultSort)[number]['id'] // 'name'
+export type SortKey = (typeof defaultSort)[number]['id'] // string：显式 SortingState 注解已拓宽 id
 
 // 从 queryFn 提取数据类型，供他处复用
 type FetchUsers = typeof fetchUsers
@@ -177,3 +182,20 @@ type Users = Awaited<ReturnType<FetchUsers>>
 - 📄 **[Table 核心 API](./02-table-core-api.md)** - ColumnDef 泛型细节
 - 📄 **[Form 核心 API](./04-form-core-api.md)** - 表单类型推断
 - 📄 **[缓存键、staleTime 与失效策略](../framework-essentials/01-query-essentials.md)** - key 工厂的使用语境
+
+
+<!-- full-library-explanation -->
+## 类型推断与运行时验证是两条链
+
+先修：泛型、unknown、联合类型。queryFn 的返回类型会影响 data 推断；但给 JSON 写 `as User[]` 并不会检查接口真实返回值。应在网络边界解析，再把已验证的类型交给 Query。
+
+`as const` 保留字面量和 readonly 信息，`satisfies` 检查约束，二者都不会生成运行时校验代码。普通查询键不写 as const 仍可运行，只是部分类型工具无法保留同样精确的元组信息。
+
+有显式 `SortingState` 注解时，元素 id 通常已拓宽成 string，不能再声称 typeof 会恢复为单个 'name'。如果确实需要固定字面量，可单独定义 `const sortId = 'name' as const`，再用它构造排序配置。
+
+**练习：** 把接口返回值先设为 unknown，分别传合法用户数组与缺少 id 的对象；确认错误在解析边界被发现。再比较 `const a = {id: 'name'}`、`as const` 与显式类型注解的推断。验收：能说明哪一步只是编译检查，哪一步真正检查了数据。
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

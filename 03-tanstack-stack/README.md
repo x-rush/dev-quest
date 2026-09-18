@@ -1,5 +1,10 @@
 # TanStack 全家桶学习
 
+> **本轮增强与版本核对**：学习路径及正文增强范围见 [逐文件台账](../shared-resources/tools/document-quality/reports/coverage.md)。下方技术基线中的旧核对日期属于历史记录，不表示这次已重跑所有平台；安装与升级以官方兼容要求、项目锁文件和实际构建结果为准。
+
+
+> 第一次学习请从[理解地图与学习规划](LEARNING_GUIDE.md)开始；按关键词查阅可直接使用其中的完整参考导航。
+
 ## 📚 模块概述
 
 本模块系统学习 TanStack 生态的核心库（Query、Table、Router、Form），掌握现代 React 应用的服务端状态管理、数据表格、类型安全路由与表单管理能力。TanStack 是 Headless（无头）设计哲学的代表，与 [02-nextjs-frontend](../02-nextjs-frontend/README.md) 的框架学习互补，重点在于可组合、可定制的数据层技术。
@@ -35,11 +40,11 @@
 | 象限 | 目录 | 内容 | 说明 |
 |------|------|------|------|
 | **教程** | [basics/](basics/) | 8 篇按序入门 | 从环境搭建到第一个完整项目，按编号顺序学习 |
-| **字典** | [reference/](reference/) | 31 篇全量参考 | 概念的唯一权威出处，无难度门槛，随时跳入查阅 |
+| **字典** | [reference/](reference/) | 31 篇参考文章 | 集中维护 API 契约；教程就地解释必要概念，参考可独立查阅但仍有前置知识 |
 | **操作指南** | [frameworks/](frameworks/) · [projects/](projects/) · [testing/](testing/) · [deployment/](deployment/) | 15 篇任务式指南 | "怎么完成这个任务"：框架实操、实战项目、测试工程、部署运维 |
 | **深度解释** | [advanced-topics/](advanced-topics/) | 4 篇原理剖析 | "为什么这样设计"：缓存架构、性能与安全 |
 
-> **单一事实来源**：概念的完整解释只在 `reference/` 存在一分，其他目录以链接引用，不重复展开。
+> **单一事实来源**：完整参考以 `reference/` 为主；教程就地解释当前步骤所需概念，再链接完整条目。
 
 ---
 
@@ -75,7 +80,7 @@
 │   ├── 06-form-fundamentals.md                    #   ⭐ Form 基础：useForm 与字段绑定
 │   ├── 07-advanced-features.md                    #   ⭐⭐ Query 高级特性：乐观更新、无限查询与失效
 │   └── 08-first-project.md                        #   ⭐ 第一个项目：城市天气数据面板
-├── reference/                                     # 字典：全量参考（无难度门槛）
+├── reference/                                     # 字典：全量参考（可独立查阅，仍有前置知识）
 │   ├── framework-essentials/
 │   │   ├── 01-query-essentials.md                 #   Query 框架要点：缓存键、staleTime/gcTime
 │   │   ├── 02-router-essentials.md                #   Router 框架要点：守卫、预加载、SSR

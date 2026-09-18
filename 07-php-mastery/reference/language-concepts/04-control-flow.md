@@ -4,6 +4,9 @@
 
 本文收录 PHP 全部控制结构的语法与行为要点，含 PHP 8 的 `match` 表达式与 PHP 7.4+ 的箭头函数。条目式排列，供速查与跳读。
 
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
+
 ## 📚 文档元数据
 
 | 属性 | 内容 |
@@ -13,6 +16,8 @@
 | **难度** | ⭐ |
 | **标签** | `#控制结构` `#match` `#循环` `#条件` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ## 1. 条件结构
 
@@ -59,12 +64,13 @@ $grade = match (true) {
     default      => 'D',
 };
 
-// 多条件并列 + 解构（8.0）
-$desc = match ($point) {
-    [0, 0]          => '原点',
-    [$x, 0]         => "X 轴上 x={$x}",
-    [0, $y]         => "Y 轴上 y={$y}",
-    [$x, $y]        => "点({$x}, {$y})",
+// match 不会进行模式解构；先显式解构，再判断坐标。
+[$x, $y] = $point; // 此前应验证输入确为两个数字的列表
+$desc = match (true) {
+    $x == 0 && $y == 0 => '原点',
+    $y == 0 => "X 轴上 x={$x}",
+    $x == 0 => "Y 轴上 y={$y}",
+    default => "点({$x}, {$y})",
 };
 
 // 无 default：配合枚举获得穷尽性检查
@@ -92,7 +98,7 @@ switch ($code) {
 }
 ```
 
-**陷阱**: 弱比较（`==`）+ 穿透是两大经典 bug 源；新代码一律 `match`，仅"故意共享分支"场景 switch 尚可接受。
+**陷阱**: 弱比较（`==`）+ 穿透是两大经典 bug 源；需要表达式结果和严格比较时优先 match；多语句分支仍可使用 if/switch，并显式管理穿透。
 
 ## 2. 循环结构
 
@@ -111,7 +117,7 @@ unset($value);
 foreach ($collection as $item) { /* ... */ }
 ```
 
-**陷阱**: 遍历的是数组副本（值语义），引用遍历忘记 `unset` 会导致末元素被"残留引用"污染。
+**陷阱**: 普通 foreach 按值提供元素，但不意味着立即深复制整个数组；对象和引用元素另有共享语义，引用遍历忘记 `unset` 会导致末元素被"残留引用"污染。
 
 ### for / while / do-while
 
@@ -151,7 +157,7 @@ foreach ($orders as $o) {
 | `return` | `return $v;` | 结束函数/脚本（顶层 return 可终止 include） |
 | `goto` | `goto end;` | 同文件内跳转，只能跳出不能跳入循环/方法 |
 | `exit`/`die` | `exit(1)` / `exit('msg')` | 终止进程；输出消息等价 `echo` 后 `exit(0)` |
-| `declare` | `declare(strict_types=1);` | 编译指令，须为文件首条语句 |
+| `declare` | `declare(strict_types=1);` | 编译/执行指令；strict_types 须为文件第一条语句 |
 | `require`/`include` | `require __DIR__.'/x.php'` | 失败：require 致命，include 警告；`_once` 变体防重复加载 |
 
 **陷阱**: `include` 返回被包含文件的 `return` 值，可用来做简易配置加载，但现代项目用 Composer autoload + 类；`exit('消息')` 退出码恒为 0，脚本编排场景必须用 `exit(1)`。
@@ -203,9 +209,10 @@ usort($rows, [self::class, 'compare']);                // 数组形式（遗留�
 function readLines(string $file): Generator
 {
     $fh = fopen($file, 'rb');
+    if ($fh === false) { throw new RuntimeException('无法打开文件'); }
     try {
         while (($line = fgets($fh)) !== false) {
-            yield trim($line);          // 惰性产出，内存 O(1)
+            yield rtrim($line, "\r\n"); // 保留行内空格；内存受最长行及消费方保留数据影响
         }
     } finally {
         fclose($fh);                    // 生成器结束或被 GC 时执行
@@ -232,3 +239,18 @@ function merged(): Generator
 - 📄 **[PHP 关键字详解](./01-php-keywords.md)** — `break`/`continue`/`goto` 等关键字条目
 - 📄 **[数组操作模式](./05-arrays-patterns.md)** — 用集合操作替代显式循环
 - 📄 **[教程：控制流程](../../basics/05-control-flow.md)** — 渐进式讲解版
+
+
+<!-- full-library-explanation -->
+## 分支比较与变量绑定要分开理解
+
+前置是布尔值和数组。match 将输入与各分支条件严格比较，不会像某些语言的模式匹配那样给 `$x` 自动绑定值。`match (true)` 则让每个条件表达式产生布尔值，按顺序选择第一个 true；更宽泛的条件放在前面会遮住后面的细分条件。
+
+`??` 可处理未设置或 null，`?:` 按真假性判断，因此合法的 0 和字符串 '0' 会触发后者的默认值。读取用户输入时先决定“缺失、空串、零”是否不同，再选运算符。无 default 的枚举 match 在遗漏值出现时抛异常，并不代表 PHP 编译器已经完成穷尽性证明。
+
+**练习**：给分支依次输入 0、'0'、null、false，记录 match 与 switch 的选择；再给 score=95 的 match(true) 将 >=60 放在第一条，解释为何得到 C。对生成器只读取第一行后保留引用，观察 finally 不会因为外部 break 就必然立即完成；需要明确资源所有者与释放时机。
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

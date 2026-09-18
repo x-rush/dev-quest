@@ -6,6 +6,9 @@
 >
 > **前置知识**: 无；教程侧见 [basics/05-layouts.md](../../basics/05-layouts.md)、[basics/06-navigation.md](../../basics/06-navigation.md)
 
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
+
 ## 📚 文档元数据
 
 | 属性 | 内容 |
@@ -15,6 +18,8 @@
 | **难度** | ⭐ |
 | **标签** | `#SwiftUI` `#视图` `#修饰符` `#速查` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ---
 
@@ -43,10 +48,10 @@
 
 | 容器 | 说明 |
 |------|------|
-| `VStack / HStack / ZStack(alignment:spacing:)` | 三轴堆叠 |
+| `VStack / HStack(alignment:spacing:)`；`ZStack(alignment:)` | 垂直、水平与叠放；ZStack 没有 spacing 参数 |
 | `LazyVStack / LazyHStack` | 惰性版，长内容必备 |
 | `Grid`（iOS 16+） | 二维网格，`GridRow` 分行 |
-| `LazyVGrid(columns:)` | 瀑布/自适应列：`[GridItem(.adaptive(minimum: 120))]` |
+| `LazyVGrid(columns:)` | 按行排列的自适应列网格（不是瀑布流）：`[GridItem(.adaptive(minimum: 120))]` |
 | `ScrollView(.vertical/.horizontal)` | 滚动容器 |
 | `ScrollViewReader` | 程序化滚动：`scrollTo(id, anchor:)` |
 | `List` | 表格列表，Section/swipeActions/editActions |
@@ -167,3 +172,36 @@ Image("hero").matchedGeometryEffect(id: "hero", in: ns)
 - 📄 [04-swiftui-state-api.md](../language-concepts/04-swiftui-state-api.md) — 数据流工具全表
 - 📄 [02-swiftdata-observability.md](./02-swiftdata-observability.md) — SwiftData 速查
 - 📄 [02-troubleshooting.md](../quick-references/02-troubleshooting.md) — UI 故障排查
+
+
+<!-- full-library-explanation -->
+## 把 API 拼成可操作的界面
+
+速查表中的链式片段省略了上下文；下面是完整 View 类型，放入导入 SwiftUI 的 iOS 工程后可作为页面展示（无需复制前面的占位 Badge/Banner）。
+
+```swift
+import SwiftUI
+
+struct ReadingSettings: View {
+    @State private var name = ""
+    @State private var reminders = false
+    @State private var pages = 10
+    var body: some View {
+        Form {
+            TextField("计划名称", text: $name)
+            Toggle("提醒我阅读", isOn: $reminders)
+            Stepper("每天 \(pages) 页", value: $pages, in: 1...100)
+            Text(name.isEmpty ? "请填写名称" : "\(name)：每天 \(pages) 页")
+        }
+    }
+}
+```
+
+TextField 和 Stepper 通过 Binding 写回同一份状态，Text 从状态推导说明，无须额外保存 summary。验收：输入名称立即更新说明；步进器不能低于 1；切换提醒不清空名称；大字体与深色模式下仍可操作。本轮没有 Apple SDK 实测。
+
+列表身份必须在插入、排序时保持稳定：`id: \.self` 适合确实唯一且稳定的值，重复字符串不满足条件。装饰图片可标记为不参与无障碍阅读，操作按钮要有可读标签；redacted 只改变视觉呈现，不等于隐藏敏感值或禁用交互。真实加载态应同时设计交互规则与辅助功能说明。
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

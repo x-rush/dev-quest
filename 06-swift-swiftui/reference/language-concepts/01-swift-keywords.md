@@ -1,10 +1,21 @@
 # Swift 关键字详解
 
+## 关键词按职责理解
+
+前置：[Swift 语法课](../../basics/03-swift-syntax-essentials.md)。let/var 控制绑定可变性，struct/class 决定值与引用语义，protocol 定义能力，extension 添加实现，async/await 描述可挂起调用。@State 与 @Observable 则来自属性包装或宏及框架机制，不是同一种关键词。
+
+some 表示调用方看不到具体名称但固定的某个类型，any 表达可持有符合协议的不同具体值的存在类型容器。把 some 理解成“任意类型都可以返回”会在不同分支返回不同类型时产生困惑；SwiftUI 的 ViewBuilder 又可能把分支组合成一个具体类型，需分层理解。
+
+自测：为什么 `let` 声明的 class 实例仍可能修改可变属性，而 let struct 通常不能直接改字段？前者固定引用，后者固定值；这不是框架例外，而是语言值模型的区别。
+
 > **文档简介**: 按类别逐条讲解 Swift 关键字：重点覆盖 Swift 6 时代的 some/any/actor/sending 等并发与所有权关键字，附语法与陷阱
 >
 > **目标读者**: 需要快速查阅某个关键字语义的所有水平学习者（字典条目，可任意跳入）
 >
-> **前置知识**: 无硬性要求；配合 [basics/03-swift-syntax-essentials.md](../../basics/03-swift-syntax-essentials.md) 学习效果最佳
+> **前置知识**: 需函数、类型与基本控制流；配合 [basics/03-swift-syntax-essentials.md](../../basics/03-swift-syntax-essentials.md) 学习效果最佳
+
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
 
 ## 📚 文档元数据
 
@@ -15,6 +26,8 @@
 | **难度** | ⭐⭐ |
 | **标签** | `#关键字` `#Swift6` `#并发` `#语言概念` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 > 🧭 **指路**: 本篇为重点关键字语义精讲；关键字的完整分组总清单（声明/类型转换/控制流/访问控制/所有权/参数包）见 [13-keywords-completion.md](./13-keywords-completion.md)。
 
@@ -177,3 +190,9 @@ actor Config {
 - 📄 [02-optionals-collections.md](./02-optionals-collections.md) — 可选值与集合 API
 - 📄 [03-concurrency-api.md](./03-concurrency-api.md) — 并发 API 全表（Task/Actor/AsyncSequence）
 - 📄 [05-protocols-generics.md](./05-protocols-generics.md) — some/any 与泛型的完整原理
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

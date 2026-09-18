@@ -1,69 +1,47 @@
-# 桥接与原生通信原理 — Bridge、JSI 与 TurboModules
+# 原生通信：接口、线程与生命周期
 
-> **难度**: ⭐⭐ | **前置**: 读过[原生模块桥接教程](../../basics/06-native-modules.md)更佳，非必需
+前置：理解函数、Promise 和 React 组件。原生模块用来访问 JS 本身没有的设备或系统能力，例如读取应用版本。通信机制回答“如何调用”，模块实现还必须回答“在哪个线程执行、失败怎样返回、对象何时释放”。
 
-## 📚 文档元数据
+## Bridge 与 JSI 的差别
 
-| 属性 | 内容 |
-|------|------|
-| **模块** | `04-multiplatform-apps` |
-| **象限** | 字典 |
-| **难度** | ⭐⭐ |
-| **标签** | `#JSI` `#Bridge` `#TurboModules` `#通信原理` |
-| **更新日期** | `2026年9月` |
+旧桥主要通过批量异步消息交换可序列化的数据；历史上也有同步方法等例外，不应写成所有旧模块都只能回调。JSI 为 JS 引擎与原生实现提供直接交互接口，HostObject 可以向 JS 暴露原生对象行为。这不意味着任意两个运行时的内存都可以安全共享，也不意味着业务数据从此没有转换成本。
 
-## 📌 定义
+## 一个规格不等于一个实现
 
-JS 与原生（Kotlin/Swift/ObjC/ArkTS）分属两个运行时，必须有一条通信通道。RN 历史上有两代模型，**本文按概念描述，不绑定具体版本号**：
-
-- **Bridge（旧架构）**：异步消息队列。JS 与原生互发**序列化后的 JSON 批量消息**，双方互不知道对方存在，无法同步取值，原生模块启动时全量注册
-- **JSI（新架构地基）**：用 C++ 实现的 JS 引擎抽象层。原生代码可以**直接持有 JS 对象引用**（宿主对象），反之 JS 也能持有原生对象——调用是直调，可同步、无序列化、引擎无关
-- **TurboModules**：建立在 JSI 之上的原生模块体系——按需懒加载 + 从 TS 规约（Codegen）生成类型安全的接口
-
-**一句话**：Bridge 是"寄信"（批量、异步、复制数据），JSI 是"打电话"（直连、可同步、共享引用）。
-
-## 📖 语法/签名
+以下是 Codegen 输入形态示例，须放入配置过 Codegen 的 RN 原生工程，并补齐平台实现；复制一个 TS 文件不会自动创建原生模块。
 
 ```ts
-// JS 侧访问原生模块的三种形态（由底层通道决定行为）
-import { NativeModules } from 'react-native';            // 旧式全量注册访问（维护遗留代码用）
-import { TurboModuleRegistry } from 'react-native';      // 按需懒加载 + Codegen 类型
-import { requireNativeModule } from 'expo-modules-core'; // Expo Modules API（构建于 JSI 之上）
+// NativeDevice.ts
+import type { TurboModule } from 'react-native';
+import { TurboModuleRegistry } from 'react-native';
 
-// TurboModule 规约：Codegen 依据此接口生成两端胶水代码
 export interface Spec extends TurboModule {
-  getDeviceName(): Promise<string>;        // 异步：Promise
-  isFeatureEnabledSync(): boolean;         // 同步：JSI 直调（慎用）
+  getDeviceName(): Promise<string>;
+  isFeatureEnabledSync(): boolean;
 }
+
 export default TurboModuleRegistry.getEnforcing<Spec>('Device');
 ```
 
-## 💡 示例
+`getEnforcing` 在模块不存在时失败，适合必需能力；`get` 允许得到空值，调用前必须处理能力缺失。接口中的名称必须与原生注册一致。Codegen 只支持其规定的类型子集，不能任意使用复杂 TypeScript 类型。
 
-```tsx
-// 同步 vs 异步的体感差异：同步方法可直接参与渲染计算
-const spec = TurboModuleRegistry.getEnforcing<Spec>('Device');
+## 同步、异步与取消
 
-// 异步（Promise）——默认形态，不阻塞 JS 线程
-const name = await spec.getDeviceName();
+同步调用会让调用方等待返回，所以适合有上界的短操作。返回 Promise 只定义结果交付方式；实现是否把耗时操作移出关键线程，需要检查原生代码。页面离开后，请求可能仍在执行；要通过取消协议或忽略过期结果避免更新错误页面。
 
-// 同步（JSI 直调）——无桥延迟，但会阻塞 JS 线程直到返回
-const enabled = spec.isFeatureEnabledSync();
-```
+业务不应为了“更快”反复跨边界逐条读取一万个值。优先考虑有界批量接口，限制返回数据规模，并规定错误码、权限拒绝和不支持设备的结果。
 
-## ⚠️ 常见陷阱
+## 自测：定位三类失败
 
-- **以为"桥没了 = JS 不再阻塞"**：JSI 消除的是序列化与队列，JS 线程仍是单线程；重活应移到原生线程或 UI 线程
-- **滥用同步方法**：同步调用会卡住 JS 线程，只应用于轻量取值（如测量、开关位）；涉及 IO 一律异步
-- **原生方法默认不在主线程**：更新 UI 需切回主线程（Android 主线程 Handler / iOS 主队列）
-- **手写两端接口不对齐**：走 Codegen/Expo Modules 声明式路线，让类型从规约单向生成
-- **把 JSI 当"更快的 Bridge"**：它是通信模型的更换（共享引用 vs 复制数据），不是同一模型的加速版
+1. JS 导入成功，调用时提示找不到 Device：检查构建是否包含原生模块及注册名称，热更新 JS 不能补上缺失的原生实现。
+2. 方法返回 Promise 但点击仍卡住：检查方法返回 Promise 之前或原生主线程上是否执行重活。
+3. 离开 A 页面再进入 B，A 的结果覆盖 B：按请求/资源身份处理过期结果，不能只靠类型声明。
 
-## 🔗 相关条目
+练习：为读取设备信息写出“成功、权限拒绝、模块缺失、调用取消”四种契约和页面行为。验收标准是调用者不用猜测空字符串到底表示哪一种情况。
 
-- 📄 [原生模块桥接教程](../../basics/06-native-modules.md) — 手写模块的完整操作
-- 📄 [新架构解析](../../advanced-topics/architecture/01-new-architecture.md) — Fabric/TurboModules 的架构级展开
-- 📄 [RNOH 鸿蒙适配字典](./05-harmonyos-rnoh-api.md) — 第三端的等价通道（ArkTS TurboModule）
-- 📄 [原生与设备能力库指南](../library-guides/02-native-and-device-libs.md) — "先找库再自研"的选型清单
+参考：[Turbo Native Modules](https://reactnative.dev/docs/turbo-native-modules-introduction)、[新架构解释](../../advanced-topics/architecture/01-new-architecture.md)。
 
-*延伸: React Native 官方文档 "The New Architecture" 系列页*
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

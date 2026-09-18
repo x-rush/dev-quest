@@ -1,10 +1,15 @@
 # iOS 原生开发 — Swift 6 + SwiftUI 现代化开发
 
+> **本轮增强与版本核对**：学习路径及正文增强范围见 [逐文件台账](../shared-resources/tools/document-quality/reports/coverage.md)。下方技术基线中的旧核对日期属于历史记录，不表示这次已重跑所有平台；安装与升级以官方兼容要求、项目锁文件和实际构建结果为准。
+
+
+> 第一次学习请从[理解地图与学习规划](LEARNING_GUIDE.md)开始；按关键词查阅可直接使用其中的完整参考导航。
+
 > **文档简介**: Dev Quest 应用帝国矩阵的 iOS 支柱模块：以 Swift 6.3 严格并发为地基，用 SwiftUI + Observation + SwiftData 构建现代原生应用，直至上架与运维
 >
 > **目标读者**: 有 Go 后端与现代前端开发经验、想系统掌握 iOS 原生开发的学习者
 >
-> **前置知识**: 无硬性要求；有任一声明式 UI 框架（React/Compose）经验可显著加速
+> **前置知识**: 需基本编程和 Swift 语法；有任一声明式 UI 框架（React/Compose）经验可显著加速
 
 ## 🧪 技术基线
 
@@ -17,6 +22,9 @@
 | iOS SDK | **iOS 26** | SwiftUI / SwiftData 随 SDK 一体发布，无独立版本号；标志性变化为 Liquid Glass 设计与 `.glassEffect()` 等 SwiftUI 新 API |
 | 构建系统 | Swift Build（开源） | Swift 6.3 起 Swift Build 以 preview 形式集成进 SPM（官方邀请试用反馈，尚未成为默认） |
 
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
+
 ## 📚 模块元数据
 
 | 属性 | 内容 |
@@ -25,6 +33,8 @@
 | **定位** | 应用帝国矩阵（核心重点）· 苹果生态 |
 | **技术栈** | Swift 6.3（严格并发）、SwiftUI + Observation（@Observable）、SwiftData、Xcode 26.x（iOS 26 SDK） |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ## 🎯 模块简介
 
@@ -44,11 +54,11 @@
 | 象限 | 目录 | 内容 | 访问方式 |
 |------|------|------|---------|
 | **📖 教程** | [basics/](./basics/01-environment-setup.md) | 环境搭建 → Swift 语法 → SwiftUI 视图/状态/布局/导航 → 并发入门 → 首个项目，共 8 篇按序学习 | 从头到尾按编号走 |
-| **📚 字典** | [reference/](./reference/quick-references/01-swift-swiftui-cheatsheet.md) | 语言概念（16 篇，含构造/关键字总索引/正则/URLSession/包地图）/ 框架要点（8 篇，含手势）/ 库指南（2 篇）/ 速查与故障排除（2 篇），共 28 篇全量参考 | **无难度门槛**，任意跳入查询 |
+| **📚 字典** | [reference/](./reference/quick-references/01-swift-swiftui-cheatsheet.md) | 语言概念（16 篇，含构造/关键字总索引/正则/URLSession/包地图）/ 框架要点（8 篇，含手势）/ 库指南（2 篇）/ 速查与故障排除（2 篇），共 28 篇全量参考 | **可独立查阅，仍有前置知识**，任意跳入查询 |
 | **🛠️ 操作指南** | [frameworks/](./frameworks/01-swiftui-basics.md) [projects/](./projects/01-notes-app.md) [testing/](./testing/01-unit-testing.md) [deployment/](./deployment/01-app-release.md) | 框架任务指南 4 篇 · 实战项目 4 个（⭐ 递进）· 测试工程 3 篇 · 部署运维 3 篇 | 面向目标，按需照做 |
 | **🎓 解释** | [advanced-topics/](./advanced-topics/architecture/01-app-architecture.md) | 应用架构、渲染性能、并发深度、安全实践，共 4 篇深度专题（均 ⭐⭐⭐） | 有实践困惑后带着问题读 |
 
-**单一事实来源**：概念的完整解释只在 `reference/` 存在一处，教程与指南均链接过去，不重复展开。
+**单一事实来源**：完整参考以 `reference/` 为主；教程就地解释当前步骤所需概念，再链接完整条目。
 
 ## 🛤️ 学习路径
 
@@ -89,7 +99,7 @@ async/await → SwiftUI 进阶 → SwiftData + 网络 → 天气应用 → 习�
 │   ├── 07-concurrency-async-await.md          #   ⭐⭐ 并发与 async/await
 │   └── 08-first-project.md                    #   ⭐ 第一个项目
 │
-├── reference/                                 # 📚 字典：全量参考（无难度门槛）
+├── reference/                                 # 📚 字典：全量参考（可独立查阅，仍有前置知识）
 │   ├── language-concepts/                     #   语言核心概念
 │   │   ├── 01-swift-keywords.md               #     Swift 关键字
 │   │   ├── 02-optionals-collections.md        #     可选值与集合

@@ -1,5 +1,7 @@
 # Material 3 主题系统速查
 
+> **阅读准备**：基础 Compose 布局与 Modifier；理解主题参数向子树传递，准备好 Material 3 依赖。
+
 > MaterialTheme 三要素（colorScheme/typography/shapes）、动态取色与暗色主题的字典式速查：定义 → 语法 → 示例 → 陷阱
 
 | 属性 | 内容 |
@@ -175,10 +177,9 @@ val colorScheme = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
 ## 6. 暗色主题要点
 
 ### 最佳实践
-- ✅ 跟随系统：`isSystemInDarkTheme()` 作为默认，让用户系统设置生效
-- ✅ 所有组件颜色取自 colorScheme，暗色模式零额外代码
-- ✅ 暗色下用"降饱和的亮色变体"做 primary，避免刺眼（如 `0xFF1565C0` → `0xFFA8C8FF`）
-- ❌ 不要在暗色模式叠纯黑 `Color.Black` 背景 + 纯白文字（对比过强）；M3 暗色 surface 是深灰蓝（约 `0xFF111318`）
+Material 主题通过语义颜色分工：同一“表面”或“错误”角色在明暗主题中可映射到不同色值，组件不必各自判断当前模式。跟随系统可以作为默认，同时尊重产品允许的用户选择。
+
+使用 colorScheme 不保证自定义图标、图片与文字对比自动合格。检查按钮禁用态、错误提示和图片覆盖文字；纯黑也不是一概禁止，最终要看对比、可读性和使用场景，而非固定某个十六进制颜色。
 
 ### 状态栏/系统栏
 ```kotlin
@@ -212,3 +213,9 @@ class MainActivity : ComponentActivity() {
 - 📄 **[第一个项目：笔记应用](../../basics/08-first-project.md)** - 给实战项目套自定义主题
 - 📖 **[Material 3 官方主题文档](https://developer.android.com/develop/ui/compose/designsystems/material3)** - 权威指南
 - 📖 **[Material Theme Builder](https://m3.material.io/theme-builder)** - 在线生成 colorScheme 代码
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

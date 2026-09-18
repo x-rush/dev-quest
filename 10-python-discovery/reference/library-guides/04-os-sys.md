@@ -1,5 +1,8 @@
 # os 与 sys — 系统接口与解释器接口
 
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
+
 ## 📚 文档元数据
 
 | 属性 | 内容 |
@@ -9,6 +12,8 @@
 | **难度** | ⭐ |
 | **标签** | `#os` `#sys` `#环境变量` `#argv` `#标准流` `#退出码` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ## 📌 定义
 
@@ -23,7 +28,7 @@
 | 环境 | `os.environ` / `os.getenv("KEY", default)` | 进程环境变量映射；getenv 读可选项给默认值 |
 | 路径 | `os.path.join` / `splitext` / `exists` | 字符串路径工具箱；新代码优先 pathlib |
 | 目录 | `os.getcwd` / `listdir` / `mkdir` / `makedirs(..., exist_ok=True)` | makedirs 递归建目录，已存在不报错 |
-| 文件 | `os.remove` / `os.rename` / `os.replace` / `os.stat` | replace 覆盖式重命名，跨设备可用 |
+| 文件 | `os.remove` / `os.rename` / `os.replace` / `os.stat` | replace 用于替换目标；跨文件系统通常会失败，不能代替跨设备复制 |
 | 进程 | `os.system` / `os.spawn*` | 官方文档明确"建议改用 subprocess"（本机实测无弃用警告，见下） |
 
 最小示例（本机 3.14.7 实测）：
@@ -47,7 +52,7 @@ os.makedirs("out/logs", exist_ok=True)   # 目录已存在不抛错
 | 标准流 | `sys.stdout` / `sys.stderr` / `sys.stdin` | print 的默认去处；测试重定向见 [pytest 速查](./03-pytest-testing.md) |
 | 退出 | `sys.exit(code)` | 抛 `SystemExit`（实测 code=2 可被 except 捕获），main() 返回值交给它 |
 | 版本 | `sys.version_info` | `(3, 14, 7, ...)` 元组，可比较；别解析 sys.version 字符串 |
-| 递归 | `sys.getrecursionlimit` / `setrecursionlimit` | 默认 1000；改大不是栈溢出的"修复" |
+| 递归 | `sys.getrecursionlimit` / `setrecursionlimit` | 当前限制由 getrecursionlimit 查询；调大不能修复无限递归 |
 
 最小示例（本机 3.14.7 实测）：
 
@@ -95,7 +100,7 @@ if __name__ == "__main__":
 
 ## ⚠️ 常见陷阱
 
-- ❌ **`os.system` 拼接用户输入**：命令注入 + stdout/stderr/退出码全都拿不到。
+- ❌ **`os.system` 拼接用户输入**：可能引入命令注入；不方便直接捕获标准流，返回值的含义还具有平台差异。
   ✅ `subprocess.run([...], capture_output=True, check=True)`，参数列表不经 shell 解析。
 - ❌ **`os.environ["KEY"]` 读可选配置**：缺键直接 `KeyError` 崩在启动深处。
   ✅ `os.getenv("KEY", default)`；必填项在应用入口集中校验。
@@ -103,8 +108,29 @@ if __name__ == "__main__":
   ✅ `sys.version_info >= (3, 14)` 元组比较（实测）。
 - ❌ **用 `sys.argv` 手撸复杂 CLI**：分支爆炸、没有 help。
   ✅ 两三个参数够用即可；再多上 argparse / typer（见 [生态库精选](./02-ecosystem-libs.md)）。
-- ❌ **调大 recursionlimit 当"修复"栈溢出**：默认 1000，改大只是推迟崩溃。
+- ❌ **调大 recursionlimit 当"修复"栈溢出**：默认值由实现和环境决定，调大可能增加底层栈溢出的风险。
   ✅ 优先改迭代/显式栈；确需深递归再谨慎调整并恢复。
+
+<!-- full-library-explanation -->
+## 当前目录、解释器与退出码
+
+前置知识是终端命令和相对路径。当前工作目录由启动方式决定，并不必然等于脚本所在目录；虚拟环境选中的是解释器和包搜索路径，也不会自动改变工作目录。因此“同一文件在编辑器能运行、在终端不能运行”需要分别检查路径和解释器。
+
+保存为 `environment.py` 后运行 `python environment.py hello`：
+
+```python
+import os
+import sys
+from pathlib import Path
+
+print(sys.argv[1:])
+print(Path.cwd() == Path(os.getcwd()))
+print(bool(sys.executable))
+```
+
+普通 Python 解释器下预期输出 `['hello']`、`True`、`True`。第三行只确认解释器路径可用；诊断实际环境时打印 sys.executable 的具体值，再用该解释器执行 `-m pip` 或测试命令，避免安装到另一个环境。
+
+练习：从父目录启动脚本，观察 argv 中的参数不变而 cwd 改变。需要项目数据文件时，应明确以工作目录、脚本目录还是配置路径为基准；不要用全局 chdir 偷偷改变其他模块的相对路径语义。
 
 ## 🔗 相关条目
 
@@ -116,3 +142,9 @@ if __name__ == "__main__":
 ---
 
 *最后更新: 2026年9月 | 本条目为模块知识字典的一部分，概念完整解释以此处为单一事实来源*
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

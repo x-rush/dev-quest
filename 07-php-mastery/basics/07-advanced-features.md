@@ -1,10 +1,26 @@
 # 高级特性 - 枚举、属性注解与 Fibers
 
+## 先理解，再动手
+
+enum 限制可取值集合，attribute 附加可供反射读取的元数据，Fiber 提供可暂停执行。它们解决不同问题，不是同一套“高级语法”。
+
+**本节自测**：用 enum 表达待办状态，再尝试从非法文本构造。
+
+<details>
+<summary>预期结果与参考思路（先尝试再展开）</summary>
+
+非法状态必须处理；attribute 不会自行执行验证，Fiber 也不自动提供异步 I/O 调度器。
+
+</details>
+
 > **文档简介**: 系统学习 PHP 8.1-8.5 的进阶语言特性：枚举、属性注解（Attributes）、Fibers 协程、一等公民 callable 语法与 8.4/8.5 增量
 >
 > **目标读者**: 已完成基础教程、希望写出地道现代 PHP 代码的中级学习者
 >
 > **前置知识**: 完成 [错误与异常](./06-error-exceptions.md)，熟悉类与接口、反射的基本概念
+
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
 
 ## 📚 文档元数据
 
@@ -15,6 +31,8 @@
 | **难度** | ⭐⭐ |
 | **标签** | `#枚举` `#属性注解` `#Fibers` `#Callable` `#PHP8.1+` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ## 🎯 学习目标
 
@@ -309,12 +327,9 @@ $next = $uri->withPath('/b');     // 不可变：with* 返回新实例
 
 ## ✅ 最佳实践
 
-- ✅ **数据库可枚举状态一律用 Backed Enum**：配合 `match` 的穷尽性检查，新增状态时静态分析兜底
-- ✅ **新特性先查字典再上手**：8.4/8.5 的钩子语法与管道限制等细节见 [增量特性条目](../reference/language-concepts/12-modern-php-85.md)
-- ✅ **属性注解只做元数据**：复杂校验逻辑交给读取注解的通用服务（如 Validator）
-- ✅ **回调一律 `Foo::method(...)` 语法**：重构时 IDE 全程追踪，消灭字符串回调
-- ❌ **不要把枚举当命名空间**：一个枚举表达一个封闭状态集，不要塞无关 case
-- ❌ **不要在普通 Web 请求里手写 Fiber 调度**：这是框架/运行时的职责，业务代码直接用 async API
+枚举用于一组有业务关系的状态；需要与数据库标量互转时 Backed Enum 很方便，但未知或旧值仍要定义迁移和失败行为。属性提供元数据，只有读取它的框架或代码才会执行对应校验。
+
+回调语法按可读性与兼容版本选择，不把一种写法定成普遍禁令。Fiber 提供暂停与恢复原语，不自带完整调度、I/O 或重试系统；初学者先解释一个调用何时暂停、由谁恢复，再进入运行时扩展。
 
 ## ❓ 常见问题
 
@@ -346,3 +361,9 @@ $next = $uri->withPath('/b');     // 不可变：with* 返回新实例
 - 📄 **[类型系统与现代 OOP 全表](../reference/language-concepts/03-types-oop-modern.md)** — 本篇各特性的条目式权威速查
 - 📄 **[PHP 8.4/8.5 增量特性](../reference/language-concepts/12-modern-php-85.md)** — 属性钩子/管道运算符/URI 扩展条目式全表
 - 📄 **[关键字详解](../reference/language-concepts/01-php-keywords.md)** — `enum`/`match`/`fn` 关键字精确定义
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../LEARNING_GUIDE.md) · [完整目录与版本](../README.md) · [通用术语](../../shared-resources/glossary.md)

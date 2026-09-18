@@ -1,10 +1,10 @@
 # useQueries：并行与动态查询列表
 
-> **模块**: `03-tanstack-stack` | **类型**: 字典条目（无难度门槛，支持任意跳入查阅）
+> **模块**: `03-tanstack-stack` | **类型**: 字典条目（可独立查阅，按主题准备前置知识，支持任意跳入查阅）
 
 ## 📌 定义
 
-`useQueries` 在**一个 Hook 调用**里声明任意数量的查询：静态多查询（页面顶部同时拉用户、配置、公告）与动态多查询（列表长度随数据变化的 `ids.map(...)`）都适用。它解决两个问题——Hooks 规则禁止在循环里调 `useQuery`；多个独立 `useQuery` 的加载状态需要手动拼装，而 `combine` 选项能把结果聚合为一个对象、只在聚合结果变化时触发一次重渲染。
+`useQueries` 在**一个 Hook 调用**里声明任意数量的查询：静态多查询（页面顶部同时拉用户、配置、公告）与动态多查询（列表长度随数据变化的 `ids.map(...)`）都适用。它解决两个问题——Hooks 规则禁止在循环里调 `useQuery`；多个独立 `useQuery` 的加载状态需要手动拼装，而 `combine` 选项能把结果聚合为一个对象、利用结构共享尽量保持聚合结果引用稳定；不承诺固定渲染次数。
 
 ## 📖 语法 / 签名
 
@@ -81,9 +81,20 @@ const results = useQueries({
 - ❌ 在 `map`/循环里调 `useQuery`：违反 Hooks 规则——动态数量请交给 `useQueries`
 - ❌ 以为条目内的 `placeholderData: (previousData) => previousData`（或 `keepPreviousData`）能拿到旧数据：useQueries 条目中该函数签名固定 `(previousData: undefined, previousQuery: undefined)`，换 key 后永远传 `undefined`（QueriesObserver 按 queryHash 匹配，新 key 新建 Observer）——平滑过渡需自行 `queryClient.getQueryData` 取缓存或保留旧 key 条目
 - ❌ 动态列表的 key 不含变量：`queryKey: ['todo']` + 固定条目数会串数据，变量必须进 key
-- ❌ `combine` 里返回每次都不同的新引用（如新建数组后又在内部变化）：会把"聚合对象变化"放大成整页重渲染，聚合值尽量是原始值或稳定结构
+- ❌ 误以为 combine 中创建对象或数组必然破坏优化：返回结果会尽量结构共享；但每次变化的函数引用会使 combine 重新执行，应保持计算纯净并在有必要时稳定函数引用
 - ✅ 结果数组顺序恒等于 `queries` 顺序，`combine` 用解构 `([user, todos])` 或下标取用
 - ✅ `combine` 返回什么，Hook 就返回什么（v5 全系可用，类型自动推断），适合把多个 `isPending` 收敛成一个
+
+<!-- full-library-explanation -->
+## 动态查询数量与真实并发成本
+
+先修：Hooks 调用规则、数组 map、queryKey。useQueries 让 Hook 本身只调用一次，动态变化的是传入的查询配置。空 ids 对应空结果数组，不必人为发一个无效请求。
+
+每个结果可以独立成功或失败。看板应决定某个面板失败是否阻断全部页面；只汇总 isPending 而忽略 error，会把失败结果显示成空数据。相同 queryKey 会共享同一查询，若输入列表有重复 ID，可先去重再映射回展示顺序。
+
+一百个独立查询不意味着应该同时发一百次 HTTP 请求。需要考虑服务器批量接口、并发上限与取消。combine 只聚合客户端结果，不能合并后端请求，也不保证一次 React 渲染。
+
+**练习：** ids 使用 `[1, 2, 3]`，让 2 失败，1 和 3 成功。验收：结果仍按输入对应展示，失败项可单独重试；再传入空数组确认不出现永远加载。参考[useQueries](https://tanstack.com/query/latest/docs/framework/react/reference/useQueries)。
 
 ## 🔗 相关条目
 
@@ -96,3 +107,9 @@ const results = useQueries({
 ---
 
 *最后更新: 2026年9月 | 本条目为模块知识字典的一部分，概念完整解释以此处为单一事实来源*
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

@@ -6,6 +6,9 @@
 >
 > **前置知识**: [交叉编译 targets](./01-cross-compilation-targets.md)、GitHub Actions 的 job/step 基本模型。
 
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
+
 ## 📚 文档元数据
 
 | 属性 | 内容 |
@@ -15,6 +18,8 @@
 | **难度** | ⭐⭐ |
 | **标签** | `#rust` `#deployment` `#github-actions` `#ci` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ## 🎯 学习目标
 
@@ -27,12 +32,12 @@
 
 ## 📋 目录
 
-- [核心概念](#核心概念)
-- [实践指南](#实践指南)
-- [Tauri 官方 action 概览](#tauri-官方-action-概览)
-- [最佳实践](#最佳实践)
-- [常见问题](#常见问题)
-- [相关资源](#相关资源)
+- [核心概念](#-核心概念)
+- [实践指南](#️-实践指南)
+- [Tauri 官方 action 概览](#-tauri-官方-action-概览)
+- [最佳实践](#-最佳实践)
+- [常见问题](#-常见问题)
+- [相关资源](#-相关资源)
 
 ---
 
@@ -276,17 +281,9 @@ jobs:
 
 ## 🎨 最佳实践
 
-### ✅ 推荐做法
+本地与 CI 使用同一组格式、lint、构建和测试命令，让失败可以复现；本地没有执行并不使 CI 门禁失效，只会延后反馈。locked 模式防止悄悄修改依赖解析，系统依赖与工具链也需记录。
 
-- **本地先行**：提交前跑一遍 `cargo fmt --all -- --check && cargo clippy -- -D warnings && cargo test`，CI 只做最后防线
-- **`--locked` 进所有 CI 构建**：防止依赖漂移导致"昨天绿今天红"
-- **矩阵加 `fail-fast: false`**：一次 PR 看到所有平台的失败，减少反复推送
-
-### ❌ 避免陷阱
-
-- **给缓存 key 手工塞时间戳**：会导致缓存永不命中，还占用存储配额；rust-cache 的自动键已覆盖主要失效因素
-- **clippy 只在 CI 开 `-D warnings` 而本地不开**：门禁形同虚设——把同一参数写进 `Cargo.toml` 的 `[lints]` 或 `.cargo/config.toml`
-- **把 macOS 构建交给 Linux runner 交叉编译**：产物无签名链且打包器不支持，见 [交叉编译 targets](./01-cross-compilation-targets.md) Q3
+矩阵是否 fail-fast 按成本和诊断需求选择，缓存键包括会影响产物的条件而不是随意时间戳。保存各目标的失败日志和实际命令；需要平台打包与签名时使用受支持环境。
 
 ---
 
@@ -398,3 +395,9 @@ graph LR
 > 💡 **学习建议**: 示例二的通用工作流与示例三的 Tauri 骨架覆盖了本模块两条主线（Axum 服务端 / Tauri 桌面端），先跑通与你当前项目匹配的那条。
 >
 > 🎯 **下一步**: [签名与自动更新](./03-signing-auto-update.md)
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../LEARNING_GUIDE.md) · [完整目录与版本](../README.md) · [通用术语](../../shared-resources/glossary.md)

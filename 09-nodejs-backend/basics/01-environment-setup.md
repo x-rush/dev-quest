@@ -1,10 +1,26 @@
 # Node.js 24 开发环境搭建
 
+## 先理解，再动手
+
+Node 运行 JavaScript，包管理器安装依赖，TypeScript 工具提供类型检查或转换。运行 ts 文件与检查类型是不同能力。
+
+**本节自测**：记录 node 版本、package.json 的 type 和启动脚本，运行一条日志。
+
+<details>
+<summary>预期结果与参考思路（先尝试再展开）</summary>
+
+知道工程按 ESM 还是 CommonJS 解释，避免混用 require 与 import 后猜错误来源。
+
+</details>
+
 > **文档简介**: 从零搭建现代化 Node.js 24 后端开发环境，涵盖版本管理器（fnm/nvm）、pnpm、TypeScript 与 ESLint 的完整配置
 
 > **目标读者**: 有其他语言后端经验、初次接触 Node.js 生态的开发者
 
 > **前置知识**: 基本命令行操作，了解 Git 与包管理概念（如 Go modules、Maven 任一即可）
+
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
 
 ## 📚 文档元数据
 
@@ -15,6 +31,8 @@
 | **难度** | ⭐ |
 | **标签** | `#环境搭建` `#Node24` `#fnm` `#pnpm` `#TypeScript` `#ESLint` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ## 🎯 学习目标
 
@@ -173,14 +191,9 @@ export default tseslint.config(
 
 ## 🎨 最佳实践
 
-- **提交 `.nvmrc` / `.node-version`**（内容一行：`24`），团队与 CI 版本自动对齐
-- **用 corepack 锁定 pnpm 版本**：`packageManager` 字段保证所有人用同一包管理器
-- **`strict: true` 从第一天开启**：后补严格模式成本极高
-- **`node:` 前缀导入内置模块**：`import fs from "node:fs"`，明确区分内置与三方包
+版本文件与 packageManager 字段记录工程约定，还需要开发工具和 CI 实际读取或执行这些约定；一个 major 版本号也不等于锁定所有补丁。安装后检查 Node、包管理器和 TypeScript 实际版本，依赖应在项目清单中可重建。
 
-- **全局安装项目依赖**：pnpm 严格隔离，缺依赖会在运行时报错——这恰恰是保护
-- **同时混用 npm/yarn/pnpm**：锁文件会互相冲突，选定一个写入 `packageManager`
-- **在类型剥离模式下使用 enum/装饰器**：这些语法无法被剥离，会直接报错，需要走预编译
+严格类型检查能更早发现不匹配，但不提供运行时输入验证。直接运行 TypeScript 时核对运行时支持的语法范围，不能把“可剥离类型”当完整编译器。内置模块采用 node: 前缀有助于识别来源，第三方依赖则由锁文件管理。
 
 ## ❓ 常见问题
 
@@ -217,3 +230,9 @@ export default tseslint.config(
 - 📄 **[第一个服务器](./02-first-server.md)** — 下一站：跑起你的第一个 HTTP 服务
 - 📄 **[Node 一行式速查](../reference/quick-references/01-node-cheatsheet.md)** — 常用 CLI 命令速查
 - 📄 **[常见故障排除](../reference/quick-references/02-troubleshooting.md)** — 环境问题排查手册
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../LEARNING_GUIDE.md) · [完整目录与版本](../README.md) · [通用术语](../../shared-resources/glossary.md)

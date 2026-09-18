@@ -1,10 +1,23 @@
 # 进阶项目 - 新闻阅读器（分页 + 缓存）
 
+## 分阶段练习与验收
+
+**最小阶段**：先加载第一页，再追加第二页和详情。
+
+**验收结果**：滚动加载不重复记录；刷新后分页游标按约定复位。
+
+**扩展顺序**：离线缓存与收藏再加入，避免一个空列表同时表示多种失败。
+
+建议保存一份正常输入、一份失败输入、实际输出和对应测试。先完成以上阶段再扩展正文中的完整设计；遇到省略实现或未定义依赖，应按文档上下文补齐，不能把代码片段拼接后当作已经验证的完整工程。
+
 > **文档简介**: 用 Paging 3 + Room 构建无限滚动新闻阅读器，掌握 RemoteMediator 分页缓存架构与列表加载状态处理
 >
 > **目标读者**: 已完成天气应用、熟悉 Repository 模式的进阶学习者
 >
 > **前置知识**: [生态集成](../frameworks/03-ecosystem-integration.md)、[天气应用](02-weather-app.md)、[Flow API](../reference/language-concepts/03-coroutines-flow-api.md)
+
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
 
 ## 📚 文档元数据
 
@@ -15,6 +28,8 @@
 | **难度** | ⭐⭐ |
 | **标签** | `#paging3` `#room` `#remote-mediator` `#offline-first` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ---
 
@@ -169,3 +184,9 @@ fun NewsScreen(viewModel: NewsViewModel = hiltViewModel()) {
 - 📖 概念字典：[AndroidX 官方库指南](../reference/library-guides/01-androidx-libraries.md) ｜ [泛型与委托属性速查](../reference/language-concepts/05-generics-delegates.md)
 - 📖 前置教程：[布局系统](../basics/05-layouts.md) ｜ [第一个项目](../basics/08-first-project.md)
 - 🚀 精通挑战：[生产级 Android 应用](04-production-android-app.md) ｜ 深度原理：[重组优化](../advanced-topics/performance/01-recomposition-optimization.md)
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../LEARNING_GUIDE.md) · [完整目录与版本](../README.md) · [通用术语](../../shared-resources/glossary.md)

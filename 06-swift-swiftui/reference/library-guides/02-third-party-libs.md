@@ -6,6 +6,9 @@
 >
 > **前置知识**: [01-foundation-and-stdlib.md](./01-foundation-and-stdlib.md)（Foundation 基础类型）
 
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
+
 ## 📚 文档元数据
 
 | 属性 | 内容 |
@@ -16,6 +19,8 @@
 | **标签** | `#三方库` `#SPM` `#Alamofire` `#Kingfisher` `#SwiftLint` |
 | **更新日期** | `2026年9月` |
 
+</details>
+
 ---
 
 ## 0. 依赖管理：Swift Package Manager
@@ -23,9 +28,9 @@
 **定义**: Apple 官方包管理器，Xcode 内建支持，iOS 生态事实标准（CocoaPods 已进入维护期）。
 
 ```bash
-# 命令行（Xcode 项目内也推荐先用 SPM CLI 验证）
+# 以下用于新建独立 Swift package；不要直接在已有 Xcode 应用根目录初始化
 swift package init --type executable
-swift package add-dependency  # 实际编辑 Package.swift
+# 编辑 Package.swift 的 dependencies 与 target dependencies 后解析
 swift package resolve
 swift build && swift test
 ```
@@ -82,8 +87,8 @@ KFImage(url)
 | 库 | SwiftUI 支持 | 特点 |
 |----|--------------|------|
 | Kingfisher | ✅ KFImage | 老牌、功能全、社区大 |
-| Nuke | ✅ LazyImage | 性能极致、API 更现代 |
-| AsyncImage（系统） | ✅ 内建 | 无缓存；小项目够用 |
+| Nuke | ✅ LazyImage | 提供图片加载管线与缓存控制，需按自己的场景测量 |
+| AsyncImage（系统） | ✅ 内建 | 系统异步图片视图；不提供专用图片库同等的显式缓存管理接口 |
 
 > 💡 选型顺序：先试系统 `AsyncImage`；需要缓存与复杂加载态再上 Kingfisher/Nuke。
 
@@ -116,7 +121,7 @@ KFImage(url)
 
 ### 4.1 SwiftLint
 
-**定位**: 风格与静态检查，500+ 规则。
+**定位**: 风格与静态规则检查；以所用版本的规则清单为准。
 
 ```bash
 brew install swiftlint
@@ -161,19 +166,36 @@ swiftformat . --swiftversion 6.0
 |------|------|
 | 系统已有等价 API | 优先系统（AsyncImage、Charts、UserDefaults） |
 | 单一职责小库 | 优于大而全框架 |
-| 长期不维护 + 简单功能 | 复制源码优于依赖（SPM vendor） |
+| 长期不维护 + 简单功能 | 评估替换或受控维护分支；复制源码仍需保留许可证并承担修复责任 |
 | 敏感合规（隐私清单） | 检查库是否提供 PrivacyInfo.xcprivacy |
 
 **评估清单**：最近提交时间、Swift 6 兼容声明、issue 响应速度、License（MIT/Apache 优先）。
 
 ## ⚠️ 高频陷阱速查
 
-- **版本规则选 Exact**：失去安全修复；Up to Next Major 平衡稳定性与更新
+- **固定版本后不维护**：Exact 并非错误，但必须主动跟踪并验证修复；范围版本也要审查升级
 - **混用 CocoaPods 与 SPM**：同一依赖两条路径解析，冲突难排查；新项目统一 SPM
-- **库内强缓存 URLProtocol**：调试时"改了 API 没反应"，先清 Kingfisher 缓存 `KingfisherManager.shared.cache.clearMemoryCache()`
+- **图片仍显示旧内容**：区分内存、磁盘与 HTTP 缓存；只有内存缓存才由下面调用清除： `KingfisherManager.shared.cache.clearMemoryCache()`
 
 ## 相关文档
 
 - 📄 [01-foundation-and-stdlib.md](./01-foundation-and-stdlib.md) — 系统网络与基础类型
 - 📄 [01-swiftui-essentials.md](../framework-essentials/01-swiftui-essentials.md) — 原生 UI 速查
 - 📄 [02-troubleshooting.md](../quick-references/02-troubleshooting.md) — 依赖冲突排查
+
+
+<!-- full-library-explanation -->
+## 用一个可撤回的小实验决定是否引库
+
+先写下系统 API 缺少的能力。例如图片页需要可配置磁盘缓存、解码缩小和取消，分别用系统 AsyncImage 与候选库完成同一个滚动列表，再比较请求次数、峰值内存与实现复杂度。不要用“性能极致”“社区大”替代测试条件。
+
+应用提交 Package.resolved 以记录解析结果；版本范围决定允许升级到哪里，锁文件决定本次实际使用什么。固定版本可以提高复现性，但需要主动审查更新；允许同一大版本更新也不保证每次没有行为变化。记录依赖版本、最低系统、许可证、迁移说明与替代路径。
+
+练习：为图片加载建立自己的小 View 封装，仅让该文件依赖 Kingfisher；使用同样输入切换到系统实现。验收包括图片 404、无网、快速滚动、相同 URL 内容更新与退出账号清理，清内存缓存不能同时证明磁盘缓存和 HTTP 缓存都已清理。
+
+选型核对入口：[Kingfisher](https://github.com/onevcat/Kingfisher)、[Nuke](https://github.com/kean/Nuke)、[Alamofire](https://github.com/Alamofire/Alamofire)、[SwiftLint](https://github.com/realm/SwiftLint)。本页不承诺固定规则数量或库永不过时；学习 HTTP、缓存、取消与测试边界能帮助替换工具。
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

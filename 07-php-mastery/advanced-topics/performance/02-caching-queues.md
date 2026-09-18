@@ -6,6 +6,9 @@
 >
 > **前置知识**: [查询优化](./01-query-optimization.md)、[生态集成：缓存](../../frameworks/03-ecosystem-integration.md)
 
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
+
 ## 📚 文档元数据
 
 | 属性 | 内容 |
@@ -15,6 +18,8 @@
 | **难度** | ⭐⭐⭐ |
 | **标签** | `#缓存` `#Redis` `#队列` `#原子锁` `#性能` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ## 🎯 学习目标
 
@@ -43,7 +48,7 @@ $orders = Cache::remember($cacheKey, now()->addMinutes(10), fn () =>
 
 1. 写操作后失效对应键（`Cache::forget()`），而不是靠 TTL 自然过期
 2. 键里纳入影响结果的所有输入（含认证主体），否则就是越权读取的洞
-3. 用标签组批量失效：`Cache::tags(['orders'])->flush()`（注意 file 驱动不支持）
+3. 用标签组批量失效：`Cache::tags(['orders'])->flush()`（具体支持情况依驱动；file、database、dynamodb 不支持标签）
 
 ## 2. 防击穿：原子锁
 
@@ -60,13 +65,15 @@ if ($orders === null) {
 
     if ($lock->get()) {
         try {
-            $orders = /* 回源查询 */;
+            // 获锁后再次查缓存，避免等待期间已由别的请求重建
+            $orders = Cache::get($cacheKey) ?? Order::where('user_id', $userId)
+                ->latest()->forPage($page, 20)->get();
             Cache::put($cacheKey, $orders, now()->addMinutes(10));
         } finally {
             $lock->release();
         }
     } else {
-        $orders = /* 短暂等待重试或返回过期数据 */;   // 容忍短暂旧值胜过 DB 雪崩
+        abort(503, '缓存正在重建，请稍后重试'); // 明确失败；应用可另设有界重试或旧值存储
     }
 }
 ```
@@ -76,13 +83,11 @@ if ($orders === null) {
 ## 3. 队列：worker 配置的语义
 
 ```bash
+# Bash：续行反斜杠后不能追加注释
 php artisan queue:work redis \
-    --queue=high,default \   # 队列优先级：先消费 high
-    --sleep=3 \              # 无任务时休眠秒数
-    --tries=3 \              # 兜底重试次数（可被任务类 $tries 覆盖）
-    --backoff=30 \           # 重试退避
-    --max-time=3600 \        # 1 小时后自杀，由 Supervisor 拉起（释放内存）
-    --memory=256             # 超内存自杀，防泄漏
+    --queue=high,default \
+    --sleep=3 --tries=3 --backoff=30 \
+    --timeout=120 --max-time=3600 --memory=256
 ```
 
 生产部署要点：
@@ -91,9 +96,10 @@ php artisan queue:work redis \
 ; Supervisor 托管 + 代码发布后重启 worker（worker 是常驻进程，跑的是旧代码）
 [program:laravel-worker]
 command=php /var/www/app/current/artisan queue:work redis --max-time=3600
+process_name=%(program_name)s_%(process_num)02d
 numprocs=4
 autorestart=true
-stopwaitsecs=30
+stopwaitsecs=180
 ```
 
 ```bash
@@ -107,12 +113,12 @@ php artisan queue:restart
 final class ChargeOrder implements ShouldQueue
 {
     public int $tries = 5;
-    public array $backoff = [10, 60, 300, 600];   // 指数退避：给上游恢复窗口
-    public int $timeout = 120;                    // 单任务硬超时
+    public array $backoff = [10, 60, 300, 600];   // 分段退避：给上游恢复窗口
+    public int $timeout = 120;                    // 任务超时；依赖运行环境支持，HTTP/I/O 仍需自身超时
 
-    public function failed(\Throwable $e): void   // 重试耗尽后调用
+    public function failed(?\Throwable $e): void   // 重试耗尽后调用
     {
-        report($e);                               // 进 Sentry（deployment/03）
+        if ($e !== null) { report($e); } // 按项目日志/监控配置上报
         OrderPaymentFailed::dispatch($this->order);
     }
 }
@@ -136,9 +142,29 @@ php artisan queue:prune-failed --hours=720
 
 缓存的读优化与队列的写削峰是互补的两半：前者降低"每秒读"，后者把"瞬时写"摊平到时间轴。两者的容量估算都应来自真实流量画像，而非拍脑袋。
 
+<!-- full-library-explanation -->
+## 用故障时间线理解缓存与队列
+
+前置是事务、缓存过期和任务重试。缓存回源存在竞态：读请求取得旧数据，写请求更新数据库并删缓存，读请求随后又把旧数据写回。TTL 只限制部分陈旧窗口，写后删缓存也不自动保证强一致；价格结算、权限判断等关键决策应读取可靠来源。
+
+持有缓存锁的时间超过租期时，第二个进程可能重新获得锁，因此“拿锁”不等于业务恰好执行一次。队列也是如此：扣款成功后进程在确认任务前退出，任务会重投。使用稳定业务幂等键、唯一约束和支付方幂等接口，把重复请求映射到已有结果，不能仅用短时 Redis 锁防重复扣款。
+
+**练习**：给任务加入“副作用完成后主动抛错”的故障点，重试后验收副作用总数仍为一。配置 worker timeout 小于 Redis/database retry_after，并留出退出时间；Supervisor stopwaitsecs 应大于最长任务时间。外部 HTTP 客户端还需独立超时。只增加 worker 可能压垮数据库，应观察最老任务等待时间及下游容量再扩容。
+
+依据：[队列](https://laravel.com/docs/13.x/queues)、[缓存](https://laravel.com/docs/13.x/cache)。下面带业务占位的片段是设计示意，需要填入查询、回退与任务构造逻辑后才能运行。
+
+
+本轮未在本机执行 PHP 片段；文中的输出为预期值，版本相关行为请用项目运行时验证。
+
 ## 🔗 相关文档
 
 - 📄 [Laravel 进阶](../../frameworks/02-laravel-advanced.md) — 任务类与事件的基础写法
 - 📄 [查询优化](./01-query-optimization.md) — 上缓存之前的必修课
 - 📄 [CI/CD 与可观测性](../../deployment/03-ci-cd-observability.md) — 队列告警接入 Sentry
 - 📄 [服务器部署](../../deployment/02-server-deployment.md) — Supervisor 完整配置
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

@@ -1,10 +1,21 @@
 # 生态集成 — Expo Router、EAS 与常用库选型
 
+## 先看框架承担哪部分职责
+
+**Expo 生态**：工程选用的 SDK 与路由、原生插件有兼容关系。新增原生能力可能要求 development build，不能只依赖 JS 热更新。
+
+**最小练习与预期结果**：增加一个官方支持的设备能力，记录插件、权限和构建方式；不支持平台显示明确降级。
+
+具体 API 与安装版本以[模块基线](../README.md)和本篇官方来源为准。先完成这条数据路径，再展开后面的高级配置；框架名称变化后，输入边界、状态归属和失败处理仍是需要理解的机制。
+
 > **文档简介**: 把 RN 应用接入主流生态：用 Expo Router 组织文件式路由，用 EAS 完成构建与更新链路，按决策表选型 Zustand/MMKV 等高频库并正确安装配置
 >
 > **目标读者**: 已掌握 RN 基础开发、准备搭建真实项目骨架的开发者
 >
 > **前置知识**: 已完成 [React Native 框架入门](./01-react-native-basics.md)，了解 npm 依赖管理
+
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
 
 ## 📚 文档元数据
 
@@ -15,6 +26,8 @@
 | **难度** | ⭐⭐ |
 | **标签** | `#ExpoRouter` `#EAS` `#Zustand` `#MMKV` `#生态` |
 | **更新日期** | 2026年9月 |
+
+</details>
 
 ## 🎯 学习目标
 
@@ -131,11 +144,9 @@ const theme = storage.getString('theme');   // 同步返回，无 await
 
 ## ✅ 最佳实践
 
-- ✅ **Expo 包优先 `npx expo install`**，保证与 SDK 版本对齐，避免原生依赖冲突
-- ✅ **区分纯 JS 库与含原生代码的库**，后者升级需重新 `eas build`，无法走 OTA
-- ✅ **Zustand 选择器订阅**（`useCart((s) => s.count)`），不要解构整个 store
-- ❌ **不要同时引入两套路由方案**（Expo Router 与裸 React Navigation），二选一
-- ❌ **不要用 MMKV 存敏感数据**，它不提供加密
+增加库之前先判断它是纯 JS 能力，还是要求客户端包含额外原生代码；后者变更后需要相应原生构建。Expo 的安装工具能协助选择兼容版本，但仍需在各目标平台验证。
+
+状态订阅尽量只读取组件需要的字段，修改购物车备注不应无故驱动所有无关界面。Expo Router 建立在 React Navigation 之上，问题是避免两套互不协调的路由状态；存储是否适合敏感数据要检查加密、密钥管理和设备威胁，不能仅凭库名判断“有/无加密”。
 
 ## ❓ 常见问题
 
@@ -158,3 +169,9 @@ A: 可以，Expo SDK 覆盖绝大多数原生需求；先在分支上按 app/ �
 - 📄 [导航基础 — React Navigation](../basics/05-navigation.md) — Expo Router 的底层模型
 - 🚀 [EAS Build 构建流程](../deployment/01-eas-build.md) — 生态集成在交付端的延伸
 - 🚀 [生产级移动应用](../projects/04-production-mobile-app.md) — 本文档选型的综合落地
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../LEARNING_GUIDE.md) · [完整目录与版本](../README.md) · [通用术语](../../shared-resources/glossary.md)

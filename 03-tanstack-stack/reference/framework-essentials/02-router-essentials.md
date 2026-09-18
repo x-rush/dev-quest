@@ -4,6 +4,9 @@
 
 TanStack Router v1 的四大生产场景：登录守卫、数据预加载、嵌套布局组织，以及 SSR/全栈集成。核心都是同一条链：`beforeLoad → loader → component`。教程见 [Router 基础](../../basics/05-router-fundamentals.md)。
 
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
+
 ## 📚 文档元数据
 
 | 属性 | 内容 |
@@ -14,13 +17,15 @@ TanStack Router v1 的四大生产场景：登录守卫、数据预加载、嵌�
 | **标签** | `#路由守卫` `#预加载` `#嵌套布局` `#SSR` |
 | **更新日期** | `2026年9月` |
 
+</details>
+
 ---
 
 ## 1. 路由守卫：beforeLoad + redirect
 
 ### 定义
 
-`beforeLoad` 在 loader 与组件渲染之前运行，是认证/授权的唯一正确位置。用 `throw redirect(...)` 中断导航。
+`beforeLoad` 在 loader 与组件渲染之前运行，适合导航前的登录检查；服务端资源授权仍须在 API/server function 中执行。用 `throw redirect(...)` 中断导航。
 
 ### 语法与示例
 
@@ -73,7 +78,7 @@ import { createFileRoute } from '@tanstack/react-router'
 import { queryClient } from '@/lib/query-client'
 import { queryKeys } from '@/lib/query-keys'
 
-// preload 与 loader 共用一个"确保缓存"函数，命中新鲜缓存时不重复请求
+// intent 预加载与正式导航均运行 loader；ensureQueryData 默认复用已有缓存
 function ensurePost(postId: string) {
   return queryClient.ensureQueryData({
     queryKey: queryKeys.post(postId),
@@ -82,9 +87,8 @@ function ensurePost(postId: string) {
 }
 
 export const Route = createFileRoute('/posts/$postId')({
-  preload: ({ params }) => ensurePost(params.postId), // hover 预加载
   loader: ({ params }) => ensurePost(params.postId),  // 正式导航
-  component: PostDetail, // 组件内 useQuery 直接命中缓存，零等待
+  component: PostDetail, // 相同键可复用缓存；新鲜度与后台重取仍需配置
 })
 ```
 
@@ -105,11 +109,11 @@ export const Route = createFileRoute('/posts/$postId')({
 src/routes/
 ├── __root.tsx               # 根壳：导航 + <Outlet/>
 ├── _auth.tsx                # 布局路由：登录态壳（不占路径）
-│   ├── _auth.dashboard.tsx  # → /dashboard
-│   └── _auth.settings.tsx   # → /settings
-└── posts.tsx                # 常规布局：posts 相关页共用
-    ├── posts.index.tsx      # → /posts
-    └── posts.$postId.tsx    # → /posts/:postId
+├── _auth.dashboard.tsx  # → /dashboard
+├── _auth.settings.tsx   # → /settings
+├── posts.tsx                # 常规布局：posts 相关页共用
+├── posts.index.tsx      # → /posts
+└── posts.$postId.tsx    # → /posts/:postId
 ```
 
 ```tsx
@@ -153,10 +157,11 @@ export const Route = createFileRoute('/weather')({
 ### Next.js App Router 中使用 Query
 
 ```tsx
-// 'use client' 组件中：服务器预取 + HydrationBoundary 注水
-const [queryClient] = useState(() => new QueryClient())
-await queryClient.prefetchQuery({ queryKey, queryFn }) // 服务端组件阶段
-<HydrationBoundary state={dehydrate(queryClient)}>
+// 服务器组件片段；需导入 QueryClient/dehydrate/HydrationBoundary
+// queryKey、queryFn 与 ClientPage 由具体页面提供
+const queryClient = new QueryClient()
+await queryClient.prefetchQuery({ queryKey, queryFn })
+return <HydrationBoundary state={dehydrate(queryClient)}>
   <ClientPage />
 </HydrationBoundary>
 ```
@@ -167,7 +172,7 @@ await queryClient.prefetchQuery({ queryKey, queryFn }) // 服务端组件阶段
 
 - SSR 中 `QueryClient` 必须每请求新建（闭包工厂），单例会把 A 用户缓存发给 B 用户
 - 服务端 prefetch 的查询要与客户端 `useQuery` 的 key **完全一致**，否则客户端重复请求
-- loader 返回值必须可序列化（Date/Map 会静默变样或报错）
+- 跨 SSR 边界的数据必须符合所用序列化器规则；Start 支持的类型不等同于裸 JSON，不能笼统禁止 Date/Map
 
 ## 相关文档
 
@@ -175,3 +180,20 @@ await queryClient.prefetchQuery({ queryKey, queryFn }) // 服务端组件阶段
 - 📄 **[Query 框架要点](./01-query-essentials.md)** - ensureQueryData 与缓存语义
 - 📄 **[Router 基础](../../basics/05-router-fundamentals.md)** - 教程入口
 - 📄 **[语法速查](../quick-references/01-syntax-cheatsheet.md)** - Router 一行式 API
+
+
+<!-- full-library-explanation -->
+## 预加载与正式导航走同一套依赖
+
+先修：路由树、Promise 和 QueryClient。intent 预加载会提前运行目标路由的数据加载流程，不需要额外发明路由选项 preload 回调。loader 可通过参数中的 preload 标志识别这次调用的来源。
+
+如果 loader 使用 Query，路由上下文应携带本次应用/请求的 client，避免 SSR 导入一个跨请求全局单例。Router 的 loader 缓存与 Query 缓存各有新鲜度；可用集成配置明确谁负责数据缓存，不能以为 router.invalidate 会自动使 Query 数据过期。
+
+beforeLoad 适合在导航开始前检查登录状态并重定向，但它可能在客户端执行，也可能因预加载被调用。写操作不能放进 loader 或 beforeLoad，否则用户只是悬停链接就可能触发副作用。服务端接口仍须自行认证授权。
+
+**练习：** 悬停文章链接后再点击，记录 loader 调用来源与接口次数；让数据仍在 Query 缓存中，观察 ensureQueryData 的返回。验收：解释两层缓存、确认悬停没有写入数据，并让未登录者直接访问接口也被拒绝。参考[路由数据加载](https://tanstack.com/router/latest/docs/framework/react/guide/data-loading)。
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

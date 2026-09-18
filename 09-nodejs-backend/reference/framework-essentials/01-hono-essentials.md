@@ -6,6 +6,9 @@
 
 > **前置知识**: [第一个服务器](../../basics/02-first-server.md)
 
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
+
 ## 📚 文档元数据
 
 | 属性 | 内容 |
@@ -15,6 +18,8 @@
 | **难度** | ⭐ |
 | **标签** | `#Hono4` `#路由` `#中间件` `#Context` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ## 1. 应用与路由方法
 
@@ -72,7 +77,7 @@ c.req.method;
 await c.req.json();           // 解析 JSON 请求体
 await c.req.text();           // 纯文本请求体
 await c.req.arrayBuffer();    // 二进制请求体
-await c.req.parseBody();      // multipart/form-data → FormData（文件为 File 实例）
+await c.req.parseBody();      // 表单 → 普通键值对象（文件值可为 File），不是 FormData 实例
 c.req.raw;                    // 底层原生 Request（Web 标准）
 c.req.valid("json");          // 经 validator 校验后的类型安全数据
 ```
@@ -80,7 +85,7 @@ c.req.valid("json");          // 经 validator 校验后的类型安全数据
 ### 陷阱
 - `param`/`query` 返回的都是 `string`——数字比较前必须显式转换（或用 Zod `z.coerce`）
 - `c.req.json()` 在请求体不是合法 JSON 时抛错——交给 `app.onError` 统一兜住，不要裸调不接
-- `parseBody()` 只处理 `multipart/form-data`；对 JSON 请求体调用会抛错
+- `parseBody()` 用于 multipart/form-data 或 application/x-www-form-urlencoded；JSON 应调用 json()，不要依赖不匹配类型的结果来验证输入
 
 ## 3. Context：响应构建方法
 
@@ -108,7 +113,7 @@ c.res.headers.set("Cache-Control", "no-store");
 
 ### 陷阱
 - 处理器 `return` 了一个响应后又继续执行代码——响应不会二次生效；分支逻辑记得 `return`
-- 在 `await next()` 之前读取/修改 `c.res` 得到的是空响应——改响应头的正确姿势是在 `next()` 之后操作 `c.res.headers`
+- 在 next() 后可访问最终响应；若提前设置响应头，可用 c.header()，避免把尚未生成的响应误当作最终结果
 
 ## 4. 中间件注册
 
@@ -120,26 +125,20 @@ c.res.headers.set("Cache-Control", "no-store");
 ```ts
 import type { MiddlewareHandler } from "hono";
 
-// 全局
-app.use(requestLogger());
-
-// 路径前缀（* 通配必需）
-app.use("/api/*", cors());
-
-// 路由级堆叠
-app.post("/upload", requireAuth, uploadLimiter, uploadHandler);
-
-// 自定义中间件：类型标注 MiddlewareHandler
+// 先声明具体中间件，再注册；它不是返回中间件的工厂函数。
 const requestLogger: MiddlewareHandler = async (c, next) => {
   const start = performance.now();
   await next();
   console.log(`${c.req.method} ${c.req.path} ${c.res.status} ${performance.now() - start}ms`);
 };
+app.use(requestLogger);
+app.use("/api/*", cors());
+app.post("/upload", requireAuth, uploadLimiter, uploadHandler);
 ```
 
 ### 陷阱
 - **顺序即语义**：`bodyLimit` 必须在 `parseBody` 之前；认证在校验之前
-- 中间件不 `await next()` 也不返回响应 = 请求悬挂到超时
+- 中间件既不继续也不返回响应会导致响应未完成错误；不要把它当作暂停请求的方法
 - 在 `next()` 前抛错会跳过洋葱内侧的中间件——清理逻辑用 `try/finally`
 
 ## 5. 内置中间件生态
@@ -158,7 +157,7 @@ const requestLogger: MiddlewareHandler = async (c, next) => {
 | `hono/compress` | gzip 压缩 | node-server 下可用 |
 | `hono/etag` | ETag 协商 | 自动 304 |
 | `hono/timing` | Server-Timing 头 | 性能观测 |
-| `hono/cache` | 响应缓存头 | Cache-Control 管理 |
+| `hono/cache` | 基于 Cache API 的响应缓存 | 需要运行时提供相应 Cache API；Node 环境不能仅靠导入就获得存储 |
 | `hono/cookie` | Cookie 读写 | `setCookie`/`getCookie`/`deleteCookie` |
 | `hono/http-exception` | HTTPException | 快速抛带状态码的错误 |
 
@@ -168,7 +167,7 @@ const requestLogger: MiddlewareHandler = async (c, next) => {
 import { cors } from "hono/cors";
 import { secureHeaders } from "hono/secure-headers";
 
-app.use(secureHeaders()); // 一次设置 CSP、HSTS 等安全头
+app.use(secureHeaders()); // 默认安全头；CSP 需按应用显式配置
 app.use("/api/*", cors({
   origin: ["https://app.example.com"],
   allowMethods: ["GET", "POST", "PATCH", "DELETE"],
@@ -183,7 +182,7 @@ app.use("/api/*", cors({
 ## 6. 错误处理
 
 ### 定义
-`app.onError` 是全站唯一错误出口：任何处理器/中间件 `throw` 的错误（含 async rejection）自动传播至此。`app.notFound` 处理未匹配路由。
+`app.onError` 处理请求执行链中抛出的错误和被等待的拒绝；脱离请求链的后台 Promise 不会自动交给它。`app.notFound` 处理未匹配路由。
 
 ### 语法与示例
 
@@ -253,8 +252,25 @@ server.close();          // 优雅关闭沿用 Node API
 
 ---
 
+<!-- full-library-explanation -->
+## 跟踪一次请求的进入、返回与错误
+
+Hono 的 `Context` 是本次请求的上下文，不是全局用户状态。把认证结果存入 `c.set`，下游用 `c.get` 读取，可以避免不同请求共享一个可变的 currentUser。TypeScript 的 Variables 声明只帮助检查类型，不能证明认证中间件确实运行过；注册顺序和路径仍需测试。
+
+中间件执行 `await next()` 后才继续处理响应；提前 `return c.json(..., 401)` 会阻止后续业务执行。框架捕获路由抛出的错误并构建响应，因此外层中间件不能假设每个下游错误都会以被拒绝的 next() 传播，必要时查看响应状态和 `c.error`。
+
+**练习**：构建一个 `/private` 路由，用计数器记录业务调用次数。无令牌请求应返回 401 且计数保持 0；合法令牌才增长。再给 JSON 接口传畸形请求体，明确返回 400，而非把所有解析错误都当服务器故障。使用 `app.request` 检查状态、响应头和响应体；无需为这类测试监听端口。
+
+查阅：[请求体解析](https://hono.dev/docs/api/request)、[中间件执行语义](https://hono.dev/docs/guides/middleware)。本页包含 API 片段，使用未定义 handler/schema 的段落需在具体应用中装配。
+
 ## 🔗 相关文档
 
 - 📄 **[路由与中间件教程](../../basics/05-http-routing.md)** — 子应用组织与 Zod 校验实战
 - 📄 **[框架选型对比](./02-fastify-nestjs.md)** — Fastify/NestJS/Express 与 Hono 的定位差异
 - 📄 **[错误处理教程](../../basics/06-error-handling.md)** — 集中式错误处理设计
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

@@ -1,5 +1,7 @@
 # 字符串 API 与正则导览
 
+> **阅读准备**：Kotlin String、转义与可空返回；复杂校验先明确整串匹配还是提取一段。
+
 > String 高频方法、模板与转义、原始字符串、Regex 全家桶（matches/find/findAll/命名分组/RegexOption）、格式化——本模块正则的完整参考
 
 | 属性 | 内容 |
@@ -14,7 +16,7 @@
 
 ## 📌 定义
 
-Kotlin 字符串 = JVM `java.lang.String` + 标准库扩展函数：高频操作（split/trim/replace/substringBefore…）全部以扩展函数提供，无需 `StringUtils` 类工具库；正则通过 `Regex` 类封装，API 比 Java `Pattern`/`Matcher` 的分离式设计更直接。下文结果注释均经本机 kotlinc 2.4.20 编译运行验证。
+本页主要讨论 Kotlin/JVM 字符串及标准库扩展；其他 Kotlin 目标不能直接等同于 java.lang.String：高频操作（split/trim/replace/substringBefore…）全部以扩展函数提供，无需 `StringUtils` 类工具库；正则通过 `Regex` 类封装，API 比 Java `Pattern`/`Matcher` 的分离式设计更直接。下文注释为预期结果；本轮未在 Kotlin/Android 工具链运行。
 
 ## 📖 语法 / API 表
 
@@ -43,14 +45,14 @@ Kotlin 字符串 = JVM `java.lang.String` + 标准库扩展函数：高频操作
 
 ### 2. 字符串模板与转义
 
-规则（实测确认）：**`$` 后跟标识符或 `{` 才是模板**，否则按字面量处理。
+规则（预期行为确认）：**`$` 后跟标识符或 `{` 才是模板**，否则按字面量处理。
 
 ```kotlin
 val name = "Ada"
 "Hi, $name (${name.length} chars)"   // Hi, Ada (3 chars)——$标识符 与 ${表达式}
 "sum=${1 + 2}"                       // sum=3
 "cost: \$5"                          // cost: $5——\$ 转义字面量 $
-"$5"                                 // $5——$ 后跟数字不是模板，按字面量（实测）
+"$5"                                 // $5——$ 后跟数字不是模板，按字面量（预期行为）
 "100$"                               // 100$——$ 结尾同理
 """${'$'}"""                         // $——原始字符串里输出 $ 的标准写法
 "a\tb"                               // 转义序列同 Java：\t \n \\ \" A → A
@@ -59,7 +61,7 @@ val name = "Ada"
 ### 3. 原始字符串（Raw String）
 
 ```kotlin
-"""a\nb""".length                    // 4——反斜杠不转义，\n 是两个字符（实测）
+"""a\nb""".length                    // 4——反斜杠不转义，\n 是两个字符（预期行为）
 """C:\Users\new"""                   // Windows 路径免双反斜杠
 val json = """{"name": "Ada"}"""     // 内嵌引号无需转义
 """
@@ -85,7 +87,7 @@ val json = """{"name": "Ada"}"""     // 内嵌引号无需转义
 | `replaceFirst` | 只替换第一处 | — |
 | `String.split(regex)` | 按正则拆分（保留尾空串） | `"ab12cd3".split(Regex("\\d+"))` → `[ab, cd, ]` |
 
-匹配结果取值（实测）：
+匹配结果取值（预期行为）：
 
 ```kotlin
 val dateRe = Regex("""(?<year>\d{4})-(?<month>\d{2})-(?<day>\d{2})""")
@@ -120,7 +122,7 @@ Regex("^a", RegexOption.MULTILINE).containsMatchIn("x\na")    // true——^/$ �
 | `%,d` | 千分位分组 | `1234567` → `"1,234,567"` |
 
 ```kotlin
-val price = "$%.2f".format(9.5)     // "$9.50"——$ 后跟 % 非模板，按字面量（实测）
+val price = String.format(java.util.Locale.US, "$%.2f", 9.5)     // "$9.50"——$ 后跟 % 非模板，按字面量（预期行为）
 ```
 
 ## 💡 示例
@@ -134,7 +136,7 @@ fun parseTimestamp(line: String): Triple<Int, Int, Int>? =
 
 parseTimestamp("[INFO] 09:05:30 boot done")   // (9, 5, 30)
 
-// findAll 是惰性 Sequence：取第一个匹配时后续不执行（实测）
+// findAll 是惰性 Sequence：取第一个匹配时后续不执行（预期行为）
 val firstDigit = Regex("\\d").findAll("1a2a3").map { it.value }.first()   // "1"
 
 // 手机号脱敏：分组引用 + replace 变换 lambda
@@ -145,18 +147,27 @@ Regex("""(\d{3})\d{4}(\d{4})""").replace("13812345678") { mr ->
 
 ## ⚠️ 常见陷阱
 
-- ❌ 拿 `matches` 当"包含匹配"用——`Regex("\\d+").matches("abc123")` 是 **false**（整串匹配，实测）。
+- ❌ 拿 `matches` 当"包含匹配"用——`Regex("\\d+").matches("abc123")` 是 **false**（整串匹配，预期行为）。
   ✅ 找子串用 `containsMatchIn`（只判断）或 `find`/`findAll`（要内容）。
-- ❌ 以为 `split` 像 Java 一样丢弃尾部空串——Kotlin **保留**：`"a,b,,".split(",")` → `["a", "b", "", ""]`（实测）。
+- ❌ 以为 `split` 像 Java 一样丢弃尾部空串——Kotlin **保留**：`"a,b,,".split(",")` → `["a", "b", "", ""]`（预期行为）。
   ✅ 需要去空链上 `filter { it.isNotBlank() }`；解析 CSV 类输入时明确依赖保留语义。
 - ❌ 沿用 `Pattern.compile` + `Matcher` 的 Java 习惯——冗长且非惯用。
   ✅ 直接 `Regex(...)` / `"...".toRegex()`；pattern 一律用原始字符串 `"""\d+"""` 免双反斜杠。
 - ❌ 找 Java 的 `g` 标志——`RegexOption` 没有它。
-  ✅ 全局匹配用 `findAll`（返回惰性 `Sequence`，实测短路消费只处理到命中处）。
-- ❌ `"%.2f".format(x)` 在用户设备上输出 `3,14`——**format 默认跟随设备区域**（实测 `Locale.GERMANY` 即逗号小数点），序列化/协议场景直接出错。
+  ✅ 全局匹配用 `findAll`（返回惰性 `Sequence`，预期行为短路消费只处理到命中处）。
+- ❌ `"%.2f".format(x)` 在用户设备上输出 `3,14`——**format 默认跟随设备区域**（预期行为 `Locale.GERMANY` 即逗号小数点），序列化/协议场景直接出错。
   ✅ 机器可读输出显式 `String.format(Locale.US / Locale.ROOT, ...)`；仅人读展示才用默认区域。
 - ❌ 在原始字符串里想输出字面量 `$` 却直接写——原始字符串同样支持模板，`$name` 仍会插值，歧义或编译错误。
-  ✅ 字面量美元符统一写 `${'$'}`（实测）。
+  ✅ 字面量美元符统一写 `${'$'}`（预期行为）。
+
+<!-- full-library-explanation -->
+## 格式匹配与语义有效性
+
+日期正则能匹配 `2026-99-99`，时间例子也能提取 `99:99:99`。正则确认形状后，还要通过日期时间 API 或数值范围验证业务含义。相同地，手机号脱敏示例不是通用号码校验器，也不能证明日志已经没有其他个人信息。
+
+Kotlin/JVM 的字符串索引按 UTF-16 代码单元计，不一定等于用户看到的字符数。截断 emoji 或组合字符时不能简单用 length 当作字形数。多平台目标的 Regex 支持和 Unicode 行为也需按目标核对。
+
+练习：测试空字符串、尾分隔符、emoji、错误时间以及包含引号/逗号的 CSV 行。验收：能说明 split 只做分割，不实现完整 CSV 语法；重复使用固定正则时复用 Regex 实例，外部输入有长度限制，避免把复杂表达式当万能解析器。
 
 ## 🔗 相关条目
 
@@ -170,3 +181,9 @@ Regex("""(\d{3})\d{4}(\d{4})""").replace("13812345678") { mr ->
 ---
 
 *最后更新: 2026年9月 | 本条目为模块知识字典的一部分，概念完整解释以此处为单一事实来源*
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

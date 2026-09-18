@@ -1,10 +1,21 @@
 # Swift 并发 API 全表
 
+## 挂起、并发与隔离分别解决什么
+
+前置：函数、错误处理和引用类型。async/await 描述可挂起调用，Task 建立任务，actor 隔离可变状态。看到 await 只知道这里可能挂起，不能据此保证代码正在另一个线程运行。
+
+以搜索框为例：用户从 A 改成 B，两个查询可能交错完成。取消旧任务能减少无用工作，但还要考虑底层是否配合取消；用请求身份或当前关键词判断结果是否仍属于当前界面。
+
+自测：A 后返回、B 先返回，最终应展示 B。若把“async 会自动按启动顺序结束”当假设，必然出现旧结果覆盖。进一步在 actor 方法的 await 前后检查状态：挂起期间其他工作可能推进，恢复后不能无条件相信之前读取的可变状态。
+
 > **文档简介**: Task、TaskGroup、Actor、AsyncSequence、锁与 GCD 桥接的完整条目式参考，每个 API 给出签名、示例与陷阱
 >
 > **目标读者**: 需要查阅并发 API 细节的中级学习者
 >
 > **前置知识**: 建议先学 [basics/07-concurrency-async-await.md](../../basics/07-concurrency-async-await.md)
+
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
 
 ## 📚 文档元数据
 
@@ -15,6 +26,8 @@
 | **难度** | ⭐⭐ |
 | **标签** | `#并发` `#Task` `#TaskGroup` `#Actor` `#AsyncSequence` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ---
 
@@ -178,3 +191,9 @@ func fetchLegacy() async throws -> Data {
 - 📄 [01-swift-keywords.md](./01-swift-keywords.md) — actor/sending/Sendable 关键字
 - 📄 [04-swiftui-state-api.md](./04-swiftui-state-api.md) — 与 UI 状态配合的包装器
 - 📄 [02-troubleshooting.md](../quick-references/02-troubleshooting.md) — 并发警告与线程问题排查
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

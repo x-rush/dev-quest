@@ -6,6 +6,9 @@
 >
 > **前置知识**: 建议先学 [basics/03-swift-syntax-essentials.md](../../basics/03-swift-syntax-essentials.md)
 
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
+
 ## 📚 文档元数据
 
 | 属性 | 内容 |
@@ -15,6 +18,8 @@
 | **难度** | ⭐ |
 | **标签** | `#闭包` `#函数类型` `#escaping` `#捕获列表` `#尾随闭包` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ---
 
@@ -66,7 +71,7 @@ Button {
 // @escaping：闭包生命周期超出函数调用（存储起来稍后调用）
 func observe(onUpdate: @escaping () -> Void) { … }
 
-// 非逃逸（默认）：闭包在函数返回前执行完毕，无捕获管理开销
+// 非逃逸（默认）：闭包不能逃出这次调用；是否执行由函数实现决定，不能承诺零开销
 func twice(_ work: () -> Void) { work(); work() }
 ```
 
@@ -133,8 +138,25 @@ final class WeatherService {
 | 强引用循环 | 逃逸闭包捕获 `self`，`self` 又持有闭包 | 捕获列表 `[weak self]` + `guard let self` |
 | `$0` 滥用 | 多个隐式参数可读性差 | 参数超过 2 个时改用具名参数 |
 | 尾随闭包错位 | 多尾随闭包漏写第二个标签 | 第一个省略标签，其余必须写标签 |
-| Task 内捕获非 Sendable 值 | 严格并发（默认开启）下编译报错 | 只捕获 Sendable 值，或用 actor 隔离数据 |
-| 在 `body` 里定义闭包又捕获状态 | 造成不必要的重算 | 闭包里只改状态，别复制状态 |
+| Task 内捕获非 Sendable 值 | 按 Swift 语言模式与隔离设置进行并发检查 | 只捕获 Sendable 值，或用 actor 隔离数据 |
+| 捕获的值与任务生命周期不匹配 | 长期任务可能使用旧输入 | 明确重新启动任务还是读取最新输入，不能仅靠闭包写法猜测 |
+
+<!-- full-library-explanation -->
+## 画出引用方向，再决定 weak
+
+若 Model 强持有闭包，闭包又强捕获 Model，就形成环。网络操作中的临时闭包不一定形成永久循环，weak 也可能让必要工作因对象消失而不执行。应先画“谁持有谁、持续多久”，再选捕获策略。
+
+```swift
+var value = 1
+let live = { value }
+let snapshot = { [value] in value }
+value = 2
+print(live(), snapshot()) // 2 1
+```
+
+捕获列表在创建闭包时求值。若捕获的是 class 引用，保存该引用并不等于深复制对象。@escaping 说明闭包可以在函数返回后调用，不保证它在后台、一定会调用或只调用一次。
+
+练习：为 Model 添加 deinit 日志，分别使用强捕获、weak 捕获和显式清空回调。验收：能解释释放与否；任务失败有接收路径。丢弃返回句柄的 throwing Task 可能让错误无人观察，不能靠 `[weak self]` 同时解决取消和错误处理。
 
 ## 🔗 相关条目
 
@@ -142,3 +164,9 @@ final class WeatherService {
 - 📄 [03-concurrency-api.md](./03-concurrency-api.md) — Task 与并发域中的闭包规则
 - 📄 [11-actors-sendability.md](./11-actors-sendability.md) — 闭包跨隔离域的 Sendable 要求
 - 📄 [01-swift-swiftui-cheatsheet.md](../quick-references/01-swift-swiftui-cheatsheet.md) — 闭包简写速查
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

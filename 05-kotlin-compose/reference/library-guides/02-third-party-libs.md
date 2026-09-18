@@ -1,5 +1,7 @@
 # 第三方库指南
 
+> **阅读准备**：Gradle 依赖、协程、HTTP 与 JSON；先能用系统能力完成小功能，再比较库提供的额外价值。
+
 > Hilt/Retrofit/OkHttp/Coil/Ktor 五大生态库的字典式速查：核心注解与 API、最小集成示例与陷阱
 
 | 属性 | 内容 |
@@ -82,11 +84,11 @@ interface NotesApi {
 
 // 构建（通常放 Hilt Module）
 @Provides @Singleton
-fun provideApi(client: OkHttpClient, moshi: Json): NotesApi =
+fun provideApi(client: OkHttpClient, json: Json): NotesApi =
     Retrofit.Builder()
         .baseUrl("https://api.example.com/v1/")     // 必须以 / 结尾
         .client(client)
-        .addConverterFactory(moshi.asConverterFactory("application/json".toMediaType()))
+        .addConverterFactory(json.asConverterFactory("application/json".toMediaType()))
         .build()
         .create(NotesApi::class.java)
 ```
@@ -127,7 +129,8 @@ fun provideOkHttp(): OkHttpClient = OkHttpClient.Builder()
         chain.proceed(request)
     }
     .addInterceptor(HttpLoggingInterceptor().apply { // 仅 debug 构建加日志
-        level = HttpLoggingInterceptor.Level.BODY
+        redactHeader("Authorization")
+        level = if (BuildConfig.DEBUG) HttpLoggingInterceptor.Level.BASIC else HttpLoggingInterceptor.Level.NONE
     })
     .build()
 ```
@@ -165,7 +168,7 @@ LaunchedEffect(url) {
 ```
 
 ### 陷阱
-- LazyColumn 中滚动错图 → 给 `ImageRequest` 加 `.memoryCacheKey(url)` 保持稳定，并确保列表 key 唯一
+- LazyColumn 中滚动错图 → 先查条目身份、请求模型、内容版本和缓存键；手工固定缓存键可能反而复用旧图
 - `contentDescription` 为 null 仅限装饰图；有含义的图必须描述（无障碍）
 
 ## 5. Ktor Client - 多平台 HTTP
@@ -175,7 +178,8 @@ Kotlin 官方 HTTP 客户端，KMP（Android/iOS/桌面）项目首选；纯 And
 
 ### 语法和示例
 ```kotlin
-val client = HttpClient(CIO) {                     // 引擎可换 OkHttp/Android
+val client = HttpClient(CIO) {
+    expectSuccess = true // 非成功响应抛出异常；调用方分类处理                     // 引擎可换 OkHttp/Android
     install(ContentNegotiation) {
         json(Json { ignoreUnknownKeys = true })
     }
@@ -218,3 +222,20 @@ suspend fun fetchNotes(): List<NoteDto> =
 - 📄 **[Kotlin 语法基础](../../basics/03-kotlin-syntax-essentials.md)** - 读懂数据类 DTO 的语言基础
 - 📖 **[Hilt 官方文档](https://developer.android.com/training/dependency-injection/hilt-android)** - 完整指南
 - 📖 **[Retrofit 官网](https://square.github.io/retrofit/)** - API 参考
+
+
+<!-- full-library-explanation -->
+## 为什么需要接口与可替换实现
+
+Repository 依赖 NotesApi 接口后，测试可以提供固定成功、超时和格式错误响应，而不用真的访问网络。Hilt 负责构建依赖图，不验证远端数据；Retrofit 负责 HTTP 映射，不决定重试一次写操作是否安全；Coil 管理图片请求，不知道业务上的用户身份。
+
+HTTP 401、429、500、连接失败与 JSON 解析失败应分别处理。刷新 token 时限制重试次数，避免多个请求同时刷新；写操作若可能在服务端已成功，要用业务幂等键或查询状态消除重复提交风险。
+
+练习：给笔记列表替换一个 fake API，依次返回空列表、两条记录、错误。验收：每种状态都有可解释界面；生产构建不输出请求体、token 和个人资料。debug 日志同样可能泄露真实数据，不能把 DEBUG 当作安全保证。
+
+选依赖时看目标平台、维护状态、兼容版本与替换成本；“最新稳定版”必须与整个工程兼容，不应把每个依赖独立升级到最大版本号。
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

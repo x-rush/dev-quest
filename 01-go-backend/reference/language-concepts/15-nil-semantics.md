@@ -1,6 +1,6 @@
 # nil 语义汇总
 
-> **模块**: `01-go-backend` | **类型**: 字典条目（无难度门槛，支持任意跳入查阅）
+> **模块**: `01-go-backend` | **类型**: 字典条目（可独立查阅，按主题准备前置知识，支持任意跳入查阅）
 
 ## 📌 定义
 
@@ -85,6 +85,15 @@ func main() {
 - ❌ **错误做法**：JSON 序列化时混用 `var s []T` 与 `s := []T{}`，导致 `null` 与 `[]` 输出不一致。
 - ✅ **正确做法**：对外 API 返回统一形态——要么都 `make([]T, 0)`，要么接收端兼容 null（见 encoding/json 条目）。
 
+<!-- full-library-explanation -->
+## nil 是具体类型的零值状态
+
+前置是接口、指针和容器。nil 不是“任何操作都失败”的统一对象：nil slice 可以 append，nil map 可以读取但不能写入，nil channel 收发会等待。先确认静态类型，再查相应操作，比先加一层 nil 判断更可靠。
+
+练习分别声明 nil slice、空 slice、nil map 和空 map，记录 len、与 nil 的比较以及 JSON 输出。使用 encoding/json 默认行为时，nil slice 输出 null，非 nil 空 slice 输出 []；接口协议需要固定形状时，在输出边界明确构造。
+
+error 自身就是接口，不是第七种独立 nil 类型。装有 nil 指针的接口仍可调用指针接收者方法，是否 panic 取决于方法实现；零值接口则没有可调用的动态方法。把“调用方法”与“解引用字段”分开判断。
+
 ## 🔗 相关条目
 
 - 📄 **[切片语义](./10-slice-semantics.md)** - nil slice 与空 slice 的底层差异
@@ -97,3 +106,9 @@ func main() {
 ---
 
 *最后更新: 2026年9月 | 本条目为模块知识字典的一部分，概念完整解释以此处为单一事实来源*
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

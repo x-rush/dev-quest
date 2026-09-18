@@ -6,6 +6,9 @@
 >
 > **前置知识**: [发布构建](01-release-build.md)、[Play Store 上架流程](02-play-store-release.md)、[集成与端到端测试](../testing/03-integration-e2e-testing.md)
 
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
+
 ## 📚 文档元数据
 
 | 属性 | 内容 |
@@ -15,6 +18,8 @@
 | **难度** | ⭐⭐⭐ |
 | **标签** | `#github-actions` `#crashlytics` `#vitals` `#release-automation` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ---
 
@@ -149,20 +154,25 @@ Crashlytics Dashboard 关注三个数：
 
 ## 🎨 最佳实践
 
-### ✅ 推荐
+每次发布将源码提交、构建编号、签名产物和混淆映射关联归档。先制造一个受控异常，验证平台能把堆栈还原到该版本的源代码，再认为崩溃采集已经可用。
 
-- CI 每个版本号产物归档（artifact），发布记录可追溯
-- Crashlytics 自定义 key 与[多模块结构](../projects/04-production-android-app.md)对齐（feature 名作 key）
-- mapping 文件每次发布上传并备份——没有它，混淆堆栈无法解读
-
-### ❌ 避免陷阱
-
-- Secrets 明文写进 yml 或 echo 到日志
-- 只监控 fatal crash：`recordException` 记录的非致命异常往往是下次 crash 的前兆
-- 灰度不看数据直接放量，或看到问题直接撤包（正确做法是暂停 + 新版本修复）
+日志和自定义字段提供定位线索，但避免用户秘密与无界高基数字段。非致命错误也值得观察，其严重性由对业务的影响判断，不能一概视为即将崩溃。流水线限制签名凭据访问；灰度发现问题时按预先定义的暂停和修复方案执行。
 
 ## 🔗 相关文档
 
 - 📖 前置步骤：[发布构建](01-release-build.md) ｜ [Play Store 上架流程](02-play-store-release.md)
 - 🧪 质量门禁：[集成与端到端测试](../testing/03-integration-e2e-testing.md)
 - 🚀 深度优化：[启动与内存优化](../advanced-topics/performance/02-startup-memory.md) ｜ [生产级 Android 应用](../projects/04-production-android-app.md)
+
+
+<!-- acceptance-exercise -->
+## 练习与验收：建立提交、构建与崩溃的对应关系
+
+在测试分支先制造一个失败单元测试，预期流水线拦截发布。恢复后构建测试发行包，用受控方式触发合成错误，确认错误平台能关联版本与反混淆映射。验收包含新进程启动、一次核心操作和敏感日志检查；上传 mapping 文件不代表它与用户实际安装的包一致，必须按构建标识匹配。
+
+以上是在个人或隔离测试环境中的练习，不是本轮已执行记录；实际运行范围见仓库文档质量报告。
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../LEARNING_GUIDE.md) · [完整目录与版本](../README.md) · [通用术语](../../shared-resources/glossary.md)

@@ -1,10 +1,10 @@
 # slices / maps - 泛型集合工具
 
-> **模块**: `01-go-backend` | **类型**: 字典条目（无难度门槛，支持任意跳入查阅）
+> **模块**: `01-go-backend` | **类型**: 字典条目（可独立查阅，按主题准备前置知识，支持任意跳入查阅）
 
 ## 📌 定义
 
-`slices` 与 `maps` 是 Go 1.21+ 的**泛型集合工具包**：把过去每个项目都手写的循环（查找、去重、排序、克隆、键值收集）变成带编译期类型检查的标准库调用。心智模型——切片是"有序序列"用 slices；map 是"键值集合"用 maps；多数函数原地操作并返回同一底层切片。
+`slices` 与 `maps` 是 Go 1.21+ 的**泛型集合工具包**：把过去每个项目都手写的循环（查找、去重、排序、克隆、键值收集）变成带编译期类型检查的标准库调用。心智模型——切片是"有序序列"用 slices；map 是"键值集合"用 maps；各函数的修改和分配行为不同，必须分别查看约定；返回切片的变形操作通常要接收返回值。
 
 ## 📖 语法 / 签名
 
@@ -26,7 +26,7 @@ slices.BinarySearch(s, v) (int, bool)         // 需已排序
 slices.Clone(s []E) []E                       // 浅拷贝（新底层数组）
 slices.Delete(s, i, j) []E                    // 原地删 [i,j)，移动尾部元素
 slices.DeleteFunc(s, func(e) bool) []E        // 函数返回 true 的删除
-slices.Insert(s, i, vs...) []E                // 原地插入
+slices.Insert(s, i, vs...) []E                // 插入并返回结果，容量不足时可能分配
 slices.Grow(s, n) []E                         // 预扩容
 slices.Compact(s) []E                         // 相邻重复压缩
 slices.Reverse(s)                             // 原地反转
@@ -41,7 +41,7 @@ maps.DeleteFunc(m, func(k, v) bool)           // 按条件删除
 maps.Equal(m1, m2) bool
 ```
 
-**迭代器要点（Go 1.23+）**：`maps.Keys/Values` 不再返回切片，而是 `iter.Seq`（可 `for k := range maps.Keys(m)` 直接遍历）；需要切片时用 `slices.Collect(maps.Keys(m))`。
+**迭代器要点（Go 1.23+）**：标准库在 Go 1.23 新增的 `maps.Keys/Values` 返回迭代器而非切片，而是 `iter.Seq`（可 `for k := range maps.Keys(m)` 直接遍历）；需要切片时用 `slices.Collect(maps.Keys(m))`。
 
 ## 💡 示例
 
@@ -67,7 +67,7 @@ func main() {
 	i, ok := slices.BinarySearch(s, 8) // 已排序才能二分
 	fmt.Println(i, ok)                 // 3 true
 
-	// 3. 克隆与增删（注意：Delete/Insert 原地修改并返回同一切片）
+	// 3. 克隆与增删（注意：Delete 修改底层数据，Insert 可能扩容；都要接收新切片头）
 	c := slices.Clone(s)
 	c = slices.Insert(c, 0, 100) // 头部插入
 	fmt.Println(c)               // [100 2 2 5 8 9]
@@ -93,12 +93,12 @@ func main() {
 }
 ```
 
-**与手写循环对比**：`slices.Contains(s, v)` 等价于 `for _, e := range s { if e == v { return true } }`——标准库版本的收益是**意图直读**（一眼看出"在找元素"）与类型安全（`Contains([]int, "x")` 编译报错，手写循环没有这层检查）。
+**与手写循环对比**：`slices.Contains(s, v)` 等价于 `for _, e := range s { if e == v { return true } }`——标准库版本的收益是**意图直读**（一眼看出"在找元素"）与类型安全（`Contains([]int, "x")` 编译报错，正确编写的具体类型循环同样受类型检查，标准库减少了重复实现）。
 
 ## ⚠️ 常见陷阱
 
 - ❌ **错误做法**：以为 `slices.Delete` 返回新切片、原切片未动。
-- ✅ **正确做法**：Delete/Insert/Compact/Reverse **原地修改**并返回（可能同底层的）切片；必须 `s = slices.Delete(...)` 接收，且其他持有者会看到变化——需要隔离先 Clone。
+- ✅ **正确做法**：Delete/Compact 修改底层数据并返回新切片头，Insert 可能复用或更换数组，Reverse 就地修改且没有返回值。Delete/Insert/Compact 要接收结果；需要隔离外层数据时先 Clone。
 - ❌ **错误做法**：`BinarySearch` 前忘了排序。
 - ✅ **正确做法**：二分要求升序（与 Sort 一致）；无序用 `slices.Index` 线性查。
 - ❌ **错误做法**：对空切片调 `slices.Max/Min`。
@@ -109,6 +109,15 @@ func main() {
 - ✅ **正确做法**：Clone 只拷一层；value 含 slice/map/指针时仍共享内层数据。
 - ❌ **错误做法**：SortFunc 比较器里返回 `a - b`（溢出风险）。
 - ✅ **正确做法**：用 `cmp.Compare(a, b)` 构造比较结果。
+
+<!-- full-library-explanation -->
+## 返回的新长度与共享的底层数据
+
+前置是切片的长度、容量与底层数组。slices.Delete 返回更新后的切片头，原变量的长度不会自动改变；它会移动底层元素并清理尾部引用，因此旧切片头虽然仍可使用，却已不再表示原来的数据。Insert 可能扩容到新数组，也可能复用旧数组，不能把是否隔离建立在当前一次运行的容量上。Reverse 就地修改且没有返回值，与 Delete 的调用形式不同。
+
+Clone 适合隔离外层元素排列。例如 []int 的 Clone 后排序不会改原切片；但 [][]int 的 Clone 仍共享每一个内层 []int。对于 map[string][]int 也是同样道理，maps.Clone 只建立新 map，不递归复制值。是否需要深复制由数据所有权决定，不能靠函数名猜测。
+
+练习：令 s 为 []int{1,2,3}，先执行 result := slices.Delete(s,0,1)，预测 len(result) 为 2，而 len(s) 仍为 3；不要继续把 s 当作未修改的原始数据。第二题将 map 的键排序后再输出，两次运行应得到相同的键顺序；直接 range map 没有这种保证。大数据中还要区分 Contains 的线性扫描与排序后 BinarySearch 的搜索成本，排序本身并非免费。
 
 ## 🔗 相关条目
 
@@ -122,3 +131,9 @@ func main() {
 ---
 
 *最后更新: 2026年9月 | 本条目为模块知识字典的一部分，概念完整解释以此处为单一事实来源*
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

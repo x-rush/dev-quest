@@ -1,10 +1,26 @@
 # 第一个 SwiftUI App - 声明式 UI 入门
 
+## 先理解，再动手
+
+App 声明场景，View 的 body 返回当前界面描述。SwiftUI 可能多次求值 body，不能把它当只执行一次的初始化函数。
+
+**本节自测**：加入按钮改变一段文本，不在 body 中修改计数或发网络请求。
+
+<details>
+<summary>预期结果与参考思路（先尝试再展开）</summary>
+
+交互通过状态变化驱动；解释为什么重算本身不应该产生新的业务动作。
+
+</details>
+
 > **文档简介**: 解剖 SwiftUI App 的生命周期与默认模板代码，建立"状态驱动界面"的声明式 UI 思维，并掌握 Xcode Preview 工作流
 >
 > **目标读者**: 已完成环境搭建、希望理解 SwiftUI 程序骨架的初学者
 >
 > **前置知识**: [01-environment-setup.md](./01-environment-setup.md)；任意一门语言的基础编程经验
+
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
 
 ## 📚 文档元数据
 
@@ -15,6 +31,8 @@
 | **难度** | ⭐ |
 | **标签** | `#SwiftUI` `#App生命周期` `#声明式UI` `#Preview` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ## 🎯 学习目标
 
@@ -176,11 +194,9 @@ struct CounterView: View {
 
 ## ✅ 最佳实践
 
-- ✅ **推荐**：把"改 UI"的冲动转成"改状态"——先想清楚哪个状态变化了，再写界面描述
-- ✅ **推荐**：小视图拆分。`body` 太长就抽子 View，SwiftUI 重建小视图的开销极低
-- ✅ **推荐**：为每个视图文件保留一个 `#Preview`，复杂界面提供深色/大字体变体
-- ❌ **避免**：在 `body` 里做副作用（网络请求、写数据库）——`body` 可能被调用多次
-- ❌ **避免**：试图缓存或持有 View 实例。视图是廉价的值描述，不是长期对象
+把界面变化追溯到状态：点击后修改哪个值，哪些 View 读取它。例如计数器增加后文本改变，而不是直接操作一个长期持有的标签对象。body 可能重复求值，网络与写入操作不应作为普通求值副作用启动。
+
+按界面职责抽取子 View，使用合成数据预览空态、长文本和大字体。拆分帮助阅读与复用，但不保证越碎就越快；性能结论仍需测量。
 
 ## ❓ 常见问题
 
@@ -216,3 +232,9 @@ Scene 是系统级"场景容器"（窗口、菜单栏、设置面板），管理
 - 📄 [03-swift-syntax-essentials.md](./03-swift-syntax-essentials.md) — 补齐阅读模板代码所需的 Swift 语法
 - 📄 [04-views-state.md](./04-views-state.md) — 深入 View 协议与状态管理
 - 📄 [参考：SwiftUI 核心速查](../reference/framework-essentials/01-swiftui-essentials.md) — 视图与修饰符字典
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../LEARNING_GUIDE.md) · [完整目录与版本](../README.md) · [通用术语](../../shared-resources/glossary.md)

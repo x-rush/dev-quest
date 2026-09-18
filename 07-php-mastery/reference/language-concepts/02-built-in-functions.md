@@ -1,8 +1,32 @@
 # 常用内置函数分类全表
 
+## 查函数时先看失败返回与是否原地修改
+
+前置：数组、字符串和严格比较。PHP 的数组兼有列表与映射用途，所以“返回数组”还不够：要看键是否保留、是否重新编号，以及 JSON 最终会编码成数组还是对象。
+
+完整脚本：保存为 `array-lab.php`，运行 `php array-lab.php`。
+
+```php
+<?php
+declare(strict_types=1);
+$values = [0, 2, 4];
+$position = array_search(0, $values, true);
+var_dump($position, $position !== false);
+$filtered = array_filter($values, fn(int $n): bool => $n > 0);
+echo json_encode($filtered, JSON_THROW_ON_ERROR), PHP_EOL;
+echo json_encode(array_values($filtered), JSON_THROW_ON_ERROR), PHP_EOL;
+```
+
+预期先看到 int(0) 与 bool(true)，再得到 `{"1":2,"2":4}` 和 `[2,4]`。下标 0 不是失败；filter 保留键，values 才重新编号。这能解释“我明明返回列表，前端却拿到对象”的常见问题。
+
+自测：sort 返回排序是否成功并原地改变数组，sorted 风格的“直接返回新数组”不是 PHP sort 的契约。需要保留原顺序时先复制，再排序；不要把返回值覆盖原数组。
+
 ## 概述
 
 PHP 内置函数超过千个，本文按"高频 + 现代"原则收录数组、字符串、日期、数学与文件五类核心函数。所有函数均在严格类型模式下可用；标注 ⚠️ 的行为在 PHP 8 中有变化或易踩坑。
+
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
 
 ## 📚 文档元数据
 
@@ -13,6 +37,8 @@ PHP 内置函数超过千个，本文按"高频 + 现代"原则收录数组、�
 | **难度** | ⭐ |
 | **标签** | `#内置函数` `#数组` `#字符串` `#日期` `#速查` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ## 1. 数组函数
 
@@ -53,7 +79,7 @@ array_splice($merged, 1, 2, ['x']);          // 原地替换切片
 | `array_reduce()` | 归约为单值 |
 | `array_unique()` | 去重；⚠️ 保留原键，需再 `array_values()` |
 | `array_reverse()` | 反转 |
-| `usort()` / `uasort()` / `uksort()` | 自定义排序（⚠️ 8.0 起比较函数不对称返回值会抛异常） |
+| `usort()` / `uasort()` / `uksort()` | 自定义排序；比较函数返回负数、0、正数。应满足一致的排序关系，不能依赖运行时自动检查不对称比较 |
 | `sort()` / `rsort()` / `asort()` / `ksort()` | 基础排序；8.0 起排序参数 `SORT_REGULAR` 语义更严格 |
 
 ```php
@@ -118,7 +144,7 @@ strip_tags($html, '<p><a>');                           // 剥离标签，白名�
 ```php
 $now = new DateTimeImmutable('now', new DateTimeZone('Asia/Shanghai'));
 $due  = $now->modify('+3 days')->setTime(18, 0);   // ⚠️ Immutable：返回新对象
-echo $due->format('Y-m-d H:i:s P'), PHP_EOL;       // 2026-09-13 18:00:00 +08:00
+echo $due->format('Y-m-d H:i:s P'), PHP_EOL;       // 实际运行日期加三天的 18:00，非固定日期
 ```
 
 **⚠️ 陷阱**：`DateTime::modify()` 修改自身并返回 `$this`，链式调用在 DateTime 上是"原地改"；项目统一用 `DateTimeImmutable` 避免共享可变状态。
@@ -128,7 +154,7 @@ echo $due->format('Y-m-d H:i:s P'), PHP_EOL;       // 2026-09-13 18:00:00 +08:00
 | 函数 | 示例 | 说明 |
 |------|------|------|
 | `date()` | `date('Y-m-d', $ts)` | 格式化时间戳 |
-| `time()` / `microtime(true)` | — | 当前秒 / 毫秒级时间戳 |
+| `time()` / `microtime(true)` | — | 整数秒 / 带小数的秒；microtime(true) 的单位仍是秒 |
 | `mktime()` | `mktime(18, 0, 0, 9, 13, 2026)` | 由分量构造时间戳 |
 | `strtotime()` | `strtotime('next friday')` | ⚠️ 解析英文相对时间，非法输入返回 false |
 | `date_parse()` | — | 解析为关联数组，配合 errors 校验 |
@@ -163,7 +189,7 @@ random_int(1, 6);   // 密码学安全随机整数（⚠️ 不要再用 rand/mt
 ```php
 file_exists($p); is_file($p); is_dir($p);
 file_get_contents($url);              // 读文件/URL，失败返回 false（⚠️ 需判 false）
-file_put_contents($p, $data, LOCK_EX); // LOCK_EX 防并发覆盖
+file_put_contents($p, $data, LOCK_EX); // LOCK_EX 只保护本次写入的合作式锁范围，不保护此前的读取与修改
 mkdir($dir, 0755, true);              // 第三参递归创建
 unlink($p);                           // 删除文件
 fopen()/fgets()/fclose();             // 大文件用流式逐行读
@@ -176,7 +202,7 @@ scandir($dir);                        // 列目录（含 . 与 ..）
 
 - **严格模式同样约束内置函数**：`strict_types=1` 下 `str_contains(123, '1')` 直接抛 `TypeError`——内置函数与用户函数一视同仁，弱转换仅发生在非严格模式
 - **false 歧义返回**：`strpos`/`array_search`/`file_get_contents` 失败返回 `false`，判断一律 `!== false` / `=== false`
-- **多字节函数**：处理中文/Emoji 必须用 `mb_*` 家族，确保 `mbstring` 扩展已启用
+- **多字节函数**：按 Unicode 字符处理可用 `mb_*` 并指定编码；组合 Emoji 的可见字符边界可能需要 intl 的 grapheme_*。按字节处理协议数据时仍使用字节函数
 - **浮点金额**：`round`/`floor` 受 IEEE 754 限制，金额计算用整数分、BCMath 或 `brick/math` 库
 
 ## 相关文档
@@ -184,3 +210,13 @@ scandir($dir);                        // 列目录（含 . 与 ..）
 - 📄 **[数组操作模式](./05-arrays-patterns.md)** — map/filter/reduce 组合范式
 - 📄 **[Composer 生态精选](../library-guides/02-composer-ecosystem.md)** — 内置函数不够用时的标准三方替代
 - 📄 **[常见错误排查](../quick-references/02-troubleshooting.md)** — 返回 false 类 bug 的排查清单
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)
+
+本轮语义核对来源：[PHP 排序比较函数契约](https://www.php.net/manual/en/function.usort.php)（2026-09-18；不等同于本地完整工程运行验证）。
+
+本轮语义核对来源：[PHP 文件写入与锁](https://www.php.net/manual/en/function.file-put-contents.php)（2026-09-18；不等同于本地完整工程运行验证）。

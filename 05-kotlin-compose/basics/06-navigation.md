@@ -1,10 +1,26 @@
 # 页面导航 - Navigation Compose 入门
 
+## 先理解，再动手
+
+导航状态决定当前页面与返回路径。参数传 ID，页面根据 ID 读取数据，可避免序列化整个对象与同步过期副本。
+
+**本节自测**：从笔记列表进入详情，修改后返回，再模拟不存在 ID。
+
+<details>
+<summary>预期结果与参考思路（先尝试再展开）</summary>
+
+返回列表显示更新；不存在时显示明确状态，不通过强制解包制造崩溃。
+
+</details>
+
 > **文档简介**: 使用 Navigation Compose 实现多页面切换：NavHost/NavController 三件套、路由参数传递、底部导航与嵌套导航图
 >
 > **目标读者**: 已掌握单页面布局与状态、需要构建多屏应用的开发者
 >
 > **前置知识**: [布局系统](./05-layouts.md)；了解 Scaffold 基本用法
+
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
 
 ## 📚 文档元数据
 
@@ -16,6 +32,8 @@
 | **标签** | `#Navigation` `#NavHost` `#路由参数` `#底部导航` `#嵌套图` |
 | **更新日期** | `2026年9月` |
 
+</details>
+
 ## 🎯 学习目标
 
 - ✅ 引入 navigation-compose 依赖并搭建 NavHost
@@ -26,13 +44,13 @@
 
 ## 📋 目录
 
-- [添加依赖](#添加依赖)
-- [核心三件套](#核心三件套)
-- [路由传参](#路由传参)
-- [返回栈控制](#返回栈控制)
-- [底部导航](#底部导航)
-- [嵌套导航图](#嵌套导航图)
-- [练习与实践](#练习与实践)
+- [添加依赖](#-添加依赖)
+- [核心三件套](#-核心三件套)
+- [路由传参](#-路由传参)
+- [返回栈控制](#️-返回栈控制)
+- [底部导航](#-底部导航)
+- [嵌套导航图](#️-嵌套导航图)
+- [练习与实践](#-练习与实践)
 
 ---
 
@@ -264,3 +282,9 @@ NavHost(navController, startDestination = "auth") {
 - 📄 **[Compose 核心组件速查](../reference/framework-essentials/01-compose-essentials.md)** - Scaffold/NavigationBar 参数速查
 - 📄 **[Navigation Compose 组件速查](../reference/framework-essentials/06-navigation-components.md)** - NavController/NavBackStackEntry/深链字典
 - 📖 **[Navigation Compose 官方文档](https://developer.android.com/develop/ui/compose/navigation)** - 路由与深链完整指南
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../LEARNING_GUIDE.md) · [完整目录与版本](../README.md) · [通用术语](../../shared-resources/glossary.md)

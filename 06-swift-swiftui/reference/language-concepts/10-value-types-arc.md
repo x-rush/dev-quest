@@ -6,6 +6,9 @@
 >
 > **前置知识**: 建议先学 [basics/03-swift-syntax-essentials.md](../../basics/03-swift-syntax-essentials.md) §二
 
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
+
 ## 📚 文档元数据
 
 | 属性 | 内容 |
@@ -16,6 +19,8 @@
 | **标签** | `#struct` `#class` `#ARC` `#weak` `#值语义` |
 | **更新日期** | `2026年9月` |
 
+</details>
+
 ---
 
 ## 📌 定义
@@ -24,7 +29,7 @@
 
 **引用类型**（class、actor、闭包）：赋值与传参时**共享同一个实例**，多变量指向同一块内存；生命周期由 **ARC（自动引用计数）**管理——引用计数归零时实例立即释放。
 
-Swift 标准库的设计哲学是**优先 struct**：模型、坐标、配置等数据用值语义获得隔离与线程安全；`class` 只留给需要共享可变状态或身份的场景（ViewModel、controller）。
+Swift 标准库的设计哲学是**优先 struct**：模型、坐标、配置等数据用值语义减少意外共享；并发安全仍取决于内部成员与访问方式；`class` 只留给需要共享可变状态或身份的场景（ViewModel、controller）。
 
 > 与 Go 对照：Go 的 map/slice 是"引用语义的值类型"混合体；Swift 中 struct 明确是值语义，class 才是引用。
 
@@ -104,7 +109,7 @@ print(a.title)   // "草稿" —— b 的修改不影响 a
 
 ```swift
 let big = Array(0..<1_000_000)
-let copy = big        // 此刻没有真正拷贝，共享底层存储（O(1)）
+var copy = big        // Array 通常共享底层存储，保持值语义
 copy[0] = -1          // 首次写入才发生实际拷贝
 ```
 
@@ -115,8 +120,17 @@ copy[0] = -1          // 首次写入才发生实际拷贝
 | struct 含 class 字段当"深拷贝" | 拷贝的只是引用，两份数据共享同一对象 | 嵌套结构保持全值类型，或显式复制 |
 | 循环引用导致泄漏 | 对象互相强引用永不释放 | `weak` 打破环；Instruments Leaks 验证 |
 | unowned 悬垂崩溃 | 实例已释放仍访问 | 生命周期不明时一律用 `weak` |
-| 误把 @State 存 class 实例 | 视图重建时状态语义混乱 | 私有简单状态用值类型；共享模型走 @Observable + Environment |
-| 滥用 class 图"省拷贝" | 值类型的拷贝多是 O(1)（COW） | 先测量再优化，默认 struct |
+| 把普通 class 放 @State 就期待属性被观察 | 普通字段变化不自动触发观察 | 现代 Observation 模型可由 @State 持有；按实际对象与系统版本选择 |
+| 滥用 class 图"省拷贝" | 标准集合可采用 COW，但并非所有值类型都 O(1) | 先测量再优化，默认 struct |
+
+<!-- full-library-explanation -->
+## 值语义与物理复制分开理解
+
+struct 复制的是其值；若字段含 class，字段值是同一对象引用。Array 的 COW 也不把元素引用自动深复制。因此“用 struct 就线程安全”不成立，仍要检查内部共享可变对象与跨隔离域访问。
+
+练习：定义 Box 类和包含 Box 的 Holder 结构体，复制 Holder 后修改 box.value。反馈：两份 Holder 可观察到同一 Box 改变；把 Box 改为值类型后再比较。不要用 O(1) 概括所有值类型复制成本，集合第一次独立写入可能复制缓冲区。
+
+ARC 管理强引用关系，作用域结束不总能作为精确释放时钟；任务、闭包和缓存可能延长寿命。排查泄漏时重复进出页面并查看保留路径，缓存稳定增长与永久引用环需要分别判断。
 
 ## 🔗 相关条目
 
@@ -124,3 +138,9 @@ copy[0] = -1          // 首次写入才发生实际拷贝
 - 📄 [11-actors-sendability.md](./11-actors-sendability.md) — actor 是引用类型中的并发安全特例
 - 📄 [03-state-driven-views.md](../framework-essentials/03-state-driven-views.md) — 视图本身是值类型
 - 📄 [02-troubleshooting.md](../quick-references/02-troubleshooting.md) — 内存类问题排查
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

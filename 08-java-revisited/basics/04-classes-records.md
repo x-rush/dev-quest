@@ -1,10 +1,26 @@
 # 类、接口与 Record
 
+## 先理解，再动手
+
+接口表达能力，类提供实现，record 方便表达数据载体。record 的成员引用不可变不意味着其引用的集合不可修改。
+
+**本节自测**：给 record 放一个可变 List，再修改列表；尝试改用不可变副本。
+
+<details>
+<summary>预期结果与参考思路（先尝试再展开）</summary>
+
+能观察浅不可变的边界；要保持快照应在构造边界复制或选择不可变集合。
+
+</details>
+
 > **文档简介**: 复习类与接口的现代语法要点，掌握用 Record 一行替代手写 DTO 样板代码，学会紧凑构造器校验与 record 适用边界判断
 >
 > **目标读者**: 有旧版 Java 经验、写过大量 getter/setter 样板代码的开发者
 >
 > **前置知识**: 已掌握[变量与类型](./03-variables-types.md)基础
+
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
 
 ## 📚 文档元数据
 
@@ -15,6 +31,8 @@
 | **难度** | ⭐ |
 | **标签** | `#面向对象` `#Record` `#接口` `#DTO` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ## 🎯 学习目标
 
@@ -178,3 +196,9 @@ public record Range(int low, int high) {
 - 📄 **[控制流程](./05-control-flow.md)** - 下一站：switch 表达式与模式匹配
 - 📄 **[Record/Sealed/模式匹配](../reference/language-concepts/05-records-sealed-patterns.md)** - 现代特性完整参考
 - 📄 **[Java 关键字详解](../reference/language-concepts/01-java-keywords.md)** - record 关键字条目
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../LEARNING_GUIDE.md) · [完整目录与版本](../README.md) · [通用术语](../../shared-resources/glossary.md)

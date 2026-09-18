@@ -1,10 +1,21 @@
 # 生态集成任务指南 — SwiftData 持久化 + URLSession 网络
 
+## 先看框架承担哪部分职责
+
+**SwiftData 与网络**：网络响应与持久化模型通常需要转换；保存完成、界面更新与远端确认不是同一事件。
+
+**最小练习与预期结果**：先从固定 JSON 构造模型再保存并重启读取；另测 JSON 不合法，不把解码失败误当空数据库。
+
+具体 API 与安装版本以[模块基线](../README.md)和本篇官方来源为准。先完成这条数据路径，再展开后面的高级配置；框架名称变化后，输入边界、状态归属和失败处理仍是需要理解的机制。
+
 > **文档简介**: 把三大系统框架接进 SwiftUI：SwiftData 本地持久化、URLSession 网络请求（async/await）、以及"先网络后缓存"的完整数据链路
 >
 > **目标读者**: 会写 SwiftUI 界面、要为应用接上真实数据源的中级学习者
 >
 > **前置知识**: [02-swiftui-advanced.md](./02-swiftui-advanced.md)（@Observable）；[basics/07-concurrency-async-await.md](../basics/07-concurrency-async-await.md)（async/await）
+
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
 
 ## 📚 文档元数据
 
@@ -15,6 +26,8 @@
 | **难度** | ⭐⭐ |
 | **标签** | `#SwiftData` `#URLSession` `#持久化` `#网络` `#async-await` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ## 🎯 本指南解决什么问题
 
@@ -181,9 +194,9 @@ struct CityListView: View {
 
 ## ✅ 最佳实践
 
-- ✅ `@Query` 只放**展示视图**，写操作集中到 `modelContext` 的明确方法里
-- ✅ 网络请求一律 `async/await` + `.task` 修饰符，取消免费获得
-- ✅ `Codable` 结构体标 `Sendable`，Swift 6 严格并发下一劳永逸
+先把网络结果解码成明确 DTO，再决定如何写入持久化模型；解码成功不代表已经满足业务校验。页面任务需要响应取消，写操作还要处理重复触发与服务端实际是否已提交。
+
+Codable 描述编解码，Sendable 描述跨并发边界传递的安全契约，二者互不替代；成员和可变状态仍须满足编译器要求。不要用 unchecked 声明消除不了解的诊断。验收离开页面、重复保存和解码失败三条路径。
 
 ## ❌ 避免陷阱
 
@@ -211,3 +224,9 @@ struct CityListView: View {
 - 📄 [03-concurrency-api.md](../reference/language-concepts/03-concurrency-api.md) — Task/Actor 并发字典
 - 📄 [02-weather-app.md](../projects/02-weather-app.md) — 实战：天气应用（本链路完整落地）
 - 📄 [07-concurrency-async-await.md](../basics/07-concurrency-async-await.md) — async/await 教程
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../LEARNING_GUIDE.md) · [完整目录与版本](../README.md) · [通用术语](../../shared-resources/glossary.md)

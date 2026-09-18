@@ -1,5 +1,13 @@
 # Kotlin 关键字与修饰符详解
 
+## 从一行 Compose 代码拆开语言能力
+
+前置：函数与变量。`var count by remember { mutableStateOf(0) }` 同时使用 var、属性委托 by、尾随 lambda 与库函数。var/by 是语言结构；remember/mutableStateOf 来自 Compose，不能把它们列成 Kotlin 关键字。
+
+`val items = mutableListOf(1)` 后不能把 items 重新指向另一个列表，但可以 items.add(2)。val 限制重新赋值，不保证深度不可变。nullable 类型把缺失写成 `T?`；`?.` 传播缺失，`?:` 选择回退，`!!` 则把缺失变成运行时失败。
+
+自测：令 name 为 null，预测 `name?.length ?: 0` 的结果为 0；把它换成 `name!!.length` 会失败。随后说明为什么“有默认值”不总是正确业务处理：缺少必填标题时可能应显示错误，而不是默默填空串。
+
 > Compose/Android 开发高频的 Kotlin 关键字速查字典：官方关键字总索引 + 按"声明 → 继承 → 并发 → 其他"分组的高频词条，每个词条包含定义、语法、示例与陷阱。标注（实测）的断言均经本机 kotlinc 2.4.20 编译运行验证
 
 | 属性 | 内容 |
@@ -664,3 +672,9 @@ var score = 0
 - 📄 **[协程与 Flow API 全表](./03-coroutines-flow-api.md)** - suspend 生态的完整 API
 - 📄 **[泛型与委托属性](./05-generics-delegates.md)** - reified 与 by 的展开
 - 📄 **[Kotlin 语法基础](../../basics/03-kotlin-syntax-essentials.md)** - 入门视角的语法教程
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

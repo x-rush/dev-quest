@@ -1,10 +1,10 @@
 # FlexRender：Table 渲染入口与单元格上下文
 
-> **模块**: `03-tanstack-stack` | **类型**: 字典条目（无难度门槛，支持任意跳入查阅）
+> **模块**: `03-tanstack-stack` | **类型**: 字典条目（可独立查阅，按主题准备前置知识，支持任意跳入查阅）
 
 ## 📌 定义
 
-`FlexRender`（组件形式）/ `flexRender`（函数形式）是 Table 把列定义里的 `header`/`cell`/`footer` 渲染物（string | JSX | 函数组件）落到 React 节点的唯一入口。v9 起它脱离 `createTableHook` 变为直接可导入的顶层 API，且实例上还挂了 `table.FlexRender` 便捷形态。渲染单元格时拿到的 `CellContext`（即 `cell.getContext()`）携带 `getValue`/`row`/`column`/`table` 等完整上下文。
+`FlexRender`（组件形式）/ `flexRender`（函数形式）是 Table 把列定义里的 `header`/`cell`/`footer` 渲染物（string | JSX | 函数组件）落到 React 节点的通用入口。v9 起它脱离 `createTableHook` 变为直接可导入的顶层 API，且实例上还挂了 `table.FlexRender` 便捷形态。渲染单元格时拿到的 `CellContext`（即 `cell.getContext()`）携带 `getValue`/`row`/`column`/`table` 等完整上下文。
 
 ## 📖 语法 / 签名
 
@@ -25,7 +25,7 @@ flexRender(header.column.columnDef.header, header.getContext())
 | CellContext 成员 | 说明 |
 |------------------|------|
 | `getValue<T>()` | 当前列的原始值（配合泛型收窄） |
-| `renderValue()` | 经 `accessorFn` 处理后的展示值（`undefined` 时返回 null） |
+| `renderValue()` | 读取 accessor 值，并在 null/undefined 时使用配置的 renderFallbackValue |
 | `row` | 行对象：`row.original` 原始数据、`row.id`、`row.getVisibleCells()` |
 | `column` | 列实例：`column.id`、`columnDef`、排序/筛选等 feature 方法 |
 | `cell` / `table` | 单元格与表实例 |
@@ -41,11 +41,12 @@ flexRender(header.column.columnDef.header, header.getContext())
 ```tsx
 import {
   useTable, tableFeatures, rowSortingFeature, columnVisibilityFeature,
-  createColumnHelper, FlexRender, flexRender,
+  createColumnHelper, FlexRender, flexRender, createSortedRowModel,
 } from '@tanstack/react-table'
 
 const features = tableFeatures({
   rowSortingFeature,       // getToggleSortingHandler 来自排序特性
+  sortedRowModel: createSortedRowModel(), // 让本地行顺序响应排序状态
   columnVisibilityFeature, // getVisibleCells 需要此特性
 })
 const columnHelper = createColumnHelper<typeof features, Person>()
@@ -147,6 +148,17 @@ function InstanceFlexTable() {
 - ❌ 以为 `FlexRender` 只能配 `createTableHook` 生成的表：顶层导入即可用于任何 `useTable` 实例
 - ✅ 函数形式适合封装自定义 `<CellRenderer>`，组件形式/实例形式适合直接写表体
 
+<!-- full-library-explanation -->
+## 取值、格式化与创建 React 节点
+
+先修：Table 列定义、React 组件。getValue 取 accessor 产生的值；renderValue 在缺值时应用回退；FlexRender 执行列的渲染模板。它们不是三个名字不同的同一函数。
+
+例如原数据 `{price: 1200}` 的 accessor 仍返回数字 1200，cell 可以显示 `¥12.00`。排序基于数字，展示基于 cell。直接输出 getValue 会跳过这个格式化模板，但简单原始文本展示并非禁止。
+
+示例中的 Person、people 需要先定义；函数返回 tbody 的版本必须放在 table 内使用。点表头只改变排序状态还不够，本地排序需要注册 sortedRowModel，服务端排序则需要请求对应新数据。
+
+**练习：** 增加金额列，让原值与显示值明显不同，分别用 getValue 与 FlexRender 观察。再启用分组表头，确认 colSpan 与 placeholder 不产生错位。验收：能说明排序依据，键盘也能触发表头按钮。参考[FlexRender 指南](https://tanstack.com/table/latest/docs/guide/flex-render)。
+
 ## 🔗 相关条目
 
 - 📄 **[Table 核心 API](./02-table-core-api.md)** - useTable/columnHelper/feature 体系
@@ -158,3 +170,9 @@ function InstanceFlexTable() {
 ---
 
 *最后更新: 2026年9月 | 本条目为模块知识字典的一部分，概念完整解释以此处为单一事实来源*
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

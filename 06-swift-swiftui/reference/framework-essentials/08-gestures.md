@@ -6,6 +6,9 @@
 >
 > **前置知识**: 视图与状态基础见 [basics/04-views-state.md](../../basics/04-views-state.md)；状态包装器对照见 [../language-concepts/04-swiftui-state-api.md](../language-concepts/04-swiftui-state-api.md)
 
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
+
 ## 📚 文档元数据
 
 | 属性 | 内容 |
@@ -15,6 +18,8 @@
 | **难度** | ⭐⭐ |
 | **标签** | `#SwiftUI` `#手势` `#Gesture` `#交互` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ## 📌 定义
 
@@ -29,8 +34,8 @@ SwiftUI 手势是**可组合的值**（不是回调）：先构造 `Gesture` 实
 | `TapGesture(count:)` | 点按 | `onEnded` 触发（简写见 §4） |
 | `LongPressGesture(minimumDuration:maximumDistance:)` | 长按（默认 0.5s） | 按压位移超 10pt 判失败 |
 | `DragGesture(minimumDistance:coordinateSpace:)` | 拖拽 | value 见 §3 |
-| `MagnificationGesture` | 捏合缩放 | value: `CGFloat` 倍率；**iOS 17 起改名 `MagnifyGesture`**（value: `.magnification`），旧名已弃用 |
-| `RotationGesture` | 旋转 | value: `Angle`；**iOS 17 起改名 `RotateGesture`**（value: `.rotation`），旧名已弃用 |
+| `MagnificationGesture` | 捏合缩放 | value: `CGFloat` 倍率；**iOS 17 起提供替代 API `MagnifyGesture`**（value: `.magnification`），旧名已弃用 |
+| `RotationGesture` | 旋转 | value: `Angle`；**iOS 17 起提供替代 API `RotateGesture`**（value: `.rotation`），旧名已弃用 |
 | `SequenceGesture(a, b)` | 顺序：a 识别后接管给 b | value: `.first`/`.second` 两分支 |
 | `SimultaneousGesture(a, b)` | 同时识别 | a、b 各自更新 |
 | `ExclusiveGesture(a, b)` | 排他：a 优先，失败才轮到 b | value: 只有一边 |
@@ -86,7 +91,7 @@ content
 | `startLocation` / `location` | CGPoint | 起点 / 当前点（局部坐标） |
 | `predictedEndTranslation` | CGSize | 按速度预测的落点位移（惯性/翻页判断） |
 | `predictedEndLocation` | CGPoint | 预测终点 |
-| `time` | Date | 手势开始时间 |
+| `time` | Date | 当前拖动事件关联的时间 |
 | `velocity` | CGSize | 速度（**iOS 17+**） |
 
 ## 4. 挂载修饰符与简写分工
@@ -96,7 +101,7 @@ content
 | `.gesture(g)` | 常规挂载（默认给系统控件让路） |
 | `.simultaneousGesture(g)` | 与系统手势**并行**识别 |
 | `.highPriorityGesture(g)` | 优先于子视图/系统手势 |
-| `.onTapGesture { }` / `.onLongPressGesture { }` | 点按/长按**简写**，等价于挂 TapGesture |
+| `.onTapGesture { }` / `.onLongPressGesture { }` | 分别提供点按与长按回调；长按不等同于 TapGesture |
 
 **分工原则**:
 
@@ -110,8 +115,8 @@ content
 // 长按解锁后才进入拖拽（SequenceGesture）
 let longPressThenDrag = SequenceGesture(LongPressGesture(minimumDuration: 0.3), DragGesture())
     .onEnded { value in
-        if case .second(let drag) = value {
-            _ = drag.translation      // .second 分支携带 DragGesture.Value
+        if case .second(true, let drag?) = value {
+            _ = drag.translation      // 第一手势值与可选的第二手势值
         }
     }
 
@@ -139,6 +144,15 @@ image
 - ❌ **继续用 `MagnificationGesture`/`RotationGesture`**：iOS 17 起已弃用，编译告警
   ✅ 改 `MagnifyGesture`/`RotateGesture`（iOS 16 及以下才需旧名）。
 
+<!-- full-library-explanation -->
+## 区分进行中、成功结束与取消
+
+@GestureState 会在手势结束或取消后复位；onEnded 只应被当成成功结束的提交入口，不要把必要清理完全寄托于它。拖拽过程以累计位置加当前 translation 呈现，提交时只累加一次，下一次手势从新的累计位置开始。
+
+练习：拖动卡片两次，第一次向右 40、第二次向下 20，最终相对原点约为 (40,20)。再在拖动中触发系统取消，观察瞬时值复位而已提交的位置保留。数值受实际手势影响，可用日志观察，不要要求手指精确移动一个像素。
+
+在 ScrollView 内先判断该交互是否可以使用系统 swipeActions 或 Button；提高优先级可能使滚动无法使用。对自定义拖动提供按钮或 accessibilityAction 替代入口，避免用户必须完成精细手势才能使用功能。contentShape 定义命中形状，不会自动增大布局尺寸。
+
 ## 🔗 相关条目
 
 - 📄 **[01-swiftui-essentials.md](./01-swiftui-essentials.md)** - 视图/修饰符/动画总表（手势的挂载目标）
@@ -148,3 +162,9 @@ image
 ---
 
 *最后更新: 2026年9月 | 本条目为模块知识字典的一部分，概念完整解释以此处为单一事实来源*
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

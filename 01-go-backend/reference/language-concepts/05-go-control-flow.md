@@ -8,6 +8,9 @@
 >
 > **预计时长**: 30分钟速查
 
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
+
 ## 📚 文档元数据
 
 | 属性 | 内容 |
@@ -19,6 +22,8 @@
 | **更新日期** | `2026年9月` |
 | **作者** | Dev Quest Team |
 | **状态** | ✅ 已完成 |
+
+</details>
 
 ## 🎯 快速索引
 
@@ -192,6 +197,50 @@ func readFile() {
 }
 ```
 
+### 类型断言
+
+对接口使用 `value, ok := x.(T)`，匹配失败时 ok 为 false，不会像单返回值断言那样 panic。多个类型分支用 type switch。类型断言不是数值转换：`int(floatValue)` 与 `x.(int)` 解决不同问题。
+
+### 循环控制
+
+break 结束最近的 for/switch/select，continue 开始最近 for 的下一次迭代。嵌套循环需要退出外层时可使用标签；先明确要退出哪一层，避免在 switch 内 break 后误以为已经退出外面的 for。
+
+### goto
+
+goto 跳到同一函数内的标签，不能跳入新的作用域或跨过导致变量尚未声明的路径。通常优先使用 return、循环和带标签 break；只有线性清理等确实更清晰的场景才考虑 goto。
+
+```go
+// main 内片段，已 import fmt
+var x any = "7"
+if value, ok := x.(int); ok {
+    fmt.Println(value)
+} else {
+    fmt.Println("不是 int") // 字符串数字不是 int
+}
+```
+
+验收：把 x 改成整数 7，输出应变为 7；再解释为何字符串到整数需要解析而不能靠断言完成。
+
+<!-- full-library-explanation -->
+## 先判断循环变量代表什么
+
+前置是布尔表达式与切片。if 要求布尔条件，不能把整数直接当真假；switch 默认在命中分支后结束，不需要像某些语言那样在每个 case 末尾写 break。range 的结果随被遍历对象变化，字符串的索引是字节偏移，值是解码得到的 rune。
+
+完整程序保存为 main.go 后运行：
+
+```go
+package main
+import "fmt"
+func main() {
+    for index, value := range "Go中" {
+        fmt.Printf("%d %c\n", index, value)
+    }
+    fmt.Println(len("Go中"))
+}
+```
+
+输出三行 `0 G`、`1 o`、`2 中`，最后是 `5`。练习：将字符串改为“中Go”，索引应为 0、3、4。再解释为什么对字符串按任意字节位置切片可能切断 UTF-8 编码。for 中的 break 只退出最近相关循环或 switch/select，跨层退出需要明确标签，不能靠缩进判断。
+
 ## 🔗 相关资源
 
 - **深入学习**: [basics/06-control-structures.md](../../basics/06-control-structures.md)
@@ -201,3 +250,9 @@ func readFile() {
 ---
 
 **更新日志**: 2026年9月 - 创建控制流程速查手册
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

@@ -1,8 +1,13 @@
 # 现代 PHP 一行式速查
 
+> **阅读准备**：理解 PHP 变量、数组、函数和异常；片段按所在章节补 import、依赖与输入，不应整页拼成一个脚本。
+
 ## 概述
 
 面向 PHP 8.5 的单行代码速查表，按场景分组，每行可直接复制使用。供随手翻阅，不做展开讲解。
+
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
 
 ## 📚 文档元数据
 
@@ -13,6 +18,8 @@
 | **难度** | ⭐ |
 | **标签** | `#速查表` `#一行式` `#语法` `#PHP8.5` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ## 1. 文件骨架
 
@@ -102,7 +109,7 @@ var_dump(debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 3));  // 调用链前 3 �
 ## 8. 文件与 HTTP 一行式
 
 ```php
-$ok = file_put_contents($path, $json, LOCK_EX) !== false;   // LOCK_EX 防并发覆盖
+$ok = file_put_contents($path, $json, LOCK_EX) !== false;   // LOCK_EX 保护本次写入，读-改-写整体仍需单独同步
 $list = array_diff(scandir($dir) ?: [], ['.', '..']);       // 列目录去点项
 $ext  = pathinfo($name, PATHINFO_EXTENSION);
 http_response_code(201);                                    // 设置响应码
@@ -128,3 +135,9 @@ $urlOK = filter_var($url, FILTER_VALIDATE_URL) !== false;
 - 📄 **[常用内置函数分类全表](../language-concepts/02-built-in-functions.md)** — 函数展开版
 - 📄 **[类型系统与现代 OOP](../language-concepts/03-types-oop-modern.md)** — 类型语法细节
 - 📄 **[PHP 8.4/8.5 增量特性](../language-concepts/12-modern-php-85.md)** — 钩子/管道/URI 扩展细节
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

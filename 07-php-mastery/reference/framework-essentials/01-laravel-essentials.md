@@ -2,7 +2,10 @@
 
 ## 概述
 
-Laravel 11 起精简骨架（无 Http Kernel、默认精简中间件栈），12/13 延续这一形态，本文收录日常开发最高频的四大核心：路由、Eloquent、Artisan、服务容器。条目式组织，供快速查阅。
+Laravel 11 起精简骨架（应用骨架不再自带 app/Http/Kernel.php，框架仍有 HTTP Kernel、默认精简中间件栈），12/13 延续这一形态，本文收录日常开发最高频的四大核心：路由、Eloquent、Artisan、服务容器。条目式组织，供快速查阅。
+
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
 
 ## 📚 文档元数据
 
@@ -13,6 +16,8 @@ Laravel 11 起精简骨架（无 Http Kernel、默认精简中间件栈），12/
 | **难度** | ⭐⭐ |
 | **标签** | `#Laravel` `#路由` `#Eloquent` `#Artisan` `#服务容器` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ## 1. 路由（routes/web.php、routes/api.php）
 
@@ -44,7 +49,7 @@ Route::middleware(['auth:sanctum'])->prefix('v1')->group(function (): void {
 Route::get('/status/{status}', fn (OrderStatus $status) => $status->value);
 ```
 
-**陷阱**: `{order}` 参数默认按 ID 注入模型（隐式绑定），记录不存在直接 404；缓存路由（`route:cache`）后闭包路由会报错——生产环境路由必须用控制器类。
+**陷阱**: 参数名匹配并有对应模型类型提示时，{order} 可按模型路由键隐式绑定（默认通常为 ID），记录不存在直接 404；现代 Laravel 支持可序列化的闭包路由缓存；复杂业务仍宜用控制器，缓存失败应检查实际捕获内容与重复路由名。
 
 ## 2. Eloquent ORM
 
@@ -90,7 +95,7 @@ $order->update(['status' => 'paid']);
 $order->items()->create(['sku' => 'PHP-1', 'qty' => 2]);
 ```
 
-**陷阱**: `with()` 预加载是防 N+1 的第一手段；`$fillable` 之外的字段 `create()` 会静默丢弃；`casts` 成枚举后读写均为 enum 实例，DB 中存 backing 值。
+**陷阱**: `with()` 预加载是防 N+1 的第一手段；`$fillable` 之外的字段 `create()` 会静默丢弃；枚举 cast 读取可得到 enum 实例，赋值可接受对应实例或合法 backing 值，DB 中存 backing 值。
 
 ## 3. Artisan 常用命令
 
@@ -144,7 +149,7 @@ $this->app->when(ReportService::class)
     ->give(fn () => new SlowHttpClient());
 ```
 
-**陷阱**: `bind` 的闭包每次调用都执行，重对象（HTTP client、连接池）必须 `singleton`/`scoped`；容器外 `new` 出来的类不会自动注入——入口必须来自容器（路由/Job/命令）。
+**陷阱**: `bind` 的闭包每次调用都执行，重对象是否共享要按状态、安全性与生命周期选择 singleton/scoped；容器外 `new` 出来的类不会自动注入——入口必须来自容器（路由/Job/命令）。
 
 ## 5. 配置与环境
 
@@ -154,16 +159,36 @@ env('QUEUE_CONNECTION');             // ⚠️ 仅允许在 config/*.php 中调�
 Cache::remember('key', 300, fn () => heavy());   // 缓存 + 记住模式
 ```
 
-**陷阱**: `config:cache` 后 `.env` 不再对运行时可见，任何在业务代码里 `env()` 的写法都会拿到 null——一律先在 config 文件映射，业务读 `config()`。
+**陷阱**: `config:cache` 后 `.env` 不再对运行时可见，env() 仍可能读到真实进程环境变量，但不再加载 .env，不应作为业务配置读取方式——一律先在 config 文件映射，业务读 `config()`。
 
 ## 陷阱速查
 
 - **N+1**：关联访问前检查是否 `with()` 预加载，`Model::preventLazyLoading()` 可让调试期直接抛错
 - **时区**：`app.timezone` 默认 UTC，DB 存 UTC、展示层转换是标准做法
-- **队列与单例**：`singleton` 中持有请求态数据会在队列复用时"串单"，跨请求状态用 `scoped`
+- **队列与单例**：`singleton` 中持有请求态数据会在队列复用时"串单"，请求或任务专属状态用 scoped，跨请求共享数据应存入合适外部存储
 
 ## 相关文档
 
 - 📄 **[Symfony 核心速查](./02-symfony-essentials.md)** — 对照学习另一主流框架
 - 📄 **[Composer 生态精选](../library-guides/02-composer-ecosystem.md)** — Laravel 周边标准工具链
 - 📄 **[常见错误排查](../quick-references/02-troubleshooting.md)** — env()/配置类问题速查
+
+
+<!-- full-library-explanation -->
+## 沿着一次请求查找框架职责
+
+前置是 PHP 类、HTTP、数据库主键。路由参数约束决定 URL 是否匹配；模型绑定负责查找记录；FormRequest 验证数据；Policy 决定当前用户是否有权操作；Action 或控制器编排业务。找到 Order 不代表当前用户拥有 Order，模型绑定之后仍要授权。
+
+Eloquent 模型既承载数据又提供持久化入口，读取关联属性可能发 SQL。把模型转换成 JSON 时，应控制对外字段与加载关系；数据库有一列不意味着 API 应暴露一列。批量赋值白名单仅限制 fill/create 一类入口，不替代授权，也不防止代码主动给敏感字段赋值。
+
+**练习**：为不存在的订单、他人的订单和自己的订单各发一次请求，预期分别进入 404、拒绝、成功路径。用 route:list 核对中间件，缓存路由前后重复测试；再开启开发期懒加载保护，发现响应序列化过程中隐藏的关联查询。速查中的业务类和方法需由练习项目提供，片段不能整块粘贴注册重复路由。
+
+依据：[Laravel 路由](https://laravel.com/docs/13.x/routing)、[Route 闭包序列化实现](https://github.com/laravel/framework/blob/13.x/src/Illuminate/Routing/Route.php)、[配置](https://laravel.com/docs/13.x/configuration)。
+
+
+本轮未在本机执行 PHP 片段；文中的输出为预期值，版本相关行为请用项目运行时验证。
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

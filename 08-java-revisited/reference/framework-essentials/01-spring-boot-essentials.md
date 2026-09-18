@@ -6,6 +6,9 @@
 >
 > **前置知识**: IoC/依赖注入概念；Java 基础见 [现代 Java 特性](../../basics/07-modern-features.md)
 
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
+
 ## 📚 文档元数据
 
 | 属性 | 内容 |
@@ -15,6 +18,8 @@
 | **难度** | ⭐⭐ |
 | **标签** | `#SpringBoot` `#自动配置` `#注解` `#Actuator` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ## 🚀 Boot 3.x 关键变化（对照旧版）
 
@@ -165,15 +170,18 @@ management:
 
 ## ✅ 最佳实践 / ❌ 陷阱清单
 
-- ✅ 依赖注入用**构造器注入**（final 字段、可测试）；不用字段 `@Autowired`
-- ✅ 配置用 `@ConfigurationProperties` + record，不用散落的 `@Value`
-- ✅ 虚拟线程开启：`spring.threads.virtual.enabled=true`（Boot 3.2 引入，Boot 4 沿用；Java 21+）
-- ❌ 不要在 `@Configuration` 里互相 `new` 部件——交给容器
-- ❌ 不要用 `javax.*` 导入（Boot 3/4 必用 `jakarta.*`）
-- ❌ 不要吞掉 `@Transactional` 边界内的受检异常期望回滚（默认不回滚，见 [JPA 核心](./02-jpa-essentials.md)）
+构造器注入让必要依赖在创建时明确，成组配置用专门类型便于校验；少量简单值也可按场景使用其他配置方式。虚拟线程属于需要验证的运行选择，先确认负载以等待为主，并限制下游并发。
+
+迁移到 Jakarta 的是相关企业 API 命名空间，并非所有 javax 都要替换，例如 JDK 自带的一些 javax 包仍然存在。事务与配置对象是否被容器管理要检查真实调用路径；用失败用例确认回滚和缺配置时的启动行为。
 
 ## 🔗 相关文档
 
 - 📄 **[JPA 核心速查](./02-jpa-essentials.md)** - Spring Data JPA 配套
 - 📄 **[三方库指南](../library-guides/02-third-party-libs.md)** - 生态常用库
 - 📄 **[现代 Java 特性](../../basics/07-modern-features.md)** - record/虚拟线程的教程基础
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

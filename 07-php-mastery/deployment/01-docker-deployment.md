@@ -6,6 +6,9 @@
 >
 > **前置知识**: [开发工具链](../frameworks/04-devtools.md)、[PHP 故障排除](../reference/quick-references/02-troubleshooting.md)
 
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
+
 ## 📚 文档元数据
 
 | 属性 | 内容 |
@@ -15,6 +18,8 @@
 | **难度** | ⭐⭐ |
 | **标签** | `#Docker` `#PHP-FPM` `#Nginx` `#Laravel` `#部署` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ## 🎯 学习目标
 
@@ -26,35 +31,30 @@
 ## 1. 多阶段 Dockerfile
 
 ```dockerfile
-# Dockerfile —— 构建阶段与运行阶段分离，最终镜像不含 composer/dev 依赖
-FROM php:8.5-cli AS build
+# Dockerfile：基础扩展在构建与运行阶段保持一致
+FROM php:8.5-fpm AS base
+RUN apt-get update && apt-get install -y --no-install-recommends libzip-dev unzip \
+    && docker-php-ext-install zip pdo_mysql opcache \
+    && pecl install redis && docker-php-ext-enable redis \
+    && rm -rf /var/lib/apt/lists/*
+WORKDIR /var/www/html
 
-RUN apt-get update && apt-get install -y --no-install-recommends \
-        git unzip libzip-dev \
-    && docker-php-ext-install zip pdo_mysql opcache
-
+FROM base AS build
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
-
-WORKDIR /app
 COPY composer.json composer.lock ./
 RUN composer install --no-dev --no-scripts --prefer-dist --no-interaction
 COPY . .
-RUN composer dump-autoload --optimize && php artisan config:cache && php artisan route:cache
+RUN composer dump-autoload --no-dev --optimize --no-scripts \
+    && php artisan package:discover --ansi
 
-
-# 运行阶段：只拷贝产物
-FROM php:8.5-fpm-alpine
-
-RUN docker-php-ext-install pdo_mysql opcache
-
-COPY --from=build /app /var/www/html
+FROM base AS app
+COPY --from=build /var/www/html /var/www/html
 RUN chown -R www-data:www-data storage bootstrap/cache
-
 EXPOSE 9000
 CMD ["php-fpm"]
 ```
 
-要点：`--no-dev` 保证测试依赖不进生产镜像；`config:cache`/`route:cache` 在**构建期**完成，运行时只读。
+要点：`--no-dev` 保证测试依赖不进生产镜像；配置依赖部署环境时，应在注入环境变量后生成 config:cache；不要在通用镜像构建期固化目标环境配置。
 
 ## 2. Compose 编排
 
@@ -63,7 +63,8 @@ CMD ["php-fpm"]
 services:
   app:
     build: .
-    environment:
+    env_file: .env.compose # 自备 APP_KEY、DB_DATABASE、DB_USERNAME、DB_PASSWORD 等
+    environment: &app-env
       DB_HOST: db
       REDIS_HOST: redis
       QUEUE_CONNECTION: redis
@@ -80,7 +81,10 @@ services:
 
   worker:
     build: .
+    env_file: .env.compose
+    environment: *app-env
     command: php artisan queue:work --sleep=3 --tries=3
+    restart: unless-stopped
     depends_on: [app, redis]
 
   db:
@@ -88,6 +92,8 @@ services:
     environment:
       MYSQL_DATABASE: app
       MYSQL_ROOT_PASSWORD: root   # 仅本地演示值
+      MYSQL_USER: app
+      MYSQL_PASSWORD: local-demo # 与 .env.compose 的 DB_PASSWORD 一致，仅本地
     volumes: [db-data:/var/lib/mysql]
 
   redis:
@@ -106,11 +112,13 @@ server {
 
     location / { try_files $uri $uri/ /index.php?$query_string; }
 
-    location ~ \.php$ {
+    location = /index.php {
         fastcgi_pass app:9000;      # 服务名即 Compose 网络主机名
         fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
         include fastcgi_params;
     }
+    location ~ \.php$ { return 404; }
+    location ~ /\.(?!well-known).* { deny all; }
 }
 ```
 
@@ -124,7 +132,7 @@ docker compose exec app php artisan migrate --force   # 容器内执行迁移
 | 现象 | 原因与对策 |
 |------|-----------|
 | storage 权限报错 | 容器内 PHP-FPM 以 `www-data` 运行，构建时 `chown storage bootstrap/cache` |
-| .env 不生效 | 生产用 `config:cache` 后 `env()` 失效，环境变量在容器层注入 |
+| .env 不生效 | 缓存后不再加载 .env；真实进程环境仍可读取，业务应通过 config()，缓存须在正确配置下生成 |
 | 镜像超 1GB | 忘了多阶段构建，或装了 dev 依赖；用 Alpine 基础镜像 |
 
 ## 4. 上线节奏
@@ -147,9 +155,29 @@ A: 工作目录不对。Dockerfile 中确认 `WORKDIR` 与代码拷贝目标一�
 **Q: 队列 worker 收不到任务？**
 A: 三查：`QUEUE_CONNECTION` 环境变量是否传进容器、`queue:restart` 是否执行过（代码更新后 worker 仍在跑旧代码）、redis 网络是否互通。
 
+<!-- full-library-explanation -->
+## 镜像、配置与持久数据分别管理
+
+前置是镜像层、容器进程和 FPM。FPM 的 9000 端口使用 FastCGI，不能当作 HTTP 服务直接给浏览器访问。Nginx 处理静态文件并转发 PHP 请求；两者必须使用同一版本的 public 文件。这里 Compose 的源码挂载仅供本地练习，生产应把静态资源打成配套镜像或发布产物。
+
+构建前提供 .dockerignore，排除 .env、.env.*（保留无密钥示例文件）、.git、vendor、node_modules、storage/logs 和本机 bootstrap/cache/*.php。否则 COPY . . 可能把密钥、开发依赖或旧配置覆盖进产物。按 composer.lock 补齐项目所需扩展；本例只是基础集合，前端资源构建也需按项目补充。可复现发布进一步固定基础镜像摘要与扩展版本。
+
+**练习**：同一个镜像分别注入两套数据库配置，检查应用实际读取值。故意让数据库尚未启动，确认连接失败可重试，不能把 depends_on 的启动顺序当作就绪保证。app 与 worker 注入同样的 APP_KEY、数据库、Redis 配置，上传文件使用持久卷或对象存储；销毁练习容器后重建，验收持久数据仍在。
+
+依据：[Laravel 部署](https://laravel.com/docs/13.x/deployment)、[Docker 构建上下文](https://docs.docker.com/build/building/context/)。本页未执行镜像构建或部署，需在独立练习项目中补齐环境变量、项目依赖和健康检查后验证。
+
+
+本轮未在本机执行 PHP 片段；文中的输出为预期值，版本相关行为请用项目运行时验证。
+
 ## 🔗 相关文档
 
 - 📄 [Composer 生态](../reference/library-guides/02-composer-ecosystem.md) — 镜像内依赖安装细节
 - 📄 [开发工具链](../frameworks/04-devtools.md) — Xdebug 在容器中的 client_host 配置
 - 📄 [生产级 Laravel 应用](../projects/04-production-laravel-app.md) — 部署前的上线清单
 - 📄 [CI/CD 与可观测性](./03-ci-cd-observability.md) — 镜像构建与发布的自动化
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../LEARNING_GUIDE.md) · [完整目录与版本](../README.md) · [通用术语](../../shared-resources/glossary.md)

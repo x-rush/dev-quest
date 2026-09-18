@@ -1,10 +1,23 @@
 # 入门项目 — TODO REST API
 
+## 分阶段练习与验收
+
+**最小阶段**：先用纯函数定义标题规则，再接 FastAPI 与存储。
+
+**验收结果**：非法请求由边界拒绝，正常创建可查回，不存在返回明确状态。
+
+**扩展顺序**：同步与异步数据库接口不要混用，先测试再加复杂依赖。
+
+建议保存一份正常输入、一份失败输入、实际输出和对应测试。先完成以上阶段再扩展正文中的完整设计；遇到省略实现或未定义依赖，应按文档上下文补齐，不能把代码片段拼接后当作已经验证的完整工程。
+
 > **文档简介**: 综合运用 FastAPI 基础知识，从零实现一个带完整 CRUD、过滤分页与测试的 TODO API
 >
 > **目标读者**: 学完 FastAPI 入门后想动手实践的开发者
 >
 > **前置知识**: [FastAPI 入门](../frameworks/01-fastapi-basics.md)、[单元测试](../testing/01-unit-testing.md)
+
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
 
 ## 📚 文档元数据
 
@@ -15,6 +28,8 @@
 | **难度** | ⭐ |
 | **标签** | `#FastAPI` `#CRUD` `#pytest` `#入门项目` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ## 🎯 项目目标
 
@@ -187,3 +202,9 @@ uv run uvicorn main:app --reload
 - 🚀 **[项目：短链接服务](./02-url-shortener.md)** — 下一关：引入 Redis 与异步
 - 📖 **[FastAPI 核心速查](../reference/framework-essentials/01-fastapi-essentials.md)** — 卡住时查字典
 - 📖 **[第一个项目教程](../basics/08-first-project.md)** — basics 侧的入门项目
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../LEARNING_GUIDE.md) · [完整目录与版本](../README.md) · [通用术语](../../shared-resources/glossary.md)

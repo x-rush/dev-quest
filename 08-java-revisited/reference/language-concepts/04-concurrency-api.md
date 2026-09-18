@@ -6,6 +6,9 @@
 >
 > **前置知识**: 线程基础概念；教程见 [现代 Java 特性](../../basics/07-modern-features.md)
 
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
+
 ## 📚 文档元数据
 
 | 属性 | 内容 |
@@ -15,6 +18,8 @@
 | **难度** | ⭐⭐⭐ |
 | **标签** | `#并发` `#虚拟线程` `#CompletableFuture` `#并发集合` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ## 🧵 线程创建方式
 
@@ -130,12 +135,9 @@ CompletableFuture.anyOf(f1, f2).join();                             // 任一完
 
 ## ✅ 最佳实践 / ❌ 陷阱清单
 
-- ✅ IO 密集 → 虚拟线程；CPU 密集 → 固定大小平台线程池
-- ✅ 共享可变状态优先交给并发集合/原子类，其次锁
-- ✅ 所有 `Future.get` 加超时
-- ❌ 不要在虚拟线程里做 CPU 长计算
-- ❌ 不要池化虚拟线程
-- ❌ 不要用 `Thread.stop`/`suspend`（已废弃且危险）——协作式中断 + `isInterrupted()`
+大量阻塞等待可评估虚拟线程，CPU 任务则受可用核数约束；两者都需要限制访问稀缺资源的并发。并发集合保证其声明的操作安全，不自动保证“先检查再修改”等多个步骤的业务原子性。
+
+等待应有取消或超时策略，但超时不自动停止后台任务，需要传递中断并释放资源。用两个并发调用测试同一库存不被超卖，再观察负载增加时的排队；不要依赖危险的强制停线程操作恢复状态。
 
 ## 🔗 相关文档
 
@@ -143,3 +145,9 @@ CompletableFuture.anyOf(f1, f2).join();                             // 任一完
 - 📄 **[集合框架与泛型](./02-collections-generics.md)** - 非并发集合选型
 - 📄 **[常见错误排查](../quick-references/02-troubleshooting.md)** - 死锁与竞态排查
 - 📄 **[现代 Java 特性](../../basics/07-modern-features.md)** - 虚拟线程教程
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

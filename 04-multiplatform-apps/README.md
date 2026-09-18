@@ -1,5 +1,10 @@
 # React Native 三端原生应用开发 — Android + iOS + 鸿蒙
 
+> **本轮增强与版本核对**：学习路径及正文增强范围见 [逐文件台账](../shared-resources/tools/document-quality/reports/coverage.md)。下方技术基线中的旧核对日期属于历史记录，不表示这次已重跑所有平台；安装与升级以官方兼容要求、项目锁文件和实际构建结果为准。
+
+
+> 第一次学习请从[理解地图与学习规划](LEARNING_GUIDE.md)开始；按关键词查阅可直接使用其中的完整参考导航。
+
 > **模块简介**: 专注 React Native 跨平台原生应用开发，一套 TypeScript 代码覆盖 Android、iOS、鸿蒙（HarmonyOS，经 RNOH 适配）三端，实现原生级用户体验与生态全覆盖
 >
 > **技术栈**: React Native 0.87 新架构（Fabric 渲染器 + TurboModules，旧架构已移除）· Expo SDK 57 · TypeScript · Reanimated 4 · Expo Router / EAS
@@ -21,6 +26,9 @@
 | **Reanimated** | **4.x** | 仅支持新架构（v4 随 SDK 54 起线）；babel 插件移交 `react-native-worklets`，`babel-preset-expo` 自动处理 |
 | **Hermes** | **V1 默认** | RN 0.84 起 V1 引擎为默认；调试统一走 React Native DevTools（Flipper 已移除） |
 
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
+
 ## 📚 模块元数据
 
 | 属性 | 内容 |
@@ -31,6 +39,8 @@
 | **内容形式** | 纯文档学习路径（本仓库无可运行代码） |
 | **更新日期** | 2026年9月 |
 | **维护团队** | Dev Quest Team |
+
+</details>
 
 ## 🎯 学习目标
 
@@ -47,14 +57,14 @@
 | 象限 | 目录 | 内容定位 | 文档 |
 |------|------|---------|------|
 | **教程** | `basics/` | 按序学习的入门教程，从环境搭建到第一个完整项目 | 8 篇 |
-| **字典** | `reference/` | 全量参考条目，无难度门槛，任意跳入查阅 | 23 篇 |
+| **字典** | `reference/` | 全量参考条目，可独立查阅，仍有前置知识，任意跳入查阅 | 23 篇 |
 | **操作指南** | `frameworks/` | React Native 框架从入门到进阶的任务式指南 + 生态集成 + 调试工具 | 4 篇 |
 | **操作指南** | `projects/` | 四个递进实战项目：待办 → 天气 → 聊天 → 生产级 | 4 篇 |
 | **操作指南** | `testing/` | Jest 单测 / RNTL 组件测试 / Maestro E2E 三层测试体系 | 3 篇 |
 | **操作指南** | `deployment/` | EAS 构建 → 双商店上架 → OTA 与可观测性 | 3 篇 |
 | **解释** | `advanced-topics/` | 新架构原理、渲染/启动性能、安全实践的深度剖析 | 4 篇 |
 
-**单一事实来源**：概念的完整解释只在 `reference/` 存在一份，其他目录链接过去。查概念先翻字典，学技能按路径走。
+**单一事实来源**：完整参考以 `reference/` 为主；教程就地解释当前步骤所需概念，再链接完整条目。查概念先翻字典，学技能按路径走。
 
 ## 🛤️ 学习路径
 
@@ -95,7 +105,7 @@
 │   ├── 06-native-modules.md                    # ⭐⭐ 原生模块桥接
 │   ├── 07-advanced-features.md                 # ⭐⭐ Fabric、Hermes 与动画
 │   └── 08-first-project.md                     # ⭐ 综合练习：待办记账 App
-├── reference/                                  # 字典：全量参考，无难度门槛
+├── reference/                                  # 字典：全量参考，可独立查阅，仍有前置知识
 │   ├── language-concepts/
 │   │   ├── 01-rn-core-api.md                   # RN 核心 API
 │   │   ├── 02-components-props.md              # 核心组件 Props 全表

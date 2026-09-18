@@ -1,6 +1,9 @@
-# 核心组件 Props 全表
+# 核心组件常用 Props 参考
 
 > **难度**: ⭐ | **前置**: 已了解核心组件用途（[03-components-jsx](../../basics/03-components-jsx.md)）
+
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
 
 ## 📚 文档元数据
 
@@ -11,6 +14,8 @@
 | **难度** | ⭐ |
 | **标签** | `#Props` `#View` `#Text` `#Image` `#FlatList` `#ScrollView` `#KeyboardAvoidingView` `#StatusBar` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ## View
 
@@ -91,7 +96,7 @@
 |------|------|------|
 | `data` | Item[] | 数据源（FlatList）；SectionList 为 `sections` |
 | `renderItem` | `(info) => ReactNode` | 条目渲染 |
-| `keyExtractor` | `(item, index) => string` | 稳定 key，不设则用 index（有删除时闪烁） |
+| `keyExtractor` | `(item, index) => string` | 稳定 key；默认提取 item.key、item.id，再退回 index，动态列表应明确身份 |
 | `ListEmptyComponent` | ReactNode | 空状态 |
 | `ListHeaderComponent` / `ListFooterComponent` | ReactNode | 头/尾组件 |
 | `ItemSeparatorComponent` | Component | 分隔条（不随条目重渲染，优于手写 border） |
@@ -121,7 +126,7 @@
 />
 ```
 
-**陷阱**: `getItemLayout` 要求条目高度严格一致（含分隔线），动态高度列表不可用；`windowSize` 过小会造成快速滑动白屏。
+**陷阱**: `getItemLayout` 要求能准确计算长度和偏移；定高最简单，已知的不同高度也可计算，未知动态高度不要硬填；`windowSize` 过小会造成快速滑动白屏。
 
 ## Pressable / TouchableOpacity
 
@@ -160,7 +165,7 @@
 |------|------|------|
 | （继承 View 全部 Props） | — | 本身是 View 的安全区特化，无独立 Prop |
 
-**陷阱**: RN 内置 `SafeAreaView` 仅在 iOS 实现，只覆盖刘海，不处理底部 home indicator 与 Android 边到边；跨端通用方案是 `react-native-safe-area-context` 的 `SafeAreaProvider` / `SafeAreaView` / `useSafeAreaInsets()`（Expo 模板默认自带），内边距与缺口判断都从它取。
+**陷阱**: RN 内置 `SafeAreaView` 仅在 iOS 实现，按 iOS 安全区域添加 padding；不要把它当作跨平台安全区方案；跨端通用方案是 `react-native-safe-area-context` 的 `SafeAreaProvider` / `SafeAreaView` / `useSafeAreaInsets()`（Expo 模板默认自带），内边距与缺口判断都从它取。
 
 ## StatusBar（组件形态）
 
@@ -192,6 +197,31 @@
 | `ActivityIndicator` | `size` `color` `animating` | 加载指示 |
 | `Modal` | `visible` `animationType` `transparent` `onRequestClose` | Android 必须给 `onRequestClose` 处理返回键 |
 
+<!-- full-library-explanation -->
+## 把 Props 连成可观察的数据流
+
+本表是常用属性索引，不是所有平台、所有版本属性的穷举。`value` 从状态流向输入框，`onChangeText` 把用户意图传回状态。`keyboardType="numeric"` 只选择键盘布局，不能阻止粘贴非数字，也不替代提交校验。
+
+```tsx
+// AmountInput.tsx：在 RN 工程中渲染该组件
+import { useState } from 'react';
+import { Text, TextInput, View } from 'react-native';
+
+export function AmountInput() {
+  const [text, setText] = useState('');
+  const valid = /^\d+(\.\d{1,2})?$/.test(text);
+  return <View>
+    <TextInput accessibilityLabel="金额" value={text}
+      onChangeText={setText} keyboardType="decimal-pad" />
+    <Text>{valid ? '格式正确' : '请输入最多两位小数的金额'}</Text>
+  </View>;
+}
+```
+
+此例只验证非负十进制文本格式，没有处理币种、金额上限和本地化小数分隔符；支付系统还需明确金额单位和服务端规则。保留原始输入字符串，用户才可以输入 `1.` 这样的中间状态。
+
+练习：粘贴 `abc`、输入 `1.20`、清空输入框，再用屏幕阅读器定位输入框。验收：界面与文本状态一致，反馈能解释错误，不因数值转换丢失输入过程。
+
 ## 🔗 相关文档
 
 - 📄 **[RN 核心 API 字典](./01-rn-core-api.md)**: Platform/Dimensions 等 API
@@ -201,3 +231,9 @@
 - 📄 **[核心组件与样式教程](../../basics/03-components-jsx.md)**: 这些组件的系统化学习路径
 
 *相关教程: [组件 Props 在实战中的应用](../../basics/08-first-project.md)*
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

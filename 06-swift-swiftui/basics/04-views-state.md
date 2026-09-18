@@ -1,10 +1,26 @@
 # View 协议与状态管理 - @State、@Binding 与 @Observable
 
+## 先理解，再动手
+
+State 持有视图状态，Binding 将读写通道传给子视图。状态保留依赖视图身份，重新创建普通 struct 值不必然重置托管状态。
+
+**本节自测**：父视图保存数量，子视图接收 Binding 增减；再给视图改变 .id。
+
+<details>
+<summary>预期结果与参考思路（先尝试再展开）</summary>
+
+正常更新共享同一状态；改变身份可能重置状态，说明它不是普通全局变量。
+
+</details>
+
 > **文档简介**: 系统讲解 SwiftUI 的视图身份与数据流：View 协议细节、@State/@Binding 本地状态、@Observable 现代数据模型与单向数据流架构
 >
 > **目标读者**: 已了解声明式 UI 基本概念、需要构建多视图数据驱动界面的学习者
 >
 > **前置知识**: [03-swift-syntax-essentials.md](./03-swift-syntax-essentials.md)（struct、闭包、可选值）
+
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
 
 ## 📚 文档元数据
 
@@ -15,6 +31,8 @@
 | **难度** | ⭐ |
 | **标签** | `#View协议` `#State` `#Binding` `#Observable` `#数据流` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ## 🎯 学习目标
 
@@ -36,7 +54,7 @@ public protocol View {
 
 三个事实决定你写 SwiftUI 的方式：
 
-1. **View 是 struct**：每次 `body` 求值都可能产生新的视图值，SwiftUI 靠视图在层级中的**位置身份**做 diff。
+1. **常见自定义 View 使用 struct**：每次 `body` 求值都可能产生新的视图值，SwiftUI 靠视图在层级中的**位置身份**做 diff。
 2. **`body` 必须是纯描述**：不应有副作用，不能假设它只被调用一次。
 3. **视图 = 函数**：`VStack { Text("a"); Text("b") }` 本质是调用 `VStack.init(@ViewBuilder content:)` 闭包。`@ViewBuilder` 让多个子视图按顺序组装为元组视图。
 
@@ -62,8 +80,8 @@ struct PlayPauseButton: View {
 要点：
 
 - `@State` 把属性升级为 **SwiftUI 托管的持久存储**：视图重建（`body` 重算）不会丢失它
-- **必须 `private`**：状态属于这个视图，外部不该触碰
-- 存值类型应为值类型（struct/String/Bool/Int）
+- **建议声明 `private`**：清楚表达状态由本视图管理，避免从外部依赖其存储细节
+- 可保存值类型；现代 Observation 模型也可以由 @State 持有，观察机制与普通引用类型不同
 - 只在当前视图及直接子视图内使用的 UI 状态（开关、选中的 tab、输入草稿）用它
 
 ## 🔍 三、@Binding：双向绑定
@@ -182,11 +200,9 @@ struct BadgeView: View {
 
 ## ✅ 最佳实践
 
-- ✅ **推荐**：UI 局部状态用 `@State`，领域模型用 `@Observable` class，两者不混用
-- ✅ **推荐**：`@Observable` 模型是引用类型，**用 `@State` 在根部创建并持有**，保证生命周期与视图树一致
-- ✅ **推荐**：把派生数据写成计算属性（如 `filteredNotes`），而不是手动维护两份变量
-- ❌ **避免**：把 `@Observable` 模型再包一层 `@State` 之外的 `class` 持有器——多余且破坏追踪
-- ❌ **避免**：在多个视图各自 `@State private var store = NoteStore()`，会创建两份互不相通的数据
+先确定状态由谁拥有、谁只负责观察。只在当前界面生效的选择值可由 State 保存；多个界面共享同一模型时，应传递同一实例或从共同环境取得，分别创建会得到两份状态。
+
+State 的存储与视图身份关联，不等于所有模型都必须在应用根部创建。筛选结果等可由已有数据计算时，避免再维护一份需要手动同步的变量。用“详情修改后列表是否更新”和“界面身份改变后状态是否重置”检查所有权是否符合设计。
 
 ## ❓ 常见问题
 
@@ -217,3 +233,11 @@ struct BadgeView: View {
 - 📄 [05-layouts.md](./05-layouts.md) — 下一篇：布局系统
 - 📄 [04-swiftui-state-api.md](../reference/language-concepts/04-swiftui-state-api.md) — 全部属性包装器字典
 - 📄 [02-swiftdata-observability.md](../reference/framework-essentials/02-swiftdata-observability.md) — SwiftData 与 Observation 深度速查
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../LEARNING_GUIDE.md) · [完整目录与版本](../README.md) · [通用术语](../../shared-resources/glossary.md)
+
+本轮语义核对来源：[SwiftUI State 文档](https://developer.apple.com/documentation/swiftui/state)（2026-09-18；不等同于本地完整工程运行验证）。

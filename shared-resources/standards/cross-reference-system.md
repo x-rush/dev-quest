@@ -1,247 +1,29 @@
-# Dev Quest 交叉引用系统
+# 交叉引用：帮助理解，而不是把解释推给下一页
 
-> 本文档定义了Dev Quest项目的文档交叉引用规范，帮助学习者快速找到相关内容，建立知识关联。
+链接用于补充上下文和继续查阅。教程应先解释当前步骤必要的概念，再指向完整参考；不得只给一个陌生术语加链接，就认为已经讲清楚。
 
-## 🎯 引用系统概览
+## 三种必要导航
 
-### 引用类型
-```mermaid
-graph LR
-    A[交叉引用系统] --> B[内部引用]
-    A --> C[外部引用]
-    A --> D[模块间引用]
+- **前置**：说明需要哪种能力，并链接最直接的补课内容。例如学习装饰器前先会把函数作为参数传递。
+- **参考**：链接完整签名、边界或机制。标题写清读者跳转后可以查到什么，不写“点这里”。
+- **后续**：给一个明确下一步。字典可按问题跳入，不强制编号顺序；教程才维护渐进顺序。
 
-    B --> B1[章节引用]
-    B --> B2[文档引用]
+## 相对路径以当前文件为起点
 
-    C --> C1[官方文档]
-    C --> C2[社区资源]
+同级文件使用 `./name.md`，上一级使用 `../`。目录深度不同，跨模块链接需要的 `../` 数量也不同，不能机械规定所有跨模块都用两个上跳。
 
-    D --> D1[前置知识]
-    D --> D2[后续学习]
-```
+本文件在 shared-resources/standards 中，所以回到仓库根再进入模块的实际例子是[Go 环境搭建](../../01-go-backend/basics/01-environment-setup.md)。同目录的例子是[写作规范](./documentation-guidelines.md)。复制模板时重新计算位置，不复制旧目录树。
 
-## 📋 引用格式规范
+## 章节锚点
 
-### 1. 内部引用
+目标文件存在与章节锚点存在是两项检查。带 emoji、标点、重复标题或自定义 HTML ID 的标题可能有不同锚点生成结果；修改标题时检查入站链接。能直接链接文件满足需要时，不额外增加脆弱的深层锚点。
 
-#### 章节引用
-```markdown
-### 当前文档内引用
-- **基础概念**: [Go基础语法](#go基础语法)
-- **实践指南**: [环境搭建](#环境搭建)
-- **代码示例**: [Hello World示例](#hello-world示例)
-```
+## 外部来源
 
-#### 文档引用
-```markdown
-### 同模块内引用
-- **相关概念**: [Go并发编程](../advanced-topics/go-general/01-concurrency/01-goroutine-patterns.md)
-- **实战项目**: [REST API服务器](../../projects/01-rest-api-server.md)
+技术事实优先引用官方语言规范、库文档、发布记录和维护者仓库。版本事实指向发布或兼容说明，不只指项目首页。引用要对应具体结论，不能用“详见官网”替代核实。
 
-### 跨模块引用
-- **前端相关**: [Next.js基础教程](../../02-nextjs-frontend/basics/01-environment-setup.md)
-- **部署指南**: [Docker部署](../../01-go-backend/deployment/01-docker-deployment.md)
-```
+## 检查范围
 
-### 2. 外部引用
+在仓库根运行 `python shared-resources/tools/code-block-verify/link_check.py . --strict` 检查可解析的相对文件链接。该工具不验证纯锚点、外链内容或教学相关性，成功不能标成“所有引用已正确”。
 
-#### 官方文档
-```markdown
-### Go生态
-- **Go官方文档**: [Go Documentation](https://go.dev/doc/) - Go语言官方文档
-- **Go标准库**: [Standard Library](https://pkg.go.dev/std) - Go标准库文档
-- **Go模块**: [Go Modules](https://go.dev/blog/using-go-modules) - Go依赖管理
-
-### Next.js生态
-- **Next.js文档**: [Next.js Documentation](https://nextjs.org/docs) - Next.js官方文档
-- **React文档**: [React 19 Documentation](https://react.dev) - React官方文档
-- **TypeScript**: [TypeScript Handbook](https://www.typescriptlang.org/docs/) - TypeScript官方文档
-```
-
-### 3. 模块间关联
-
-#### 前置知识引用
-```markdown
-### 学习路径
-**前置要求**:
-- [ ] **Go基础**: [环境搭建](../01-go-backend/basics/01-environment-setup.md) ⭐
-- [ ] **Web基础**: [RESTful设计模式](../01-go-backend/advanced-topics/api-advanced/01-restful-patterns.md) ⭐⭐
-- [ ] **数据库**: [GORM ORM完全指南](../01-go-backend/frameworks/03-gorm-orm-complete.md) ⭐⭐
-```
-
-#### 后续学习引用
-```markdown
-### 进阶学习
-**推荐后续**:
-- 🚀 **微服务架构**: [微服务设计](../01-go-backend/advanced-topics/architecture/03-microservices-architecture.md)
-- 🚀 **性能优化**: [Go性能调优](../01-go-backend/advanced-topics/go-general/03-performance/01-performance-tuning.md)
-- 🚀 **云原生部署**: [Kubernetes部署](../01-go-backend/deployment/02-kubernetes-deployment.md)
-```
-
-## 🔗 智能引用系统
-
-### 1. 自动引用标签
-
-在文档头部添加引用信息：
-```markdown
----
-# 文档元数据
-**模块**: 01-go-backend
-**分类**: 基础知识
-**难度**: ⭐⭐
-**前置**: [Go环境搭建](01-environment-setup.md)
-**后续**: [数据类型](03-data-types.md), [控制流程](04-control-flow.md)
-**相关**: [02-nextjs-frontend TypeScript基础](../../02-nextjs-frontend/basics/03-typescript-integration.md)
-**标签**: #go #basics #syntax #variables
----
-```
-
-### 2. 知识图谱引用
-
-````markdown
-### 知识关联
-```mermaid
-graph TD
-    A[Go基础语法] --> B[数据类型]
-    A --> C[控制流程]
-    A --> D[函数定义]
-
-    B --> E[结构体]
-    C --> F[错误处理]
-    D --> G[并发编程]
-
-    H[TypeScript基础] -.-> A
-    I[PHP变量] -.-> A
-```
-````
-
-### 3. 学习路径引用
-
-```markdown
-### 学习路径
-**当前阶段**: Go基础 ⭐⭐
-**学习进度**: 2/10 完成
-
-**前后关联**:
-- ⬅️ **上一课**: [环境搭建](01-environment-setup.md)
-- ➡️ **下一课**: [数据类型](03-data-types.md)
-
-**平行学习**:
-- 🔄 **前端对应**: [TypeScript基础](../../02-nextjs-frontend/basics/03-typescript-integration.md)
-- 🔄 **语言对比**: [PHP变量](../../07-php-mastery/basics/03-variables-types.md)
-```
-
-## 📊 引用质量标准
-
-### 引用有效性检查
-- ✅ **链接可访问**: 目标文档存在且可访问
-- ✅ **内容相关**: 引用内容与当前文档相关
-- ✅ **难度匹配**: 引用文档难度适合当前学习者
-- ✅ **版本一致**: 引用内容使用最新版本
-
-### 引用频率优化
-- ✅ **适度引用**: 避免过度引用影响阅读体验
-- ✅ **重点突出**: 优先引用最相关的资源
-- ✅ **分类清晰**: 按重要性分组引用
-- ✅ **更新及时**: 定期检查和更新引用链接
-
-## 🛠️ 实现方案
-
-### 1. 文档结构映射
-
-```
-dev-quest/
-├── 01-go-backend/
-│   ├── basics/
-│   │   ├── 01-environment-setup.md      → 前置: README.md
-│   │   ├── 02-basic-syntax.md           → 前置: 01-environment-setup.md
-│   │   ├── 03-data-types.md             → 前置: 02-basic-syntax.md
-│   │   ├── 04-control-flow.md           → 前置: 03-data-types.md
-│   │   └── 05-oop-concepts.md           → 前置: 04-control-flow.md
-│   ├── frameworks/
-│   │   ├── 01-gin-framework.md          → 前置: basics/
-│   │   └── 02-echo-framework.md         → 平行: 01-gin-framework.md
-│   └── advanced-topics/
-│       ├── go-general/                  → 前置: frameworks/
-│       ├── gin/                         → 前置: frameworks/01-gin-framework.md
-│       └── architecture/                → 前置: advanced-topics/go-general/
-├── 02-nextjs-frontend/
-│   ├── basics/
-│   │   ├── 01-environment-setup.md      → 前置: README.md
-│   │   ├── 02-typescript-fundamentals.md → 前置: 01-environment-setup.md
-│   │   └── 03-react-basics.md           → 前置: 02-typescript-fundamentals.md
-│   └── frameworks/
-│       └── 01-tailwind-css.md           → 前置: basics/
-└── shared-resources/
-    ├── cross-reference-system.md        ← 本文档
-    ├── templates/document-template.md   ← 模板引用
-    └── documentation-guidelines.md      ← 规范引用
-```
-
-### 2. 引用模板
-
-#### README文档引用模板
-```markdown
-### 🔗 快速导航
-**开始学习**:
-- 📖 **新手入门**: [环境搭建](basics/01-environment-setup.md) ⭐
-- 🛠️ **框架学习**: [Gin框架基础](frameworks/01-gin-framework-basics.md) ⭐
-- 🚀 **项目实战**: [REST API](projects/01-rest-api-server.md) ⭐⭐
-
-**知识拓展**:
-- 🔍 **深度专题**: [高级主题](advanced-topics/) ⭐⭐⭐
-- 📚 **字典查阅**: [参考手册](reference/) 无难度门槛
-- 🧪 **测试指南**: [测试工程](testing/) ⭐⭐
-
-**相关模块**:
-- 🌐 **前端开发**: [Next.js教程](../02-nextjs-frontend/README.md)
-- 📊 **数据层**: [TanStack教程](../03-tanstack-stack/README.md)
-```
-
-#### 具体文档引用模板
-```markdown
-### 📍 当前位置
-**模块**: 01-go-backend → basics → 02-basic-syntax.md
-
-**学习路径**:
-- ⬅️ **上一课**: [环境搭建](01-environment-setup.md)
-- 📍 **当前课**: **基础语法** ⭐⭐
-- ➡️ **下一课**: [数据类型](03-data-types.md)
-
-**相关内容**:
-- 🔄 **练习**: [语法练习题](../../projects/01-rest-api-server.md#基础语法部分)
-- 📖 **参考**: [Go官方语法文档](https://go.dev/ref/spec)
-- 🔗 **对比**: [PHP语法对比](../../07-php-mastery/basics/05-control-flow.md)
-```
-
-## 🔄 维护和更新
-
-### 定期检查任务
-```markdown
-### 月度检查清单
-- [ ] 检查所有内部链接的有效性
-- [ ] 验证外部链接的可访问性
-- [ ] 更新过时的技术版本引用
-- [ ] 补充缺失的相关引用
-- [ ] 优化引用分类和组织
-
-### 季度维护任务
-- [ ] 全面审核引用系统的完整性
-- [ ] 更新知识图谱和依赖关系
-- [ ] 优化引用模板和格式
-- [ ] 收集用户反馈并改进
-- [ ] 同步最新技术发展动态
-```
-
----
-
-**文档版本**: v1.0.0
-**最后更新**: 2026年9月
-**维护团队**: Dev Quest Team
-
-> 💡 **使用建议**:
-> - 在编写新文档时，先确定相关的引用关系
-> - 定期检查引用链接的有效性
-> - 根据学习反馈优化引用结构和内容
-> - 保持引用系统的简洁和实用性
+新文章同步模块导读、[文档索引](../tools/document-index.md)与[学习记录入口](../progress/learning-progress.md)。历史归档是旧版本记录，不应机械改写其中的历史事实来匹配现状。

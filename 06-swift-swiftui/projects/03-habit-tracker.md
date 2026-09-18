@@ -1,10 +1,23 @@
 # 实战项目三：习惯追踪器（数据建模 + 图表）
 
+## 分阶段练习与验收
+
+**最小阶段**：先记录某一天是否完成，再计算连续天数。
+
+**验收结果**：跨日、空记录、同一天重复打卡有明确定义。
+
+**扩展顺序**：图表展示后置；先明确时区、一天的边界与补签规则。
+
+建议保存一份正常输入、一份失败输入、实际输出和对应测试。先完成以上阶段再扩展正文中的完整设计；遇到省略实现或未定义依赖，应按文档上下文补齐，不能把代码片段拼接后当作已经验证的完整工程。
+
 > **文档简介**: 构建一个习惯打卡应用：多对多数据建模、打卡统计聚合、用 SwiftUI Charts 绘制周趋势图，掌握"数据先想清楚再写 UI"的建模思路
 >
 > **目标读者**: 已完成两个入门项目、要练习数据建模与可视化的学习者
 >
 > **前置知识**: [projects/01-notes-app.md](./01-notes-app.md)（SwiftData CRUD）、[frameworks/02-swiftui-advanced.md](../frameworks/02-swiftui-advanced.md)（@Observable）
+
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
 
 ## 📚 文档元数据
 
@@ -15,6 +28,8 @@
 | **难度** | ⭐⭐ |
 | **标签** | `#SwiftData` `#数据建模` `#关系` `#Charts` `#聚合统计` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ## 🎯 项目目标
 
@@ -219,3 +234,9 @@ struct WeeklyChart: View {
 - 📄 [02-swiftdata-observability.md](../reference/framework-essentials/02-swiftdata-observability.md) — 关系与删除规则字典
 - 📄 [01-unit-testing.md](../testing/01-unit-testing.md) — 给 streak/dailyCounts 写单元测试
 - 📄 [01-swift-swiftui-cheatsheet.md](../reference/quick-references/01-swift-swiftui-cheatsheet.md) — 语法速查
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../LEARNING_GUIDE.md) · [完整目录与版本](../README.md) · [通用术语](../../shared-resources/glossary.md)

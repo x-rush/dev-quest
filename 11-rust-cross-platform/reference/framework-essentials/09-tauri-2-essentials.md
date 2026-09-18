@@ -6,6 +6,9 @@
 >
 > **前置知识**: Rust 模块系统与 Cargo；前端工程基本概念（dev server / 构建产物目录）
 
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
+
 ## 📚 文档元数据
 
 | 属性 | 内容 |
@@ -15,6 +18,8 @@
 | **难度** | ⭐⭐ |
 | **标签** | `#rust` `#tauri` `#reference` `#cross-platform` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 > 版本基线：Tauri **2.11**（技术基线区块见模块 [README](../../README.md)，正文中易变层版本号以该区块为准）。
 
@@ -277,15 +282,9 @@ cargo tauri signer generate -w ~/.tauri/myapp.key   # 生成更新签名密钥�
 
 ## 🎨 最佳实践
 
-### ✅ 推荐做法
-- **capabilities 最小化**：按窗口拆分能力文件，只授 `default` + 显式 `allow-*`，新窗口上线前先跑一遍权限审计
-- **状态进 `setup` 后再注册命令**：顺序颠倒会出现命令执行时 `State` 尚未托管的 panic
-- **`identifier` 用真实持有域名**：自动更新与深链接生态都会校验归属
+capabilities 定义窗口或 WebView 能调用的受控能力，默认权限集合也需逐项理解；自定义业务命令还要验证资源路径和授权，不因已经注册命令就自动安全。状态必须在命令实际调用前准备好，但配置链的书写顺序不能简单等同于运行时顺序。
 
-### ❌ 避免陷阱
-- **漏配 `connect-src` 的 ipc 指令**：CSP 收紧后前端 invoke 全挂，报错却不指向 CSP
-- **在生产 capabilities 里留 `*` 通配**：等于放弃 ACL 这层防线
-- **改 `identifier` 后直接覆盖安装**：数据目录与签名校验错位，应用"凭空丢数据"
+应用标识、数据目录和更新身份一起规划，变更后需要迁移与升级测试。收紧 CSP 或权限后，验证正常命令仍可用、越界访问确实被拒绝，不能只检查配置文件“看起来严格”。
 
 ## ❓ 常见问题
 
@@ -331,3 +330,9 @@ cargo tauri signer generate -w ~/.tauri/myapp.key   # 生成更新签名密钥�
 **文档版本**: v1.0.0
 **最后更新**: 2026年9月
 **维护团队**: Dev Quest Team
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

@@ -6,6 +6,9 @@
 >
 > **前置知识**: [01-unit-testing.md](./01-unit-testing.md)（测试框架已就绪）、[projects/01-notes-app.md](../projects/01-notes-app.md)（有可测的界面流程）
 
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
+
 ## 📚 文档元数据
 
 | 属性 | 内容 |
@@ -15,6 +18,8 @@
 | **难度** | ⭐⭐ |
 | **标签** | `#XCUITest` `#UI测试` `#可访问性` `#用户旅程` `#回归` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ## 🎯 本指南解决什么问题
 
@@ -145,9 +150,9 @@ struct NotesApp: App {
 
 ## ✅ 最佳实践
 
-- ✅ 只给**核心旅程**写 UI 测试（新增笔记、打卡、搜索），控制在两位数以内
-- ✅ 所有定位优先 `accessibilityIdentifier`，内容文案会改、标识不该改
-- ✅ 异步验证一律 `waitForExistence`，杜绝 `sleep` 固定等待
+UI 测试优先覆盖发布后代价高的旅程，数量由风险与维护能力决定，不设“两位数以内”的硬上限。定位使用稳定的标识或可理解语义，文案变化不应让与文字无关的用例全部失效。
+
+等待目标元素出现或状态达到预期，而不是固定 sleep；元素出现也可能尚未可操作，需检查相应条件。保存失败截图与应用日志，另外验证焦点、动态字体和读屏，不把可定位等同于可访问。
 
 ## ❌ 避免陷阱
 
@@ -175,3 +180,9 @@ struct NotesApp: App {
 - 📄 [01-unit-testing.md](./01-unit-testing.md) — 单元测试（逻辑层保障）
 - 📄 [01-notes-app.md](../projects/01-notes-app.md) — 被测界面出处
 - 📄 [02-troubleshooting.md](../reference/quick-references/02-troubleshooting.md) — 测试报错速查
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../LEARNING_GUIDE.md) · [完整目录与版本](../README.md) · [通用术语](../../shared-resources/glossary.md)

@@ -1,10 +1,23 @@
 # 入门项目：TODO REST API
 
+## 分阶段练习与验收
+
+**最小阶段**：先完成内存 CRUD，再接数据库。
+
+**验收结果**：非法输入失败、未知 ID 为 404、删除后无法查询。
+
+**扩展顺序**：每个 Promise 失败可追踪，HTTP 与存储测试分开。
+
+建议保存一份正常输入、一份失败输入、实际输出和对应测试。先完成以上阶段再扩展正文中的完整设计；遇到省略实现或未定义依赖，应按文档上下文补齐，不能把代码片段拼接后当作已经验证的完整工程。
+
 > **文档简介**: 独立完成第一个完整的 TODO REST API——Hono 4 + Prisma + Zod + Vitest 的最小组合，覆盖 CRUD、过滤、分页与测试的全流程
 >
 > **目标读者**: 完成 basics 路径、希望第一次独立交付完整 API 的初学者
 >
 > **前置知识**: [第一个完整项目](../basics/08-first-project.md)、[Hono 基础](../frameworks/01-hono-basics.md)
+
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
 
 ## 📚 文档元数据
 
@@ -15,6 +28,8 @@
 | **难度** | ⭐ |
 | **标签** | `#rest-api` `#hono` `#crud` `#prisma` `#zod` `#入门项目` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 > basics 的任务管理项目已带你走过一遍全流程；本项目是它的**独立拓展练习**——从空白仓库出发，完成带标签、优先级与过滤能力的 TODO API。步骤只给关键代码与决策点，细节自行查字典补齐。
 
@@ -203,3 +218,9 @@ describe('listTodos', () => {
 - 📄 [Hono 基础](../frameworks/01-hono-basics.md) — 路由与中间件写法
 - 📄 [生态集成](../frameworks/03-ecosystem-integration.md) — Prisma 连接与事务细节
 - 📄 [认证服务实战](02-auth-service.md) — 下一个难度⭐⭐项目
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../LEARNING_GUIDE.md) · [完整目录与版本](../README.md) · [通用术语](../../shared-resources/glossary.md)

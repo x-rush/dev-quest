@@ -6,6 +6,9 @@
 >
 > **前置知识**: [01-app-release.md](./01-app-release.md)（构建已可上传）、[04-production-ios-app.md](../projects/04-production-ios-app.md)（验收清单已勾完）
 
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
+
 ## 📚 文档元数据
 
 | 属性 | 内容 |
@@ -15,6 +18,8 @@
 | **难度** | ⭐⭐ |
 | **标签** | `#AppStoreConnect` `#审核` `#元数据` `#截图` `#上架` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ## 🎯 本指南解决什么问题
 
@@ -93,9 +98,9 @@
 
 ## ✅ 最佳实践
 
-- ✅ 首次提审选"手动发布"，给自己留观察与撤回的余地
-- ✅ 提审前用**全新设备**（或抹除后的模拟器）走一遍首次启动流程
-- ✅ 版本日志、截图与实际功能同步更新，过期截图是差评来源
+提审前验证干净安装与从旧版本升级两条路径：前者暴露未配置权限和首次启动问题，后者暴露数据迁移与登录恢复问题。无需为了测试重置用户真实设备，可使用隔离测试设备或模拟器环境。
+
+截图、说明和隐私申报应反映实际产物；选择手动或自动发布取决于协调需求。审批通过不意味着已安装用户可以撤回到旧版，因此提前准备暂停分发和修复版流程。
 
 ## ❌ 避免陷阱
 
@@ -123,3 +128,9 @@
 - 📄 [01-app-release.md](./01-app-release.md) — 上游：签名、Archive 与 TestFlight
 - 📄 [04-production-ios-app.md](../projects/04-production-ios-app.md) — 提审前的功能验收
 - 📄 [01-security-practices.md](../advanced-topics/security/01-security-practices.md) — 隐私合规的技术实现
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../LEARNING_GUIDE.md) · [完整目录与版本](../README.md) · [通用术语](../../shared-resources/glossary.md)

@@ -1,5 +1,8 @@
 # enum — 枚举类型
 
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
+
 ## 📚 文档元数据
 
 | 属性 | 内容 |
@@ -10,9 +13,11 @@
 | **标签** | `#enum` `#枚举` `#IntEnum` `#StrEnum` `#常量` `#状态机` |
 | **更新日期** | `2026年9月` |
 
+</details>
+
 ## 📌 定义
 
-enum 用"有限的、命名的常量集合"替代裸字符串与魔法数字：`OrderState.SHIPPED` 可读、可被 IDE 重构、拼错在定义处就报错。成员是**单例**，按身份（`is`）比较而非值相等——`Color.RED == 1` 为 `False`（实测），这是特性：防止枚举与裸值混用。状态机、HTTP 状态码、方向参数、配置开关都该是枚举。
+enum 用"有限的、命名的常量集合"替代裸字符串与魔法数字：`OrderState.SHIPPED` 可读、可被 IDE 重构、拼错在定义处就报错。成员是**单例**，普通 Enum 的默认相等语义基于成员身份，可用 == 比较成员——`Color.RED == 1` 为 `False`（实测），这是特性：防止枚举与裸值混用。状态、方向等有限集合可以使用枚举；开放字符串集合或简单布尔开关未必需要单独建枚举。
 
 ## 📖 语法 / 详解
 
@@ -29,7 +34,7 @@ class Color(Enum):
 
 成员三要素：`Color.RED.name` → `'RED'`，`Color.RED.value` → `1`，身份全局唯一。
 
-### 成员访问与比较（identity 而非 ==）
+### 成员访问与比较
 
 ```python
 Color.RED is Color(1)        # True：按值反查（实测）
@@ -76,7 +81,7 @@ class Strict(Enum):
     B = 1            # ValueError: duplicate values found in <enum 'Strict'>: B -> A（实测）
 ```
 
-`@unique` 等价于 `@verify(UNIQUE)`；`CONTINUOUS` 检查 `auto()` 值连续无缺口。别名机制本身合法——可用于给旧名起文档化新名。
+`@unique` 等价于 `@verify(UNIQUE)`；`CONTINUOUS` 检查整数成员值是否连续，不限于 auto 生成的值。别名机制本身合法——可用于给旧名起文档化新名。
 
 ### 枚举方法与属性
 
@@ -130,7 +135,7 @@ f"state={OrderState.SHIPPED}"            # 'state=shipped' —— JSON/日志友
 ## ⚠️ 常见陷阱
 
 - ❌ **用字符串比较写状态分支**：`if status == "pending"` 拼错无警告、无补全。
-  ✅ `if status is OrderState.PENDING`；非法值在类型层被挡住。
+  ✅ `if status is OrderState.PENDING`；外部输入先调用 OrderState(value) 并处理 ValueError；函数注解本身不会挡住非法值。
 - ❌ **期待 `Color.RED == 1` 为 True**：普通 Enum 与裸值永不相等（实测 False）。
   ✅ 需要 int 互操作用 `IntEnum`，或显式取 `.value`。
 - ❌ **重复 value 当两个成员用**：第二个静默变成别名（实测）。
@@ -139,6 +144,32 @@ f"state={OrderState.SHIPPED}"            # 'state=shipped' —— JSON/日志友
   ✅ 先查 `"PURPLE" in Color.__members__` 或用 try/except 包住反查。
 - ❌ **在业务代码里用 `range(len(...))` 遍历成员**：绕开枚举抽象。
   ✅ 直接 `for member in Color` 或 `list(Color)`，按定义序迭代。
+
+<!-- full-library-explanation -->
+## 在输入边界把字符串转换为枚举
+
+前置知识是类、比较和异常。枚举让合法状态有明确名字，但不会自动限制一个普通函数的实际参数。来自 JSON 的字符串需要显式转换，再进入只处理枚举的业务函数。
+
+完整实验保存为 `states.py`，Python 3.11+ 运行：
+
+```python
+from enum import StrEnum
+
+class State(StrEnum):
+    PENDING = "pending"
+    SHIPPED = "shipped"
+
+print(State("pending") is State.PENDING)
+print(State.PENDING == "pending")
+try:
+    State("unknown")
+except ValueError:
+    print("invalid state")
+```
+
+输出 `True`、`True`、`invalid state`。StrEnum 故意保留字符串互操作性，因此不能套用“枚举永远不等于裸值”的说法。
+
+练习：即使 pending 与 shipped 都是合法成员，从 shipped 再次发货是否合理？枚举只限制状态集合，状态转移还需要业务规则，重复发货的幂等处理也需要单独设计。
 
 ## 🔗 相关条目
 
@@ -150,3 +181,9 @@ f"state={OrderState.SHIPPED}"            # 'state=shipped' —— JSON/日志友
 ---
 
 *最后更新: 2026年9月 | 本条目为模块知识字典的一部分，概念完整解释以此处为单一事实来源*
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

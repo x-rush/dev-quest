@@ -6,6 +6,9 @@
 
 > **前置知识**: [错误处理](../../basics/06-error-handling.md)，[Stream 与 Worker](../../basics/07-streams-workers.md)
 
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
+
 ## 📚 文档元数据
 
 | 属性 | 内容 |
@@ -16,6 +19,8 @@
 | **标签** | `#内存泄漏` `#事件循环` `#ESM` `#故障排除` |
 | **更新日期** | `2026年9月` |
 
+</details>
+
 ## 1. 内存泄漏
 
 ### 症状
@@ -25,7 +30,8 @@ RSS/heapUsed 随运行时间单调上升不回落；容器 OOMKilled；`Allocati
 
 ```bash
 # 1) 观察趋势：两次采样对比增量
-node -e "setInterval(()=>{const m=process.memoryUsage();console.log(m.rss>>20,'MB RSS')},5000)"
+node -e "setInterval(()=>{const m=process.memoryUsage();console.log(m.rss/1024**2,'MB RSS')},5000)"
+# 上面仅演示采样 API；诊断真实服务应把同样采样接入目标进程
 
 # 2) 抓堆快照（DevTools Memory 面板对比两份快照的 Retained Size）
 kill -USR1 <pid>          # 开调试端口后用 chrome://inspect 抓快照
@@ -40,12 +46,12 @@ node --trace-gc server.js # 观察 GC 频率与回收量
 | 根因 | 典型代码 | 修复 |
 |------|---------|------|
 | 无界缓存 | `const cache = new Map()` 永不清理 | 用 `lru-cache` 限容量 + TTL |
-| 忘记解绑监听器 | 每请求 `emitter.on(...)` | 复用 handler 或 `{ signal }` 自动解绑 |
+| 忘记解绑监听器 | 每请求 `emitter.on(...)` | 用原函数引用 off；EventEmitter.on 不接收 signal，events.on 异步迭代器才支持取消选项 |
 | 闭包持有大对象 | handler 捕获了巨大 buffer | 用完置 null / 缩小作用域 |
 | 未 end 的流 | 只写不关，缓冲堆积 | `pipeline` + `end()` |
 | setInterval 泄漏 | 组件销毁未 clearInterval | 可取消的 timers/promises |
 
-**`MaxListenersExceededWarning` 出现即当泄漏处理**——它经常是泄漏的第一个信号。
+**`MaxListenersExceededWarning` 是排查线索，不是泄漏的证明**。确认监听器是否随请求持续增加，以及生命周期结束后是否解除。
 
 ## 2. 事件循环阻塞
 
@@ -70,7 +76,7 @@ setInterval(() => {
   console.log("P99 延迟 ms:", h.percentile(99) / 1e6);
   h.reset();
 }, 5_000).unref();
-// P99 持续 > 100ms 说明存在阻塞
+// 与基线比较；CPU 争抢、GC 与同步长任务都可能使延迟升高
 ```
 
 ### 高频根因与修复
@@ -119,9 +125,9 @@ const mod = await import("./lazy.js");            // 条件/惰性加载
 | 症状 | 排查 |
 |------|------|
 | `EADDRINUSE` | `lsof -i :3000` 找占用进程；或换端口 |
-| `ECONNRESET` 大量出现 | 客户端提前断开：检查是否响应太慢/超时配置不一致 |
+| `ECONNRESET` 大量出现 | 连接被重置：结合两端日志检查取消、代理与超时，不只一种原因 |
 | 请求体解析失败 415 | Content-Type 与解析中间件不匹配（Fastify 对未知类型默认 415） |
-| `RequestAbortedError` | 出站 fetch 未加超时被远端挂断；统一 `AbortSignal.timeout` |
+| `RequestAbortedError` | 检查主动取消、超时和底层原因；配置 AbortSignal.timeout，并区分取消与网络故障 |
 | `ERR_HTTP_HEADERS_SENT` | handler 中有多个响应出口，分支加 `return` |
 
 ## 6. 进程异常退出类
@@ -143,8 +149,23 @@ const mod = await import("./lazy.js");            // 条件/惰性加载
 
 ---
 
+<!-- full-library-explanation -->
+## 把症状变成可以推翻的假设
+
+“内存涨”至少可能是缓存预热、业务持有对象、Buffer 占用或原生分配器保留内存。先对同一个服务采样 RSS、heapUsed、external 和请求量；另起 node -e 只能观察新进程，不能替代目标进程指标。堆快照比较应在相似负载阶段进行，快照本身也会占用内存和暂停执行。
+
+模块解析错误同样需要分层：先记录 Node 版本、执行路径、package.json 的 type、实际导入字符串，再检查文件是否存在以及包 exports 是否允许访问。不要用“删除所有锁文件并升级”同时改变多个变量，否则无法知道修复来自哪里。
+
+**练习**：建立两个小服务，一个保留每次请求的数据到数组，另一个只维护计数器。以相同负载观察多轮采样，比较可达对象的增长；验收是找到保留引用的位置。对 ECONNRESET 记录发生在读、写还是 TLS 建连阶段，结合两端超时和日志验证假设，不能仅凭错误名断言客户端主动断开。
+
 ## 🔗 相关文档
 
 - 📄 **[Node 一行式速查](./01-node-cheatsheet.md)** — 本页用到的诊断命令全集
 - 📄 **[错误处理教程](../../basics/06-error-handling.md)** — 进程级兜底的正确姿势
 - 📄 **[模块系统与 ESM](../../basics/03-modules-esm.md)** — ESM 解析规则详解
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

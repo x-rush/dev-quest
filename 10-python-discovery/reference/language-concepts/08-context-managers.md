@@ -1,5 +1,8 @@
 # 上下文管理器 — with 语句与资源生命周期
 
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
+
 ## 📚 文档元数据
 
 | 属性 | 内容 |
@@ -10,9 +13,11 @@
 | **标签** | `#with` `#上下文管理器` `#contextlib` `#资源管理` |
 | **更新日期** | `2026年9月` |
 
+</details>
+
 ## 📌 定义
 
-上下文管理器是实现"进入/退出"协议的对象：`__enter__` 在进入 `with` 块时执行，`__exit__` 在离开时**无论正常还是异常**都执行，是资源清理（关闭文件、释放锁、回滚事务）的结构化答案。`with` 保证清理代码只写一次且必然执行，替代散落各处的 `try/finally`。
+上下文管理器是实现"进入/退出"协议的对象：`__enter__` 在进入 `with` 块时执行，`__exit__` 在 `__enter__` 成功后，正常或异常离开代码块时被调用，是资源清理（关闭文件、释放锁、回滚事务）的结构化答案。`with` 把获取与释放配对表达，减少重复的 `try/finally`；资源获取失败、清理自身失败和进程被强制终止仍需分别考虑。
 
 ## 📖 语法 / 签名
 
@@ -23,7 +28,7 @@ class Managed:
     def __exit__(self,
                  exc_type: type[BaseException] | None,
                  exc: BaseException | None,
-                 tb: object | None) -> bool: ...
+                 tb: object | None) -> bool | None: ...
         # 返回 True 表示异常已处理并吞掉；返回 None/False 继续向外抛
 
 # 函数形式：contextlib.contextmanager 装饰生成器
@@ -80,9 +85,43 @@ with ExitStack() as stack:
 | 生成器对象当资源用完不关 | 文件生成器退出前文件仍打开，配合 `with closing(...)` |
 | 混用同步资源与 async with | 同步 `__exit__` 对象不能进 `async with`，反之亦然 |
 
+<!-- full-library-explanation -->
+## 进入成功，才有对应的退出
+
+前置知识是 `try/finally` 与异常传播。`with` 的重要边界是 `__enter__` 成功返回：若获取资源时就失败，相应的 `__exit__` 不会被调用，获取操作自身要负责处理已经部分取得的资源。进入成功后，正常完成或异常离开代码块都会调用退出方法。
+
+保存为 `managed.py` 并运行 `python managed.py`：
+
+```python
+from contextlib import contextmanager
+
+@contextmanager
+def managed():
+    print("open")
+    try:
+        yield "resource"
+    finally:
+        print("close")
+
+try:
+    with managed() as value:
+        print(value)
+        raise ValueError("failed")
+except ValueError:
+    print("handled")
+```
+
+输出为 `open`、`resource`、`close`、`handled`，证明清理发生在外层处理异常之前。练习：把抛错改为正常退出，前面三行应保留，`handled` 不再出现。退出操作本身也可能失败；强制终止进程等情况不属于 Python 正常展开控制流的保证范围。
+
 ## 🔗 相关条目
 
 - 📄 **[异常处理教程](../../basics/06-exceptions.md)** — with 与异常体系的关系
 - 📄 **[生成器与迭代器](./07-generators-iterators.md)** — `@contextmanager` 建立在生成器之上
 - 📄 **[asyncio 并发](./09-asyncio-concurrency.md)** — `async with` 与 TaskGroup 的超时管理
 - 📄 **[魔术方法与协议](./04-oop-protocols.md)** — `__enter__/__exit__` 所在的协议全景
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

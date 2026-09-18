@@ -1,10 +1,10 @@
 # MongoDB Go Driver（官方驱动）速查
 
-> **模块**: `01-go-backend` | **类型**: 字典条目（无难度门槛，支持任意跳入查阅）
+> **模块**: `01-go-backend` | **类型**: 字典条目（可独立查阅，按主题准备前置知识，支持任意跳入查阅）
 
 ## 📌 定义
 
-`mongo-go-driver` 是 MongoDB 官方 Go 驱动：通过一个长连接 `Client` 派生 `Database` 与 `Collection` 句柄，用 BSON 编解码文档，以 `context` 控制每次操作的超时与取消。适合文档型数据、灵活 schema 与聚合查询场景。
+`mongo-go-driver` 是 MongoDB 官方 Go 驱动：通过一个管理连接池的 `Client` 派生 `Database` 与 `Collection` 句柄，用 BSON 编解码文档，以 `context` 控制每次操作的超时与取消。适合文档型数据、灵活 schema 与聚合查询场景。
 
 ```bash
 go get go.mongodb.org/mongo-driver/v2/mongo
@@ -36,7 +36,7 @@ col.CountDocuments(ctx, filter)                     // 计数
 | 方法/对象 | 签名要点 | 说明 |
 |-----------|---------|------|
 | `mongo.Connect` | `func(opts ...*options.ClientOptions) (*Client, error)` | 返回即用；配合 `Ping` 确认可达 |
-| `filter` | `bson.M` / `bson.D` / 结构体 | `D` 保序，构建 `$and` 等复合条件时优先用 |
+| `filter` | `bson.M` / `bson.D` / 结构体 | `D` 保序，例如多字段排序依赖字段顺序时使用 |
 | `FindOne` | 返回 `*SingleResult` | 未命中时 `Decode` 返回 `mongo.ErrNoDocuments` |
 | `Find` | 返回 `*mongo.Cursor` | `cursor.All` 或 `cursor.Next` + `Decode` 消费 |
 | `options.Find()` | `.SetLimit` `.SetSort` `.SetSkip` | 链式设置排序/分页 |
@@ -106,10 +106,10 @@ func main() {
 ## ⚠️ 常见陷阱
 
 - ❌ **错误做法**：`Connect` 成功就当服务可用。
-- ✅ **正确做法**：启动时 `Ping` 一次验证连通性；`Connect` 只构建客户端，不会立即发现 URI 错误。
+- ✅ **正确做法**：启动时 `Ping` 一次验证连通性；`Connect` 只构建客户端，不保证服务器可达；部分 URI 或选项错误会立即返回。
 - ❌ **错误做法**：对 `FindOne` 不区分"未找到"与其他错误。
 - ✅ **正确做法**：`if errors.Is(err, mongo.ErrNoDocuments) { ... }` 单独处理空结果。
-- ❌ **错误做法**：用 `bson.M`（map，无序）构建依赖顺序的 `$and`/`$sort` 文档。
+- ❌ **错误做法**：用 `bson.M`（map，无序）构建依赖键顺序的多字段排序文档；$and 条件本身应使用数组表示。
 - ✅ **正确做法**：需要保序时用 `bson.D`（切片，按元素顺序编码）。
 - ❌ **错误做法**：每个请求都 `Connect` 一次。
 - ✅ **正确做法**：`Client` 连接池化，应用生命周期内复用一个实例；为每次操作传入带超时的 `context`。
@@ -117,6 +117,15 @@ func main() {
 - ✅ **正确做法**：用 `cursor.All` 一次收齐，或 `defer cursor.Close(ctx)` 并在循环后检查 `cursor.Err()`。
 - ❌ **错误做法**：结构体不加 `bson` tag 依赖默认字段名。
 - ✅ **正确做法**：显式声明 `bson:"snake_case"`，与 `_id`/`omitempty` 语义保持一致。
+
+<!-- full-library-explanation -->
+## 灵活文档仍需要稳定的查询与更新约定
+
+前置是结构体、map、context 和数据库索引。Client 管理到集群的连接池，Database 与 Collection 是操作句柄，不是每次创建一条新连接。Connect 成功不等于服务器已经可达；Ping 验证的是当时的连通性，运行期间仍必须处理超时、选主和权限错误。生产每次操作的预算应来自请求，而不是永久复用启动时那个十秒 context。
+
+更新时要区分字段修改与整份替换。UpdateOne 使用 $set 可以保留未修改字段，ReplaceOne 则以新文档替换原有内容。查询条件也属于授权边界：只按 _id 查询可能读取另一租户的数据，应把 tenant_id 等范围条件一并传给数据库。灵活 schema 不代表可以跳过输入验证与唯一索引。
+
+练习：在独立练习数据库中插入同一用户两次，先观察无唯一索引时会产生两条记录，再为 email 建立唯一索引并验证重复写入被拒绝。查询不存在 id 时区分 ErrNoDocuments 与连接失败；读取大量文档时逐批使用 Cursor，检查 Err 并关闭，不要无限 All 到内存。用 explain 检查筛选字段是否走索引，避免将所有性能问题归咎于驱动。
 
 ## 🔗 相关条目
 
@@ -129,3 +138,9 @@ func main() {
 ---
 
 *最后更新: 2026年09月 | 本条目为模块知识字典的一部分，概念完整解释以此处为单一事实来源*
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

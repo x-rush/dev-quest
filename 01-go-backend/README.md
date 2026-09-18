@@ -1,5 +1,10 @@
 # Go Backend 开发 - 现代后端技术栈完整学习
 
+> **本轮增强与版本核对**：学习路径及正文增强范围见 [逐文件台账](../shared-resources/tools/document-quality/reports/coverage.md)。下方技术基线中的旧核对日期属于历史记录，不表示这次已重跑所有平台；安装与升级以官方兼容要求、项目锁文件和实际构建结果为准。
+
+
+> 第一次学习请从[理解地图与学习规划](LEARNING_GUIDE.md)开始；按关键词查阅可直接使用其中的完整参考导航。
+
 > **模块简介**: 系统掌握Go后端开发技术栈，从基础语法到高性能微服务架构的完整学习路径
 >
 > **目标读者**: 希望学习Go后端开发的初学者和有经验的后端开发者
@@ -14,11 +19,14 @@
 
 | 技术 | 版本 | 核实日期 | 来源 |
 |------|------|---------|------|
-| Go | 1.27（1.27.1；go.dev/dl 官方版本 JSON 实核，1.25/1.26 已出官方支持窗口，1.25.x 旧断言以本基线为准对齐） | 2026-09-16 | [go.dev/dl](https://go.dev/dl/) |
+| Go | 1.27（1.27.1；go.dev/dl 官方版本 JSON 实核，按官方“出现两个更新主版本后停止支持”的政策，1.26 仍在支持窗口；1.25 已退出支持窗口，1.25.x 旧断言以本基线为准对齐） | 2026-09-16 | [go.dev/dl](https://go.dev/dl/) |
 | Gin | 1.12.0（满足 ≥1.10 基线） | 2026-09-11 | [gin-gonic/gin releases](https://github.com/gin-gonic/gin/releases) |
 | GORM | v1.31.2（最新稳定版；v1.30.0 起提供 `gorm.G[T]` 泛型 API） | 2026-09-11 | [pkg.go.dev/gorm.io/gorm](https://pkg.go.dev/gorm.io/gorm) |
 | MongoDB Go Driver | v2.9.1（最新稳定版；v1 路径已进入维护模式，新项目使用 `/v2`） | 2026-09-11 | [mongodb/mongo-go-driver releases](https://github.com/mongodb/mongo-go-driver/releases) |
 | go-redis | v9.22.0（v9 系列） | 2026-09-11 | [redis/go-redis releases](https://github.com/redis/go-redis/releases) |
+
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
 
 ## 📚 文档元数据
 
@@ -32,6 +40,8 @@
 | **作者** | Dev Quest Team |
 | **状态** | ✅ 已完成 |
 
+</details>
+
 ## 📚 模块概述
 
 本模块采用现代化的学习体系设计，建立**双路径学习模式**，满足不同学习场景的需求：
@@ -44,7 +54,7 @@
 
 ## 🧭 四象限导览
 
-按内容用途四象限组织（规范见 `../shared-resources/standards/module-structure-guide.md`）。**字典参考（reference/）现有 41 篇，无难度门槛，可任意跳入查阅**：
+按内容用途四象限组织（规范见 `../shared-resources/standards/module-structure-guide.md`）。**字典参考（reference/）现有 41 篇，可独立查阅，仍有前置知识，可任意跳入查阅**：
 
 | 象限 | 目录 | 篇数 | 入口 |
 |------|------|------|------|
@@ -217,7 +227,7 @@
 
 ### ✅ 项目经验
 - **REST API**: 完整的RESTful API设计和实现
-- **微服务**: 微服务架构的设计和开发
+- **微服务**: 在独立发布或负载隔离的需求下划定服务边界，并能解释一次跨服务请求的超时、失败重试与数据一致性处理。
 - **实时应用**: WebSocket等实时通信技术
 - **CLI工具**: 命令行工具的开发和发布
 

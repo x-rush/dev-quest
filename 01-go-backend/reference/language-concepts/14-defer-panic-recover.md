@@ -1,10 +1,10 @@
 # defer / panic / recover 语义
 
-> **模块**: `01-go-backend` | **类型**: 字典条目（无难度门槛，支持任意跳入查阅）
+> **模块**: `01-go-backend` | **类型**: 字典条目（可独立查阅，按主题准备前置知识，支持任意跳入查阅）
 
 ## 📌 定义
 
-三者构成 Go 的异常控制流机制：`defer` 注册函数退出时执行的延迟调用（LIFO）；`panic` 中断当前函数并向上传播运行时错误；`recover` 仅在 defer 函数中有效，捕获 panic 让流程恢复。90% 的场景只需要 defer（资源释放），panic/recover 应保留给"不可恢复的程序性错误"。
+三者构成 Go 的异常控制流机制：`defer` 注册函数退出时执行的延迟调用（LIFO）；`panic` 中断当前函数并向上传播运行时错误；`recover` 仅在 defer 函数中有效，捕获 panic 让流程恢复。常规资源清理使用 defer，可预期失败通过 error 返回；panic/recover 用于有明确责任边界的异常控制，不是一般业务分支的替代。
 
 ## 📖 语法 / 签名
 
@@ -89,13 +89,22 @@ func main() {
 - ❌ **错误做法**：在循环内 defer 打开资源的 Close（资源累积到函数结束才释放）。
 - ✅ **正确做法**：把循环体抽成函数，或立即显式 Close；defer 的作用域是**函数**而非代码块。
 - ❌ **错误做法**：子 goroutine 里 panic，指望主 goroutine 的 recover 兜底。
-- ✅ **正确做法**：每个 goroutine 自带 recover（worker 池统一包装）；panic 永远不跨 goroutine 边界。
+- ✅ **正确做法**：需要隔离故障时，在该 goroutine 内的合适边界 recover、记录并返回失败；不能期待另一个 goroutine 捕获它，也不应无条件吞掉错误。
 - ❌ **错误做法**：用 panic 做普通业务错误流控制。
 - ✅ **正确做法**：可预期错误走 error 返回值；panic 只用于断言失败、不变量破坏等程序性 bug（与 recover 搭配仅限进程级兜底/中间件）。
 - ❌ **错误做法**：在 defer 之外或 defer 语句本身调用 recover。
 - ✅ **正确做法**：recover 只有在 panic 传播途中、被 defer 的**函数体内直接调用**才返回非 nil；其他位置恒返回 nil。
 - ❌ **错误做法**：`os.Exit(1)` 之前依赖 defer 清理。
 - ✅ **正确做法**：`os.Exit` 不执行任何 defer（见 os 条目）；先清理再退出。
+
+<!-- full-library-explanation -->
+## recover 以后从哪里继续
+
+前置是函数调用栈和返回值。panic 展开调用栈时执行已注册 defer；某个 defer 成功 recover 后，该函数按返回流程结束，不会跳回原 panic 语句的下一行。调用它的上层函数随后可以继续执行。
+
+练习在本页 safeCall 的回调中先 panic，再写一条打印；调用 safeCall 后也写一条打印。回调中 panic 后的打印不应出现，上层调用后的打印应出现。把 recover 移到未直接被 defer 调用的普通辅助函数中，它将无法按这个模式截获 panic。
+
+恢复 panic 不能证明应用状态完好。若操作在修改共享数据中途失败，仍需定义如何隔离或终止受损任务。不要为每个 goroutine 无条件吞掉 panic；在能够恢复责任边界、记录故障并返回失败的地方使用它。
 
 ## 🔗 相关条目
 
@@ -109,3 +118,9 @@ func main() {
 ---
 
 *最后更新: 2026年9月 | 本条目为模块知识字典的一部分，概念完整解释以此处为单一事实来源*
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

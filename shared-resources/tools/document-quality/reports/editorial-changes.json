@@ -1,0 +1,2226 @@
+[
+  {
+    "path": "03-tanstack-stack/basics/01-environment-setup.md",
+    "heading": "## ✅ 最佳实践",
+    "original_line": 172,
+    "before": "- ✅ **统一包管理器**：在 `package.json` 中用 `packageManager` 字段锁定 pnpm 版本\n- ✅ **QueryClient 单例**：应用生命周期内只创建一次\n- ✅ **staleTime 从小值起步**：先设 30 秒感受缓存行为，再按业务调优\n- ❌ **避免** 手动编辑 `routeTree.gen.ts`，它是插件生成的产物\n- ❌ **避免** 在 `QueryClientProvider` 之外调用 `useQuery`",
+    "after": "同一工程的开发机与 CI 应使用约定的 Node 和包管理器版本，并实际配置安装流程读取该约定；只写一个版本字段不会自动改变所有人的环境。生成的路由树由插件重建，路由修改应落在源文件，否则下次生成会覆盖手工更改。\n\n浏览器中保持 QueryClient 实例稳定，避免重渲染时丢缓存；SSR 则要隔离不同请求，不能让全局客户端把用户数据混在一起。staleTime 表示数据多久仍被视为新鲜，实验时可以比较 0 与 30 秒下返回页面的请求次数，再按业务容忍的旧数据时间决定。[官方 SSR 说明](https://tanstack.com/query/latest/docs/framework/react/guides/ssr)给出了客户端作用域的区别。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "03-tanstack-stack/basics/04-table-fundamentals.md",
+    "heading": "## ✅ 最佳实践",
+    "original_line": 184,
+    "before": "- ✅ **columns 定义在组件外或 useMemo 中**，避免每次渲染生成新引用\n- ✅ **data 引用要稳定**：来自 `useQuery` 的 `data` 天然稳定，本地拼接需 `useMemo`\n- ✅ **派生列必须给 `id`**：没有 `accessorKey` 时 id 是唯一标识\n- ❌ **避免** 忘传 `features` 或漏注册行模型槽位——对应能力静默失效，表格渲染空白\n- ❌ **避免** 手动遍历 `data` 渲染行——一切渲染都应经过 `table.getRowModel()`",
+    "after": "表格先从 data 和 columns 建立行、列的含义，再由行模型应用排序、筛选与分页；如果直接遍历原始 data 渲染，就可能绕过这些处理，出现“按钮变了，行顺序没变”。改变排序后检查屏幕行序，是比“已注册功能”更直接的验收。\n\n不要在每次渲染时无条件创建相同的派生数组，导致表格重复处理；可将固定列放到组件外，把昂贵派生计算按实际依赖记忆化。Query 对符合条件的数据会做结构共享，但不是所有 data 永远引用相同。列身份要稳定，无法从 accessor 或标题推导时显式设置 id；功能注册方式按本文对应 Table 版本核对，不能把某版本配置当通用 API。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "03-tanstack-stack/basics/05-router-fundamentals.md",
+    "heading": "## ✅ 最佳实践",
+    "original_line": 180,
+    "before": "- ✅ **从 `Route.useParams()` 取参**而非全局 hook，类型自动收窄\n- ✅ **activeProps 标记当前路由**，导航高亮一行搞定\n- ❌ **避免** 手动编辑 `routeTree.gen.ts`\n- ❌ **避免** 用字符串拼接构造 `to`——动态路径请传 `params` 对象",
+    "after": "路由参数属于某个路由契约。详情页读取该路由的类型化参数，导航时传入 params，能让拼错名称或漏参数更早暴露；参数在 URL 中出现仍不代表已通过业务验证。例如 id 有正确的字符串类型，也可能对应不存在的记录。\n\n文件路由项目修改源路由，不手改生成树。用一次“列表 → 详情 → 返回 → 直接刷新详情”的实验检查地址、选中导航和返回状态是否一致，不能只验证点击后出现了页面。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "03-tanstack-stack/basics/06-form-fundamentals.md",
+    "heading": "## ✅ 最佳实践",
+    "original_line": 183,
+    "before": "- ✅ **字段级校验管即时反馈，表单级 schema 管最终把关**，两层配合\n- ✅ **同步校验用函数，复杂规则用 Standard Schema**，避免手写异步判断\n- ❌ **避免** 从 `form.state` 直接读值绑定输入框——走 `<form.Field>` 才有精确订阅\n- ❌ **避免** 在 `onChange` 里做重请求类校验——用 `onChangeAsync` + 防抖",
+    "after": "字段校验适合及时提示“这个邮箱格式不对”，表单校验适合检查“结束时间早于开始时间”等字段关系；服务端仍须重新校验，客户端反馈不能成为信任边界。同步与异步的区别取决于是否要等待外部结果，而不是规则看起来复杂与否。\n\n检查用户名是否占用时，应防抖并处理旧响应晚于新响应的情况：连续输入 A、B，即使 A 最后返回，也不能覆盖 B 的提示。输入组件通过库提供的订阅接口观察字段变化，避免只读取一个不会触发更新的状态快照。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "03-tanstack-stack/deployment/01-ci-cd-pipelines.md",
+    "heading": "## 🎨 最佳实践速查",
+    "original_line": 164,
+    "before": "- ✅ `actions/setup-node` 的 `cache: npm` 一行省下大半安装时间\n- ✅ `concurrency.cancel-in-progress` 防止队列堆积\n- ❌ 不要在 CI 里跑 `npm install`——必须 `npm ci` 保证锁文件一致性\n- ❌ 不要把密钥写进 `VITE_*`——所有打进前端产物的变量都是公开的",
+    "after": "CI 使用与项目一致的包管理器和锁文件；npm 项目用 npm ci，pnpm 项目用冻结锁文件的安装方式。缓存主要减少重复下载，实际收益需比较冷缓存与热缓存运行时间，不能承诺固定倍数。\n\n取消旧任务适用于可重跑的分支检查；正在迁移数据库或切换生产流量的发布不能不加区分地取消。构建前端时验证产物里没有秘密：VITE_ 等注入客户端的变量应按公开数据处理，部署凭据只提供给获授权的发布步骤。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "03-tanstack-stack/deployment/03-observability.md",
+    "heading": "## 🎨 最佳实践速查",
+    "original_line": 155,
+    "before": "- ✅ release 版本号贯穿\"构建 → 上报 → source map\"三处，否则错误无法归版\n- ✅ 采样率分级：错误 100%，性能 10~20%，回放 1%\n- ❌ 不要把 Sentry DSN 当密钥藏——它本来就是公开的，靠项目级权限控制\n- ❌ 不要在 onError 里既 toast 又直接 captureException 又打日志——收敛为一个 reportError 入口",
+    "after": "错误记录要能定位到实际发布产物，因此 release 标识、构建产物和对应 source map 应一起归档。先制造一个可控错误，确认能还原到正确版本的源码位置，再认为错误采集已经接通。\n\n采样率由流量、预算和排障需求决定，不预设所有项目必须使用某组百分比。客户端 DSN 通常是公开接入标识，但仍需防滥用与控制上报内容；会话回放尤其需要脱敏。一个错误可以同时有用户提示和诊断记录，但要集中管理，避免多个回调重复上报。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "03-tanstack-stack/frameworks/01-tanstack-query-basics.md",
+    "heading": "## 🎨 最佳实践速查",
+    "original_line": 209,
+    "before": "### ✅ 推荐\n\n- 把 queryFn 写成独立函数或集中到 api 层，Hook 只做键与配置的编排\n- 写操作成功后用 `invalidateQueries` 而不是手动 `setQueryData` 拼数据（乐观更新除外）\n- 在 Hook 层封装 `useXxxQuery` / `useXxxMutation`，组件不直接写键字符串\n\n### ❌ 避免\n\n- 把派生数据存进缓存：用 `select` 或组件内 useMemo 派生\n- 在键里放不稳定的引用（函数、每轮渲染新建的对象字面量）\n- 用过时的 API 名写 v5 代码：`isLoading`（作为主要分支判断）、`cacheTime`（v5 已移除）、`keepPreviousData` 选项（v4 的它已在 v5 移除，改用 `placeholderData: (prev) => prev` 或内置 `keepPreviousData` 帮助函数）",
+    "after": "queryKey 描述结果的身份：分页、筛选条件、租户等会改变结果的输入都应进入键。可序列化对象可以作为键的一部分，新建但内容等价的对象不会仅因引用变化就变成另一份缓存；函数等不能稳定序列化的值则不适合。见[官方查询键规则](https://tanstack.com/query/latest/docs/framework/react/guides/query-keys)。\n\n写入成功后有两条常用路径：接口返回完整新对象时可用 setQueryData 更新对应缓存；返回信息不足或影响多份列表时，可使相关查询失效并重取。两者按结果契约选，不必禁用其中之一。将多处复用的键和请求逻辑集中维护，并验证更新详情后列表也一致；v5 的 isLoading 仍存在，其含义要与 isPending、isFetching 区分。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "03-tanstack-stack/frameworks/02-tanstack-query-advanced.md",
+    "heading": "## 🎨 最佳实践速查",
+    "original_line": 198,
+    "before": "- ✅ 乐观更新的 `onMutate` 必须先 `await cancelQueries`，否则竞态会让乐观结果被旧响应覆盖\n- ✅ 无限列表配 `maxPages`，配合路由离开后的 `gcTime` 自动回收内存\n- ❌ 不要在 `onSuccess` 里手动 setState 同步服务端数据——缓存就是唯一事实来源\n- ❌ 不要对同一资源混用\"乐观更新\"和\"invalidate 后再直写\"，会引入难以复现的状态漂移",
+    "after": "乐观更新先显示预测结果，因此要处理尚未返回的旧请求、写入失败和同时发生的第二次写入。取消相关查询能减少旧响应覆盖，但简单恢复整个旧快照仍可能抹掉后续成功修改；并发写入时应限定回滚范围或最终与服务端重新对齐。\n\n无限列表是否限制页数取决于内存预算与回看需求，移除旧页可能需要再次请求。gcTime 主要控制无活跃观察者的缓存回收，不是活跃页面的页数限制。练习同时发起两次修改并让第一条失败，检查第二条结果没有被回滚掉。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "03-tanstack-stack/frameworks/03-ecosystem-integration.md",
+    "heading": "## 🎨 最佳实践速查",
+    "original_line": 215,
+    "before": "- ✅ 预取键与组件消费键**完全一致**，否则白预取一次\n- ✅ 表格状态放 URL 搜索参数：可分享、可回退、刷新可恢复\n- ✅ 服务端分页必配 `placeholderData: (prev) => prev`（函数式写法，翻页保留旧数据），避免翻页闪烁\n- ❌ 不要在 loader 里 await 全部数据：关键数据 await，次要数据 prefetch\n- ❌ 不要让 Form 直接写缓存绕过 Mutation，会失去错误处理与失效时机",
+    "after": "路由预取与页面查询共享同一份结果身份，键和参数不一致就无法复用。需要分享或浏览器回退恢复的筛选条件可以放 URL；临时弹窗状态或敏感输入不必全部写进地址。\n\n翻页时保留上一页能减少空白，但须明确标记正在加载，不能让用户误以为旧数据已属于新页。loader 是否等待数据取决于首屏是否必须依赖它；次要区域可以独立加载。提交表单后验证相关缓存与 URL 表示的是同一个状态，不只检查提交按钮出现成功提示。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "03-tanstack-stack/frameworks/04-devtools.md",
+    "heading": "## 🎨 最佳实践速查",
+    "original_line": 151,
+    "before": "- ✅ Devtools 只装 devDependencies，组件挂载处做 PROD 判断\n- ✅ CI 中把 ESLint plugin 作为独立 lint 步骤跑，红线不进主干\n- ❌ 不要在测试环境打开 Devtools 面板（污染 DOM 快照与 user-event 定位）\n- ❌ 不要只靠\"刷新页面好像就好了\"定位缓存问题——先用 Query Explorer 重现时序",
+    "after": "调试缓存时先记录查询键、数据更新时间和触发请求的操作，再用 Devtools 观察状态变化。例如“返回页面重复请求”可能是数据已过期，不一定是缓存没有生效。保留可重复步骤比反复刷新更能定位原因。\n\n开发工具是否进入生产包由导入方式和构建流程共同决定，写进 devDependencies 不自动保证不会打包。检查生产产物及网络请求；测试中按需关闭调试面板，避免额外节点干扰定位。CI 的 lint 负责检查已配置规则，不能证明缓存语义正确。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "03-tanstack-stack/testing/01-unit-testing.md",
+    "heading": "## 🎨 最佳实践速查",
+    "original_line": 173,
+    "before": "- ✅ 优先测错误分支：Query 的价值一半在错误恢复\n- ✅ 把 setQueryData 的 updater 抽成纯函数，乐观更新从\"难测\"变\"好测\"\n- ❌ 不要在单元测试里挂载 Provider——那是集成测试的职责\n- ❌ 不要 mock 整个 @tanstack/react-query——测的就成了 mock 本身",
+    "after": "将乐观更新的数据变换提成纯函数，可以直接验证空列表、目标不存在和重复修改。需要验证 Hook 与缓存交互时，应使用独立 QueryClient 和 Provider；测试类别取决于验证边界，不存在“单元测试绝不能挂 Provider”的规则。\n\n保留 Query 的真实行为，优先替换网络边界，并控制重试和时间以获得可预测反馈。至少验证首次失败、重试成功、后台失败保留已有数据，避免只断言 mock 被调用过。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "03-tanstack-stack/testing/04-e2e-testing.md",
+    "heading": "## 🎨 最佳实践速查",
+    "original_line": 178,
+    "before": "- ✅ 选择器优先 getByRole/getByLabel（贴近用户视角，顺带覆盖可访问性）\n- ✅ 每个用例独立、可重跑（幂等），失败重试才有效\n- ❌ 不要用 E2E 测表单校验细节——那是集成测试的活\n- ❌ 不要对真实第三方 API 跑 E2E——一律拦截或 mock",
+    "after": "E2E 优先覆盖用户风险高的完整旅程，例如登录后创建记录并在刷新后看到它；字段的详细排列组合可放在更快的测试层。通过 role/label 查找控件能靠近用户操作，但仍需额外验证键盘与读屏体验。\n\n大多数 CI 用例应使用受控数据和隔离服务，减少第三方波动；支付等真实集成可另设有授权的沙箱契约测试。失败时保存页面、请求和日志证据，先定位原因，不把无限重试当修复。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "04-multiplatform-apps/basics/01-environment-setup.md",
+    "heading": "## 🎨 最佳实践",
+    "original_line": 165,
+    "before": "### ✅ 推荐做法\n- **用 nvm 类工具管理 Node 版本**，避免全局版本漂移导致构建突然失败\n- **Android 环境变量写进 shell 配置文件**并 `source` 一次，IDE 与终端共用\n- **三端 SDK 版本记录在项目 README**，新成员可按文档复现环境\n\n### ❌ 避免陷阱\n- **JDK 版本不匹配**: 现行 RN 工具链（AGP 9）需要 JDK 17+，装错大版本会出现莫名其妙的构建异常\n- **只在模拟器上验证**: 真机（尤其华为鸿蒙真机）与模拟器行为差异大，环境搭好后尽早连真机\n- **跳过 CocoaPods**: bare 工程 iOS 侧漏跑 `pod install` 会出现头文件找不到的编译错误",
+    "after": "环境问题先核对实际执行的 Node、JDK、SDK 和构建插件版本，IDE 与终端可能使用不同路径。把项目采用的版本和检查命令写下来，再让新终端执行一次干净构建，验证文档是否足够复现。\n\nJDK、Gradle、AGP 及原生依赖要按工程兼容表组合，不能把“某个最低版本以上”视为任意新版都兼容。模拟器适合快速迭代，涉及权限、相机、推送和性能的能力还要在目标真机验证；iOS 原生依赖按该工程的安装流程处理。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "04-multiplatform-apps/basics/02-first-app.md",
+    "heading": "## 🎨 最佳实践",
+    "original_line": 194,
+    "before": "### ✅ 推荐做法\n- **入口保持极简**: `App.tsx` 只做 Provider 装配，页面逻辑放 `src/screens/`\n- **第一时间跑通真机**: 模拟器无法验证触摸、性能、权限等真实行为\n- **记住 `--reset-cache`**: Metro 缓存异常时 `npx react-native start --reset-cache` 能解决一大类\"改了没生效\"\n\n### ❌ 避免陷阱\n- **在设备浏览器里找报错**: RN 报错显示在设备红屏上，详细堆栈在 Metro 终端里\n- **直接改 `android/` 里的自动生成文件**: prebuild 会覆盖；平台配置优先走 Config Plugins（Expo）或官方支持的字段\n- **同时开两个 Metro**: 端口冲突导致设备加载到旧 bundle",
+    "after": "第一个应用只需一个能解释清楚的界面：状态在哪里、点击如何改变状态、屏幕为何更新。逻辑增长后再拆页面与 Provider，不必先制造完整目录。用真机验证一次点击、输入和重启，确认连接的确是当前构建。\n\n“修改不生效”先检查 Metro 进程、端口和设备连接，再考虑重置缓存。Expo prebuild 管理的原生文件可能被重新生成，修改应进入配置或插件；手工管理的原生工程则有不同维护方式，不应禁止所有 android/ios 目录修改。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "04-multiplatform-apps/basics/03-components-jsx.md",
+    "heading": "## 🎨 最佳实践",
+    "original_line": 172,
+    "before": "### ✅ 推荐做法\n- **`StyleSheet.create` 集中定义样式**: 获得类型检查，避免每次 render 创建新对象\n- **长列表交给 FlatList**: 配合 `keyExtractor` 稳定 key，避免渲染闪烁\n- **触控用 Pressable 或 TouchableOpacity**: 前者是 RN 官方推荐的现代化触控组件\n\n### ❌ 避免陷阱\n- **忘写尺寸就渲染网络图**: `<Image source={{uri}} />` 不给宽高会显示空白\n- **在 ScrollView 里嵌套同向 FlatList**: 滚动事件冲突，表现异常\n- **用 `setTimeout` 延迟拿布局尺寸**: 应使用 `onLayout` 回调获取真实渲染尺寸",
+    "after": "列表中的 key 用来识别项目身份，插入或排序后仍应对应同一条数据；用数组下标可能让输入状态跟错行。大量内容用虚拟列表减少同时挂载的项目，并通过滚动检查空白、复用和触控行为。\n\nStyleSheet 有助于组织与检查样式，动态样式对象也合法；是否值得稳定引用要看实际渲染成本。网络图需要可确定的布局尺寸，测量布局用 onLayout，不靠猜测延时。长列表的页头可交给列表自身，避免外层同向滚动容器削弱虚拟化。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "04-multiplatform-apps/basics/04-state-hooks.md",
+    "heading": "## 🎨 最佳实践",
+    "original_line": 173,
+    "before": "### ✅ 推荐做法\n- **副作用分层**: 组件内只留\"页面级\"副作用，可复用逻辑全部抽成自定义 Hook\n- **每个订阅都配清理**: `addEventListener` 与 `remove`/`unsubscribe` 成对出现\n- **依赖数组如实填写**: 用 ESLint 插件 `eslint-plugin-react-hooks` 强制检查\n\n### ❌ 避免陷阱\n- **在 useEffect 里直接 setState 无限循环**: 忘写依赖数组或依赖了每次变化的对象\n- **对象/数组作为 useState 初始值**: 每次渲染新建引用，应惰性初始化 `useState(() => heavyInit())`\n- **Context value 忘记 useMemo**: 导致整棵子树级联重渲染",
+    "after": "useState 可以接收对象或数组，React 不会每次渲染都重新采用初始值；只有创建初始值的计算昂贵时，惰性初始化才有实际收益。更新对象时生成新的值，并明确哪些组件需要共享它。[React 的 useState 说明](https://react.dev/reference/react/useState)区分了初始参数与后续更新。\n\nEffect 用于同步订阅等外部系统，注册后应清理；循环更新要查“Effect 修改的状态是否又改变依赖”。Context value 的变化会影响相应消费者，但不能概括成必然重渲染整棵树。先复现一次不必要更新，再决定是否用 memo。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "04-multiplatform-apps/basics/05-navigation.md",
+    "heading": "## 🎨 最佳实践",
+    "original_line": 218,
+    "before": "### ✅ 推荐做法\n- **类型集中声明**: `RootStackParamList` 放在单一文件，全 App 共享，获得完整的类型推导\n- **导航层级最多三层**: Stack > Tabs > 内部 Stack，超过就考虑拆模块或用 Modal\n- **动画依赖提前装好**: Reanimated 需要 babel 插件，顺序装错会导致启动崩溃\n\n### ❌ 避免陷阱\n- **在导航器外使用 `useNavigation`**: 必须在 `NavigationContainer` 之内的组件里调用\n- **参数里塞大对象**: 路由参数会被序列化，只传 id，数据从 store/query 取\n- **忘记 `headerShown: false`**: Tabs/Drawer 外层再套 Stack 时出现双头部",
+    "after": "导航结构应反映任务关系：列表到详情属于返回栈，平行功能可用 tabs，临时任务可用 modal。没有适用于所有应用的三层上限；检查返回键、深链接和状态恢复能否按预期工作，比分层数量更重要。\n\n路由参数尽量传稳定 id 与必要可序列化值，详情从数据层读取，避免携带过期的大对象。导航和动画依赖按安装版本配置；出现双导航栏时检查每层导航器的显示责任，而不是到处关闭 header。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "04-multiplatform-apps/basics/06-native-modules.md",
+    "heading": "## 🎨 最佳实践",
+    "original_line": 163,
+    "before": "### ✅ 推荐做法\n- **接口设计为异步**: 即使原生实现是同步的，也用 Promise，避免阻塞 JS 线程\n- **模块职责单一**: 一个能力一个模块，命名与平台目录保持一致\n- **错误必须 reject**: 用错误码 + 消息，JS 侧才能统一 try/catch\n\n### ❌ 避免陷阱\n- **忘记重新编译原生**: 只改原生代码就等热更新——永远不会生效，必须重跑 `npm run android/ios`\n- **在 UI 线程做重活**: 原生方法默认跑在 NativeModules 线程，更新 UI 需切到主线程（Android 主线程 Handler、iOS 主队列）\n- **直接用 `NativeModules` 散落各处**: 统一封装成 TS 模块再导出，方便后续迁移 TurboModule",
+    "after": "原生接口先声明输入、结果和失败形式，例如读取文件返回内容或“无权限”错误。Promise 描述异步结果，并不会自动把耗时原生计算移出 UI 线程；线程安排由原生实现及所用架构决定，应在各平台分别核对。\n\n用一个 TypeScript 包装层统一参数和错误映射，页面只调用业务能力。修改原生代码通常需要重新编译客户端，JS 热更新不能替换已经编译的原生实现。验证成功、用户拒绝权限和组件离开后三种情况，确保资源能释放。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "04-multiplatform-apps/basics/07-advanced-features.md",
+    "heading": "## 🎨 最佳实践",
+    "original_line": 152,
+    "before": "### ✅ 推荐做法\n- **升级前查适配表**: 三方库是否标注 \"New Architecture ready\"（RNOH 亦要求同版本对齐）\n- **动画一律 Reanimated**: 内置 Animated 仅用于简单透明度/位移过渡\n- **对图片做预算**: 大图用缓存库 + 固定尺寸，避免解码阻塞\n\n### ❌ 避免陷阱\n- **在动画 worklet 里 setState**: 会跨线程往返，性能全毁；用 sharedValue 通信\n- **把 Fabric 当\"自动优化\"**: 渲染器只影响挂载链路，JS 侧过度重渲染仍会卡\n- **忽略鸿蒙端验证**: Reanimated 等动画库需使用 RNOH 适配分支，直接 npm 装最新版可能不兼容",
+    "after": "升级原生依赖前先检查目标平台与架构支持，再在固定依赖的工程中构建验证。动画库按交互复杂度选择，简单动画不需要为了“高级”换库；持续掉帧时分别观察 JS 工作量、布局和图片解码。\n\nworklet 与 React 状态所在执行环境不同，跨环境更新要使用库支持的调度方式，不能假定可直接调用所有 JS 函数。大图先限定展示与解码尺寸，在真实目标设备比较内存和帧表现；新渲染器不会自动消除业务代码中的重复计算。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "04-multiplatform-apps/basics/08-first-project.md",
+    "heading": "## 🎨 最佳实践",
+    "original_line": 252,
+    "before": "### ✅ 推荐做法\n- **金额用\"分\"存储**: 全程整数运算，仅在展示层除以 100 格式化\n- **样式值抽常量**: 颜色/间距集中在 `src/utils/theme.ts`，为后续换肤留口\n- **每完成一个功能就在三端各跑一遍**: 差异问题当次发现成本最低\n\n### ❌ 避免陷阱\n- **把持久化逻辑写进组件**: 一定抽 Hook，否则第二个页面要用时只能复制粘贴\n- **用 `parseFloat` 直接展示金额**: 浮点误差会让 ¥0.1+¥0.2 ≠ ¥0.3\n- **忽略键盘遮挡**: 表单页用 `KeyboardAvoidingView`（iOS `padding`、Android `height` 策略）",
+    "after": "记账项目要先约定货币与精度。采用最小货币单位的整数可避免常见二进制小数累加误差，但并非所有货币都除以 100，折扣和汇率还要定义舍入规则。输入“0.1”和“0.2”后验证存储、求和与展示一致。\n\n将读写存储放到可单测的函数或服务；需要与组件生命周期结合时再封装 Hook。表单在小屏、键盘弹起和大字体下都应能提交，键盘避让策略按平台实测，不把某个 behavior 写成固定答案。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "04-multiplatform-apps/deployment/01-eas-build.md",
+    "heading": "## ✅ 最佳实践",
+    "original_line": 111,
+    "before": "- ✅ **三 profile 铁律**：development 连 Metro、preview 装真机、production 走商店，禁止混用\n- ✅ **`appVersionSource: \"remote\"`**，让 EAS 管版本号，配合 `autoIncrement` 杜绝手改遗漏\n- ✅ **把 `eas build` 接进 CI**，构建产物链接自动回帖到 PR\n- ❌ **不要把 keystore 提交进 git**，用 EAS 托管或本地安全存储\n- ❌ **不要在 preview profile 里放生产密钥**，内测包也会落到测试者设备",
+    "after": "构建 profile 用来表达不同用途：开发调试、内部验证和商店发布可能采用不同签名、环境与调试能力。先记录每个 profile 生成什么产物、连哪个后端，再由 CI 明确选择，避免测试人员误装生产配置。\n\n版本号可由构建服务或仓库流程管理，关键是唯一、可追溯并满足平台规则。签名材料限制访问并准备恢复方案；任何进入客户端的密钥都应按可能被提取处理，不能因产物只发内测就视为秘密。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "04-multiplatform-apps/deployment/02-app-store-release.md",
+    "heading": "## ✅ 最佳实践",
+    "original_line": 98,
+    "before": "- ✅ **提审前用 TestFlight/内部轨道跑真实登录/推送/支付**，模拟器测不出的坑都在那里\n- ✅ **隐私政策与数据表单提前写**，两者互相矛盾是常见拒审原因\n- ✅ **保留每版构建与提交记录**（EAS 后台自动留存），便于回滚定位\n- ❌ **不要赶在节假日/WWDC 前一周提审**，审核队列高峰\n- ❌ **不要用 OTA 越过审核推重大功能**，一旦发现可能封号",
+    "after": "提审前从未登录和全新安装状态走通核心旅程，再在内部测试渠道验证真机相关能力。把构建编号、源码提交、测试结果和提交记录关联起来，审核或崩溃问题才能定位到实际产物。\n\n隐私说明应与权限、分析 SDK 和真实数据流一致，升级 SDK 后也要复核。审核时长和政策会变化，不用固定节假日经验作保证；OTA 可发布范围以平台规则及客户端兼容性为准，不能靠更新渠道绕开应有审核。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "04-multiplatform-apps/deployment/03-ota-updates-observability.md",
+    "heading": "## ✅ 最佳实践",
+    "original_line": 120,
+    "before": "- ✅ **OTA 只修不改**：热修限定 bugfix，新功能走商店版本，规避审核风险\n- ✅ **runtimeVersion 策略交给 Expo**，不要手写自研匹配逻辑\n- ✅ **Sentry release 关联版本号**，崩溃自动归因到具体构建\n- ✅ **内测分支先行**：`eas update --branch preview` 验证 24h 再进 production\n- ❌ **不要用 OTA 绕过审核推原生行为变化**，违反商店政策可致下架\n- ❌ **不要把 `reloadAsync` 做成日常自动行为**，用户正在输入时重载是灾难",
+    "after": "OTA 能更新什么取决于新 JS/资源是否兼容已安装的原生运行时；加入新的原生模块通常需要新客户端。runtimeVersion 用来表达这个兼容边界，不只是一个随意填写的版本标签。\n\n先向受控群体验证启动、关键操作和恢复路径，观察窗口按风险和用户量决定，不能固定等待 24 小时就算安全。记录更新 ID 与客户端构建的对应关系；应用重载前处理未保存输入，准备停止分发或发布修复更新的流程。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "04-multiplatform-apps/frameworks/01-react-native-basics.md",
+    "heading": "## ✅ 最佳实践",
+    "original_line": 169,
+    "before": "- ✅ **样式全部走 `StyleSheet.create`**，模块级声明，禁止在 render 中创建样式对象\n- ✅ **尺寸用数字不用字符串**，RN 不支持 `em`/`rem`（`width: '50%'` 字符串除外）\n- ✅ **触控目标最小 44×44pt**（iOS HIG）或 48×48dp（Android Material）\n- ❌ **避免嵌套同向 `ScrollView` + `FlatList`**，会破坏虚拟化；长列表头部用 `ListHeaderComponent`\n- ❌ **不要用 `absolute` 满屏铺**，优先 Flexbox 流式布局，绝对定位留给浮层",
+    "after": "布局优先表达相对关系：容器如何伸缩、内容如何换行、长列表如何滚动。固定浮层可以使用绝对定位，但把整页位置写死会在字体缩放和不同屏幕上暴露问题。用小屏和大字体检查按钮仍可触及、文字没有遮挡。\n\n样式既可集中定义，也可按状态动态生成；不要把内联对象本身当错误。长列表避免再包同向普通滚动容器，用列表的页头/页尾表达混排内容，并在真机检查滚动与点击。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "04-multiplatform-apps/frameworks/02-react-native-advanced.md",
+    "heading": "## ✅ 最佳实践",
+    "original_line": 133,
+    "before": "- ✅ **优先 Expo Modules API**，只有规格文件需求才写裸 TurboModule\n- ✅ **动画数值动画化**：位移/缩放用 `transform` 与共享值，避免触发布局重算的属性（width/height/margin）\n- ✅ **手势必须用 `react-native-gesture-handler`** 的 `GestureDetector`，原生 `onTouch` 拿不到 UI 线程\n- ❌ **不要在动画循环里 setState**，每帧过一次桥会让 JS 线程饱和\n- ❌ **不要混用旧版 `Animated` 与 Reanimated** 于同一节点，时序不可控",
+    "after": "拖拽动画的关键是高频位置更新不必触发整页 React 渲染。可以让动画系统管理连续数值，只在拖拽完成时提交最终业务状态；改变宽高等布局属性则需要测量布局成本。\n\n原生模块与手势方案按目标平台和库兼容性选择，并非所有项目只能使用某一个 API。若同一视觉属性同时被多个动画来源修改，应明确谁负责它。用相同拖动路径比较改动前后的帧表现，避免只凭“用了新架构”判断效果。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "04-multiplatform-apps/frameworks/03-ecosystem-integration.md",
+    "heading": "## ✅ 最佳实践",
+    "original_line": 145,
+    "before": "- ✅ **Expo 包优先 `npx expo install`**，保证与 SDK 版本对齐，避免原生依赖冲突\n- ✅ **区分纯 JS 库与含原生代码的库**，后者升级需重新 `eas build`，无法走 OTA\n- ✅ **Zustand 选择器订阅**（`useCart((s) => s.count)`），不要解构整个 store\n- ❌ **不要同时引入两套路由方案**（Expo Router 与裸 React Navigation），二选一\n- ❌ **不要用 MMKV 存敏感数据**，它不提供加密",
+    "after": "增加库之前先判断它是纯 JS 能力，还是要求客户端包含额外原生代码；后者变更后需要相应原生构建。Expo 的安装工具能协助选择兼容版本，但仍需在各目标平台验证。\n\n状态订阅尽量只读取组件需要的字段，修改购物车备注不应无故驱动所有无关界面。Expo Router 建立在 React Navigation 之上，问题是避免两套互不协调的路由状态；存储是否适合敏感数据要检查加密、密钥管理和设备威胁，不能仅凭库名判断“有/无加密”。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "04-multiplatform-apps/frameworks/04-devtools.md",
+    "heading": "## ✅ 最佳实践",
+    "original_line": 108,
+    "before": "- ✅ **团队统一 dev client**，把调试依赖（Reactotron、自定义菜单）打进客户端，避免\"我机器上能跑\"\n- ✅ **崩溃先看 `adb logcat -s ReactNativeJS`**，再进 DevTools 复现，最后查 Sentry 聚合\n- ✅ **Profiler 用\"录制交互\"而非盯实时曲线**，数据可复现可对比\n- ❌ **不要在生产包里留 `console.log`**，用 babel 插件在构建时剥离\n- ❌ **不要用 `debugger` 硬断点代替 DevTools 断点**，前者在 release 包会直接抛错",
+    "after": "排查问题先分类：JS 异常看 JS 堆栈，原生崩溃看平台日志与符号，卡顿记录可重复交互的性能轨迹。只筛 ReactNativeJS 日志可能漏掉原生进程退出的原因。\n\n生产日志应控制体积并去除敏感字段，必要诊断仍有价值，不必机械删除一切输出。debugger 是调试语句，不能笼统声称 release 中会直接抛错。保留设备、系统、构建版本和复现步骤，让另一台机器也能定位同一问题。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "04-multiplatform-apps/projects/01-todo-app.md",
+    "heading": "## ✅ 最佳实践与进阶方向",
+    "original_line": 189,
+    "before": "- ✅ **id 用 UUID 而非 Date.now()**（多条同毫秒创建会撞 id），可引入 `nanoid`\n- ✅ **空态必须设计**，`ListEmptyComponent` 是用户体验的底线\n- ❌ **不要把待办数组存进组件 state**，多页面共享时必然失控\n\n**进阶挑战**：\n1. 加\"编辑标题\"长按功能（提示：`Alert.prompt` 仅 iOS，Android 自写弹层）\n2. 用 `Gesture.Pan()` 实现左滑删除（见 [框架进阶](../frameworks/02-react-native-advanced.md)）\n3. 给项目补上单元测试（见 [单元测试](../testing/01-unit-testing.md)）",
+    "after": "待办 id 要在项目需要的范围内保持唯一；毫秒时间戳不能保证连续快速创建不冲突，UUID 与 nanoid 是不同的标识方案，可按依赖与平台支持选择。排序、编辑和删除都应使用稳定 id，而不是数组位置。\n\n单页应用完全可以把待办数组放在组件 state；多个页面要共享时再提升所有权或引入状态层。练习新增两条、修改其中一条、删除另一条并重启，检查数据身份和持久化都正确。扩展编辑弹窗时验证各平台支持差异，不能照搬只在一个平台存在的交互。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "04-multiplatform-apps/projects/02-weather-app.md",
+    "heading": "## ✅ 最佳实践",
+    "original_line": 179,
+    "before": "- ✅ **服务端状态不入 Zustand**：缓存/重试/失效逻辑 Query 已内建（选型对比见[库指南](../reference/library-guides/01-state-and-data.md)）\n- ✅ **`enabled` 守卫依赖项**，在参数就绪前不发请求，避免 undefined 坐标打脏 URL\n- ✅ **非 2xx 抛异常**，让 `isError` 分支可被触发，UI 三态完整\n- ✅ **权限文案在 app.json 声明**，上架审核必查用途描述\n- ❌ **不要把 API 密钥硬编码进前端代码**，免费无密钥 API 优先；必须用时走后端代理（见[安全实践](../advanced-topics/security/01-security-practices.md)）\n- ❌ **不要用 useEffect + useState 手写 loading/error**，重复实现 Query 已解决的问题",
+    "after": "天气查询依赖位置和权限，应先表示“尚未授权”“定位中”“请求失败”“已有数据”这些不同状态，再决定何时发请求。HTTP 非成功响应要按 API 契约转换为失败，否则 fetch 的 Promise 正常返回也可能被误画成成功天气。\n\nQuery 可以统一缓存和重试，但不是禁止手写状态；引入它的收益是减少重复同步逻辑。若已经用 Query 管服务端结果，避免再在另一个 store 手动维护同一份天气。客户端中的服务秘密可被提取，真正需要保密的凭据留在服务端，并验证拒绝权限时仍有可用反馈。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "04-multiplatform-apps/projects/03-chat-app.md",
+    "heading": "## ✅ 最佳实践",
+    "original_line": 173,
+    "before": "- ✅ **聊天列表一律 `inverted`**，别手写\"自动滚到底\"的 offset 计算\n- ✅ **乐观更新 + 失败补偿**，发送体验优先于发送确认\n- ✅ **重连用指数退避**，固定间隔重连会在服务端故障时形成流量风暴\n- ✅ **`data` 用函数式 setState 更新**，避免闭包旧值丢消息\n- ❌ **不要高频全量替换大数组引用**，拷贝成本在高频下被放大；可考虑游标分页\n- ❌ **不要在 `renderItem` 里创建新函数/新对象**传给子组件，会击穿 memo",
+    "after": "聊天先区分本地待发送、服务端已确认与发送失败三种消息状态，并用消息 id 对齐重试和回执，避免同一消息显示两次。新消息插入与历史分页要保持滚动位置；是否使用 inverted 取决于列表方向和交互设计，并非强制。\n\n断线后以带抖动的退避重连，设置上限并补拉缺失消息。函数式更新有助于避免闭包旧值覆盖新消息；高频拷贝或渲染若成为瓶颈，再测量分页和 memo 的收益。验收包含“发送后断网再重试”以及“查看历史时收到新消息”。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "04-multiplatform-apps/projects/04-production-mobile-app.md",
+    "heading": "## ✅ 最佳实践",
+    "original_line": 141,
+    "before": "- ✅ **环境变量分级**：`EXPO_PUBLIC_` 前缀的进客户端（可被逆向读取），秘密一律留在服务端（见[安全实践](../advanced-topics/security/01-security-practices.md)）\n- ✅ **灰度发布**：新版本先 5% 用户观察崩溃率，再全量；EAS Update 支持 rollout 百分比\n- ✅ **崩溃率 < 0.5%、启动 < 2s** 作为版本准出红线，不达标回滚\n- ✅ **每个 feature 自带测试**，集成进 CI 门禁，而非\"最后统一补\"\n- ❌ **不要在客户端存长有效期 token**，用短期 access token + refresh 旋转\n- ❌ **不要用 OTA 推\"绕过审核\"的行为变更**，违反商店政策风险极高",
+    "after": "发布标准应来自应用自己的设备基线与用户目标。例如测冷启动、关键操作成功率和崩溃影响人数，明确统计时间窗和样本量，再定义停止放量的条件；固定的 0.5% 或 2 秒不能代表所有应用合格。\n\n先向受控群体发布并验证升级、登录和数据兼容，保留暂停与修复路径。客户端公开变量不放服务秘密，凭据的有效期、撤销和刷新按身份系统设计。测试随功能进入流水线，更新渠道遵守平台规则及原生兼容边界。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "04-multiplatform-apps/React Native三端原生应用学习路线.md",
+    "heading": "## 💡 学习建议和最佳实践",
+    "original_line": 442,
+    "before": "### 利用你的Android设备优势\n1. **真机调试优先**: 充分利用你的Android设备进行开发调试\n2. **Android平台深耕**: 成为Android开发专家，建立技术优势\n3. **用户体验优化**: 基于真实设备体验优化产品细节\n\n### \"React Native为主，原生为辅\"实践建议\n1. **90% RN原则**: 90%功能用React Native实现，仅10%使用原生\n2. **性能优先**: 仅在性能瓶颈、系统级功能时考虑原生\n3. **源码共存管理**: 建立清晰的项目结构，管理多语言源码\n\n### 学习路径优化\n1. **Android深度优先**: 先成为Android平台专家\n2. **鸿蒙新兴机会**: 抓住鸿蒙生态发展红利期\n3. **iOS全球化扩展**: 最后进军iOS实现全球化布局\n\n### 商业化思维培养\n1. **MVP快速验证**: 快速开发验证商业模式\n2. **数据驱动决策**: 基于用户数据优化产品\n3. **三端市场策略**: 不同平台采用不同的市场策略",
+    "after": "先选择一台可获得的目标设备，完成安装、网络请求、本地保存和权限拒绝四条路径，再扩展另一平台。这样能把“React 写法不熟”和“平台能力不同”分开定位，学习顺序由设备与产品需求决定。\n\n复用多少代码没有固定百分比。列表与数据处理通常容易共享，系统权限、后台任务和特定硬件往往需要平台实现；用一个明确接口隔离差异，再分别测试。商业化练习可以选一个真实小需求，观察用户能否完成任务，而不是把生态热度当作产品价值的证据。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "04-multiplatform-apps/testing/01-unit-testing.md",
+    "heading": "## ✅ 最佳实践",
+    "original_line": 136,
+    "before": "- ✅ **测试金字塔**：单元测试最快最多，聚焦 store/纯函数/工具；组件行为交给 RNTL（见[组件测试](../testing/02-component-testing.md)）\n- ✅ **每个用例前重置全局状态**（`beforeEach`），杜绝用例间耦合\n- ✅ **mock 返回合成数据**，不要引用线上真实接口响应\n- ❌ **不要测实现细节**（内部函数调用次数），测行为与输出\n- ❌ **不要在单测里渲染整棵组件树**，那是组件测试的职责，单测只管逻辑",
+    "after": "单元测试优先验证纯逻辑的输入输出，例如重复添加、金额汇总和无效标题；外部网络、时间或原生能力可由可控依赖替代。用例每次建立自己的初始状态，连续运行和单独运行都应一致。\n\n是否渲染组件取决于要验证的边界，而不是名称禁令。调用次数只有在它本身属于契约时才值得断言，例如一次点击不能重复扣费；其他情况下优先检查用户可见结果和保存的数据。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "04-multiplatform-apps/testing/02-component-testing.md",
+    "heading": "## ✅ 最佳实践",
+    "original_line": 135,
+    "before": "- ✅ **面向用户查询**：优先 `getByRole`/`getByText`，`testID` 只留给无法语义化的图标兜底\n- ✅ **断言可观察结果**（出现的文本/调用的回调），不测内部 state\n- ✅ **异步一律 `findBy*` 或 `waitFor`**，不要手写 sleep\n- ❌ **不要 snapshot 测试整个屏幕**，一改样式全红，快照只会被无脑更新\n- ❌ **不要在组件测试里 mock 被测组件自身**，mock 边界放在\"网络/原生模块/导航\"",
+    "after": "点击保存后，断言新标题出现或预期回调收到正确数据，而不是读取组件私有 state。先按角色、标签等可理解语义定位控件；测试标识用于必要补充，但不替代无障碍检查。\n\n异步操作等待预期条件出现，并设置失败上限，避免猜一个 sleep 时间。保持被测组件真实，只替换网络或原生等外部边界。快照适合稳定且可审阅的输出，整屏大快照若难以判断差异，应改成更具体的行为断言。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "04-multiplatform-apps/testing/03-e2e-testing.md",
+    "heading": "## ✅ 最佳实践",
+    "original_line": 128,
+    "before": "- ✅ **E2E 只测\"核心旅程\"**，分支细节交给组件测试，金字塔不能倒置\n- ✅ **断言文案要稳定**：给关键节点设计不易改动的锚文本，或加 `testID` 兜底\n- ✅ **失败自动截图**（`takeScreenshot`），CI 上没有真机屏幕可看\n- ❌ **不要用 E2E 测视觉样式**，截图 diff 维护成本极高\n- ❌ **不要在 E2E 里依赖真实后端数据**，用测试环境/stub 服务，避免数据漂移误报",
+    "after": "E2E 验证安装后的应用能否完成核心旅程，例如创建待办、重启并再次看到它；分支规则尽量用更快的测试覆盖。测试账号和数据要隔离，第三方波动不能混进每一次基础回归。\n\n失败时保存截图、设备日志和构建版本，先确定卡在哪一步。视觉回归可以是 E2E 的一部分，但需要稳定字体、尺寸和渲染环境；不是一概禁止截图比较。对异步界面等待状态变化，避免用长 sleep 掩盖未完成的操作。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "05-kotlin-compose/advanced-topics/performance/01-recomposition-optimization.md",
+    "heading": "## 🎨 最佳实践",
+    "original_line": 140,
+    "before": "### ✅ 推荐\n\n- 稳定性问题在**模型层**解决（@Immutable 模型/不可变集合），不在调用点打补丁\n- Lazy 列表项一律提供稳定 `key`\n- 每次优化前后用同一组指标（重组计数/帧数据）对比验收\n\n### ❌ 避免陷阱\n\n- 到处加 `@Stable` 说谎——契约破坏后跳过机制会产出**错误 UI**，比慢更糟\n- 无差别 `derivedStateOf`/多层 `remember`：复杂度暴涨而收益趋零\n- 在 `@Composable` 里 new 出 List/Filter 链却不加 remember key，重组即重算",
+    "after": "重组本身是更新界面的正常机制；优化前先找出哪个交互掉帧，以及哪段计算或布局占时。列表 key 表示项目身份，插入或移动后应继续对应同一数据，不能为了“稳定”给所有行相同 key。\n\nStable/Immutable 注解表达必须履行的契约，不会把可变对象自动变不可变。remember 的依赖应覆盖计算输入，derivedStateOf 适合输入频繁变化但输出较少变化的情况；给简单计算层层包裹也有成本。用同一设备和操作比较帧表现，重组次数下降只是辅助证据。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "05-kotlin-compose/advanced-topics/performance/02-startup-memory.md",
+    "heading": "## 🎨 最佳实践",
+    "original_line": 142,
+    "before": "### ✅ 推荐\n\n- 启动预算纳入 CI：Macrobenchmark 基线超阈值即失败（联动 [质量门禁](../../projects/04-production-android-app.md)）\n- 所有 `DisposableEffect` 成对写注销，代码评审时作为固定检查项\n- 常驻 `collectAsStateWithLifecycle`，杜绝后台无用功\n\n### ❌ 避免陷阱\n\n- 只优化真机不测低端机：启动与内存问题在低端设备放大 5-10 倍\n- 把\"加缓存\"当万能药：缓存 = 更长的持有链 = 更难发现的泄漏\n- Baseline Profile 生成后不再更新，UI 变化后热路径失效",
+    "after": "先区分冷启动、温启动和恢复，固定设备与操作后记录启动耗时和内存。把非首屏必要的初始化延后可能改善首屏，但要验证用户进入相关功能时仍有加载与失败反馈。\n\n监听器或资源的生命周期应明确结束；生命周期感知的 UI 收集可以在后台停止收集，但上游任务是否停止还取决于其共享策略。缓存会延长对象持有时间，新增缓存后观察内存是否回落。不要引用没有本项目测量依据的“低端设备慢 5–10 倍”。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "05-kotlin-compose/advanced-topics/security/01-security-practices.md",
+    "heading": "## 🎨 最佳实践",
+    "original_line": 126,
+    "before": "### ✅ 推荐\n\n- 以\"数据分类表\"驱动存储选型，代码评审按表核对\n- 敏感界面 FLAG_SECURE + 备份排除两项一起上\n- release 构建集成 Play Integrity + 服务端风控，而非仅靠客户端手段\n\n### ❌ 避免陷阱\n\n- \"本地存储而已，加密多余\"——root 设备上明文 SQLite/SP 等于公开\n- 证书锁定当银弹：一次证书轮换事故的代价远大于收益，除非有完整运维能力\n- 把 API key 藏进字符串数组/NDK 就以为安全——静态分析均可提取，真正的防线是服务端鉴权",
+    "after": "先列出数据：公开缓存、个人资料、登录凭据分别需要多长保留期、是否允许备份、何时删除。选择存储与密钥方案后，用退出登录、备份恢复和设备锁定等场景验证，而不是只检查“启用了加密”。\n\n截图限制、完整性信号等只能保护特定边界，不能取代服务端授权。客户端中的服务秘密不能靠混淆或放进原生库保证不可提取。证书锁定若采用，必须同时准备轮换和恢复；按真实威胁与维护能力选，不把它写成普遍必需或普遍无用。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "05-kotlin-compose/deployment/02-play-store-release.md",
+    "heading": "## 🎨 最佳实践",
+    "original_line": 107,
+    "before": "### ✅ 推荐\n\n- 首版先内部 → 封闭双轨跑通，再敢碰生产\n- 每个版本附 CHANGELOG，发布说明写用户视角（\"修复了搜索闪退\"而非内部编号）\n- 数据安全表单与实际权限/SDK 逐项核对，SDK 升级后复查\n\n### ❌ 避免陷阱\n\n- 直接 100% 发布新版本——灰度是唯一的低成本回滚缓冲\n- 包名带 `test`/占位名发布——不可改，只能弃号重来\n- 截图/描述与实际功能不符——差评与应用内\"虚假宣传\"举报的主要来源",
+    "after": "先在内部测试渠道走通安装、更新、登录与数据迁移，再决定放量方式。发布包的应用标识要在早期确定；版本日志说明用户能观察到的改变，权限与 SDK 数据收集要和申报内容一致。\n\n灰度能限制部分风险暴露，但不等于可自动回滚已安装的客户端。记录何种指标触发暂停，以及如何发布兼容旧数据的修复版；比例和观察时长根据风险与样本量选择。商店要求以提交时官方政策为准，不能靠一套固定流程保证通过。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "05-kotlin-compose/deployment/03-ci-cd-observability.md",
+    "heading": "## 🎨 最佳实践",
+    "original_line": 155,
+    "before": "### ✅ 推荐\n\n- CI 每个版本号产物归档（artifact），发布记录可追溯\n- Crashlytics 自定义 key 与[多模块结构](../projects/04-production-android-app.md)对齐（feature 名作 key）\n- mapping 文件每次发布上传并备份——没有它，混淆堆栈无法解读\n\n### ❌ 避免陷阱\n\n- Secrets 明文写进 yml 或 echo 到日志\n- 只监控 fatal crash：`recordException` 记录的非致命异常往往是下次 crash 的前兆\n- 灰度不看数据直接放量，或看到问题直接撤包（正确做法是暂停 + 新版本修复）",
+    "after": "每次发布将源码提交、构建编号、签名产物和混淆映射关联归档。先制造一个受控异常，验证平台能把堆栈还原到该版本的源代码，再认为崩溃采集已经可用。\n\n日志和自定义字段提供定位线索，但避免用户秘密与无界高基数字段。非致命错误也值得观察，其严重性由对业务的影响判断，不能一概视为即将崩溃。流水线限制签名凭据访问；灰度发现问题时按预先定义的暂停和修复方案执行。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "05-kotlin-compose/frameworks/01-compose-basics.md",
+    "heading": "## 🎨 最佳实践",
+    "original_line": 157,
+    "before": "### ✅ 推荐\n\n- **无状态优先**：组件设计为\"状态提升\"形态，预览与 UI 测试都因此变简单（见 [Compose UI 测试](../testing/02-ui-testing.md)）\n- **样式走主题**：用 `MaterialTheme.typography/color`，不硬编码 sp/Color（主题速查见 [Material 3 主题系统](../reference/framework-essentials/02-compose-material3.md)）\n- **状态尽量上提**：提到最近需要共享的祖先，或直接提到 ViewModel（见 [生态集成](03-ecosystem-integration.md)）\n\n### ❌ 避免陷阱\n\n- 在 Composable 内做 IO、改全局单例等副作用——用[侧效应 API](02-compose-advanced.md) 表达\n- 组合期间直接启动协程（用 `LaunchedEffect` / `rememberCoroutineScope`）\n- 嵌套超过 3 层不拆分，导致重组范围过大、可读性差",
+    "after": "状态提升是把共享状态交给共同使用者的合适所有者，例如父组件保存选择值，子组件接收值和 onSelect。只属于单个控件的状态可以留在本地；不要为了分层把所有东西推到 ViewModel。\n\nComposable 描述界面，网络或订阅由具备生命周期的机制管理，避免重新组合时重复启动工作。拆组件以职责和复用为依据，不用嵌套三层作为性能定律。主题统一颜色与文字样式后，还要实际检查深色和大字体。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "05-kotlin-compose/frameworks/02-compose-advanced.md",
+    "heading": "## 🎨 最佳实践",
+    "original_line": 185,
+    "before": "### ✅ 推荐\n\n- 优先 `LaunchedEffect`；需要手动控制的用户事件才用 `rememberCoroutineScope`\n- 成对注册/注销（监听器、广播）一律 `DisposableEffect`，杜绝泄漏\n- 动画参数带 `label`，便于工具链调试与代码审查\n\n### ❌ 避免陷阱\n\n- **用计数器当 LaunchedEffect 的 key**——key 应是数据标识（如 userId），不是 `remember` 出来的计数\n- 在 `LaunchedEffect` 里读\"会被更新的回调\"而不套 `rememberUpdatedState`，捕获了旧值\n- 为每个小变化堆动画：单次过渡超 400ms 会明显拖慢操作节奏",
+    "after": "LaunchedEffect 的 key 决定何时取消旧任务并重启，例如用户 id 改变就重新加载；计数器若确实代表“重试一次”也可以成为 key，关键是行为是否符合预期。任务不应重启但需要读取最新回调时，可用 rememberUpdatedState。见[官方副作用说明](https://developer.android.com/develop/ui/compose/side-effects)。\n\n有注册与注销的资源可在 DisposableEffect 中成对处理。测试离开页面后监听是否移除、快速切换 id 后旧结果是否还会覆盖新页面。动画时长按交互目的和用户设置决定，不用一个固定毫秒数判断全部动画。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "05-kotlin-compose/frameworks/03-ecosystem-integration.md",
+    "heading": "## 🎨 最佳实践",
+    "original_line": 205,
+    "before": "### ✅ 推荐\n\n- DTO / Entity / Domain 三套模型各司其职，边界处显式映射\n- 所有依赖经 Hilt 注入，测试时可整体替换为 Fake（见[单元测试](../testing/01-unit-testing.md)）\n- `StateFlow` + `collectAsStateWithLifecycle`，后台自动停止收集省电\n\n### ❌ 避免陷阱\n\n- UI 直接调用 Retrofit 或全局单例——破坏可测试性，也违背单向数据流（原理见[应用架构](../advanced-topics/architecture/01-app-architecture.md)）\n- 在 `Application` 中同步初始化数据库/网络，拖慢冷启动（对策见[启动与内存优化](../advanced-topics/performance/02-startup-memory.md)）\n- 忘记 `ksp` 编译器依赖，Room/Hilt 编译期不生成代码，运行期才报错",
+    "after": "网络 DTO、数据库 Entity 与业务模型用于隔离不同契约；当字段与生命周期确实不同再拆分，简单程序不必机械复制三份相同数据。构造参数即可表达依赖，Hilt 在对象图增长后帮助组装，不意味着所有依赖只能经它传递。\n\nUI 从可观察状态读取结果，服务层负责数据协调。按生命周期收集不自动停止所有上游工作，应同时核对 StateFlow 的共享策略。代码生成配置缺失可能直接导致构建失败，先检查构建诊断和生成源码，不能笼统断言只在运行时暴露。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "05-kotlin-compose/frameworks/04-devtools.md",
+    "heading": "## 🎨 最佳实践",
+    "original_line": 127,
+    "before": "### ✅ 推荐\n\n- 每个有意义的组件都配 Preview，逐渐积累成\"活的设计规范\"\n- 性能问题先量化（重组计数/指标文件）再动手，不凭感觉优化\n- Debug 构建集成 StrictMode，提前暴露主线程 IO 等问题\n\n### ❌ 避免陷阱\n\n- 预览函数里调用 ViewModel 或数据库——预览必然失败，还掩盖了\"状态未提升\"的设计问题\n- 只在模拟器验证：真机的字体缩放、深色模式、性能特征差异很大\n- 忽视 Gradle Sync 报错中的版本冲突提示，埋下依赖隐患（常用片段见\n  [一行式速查表](../reference/quick-references/01-kotlin-compose-cheatsheet.md)）",
+    "after": "Preview 用合成状态展示空数据、加载、错误和长文本，便于不启动真实服务就比较界面。将可预览组件与负责取得 ViewModel 的入口分开，避免预览必须依赖数据库或登录环境。\n\n卡顿使用同一交互的性能记录比较；主线程 I/O 可借助调试工具发现。模拟器适合功能反馈，目标真机负责补充字体、触控、系统权限和性能验证。构建失败先记录完整版本组合和首个相关错误，不反复清缓存来替代排查。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "05-kotlin-compose/reference/framework-essentials/02-compose-material3.md",
+    "heading": "### 最佳实践",
+    "original_line": 177,
+    "before": "- ✅ 跟随系统：`isSystemInDarkTheme()` 作为默认，让用户系统设置生效\n- ✅ 所有组件颜色取自 colorScheme，暗色模式零额外代码\n- ✅ 暗色下用\"降饱和的亮色变体\"做 primary，避免刺眼（如 `0xFF1565C0` → `0xFFA8C8FF`）\n- ❌ 不要在暗色模式叠纯黑 `Color.Black` 背景 + 纯白文字（对比过强）；M3 暗色 surface 是深灰蓝（约 `0xFF111318`）",
+    "after": "Material 主题通过语义颜色分工：同一“表面”或“错误”角色在明暗主题中可映射到不同色值，组件不必各自判断当前模式。跟随系统可以作为默认，同时尊重产品允许的用户选择。\n\n使用 colorScheme 不保证自定义图标、图片与文字对比自动合格。检查按钮禁用态、错误提示和图片覆盖文字；纯黑也不是一概禁止，最终要看对比、可读性和使用场景，而非固定某个十六进制颜色。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "05-kotlin-compose/testing/01-unit-testing.md",
+    "heading": "## 🎨 最佳实践",
+    "original_line": 133,
+    "before": "### ✅ 推荐\n\n- ViewModel 状态机测试覆盖：初始态、成功、失败、重复触发\n- 用 `SharingStarted.WhileSubscribed(5_000)` 的 ViewModel 测试时先收集 `uiState` 再触发动作\n- 时间相关逻辑（防抖/超时/重试）全部走虚拟时间\n\n### ❌ 避免陷阱\n\n- 测试里 `Thread.sleep` / `runBlocking`——慢且不稳定，正确姿势是 `runTest` + `advanceUntilIdle`\n- Mock 掉被测对象自己负责的协作类，测试沦为\"mock 剧本回放\"\n- 断言私有状态或实现细节（如内部 MutableStateFlow），应断言公开的 `uiState` 与行为",
+    "after": "ViewModel 测试观察公开状态如何从初始变为加载、成功或失败，再验证重复触发和取消。依赖 WhileSubscribed 的流需要活跃收集者才能推动相应上游；测试应明确启动和清理收集，而不只读取初值。\n\n协程测试调度器可控制它管理的延时，但不会自动加速所有真实线程或外部 I/O。用可控时钟和依赖验证防抖、重试，不把每个等待都替换成无限 advanceUntilIdle。断言用户可见状态，避免绑定私有实现。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "05-kotlin-compose/testing/02-ui-testing.md",
+    "heading": "## 🎨 最佳实践",
+    "original_line": 124,
+    "before": "### ✅ 推荐\n\n- 只测**行为**（点击后出现 X），不测实现（某私有组合被调用了几次）\n- 内容描述同步服务无障碍：测试通过 ≈ TalkBack 可用\n- 每个核心界面至少一条\"正向路径 + 一条错误路径\"\n\n### ❌ 避免陷阱\n\n- 用文本匹配唯一节点时文本不唯一（列表多行同文案）——改用 `testTag` 或 `onAllNodes` 收窄\n- 测试里直接操作内部状态绕过回调——绕过了 UDF，测不出真实链路\n- 在测试断言里硬编码等待毫秒数——用条件等待，CI 机器更慢",
+    "after": "UI 测试从用户动作出发：输入、点击，然后检查结果或错误提示。相同文案出现在多行时，先限定父节点或语义范围，必要时补 testTag，而不是依赖偶然的节点顺序。\n\n等待异步状态满足明确条件，并保留超时诊断。语义节点与内容描述有助于无障碍，但测试能找到按钮不等于 TalkBack 已可用；仍需检查朗读顺序、焦点、可点击区域和真实交互。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "05-kotlin-compose/testing/03-integration-e2e-testing.md",
+    "heading": "## 🎨 最佳实践",
+    "original_line": 151,
+    "before": "### ✅ 推荐\n\n- 集成测试聚焦 Repository/DAO 层；页面级依赖注入走 Hilt `@TestInstallIn`\n- 每个测试重置状态：内存库每次新建、MockWebServer 每测重启\n- 失败信息可读：断言消息写清\"期望什么、实际什么\"\n\n### ❌ 避免陷阱\n\n- E2E 试图覆盖所有分支——成本爆炸，分支归单元测试\n- 集成测试共享单例状态，测试顺序依赖导致\"单独跑绿、全量跑红\"\n- 过度断言网络请求次数等实现细节（MockWebServer 的 requestCount 适度使用）",
+    "after": "集成测试保留本次要验证的协作链，例如 Repository 与真实 DAO，网络则可由受控服务返回成功或错误数据。每条测试建立可预测状态并清理资源，允许单独或换序运行。\n\n断言应覆盖最终数据及失败影响。请求次数在“防止重复提交”等契约中有意义，其余场景不必绑定实现细节。E2E 选择跨层风险高的少数旅程；数据库细节和业务组合优先在反馈更快的层验证。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "06-swift-swiftui/basics/01-environment-setup.md",
+    "heading": "## ✅ 最佳实践",
+    "original_line": 158,
+    "before": "- ✅ **推荐**：从 App Store 安装 Xcode，自动更新；从 developer.apple.com 下载的 .xip 适合锁定特定版本\n- ✅ **推荐**：为每个项目使用独立的 Organization Identifier，避免后续 Bundle ID 冲突\n- ✅ **推荐**：熟悉 `xcrun simctl`，它在 CI 与脚本化场景中不可替代\n- ❌ **避免**：同时安装多个 Xcode 版本却不了解 `xcode-select` 切换机制\n- ❌ **避免**：在学习初期就购买付费账号——模拟器 + 免费真机调试足以覆盖全部入门内容",
+    "after": "先确认项目实际使用哪个 Xcode 和命令行工具路径，再创建并运行一个最小应用；多版本并存时把所选版本记录在工程说明和 CI 中。自动更新方便个人试学，团队复现构建则需要明确升级时机。\n\nOrganization Identifier 可以由多个项目共用，完整 Bundle Identifier 才用于区分应用。模拟器足以开始界面学习，真机和开发者计划需求由具体能力与分发方式决定，不预先承诺免费配置能覆盖所有功能。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "06-swift-swiftui/basics/02-first-swiftui-app.md",
+    "heading": "## ✅ 最佳实践",
+    "original_line": 195,
+    "before": "- ✅ **推荐**：把\"改 UI\"的冲动转成\"改状态\"——先想清楚哪个状态变化了，再写界面描述\n- ✅ **推荐**：小视图拆分。`body` 太长就抽子 View，SwiftUI 重建小视图的开销极低\n- ✅ **推荐**：为每个视图文件保留一个 `#Preview`，复杂界面提供深色/大字体变体\n- ❌ **避免**：在 `body` 里做副作用（网络请求、写数据库）——`body` 可能被调用多次\n- ❌ **避免**：试图缓存或持有 View 实例。视图是廉价的值描述，不是长期对象",
+    "after": "把界面变化追溯到状态：点击后修改哪个值，哪些 View 读取它。例如计数器增加后文本改变，而不是直接操作一个长期持有的标签对象。body 可能重复求值，网络与写入操作不应作为普通求值副作用启动。\n\n按界面职责抽取子 View，使用合成数据预览空态、长文本和大字体。拆分帮助阅读与复用，但不保证越碎就越快；性能结论仍需测量。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "06-swift-swiftui/basics/03-swift-syntax-essentials.md",
+    "heading": "## ✅ 最佳实践",
+    "original_line": 208,
+    "before": "- ✅ **推荐**：默认用 struct；只有需要引用语义/继承/OBJC 桥接时才用 class\n- ✅ **推荐**：解包优先级 `guard let` > `if let` > `??` > 可选链 > `!`\n- ✅ **推荐**：用 enum 表达互斥状态机（idle/loading/loaded/failed）\n- ❌ **避免**：滥用 `!` 强制解包——线上崩溃的头号来源\n- ❌ **避免**：`if x != nil` 后使用 `x!`，改用 `if let` 一步完成",
+    "after": "struct 适合独立值，class 适合需要共享身份的对象；选择依据是修改一处后其他持有者是否应看到同一个对象变化。不要用固定“优先级”代替可选值的语义判断：guard 适合前置条件失败即退出，if let 适合局部分支，?? 适合确有合理默认值的情况。\n\n强制解包表达“这里不允许没有值”，若该保证无法证明就显式处理 nil。用 enum 表示加载中、成功与失败，可以排除几个布尔值同时为真的矛盾状态；练习让空输入走失败分支，而非依靠崩溃暴露问题。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "06-swift-swiftui/basics/04-views-state.md",
+    "heading": "## ✅ 最佳实践",
+    "original_line": 201,
+    "before": "- ✅ **推荐**：UI 局部值可用 `@State`；需要可观察领域模型时可用 `@Observable` class，并由拥有它的视图用 `@State` 持有\n- ✅ **推荐**：`@Observable` 模型是引用类型，**用 `@State` 在根部创建并持有**，保证生命周期与视图树一致\n- ✅ **推荐**：把派生数据写成计算属性（如 `filteredNotes`），而不是手动维护两份变量\n- ❌ **避免**：没有说明所有权就增加模型包装层——先确认视图读取的属性确实能被观察，以及模型实例是否稳定\n- ❌ **避免**：在多个视图各自 `@State private var store = NoteStore()`，会创建两份互不相通的数据",
+    "after": "先确定状态由谁拥有、谁只负责观察。只在当前界面生效的选择值可由 State 保存；多个界面共享同一模型时，应传递同一实例或从共同环境取得，分别创建会得到两份状态。\n\nState 的存储与视图身份关联，不等于所有模型都必须在应用根部创建。筛选结果等可由已有数据计算时，避免再维护一份需要手动同步的变量。用“详情修改后列表是否更新”和“界面身份改变后状态是否重置”检查所有权是否符合设计。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "06-swift-swiftui/basics/05-layouts.md",
+    "heading": "## ✅ 最佳实践",
+    "original_line": 190,
+    "before": "- ✅ **推荐**：先想\"哪根轴流动、哪根轴固定\"，再选容器；间距交给容器 `spacing`，不要在子视图乱加 padding 凑\n- ✅ **推荐**：列表数据用 `List`，营销页/自由混排用 `ScrollView` + Lazy 容器\n- ✅ **推荐**：限宽居中模式（`.frame(maxWidth: 480)`）让同一界面在 iPad 也好看\n- ❌ **避免**：无差别用 `.fixedSize()`，它会拒绝协商导致文字被截断不换行\n- ❌ **避免**：在 ScrollView 内嵌套 List（滚动冲突、高度塌陷），需要表格式行就全程用 List",
+    "after": "布局从内容需求推导容器：垂直表单需要文本换行与键盘避让，平行操作需要横向空间分配，大量数据需要滚动和适当的延迟构建。不要只在一个固定设备尺寸下用 padding 凑位置。\n\nfixedSize 与 frame 会改变父子尺寸协商，可能帮助内容按理想尺寸展示，也可能让内容超出可用范围，不能统一解释成必然截断。验收至少包括大字体、窄屏和横屏；限宽数值从内容可读性选择，而非固定 480。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "06-swift-swiftui/basics/06-navigation.md",
+    "heading": "## ✅ 最佳实践",
+    "original_line": 191,
+    "before": "- ✅ **推荐**：导航用\"值驱动\"（value + destination 规则），仅在简单原型里用 `NavigationLink(destination:)` 直塞视图\n- ✅ **推荐**：每个 tab 独立 NavigationStack；需要跨 tab 保持的返回栈，把 path 存到 `@Observable` store\n- ❌ **避免**：在 NavigationStack 内再嵌 NavigationStack（双重导航栏）\n- ❌ **避免**：用 sheet 一层叠一层地\"模拟导航\"——超过两级跳转就该用 push",
+    "after": "需要深链接或恢复导航时，把路径表达成可识别的数据，再为路径值定义目的界面；最简单的页面跳转也可以直接使用目的 View。只有路径元素具备合适的编码契约，才谈得上序列化恢复。\n\n不同 tab 是否各自保留返回历史由交互决定，modal 则表示独立的临时任务，不由“超过两级”机械改成 push。测试直接打开详情、返回列表、切换 tab 再回来，确认路径所有者与界面显示一致。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "06-swift-swiftui/basics/07-concurrency-async-await.md",
+    "heading": "## ✅ 最佳实践",
+    "original_line": 211,
+    "before": "- ✅ **推荐**：视图触发的异步一律用 `.task` / `.task(id:)`，按钮触发才用 `Task {}`\n- ✅ **推荐**：`@Observable` store 标 `@MainActor`；网络/IO 层独立 actor 化\n- ❌ **避免**：`Task { sleep }` 硬编码延时等待业务结果；用信号或状态驱动\n- ❌ **避免**：在 `deinit`/`body` 里启动 Task 修改 UI；取消后仍写 `@State` 会引发警告",
+    "after": "任务应由真正负责它生命周期的对象持有。随页面存在而加载的数据可用 task/task(id:)，用户点击触发的任务则要考虑取消、重复点击和结果归属。取消是协作式的，任务内部或下游 API 仍需响应取消，不能视为免费清理一切。\n\nUI 状态通常需要遵守主 actor 隔离；网络层是否需要独立 actor 取决于是否管理共享可变状态，不必为每个服务都创建 actor。模拟快速切换查询条件，确认旧结果不会覆盖当前内容。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "06-swift-swiftui/basics/08-first-project.md",
+    "heading": "## ✅ 最佳实践",
+    "original_line": 208,
+    "before": "- ✅ **推荐**：模型字段保持简单类型（String/Double/Date/Bool），复杂结构拆成关联模型\n- ✅ **推荐**：查询过滤交给 `@Query(filter:)` / `#Predicate`，别把全表拉进内存再筛\n- ❌ **避免**：把统计逻辑塞进 `body` 的闭包链里层层嵌套，抽成计算属性或 model 方法",
+    "after": "查询条件适合在存储层表达时，避免把整张表读出再筛选；少量已经加载的数据则可以本地派生，选择取决于数据量和查询支持。模型字段要表达业务含义，并考虑格式变更后旧数据怎样读取。\n\n把聚合与校验放到可独立测试的函数，body 负责展示结果。增加、修改、删除之后重新查询确认持久化状态，再测试一次重启；只看到当前内存界面变化还不能证明保存成功。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "06-swift-swiftui/deployment/01-app-release.md",
+    "heading": "## ✅ 最佳实践",
+    "original_line": 98,
+    "before": "- ✅ Build 号交给脚本或 Xcode Cloud 自动递增，杜绝手动忘改\n- ✅ 每个功能分支合并前先走一遍 Release 构建，别让签名问题堆到发布日\n- ✅ 外部测试用公开链接 + 独立测试组，按功能线分组管理",
+    "after": "将构建编号、源码提交、签名配置和产物关联保存，自动递增工具帮助避免重复编号，但要确认多个发布分支不会冲突。用可安装的 Release 产物走通核心流程，因为调试成功不能覆盖签名和优化构建差异。\n\n测试组与分发链接按访问范围管理，明确测试数据环境和反馈渠道。先验证一名新测试者能安装并完成任务，再扩大发放范围。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "06-swift-swiftui/deployment/02-app-store-release.md",
+    "heading": "## ✅ 最佳实践",
+    "original_line": 99,
+    "before": "- ✅ 首次提审选\"手动发布\"，给自己留观察与撤回的余地\n- ✅ 提审前用**全新设备**（或抹除后的模拟器）走一遍首次启动流程\n- ✅ 版本日志、截图与实际功能同步更新，过期截图是差评来源",
+    "after": "提审前验证干净安装与从旧版本升级两条路径：前者暴露未配置权限和首次启动问题，后者暴露数据迁移与登录恢复问题。无需为了测试重置用户真实设备，可使用隔离测试设备或模拟器环境。\n\n截图、说明和隐私申报应反映实际产物；选择手动或自动发布取决于协调需求。审批通过不意味着已安装用户可以撤回到旧版，因此提前准备暂停分发和修复版流程。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "06-swift-swiftui/deployment/03-ci-cd-observability.md",
+    "heading": "## ✅ 最佳实践",
+    "original_line": 144,
+    "before": "- ✅ 流水线从第一天就跑测试，**没有测试支撑的 CI 只是打包机器**\n- ✅ dSYM 与版本一一归档，崩溃符号化不过夜\n- ✅ 指标看趋势不看单点，周同比比日波动有意义",
+    "after": "CI 要给出可解释的反馈：编译失败、测试失败和签名失败分别保留日志，不能只有一个“打包失败”。归档对应构建的符号文件，并用受控异常确认能还原到源码。\n\n监控按版本、设备与用户旅程分析趋势，同时保留严重单次事件的调查入口。同比有助于比较，但不能忽略发布后立即出现的错误峰值；根据影响与样本量决定告警。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "06-swift-swiftui/frameworks/01-swiftui-basics.md",
+    "heading": "## ✅ 最佳实践",
+    "original_line": 159,
+    "before": "- ✅ `@State` 一律 `private`，编译器会阻止外部误改\n- ✅ 界面能拆就拆成小 View，SwiftUI 按 struct 做增量求值，拆分反而更快\n- ✅ 常量数据用 `let` 传入，不要为了\"方便\"全塞进状态",
+    "after": "State 通常设为 private，用来表明这是当前 View 管理的状态，外部协作通过参数或 Binding 表达；private 是访问控制选择，不是 State 强制的语法要求。已有常量用 let 传递，不要额外复制到状态形成两个来源。\n\n抽取子 View 可以让依赖和职责更清楚，但 SwiftUI 不按“每个 struct 固定只更新一次”工作，拆得更多也不保证更快。通过真实状态变化验证界面正确，再用性能工具定位昂贵求值。[State 官方说明](https://developer.apple.com/documentation/swiftui/state)解释了其所有权用途。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "06-swift-swiftui/frameworks/02-swiftui-advanced.md",
+    "heading": "## ✅ 最佳实践",
+    "original_line": 191,
+    "before": "- ✅ `@Observable` 类中，派生数据写计算属性，不手动同步第二份变量\n- ✅ 导航用**值驱动**（路由值/路径数组），导航状态可序列化、可还原\n- ✅ 动画只挂在**驱使变化的状态值**上，避免全局 `.animation()` 旧 API",
+    "after": "派生属性尽量由已有状态计算，避免保存一份 filteredItems 后每次又手动同步。若计算昂贵，应明确缓存输入和失效时机，而不是默认计算属性没有成本。\n\n数据驱动导航便于测试和恢复，但路径值还需可编码且能处理已删除资源。动画绑定到实际变化的状态并验证中断、快速操作和减少动态效果设置，避免整棵界面的无关变化一起动。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "06-swift-swiftui/frameworks/03-ecosystem-integration.md",
+    "heading": "## ✅ 最佳实践",
+    "original_line": 195,
+    "before": "- ✅ `@Query` 只放**展示视图**，写操作集中到 `modelContext` 的明确方法里\n- ✅ 网络请求一律 `async/await` + `.task` 修饰符，取消免费获得\n- ✅ `Codable` 结构体标 `Sendable`，Swift 6 严格并发下一劳永逸",
+    "after": "先把网络结果解码成明确 DTO，再决定如何写入持久化模型；解码成功不代表已经满足业务校验。页面任务需要响应取消，写操作还要处理重复触发与服务端实际是否已提交。\n\nCodable 描述编解码，Sendable 描述跨并发边界传递的安全契约，二者互不替代；成员和可变状态仍须满足编译器要求。不要用 unchecked 声明消除不了解的诊断。验收离开页面、重复保存和解码失败三条路径。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "06-swift-swiftui/frameworks/04-devtools.md",
+    "heading": "## ✅ 最佳实践",
+    "original_line": 132,
+    "before": "- ✅ 每个 UI 组件文件都留一个 `#Preview`，改动即时可见，减少全量编译\n- ✅ 查\"视图为什么刷新\"优先 `Self._printChanges()`，比猜快得多\n- ✅ 性能问题先测量（Instruments）再优化，禁止凭感觉",
+    "after": "预览使用可控数据覆盖加载、错误、空态和长文本，不能只展示最理想的一屏。复杂界面的入口可以负责依赖装配，子 View 接收状态，从而让预览不必启动整个应用环境。\n\n刷新异常先记录什么状态变化、哪些视图读取它，再用诊断工具观察；下划线调试 API 不应成为生产契约。优化前后用 Instruments 在同一场景比较，保留设备和构建模式以便复现。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "06-swift-swiftui/testing/01-unit-testing.md",
+    "heading": "## ✅ 最佳实践",
+    "original_line": 144,
+    "before": "- ✅ 先测**模型层业务逻辑**（streak、过滤、聚合），再测视图模型状态机，UI 交给 UI 测试\n- ✅ 每个测试独立构造数据，不共享、不依赖执行顺序\n- ✅ 测试命名说人话：「条件 → 预期」，失败时不用读代码就知道错哪",
+    "after": "测试名称描述条件与结果，例如“连续记录中断后重新从一开始”，比“testModel”更能解释失败。用独立数据验证业务规则，再覆盖模型的成功、失败与重复触发状态。\n\n对时间、随机和外部存储提供可控依赖，让测试换序或单独运行仍然成立。不要只断言函数被调用过：错误返回后数据是否保持原状，同样属于行为。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "06-swift-swiftui/testing/02-ui-testing.md",
+    "heading": "## ✅ 最佳实践",
+    "original_line": 151,
+    "before": "- ✅ 只给**核心旅程**写 UI 测试（新增笔记、打卡、搜索），控制在两位数以内\n- ✅ 所有定位优先 `accessibilityIdentifier`，内容文案会改、标识不该改\n- ✅ 异步验证一律 `waitForExistence`，杜绝 `sleep` 固定等待",
+    "after": "UI 测试优先覆盖发布后代价高的旅程，数量由风险与维护能力决定，不设“两位数以内”的硬上限。定位使用稳定的标识或可理解语义，文案变化不应让与文字无关的用例全部失效。\n\n等待目标元素出现或状态达到预期，而不是固定 sleep；元素出现也可能尚未可操作，需检查相应条件。保存失败截图与应用日志，另外验证焦点、动态字体和读屏，不把可定位等同于可访问。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "06-swift-swiftui/testing/03-integration-testing.md",
+    "heading": "## ✅ 最佳实践",
+    "original_line": 183,
+    "before": "- ✅ 集成断言**重新查库**验证，不信任内存对象（内存里删了库未必删了）\n- ✅ Stub 返回的数据结构与生产 API 完全一致，字段值用可识别的合成值\n- ✅ 每条测试独立容器，`SetUp` 里建、不跨用例复用",
+    "after": "持久化集成测试应从新的查询上下文读取结果，必要时重建存储实例，避免只验证内存里的对象已经变化。模拟 API 使用能反映真实契约的合成数据，并包含缺字段、错误状态和延迟。\n\n隔离测试容器或明确清理数据，保证每条用例独立。对一次失败保存检查没有留下半条记录，再对重启后的读取作断言，才能证明协作链满足要求。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "07-php-mastery/advanced-topics/runtime/01-fpm-vs-resident.md",
+    "heading": "## 🎨 最佳实践",
+    "original_line": 147,
+    "before": "### ✅ 推荐做法\n\n- **默认 FPM**：普通 CRUD、B2C 网站全年 99.9% 的场景 FPM 是最省心且最成熟的选择\n- **先测量后改造**：用 profile 数据证明启动税/进程并发是瓶颈，再考虑常驻\n- **常驻化先审状态**：把\"静态与单例审计\"作为常驻化的第一道工序，而不是上线后排查\n\n### ❌ 避免陷阱\n\n- **陷阱 1**：\"Swoole/Webman 能替代 Laravel\"——错。它们是**另一种运行模型**，改变的是\"进程如何活着\"，不是\"业务代码怎么写\"\n- **陷阱 2**：\"常驻=快\"。若瓶颈在慢 SQL，常驻化只是让\"没有启动税的慢请求\"排队\n- **陷阱 3**：\"内存泄漏线上再看\"。常驻进程的泄漏要以小时为单位做压测与内存曲线监控，而不是等 OOM",
+    "after": "FPM 的请求生命周期比较明确，常驻进程则把启动成本分摊到多次请求，同时要求重新审视状态与资源。若瓶颈是慢 SQL，换运行模型不会自动修复查询；先从 profile 确认收益，不用没有证据的“99.9% 场景”作选型结论。\n\n迁移前列出静态属性、单例、用户身份和数据库连接由谁持有，验证前一个请求结束后不会影响下一个。用连续负载观察内存、延迟与连接恢复；长连接或后台任务需求也可能是采用常驻模型的理由。框架与运行时并非同一层，适配关系要按具体组合判断。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "07-php-mastery/advanced-topics/runtime/02-workerman-principles.md",
+    "heading": "## 🎨 最佳实践",
+    "original_line": 159,
+    "before": "### ✅ 推荐做法\n\n- **CPU 密集任务踢出事件循环**：图片处理、大 JSON 编码丢给队列（Redis/消息服务），回调里只做投递\n- **用 `status` 命令观测**：`php start.php status` 查看各进程连接数、内存、请求量，是常驻服务的基本体检手段\n- **守护化 + 开机自启**：生产环境 `php start.php start -d` 并配 systemd 守护\n\n### ❌ 避免陷阱\n\n- **陷阱 1**：在 `onMessage` 里同步调用慢接口——整个进程所有连接一起卡死。I/O 密集场景应考虑协程运行时（见[Swoole 生态](./04-swoole-ecosystem.md)）或异步客户端\n- **陷阱 2**：有连接状态的服务把 `count` 设成多进程——连接分散在不同进程，广播/会话互相看不见\n- **陷阱 3**：把 FPM 的\"代码改了刷新就生效\"习惯带过来——常驻进程必须 `php start.php reload` 才加载新代码",
+    "after": "事件循环中的慢同步调用会延迟同一 worker 处理其他连接。先用两个并发客户端复现：一个触发慢操作，另一个发轻量请求；若轻量请求也延迟，就要考虑异步客户端、独立 worker 或任务队列。\n\n多个 worker 的内存不自动共享，广播与在线状态需要跨进程通信或共享存储。进程交给监督器管理时，前台运行还是自行 daemonize 应匹配监督器配置；代码与启动配置变更分别核对 reload/restart 的生效范围，不假定一次 reload 更新所有资源。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "07-php-mastery/advanced-topics/runtime/03-webman-practice.md",
+    "heading": "## 🎨 最佳实践",
+    "original_line": 199,
+    "before": "### ✅ 推荐做法\n\n- **把\"常驻纪律\"写进 code review 清单**：控制器/服务类禁止用静态属性携带请求态；单例不存 `$request`、用户、租户\n- **配置当启动期产物**：`.env` 与 `config/` 只在启动时读取一次，改配置后必须 `php start.php reload`\n- **用 process.php 承载后台工作**：队列消费、定时任务写成独立常驻进程，与 HTTP 进程统一由 master 管理\n\n### ❌ 避免陷阱（Laravel 心智迁移清单）\n\n- **陷阱 1：静态属性跨请求存活**。Laravel 里\"本次请求内的缓存\"用 static 写没毛病；Webman 里它会串户。要请求级隔离就显式传参或用协程/请求上下文\n- **陷阱 2：以为代码保存即生效**。常驻进程不会自动加载新代码，开发期可用 monitor 进程自动 reload，生产靠发布流程触发 `reload`\n- **陷阱 3：Session/内存默认当\"进程内变量\"**。多 worker 进程内存不共享，会话类状态用 Redis 存储\n- **陷阱 4：把异常当\"请求结束\"**。未捕获异常不会像 FPM 那样随请求销毁现场，注意在中间件/异常处理器里统一兜底并记录",
+    "after": "常驻进程可能连续处理不同用户，请求身份和临时缓存不能随意放在长寿命单例里。用“用户 A 请求结束后紧接用户 B”验证数据隔离；需要请求级状态时显式传参或使用框架支持的上下文。\n\nLaravel 是否逐请求重建同样取决于运行方式，不能认为 static 在 Laravel 中天然安全。配置变更需按资源生命周期选择重载或重启，后台任务则声明退出、失败与重试责任。多 worker 的会话存储必须可共享，异常后的资源清理由明确的 finally/框架生命周期负责。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "07-php-mastery/advanced-topics/runtime/04-swoole-ecosystem.md",
+    "heading": "## 🎨 最佳实践",
+    "original_line": 140,
+    "before": "### ✅ 推荐做法\n\n- **连接池化一切外设**：Hyperf 内置 MySQL/Redis 连接池，避免\"每协程新建连接\"打垮下游\n- **协程上下文存请求态**：用户/租户等请求级数据放协程上下文（`Swoole\\Coroutine::getContext()`），不放全局/静态\n- **压测内存曲线**：常驻 + 协程的服务按小时级压测观察内存，纳入 CI 或值班巡检\n\n### ❌ 避免陷阱\n\n- **陷阱 1**：CPU 密集循环不让出——协程调度发生在 I/O 边界，纯计算会饿死同进程其他协程\n- **陷阱 2**：hook 后以为\"绝对安全\"——部分扩展/库不在 hook 覆盖内，混用阻塞调用会拖垮事件循环\n- **陷阱 3**：把 Laravel 组件直接搬进协程环境——大量 illuminate 组件假设\"进程=请求\"，需使用明确支持协程的框架层（如 Hyperf）",
+    "after": "协程让等待 I/O 的任务有机会让出执行权，但不会把纯计算自动分到多个 CPU。把慢计算移到合适的进程或执行器，并限制并发量；给每个请求无限创建协程可能转而压垮数据库。\n\n连接池应匹配协议与客户端契约，借出的连接要正确归还且不能跨请求残留事务。hook 只覆盖支持的操作，应实测所用扩展是否仍会阻塞。连续交错运行两个租户请求，验证上下文、连接与错误路径都隔离，再观察持续负载下的内存。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "07-php-mastery/basics/01-environment-setup.md",
+    "heading": "## ✅ 最佳实践",
+    "original_line": 207,
+    "before": "- ✅ **用版本管理器**：使用 `brew` 或 phpbrew/asdf 管理多个 PHP 版本，方便在不同项目间切换\n- ✅ **开发/生产配置分离**：本地用 `php.ini-development`（错误直接显示），生产环境必须用 production 配置并关闭 `display_errors`\n- ✅ **所有项目用 Composer 管理依赖**：不要手工下载类库或修改全局 `php.ini` 来\"装库\"\n- ❌ **避免使用 PHP 8.0 以下的版本**：枚举、属性注解、构造器属性提升等现代特性均需 8.1+\n- ❌ **不要用 `@` 错误抑制符**：现代 PHP 应通过异常处理与 `error_reporting` 管理错误",
+    "after": "先确认 CLI 与 Web 服务实际加载的 PHP 版本、扩展和 ini 文件，它们可能不同；“终端能跑”不足以证明 FPM 配置正确。项目依赖由 Composer 清单与锁文件记录，扩展则属于运行环境，不能混为一类。\n\n开发时需要充分诊断，生产错误细节进入受控日志而非响应。新语法按其引入版本和项目支持范围核对，例如属性与构造器提升并不是同枚举一起加入的。升级前执行语法、测试与依赖兼容检查，不只改版本号。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "07-php-mastery/basics/02-first-script.md",
+    "heading": "## ✅ 最佳实践",
+    "original_line": 188,
+    "before": "- ✅ **每个纯 PHP 文件都加 `declare(strict_types=1)`**：一致性比个别文件的便利更重要\n- ✅ **CLI 输出用 `PHP_EOL`**：Windows 与 Unix 换行符不同，硬编码 `\\n` 在 Windows 终端显示异常\n- ✅ **Web 输出前设置 `header()`**：明确 `Content-Type`，避免浏览器猜测编码\n- ❌ **不要省略开始标签前的空行检查**：`<?php` 之前任何字符（包括 BOM）都会被当作输出\n- ❌ **不要在文件末尾写 `?>`**：PSR-12 明确规定纯 PHP 文件应省略结束标签",
+    "after": "把脚本入口与可复用函数分开，成功返回 0，失败返回明确非零退出码，方便终端脚本判断是否继续。输出协议规定换行时遵循协议，PHP_EOL 用于本地文本方便；不能声称 Windows 普遍无法显示 Unix 换行。\n\nWeb 响应的 header 必须在实际输出前发送，BOM 或意外空白也可能提前产生输出。纯 PHP 文件省略结束标签可减少末尾误输出。strict_types 影响特定标量类型转换规则，不会把所有外部输入自动验证成业务合法数据。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "07-php-mastery/basics/03-variables-types.md",
+    "heading": "## ✅ 最佳实践",
+    "original_line": 224,
+    "before": "- ✅ **所有生产代码开启 `strict_types=1` 并写全类型签名**：让错误在调用点立刻暴露\n- ✅ **恒等比较 `===` / `!==`**：仅在明确需要弱比较时用 `==`，并注释原因\n- ✅ **优先窄化类型**：能写 `int|float` 就不写 `mixed`，能写 `?string` 就不写更宽的联合\n- ❌ **不要滥用 `mixed`**：它是\"放弃类型检查\"的信号，应尽量限定到具体联合类型\n- ❌ **不要用可变变量 `$$name`**：静态分析与 IDE 均无法追踪，改用数组映射",
+    "after": "类型声明帮助描述函数接受什么，但外部字符串仍要按业务规则解析。strict_types 不等于全局禁止一切转换；比较时用 === 明确区分值和类型，确实需要转换则显式写出，便于审查。\n\nmixed 可以表达尚未验证的边界输入，随后应通过检查缩小范围，而不是把不确定值一路传给业务。用数组映射动态字段通常比可变变量更容易追踪；练习比较 0、\"0\"、null 与空串，写出各自业务含义。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "07-php-mastery/basics/04-functions-oop.md",
+    "heading": "## ✅ 最佳实践",
+    "original_line": 282,
+    "before": "- ✅ **值对象一律构造器提升 + readonly**：不可变对象消除整类状态 bug\n- ✅ **组合优于继承**：优先注入接口依赖，而非拉深继承链\n- ✅ **类设计成 `final`**：留好接口，默认关闭继承，避免子类破坏不变式\n- ❌ **不要在构造器中做 I/O**：构造器只做赋值与校验，网络/DB 调用交给工厂或服务\n- ❌ **不要滥用魔术方法 `__get/__set`**：显式方法签名对 IDE 与静态分析更友好",
+    "after": "值对象应保证创建后仍满足不变量，例如价格不能为负；readonly 属性限制重新赋值，但内部对象仍可能可变，因此不能仅凭关键字声称深度不可变。构造器提升减少声明重复，并不决定对象的业务设计。\n\n依赖通过参数传入，测试可替换网络或存储。final 用于确实不支持继承扩展的类型，不必机械作用于所有类。将不可预测 I/O 与简单对象初始化分开，使失败和重试发生在明确边界。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "07-php-mastery/basics/05-control-flow.md",
+    "heading": "## ✅ 最佳实践",
+    "original_line": 265,
+    "before": "- ✅ **新代码一律用 `match` 替代 `switch`**：严格比较 + 表达式语义 + 无穿透\n- ✅ **配合枚举使用无 default 的 match**：换取静态分析的穷尽性检查\n- ✅ **条件中避免赋值与副作用**：`if ($row = fetch())` 难读易错，拆成两行\n- ❌ **不要在 foreach 引用遍历后忘记 `unset`**：残留引用会让后续赋值\"意外\"修改数组末元素\n- ❌ **不要用 `elseif` 长链做类型分发**：多态或 match 更清晰",
+    "after": "match 适合把一个输入映射到一个结果，严格比较且不会分支穿透；switch 和普通条件仍适合各自的控制流程。枚举增加成员后要有测试或静态分析提醒遗漏，运行时未匹配的 match 会失败，不能把它当成永远自动编译穷尽检查。\n\n引用 foreach 会让循环变量继续引用最后一个元素，后续赋值可能误改数组；结束后解除不再需要的引用。练习遍历完成后再次给循环变量赋值，比较普通遍历与引用遍历的结果。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "07-php-mastery/basics/06-error-exceptions.md",
+    "heading": "## ✅ 最佳实践",
+    "original_line": 231,
+    "before": "- ✅ **每个模块建立 `abstract class XxxException extends RuntimeException` 基类**：上游捕获粒度可控\n- ✅ **异常消息面向开发者，错误码/文案面向用户**：两层分离，不要把 SQL 细节透出给用户\n- ✅ **`finally` 只做清理，不做业务分支**：保证可预测\n- ❌ **不要用异常做常规流程控制**：抛接成本高、堆栈难读，正常分支用返回值\n- ❌ **不要捕获 `Throwable` 后什么都不做**：最小也必须 `error_log($e)`",
+    "after": "异常分类应服务调用方决策，例如非法输入可提示修改，存储失败可能需要重试；只有存在共同处理需求时才建立异常基类，不必每个模块都先搭继承树。\n\n捕获后明确恢复、转换或继续传播，未知错误在边界记录经过脱敏的上下文，客户端得到稳定消息。finally 用于清理，避免 return 覆盖原结果。正常“没有找到”是返回值还是异常由接口契约决定，不能只按性能口号选择。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "07-php-mastery/basics/07-advanced-features.md",
+    "heading": "## ✅ 最佳实践",
+    "original_line": 328,
+    "before": "- ✅ **数据库可枚举状态一律用 Backed Enum**：配合 `match` 的穷尽性检查，新增状态时静态分析兜底\n- ✅ **新特性先查字典再上手**：8.4/8.5 的钩子语法与管道限制等细节见 [增量特性条目](../reference/language-concepts/12-modern-php-85.md)\n- ✅ **属性注解只做元数据**：复杂校验逻辑交给读取注解的通用服务（如 Validator）\n- ✅ **回调一律 `Foo::method(...)` 语法**：重构时 IDE 全程追踪，消灭字符串回调\n- ❌ **不要把枚举当命名空间**：一个枚举表达一个封闭状态集，不要塞无关 case\n- ❌ **不要在普通 Web 请求里手写 Fiber 调度**：这是框架/运行时的职责，业务代码直接用 async API",
+    "after": "枚举用于一组有业务关系的状态；需要与数据库标量互转时 Backed Enum 很方便，但未知或旧值仍要定义迁移和失败行为。属性提供元数据，只有读取它的框架或代码才会执行对应校验。\n\n回调语法按可读性与兼容版本选择，不把一种写法定成普遍禁令。Fiber 提供暂停与恢复原语，不自带完整调度、I/O 或重试系统；初学者先解释一个调用何时暂停、由谁恢复，再进入运行时扩展。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "07-php-mastery/basics/08-first-project.md",
+    "heading": "## ✅ 最佳实践",
+    "original_line": 424,
+    "before": "- ✅ **分层单向依赖**：`bin → Service → Repository/Model`，上层依赖下层抽象，方便替换存储引擎\n- ✅ **序列化集中在 Model**：`fromArray/toArray` 是数据进出系统的唯一边界，格式变更只改一处\n- ✅ **CLI 必须有退出码**：成功 0、失败非 0，Shell 脚本与 CI 才能判断成败\n- ❌ **不要在 bin 脚本里堆业务逻辑**：入口只做参数解析与装配，逻辑下沉到 Service\n- ❌ **不要把 `tasks.json` 提交进版本库**：加入 `.gitignore`，数据文件属于运行时产物",
+    "after": "CLI 入口负责读参数、组装依赖和映射退出码，业务规则放在可直接测试的函数或服务中。存储格式转换集中在明确边界，放模型还是独立映射器取决于复用需求，不必宣布一个方法是系统唯一数据入口。\n\n运行数据与示例夹具分开：真实 tasks.json 通常不提交，合成测试数据可以入库。验证无效参数、损坏文件与写入失败时的退出码和数据完整性，再检查成功后重启仍能读取。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "08-java-revisited/advanced-topics/performance/01-jvm-tuning.md",
+    "heading": "## 🎨 最佳实践",
+    "original_line": 122,
+    "before": "### ✅ 推荐\n- 生产必配：`-XX:+HeapDumpOnOutOfMemoryError`、GC 日志滚动、`MaxRAMPercentage`\n- 每次只改一个参数，前后对比同一时段的 GC 日志\n- 灰度环境先验证：GC 行为与流量形态强相关\n\n### ❌ 陷阱\n- 照抄网上的\"-Xms=-Xmx + Full GC 参数组合\"，忽略自己的流量形态\n- 用 `System.gc()` \"清理内存\"：触发全停顿，治标且伤身\n- 忽视元空间与直接内存：容器里只盯着堆",
+    "after": "调 JVM 前先区分堆耗尽、原生内存、线程和容器配额问题；只增加堆可能挤压其他内存。GC 日志与必要的堆转储能帮助定位，但转储可能很大且含敏感数据，需限制保存位置、容量和访问。\n\n在可比负载下每次改变一个参数，观察吞吐、延迟与暂停分布。System.gc 是请求，实际行为依 GC 与配置而异，不应靠它定时“修复泄漏”。完成分析后找到对象为何仍被引用，而不是只把故障推迟。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "08-java-revisited/advanced-topics/security/01-security-practices.md",
+    "heading": "## 🎨 最佳实践",
+    "original_line": 141,
+    "before": "### ✅ 推荐\n- 默认全拒绝（`anyRequest().authenticated()`），白名单放行\n- 安全规则集中一个 `SecurityConfig`，代码评审时一眼可查\n- 认证失败与\"不存在\"返回相同响应（401 vs 404 泄露资源存在性）\n\n### ❌ 陷阱\n- `permitAll()` 越积越多：每次\"临时放开\"都变成永久后门\n- 把用户 ID 存 JWT 明文字段当权限依据：token 签发后角色变更不生效，权限要实时查\n- 依赖 `SecurityContextHolder` 全局可变性：无状态模式下按请求读取即可",
+    "after": "安全规则要分别表达公开访问、必须登录与资源授权。anyRequest().authenticated() 要求身份认证，并不等于“默认拒绝全部”；真正禁止请求与允许已登录者是不同策略。对路由与方法建立测试矩阵，确认公开例外没有覆盖敏感接口。\n\n有效令牌可证明已签发身份，但角色变化、撤销与资源归属还需按业务时效校验。401、403、404 的选择按认证协议与资源隐藏策略统一设计，不把所有失败强行返回同一种状态。跨用户访问测试比只检查安全注解存在更有价值。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "08-java-revisited/basics/03-variables-types.md",
+    "heading": "## ✅ 最佳实践",
+    "original_line": 164,
+    "before": "- ✅ 默认 `int`/`double`，范围不够再升级 `long`\n- ✅ 右侧类型明确时局部变量优先 `var`\n- ✅ 包装类型比较一律 `equals`，空值用 `getOrDefault`/`Optional` 防护\n- ❌ 不用 `float`/`double` 表示金额\n- ❌ 不给可空包装类型直接赋给基本类型变量（隐式拆箱风险）",
+    "after": "数值类型由范围和精度需求决定：计数可能超出 int，金额通常需要约定十进制精度与舍入。var 保留静态类型推断，右侧无法一眼看出含义时显式类型可能更易读。\n\n包装类型可能为 null，自动拆箱会因此失败；Objects.equals 等空值安全比较与对象自身 equals 的前提不同。Map.getOrDefault 也不把所有显式 null 值变成默认值。用缺键、存在且为 null、正常值三个输入检查边界。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "08-java-revisited/basics/05-control-flow.md",
+    "heading": "## ✅ 最佳实践",
+    "original_line": 154,
+    "before": "- ✅ 多分支值映射优先 switch 表达式，而非 if-else 链\n- ✅ 枚举/密封类型 switch 省略 default，让编译器检查穷举\n- ✅ null 值显式 `case null`，不要依赖 default 隐式吞掉\n- ❌ 避免 `when` 守卫中写副作用与复杂业务逻辑\n- ❌ 避免用 switch 模式匹配替代多态——先考虑虚方法",
+    "after": "用 switch 表达式表示从状态到结果的映射，能减少每个分支重复赋值；连续范围判断仍适合 if。对封闭枚举或 sealed 层级进行穷尽处理，有助于新增类型时发现遗漏。\n\nnull 的处理遵循所用 switch 形式与 Java 版本，不能假定 default 自动接住。守卫应尽量只判断条件，避免在匹配过程中改变业务状态；将判断与执行拆开后分别测试边界。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "08-java-revisited/basics/06-exceptions.md",
+    "heading": "## ✅ 最佳实践 / ❌ 陷阱清单",
+    "original_line": 133,
+    "before": "- ✅ finally 只做资源清理，**不写 return**（会吞掉异常与返回值）\n- ✅ 捕获 `InterruptedException` 时恢复中断位：`Thread.currentThread().interrupt()`\n- ❌ 不捕获 `Throwable`/`Error`\n- ❌ 不用 `e.printStackTrace()`——用日志框架（SLF4J）记录\n- ❌ 不写 `catch (Exception e)` 大兜底掩盖具体问题\n- ❌ 不在循环内 try-catch 复用同一段大逻辑（粒度过粗）",
+    "after": "捕获异常后要决定恢复、转换还是传播，并在一个合适边界记录原因。InterruptedException 如果继续向上抛出就不必再原地恢复；若无法传播且终止本次工作，通常恢复中断标记让上层知道取消请求。\n\n使用 try-with-resources 关闭支持该协议的资源，finally 中不要返回新结果覆盖原异常。宽泛捕获可以用于服务边界兜底，但不能吞掉未知错误继续假装成功；底层日志与用户消息分开。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "08-java-revisited/basics/07-modern-features.md",
+    "heading": "## ✅ 最佳实践 / ❌ 陷阱清单",
+    "original_line": 166,
+    "before": "- ✅ DTO 转换、过滤聚合、分组统计优先 Stream\n- ✅ 对外查询接口返回 `Optional`，内部集合空缺用空集合而非 null\n- ✅ 高并发 IO 服务优先虚拟线程（JDK 21+）\n- ❌ Stream 里做副作用（修改外部变量）；复杂多步副作用用普通循环\n- ❌ 并行流（`parallelStream`）滥用——默认串行，确有收益且线程安全再并行\n- ❌ 用 Optional 集合/字段\"到处包一层\"",
+    "after": "Stream 适合清晰的变换、筛选与聚合；包含多步副作用或复杂退出逻辑时，普通循环往往更容易验证。Optional 表达单个结果可能缺失，空集合已经能表达“零项”，无需为一致形式层层包装。\n\n虚拟线程降低某些阻塞等待的线程成本，不增加 CPU 算力，也不扩大数据库容量。并行流和虚拟线程都需要资源上限与实际基准，不能仅按“现代特性”一律开启。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "08-java-revisited/deployment/01-docker-deployment.md",
+    "heading": "## 🎨 最佳实践",
+    "original_line": 132,
+    "before": "### ✅ 推荐\n- 镜像 tag 用语义化版本 + commit SHA，禁止只打 `latest`\n- `.dockerignore` 排除 `target/`、`.git`，加速构建上下文\n- 运行镜像不含 Maven/JDK 编译链（多阶段构建隔离）\n\n### ❌ 陷阱\n- 容器里 `-Xmx` 硬编码超过配额 → OOMKilled\n- 用 root 跑应用：容器逃逸攻击面变大\n- `COPY . .` 一步到位：任何文件变动都击穿全部缓存层",
+    "after": "构建镜像时把依赖获取与经常变化的源码分层，可减少无关变化造成的重复工作；若构建流程需要本地生成的 jar，不能又无条件把 target 全部排除。根据 Dockerfile 实际输入设计上下文。\n\n运行镜像只带所需运行能力，内存预算包含堆外、线程等开销。版本标签方便识别但可能被覆盖，严格追溯需记录镜像摘要。用非特权身份运行并测试容器内文件权限，避免应用启动后才发现无法写必要目录。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "08-java-revisited/deployment/02-kubernetes-deployment.md",
+    "heading": "## 🎨 最佳实践",
+    "original_line": 157,
+    "before": "### ✅ 推荐\n- 探针端点走 Actuator 专用 liveness/readiness，与 `/health` 主端点分离\n- 所有配置经 ConfigMap/Secret 注入，镜像保持环境无关\n- 发布用固定 tag + `kubectl rollout undo` 一键回滚\n\n### ❌ 陷阱\n- livenessProbe 检查数据库连通性：DB 抖动 → 全体 Pod 被杀 → 雪崩\n- 没有 startupProbe 就配 liveness：慢启动应用永远起不来\n- CPU limit 设得过低：GC 与 JIT 线程被节流，延迟飙升",
+    "after": "readiness 决定是否接收流量，liveness 用于判断是否需要重启，startup 给慢启动留出初始化窗口。若 liveness 直接依赖数据库，数据库故障可能触发全体应用反复重启；应先定义故障应由哪一层恢复。\n\n发布固定产物并验证就绪与核心接口，回滚镜像不自动回滚数据库或外部状态。资源配额从实际负载测量，过紧的 CPU/内存限制可能增加延迟。练习让下游暂时不可用，观察系统是否停止接流量而非无休止重启。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "08-java-revisited/deployment/03-ci-cd-observability.md",
+    "heading": "## 🎨 最佳实践",
+    "original_line": 173,
+    "before": "### ✅ 推荐\n- 流水线每个 job 单一职责：test / image / deploy 各自可重跑\n- 指标带上 `application` 全局标签，看板一套模板多服务复用\n- 核心接口必有 P99 延迟与错误率双指标\n\n### ❌ 陷阱\n- 告警只发不治：阈值一刀切导致狼来了效应\n- 部署后无验证：加一步 `kubectl rollout status` + 健康检查冒烟\n- 密钥写在 workflow YAML：一律走 `secrets.*`",
+    "after": "流水线应能区分测试、构建和发布各阶段，并把最终产物绑定到通过检查的提交。发布后确认就绪与核心业务成功，rollout 完成只能证明部署层达到期望状态，不能替代业务冒烟。\n\n监控同时记录流量、失败与延迟分布，标签帮助按服务和版本聚合，避免把用户 id 等无限增长值作为普通指标标签。告警写明影响、持续条件和处理动作；凭据只提供给可信且需要它的步骤。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "08-java-revisited/frameworks/01-spring-boot-basics.md",
+    "heading": "## 🎨 最佳实践",
+    "original_line": 213,
+    "before": "### ✅ 推荐\n- **构造器注入 + final 字段**：依赖显式、不可变、可测\n- **Record 做 DTO**：消除样板代码，天然不可变（语义详见 [Record / Sealed / 模式匹配速查](../reference/language-concepts/05-records-sealed-patterns.md)）\n- **DTO 与实体分层**：Web 层不直接暴露 JPA 实体\n\n### ❌ 陷阱\n- 循环依赖：A 构造注入 B、B 构造注入 A → 启动失败；用 `@Lazy` 或重新设计边界\n- 在构造器里做重活：初始化逻辑放 `@PostConstruct` 或 `ApplicationRunner`\n- 忽略 `jakarta` 与 `javax` 混用：Boot 3/4 下 `javax.validation` 注解静默失效",
+    "after": "构造器参数使依赖显式，测试可以传入替代实现。final 字段限制重新赋值，不会让依赖对象自动不可变；record 同样只提供浅层不可变的数据载体，成员若是可变集合仍需考虑防御性复制。\n\nWeb DTO 与持久化实体分开可避免意外暴露字段和懒加载。循环依赖优先检查职责是否混在一起，Lazy 只能在有明确生命周期理由时使用。把重工作移到 PostConstruct 仍会影响启动，初始化应定义超时、失败和就绪语义。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "08-java-revisited/frameworks/02-spring-boot-advanced.md",
+    "heading": "## 🎨 最佳实践",
+    "original_line": 203,
+    "before": "### ✅ 推荐\n- 事务方法保持短小，RPC/文件 IO 移出事务\n- `open-in-view: false` + 在服务层完成所有数据装配\n- 分页接口统一返回 `Page`/`Slice` 而非裸 `List`\n\n### ❌ 陷阱\n- `@Transactional` 加在 private 方法上：代理无法拦截，静默失效\n- 默认只回滚 `RuntimeException`：受检异常需显式 `rollbackFor = Exception.class`\n- 在事务内发 HTTP 请求：长事务拖垮连接池",
+    "after": "事务边界围绕需要一起成功或失败的数据库操作，避免在持有连接和锁时等待不受控外部 HTTP。禁用 open-in-view 后，应在明确的数据访问范围内取齐响应需要的数据；返回 DTO 的形状由 API 契约决定，不必暴露框架的 Page 类型。\n\n事务注解是否生效取决于代理调用路径、方法可见性与配置，自调用尤其要检查。回滚规则也可以被应用配置改变；显式为业务异常定义期望并测试，不能默认“加注解就一定回滚”。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "08-java-revisited/frameworks/03-ecosystem-integration.md",
+    "heading": "## 🎨 最佳实践",
+    "original_line": 213,
+    "before": "### ✅ 推荐\n- Security 配置集中在一个 `SecurityFilterChain`，规则可读优先\n- 缓存 TTL 显式设置，杜绝\"永不过期\"的脏数据\n- 消息体只带 ID + 关键字段，消费方按需回查，避免大消息\n\n### ❌ 陷阱\n- `@Cacheable` 用于\"每次结果都不同\"的方法（如随机、时间相关）\n- 在 `@Transactional` 事务内发消息：事务回滚但消息已发出 → 用事务同步器或 Outbox 模式",
+    "after": "按请求路径匹配认证与授权规则，可以使用一个或多个有明确顺序的安全链；关键是匹配关系可解释且有测试。缓存定义键、失效与可接受的旧数据时间，TTL 不是唯一策略，也不能自动解决并发一致性。\n\n数据库提交与消息发送是两个系统的操作。提交后回调避免“事务回滚但消息已发”，却仍可能在提交后进程崩溃而漏发；需要可靠交付时使用 Outbox 等机制，并让消费方处理重复。消息携带快照还是 id 取决于回查时是否仍能得到当时语义。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "08-java-revisited/frameworks/04-devtools.md",
+    "heading": "## 🎨 最佳实践",
+    "original_line": 184,
+    "before": "### ✅ 推荐\n- 依赖版本全部交给 BOM 管理，禁止散落的硬编码版本\n- CI 统一用 `mvn verify` / `./gradlew build` 单命令完成全链路校验\n- Actuator 只暴露必要端点，并叠加 Spring Security 访问控制\n\n### ❌ 陷阱\n- DevTools 依赖被打进生产镜像（忘了 `optional` / `developmentOnly`）\n- 生产 `show-details: always` 泄露内部拓扑\n- Actuator 端点未鉴权：`/env`、`/heapdump` 是常见泄露面",
+    "after": "BOM 管理其覆盖范围内的兼容依赖，不在 BOM 中的库仍需明确版本和升级策略。统一检查命令要确认实际启用了单元、集成和静态检查，不能仅凭命令叫 verify 就假定所有检查已执行。\n\n管理端点只暴露运维需要的范围，控制访问并检查错误与详情是否泄漏内部数据。开发工具不应无意进入生产启动路径；最终检查构建产物和运行配置，而不只看依赖声明。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "08-java-revisited/projects/02-library-management.md",
+    "heading": "## 🎨 最佳实践",
+    "original_line": 220,
+    "before": "### ✅ 推荐\n- 枚举状态 + 领域方法（`markBorrowed`）替代裸 setter\n- 所有 `@ManyToOne` 显式 `LAZY`，列表接口用 JOIN FETCH 定向加载\n\n### ❌ 陷阱\n- 双向关联直接序列化 → 无限递归；用 DTO 投影替代\n- 缓存实体对象：脱管后懒加载报错；缓存 DTO\n- 迁移文件重命名/修改导致 Flyway 校验失败",
+    "after": "借阅状态通过明确领域操作改变，可以同时校验“已借出不能再次借出”等规则；直接暴露 setter 容易让调用者绕过这些条件。关联加载依据接口所需数据设计，LAZY 只是推迟查询，若逐行访问仍可能产生 N+1。\n\nAPI 返回明确 DTO，避免双向关系递归与意外字段泄漏。迁移一旦用于共享环境应保留历史，用新迁移修正；测试真实查询次数与重新查库的借阅结果，而不是只看内存实体状态。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "08-java-revisited/projects/03-order-system.md",
+    "heading": "## 🎨 最佳实践",
+    "original_line": 200,
+    "before": "### ✅ 推荐\n- 一致性先\"同库事务 + Outbox\"，再考虑分布式事务框架\n- 消息体只含 ID 与最小字段，消费方回查本地库\n- 状态流转用类型（Sealed + switch）而非 if-else 散落\n\n### ❌ 陷阱\n- `@Scheduled` 单实例假设：多实例部署需 ShedLock/分片\n- 消费端\"先扣库存再记消费日志\"：崩溃窗口导致重复扣减\n- 无死信队列：失败消息静默堆积",
+    "after": "订单、库存与待发送事件若在同库中，可以用本地事务一起提交，再由后台发送 Outbox。消费者仍可能收到重复消息，业务变更与去重记录需在能够保证一致性的边界内完成，不能先扣库存再单独记录已处理。\n\n多实例定时任务要决定是允许重复、需要互斥还是应分片执行，工具不能替代语义选择。消息失败进入可观察的重试或人工处理流程；用“提交后崩溃”“重复投递”检验库存不被重复扣减。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "08-java-revisited/projects/04-production-spring-app.md",
+    "heading": "## 🎨 最佳实践",
+    "original_line": 200,
+    "before": "### ✅ 推荐\n- 可观测性从第一天就有，而不是\"上线后补\"\n- 降级路径必须真实演练（拔掉下游再压测）\n- 配置变更走流水线，禁止生产机器手改\n\n### ❌ 陷阱\n- 重试没有退避与上限 → 故障放大（雪崩）\n- 只监控 JVM 指标不看业务指标：JVM 全绿但订单都在失败\n- 日志打敏感字段（手机号、token）违反合规",
+    "after": "在隔离环境模拟下游超时，验证服务是否按预算失败、释放资源并给出可理解响应。重试只用于允许重试的操作，设次数、总时限与退避，避免每层都重试把一次失败放大。\n\n观察订单成功率等业务指标与 JVM、连接池指标之间的关系。配置变更应可追溯且有恢复步骤，日志只保留必要并脱敏的上下文；“系统资源正常”不能证明用户任务成功。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "08-java-revisited/reference/framework-essentials/01-spring-boot-essentials.md",
+    "heading": "## ✅ 最佳实践 / ❌ 陷阱清单",
+    "original_line": 171,
+    "before": "- ✅ 依赖注入用**构造器注入**（final 字段、可测试）；不用字段 `@Autowired`\n- ✅ 配置用 `@ConfigurationProperties` + record，不用散落的 `@Value`\n- ✅ 虚拟线程开启：`spring.threads.virtual.enabled=true`（Boot 3.2 引入，Boot 4 沿用；Java 21+）\n- ❌ 不要在 `@Configuration` 里互相 `new` 部件——交给容器\n- ❌ 不要用 `javax.*` 导入（Boot 3/4 必用 `jakarta.*`）\n- ❌ 不要吞掉 `@Transactional` 边界内的受检异常期望回滚（默认不回滚，见 [JPA 核心](./02-jpa-essentials.md)）",
+    "after": "构造器注入让必要依赖在创建时明确，成组配置用专门类型便于校验；少量简单值也可按场景使用其他配置方式。虚拟线程属于需要验证的运行选择，先确认负载以等待为主，并限制下游并发。\n\n迁移到 Jakarta 的是相关企业 API 命名空间，并非所有 javax 都要替换，例如 JDK 自带的一些 javax 包仍然存在。事务与配置对象是否被容器管理要检查真实调用路径；用失败用例确认回滚和缺配置时的启动行为。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "08-java-revisited/reference/framework-essentials/02-jpa-essentials.md",
+    "heading": "## ✅ 最佳实践 / ❌ 陷阱清单",
+    "original_line": 137,
+    "before": "- ✅ 实体字段用 `java.time`（LocalDate/Instant），Hibernate 6 起原生映射（7.x 沿用）\n- ✅ 枚举一律 `@Enumerated(EnumType.STRING)`\n- ✅ 批量插入用 `saveAll` + `spring.jpa.properties.hibernate.jdbc.batch_size=50`（配 SEQUENCE 主键）\n- ❌ 不要让 `@ManyToOne` 保持默认 EAGER；关联显式 LAZY\n- ❌ 不要用实体做 API 响应体——用 record DTO 投影，防字段泄漏与懒加载连带触发\n- ❌ 不要依赖 open-in-view 掩盖懒加载问题",
+    "after": "日期类型按语义选择：LocalDate 表示日期，Instant 表示时间点，不能不分时区需求互换。枚举存字符串便于理解，却仍需计划重命名后的旧数据迁移；存数字也要明确稳定映射，不能依赖随意调整的顺序。\n\nsaveAll 不保证自动产生高效 JDBC 批处理，效果受主键策略、驱动、批大小和 flush 行为影响。通过实际 SQL 与相同数据量的耗时验证。响应使用所需字段的 DTO，并检查关联加载，避免序列化才触发一串查询。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "08-java-revisited/reference/language-concepts/02-collections-generics.md",
+    "heading": "## ✅ 最佳实践 / ❌ 陷阱清单",
+    "original_line": 141,
+    "before": "- ✅ 集合选型默认 `ArrayList`/`HashMap`/`ArrayDeque`，有排序/并发需求再换\n- ✅ 对外暴露不可变集合（`List.copyOf`）或返回副本\n- ✅ 泛型方法优先于带通配符的签名；通配符遵循 PECS\n- ❌ 不要用 `Stack`/`Vector`/`Hashtable`（遗留类）——用 `ArrayDeque`/`ArrayList`/`HashMap`\n- ❌ 不要在不可变工厂集合里放 null\n- ❌ 不要用原始类型 `List`（raw type）——丢失全部类型检查",
+    "after": "集合先按操作选择：顺序遍历用列表、按键查询用映射、两端操作用队列；需要排序或并发再选择对应实现。List.copyOf 产生不可修改的浅层集合且拒绝 null，内部元素若可变仍可被修改。\n\n泛型让编译器检查元素契约，生产者/消费者通配符用于表达可接受范围；原始类型会削弱静态保障。替换旧同步集合前检查线程安全需求，不能把 Vector 换 ArrayList 后仍假定拥有相同并发行为。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "08-java-revisited/reference/language-concepts/04-concurrency-api.md",
+    "heading": "## ✅ 最佳实践 / ❌ 陷阱清单",
+    "original_line": 136,
+    "before": "- ✅ IO 密集 → 虚拟线程；CPU 密集 → 固定大小平台线程池\n- ✅ 共享可变状态优先交给并发集合/原子类，其次锁\n- ✅ 所有 `Future.get` 加超时\n- ❌ 不要在虚拟线程里做 CPU 长计算\n- ❌ 不要池化虚拟线程\n- ❌ 不要用 `Thread.stop`/`suspend`（已废弃且危险）——协作式中断 + `isInterrupted()`",
+    "after": "大量阻塞等待可评估虚拟线程，CPU 任务则受可用核数约束；两者都需要限制访问稀缺资源的并发。并发集合保证其声明的操作安全，不自动保证“先检查再修改”等多个步骤的业务原子性。\n\n等待应有取消或超时策略，但超时不自动停止后台任务，需要传递中断并释放资源。用两个并发调用测试同一库存不被超卖，再观察负载增加时的排队；不要依赖危险的强制停线程操作恢复状态。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "08-java-revisited/reference/language-concepts/05-records-sealed-patterns.md",
+    "heading": "## ✅ 最佳实践 / ❌ 陷阱清单",
+    "original_line": 145,
+    "before": "- ✅ 领域模型\"is-a 关系封闭\"时用 sealed（支付方式、事件类型、AST 节点）\n- ✅ 模式匹配 switch 处理 sealed 层级时省略 default，获得增量编译检查\n- ✅ record 作为方法多返回值、Map key（自带 equals/hashCode）\n- ❌ 不要把 record 当\"少写代码的 class\"用于有状态服务\n- ❌ 不要在模式守卫 `when` 中修改状态\n- ❌ 不要对非密封层级写类型模式 switch——没有穷举保证，等于高级 if-else",
+    "after": "sealed 适合已知且受控的类型集合，例如一组领域事件；新增成员时，穷尽处理能提醒相关分支更新。开放类型层级也可以使用模式匹配，但需要相应兜底，不能因无法穷尽就认定语法无用。\n\nrecord 适合数据载体，自动生成相等比较不等于内部成员深度不可变。若可变集合影响 hashCode，把 record 用作 Map key 后再修改成员可能破坏查找；采用不可变成员或复制，并测试这一边界。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "08-java-revisited/reference/library-guides/01-standard-library.md",
+    "heading": "## ✅ 最佳实践 / ❌ 陷阱清单",
+    "original_line": 156,
+    "before": "- ✅ 日期时间全部 java.time；边界处与遗留 `Date` 显式互转\n- ✅ 文件流（lines/walk）全部 try-with-resources\n- ✅ `HttpClient` 全局单例复用\n- ❌ 不要用 `SimpleDateFormat`（非线程安全）——`DateTimeFormatter` 线程安全可静态共享\n- ❌ 不要用 `double`/`float` 做钱——`BigDecimal` + 字符串构造",
+    "after": "时间 API 按时间点、日期、时区和时长区分；不要在业务中把所有时间都压成一个本地字符串。Files.lines/walk 等持有资源的流要关闭，普通内存 Stream 则不是同一种资源责任。\n\nHTTP 客户端按相同配置复用，不同代理或身份配置可有独立实例。十进制金额明确精度与舍入，BigDecimal 从字符串构造可避免先经过二进制浮点；线程间共享格式化器则检查其线程安全契约。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "08-java-revisited/reference/library-guides/02-third-party-libs.md",
+    "heading": "## ✅ 最佳实践 / ❌ 陷阱清单",
+    "original_line": 164,
+    "before": "- ✅ 新代码 DTO 优先 record；Lombok 只服务可变类与 @Builder 场景\n- ✅ Boot 项目用注入的 JsonMapper（Jackson 3），不自建\n- ✅ 测试命名表达行为；断言优先 AssertJ\n- ❌ 不要 JPA 实体上 `@Data`\n- ❌ 不要用反射式映射库（ModelMapper）处理关键字段",
+    "after": "选择库前先说明它替代哪段工作，例如序列化、映射或断言。复用框架配置的 JSON 映射器可保持日期和模块设置一致，自建实例必须显式保持同样契约。\n\nJPA 实体上的自动生成 equals/hashCode/toString 可能遍历懒加载关联或依赖可变字段，应按实体身份设计。DTO 与实体之间的关键字段映射用测试验证，包括权限字段不可被客户端覆盖；手写或生成映射都不能免除这项验证。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "08-java-revisited/testing/01-unit-testing.md",
+    "heading": "## 🎨 最佳实践",
+    "original_line": 152,
+    "before": "### ✅ 推荐\n- 一测一意：方法名/`@DisplayName` 表达业务行为而非方法名\n- 优先构造器手写依赖（简单对象），Mock 只用于\"边界\"（网络、时钟、随机）\n- 用 `assertAll` 汇报全部失败，减少\"改一个跑一次\"\n\n### ❌ 陷阱\n- 测试断言 Mock 的调用次数却不断言结果：测试了实现而非行为\n- Mock 具体实现类而非接口：脆弱且难维护\n- 在 Spring 容器里跑纯逻辑单测：`@SpringBootTest` 拖慢反馈，仅限集成层",
+    "after": "一个用例围绕一个行为，但可以有多个相关断言，例如拒绝扣款后余额不变且返回错误。简单依赖直接构造，外部时钟、网络或随机可以替换；mock 的是边界，不是被测业务本身。\n\n调用次数在防止重复发送或扣费时属于契约，其余情况优先断言结果。纯逻辑不必启动 Spring 容器；需要验证装配或注解行为时再使用对应集成环境。测试名称写出条件和预期，失败报告才能直接帮助定位。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "08-java-revisited/testing/02-integration-testing.md",
+    "heading": "## 🎨 最佳实践",
+    "original_line": 161,
+    "before": "### ✅ 推荐\n- 集成测试统一 `*IT` 后缀 + Failsafe 插件，与单元测试分离执行\n- `@ServiceConnection` 替代手工写容器连接属性\n- 关键业务流至少一条全链路 IT（HTTP → DB → MQ）\n\n### ❌ 陷阱\n- 测试里 `Thread.sleep` 等异步：用 Awaitility `await().atMost(5, SECONDS)`\n- 测试数据硬编码主键 ID：依赖自增序列初始值，迁移后全挂\n- 共享容器但每次测试不清理：用例间数据污染",
+    "after": "集成测试先声明保留哪些真实组件，例如 HTTP、事务与数据库，外部支付可用沙箱或受控替身。测试命名后缀要与构建插件配置一致，否则文件存在也可能从未执行。\n\n每条测试创建自己的数据并使用返回 id，等待异步结果时给出条件与上限。共享容器可以节省启动成本，但必须隔离数据；同一用例应能单独与整套运行都通过。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "08-java-revisited/testing/03-api-testing.md",
+    "heading": "## 🎨 最佳实践",
+    "original_line": 164,
+    "before": "### ✅ 推荐\n- MockMvc 管\"控制器单元\"，REST Assured 管\"整条链路验收\"，各司其职\n- 测试里先创建数据再断言，不依赖其他测试留下的状态\n- 把核心接口的请求/响应样例沉淀为 API 文档（配合 springdoc-openapi）\n\n### ❌ 陷阱\n- MockMvc 断言整个 JSON 字符串：字段顺序变化就挂，用 `jsonPath` 逐字段断言\n- 验收测试共享可变状态（自增 ID）：改用创建后返回的 ID\n- 只测 happy path：401/404/400 分支必须有覆盖",
+    "after": "API 测试同时检查状态码、响应契约和持久化副作用。MockMvc 可在不同上下文中测试 MVC 链，不只等于“控制器单元”；真实端口测试则补充服务器与网络集成的边界。\n\n创建后使用服务返回的 id，JSON 按字段语义断言而非依赖对象键序。为成功、无效输入、无身份和无权限分别设计用例，尤其验证失败操作没有修改数据；样例可以沉淀为接口文档但要随契约更新。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "09-nodejs-backend/basics/01-environment-setup.md",
+    "heading": "## 🎨 最佳实践",
+    "original_line": 192,
+    "before": "- **提交 `.nvmrc` / `.node-version`**（内容一行：`24`），团队与 CI 版本自动对齐\n- **用 corepack 锁定 pnpm 版本**：`packageManager` 字段保证所有人用同一包管理器\n- **`strict: true` 从第一天开启**：后补严格模式成本极高\n- **`node:` 前缀导入内置模块**：`import fs from \"node:fs\"`，明确区分内置与三方包\n\n- **全局安装项目依赖**：pnpm 严格隔离，缺依赖会在运行时报错——这恰恰是保护\n- **同时混用 npm/yarn/pnpm**：锁文件会互相冲突，选定一个写入 `packageManager`\n- **在类型剥离模式下使用 enum/装饰器**：这些语法无法被剥离，会直接报错，需要走预编译",
+    "after": "版本文件与 packageManager 字段记录工程约定，还需要开发工具和 CI 实际读取或执行这些约定；一个 major 版本号也不等于锁定所有补丁。安装后检查 Node、包管理器和 TypeScript 实际版本，依赖应在项目清单中可重建。\n\n严格类型检查能更早发现不匹配，但不提供运行时输入验证。直接运行 TypeScript 时核对运行时支持的语法范围，不能把“可剥离类型”当完整编译器。内置模块采用 node: 前缀有助于识别来源，第三方依赖则由锁文件管理。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "09-nodejs-backend/basics/02-first-server.md",
+    "heading": "## 🎨 最佳实践",
+    "original_line": 187,
+    "before": "- ✅ **开发用 `node --watch`**：Node 24 内置监听，省去 nodemon 依赖\n- ✅ **端口从 `process.env.PORT` 读取**：容器与云平台会注入该变量\n- ✅ **生产环境绝不裸跑 node**：交给 systemd / 容器编排 / PM2 等进程守护\n- ❌ **不要忽略优雅退出**：`server.close` 处理存量连接后才能真正安全下线\n- ❌ **不要在请求处理器里写同步阻塞代码**（如大文件同步读），会卡住整个事件循环",
+    "after": "服务器启动时解析并校验端口等配置，给出缺失或非法值的明确错误。开发监听用于缩短反馈，生产由部署平台或监督器管理进程生命周期；重点是退出、重启和日志行为，而不是禁止命令本身。\n\n关闭时先停止接收新请求，再等待在途工作并设置最长等待时间，最后释放资源。请求处理中的长同步计算会阻塞事件循环，用一个慢请求和一个轻请求同时测试即可观察影响。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "09-nodejs-backend/basics/03-modules-esm.md",
+    "heading": "## 🎨 最佳实践",
+    "original_line": 184,
+    "before": "- ✅ **新项目一律 ESM**：`\"type\": \"module\"` + `.js` 全扩展名\n- ✅ **内置模块加 `node:` 前缀**：区分来源且未来兼容性更好\n- ✅ **发布库必写 `exports`**：显式控制 API 面，双格式（import/require）双构建\n- ❌ **不要在 ESM 里用 `__dirname`**：改用 `import.meta.dirname`（Node 20.11+ 稳定）\n- ❌ **不要在 ESM 文件里调用 `require`**：作用域中不存在，需用 `createRequire` 桥接",
+    "after": "模块格式按运行环境和依赖契约选择，ESM 与 CommonJS 互操作仍有边界。原生 Node ESM 的相对导入通常需要明确扩展名，TypeScript 构建工具又可能有不同解析规则，需区分源码与运行产物。\n\nexports 可限定包的公共入口，但仅在承诺支持两种消费方式时才需要相应双格式设计。ESM 中没有传统的 require/__dirname 绑定，使用适用版本的 import.meta 能力或标准桥接方式。编写一个真实消费者验证公开入口，避免只在库自己的目录里能导入。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "09-nodejs-backend/basics/04-async-promises.md",
+    "heading": "## 🎨 最佳实践",
+    "original_line": 197,
+    "before": "- ✅ **async 函数内必须处理错误**：要么 try/catch 要么向上抛，禁止吞掉\n- ✅ **独立任务用 `Promise.all` 并行**：有依赖、限速或事务顺序的操作应保留串行，独立且资源允许的操作才并发\n- ✅ **所有出站请求加 `AbortSignal.timeout`**：没有超时的请求是事故温床\n- ❌ **不要用 `new Promise` 包装已返回 Promise 的函数**（Promise 反模式）\n- ❌ **不要在热路径回调里做 CPU 重活**：会阻塞事件循环，依据测得的延迟预算决定是否使用 Worker Threads（见 [07-streams-workers](./07-streams-workers.md)）",
+    "after": "async 函数可以把失败传播给调用方，不需要每一层重复 try/catch；只有能恢复、补充上下文或转换边界语义时再捕获。独立任务可以并发，但仍要控制并发量、超时与取消，Promise.all 拒绝并不会自动取消其他任务。\n\n已经返回 Promise 的函数通常直接 await 即可；回调 API 才可能需要包装。CPU 重活是否交给 worker 由任务成本、传输开销和延迟预算共同决定，不设通用毫秒门槛。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "09-nodejs-backend/basics/05-http-routing.md",
+    "heading": "## 🎨 最佳实践",
+    "original_line": 193,
+    "before": "- ✅ **子应用按资源拆分**：单文件路由超过 ~150 行就该拆了\n- ✅ **校验失败返回 400/422 + 结构化 issues**：让前端能精确提示字段错误\n- ✅ **Zod schema 放在离使用处最近的位置**并可复用推导类型\n- ❌ **不要信任 `c.req.json()`/`c.req.query()`/`c.req.param()`**：全部来自客户端，必须校验\n- ❌ **不要在业务处理函数里做认证**：横切关注点交给中间件",
+    "after": "路由按资源或业务边界组织，读请求、校验、调用服务和写响应各有明确责任，不用文件超过某行数就强制拆分。客户端的 JSON、路径和查询参数都属于待验证输入，转换成功还要检查范围及业务合法性。\n\n中间件适合提取和验证身份，但“当前用户能否修改这条记录”的授权通常还涉及业务数据。统一字段错误响应让前端能定位输入问题；用非法参数、无身份、跨用户和成功请求分别验收。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "09-nodejs-backend/basics/06-error-handling.md",
+    "heading": "## 🎨 最佳实践",
+    "original_line": 207,
+    "before": "- ✅ **错误出口只有一个：`app.onError`**，全站统一格式\n- ✅ **用 `Error cause` 链包装底层错误**，日志里保留根因\n- ✅ **生产 5xx 响应不回传堆栈**，细节进日志\n- ❌ **不要 `catch (err) {}` 静默吞错**——这是线上事故第一来源\n- ❌ **不要把程序员错误当操作性错误处理**：捕获 Bug 继续跑比崩溃更危险",
+    "after": "在应用边界统一错误响应形状，业务内部保留可区分的原因。能恢复的操作在局部处理，未知错误交给边界兜底；“统一出口”不意味着所有代码只能有一个 catch。\n\ncause 链帮助保留底层原因，日志经过脱敏后记录上下文，客户端只得到安全消息。对无法保证继续运行正确的进程状态制定退出与监督重启策略，但不能把普通请求异常都当作必须崩溃。测试错误发生后是否返回预期状态且没有留下部分写入。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "09-nodejs-backend/basics/07-streams-workers.md",
+    "heading": "## 🎨 最佳实践",
+    "original_line": 196,
+    "before": "- ✅ **一律 `pipeline`，禁用裸 `pipe`**：错误处理与清理自动完成\n- ✅ **HTTP 上传/下载走流**：`req`/`res` 本身就是流，别用 buffer 中转\n- ✅ **CPU 任务先测量再优化**：`console.time` 或 `perf_hooks` 确认超过 ~10ms 才值得上 worker\n- ❌ **不要在 worker 里访问主线程对象**：线程间只有消息传递\n- ❌ **不要用 cluster 解决 CPU 瓶颈**：每个子进程照样有自己阻塞的事件循环",
+    "after": "流适合数据较大或持续到达的场景，背压让上游配合下游消费速度。pipeline 常能统一传递错误和清理，手工 pipe 则需要自己承担这些责任；小而有明确上限的载荷可以缓冲，不必机械禁止 Buffer。\n\nworker 适合部分 CPU 工作，消息传递有复制或转移成本，也可使用受约束的共享内存。多进程能分担独立请求的计算，但单个进程中的长任务仍会影响该进程；选择方案后用相同输入和并发复测，不以固定 10ms 判断。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "09-nodejs-backend/basics/08-first-project.md",
+    "heading": "## 🎨 最佳实践",
+    "original_line": 275,
+    "before": "- ✅ **app 与 serve 分离**：`app.request()` 直接注入请求，测试零端口开销\n- ✅ **查询串用 `z.coerce`**：`c.req.query()` 的值全是字符串\n- ✅ **Prisma 错误映射为 4xx**：onError 按 `err.code` 前缀 `P` 转换（P2002→409、P2025→404）\n- ❌ **不要跳过 migrate 直接 `db push` 上生产**：迁移文件是数据库变更的历史依据",
+    "after": "应用路由与监听端口分离后，可以在测试中注入请求检查 HTTP 行为，再用少量真实端口测试覆盖服务器集成。查询参数转换后仍要验证上下限，例如空字符串被转成 0 是否符合分页规则。\n\n数据库错误只按已识别语义映射，例如唯一约束冲突可以对应冲突响应；不能把所有带 P 前缀的 Prisma 错误都变成客户端 4xx，连接和内部故障仍需服务端处理。数据库结构通过可审阅迁移演进，发布前验证旧数据兼容。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "09-nodejs-backend/deployment/01-docker-deployment.md",
+    "heading": "## ✅ 最佳实践与陷阱",
+    "original_line": 157,
+    "before": "- ✅ 先 COPY 依赖清单再 `pnpm install`——源码改动不触发依赖重装\n- ✅ `--frozen-lockfile` 锁定依赖树，保证可复现构建\n- ❌ 在 Dockerfile 里 `COPY . .` 到 deps 阶段——任何文件改动都打碎缓存\n- ❌ 用 `latest` 基础镜像——用 `node:24-alpine` 明确锁定",
+    "after": "把依赖清单与锁文件先复制进构建阶段，使只改业务源码时有机会复用依赖层；后续指令与安装脚本仍可能影响缓存和产物。冻结锁文件固定依赖解析，但运行时、平台和外部下载也属于复现条件。\n\nnode:24-alpine 仍是可移动标签，不是精确不可变锁定；需要严格追溯时记录镜像摘要，并维护安全更新流程。检查 native addon 与目标 libc/架构兼容性，不能只因为镜像小就选择 Alpine。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "09-nodejs-backend/deployment/02-ci-cd-pipelines.md",
+    "heading": "## ✅ 最佳实践与陷阱",
+    "original_line": 185,
+    "before": "- ✅ `--frozen-lockfile` 是 CI 的纪律：锁文件与 package.json 不同步直接失败\n- ✅ 三个 job 并行，最慢的集成测试不阻塞 lint 反馈\n- ❌ 把部署密钥塞进 PR 流程——PR 可被 fork 触发，密钥只进 release\n- ❌ 用 `npm install` 替代 `pnpm install --frozen-lockfile`——依赖树漂移，构建不可复现",
+    "after": "CI 安装与本地使用相同包管理器，锁文件不一致时明确失败；lint、类型检查和测试可以在无依赖关系时并行，但部署必须使用通过全部必要检查的同一产物。\n\n不可信 PR 的检查任务不应获得生产凭据。将发布权限限制到可信分支或受控流程，并验证失败的测试确实会阻止发布；仅拆成多个 job 不自动形成正确门禁。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "09-nodejs-backend/deployment/03-observability.md",
+    "heading": "## ✅ 最佳实践与陷阱",
+    "original_line": 172,
+    "before": "- ✅ 日志写 stdout，由采集器（Loki/ELK）接管——容器时代不要自己写日志文件\n- ✅ 每个 handler 用 `c.get('log')`，让 requestId 自动贯穿\n- ❌ `console.log(obj)` 打印大对象——热路径上的同步序列化会拖慢事件循环（见 [`../advanced-topics/performance/01-event-loop.md`](../advanced-topics/performance/01-event-loop.md)）\n- ❌ 日志里记录完整 token/身份证号——`redact` 必须在上线前配置",
+    "after": "结构化日志记录请求身份标识、操作和错误上下文，方便从一次失败追到具体处理步骤；中间件先建立日志上下文，handler 才能正确取得它。容器场景常写 stdout 交采集器处理，其他部署也可以采用受管理文件输出。\n\n日志需要体积、级别与敏感字段控制，大对象序列化可能占用事件循环。用一次失败请求确认日志足够定位且不含令牌，采集故障时也不应无限堆积内存。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "09-nodejs-backend/frameworks/01-hono-basics.md",
+    "heading": "## ✅ 最佳实践与陷阱",
+    "original_line": 190,
+    "before": "- ✅ app 与 server 分离文件，测试可 `import app` 并用内置 `app.request()`，不占端口\n- ✅ 路由文件只做\"接请求、调服务、返响应\"，业务逻辑下沉到 service 层（见 [`../advanced-topics/architecture/01-service-architecture.md`](../advanced-topics/architecture/01-service-architecture.md)）\n- ❌ 中间件里忘记 `await next()` 导致请求悬挂\n- ❌ 在 `await next()` 之前就想读 `c.res`——响应此时还没生成；修改响应头/状态必须放在 `next()` 之后\n- ❌ 把 `@hono/node-server` 当成\"另一个 Web 框架\"——它只是运行时适配器，业务代码永远只依赖 `hono` 主包",
+    "after": "app 与运行适配器分开，路由测试可以直接调用请求入口；依赖 Node 特有资源的功能仍需相应运行环境测试，不能声称业务永远只依赖框架主包。\n\n中间件应明确选择继续执行并等待 next，或直接返回响应。需要观察最终响应的逻辑放在下游完成后，设置某些响应头则可以按框架约定提前声明，不是所有修改都只能在 next 之后。通过日志记录前后顺序并测试提前拒绝分支。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "09-nodejs-backend/frameworks/02-hono-advanced.md",
+    "heading": "## ✅ 最佳实践与陷阱",
+    "original_line": 225,
+    "before": "- ✅ 错误处理只有 `app.onError` 一个出口；中间件里直接 `throw`，不要 `try/catch` 后吞错\n- ✅ 用户上传文件一律重命名，禁止拼接原始文件名（路径穿越风险）\n- ❌ `jwt({ secret })` 漏写 `alg`——注册时即抛 `JWT auth middleware requires options for \"alg\"`，该选项必填且应与 `verify()` 的第三参一致（如 `'HS256'`）\n- ❌ 在 `await next()` 之前抛错会让洋葱\"内侧\"的中间件全部跳过——需要清理逻辑时用 `try/finally` 包住 `next()`\n- ❌ 把 JWT 密钥硬编码——应走环境变量（密钥管理见 [`../advanced-topics/security/01-security-practices.md`](../advanced-topics/security/01-security-practices.md)）",
+    "after": "认证中间件验证令牌算法、签名和相关声明，授权仍要检查目标资源。算法配置遵循所安装版本的明确契约，并用过期、错误签名和错误受众的测试验证；环境变量只是传递秘密的渠道，还需要访问与轮换管理。\n\n上传文件的存储 key 由服务端生成，原文件名只作为经验证的元数据，不直接拼接路径。资源清理覆盖成功、拒绝和异常路径，finally 能表达自己的清理责任；不要捕获后吞掉错误让请求看似成功。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "09-nodejs-backend/frameworks/03-ecosystem-integration.md",
+    "heading": "## ✅ 最佳实践与陷阱",
+    "original_line": 202,
+    "before": "- ✅ `prisma migrate deploy` 用于生产，`migrate dev` 只在开发使用\n- ✅ 缓存写路径\"更新后失效\"而非\"更新缓存\"，避免并发写不一致\n- ❌ 每次请求 `new PrismaClient()`——连接池迅速耗尽（症状见 [`../reference/quick-references/02-troubleshooting.md`](../reference/quick-references/02-troubleshooting.md)）\n- ❌ 把 Redis 当强一致存储：TTL 内读到旧数据是特性不是 Bug",
+    "after": "数据库客户端按其生命周期复用，避免每次请求创建新连接池；不同租户或环境的隔离需求另行设计。迁移在受控发布步骤执行，失败时停止后续依赖新结构的部署。\n\n缓存中的旧数据通常来自应用缓存协议，而不是 Redis 天生只能弱一致。删除缓存与更新缓存各有竞态，先明确写入顺序、失效策略和可接受延迟，再测试并发读写。TTL 只能限制部分旧值持续时间，不能独自证明一致性。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "09-nodejs-backend/frameworks/04-devtools.md",
+    "heading": "## ✅ 最佳实践与陷阱",
+    "original_line": 158,
+    "before": "- ✅ 把 `check`（typecheck + lint）挂到 CI，本地依赖编辑器集成\n- ✅ `engines.node` 锁定 24 LTS（当前 Active LTS；22 已进入 Maintenance，新项目不要选），配合 `.npmrc` 的 `engine-strict=true`\n- ❌ 用 `ts-node`——维护停滞且慢，新项目一律 tsx\n- ❌ ESLint 与 Prettier 各自管理格式导致互相打架——加 `eslint-config-prettier`",
+    "after": "先确认工具各负责哪件事：编译或类型检查验证静态契约，lint 检查配置规则，格式化统一文本。若多个工具修改相同格式，需协调配置并让本地与 CI 使用一致命令。\n\n运行时与 TS 执行器依据维护政策、工程兼容性和构建需求选择，不以“一律禁用某工具”替代比较。engines 字段是否强制取决于安装器配置；用干净环境执行一次安装、检查和启动，才能确认版本约定真正生效。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "09-nodejs-backend/projects/03-file-storage-service.md",
+    "heading": "## ✅ 最佳实践与陷阱",
+    "original_line": 193,
+    "before": "- ✅ 对象 key 始终服务端生成（随机 UUID + 日期前缀），永不信任客户端文件名\n- ✅ 预签名 URL 短时效，过期自动失效\n- ❌ 用 `Buffer` 整读大文件再转存——内存峰值等于文件大小，改用流式（背压见 [`../reference/language-concepts/04-streams-api.md`](../reference/language-concepts/04-streams-api.md)）\n- ❌ 把 MinIO 内网 endpoint 直接暴露给公网客户端",
+    "after": "文件上传先校验用户对目标位置的权限，服务端生成对象 key，并限制允许的类型与大小。预签名 URL 在有效期内是一种访问能力，应限定对象、操作和时限，不能在签发后就忽略泄漏风险。\n\n大文件采用有背压的流式传输，客户端中断或下游失败时清理未完成对象。给外部客户端的下载地址必须可达且符合访问策略，不能直接假定内部服务 endpoint 可用。测试超限、重名、过期和中断，而不只检查小文件上传成功。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "09-nodejs-backend/testing/01-unit-testing.md",
+    "heading": "## ✅ 最佳实践与陷阱",
+    "original_line": 163,
+    "before": "- ✅ 测试命名描述行为（\"分页参数正确换算\"）而非函数名\n- ✅ `beforeEach` 里 `clearAllMocks`，用例之间零耦合\n- ❌ Mock 了被测对象本身——只 Mock 依赖边界\n- ❌ 追求 100% 覆盖率：70-80% 且断言有效，远胜注水刷满",
+    "after": "测试断言参数如何变成结果，例如分页输入被正确校验与换算。mock 清理要区分调用历史、实现和恢复原函数，clearAllMocks 不会替你清理数据库、全局状态或所有实现。\n\n覆盖率用于发现未触及的代码，不设通用 70–80% 合格线；高风险分支仍应有有效断言。让一个故意的业务错误能使测试失败，比为了数字执行更多无断言代码有意义。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "09-nodejs-backend/testing/02-integration-testing.md",
+    "heading": "## ✅ 最佳实践与陷阱",
+    "original_line": 199,
+    "before": "- ✅ 集成测试断言**状态码 + 响应结构**，避免断言易变的具体文案\n- ✅ 播种用 `createMany` 直写库，验证走 API\n- ❌ 在集成测试里 Mock 数据库——那只是昂贵的单元测试\n- ❌ 用例间依赖执行顺序——每个用例必须能单独 `vitest run -t` 通过",
+    "after": "先写明集成范围：验证路由与服务可以替换数据库，验证事务与查询就需要真实数据库语义。不能只凭用了 mock 判定测试名称，而应明确哪些缺陷本测试有能力发现。\n\n每条用例建立独立数据并通过 API 验证状态码、契约字段与持久化效果。业务规定的错误码或文案也可以断言，避免不必要依赖文本排版即可。换序和单独运行都应得到相同结果。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "09-nodejs-backend/testing/03-e2e-api-testing.md",
+    "heading": "## ✅ 最佳实践与陷阱",
+    "original_line": 164,
+    "before": "- ✅ E2E 断言\"旅程能走通\"，不做逐字段校验\n- ✅ 用生产 Dockerfile 起 app 服务，E2E 顺带验证镜像\n- ❌ 把 30 个接口的参数组合都塞进 E2E——那是集成测试的活\n- ❌ E2E 失败后不保留日志直接重跑——先看 `docker compose logs app` 定位",
+    "after": "端到端测试通过真实运行入口完成业务旅程，关键字段如创建后的 id、金额或权限结果仍必须验证，不能因“只测旅程”而省掉契约断言。底层组合边界留给更快的测试，减少重复成本。\n\n使用接近发布的构建产物并隔离测试数据，失败保留服务日志、请求信息和产物版本。先定位失败，再决定重试；否则暂时变绿可能掩盖竞态。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "10-python-discovery/basics/01-environment-setup.md",
+    "heading": "## ✅ 最佳实践",
+    "original_line": 207,
+    "before": "- ✅ **每个项目一个虚拟环境**：uv 会在 `uv add` 时自动创建 `.venv`\n- ✅ **提交 pyproject.toml 与 uv.lock**，忽略 `.venv/`（写入 .gitignore）\n- ✅ **工具统一走 `uv run`**：保证 `ruff`、`pytest` 等使用项目环境\n- ❌ **避免**：在系统解释器上 `pip install`；把 `.venv` 提交进 git\n- 💡 **技巧**：`uvx <tool>` 可免安装直接运行工具，如 `uvx ruff check .`",
+    "after": "为项目建立独立环境并记录解释器和依赖约定，避免一个项目升级库影响另一个。锁文件与项目清单可以提交，虚拟环境目录属于可重建产物，不应入库。\n\nuv run 让命令使用项目环境，uvx 通常使用隔离工具环境且可能需要下载，并非“无需安装即可获得任意工具”。CI 要按锁文件和约定版本重建，再实际执行测试，不能只检查文件存在。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "10-python-discovery/basics/02-first-script.md",
+    "heading": "## ✅ 最佳实践",
+    "original_line": 169,
+    "before": "- ✅ **入口统一命名为 `main()`** 并返回退出码\n- ✅ **`if __name__ == \"__main__\"` 里用 `raise SystemExit(main())`**，退出码可测试\n- ✅ **为函数写 docstring**（第一行一句话即可）\n- ❌ **避免**：模块顶层写副作用代码（读文件、发请求）\n- ❌ **避免**：`if __name__ == \"__main__\"` 里堆业务逻辑\n- 💡 **技巧**：`uv run python -i hello.py` 脚本跑完后进入 REPL，可接着调用其中函数",
+    "after": "把可复用逻辑放函数中，入口负责解析参数、调用和返回退出码。__main__ 判断避免模块被导入时就执行命令；main 是约定名称，不是解释器要求。\n\ndocstring 说明输入约束、结果和可能失败之处，避免复述函数名。用导入测试确认没有意外读写，再分别验证正常执行与失败时的退出状态，便于脚本和 CI 可靠调用。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "10-python-discovery/basics/03-variables-types.md",
+    "heading": "## ✅ 最佳实践",
+    "original_line": 204,
+    "before": "- ✅ **公共函数必写类型注解**，内部变量酌情省略\n- ✅ **f-string 统一格式化**，禁用 `%` 与 `.format()` 混用\n- ✅ **判空用真值语义**，`x == None` 改为 `x is None`\n- ❌ **避免**：依赖 `bool` 是 `int` 子类的副作用做算术\n- ❌ **避免**：对浮点数用 `==` 比较，改用 `math.isclose(a, b)`\n- 💡 **技巧**：`type(x)` 查确切类型，`isinstance(x, int)` 做类型判断（兼容子类）",
+    "after": "类型注解描述预期契约，运行时仍可收到不符合约定的值。判断“缺失”用 is None，判断“为空”可用相应长度或真值；0、空串与 None 不能因都为假就无条件视为同一业务情况。\n\n浮点近似比较要设置符合场景的相对或绝对容差，精确可表示值与特定协议也可能需要精确比较。f-string、format 和日志的延迟格式化各有用途，不必统一禁用。练习分别输入 None、0 和空串，确认不会误用默认值。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "10-python-discovery/basics/04-functions-oop.md",
+    "heading": "## ✅ 最佳实践",
+    "original_line": 206,
+    "before": "- ✅ **数据类一律 dataclass**，手写 `__init__` 仅在行为复杂时\n- ✅ **可变默认值用 `field(default_factory=list)`** 或 `None` 哨兵\n- ✅ **总实现 `__repr__`**（dataclass 自动生成），调试效率翻倍\n- ❌ **避免**：写 Java 式 getter/setter——Python 用 `@property` 或直接暴露属性\n- 💡 **技巧**：`dataclasses.asdict(bm)` 一键转字典，配合 json 序列化",
+    "after": "dataclass 减少数据载体的初始化和比较样板，复杂不变量或不同身份语义可能需要普通类。函数的可变默认参数在定义时创建，dataclass 的可变字段通常用 default_factory 为每个实例生成独立对象。\n\nrepr 帮助调试，但不要把秘密字段直接展示；asdict 的递归转换也不保证任意成员都能被 JSON 序列化。创建两个实例只修改其中一个的列表，验证没有共享默认状态。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "10-python-discovery/basics/05-control-flow.md",
+    "heading": "## ✅ 最佳实践",
+    "original_line": 191,
+    "before": "- ✅ **遍历优先 `enumerate`/`zip`/`.items()`**，禁止 `for i in range(len(lst))` 取元素\n- ✅ **简单映射过滤用推导式**，复杂逻辑用循环\n- ✅ **大集合聚合用生成器表达式**，避免中间列表\n- ❌ **避免**：在推导式里有副作用（打印、修改外部变量）\n- ❌ **避免**：嵌套推导式超过两层\n- 💡 **技巧**：`for-else` + `break` 替代\"搜索成功标志位\"变量",
+    "after": "需要索引和值时用 enumerate，需要键值时用 items，可使循环目的更明显；确实要按位置修改或访问邻居时，索引循环仍然合理。推导式适合短的变换，复杂条件和副作用用普通循环更易追踪。\n\n生成器避免提前保存所有中间项，但只消费一次且最终聚合仍可能需要内存。for-else 表示循环未被 break 终止，不是“循环条件为假才开始执行”。用找到、未找到和空输入三个例子验证理解。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "10-python-discovery/basics/06-exceptions.md",
+    "heading": "## ✅ 最佳实践",
+    "original_line": 204,
+    "before": "- ✅ **try 块只包一行**可能出错的语句，成功逻辑放 else\n- ✅ **异常信息带上下文**：`raise ValueError(f\"非法数字: {text!r}\")`\n- ✅ **资源管理一律 with**，不手写 close\n- ❌ **避免**：`except Exception: pass` 静默吞异常\n- ❌ **避免**：用异常做常规流程控制（如循环里靠 IndexError 停止）\n- 💡 **技巧**：`except (A, B) as e` 元组捕获多类异常；`logging.exception` 自动记录栈",
+    "after": "try 的范围应覆盖同一个需要处理的失败操作，而非机械限制成一行；范围过大会把后续无关错误误当作同一种输入问题。捕获尽可能明确的类型，补上下文后保留原因，或交给能够处理它的上层。\n\n支持上下文管理协议的资源优先用 with，其他资源仍需按契约关闭。Python 中异常有时就是正常协议的一部分，如迭代结束，不应一概禁止；关键是不要吞掉未知错误或靠异常掩盖本来可清楚表达的控制流。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "10-python-discovery/basics/07-advanced-features.md",
+    "heading": "## ✅ 最佳实践",
+    "original_line": 234,
+    "before": "- ✅ **装饰器必配 `@wraps`**，参数化装饰器三层结构记牢\n- ✅ **大数据流用生成器**，聚合终止函数（sum/join）配生成器表达式\n- ✅ **公开 API 优先 Protocol** 而非抽象基类，耦合更低\n- ❌ **避免**：把生成器对象存起来跨函数复用（一次性耗尽）；事件循环里混入阻塞调用",
+    "after": "包装函数时 wraps 保留名称、文档和 wrapped 等元数据，有利于调试与工具检查，但不会自动保持全部运行行为。参数化装饰器常见嵌套工厂结构，不应只背层数而不理解每层何时执行。\n\n生成器可作为明确的单次数据流传递，消费完不能无声地当可重复集合使用。Protocol 适合结构化接口，抽象基类也有名义约束和共享行为用途；异步程序同时检查阻塞调用是否占住事件循环。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "10-python-discovery/basics/08-first-project.md",
+    "heading": "## ✅ 最佳实践",
+    "original_line": 209,
+    "before": "- ✅ **三层分离**：models/storage/cli 各司其职，存储可替换\n- ✅ **退出码语义化**：成功 0、业务失败 1、参数错误由 typer 处理\n- ✅ **用户输出与日志分离**：rich 面向人，异常栈面向调试\n- ❌ **避免**：把业务逻辑写进命令函数（保持\"命令=编排\"）；路径集中到 `storage.STORE_PATH` 常量",
+    "after": "命令入口解析输入，业务函数决定哪些操作允许，存储层负责持久化和错误传播；这些责任可以先在少量文件中表达，不必按目录数衡量架构。数据路径由配置或参数提供，测试使用临时路径，避免修改用户真实文件。\n\n人类提示与机器输出分开，成功和失败退出码明确。用损坏 JSON、不存在目录和重复记录测试失败后的文件状态，再验证重新启动能读取成功保存的数据。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "10-python-discovery/deployment/03-observability.md",
+    "heading": "## ✅ 最佳实践",
+    "original_line": 145,
+    "before": "- 日志先于告警：每条日志想清楚\"半夜排障的我需要什么信息\"\n- 指标看趋势、日志查个案、Sentry 定根因——三者应能互相跳转\n- 采样率与保留期控制成本，不必全量上报",
+    "after": "先选一个失败旅程，确保能从请求标识找到相关日志、错误与耗时。指标适合观察分布和趋势，日志保留个案上下文，错误平台帮助聚合；任何工具都不会自动给出根因。\n\n上报数据先脱敏，设置采样与保留期。告警描述用户影响及下一步排查，验证采集服务故障不会阻塞主业务或无限积压。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "10-python-discovery/frameworks/01-fastapi-basics.md",
+    "heading": "## ✅ 最佳实践",
+    "original_line": 144,
+    "before": "- **同步端点用 `def`**：FastAPI 会放进线程池，兼容阻塞库；`async def` 里不要混用阻塞调用（深入见[异步并发模型](../advanced-topics/performance/01-async-python.md)）\n- 入参/出参模型分开设（`TodoCreate` / `TodoRead`），避免字段随意外泄\n- 状态码用 `status` 常量而非魔法数字",
+    "after": "同步端点可通过框架的线程池运行阻塞代码，async 端点则应等待可异步的操作；随意把同步库调用放进 async 函数并不会自动变非阻塞。线程池同样有容量与排队成本，应在实际负载下观察。\n\n输入模型只允许客户端应填写的字段，输出模型只暴露需要返回的字段，防止数据库内部属性意外泄漏。校验成功还不代表有权操作资源，用跨用户访问和非法输入验证服务端边界。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "10-python-discovery/frameworks/02-fastapi-advanced.md",
+    "heading": "## ✅ 最佳实践",
+    "original_line": 173,
+    "before": "- 业务逻辑别写进端点：用依赖注入服务函数，保持端点薄（架构原理见[项目分层与领域建模](../advanced-topics/architecture/01-project-architecture.md)）\n- 全局异常处理器只兜底未知异常，业务错误统一走 `HTTPException`\n- 中间件保持轻量：重逻辑交给依赖，避免每个请求的额外开销",
+    "after": "依赖注入把数据库会话、身份或服务交给端点使用，便于替换与测试；业务层可抛领域异常，由 HTTP 边界统一映射，不必把所有业务代码绑定到 HTTPException。\n\n中间件适合请求级通用工作，依赖适合按路由需求装配；把重计算移到依赖并不会让它免费。验证未知错误、安全响应和资源清理路径，确保测试替换只发生在预期边界。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "10-python-discovery/frameworks/03-ecosystem-integration.md",
+    "heading": "## ✅ 最佳实践",
+    "original_line": 191,
+    "before": "- 查询只取需要的列，列表接口强制 limit/offset\n- N+1 查询用 `selectinload` 预加载关系（剖析定位见[性能剖析](../advanced-topics/performance/02-profiling-optimization.md)）\n- 迁移文件随代码进仓库，`upgrade head` 必须可重复执行",
+    "after": "列表查询先约定分页方式和上限，offset 与游标各有适用场景，不能无条件强制同一种。遇到 N+1 时记录实际 SQL 与访问关系，选择 selectinload、join 等加载策略并比较结果数量和查询成本。\n\n迁移记录随代码管理，验证空库创建和旧版本数据升级。upgrade head 再运行通常不应重复应用已记录迁移，但这不等于每条迁移 SQL 天然可随意重放；失败恢复需要具体方案。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "10-python-discovery/frameworks/04-devtools.md",
+    "heading": "## ✅ 最佳实践",
+    "original_line": 135,
+    "before": "- 运行时依赖与开发依赖分离：pytest/ruff/mypy 一律进 `--dev` 组\n- ruff + mypy 进 pre-commit 与 CI（流水线配置见[CI/CD](../deployment/02-ci-cd-pipelines.md)）\n- 复杂问题排查套路：REPL 复现 → 最小代码 → 写成 pytest 回归（见[单元测试](../testing/01-unit-testing.md)）",
+    "after": "将发布运行需要的依赖与仅开发检查的工具区分，保证生产构建仍包含实际需要的模块。lint、类型检查与测试各验证不同问题，pre-commit 提供快速反馈，CI 负责检查受版本控制的结果。\n\n复杂错误先缩小到可重现输入，再将确认的行为写成回归测试。保留原失败条件，修复后验证它变绿，而不是只更新快照接受新输出。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "10-python-discovery/testing/01-unit-testing.md",
+    "heading": "## ✅ 最佳实践",
+    "original_line": 141,
+    "before": "- 测试名描述行为：`test_expired_token_returns_401`，而非 `test_3`\n- 单元测试不碰网络/数据库——外部依赖交给 [Mock 测试](./03-mocking-testing.md)\n- 每修一个 bug，先写复现测试再修复，让回归永久留下\n- 测试代码同样过 ruff（CI 门禁见[CI/CD](../deployment/02-ci-cd-pipelines.md)）",
+    "after": "为业务规则写可理解的测试名，并用独立数据验证正常、边界和失败行为。网络与时间可用受控依赖；需要验证真实数据库或协议时，应另设相应集成测试，不靠 mock 证明未执行的部分。\n\n修复 bug 时尽可能先记录能复现的失败测试，检查修复后通过且相关行为不退化。覆盖率与风格检查提供线索，但真正标准是错误行为会被断言发现。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "10-python-discovery/testing/03-mocking-testing.md",
+    "heading": "## ✅ 最佳实践",
+    "original_line": 137,
+    "before": "- 先验证交互（`assert_called_once_with`），再验证返回值被正确使用\n- Mock 返回值要贴近真实形状，否则测试通过、线上报错\n- FastAPI 里优先考虑 `app.dependency_overrides`——它替换整层依赖，比 patch 更贴近真实行为（见[集成测试](./02-integration-testing.md)）\n- 不确定是否该 mock 时问一句：这个依赖会让测试变慢、不稳定或有真实副作用吗？",
+    "after": "先明确依赖契约再替换：输入什么，可能返回哪些形状，什么时候抛错。断言返回结果或副作用，再在“必须恰好调用一次”属于业务承诺时检查调用次数，避免只演练 mock 脚本。\n\nFastAPI 的 dependency_overrides 可替换依赖，但测试结束要恢复，防止污染其他用例。patch 则要作用在被测代码实际查找名称的位置。为替身加入一次失败返回，确认被测逻辑确实处理它。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "11-rust-cross-platform/advanced-topics/01-memory-layout-performance.md",
+    "heading": "## 🎨 最佳实践",
+    "original_line": 266,
+    "before": "### ✅ 推荐做法\n\n- **热点结构先量再改**: `size_of` 一行命令就能证伪「我觉得它很大」的直觉\n- **减少堆跳转优先于减少字节数**: 缓存未命中的代价通常远超 padding 损失；`Vec<T>` 换 `Box<[T]>` 能省掉容量字段，但先确认它真是热点\n- **写时克隆用 `Cow`**: 参数与返回值「多数不改、偶尔要改」的 API 是 `Cow` 的标准应用面\n\n### ❌ 避免陷阱\n\n- **把 repr(Rust) 的布局写进二进制协议**: 字段顺序与大小随编译器版本都可能变——跨界一律 `repr(C)`\n- **`#[repr(packed)]` 后直接取字段引用**: 未对齐引用是未定义行为，packed 结构体内字段一律按字节拷贝访问\n- **在 debug 构建下下性能结论**: 所有本篇的耗时数字都来自 `-O`；debug 数字只反映解释器般的执行形态",
+    "after": "size_of 测量类型本身的存储大小，不包含 Vec/String 指向的全部堆分配。定位热点后同时考虑访问局部性、分配次数和实际数据规模，不能只以少几个字节判断整体更快。\n\nrepr(C) 适合需要约定 C 布局的边界，但不自动成为跨平台二进制协议：字节序、指针、填充和尺寸仍需明确。packed 字段可能未对齐，访问方式必须满足对齐规则。用发布构建和相同输入测量，debug 仍是编译后的机器码，不能称为解释器执行。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "11-rust-cross-platform/advanced-topics/02-ffi-bindgen.md",
+    "heading": "## 🎨 最佳实践",
+    "original_line": 253,
+    "before": "### ✅ 推荐做法\n\n- **边界函数「薄」**: 导出层只做类型转换与错误码映射，业务逻辑留在安全 Rust 内部（可单元测试）\n- **成对设计 API**: `xxx_new`/`xxx_free`、`into_raw`/`from_raw`——谁分配谁释放，分配器不跨边\n- **错误码 + 空指针表达失败**: 用 `NULL`、非零错误码、out 参数；不要指望 C 理解 `Result`\n\n### ❌ 避免陷阱\n\n- **让 C 直接 `free()` Rust 分配的内存**: 分配器可能不同（不同堆实现、不同调试钩子），释放必须回到 Rust 提供的 `_free` 函数\n- **裸 `no_mangle` / 裸 extern 块（edition 2024）**: 编译不过不是刁难，而是提醒你这两处本来就属高危，显式认领\n- **panic 直接穿出边界**: 进程 abort；每一条可能 panic 的跨界路径都要 `catch_unwind` + 错误码",
+    "after": "FFI 接口声明指针指向什么、长度是多少、谁拥有内存、由谁释放以及失败如何表示。把边界转换与安全 Rust 业务分开，测试可以分别验证正常输入和错误契约。\n\npanic 是否允许跨边界与 ABI 和 panic 策略有关；catch_unwind 只能捕获展开式 panic，不能恢复 abort，也不能修复无效指针造成的未定义行为。向 C 提供明确释放函数，不让它猜 Rust 的分配方式。edition 2024 的 unsafe 声明应与相应证明一起阅读，而不是为通过编译盲加标记。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "11-rust-cross-platform/advanced-topics/03-wasm32-target.md",
+    "heading": "## 🎨 最佳实践",
+    "original_line": 226,
+    "before": "### ✅ 推荐做法\n\n- **核心逻辑做成纯 Rust 库，wasm 壳单独一个 crate**: 同一套逻辑还能出 CLI/cdylib 形态（本模块多端复用的关键）\n- **粗粒度跨界**: 一次传一批数据/一次算一大段，摊薄桥接与拷贝成本\n- **用 `.d.ts` 当契约**: 前端 TS 工程直接享受 Rust 类型推论，重构时两边的断点一致\n\n### ❌ 避免陷阱\n\n- **把 std::net/std::fs 相关代码编进来**: unknown-unknown 下链接期就报错；IO 永远走宿主能力（web-sys/WASI）\n- **逐元素循环跨界传数组**: 千万级数据逐个 JS↔Rust 调用会慢到失去意义；走线性内存批量视图\n- **无 release 直接发 `.wasm`**: debug 产物可能大一个数量级且慢数倍",
+    "after": "将可移植计算与宿主 I/O 分开，便于相同逻辑用于浏览器、CLI 或服务。批量跨界可以摊薄序列化开销，但要同时比较拷贝、内存增长与响应延迟；类型声明帮助调用方检查形状，不自动验证外部数据。\n\nwasm32-unknown-unknown 并不提供完整操作系统能力：某些 std API 可以编译却在运行时失败或没有预期效果，不能统一说链接时必错。使用浏览器或相应 WASI 宿主能力时核对目标和权限，并在真实宿主执行读写与错误用例。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "11-rust-cross-platform/advanced-topics/04-security-practices.md",
+    "heading": "## 🎨 最佳实践",
+    "original_line": 221,
+    "before": "### ✅ 推荐做法\n\n- **安全门禁三件套进 CI**: `cargo audit`、`cargo deny check`、`cargo test` 同级触发；audit 报高危即红\n- **unsafe 审计走 diff**: 评审时只看 `unsafe` 关键字出现/消失的位置，豁免模块的变动必须带理由\n- **把「破坏性实验」排进学习计划**: 故意制造漏洞（见练习），观察门禁与运行时各自的表现\n\n### ❌ 避免陷阱\n\n- **「Rust 写的所以安全」**: 类型系统覆盖内存与并发；逻辑漏洞、权限错配、机密泄漏照常发生\n- **审计工具只装不跑**: 安装即解决、跑进 CI 才是门禁；本地手动跑注定漏\n- **安全修复合并前不跑全量测试**: `cargo audit fix` 动的是依赖版本，行为可能变——修复本身需要回归验证",
+    "after": "依赖扫描发现已知漏洞，测试验证已声明行为，unsafe 审查核对编译器无法证明的条件；三者不能互相替代。unsafe 风险也可能来自未修改关键字的调用方和数据结构变化，评审必须沿不变量追踪上下文。\n\nRust 的内存安全保障不解决资源授权和秘密泄漏。用隔离实验检查路径越界、跨用户访问等业务边界，记录依赖告警的影响判断与修复证据。升级依赖后执行相关回归，不能以扫描不再报警作为唯一成功条件。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "11-rust-cross-platform/basics/01-environment-setup.md",
+    "heading": "## 🎨 最佳实践",
+    "original_line": 275,
+    "before": "### ✅ 推荐做法\n- **把 `cargo check` 当保存键**: 比 build 快得多，配合编辑器 rust-analyzer 保存时自动触发，错误即时可见\n- **`rust-toolchain.toml` 提交进仓库**: 团队成员与 CI 自动对齐工具链，杜绝\"我机器上能编译\"\n- **clippy 纳入默认工作流**: `cargo clippy` 抓出的多数是真实坏味道，新项目从第一天就开\n\n### ❌ 避免陷阱\n- **绕过 rustup 手动装 rustc**: 失去组件管理与多通道切换能力，后续升级痛苦\n- **把 target/ 提交进 git**: 编译产物巨大且可再生，`cargo new` 已生成 .gitignore\n- **应用项目忽略 Cargo.lock**: 应用应提交锁文件保证可复现构建；只有库项目通常不提交",
+    "after": "先让同一工具链完成 check、build、test，理解三者分别验证类型、生成产物和执行行为。工具链文件、锁文件和 CI 配置共同记录复现条件，编译目标与系统依赖也要说明。\n\nclippy 提供改进线索，遇到告警先理解原因再修或写出例外依据。target 可重建不应提交；Cargo.lock 的提交与下游依赖解析是两回事，库项目也可以提交锁文件以固定自身开发测试，不能概括成“库通常必须忽略”。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "11-rust-cross-platform/basics/02-ownership-borrowing.md",
+    "heading": "## 🎨 最佳实践",
+    "original_line": 262,
+    "before": "### ✅ 推荐做法\n- **函数参数优先借用**: 用 `&str` / `&[T]` / `&T` 而不是 `String` / `Vec<T>` / `T`，把选择权留给调用方\n- **clone 当作显式成本声明**: 需要独立副本就写 clone，成本可见、可审计，好过绕弯的引用技巧\n- **先写自然的顺序代码**: 信任 NLL，报错时再阅读借用冲突点并调整持有时序\n\n### ❌ 避免陷阱\n- **为绕过检查到处 clone**: 治标不治本，正确解法往往是重构数据的持有关系（谁真正拥有它）\n- **在循环中长期持有可变借用**: 典型解法是\"先收集要改的索引，循环结束后再统一改\"\n- **用 unsafe 绕过借用检查**: 那不是绕过，是放弃编译期保护，basics 阶段禁止触碰",
+    "after": "函数只需临时读取数据时接受借用，确实要保存、转交或消费数据时接受所有权；签名应反映责任，而不是一律避免 String 或 Vec。clone 的行为取决于类型，可能复制数据，也可能增加共享持有者。\n\n借用冲突先画出谁拥有数据、借用持续到哪一步，再缩短借用或调整操作顺序。不要盲目 clone 或添加 unsafe 消除诊断。用调用后还要再次使用原数据的例子，验证签名是否符合需求。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "11-rust-cross-platform/basics/03-structs-enums-patterns.md",
+    "heading": "## 🎨 最佳实践",
+    "original_line": 320,
+    "before": "### ✅ 推荐做法\n- **derive(Debug) 作为默认起点**: 结构体与枚举第一行都加 `#[derive(Debug)]`，随时可用 `{var:?}` 打印\n- **信任穷尽性检查**: 新增枚举变体后按编译器提示逐处补分支，而不是加 `_ =>` 通配逃逸\n- **按场景选 Option 取值方式**: 需要两种情况都处理用 match；单分支用 if let / let else；有兜底值用 unwrap_or 系列方法\n\n### ❌ 避免陷阱\n- **生产代码裸 `unwrap()`**: 在 `Option`/`Result` 上直接 unwrap，None/Err 时立刻 panic——原型可以，工程不行\n- **用 bool/魔法数模拟状态**: `is_done + is_failed + is_archived` 三个 bool 的组合爆炸，不如一个三变体枚举\n- **match 分支返回不同类型**: match 是表达式，所有分支必须同类型；需要不同行为时把差异装进枚举或字符串里",
+    "after": "enum 表达互斥状态，可避免 loading 与 failed 同时为真；多个可独立成立的事实仍可用多个布尔值。match 的分支结果需要能统一到兼容类型，某些发散分支如提前返回有不同推断行为，不能只按表面写法判断。\n\n对可能缺失的外部数据显式处理 None/Err；unwrap/expect 只在不变量确实保证成功时使用，并说明理由。derive(Debug) 有助调试，但含敏感字段时检查输出。新增变体后编译并测试所有状态转换，不用通配分支无声忽略新情况。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "11-rust-cross-platform/basics/04-traits-generics.md",
+    "heading": "## 🎨 最佳实践",
+    "original_line": 312,
+    "before": "### ✅ 推荐做法\n- **按\"同构/异构\"选型**: 数据同构、追求性能 → 泛型静态分发；需要混装不同类型或插件式扩展 → `dyn Trait`\n- **derive 优先于手写**: 标准派生一律 derive，手写 `Debug`/`PartialEq` 是无谓的样板劳动\n- **bound 多时用 where 子句**: 签名可读性优先；trait 定义里的方法也遵守同样的排版惯例\n- **先具体后泛型**: 先写能跑的具体类型版本，出现真实的重复再抽 trait——避免臆想出来的抽象\n\n### ❌ 避免陷阱\n- **无 bound 的泛型**: `fn process<T>(x: T)` 里几乎什么都做不了，bound 决定能力\n- **把 dyn 当默认**: 全部接口 `Box<dyn Trait>` 化会失去单态化优化，也阻断泛型组合；先问\"真的需要异构吗\"\n- **在 trait 方法里默认拿所有权 `self`**: 多数读场景应选 `&self`，消费自身是特例而非常态",
+    "after": "泛型用约束声明操作所需能力，dyn trait 对象允许运行时通过共同接口处理不同具体类型；选择还涉及代码体积、分发与所有权成本，不只是“性能好/坏”。先实现具体需求，再抽取确有复用价值的能力。\n\nderive 遵循字段组成的默认语义，若 Debug 需脱敏或 PartialEq 要表达领域身份，手写实现可能必要。方法接收 self、&self 或 &mut self 分别表达消费、读取和修改责任，用调用者视角检查是否过度限制。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "11-rust-cross-platform/basics/05-error-handling.md",
+    "heading": "## 🎨 最佳实践",
+    "original_line": 336,
+    "before": "### ✅ 推荐做法\n- **分层选型**: 库与公共模块返回**具体错误类型**（thiserror 定义），应用与二进制入口用 `anyhow::Result` 统一传播\n- **panic 只给 bug**: 断言不变量、程序逻辑上不可能失败的场景；一切外部输入（用户/网络/文件）走 Result\n- **expect 优于 unwrap**: 必须解包时用 `expect(\"说明为什么这里一定成功\")`，崩溃信息可定位\n- **错误信息带上下文**: map_err / context 附上\"操作 + 输入\"，如\"解析端口失败: abc\"优于裸的 InvalidDigit\n\n### ❌ 避免陷阱\n- **catch-all 的 String 错误**: `Result<T, String>` 丢失结构，调用方无法 match 分支处理\n- **错误层层丢弃**: `unwrap_or_default()`、`let _ = ...` 把失败静默吞掉——至少记日志或向上传播\n- **把 panic 当错误处理**: `panic!` 不进 Result 流、不受 `?` 管，拿它响应外部输入等于埋雷\n- **库的公共 API 返回 anyhow::Error**: 调用方失去 match 具体变体的能力；anyhow 属于应用层",
+    "after": "错误类型应让调用者能够决定如何处理：没有权限、格式错误和暂时不可用可能需要不同动作。结构化错误适合公共契约，应用边界可使用统一包装并添加操作上下文；anyhow 也能向下转换已知类型，只是不会自动提供稳定的枚举契约。\n\n外部失败通常通过 Result 表达；确有默认值语义时可以转换，但应明确丢失了哪些信息。expect 给 panic 补说明，并没有让失败更安全。测试错误传播后资源释放、数据未部分写入，以及用户消息不暴露内部路径或秘密。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "11-rust-cross-platform/basics/06-collections-iterators.md",
+    "heading": "## 🎨 最佳实践",
+    "original_line": 315,
+    "before": "### ✅ 推荐做法\n- **默认 `iter()`，需要消费才 `into_iter()`**: 借用遍历成本最低，且不破坏调用方的数据\n- **聚合统计优先迭代器而非手写循环**: `sum` / `count` / `max_by_key` 语义清晰，编译器内联后无性能差\n- **HashMap 判存在用 `entry`**: 一次定位完成读改写，避免 `contains_key` + `insert` 的双重哈希\n\n### ❌ 避免陷阱\n- **String 下标取值**: `s[0]` 不能编译——UTF-8 变长编码使\"第 i 个字节\"≠\"第 i 个字符\"，用 `s.chars()` 或 `s.as_bytes()`\n- **在迭代中修改集合**: `for x in &v { v.push(..) }` 编译报错（借用冲突），这是保护而非限制——收集待删项后统一 `retain` 即可\n- **忘记消费器**: 适配器链只赋值给变量会产生 `unused` 警告且什么都没发生，链尾必须有 `collect` / `sum` / `for` 等\n- **对 `HashMap` 依赖遍历顺序**: 哈希遍历顺序刻意不稳定（防哈希碰撞攻击），需要有序遍历用 `BTreeMap`",
+    "after": "根据是否保留集合选择借用遍历或消费遍历，两者成本取决于元素与后续使用，并非 iter 永远更便宜。迭代器适配器通常按需执行，只有实际消费才处理元素；也可以返回迭代器让调用方稍后消费。\n\nHashMap 的 entry 适合“存在就修改、不存在就插入”，单纯查存在仍可用 contains_key。字符串按字节和 Unicode 标量值遍历含义不同，不能用整数下标当字符定位。需要稳定输出时显式排序或选有序结构，不依赖哈希遍历顺序。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "11-rust-cross-platform/basics/07-lifetimes.md",
+    "heading": "## 🎨 最佳实践",
+    "original_line": 276,
+    "before": "### ✅ 推荐做法\n- **先靠省略规则，报错再标注**: 90% 的签名无需手写 `'a`，过度标注只会增加阅读噪音\n- **结构体能拥有就别借用**: `String` 成员比 `&'a str` 成员好用得多；`&'a str` 留给\"解析器输出切片\"这类零复制场景\n- **读签名先读生命周期**: 标准 API 如 `str::split`、`Vec::first` 的 `'a` 都在告诉你返回值与谁绑定\n\n### ❌ 避免陷阱\n- **把 `'a` 当参数传\"存活时间\"**: `'a` 由编译器从实参推断，调用方无法显式指定（`longest::<'static>` 会要求两个实参都是 `'static`）\n- **试图从函数返回局部变量的引用**: 无任何标注能救活 `fn dangle() -> &str`——数据本身活不过函数体，正确做法是返回 `String`（转移所有权）\n- **混淆 `'static` 引用与 `T: 'static`**: 前者是\"引用活到程序结束\"，后者是\"类型不含短命借用\"，后者宽松得多",
+    "after": "生命周期标注描述引用之间必须满足的关系，不会延长被引用数据的存在时间。函数返回局部 String 的引用无论怎样改标注都无效，应返回所有权或让调用方提供活得足够久的存储。\n\n先利用省略规则，确实无法表达关联时再标注；不以未经统计的百分比判断是否需要。借用型结构体适合视图或解析结果，拥有型更独立但可能复制。区分 &'static T 与 T: 'static：后者不要求值实际活到进程结束，而是限制其中借用。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "11-rust-cross-platform/basics/08-smart-pointers.md",
+    "heading": "## 🎨 最佳实践",
+    "original_line": 354,
+    "before": "### ✅ 推荐做法\n- **从最简单的工具开始**: 先试所有权/借用，不行再 Box，再 Rc/Arc——每一层都该有明确理由\n- **`Rc::clone` 显式写法**: 让代码读者一眼区分\"共享引用\"与\"深拷贝\"\n- **缩小 MutexGuard 作用域**: 锁持有时间越短越好，必要时用 `{}` 包住加锁区间\n\n### ❌ 避免陷阱\n- **RefCell 借用跨 `?` 或长时间持有**: panic 会从\"编译错误\"退化为\"线上崩溃\"，借用期间不要调用可能再次借用的函数\n- **Rc 循环引用内存泄漏**: A 持 `Rc<B>`、B 持 `Rc<A>` 时计数永不归零，需用 `Weak` 打破环（进阶见字典篇）\n- **在持锁期间再 lock 同一把锁**: 同线程重入 Mutex 会死锁，持锁区间内只做纯计算",
+    "after": "Box 表达独占堆分配，Rc/Arc 表达共享所有权，RefCell/Mutex 等解决不同环境中的内部可变性，不能简单当作逐层升级的工具。Rc::clone 复制持有句柄，需与数据类型自己的 Clone 行为区分。\n\nRefCell 冲突在运行时检查，问题是同时存在不兼容借用，而不是遇到问号操作符就危险。缩短借用与锁 guard 的作用域，避免回调重入或长 I/O。共享引用形成环时用 Weak 等设计打破所有权环，并验证释放行为。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "11-rust-cross-platform/basics/09-concurrency-async.md",
+    "heading": "## 🎨 最佳实践",
+    "original_line": 326,
+    "before": "### ✅ 推荐做法\n- **IO 密集选 async、CPU 密集选线程**: 两者可混用（async 里用 `spawn_blocking` 跑阻塞计算）\n- **通道优先于共享内存**: 消息传递让数据流显式化，比\"加锁保护共享状态\"更少出错\n- **async 函数保持\"非阻塞\"**: `.await` 之间不要跑长计算或调用阻塞 IO，会卡死同 worker 上的其他任务\n\n### ❌ 避免陷阱\n- **`#[tokio::main]` 里调用阻塞 API**: `std::thread::sleep` 在 async 上下文会阻塞整个 worker，异步睡眠用 `tokio::time::sleep`\n- **把 `Rc`/`RefCell` 带进 async 任务**: Tokio 任务可能在不同线程间迁移，必须 `Arc`/`Mutex`（或 Tokio 自己的 `tokio::sync` 原语）\n- **滥用 `Mutex` 代替重新设计**: 锁粒度过大等于单线程；先想清楚状态归属，再考虑锁\n- **忘记 join / abort**: 裸 spawn 的任务成为\"孤儿\"，失败无人知晓——保留 JoinHandle 并检查结果",
+    "after": "async 适合让等待中的任务让出执行权，CPU 工作与阻塞调用仍占用执行线程。通道便于表达所有权转移，共享状态在明确同步协议下也合理；依据数据流选择，不把一种方式宣称永远更安全。\n\ntokio::spawn 要求其约束范围内的 Future 满足 Send 等条件，本地任务也可以使用不跨线程的状态，不能把所有 async 一概要求 Arc/Mutex。保存任务管理句柄，定义失败、取消与关闭时如何等待；丢弃句柄不等于任务已经停止。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "11-rust-cross-platform/basics/10-cargo-testing.md",
+    "heading": "## 🎨 最佳实践",
+    "original_line": 347,
+    "before": "### ✅ 推荐做法\n- **提交 `Cargo.lock`**: 应用与 workspace 项目锁定依赖，可复现构建\n- **测试函数名写成句子**: \"空序列均值返回_none\" 直接说明行为预期，失败输出即文档\n- **公共 API 至少一个 doctest**: 示例保活 + 使用教学一石二鸟\n\n### ❌ 避免陷阱\n- **profile 当功能开关**: profiles 管优化不管行为，条件能力一律走 features\n- **feature 爆炸**: `2^n` 组合无人测得动；feature 只切\"依赖有无\"，不切\"行为分支\"\n- **忽略 doctest 失败**: 示例腐烂从\"先 ignore 掉\"开始，宁可改示例也不注掉测试",
+    "after": "锁文件固定本工程的依赖解析，工具链与目标环境也参与可复现构建。测试名说明输入条件与预期，公共 API 的可执行示例帮助同时维护用法和行为；不能为保持绿灯无理由忽略失败示例。\n\nprofile 管理优化与相关构建设置，其中某些设置会影响可观察行为；feature 用于能力选择，也不只限于依赖开关。声明支持的组合并在 CI 验证，避免承诺所有组合都可用却只测试默认值。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "11-rust-cross-platform/deployment/01-cross-compilation-targets.md",
+    "heading": "## 🎨 最佳实践",
+    "original_line": 222,
+    "before": "### ✅ 推荐做法\n\n- **多平台产物交给 CI 矩阵**：各 OS 在自己的 runner 上 native 构建，而不是把宝押在跨平台交叉编译上（macOS 端无解）\n- **容器场景锁定 musl**：静态链接产物 + 最小运行镜像，镜像体积可压到 10MB 级\n- **C 依赖优先用 cross**：遇到 `ring`/`openssl-sys` 等交叉编译报 linker 错误时，`cross` 比手工配 NDK 工具链可靠\n\n### ❌ 避免陷阱\n\n- **glibc 版本倒挂**：在新版 Ubuntu 上构建的 `*-gnu` 产物，拿到 CentOS 等旧 glibc 机器会报 `GLIBC_2.xx not found`——要么在旧系统容器里构建，要么改用 musl\n- **假设\"能编译就能打包\"**：macOS 交叉编译产物没有签名链，Tauri 官方也不支持从非 macOS 机器出 `.dmg`\n- **在 CI 里现装 NDK 却没对齐 API level**：linker 名里的 `android24` 与应用 `minSdkVersion` 不一致会埋下运行期兼容雷",
+    "after": "区分交叉编译、链接、打包、签名和运行验证：某目标能生成二进制，不代表当前主机能完成该平台所有发布步骤。按实际支持矩阵选择原生 runner 或交叉工具，记录系统库和 SDK 要求。\n\ngnu/musl 选择要匹配运行环境和 C 依赖，不因追求小镜像就强行切换。旧系统上的动态库版本可能限制新环境构建的产物；在目标环境运行冒烟测试，确认网络、证书和文件能力，而不只检查编译退出码。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "11-rust-cross-platform/deployment/02-github-actions-ci.md",
+    "heading": "## 🎨 最佳实践",
+    "original_line": 282,
+    "before": "### ✅ 推荐做法\n\n- **本地先行**：提交前跑一遍 `cargo fmt --all -- --check && cargo clippy -- -D warnings && cargo test`，CI 只做最后防线\n- **`--locked` 进所有 CI 构建**：防止依赖漂移导致\"昨天绿今天红\"\n- **矩阵加 `fail-fast: false`**：一次 PR 看到所有平台的失败，减少反复推送\n\n### ❌ 避免陷阱\n\n- **给缓存 key 手工塞时间戳**：会导致缓存永不命中，还占用存储配额；rust-cache 的自动键已覆盖主要失效因素\n- **clippy 只在 CI 开 `-D warnings` 而本地不开**：门禁形同虚设——把同一参数写进 `Cargo.toml` 的 `[lints]` 或 `.cargo/config.toml`\n- **把 macOS 构建交给 Linux runner 交叉编译**：产物无签名链且打包器不支持，见 [交叉编译 targets](./01-cross-compilation-targets.md) Q3",
+    "after": "本地与 CI 使用同一组格式、lint、构建和测试命令，让失败可以复现；本地没有执行并不使 CI 门禁失效，只会延后反馈。locked 模式防止悄悄修改依赖解析，系统依赖与工具链也需记录。\n\n矩阵是否 fail-fast 按成本和诊断需求选择，缓存键包括会影响产物的条件而不是随意时间戳。保存各目标的失败日志和实际命令；需要平台打包与签名时使用受支持环境。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "11-rust-cross-platform/deployment/03-signing-auto-update.md",
+    "heading": "## 🎨 最佳实践",
+    "original_line": 255,
+    "before": "### ✅ 推荐做法\n\n- **公钥发布前冻结**：公钥随应用出厂，一旦发布就难以更换（换了=老用户全部收不到更新）；上生产前确认密钥对即为\"最终密钥对\"\n- **私钥只活在 CI secret**：本机生成后立即转入 secret 存储，工作区不留副本；`.key` 文件加入 `.gitignore` 兜底\n- **发布前抽查验签**：用示例三的 verify 命令抽查各平台产物，把\"用户更新失败\"挡在发布前\n- **`releaseDraft: true` 人工放行**：自动更新一旦推错就是全量事故，草稿审核是最后一道闸\n\n### ❌ 避免陷阱\n\n- **`signature` 字段填了文件路径或 URL**：必须填 `.sig` 文件内容全文，这是新手最高频的翻车点\n- **复用上一版的签名**：签名与产物一一对应，改了产物没换签名会直接校验失败\n- **私钥密码设为空且私钥入库**：等于把更新通道的控制权交给任何能读仓库的人\n- **latest.json 里只写部分平台**：Tauri 整体校验 JSON，某个已发布平台缺条目会让该平台用户收不到任何更新",
+    "after": "更新签名绑定具体产物，重新构建后必须重新签名并验证客户端下载与校验路径。私钥放在受控秘密存储，限制使用权限并准备备份、恢复与轮换；不能用“立即删掉唯一副本”换取表面安全。\n\n已发布客户端内置的公钥决定它信任什么，轮换需设计旧客户端能验证的迁移路径。先在受控发布渠道检查各平台的下载、验签和安装，故意使用不匹配签名应被拒绝。草稿或分阶段发布有助审核，但不能替代兼容性测试。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "11-rust-cross-platform/deployment/04-containerized-services.md",
+    "heading": "## 🎨 最佳实践",
+    "original_line": 288,
+    "before": "### ✅ 推荐做法\n\n- **`.dockerignore` 第一条写 `target/`**：构建上下文不带本地编译产物，缓存命中率与上下文上传速度双赢\n- **清单先行、`--locked` 构建**：`Cargo.lock` 进版本库，Dockerfile 中 `--locked` 锁死，镜像内容可复现\n- **非 root 运行**：distroless 的 `nonroot` 或 alpine 的 `USER 65532:65532`，监听 1024 以上端口即可\n\n### ❌ 避免陷阱\n\n- **监听 `127.0.0.1`**：容器内健康检查与端口映射全部失效，这是容器化 Rust 服务第一大事故来源\n- **glibc/musl 镜像错配**：gnu 产物放进 alpine 会报动态链接错误；产物与运行层 libc 类型必须一致\n- **把 C 依赖硬迁 musl**：`openssl-sys`、`ring` 等在 musl 下常触发编译失败，能用 rustls 替代就替代，不能就改走 distroless/glibc 路线\n- **compose 里 Postgres 无健康检查**：应用启动比数据库快，`depends_on` 不带 `condition: service_healthy` 会随机启动失败",
+    "after": "构建层与运行层的 libc、架构、证书和动态依赖要匹配，锁文件并不覆盖这些条件。非特权运行后验证所需目录与监听端口权限；构建上下文只包含实际需要的输入。\n\n只绑定容器内 127.0.0.1 通常无法通过外部端口映射访问，但同容器回环健康检查可能仍成功，因此健康探测位置很重要。数据库未就绪时应用应有明确失败或重试策略，启动顺序不能保证下游以后永不掉线。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "11-rust-cross-platform/frameworks/01-tauri-2-architecture.md",
+    "heading": "## 🎨 最佳实践",
+    "original_line": 257,
+    "before": "### ✅ 推荐做法\n\n- **敏感逻辑全部下沉 Rust**: 密钥、鉴权、文件路径拼接不进 WebView——前端只收到\"结果\"，攻击面收敛到 IPC 面\n- **IPC 面最小化**: 每加一个 command 都问一句\"前端真的需要吗\"；能力授予用 capabilities 精确到窗口\n- **大文件走 Rust 侧流式处理**: 不要把几 MB 的二进制序列化成 JSON 过 IPC，读写都留在 Rust\n\n### ❌ 避免陷阱\n\n- **以为 WebView 行为全平台一致**: WebKitGTK 与 WebView2 的 CSS/JS 引擎差异真实存在，跨端 UI 必须三平台实测\n- **在命令函数里做长阻塞操作**: 阻塞会卡 UI 桥接，耗时任务改 async 命令或 `std::thread::spawn` + 事件回报\n- **手工修改 `src-tauri/gen/`**: 移动端原生工程是 CLI 生成的构建产物，升级会被覆盖",
+    "after": "IPC 是从界面到原生能力的入口，命令应只暴露完成任务所需的操作，并在 Rust 侧验证输入、路径与授权。把秘密移进 Rust 可以缩小暴露面，但桌面二进制仍可能被分析，服务秘密不能仅靠换语言隐藏。\n\n大文件尽量在原生侧处理，前端取得有限结果或进度；async 关键字不自动移走阻塞工作，要安排合适执行资源。用目标系统验证 WebView 行为与权限，并记录生成文件如何从配置重建。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "11-rust-cross-platform/frameworks/02-tauri-plugins.md",
+    "heading": "## 🎨 最佳实践",
+    "original_line": 363,
+    "before": "### ✅ 推荐做法\n\n- **先试官方插件**: 系统能力优先官方实现（已处理跨平台怪癖 + 权限集成），自研只做业务特有部分\n- **权限按需收紧**: 上线前把开发期图省事的宽 scope（`**`）替换为最小路径集，capability 变更走 code review\n- **updater 公钥进配置、私钥进 CI**: 私钥只在构建机环境变量中出现，泄露即失去更新通道的信任根\n\n### ❌ 避免陷阱\n\n- **pubkey 填文件路径**: updater 要求公钥**内容**直接内联在配置里，填路径会导致运行时校验失败\n- **改权限后忘记重启**: capabilities 编译进二进制（`generate_context!`），改完必须重新 `tauri dev/build`\n- **shell 插件当 opener 用**: 执行任意命令走 `shell` 且必须配 scope 白名单；只是\"打开网页/文件\"用 `opener`，能力面小得多",
+    "after": "插件减少平台适配工作，仍要核对所用版本、支持平台与权限范围。只需要打开网页时，不要额外授予任意执行命令；文件能力限制到业务所需路径并测试越界拒绝。\n\n更新公钥用于验证，私钥用于签名，两者责任不同。按配置契约填写内容与作用域，重建后验证新权限确实生效。官方来源不等于无需审查，新增插件仍需评估依赖、数据访问与失败行为。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "11-rust-cross-platform/frameworks/03-tauri-frontend-react.md",
+    "heading": "## 🎨 最佳实践",
+    "original_line": 296,
+    "before": "### ✅ 推荐做法\n\n- **invoke 只有一层出口**: 收口进 `api/` 的收益是审计容易（grep 一处）、mock 容易（测试替换 `api` 对象）、错误统一\n- **DTO 注明来源命令**: 每个接口上方注释对应 Rust 命令名，改签名时能顺藤摸瓜\n- **事件命名加域前缀**: `notes-changed` 而非 `changed`——事件是全局命名空间\n\n### ❌ 避免陷阱\n\n- **在渲染路径里 invoke 高频命令**: 每次跨进程都有序列化开销，列表类数据一次批量拉取，增量靠事件推送\n- **忘记退订事件**: 直接 `useEffect` 里裸调 `listen` 不清理，卸载后回调仍执行——必现\"内存泄漏 + setState on unmounted\"\n- **把 devUrl 提交成生产配置**: `tauri build` 只认 `frontendDist`，devUrl 仅在 dev 生效；但 CI 打包前务必确认 `beforeBuildCommand` 正确产出前端产物",
+    "after": "将命令名、参数和错误转换集中在可查阅的前端模块，组件就能表达“保存笔记”而不是反复拼装 IPC。invoke 的泛型帮助静态使用，不会自动验证 Rust 实际返回形状；契约变化应联动两端测试。\n\n订阅事件需要清理，尤其 listen 异步完成可能晚于组件卸载；应处理这种时序而非只在同步返回里假设句柄已存在。批量读取与事件更新减少重复跨界，验收快速进入离开页面后不会积累重复响应。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "11-rust-cross-platform/frameworks/04-axum-web-stack.md",
+    "heading": "## 🎨 最佳实践",
+    "original_line": 318,
+    "before": "### ✅ 推荐做法\n\n- **子路由自治**: 每个资源模块 `pub fn router() -> Router<AppState>`，主文件只 merge/nest——路由表可按模块 review\n- **用类型收窄状态**: handler 各取所需；大状态用 `FromRef` 拆分，避免全部 handler 依赖巨型 struct\n- **TraceLayer 放最外层**: 让日志覆盖 CORS 预检与静态文件请求，排查问题才有完整链路\n\n### ❌ 避免陷阱\n\n- **中途消费请求体**: 把 `String`/`Bytes` 提取器放在 Json 之前（或用 `.body` 先读过）会让 Json 拿到空 body 得 400——body 类只能有一个且殿后\n- **用 `layer` 挂认证守卫**: 404 请求也会过守卫，未登录用户探测路径会得到 401（信息泄露）；守卫一律 `route_layer`\n- **`:id` 写法残留**: 0.7 教程抄来的 `/:id` 在 0.8 会被当成字面量段，请求永远 404",
+    "after": "按业务资源组合路由，使路径和状态依赖可以独立检查。handler 只取得所需状态，公共日志与认证层的顺序通过实际请求测试确认，不以“放最外层”概括所有组合。\n\n消耗请求体的提取器通常只能有一个并置于参数末尾，不兼容组合可能在编译期就失败，不能笼统说最终只得到空 body。Axum 0.8 使用花括号捕获路径，旧冒号语法在默认检查下会在路由构建时 panic；认证层覆盖范围还要测试未匹配路径和方法。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "11-rust-cross-platform/frameworks/05-state-and-database-sqlx.md",
+    "heading": "## 🎨 最佳实践",
+    "original_line": 414,
+    "before": "### ✅ 推荐做法\n\n- **全应用一个 Pool**: 池是进程级单例（`with_state` 注入），按部署规格给 `max_connections`，多实例部署时乘上实例数留余量\n- **`.sqlx` 进仓库**: 编译期校验的价值在 CI 无数据库时依然成立——缓存让 schema 契约随代码走\n- **锁粒度对齐不变量**: 计数用原子量、配置只读、真正需要互斥的多字段更新才上 `Mutex`，并尽量短临界区\n\n### ❌ 避免陷阱\n\n- **`std::Mutex` 跨 `.await`**: guard 不 Send 导致编译错误是好事；更糟的是把数据库调用放进临界区造成排队。跨 await 用 `tokio::sync::Mutex`，或重构为\"临界区内取值、锁外做 IO\"\n- **把用户输入拼进 SQL**: 0.9 的 `AssertSqlSafe` 不是免死金牌——动态部分必须白名单化，断言只对\"已审查过的拼接\"负责\n- **事务里做慢 IO**: 事务独占连接，把外部 HTTP 调用塞进事务会放大连接饥饿",
+    "after": "应用按配置共享连接池，最大连接数要考虑所有副本总量及数据库容量；多租户隔离等需求可能需要多个池，不存在永远全局唯一的规则。离线 SQL 元数据要随 schema 更新并在 CI 检查，旧缓存不能证明新数据库兼容。\n\n锁只保护所需不变量，尽量在临界区内取得必要值、锁外进行慢 I/O。改用异步锁不会消除串行等待；参数值使用绑定，动态列名等不能绑定的位置使用受控白名单。用并发操作测试事务与共享状态一致。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "11-rust-cross-platform/frameworks/06-auth-middleware.md",
+    "heading": "## 🎨 最佳实践",
+    "original_line": 439,
+    "before": "### ✅ 推荐做法\n\n- **守卫一律 `route_layer`**: 404 与 401 的语义分离是安全信号，`layer` 会让未登录探测者借 401 分辨\"路径存在与否\"\n- **校验点唯一**: 全应用只有 `require_auth` 调 `decode`；handler 通过 `AuthUser` 消费已验证身份\n- **密钥从环境注入**: `JWT_SECRET` 走环境变量/密钥管理，轮换密钥不需改代码\n\n### ❌ 避免陷阱\n\n- **在 extractor 里再 decode 一次**: 令牌校验含 HMAC 与时间比对，每请求重复做两次是纯浪费；中间件插值 + extractor 取值是单向流\n- **用 query 参数传令牌**: `?token=...` 会进入访问日志、Referer 头与浏览器历史，令牌只走 Authorization 头\n- **忽略时钟偏移**: 多机部署时服务器间偏差会令\"刚签发就 401\"；jsonwebtoken 的默认 leeway 60 秒已兜底，别把它设成 0",
+    "after": "认证验证身份，资源授权判断当前身份能做什么；已验证身份可供后续处理复用，但不同入口仍需各自保证没有绕过检查。route_layer 与其他层的覆盖范围按路由组合实测，不能由返回 401 或 404 单独推断泄漏与否。\n\n令牌传递方式要匹配客户端能力，避免进入 URL 日志和历史；Cookie 方案另有 CSRF 等边界。时钟容差按同步精度和风险设置，不应因为库默认某值就永远禁止调整。测试过期、错误签名、跨用户和未知路由。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "11-rust-cross-platform/frameworks/07-desktop-packaging.md",
+    "heading": "## 🎨 最佳实践",
+    "original_line": 241,
+    "before": "### ✅ 推荐做法\n\n- **CI 按 OS 分片**: Windows 跑 nsis+msi、macOS 跑 dmg、Linux 跑 appimage+deb+rpm——打包器只认宿主 OS，矩阵化是唯一正路\n- **定型后收敛 targets**: `\"all\"` 会为每个可用打包器都花时间（NSIS 的 lzma 压缩尤其慢），按渠道显式列出可显著缩短 CI\n- **图标先行**: 用 `tauri icon` 从单源图生成，避免手工维护十几个尺寸文件导致漏更新\n\n### ❌ 避免陷阱\n\n- **在 Linux 上追 Windows 产物**: 打包器无跨 OS 打包能力；\"在这台机器上顺便把 dmg 也出了\"不存在\n- **忘记 `bundle.active`**: 构建成功却找不到 bundle/ 目录，十有八九是 `active` 还是默认的 `false`\n- **改配置不重编**: `tauri.conf.json` 经 `generate_context!` 编译进二进制，改完必须重新 build（dev 也要重启才能生效）",
+    "after": "先列出发布渠道真正需要的安装格式，再选择工具明确支持的主机与目标组合；原生 runner 常简化签名与平台依赖，但不能概括所有跨平台打包都不可能。只生成所需格式可以减少构建工作。\n\n找不到安装包时检查 bundler 开关、输出目录和实际构建命令，不凭固定默认值猜原因。归档版本、图标与签名信息，使用干净目标系统验证安装、启动和卸载，并检查用户数据的保留策略。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "11-rust-cross-platform/projects/01-cli-tool.md",
+    "heading": "## 最佳实践",
+    "original_line": 347,
+    "before": "### ✅ 推荐做法\n\n- **逻辑下沉为纯函数**：`next_id` 不做 IO，测试无需文件系统（完整测试策略见 [testing/01](../testing/01-unit-integration-tests.md)）\n- **退出码区分成败**：shell 脚本里 `rtask ... && next-step` 才可靠\n- **错误带上下文**：`with_context` 把\"哪个文件、哪个操作\"钉进错误链，用户报 issue 时能直接定位\n\n### ❌ 避免陷阱\n\n- **不要在程序代码里 `unwrap()` IO 结果**：磁盘随时会拒绝你\n- **不要手写参数解析**：`std::env::args` + `match` 方案在子命令超过 2 个后维护成本陡增\n- **不要用 `String` 存文件路径**：`PathBuf` 才能正确处理跨平台分隔符与非 UTF-8 路径",
+    "after": "CLI 将参数解析、业务计算和文件读写分开，纯函数测试不用碰真实用户文件，存储测试使用临时目录。退出码让 shell 能判断下一步是否执行，错误消息说明哪个操作失败并避免泄漏秘密。\n\nPath/PathBuf 配合 args_os 等接口处理可能不是 UTF-8 的路径；库化参数解析有助复杂命令维护，最小实验也可手写。测试不存在文件、权限错误和非法参数，而不把外部 I/O 失败全部 unwrap 成 panic。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "11-rust-cross-platform/projects/02-tauri-notes-app.md",
+    "heading": "## 最佳实践",
+    "original_line": 496,
+    "before": "### ✅ 推荐做法\n\n- **状态只有一个事实来源**：内存 `HashMap` 是运行时真相，磁盘 JSON 只是它的投影；不要让前端与 Rust 各持一份业务状态\n- **锁临界区最小化**：锁内只做取数/改数，序列化与文件 IO 放锁外\n- **权限按需授予**：capabilities 从 `core:default` 起步，用到什么插件加什么权限，拒绝\"全开\"\n\n### ❌ 避免陷阱\n\n- **不要在命令里长时间持锁做 IO**：其他命令会被阻塞，界面卡顿\n- **不要用 `tokio::sync::Mutex` 处理同步短临界区**：徒增复杂度；只在 async 命令跨 `.await` 持锁时才需要它\n- **不要把 identifier 写成临时值**：`com.devquest.rustnotes` 决定数据目录与打包签名，上架后不可改\n\n### 模式不变量\n\n- 状态归属其最小必要作用域：笔记表只被 Rust 进程持有，前端只持有视图投影\n- IPC 边界是安全边界：前端能做什么由 capabilities 声明决定，而非代码约定\n- 持久化格式变更必须兼容旧文件（serde 的 `#[serde(default)]` 是第一道防线）",
+    "after": "明确内存状态、前端投影与磁盘持久化的权威关系。锁外保存快照能缩短临界区，但两个并发保存可能按相反顺序落盘，因此还需要串行写入、版本检查或其他一致性协议，不能只要求“所有 I/O 都移出锁”。\n\n默认 capability 集也要审阅，自定义命令还需自己的业务检查。应用标识变更可能影响数据目录和升级身份，应设计迁移；serde default 只能填缺失字段，不能替代全部格式迁移。验收并发编辑、保存失败和重启后数据。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "11-rust-cross-platform/projects/03-axum-rest-api.md",
+    "heading": "## 最佳实践",
+    "original_line": 497,
+    "before": "### ✅ 推荐做法\n\n- **输入输出模型分离**：`CreateNote`/`UpdateNote` 只含客户端可写字段，`Note` 才含 `id`/`created_at`——防止客户端伪造服务端字段\n- **错误在边界翻译一次**：service 抛领域错误，`IntoResponse` 做唯一一次状态码映射，handler 里不出现 `StatusCode`\n- **显式列名**：`SELECT id, title, ...` 而非 `SELECT *`，列序与字段增删都不会静默破坏映射\n\n### ❌ 避免陷阱\n\n- **不要在 repo 层判断 404**：repo 只返回 `Option`/行数，语义翻译是 service 的职责\n- **不要把 `sqlx::Error` 直接返回给客户端**：连接串、表结构可能随错误消息泄漏\n- **不要用 0.7 的 `/:id` 语法**：Axum 0.8 启动时会对旧语法直接报错（新语法为 `{capture}` 与 `{*wildcard}`）\n\n### 模式不变量\n\n- 错误映射在边界处完成一次：内部各层只携带领域错误，HTTP 语义不向内渗透\n- SQL 显式列出所需列：数据契约不依赖数据库的物理列序\n- 连接是池化资源：应用持有池，请求借用连接，任何一层都不自建连接",
+    "after": "请求模型只包含客户端允许填写的字段，服务端生成 id 和时间等受控值；输入格式正确后仍要验证权限与业务不变量。内部错误保留原因，在 HTTP 边界转换成稳定状态和安全消息。\n\n显式查询列减少不需要的数据并使映射可见，但 schema 变更仍可能破坏契约。共享连接池并结束事务，验证不存在、冲突与数据库失败三条路径。Axum 0.8 路由捕获按版本语法定义，并测试实际路径匹配。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "11-rust-cross-platform/projects/04-websocket-realtime.md",
+    "heading": "## 最佳实践",
+    "original_line": 353,
+    "before": "### ✅ 推荐做法\n\n- **读写分离双任务**：`split()` 后接收与发送各占一个 task，`select!` 兜底回收——这是 Axum 官方示例的标准形态，勿在单 task 里串行读写\n- **心跳参数成对设计**：间隔与超时保持 1:3 左右，超时覆盖\"丢一个周期\"的抖动\n- **广播通道容量明确**：`broadcast::channel(256)` 的 256 是背压策略的一部分，写注释说明\n\n### ❌ 避免陷阱\n\n- **不要用 `mpsc` 做全体广播**：mpsc 一对多要自己维护\"每客户端一个 Sender\"的列表，broadcast 原生就是为此设计\n- **不要忽略 `Lagged`**：把它当致命错误会误杀慢客户端；正确的姿势是提示后继续\n- **不要在锁内 `.await`**：在线名单的 `Mutex` 临界区必须是纯内存操作，持锁跨 await 会阻塞其他连接的状态更新\n\n### 模式不变量\n\n- 广播语义归通道所有：订阅者自行处理背压（Lagged），通道不为单个慢消费者降速\n- 连接健康由读端判定：超时挂在\"读\"上，发送侧只负责周期性心跳\n- 会话状态与连接生命周期同生共死：注册在握手成功后，注销在两个任务终结后",
+    "after": "WebSocket 同时需要接收、发送和连接关闭协调，可以用拆分任务或单任务选择循环，重点是一个方向结束时另一个不会永久遗留。心跳间隔与超时依据网络和资源预算设置，不以固定比例保证健康判断。\n\nbroadcast 对慢消费者报告丢失，是否继续取决于消息语义：可丢行情可继续，聊天记录可能要补拉或重同步。每连接 mpsc 也可实现广播分发，但应用负责队列与慢客户端策略。测试慢读、断线和重复连接后在线状态能清理。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "11-rust-cross-platform/projects/05-multiplatform-release.md",
+    "heading": "## 最佳实践",
+    "original_line": 331,
+    "before": "### ✅ 推荐做法\n\n- **版本号只有一处**：workspace 根定义、成员继承、tauri.conf.json 回退——任何一处手写版本号都是未来的事故\n- **草稿制发布**：所有 CI 产物先进 Release 草稿，人工冒烟通过才公开\n- **锁文件入库**：`Cargo.lock` 随 bump 一起提交，保证 CI 构建与本地一致\n\n### ❌ 避免陷阱\n\n- **不要手改生成文件**：`cargo dist generate` 与 tauri-action 的产物以工具为准，手工热修会在下次生成时丢失\n- **不要跳过本地排练**：CI 分钟级计费且失败一轮就是十几分钟；`cargo dist plan` + 本机 `tauri build` 能拦住 80% 的问题\n- **不要在同一次发布里混用版本号**：桌面端晚于服务端发版时，桌面 bundle 内仍显示 workspace 版本，对外口径必须统一说明\n\n### 模式不变量\n\n- 单一事实来源原则对版本号同样成立：所有派生版本必须可追溯到一处定义\n- 发布是可重复的过程而非手工技艺：tag 触发、产物进草稿、人工验证后公开，每步可回退\n- 构建环境即契约：桌面打包依赖各 OS 原生工具链，流水线必须显式声明这些依赖（如 Linux 的 WebKitGTK）",
+    "after": "发布流程让版本、提交和每个平台产物互相可追溯；多个文件保存版本时可以由工具同步并检查一致性，不必要求物理上只能出现一次。锁文件帮助固定解析，系统依赖和签名环境仍要单独管理。\n\n发布草稿先验证安装与升级，生成文件通过源配置修改以避免下次覆盖。服务器与客户端可能独立版本演进，应声明兼容范围，不强行伪装同一版本。计划检查与本地构建能提前发现问题，但不能承诺拦住固定百分比缺陷。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "11-rust-cross-platform/reference/framework-essentials/09-tauri-2-essentials.md",
+    "heading": "## 🎨 最佳实践",
+    "original_line": 283,
+    "before": "### ✅ 推荐做法\n- **capabilities 最小化**：按窗口拆分能力文件，只授 `default` + 显式 `allow-*`，新窗口上线前先跑一遍权限审计\n- **状态进 `setup` 后再注册命令**：顺序颠倒会出现命令执行时 `State` 尚未托管的 panic\n- **`identifier` 用真实持有域名**：自动更新与深链接生态都会校验归属\n\n### ❌ 避免陷阱\n- **漏配 `connect-src` 的 ipc 指令**：CSP 收紧后前端 invoke 全挂，报错却不指向 CSP\n- **在生产 capabilities 里留 `*` 通配**：等于放弃 ACL 这层防线\n- **改 `identifier` 后直接覆盖安装**：数据目录与签名校验错位，应用\"凭空丢数据\"",
+    "after": "capabilities 定义窗口或 WebView 能调用的受控能力，默认权限集合也需逐项理解；自定义业务命令还要验证资源路径和授权，不因已经注册命令就自动安全。状态必须在命令实际调用前准备好，但配置链的书写顺序不能简单等同于运行时顺序。\n\n应用标识、数据目录和更新身份一起规划，变更后需要迁移与升级测试。收紧 CSP 或权限后，验证正常命令仍可用、越界访问确实被拒绝，不能只检查配置文件“看起来严格”。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "11-rust-cross-platform/reference/framework-essentials/10-tauri-ipc-commands.md",
+    "heading": "## 🎨 最佳实践",
+    "original_line": 312,
+    "before": "### ✅ 推荐做法\n- **命令粒度对齐业务操作**：一个命令 = 一次完整业务动作，避免前端拼装多次 invoke 的中间态\n- **长任务走事件**：超过几百毫秒的工作，立即 `emit` started，进度用事件推送，结束再 `emit` finished\n- **前端封装类型层**：`invoke<T>()` 泛型 + 每命令一个包装函数，把命令名与参数形状收敛到单文件\n\n### ❌ 避免陷阱\n- **camelCase 拼写错位**：Rust `file_path` ↔ JS `filePath`，对不上报 `invalid args`，是最高频错误\n- **async + State 忘了 Result**：编译错误信息指向 Send 约束，记住\"借用参数必 Result\"\n- **事件监听不注销**：前端组件卸载时忘记 `unlisten()`，监听器随窗口累积",
+    "after": "命令粒度围绕可解释的业务动作，例如保存一条笔记；长任务可返回任务 id 或通过事件报告进度，但必须定义失败、取消和结束状态。类型参数只是前端声明，参数名称与返回结构还需两端契约测试。\n\n异步命令涉及借用与 Send 等约束时，按实际签名和编译诊断调整，不能背诵“有借用必加 Result”作为普遍规则。事件订阅处理卸载与注册完成的竞态，快速重复进入页面后不应收到重复进度。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "11-rust-cross-platform/reference/framework-essentials/11-axum-essentials.md",
+    "heading": "## 🎨 最佳实践",
+    "original_line": 344,
+    "before": "### ✅ 推荐做法\n- **每个功能模块一个 `routes() -> Router<AppState>`**：根路由器只做 nest/merge/with_state，路径冲突在启动即 panic 暴露\n- **鉴权走 `route_layer` + Extension**：404 不被鉴权保护逻辑影响，handler 通过 `Extension` 拿身份\n- **统一 AppError + `?`**：handler 签名统一为 `Result<impl IntoResponse, AppError>`，错误路径零样板\n\n### ❌ 避免陷阱\n- **手写旧 `:param` 语法**：0.8 构建期直接报错；错误信息会提示花括号写法\n- **`with_state` 提前调用**：后续 `.route()` 的 `State<T>` 全部对不上类型，报出深层 trait bound 错误\n- **把内部错误回给客户端**：`anyhow` 错误链可能含 SQL/路径细节，只回固定文案，细节进日志",
+    "after": "组合 Router 时明确当前还缺少什么 State，再通过合适位置提供状态；with_state 后并非永远不能添加路由，类型是否匹配由完整组合决定。路径冲突和旧捕获语法通常在构建路由的运行阶段暴露，不应混称 rustc 编译错误。\n\n认证中间件与 extractor 可以按应用需要组织，重点是身份验证不会遗漏，资源授权仍执行。错误响应保持稳定且不暴露内部原因，用真实请求验证合法路径、缺身份、无权限和未匹配路径的行为。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "11-rust-cross-platform/reference/library-guides/12-tokio-guide.md",
+    "heading": "## 🎨 最佳实践与陷阱",
+    "original_line": 290,
+    "before": "### ✅ 推荐做法\n- **容量即背压**：有界 mpsc 满了 `send().await` 自然等待，是流控的第一道闸。\n- **阻塞移出 worker**：文件 IO、重 CPU、FFI 调用一律 `spawn_blocking`。\n- **`select!` 分支保持取消安全**：非取消安全操作（如整段 `read_exact`）拆小或先落缓冲。\n\n### ❌ 避免陷阱\n- **在 async fn 里 `std::thread::sleep`**：卡死整个 worker 线程；用 `tokio::time::sleep`。\n- **`current_thread` runtime 用 `block_in_place`**：会 panic，仅多线程 runtime 支持。\n- **spawn 出的\"孤儿任务\"失控**：保存 `JoinHandle` 或用 `JoinSet` 管理，需要时可 `abort`。\n- **broadcast 读者忽略 `Lagged`**：`Lagged(n)` 表示已丢 n 帧，必须显式决定重同步策略。\n- **手动 Builder 忘了 `enable_all()`**：`net`/`time` API 运行时 panic。",
+    "after": "有界通道让生产者在容量耗尽时等待，但总任务数量和生产速度也需限制，否则排队可能只是转移到任务堆积。阻塞调用可放合适执行器，已有异步 API 无需再全部包 spawn_blocking；CPU 密集工作同样要限并发。\n\nselect 丢弃未获选 Future 的语义要求检查取消安全，部分读写可能已经推进，不能简单重来。任务需要明确关闭与等待责任，abort 不会停止所有已经开始的阻塞工作。Runtime Builder 按需启用时间或 I/O 驱动，也可 enable_all；验收取消和关闭时资源确实释放。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "11-rust-cross-platform/reference/library-guides/13-serde-guide.md",
+    "heading": "## 🎨 最佳实践与陷阱",
+    "original_line": 289,
+    "before": "### ✅ 推荐做法\n- **对外 API 用 `rename_all = \"camelCase\"`**：Rust 命名风格与 JSON 惯例解耦，一处声明全局生效。\n- **可选字段统一 `skip_serializing_if = \"Option::is_none\"`**：保持载荷干净；`Option` 字段缺失时反序列化自动得 `None`，无需 `default`。\n- **边界类型手写、内部类型 derive**：`remote` + `from` 组合为第三方类型做桥。\n\n### ❌ 避免陷阱\n- **`skip` 字段不是\"必填校验\"**：skip 字段反序列化时用 `Default::default()` 填充，不会报错。\n- **`untagged` 挨个试变体**：变体多时解析慢且错误信息模糊，性能敏感路径慎用。\n- **`flatten` 与 `deny_unknown_fields` 互斥**：拍平语义下\"未知键\"概念已不存在。\n- **`deny_unknown_fields` 配 API 演进**：服务端加字段会直接打挂老客户端，宽松消费端慎用。\n- **忘记 `SerializeStruct` 导入**：`serialize_field` 是 trait 方法，需 `use serde::ser::SerializeStruct;`。",
+    "after": "序列化字段名、null 与缺失是接口契约，camelCase 和省略 None 都不是普遍规定。例如 PATCH 中“未提供”与“主动清空”可能不同，需要显式建模，不能只靠一个 Option 草率合并。\n\nderive 适合类型结构与格式一致的场景，特殊边界可使用转换或自定义实现。untagged 的匹配顺序与错误反馈需测试，flatten 与 deny_unknown_fields 按 Serde 支持限制使用；未知字段仍有概念，不能把配置不兼容解释成未知键不存在。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "11-rust-cross-platform/reference/library-guides/14-error-libraries.md",
+    "heading": "## 🎨 最佳实践与陷阱",
+    "original_line": 241,
+    "before": "### ✅ 推荐做法\n- **先分层再选库**：写库（会被别人依赖）→ thiserror；写应用（消费一切）→ anyhow。\n- **`#[from]` 只给\"真的想隐式的\"转换**：每个 `#[from]` 都是一条隐式 `?` 通路，多了会模糊错误来源。\n- **context 写\"当时在做什么\"**：`open(path).context(\"读取配置失败\")`——上下文是操作语义，不是错误重复。\n\n### ❌ 避免陷阱\n- **`io::Error::new(kind, payload).source()` 是 `None`（实测）**：自定义载荷要用 `get_ref()` 取，它不进 source 链；想要链就用包装类型或 anyhow 的 `.context()`。\n- **anyhow 的 Display 以为会显示全链**：只显示最外层；排障日志必须 `{:#}` 或 `{:?}`。\n- **thiserror 枚举里同类型两个 `#[from]`**：`From` 实现冲突，编译失败；第二个变体去掉 `#[from]` 手动构造。\n- **在库的公开签名里用 `anyhow::Error`**：调用方失去 match 能力；anyhow 留在二进制边界内。\n- **`unwrap()`/`expect()` 出现在库路径**：panic 不进错误链、跨 FFI/线程边界即炸；仅测试与\"逻辑上不可能失败\"处使用。",
+    "after": "错误库按调用方需要选择：稳定公共 API 常提供可区分的错误，应用聚合多种失败可使用统一容器。anyhow 支持向下转换已知类型，但不是自动生成的稳定业务错误枚举。context 说明当时的操作，避免只是重复底层消息。\n\n从同一种错误类型到多个变体不能自动生成互相冲突的 From，实现中需明确选择。io::Error 的载荷访问与 source 链不同，不能对所有载荷一概断言 source 永远为空；排查时按实际错误结构检查。panic、线程和 FFI 各有边界，不用统一“跨界即炸”替代契约。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "11-rust-cross-platform/testing/01-unit-integration-tests.md",
+    "heading": "## 🎨 最佳实践",
+    "original_line": 293,
+    "before": "### ✅ 推荐做法\n\n- **层级归位**: 私有逻辑细节用单元测试，公开行为承诺用集成测试，API 用法用 doctest——不要用集成测试去追私有实现\n- **测试名即规格**: `smaller_cannot_hold_larger` 这样的名字让失败报告直接可读\n- **公共 setup 进 `common` 模块**: 用 `mod.rs` 后缀规避误执行\n\n### ❌ 避免陷阱\n\n- **给 `Result` 风格函数配 `#[should_panic]`**: 永远不会 panic，测试必然失败（本篇实测教训）\n- **`tests/common.rs` 单文件共享代码**: 会被当作测试执行，报 \"running 0 tests\" 且徒增噪音——改用 `tests/common/mod.rs`\n- **依赖执行顺序或共享可变全局**: libtest 默认多线程乱序执行，共享状态要么显式加锁，要么 `--test-threads=1`，要么每测试独立构造",
+    "after": "单元测试可覆盖模块内逻辑，集成测试从公开入口验证协作，doctest 维护 API 用法。Result 函数的错误路径应断言 Err，不因返回类型是 Result 就认为内部绝不可能 panic；只有明确契约要求 panic 时使用 should_panic。\n\n共享测试辅助代码放合适子模块，避免被当作独立测试目标。每个用例独立建立状态，串行执行只是诊断或特定资源约束手段，不能掩盖用例之间不该存在的依赖。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "11-rust-cross-platform/testing/02-criterion-benchmarks.md",
+    "heading": "## 🎨 最佳实践",
+    "original_line": 221,
+    "before": "### ✅ 推荐做法\n\n- **`black_box` 包住输入与结果**: 输入不进 `black_box` 会被常量折叠，结果不消费会被整段删除\n- **固定测量环境**: 插电、锁频（或至少避开降频窗口）、关闭重负载进程；报告的异常点计数是环境噪声的晴雨表\n- **CI 里保存基线产物**: `--save-baseline` 的结果在 `target/criterion/` 下，作为 artifact 跨流水线传递即可实现回归门禁\n\n### ❌ 避免陷阱\n\n- **在 debug 档位测性能**: `cargo bench` 自带 bench profile；手动 `cargo test --release` 跑基准属于另立口径\n- **把冷启动算进结论**: Criterion 自带预热与自适应采样；自写循环计时既没有预热也没有异常剔除\n- **只看均值**: 均值对长尾敏感，中位数与斜率背离时先查分布图，再谈结论",
+    "after": "基准先定义测量对象：初始化、单次计算还是完整请求。black_box 帮助降低优化器消除基准工作的机会，但不是绝对屏障；输入分布与结果消费仍应接近真实任务。\n\n固定构建模式和环境，比较分布及波动，冷启动若是产品问题就应单独测量，不能一概排除。保存基线不自动产生 CI 门禁，还需实现比较、阈值和失败策略，并考虑共享 runner 噪声。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "11-rust-cross-platform/testing/03-tauri-e2e-webdriver.md",
+    "heading": "## 🎨 最佳实践",
+    "original_line": 225,
+    "before": "### ✅ 推荐做法\n\n- **先稳住下层再上 E2E**: 单元/集成测试覆盖逻辑正确性，E2E 只守护「应用作为整体能被使用」的关键路径\n- **固定等待策略**: 优先用条件等待（元素出现/文本变化），避免裸 `sleep` 导致的时序脆弱\n- **CI 中提供虚拟显示**: Linux 流水线用 `xvfb-run` 包裹测试命令，让原生驱动有可用的显示环境\n\n### ❌ 避免陷阱\n\n- **拿 release 精简产物当被测对象**: 剥符号、压缩资源会放大偶发问题且不可诊断——E2E 用 debug 构建\n- **在 E2E 里测计算逻辑**: 纯算法走单元测试即可，E2E 重复断言只会拖慢反馈\n- **Edge Driver 与 WebView2 版本错位（Windows）**: 症状是会话挂起无报错，先核对版本再查用例",
+    "after": "E2E 通过真实窗口完成核心旅程，等待元素与状态条件，并保存截图、应用日志和驱动版本。平台要求虚拟显示或特定 WebDriver 版本时，将其作为可复现环境的一部分记录。\n\n调试构建便于诊断，发布前仍需要对实际 release 产物冒烟或适当的 E2E 验证，不能因符号被剥离就禁止测试它。算法细节在更快测试层验证，端到端重点检查打包、权限、IPC 与界面能否协作。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "01-go-backend/advanced-topics/performance/01-concurrency-patterns.md",
+    "heading": "## 🎯 最佳实践",
+    "original_line": 232,
+    "before": "### ✅ 推荐做法\n- **避免全局变量**: 使用参数传递状态\n- **正确处理错误**: 所有并发操作都要处理错误\n- **资源管理**: 使用defer确保资源释放\n- **合理设置超时**: 避免无限等待\n\n### ❌ 避免陷阱\n- **数据竞争**: 使用互斥锁保护共享状态\n- **goroutine泄漏**: 确保所有goroutine都能退出\n- **channel阻塞**: 避免死锁情况",
+    "after": "并发设计先回答三件事：谁启动 goroutine、谁负责等待结果、什么情况下它结束。请求取消时，数据库和下游调用应接收相应 context；channel 发送方也要考虑接收者已离开的情况，避免永远阻塞。\n\n共享可变状态通过明确的锁或消息协议保护，不能仅把全局变量改成参数就认为没有竞争。defer 随当前函数返回执行，在长循环里不断 defer 可能让资源持有过久。用取消、下游失败和缓慢消费者测试退出路径，并结合 race 检查验证并发访问。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "01-go-backend/advanced-topics/security/01-security-best-practices.md",
+    "heading": "## 🎯 最佳实践",
+    "original_line": 179,
+    "before": "### ✅ 推荐做法\n- **最小权限原则**: 只授予必要的权限\n- **定期密钥轮换**: 定期更换JWT密钥和数据库密码\n- **多层验证**: 实现多层次的安全检查\n- **安全日志**: 记录关键安全事件\n\n### ❌ 避免陷阱\n- **硬编码密钥**: 不要在代码中硬编码敏感信息\n- **忽略错误处理**: 所有安全操作都要处理错误\n- **过度暴露信息**: 错误信息不要暴露系统内部结构",
+    "after": "最小权限落实到具体资源：普通查询账号无需建表权限，用户只能操作自己的记录，后台任务只获得其处理范围。为权限规则写跨用户与越权输入测试，不能只检查“有认证中间件”。\n\n密钥轮换包含生成、分发、旧凭据过渡与撤销，先演练服务不中断且旧凭据按期失效。安全日志记录发生了什么和关联标识，不记录令牌与密码。拒绝请求时返回一致的安全消息，内部原因在受控日志中保留。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "01-go-backend/deployment/01-containerization.md",
+    "heading": "## 📋 部署最佳实践",
+    "original_line": 930,
+    "before": "### 1. 镜像优化\n- 使用多阶段构建\n- 选择合适的基础镜像\n- 清理不必要的依赖\n- 使用.dockerignore文件\n\n### 2. 安全考虑\n- 使用非root用户运行\n- 定期更新基础镜像\n- 扫描镜像漏洞\n- 使用secret管理敏感信息\n\n### 3. 生产环境部署\n- 使用容器编排工具\n- 实现健康检查\n- 配置日志收集\n- 设置监控告警\n\n### 4. CI/CD集成\n- 自动化构建测试\n- 镜像版本管理\n- 自动部署流程\n- 回滚机制",
+    "after": "多阶段构建把编译工具与运行产物分开，减少运行镜像携带的内容；基础镜像还必须具备程序需要的 libc、证书与时区等能力。先验证可运行，再比较镜像大小与构建时间，不能只追求最小体积。\n\n容器以合适非特权身份运行，配置与秘密由部署环境提供；健康探测要区分能否接流量与是否需要重启。发布记录关联源码、镜像摘要与配置版本，并在隔离环境演练退出、重启和恢复。回滚镜像不会自动撤销数据迁移，应另行验证兼容性。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "01-go-backend/deployment/03-kubernetes-deployment.md",
+    "heading": "## 📋 生产环境最佳实践",
+    "original_line": 1005,
+    "before": "### 1. 资源优化\n- 合理设置资源请求和限制\n- 使用HPA进行自动扩展\n- 优化镜像大小和启动时间\n- 配置合适的探针\n\n### 2. 安全配置\n- 使用非root用户运行\n- 配置网络策略\n- 定期更新基础镜像\n- 使用密钥管理敏感信息\n\n### 3. 高可用配置\n- 多副本部署\n- 跨区域部署\n- 健康检查和自愈\n- 备份和恢复策略\n\n### 4. 监控和日志\n- 完整的监控体系\n- 集中日志收集\n- 告警和通知\n- 性能指标收集",
+    "after": "requests 用于调度资源，limits 约束消耗，两者从代表性负载测量；过紧限制可能导致节流或 OOM。HPA 依据配置指标扩副本，不会自动解决数据库瓶颈，还可能增加连接总量。\n\n探针、非特权身份、网络策略与密钥管理分别保护运行和访问边界，配置存在不等于已生效。多副本也不能代替数据备份；跨区方案还要考虑延迟、一致性与成本。演练一个副本退出和一次备份恢复，检查用户请求与数据是否满足目标。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "01-go-backend/reference/framework-essentials/01-gin-framework.md",
+    "heading": "### 3.4 中间件最佳实践",
+    "original_line": 218,
+    "before": "- **中间件顺序**：执行顺序的重要性\n- **中间件组合**：中间件链的组合\n- **条件中间件**：基于条件的中间件\n- **中间件测试**：中间件单元测试\n- **性能考虑**：中间件性能影响",
+    "after": "中间件按注册顺序进入，调用 Next 后可以等待后续处理再执行收尾；认证提前拒绝时应中止链并结束当前处理，避免无意继续执行业务。日志或计时放在哪一层，决定它能否覆盖被拒绝的请求。\n\n将认证、日志和业务分别记录一个可观察事件，测试正常、无身份和 panic 恢复三条路径，确认执行顺序符合预期。条件性中间件应明确匹配哪些路由；每请求都执行的工作需要避免慢 I/O 和重复校验。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "01-go-backend/reference/language-concepts/03-go-programming-essentials.md",
+    "heading": "### Q6: Go模块的最佳实践是什么？",
+    "original_line": 3418,
+    "before": "**A**: Go模块最佳实践：\n- **语义化版本**: 遵循v2+版本约定\n- **最小依赖**: 只依赖真正需要的包\n- **固定版本**: 在生产环境中固定依赖版本\n- **定期更新**: 定期更新依赖获得安全修复",
+    "after": "模块版本表达兼容契约，v2 及以后通常需要相应主版本路径，调用方的 import 也随之改变。新增依赖前确认它提供的能力与维护成本，go.mod 记录所需版本，go.sum 记录内容校验，二者作用不同。\n\n升级时审阅变更并运行相关测试，检查实际选择的依赖图，而不是只看直接依赖的一行版本号。固定解析有助复现，但不能成为永不更新安全修复的理由；移除依赖后重新整理并验证干净环境能构建。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "02-nextjs-frontend/advanced-topics/api-integration/01-graphql-apollo.md",
+    "heading": "### 🏢 企业级最佳实践",
+    "original_line": 46,
+    "before": "- 实施GraphQL API设计原则和Schema治理体系\n- 构建GraphQL安全防护机制，防止恶意查询和数据泄露\n- 掌握GraphQL监控、调试和错误追踪体系\n- 实现GraphQL自动化测试和质量保证流程\n- 构建GraphQL文档生成和API探索工具\n- 建立GraphQL团队协作和知识管理体系",
+    "after": "以一个“订单及明细”查询为单位设计 schema：字段含义、可空性、分页和权限都应明确。灵活查询同时带来成本风险，需要限制查询复杂度并检查 resolver 是否出现逐项访问数据库的 N+1。\n\n用受控请求测试无权限字段、部分失败和分页边界，再记录耗时与错误位置。schema 变更先检查已有消费者是否兼容，文档生成只能展示结构，不能代替字段语义与安全规则的说明。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "02-nextjs-frontend/advanced-topics/architecture/02-micro-frontends.md",
+    "heading": "### 🏢 企业级最佳实践",
+    "original_line": 46,
+    "before": "- 建立微前端开发团队的组织架构和协作流程\n- 实施微前端应用的治理体系和质量保证机制\n- 构建微前端的技术债务管理和重构策略\n- 掌握微前端应用的渐进式迁移和遗留系统集成\n- 建立微前端的知识管理体系和最佳实践沉淀\n- 构建可扩展的微前端技术平台和生态系统",
+    "after": "微前端适合确实需要独立交付的团队边界，它增加了依赖协调、路由、身份和样式隔离成本。先用一个可独立部署的业务区域验证收益，不要仅为“企业级”把小应用拆成多个运行单元。\n\n迁移时规定壳应用与子应用的接口、版本兼容和故障回退：一个子应用加载失败时其他功能仍应可用。用不同版本组合与重复导航测试资源清理和状态隔离，团队流程围绕这些可验证契约建立。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "02-nextjs-frontend/basics/01-environment-setup.md",
+    "heading": "## 📊 开发最佳实践",
+    "original_line": 726,
+    "before": "### 1. 代码组织\n- 使用`src`目录结构以获得更好的组织\n- 按功能/域对组件进行分组\n- 使用一致的命名约定\n- 保持组件小而专注\n\n### 2. 版本控制\n- 使用语义化版本\n- 编写清晰、描述性的提交信息\n- 为新工作创建功能分支\n- 定期提交并逻辑分组\n\n### 3. 依赖管理\n- 定期更新依赖\n- 使用锁文件确保一致的构建\n- 监控安全漏洞\n- 优先选择特定版本而不是版本范围\n\n### 4. 性能优化\n- 使用Turbopack进行更快的开发构建\n- 启用TypeScript严格模式\n- 配置代码分割\n- 监控包大小\n\n### 5. 代码质量\n- 启用严格的TypeScript配置\n- 使用ESLint进行代码质量检查\n- 用Prettier格式化代码\n- 为关键功能编写单元测试",
+    "after": "环境搭好后应能从干净目录安装、检查、构建并运行一个最小页面。src 目录和按功能分组有助定位代码，但不自动保证可维护；先把页面入口、复用组件与服务端代码边界说明白。\n\n版本控制保存可解释的改动与依赖锁文件，升级按兼容性和维护需求进行。TypeScript 严格模式检查类型，lint 检查已配置规则，格式化统一文本，它们不等于性能优化或运行时验证。构建速度与首屏性能分别测量，不把换构建器当作全部问题的解法。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "02-nextjs-frontend/deployment/02-docker-containerization.md",
+    "heading": "## 📋 最佳实践清单",
+    "original_line": 1511,
+    "before": "### ✅ Dockerfile优化\n- [ ] 使用多阶段构建减少镜像大小\n- [ ] 使用非root用户运行容器\n- [ ] 优化层缓存和构建顺序\n- [ ] 实施健康检查\n- [ ] 使用轻量级基础镜像\n\n### ✅ Docker Compose配置\n- [ ] 配置资源限制和预留\n- [ ] 设置健康检查和重启策略\n- [ ] 实现服务发现和负载均衡\n- [ ] 配置网络隔离和安全策略\n- [ ] 设置数据持久化和备份\n\n### ✅ 安全配置\n- [ ] 定期运行安全扫描\n- [ ] 实施镜像签名和验证\n- [ ] 配置运行时安全策略\n- [ ] 管理密钥和敏感信息\n- [ ] 实施网络分段和访问控制\n\n### ✅ 监控和日志\n- [ ] 配置全面的指标收集\n- [ ] 设置智能告警规则\n- [ ] 实现日志聚合和分析\n- [ ] 建立性能基线监控\n- [ ] 配置可视化仪表板",
+    "after": "容器交付先验收一个结果：同一镜像在隔离环境启动后，能响应健康请求和核心页面，配置由环境提供。构建层只带编译需要的内容，运行层只带应用所需文件；依赖缓存和基础镜像选择用构建时间、大小及兼容性验证。\n\n用非特权身份检查目录权限，敏感配置不进入镜像层与日志。持久数据放在明确存储中，重建容器后仍可恢复。监控关注请求失败与资源饱和，并演练停止、重启和旧产物恢复；不要把部署了仪表板当作已经具备恢复能力。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "02-nextjs-frontend/deployment/03-ci-cd-pipelines.md",
+    "heading": "### 🛠️ DevOps最佳实践",
+    "original_line": 46,
+    "before": "- 实施基础设施即代码和配置管理\n- 掌握蓝绿部署和金丝雀发布策略\n- 构建故障回滚和应急响应机制\n- 实现日志聚合和分析自动化\n- 掌握团队协作和权限管理最佳实践\n- 建立可观测性和性能监控体系",
+    "after": "把基础设施与发布配置纳入版本控制，能回答“这次发布改变了什么”和“如何还原”。蓝绿或金丝雀只有在流量切换、健康判断与旧版本兼容明确时才有价值，不要求每个练习同时实现两套方案。\n\n流水线先在受控环境演练失败：测试不通过不能发布，新实例未就绪不能接流量，部署后业务冒烟失败能停止放量。权限按检查、构建与发布分开，日志记录足够定位失败但不输出凭据。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "02-nextjs-frontend/deployment/03-ci-cd-pipelines.md",
+    "heading": "## 📋 最佳实践清单",
+    "original_line": 1122,
+    "before": "### ✅ CI/CD流水线设计\n- [ ] 实现多阶段构建和并行执行\n- [ ] 配置智能缓存策略\n- [ ] 设置质量门禁和自动化检查\n- [ ] 实现失败重试和错误处理\n- [ ] 建立完整的测试覆盖\n\n### ✅ 测试策略\n- [ ] 单元测试、集成测试、E2E测试\n- [ ] 代码覆盖率统计和质量报告\n- [ ] 性能测试和回归检测\n- [ ] 安全测试和漏洞扫描\n- [ ] 自动化烟雾测试\n\n### ✅ 部署策略\n- [ ] 多环境部署配置管理\n- [ ] 蓝绿部署和金丝雀发布\n- [ ] 自动化回滚和故障恢复\n- [ ] 健康检查和监控集成\n- [ ] 零停机部署策略\n\n### ✅ 安全和合规\n- [ ] 代码安全扫描和漏洞检测\n- [ ] 依赖安全审计和许可证检查\n- [ ] 密钥管理和环境变量保护\n- [ ] 访问控制和权限管理\n- [ ] 安全告警和事件响应",
+    "after": "验收流水线时故意提交一次测试失败，确认发布被阻止；再用同一通过检查的产物部署，核对版本标识与核心功能。可以并行的检查独立运行，有依赖的构建和发布按顺序衔接，重试只用于可安全重试的步骤。\n\n测试分层按风险覆盖：纯逻辑检查规则，集成检查协作，E2E 检查核心旅程。部署后的回退要区分应用产物、配置和数据库迁移；秘密仅注入可信步骤，审计与许可证检查结果需要处理记录，而不只是一个绿色徽章。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "02-nextjs-frontend/deployment/04-monitoring-analytics.md",
+    "heading": "### 🚀 运维最佳实践",
+    "original_line": 46,
+    "before": "- 实施多层次监控策略（基础设施、应用、业务）\n- 掌握异常检测和根因分析技术\n- 建立智能告警和自动化响应机制\n- 实现容量规划和性能预测\n- 掌握灾难恢复和业务连续性保障\n- 建立团队协作的运维流程体系",
+    "after": "先选一个用户任务建立监控链，例如下单失败能关联请求、后端异常与依赖耗时。基础设施资源帮助判断容量，业务成功率帮助判断用户影响，二者一起看才能缩小原因范围。\n\n告警应说明异常持续多久、影响什么及下一步行动，避免每次短暂波动都通知。容量预测用代表性负载和增长假设验证；恢复能力通过备份恢复与故障演练证明，而不是通过监控工具数量证明。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "02-nextjs-frontend/deployment/04-monitoring-analytics.md",
+    "heading": "## 📋 最佳实践清单",
+    "original_line": 1110,
+    "before": "### ✅ 错误监控\n- [ ] 配置Sentry完整集成\n- [ ] 实现自定义错误追踪\n- [ ] 设置智能告警规则\n- [ ] 建立错误分类和优先级\n- [ ] 实现错误趋势分析\n\n### ✅ 性能监控\n- [ ] 集成Web Vitals追踪\n- [ ] 实现自定义性能监控\n- [ ] 设置性能阈值告警\n- [ ] 建立性能基线对比\n- [ ] 实现资源加载分析\n\n### ✅ 用户分析\n- [ ] 实现事件追踪系统\n- [ ] 建立转化漏斗分析\n- [ ] 配置用户行为追踪\n- [ ] 实现A/B测试框架\n- [ ] 建立用户分群系统\n\n### ✅ 仪表板和可视化\n- [ ] 创建实时监控仪表板\n- [ ] 实现自定义报告系统\n- [ ] 建立趋势分析图表\n- [ ] 配置移动端适配\n- [ ] 实现数据导出功能",
+    "after": "先制造一个受控错误，确认错误平台记录了对应发布版本、源码位置和请求线索，并检查敏感数据已经过滤。再故意降低一个依赖的响应速度，确认性能指标能区分前端加载与后端等待。\n\n用户分析只采集有明确用途的事件，定义事件何时触发和如何去重，避免“按钮点击”与“操作成功”混为一谈。仪表板围绕要做的决策设计；验证一次告警到调查的过程，比勾选“智能告警、实时看板”更能证明系统可用。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "02-nextjs-frontend/frameworks/02-react-19-integration.md",
+    "heading": "### ⚡ 性能优化最佳实践",
+    "original_line": 1382,
+    "before": "- React 19的性能优化特性和工具\n- memo、useMemo、useCallback的高级应用\n- 虚拟滚动和大数据量处理\n- 实时性能监控和调试技术",
+    "after": "优化前先记录一次实际交互，例如输入筛选词时哪部分计算或渲染变慢。memo、useMemo、useCallback 分别影响组件跳过或值/函数引用复用，依赖不正确会产生旧结果，使用本身也有维护成本。\n\n大量列表可评估虚拟化，昂贵计算可减少输入范围或移到适当位置。用同一数据量比较交互延迟与提交耗时，确保修改后结果仍正确，不能把使用了某个 Hook 当作性能已经改善。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "02-nextjs-frontend/reference/development-tools/03-package-managers.md",
+    "heading": "## 📋 最佳实践",
+    "original_line": 861,
+    "before": "### 依赖管理最佳实践\n- [ ] 使用固定版本或兼容版本\n- [ ] 定期更新依赖和审计安全\n- [ ] 使用 workspace 管理多包项目\n- [ ] 配置适当的缓存策略\n- [ ] 使用 .npmignore 或 .gitignore 忽略文件\n\n### 安全实践\n- [ ] 定期运行安全审计\n- [ ] 使用私有注册表配置\n- [ ] 配置 CI/CD 中的依赖扫描\n- [ ] 使用内容安全策略 (CSP)\n- [ ] 管理访问令牌和密钥\n\n### 性能优化\n- [ ] 选择合适的包管理器\n- [ ] 配置缓存和存储优化\n- [ ] 使用零安装模式 (可选)\n- [ ] 优化 CI/CD 中的依赖安装\n- [ ] 监控依赖大小和安装时间",
+    "after": "依赖范围表达允许升级的边界，锁文件记录本次解析出的具体依赖图，两者并不矛盾。发布库需要合理兼容范围，应用部署需要可重建解析；workspace 用于管理确有协作关系的包，不是所有仓库必需。\n\n发布前检查打包清单，.gitignore 与包发布忽略规则不是同一份安全保证。安装缓存按锁文件和环境失效，比较冷热运行时间；访问令牌限制权限。CSP 管浏览器内容执行，不能代替依赖来源、安装脚本与供应链审查。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "02-nextjs-frontend/reference/development-tools/04-debugging-tools.md",
+    "heading": "## 📋 最佳实践",
+    "original_line": 1237,
+    "before": "### 构建配置最佳实践\n- [ ] 使用环境变量管理不同配置\n- [ ] 配置适当的代码分割策略\n- [ ] 启用 Source Maps 在开发环境\n- [ ] 使用 Tree Shaking 移除无用代码\n- [ ] 配置适当的压缩和混淆\n- [ ] 设置构建分析工具\n\n### 性能优化建议\n- [ ] 选择合适的构建工具\n- [ ] 配置并行构建\n- [ ] 使用缓存策略\n- [ ] 优化依赖解析\n- [ ] 监控构建性能\n- [ ] 定期更新构建工具\n\n### 安全考虑\n- [ ] 定期更新构建工具和插件\n- [ ] 扫描依赖安全漏洞\n- [ ] 配置安全的构建环境\n- [ ] 验证构建完整性\n- [ ] 使用内容安全策略",
+    "after": "构建排查先区分源码解析、依赖解析、打包与运行错误，保留实际命令、版本和第一条相关诊断。source map 把产物位置对应到源码，生产是否公开应按调试与信息暴露需求安排。\n\ntree shaking、动态导入和压缩解决不同问题，也不保证所有未调用代码都会自动移除。构建提速用冷缓存与热缓存分别测量，避免缓存掩盖真实依赖。插件与构建脚本会执行代码，凭据和权限需限制；最终产物完整性不能由“构建成功”单独证明。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "02-nextjs-frontend/reference/framework-patterns/01-app-router-patterns.md",
+    "heading": "## 📋 最佳实践清单",
+    "original_line": 1762,
+    "before": "### App Router 设计原则\n- [ ] **文件系统优先**: 充分利用文件系统路由约定\n- [ ] **组件化设计**: 保持组件的单一职责和可复用性\n- [ ] **类型安全**: 使用 TypeScript 确保类型安全\n- [ ] **性能优先**: 合理使用缓存和数据预获取\n- [ ] **SEO 友好**: 正确设置元数据和结构化数据\n- [ ] **可访问性**: 遵循 WCAG 和 ARIA 标准\n\n### 路由组织最佳实践\n- [ ] **逻辑分组**: 使用路由组组织相关功能\n- [ ] **清晰命名**: 使用描述性的文件夹和文件名\n- [ ] **层次结构**: 保持合理的路由层次深度\n- [ ] **一致性**: 遵循统一的命名和组织约定\n- [ ] **可扩展性**: 设计支持未来功能扩展的结构\n- [ ] **文档化**: 为复杂的路由结构提供文档\n\n### 性能优化策略\n- [ ] **智能缓存**: 根据数据更新频率设置合适的缓存策略\n- [ ] **并行数据获取**: 同时获取多个数据源\n- [ ] **代码分割**: 合理拆分代码减少初始加载时间\n- [ ] **图片优化**: 使用 Next.js Image 组件优化图片\n- [ ] **字体优化**: 使用字体显示策略优化字体加载\n- [ ] **预加载策略**: 预加载关键资源\n\n### 安全性考虑\n- [ ] **认证中间件**: 实现可靠的认证和授权\n- [ ] **输入验证**: 严格验证所有用户输入\n- [ ] **CORS 配置**: 正确配置跨域资源共享\n- [ ] **安全头部**: 设置适当的安全响应头\n- [ ] **速率限制**: 防止 API 滥用\n- [ ] **错误处理**: 避免泄露敏感信息",
+    "after": "路由目录表达 URL 与布局关系，路由组主要帮助组织，不是所有目录都改变地址。先画出列表、详情和登录三条用户路径，验证直接打开、刷新、返回与未登录访问，而不只测试应用内点击。\n\n缓存键和作用域依据数据身份设计，私人数据不能进入不隔离用户的共享缓存。独立数据可以并行获取，有依赖的请求则按顺序或重构接口；预取会额外消耗资源，不是越多越快。认证提示可以在界面层完成，真正读取或修改数据的位置仍要校验权限。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "02-nextjs-frontend/reference/framework-patterns/01-app-router-patterns.md",
+    "heading": "### 最佳实践：",
+    "original_line": 1816,
+    "before": "- 文件系统优先的设计理念\n- 组件化和类型安全的开发方式\n- 性能优先的缓存策略\n- 安全可靠的中间件实现\n- SEO 友好的元数据管理\n\n通过掌握这些模式和最佳实践，开发者可以构建高性能、可维护、用户友好的现代 Web 应用，充分利用 Next.js 16 App Router 的强大功能。",
+    "after": "用一个真实路径串起路由、数据和错误：直接访问详情页，应得到正确数据或明确的不存在结果；登录状态变化后不能继续读到前一个用户的内容。元数据与无障碍语义随实际页面内容检查。\n\n结构是否合理看新增页面时需要修改多少无关代码，以及加载、错误和权限边界能否独立验证。文件组织和类型检查提供帮助，但不会自动保证安全或性能。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "02-nextjs-frontend/reference/framework-patterns/04-data-fetching-patterns.md",
+    "heading": "### 最佳实践：",
+    "original_line": 2081,
+    "before": "1. **合理选择**: 根据数据特性选择合适的获取策略\n2. **性能优先**: 优化缓存策略和加载顺序\n3. **错误处理**: 实现健壮的错误处理和恢复机制\n4. **安全第一**: 严格的输入验证和权限控制\n\n通过合理的数据获取架构，可以构建高性能、安全、可维护的 Next.js 16 企业应用。",
+    "after": "先说明数据是谁的、多久变化、首次展示是否必须等到它。公开且允许短暂过时的内容可以共享缓存，用户私有内容要隔离身份；写入后还需定义哪些查询失效或更新。\n\n独立请求并行有机会缩短等待，有依赖的请求则不能只为“快”改成同时执行。验收包含首次失败、后台失败和写入后重取，检查旧结果不会伪装成最新结果，权限检查仍发生在真正访问数据的位置。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "02-nextjs-frontend/reference/framework-patterns/05-state-management-patterns.md",
+    "heading": "### 最佳实践：",
+    "original_line": 1931,
+    "before": "1. **合理选择**: 根据状态类型选择合适的管理方案\n2. **性能优先**: 优化选择器和缓存策略\n3. **错误处理**: 实现健壮的错误处理和恢复机制\n4. **渐进增强**: 从简单开始，根据需要增加复杂度\n\n通过合理的状态管理架构，可以构建高性能、可维护的 Next.js 16 企业应用。",
+    "after": "先找状态的所有者：控件内部开关留在局部，需要分享和返回恢复的筛选可放 URL，服务端结果由请求缓存管理，跨页面业务状态再考虑共享 store。不要因为装了状态库就把所有值复制进去。\n\n派生值尽量从单一来源计算，更新时验证所有消费界面一致。只有测到无关更新造成成本时，再优化订阅和记忆化；失败恢复也要防止旧快照覆盖用户后续操作。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "02-nextjs-frontend/reference/framework-patterns/06-form-validation-patterns.md",
+    "heading": "### 🏗️ 企业级最佳实践",
+    "original_line": 46,
+    "before": "- 实施表单性能优化策略，包含虚拟化、懒加载和代码分割\n- 构建可访问的表单界面，支持屏幕阅读器和键盘导航\n- 掌握表单安全最佳实践，防止CSRF、XSS和注入攻击\n- 实现表单分析和用户行为追踪，优化转化率\n- 构建表单测试策略，包含单元测试和端到端测试\n- 建立表单设计和开发的标准化流程",
+    "after": "表单先保证用户能理解标签、发现错误并修正：每个字段说明格式，提交失败保留已输入内容，把错误与对应字段关联，并验证键盘与读屏操作。大表单性能问题先测量，再决定分步、延迟渲染或代码拆分。\n\n客户端验证改善反馈，服务端重新检查输入和权限；提交按钮禁用不等于防止重复写入，必要操作需要服务端幂等。分析事件只采集必要信息，避免把填写内容当作普通埋点。用超时、重复点击和跨字段错误测试恢复路径。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "02-nextjs-frontend/reference/framework-patterns/07-authentication-flows.md",
+    "heading": "### 🏗️ 企业级最佳实践",
+    "original_line": 46,
+    "before": "- 实施现代化密码安全策略，包含密码强度检查和过期策略\n- 构建完整的用户自助服务流程，包含注册、验证、密码重置、账户恢复\n- 掌握GDPR合规的用户数据处理和隐私保护机制\n- 实现高级监控和告警系统，及时发现安全威胁\n- 构建可扩展的认证架构，支持多租户和多云部署\n- 建立完整的安全测试和渗透测试体系",
+    "after": "认证流程不仅是登录按钮，还包括注册验证、凭据恢复、会话失效和撤销。每条路径都可能改变账号控制权，因此令牌要有使用范围与时限，错误反馈避免泄漏不必要的账号信息。\n\n密码策略、隐私处理和多租户隔离依据实际威胁、产品范围与适用要求设计，不能用“定期过期”“支持多云”代替论证。先验证用户 A 无法访问用户 B 的资源、恢复链接不能重复使用、退出后会话按设计失效，再扩展高级能力。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "02-nextjs-frontend/reference/performance-optimization/02-bundle-optimization.md",
+    "heading": "### 🏗️ 企业级最佳实践",
+    "original_line": 46,
+    "before": "- 实施现代化的构建流水线和CI/CD优化\n- 掌握多环境配置和生产环境优化策略\n- 实现性能预算和Bundle大小限制机制\n- 构建完整的性能监控和分析体系\n- 掌握大规模应用的打包优化架构\n- 建立团队协作的打包优化规范",
+    "after": "为关键页面记录初始下载量、执行成本和交互延迟，性能预算从目标设备和用户网络推导。包大小增加时查看新增了哪个依赖、进入了哪些路由，不只看整个仓库压缩后的总数。\n\n把分析和比较接入构建流程，超过预算时输出可定位的差异与例外说明。多环境构建要确认公开配置与秘密边界，团队规范围绕可重复测量和回归判断，而不是要求每次都采用更多优化工具。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "02-nextjs-frontend/reference/performance-optimization/02-bundle-optimization.md",
+    "heading": "## 📋 最佳实践清单",
+    "original_line": 1343,
+    "before": "### ✅ 配置优化\n- [ ] 启用Turbopack提升构建速度\n- [ ] 配置智能代码分割策略\n- [ ] 优化Webpack splitChunks配置\n- [ ] 启用生产环境压缩和minification\n- [ ] 配置长期缓存策略\n\n### ✅ 代码优化\n- [ ] 使用ES模块语法支持Tree Shaking\n- [ ] 按需导入第三方库\n- [ ] 实施动态导入减少初始Bundle\n- [ ] 移除未使用的代码和依赖\n- [ ] 优化图片和字体资源\n\n### ✅ 性能监控\n- [ ] 设置Bundle大小预算\n- [ ] 实施实时性能监控\n- [ ] 定期运行Bundle分析\n- [ ] 建立性能回归检测\n- [ ] 监控真实用户体验指标\n\n### ✅ 高级优化\n- [ ] 实施微前端架构\n- [ ] 利用服务端组件优势\n- [ ] 配置CDN和边缘计算\n- [ ] 实施智能预加载策略\n- [ ] 建立自动化优化流水线",
+    "after": "先确认当前构建器，再使用它支持的配置；Turbopack 与 Webpack 的选项不能直接混用。动态导入可以减少首屏工作，却可能让用户点击后等待，应检查实际网络瀑布与交互时间。\n\n服务端组件可减少部分客户端代码，客户端仍需承担交互和相关依赖。移除未用依赖、控制重复包和按需加载后复测关键页面。微前端、边缘部署与 CDN 各有组织或交付目标，不应被列为每个应用都要勾选的打包优化步骤。",
+    "scope": "重写本节的解释与建议；不是全文技术验证"
+  },
+  {
+    "path": "01-go-backend/reference/framework-essentials/01-gin-framework.md",
+    "heading": "### 1.1 Gin简介",
+    "original_line": 24,
+    "before": "- **Gin特点**：高性能、极简设计、中间件支持\n- **核心特性**：路由、中间件、参数绑定、渲染\n- **性能优势**：基于httprouter，比标准库快40倍\n- **适用场景**：API开发、微服务、Web应用",
+    "after": "Gin 在 net/http 上提供路由、请求上下文、中间件和绑定等组织能力。例如请求 GET /users/7，会先匹配方法与路径，再交给处理函数解析 id 并返回响应。是否更快要在相同业务、负载和配置下测量；不能把路由微基准的倍数当成完整应用比标准库快的保证。",
+    "scope": "替换占位条目，解释 API 责任与边界；非全文代码实测"
+  },
+  {
+    "path": "01-go-backend/reference/framework-essentials/01-gin-framework.md",
+    "heading": "### 1.2 安装和配置",
+    "original_line": 30,
+    "before": "- **安装Gin**：`go get -u github.com/gin-gonic/gin`\n- **导入Gin**：`import \"github.com/gin-gonic/gin\"`\n- **模式设置**：`gin.SetMode(gin.ReleaseMode)`\n- **默认引擎**：`gin.Default()` 和 `gin.New()`",
+    "after": "先在 Go module 工程中加入 github.com/gin-gonic/gin，并记录所选依赖版本；安装与升级是不同动作，不必每次入门都加 -u 扩大更新范围。gin.Default 创建带日志与恢复中间件的引擎，gin.New 则由调用者自行装配。ReleaseMode 改变框架运行模式，不自动完成 TLS、权限或超时配置。",
+    "scope": "替换占位条目，解释 API 责任与边界；非全文代码实测"
+  },
+  {
+    "path": "01-go-backend/reference/framework-essentials/01-gin-framework.md",
+    "heading": "### 1.3 基本使用",
+    "original_line": 36,
+    "before": "- **创建引擎**：`gin.Default()` vs `gin.New()`\n- **创建路由**：`router.GET()`, `router.POST()`\n- **启动服务**：`router.Run()`\n- **基本路由**：简单路由定义和处理",
+    "after": "创建引擎后用 router.GET/POST 将“方法 + 路径”绑定到 handler，router.Run 用于开始监听。先实现一个固定返回 JSON 的 GET 路由，分别请求正确路径和不存在路径，观察状态码与内容；随后再加入参数和存储，便于区分路由问题与业务问题。",
+    "scope": "替换占位条目，解释 API 责任与边界；非全文代码实测"
+  },
+  {
+    "path": "01-go-backend/reference/framework-essentials/01-gin-framework.md",
+    "heading": "### 2.1 路由定义",
+    "original_line": 70,
+    "before": "- **HTTP方法**：GET, POST, PUT, DELETE, PATCH, OPTIONS, HEAD\n- **路由参数**：`/user/:id`, `/*wildcard`\n- **查询参数**：`?name=value&key=data`\n- **路由组**：`router.Group()` 和嵌套路由\n- **路由优先级**：精确匹配 > 通配符匹配",
+    "after": "HTTP 方法属于接口契约，路径参数标识资源，查询参数表达筛选或分页。例如 GET /users/7?detail=true 中，7 是路径值，detail 是查询值。命名参数和通配路径按 Gin 路由语法注册，冲突可能在注册阶段暴露，不应把“精确优先”当成允许任意重叠规则的保证。",
+    "scope": "替换占位条目，解释 API 责任与边界；非全文代码实测"
+  },
+  {
+    "path": "01-go-backend/reference/framework-essentials/01-gin-framework.md",
+    "heading": "### 2.2 路由参数",
+    "original_line": 77,
+    "before": "- **命名参数**：`/user/:id`\n- **通配符参数**：`/user/*action`\n- **参数获取**：`c.Param(\"id\")`, `c.Query(\"name\")`\n- **参数验证**：参数类型和存在性检查",
+    "after": "c.Param 读取匹配出的路径值，c.Query 读取查询串，它们得到的字符串还没有成为合法业务输入。将 id 解析为所需整数后检查范围；需要区分“没有提供”和“提供空值”时使用带存在性结果的读取方式。用缺值、非数字和不存在记录三个请求检验分支。",
+    "scope": "替换占位条目，解释 API 责任与边界；非全文代码实测"
+  },
+  {
+    "path": "01-go-backend/reference/framework-essentials/01-gin-framework.md",
+    "heading": "### 2.3 路由组",
+    "original_line": 83,
+    "before": "- **组定义**：`router.Group(\"/api/v1\")`\n- **组中间件**：组级别的中间件\n- **嵌套组**：组的嵌套和继承\n- **组路由**：组内路由定义\n- **组前缀**：URL前缀管理",
+    "after": "Group 把共同路径前缀与中间件组合到一组路由，例如 /api/v1 下的用户接口共享认证。嵌套组帮助表达子资源或权限范围，不会自动检查每条记录归属。验证组内路由需要身份、公开路由不被误保护，避免因放错组泄漏接口。",
+    "scope": "替换占位条目，解释 API 责任与边界；非全文代码实测"
+  },
+  {
+    "path": "01-go-backend/reference/framework-essentials/01-gin-framework.md",
+    "heading": "### 2.4 静态文件服务",
+    "original_line": 115,
+    "before": "- **静态文件**：`router.Static()`, `router.StaticFile()`\n- **静态目录**：`router.StaticFS()`\n- **文件上传**：`c.FormFile()`, `c.SaveUploadedFile()`\n- **文件下载**：`c.File()`, `c.FileAttachment()`\n- **静态文件中间件**：静态文件服务优化",
+    "after": "Static/StaticFile/StaticFS 将明确文件或文件系统暴露为 HTTP 资源；只挂载应公开目录，不能把项目根或上传私有文件目录直接开放。上传是单独的写入路径，FormFile 取得元数据后仍需限制大小、验证权限并由服务端生成存储名；下载私有文件前也要授权。",
+    "scope": "替换占位条目，解释 API 责任与边界；非全文代码实测"
+  },
+  {
+    "path": "01-go-backend/reference/framework-essentials/01-gin-framework.md",
+    "heading": "### 3.1 中间件基础",
+    "original_line": 149,
+    "before": "- **中间件定义**：`gin.HandlerFunc` 类型\n- **中间件执行**：`c.Next()`, `c.Abort()`\n- **中间件链**：中间件执行顺序\n- **全局中间件**：`router.Use()`\n- **路由中间件**：路由级别中间件",
+    "after": "gin.HandlerFunc 接收本次请求的上下文。中间件可在 Next 前准备数据、后统计结果；Abort 阻止后续 handler，但不会自动停止当前函数，因此拒绝请求后通常还需 return。Use 的作用范围决定谁受影响，用两个中间件打印进入与退出顺序可直观看到嵌套过程。",
+    "scope": "替换占位条目，解释 API 责任与边界；非全文代码实测"
+  },
+  {
+    "path": "01-go-backend/reference/framework-essentials/01-gin-framework.md",
+    "heading": "### 3.2 内置中间件",
+    "original_line": 156,
+    "before": "- **Logger中间件**：`gin.Logger()`\n- **Recovery中间件**：`gin.Recovery()`\n- **BasicAuth中间件**：`gin.BasicAuth()`\n- **绑定中间件**：参数绑定和验证\n- **CORS中间件**：跨域资源共享",
+    "after": "Logger 记录请求信息，Recovery 捕获同一处理链中的 panic 并提供兜底响应，BasicAuth 提供基本认证能力；它们不等于完整身份与授权系统。参数绑定在 handler 中按需调用，CORS 通常通过额外实现或 gin-contrib 组件配置，不能把它们都称为 Gin 默认内置中间件。",
+    "scope": "替换占位条目，解释 API 责任与边界；非全文代码实测"
+  },
+  {
+    "path": "01-go-backend/reference/framework-essentials/01-gin-framework.md",
+    "heading": "### 3.3 自定义中间件",
+    "original_line": 163,
+    "before": "- **中间件结构**：标准中间件模式\n- **请求处理**：前置和后置处理\n- **上下文处理**：上下文数据传递\n- **错误处理**：错误捕获和处理\n- **性能监控**：请求时间统计",
+    "after": "自定义中间件可在开始时保存时间，Next 后记录耗时、状态与 request_id。通过 c.Set/Get 传递请求级数据时约定键和类型，避免假设全局变量只服务一个用户。一次请求只在合适边界记录错误；异步任务不要继续引用已归还框架管理的原上下文。",
+    "scope": "替换占位条目，解释 API 责任与边界；非全文代码实测"
+  },
+  {
+    "path": "01-go-backend/reference/framework-essentials/01-gin-framework.md",
+    "heading": "### 4.1 参数绑定",
+    "original_line": 225,
+    "before": "- **JSON绑定**：`c.ShouldBindJSON()`\n- **表单绑定**：`c.ShouldBind()`\n- **查询参数绑定**：`c.ShouldBindQuery()`\n- **URI参数绑定**：`c.ShouldBindUri()`\n- **自定义绑定**：自定义绑定器",
+    "after": "ShouldBindJSON 按 JSON 解码，ShouldBindQuery 处理查询串，ShouldBindUri 处理路径值；ShouldBind 依据方法和内容类型选择绑定方式。Should 系列让调用者处理返回错误，便于统一响应。请求体通常只能消费一次，需要重复读取时明确缓冲方式与大小上限，不可无限保存用户输入。",
+    "scope": "替换占位条目，解释 API 责任与边界；非全文代码实测"
+  },
+  {
+    "path": "01-go-backend/reference/framework-essentials/01-gin-framework.md",
+    "heading": "### 4.2 参数验证",
+    "original_line": 232,
+    "before": "- **结构体标签**：`binding:\"required\"`\n- **验证规则**：required, min, max, email, len等\n- **自定义验证**：自定义验证器\n- **验证错误**：错误处理和响应\n- **验证组合**：多条件验证",
+    "after": "binding 标签表达字段层面的规则，例如不能为空或在某个范围内，但 required 对零值的判断未必等于“字段是否提交”。若 0 或 false 是合法输入且需要区分缺失，可用指针或独立存在性信息建模。检查解析失败、字段规则失败与业务权限失败，分别映射明确响应。",
+    "scope": "替换占位条目，解释 API 责任与边界；非全文代码实测"
+  },
+  {
+    "path": "01-go-backend/reference/framework-essentials/01-gin-framework.md",
+    "heading": "### 4.3 自定义验证器",
+    "original_line": 262,
+    "before": "- **验证器注册**：`binding.Validator`\n- **自定义标签**：自定义验证标签\n- **验证逻辑**：验证函数实现\n- **错误消息**：自定义错误消息\n- **验证上下文**：上下文信息传递",
+    "after": "多个接口共享的稳定格式规则可以注册为自定义验证标签，注册通常在服务开始处理请求前完成。涉及数据库、当前身份或跨字段业务状态的检查需要明确依赖和错误语义，不宜藏进难以追踪的全局校验函数。返回字段名与错误码，让客户端知道该改哪里。",
+    "scope": "替换占位条目，解释 API 责任与边界；非全文代码实测"
+  },
+  {
+    "path": "01-go-backend/reference/framework-essentials/01-gin-framework.md",
+    "heading": "### 5.1 响应类型",
+    "original_line": 291,
+    "before": "- **JSON响应**：`c.JSON()`, `c.JSONP()`\n- **XML响应**：`c.XML()`\n- **HTML响应**：`c.HTML()`\n- **字符串响应**：`c.String()`\n- **文件响应**：`c.File()`, `c.FileAttachment()`",
+    "after": "响应格式由接口消费者决定：JSON/XML 用于结构化数据，String 返回文本，HTML 通过模板生成页面，File 系列发送文件。先设置正确状态和类型，再写响应；不要把 JSONP 作为默认跨域解决方案。测试响应头与实际正文一致，而不只看浏览器能否显示。",
+    "scope": "替换占位条目，解释 API 责任与边界；非全文代码实测"
+  },
+  {
+    "path": "01-go-backend/reference/framework-essentials/01-gin-framework.md",
+    "heading": "### 5.2 响应格式",
+    "original_line": 298,
+    "before": "- **状态码**：HTTP状态码设置\n- **响应头**：自定义响应头\n- **响应压缩**：gzip压缩\n- **缓存控制**：缓存头设置\n- **CORS处理**：跨域响应头",
+    "after": "状态码表达成功或失败，响应头说明类型、缓存和其他协议行为。压缩可减少传输但增加处理开销，缓存控制须区分公开与用户私有结果，CORS 只约束浏览器跨域访问而非身份。验证同一私人接口不会被共享缓存返回给另一个用户。",
+    "scope": "替换占位条目，解释 API 责任与边界；非全文代码实测"
+  },
+  {
+    "path": "01-go-backend/reference/framework-essentials/01-gin-framework.md",
+    "heading": "### 5.3 模板渲染",
+    "original_line": 305,
+    "before": "- **HTML模板**：`c.HTML()`\n- **模板加载**：`router.LoadHTMLGlob()`\n- **模板变量**：模板数据传递\n- **模板函数**：自定义模板函数\n- **模板继承**：模板继承和布局",
+    "after": "LoadHTMLGlob 加载模板，c.HTML 选择模板并传入数据；模板中的字段通过 Go 模板语法访问。布局通常用 define/template 等组合，不能假定框架自带任意模板引擎的继承语法。自定义函数先注册再解析模板，用户内容保留上下文转义，避免强转成可信 HTML。",
+    "scope": "替换占位条目，解释 API 责任与边界；非全文代码实测"
+  },
+  {
+    "path": "01-go-backend/reference/framework-essentials/01-gin-framework.md",
+    "heading": "### 6.1 错误处理机制",
+    "original_line": 346,
+    "before": "- **错误响应**：`c.Error()`, `c.AbortWithError()`\n- **错误类型**：Gin错误类型\n- **错误堆栈**：错误堆栈信息\n- **错误日志**：错误日志记录\n- **错误恢复**：错误恢复机制",
+    "after": "c.Error 把错误挂到请求上下文，供后续中间件检查，它本身不等于已写出 JSON 错误响应；AbortWithError 会中止并设置相应状态。若要统一格式，应确保响应尚未提交再翻译错误。Recovery 处理 panic 的边界与普通 error 不同，也不会自动给所有 error 附加完整堆栈。",
+    "scope": "替换占位条目，解释 API 责任与边界；非全文代码实测"
+  },
+  {
+    "path": "01-go-backend/reference/framework-essentials/01-gin-framework.md",
+    "heading": "### 6.2 自定义错误",
+    "original_line": 353,
+    "before": "- **错误定义**：自定义错误类型\n- **错误处理**：错误处理函数\n- **错误响应**：统一错误响应格式\n- **错误中间件**：错误处理中间件\n- **错误监控**：错误监控和报告",
+    "after": "定义能让上层决策的错误，如未找到、输入非法、暂时不可用，在 HTTP 边界映射为稳定错误码与安全文案。中间件收集原因并关联请求日志，避免既在 handler 又在中间件重复写响应。验证未知内部错误不会把 SQL、路径或令牌带给客户端。",
+    "scope": "替换占位条目，解释 API 责任与边界；非全文代码实测"
+  },
+  {
+    "path": "01-go-backend/reference/framework-essentials/01-gin-framework.md",
+    "heading": "### 7.1 GORM集成",
+    "original_line": 414,
+    "before": "- **GORM配置**：数据库连接配置\n- **模型定义**：GORM模型定义\n- **CRUD操作**：基本的数据库操作\n- **关联关系**：模型关联和预加载\n- **事务处理**：事务管理",
+    "after": "应用启动时配置 GORM 与连接池，将数据访问能力传给服务，handler 不应每次请求重新建立数据库。模型字段描述存储形状，HTTP 输入模型还要限制客户端可写字段。创建记录后重新查询确认保存成功，跨多步写入的一致性使用明确事务。",
+    "scope": "替换占位条目，解释 API 责任与边界；非全文代码实测"
+  },
+  {
+    "path": "01-go-backend/reference/framework-essentials/01-gin-framework.md",
+    "heading": "### 7.2 数据库中间件",
+    "original_line": 421,
+    "before": "- **连接池**：数据库连接池配置\n- **健康检查**：数据库健康检查\n- **事务中间件**：事务管理中间件\n- **查询日志**：查询日志记录\n- **性能监控**：查询性能监控",
+    "after": "数据库中间件可以提供带请求 context 的访问入口，但不应默认把整个 HTTP 请求都包进长事务。连接池是共享资源，日志与指标观察等待时间和慢查询，健康探测区分暂时不能服务与必须重启。请求取消后验证查询按驱动能力终止且连接能归还。",
+    "scope": "替换占位条目，解释 API 责任与边界；非全文代码实测"
+  },
+  {
+    "path": "01-go-backend/reference/framework-essentials/01-gin-framework.md",
+    "heading": "### 8.1 JWT认证",
+    "original_line": 470,
+    "before": "- **JWT生成**：JWT令牌生成\n- **JWT验证**：JWT令牌验证\n- **JWT中间件**：JWT认证中间件\n- **Token刷新**：Token刷新机制\n- **Token撤销**：Token撤销列表",
+    "after": "JWT 验证需要检查允许算法、签名与相关时间/受众声明，不是把载荷解码出来就算登录。短期访问令牌、刷新和撤销属于额外会话协议，签发后令牌中的旧角色不会自动随数据库变化。测试过期、错误签名、撤销后访问以及跨用户资源请求。",
+    "scope": "替换占位条目，解释 API 责任与边界；非全文代码实测"
+  },
+  {
+    "path": "01-go-backend/reference/framework-essentials/01-gin-framework.md",
+    "heading": "### 8.2 OAuth2集成",
+    "original_line": 477,
+    "before": "- **OAuth2流程**：授权码流程\n- **第三方登录**：Google, GitHub, Facebook\n- **Token管理**：访问令牌和刷新令牌\n- **用户信息**：用户信息获取\n- **权限控制**：基于OAuth2的权限控制",
+    "after": "OAuth2 主要描述授权委托，第三方登录还需要适当的身份协议或提供方明确的用户身份契约，不能只拿一个访问令牌就猜用户是谁。授权码流程需验证回调绑定并采用适用的 PKCE 等保护；访问令牌只能用于其授予的资源范围，本应用权限仍需独立判断。",
+    "scope": "替换占位条目，解释 API 责任与边界；非全文代码实测"
+  },
+  {
+    "path": "01-go-backend/reference/framework-essentials/01-gin-framework.md",
+    "heading": "### 8.3 基于角色的访问控制",
+    "original_line": 484,
+    "before": "- **角色定义**：用户角色定义\n- **权限映射**：角色权限映射\n- **权限检查**：权限检查中间件\n- **权限缓存**：权限缓存机制\n- **权限管理**：权限管理接口",
+    "after": "RBAC 将角色映射为允许的动作，例如编辑者可修改文章，读者只能查看。请求先取得可信身份，再检查动作与资源归属，不能让客户端提交一个 admin 字段就获得权限。权限缓存需要撤销/更新策略，用降权后再次操作的测试验证时效。",
+    "scope": "替换占位条目，解释 API 责任与边界；非全文代码实测"
+  },
+  {
+    "path": "01-go-backend/reference/framework-essentials/01-gin-framework.md",
+    "heading": "### 9.1 单元测试",
+    "original_line": 552,
+    "before": "- **路由测试**：HTTP路由测试\n- **中间件测试**：中间件单元测试\n- **处理函数测试**：处理函数测试\n- **模拟请求**：HTTP请求模拟\n- **断言库**：测试断言库",
+    "after": "用 httptest 构造请求与响应记录器，保留真实路由和中间件，服务依赖可传入可控替身。验证状态、关键响应字段与副作用，覆盖输入非法和无身份。只断言处理函数被调用过，无法证明请求绑定和错误响应符合契约。",
+    "scope": "替换占位条目，解释 API 责任与边界；非全文代码实测"
+  },
+  {
+    "path": "01-go-backend/reference/framework-essentials/01-gin-framework.md",
+    "heading": "### 9.2 集成测试",
+    "original_line": 559,
+    "before": "- **端到端测试**：完整API测试\n- **数据库测试**：数据库集成测试\n- **认证测试**：认证流程测试\n- **性能测试**：API性能测试\n- **负载测试**：负载和压力测试",
+    "after": "集成测试保留实际需要验证的协作层，例如路由、服务与测试数据库；数据每次独立建立并清理。认证测试使用受控身份而非真实用户凭据。负载测试另行指定并发、数据量和运行环境，不把一次接口返回成功当成容量证明。",
+    "scope": "替换占位条目，解释 API 责任与边界；非全文代码实测"
+  },
+  {
+    "path": "01-go-backend/reference/framework-essentials/01-gin-framework.md",
+    "heading": "### 10.1 性能监控",
+    "original_line": 608,
+    "before": "- **响应时间**：请求响应时间监控\n- **内存使用**：内存使用监控\n- **并发连接**：并发连接数监控\n- **错误率**：错误率监控\n- **吞吐量**：请求吞吐量监控",
+    "after": "延迟应观察分位数及慢请求，而非仅平均值；同时记录吞吐与失败率，避免把快速返回错误误当作性能改善。结合内存、连接等待和下游耗时定位原因。每个指标说明单位、窗口与标签范围，高基数用户标识更适合日志而非普通指标标签。",
+    "scope": "替换占位条目，解释 API 责任与边界；非全文代码实测"
+  },
+  {
+    "path": "01-go-backend/reference/framework-essentials/01-gin-framework.md",
+    "heading": "### 10.2 缓存策略",
+    "original_line": 615,
+    "before": "- **Redis缓存**：Redis缓存集成\n- **内存缓存**：内存缓存实现\n- **CDN缓存**：CDN缓存配置\n- **浏览器缓存**：浏览器缓存控制\n- **缓存策略**：缓存策略设计",
+    "after": "进程内缓存读取快但多个副本各有一份，Redis 可提供共享缓存，CDN 和浏览器缓存位于请求链的不同位置。每层都要说明键、可接受过期时间与写入后的失效责任；先实现一层并验证更新可见，再判断多层是否值得增加一致性成本。",
+    "scope": "替换占位条目，解释 API 责任与边界；非全文代码实测"
+  },
+  {
+    "path": "01-go-backend/reference/framework-essentials/01-gin-framework.md",
+    "heading": "### 10.3 连接池优化",
+    "original_line": 622,
+    "before": "- **数据库连接池**：数据库连接池配置\n- **HTTP连接池**：HTTP连接池优化\n- **Redis连接池**：Redis连接池配置\n- **连接复用**：连接复用策略\n- **连接监控**：连接池监控",
+    "after": "连接池减少重复建连，但同时限制和占用下游资源。观察打开连接、空闲连接与等待情况，结合副本数设预算；数据库、HTTP、Redis 客户端各有自己的契约，不复制同一组参数。超时和取消后仍需正确结束事务、关闭响应体或归还资源。",
+    "scope": "替换占位条目，解释 API 责任与边界；非全文代码实测"
+  },
+  {
+    "path": "01-go-backend/reference/framework-essentials/01-gin-framework.md",
+    "heading": "### 11.1 容器化部署",
+    "original_line": 679,
+    "before": "- **Docker镜像**：Docker镜像构建\n- **Docker Compose**：多服务编排\n- **Kubernetes部署**：K8s部署配置\n- **健康检查**：容器健康检查\n- **日志管理**：容器日志管理",
+    "after": "镜像包含应用与所需运行依赖，配置在运行时注入；本地 Compose 帮助组合应用和数据库，是否使用 Kubernetes 取决于部署需求。验证非特权运行、外部访问、进程停止和重启后的数据，日志写到部署环境能可靠采集的位置。",
+    "scope": "替换占位条目，解释 API 责任与边界；非全文代码实测"
+  },
+  {
+    "path": "01-go-backend/reference/framework-essentials/01-gin-framework.md",
+    "heading": "### 11.2 负载均衡",
+    "original_line": 686,
+    "before": "- **Nginx配置**：Nginx反向代理\n- **负载均衡策略**：负载均衡算法\n- **健康检查**：服务健康检查\n- **会话保持**：会话保持配置\n- **自动扩缩**：自动扩缩容",
+    "after": "负载均衡器按策略将请求分给可用实例，服务仍需设计共享会话与持久数据；会话保持只是特定方案，不能代替数据可靠性。增加副本前核对数据库连接预算和就绪探测，移除实例时等待在途请求，验证滚动更新不导致大量失败。",
+    "scope": "替换占位条目，解释 API 责任与边界；非全文代码实测"
+  },
+  {
+    "path": "01-go-backend/reference/framework-essentials/01-gin-framework.md",
+    "heading": "### 11.3 监控和告警",
+    "original_line": 693,
+    "before": "- **Prometheus**：指标收集和存储\n- **Grafana**：监控仪表板\n- **Alertmanager**：告警管理\n- **ELK Stack**：日志收集和分析\n- **分布式追踪**：Jaeger或Zipkin",
+    "after": "指标系统回答“哪类请求整体变差”，日志回答“一次请求做了什么”，追踪帮助观察跨服务等待。Prometheus、Grafana 等是实现这些用途的工具组合，并非每项都必须安装。先让一次模拟失败能触发有行动说明的告警，并追到相关请求，再扩大采集范围。",
+    "scope": "替换占位条目，解释 API 责任与边界；非全文代码实测"
+  },
+  {
+    "path": "01-go-backend/reference/framework-essentials/01-gin-framework.md",
+    "heading": "### 12.1 输入验证",
+    "original_line": 725,
+    "before": "- **参数验证**：参数类型和格式验证\n- **SQL注入防护**：SQL注入防范\n- **XSS防护**：跨站脚本防护\n- **CSRF防护**：跨站请求伪造防护\n- **文件上传安全**：文件上传验证",
+    "after": "验证分为结构、业务与权限：合法 JSON 不代表标题长度合理，也不代表能修改指定用户的数据。SQL 值使用参数绑定；HTML 输出按上下文编码；Cookie 身份场景考虑 CSRF。上传还需限制实际读取大小与存储路径，不能只看扩展名或 Content-Length。",
+    "scope": "替换占位条目，解释 API 责任与边界；非全文代码实测"
+  },
+  {
+    "path": "01-go-backend/reference/framework-essentials/01-gin-framework.md",
+    "heading": "### 12.2 安全头部",
+    "original_line": 732,
+    "before": "- **安全头部设置**：安全HTTP头部\n- **CSP配置**：内容安全策略\n- **HSTS配置**：HTTP严格传输安全\n- **XSS防护**：XSS保护头部\n- **点击劫持防护**：点击劫持防护",
+    "after": "CSP 限制页面允许的内容来源和执行方式，HSTS 告诉浏览器后续使用 HTTPS，防嵌入策略限制页面被其他站点放进框架；它们保护的边界不同。结合实际部署逐项验证，避免照抄会阻断正常资源的策略；旧式 XSS 头不能替代安全的输出与 CSP 设计。",
+    "scope": "替换占位条目，解释 API 责任与边界；非全文代码实测"
+  },
+  {
+    "path": "01-go-backend/reference/framework-essentials/01-gin-framework.md",
+    "heading": "### 12.3 认证安全",
+    "original_line": 739,
+    "before": "- **密码安全**：密码哈希和存储\n- **Token安全**：JWT令牌安全\n- **会话管理**：会话安全管理\n- **OAuth2安全**：OAuth2安全配置\n- **API密钥管理**：API密钥安全",
+    "after": "密码使用适当的专用口令哈希方案，验证与升级参数由可靠库处理，不能存明文或用字符串前缀模拟哈希。会话凭据需要传输保护、有效期、撤销与恢复流程，API 密钥按调用者和用途限权。验证错误登录、凭据泄漏后的撤销和退出后的访问行为。",
+    "scope": "替换占位条目，解释 API 责任与边界；非全文代码实测"
+  },
+  {
+    "path": "01-go-backend/reference/framework-essentials/02-gorm-orm.md",
+    "heading": "### 1.1 GORM简介",
+    "original_line": 24,
+    "before": "- **GORM特点**：开发者友好的ORM库\n- **核心功能**：模型定义、CRUD操作、关联关系\n- **数据库支持**：MySQL, PostgreSQL, SQLite, SQL Server\n- **设计理念**：约定优于配置",
+    "after": "GORM 将 Go 模型与关系数据库操作连接起来，能减少常见 CRUD 的重复代码，但生成 SQL、事务和索引仍需开发者理解。数据库驱动决定具体能力与差异；模型约定方便默认映射，已有表结构则可通过显式配置适配。先完成创建、查询与错误处理再展开关联。",
+    "scope": "替换占位条目，解释 API 责任与边界；非全文代码实测"
+  },
+  {
+    "path": "01-go-backend/reference/framework-essentials/02-gorm-orm.md",
+    "heading": "### 1.2 安装和配置",
+    "original_line": 30,
+    "before": "- **安装GORM**：`go get -u gorm.io/gorm`\n- **安装驱动**：`go get gorm.io/driver/postgres`\n- **导入GORM**：`import \"gorm.io/gorm\"`\n- **版本管理**：GORM版本兼容性",
+    "after": "在 Go module 中加入 GORM 和目标数据库驱动，记录并测试所选版本组合。导入 gorm.io/gorm 只提供 ORM API，具体连接还需 postgres 等驱动。不要把 go get -u 当每次安装必需，它可能扩大依赖更新范围；已有工程先审阅升级差异。",
+    "scope": "替换占位条目，解释 API 责任与边界；非全文代码实测"
+  },
+  {
+    "path": "01-go-backend/reference/framework-essentials/02-gorm-orm.md",
+    "heading": "### 1.3 数据库连接",
+    "original_line": 36,
+    "before": "- **连接配置**：DSN字符串配置\n- **连接池**：连接池配置和优化\n- **连接测试**：连接健康检查\n- **多数据库**：多数据库配置\n- **连接管理**：连接生命周期管理",
+    "after": "DSN 说明地址、数据库与身份等连接参数，不应把生产密码提交到文档或代码。通过 GORM 取得底层 sql.DB 管理池，启动时验证必要连接，退出时关闭。多数据库各有连接、事务和一致性边界，不因为持有多个句柄就自动拥有跨库原子性。",
+    "scope": "替换占位条目，解释 API 责任与边界；非全文代码实测"
+  },
+  {
+    "path": "01-go-backend/reference/framework-essentials/02-gorm-orm.md",
+    "heading": "### 2.1 模型基础",
+    "original_line": 84,
+    "before": "- **结构体定义**：GORM模型结构体\n- **字段标签**：GORM标签和数据库标签\n- **表名约定**：表名自动生成规则\n- **字段名约定**：字段名转换规则\n- **主键定义**：主键字段定义",
+    "after": "模型结构体描述字段，标签控制列名、主键或索引等映射，默认命名约定只是在没有显式设置时生效。先查看实际生成的表结构，确认 id、时间字段和可空性符合需求；HTTP 客户端能写哪些字段应另外用输入模型限制。",
+    "scope": "替换占位条目，解释 API 责任与边界；非全文代码实测"
+  },
+  {
+    "path": "01-go-backend/reference/framework-essentials/02-gorm-orm.md",
+    "heading": "### 2.2 字段类型",
+    "original_line": 91,
+    "before": "- **基本类型**：Go类型与数据库类型映射\n- **时间类型**：时间字段处理\n- **JSON类型**：JSON字段支持\n- **枚举类型**：枚举字段定义\n- **自定义类型**：自定义数据类型",
+    "after": "Go 值与数据库类型之间需明确缺失、零值和精度，例如 *string 或 nullable 类型可区分 NULL 与空串，金额不能随意转成 float。JSON、枚举与自定义类型依数据库和驱动支持，必要时实现 Scanner/Valuer 等契约。写入边界值再读回，检查没有精度或时区丢失。",
+    "scope": "替换占位条目，解释 API 责任与边界；非全文代码实测"
+  },
+  {
+    "path": "01-go-backend/reference/framework-essentials/02-gorm-orm.md",
+    "heading": "### 2.3 模型标签",
+    "original_line": 98,
+    "before": "- **主键标签**：`gorm:\"primaryKey\"`\n- **自增标签**：`gorm:\"autoIncrement\"`\n- **索引标签**：`gorm:\"index\"`\n- **唯一标签**：`gorm:\"unique\"`\n- **非空标签**：`gorm:\"not null\"`",
+    "after": "primaryKey 标识主键，autoIncrement 请求相应自增行为，index/unique/not null 表达索引或约束意图，最终支持取决于数据库与迁移执行。唯一约束才防止并发下重复插入，“先查询不存在再创建”本身有竞态。验证重复值和 NULL 的实际失败结果。",
+    "scope": "替换占位条目，解释 API 责任与边界；非全文代码实测"
+  },
+  {
+    "path": "01-go-backend/reference/framework-essentials/02-gorm-orm.md",
+    "heading": "### 3.1 自动迁移",
+    "original_line": 164,
+    "before": "- **AutoMigrate**：自动迁移表结构\n- **Migrator接口**：迁移器接口使用\n- **迁移选项**：迁移配置选项\n- **迁移回滚**：迁移回滚支持\n- **迁移错误**：迁移错误处理",
+    "after": "AutoMigrate 根据模型尝试补齐受支持的 schema 变化，返回错误必须处理；它不是带版本历史与自动回滚的完整迁移系统，也不会为保护数据随意删除旧列。生产变更需审阅锁表、数据回填与兼容影响，参见[官方迁移说明](https://gorm.io/docs/migration.html)。",
+    "scope": "替换占位条目，解释 API 责任与边界；非全文代码实测"
+  },
+  {
+    "path": "01-go-backend/reference/framework-essentials/02-gorm-orm.md",
+    "heading": "### 3.2 手动迁移",
+    "original_line": 171,
+    "before": "- **创建表**：手动创建表\n- **修改表**：修改表结构\n- **删除表**：删除表操作\n- **索引管理**：索引创建和删除\n- **约束管理**：约束创建和管理",
+    "after": "Migrator 提供创建表、修改列和管理索引/约束的接口，但数据库对这些操作的能力与事务支持不同。删除列或表可能永久丢数据，迁移应包含前置检查和恢复设计。先对有代表性旧数据的测试库执行，并验证新旧应用过渡期间都能读写。",
+    "scope": "替换占位条目，解释 API 责任与边界；非全文代码实测"
+  },
+  {
+    "path": "01-go-backend/reference/framework-essentials/02-gorm-orm.md",
+    "heading": "### 3.3 迁移策略",
+    "original_line": 178,
+    "before": "- **开发环境**：开发环境迁移策略\n- **生产环境**：生产环境迁移策略\n- **版本控制**：迁移版本控制\n- **数据迁移**：数据迁移脚本\n- **迁移测试**：迁移测试验证",
+    "after": "开发期可以快速重建合成数据，生产则需要保留已应用变更历史并评估兼容窗口。通常先添加兼容结构、回填数据、切换代码，再移除旧结构；迁移失败后的继续或恢复步骤必须明确。验收同时覆盖空库创建和旧库升级，不能只验证本机新数据库。",
+    "scope": "替换占位条目，解释 API 责任与边界；非全文代码实测"
+  },
+  {
+    "path": "01-go-backend/reference/framework-essentials/02-gorm-orm.md",
+    "heading": "### 4.1 创建记录",
+    "original_line": 266,
+    "before": "- **Create方法**：创建单条记录\n- **批量创建**：批量创建记录\n- **创建选项**：创建配置选项\n- **默认值**：默认值处理\n- **钩子函数**：创建钩子函数",
+    "after": "Create 写入新记录，传入指针可取得回填的主键；传统链式 API 检查 Error，必要时检查 RowsAffected。批量创建减少往返但要控制批大小与失败语义。带默认值标签的字段要特别测试 0、false 等零值，确认数据库默认没有覆盖用户明确意图。",
+    "scope": "替换占位条目，解释 API 责任与边界；非全文代码实测"
+  },
+  {
+    "path": "01-go-backend/reference/framework-essentials/02-gorm-orm.md",
+    "heading": "### 4.2 查询记录",
+    "original_line": 273,
+    "before": "- **First方法**：查询第一条记录\n- **Find方法**：查询多条记录\n- **Where条件**：条件查询\n- **高级查询**：复杂查询条件\n- **查询链**：查询链调用",
+    "after": "First 取得一条记录且可能返回 ErrRecordNotFound，Find 查询集合时零行通常通过空结果/影响行数表达，不能统一按同一种错误判断。Where 与排序决定取到什么，未指定稳定顺序的“第一条”不适合作业务时间顺序承诺。查零条、一条和多条验证契约。",
+    "scope": "替换占位条目，解释 API 责任与边界；非全文代码实测"
+  },
+  {
+    "path": "01-go-backend/reference/framework-essentials/02-gorm-orm.md",
+    "heading": "### 4.3 更新记录",
+    "original_line": 280,
+    "before": "- **Save方法**：保存更新\n- **Update方法**：字段更新\n- **Updates方法**：批量更新\n- **更新选项**：更新配置\n- **钩子函数**：更新钩子函数",
+    "after": "Update 处理指定字段，Updates 可修改多个字段，目标是哪些行由 Model 与条件决定；“多字段”不等于必然“多行”。传统 API 的 struct Updates 默认忽略零值，map 或 Select 可显式写入 false/0。Save 的保存语义还可能涉及插入回退，避免在只允许更新的接口盲用，见[官方更新说明](https://gorm.io/docs/update.html)。",
+    "scope": "替换占位条目，解释 API 责任与边界；非全文代码实测"
+  },
+  {
+    "path": "01-go-backend/reference/framework-essentials/02-gorm-orm.md",
+    "heading": "### 4.4 删除记录",
+    "original_line": 287,
+    "before": "- **Delete方法**：删除记录\n- **批量删除**：批量删除\n- **软删除**：软删除功能\n- **永久删除**：永久删除\n- **钩子函数**：删除钩子函数",
+    "after": "Delete 需要明确目标条件，避免把空输入误解成全表删除。具有软删除字段的模型通常标记删除时间，普通查询过滤这些记录；Unscoped 等路径可能绕过保护或永久删除。软删除不等于隐私数据已擦除，恢复、保留期与清理要另设策略。",
+    "scope": "替换占位条目，解释 API 责任与边界；非全文代码实测"
+  },
+  {
+    "path": "01-go-backend/reference/framework-essentials/02-gorm-orm.md",
+    "heading": "### 5.1 基本查询",
+    "original_line": 421,
+    "before": "- **Where条件**：条件查询\n- **Order排序**：结果排序\n- **Limit限制**：结果限制\n- **Offset偏移**：分页偏移\n- **Count计数**：记录计数",
+    "after": "Where 筛选、Order 排序、Limit/Offset 分页、Count 统计各承担不同责任。分页需要稳定排序并控制最大页大小，深偏移可能越来越贵。先用固定数据验证各页不重复遗漏，再用实际执行计划判断性能，不以链式调用短就认为 SQL 高效。",
+    "scope": "替换占位条目，解释 API 责任与边界；非全文代码实测"
+  },
+  {
+    "path": "01-go-backend/reference/framework-essentials/02-gorm-orm.md",
+    "heading": "### 5.2 高级查询",
+    "original_line": 428,
+    "before": "- **Join查询**：表连接查询\n- **Group分组**：分组查询\n- **Having过滤**：分组过滤\n- **Distinct去重**：去重查询\n- **子查询**：子查询支持",
+    "after": "Join 组合表时可能把一条主记录展开成多行；Group 后 Having 过滤分组结果，而普通 Where 过滤参与分组的行。Distinct 的列集合决定什么算重复。先手工写出少量输入的预期行数，再检查生成 SQL 和 ORM 扫描结果，防止计数或分页被关联放大。",
+    "scope": "替换占位条目，解释 API 责任与边界；非全文代码实测"
+  },
+  {
+    "path": "01-go-backend/reference/framework-essentials/02-gorm-orm.md",
+    "heading": "### 5.3 查询条件",
+    "original_line": 435,
+    "before": "- **比较运算**：=, !=, >, <, >=, <=\n- **逻辑运算**：AND, OR, NOT\n- **范围查询**：IN, BETWEEN, LIKE\n- **空值查询**：IS NULL, IS NOT NULL\n- **复杂条件**：复杂条件组合",
+    "after": "参数值通过占位符绑定，列名和排序方向等不能当普通值绑定的部分用允许列表选择。SQL 的 NULL 判断使用 IS NULL 等语义，不等同普通等号；AND/OR 加括号明确优先关系。测试空列表、NULL 和组合条件，避免意外扩大可访问记录范围。",
+    "scope": "替换占位条目，解释 API 责任与边界；非全文代码实测"
+  },
+  {
+    "path": "01-go-backend/reference/framework-essentials/02-gorm-orm.md",
+    "heading": "### 5.4 查询链",
+    "original_line": 442,
+    "before": "- **链式调用**：查询链调用\n- **条件组合**：条件组合逻辑\n- **查询优化**：查询性能优化\n- **查询缓存**：查询结果缓存\n- **查询日志**：查询日志记录",
+    "after": "链式方法累积查询条件，执行方法触发 SQL；复用已带条件的对象时要了解会话行为，防止条件污染下一次查询。查看 SQL 和绑定参数帮助理解真正执行了什么，日志须脱敏。查询结果缓存不是所有 GORM 查询默认提供的功能，需要单独说明实现和失效策略。",
+    "scope": "替换占位条目，解释 API 责任与边界；非全文代码实测"
+  },
+  {
+    "path": "01-go-backend/reference/framework-essentials/02-gorm-orm.md",
+    "heading": "### 6.1 一对一关系",
+    "original_line": 604,
+    "before": "- **Belongs To**：属于关系\n- **Has One**：拥有一对一关系\n- **外键定义**：外键字段定义\n- **预加载**：关联数据预加载\n- **关联查询**：关联数据查询",
+    "after": "Belongs To 与 Has One 的关键差别是外键放在哪一侧，例如订单持有 customer_id 表示属于客户，用户的 profile 可能由 profile.user_id 关联。Preload 显式加载关系，不应假定访问字段就自动发起懒查询。验证无关联记录时的结果形状。",
+    "scope": "替换占位条目，解释 API 责任与边界；非全文代码实测"
+  },
+  {
+    "path": "01-go-backend/reference/framework-essentials/02-gorm-orm.md",
+    "heading": "### 6.2 一对多关系",
+    "original_line": 611,
+    "before": "- **Has Many**：拥有一对多关系\n- **外键定义**：外键字段定义\n- **关联查询**：关联数据查询\n- **关联创建**：关联数据创建\n- **关联更新**：关联数据更新",
+    "after": "Has Many 表示一条主记录关联多条子记录，如用户与订单，子表外键说明归属。加载用户列表后逐个查询订单可能产生 N+1，按需求批量预加载并控制数据量。修改关联和删除子记录是不同操作，执行后重新查询数据库确认效果。",
+    "scope": "替换占位条目，解释 API 责任与边界；非全文代码实测"
+  },
+  {
+    "path": "01-go-backend/reference/framework-essentials/02-gorm-orm.md",
+    "heading": "### 6.3 多对多关系",
+    "original_line": 618,
+    "before": "- **Many to Many**：多对多关系\n- **中间表**：中间表定义\n- **关联查询**：关联数据查询\n- **关联创建**：关联数据创建\n- **关联更新**：关联数据更新",
+    "after": "多对多用中间表记录两端关系，例如学生与课程；若关系本身有成绩等属性，可显式建模中间表。唯一约束避免同一关系重复插入。解除关联通常只影响中间表，不等于删除课程或学生；分别测试添加、重复添加和解除关系。",
+    "scope": "替换占位条目，解释 API 责任与边界；非全文代码实测"
+  },
+  {
+    "path": "01-go-backend/reference/framework-essentials/02-gorm-orm.md",
+    "heading": "### 6.4 关联选项",
+    "original_line": 625,
+    "before": "- **外键约束**：外键约束配置\n- **级联操作**：级联删除和更新\n- **预加载策略**：预加载优化\n- **关联验证**：关联数据验证\n- **关联钩子**：关联钩子函数",
+    "after": "外键和级联由数据库约束保护，ORM 的关联保存是应用侧操作，两者不能互相代替。选择删除行为前明确是阻止、级联还是置空，并测试真实数据库结果。预加载会增加数据与查询成本，按接口需要选择字段和关系，而非一次加载所有关联。",
+    "scope": "替换占位条目，解释 API 责任与边界；非全文代码实测"
+  },
+  {
+    "path": "01-go-backend/reference/framework-essentials/02-gorm-orm.md",
+    "heading": "### 7.1 事务基础",
+    "original_line": 824,
+    "before": "- **Begin方法**：开始事务\n- **Commit方法**：提交事务\n- **Rollback方法**：回滚事务\n- **Savepoint**：保存点\n- **嵌套事务**：嵌套事务支持",
+    "after": "一个事务让一组数据库操作一起提交或回滚。使用 Transaction 回调时，内部都用收到的 tx，返回错误触发回滚；手工 Begin/Commit/Rollback 则要检查每一步错误并覆盖所有退出路径。SavePoint/RollbackTo 可回退局部操作，但仍属于外层事务，见[官方事务说明](https://gorm.io/docs/transactions.html)。",
+    "scope": "替换占位条目，解释 API 责任与边界；非全文代码实测"
+  },
+  {
+    "path": "01-go-backend/reference/framework-essentials/02-gorm-orm.md",
+    "heading": "### 7.2 事务模式",
+    "original_line": 831,
+    "before": "- **自动提交**：自动提交模式\n- **手动事务**：手动事务管理\n- **嵌套事务**：嵌套事务处理\n- **分布式事务**：分布式事务支持\n- **事务超时**：事务超时设置",
+    "after": "单次写入的默认事务不等于多次调用自动处在同一事务，需要显式包住完整业务步骤。嵌套事务通常通过保存点表达局部回退；跨数据库或消息系统的原子提交不由普通 GORM 事务自动提供。超时需通过 context/驱动与数据库配合，并确认失败后连接归还。",
+    "scope": "替换占位条目，解释 API 责任与边界；非全文代码实测"
+  },
+  {
+    "path": "01-go-backend/reference/framework-essentials/02-gorm-orm.md",
+    "heading": "### 7.3 事务隔离",
+    "original_line": 838,
+    "before": "- **隔离级别**：事务隔离级别\n- **脏读**：脏读防范\n- **不可重复读**：不可重复读防范\n- **幻读**：幻读防范\n- **死锁处理**：死锁检测和处理",
+    "after": "隔离级别约束并发事务可观察的变化，脏读、不可重复读与幻读分别关注未提交值、重复读值改变及结果集合变化，具体保证以数据库实现为准。更强隔离可能增加等待或重试；用两条并发事务实验验证余额/库存不变量，而不是仅写出级别名称。",
+    "scope": "替换占位条目，解释 API 责任与边界；非全文代码实测"
+  },
+  {
+    "path": "01-go-backend/reference/framework-essentials/02-gorm-orm.md",
+    "heading": "### 7.4 事务最佳实践",
+    "original_line": 845,
+    "before": "- **事务边界**：事务边界定义\n- **事务大小**：事务大小控制\n- **事务回滚**：事务回滚策略\n- **事务日志**：事务日志记录\n- **事务监控**：事务性能监控",
+    "after": "事务边界覆盖必须一致的写入，例如创建订单与扣库存，不把慢外部请求混入持锁阶段。死锁或序列化冲突可按数据库错误分类考虑重试，但每次应重新执行完整事务并限制次数；重复外部副作用不能随意重放。记录事务耗时与失败原因，测试第二步失败时第一步也撤销。",
+    "scope": "替换占位条目，解释 API 责任与边界；非全文代码实测"
+  },
+  {
+    "path": "01-go-backend/reference/framework-essentials/02-gorm-orm.md",
+    "heading": "### 8.1 生命周期钩子",
+    "original_line": 1040,
+    "before": "- **BeforeCreate**：创建前钩子\n- **AfterCreate**：创建后钩子\n- **BeforeUpdate**：更新前钩子\n- **AfterUpdate**：更新后钩子\n- **BeforeDelete**：删除前钩子\n- **AfterDelete**：删除后钩子\n- **BeforeFind**：查找前钩子\n- **AfterFind**：查找后钩子",
+    "after": "模型写入钩子包括 BeforeSave/BeforeCreate、AfterCreate/AfterSave 以及更新、删除对应阶段；查询模型钩子是 AfterFind，BeforeFind 不是同样自动识别的模型钩子。写入后的 hook 可能仍在提交之前，不能据其名称就发送不可撤销邮件。具体时序见[官方 hooks](https://gorm.io/docs/hooks.html)。",
+    "scope": "替换占位条目，解释 API 责任与边界；非全文代码实测"
+  },
+  {
+    "path": "01-go-backend/reference/framework-essentials/02-gorm-orm.md",
+    "heading": "### 8.2 钩子使用",
+    "original_line": 1050,
+    "before": "- **钩子定义**：钩子函数定义\n- **钩子调用**：钩子函数调用时机\n- **钩子错误**：钩子函数错误处理\n- **钩子顺序**：钩子函数执行顺序\n- **钩子测试**：钩子函数测试",
+    "after": "钩子采用框架要求的方法签名，返回错误能中止相应操作并影响当前事务。调用哪些钩子与使用的写入方法、批量形式和跳过配置有关，要测试实际调用路径；把函数命名得像 hook 不会自动让框架调用它。验证一次成功和一次 hook 拒绝时数据库状态。",
+    "scope": "替换占位条目，解释 API 责任与边界；非全文代码实测"
+  },
+  {
+    "path": "01-go-backend/reference/framework-essentials/02-gorm-orm.md",
+    "heading": "### 8.3 钩子最佳实践",
+    "original_line": 1057,
+    "before": "- **业务逻辑**：业务逻辑钩子\n- **数据验证**：数据验证钩子\n- **数据转换**：数据转换钩子\n- **审计日志**：审计日志钩子\n- **缓存更新**：缓存更新钩子",
+    "after": "钩子适合靠近模型的不变量或同事务审计写入，不适合隐藏复杂网络副作用。发送邮件或更新外部缓存若发生在数据库提交之前，后续回滚可能留下错误通知；可靠发送需要提交协调与重试设计。不要在 hook 中启动 goroutine 继续使用 tx，它可能已经结束。",
+    "scope": "替换占位条目，解释 API 责任与边界；非全文代码实测"
+  },
+  {
+    "path": "01-go-backend/reference/framework-essentials/02-gorm-orm.md",
+    "heading": "### 9.1 查询优化",
+    "original_line": 1262,
+    "before": "- **索引优化**：索引创建和使用\n- **查询缓存**：查询结果缓存\n- **预加载优化**：关联数据预加载\n- **批量操作**：批量操作优化\n- **查询分析**：查询性能分析",
+    "after": "先查看慢查询的 SQL、参数规模与执行计划，判断索引是否服务筛选和排序。预加载解决部分 N+1，但加载过多关联也浪费资源；批量操作减少往返却可能扩大单次锁与内存。结果缓存需要另建失效契约，不能把“使用 GORM”当作自动拥有缓存。",
+    "scope": "替换占位条目，解释 API 责任与边界；非全文代码实测"
+  },
+  {
+    "path": "01-go-backend/reference/framework-essentials/02-gorm-orm.md",
+    "heading": "### 9.2 连接池优化",
+    "original_line": 1269,
+    "before": "- **连接池配置**：连接池参数调优\n- **连接复用**：连接复用策略\n- **连接监控**：连接池监控\n- **连接泄露**：连接泄露检测\n- **连接测试**：连接健康测试",
+    "after": "池参数从底层 sql.DB 调整，观察等待、使用中和空闲连接，再结合数据库与副本数量设预算。事务未结束、Rows 未关闭都可能延长连接占用。模拟请求取消和查询失败后观察使用中连接回落，不把“连接池设置了数字”当作优化完成。",
+    "scope": "替换占位条目，解释 API 责任与边界；非全文代码实测"
+  },
+  {
+    "path": "01-go-backend/reference/framework-essentials/02-gorm-orm.md",
+    "heading": "### 9.3 事务优化",
+    "original_line": 1276,
+    "before": "- **事务大小**：事务大小控制\n- **事务隔离**：事务隔离级别\n- **死锁处理**：死锁检测和处理\n- **事务监控**：事务性能监控\n- **事务重试**：事务重试机制",
+    "after": "长事务会延长锁和连接持有，拆小前先确认业务是否允许分批成功。死锁可以通过统一锁顺序、减少范围等降低，重试只对已识别暂时性失败使用，并有上限与退避。比较同一负载下等待、失败与完成时间，而不单看每次事务的代码行数。",
+    "scope": "替换占位条目，解释 API 责任与边界；非全文代码实测"
+  },
+  {
+    "path": "01-go-backend/reference/framework-essentials/02-gorm-orm.md",
+    "heading": "### 9.4 内存优化",
+    "original_line": 1283,
+    "before": "- **内存使用**：内存使用优化\n- **内存泄漏**：内存泄漏检测\n- **垃圾回收**：垃圾回收优化\n- **内存池**：内存池使用\n- **内存监控**：内存使用监控",
+    "after": "查询过多行和关联会同时增加数据库传输、扫描与 Go 堆分配。先限制结果范围或分批处理，记录峰值与持续负载后的内存，再判断是否存在长期持有。对象池有复用与清理成本，不能为所有模型默认添加；GC 参数也不能修复无界缓存。",
+    "scope": "替换占位条目，解释 API 责任与边界；非全文代码实测"
+  },
+  {
+    "path": "01-go-backend/reference/framework-essentials/02-gorm-orm.md",
+    "heading": "### 10.1 单元测试",
+    "original_line": 1507,
+    "before": "- **模型测试**：模型定义测试\n- **关联测试**：关联关系测试\n- **钩子测试**：钩子函数测试\n- **验证测试**：数据验证测试\n- **业务逻辑测试**：业务逻辑测试",
+    "after": "不依赖数据库的校验和业务计算可以直接测输入输出；模型标签、实际 hook 调用和关系保存则需要相应 ORM/数据库路径验证。用可控失败检查业务没有留下部分状态，避免 mock 掉整个被测行为后只验证调用脚本。",
+    "scope": "替换占位条目，解释 API 责任与边界；非全文代码实测"
+  },
+  {
+    "path": "01-go-backend/reference/framework-essentials/02-gorm-orm.md",
+    "heading": "### 10.2 集成测试",
+    "original_line": 1514,
+    "before": "- **数据库测试**：数据库操作测试\n- **事务测试**：事务处理测试\n- **迁移测试**：迁移功能测试\n- **性能测试**：性能基准测试\n- **并发测试**：并发安全测试",
+    "after": "集成测试使用与目标数据库语义相符的环境，验证事务回滚、唯一约束、迁移和并发修改。SQLite 方便小实验但不能自动代表 PostgreSQL/MySQL 的隔离、类型和 SQL 方言。每条测试隔离数据，发布迁移还要测试旧结构升级而不仅新库创建。",
+    "scope": "替换占位条目，解释 API 责任与边界；非全文代码实测"
+  },
+  {
+    "path": "01-go-backend/reference/framework-essentials/02-gorm-orm.md",
+    "heading": "### 10.3 测试工具",
+    "original_line": 1521,
+    "before": "- **测试框架**：测试框架选择\n- **Mock对象**：Mock对象创建\n- **测试数据库**：测试数据库配置\n- **测试数据**：测试数据准备\n- **测试断言**：测试断言库",
+    "after": "Go testing 提供测试组织，断言库只改善表达，mock 用于明确的外部边界，容器数据库用于验证真实 SQL。夹具采用可识别合成数据，每例清理或重建。选择工具后先故意破坏一条约束，确认测试真的失败，而不是单纯检查命令退出成功。",
+    "scope": "替换占位条目，解释 API 责任与边界；非全文代码实测"
+  },
+  {
+    "path": "01-go-backend/reference/framework-essentials/02-gorm-orm.md",
+    "heading": "### 11.1 错误类型",
+    "original_line": 1818,
+    "before": "- **GORM错误**：GORM内置错误类型\n- **数据库错误**：数据库相关错误\n- **验证错误**：数据验证错误\n- **事务错误**：事务处理错误\n- **连接错误**：数据库连接错误",
+    "after": "区分未找到、唯一约束冲突、连接失败与业务验证错误，因为调用者的恢复动作不同。传统链式 API 通过 Error 取结果，支持的错误翻译还需相应配置；底层数据库错误仍按驱动契约识别。不要靠任意字符串包含关系决定是否重试。",
+    "scope": "替换占位条目，解释 API 责任与边界；非全文代码实测"
+  },
+  {
+    "path": "01-go-backend/reference/framework-essentials/02-gorm-orm.md",
+    "heading": "### 11.2 错误处理",
+    "original_line": 1825,
+    "before": "- **错误检查**：错误检查和处理\n- **错误转换**：错误类型转换\n- **错误日志**：错误日志记录\n- **错误恢复**：错误恢复策略\n- **错误监控**：错误监控和告警",
+    "after": "发生错误后先判断能否恢复，再补充操作上下文并传播；事务中的失败不能被吞掉后返回 nil。HTTP 边界把内部错误翻译为稳定响应，日志记录必要原因并脱敏。对暂时故障重试前确认幂等和总时限，永久格式错误应及时返回给调用者。",
+    "scope": "替换占位条目，解释 API 责任与边界；非全文代码实测"
+  },
+  {
+    "path": "01-go-backend/reference/framework-essentials/02-gorm-orm.md",
+    "heading": "### 11.3 自定义错误",
+    "original_line": 1832,
+    "before": "- **错误定义**：自定义错误类型\n- **错误包装**：错误信息包装\n- **错误链**：错误链追踪\n- **错误码**：错误码定义\n- **错误文档**：错误文档管理",
+    "after": "自定义错误保留稳定类别与必要上下文，包装时使用可追溯原因的方式，使 errors.Is/As 仍能判断底层问题。错误码用于客户端决策，文案用于解释，日志用于内部排查，三者不用共享同一条含 SQL 的字符串。为每个公开错误写一个可触发的请求例子。",
+    "scope": "替换占位条目，解释 API 责任与边界；非全文代码实测"
+  },
+  {
+    "path": "01-go-backend/reference/framework-essentials/02-gorm-orm.md",
+    "heading": "### 12.2 模型设计",
+    "original_line": 2155,
+    "before": "- **命名约定**：遵循GORM命名约定\n- **字段类型**：选择合适的字段类型\n- **索引设计**：合理的索引设计\n- **关联关系**：清晰的关联关系\n- **验证规则**：数据验证规则",
+    "after": "从查询与业务不变量反推模型：哪些字段可空、何者唯一、关联由谁拥有、删除后发生什么。索引根据实际筛选/排序建立，写入成本与存储成本也需考虑。应用校验改善反馈，数据库约束抵御并发竞态，两者共同验证重复值和越界状态。",
+    "scope": "替换占位条目，解释 API 责任与边界；非全文代码实测"
+  },
+  {
+    "path": "01-go-backend/reference/framework-essentials/02-gorm-orm.md",
+    "heading": "### 12.3 查询优化",
+    "original_line": 2162,
+    "before": "- **索引使用**：合理使用索引\n- **查询简化**：简化查询逻辑\n- **批量操作**：使用批量操作\n- **预加载优化**：优化预加载\n- **缓存策略**：使用查询缓存",
+    "after": "选一个具体慢接口，保存其 SQL、执行计划、数据量与延迟基线；改变索引、投影字段或加载方式后在同等负载复测。不要把批量、预加载和缓存一次全部加入，否则难以知道哪个改动有效，也容易引入新的一致性问题。",
+    "scope": "替换占位条目，解释 API 责任与边界；非全文代码实测"
+  },
+  {
+    "path": "01-go-backend/reference/framework-essentials/02-gorm-orm.md",
+    "heading": "### 12.4 事务管理",
+    "original_line": 2169,
+    "before": "- **事务边界**：明确事务边界\n- **错误处理**：完善的错误处理\n- **重试机制**：事务重试机制\n- **性能监控**：事务性能监控\n- **日志记录**：事务日志记录",
+    "after": "用一条失败实验定义事务承诺：扣库存成功后创建订单失败，最终库存应保持原值。确保两步使用同一个 tx，提交结果被检查。只有明确可重试的数据库冲突才重新执行整个业务单元，日志记录次数与最终结果而非秘密参数。",
+    "scope": "替换占位条目，解释 API 责任与边界；非全文代码实测"
+  },
+  {
+    "path": "01-go-backend/reference/framework-essentials/02-gorm-orm.md",
+    "heading": "### 12.5 错误处理",
+    "original_line": 2176,
+    "before": "- **错误分类**：错误分类和处理\n- **错误恢复**：错误恢复策略\n- **错误日志**：错误日志记录\n- **错误监控**：错误监控告警\n- **用户反馈**：用户友好的错误信息",
+    "after": "错误处理的验收是调用方知道能否修改输入、重试或联系支持，运维能够查到真实原因。对未找到、冲突和连接失败分别编写用例，确认状态不同且未泄漏内部信息；恢复动作失败时继续传播，不用返回空列表掩盖数据库不可用。",
+    "scope": "替换占位条目，解释 API 责任与边界；非全文代码实测"
+  }
+]

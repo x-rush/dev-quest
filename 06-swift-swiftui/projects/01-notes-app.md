@@ -1,10 +1,23 @@
 # 实战项目一：本地笔记应用（SwiftData）
 
+## 分阶段练习与验收
+
+**最小阶段**：先在 SwiftData 创建与查询一条笔记。
+
+**验收结果**：重启后内容保留；无效标题失败；删除立即反映在查询结果。
+
+**扩展顺序**：编辑和搜索作为第二阶段，关系与迁移单独测试。
+
+建议保存一份正常输入、一份失败输入、实际输出和对应测试。先完成以上阶段再扩展正文中的完整设计；遇到省略实现或未定义依赖，应按文档上下文补齐，不能把代码片段拼接后当作已经验证的完整工程。
+
 > **文档简介**: 从零构建一个带增删改查与搜索的本地笔记应用，完整走一遍 SwiftData 持久化 + SwiftUI 列表交互的最小闭环
 >
 > **目标读者**: 完成 basics 全部教程、首次做完整 iOS 应用的学习者
 >
 > **前置知识**: [basics/08-first-project.md](../basics/08-first-project.md)、[frameworks/01-swiftui-basics.md](../frameworks/01-swiftui-basics.md)
+
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
 
 ## 📚 文档元数据
 
@@ -15,6 +28,8 @@
 | **难度** | ⭐ |
 | **标签** | `#SwiftData` `#CRUD` `#List` `#搜索` `#入门项目` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ## 🎯 项目目标
 
@@ -214,3 +229,9 @@ struct NoteEditorView: View {
 - 📄 [07-swiftdata-migration.md](../reference/framework-essentials/07-swiftdata-migration.md) — 数据迁移字典（进阶挑战"数据迁移"的参考）
 - 📄 [01-swift-swiftui-cheatsheet.md](../reference/quick-references/01-swift-swiftui-cheatsheet.md) — 语法速查（写卡壳时翻）
 - 📄 [08-first-project.md](../basics/08-first-project.md) — 教程侧的第一个项目
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../LEARNING_GUIDE.md) · [完整目录与版本](../README.md) · [通用术语](../../shared-resources/glossary.md)

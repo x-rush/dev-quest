@@ -4,6 +4,9 @@
 
 Go内置了强大的测试框架，与PHP的PHPUnit等测试库相比，Go的测试更加简洁和集成度高。掌握Go的测试是编写高质量Go应用的重要技能。
 
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
+
 ## 📚 文档元数据
 
 | 属性 | 内容 |
@@ -15,6 +18,8 @@ Go内置了强大的测试框架，与PHP的PHPUnit等测试库相比，Go的测
 | **更新日期** | `2026年9月` |
 | **作者** | Dev Quest Team |
 | **状态** | ✅ 已完成 |
+
+</details>
 
 ### 🎯 学习目标
 - 掌握Go的testing包使用
@@ -318,6 +323,7 @@ type MockUserRepository struct {
 
 func (m *MockUserRepository) FindByID(id int) (*User, error) {
     args := m.Called(id)
+    if args.Get(0) == nil { return nil, args.Error(1) }
     return args.Get(0).(*User), args.Error(1)
 }
 
@@ -375,6 +381,7 @@ type MockHTTPClient struct {
 
 func (m *MockHTTPClient) Do(req *http.Request) (*http.Response, error) {
     args := m.Called(req)
+    if args.Get(0) == nil { return nil, args.Error(1) }
     return args.Get(0).(*http.Response), args.Error(1)
 }
 
@@ -1065,3 +1072,17 @@ test-race:
 **学习提示**: Go的测试框架虽然简单，但功能强大。通过良好的测试实践，你可以构建更加可靠的Go应用。相比于PHP的PHPUnit，Go的测试更加内聚和高效。
 
 *最后更新: 2025年9月*
+
+<!-- full-library-explanation -->
+## 第一条单元测试应独立说明一条业务规则
+
+前置是函数、error 和接口，不要求先了解 PHP。先挑一个不依赖网络的小规则，例如用户名去除两端空白后长度必须在 3 到 20 之间。为正常值、边界长度、空字符串分别给出输入与预期结果，测试失败信息写出 got 与 want。测试预期应来自规则，不应调用另一遍同一实现来计算。
+
+当规则依赖外部数据时再引入小接口。例如注册服务依赖 EmailExists 和 Save，可用内存实现模拟邮箱重复，验证重复时不发生保存。测试关注服务对外行为；如果断言每个内部辅助函数的调用顺序，重构实现即使没有改变行为也会导致大量无意义失败。
+
+练习：把用户名最小长度从 3 故意改为 4，至少一个边界测试应失败；恢复实现后应通过。再模拟仓储返回错误，服务应返回可识别的失败且不继续保存。共享 map、时钟和随机源都可能让并行测试不稳定，使用每个测试独立的夹具和可控制输入。示例中的 your-project 导入是占位，需要替换为自己的模块路径并补齐被测服务。
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../LEARNING_GUIDE.md) · [完整目录与版本](../README.md) · [通用术语](../../shared-resources/glossary.md)

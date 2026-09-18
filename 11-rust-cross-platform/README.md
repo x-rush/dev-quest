@@ -1,6 +1,11 @@
 # Rust 跨平台开发（第 11 模块 · 探索系列）
 
-> **模块定位**：以 Rust 语言全量参考为根基，Tauri 2 跨端应用为旗舰方向（对标 04-multiplatform-apps 的三端原生路线），Axum 后端为辅线。Rust 的所有权系统与 edition 兼容承诺使其成为知识库中**半衰期最长**的语言资产——2015 年 1.0 至今零破坏性升级。
+> **本轮增强与版本核对**：学习路径及正文增强范围见 [逐文件台账](../shared-resources/tools/document-quality/reports/coverage.md)。下方技术基线中的旧核对日期属于历史记录，不表示这次已重跑所有平台；安装与升级以官方兼容要求、项目锁文件和实际构建结果为准。
+
+
+> 第一次学习请从[理解地图与学习规划](LEARNING_GUIDE.md)开始；按关键词查阅可直接使用其中的完整参考导航。
+
+> **模块定位**：以 Rust 语言全量参考为根基，Tauri 2 跨端应用为旗舰方向（对标 04-multiplatform-apps 的三端原生路线），Axum 后端为辅线。学习重点是所有权、类型约束、错误传播与平台边界。edition 提供演进机制，但不能据此承诺任意旧代码与第三方依赖永久无需迁移。
 
 ## 🧭 技术基线
 
@@ -18,14 +23,16 @@
 | Clap | **4.6** | CLI 参数解析 derive 风格 | 2026-09-16 |
 | Tracing | **0.1** | 结构化日志与 span 追踪 | 2026-09-16 |
 
-**收录判据**（详见 [tech-adoption-checklist](../shared-resources/standards/tech-adoption-checklist.md)）：语言层半衰期 10 年+（edition 系统保证）、Tauri 2 为跨端赛道活跃主流（GitHub ⭐111k 级，2026-09 核实）、Axum/Tokio 为 Rust 后端事实标准。放弃收录的：Actix Web（vs Axum 生态收敛）、Rocket（迭代慢）、WASM 框架（Yew/Leptos 竞争未收敛，仅 advanced 单篇视野）。
+**收录判据**：按[技术收录标准](../shared-resources/standards/tech-adoption-checklist.md)区分基础、应用主线与专题。当前主线分别用 Tauri 练习原生能力边界、Axum 练习 HTTP 服务、Tokio 练习异步调度；这不表示其他框架失去价值。WASM 作为按目标平台选修的扩展，不以“竞争尚未结束”代替适用性分析。上方历史版本核对记录保留日期，本轮没有重新验证整张版本表。
 
-## 🗺️ 四象限导览（47 篇，2026-09-16 全量建成；rust 块经本机 rustc edition 2024 实测）
+## 🗺️ 目录导览（原 47 篇，新增 3 篇基础参考）
+
+原目录记录过 rustc 验证；本轮新增或修改的 Rust 示例尚未本机执行，不能沿用旧记录视为新内容已通过。目录“已建成”只表示文章存在。
 
 | 象限 | 目录 | 篇数 | 状态 |
 |------|------|-----:|------|
 | 📖 教程（按序入门） | `basics/` | 10 | ✅ 已建成 |
-| 📚 字典（全量参考） | `reference/` | 14 | ✅ 已建成 |
+| 📚 字典（全量参考） | `reference/` | 17 | ✅ 已建成 |
 | 🛠️ 指南（框架生态） | `frameworks/` | 7 | ✅ 已建成 |
 | 🚀 指南（实战项目） | `projects/` | 5 | ✅ 已建成 |
 | 🔧 指南（测试工程） | `testing/` | 3 | ✅ 已建成 |
@@ -45,7 +52,11 @@
 9. `09-concurrency-async.md` — 并发与 async/.await（Tokio 入门）
 10. `10-cargo-testing.md` — Cargo 工程化与单元测试
 
-### 📚 reference/ 知识字典（单一事实来源）
+### 📚 reference/ 知识字典
+
+- [关键词与语法入口](reference/language-concepts/09-keywords-and-syntax.md)
+- [常用标准类型、方法与宏](reference/language-concepts/10-standard-types-and-methods.md)
+- [常用标准库地图](reference/library-guides/15-standard-library-map.md)
 
 - `language-concepts/01-ownership-dictionary.md` ~ `08-async-internals.md`（8 篇：所有权细则 / trait 对象与动态分发 / 常量泛型 / 高级生命周期 / 宏系统 / unsafe / Future·Pin·Waker / 智能指针全表）
 - `framework-essentials/09-tauri-2-essentials.md`、`10-tauri-ipc-commands.md`、`11-axum-essentials.md`

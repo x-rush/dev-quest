@@ -1,10 +1,26 @@
 # 现代 Java 特性 - Lambda、Stream、Optional、虚拟线程与 Sealed
 
+## 先理解，再动手
+
+Stream 描述数据变换管道，终结操作驱动消费；Optional 表达可能缺失；虚拟线程影响任务执行方式。一次只用一个特性解决具体问题。
+
+**本节自测**：用 filter/map 收集成年人姓名，分别输入空列表与无匹配列表。
+
+<details>
+<summary>预期结果与参考思路（先尝试再展开）</summary>
+
+两者都得到空结果；不要使用无条件 Optional.get 来代替缺失处理。
+
+</details>
+
 > **文档简介**: 一站式回顾 Java 8 以来的范式转变：Lambda 与函数式接口、Stream 管道、Optional 空安全、Java 21 虚拟线程与 Sealed 类，从"命令式 Java"升级到"现代 Java"
 >
 > **目标读者**: 主力经验停留在 Java 8，需要系统补齐现代特性的开发者
 >
 > **前置知识**: 已完成[异常处理](./06-exceptions.md)及之前全部章节
+
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
 
 ## 📚 文档元数据
 
@@ -15,6 +31,8 @@
 | **难度** | ⭐⭐ |
 | **标签** | `#Lambda` `#Stream` `#Optional` `#虚拟线程` `#Sealed` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ## 🎯 学习目标
 
@@ -147,12 +165,9 @@ public final class Triangle implements Shape {}
 
 ## ✅ 最佳实践 / ❌ 陷阱清单
 
-- ✅ DTO 转换、过滤聚合、分组统计优先 Stream
-- ✅ 对外查询接口返回 `Optional`，内部集合空缺用空集合而非 null
-- ✅ 高并发 IO 服务优先虚拟线程（JDK 21+）
-- ❌ Stream 里做副作用（修改外部变量）；复杂多步副作用用普通循环
-- ❌ 并行流（`parallelStream`）滥用——默认串行，确有收益且线程安全再并行
-- ❌ 用 Optional 集合/字段"到处包一层"
+Stream 适合清晰的变换、筛选与聚合；包含多步副作用或复杂退出逻辑时，普通循环往往更容易验证。Optional 表达单个结果可能缺失，空集合已经能表达“零项”，无需为一致形式层层包装。
+
+虚拟线程降低某些阻塞等待的线程成本，不增加 CPU 算力，也不扩大数据库容量。并行流和虚拟线程都需要资源上限与实际基准，不能仅按“现代特性”一律开启。
 
 ## 🎯 练习与实践
 
@@ -172,3 +187,9 @@ public final class Triangle implements Shape {}
 - 📄 **[Stream/Optional API 速查](../reference/language-concepts/03-streams-optional.md)** - 函数式 API 全表
 - 📄 **[并发 API 速查](../reference/language-concepts/04-concurrency-api.md)** - 虚拟线程与并发工具全表
 - 📄 **[Spring Boot 核心](../reference/framework-essentials/01-spring-boot-essentials.md)** - 特性在主流框架中的应用
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../LEARNING_GUIDE.md) · [完整目录与版本](../README.md) · [通用术语](../../shared-resources/glossary.md)

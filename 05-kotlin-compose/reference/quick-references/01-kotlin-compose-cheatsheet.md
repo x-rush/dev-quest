@@ -1,6 +1,8 @@
 # Kotlin + Compose 一行式速查表
 
-> 最高频语法的单行片段合集：声明 → 集合 → 协程 → Flow → Compose 状态 → 布局 → 导航，查一行就能用
+> **阅读准备**：已读 Kotlin 和 Compose 入门；这是查阅片段，导入、状态声明和调用作用域仍由项目提供。
+
+> 最高频语法的单行片段合集：声明 → 集合 → 协程 → Flow → Compose 状态 → 布局 → 导航，定位写法后按所需上下文使用
 
 | 属性 | 内容 |
 |------|------|
@@ -28,7 +30,7 @@ val (id, name) = u1                           // 解构
 fun String.shout() = uppercase() + "!"        // 扩展函数
 sealed interface State { data object Loading : State; data class Data(val v: Int) : State }
 listOf(1, 2, 3).map { it * 2 }.filter { it > 2 }        // 集合链
-val tag by lazy { expensive() }               // 惰性单例
+val tag by lazy { expensive() }               // 该属性首次成功读取后缓存
 ```
 
 ## 2. 协程
@@ -131,9 +133,9 @@ val current by nav.currentBackStackEntryAsState()          // 驱动底部导航
 @Composable fun Input(value: String, onChange: (String) -> Unit, modifier: Modifier = Modifier) { }
 
 // UiState 三态建模
-sealed interface UiState<T> { data object Loading : UiState<Nothing>; data class Ok<T>(val data: List<T>) : UiState<T>; data class Err<T>(val msg: String) : UiState<T> }
+sealed interface UiState<out T> { data object Loading : UiState<Nothing>; data class Ok<T>(val data: List<T>) : UiState<T>; data class Err<T>(val msg: String) : UiState<T> }
 
-// 一次性事件（防旋转重放）
+// 无 replay 的事件流：无订阅者时可能丢失事件，并不提供恰好一次保证
 private val _events = MutableSharedFlow<Event>(extraBufferCapacity = 1)
 
 // 空态/加载态渲染
@@ -148,3 +150,18 @@ when (val s = uiState) { UiState.Loading -> Loader(); is UiState.Ok -> List(s.da
 - 📄 **[Compose 核心组件速查](../framework-essentials/01-compose-essentials.md)** - 组件参数展开版
 - 📄 **[协程与 Flow API 全表](../language-concepts/03-coroutines-flow-api.md)** - Flow 操作符展开版
 - 📖 **[Kotlin Playground](https://play.kotlinlang.org)** - 在线验证 Kotlin 片段
+
+
+<!-- full-library-explanation -->
+## 速查片段需要放回正确上下文
+
+本页每一行用于查写法，不是可整体复制的程序。remember 与 UI 组件在 Composable 内；launch/async 需要 CoroutineScope；collect、delay 与 withContext 需要挂起上下文。以此区分“语法不对”和“调用位置不对”，不要通过 GlobalScope 或 runBlocking 绕过生命周期设计。
+
+`runCatching` 会捕获包括 CancellationException 在内的异常，协程中使用时应重新抛出取消，否则可能把页面取消变成错误提示。`MutableSharedFlow(replay = 0)` 在没有订阅者时不会为未来订阅者保留事件，extraBufferCapacity 也不提供离线事件队列。
+
+练习：页面进入后台时触发一条保存成功提示，返回后决定应显示还是忽略。验收：把需求写清，再选状态、事件或持久队列；不能仅用“一次性事件”四个字宣称不会丢失或重复。需要确认处理的重要结果可建模为状态并显式确认。
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

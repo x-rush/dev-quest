@@ -1,5 +1,8 @@
 # 闭包与作用域 — LEGB、global/nonlocal、late binding
 
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
+
 ## 📚 文档元数据
 
 | 属性 | 内容 |
@@ -9,6 +12,8 @@
 | **难度** | ⭐⭐ |
 | **标签** | `#闭包` `#LEGB` `#nonlocal` `#late-binding` `#作用域` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ## 📌 定义
 
@@ -99,7 +104,7 @@ callbacks = [partial(print, i) for i in range(3)]      # 各自持有自己的 i
 
 ### 与装饰器的关系
 
-装饰器就是"接收原函数、返回闭包"的高阶函数：`wrapper` 闭包持有 `func`、以及带参装饰器外层的 `arg` 等自由变量，闭包的生存期 = wrapper 的生存期。完整展开见 [06-decorators](./06-decorators.md)。
+常见函数装饰器会接收原函数并返回包装闭包，但装饰器也可以返回其他对象或由可调用实例实现。对包装闭包这种写法：`wrapper` 闭包持有 `func`、以及带参装饰器外层的 `arg` 等自由变量，闭包的生存期 = wrapper 的生存期。完整展开见 [06-decorators](./06-decorators.md)。
 
 ## 💡 示例
 
@@ -129,10 +134,26 @@ d()        # 101
   ✅ 需要 rebind 模块级名字时显式 `global count`；只读引用不需要声明。
 - ❌ **跨函数改外层变量不加 nonlocal**：`n += 1` 同理被当局部变量，`UnboundLocalError`。
   ✅ 声明 `nonlocal n`；注意 `nonlocal` 找不到外层函数变量时编译报 SyntaxError，它也不命中模块级名字。
-- ❌ **用可变容器绕过 nonlocal**：`state = {"n": 0}; state["n"] += 1`。
-  ✅ 单函数链内有 `nonlocal` 就用它；容器技巧只在没有函数嵌套关系时才有意义。
+- **可变容器与 nonlocal 表达不同动作**：`state["n"] += 1` 修改对象内容，`nonlocal n; n += 1` 重新绑定外层名字。两者都可用于闭包状态，按数据形状与可读性选择，不必把容器写法当成错误。
 - ❌ **注册事件回调时直接引用循环变量**（GUI/异步回调的经典翻车点，与 late binding 同源）。
   ✅ 回调注册用 `functools.partial(handler, item)` 在注册时固定参数。
+
+<!-- full-library-explanation -->
+## 用两个计数器观察绑定的寿命
+
+前置知识是函数可以作为返回值。闭包不是把所有外层变量拍成快照，而是保留所需绑定。`nonlocal` 用于重新绑定外层名字；对已引用的列表调用 `append` 没有重新绑定名字，因此不要求 `nonlocal`。
+
+将上面的 `make_counter` 定义保存到 `counter.py`，追加：
+
+```python
+left = make_counter()
+right = make_counter(10)
+print(left(), left(), right(), left())
+```
+
+运行 `python counter.py`，输出 `1 2 11 3`。同一闭包多次调用共享状态，不同工厂调用建立不同状态。
+
+练习：解释 `lambda i=i: i` 为什么解决循环回调问题，却不能隔离 `i` 引用的可变列表。答案是默认参数保存当时的对象引用，不自动复制对象；需要独立数据时，在注册时明确构造副本。不要把绑定时机与对象可变性混为一谈。
 
 ## 🔗 相关条目
 
@@ -145,3 +166,9 @@ d()        # 101
 ---
 
 *最后更新: 2026年9月 | 本条目为模块知识字典的一部分，概念完整解释以此处为单一事实来源*
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

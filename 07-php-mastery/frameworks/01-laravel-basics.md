@@ -1,10 +1,21 @@
 # Laravel 入门：路由、控制器与 Blade 模板
 
+## 先看框架承担哪部分职责
+
+**Laravel 入口**：路由把请求交给控制器，容器提供依赖，视图或 JSON 形成响应。约定减少配置，但每一步仍有可追踪的输入输出。
+
+**最小练习与预期结果**：用一个列表和创建路由串起请求校验与业务处理；非法输入不能写入，缺少路由有明确响应。
+
+具体 API 与安装版本以[模块基线](../README.md)和本篇官方来源为准。先完成这条数据路径，再展开后面的高级配置；框架名称变化后，输入边界、状态归属和失败处理仍是需要理解的机制。
+
 > **文档简介**: 从零创建 Laravel 13 项目，掌握路由定义、资源控制器、Blade 模板渲染与完整请求生命周期
 >
 > **目标读者**: 已学完 PHP 基础、第一次接触 Laravel 的开发者
 >
 > **前置知识**: [面向对象基础](../basics/04-functions-oop.md)、[环境搭建](../basics/01-environment-setup.md)
+
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
 
 ## 📚 文档元数据
 
@@ -15,6 +26,8 @@
 | **难度** | ⭐ |
 | **标签** | `#Laravel` `#路由` `#控制器` `#Blade` `#请求生命周期` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ## 🎯 学习目标
 
@@ -187,3 +200,9 @@ A: `php artisan view:clear` 清理编译后的模板缓存。
 - 📄 [类型系统与现代 OOP](../reference/language-concepts/03-types-oop-modern.md) — 控制器中 readonly、枚举等语法细节
 - 📄 [Laravel 进阶：Eloquent 与队列](./02-laravel-advanced.md) — 本文的进阶篇
 - 📄 [综合练习：CLI 任务管理工具](../basics/08-first-project.md) — Laravel 之前的纯 PHP 项目体验
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../LEARNING_GUIDE.md) · [完整目录与版本](../README.md) · [通用术语](../../shared-resources/glossary.md)

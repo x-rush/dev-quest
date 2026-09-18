@@ -1,5 +1,18 @@
 # Next.js 16 + Tailwind CSS 4 企业级样式开发完整指南
 
+## 先理解，再动手
+
+Tailwind 把常用 CSS 规则表达为类名。布局仍受盒模型、可用宽度和继承规则约束；加类名不能替代理解这些规则。
+
+**本节自测**：做窄屏一列、宽屏两列的卡片，放入很长标题测试溢出。
+
+<details>
+<summary>预期结果与参考思路（先尝试再展开）</summary>
+
+观察布局断点和内容换行；颜色正常不等于响应式布局正确。
+
+</details>
+
 > **文档简介**: Next.js 16 与 Tailwind CSS 4 深度集成教程，涵盖现代化样式系统、响应式设计、主题定制、组件样式、性能优化等企业级CSS开发技术
 
 > **目标读者**: 具备基础CSS知识的开发者，需要掌握现代样式系统和UI设计的前端工程师
@@ -7,6 +20,9 @@
 > **前置知识**: CSS基础、Next.js基础、JavaScript基础、响应式设计概念
 
 > **预计时长**: 4-6小时
+
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
 
 ## 📚 文档元数据
 
@@ -19,6 +35,8 @@
 | **更新日期** | `2026年9月` |
 | **作者** | Dev Quest Team |
 | **状态** | ✅ 已完成 |
+
+</details>
 
 ## 🎯 学习目标
 
@@ -1103,7 +1121,7 @@ Tailwind CSS为Next.js应用提供了强大而灵活的样式解决方案。继�
 - 📄 **[相关的reference文档](../reference/development-tools/02-styling-tools.md)**: 快速参考样式工具和插件配置
 
 ### 参考章节
-- 📖 **[本模块其他章节]**: [布局路由设计](./04-layouts-routing.md#响应式布局) | [数据获取基础](./06-data-fetching-basics.md#客户端数据获取)
+- 📖 **[本模块其他章节]**: [布局路由设计](./04-layouts-routing.md#响应式布局) | [数据获取基础](./06-data-fetching-basics.md#基础客户端数据获取)
 - 📖 **[Knowledge Points快速参考]**: [CSS模式参考](../reference/language-concepts/05-css-patterns.md) | [样式工具配置](../reference/development-tools/02-styling-tools.md)
 
 ## 📝 总结
@@ -1141,3 +1159,8 @@ Tailwind CSS为Next.js应用提供了强大而灵活的样式解决方案。继�
 **文档状态**: ✅ 已完成
 **最后更新**: 2026年9月
 **版本**: v1.0.0
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../LEARNING_GUIDE.md) · [完整目录与版本](../README.md) · [通用术语](../../shared-resources/glossary.md)

@@ -1,10 +1,26 @@
 # 导航 - NavigationStack、TabView 与模态呈现
 
+## 先理解，再动手
+
+NavigationStack 管理一条进入与返回路径，sheet 表达模态任务，TabView 表达并列主入口。用同一种容器模拟所有导航会模糊返回语义。
+
+**本节自测**：从列表进详情，另用 sheet 编辑标题，取消编辑不保存。
+
+<details>
+<summary>预期结果与参考思路（先尝试再展开）</summary>
+
+返回和取消行为明确；保存才修改拥有者的数据，草稿与正式记录分开。
+
+</details>
+
 > **文档简介**: 掌握 SwiftUI 现代导航三件套：NavigationStack 压栈导航与类型安全传值、TabView 标签切换、sheet/fullScreenCover 模态弹窗
 >
 > **目标读者**: 能搭建单页界面、需要组织多页面应用结构的学习者
 >
 > **前置知识**: [05-layouts.md](./05-layouts.md)
+
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
 
 ## 📚 文档元数据
 
@@ -15,6 +31,8 @@
 | **难度** | ⭐ |
 | **标签** | `#NavigationStack` `#TabView` `#Sheet` `#导航传值` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ## 🎯 学习目标
 
@@ -172,10 +190,9 @@ sheet 内容里用 `@Environment(\.dismiss) private var dismiss` 获取关闭动
 
 ## ✅ 最佳实践
 
-- ✅ **推荐**：导航用"值驱动"（value + destination 规则），仅在简单原型里用 `NavigationLink(destination:)` 直塞视图
-- ✅ **推荐**：每个 tab 独立 NavigationStack；需要跨 tab 保持的返回栈，把 path 存到 `@Observable` store
-- ❌ **避免**：在 NavigationStack 内再嵌 NavigationStack（双重导航栏）
-- ❌ **避免**：用 sheet 一层叠一层地"模拟导航"——超过两级跳转就该用 push
+需要深链接或恢复导航时，把路径表达成可识别的数据，再为路径值定义目的界面；最简单的页面跳转也可以直接使用目的 View。只有路径元素具备合适的编码契约，才谈得上序列化恢复。
+
+不同 tab 是否各自保留返回历史由交互决定，modal 则表示独立的临时任务，不由“超过两级”机械改成 push。测试直接打开详情、返回列表、切换 tab 再回来，确认路径所有者与界面显示一致。
 
 ## ❓ 常见问题
 
@@ -207,3 +224,9 @@ sheet 呈现的是**新的呈现层级**，部分环境不会自动继承。在 
 - 📄 [07-concurrency-async-await.md](./07-concurrency-async-await.md) — 下一篇：并发
 - 📄 [01-swiftui-essentials.md](../reference/framework-essentials/01-swiftui-essentials.md) — 导航修饰符速查
 - 📄 [02-troubleshooting.md](../reference/quick-references/02-troubleshooting.md) — 导航与环境丢失类故障排除
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../LEARNING_GUIDE.md) · [完整目录与版本](../README.md) · [通用术语](../../shared-resources/glossary.md)

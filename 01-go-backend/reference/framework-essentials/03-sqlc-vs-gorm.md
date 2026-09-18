@@ -1,12 +1,12 @@
 # sqlc vs GORM vs ent：Go 数据访问层选型
 
-> **模块**: `01-go-backend` | **类型**: 字典条目（无难度门槛，支持任意跳入查阅）
+> **模块**: `01-go-backend` | **类型**: 字典条目（可独立查阅，按主题准备前置知识，支持任意跳入查阅）
 
 ## 📌 定义
 
 这是 Go 语言访问 SQL 数据库的三种主流心智模型：
 
-- **sqlc（SQL-first）**：开发者手写 SQL 与 schema，由工具在编译期生成类型安全的 Go 访问代码。SQL 是事实来源（source of truth），Go 代码是产物。
+- **sqlc（SQL-first）**：开发者手写 SQL 与 schema，在代码生成步骤生成类型安全的 Go 访问代码。SQL 是事实来源（source of truth），Go 代码是产物。
 - **GORM（ORM-first）**：开发者定义 Go 结构体与关联，通过链式 API 由 ORM 生成 SQL。Go 结构体是事实来源，SQL 是产物。
 - **ent（Schema-as-Code 实体框架）**：与 GORM 同属模型优先阵营，但 schema 用 Go 代码声明（Fields/Edges），经代码生成产出强类型实体与查询 API——可以理解为"模型优先 + 编译期类型安全 + 图式关联遍历"。
 
@@ -24,7 +24,7 @@
 | **迁移** | 通常配合 golang-migrate、goose 等独立迁移工具 | 内置 `AutoMigrate`（生产环境慎用） | 配套 Atlas 版本化迁移（ent 官方工具链） |
 | **Codegen 负担** | 需要在构建/CI 流程中固定生成步骤 | 无 codegen，即写即用 | codegen 负担最重：schema 变更即需重新生成 |
 | **生态与资料** | 社区活跃，文档以英文为主 | Go 生态最普及，中文资料最丰富 | Meta 出品、文档质量高，但社区规模小于 GORM |
-| **性能特征** | 无运行时反射开销，生成代码即普通 Go 代码 | 有运行时反射与对象开销，可通过配置缓解 | 生成代码为主，开销介于两者之间 |
+| **性能特征** | 无运行时反射开销，生成代码即普通 Go 代码 | 有运行时反射与对象开销，可通过配置缓解 | 生成代码为主，实际开销取决于生成 SQL、查询次数和数据映射 |
 | **典型适用规模** | 查询相对固定、SQL 复杂度高的系统（报表、分析、遗留库） | 业务模型复杂、增删改频繁的 CRUD 应用 | 关联密集的领域模型（社交关系、内容图谱）、重视重构安全的团队 |
 
 ## 💡 示例
@@ -43,8 +43,10 @@ WHERE city = $1 AND age >= $2;
 
 ```go
 // 生成的代码（db 包由 sqlc 产出，勿手改）
-users, err := queries.ListAdultUsersByCity(ctx, "Shanghai", 18)
-// users 类型为 []db.User，参数个数/类型错误在编译期报错
+users, err := queries.ListAdultUsersByCity(ctx, db.ListAdultUsersByCityParams{
+    City: "Shanghai", Age: 18,
+})
+// 常见默认配置会生成 Params 和 ListAdultUsersByCityRow；准确名称/字段类型以生成文件为准
 ```
 
 **GORM：先定义结构体，链式查询**
@@ -103,7 +105,7 @@ rows, err := queries.MonthlyRevenueByRegion(ctx, start, end)
 
 ## 🔌 驱动层：pgx（sqlc 的事实标准搭配）
 
-数据层选型之外还有一层常被忽略的选型：**底层驱动**。PostgreSQL 场景的事实答案是 [pgx](https://github.com/jackc/pgx)（v5 现行，`github.com/jackc/pgx/v5`）——PostgreSQL 专精驱动，功能是 `database/sql` 的超集，也是 sqlc 官方推荐的默认驱动（`sqlc.yaml` 中 `driver: pgx/v5`）。
+数据层选型之外还有一层常被忽略的选型：**底层驱动**。PostgreSQL 项目可评估 [pgx](https://github.com/jackc/pgx)（v5 现行，`github.com/jackc/pgx/v5`）——PostgreSQL 专精驱动，功能是 `database/sql` 的超集，也是 sqlc 官方推荐的默认驱动（`sqlc.yaml` 中 `gen.go.sql_package: "pgx/v5"`）。
 
 **两种接入模式**：
 
@@ -128,13 +130,13 @@ row := pool.QueryRow(ctx, "SELECT name, age FROM users WHERE id = $1", 42)
 
 | 能力 | 说明 |
 |------|------|
-| `CopyFrom` | PostgreSQL COPY 协议批量写入，比逐条 INSERT 快一到两个数量级 |
+| `CopyFrom` | PostgreSQL COPY 协议批量写入，可减少逐条 INSERT 的往返与处理成本，收益依数据量和约束实测 |
 | `pgtype` 类型系统 | 原生映射 JSONB、数组、uuid、numeric、timestamptz 等 PG 专有类型 |
 | `LISTEN/NOTIFY` | 直接消费 PG 的发布订阅通知（`WaitForNotification`） |
 | Large Objects | 大对象流式读写 |
 | 批量查询 `Batch` | 多语句一次网络往返 |
 
-**组合结论**：PostgreSQL 项目里 **sqlc + pgx/v5** 就是 2026 年的默认起点——sqlc 出类型安全查询代码，pgx 出驱动性能与 PG 专有能力，GORM/ent 也可透过 stdlib 模式受益于 pgx 的连接层（GORM PostgreSQL driver 即基于 pgx stdlib）。只有当项目同时要兼容多家数据库时，才退回纯 `database/sql` 接口 + 各家驱动。
+**组合结论**：PostgreSQL 项目里 **sqlc + pgx/v5** 就是 2026 年的默认起点——sqlc 出类型安全查询代码，pgx 出驱动性能与 PG 专有能力，GORM/ent 也可透过 stdlib 模式受益于 pgx 的连接层（GORM PostgreSQL driver 即基于 pgx stdlib）。需要复用 database/sql 生态或统一接口时也可采用其兼容层，不必等到支持多家数据库才使用。
 
 ## 🧭 选型建议
 
@@ -162,9 +164,18 @@ row := pool.QueryRow(ctx, "SELECT name, age FROM users WHERE id = $1", 42)
 - ❌ **错误做法**：把 `AutoMigrate` 当作生产环境的迁移方案。
 - ✅ **正确做法**：生产使用版本化迁移工具，schema 变更可审查、可回滚。
 - ❌ **错误做法**：在 `Where("...")` 里拼用户输入字符串。
-- ✅ **正确做法**：一律使用参数占位符 `?`，三者皆然。
+- ✅ **正确做法**：使用各工具与驱动支持的参数绑定；GORM 常用 ?，PostgreSQL 原生 SQL 常用 $1，不能跨工具照抄占位符。
 - ❌ **错误做法**：ent 项目里手写/手改生成的实体代码，或 schema 与生成结果不同步。
 - ✅ **正确做法**：schema 是唯一事实来源，改动后立即重新生成并纳入 CI 检查；手写逻辑放 hook/扩展层。
+
+<!-- full-library-explanation -->
+## 用同一项业务变更比较抽象成本
+
+前置是 SQL、结构体、连接池与事务。类型安全通常只覆盖工具看得见的部分：sqlc 能根据输入 schema 生成参数类型，却无法保证生产数据库已经执行对应迁移；GORM 的结构体能约束部分结果形状，字符串条件仍可能拼错列；ent 生成的谓词便于重构，也不能替代索引和查询计划分析。三者都需要数据库集成测试。
+
+做一个小型选型练习：实现“查询某城市成年用户并按 id 分页”，随后添加“email 可空”这一变更。记录需要修改哪些输入文件、如何重新生成、空值映射为何种 Go 类型、生成 SQL 是否命中索引。不要只比较最短的 CRUD 行数，要比较需求变化后还能否理解和验证。
+
+sqlc 示例中的生成方法通常接收 Params 结构体，返回类型也取决于所选列与生成配置，应以生成结果为准。生成代码可以提交版本库，也可以在 CI 中重建；关键是固定工具版本并验证输入与产物一致。混用 ORM 和 sqlc 时还要明确是否共享同一事务与连接，不能把两个独立提交误当作一个原子业务操作。
 
 ## 🔗 相关条目
 
@@ -180,3 +191,9 @@ row := pool.QueryRow(ctx, "SELECT name, age FROM users WHERE id = $1", 42)
 ---
 
 *最后更新: 2026年09月 | 本条目为模块知识字典的一部分，概念完整解释以此处为单一事实来源*
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

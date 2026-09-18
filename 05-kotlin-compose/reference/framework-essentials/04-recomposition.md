@@ -1,5 +1,7 @@
 # 重组与稳定性速查
 
+> **阅读准备**：会用 remember 和 mutableStateOf，能区分普通变量与被观察的状态读取。
+
 > Compose 把"状态 → UI"重新执行的过程：三阶段模型、跳过（skip）条件、@Stable / @Immutable 稳定性契约——一切性能优化的概念底座
 
 | 属性 | 内容 |
@@ -37,7 +39,7 @@ UI = f(state)
 编译器判定规则：
 
 - `val` + 原始类型 / String / 函数类型 / lambda → 稳定
-- `data class` 全部公开属性稳定 → 稳定；含 `List` / `Map` 等**接口**类型 → 默认视为**不稳定**（接口无法证明实现稳定），需 `@Immutable` 显式声明
+- `data class` 全部公开属性稳定 → 稳定；含 `List` / `Map` 等**接口**类型 → 默认视为**不稳定**（接口无法证明实现稳定），应先保证数据契约，不能仅用 @Immutable 掩盖可变性；跳过还受编译器模式影响
 - `MutableState<T>` 本身稳定（内部值被框架追踪）
 
 ## 💡 示例
@@ -55,20 +57,29 @@ data class UserUi(val id: Long, val name: String, val avatarUrl: String)
 @Composable
 fun Screen(state: ScreenState) {
     val query by state.queryFlow.collectAsStateWithLifecycle()
-    SearchBar(query)            // query 变化只重组 SearchBar，不重组整个 Screen
+    SearchBar(query)            // query 在 Screen 中被读取，所以 Screen 的相关重启作用域会受影响
 }
 
 // 4. 派生值用 derivedStateOf 收窄重启范围
-val showButton by remember { derivedStateOf { listState.firstVisibleItem > 0 } }
+val showButton by remember { derivedStateOf { listState.firstVisibleItemIndex > 0 } }
 ```
 
 ## ⚠️ 常见陷阱
 
 - 重组是尽力而为的：组合体内**禁止写副作用**（见[副作用 API](./03-side-effects.md)），否则行为随跳过与否而漂移。
-- 以为 `data class` 一定稳定：含 `List` / `Map` 接口属性、或来自其他模块的无注解类，默认不稳定，导致整条调用链跳过失效。
-- 每帧创建新 lambda / 新集合传给子组件 → 参数"永远变了"，跳过失效；用 `remember` 包裹或把 lambda 下移。
+- 以为 `data class` 一定稳定：含 `List` / `Map` 接口属性、或来自其他模块的无注解类，可能被推断为不稳定，但 strong skipping 等模式会影响能否跳过。
+- 新集合身份、lambda 捕获及编译器缓存都会影响跳过；根据编译报告与测量定位，不要机械地全部加 remember。
 - 用一个 `mutableStateOf` 包大对象再整对象替换 → 所有读取它的 Scope 全部重启；拆分状态或用 `derivedStateOf` 收窄。
 - 优化前不量化：先确认重组热点再动手，度量方法见[重组优化](../../advanced-topics/performance/01-recomposition-optimization.md)。
+
+<!-- full-library-explanation -->
+## 稳定性注解是承诺，不是修复按钮
+
+把包含普通可变列表的类型标为 Immutable，不会冻结列表，也不会让写入自动可观察。若事实不符合承诺，框架可能跳过本应更新的 UI。先检查状态是否可观察、数据是否正确替换，再查看编译器报告和性能记录。
+
+当前 Compose 编译器的 strong skipping 模式还允许许多带不稳定参数的可重启函数跳过；不稳定参数通常用实例身份比较，稳定参数按相等性比较，lambda 也可由编译器缓存。因此“含 List 就整条调用链无法跳过”不是普遍规则。[官方 strong skipping 说明](https://developer.android.com/develop/ui/compose/performance/stability/strongskipping)给出了模式与比较规则。
+
+练习：在 Screen 内读取文本状态，与把读取移动到 SearchBar 内分别记录重组。验收：能够指出实际读取发生在哪个重启作用域；只把值作为参数传给 SearchBar，不会把 Screen 中已经发生的读取转移过去。最后检查交互耗时，而非追求重组计数为零。
 
 ## 🔗 相关条目
 
@@ -77,3 +88,9 @@ val showButton by remember { derivedStateOf { listState.firstVisibleItem > 0 } }
 - 🎓 解释深入：[重组优化](../../advanced-topics/performance/01-recomposition-optimization.md)
 - 📄 教程：[Composable 与状态](../../basics/04-composables-state.md)
 - 📖 官方文档：[Compose phases](https://developer.android.com/develop/ui/compose/phases)
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

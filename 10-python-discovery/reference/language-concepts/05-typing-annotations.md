@@ -4,6 +4,9 @@
 
 类型注解是现代 Python 的基础设施：编辑器提示、静态检查（mypy/pyright）、框架运行时校验（FastAPI/Pydantic）共同依赖它。本条目覆盖 3.12+ 推荐写法与旧写法对照，并速览 3.13/3.14 的类型系统能力（模块基线 Python 3.14）。
 
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
+
 ## 📚 文档元数据
 
 | 属性 | 内容 |
@@ -13,6 +16,8 @@
 | **难度** | ⭐⭐ |
 | **标签** | `#typing` `#泛型` `#Protocol` `#TypedDict` `#Pydantic` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ## 新旧写法对照（读旧代码必备）
 
@@ -45,7 +50,7 @@ def render(data: object) -> str: ...        # object 接受任何值
 def callback() -> None: ...                 # 无返回（返回 None）
 ```
 
-`Any` 与 `object` 的区别：`Any` 放弃检查（双向兼容），`object` 是"什么都行但啥也不能做"（安全）。
+`Any` 与 `object` 的区别：`Any` 放弃检查（双向兼容），`object` 可以接收任意对象，但只能直接使用所有对象共有的操作；访问特定方法前需要类型收窄。
 
 ---
 
@@ -89,7 +94,7 @@ def safe_close(resource: Closable) -> None:   # 任何有 close() 的对象都�
 **要点**:
 - 与 ABC 的区别：调用方**无需**被检查类配合，第三方对象天然适配
 - 默认仅静态检查；`@runtime_checkable` 后 `isinstance` 也只验证方法名，不验签名
-- 公共 API 参数类型优先 Protocol，耦合最低
+- 当调用方只依赖少量行为时可用 Protocol；具体类型、现有 ABC 或普通函数参数有时更清楚，不必为每个参数创建新协议
 
 ---
 
@@ -140,8 +145,9 @@ class Box[T = int]:
 
 # 3.13：TypeIs（PEP 742）——isinstance 风格的类型收窄，语义比 TypeGuard 更直觉
 from typing import TypeIs
+from collections.abc import Sequence
 
-def is_strs(items: list[object]) -> TypeIs[list[str]]:
+def is_strs(items: Sequence[object]) -> TypeIs[Sequence[str]]:
     return all(isinstance(i, str) for i in items)
 
 # 3.13：warnings.deprecated（PEP 702）——声明弃用的标准方式
@@ -155,13 +161,13 @@ class Node:
     def link(self, other: Node) -> Node: ...   # 3.13 及以前需写 "Node"
 ```
 
-**要点**：注解惰性求值是 3.14 对工具链影响最大的变化——`__annotations__` 按需计算，运行时开销更低；Pydantic/FastAPI 已适配，旧代码无需改动。
+**要点**：Python 3.14 改变注解的求值机制；运行时读取注解的库需要与解释器版本兼容，不能据此承诺旧代码都无需修改。TypeIs 要求收窄后的类型与输入兼容：上例使用协变的 Sequence，不能机械换成不变的 `list[object]` → `list[str]`。
 
 ---
 
 ## 7. 与 Pydantic 配合 — 运行时校验
 
-Pydantic v2 把注解变成**运行时强约束**，是 FastAPI 的数据层：
+Pydantic v2 根据注解和字段配置执行运行时解析与验证，也是 FastAPI 常用的数据模型工具。默认模式可能转换输入类型；需要拒绝转换时应明确配置严格模式：
 
 ```python
 from pydantic import BaseModel, Field, field_validator
@@ -204,8 +210,43 @@ print(user.model_dump())        # 模型 → dict
 
 ---
 
+<!-- full-library-explanation -->
+## 把静态契约和输入验证分开
+
+前置知识是函数参数、容器和异常。注解描述程序希望接收什么，不会让解释器自动拒绝错误值。静态检查器也只能根据代码中可见的信息推导；外部 JSON、命令行或数据库返回值仍需要运行时检查。
+
+保存为 `annotation_boundary.py` 并运行：
+
+```python
+def double(value: int) -> int:
+    return value * 2
+
+print(double(3))
+print(double("3"))  # 静态检查应报告参数类型错误；解释器仍执行
+
+def require_int(value: object) -> int:
+    if type(value) is not int:
+        raise TypeError("integer required")
+    return value
+
+try:
+    require_int("3")
+except TypeError:
+    print("rejected")
+```
+
+输出为 `6`、`33`、`rejected`。这里刻意使用 `type(value) is int` 排除布尔值，因为 Python 的 bool 是 int 子类；若业务允许整数子类，应选择相应的 `isinstance` 规则。
+
+练习：给 `require_int` 增加范围 1–100 的检查，分别验证 `0`、`True`、`"5"`、`5`。只有最后一个应通过。类型、转换和业务约束是三个独立决策，不要用一个注解代替它们。
+
 ## 🔗 相关文档
 
 - 📄 **[FastAPI 核心速查](../framework-essentials/01-fastapi-essentials.md)** — 注解驱动的 Web 框架
 - 📄 **[高级特性](../../basics/07-advanced-features.md)** — 泛型与 Protocol 的教程视角
 - 📄 **[魔术方法与协议](./04-oop-protocols.md)** — Protocol 对应的运行时协议
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

@@ -1,5 +1,8 @@
 # Go 应用监控与可观测性
 
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
+
 ## 📚 文档元数据
 
 | 属性 | 内容 |
@@ -11,6 +14,8 @@
 | **更新日期** | `2026年9月` |
 | **作者** | Dev Quest Team |
 | **状态** | ✅ 已完成 |
+
+</details>
 
 ## 📚 概述
 
@@ -1471,7 +1476,7 @@ func main() {
     defer logging.Logger.Sync()
 
     // 初始化OpenTelemetry
-    cleanup, err := telemetry.InitProvider("go-app", "http://jaeger:14268/api/traces")
+    cleanup, err := telemetry.InitProvider("go-app", "http://jaeger:4318")
     if err != nil {
         logging.Logger.Fatal("Failed to initialize telemetry", zap.Error(err))
     }
@@ -1681,3 +1686,17 @@ func (m *BusinessMonitor) GetHourlyStats() map[string]interface{} {
 **学习提示**: Go应用的监控体系是其性能和稳定性的重要保障。完善的监控可以帮助你快速发现问题、优化性能、提升用户体验。
 
 *最后更新: 2025年9月*
+
+<!-- full-library-explanation -->
+## 从一次慢请求反向选择观测信号
+
+前置是 HTTP 生命周期、日志字段与基本统计。指标适合回答“过去五分钟有多少请求失败、延迟分布怎样”，日志适合记录一次具体事件的上下文，trace 把同一请求在多个服务中的操作连接起来。先用指标发现范围，再用 trace 定位耗时阶段，用关联 ID 找日志解释失败原因。安装三个工具不自动建立这种关联，需要一致的服务名和上下文传播。
+
+指标标签必须控制基数。endpoint 应使用 /users/:id 这样的路由模板，不能直接用包含真实 id 的 URL；用户 ID、邮箱和 trace ID 不宜成为常规时序标签。统计 p95 应使用适合聚合的延迟分布，不能将各实例的 p95 再求平均。告警要与用户影响和行动对应，例如持续错误率升高时核对依赖健康，而不是每次 CPU 短暂超过阈值都唤醒值班者。
+
+练习：在本地给数据库调用注入 300ms 延迟，发固定数量请求，确认延迟直方图变化、trace 中数据库 span 变长、日志能按请求 ID 找到对应事件；移除延迟后指标应恢复。再产生 1000 个不同用户路径，路由标签值数量应保持稳定。OTLP HTTP 使用接收器的 OTLP 地址，旧 Jaeger thrift 14268 地址不能直接当作 OTLP 接口；关闭进程前用有限超时刷新 exporter，并报告刷新失败。
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../LEARNING_GUIDE.md) · [完整目录与版本](../README.md) · [通用术语](../../shared-resources/glossary.md)

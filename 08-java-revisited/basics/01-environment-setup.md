@@ -1,10 +1,26 @@
 # 环境搭建 - JDK 与现代工具链
 
+## 先理解，再动手
+
+JDK 提供编译器与运行时，Maven/Gradle 描述依赖和构建过程。IDE 配置的 JDK 与终端的 JDK 可能不同。
+
+**本节自测**：在终端记录 java 与 javac 版本，运行模板程序，再比对 IDE 设置。
+
+<details>
+<summary>预期结果与参考思路（先尝试再展开）</summary>
+
+出现 class version 错误时先检查编译与运行版本，不先修改业务代码。
+
+</details>
+
 > **文档简介**: 使用 SDKMAN 安装并管理 JDK 21/25 LTS，配置 Maven/Gradle 构建工具与 IDE，搭建现代 Java 开发环境
 >
 > **目标读者**: 有旧版 Java 经验、需要更新到现代 Java 工具链的开发者
 >
 > **前置知识**: 基本命令行操作经验
+
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
 
 ## 📚 文档元数据
 
@@ -15,6 +31,8 @@
 | **难度** | ⭐ |
 | **标签** | `#环境搭建` `#JDK` `#SDKMAN` `#Maven` `#Gradle` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ## 🎯 学习目标
 
@@ -169,3 +187,9 @@ A: 推荐 WSL2 + SDKMAN；纯 Windows 可用 winget 安装 Temurin，步骤思�
 - 📄 **[第一个程序](./02-first-program.md)** - 环境就绪后，编写并运行第一个程序
 - 📄 **[现代 Java 速查](../reference/quick-references/01-java-cheatsheet.md)** - 常用工具与代码一行式速查
 - 📄 **[模块总览](../README.md)** - 了解本模块的整体学习路径
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../LEARNING_GUIDE.md) · [完整目录与版本](../README.md) · [通用术语](../../shared-resources/glossary.md)

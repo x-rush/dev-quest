@@ -1,10 +1,23 @@
 # 进阶项目：博客平台（CRUD + 认证）
 
+## 分阶段练习与验收
+
+**最小阶段**：先让作者创建草稿并公开一篇文章。
+
+**验收结果**：未登录不能编辑，另一作者不能修改他人文章，草稿不会公开。
+
+**扩展顺序**：评论、标签和搜索后置，先验收权限与发布状态。
+
+建议保存一份正常输入、一份失败输入、实际输出和对应测试。先完成以上阶段再扩展正文中的完整设计；遇到省略实现或未定义依赖，应按文档上下文补齐，不能把代码片段拼接后当作已经验证的完整工程。
+
 > **文档简介**: 构建带用户体系的多作者博客——关系建模、Sanctum 登录、Policy 授权与草稿/发布工作流
 >
 > **目标读者**: 完成 TODO API、想掌握"认证 + 授权 + 关系"三件套的开发者
 >
 > **前置知识**: [TODO API](./01-todo-api.md)、[Laravel 进阶](../frameworks/02-laravel-advanced.md)、[Sanctum 认证](../frameworks/03-ecosystem-integration.md)
+
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
 
 ## 📚 文档元数据
 
@@ -15,6 +28,8 @@
 | **难度** | ⭐⭐ |
 | **标签** | `#Laravel` `#博客` `#认证` `#Policy` `#实战项目` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ## 🎯 项目目标
 
@@ -217,3 +232,9 @@ public function publish(Request $request, Post $post): PostResource
 - 📄 [生态集成：迁移、缓存与认证](../frameworks/03-ecosystem-integration.md) — Sanctum 完整配置
 - 📄 [高级特性](../basics/07-advanced-features.md) — match 表达式、首类 callable 等语法
 - 📄 [电商 API 实战](./03-ecommerce-api.md) — 下一级项目
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../LEARNING_GUIDE.md) · [完整目录与版本](../README.md) · [通用术语](../../shared-resources/glossary.md)

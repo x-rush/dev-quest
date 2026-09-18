@@ -1,0 +1,4548 @@
+{
+  "counts": {
+    "主题解释、边界与反馈练习增强；运行范围另记": 313,
+    "正文段落重写与语义纠错；非全篇深审": 90,
+    "正文增强：概念、自测与反馈；非全篇深审": 90,
+    "正文增强：职责、数据流与验收；非全篇深审": 49,
+    "新增模块导读与完整文章导航": 11,
+    "正文增强：范围、阶段与验收；非完整工程实测": 45,
+    "重点参考增强或语义纠错；非全篇深审": 32,
+    "入口增强；原版本表未全量复核": 10
+  },
+  "documents": [
+    {
+      "path": "01-go-backend/advanced-topics/api-advanced/01-restful-patterns.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "01-go-backend/advanced-topics/api-advanced/02-graphql-apis.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "01-go-backend/advanced-topics/architecture/01-microservices-design.md",
+      "status": "正文段落重写与语义纠错；非全篇深审",
+      "editorial_sections": 0,
+      "editorial_detail": "；追加上下文纠错",
+      "structure_signals": []
+    },
+    {
+      "path": "01-go-backend/advanced-topics/performance/01-concurrency-patterns.md",
+      "status": "正文段落重写与语义纠错；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "01-go-backend/advanced-topics/performance/02-performance-tuning.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "01-go-backend/advanced-topics/security/01-security-best-practices.md",
+      "status": "正文段落重写与语义纠错；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "01-go-backend/basics/01-environment-setup.md",
+      "status": "正文增强：概念、自测与反馈；非全篇深审",
+      "editorial_sections": 0,
+      "editorial_detail": "；追加上下文纠错",
+      "structure_signals": []
+    },
+    {
+      "path": "01-go-backend/basics/02-first-program.md",
+      "status": "正文增强：概念、自测与反馈；非全篇深审",
+      "editorial_sections": 0,
+      "editorial_detail": "",
+      "structure_signals": []
+    },
+    {
+      "path": "01-go-backend/basics/03-variables-constants.md",
+      "status": "正文增强：概念、自测与反馈；非全篇深审",
+      "editorial_sections": 0,
+      "editorial_detail": "",
+      "structure_signals": []
+    },
+    {
+      "path": "01-go-backend/basics/04-composite-types.md",
+      "status": "正文增强：概念、自测与反馈；非全篇深审",
+      "editorial_sections": 0,
+      "editorial_detail": "",
+      "structure_signals": []
+    },
+    {
+      "path": "01-go-backend/basics/05-functions-methods.md",
+      "status": "正文增强：概念、自测与反馈；非全篇深审",
+      "editorial_sections": 0,
+      "editorial_detail": "",
+      "structure_signals": []
+    },
+    {
+      "path": "01-go-backend/basics/06-control-structures.md",
+      "status": "正文增强：概念、自测与反馈；非全篇深审",
+      "editorial_sections": 0,
+      "editorial_detail": "",
+      "structure_signals": []
+    },
+    {
+      "path": "01-go-backend/basics/07-concurrency-basics.md",
+      "status": "正文增强：概念、自测与反馈；非全篇深审",
+      "editorial_sections": 0,
+      "editorial_detail": "",
+      "structure_signals": []
+    },
+    {
+      "path": "01-go-backend/basics/08-error-handling.md",
+      "status": "正文增强：概念、自测与反馈；非全篇深审",
+      "editorial_sections": 0,
+      "editorial_detail": "",
+      "structure_signals": [
+        "教程代码含省略标记，需人工判断"
+      ]
+    },
+    {
+      "path": "01-go-backend/deployment/01-containerization.md",
+      "status": "正文段落重写与语义纠错；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": [
+        "缺少明确结果信号"
+      ]
+    },
+    {
+      "path": "01-go-backend/deployment/02-ci-cd-pipelines.md",
+      "status": "正文段落重写与语义纠错；非全篇深审",
+      "editorial_sections": 0,
+      "editorial_detail": "；追加上下文纠错",
+      "structure_signals": []
+    },
+    {
+      "path": "01-go-backend/deployment/03-kubernetes-deployment.md",
+      "status": "正文段落重写与语义纠错；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": [
+        "缺少明确结果信号"
+      ]
+    },
+    {
+      "path": "01-go-backend/deployment/04-observability.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": [
+        "缺少明确结果信号"
+      ]
+    },
+    {
+      "path": "01-go-backend/frameworks/01-gin-framework-basics.md",
+      "status": "正文增强：职责、数据流与验收；非全篇深审",
+      "editorial_sections": 0,
+      "editorial_detail": "；追加上下文纠错",
+      "structure_signals": []
+    },
+    {
+      "path": "01-go-backend/frameworks/02-gin-framework-advanced.md",
+      "status": "正文增强：职责、数据流与验收；非全篇深审",
+      "editorial_sections": 0,
+      "editorial_detail": "",
+      "structure_signals": []
+    },
+    {
+      "path": "01-go-backend/frameworks/03-gorm-orm-complete.md",
+      "status": "正文增强：职责、数据流与验收；非全篇深审",
+      "editorial_sections": 0,
+      "editorial_detail": "；追加上下文纠错",
+      "structure_signals": []
+    },
+    {
+      "path": "01-go-backend/frameworks/04-mongodb-go-driver.md",
+      "status": "正文增强：职责、数据流与验收；非全篇深审",
+      "editorial_sections": 0,
+      "editorial_detail": "",
+      "structure_signals": []
+    },
+    {
+      "path": "01-go-backend/frameworks/05-go-redis-complete.md",
+      "status": "正文增强：职责、数据流与验收；非全篇深审",
+      "editorial_sections": 0,
+      "editorial_detail": "",
+      "structure_signals": []
+    },
+    {
+      "path": "01-go-backend/frameworks/06-grpc-service-development.md",
+      "status": "正文增强：职责、数据流与验收；非全篇深审",
+      "editorial_sections": 0,
+      "editorial_detail": "",
+      "structure_signals": []
+    },
+    {
+      "path": "01-go-backend/LEARNING_GUIDE.md",
+      "status": "新增模块导读与完整文章导航",
+      "editorial_sections": 0,
+      "editorial_detail": "",
+      "structure_signals": []
+    },
+    {
+      "path": "01-go-backend/projects/01-rest-api-server.md",
+      "status": "正文增强：范围、阶段与验收；非完整工程实测",
+      "editorial_sections": 0,
+      "editorial_detail": "",
+      "structure_signals": [
+        "短条目重复术语，需核查是否缺少解释"
+      ]
+    },
+    {
+      "path": "01-go-backend/projects/02-microservices-demo.md",
+      "status": "正文增强：范围、阶段与验收；非完整工程实测",
+      "editorial_sections": 0,
+      "editorial_detail": "",
+      "structure_signals": []
+    },
+    {
+      "path": "01-go-backend/projects/03-real-time-app.md",
+      "status": "正文增强：范围、阶段与验收；非完整工程实测",
+      "editorial_sections": 0,
+      "editorial_detail": "",
+      "structure_signals": []
+    },
+    {
+      "path": "01-go-backend/projects/04-cli-tool.md",
+      "status": "正文增强：范围、阶段与验收；非完整工程实测",
+      "editorial_sections": 0,
+      "editorial_detail": "",
+      "structure_signals": []
+    },
+    {
+      "path": "01-go-backend/README.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；追加上下文纠错；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "01-go-backend/reference/framework-essentials/01-gin-framework.md",
+      "status": "重点参考增强或语义纠错；非全篇深审",
+      "editorial_sections": 35,
+      "editorial_detail": "；本轮重写 35 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "01-go-backend/reference/framework-essentials/02-gorm-orm.md",
+      "status": "正文段落重写与语义纠错；非全篇深审",
+      "editorial_sections": 42,
+      "editorial_detail": "；本轮重写 42 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "01-go-backend/reference/framework-essentials/03-sqlc-vs-gorm.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "01-go-backend/reference/framework-essentials/04-router-selection.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "01-go-backend/reference/framework-essentials/05-mongo-driver.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "01-go-backend/reference/framework-essentials/06-go-redis.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "01-go-backend/reference/language-concepts/01-go-keywords.md",
+      "status": "重点参考增强或语义纠错；非全篇深审",
+      "editorial_sections": 0,
+      "editorial_detail": "",
+      "structure_signals": []
+    },
+    {
+      "path": "01-go-backend/reference/language-concepts/02-go-built-in-functions.md",
+      "status": "重点参考增强或语义纠错；非全篇深审",
+      "editorial_sections": 0,
+      "editorial_detail": "",
+      "structure_signals": []
+    },
+    {
+      "path": "01-go-backend/reference/language-concepts/03-go-programming-essentials.md",
+      "status": "正文段落重写与语义纠错；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "01-go-backend/reference/language-concepts/04-go-data-types.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "01-go-backend/reference/language-concepts/05-go-control-flow.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "01-go-backend/reference/language-concepts/06-go-oop-concepts.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "01-go-backend/reference/language-concepts/07-error-handling.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "01-go-backend/reference/language-concepts/08-concurrency-basics.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "01-go-backend/reference/language-concepts/09-generics.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "01-go-backend/reference/language-concepts/10-slice-semantics.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "01-go-backend/reference/language-concepts/11-map-semantics.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "01-go-backend/reference/language-concepts/12-channel-semantics.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "01-go-backend/reference/language-concepts/13-interface-semantics.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "01-go-backend/reference/language-concepts/14-defer-panic-recover.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "01-go-backend/reference/language-concepts/15-nil-semantics.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "01-go-backend/reference/library-guides/01-go-standard-library.md",
+      "status": "重点参考增强或语义纠错；非全篇深审",
+      "editorial_sections": 0,
+      "editorial_detail": "",
+      "structure_signals": []
+    },
+    {
+      "path": "01-go-backend/reference/library-guides/02-third-party-libs.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "01-go-backend/reference/library-guides/03-net-http.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "01-go-backend/reference/library-guides/04-encoding-json.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "01-go-backend/reference/library-guides/05-context.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "01-go-backend/reference/library-guides/06-sync.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "01-go-backend/reference/library-guides/07-database-sql.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "01-go-backend/reference/library-guides/08-time.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "01-go-backend/reference/library-guides/09-errors.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "01-go-backend/reference/library-guides/10-io-bufio.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "01-go-backend/reference/library-guides/11-os.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "01-go-backend/reference/library-guides/12-testing.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "01-go-backend/reference/library-guides/13-slices-maps.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "01-go-backend/reference/library-guides/14-strconv.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "01-go-backend/reference/library-guides/15-log-slog.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "01-go-backend/reference/library-guides/16-flag.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "01-go-backend/reference/library-guides/17-std-package-map.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "01-go-backend/reference/quick-references/01-syntax-cheatsheet.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "01-go-backend/reference/quick-references/02-web-tools.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "01-go-backend/reference/quick-references/03-troubleshooting.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "01-go-backend/testing/01-unit-testing.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "01-go-backend/testing/02-mocking-stubbing.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "01-go-backend/testing/03-integration-testing.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": [
+        "缺少明确结果信号"
+      ]
+    },
+    {
+      "path": "01-go-backend/testing/04-benchmarking.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "01-go-backend/testing/05-test-driven-development.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "02-nextjs-frontend/advanced-topics/api-integration/01-graphql-apollo.md",
+      "status": "正文段落重写与语义纠错；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "02-nextjs-frontend/advanced-topics/architecture/01-scaling-patterns.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "02-nextjs-frontend/advanced-topics/architecture/02-micro-frontends.md",
+      "status": "正文段落重写与语义纠错；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "02-nextjs-frontend/advanced-topics/performance/01-core-web-vitals.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "02-nextjs-frontend/advanced-topics/performance/02-advanced-optimization.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "02-nextjs-frontend/advanced-topics/security/01-security-best-practices.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "02-nextjs-frontend/basics/01-environment-setup.md",
+      "status": "正文增强：概念、自测与反馈；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "02-nextjs-frontend/basics/02-first-nextjs-app.md",
+      "status": "正文增强：概念、自测与反馈；非全篇深审",
+      "editorial_sections": 0,
+      "editorial_detail": "",
+      "structure_signals": []
+    },
+    {
+      "path": "02-nextjs-frontend/basics/03-typescript-integration.md",
+      "status": "正文增强：概念、自测与反馈；非全篇深审",
+      "editorial_sections": 0,
+      "editorial_detail": "",
+      "structure_signals": []
+    },
+    {
+      "path": "02-nextjs-frontend/basics/04-layouts-routing.md",
+      "status": "正文增强：概念、自测与反馈；非全篇深审",
+      "editorial_sections": 0,
+      "editorial_detail": "",
+      "structure_signals": []
+    },
+    {
+      "path": "02-nextjs-frontend/basics/05-styling-with-tailwind.md",
+      "status": "正文增强：概念、自测与反馈；非全篇深审",
+      "editorial_sections": 0,
+      "editorial_detail": "",
+      "structure_signals": []
+    },
+    {
+      "path": "02-nextjs-frontend/basics/06-data-fetching-basics.md",
+      "status": "正文增强：概念、自测与反馈；非全篇深审",
+      "editorial_sections": 0,
+      "editorial_detail": "",
+      "structure_signals": []
+    },
+    {
+      "path": "02-nextjs-frontend/basics/07-state-management.md",
+      "status": "正文增强：概念、自测与反馈；非全篇深审",
+      "editorial_sections": 0,
+      "editorial_detail": "",
+      "structure_signals": []
+    },
+    {
+      "path": "02-nextjs-frontend/basics/08-first-project.md",
+      "status": "正文增强：概念、自测与反馈；非全篇深审",
+      "editorial_sections": 0,
+      "editorial_detail": "；追加上下文纠错",
+      "structure_signals": [
+        "教程代码含省略标记，需人工判断"
+      ]
+    },
+    {
+      "path": "02-nextjs-frontend/deployment/01-vercel-deployment.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "02-nextjs-frontend/deployment/02-docker-containerization.md",
+      "status": "正文段落重写与语义纠错；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "02-nextjs-frontend/deployment/03-ci-cd-pipelines.md",
+      "status": "正文段落重写与语义纠错；非全篇深审",
+      "editorial_sections": 2,
+      "editorial_detail": "；本轮重写 2 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "02-nextjs-frontend/deployment/04-monitoring-analytics.md",
+      "status": "正文段落重写与语义纠错；非全篇深审",
+      "editorial_sections": 2,
+      "editorial_detail": "；本轮重写 2 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "02-nextjs-frontend/frameworks/01-nextjs-16-complete.md",
+      "status": "正文增强：职责、数据流与验收；非全篇深审",
+      "editorial_sections": 0,
+      "editorial_detail": "",
+      "structure_signals": []
+    },
+    {
+      "path": "02-nextjs-frontend/frameworks/02-react-19-integration.md",
+      "status": "正文增强：职责、数据流与验收；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "02-nextjs-frontend/frameworks/03-full-stack-patterns.md",
+      "status": "正文增强：职责、数据流与验收；非全篇深审",
+      "editorial_sections": 0,
+      "editorial_detail": "",
+      "structure_signals": []
+    },
+    {
+      "path": "02-nextjs-frontend/frameworks/04-performance-optimization.md",
+      "status": "正文增强：职责、数据流与验收；非全篇深审",
+      "editorial_sections": 0,
+      "editorial_detail": "",
+      "structure_signals": []
+    },
+    {
+      "path": "02-nextjs-frontend/LEARNING_GUIDE.md",
+      "status": "新增模块导读与完整文章导航",
+      "editorial_sections": 0,
+      "editorial_detail": "",
+      "structure_signals": []
+    },
+    {
+      "path": "02-nextjs-frontend/projects/01-corporate-landing.md",
+      "status": "正文增强：范围、阶段与验收；非完整工程实测",
+      "editorial_sections": 0,
+      "editorial_detail": "",
+      "structure_signals": [
+        "教程代码含省略标记，需人工判断"
+      ]
+    },
+    {
+      "path": "02-nextjs-frontend/projects/02-ecommerce-store.md",
+      "status": "正文增强：范围、阶段与验收；非完整工程实测",
+      "editorial_sections": 0,
+      "editorial_detail": "",
+      "structure_signals": []
+    },
+    {
+      "path": "02-nextjs-frontend/projects/03-dashboard-analytics.md",
+      "status": "正文增强：范围、阶段与验收；非完整工程实测",
+      "editorial_sections": 0,
+      "editorial_detail": "",
+      "structure_signals": []
+    },
+    {
+      "path": "02-nextjs-frontend/projects/04-saas-platform.md",
+      "status": "正文增强：范围、阶段与验收；非完整工程实测",
+      "editorial_sections": 0,
+      "editorial_detail": "",
+      "structure_signals": [
+        "短条目重复术语，需核查是否缺少解释"
+      ]
+    },
+    {
+      "path": "02-nextjs-frontend/README.md",
+      "status": "入口增强；原版本表未全量复核",
+      "editorial_sections": 0,
+      "editorial_detail": "",
+      "structure_signals": []
+    },
+    {
+      "path": "02-nextjs-frontend/reference/development-tools/01-testing-tools.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "02-nextjs-frontend/reference/development-tools/02-styling-tools.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "02-nextjs-frontend/reference/development-tools/03-package-managers.md",
+      "status": "正文段落重写与语义纠错；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "02-nextjs-frontend/reference/development-tools/04-debugging-tools.md",
+      "status": "正文段落重写与语义纠错；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "02-nextjs-frontend/reference/framework-patterns/01-app-router-patterns.md",
+      "status": "正文段落重写与语义纠错；非全篇深审",
+      "editorial_sections": 2,
+      "editorial_detail": "；本轮重写 2 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "02-nextjs-frontend/reference/framework-patterns/02-server-components-patterns.md",
+      "status": "重点参考增强或语义纠错；非全篇深审",
+      "editorial_sections": 0,
+      "editorial_detail": "",
+      "structure_signals": []
+    },
+    {
+      "path": "02-nextjs-frontend/reference/framework-patterns/03-client-components-patterns.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "02-nextjs-frontend/reference/framework-patterns/04-data-fetching-patterns.md",
+      "status": "正文段落重写与语义纠错；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "02-nextjs-frontend/reference/framework-patterns/05-state-management-patterns.md",
+      "status": "正文段落重写与语义纠错；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "02-nextjs-frontend/reference/framework-patterns/06-form-validation-patterns.md",
+      "status": "正文段落重写与语义纠错；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "02-nextjs-frontend/reference/framework-patterns/07-authentication-flows.md",
+      "status": "正文段落重写与语义纠错；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "02-nextjs-frontend/reference/framework-patterns/08-caching-patterns.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "02-nextjs-frontend/reference/framework-patterns/09-async-request-apis.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "02-nextjs-frontend/reference/framework-patterns/10-proxy-patterns.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "02-nextjs-frontend/reference/framework-patterns/11-error-loading-patterns.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "02-nextjs-frontend/reference/framework-patterns/12-metadata-and-script.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "02-nextjs-frontend/reference/framework-patterns/13-route-segment-config.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "02-nextjs-frontend/reference/framework-patterns/14-env-vars.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "02-nextjs-frontend/reference/language-concepts/01-react-syntax-cheatsheet.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "02-nextjs-frontend/reference/language-concepts/02-nextjs-api-reference.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "02-nextjs-frontend/reference/language-concepts/03-typescript-types.md",
+      "status": "重点参考增强或语义纠错；非全篇深审",
+      "editorial_sections": 0,
+      "editorial_detail": "",
+      "structure_signals": []
+    },
+    {
+      "path": "02-nextjs-frontend/reference/language-concepts/04-javascript-modern.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "02-nextjs-frontend/reference/language-concepts/05-css-patterns.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "02-nextjs-frontend/reference/language-concepts/06-react-19-hooks.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "02-nextjs-frontend/reference/language-concepts/07-type-narrowing-guards.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "02-nextjs-frontend/reference/language-concepts/08-ts-declarations-modules.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "02-nextjs-frontend/reference/language-concepts/09-js-core-semantics.md",
+      "status": "重点参考增强或语义纠错；非全篇深审",
+      "editorial_sections": 0,
+      "editorial_detail": "",
+      "structure_signals": []
+    },
+    {
+      "path": "02-nextjs-frontend/reference/language-concepts/10-web-platform-apis.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "02-nextjs-frontend/reference/library-guides/03-ecosystem-map.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "02-nextjs-frontend/reference/performance-optimization/01-rendering-optimization.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "02-nextjs-frontend/reference/performance-optimization/02-bundle-optimization.md",
+      "status": "正文段落重写与语义纠错；非全篇深审",
+      "editorial_sections": 2,
+      "editorial_detail": "；本轮重写 2 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "02-nextjs-frontend/reference/performance-optimization/03-image-font-optimization.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "02-nextjs-frontend/testing/01-unit-testing.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "02-nextjs-frontend/testing/02-component-testing.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "02-nextjs-frontend/testing/03-e2e-testing.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": [
+        "缺少明确结果信号"
+      ]
+    },
+    {
+      "path": "02-nextjs-frontend/testing/04-performance-testing.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "03-tanstack-stack/advanced-topics/architecture/01-cache-architecture.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "03-tanstack-stack/advanced-topics/performance/01-query-optimization.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "03-tanstack-stack/advanced-topics/performance/02-rendering-performance.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "03-tanstack-stack/advanced-topics/security/01-security-practices.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "03-tanstack-stack/basics/01-environment-setup.md",
+      "status": "正文增强：概念、自测与反馈；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "03-tanstack-stack/basics/02-headless-philosophy.md",
+      "status": "正文增强：概念、自测与反馈；非全篇深审",
+      "editorial_sections": 0,
+      "editorial_detail": "",
+      "structure_signals": []
+    },
+    {
+      "path": "03-tanstack-stack/basics/03-query-fundamentals.md",
+      "status": "正文增强：概念、自测与反馈；非全篇深审",
+      "editorial_sections": 0,
+      "editorial_detail": "",
+      "structure_signals": []
+    },
+    {
+      "path": "03-tanstack-stack/basics/04-table-fundamentals.md",
+      "status": "正文增强：概念、自测与反馈；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "03-tanstack-stack/basics/05-router-fundamentals.md",
+      "status": "正文增强：概念、自测与反馈；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "03-tanstack-stack/basics/06-form-fundamentals.md",
+      "status": "正文增强：概念、自测与反馈；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "03-tanstack-stack/basics/07-advanced-features.md",
+      "status": "正文增强：概念、自测与反馈；非全篇深审",
+      "editorial_sections": 0,
+      "editorial_detail": "",
+      "structure_signals": []
+    },
+    {
+      "path": "03-tanstack-stack/basics/08-first-project.md",
+      "status": "正文增强：概念、自测与反馈；非全篇深审",
+      "editorial_sections": 0,
+      "editorial_detail": "",
+      "structure_signals": []
+    },
+    {
+      "path": "03-tanstack-stack/deployment/01-ci-cd-pipelines.md",
+      "status": "正文段落重写与语义纠错；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "03-tanstack-stack/deployment/02-vercel-deployment.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "03-tanstack-stack/deployment/03-observability.md",
+      "status": "正文段落重写与语义纠错；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "03-tanstack-stack/frameworks/01-tanstack-query-basics.md",
+      "status": "正文增强：职责、数据流与验收；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "03-tanstack-stack/frameworks/02-tanstack-query-advanced.md",
+      "status": "正文增强：职责、数据流与验收；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "03-tanstack-stack/frameworks/03-ecosystem-integration.md",
+      "status": "正文增强：职责、数据流与验收；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "03-tanstack-stack/frameworks/04-devtools.md",
+      "status": "正文增强：职责、数据流与验收；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "03-tanstack-stack/LEARNING_GUIDE.md",
+      "status": "新增模块导读与完整文章导航",
+      "editorial_sections": 0,
+      "editorial_detail": "",
+      "structure_signals": []
+    },
+    {
+      "path": "03-tanstack-stack/projects/01-todo-app.md",
+      "status": "正文增强：范围、阶段与验收；非完整工程实测",
+      "editorial_sections": 0,
+      "editorial_detail": "",
+      "structure_signals": []
+    },
+    {
+      "path": "03-tanstack-stack/projects/02-data-dashboard.md",
+      "status": "正文增强：范围、阶段与验收；非完整工程实测",
+      "editorial_sections": 0,
+      "editorial_detail": "",
+      "structure_signals": []
+    },
+    {
+      "path": "03-tanstack-stack/projects/03-collaborative-kanban.md",
+      "status": "正文增强：范围、阶段与验收；非完整工程实测",
+      "editorial_sections": 0,
+      "editorial_detail": "",
+      "structure_signals": []
+    },
+    {
+      "path": "03-tanstack-stack/projects/04-saas-admin-platform.md",
+      "status": "正文增强：范围、阶段与验收；非完整工程实测",
+      "editorial_sections": 0,
+      "editorial_detail": "",
+      "structure_signals": []
+    },
+    {
+      "path": "03-tanstack-stack/README.md",
+      "status": "入口增强；原版本表未全量复核",
+      "editorial_sections": 0,
+      "editorial_detail": "",
+      "structure_signals": []
+    },
+    {
+      "path": "03-tanstack-stack/reference/framework-essentials/01-query-essentials.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "03-tanstack-stack/reference/framework-essentials/02-router-essentials.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "03-tanstack-stack/reference/framework-essentials/03-queryclient-config.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "03-tanstack-stack/reference/framework-essentials/04-prefetch-ssr.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "03-tanstack-stack/reference/framework-essentials/05-mutation-state.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "03-tanstack-stack/reference/framework-essentials/06-start-server-functions.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "03-tanstack-stack/reference/language-concepts/01-query-core-api.md",
+      "status": "重点参考增强或语义纠错；非全篇深审",
+      "editorial_sections": 0,
+      "editorial_detail": "",
+      "structure_signals": []
+    },
+    {
+      "path": "03-tanstack-stack/reference/language-concepts/02-table-core-api.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "03-tanstack-stack/reference/language-concepts/03-router-core-api.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "03-tanstack-stack/reference/language-concepts/04-form-core-api.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "03-tanstack-stack/reference/language-concepts/05-typescript-patterns.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "03-tanstack-stack/reference/language-concepts/06-optimistic-update.md",
+      "status": "重点参考增强或语义纠错；非全篇深审",
+      "editorial_sections": 0,
+      "editorial_detail": "",
+      "structure_signals": []
+    },
+    {
+      "path": "03-tanstack-stack/reference/language-concepts/07-infinite-query.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "03-tanstack-stack/reference/language-concepts/08-placeholder-data.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "03-tanstack-stack/reference/language-concepts/09-suspense-query.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "03-tanstack-stack/reference/language-concepts/10-network-mode.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "03-tanstack-stack/reference/language-concepts/11-search-params.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "03-tanstack-stack/reference/language-concepts/12-use-queries.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "03-tanstack-stack/reference/language-concepts/13-use-is-fetching-use-is-mutating.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "03-tanstack-stack/reference/language-concepts/14-query-persistence.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "03-tanstack-stack/reference/language-concepts/15-enabled-conditional-queries.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "03-tanstack-stack/reference/language-concepts/16-render-optimization.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "03-tanstack-stack/reference/language-concepts/17-flexrender.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "03-tanstack-stack/reference/language-concepts/18-controlled-state.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "03-tanstack-stack/reference/language-concepts/19-outlet-and-route-components.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "03-tanstack-stack/reference/language-concepts/20-use-match-hooks.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "03-tanstack-stack/reference/language-concepts/21-usefield-and-createformhook.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "03-tanstack-stack/reference/library-guides/01-ecosystem-integrations.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "03-tanstack-stack/reference/library-guides/02-related-libs.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "03-tanstack-stack/reference/quick-references/01-syntax-cheatsheet.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "03-tanstack-stack/reference/quick-references/02-troubleshooting.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "03-tanstack-stack/testing/01-unit-testing.md",
+      "status": "正文段落重写与语义纠错；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "03-tanstack-stack/testing/02-mocking-server.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "03-tanstack-stack/testing/03-integration-testing.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "03-tanstack-stack/testing/04-e2e-testing.md",
+      "status": "正文段落重写与语义纠错；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "04-multiplatform-apps/advanced-topics/architecture/01-new-architecture.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "04-multiplatform-apps/advanced-topics/performance/01-rendering-performance.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "04-multiplatform-apps/advanced-topics/performance/02-startup-optimization.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "04-multiplatform-apps/advanced-topics/security/01-security-practices.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "04-multiplatform-apps/basics/01-environment-setup.md",
+      "status": "正文增强：概念、自测与反馈；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "04-multiplatform-apps/basics/02-first-app.md",
+      "status": "正文增强：概念、自测与反馈；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "04-multiplatform-apps/basics/03-components-jsx.md",
+      "status": "正文增强：概念、自测与反馈；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "04-multiplatform-apps/basics/04-state-hooks.md",
+      "status": "正文增强：概念、自测与反馈；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "04-multiplatform-apps/basics/05-navigation.md",
+      "status": "正文增强：概念、自测与反馈；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "04-multiplatform-apps/basics/06-native-modules.md",
+      "status": "正文增强：概念、自测与反馈；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "04-multiplatform-apps/basics/07-advanced-features.md",
+      "status": "正文增强：概念、自测与反馈；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "04-multiplatform-apps/basics/08-first-project.md",
+      "status": "正文增强：概念、自测与反馈；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "04-multiplatform-apps/deployment/01-eas-build.md",
+      "status": "正文段落重写与语义纠错；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "04-multiplatform-apps/deployment/02-app-store-release.md",
+      "status": "正文段落重写与语义纠错；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": [
+        "缺少明确结果信号"
+      ]
+    },
+    {
+      "path": "04-multiplatform-apps/deployment/03-ota-updates-observability.md",
+      "status": "正文段落重写与语义纠错；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "04-multiplatform-apps/frameworks/01-react-native-basics.md",
+      "status": "正文增强：职责、数据流与验收；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "04-multiplatform-apps/frameworks/02-react-native-advanced.md",
+      "status": "正文增强：职责、数据流与验收；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "04-multiplatform-apps/frameworks/03-ecosystem-integration.md",
+      "status": "正文增强：职责、数据流与验收；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "04-multiplatform-apps/frameworks/04-devtools.md",
+      "status": "正文增强：职责、数据流与验收；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "04-multiplatform-apps/LEARNING_GUIDE.md",
+      "status": "新增模块导读与完整文章导航",
+      "editorial_sections": 0,
+      "editorial_detail": "",
+      "structure_signals": []
+    },
+    {
+      "path": "04-multiplatform-apps/projects/01-todo-app.md",
+      "status": "正文增强：范围、阶段与验收；非完整工程实测",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "04-multiplatform-apps/projects/02-weather-app.md",
+      "status": "正文增强：范围、阶段与验收；非完整工程实测",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "04-multiplatform-apps/projects/03-chat-app.md",
+      "status": "正文增强：范围、阶段与验收；非完整工程实测",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "04-multiplatform-apps/projects/04-production-mobile-app.md",
+      "status": "正文增强：范围、阶段与验收；非完整工程实测",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "04-multiplatform-apps/React Native三端原生应用学习路线.md",
+      "status": "正文段落重写与语义纠错；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "04-multiplatform-apps/README.md",
+      "status": "入口增强；原版本表未全量复核",
+      "editorial_sections": 0,
+      "editorial_detail": "",
+      "structure_signals": []
+    },
+    {
+      "path": "04-multiplatform-apps/reference/framework-essentials/01-expo-essentials.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "04-multiplatform-apps/reference/framework-essentials/02-navigation-essentials.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "04-multiplatform-apps/reference/framework-essentials/03-config-plugins-prebuild.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "04-multiplatform-apps/reference/framework-essentials/04-dev-client-and-updates.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "04-multiplatform-apps/reference/language-concepts/01-rn-core-api.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "04-multiplatform-apps/reference/language-concepts/02-components-props.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "04-multiplatform-apps/reference/language-concepts/03-hooks-reference.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "04-multiplatform-apps/reference/language-concepts/04-typescript-patterns.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "04-multiplatform-apps/reference/language-concepts/05-harmonyos-rnoh-api.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "04-multiplatform-apps/reference/language-concepts/06-component-lifecycle.md",
+      "status": "重点参考增强或语义纠错；非全篇深审",
+      "editorial_sections": 0,
+      "editorial_detail": "",
+      "structure_signals": []
+    },
+    {
+      "path": "04-multiplatform-apps/reference/language-concepts/07-state-management.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "04-multiplatform-apps/reference/language-concepts/08-bridge-principles.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "04-multiplatform-apps/reference/language-concepts/09-navigation-model.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "04-multiplatform-apps/reference/language-concepts/10-styling-model.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "04-multiplatform-apps/reference/language-concepts/11-new-architecture-terms.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "04-multiplatform-apps/reference/language-concepts/12-list-performance-model.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "04-multiplatform-apps/reference/language-concepts/13-platform-api-map.md",
+      "status": "重点参考增强或语义纠错；非全篇深审",
+      "editorial_sections": 0,
+      "editorial_detail": "",
+      "structure_signals": []
+    },
+    {
+      "path": "04-multiplatform-apps/reference/library-guides/01-state-and-data.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "04-multiplatform-apps/reference/library-guides/02-native-and-device-libs.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "04-multiplatform-apps/reference/library-guides/03-storage-options.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "04-multiplatform-apps/reference/library-guides/04-animation-gesture-libs.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "04-multiplatform-apps/reference/quick-references/01-cli-and-debug-cheatsheet.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "04-multiplatform-apps/reference/quick-references/02-troubleshooting.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "04-multiplatform-apps/testing/01-unit-testing.md",
+      "status": "正文段落重写与语义纠错；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "04-multiplatform-apps/testing/02-component-testing.md",
+      "status": "正文段落重写与语义纠错；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "04-multiplatform-apps/testing/03-e2e-testing.md",
+      "status": "正文段落重写与语义纠错；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "05-kotlin-compose/advanced-topics/architecture/01-app-architecture.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "05-kotlin-compose/advanced-topics/performance/01-recomposition-optimization.md",
+      "status": "正文段落重写与语义纠错；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "05-kotlin-compose/advanced-topics/performance/02-startup-memory.md",
+      "status": "正文段落重写与语义纠错；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "05-kotlin-compose/advanced-topics/security/01-security-practices.md",
+      "status": "正文段落重写与语义纠错；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "05-kotlin-compose/Android原生开发学习路线.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "05-kotlin-compose/basics/01-environment-setup.md",
+      "status": "正文增强：概念、自测与反馈；非全篇深审",
+      "editorial_sections": 0,
+      "editorial_detail": "",
+      "structure_signals": []
+    },
+    {
+      "path": "05-kotlin-compose/basics/02-first-compose-app.md",
+      "status": "正文增强：概念、自测与反馈；非全篇深审",
+      "editorial_sections": 0,
+      "editorial_detail": "",
+      "structure_signals": []
+    },
+    {
+      "path": "05-kotlin-compose/basics/03-kotlin-syntax-essentials.md",
+      "status": "正文增强：概念、自测与反馈；非全篇深审",
+      "editorial_sections": 0,
+      "editorial_detail": "",
+      "structure_signals": []
+    },
+    {
+      "path": "05-kotlin-compose/basics/04-composables-state.md",
+      "status": "正文增强：概念、自测与反馈；非全篇深审",
+      "editorial_sections": 0,
+      "editorial_detail": "",
+      "structure_signals": []
+    },
+    {
+      "path": "05-kotlin-compose/basics/05-layouts.md",
+      "status": "正文增强：概念、自测与反馈；非全篇深审",
+      "editorial_sections": 0,
+      "editorial_detail": "",
+      "structure_signals": []
+    },
+    {
+      "path": "05-kotlin-compose/basics/06-navigation.md",
+      "status": "正文增强：概念、自测与反馈；非全篇深审",
+      "editorial_sections": 0,
+      "editorial_detail": "",
+      "structure_signals": []
+    },
+    {
+      "path": "05-kotlin-compose/basics/07-coroutines-flow-basics.md",
+      "status": "正文增强：概念、自测与反馈；非全篇深审",
+      "editorial_sections": 0,
+      "editorial_detail": "",
+      "structure_signals": []
+    },
+    {
+      "path": "05-kotlin-compose/basics/08-first-project.md",
+      "status": "正文增强：概念、自测与反馈；非全篇深审",
+      "editorial_sections": 0,
+      "editorial_detail": "",
+      "structure_signals": []
+    },
+    {
+      "path": "05-kotlin-compose/deployment/01-release-build.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "05-kotlin-compose/deployment/02-play-store-release.md",
+      "status": "正文段落重写与语义纠错；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "05-kotlin-compose/deployment/03-ci-cd-observability.md",
+      "status": "正文段落重写与语义纠错；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "05-kotlin-compose/frameworks/01-compose-basics.md",
+      "status": "正文增强：职责、数据流与验收；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "05-kotlin-compose/frameworks/02-compose-advanced.md",
+      "status": "正文增强：职责、数据流与验收；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "05-kotlin-compose/frameworks/03-ecosystem-integration.md",
+      "status": "正文增强：职责、数据流与验收；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "05-kotlin-compose/frameworks/04-devtools.md",
+      "status": "正文增强：职责、数据流与验收；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "05-kotlin-compose/LEARNING_GUIDE.md",
+      "status": "新增模块导读与完整文章导航",
+      "editorial_sections": 0,
+      "editorial_detail": "",
+      "structure_signals": []
+    },
+    {
+      "path": "05-kotlin-compose/projects/01-notes-app.md",
+      "status": "正文增强：范围、阶段与验收；非完整工程实测",
+      "editorial_sections": 0,
+      "editorial_detail": "",
+      "structure_signals": []
+    },
+    {
+      "path": "05-kotlin-compose/projects/02-weather-app.md",
+      "status": "正文增强：范围、阶段与验收；非完整工程实测",
+      "editorial_sections": 0,
+      "editorial_detail": "",
+      "structure_signals": []
+    },
+    {
+      "path": "05-kotlin-compose/projects/03-news-reader.md",
+      "status": "正文增强：范围、阶段与验收；非完整工程实测",
+      "editorial_sections": 0,
+      "editorial_detail": "",
+      "structure_signals": []
+    },
+    {
+      "path": "05-kotlin-compose/projects/04-production-android-app.md",
+      "status": "正文增强：范围、阶段与验收；非完整工程实测",
+      "editorial_sections": 0,
+      "editorial_detail": "",
+      "structure_signals": []
+    },
+    {
+      "path": "05-kotlin-compose/README.md",
+      "status": "入口增强；原版本表未全量复核",
+      "editorial_sections": 0,
+      "editorial_detail": "",
+      "structure_signals": []
+    },
+    {
+      "path": "05-kotlin-compose/reference/framework-essentials/01-compose-essentials.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "05-kotlin-compose/reference/framework-essentials/02-compose-material3.md",
+      "status": "正文段落重写与语义纠错；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "05-kotlin-compose/reference/framework-essentials/03-side-effects.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "05-kotlin-compose/reference/framework-essentials/04-recomposition.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "05-kotlin-compose/reference/framework-essentials/05-animation-core.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "05-kotlin-compose/reference/framework-essentials/06-navigation-components.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "05-kotlin-compose/reference/framework-essentials/07-compose-testing.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "05-kotlin-compose/reference/framework-essentials/08-composition-model.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "05-kotlin-compose/reference/framework-essentials/09-gestures.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "05-kotlin-compose/reference/framework-essentials/10-canvas-drawing.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "05-kotlin-compose/reference/language-concepts/01-kotlin-keywords.md",
+      "status": "重点参考增强或语义纠错；非全篇深审",
+      "editorial_sections": 0,
+      "editorial_detail": "",
+      "structure_signals": []
+    },
+    {
+      "path": "05-kotlin-compose/reference/language-concepts/02-null-safety-collections.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "05-kotlin-compose/reference/language-concepts/03-coroutines-flow-api.md",
+      "status": "重点参考增强或语义纠错；非全篇深审",
+      "editorial_sections": 0,
+      "editorial_detail": "",
+      "structure_signals": []
+    },
+    {
+      "path": "05-kotlin-compose/reference/language-concepts/04-compose-state-api.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "05-kotlin-compose/reference/language-concepts/05-generics-delegates.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "05-kotlin-compose/reference/language-concepts/06-extension-functions.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "05-kotlin-compose/reference/language-concepts/07-scope-functions.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "05-kotlin-compose/reference/language-concepts/08-lambdas-higher-order.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "05-kotlin-compose/reference/language-concepts/09-collections-operations.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "05-kotlin-compose/reference/language-concepts/10-sequences.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "05-kotlin-compose/reference/language-concepts/11-text-and-regex.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "05-kotlin-compose/reference/library-guides/01-androidx-libraries.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "05-kotlin-compose/reference/library-guides/02-third-party-libs.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "05-kotlin-compose/reference/library-guides/03-ksp-configuration.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "05-kotlin-compose/reference/quick-references/01-kotlin-compose-cheatsheet.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "05-kotlin-compose/reference/quick-references/02-troubleshooting.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "05-kotlin-compose/testing/01-unit-testing.md",
+      "status": "正文段落重写与语义纠错；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "05-kotlin-compose/testing/02-ui-testing.md",
+      "status": "正文段落重写与语义纠错；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "05-kotlin-compose/testing/03-integration-e2e-testing.md",
+      "status": "正文段落重写与语义纠错；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "06-swift-swiftui/advanced-topics/architecture/01-app-architecture.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "06-swift-swiftui/advanced-topics/performance/01-rendering-performance.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "06-swift-swiftui/advanced-topics/performance/02-concurrency-optimization.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "06-swift-swiftui/advanced-topics/security/01-security-practices.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "06-swift-swiftui/basics/01-environment-setup.md",
+      "status": "正文增强：概念、自测与反馈；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "06-swift-swiftui/basics/02-first-swiftui-app.md",
+      "status": "正文增强：概念、自测与反馈；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "06-swift-swiftui/basics/03-swift-syntax-essentials.md",
+      "status": "正文增强：概念、自测与反馈；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "06-swift-swiftui/basics/04-views-state.md",
+      "status": "正文增强：概念、自测与反馈；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "06-swift-swiftui/basics/05-layouts.md",
+      "status": "正文增强：概念、自测与反馈；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "06-swift-swiftui/basics/06-navigation.md",
+      "status": "正文增强：概念、自测与反馈；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "06-swift-swiftui/basics/07-concurrency-async-await.md",
+      "status": "正文增强：概念、自测与反馈；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "06-swift-swiftui/basics/08-first-project.md",
+      "status": "正文增强：概念、自测与反馈；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "06-swift-swiftui/deployment/01-app-release.md",
+      "status": "正文段落重写与语义纠错；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "06-swift-swiftui/deployment/02-app-store-release.md",
+      "status": "正文段落重写与语义纠错；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": [
+        "任意查阅与零前提混淆"
+      ]
+    },
+    {
+      "path": "06-swift-swiftui/deployment/03-ci-cd-observability.md",
+      "status": "正文段落重写与语义纠错；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": [
+        "缺少明确结果信号"
+      ]
+    },
+    {
+      "path": "06-swift-swiftui/frameworks/01-swiftui-basics.md",
+      "status": "正文增强：职责、数据流与验收；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "06-swift-swiftui/frameworks/02-swiftui-advanced.md",
+      "status": "正文增强：职责、数据流与验收；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "06-swift-swiftui/frameworks/03-ecosystem-integration.md",
+      "status": "正文增强：职责、数据流与验收；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "06-swift-swiftui/frameworks/04-devtools.md",
+      "status": "正文增强：职责、数据流与验收；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "06-swift-swiftui/iOS原生开发学习路线.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "06-swift-swiftui/LEARNING_GUIDE.md",
+      "status": "新增模块导读与完整文章导航",
+      "editorial_sections": 0,
+      "editorial_detail": "",
+      "structure_signals": []
+    },
+    {
+      "path": "06-swift-swiftui/projects/01-notes-app.md",
+      "status": "正文增强：范围、阶段与验收；非完整工程实测",
+      "editorial_sections": 0,
+      "editorial_detail": "",
+      "structure_signals": []
+    },
+    {
+      "path": "06-swift-swiftui/projects/02-weather-app.md",
+      "status": "正文增强：范围、阶段与验收；非完整工程实测",
+      "editorial_sections": 0,
+      "editorial_detail": "",
+      "structure_signals": []
+    },
+    {
+      "path": "06-swift-swiftui/projects/03-habit-tracker.md",
+      "status": "正文增强：范围、阶段与验收；非完整工程实测",
+      "editorial_sections": 0,
+      "editorial_detail": "",
+      "structure_signals": []
+    },
+    {
+      "path": "06-swift-swiftui/projects/04-production-ios-app.md",
+      "status": "正文增强：范围、阶段与验收；非完整工程实测",
+      "editorial_sections": 0,
+      "editorial_detail": "",
+      "structure_signals": []
+    },
+    {
+      "path": "06-swift-swiftui/README.md",
+      "status": "入口增强；原版本表未全量复核",
+      "editorial_sections": 0,
+      "editorial_detail": "",
+      "structure_signals": []
+    },
+    {
+      "path": "06-swift-swiftui/reference/framework-essentials/01-swiftui-essentials.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "06-swift-swiftui/reference/framework-essentials/02-swiftdata-observability.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "06-swift-swiftui/reference/framework-essentials/03-state-driven-views.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "06-swift-swiftui/reference/framework-essentials/04-view-modifier.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "06-swift-swiftui/reference/framework-essentials/05-data-flow.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "06-swift-swiftui/reference/framework-essentials/06-swift-charts.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "06-swift-swiftui/reference/framework-essentials/07-swiftdata-migration.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "06-swift-swiftui/reference/framework-essentials/08-gestures.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "06-swift-swiftui/reference/language-concepts/01-swift-keywords.md",
+      "status": "重点参考增强或语义纠错；非全篇深审",
+      "editorial_sections": 0,
+      "editorial_detail": "",
+      "structure_signals": []
+    },
+    {
+      "path": "06-swift-swiftui/reference/language-concepts/02-optionals-collections.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "06-swift-swiftui/reference/language-concepts/03-concurrency-api.md",
+      "status": "重点参考增强或语义纠错；非全篇深审",
+      "editorial_sections": 0,
+      "editorial_detail": "",
+      "structure_signals": []
+    },
+    {
+      "path": "06-swift-swiftui/reference/language-concepts/04-swiftui-state-api.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "06-swift-swiftui/reference/language-concepts/05-protocols-generics.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "06-swift-swiftui/reference/language-concepts/06-closures.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "06-swift-swiftui/reference/language-concepts/07-enums-pattern-matching.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "06-swift-swiftui/reference/language-concepts/08-error-handling.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "06-swift-swiftui/reference/language-concepts/09-property-wrappers.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "06-swift-swiftui/reference/language-concepts/10-value-types-arc.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "06-swift-swiftui/reference/language-concepts/11-actors-sendability.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "06-swift-swiftui/reference/language-concepts/12-initialization.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "06-swift-swiftui/reference/language-concepts/13-keywords-completion.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "06-swift-swiftui/reference/language-concepts/14-regex.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "06-swift-swiftui/reference/language-concepts/15-urlsession.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "06-swift-swiftui/reference/language-concepts/16-stdlib-foundation-map.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "06-swift-swiftui/reference/library-guides/01-foundation-and-stdlib.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "06-swift-swiftui/reference/library-guides/02-third-party-libs.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "06-swift-swiftui/reference/quick-references/01-swift-swiftui-cheatsheet.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "06-swift-swiftui/reference/quick-references/02-troubleshooting.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "06-swift-swiftui/testing/01-unit-testing.md",
+      "status": "正文段落重写与语义纠错；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": [
+        "缺少明确结果信号"
+      ]
+    },
+    {
+      "path": "06-swift-swiftui/testing/02-ui-testing.md",
+      "status": "正文段落重写与语义纠错；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "06-swift-swiftui/testing/03-integration-testing.md",
+      "status": "正文段落重写与语义纠错；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": [
+        "缺少明确结果信号"
+      ]
+    },
+    {
+      "path": "07-php-mastery/advanced-topics/architecture/01-laravel-architecture.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "07-php-mastery/advanced-topics/performance/01-query-optimization.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "07-php-mastery/advanced-topics/performance/02-caching-queues.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "07-php-mastery/advanced-topics/runtime/01-fpm-vs-resident.md",
+      "status": "正文段落重写与语义纠错；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "07-php-mastery/advanced-topics/runtime/02-workerman-principles.md",
+      "status": "正文段落重写与语义纠错；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "07-php-mastery/advanced-topics/runtime/03-webman-practice.md",
+      "status": "正文段落重写与语义纠错；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "07-php-mastery/advanced-topics/runtime/04-swoole-ecosystem.md",
+      "status": "正文段落重写与语义纠错；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "07-php-mastery/advanced-topics/security/01-security-practices.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "07-php-mastery/basics/01-environment-setup.md",
+      "status": "正文增强：概念、自测与反馈；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "07-php-mastery/basics/02-first-script.md",
+      "status": "正文增强：概念、自测与反馈；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "07-php-mastery/basics/03-variables-types.md",
+      "status": "正文增强：概念、自测与反馈；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "07-php-mastery/basics/04-functions-oop.md",
+      "status": "正文增强：概念、自测与反馈；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "07-php-mastery/basics/05-control-flow.md",
+      "status": "正文增强：概念、自测与反馈；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": [
+        "教程代码含省略标记，需人工判断"
+      ]
+    },
+    {
+      "path": "07-php-mastery/basics/06-error-exceptions.md",
+      "status": "正文增强：概念、自测与反馈；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": [
+        "教程代码含省略标记，需人工判断"
+      ]
+    },
+    {
+      "path": "07-php-mastery/basics/07-advanced-features.md",
+      "status": "正文增强：概念、自测与反馈；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "07-php-mastery/basics/08-first-project.md",
+      "status": "正文增强：概念、自测与反馈；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "07-php-mastery/deployment/01-docker-deployment.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "07-php-mastery/deployment/02-server-deployment.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "07-php-mastery/deployment/03-ci-cd-observability.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "07-php-mastery/frameworks/01-laravel-basics.md",
+      "status": "正文增强：职责、数据流与验收；非全篇深审",
+      "editorial_sections": 0,
+      "editorial_detail": "",
+      "structure_signals": []
+    },
+    {
+      "path": "07-php-mastery/frameworks/02-laravel-advanced.md",
+      "status": "正文增强：职责、数据流与验收；非全篇深审",
+      "editorial_sections": 0,
+      "editorial_detail": "",
+      "structure_signals": []
+    },
+    {
+      "path": "07-php-mastery/frameworks/03-ecosystem-integration.md",
+      "status": "正文增强：职责、数据流与验收；非全篇深审",
+      "editorial_sections": 0,
+      "editorial_detail": "",
+      "structure_signals": []
+    },
+    {
+      "path": "07-php-mastery/frameworks/04-devtools.md",
+      "status": "正文增强：职责、数据流与验收；非全篇深审",
+      "editorial_sections": 0,
+      "editorial_detail": "",
+      "structure_signals": []
+    },
+    {
+      "path": "07-php-mastery/LEARNING_GUIDE.md",
+      "status": "新增模块导读与完整文章导航",
+      "editorial_sections": 0,
+      "editorial_detail": "",
+      "structure_signals": []
+    },
+    {
+      "path": "07-php-mastery/projects/01-todo-api.md",
+      "status": "正文增强：范围、阶段与验收；非完整工程实测",
+      "editorial_sections": 0,
+      "editorial_detail": "",
+      "structure_signals": []
+    },
+    {
+      "path": "07-php-mastery/projects/02-blog-platform.md",
+      "status": "正文增强：范围、阶段与验收；非完整工程实测",
+      "editorial_sections": 0,
+      "editorial_detail": "",
+      "structure_signals": [
+        "教程代码含省略标记，需人工判断"
+      ]
+    },
+    {
+      "path": "07-php-mastery/projects/03-ecommerce-api.md",
+      "status": "正文增强：范围、阶段与验收；非完整工程实测",
+      "editorial_sections": 0,
+      "editorial_detail": "",
+      "structure_signals": []
+    },
+    {
+      "path": "07-php-mastery/projects/04-production-laravel-app.md",
+      "status": "正文增强：范围、阶段与验收；非完整工程实测",
+      "editorial_sections": 0,
+      "editorial_detail": "",
+      "structure_signals": []
+    },
+    {
+      "path": "07-php-mastery/README.md",
+      "status": "入口增强；原版本表未全量复核",
+      "editorial_sections": 0,
+      "editorial_detail": "",
+      "structure_signals": []
+    },
+    {
+      "path": "07-php-mastery/reference/framework-essentials/01-laravel-essentials.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "07-php-mastery/reference/framework-essentials/02-symfony-essentials.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "07-php-mastery/reference/language-concepts/01-php-keywords.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "07-php-mastery/reference/language-concepts/02-built-in-functions.md",
+      "status": "重点参考增强或语义纠错；非全篇深审",
+      "editorial_sections": 0,
+      "editorial_detail": "",
+      "structure_signals": []
+    },
+    {
+      "path": "07-php-mastery/reference/language-concepts/03-types-oop-modern.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "07-php-mastery/reference/language-concepts/04-control-flow.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "07-php-mastery/reference/language-concepts/05-arrays-patterns.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "07-php-mastery/reference/language-concepts/06-generators-iterators.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "07-php-mastery/reference/language-concepts/07-namespaces-autoloading.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "07-php-mastery/reference/language-concepts/08-reflection-attributes.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "07-php-mastery/reference/language-concepts/09-strings-regex.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "07-php-mastery/reference/language-concepts/10-datetime.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "07-php-mastery/reference/language-concepts/11-errors-exceptions.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "07-php-mastery/reference/language-concepts/12-modern-php-85.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "07-php-mastery/reference/language-concepts/13-weak-comparison.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "07-php-mastery/reference/language-concepts/14-references-value-semantics.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "07-php-mastery/reference/language-concepts/15-superglobals.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "07-php-mastery/reference/language-concepts/16-operators.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "07-php-mastery/reference/language-concepts/17-magic-methods.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "07-php-mastery/reference/language-concepts/18-constants-magic-constants.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "07-php-mastery/reference/library-guides/01-standard-library-spl.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "07-php-mastery/reference/library-guides/02-composer-ecosystem.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "07-php-mastery/reference/library-guides/03-pdo.md",
+      "status": "重点参考增强或语义纠错；非全篇深审",
+      "editorial_sections": 0,
+      "editorial_detail": "",
+      "structure_signals": []
+    },
+    {
+      "path": "07-php-mastery/reference/library-guides/04-json.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "07-php-mastery/reference/library-guides/05-file-stream-io.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "07-php-mastery/reference/library-guides/06-http-session-cookie.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "07-php-mastery/reference/library-guides/07-extension-map.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "07-php-mastery/reference/quick-references/01-php-cheatsheet.md",
+      "status": "重点参考增强或语义纠错；非全篇深审",
+      "editorial_sections": 0,
+      "editorial_detail": "",
+      "structure_signals": []
+    },
+    {
+      "path": "07-php-mastery/reference/quick-references/02-troubleshooting.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "07-php-mastery/testing/01-unit-testing.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "07-php-mastery/testing/02-pest-testing.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "07-php-mastery/testing/03-feature-testing.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "08-java-revisited/advanced-topics/architecture/01-layered-architecture.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "08-java-revisited/advanced-topics/performance/01-jvm-tuning.md",
+      "status": "正文段落重写与语义纠错；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "08-java-revisited/advanced-topics/performance/02-virtual-threads.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "08-java-revisited/advanced-topics/security/01-security-practices.md",
+      "status": "正文段落重写与语义纠错；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "08-java-revisited/basics/01-environment-setup.md",
+      "status": "正文增强：概念、自测与反馈；非全篇深审",
+      "editorial_sections": 0,
+      "editorial_detail": "",
+      "structure_signals": []
+    },
+    {
+      "path": "08-java-revisited/basics/02-first-program.md",
+      "status": "正文增强：概念、自测与反馈；非全篇深审",
+      "editorial_sections": 0,
+      "editorial_detail": "",
+      "structure_signals": []
+    },
+    {
+      "path": "08-java-revisited/basics/03-variables-types.md",
+      "status": "正文增强：概念、自测与反馈；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "08-java-revisited/basics/04-classes-records.md",
+      "status": "正文增强：概念、自测与反馈；非全篇深审",
+      "editorial_sections": 0,
+      "editorial_detail": "",
+      "structure_signals": []
+    },
+    {
+      "path": "08-java-revisited/basics/05-control-flow.md",
+      "status": "正文增强：概念、自测与反馈；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "08-java-revisited/basics/06-exceptions.md",
+      "status": "正文增强：概念、自测与反馈；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "08-java-revisited/basics/07-modern-features.md",
+      "status": "正文增强：概念、自测与反馈；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "08-java-revisited/basics/08-first-project.md",
+      "status": "正文增强：概念、自测与反馈；非全篇深审",
+      "editorial_sections": 0,
+      "editorial_detail": "",
+      "structure_signals": []
+    },
+    {
+      "path": "08-java-revisited/deployment/01-docker-deployment.md",
+      "status": "正文段落重写与语义纠错；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "08-java-revisited/deployment/02-kubernetes-deployment.md",
+      "status": "正文段落重写与语义纠错；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": [
+        "缺少明确结果信号"
+      ]
+    },
+    {
+      "path": "08-java-revisited/deployment/03-ci-cd-observability.md",
+      "status": "正文段落重写与语义纠错；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "08-java-revisited/frameworks/01-spring-boot-basics.md",
+      "status": "正文增强：职责、数据流与验收；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "08-java-revisited/frameworks/02-spring-boot-advanced.md",
+      "status": "正文增强：职责、数据流与验收；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "08-java-revisited/frameworks/03-ecosystem-integration.md",
+      "status": "正文增强：职责、数据流与验收；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "08-java-revisited/frameworks/04-devtools.md",
+      "status": "正文增强：职责、数据流与验收；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "08-java-revisited/LEARNING_GUIDE.md",
+      "status": "新增模块导读与完整文章导航",
+      "editorial_sections": 0,
+      "editorial_detail": "",
+      "structure_signals": []
+    },
+    {
+      "path": "08-java-revisited/projects/01-todo-api.md",
+      "status": "正文增强：范围、阶段与验收；非完整工程实测",
+      "editorial_sections": 0,
+      "editorial_detail": "",
+      "structure_signals": [
+        "教程代码含省略标记，需人工判断"
+      ]
+    },
+    {
+      "path": "08-java-revisited/projects/02-library-management.md",
+      "status": "正文增强：范围、阶段与验收；非完整工程实测",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "08-java-revisited/projects/03-order-system.md",
+      "status": "正文增强：范围、阶段与验收；非完整工程实测",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "08-java-revisited/projects/04-production-spring-app.md",
+      "status": "正文增强：范围、阶段与验收；非完整工程实测",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "08-java-revisited/README.md",
+      "status": "入口增强；原版本表未全量复核",
+      "editorial_sections": 0,
+      "editorial_detail": "",
+      "structure_signals": []
+    },
+    {
+      "path": "08-java-revisited/reference/framework-essentials/01-spring-boot-essentials.md",
+      "status": "正文段落重写与语义纠错；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "08-java-revisited/reference/framework-essentials/02-jpa-essentials.md",
+      "status": "正文段落重写与语义纠错；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "08-java-revisited/reference/framework-essentials/03-ioc-di-essentials.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "08-java-revisited/reference/framework-essentials/04-aop-essentials.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "08-java-revisited/reference/framework-essentials/05-transaction-essentials.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "08-java-revisited/reference/framework-essentials/06-spring-security-essentials.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "08-java-revisited/reference/framework-essentials/07-rest-client-essentials.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "08-java-revisited/reference/language-concepts/01-java-keywords.md",
+      "status": "重点参考增强或语义纠错；非全篇深审",
+      "editorial_sections": 0,
+      "editorial_detail": "",
+      "structure_signals": []
+    },
+    {
+      "path": "08-java-revisited/reference/language-concepts/02-collections-generics.md",
+      "status": "正文段落重写与语义纠错；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "08-java-revisited/reference/language-concepts/03-streams-optional.md",
+      "status": "重点参考增强或语义纠错；非全篇深审",
+      "editorial_sections": 0,
+      "editorial_detail": "",
+      "structure_signals": []
+    },
+    {
+      "path": "08-java-revisited/reference/language-concepts/04-concurrency-api.md",
+      "status": "正文段落重写与语义纠错；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "08-java-revisited/reference/language-concepts/05-records-sealed-patterns.md",
+      "status": "正文段落重写与语义纠错；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "08-java-revisited/reference/language-concepts/06-exceptions-resources.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "08-java-revisited/reference/language-concepts/07-string-immutability-pool.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "08-java-revisited/reference/language-concepts/08-enums.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "08-java-revisited/reference/language-concepts/09-annotations.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "08-java-revisited/reference/language-concepts/10-interface-semantics.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "08-java-revisited/reference/library-guides/01-standard-library.md",
+      "status": "重点参考增强或语义纠错；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "08-java-revisited/reference/library-guides/02-third-party-libs.md",
+      "status": "正文段落重写与语义纠错；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "08-java-revisited/reference/library-guides/03-java-lang.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "08-java-revisited/reference/library-guides/04-java-io.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "08-java-revisited/reference/library-guides/05-java-util-function.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "08-java-revisited/reference/library-guides/06-java-math.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "08-java-revisited/reference/library-guides/07-java-text-and-time-format.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "08-java-revisited/reference/library-guides/08-java-util-regex.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "08-java-revisited/reference/library-guides/09-jdk-package-map.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "08-java-revisited/reference/quick-references/01-java-cheatsheet.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "08-java-revisited/reference/quick-references/02-troubleshooting.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "08-java-revisited/reference/quick-references/03-spring-boot4-migration.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "08-java-revisited/testing/01-unit-testing.md",
+      "status": "正文段落重写与语义纠错；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "08-java-revisited/testing/02-integration-testing.md",
+      "status": "正文段落重写与语义纠错；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "08-java-revisited/testing/03-api-testing.md",
+      "status": "正文段落重写与语义纠错；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "09-nodejs-backend/advanced-topics/architecture/01-service-architecture.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "09-nodejs-backend/advanced-topics/performance/01-event-loop.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "09-nodejs-backend/advanced-topics/performance/02-streaming-clustering.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "09-nodejs-backend/advanced-topics/security/01-security-practices.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "09-nodejs-backend/basics/01-environment-setup.md",
+      "status": "正文增强：概念、自测与反馈；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "09-nodejs-backend/basics/02-first-server.md",
+      "status": "正文增强：概念、自测与反馈；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "09-nodejs-backend/basics/03-modules-esm.md",
+      "status": "正文增强：概念、自测与反馈；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "09-nodejs-backend/basics/04-async-promises.md",
+      "status": "正文增强：概念、自测与反馈；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "09-nodejs-backend/basics/05-http-routing.md",
+      "status": "正文增强：概念、自测与反馈；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "09-nodejs-backend/basics/06-error-handling.md",
+      "status": "正文增强：概念、自测与反馈；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "09-nodejs-backend/basics/07-streams-workers.md",
+      "status": "正文增强：概念、自测与反馈；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "09-nodejs-backend/basics/08-first-project.md",
+      "status": "正文增强：概念、自测与反馈；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "09-nodejs-backend/deployment/01-docker-deployment.md",
+      "status": "正文段落重写与语义纠错；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "09-nodejs-backend/deployment/02-ci-cd-pipelines.md",
+      "status": "正文段落重写与语义纠错；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "09-nodejs-backend/deployment/03-observability.md",
+      "status": "正文段落重写与语义纠错；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "09-nodejs-backend/frameworks/01-hono-basics.md",
+      "status": "正文增强：职责、数据流与验收；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "09-nodejs-backend/frameworks/02-hono-advanced.md",
+      "status": "正文增强：职责、数据流与验收；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "09-nodejs-backend/frameworks/03-ecosystem-integration.md",
+      "status": "正文增强：职责、数据流与验收；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "09-nodejs-backend/frameworks/04-devtools.md",
+      "status": "正文增强：职责、数据流与验收；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "09-nodejs-backend/LEARNING_GUIDE.md",
+      "status": "新增模块导读与完整文章导航",
+      "editorial_sections": 0,
+      "editorial_detail": "",
+      "structure_signals": []
+    },
+    {
+      "path": "09-nodejs-backend/projects/01-todo-api.md",
+      "status": "正文增强：范围、阶段与验收；非完整工程实测",
+      "editorial_sections": 0,
+      "editorial_detail": "",
+      "structure_signals": []
+    },
+    {
+      "path": "09-nodejs-backend/projects/02-auth-service.md",
+      "status": "正文增强：范围、阶段与验收；非完整工程实测",
+      "editorial_sections": 0,
+      "editorial_detail": "",
+      "structure_signals": []
+    },
+    {
+      "path": "09-nodejs-backend/projects/03-file-storage-service.md",
+      "status": "正文增强：范围、阶段与验收；非完整工程实测",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "09-nodejs-backend/projects/04-production-nodejs-api.md",
+      "status": "正文增强：范围、阶段与验收；非完整工程实测",
+      "editorial_sections": 0,
+      "editorial_detail": "",
+      "structure_signals": []
+    },
+    {
+      "path": "09-nodejs-backend/README.md",
+      "status": "入口增强；原版本表未全量复核",
+      "editorial_sections": 0,
+      "editorial_detail": "",
+      "structure_signals": []
+    },
+    {
+      "path": "09-nodejs-backend/reference/framework-essentials/01-hono-essentials.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "09-nodejs-backend/reference/framework-essentials/02-fastify-nestjs.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "09-nodejs-backend/reference/language-concepts/01-js-modern-syntax.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "09-nodejs-backend/reference/language-concepts/02-async-api.md",
+      "status": "重点参考增强或语义纠错；非全篇深审",
+      "editorial_sections": 0,
+      "editorial_detail": "",
+      "structure_signals": []
+    },
+    {
+      "path": "09-nodejs-backend/reference/language-concepts/03-node-core-api.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "09-nodejs-backend/reference/language-concepts/04-streams-api.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "09-nodejs-backend/reference/language-concepts/05-typescript-patterns.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "09-nodejs-backend/reference/language-concepts/06-esm-module-resolution.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "09-nodejs-backend/reference/language-concepts/07-js-core-semantics.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "09-nodejs-backend/reference/language-concepts/08-type-coercion-collections.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "09-nodejs-backend/reference/language-concepts/09-globals-reference.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "09-nodejs-backend/reference/library-guides/01-core-modules.md",
+      "status": "重点参考增强或语义纠错；非全篇深审",
+      "editorial_sections": 0,
+      "editorial_detail": "",
+      "structure_signals": []
+    },
+    {
+      "path": "09-nodejs-backend/reference/library-guides/02-ecosystem-libs.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "09-nodejs-backend/reference/library-guides/03-crypto.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "09-nodejs-backend/reference/library-guides/04-child-process.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "09-nodejs-backend/reference/library-guides/05-buffer.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "09-nodejs-backend/reference/library-guides/06-util.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "09-nodejs-backend/reference/library-guides/07-process-lifecycle.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "09-nodejs-backend/reference/library-guides/08-test-runner.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "09-nodejs-backend/reference/library-guides/09-zlib.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "09-nodejs-backend/reference/quick-references/01-node-cheatsheet.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "09-nodejs-backend/reference/quick-references/02-troubleshooting.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "09-nodejs-backend/testing/01-unit-testing.md",
+      "status": "正文段落重写与语义纠错；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "09-nodejs-backend/testing/02-integration-testing.md",
+      "status": "正文段落重写与语义纠错；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "09-nodejs-backend/testing/03-e2e-api-testing.md",
+      "status": "正文段落重写与语义纠错；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "10-python-discovery/advanced-topics/architecture/01-project-architecture.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "10-python-discovery/advanced-topics/performance/01-async-python.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "10-python-discovery/advanced-topics/performance/02-profiling-optimization.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "10-python-discovery/advanced-topics/security/01-security-practices.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "10-python-discovery/basics/01-environment-setup.md",
+      "status": "正文增强：概念、自测与反馈；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "10-python-discovery/basics/02-first-script.md",
+      "status": "正文增强：概念、自测与反馈；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "10-python-discovery/basics/03-variables-types.md",
+      "status": "正文增强：概念、自测与反馈；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "10-python-discovery/basics/04-functions-oop.md",
+      "status": "正文增强：概念、自测与反馈；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "10-python-discovery/basics/05-control-flow.md",
+      "status": "正文增强：概念、自测与反馈；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "10-python-discovery/basics/06-exceptions.md",
+      "status": "正文增强：概念、自测与反馈；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "10-python-discovery/basics/07-advanced-features.md",
+      "status": "正文增强：概念、自测与反馈；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "10-python-discovery/basics/08-first-project.md",
+      "status": "正文增强：概念、自测与反馈；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "10-python-discovery/deployment/01-docker-deployment.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "10-python-discovery/deployment/02-ci-cd-pipelines.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "10-python-discovery/deployment/03-observability.md",
+      "status": "正文段落重写与语义纠错；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "10-python-discovery/frameworks/01-fastapi-basics.md",
+      "status": "正文增强：职责、数据流与验收；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "10-python-discovery/frameworks/02-fastapi-advanced.md",
+      "status": "正文增强：职责、数据流与验收；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "10-python-discovery/frameworks/03-ecosystem-integration.md",
+      "status": "正文增强：职责、数据流与验收；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "10-python-discovery/frameworks/04-devtools.md",
+      "status": "正文增强：职责、数据流与验收；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "10-python-discovery/LEARNING_GUIDE.md",
+      "status": "新增模块导读与完整文章导航",
+      "editorial_sections": 0,
+      "editorial_detail": "",
+      "structure_signals": []
+    },
+    {
+      "path": "10-python-discovery/projects/01-todo-api.md",
+      "status": "正文增强：范围、阶段与验收；非完整工程实测",
+      "editorial_sections": 0,
+      "editorial_detail": "",
+      "structure_signals": []
+    },
+    {
+      "path": "10-python-discovery/projects/02-url-shortener.md",
+      "status": "正文增强：范围、阶段与验收；非完整工程实测",
+      "editorial_sections": 0,
+      "editorial_detail": "",
+      "structure_signals": [
+        "教程代码含省略标记，需人工判断"
+      ]
+    },
+    {
+      "path": "10-python-discovery/projects/03-data-pipeline.md",
+      "status": "正文增强：范围、阶段与验收；非完整工程实测",
+      "editorial_sections": 0,
+      "editorial_detail": "",
+      "structure_signals": []
+    },
+    {
+      "path": "10-python-discovery/projects/04-production-fastapi-app.md",
+      "status": "正文增强：范围、阶段与验收；非完整工程实测",
+      "editorial_sections": 0,
+      "editorial_detail": "",
+      "structure_signals": []
+    },
+    {
+      "path": "10-python-discovery/README.md",
+      "status": "入口增强；原版本表未全量复核",
+      "editorial_sections": 0,
+      "editorial_detail": "",
+      "structure_signals": []
+    },
+    {
+      "path": "10-python-discovery/reference/framework-essentials/01-fastapi-essentials.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "10-python-discovery/reference/framework-essentials/02-django-flask.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "10-python-discovery/reference/framework-essentials/03-uv-package-manager.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "10-python-discovery/reference/language-concepts/01-python-keywords.md",
+      "status": "重点参考增强或语义纠错；非全篇深审",
+      "editorial_sections": 0,
+      "editorial_detail": "",
+      "structure_signals": []
+    },
+    {
+      "path": "10-python-discovery/reference/language-concepts/02-built-in-functions.md",
+      "status": "重点参考增强或语义纠错；非全篇深审",
+      "editorial_sections": 0,
+      "editorial_detail": "",
+      "structure_signals": []
+    },
+    {
+      "path": "10-python-discovery/reference/language-concepts/03-data-structures.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "10-python-discovery/reference/language-concepts/04-oop-protocols.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "10-python-discovery/reference/language-concepts/05-typing-annotations.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "10-python-discovery/reference/language-concepts/06-decorators.md",
+      "status": "重点参考增强或语义纠错；非全篇深审",
+      "editorial_sections": 0,
+      "editorial_detail": "",
+      "structure_signals": []
+    },
+    {
+      "path": "10-python-discovery/reference/language-concepts/07-generators-iterators.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "10-python-discovery/reference/language-concepts/08-context-managers.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "10-python-discovery/reference/language-concepts/09-asyncio-concurrency.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "10-python-discovery/reference/language-concepts/10-exceptions-system.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "10-python-discovery/reference/language-concepts/11-modules-imports.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "10-python-discovery/reference/language-concepts/12-string-formatting.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "10-python-discovery/reference/language-concepts/13-dataclasses.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "10-python-discovery/reference/language-concepts/14-comprehensions.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "10-python-discovery/reference/language-concepts/15-closures-and-scope.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "10-python-discovery/reference/language-concepts/16-classes-and-inheritance.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "10-python-discovery/reference/language-concepts/17-functions-parameters.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "10-python-discovery/reference/library-guides/01-standard-library.md",
+      "status": "重点参考增强或语义纠错；非全篇深审",
+      "editorial_sections": 0,
+      "editorial_detail": "",
+      "structure_signals": []
+    },
+    {
+      "path": "10-python-discovery/reference/library-guides/02-ecosystem-libs.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "10-python-discovery/reference/library-guides/03-pytest-testing.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "10-python-discovery/reference/library-guides/04-os-sys.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "10-python-discovery/reference/library-guides/05-enum-module.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "10-python-discovery/reference/library-guides/06-functools-subprocess.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "10-python-discovery/reference/quick-references/01-python-cheatsheet.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "10-python-discovery/reference/quick-references/02-troubleshooting.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "10-python-discovery/testing/01-unit-testing.md",
+      "status": "正文段落重写与语义纠错；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "10-python-discovery/testing/02-integration-testing.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "10-python-discovery/testing/03-mocking-testing.md",
+      "status": "正文段落重写与语义纠错；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "11-rust-cross-platform/advanced-topics/01-memory-layout-performance.md",
+      "status": "正文段落重写与语义纠错；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "11-rust-cross-platform/advanced-topics/02-ffi-bindgen.md",
+      "status": "正文段落重写与语义纠错；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "11-rust-cross-platform/advanced-topics/03-wasm32-target.md",
+      "status": "正文段落重写与语义纠错；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "11-rust-cross-platform/advanced-topics/04-security-practices.md",
+      "status": "正文段落重写与语义纠错；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "11-rust-cross-platform/basics/01-environment-setup.md",
+      "status": "正文增强：概念、自测与反馈；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "11-rust-cross-platform/basics/02-ownership-borrowing.md",
+      "status": "正文增强：概念、自测与反馈；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": [
+        "教程代码含省略标记，需人工判断"
+      ]
+    },
+    {
+      "path": "11-rust-cross-platform/basics/03-structs-enums-patterns.md",
+      "status": "正文增强：概念、自测与反馈；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "11-rust-cross-platform/basics/04-traits-generics.md",
+      "status": "正文增强：概念、自测与反馈；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "11-rust-cross-platform/basics/05-error-handling.md",
+      "status": "正文增强：概念、自测与反馈；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "11-rust-cross-platform/basics/06-collections-iterators.md",
+      "status": "正文增强：概念、自测与反馈；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "11-rust-cross-platform/basics/07-lifetimes.md",
+      "status": "正文增强：概念、自测与反馈；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "11-rust-cross-platform/basics/08-smart-pointers.md",
+      "status": "正文增强：概念、自测与反馈；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "11-rust-cross-platform/basics/09-concurrency-async.md",
+      "status": "正文增强：概念、自测与反馈；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "11-rust-cross-platform/basics/10-cargo-testing.md",
+      "status": "正文增强：概念、自测与反馈；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "11-rust-cross-platform/deployment/01-cross-compilation-targets.md",
+      "status": "正文段落重写与语义纠错；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": [
+        "缺少明确结果信号"
+      ]
+    },
+    {
+      "path": "11-rust-cross-platform/deployment/02-github-actions-ci.md",
+      "status": "正文段落重写与语义纠错；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": [
+        "缺少明确结果信号"
+      ]
+    },
+    {
+      "path": "11-rust-cross-platform/deployment/03-signing-auto-update.md",
+      "status": "正文段落重写与语义纠错；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": [
+        "缺少明确结果信号"
+      ]
+    },
+    {
+      "path": "11-rust-cross-platform/deployment/04-containerized-services.md",
+      "status": "正文段落重写与语义纠错；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": [
+        "缺少明确结果信号"
+      ]
+    },
+    {
+      "path": "11-rust-cross-platform/frameworks/01-tauri-2-architecture.md",
+      "status": "正文增强：职责、数据流与验收；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "11-rust-cross-platform/frameworks/02-tauri-plugins.md",
+      "status": "正文增强：职责、数据流与验收；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "11-rust-cross-platform/frameworks/03-tauri-frontend-react.md",
+      "status": "正文增强：职责、数据流与验收；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "11-rust-cross-platform/frameworks/04-axum-web-stack.md",
+      "status": "正文增强：职责、数据流与验收；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "11-rust-cross-platform/frameworks/05-state-and-database-sqlx.md",
+      "status": "正文增强：职责、数据流与验收；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "11-rust-cross-platform/frameworks/06-auth-middleware.md",
+      "status": "正文增强：职责、数据流与验收；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "11-rust-cross-platform/frameworks/07-desktop-packaging.md",
+      "status": "正文增强：职责、数据流与验收；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "11-rust-cross-platform/LEARNING_GUIDE.md",
+      "status": "新增模块导读与完整文章导航",
+      "editorial_sections": 0,
+      "editorial_detail": "",
+      "structure_signals": []
+    },
+    {
+      "path": "11-rust-cross-platform/projects/01-cli-tool.md",
+      "status": "正文增强：范围、阶段与验收；非完整工程实测",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "11-rust-cross-platform/projects/02-tauri-notes-app.md",
+      "status": "正文增强：范围、阶段与验收；非完整工程实测",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "11-rust-cross-platform/projects/03-axum-rest-api.md",
+      "status": "正文增强：范围、阶段与验收；非完整工程实测",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "11-rust-cross-platform/projects/04-websocket-realtime.md",
+      "status": "正文增强：范围、阶段与验收；非完整工程实测",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "11-rust-cross-platform/projects/05-multiplatform-release.md",
+      "status": "正文增强：范围、阶段与验收；非完整工程实测",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "11-rust-cross-platform/README.md",
+      "status": "入口增强；原版本表未全量复核",
+      "editorial_sections": 0,
+      "editorial_detail": "",
+      "structure_signals": []
+    },
+    {
+      "path": "11-rust-cross-platform/reference/framework-essentials/09-tauri-2-essentials.md",
+      "status": "正文段落重写与语义纠错；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "11-rust-cross-platform/reference/framework-essentials/10-tauri-ipc-commands.md",
+      "status": "正文段落重写与语义纠错；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "11-rust-cross-platform/reference/framework-essentials/11-axum-essentials.md",
+      "status": "正文段落重写与语义纠错；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "11-rust-cross-platform/reference/language-concepts/01-ownership-dictionary.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "11-rust-cross-platform/reference/language-concepts/02-trait-objects.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "11-rust-cross-platform/reference/language-concepts/03-const-generics.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "11-rust-cross-platform/reference/language-concepts/04-advanced-lifetimes.md",
+      "status": "重点参考增强或语义纠错；非全篇深审",
+      "editorial_sections": 0,
+      "editorial_detail": "",
+      "structure_signals": []
+    },
+    {
+      "path": "11-rust-cross-platform/reference/language-concepts/05-macros.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "11-rust-cross-platform/reference/language-concepts/06-unsafe.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "11-rust-cross-platform/reference/language-concepts/07-smart-pointers.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "11-rust-cross-platform/reference/language-concepts/08-async-internals.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "11-rust-cross-platform/reference/language-concepts/09-keywords-and-syntax.md",
+      "status": "重点参考增强或语义纠错；非全篇深审",
+      "editorial_sections": 0,
+      "editorial_detail": "",
+      "structure_signals": []
+    },
+    {
+      "path": "11-rust-cross-platform/reference/language-concepts/10-standard-types-and-methods.md",
+      "status": "重点参考增强或语义纠错；非全篇深审",
+      "editorial_sections": 0,
+      "editorial_detail": "",
+      "structure_signals": []
+    },
+    {
+      "path": "11-rust-cross-platform/reference/library-guides/12-tokio-guide.md",
+      "status": "正文段落重写与语义纠错；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "11-rust-cross-platform/reference/library-guides/13-serde-guide.md",
+      "status": "正文段落重写与语义纠错；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "11-rust-cross-platform/reference/library-guides/14-error-libraries.md",
+      "status": "重点参考增强或语义纠错；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "11-rust-cross-platform/reference/library-guides/15-standard-library-map.md",
+      "status": "重点参考增强或语义纠错；非全篇深审",
+      "editorial_sections": 0,
+      "editorial_detail": "",
+      "structure_signals": []
+    },
+    {
+      "path": "11-rust-cross-platform/testing/01-unit-integration-tests.md",
+      "status": "正文段落重写与语义纠错；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "11-rust-cross-platform/testing/02-criterion-benchmarks.md",
+      "status": "正文段落重写与语义纠错；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": [
+        "缺少明确结果信号"
+      ]
+    },
+    {
+      "path": "11-rust-cross-platform/testing/03-tauri-e2e-webdriver.md",
+      "status": "正文段落重写与语义纠错；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": []
+    }
+  ]
+}

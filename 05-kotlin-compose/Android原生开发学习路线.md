@@ -1,429 +1,50 @@
-# Android 原生开发学习路线 - 2026 年前沿技术栈
-
-## 前言
-
-欢迎来到 Android 原生开发的世界！2026 年的 Android 开发已经进入了 Jetpack Compose 时代，Kotlin 和声明式 UI 正在重塑开发体验。本学习路线将帮助你从零基础掌握现代 Android 开发，构建高性能、高质量的原生应用。
-
-## 技术栈概览 (2026年最新)
-
-### 核心技术栈
-```kotlin
-// 编程语言
-Kotlin 2.4                   // 现代化、简洁的编程语言（K2 编译器）
-
-// UI 框架
-Jetpack Compose             // 声明式 UI 框架（推荐）
-Views + XML                 // 传统命令式 UI 框架（维护用）
-
-// 架构组件
-Jetpack Architecture Components
-├── ViewModel               // UI 状态管理
-├── LiveData / StateFlow     // 可观察数据持有者
-├── Room                    // 数据库 ORM
-├── Navigation              // 导航组件
-├── DataStore              // 数据存储
-└── WorkManager            // 后台任务
-
-// 开发工具
-Android Studio Quail      // 官方 IDE（2026.1 或更新）
-Gradle 9.x                // 构建工具
-Android Emulator          // 模拟器
-```
-
-### 辅助技术栈
-```kotlin
-// 网络和数据处理
-Retrofit                   // HTTP 客户端
-OkHttp                     // HTTP 客户端
-Moshi / Gson               // JSON 序列化
-Room                       // 数据库 ORM
-DataStore                  // 键值存储
-
-// 依赖注入
-Hilt                       // 依赖注入框架
-Koin                       // 轻量级 DI 框架
-
-// 图像和媒体
-Coil                       // 图像加载库
-ExoPlayer                 // 媒体播放器
-CameraX                    // 相机库
-
-// 测试
-JUnit                      // 单元测试
-Espresso                   // UI 测试
-Compose UI Testing         // Compose UI 测试
-```
-
-## 学习阶段规划
-
-### 阶段一：Kotlin 语言基础
-
-#### 1. Kotlin 基础语法
-**学习目标**：掌握 Kotlin 核心语法和概念
-- **重点内容**：
-  - 变量声明（val/var）
-  - 基本数据类型
-  - 空安全（Null Safety）
-  - 函数和 Lambda 表达式
-  - 控制流（if/when/for/while）
-  - 集合操作（map/filter/reduce）
-  - 类和对象
-  - 继承和接口
-
-#### 2. Kotlin 高级特性
-**学习目标**：理解 Kotlin 的现代化特性
-- **重点内容**：
-  - 扩展函数和属性
-  - 数据类（Data Classes）
-  - 密封类（Sealed Classes）
-  - 泛型编程
-  - 协程基础（Coroutines）
-  - 委托属性（Delegated Properties）
-  - 操作符重载
-
-#### 3. Kotlin 2.4 新特性
-**学习目标**：掌握最新语言特性
-- **重点内容**：
-  - K2 编译器成为唯一引擎（K1 与 `-language-version=1.9` 已移除）
-  - 上下文参数（context parameters）与显式后备字段（explicit backing fields）转正
-  - 标准库 UUID API 稳定、集合有序性检查扩展
-  - Compose 编译器随 Kotlin 内置发行（`org.jetbrains.kotlin.plugin.compose`）
-
-**实践项目**：
-- Kotlin 命令行工具
-- 算法和数据结构练习
-- 小型游戏或工具应用
-
-### 阶段二：Jetpack Compose 声明式 UI
-
-#### 1. Compose 基础
-**学习目标**：掌握声明式 UI 开发
-- **重点内容**：
-  - Composable 函数
-  - 基础组件（Text、Button、Image）
-  - 布局组件（Column、Row、Box、LazyColumn）
-  - 状态管理（remember、mutableStateOf）
-  - 主题和样式
-  - 生命周期和副作用
-
-#### 2. Compose 进阶
-**学习目标**：掌握复杂的 UI 开发
-- **重点内容**：
-  - 自定义组件和布局
-  - 动画和过渡效果
-  - 手势处理
-  - 列表和网格优化
-  - 导航组件（Navigation Compose）
-  - 适配不同屏幕尺寸
-
-#### 3. Compose 架构
-**学习目标**：掌握 Compose 最佳实践
-- **重点内容**：
-  - 状态提升（State Hoisting）
-  - ViewMode 模式
-  - 依赖注入集成
-  - 测试策略
-  - 性能优化
-
-**实践项目**：
-- 天气应用（API 调用 + 数据展示）
-- 待办事项应用（本地存储 + 状态管理）
-- 简单的社交媒体应用
-
-### 阶段三：Android 架构和组件
-
-#### 1. 架构组件
-**学习目标**：掌握现代 Android 架构
-- **重点内容**：
-  - MVVM 架构模式
-  - ViewModel 和 StateFlow
-  - Room 数据库
-  - Navigation 组件
-  - DataStore 配置
-  - WorkManager 后台任务
-
-#### 2. 依赖注入
-**学习目标**：掌握 DI 框架使用
-- **重点内容**：
-  - Hilt 基础
-  - 模块和组件
-  - 依赖注入最佳实践
-  - 测试中的依赖注入
-
-#### 3. 数据持久化
-**学习目标**：掌握数据存储方案
-- **重点内容**：
-  - Room 数据库
-  - 数据库迁移
-  - DataStore Preferences
-  - 文件存储
-  - 备份和恢复
-
-**实践项目**：
-- 笔记应用（Room + DataStore）
-- 新闻阅读器（API + 缓存）
-- 个人财务管理应用
-
-### 阶段四：网络和数据处理
-
-#### 1. 网络编程
-**学习目标**：掌握现代网络开发
-- **重点内容**：
-  - Retrofit 基础
-  - OkHttp 配置
-  - RESTful API 设计
-  - GraphQL 集成
-  - WebSocket 实时通信
-  - 网络状态检测
-
-#### 2. 数据序列化
-**学习目标**：掌握数据处理
-- **重点内容**：
-  - Moshi/Gson 序列化
-  - 协议缓冲区（Protocol Buffers）
-  - 数据验证
-  - 错误处理
-  - 缓存策略
-
-#### 3. 离线支持
-**学习目标**：掌握离线应用开发
-- **重点内容**：
-  - 本地缓存策略
-  - 数据同步
-  - 离线模式检测
-  - 冲突解决
-  - 后台同步
-
-**实践项目**：
-- 电商应用（支付集成 + 购物车）
-- 社交应用（实时通信 + 离线支持）
-- 企业级应用（安全 + 数据同步）
-
-### 阶段五：高级功能和优化
-
-#### 1. 性能优化
-**学习目标**：掌握应用优化技巧
-- **重点内容**：
-  - 内存优化
-  - 启动时间优化
-  - UI 渲染优化
-  - 电池优化
-  - 网络优化
-  - 性能分析工具
-
-#### 2. 媒体和硬件
-**学习目标**：掌握硬件集成
-- **重点内容**：
-  - CameraX 相机开发
-  - ExoPlayer 视频播放
-  - 音频处理
-  - 传感器集成
-  - 蓝牙和 NFC
-  - 位置服务
-
-#### 3. 安全和隐私
-**学习目标**：掌握应用安全
-- **重点内容**：
-  - 数据加密
-  - 网络安全
-  - 生物识别
-  - 权限管理
-  - 应用签名
-  - 隐私保护
-
-**实践项目**：
-- 音乐播放器（媒体播放 + 后台服务）
-- 相机应用（CameraX + 图片处理）
-- 健康追踪应用（传感器 + 数据可视化）
-
-### 阶段六：发布和运维
-
-#### 1. Google Play 发布
-**学习目标**：掌握应用发布流程
-- **重点内容**：
-  - 应用签名
-  - APK/AAB 构建
-  - Google Play Console
-  - 应用内更新
-  - 订阅和购买
-  - 应用审核
-
-#### 2. 持续集成
-**学习目标**：掌握自动化流程
-- **重点内容**：
-  - GitHub Actions 配置
-  - 自动化测试
-  - 自动化构建
-  - Beta 版本发布
-  - A/B 测试
-
-#### 3. 监控和分析
-**学习目标**：掌握应用监控
-- **重点内容**：
-  - Firebase Analytics
-  - 崩溃报告
-  - 性能监控
-  - 用户行为分析
-  - 远程配置
-
-**实践项目**：
-- 完整的商业应用
-- 发布到 Google Play
-- 后续维护和更新
-
-## 开发工具和环境
-
-### 必备工具
-```bash
-# 开发环境
-Android Studio Quail       # 官方 IDE
-Kotlin 2.4                 # 编程语言
-Android SDK API 36+        # 开发工具包
-Android Emulator           # 模拟器
-
-# 构建工具
-Gradle 9.x                 # 构建系统
-Android Gradle Plugin 9.x  # Android 构建插件
-
-# 版本控制
-Git                         # 版本控制
-GitHub / GitLab            # 代码托管
-
-# 依赖管理
-Gradle                      # 依赖管理
-Maven Central               # 仓库
-
-# 测试工具
-JUnit                       # 单元测试
-Espresso                    # UI 测试
-Compose UI Testing          # Compose 测试
-```
-
-### 推荐插件
-```bash
-# Android Studio 插件
-Kotlin Multiplatform Mobile  # KMM 支持
-Compose Preview              # Compose 预览
-Firebase                     # Firebase 集成
-GitToolBox                   # Git 工具
-
-# VS Code 扩展
-Android Extensions           # Android 开发
-Kotlin                       # Kotlin 支持
-```
-
-## 学习资源推荐
-
-### 官方资源
-- [Android Developers Documentation](https://developer.android.com/)
-- [Jetpack Compose Documentation](https://developer.android.com/jetpack/compose)
-- [Kotlin Documentation](https://kotlinlang.org/)
-- [Android Developers YouTube](https://www.youtube.com/@AndroidDevelopers)
-
-### 书籍推荐
-- "Android Programming: The Big Nerd Ranch Guide"
-- "Jetpack Compose by Tutorials" - raywenderlich.com
-- "Kotlin for Android Developers" - Antonio Leiva
-- "Clean Architecture for Android" - Fernando Cejas
-
-### 在线课程
-- [Android Basics with Compose](https://developer.android.com/courses/android-basics-compose/course)
-- [Udemy Android Development Bootcamp]
-- [Coursera Android Development Specialization]
-- [Kodeco Android Courses]
-
-### 社区资源
-- [Android Developers Blog](https://android-developers.googleblog.com/)
-- [Stack Overflow](https://stackoverflow.com/)
-- [Reddit r/androiddev](https://www.reddit.com/r/androiddev/)
-- [Medium Android Publication](https://medium.com/android-developers)
-
-### 实践项目
-- [Android Developer Samples](https://github.com/android/samples)
-- [Compose Samples](https://github.com/android/compose-samples)
-- [Open Source Android Projects](https://github.com/topics/android)
-
-## 学习建议
-
-### 1. 学习策略
-- **循序渐进**：从 Kotlin 基础开始，不要急于求成
-- **实践为主**：每个阶段都要有实际项目练习
-- **代码质量**：重视代码规范和架构设计
-- **持续学习**：关注 Google I/O 和 Android 更新
-
-### 2. 实践建议
-- **从小项目开始**：先做简单的工具应用
-- **逐步复杂**：逐步增加功能和复杂度
-- **参与开源**：为开源项目贡献代码
-- **构建作品集**：准备展示给潜在雇主
-
-### 3. 职业发展
-- **准备作品集**：展示 3-5 个高质量项目
-- **参与社区**：在技术社区分享经验
-- **持续更新**：跟进行业最新趋势
-- **考取认证**：考虑 Google 认证
-
-## 项目实战建议
-
-### 初级项目
-1. **计算器应用**：UI 布局、事件处理、数据验证
-2. **天气应用**：API 调用、位置服务、数据展示
-3. **待办事项**：本地存储、状态管理、用户交互
-
-### 中级项目
-1. **笔记应用**：Room 数据库、搜索功能、分享
-2. **新闻阅读器**：API 集成、缓存、离线支持
-3. **音乐播放器**：媒体播放、后台服务、通知
-
-### 高级项目
-1. **社交媒体应用**：实时通信、图片处理、用户系统
-2. **电商应用**：支付集成、购物车、订单管理
-3. **健康追踪应用**：传感器集成、数据可视化、图表
-
-## 常见问题解答
-
-### Q: 需要什么样的电脑？
-A: 推荐 16GB 内存以上，SSD 硬盘。Windows、macOS、Linux 都支持。
-
-### Q: 学习周期大概需要多长？
-A: 根据个人背景和投入时间不同，基础阶段需要掌握Kotlin和Compose，熟练开发需要持续实践和项目积累。
-
-### Q: Jetpack Compose 还是传统 XML？
-A: **优先学习 Jetpack Compose**，这是未来的趋势。XML 仍需了解用于维护老项目。
-
-### Q: 需要数学基础吗？
-A: 基础数学即可，重点在编程思维和问题解决能力。
-
-### Q: 就业前景如何？
-A: Android 开发者需求旺盛，薪资水平较高，技术栈稳定。
-
-## 技术趋势和未来
-
-### 2026年趋势
-- **Jetpack Compose 成为主流**：声明式 UI 成为标准
-- **Kotlin Multiplatform Mobile (KMM)**：跨平台业务逻辑共享
-- **折叠屏设备适配**：大屏幕和折叠屏优化
-- **Wear OS 开发**：可穿戴设备应用开发
-- **AI 集成**：设备端机器学习和 AI 功能
-
-### 长期发展
-- **系统级开发**：Framework 开发和系统应用
-- **嵌入式 Android**：IoT 设备开发
-- **Android Auto**：车载系统开发
-- **Android TV**：电视应用开发
-
-## 总结
-
-Android 原生开发是一个充满机遇的领域。通过本学习路线，你将掌握：
-
-✅ **Kotlin 2.4**：现代化、简洁的编程语言
-✅ **Jetpack Compose**：声明式 UI 开发范式
-✅ **Jetpack 组件**：现代架构和开发模式
-✅ **完整开发生态**：从开发到发布的完整流程
-
-
-记住，技术学习是一个持续的过程。保持好奇心，多动手实践，你将成为一名优秀的 Android 开发者！
-
----
-
-*最后更新: 2026年9月 - 基于 Google 最新的技术和工具*
+# Android 学习路线：从 Kotlin 到可维护的应用
+
+> **阅读准备**：会基本编程即可进入路线；Kotlin 语法、Android 生命周期与 Compose 分阶段学习，不要求提前熟悉整个技术栈。
+
+这条路线面向会基本编程、尚不熟悉 Android 的学习者。按能力验收推进，不要求同时掌握所有库。日常查阅从 [模块理解地图](LEARNING_GUIDE.md)进入；该地图列出了完整文章入口。
+
+## 第一阶段：能解释一段 Kotlin 程序
+
+先读 [语法基础](basics/03-kotlin-syntax-essentials.md)，遇到关键词查 [语言参考](reference/language-concepts/01-kotlin-keywords.md)。重点不是记住缩写，而是能解释 val/var、可空类型、when、data class、lambda 和集合操作的输入输出。
+
+练习：实现命令行待办清单，支持添加、完成、按状态筛选。输入空标题、重复 ID、空集合都要有规定行为。验收：不依赖 !! 掩盖缺失数据；能说明 List 为什么不等于深度不可变、map 与 forEach 返回值如何不同。
+
+进阶再学泛型、委托、扩展与 Sequence。先正确处理有限数据，再研究减少中间集合和短路执行。协程另学作用域、取消与挂起；suspend 不代表自动后台线程。
+
+## 第二阶段：让状态驱动可操作的页面
+
+从 [环境搭建](basics/01-environment-setup.md)使用兼容模板创建工程，再学 [Composable 与状态](basics/04-composables-state.md)、[布局](basics/05-layouts.md)。使用项目版本目录锁定 Kotlin、AGP、Gradle、Compose 组合，不把各依赖分别升到最大版本。
+
+练习：把清单做成 Compose 页面，加入输入框、删除确认、空状态和稳定列表 key。验收：新增与删除后状态跟随记录；旋转和大字体下可用；屏幕阅读器能辨识按钮。查属性使用 [组件参考](reference/framework-essentials/01-compose-essentials.md)，不要一次背完整 API。
+
+## 第三阶段：跨页面、跨重建、跨进程保存
+
+学习 [导航](basics/06-navigation.md)、ViewModel、Room 与 DataStore。用事件向上、状态向下的数据流组织代码，Repository 负责数据来源和同步规则；UseCase 只在规则复用或编排复杂时引入。
+
+练习：[笔记项目](basics/08-first-project.md)增加搜索与排序，数据库新增 pinned 字段并迁移旧数据。验收：旋转不丢 UI 状态，进程重启后笔记仍在，从旧数据库升级不丢记录。能区分 remember、保存状态、ViewModel 内存与磁盘数据的寿命。
+
+## 第四阶段：网络和离线行为
+
+学习 Retrofit/OkHttp 或适合跨平台需求的 Ktor，先选一套完成链路。序列化负责转换，不替代业务校验。用 [AndroidX](reference/library-guides/01-androidx-libraries.md) 与 [生态库](reference/library-guides/02-third-party-libs.md)参考补齐依赖职责。
+
+练习：做新闻阅读器，先展示本地内容再同步远端，区分首次加载、空结果、刷新失败。验收：断网不清空可用数据，快速切换查询时旧结果不覆盖新页面，重试写操作不会重复创建记录。后台持久同步再考虑 WorkManager，它不承诺精确时刻运行。
+
+## 第五阶段：带证据地测试与优化
+
+先测纯 Kotlin 规则，再测 Repository 与数据库迁移，最后测关键 UI 行为。使用 [测试参考](reference/framework-essentials/07-compose-testing.md)编写“输入—操作—可见结果”断言。性能只针对已记录的慢交互优化，重组本身不是错误。
+
+练习：让一个接口返回 500、一个保存动作失败、一个页面快速进出。验收：测试会在引入对应缺陷后失败，取消任务不留下错误提示，release 构建的滚动与启动有可复现记录。
+
+## 第六阶段：交付与长期维护
+
+读 [发布构建](deployment/01-release-build.md)，用测试签名制作 release，验证升级、混淆和错误还原。商店发布另按实际平台的当前要求检查；学习项目不必为了完成路线接入支付或真实个人数据。
+
+进阶方向按需求选择：CameraX、Media3、复杂手势与 Canvas、大屏适配、Kotlin Multiplatform。新框架先验证维护状态、平台支持、迁移成本和它解决的真实问题；任何框架都可能变化，更长久的能力是状态建模、并发、数据一致性、测试和诊断。
+
+官方补充材料：[Android Basics with Compose](https://developer.android.com/courses/android-basics-compose/course)、[Kotlin 文档](https://kotlinlang.org/docs/home.html)。读教程后用上述项目验收，不以“看完章节”替代会独立完成任务。
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](LEARNING_GUIDE.md) · [完整目录与版本](README.md) · [通用术语](../shared-resources/glossary.md)

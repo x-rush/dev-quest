@@ -6,6 +6,9 @@
 >
 > **前置知识**: [projects/03-habit-tracker.md](../projects/03-habit-tracker.md)（有可测的业务扩展）、[05-protocols-generics.md](../reference/language-concepts/05-protocols-generics.md)（协议用于 Mock）
 
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
+
 ## 📚 文档元数据
 
 | 属性 | 内容 |
@@ -15,6 +18,8 @@
 | **难度** | ⭐⭐ |
 | **标签** | `#SwiftTesting` `#expect` `#参数化` `#异步测试` `#单元测试` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ## 🎯 本指南解决什么问题
 
@@ -138,9 +143,9 @@ func loadFailureSetsFailedState() async {
 
 ## ✅ 最佳实践
 
-- ✅ 先测**模型层业务逻辑**（streak、过滤、聚合），再测视图模型状态机，UI 交给 UI 测试
-- ✅ 每个测试独立构造数据，不共享、不依赖执行顺序
-- ✅ 测试命名说人话：「条件 → 预期」，失败时不用读代码就知道错哪
+测试名称描述条件与结果，例如“连续记录中断后重新从一开始”，比“testModel”更能解释失败。用独立数据验证业务规则，再覆盖模型的成功、失败与重复触发状态。
+
+对时间、随机和外部存储提供可控依赖，让测试换序或单独运行仍然成立。不要只断言函数被调用过：错误返回后数据是否保持原状，同样属于行为。
 
 ## ❌ 避免陷阱
 
@@ -168,3 +173,9 @@ func loadFailureSetsFailedState() async {
 - 📄 [05-protocols-generics.md](../reference/language-concepts/05-protocols-generics.md) — 协议与泛型字典（Mock 的语法基础）
 - 📄 [03-habit-tracker.md](../projects/03-habit-tracker.md) — 被测业务逻辑出处
 - 📄 [02-troubleshooting.md](../reference/quick-references/02-troubleshooting.md) — 测试相关报错速查
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../LEARNING_GUIDE.md) · [完整目录与版本](../README.md) · [通用术语](../../shared-resources/glossary.md)

@@ -1,5 +1,7 @@
 # Compose 核心组件速查
 
+> **阅读准备**：Kotlin 函数与 lambda、@Composable、State 与事件回调。
+
 > Jetpack Compose（Material 3）高频组件与 Modifier 的一览式速查：Scaffold 骨架、常用组件参数、Modifier 链全表
 
 | 属性 | 内容 |
@@ -121,7 +123,7 @@ LazyColumn(
     state = rememberLazyListState()
 ) {
     item { Header() }                                    // 头部
-    items(data, key = { it.id }) { item -> Row(item) }   // ⭐ 必给 key
+    items(data, key = { it.id }) { item -> Row(item) }   // 动态增删或有行内状态时提供稳定 key
     item { Footer() }
 }
 
@@ -206,7 +208,7 @@ VerticalPager(state = pagerState) { page -> /* 纵向翻页 */ }
 scope.launch { pagerState.animateScrollToPage(2) }
 
 // 观察翻页状态
-val current = pagerState.currentPage        // 稳定停靠的页
+val current = pagerState.currentPage        // 当前最接近停靠位置的页，滚动中可变化
 val settled = pagerState.settledPage        // 动画完全落定的页
 val target  = pagerState.targetPage         // 正在滑向的页
 pagerState.isScrollInProgress               // 是否正在滚动
@@ -215,7 +217,7 @@ pagerState.isScrollInProgress               // 是否正在滚动
 ### 陷阱
 - 读 `currentPage` 做"到第 3 页才允许继续"的判断会因滑动中的中间值提前成立——用 `settledPage`（落定）或 `targetPage`（意向）
 - `pageCount` 是 `() -> Int`，直接传 `pages.size` 编译不过（旧版 API 已移除）
-- 翻页内容里放 `LaunchedEffect(page)` 可做每页首次曝光埋点，不要在页面 lambda 里直接发副作用
+- 翻页内容里的 LaunchedEffect(page) 表示进入组合，不能直接当作首次可见曝光，不要在页面 lambda 里直接发副作用
 
 ## 11. BackHandler - 拦截系统返回
 
@@ -261,3 +263,41 @@ BackHandler(enabled = showDialog) {     // 仅弹窗打开时接管返回
 - 📄 **[布局系统](../../basics/05-layouts.md)** - Column/Row/Box/LazyColumn 教程
 - 📄 **[Compose 状态 API 详解](../language-concepts/04-compose-state-api.md)** - 组件状态来源
 - 📖 **[Compose Material 3 API 参考](https://developer.android.com/reference/kotlin/androidx/compose/material3/package-summary)** - 全量组件文档
+
+
+<!-- full-library-explanation -->
+## 从输入到反馈的小页面
+
+以下组件放入已有 Material 3 Compose 工程，在 Activity 的 setContent 中调用；只展示组件数据流，不涉及数据库。
+
+```kotlin
+import androidx.compose.foundation.layout.Column
+import androidx.compose.material3.Button
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Text
+import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
+
+@Composable
+fun NameForm() {
+    var name by rememberSaveable { mutableStateOf("") }
+    var greeting by rememberSaveable { mutableStateOf("") }
+    Column {
+        OutlinedTextField(value = name, onValueChange = { name = it },
+            label = { Text("姓名") })
+        Button(enabled = name.isNotBlank(), onClick = { greeting = "你好，${name.trim()}" }) {
+            Text("确认")
+        }
+        Text(greeting)
+    }
+}
+```
+
+value 由状态控制，输入回调更新状态；按钮事件决定何时生成问候语。若直接在组合体中赋 greeting，重组次数就会混入业务行为。练习：输入空白、中文和长文本，再旋转设备。验收：空白不能提交，确认后文案正确，控件在大字体下仍可操作。
+
+Pager 可以预先组合邻页，LaunchedEffect(page) 因此不等于“用户首次看见该页”。曝光要观察当前/落定页并定义去重规则；埋点不应靠组件是否碰巧进入组合来猜。
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

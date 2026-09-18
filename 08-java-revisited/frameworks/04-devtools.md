@@ -1,10 +1,21 @@
 # 开发工具链 - Maven/Gradle、DevTools 与 Actuator
 
+## 先看框架承担哪部分职责
+
+**构建与观测**：Maven/Gradle 保证依赖和构建可重复，DevTools 帮开发反馈，Actuator 提供运行状态入口。可观测端点也需要访问边界。
+
+**最小练习与预期结果**：从新目录构建并启动应用，检查健康状态；配置缺失时应有明确错误，不能依赖 IDE 隐式参数。
+
+具体 API 与安装版本以[模块基线](../README.md)和本篇官方来源为准。先完成这条数据路径，再展开后面的高级配置；框架名称变化后，输入边界、状态归属和失败处理仍是需要理解的机制。
+
 > **文档简介**: 打磨 Java 日常开发体验：构建工具选型与常用命令、DevTools 热重载提速本地迭代、Actuator 生产端点速览
 >
 > **目标读者**: 刚回归 Java、想快速搭顺手的开发工作流的学习者
 >
 > **前置知识**: 已完成 [环境搭建](../basics/01-environment-setup.md) 与 [Spring Boot 入门](./01-spring-boot-basics.md)
+
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
 
 ## 📚 文档元数据
 
@@ -15,6 +26,8 @@
 | **难度** | ⭐ |
 | **标签** | `#Maven` `#Gradle` `#DevTools` `#Actuator` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ## 🎯 学习目标
 
@@ -170,15 +183,9 @@ public class PaymentChannelHealthIndicator extends AbstractHealthIndicator {
 
 ## 🎨 最佳实践
 
-### ✅ 推荐
-- 依赖版本全部交给 BOM 管理，禁止散落的硬编码版本
-- CI 统一用 `mvn verify` / `./gradlew build` 单命令完成全链路校验
-- Actuator 只暴露必要端点，并叠加 Spring Security 访问控制
+BOM 管理其覆盖范围内的兼容依赖，不在 BOM 中的库仍需明确版本和升级策略。统一检查命令要确认实际启用了单元、集成和静态检查，不能仅凭命令叫 verify 就假定所有检查已执行。
 
-### ❌ 陷阱
-- DevTools 依赖被打进生产镜像（忘了 `optional` / `developmentOnly`）
-- 生产 `show-details: always` 泄露内部拓扑
-- Actuator 端点未鉴权：`/env`、`/heapdump` 是常见泄露面
+管理端点只暴露运维需要的范围，控制访问并检查错误与详情是否泄漏内部数据。开发工具不应无意进入生产启动路径；最终检查构建产物和运行配置，而不只看依赖声明。
 
 ## 🚀 下一步
 
@@ -192,3 +199,9 @@ public class PaymentChannelHealthIndicator extends AbstractHealthIndicator {
 - 📖 [标准库与工具链](../reference/library-guides/01-standard-library.md) — 标准库与工具链索引
 - 📄 [环境搭建](../basics/01-environment-setup.md) — Maven/Gradle 安装与配置基础
 - 📄 [CI/CD 与可观测性](../deployment/03-ci-cd-observability.md) — Actuator 指标接入 Prometheus
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../LEARNING_GUIDE.md) · [完整目录与版本](../README.md) · [通用术语](../../shared-resources/glossary.md)

@@ -4,6 +4,9 @@
 
 TanStack Form v1 的三层 API：`useForm`（表单实例）、`form.Field` / `form.Subscribe`（订阅渲染）、校验器（同步/异步/Standard Schema）。教程见 [Form 基础](../../basics/06-form-fundamentals.md)。
 
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
+
 ## 📚 文档元数据
 
 | 属性 | 内容 |
@@ -13,6 +16,8 @@ TanStack Form v1 的三层 API：`useForm`（表单实例）、`form.Field` / `f
 | **难度** | ⭐⭐ |
 | **标签** | `#useForm` `#Field` `#validators` `#API字典` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ---
 
@@ -34,7 +39,6 @@ const form = useForm({
     onSubmit: z.object({ /* ... */ }),     // Standard Schema 直接可用
     onChangeDebounceMs: 300,               // 异步校验防抖
   },
-  transform: (base) => base,               // 嵌套/复用表单时的字段映射
 })
 ```
 
@@ -56,7 +60,7 @@ const form = useForm({
 | `values` | 全部字段值 |
 | `canSubmit` | 无阻塞错误且不在提交中 |
 | `isSubmitting` / `isSubmitted` | 提交状态 |
-| `isDirty` | 任一字段偏离初始值 |
+| `isDirty` | 字段曾被编辑的脏状态；与当前值是否等于默认值应分别判断 |
 | `errorMap` | 按校验时机分布的表单级错误 |
 | `fieldMeta` | 所有字段的 meta 汇总 |
 
@@ -110,7 +114,7 @@ const form = useForm({
 
 ### 陷阱
 
-- `meta.errors` 是数组：函数校验器的错误是 string，Standard Schema 的错误是含 `message` 的对象，渲染时统一 `map(String)` 或取 `message`
+- `meta.errors` 是数组：函数校验器的错误是 string，Standard Schema 的错误是含 `message` 的对象，渲染时按实际错误类型提取 message；直接 String(对象) 可能只显示 [object Object]
 - `onChange` 里写重量级异步校验会阻塞输入，应使用 `onChangeAsync` + `onChangeDebounceMs`
 
 ## 3. 校验器层级与时机
@@ -144,8 +148,8 @@ const form = useForm({
 
 ### 陷阱
 
-- 函数校验器返回 `undefined` 才表示通过，返回 `null` 不行
-- 表单级与字段级同名时机都会执行，结果合并进 `errors` 数组
+- 通常用 undefined 表示无错误；官方表单级示例也支持 null，不应笼统禁止
+- 同一字段同一时机的字段级错误可能覆盖表单级分配的错误；需要通过用例确认最终 errorMap
 
 ## 4. form.Subscribe
 
@@ -174,3 +178,22 @@ const form = useForm({
 - 📄 **[Form 基础](../../basics/06-form-fundamentals.md)** - 教程入口
 - 📄 **[TypeScript 模式](./05-typescript-patterns.md)** - 表单类型的推断
 - 📄 **[相关库：Zod](../library-guides/02-related-libs.md)** - Schema 生态搭配
+
+
+<!-- full-library-explanation -->
+## 表单实例与响应式订阅分别负责什么
+
+先修：受控输入、事件、异步函数。form 实例是操作入口；直接在 React 渲染中读 form.state，不会自动为所有字段建立响应式订阅。字段用 Field/useField，表单派生 UI 用 Subscribe 或 store 订阅。
+
+数字输入的空字符串不是数字 0 的同义词；Number('') 会得到 0，可能把“未填写”误作合法年龄。先定义空值业务语义，再决定字段存字符串、number 或 number|undefined，转换时检查 NaN 与范围。
+
+客户端校验帮助用户修正输入，服务端仍须重验。异步校验应考虑防抖与过期结果，但把函数标成 async 并不会使其中同步重计算不阻塞主线程。
+
+**练习：** 创建年龄与用户名两字段，验证空值、负数、正常值；提交时显示 isSubmitting，并在失败时保留用户输入。验收：按钮状态随订阅变化，服务端错误能够显示，异步初始数据不会覆盖用户已经编辑的字段。
+
+官方依据：[校验规则](https://tanstack.com/form/latest/docs/framework/react/guides/validation)与[响应式订阅](https://tanstack.com/form/latest/docs/framework/react/guides/reactivity)。
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

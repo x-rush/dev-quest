@@ -1,10 +1,21 @@
 # Laravel 生态集成：迁移、Seeder、缓存与 Sanctum 认证
 
+## 先看框架承担哪部分职责
+
+**Laravel 集成**：迁移定义结构变化，Seeder 提供测试数据，认证定义身份，缓存保存副本。这四种状态必须分别管理。
+
+**最小练习与预期结果**：在空测试库执行迁移与种子后调用受保护接口；用两名用户验证资源隔离，再测试缓存失效。
+
+具体 API 与安装版本以[模块基线](../README.md)和本篇官方来源为准。先完成这条数据路径，再展开后面的高级配置；框架名称变化后，输入边界、状态归属和失败处理仍是需要理解的机制。
+
 > **文档简介**: 打通 Laravel 数据层与安全层——用迁移与工厂管理数据库结构、用缓存加速读取、用 Sanctum 保护 API
 >
 > **目标读者**: 需要为 API 配备完整数据库与认证方案的开发者
 >
 > **前置知识**: [Laravel 进阶](./02-laravel-advanced.md)、[Composer 生态速查](../reference/library-guides/02-composer-ecosystem.md)
+
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
 
 ## 📚 文档元数据
 
@@ -15,6 +26,8 @@
 | **难度** | ⭐⭐ |
 | **标签** | `#Laravel` `#迁移` `#Seeder` `#缓存` `#Sanctum` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ## 🎯 学习目标
 
@@ -183,3 +196,9 @@ A: 检查是否用了无能力签发的旧 Token；`createToken` 未传能力数
 - 📄 [Composer 生态](../reference/library-guides/02-composer-ecosystem.md) — 安装 Sanctum 等包的依赖管理
 - 📄 [Feature 测试与数据库测试](../testing/03-feature-testing.md) — 工厂在测试中的标准用法
 - 📄 [电商 API 实战](../projects/03-ecommerce-api.md) — 迁移 + 认证 + 缓存的综合项目
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../LEARNING_GUIDE.md) · [完整目录与版本](../README.md) · [通用术语](../../shared-resources/glossary.md)

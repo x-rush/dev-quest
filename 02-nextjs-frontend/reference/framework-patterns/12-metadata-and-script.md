@@ -1,12 +1,12 @@
 # Metadata API 与 next/script
 
 > **模块**: `02-nextjs-frontend`
-> **类型**: 字典条目（无难度门槛）
+> **类型**: 字典条目（可独立查阅，按主题准备前置知识）
 > **分类**: `framework-patterns`
 
 ## 📌 定义
 
-两条"往 HTML 里注入东西"的官方通道：**Metadata API**（`export const metadata` 对象 / `generateMetadata` 函数）让 Next.js 在服务端渲染 `<title>`、`<meta>`、favicon、OG 标签，代替手写 `<head>`；**`next/script` 组件**用 `strategy` 三档加载策略（`beforeInteractive` / `afterInteractive` / `lazyOnload`）优化第三方脚本（统计、客服、Cookie 弹窗），避免第三方 JS 拖垮水合。两者都只在 App Router 的服务端语境下定义，行为随 Next.js 16.3 官方文档核实。
+两条"往 HTML 里注入东西"的官方通道：**Metadata API**（`export const metadata` 对象 / `generateMetadata` 函数）让 Next.js 在服务端渲染 `<title>`、`<meta>`、favicon、OG 标签，代替手写 `<head>`；**`next/script` 组件**用 `strategy` 三档加载策略（`beforeInteractive` / `afterInteractive` / `lazyOnload`）优化第三方脚本（统计、客服、Cookie 弹窗），避免第三方 JS 拖垮水合。Metadata 导出仅用于服务端组件；Script 可出现在客户端组件，事件回调需要客户端语境，行为随 Next.js 16.3 官方文档核实。
 
 ## 📖 语法/签名
 
@@ -104,6 +104,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 ```tsx
 // app/dashboard/page.tsx —— 统计脚本：默认 afterInteractive；低优先级用 lazyOnload
 'use client'
+import Script from 'next/script'
 export default function Dashboard() {
   return (
     <>
@@ -117,7 +118,7 @@ export default function Dashboard() {
 ## ⚠️ 常见陷阱
 
 - ❌ **以为 metadata 深合并**：多段之间是**浅合并**——子段写了自己的 `openGraph`，父段的 `openGraph.description`/`images` 整个被覆盖（官方文档明确 "Duplicate keys are replaced"）。✅ 子段需要继承时把父段字段重新展开：`openGraph: { ...parentOpenGraph, title: post.title }`。
-- ❌ **在客户端组件里 export metadata / 调 generateMetadata**：`metadata` 导出与 `generateMetadata` 仅 Server Component 支持（元数据必须在服务端渲染进初始 HTML）。✅ page.tsx 保持服务端，客户端逻辑拆成子组件再 `'use client'`。
+- ❌ **在客户端组件里 export metadata / 调 generateMetadata**：`metadata` 导出与 `generateMetadata` 仅 Server Component 支持（元数据由服务端生成，动态元数据可流式追加）。✅ page.tsx 保持服务端，客户端逻辑拆成子组件再 `'use client'`。
 - ❌ **OG 图片用相对路径却没设 `metadataBase`**：直接构建报错。✅ 根 layout 里设 `metadataBase: new URL('https://你的域名')`；另外启用 `'use cache'` 的 `generateMetadata` 返回值必须可序列化，`URL` 实例不支持，返回 `url.toString()` 字符串。
 - ❌ **把 `beforeInteractive` 脚本写在子页面**：该策略必须放在**根 layout**（`app/layout.tsx`），且每次文档加载只执行一次——客户端导航不会重跑。✅ 全站关键脚本（合规、检测类）进根 layout；页面级脚本用默认 `afterInteractive`。
 - ❌ **给 `beforeInteractive` 配 `onLoad`/`onError`**：官方明确不支持该组合。✅ 用 `onReady`（脚本加载完成且每次组件挂载后触发）。
@@ -126,11 +127,22 @@ export default function Dashboard() {
 
 ## 模式不变量
 
-- **元数据是服务端渲染产物**：进入 HTML 头部的信息必须在服务端生成并写入初始 HTML，因此只能由服务端组件定义（对照 `metadata` / `generateMetadata` 仅 Server Component 可用的约束）。
+- **元数据是服务端渲染产物**：进入 HTML 头部的信息由服务端生成，是否包含在初始 HTML 取决于渲染与爬虫处理策略，因此只能由服务端组件定义（对照 `metadata` / `generateMetadata` 仅 Server Component 可用的约束）。
 - **跨层级配置的合并是显式契约而非直觉继承**：配置从根到叶逐段求值、同名键整体替换，需要继承的字段必须显式展开，而不是假设深层结构自动合并（对照 `openGraph` 浅合并陷阱、`title.template` 只作用于子段）。
 - **第三方脚本的加载时机按其对用户的关键度分档**：外部代码的注入时机分为"先于交互 / 交互后 / 空闲时"三档，排布原则是用户优先于第三方（对照 `beforeInteractive` / `afterInteractive` / `lazyOnload` 三档策略）。
 - **文档级一次性资源与页面级资源作用域不同**：每文档生命周期只执行一次的脚本属于根布局作用域，随页面挂载的脚本属于页面作用域，客户端导航不重跑前者（对照 `beforeInteractive` 必须放根 layout 的陷阱）。
 - **依赖浏览器事件时机的逻辑必须位于水合后的客户端语境**：脚本的加载/就绪/失败回调只能在客户端组件中挂载（对照 `onLoad`/`onReady`/`onError` 仅客户端可用的陷阱）。
+
+<!-- full-library-explanation -->
+## 验证最终 HTML 与脚本行为，而不只看配置对象
+
+前置是服务端组件、HTML head 与客户端导航。同一个路由文件不能同时导出 metadata 和 generateMetadata，开头的两种写法应二选一。父子 openGraph 对象是浅合并，需要保留父级图片时显式读取并组合父级结果。
+
+元数据在服务器生成，但不一定全部阻塞首屏：支持流式元数据时可随后追加；对只能读取 HTML 的爬虫会采用不同策略。因此用浏览器 DOM、初始响应和目标爬虫的抓取结果分别检查，不能只看 View Source 就判断完全缺失。robots noindex 是给爬虫的指令，不是访问控制。
+
+**练习**：父布局设品牌标题、描述与图片，子页只覆写 openGraph.title，观察哪些父字段被覆盖，再显式合并修正。来回导航两次，验证统计脚本与事件订阅不会重复初始化；onReady 可在挂载时再次触发，第三方初始化需幂等并清理自建监听器。加载脚本的策略不等于用户同意策略，需按产品要求决定何时真正启用统计。
+
+依据：[Metadata](https://nextjs.org/docs/app/api-reference/functions/generate-metadata)、[Script](https://nextjs.org/docs/app/api-reference/components/script)。
 
 ## 🔗 相关条目
 
@@ -142,3 +154,9 @@ export default function Dashboard() {
 
 ---
 *最后更新: 2026年9月 | 本条目为模块知识字典的一部分，概念完整解释以此处为单一事实来源*
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

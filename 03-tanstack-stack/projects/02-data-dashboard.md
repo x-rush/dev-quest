@@ -1,10 +1,23 @@
 # 进阶项目：数据看板（Table + Query 分页/排序/筛选）
 
+## 分阶段练习与验收
+
+**最小阶段**：先把分页参数同时传给查询键和请求。
+
+**验收结果**：第 1、2 页不串数据，筛选后页码重置或按约定调整。
+
+**扩展顺序**：客户端全量排序与服务端分页排序选择其一并写明数据边界。
+
+建议保存一份正常输入、一份失败输入、实际输出和对应测试。先完成以上阶段再扩展正文中的完整设计；遇到省略实现或未定义依赖，应按文档上下文补齐，不能把代码片段拼接后当作已经验证的完整工程。
+
 > **文档简介**: 构建一个用户数据看板：服务端分页、排序、筛选的状态全部收敛到 URL，TanStack Table 渲染 + TanStack Query 取数，翻页不闪不抖。
 >
 > **目标读者**: 完成 Todo App、要挑战"URL 驱动数据表格"的中级开发者
 >
 > **前置知识**: [生态协作](../frameworks/03-ecosystem-integration.md)、[Router 基础](../basics/05-router-fundamentals.md)、[Table 基础](../basics/04-table-fundamentals.md)
+
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
 
 ## 📚 文档元数据
 
@@ -15,6 +28,8 @@
 | **难度** | ⭐⭐ |
 | **标签** | `#实战项目` `#tanstack-table` `#tanstack-query` `#服务端分页` `#搜索参数` |
 | **更新日期** | 2026年9月 |
+
+</details>
 
 ## 🎯 项目目标
 
@@ -222,3 +237,9 @@ export function UserTable() {
 - 📄 **[Router 核心 API](../reference/language-concepts/03-router-core-api.md)** - validateSearch 与导航
 - 📄 **[查询性能优化](../advanced-topics/performance/01-query-optimization.md)** - 占位数据的成本账
 - 📄 **[SaaS 后台](../projects/04-saas-admin-platform.md)** - 把看板扩成完整平台
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../LEARNING_GUIDE.md) · [完整目录与版本](../README.md) · [通用术语](../../shared-resources/glossary.md)

@@ -1,10 +1,23 @@
 # 高级项目：电商 API（购物车 + 订单 + 支付流程）
 
+## 分阶段练习与验收
+
+**最小阶段**：先做一个商品、一张购物车和一次创建订单。
+
+**验收结果**：服务端重算价格，库存不足不生成成功订单，重复提交策略明确。
+
+**扩展顺序**：支付回调和退款作为单独练习，用幂等与状态转换约束重复事件。
+
+建议保存一份正常输入、一份失败输入、实际输出和对应测试。先完成以上阶段再扩展正文中的完整设计；遇到省略实现或未定义依赖，应按文档上下文补齐，不能把代码片段拼接后当作已经验证的完整工程。
+
 > **文档简介**: 综合运用事务、状态机与队列，实现购物车→下单→支付的完整链路，重点是"钱不丢单不错"的一致性设计
 >
 > **目标读者**: 已完成博客平台、需要设计多步业务流程的开发者
 >
 > **前置知识**: [博客平台](./02-blog-platform.md)、[Laravel 进阶](../frameworks/02-laravel-advanced.md)、[PHP 高级特性](../basics/07-advanced-features.md)
+
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
 
 ## 📚 文档元数据
 
@@ -15,6 +28,8 @@
 | **难度** | ⭐⭐ |
 | **标签** | `#Laravel` `#电商` `#事务` `#状态机` `#支付` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ## 🎯 项目目标
 
@@ -220,3 +235,9 @@ final class ProcessPaymentCallback implements ShouldQueue
 - 📄 [Laravel 核心速查](../reference/framework-essentials/01-laravel-essentials.md) — Eloquent 与事务条目
 - 📄 [缓存策略与队列调优](../advanced-topics/performance/02-caching-queues.md) — 原子锁与队列重试细节
 - 📄 [生产级 Laravel 应用](./04-production-laravel-app.md) — 本项目上生产的改造清单
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../LEARNING_GUIDE.md) · [完整目录与版本](../README.md) · [通用术语](../../shared-resources/glossary.md)

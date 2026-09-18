@@ -1,10 +1,21 @@
 # 开发工具链 — uv、ruff、mypy 与 IPython
 
+## 先看框架承担哪部分职责
+
+**Python 工具**：uv 管环境与依赖，ruff 检查风格和部分错误，mypy 检查类型关系，pytest 检查指定行为。工具输出回答不同问题。
+
+**最小练习与预期结果**：同一环境执行导入、静态检查和测试；先验证 sys.executable，避免把错环境的通过当作项目通过。
+
+具体 API 与安装版本以[模块基线](../README.md)和本篇官方来源为准。先完成这条数据路径，再展开后面的高级配置；框架名称变化后，输入边界、状态归属和失败处理仍是需要理解的机制。
+
 > **文档简介**: 组装 Python 3.14 的现代工具链：uv 管依赖与脚本、ruff 一站式检查与格式化、mypy 静态类型检查、IPython/Jupyter 交互实验与调试
 >
 > **目标读者**: 已完成环境搭建、想让日常开发更顺滑的开发者
 >
 > **前置知识**: [环境搭建](../basics/01-environment-setup.md)
+
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
 
 ## 📚 文档元数据
 
@@ -15,6 +26,8 @@
 | **难度** | ⭐ |
 | **标签** | `#uv` `#ruff` `#mypy` `#IPython` `#工具链` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ## 🎯 学习目标
 
@@ -121,9 +134,9 @@ In [3]: %timeit [x**2 for x in range(1000)]    # 微基准（系统剖析见性�
 
 ## ✅ 最佳实践
 
-- 运行时依赖与开发依赖分离：pytest/ruff/mypy 一律进 `--dev` 组
-- ruff + mypy 进 pre-commit 与 CI（流水线配置见[CI/CD](../deployment/02-ci-cd-pipelines.md)）
-- 复杂问题排查套路：REPL 复现 → 最小代码 → 写成 pytest 回归（见[单元测试](../testing/01-unit-testing.md)）
+将发布运行需要的依赖与仅开发检查的工具区分，保证生产构建仍包含实际需要的模块。lint、类型检查与测试各验证不同问题，pre-commit 提供快速反馈，CI 负责检查受版本控制的结果。
+
+复杂错误先缩小到可重现输入，再将确认的行为写成回归测试。保留原失败条件，修复后验证它变绿，而不是只更新快照接受新输出。
 
 ## ❓ 常见问题
 
@@ -142,3 +155,9 @@ In [3]: %timeit [x**2 for x in range(1000)]    # 微基准（系统剖析见性�
 - 📖 **[故障排除](../reference/quick-references/02-troubleshooting.md)** — 环境与依赖问题速查
 - 🧪 **[单元测试](../testing/01-unit-testing.md)** — 工具链的下一个环节
 - 🚀 **[CI/CD 流水线](../deployment/02-ci-cd-pipelines.md)** — ruff/mypy/pytest 自动化
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../LEARNING_GUIDE.md) · [完整目录与版本](../README.md) · [通用术语](../../shared-resources/glossary.md)

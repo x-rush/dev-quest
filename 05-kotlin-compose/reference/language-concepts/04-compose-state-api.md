@@ -1,5 +1,7 @@
 # Compose 状态 API 详解
 
+> **阅读准备**：Kotlin 属性、lambda 与 Composable；先明确数据所有者，再选择保存与恢复机制。
+
 > State/remember/rememberSaveable/derivedStateOf/snapshotFlow 等 Compose 状态 API 的字典式速查：定义 → 语法 → 示例 → 陷阱
 
 | 属性 | 内容 |
@@ -49,7 +51,7 @@ val filtered = remember(tasks) { tasks.filter { it.done } }   // 带 key：tasks
 ## 3. rememberSaveable
 
 ### 定义
-`remember` 的持久化版本：值自动写入 `Bundle`，能扛住**配置变更（旋转）与进程被杀恢复**。
+参与系统实例状态保存与恢复的 remember 变体：值自动写入 `Bundle`，能扛住**配置变更（旋转）与进程被杀恢复**。
 
 ### 语法和示例
 ```kotlin
@@ -116,7 +118,7 @@ val uiState2 by viewModel.uiState.collectAsState()               // 不感知生
 ```
 
 ### 陷阱
-后台仍收集会浪费电量并可能覆盖新状态；两者差异只在 UI 不在屏幕时——测试中不可见。
+后台仍收集会浪费电量并可能覆盖新状态；生命周期版本依据 Lifecycle 状态启停收集；可用生命周期测试验证，停止收集不一定停止上游共享流。
 
 ## 7. 状态提升（State Hoisting）
 
@@ -129,7 +131,7 @@ val uiState2 by viewModel.uiState.collectAsState()               // 不感知生
 fun Counter(
     count: Int,
     onIncrement: () -> Unit,
-    modifier: Modifier = Modifier       // modifier 总是最后一个可选参数
+    modifier: Modifier = Modifier       // modifier 通常作为第一个可选参数；内容 lambda 等可放最后
 ) {
     Button(onClick = onIncrement, modifier = modifier) { Text("$count") }
 }
@@ -151,7 +153,7 @@ key(userId) {
 ```
 
 ### 陷阱
-与 LazyColumn `items(key = ...)` 是两回事：后者是列表项身份标识，前者是状态作用域重置。
+key() 与 LazyColumn 的 key 都与组合身份有关；列表 key 帮助重排时让状态跟随记录，改变身份也会影响内部状态。
 
 ## 9. CompositionLocal
 
@@ -209,3 +211,18 @@ Button(onClick = { scope.launch { listState.animateScrollToItem(0) } }) { Text("
 - 📄 **[泛型与委托属性](./05-generics-delegates.md)** - `by` 委托让 state.value 读写更简洁
 - 📄 **[Composable 与状态](../../basics/04-composables-state.md)** - 状态与重组的入门教程
 - 📖 **[Compose 状态官方文档](https://developer.android.com/develop/ui/compose/state)** - 权威参考
+
+
+<!-- full-library-explanation -->
+## 选择状态容器先问要活多久
+
+remember 保留的是组合位置仍存在时的值；rememberSaveable 参与系统状态保存/恢复，不是数据库；ViewModel 通常跨配置变更保留内存状态，也不自动跨进程存活。重要草稿要结合 SavedStateHandle 或持久化方案，明确用户主动关闭页面、系统回收和重新安装的不同结果。
+
+练习：给同一输入框分别使用 remember、rememberSaveable、ViewModel，测试重组、旋转、离开页面再进入、系统恢复。验收：表中记录实际行为和导航作用域，不能把“旋转不丢”写成“永久保存”。Bundle 的预算由多处共享，不应把约 1MB 当作每个页面可独占的容量。
+
+状态更新并不一定导致重组：相等策略可合并等价值，且在布局/绘制阶段读取的状态可能只重启相应阶段。普通 MutableList 原地改动也不会自动被 Compose 观察，应使用可观察集合或不可变替换。
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

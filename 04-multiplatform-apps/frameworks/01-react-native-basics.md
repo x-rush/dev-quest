@@ -1,10 +1,21 @@
 # React Native 框架入门 — 组件、样式与 Flexbox
 
+## 先看框架承担哪部分职责
+
+**原生组件与布局**：React Native 使用平台控件与自己的布局规则。共享 React 写法，不代表 DOM、CSS 和浏览器 API 都能直接搬过来。
+
+**最小练习与预期结果**：在目标设备测试长文本、窄屏和输入键盘；内容不遮挡操作，文本处于 Text 组件内。
+
+具体 API 与安装版本以[模块基线](../README.md)和本篇官方来源为准。先完成这条数据路径，再展开后面的高级配置；框架名称变化后，输入边界、状态归属和失败处理仍是需要理解的机制。
+
 > **文档简介**: 以任务为导向掌握 React Native 的组件模型、StyleSheet 样式体系与移动端 Flexbox 布局，写出结构清晰、三端一致的界面代码
 >
 > **目标读者**: 已完成模块入门路径、准备系统梳理 RN 界面开发知识的开发者
 >
 > **前置知识**: 已完成 [核心组件与 Flexbox 初识](../basics/03-components-jsx.md)，有 React 函数组件基础
+
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
 
 ## 📚 文档元数据
 
@@ -15,6 +26,8 @@
 | **难度** | ⭐ |
 | **标签** | `#ReactNative` `#StyleSheet` `#Flexbox` `#组件` |
 | **更新日期** | 2026年9月 |
+
+</details>
 
 ## 🎯 学习目标
 
@@ -155,11 +168,9 @@ function useTheme() {
 
 ## ✅ 最佳实践
 
-- ✅ **样式全部走 `StyleSheet.create`**，模块级声明，禁止在 render 中创建样式对象
-- ✅ **尺寸用数字不用字符串**，RN 不支持 `em`/`rem`（`width: '50%'` 字符串除外）
-- ✅ **触控目标最小 44×44pt**（iOS HIG）或 48×48dp（Android Material）
-- ❌ **避免嵌套同向 `ScrollView` + `FlatList`**，会破坏虚拟化；长列表头部用 `ListHeaderComponent`
-- ❌ **不要用 `absolute` 满屏铺**，优先 Flexbox 流式布局，绝对定位留给浮层
+布局优先表达相对关系：容器如何伸缩、内容如何换行、长列表如何滚动。固定浮层可以使用绝对定位，但把整页位置写死会在字体缩放和不同屏幕上暴露问题。用小屏和大字体检查按钮仍可触及、文字没有遮挡。
+
+样式既可集中定义，也可按状态动态生成；不要把内联对象本身当错误。长列表避免再包同向普通滚动容器，用列表的页头/页尾表达混排内容，并在真机检查滚动与点击。
 
 ## ❓ 常见问题
 
@@ -182,3 +193,9 @@ A: 用 `react-native-safe-area-context` 的 `SafeAreaView` 包裹根布局，不
 - 📄 [核心组件、JSX 与 Flexbox 布局](../basics/03-components-jsx.md) — 本文的入门版教程
 - 📄 [状态管理 — Hooks 与自定义 Hook](../basics/04-state-hooks.md) — 让界面动起来的下一步
 - 🚀 [待办应用实战](../projects/01-todo-app.md) — 用本文知识交付第一个完整项目
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../LEARNING_GUIDE.md) · [完整目录与版本](../README.md) · [通用术语](../../shared-resources/glossary.md)

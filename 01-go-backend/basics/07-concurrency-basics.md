@@ -1,5 +1,18 @@
 # 并发编程基础：goroutine、channel 与 sync
 
+## 先理解，再动手
+
+go f() 安排并发工作，不保证它在 main 返回前完成。等待完成和保护共享数据是两种不同职责，WaitGroup 不能代替 Mutex。
+
+**本节自测**：启动两个任务，各发送一个整数到 channel，由 main 接收两次求和。
+
+<details>
+<summary>预期结果与参考思路（先尝试再展开）</summary>
+
+求和确定，打印先后未必确定；若不接收、不等待就返回，不能保证任务完成。
+
+</details>
+
 > **文档简介**: 掌握Go最著名的并发模型——用 goroutine 启动并发任务、用 channel 在任务间通信、用 sync 包协调同步，并避开最常见的并发陷阱
 
 > **目标读者**: 已掌握函数与控制结构、想理解Go并发精髓的学习者
@@ -7,6 +20,9 @@
 > **前置知识**: 已完成 [函数和方法](05-functions-methods.md)（理解闭包）与 [控制结构](06-control-structures.md)
 
 > **预计时长**: 3-4小时学习 + 练习
+
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
 
 ## 📚 文档元数据
 
@@ -19,6 +35,8 @@
 | **更新日期** | `2026年9月` |
 | **作者** | Dev Quest Team |
 | **状态** | ✅ 已完成 |
+
+</details>
 
 ## 🎯 学习目标
 
@@ -304,3 +322,9 @@ fmt.Println(count.Load())
 > - 并发代码必须用 `-race` 验证，养成习惯
 > - 先想清楚数据的所有权归谁（谁来发、谁来收、谁来 close），再写 channel 代码
 > - 不确定时选 Mutex——它比错误的 channel 用法容易排查得多
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../LEARNING_GUIDE.md) · [完整目录与版本](../README.md) · [通用术语](../../shared-resources/glossary.md)

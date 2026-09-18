@@ -6,6 +6,9 @@
 >
 > **前置知识**: [生态集成](../../frameworks/03-ecosystem-integration.md)、[图书管理系统的认证](../../projects/02-library-management.md)、[异常处理](../../basics/06-exceptions.md)
 
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
+
 ## 📚 文档元数据
 
 | 属性 | 内容 |
@@ -15,6 +18,8 @@
 | **难度** | ⭐⭐⭐ |
 | **标签** | `#SpringSecurity` `#OAuth2` `#JWT` `#纵深防御` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ## 🎯 学习目标
 
@@ -135,15 +140,9 @@ spring:
 
 ## 🎨 最佳实践
 
-### ✅ 推荐
-- 默认全拒绝（`anyRequest().authenticated()`），白名单放行
-- 安全规则集中一个 `SecurityConfig`，代码评审时一眼可查
-- 认证失败与"不存在"返回相同响应（401 vs 404 泄露资源存在性）
+安全规则要分别表达公开访问、必须登录与资源授权。anyRequest().authenticated() 要求身份认证，并不等于“默认拒绝全部”；真正禁止请求与允许已登录者是不同策略。对路由与方法建立测试矩阵，确认公开例外没有覆盖敏感接口。
 
-### ❌ 陷阱
-- `permitAll()` 越积越多：每次"临时放开"都变成永久后门
-- 把用户 ID 存 JWT 明文字段当权限依据：token 签发后角色变更不生效，权限要实时查
-- 依赖 `SecurityContextHolder` 全局可变性：无状态模式下按请求读取即可
+有效令牌可证明已签发身份，但角色变化、撤销与资源归属还需按业务时效校验。401、403、404 的选择按认证协议与资源隐藏策略统一设计，不把所有失败强行返回同一种状态。跨用户访问测试比只检查安全注解存在更有价值。
 
 ## 🔗 相关文档
 
@@ -153,3 +152,9 @@ spring:
 - 📄 [生态集成](../../frameworks/03-ecosystem-integration.md) — Security 7 基础配置
 - 📄 [图书管理系统项目](../../projects/02-library-management.md) — 认证落地实战
 - 📄 [生产级 Spring Boot 应用](../../projects/04-production-spring-app.md) — 密钥管理与配置收敛
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

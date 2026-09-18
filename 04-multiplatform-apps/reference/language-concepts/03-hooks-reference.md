@@ -2,6 +2,9 @@
 
 > **难度**: ⭐ | **前置**: 理解 Hook 基本用法（[04-state-hooks](../../basics/04-state-hooks.md)）
 
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
+
 ## 📚 文档元数据
 
 | 属性 | 内容 |
@@ -11,6 +14,8 @@
 | **难度** | ⭐ |
 | **标签** | `#Hooks` `#useEffect` `#useMemo` `#useNavigation` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ## React 官方 Hooks（RN 全部可用）
 
@@ -67,7 +72,7 @@ const onSubmit = useCallback((v: string) => add(v), [add]);
 
 ### 陷阱
 - 只对"昂贵计算"或"作为 props 传给 memo 组件"的值使用；到处包裹反而增加开销
-- Context 的 value 必须 useMemo，否则级联重渲染
+- Context 的对象 value 身份变化会通知消费者；有性能证据时稳定其引用，常量对象或基础值不一定需要 useMemo
 
 ### useRef
 
@@ -126,7 +131,7 @@ const theme = useMemo(() => (dark ? darkColors : lightColors), [dark]); // 主�
 
 ### 陷阱
 - 启动早期/部分 Android 设备首帧返回 `null`，按 `'light'` 兜底，勿对返回值直接做字符串操作
-- 主题对象不 `useMemo` 会让每个消费者级联重渲染
+- 新建对象作为 Context value 可能触发消费者更新；直接选择已有的 darkColors/lightColors 常量时，不必为了此目的再缓存
 - "深色模式部分页面不生效"先查硬编码色值，再查该页是否真的消费了 Hook
 
 ### useWindowDimensions 详解
@@ -140,7 +145,7 @@ import { useWindowDimensions } from 'react-native';
 
 const { width, fontScale } = useWindowDimensions();
 const cols = width > 600 ? 3 : 1;        // 断点随旋转/分屏自动重算
-const fontSize = 16 * fontScale;          // 跟随系统字体缩放
+const fontSize = 16; // Text 默认允许系统字号缩放，不要再乘 fontScale 导致重复缩放
 ```
 
 ### 陷阱
@@ -176,8 +181,32 @@ useFocusEffect(
 
 - ✅ Hook 只在组件/自定义 Hook 顶层调用（不在循环/条件/嵌套函数内）
 - ✅ 每个 useEffect 都审视过清理函数
-- ✅ 列表 renderItem 中的回调已 useCallback + 子组件 memo
+- ✅ 先测量列表更新成本，再决定是否稳定回调与缓存行组件
 - ✅ 深层组件用 `useNavigation` 替代 props 透传
+
+<!-- full-library-explanation -->
+## 从订阅到清理：一个完整 Hook
+
+前面的短片段都放在组件或自定义 Hook 内。下面的 Hook 可放在 `useAppStatus.ts`，由页面调用；需要已安装 React Native 的工程。
+
+```tsx
+import { useEffect, useState } from 'react';
+import { AppState } from 'react-native';
+
+export function useAppStatus() {
+  const [status, setStatus] = useState(AppState.currentState);
+  useEffect(() => {
+    const subscription = AppState.addEventListener('change', setStatus);
+    setStatus(AppState.currentState);
+    return () => subscription.remove();
+  }, []);
+  return status;
+}
+```
+
+状态让页面响应更新；Effect 建立订阅；清理函数负责移除该次订阅。依赖数组为空表示这次订阅不依赖组件内变化的值，不是“所有外部值永远不会变”。开发模式可能重复执行设置/清理，用来暴露副作用不对称的问题。
+
+练习：显示该 Hook 的值，前后台切换后检查变化，再反复进入、离开页面。验收：监听器不随进入次数累积；不用 ref 保存本应显示的状态。若列表计算昂贵，再用分析工具决定是否 memo，不能把“全部加缓存”当作 Hook 使用规则。
 
 ## 🔗 相关文档
 
@@ -187,3 +216,9 @@ useFocusEffect(
 - 📄 **[状态与 Hooks 教程](../../basics/04-state-hooks.md)**: 系统学习路径
 
 *相关教程: [导航中的 Hook 实战](../../basics/05-navigation.md)*
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

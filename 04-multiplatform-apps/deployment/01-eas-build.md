@@ -6,6 +6,9 @@
 >
 > **前置知识**: 已完成 [环境搭建](../basics/01-environment-setup.md)；已了解 Expo 生态（见 [生态集成](../frameworks/03-ecosystem-integration.md)）
 
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
+
 ## 📚 文档元数据
 
 | 属性 | 内容 |
@@ -15,6 +18,8 @@
 | **难度** | ⭐⭐ |
 | **标签** | `#EAS` `#构建` `#签名` `#环境变量` |
 | **更新日期** | 2026年9月 |
+
+</details>
 
 ## 🎯 学习目标
 
@@ -105,11 +110,9 @@ export const API_URL = process.env.EXPO_PUBLIC_API_URL ?? 'http://localhost:3000
 
 ## ✅ 最佳实践
 
-- ✅ **三 profile 铁律**：development 连 Metro、preview 装真机、production 走商店，禁止混用
-- ✅ **`appVersionSource: "remote"`**，让 EAS 管版本号，配合 `autoIncrement` 杜绝手改遗漏
-- ✅ **把 `eas build` 接进 CI**，构建产物链接自动回帖到 PR
-- ❌ **不要把 keystore 提交进 git**，用 EAS 托管或本地安全存储
-- ❌ **不要在 preview profile 里放生产密钥**，内测包也会落到测试者设备
+构建 profile 用来表达不同用途：开发调试、内部验证和商店发布可能采用不同签名、环境与调试能力。先记录每个 profile 生成什么产物、连哪个后端，再由 CI 明确选择，避免测试人员误装生产配置。
+
+版本号可由构建服务或仓库流程管理，关键是唯一、可追溯并满足平台规则。签名材料限制访问并准备恢复方案；任何进入客户端的密钥都应按可能被提取处理，不能因产物只发内测就视为秘密。
 
 ## ❓ 常见问题
 
@@ -132,3 +135,16 @@ A: `eas.json` 顶层加 `monorepo: true`，并在 package.json 指定 `projectRo
 - 🚀 [商店上架](./02-app-store-release.md) — 构建产物的下一步去向
 - 🚀 [OTA 更新与可观测性](./03-ota-updates-observability.md) — 与构建互补的热更新通道
 - 🚀 [生产级移动应用](../projects/04-production-mobile-app.md) — 构建纳入发布闭环的完整视图
+
+
+<!-- acceptance-exercise -->
+## 练习与验收：以安装包而不是构建日志验收
+
+在测试 profile 构建一次，记录源码提交、profile、应用标识与 runtimeVersion，然后在目标设备安装并打开一条需要原生能力的流程。预期包能启动、原生模块可调用、网络配置指向测试环境。验收再加入一次冷启动和无网启动；EAS 构建成功只证明生成产物，不证明权限、推送、深链或登录正常。首次使用的功能所需证书和设备能力按对应平台配置。
+
+以上是在个人或隔离测试环境中的练习，不是本轮已执行记录；实际运行范围见仓库文档质量报告。
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../LEARNING_GUIDE.md) · [完整目录与版本](../README.md) · [通用术语](../../shared-resources/glossary.md)

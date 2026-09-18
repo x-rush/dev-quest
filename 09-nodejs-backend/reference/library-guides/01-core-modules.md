@@ -1,10 +1,33 @@
 # 内置模块导航表
 
+## 先区分语言、运行时与依赖
+
+前置：[ESM](../../basics/03-modules-esm.md)。Array、Promise 来自 JavaScript；node:fs 来自 Node 运行时；Hono 是项目安装的包。AbortController 与 fetch 是 Node 提供的全局 Web API，不能据此拼出一个同名 node: 模块。
+
+完整示例：保存为 `core-lab.mjs`，运行 `node core-lab.mjs`。通过 URL 指向脚本旁的文件，避免工作目录改变后读取了另一个文件。
+
+```js
+import { readFile } from 'node:fs/promises'
+import { basename } from 'node:path'
+import { fileURLToPath } from 'node:url'
+
+const file = fileURLToPath(import.meta.url)
+const text = await readFile(file, 'utf8')
+console.log(basename(file))
+console.log(text.includes("node:fs/promises"))
+console.log(typeof AbortController)
+```
+
+预期为 core-lab.mjs、true、function。三个模块各负责读取、路径和 URL 转换；无需安装名为 fs 的 npm 包。练习把路径改成一个不存在文件并用 try/catch 输出错误 code，预期为 ENOENT，而不是把失败当成空文本。
+
 > **文档简介**: Node.js 全部常用内置模块的分类导航，标注使用频率与一句话用途，快速定位该用哪个模块
 
 > **目标读者**: 需要判断"这个功能是不是内置、该 import 什么"的开发者
 
 > **前置知识**: [模块系统](../../basics/03-modules-esm.md)（`node:` 前缀导入）
+
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
 
 ## 📚 文档元数据
 
@@ -15,6 +38,8 @@
 | **难度** | ⭐ |
 | **标签** | `#内置模块` `#标准库` `#导航` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ## 🔥 高频模块（几乎每个项目都会用到）
 
@@ -28,10 +53,10 @@
 | `node:os` | 操作系统信息 | `availableParallelism` `totalmem` | 同上 |
 | `node:events` | 事件基座 | `EventEmitter` `once` | 同上 |
 | `node:stream` | 流处理 | `pipeline` `Transform` | [Stream API 速查](../language-concepts/04-streams-api.md) |
-| `node:util` | 工具函数 | `inspect` `parseArgs` `styleText` | — |
-| `node:crypto` | 加密与哈希 | `randomUUID` `createHash` `randomBytes` | — |
-| `node:child_process` | 子进程 | `execFile` `spawn` `fork` | — |
-| `node:zlib` | 压缩 | `createGzip` `brotliCompress` | — |
+| `node:util` | 工具函数 | `inspect` `parseArgs` `styleText` | [util 详解](./06-util.md) |
+| `node:crypto` | 加密与哈希 | `randomUUID` `createHash` `randomBytes` | [crypto 详解](./03-crypto.md) |
+| `node:child_process` | 子进程 | `execFile` `spawn` `fork` | [子进程详解](./04-child-process.md) |
+| `node:zlib` | 压缩 | `createGzip` `brotliCompress` | [压缩详解](./09-zlib.md) |
 
 ## ⚙️ 服务端常用（按需引入）
 
@@ -55,7 +80,7 @@
 | `node:async_hooks` | 异步上下文追踪 | `AsyncLocalStorage` 是 tracing 基石 |
 | `node:timers`（全局） | 定时器 | `setTimeout` `setImmediate` |
 | `node:timers/promises` | Promise 定时 | 可取消的 `setTimeout` |
-| `node:abort_controller`（全局） | 取消协议 | `AbortController` / `AbortSignal` |
+| 全局 `AbortController` / `AbortSignal` | 取消协议 | 直接使用；不存在可导入的 `node:abort_controller` 模块 |
 
 ## 🗄️ 数据与序列化
 
@@ -95,7 +120,7 @@ Node 24 已内置大量 Web 标准 API，直接使用：
 ```ts
 fetch(url, { signal });           // 出站 HTTP（undici 实现）
 new URL(input); new URLPattern(p);
-new Request(); new Response();    // Fetch 类型（服务器也可用）
+new Request("https://example.com"); new Response("ok"); // Request 必须提供输入
 new Headers();
 FormData / Blob / File;
 structuredClone(value);
@@ -119,3 +144,11 @@ TextEncoder / TextDecoder;
 - 📄 **[Node 核心模块 API 速查](../language-concepts/03-node-core-api.md)** — 高频模块的 API 细节
 - 📄 **[生态库精选](./02-ecosystem-libs.md)** — 内置模块不够用时的三方选择
 - 📄 **[Node 一行式速查](../quick-references/01-node-cheatsheet.md)** — CLI 命令与调试入口
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)
+
+本轮语义核对来源：[Node 全局 AbortController](https://nodejs.org/api/globals.html#class-abortcontroller)（2026-09-18；不等同于本地完整工程运行验证）。

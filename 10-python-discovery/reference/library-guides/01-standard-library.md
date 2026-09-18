@@ -1,8 +1,27 @@
 # 标准库导航 — collections / itertools / pathlib / json / logging 等
 
+## 标准库不是内置名称：先导入，再确认契约
+
+前置：模块导入、with、异常。len/list/open 等直接可用；pathlib/json/collections/datetime 等属于标准库模块，通常先 import。requests、FastAPI、pandas 等需要安装的第三方包另列，不要把“常见”当成“解释器自带”。
+
+| 任务 | 优先查的模块 | 需要同时理解 |
+|---|---|---|
+| 构造文件路径 | pathlib | 相对路径依赖当前工作目录；路径存在不代表有读取权限 |
+| 读写 JSON | json | 编解码成功不代表满足业务结构；时间对象不自动成为标准 JSON |
+| 计数与分组 | collections | Counter/defaultdict 的缺失键行为不同于普通读取 |
+| 惰性组合迭代 | itertools | 输入是否可重复消费，是否可能产生无限结果 |
+| 保存日期和时间 | datetime / zoneinfo | 无时区本地时间与确定时刻不能随意比较或换算 |
+| 外部进程 | subprocess | 参数列表、退出码、超时和标准输出分别处理 |
+| 命令行参数 | argparse | 类型转换、必选参数、帮助和退出行为 |
+
+自测：先解码合法 JSON `{}`，再读其中的必填 title。为什么 JSON 解析成功仍不能当成有效笔记？因为语法与业务结构属于两层校验。再用 pathlib 指向不存在文件，读取失败应保留路径和原因，不能自动当成空列表覆盖原有数据。
+
 ## 概述
 
 Python "自带电池"：大量日常需求无需第三方包。本条目按场景导航最值得掌握的标准库模块，每个给出最小可用示例。
+
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
 
 ## 📚 文档元数据
 
@@ -13,6 +32,8 @@ Python "自带电池"：大量日常需求无需第三方包。本条目按场�
 | **难度** | ⭐⭐ |
 | **标签** | `#标准库` `#collections` `#itertools` `#pathlib` `#json` `#logging` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ---
 
@@ -193,3 +214,9 @@ def fetch_user(uid: int) -> dict: ...
 - 📄 **[生态库精选](./02-ecosystem-libs.md)** — 标准库之外的能力补充
 - 📄 **[内置函数全表](../language-concepts/02-built-in-functions.md)** — 免导入的内建能力
 - 📄 **[数据结构速查](../language-concepts/03-data-structures.md)** — collections 的原生基础
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

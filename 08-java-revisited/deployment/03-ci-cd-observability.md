@@ -6,6 +6,9 @@
 >
 > **前置知识**: 已完成 [K8s 部署](./02-kubernetes-deployment.md)；Actuator 端点见 [开发工具链](../frameworks/04-devtools.md)
 
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
+
 ## 📚 文档元数据
 
 | 属性 | 内容 |
@@ -15,6 +18,8 @@
 | **难度** | ⭐⭐⭐ |
 | **标签** | `#GitHubActions` `#Prometheus` `#Grafana` `#可观测性` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ## 🎯 学习目标
 
@@ -167,15 +172,9 @@ Micrometer Tracing + OTLP 导出到 Jaeger/Tempo，traceId 自动进 MDC 日志�
 
 ## 🎨 最佳实践
 
-### ✅ 推荐
-- 流水线每个 job 单一职责：test / image / deploy 各自可重跑
-- 指标带上 `application` 全局标签，看板一套模板多服务复用
-- 核心接口必有 P99 延迟与错误率双指标
+流水线应能区分测试、构建和发布各阶段，并把最终产物绑定到通过检查的提交。发布后确认就绪与核心业务成功，rollout 完成只能证明部署层达到期望状态，不能替代业务冒烟。
 
-### ❌ 陷阱
-- 告警只发不治：阈值一刀切导致狼来了效应
-- 部署后无验证：加一步 `kubectl rollout status` + 健康检查冒烟
-- 密钥写在 workflow YAML：一律走 `secrets.*`
+监控同时记录流量、失败与延迟分布，标签帮助按服务和版本聚合，避免把用户 id 等无限增长值作为普通指标标签。告警写明影响、持续条件和处理动作；凭据只提供给可信且需要它的步骤。
 
 ## 🔗 相关文档
 
@@ -186,3 +185,16 @@ Micrometer Tracing + OTLP 导出到 Jaeger/Tempo，traceId 自动进 MDC 日志�
 - 📄 [Docker 部署](./01-docker-deployment.md) — 流水线的构建输入
 - 📄 [K8s 部署](./02-kubernetes-deployment.md) — 部署目标环境
 - 📄 [生产级 Spring Boot 应用](../projects/04-production-spring-app.md) — 三支柱应用侧配置
+
+
+<!-- acceptance-exercise -->
+## 练习与验收：证明门禁会失败，诊断能对版本
+
+在测试分支引入一个可复现业务缺陷，预期 Maven/Gradle 测试失败并阻止发布。修复后向测试环境发布，发起带请求标识的调用，确认日志与 trace 能关联到同一构建。验收记录失败 job、修复提交、产物摘要和一条完整请求链；不要将所有用户 ID 作为指标标签来获得关联，避免高基数时序。
+
+以上是在个人或隔离测试环境中的练习，不是本轮已执行记录；实际运行范围见仓库文档质量报告。
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../LEARNING_GUIDE.md) · [完整目录与版本](../README.md) · [通用术语](../../shared-resources/glossary.md)

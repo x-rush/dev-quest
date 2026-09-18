@@ -1,10 +1,26 @@
 # 函数与类 — 函数、dataclass 与魔术方法入门
 
+## 先理解，再动手
+
+函数默认值在定义时求值；可变默认参数会被后续调用复用。dataclass 帮你生成方法，不改变这个基本对象语义。
+
+**本节自测**：写一个追加任务的函数，先用列表默认值，再改用 None 并在函数内创建列表。
+
+<details>
+<summary>预期结果与参考思路（先尝试再展开）</summary>
+
+第二种写法每次缺省调用得到独立容器；需要共享状态时应明确设计，而不是偶然共享。
+
+</details>
+
 > **文档简介**: 系统掌握 Python 函数的参数设计、类的定义与 dataclass 数据建模，并认识魔术方法驱动的对象协议
 >
 > **目标读者**: 已理解变量与类型的开发者，准备进入 Python 的核心抽象层
 >
 > **前置知识**: 完成[变量与类型](./03-variables-types.md)，理解类型注解基本写法
+
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
 
 ## 📚 文档元数据
 
@@ -15,6 +31,8 @@
 | **难度** | ⭐ |
 | **标签** | `#函数` `#类` `#dataclass` `#魔术方法` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ## 🎯 学习目标
 
@@ -187,11 +205,9 @@ class Vector:
 
 ## ✅ 最佳实践
 
-- ✅ **数据类一律 dataclass**，手写 `__init__` 仅在行为复杂时
-- ✅ **可变默认值用 `field(default_factory=list)`** 或 `None` 哨兵
-- ✅ **总实现 `__repr__`**（dataclass 自动生成），调试效率翻倍
-- ❌ **避免**：写 Java 式 getter/setter——Python 用 `@property` 或直接暴露属性
-- 💡 **技巧**：`dataclasses.asdict(bm)` 一键转字典，配合 json 序列化
+dataclass 减少数据载体的初始化和比较样板，复杂不变量或不同身份语义可能需要普通类。函数的可变默认参数在定义时创建，dataclass 的可变字段通常用 default_factory 为每个实例生成独立对象。
+
+repr 帮助调试，但不要把秘密字段直接展示；asdict 的递归转换也不保证任意成员都能被 JSON 序列化。创建两个实例只修改其中一个的列表，验证没有共享默认状态。
 
 ---
 
@@ -221,3 +237,9 @@ class Vector:
 - 📄 **[控制流与推导式](./05-control-flow.md)** — 让自定义类型融入 for 循环世界
 - 📄 **[魔术方法与协议](../reference/language-concepts/04-oop-protocols.md)** — 迭代器/上下文/描述符全协议
 - 📄 **[内置函数全表](../reference/language-concepts/02-built-in-functions.md)** — `isinstance`、`len` 等如何触发协议
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../LEARNING_GUIDE.md) · [完整目录与版本](../README.md) · [通用术语](../../shared-resources/glossary.md)

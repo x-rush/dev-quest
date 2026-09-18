@@ -1,5 +1,7 @@
 # KSP 代码生成配置指南
 
+> **阅读准备**：Gradle Kotlin DSL、插件与依赖配置，理解编译期生成代码和运行时反射的区别。
+
 > KSP（Kotlin Symbol Processing）的字典式速查：与 kapt 的关系、版本与插件声明、ksp(...) 依赖写法、Room/Hilt 等库的接入、常见配置错误
 
 | 属性 | 内容 |
@@ -23,7 +25,7 @@
 | Kotlin 2.x 支持 | 一等公民 | 仍可用但不再演进 |
 | 版本号 | **独立版本号**（如 2.3.x），与 Kotlin 版本解耦 | 随 Kotlin 版本走 |
 
-结论：**新项目一律 KSP；旧项目从 kapt 迁移时把 kapt 依赖删干净**，不能双处理器并存。
+结论：**处理器支持时优先评估 KSP**；迁移同一处理器后移除其 kapt 配置。不同处理器可逐步迁移，但需检查跨生成类型的可见性限制。
 
 ## 2. 版本与插件声明（libs.versions.toml）
 
@@ -31,7 +33,7 @@
 # gradle/libs.versions.toml（版本以官方最新稳定版为准，基线见模块 README）
 [versions]
 kotlin = "2.4.20"
-ksp = "2.3.11"            # ⭐ KSP 独立版本号，升级 Kotlin 后无需强改
+ksp = "2.3.11"            # ⭐ KSP 独立版本号，独立编号不等于任意 Kotlin 版本都兼容，升级时仍需核对
 
 [plugins]
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
@@ -59,11 +61,12 @@ dependencies {
     implementation(libs.androidx.room.ktx)
     ksp(libs.androidx.room.compiler)                 // ⭐ 处理器专用配置
 
-    // 需要传参时用 ksp 扩展块
-    ksp {
-        // arg("room.schemaLocation", "$projectDir/schemas")
-        // Room 更推荐官方 Gradle 插件的 DSL（见下）
-    }
+ }
+
+// ksp 扩展块放在 dependencies 之外
+ksp {
+    // arg("room.schemaLocation", "$projectDir/schemas")
+    // 使用 Room Gradle 插件时改由 room.schemaDirectory 管理
 }
 
 // Room 推荐写法：androidx.room 官方插件管理 schema 导出
@@ -105,7 +108,7 @@ ksp(libs.androidx.room.compiler)              // ✅ 注册为 KSP 处理器
 依赖写了 `ksp(...)` 但模块 plugins 没有 `alias(libs.plugins.ksp)` → Gradle 报"无法解析 ksp 配置"。
 
 ### 5.4 kapt 残留与 ksp 并存
-从 kapt 迁移后同时保留 `kapt(room-compiler)` 与 `ksp(room-compiler)` → 重复生成/冲突。迁移时逐模块删净 `kapt(...)` 与 kapt 插件。
+从 kapt 迁移后同时保留 `kapt(room-compiler)` 与 `ksp(room-compiler)` → 重复生成/冲突。迁移同一处理器时移除其 kapt 配置；模块没有其他 kapt 处理器后再移除 kapt 插件。
 
 ### 5.5 Room schema 目录未配置
 没配 `room { schemaDirectory(...) }`（或 `arg("room.schemaLocation", ...)`）→ 无 schema 导出，日后无法写迁移测试。
@@ -119,3 +122,18 @@ ksp(libs.androidx.room.compiler)              // ✅ 注册为 KSP 处理器
 - 📄 **[AndroidX 官方库指南](./01-androidx-libraries.md)** - Room 三件套与迁移
 - 📄 **[常见错误与故障排除](../quick-references/02-troubleshooting.md)** - KSP 版本不匹配等构建期症状
 - 📖 **[KSP 官方文档](https://kotlinlang.org/docs/ksp-overview.html)** - 快速开始与 Gradle 配置细节
+
+
+<!-- full-library-explanation -->
+## 沿构建链定位“没有生成实现”
+
+插件让 Gradle 创建处理任务；ksp(...) 把处理器放到对应配置；处理器读取项目符号并生成文件；后续编译使用生成的实现。运行时库和代码生成工具的职责不同，不能仅因为 implementation 中能找到一个 jar 就认为处理已执行。
+
+版本目录里的 alias 是项目自己声明的，不是 Gradle 自带名称。拷贝 `libs.plugins.room` 前必须在 TOML 中定义它。示例版本也不是任意 Kotlin/AGP/Gradle 组合都兼容，升级前核对处理器与插件支持范围。
+
+练习：在 Room 学习工程中暂时去掉 ksp(room-compiler)，记录最早失败阶段；恢复后检查生成任务与 schema 文件，再改一个实体字段观察编译和迁移要求。验收：能通过构建日志解释变化，不手工编辑生成的 DAO 文件。混用 kapt/KSP 时尤其检查生成类型跨处理器引用的限制。
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

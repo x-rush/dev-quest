@@ -1,10 +1,21 @@
 # Spring 生态集成 - Security、Redis 与消息队列
 
+## 先看框架承担哪部分职责
+
+**Spring 生态**：Security 判断身份与授权，Redis 提供共享数据或缓存，消息队列延后处理。先定义一致性和失败责任再接库。
+
+**最小练习与预期结果**：未登录、已登录但无权限、正确身份三条路径分别验收；消息重复投递不应重复处理关键业务。
+
+具体 API 与安装版本以[模块基线](../README.md)和本篇官方来源为准。先完成这条数据路径，再展开后面的高级配置；框架名称变化后，输入边界、状态归属和失败处理仍是需要理解的机制。
+
 > **文档简介**: 给 Spring Boot 应用补上生产三件套：用 Spring Security 做认证授权，用 Redis 做缓存与会话，用消息队列实现服务间异步解耦
 >
 > **目标读者**: 已掌握 Spring Data JPA 与事务，准备接入中间件的开发者
 >
 > **前置知识**: 已完成 [Spring Boot 进阶](./02-spring-boot-advanced.md)；并发 API 背景见 [并发 API 速查](../reference/language-concepts/04-concurrency-api.md)
+
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
 
 ## 📚 文档元数据
 
@@ -15,6 +26,8 @@
 | **难度** | ⭐⭐ |
 | **标签** | `#SpringSecurity` `#Redis` `#消息队列` `#JWT` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ## 🎯 学习目标
 
@@ -199,14 +212,9 @@ Kafka 侧同理：`@KafkaListener(topics = "orders", groupId = "order-service")`
 
 ## 🎨 最佳实践
 
-### ✅ 推荐
-- Security 配置集中在一个 `SecurityFilterChain`，规则可读优先
-- 缓存 TTL 显式设置，杜绝"永不过期"的脏数据
-- 消息体只带 ID + 关键字段，消费方按需回查，避免大消息
+按请求路径匹配认证与授权规则，可以使用一个或多个有明确顺序的安全链；关键是匹配关系可解释且有测试。缓存定义键、失效与可接受的旧数据时间，TTL 不是唯一策略，也不能自动解决并发一致性。
 
-### ❌ 陷阱
-- `@Cacheable` 用于"每次结果都不同"的方法（如随机、时间相关）
-- 在 `@Transactional` 事务内发消息：事务回滚但消息已发出 → 用事务同步器或 Outbox 模式
+数据库提交与消息发送是两个系统的操作。提交后回调避免“事务回滚但消息已发”，却仍可能在提交后进程崩溃而漏发；需要可靠交付时使用 Outbox 等机制，并让消费方处理重复。消息携带快照还是 id 取决于回查时是否仍能得到当时语义。
 
 ## 🚀 下一步
 
@@ -220,3 +228,9 @@ Kafka 侧同理：`@KafkaListener(topics = "orders", groupId = "order-service")`
 - 📖 [Spring Boot 核心速查](../reference/framework-essentials/01-spring-boot-essentials.md) — 配置绑定语法
 - 📄 [Spring Boot 进阶](./02-spring-boot-advanced.md) — 事务与 AOP 前置知识
 - 📄 [订单系统项目](../projects/03-order-system.md) — 本文中间件的综合实战
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../LEARNING_GUIDE.md) · [完整目录与版本](../README.md) · [通用术语](../../shared-resources/glossary.md)

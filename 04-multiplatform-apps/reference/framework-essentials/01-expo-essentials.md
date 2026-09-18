@@ -2,6 +2,9 @@
 
 > **难度**: ⭐ | **前置**: 已用 Expo 创建过工程（[02-first-app](../../basics/02-first-app.md)）
 
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
+
 ## 📚 文档元数据
 
 | 属性 | 内容 |
@@ -11,6 +14,8 @@
 | **难度** | ⭐ |
 | **标签** | `#Expo` `#expo-router` `#EAS` `#Config Plugins` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ## expo-router — 文件路由
 
@@ -81,7 +86,7 @@ eas submit --platform ios --latest
 
 ### 陷阱
 - EAS 构建需 Expo 账号 + 项目所有者权限；免费额度按月计
-- iOS 证书/描述文件由 EAS 托管管理，本地已有证书冲突时先清理 keychain 配置
+- iOS 证书/描述文件由 EAS 托管管理，证书冲突时先核对签名身份、描述文件与构建配置，避免无依据删除整个 keychain
 
 ## expo-modules 与系统能力
 
@@ -136,7 +141,7 @@ const withMyConfig = (config) => {
 ```
 
 ### 陷阱
-- 原生目录是 prebuild 的产物，手工改动会被下次 prebuild 覆盖；平台配置一律走 plugins
+- 采用 CNG 时，将可再生的原生配置维护在配置和插件中；手工维护原生目录的工程须明确另一套来源，不能盲目 clean
 - `scheme` 决定深链协议，改后需重新 prebuild
 
 ## Expo vs bare 决策表
@@ -144,8 +149,17 @@ const withMyConfig = (config) => {
 | 场景 | 建议 |
 |------|------|
 | 新项目、常规 App | Expo + CNG（Continuous Native Generation） |
-| 需要大量自研原生模块 | prebuild 转 bare，保留 Expo SDK |
+| 需要自研原生模块 | 先评估 Expo Modules + CNG；需要手工维护原生工程时仍可保留 Expo SDK |
 | 主目标含鸿蒙 RNOH | 鸿蒙侧按 bare 流程接入（RNOH 不走 Expo 托管构建） |
+
+<!-- full-library-explanation -->
+## 先分清四个工作阶段
+
+安装 JS 包使源码可导入；配置插件描述原生配置；prebuild 生成原生工程；构建把原生实现装进二进制。最后 Metro 或更新服务提供 JS。任一环节缺失都可能表现为“模块找不到”，但清 Metro 缓存无法补上未编译的原生实现。
+
+练习：在学习工程添加相机能力，记录安装、权限文案、重新构建、运行时授权四步。分别拒绝权限和在设置中重新允许，验收页面能解释当前状态并继续使用其他功能。不要把 Info.plist/Manifest 声明与用户实际授权混为一谈。
+
+自研原生模块可以配合 Expo Modules/CNG 使用，不必因为写了原生代码就放弃整个 Expo 工具链；是否手工维护原生目录取决于工程需求与生成流程能否表达改动。
 
 ## 🔗 相关文档
 
@@ -155,3 +169,9 @@ const withMyConfig = (config) => {
 - 📄 **[综合练习教程](../../basics/08-first-project.md)**: 在项目中使用 Expo 全家桶
 
 *延伸: Expo 官方文档 docs.expo.dev · EAS 定价页*
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

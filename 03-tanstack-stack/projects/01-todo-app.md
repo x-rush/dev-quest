@@ -1,10 +1,23 @@
 # 入门项目：Todo App（Query CRUD 标准范式）
 
+## 分阶段练习与验收
+
+**最小阶段**：先以 Query 完成列表读取与一条创建操作。
+
+**验收结果**：空输入失败，创建成功后重取可见，错误状态可重试。
+
+**扩展顺序**：模拟后端须明确是否保存数据；确认持久化后再加乐观更新。
+
+建议保存一份正常输入、一份失败输入、实际输出和对应测试。先完成以上阶段再扩展正文中的完整设计；遇到省略实现或未定义依赖，应按文档上下文补齐，不能把代码片段拼接后当作已经验证的完整工程。
+
 > **文档简介**: 从零构建一个 Todo 应用，完整走通"读取-创建-更新-删除"四类操作在 TanStack Query v5 下的标准写法，建立 Query 项目的骨架感。
 >
 > **目标读者**: 刚学完 Query 基础、需要第一个完整练手项目的初级开发者
 >
 > **前置知识**: [Query 基础](../frameworks/01-tanstack-query-basics.md)、[环境搭建](../basics/01-environment-setup.md)
+
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
 
 ## 📚 文档元数据
 
@@ -15,6 +28,8 @@
 | **难度** | ⭐ |
 | **标签** | `#实战项目` `#tanstack-query` `#crud` `#react19` |
 | **更新日期** | 2026年9月 |
+
+</details>
 
 ## 🎯 项目目标
 
@@ -217,3 +232,9 @@ export default function App() {
 - 📄 **[第一个项目：城市天气数据面板](../basics/08-first-project.md)** - 只读版入门项目
 - 📄 **[单元测试](../testing/01-unit-testing.md)** - 给本文的 hooks 补上测试
 - 📄 **[数据看板](../projects/02-data-dashboard.md)** - 下一站：服务端分页表格
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../LEARNING_GUIDE.md) · [完整目录与版本](../README.md) · [通用术语](../../shared-resources/glossary.md)

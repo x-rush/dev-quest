@@ -1,0 +1,54 @@
+{
+  "python": "3.12.14",
+  "results": [
+    {
+      "case": "python-0.py",
+      "status": "PASS",
+      "output": "[7, 2, 10] [2, 7, 10]\n19 2 10\n[(1, 2), (2, 7), (3, 10)]\n2 7 10 结束\nFalse True\nTrue False\n",
+      "source": "10-python-discovery/reference/language-concepts/02-built-in-functions.md"
+    },
+    {
+      "case": "python-1.py",
+      "status": "PASS",
+      "output": "3\n",
+      "source": "10-python-discovery/reference/language-concepts/01-python-keywords.md"
+    },
+    {
+      "case": "python-2.py",
+      "status": "PASS",
+      "output": "开始\n完成\n你好，Ada\ngreet\n",
+      "source": "10-python-discovery/reference/language-concepts/06-decorators.md"
+    },
+    {
+      "case": "order.cjs",
+      "status": "PASS",
+      "output": "sync\nnextTick\nmicrotask\npromise\n",
+      "source": "09-nodejs-backend/basics/04-async-promises.md"
+    },
+    {
+      "case": "order.mjs",
+      "status": "PASS",
+      "output": "sync\nmicrotask\npromise\nnextTick\n",
+      "source": "09-nodejs-backend/basics/04-async-promises.md"
+    },
+    {
+      "case": "core-lab.mjs",
+      "status": "PASS",
+      "output": "core-lab.mjs\ntrue\nfunction\n",
+      "source": "09-nodejs-backend/reference/library-guides/01-core-modules.md"
+    },
+    {
+      "case": "keywords.mjs",
+      "status": "PASS",
+      "output": "read\ntrue\nfinished\n",
+      "source": "shared-resources/javascript-keywords.md"
+    },
+    {
+      "case": "builtins.mjs",
+      "status": "PASS",
+      "output": "2,7,10\n19\nfalse\ntrue\ntrue\n",
+      "source": "shared-resources/javascript-builtins.md"
+    }
+  ],
+  "scope": "Only named complete examples; no Java, Go, Rust, PHP or native UI execution."
+}

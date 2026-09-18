@@ -1,16 +1,16 @@
 # 路由段配置（Route Segment Config）
 
 > **模块**: `02-nextjs-frontend`
-> **类型**: 字典条目（无难度门槛）
+> **类型**: 字典条目（可独立查阅，按主题准备前置知识）
 > **分类**: `framework-patterns`
 
 ## 📌 定义
 
-路由段配置是从 `page.tsx`/`layout.tsx`/`route.ts` 直接 `export const` 的常量，用来声明该段的渲染与缓存行为（`dynamic`、`revalidate`、`fetchCache` 等）。**它们属于 Next.js 16 之前的"隐式缓存模型"**：未启用 `cacheComponents` 时仍可用（官方文档已将其移入"Caching and Revalidating (Previous Model)"指南）；而启用 Cache Components（`cacheComponents: true`，16 的缓存新方向）后，`dynamic`/`dynamicParams`/`revalidate`/`fetchCache` 四项**被移除**，缓存一律改由 `"use cache"` 显式声明。运行环境类配置（`runtime`、`maxDuration`）不受此影响。
+路由段配置是从 `page.tsx`/`layout.tsx`/`route.ts` 直接 `export const` 的常量，用来声明该段的渲染与缓存行为（`dynamic`、`revalidate`、`fetchCache` 等）。**它们属于 Next.js 16 之前的"隐式缓存模型"**：未启用 `cacheComponents` 时仍可用（官方文档已将其移入"Caching and Revalidating (Previous Model)"指南）；而启用 Cache Components（`cacheComponents: true`，16 的缓存新方向）后，`dynamic`/`dynamicParams`/`revalidate`/`fetchCache` 四项**被移除**，缓存一律改由 `"use cache"` 显式声明。maxDuration 等环境配置需按部署平台核对；Cache Components 使用 Node.js，不兼容 Edge runtime。
 
 ## 📖 语法/签名
 
-### 与缓存无关、始终可用的段配置（Next.js 16.3 官方文档）
+### 运行环境与其他段配置（仍需确认平台和功能组合支持）（Next.js 16.3 官方文档）
 
 | 选项 | 类型 | 默认 | 语义 |
 |------|------|------|------|
@@ -66,7 +66,7 @@ import { cacheLife } from 'next/cache'
 
 export default async function ProductsPage() {
   'use cache'
-  cacheLife('hours')               // 取代 export const revalidate = 3600
+  cacheLife('hours')               // 改用缓存 profile；具体 stale/revalidate/expire 不等同单个 revalidate 数字
   const products = await fetch('https://api.acme.com/products').then((r) => r.json())
   return <ProductList products={products} />
 }
@@ -86,7 +86,18 @@ export default async function ProductsPage() {
 - **段级约束沿路由树组合时取最严格者**：配置从父段到子段逐段生效，周期类取全路由最小值、互斥取值同路报错——子段无法单方面放宽父段已施加的约束（对照 `revalidate` 取最小值、`fetchCache` 同路不兼容报错）。
 - **声明式配置必须静态可分析**：作为构建期契约的配置值只接受字面量，运行期求值的表达式不被接受（对照 `revalidate = 600` 合法、`60 * 10` 不合法的陷阱）。
 - **段的渲染模式约束段内一切数据访问的默认行为**：把段声明为强制动态或强制静态时，段内所有数据请求与请求 API 的默认表现随之确定（对照 `force-dynamic` 等效全部 no-store、`force-static` 让请求 API 返回空值）。
-- **执行环境与数据新鲜度是正交关注点**：运行时与时长上限这类环境配置独立于缓存模型演进，缓存策略更迭不影响它们（对照 `runtime` / `maxDuration` 不随缓存模型切换受影响）。
+- **执行环境与数据新鲜度是正交关注点**：运行时与时长上限这类环境配置独立于缓存模型演进，配置目的不同，但功能组合仍可能存在运行时限制（对照 `runtime` / `maxDuration` 不随缓存模型切换受影响）。
+
+<!-- full-library-explanation -->
+## 先确认缓存模式，再解释每个配置
+
+前置是 App Router 路由树、静态预渲染与请求时执行。不要仅凭 Next 主版本选择一段配置：先查 next.config 的 cacheComponents，再查父 layout 和当前 page 的选项。旧模型的 revalidate 是数据可以被重新验证的时间条件，不是每隔固定秒数主动运行的定时任务；没有访问时不必发生重建。
+
+cacheLife 包含 stale、revalidate、expire 等维度，使用 hours 是选取一个配置组合，并不与 export const revalidate=3600 完全等价。迁移需明确客户端可复用多久、服务端何时重验证、何时必须等待新值。maxDuration 也不会让长任务自动持久化，进程超时后任务仍可能中断。
+
+**练习**：在独立路由记录数据源调用次数，分别测试首次访问、缓存期内访问、过期后首次访问与后续访问，写出结果时间线。再开启 cacheComponents，按构建错误迁移不支持的段配置。需要长时间生成报表时，返回任务 ID 并查询任务状态，而不是仅不断提高 maxDuration。
+
+依据：[dynamicParams](https://nextjs.org/docs/app/api-reference/file-conventions/route-segment-config/dynamicParams)、[runtime](https://nextjs.org/docs/app/api-reference/file-conventions/route-segment-config/runtime)、[cacheLife](https://nextjs.org/docs/app/api-reference/functions/cacheLife)。
 
 ## 🔗 相关条目
 
@@ -98,3 +109,9 @@ export default async function ProductsPage() {
 
 ---
 *最后更新: 2026年9月 | 本条目为模块知识字典的一部分，概念完整解释以此处为单一事实来源*
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

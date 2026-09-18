@@ -1,10 +1,26 @@
 # 第一个完整项目：任务管理 REST API
 
+## 先理解，再动手
+
+最小 REST API 是一组有一致规则的操作，不只是若干返回 JSON 的函数。创建、查询、更新和删除必须对同一资源身份工作。
+
+**本节自测**：依次创建、查询、完成、删除同一 ID，再查询。
+
+<details>
+<summary>预期结果与参考思路（先尝试再展开）</summary>
+
+最后得到不存在；非法输入不创建记录，内存版重启清空应写明。
+
+</details>
+
 > **文档简介**: 综合运用前七课知识，从零构建任务管理 REST API——Hono 4 + Prisma + Zod，含分页、校验、错误处理与测试
 
 > **目标读者**: 完成入门路径全部课程的学习者，需要一次"真刀真枪"的综合演练
 
 > **前置知识**: [路由与中间件](./05-http-routing.md)、[错误处理](./06-error-handling.md)
+
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
 
 ## 📚 文档元数据
 
@@ -15,6 +31,8 @@
 | **难度** | ⭐ |
 | **标签** | `#REST API` `#Hono` `#Prisma` `#Zod` `#综合项目` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ## 🎯 学习目标
 
@@ -256,10 +274,9 @@ node --test          # 原生测试命令，无需额外测试框架（递归匹
 
 ## 🎨 最佳实践
 
-- ✅ **app 与 serve 分离**：`app.request()` 直接注入请求，测试零端口开销
-- ✅ **查询串用 `z.coerce`**：`c.req.query()` 的值全是字符串
-- ✅ **Prisma 错误映射为 4xx**：onError 按 `err.code` 前缀 `P` 转换（P2002→409、P2025→404）
-- ❌ **不要跳过 migrate 直接 `db push` 上生产**：迁移文件是数据库变更的历史依据
+应用路由与监听端口分离后，可以在测试中注入请求检查 HTTP 行为，再用少量真实端口测试覆盖服务器集成。查询参数转换后仍要验证上下限，例如空字符串被转成 0 是否符合分页规则。
+
+数据库错误只按已识别语义映射，例如唯一约束冲突可以对应冲突响应；不能把所有带 P 前缀的 Prisma 错误都变成客户端 4xx，连接和内部故障仍需服务端处理。数据库结构通过可审阅迁移演进，发布前验证旧数据兼容。
 
 ## ❓ 常见问题
 
@@ -287,3 +304,9 @@ node --test          # 原生测试命令，无需额外测试框架（递归匹
 - 📄 **[错误处理](./06-error-handling.md)** — HttpError 与 app.onError 完整设计
 - 📄 **[生态库精选](../reference/library-guides/02-ecosystem-libs.md)** — Prisma/Zod/pino 深入参考
 - 📄 **[Node 一行式速查](../reference/quick-references/01-node-cheatsheet.md)** — 测试与调试命令
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../LEARNING_GUIDE.md) · [完整目录与版本](../README.md) · [通用术语](../../shared-resources/glossary.md)

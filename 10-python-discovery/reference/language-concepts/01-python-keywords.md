@@ -1,8 +1,35 @@
 # Python 关键字与软关键字详解
 
+## 阅读准备与一条完整控制流
+
+前置：变量、函数与条件。关键词不是需要背诵的清单，而是用来描述数据流和控制流的语法。先按“定义 → 调用 → 分支 → 返回”理解，再查异步和模式匹配。
+
+完整示例，保存为 `keywords_lab.py` 并用 Python 运行：
+
+```python
+def first_positive(values):
+    for value in values:
+        if value > 0:
+            return value
+    return None
+
+answer = first_positive([-2, 0, 3, 8])
+if answer is None:
+    print("没有正数")
+else:
+    print(answer)
+```
+
+预期输出 3。def 创建函数，for 按次取值，if 判断当前项，return 同时结束函数并交出结果。换成 `[-2, 0]` 应输出“没有正数”；这里 None 表达缺失，不能用 `answer or ...` 代替所有缺失判断，因为其他题目里 0 可能是合法答案。
+
+**边界辨析**：and 与 or 短路并返回选中的操作数；not 返回布尔值。is 比较对象身份，== 比较值是否相等，两个列表内容相同不代表是同一个列表。自测 `[] == []` 为 True，`[] is []` 为 False；能解释原因再继续读身份与作用域条目。
+
 ## 概述
 
 Python 3.14 仍是 **35 个硬关键字**与 4 个**软关键字**（`match`/`case`/`_`/`type`，其中 `type` 自 3.12 引入 PEP 695 类型参数语法起成为软关键字）——3.13/3.14 的新特性（t-string、free-threading 等）均未新增关键字。硬关键字不可用作标识符；软关键字仅在特定语法上下文中被解释为关键字，其余场景可作普通名字。
+
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
 
 ## 📚 文档元数据
 
@@ -13,6 +40,8 @@ Python 3.14 仍是 **35 个硬关键字**与 4 个**软关键字**（`match`/`ca
 | **难度** | ⭐⭐ |
 | **标签** | `#关键字` `#语法基础` `#软关键字` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ## 快速总览
 
@@ -31,7 +60,7 @@ Python 3.14 仍是 **35 个硬关键字**与 4 个**软关键字**（`match`/`ca
 
 ## 1. 值、逻辑与身份 — True/False/None, and/or/not, is/in
 
-**定义**: 三个单例常量；`and`/`or`/`not` 短路求值并返回**操作数本身**而非布尔值；`is` 比较对象身份，`in` 测试成员关系。
+**定义**: 三个单例常量；`and`/`or` 短路求值并返回选中的**操作数本身**，`not` 返回布尔值；`is` 比较对象身份，`in` 测试成员关系。
 
 ```python
 result: str | None = None
@@ -178,3 +207,9 @@ async def fetch() -> None:
 - 📄 **[内置函数全表](./02-built-in-functions.md)** — 与关键字配合的内建能力
 - 📄 **[控制流与推导式](../../basics/05-control-flow.md)** — 分支循环的教程式讲解
 - 📄 **[异常处理](../../basics/06-exceptions.md)** — try/except 家族的完整用法
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

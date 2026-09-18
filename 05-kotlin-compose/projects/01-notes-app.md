@@ -1,10 +1,23 @@
 # 入门项目 - 本地笔记应用
 
+## 分阶段练习与验收
+
+**最小阶段**：先在 Room 保存标题和正文，提供新增与列表。
+
+**验收结果**：关闭应用再启动仍可读取；删除后重启不会恢复。
+
+**扩展顺序**：先验证持久化，再加入编辑、搜索与依赖注入。
+
+建议保存一份正常输入、一份失败输入、实际输出和对应测试。先完成以上阶段再扩展正文中的完整设计；遇到省略实现或未定义依赖，应按文档上下文补齐，不能把代码片段拼接后当作已经验证的完整工程。
+
 > **文档简介**: 用 Compose + Room + ViewModel 从零构建一个支持增删改查与搜索的本地笔记应用，覆盖现代 Android 应用最小的完整闭环
 >
 > **目标读者**: 完成 basics 全部教程、首次做完整项目的初学者
 >
 > **前置知识**: [第一个项目](../basics/08-first-project.md)（最小版笔记应用）、[生态集成](../frameworks/03-ecosystem-integration.md) 建议先读
+
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
 
 ## 📚 文档元数据
 
@@ -15,6 +28,8 @@
 | **难度** | ⭐ |
 | **标签** | `#room` `#viewmodel` `#crud` `#lazy-column` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ---
 
@@ -184,3 +199,9 @@ fun NoteEditorScreen(noteId: Long?, viewModel: NotesViewModel, onDone: () -> Uni
 - 📖 概念字典：[Compose 状态 API 详解](../reference/language-concepts/04-compose-state-api.md) ｜ [可空性与集合 API 速查](../reference/language-concepts/02-null-safety-collections.md)
 - 📖 前置教程：[第一个项目 - Compose + Room 笔记应用](../basics/08-first-project.md) ｜ [布局系统](../basics/05-layouts.md)
 - 🚀 进阶项目：[天气应用：网络 + 定位](02-weather-app.md) ｜ [新闻阅读器：分页 + 缓存](03-news-reader.md)
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../LEARNING_GUIDE.md) · [完整目录与版本](../README.md) · [通用术语](../../shared-resources/glossary.md)

@@ -6,6 +6,9 @@
 >
 > **前置知识**: 已读 [新架构解析](../architecture/01-new-architecture.md) 与 [框架进阶](../../frameworks/02-react-native-advanced.md)（Reanimated 基础）
 
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
+
 ## 📚 文档元数据
 
 | 属性 | 内容 |
@@ -15,6 +18,8 @@
 | **难度** | ⭐⭐⭐ |
 | **标签** | `#性能` `#渲染` `#FlashList` `#重渲染` `#Reanimated` |
 | **更新日期** | 2026年9月 |
+
+</details>
 
 ## 🎯 学习目标
 
@@ -39,7 +44,7 @@ UI 线程（主线程）：挂载视图 / 绘制
 
 - **JS 帧率低**：JS 线程忙（重渲染、复杂计算）→ 治理重渲染、拆分长任务
 - **UI 帧率低**：主线程忙（过度绘制、大图解码、动画跑错线程）→ 降层级、换 UI 线程动画
-- **两者都低**：先修 JS；JS 拥塞会拖累后续 commit，通常连带 UI
+- **两者都低**：结合时间线找共同原因，检查 JS 长任务、布局、图片和原生调用，不能仅凭两个低帧率决定先修哪一层
 
 ## 🔁 重渲染治理三板斧
 
@@ -77,7 +82,7 @@ const HeavyList = memo(function HeavyList({ results }: Props) { /* … */ });
 **三板斧清单**：
 1. **状态下放**：把易变状态移到最小的共同父组件，甚至组件内部
 2. **稳定引用**：`useCallback`/`useMemo` 包住传给 memo 子组件的函数与对象；列表行数据避免运行时拼装
-3. **memo 隔离**：列表行、图表、输入区全部 `memo`，配合选择器订阅（`useCart((s) => s.count)` 而非解构 store）
+3. **memo 隔离**：对已确认昂贵且 props 能稳定的组件使用 `memo`，配合选择器订阅（`useCart((s) => s.count)` 而非解构 store）
 
 **Context 的额外陷阱**：Provider 的 value 变化会让所有消费者重渲染——高频状态（输入、滚动位置）不要进 Context，用 zustand 选择器或组件内部 state。
 
@@ -97,8 +102,7 @@ import { FlashList } from '@shopify/flash-list';
   data={messages}
   keyExtractor={(m) => m.id}
   renderItem={renderItem}
-  // 可预测行高时补 getItemLayout，滚动定位零测量
-  getItemLayout={(_d, index) => ({ length: 72, offset: 72 * index, index })}
+  // FlashList 的属性不能照搬 FlatList，按当前版本 API 配置。
 />
 ```
 
@@ -108,17 +112,21 @@ import { FlashList } from '@shopify/flash-list';
 
 ```tsx
 // 原则：动画数值只进共享值，绝不过 JS 线程
-import Animated, { useSharedValue, useAnimatedStyle, withRepeat, withTiming } from 'react-native-reanimated';
+import { useEffect } from 'react';
+import Animated, { cancelAnimation, useSharedValue, useAnimatedStyle, withRepeat, withTiming } from 'react-native-reanimated';
 
 function Spinner() {
   const rotation = useSharedValue(0);
   // 启动一次，之后每帧都在 UI 线程插值；JS 完全不参与
-  rotation.value = withRepeat(withTiming(360, { duration: 1000 }), -1);
+  useEffect(() => {
+    rotation.value = withRepeat(withTiming(360, { duration: 1000 }), -1);
+    return () => cancelAnimation(rotation);
+  }, [rotation]);
 
   const style = useAnimatedStyle(() => ({
     transform: [{ rotateZ: `${rotation.value}deg` }],
   }));
-  return <Animated.View style={style} />;
+  return <Animated.View style={[{ width: 40, height: 40, backgroundColor: 'tomato' }, style]} />;
 }
 ```
 
@@ -133,8 +141,8 @@ function Spinner() {
 ## ✅ 要点回顾
 
 - ✅ **先归因后优化**：JS 帧率 vs UI 帧率决定完全不同的药方
-- ✅ **重渲染是万恶之源**：状态下放 > 稳定引用 > memo，顺序不能乱
-- ✅ **千行以上列表上 FlashList**（v2 已无需行高估计，用法见 [列表性能模型](../../reference/language-concepts/12-list-performance-model.md)）
+- ✅ **重渲染是正常机制**：优化已测出的昂贵更新，必要时缩小状态与订阅范围
+- ✅ **根据同场景测量选择列表实现，条数不是硬性换库门槛**（v2 已无需行高估计，用法见 [列表性能模型](../../reference/language-concepts/12-list-performance-model.md)）
 - ❌ **不要在生产验证前轻信 dev 数据**：dev 包 JS 执行慢数倍，结论不可信
 - ❌ **不要优化没有基线的东西**：先测量、再优化、后复测，否则是玄学
 
@@ -151,6 +159,15 @@ A: 长文本拆段 + `numberOfLines` 限制；富文本分页虚拟化，Hermes 
 
 ---
 
+<!-- full-library-explanation -->
+## 用同一交互验证一次优化
+
+先准备固定的 500 条本地数据，避免网络波动混入渲染测量。记录设备、系统、构建模式、列表内容、滚动动作和至少三次结果。60 Hz 的一帧约 16.7 ms，120 Hz 约 8.3 ms；这是显示节奏，不是所有 JS 任务都能独占的预算。
+
+例如点击一行“收藏”时，检查究竟多少行执行了组件函数、耗时在哪，以及交互到视觉反馈多久。若所有行都更新，先看数据对象是否全部重建、选择器是否订阅过宽；若只有一行更新但仍慢，检查图片、文本测量和原生绘制。只数 render 次数无法代表用户体验。
+
+练习：保留基线，先稳定行对象，再调整列表窗口，两次修改分别测量。验收表要同时记录空白区域、交互延迟和内存。窗口扩大后白屏消失但内存大涨，是有代价的结果，不能只报“优化成功”。没有真机测量的参数只能写成待验证假设。
+
 ## 🔗 相关文档
 
 - 📖 [核心组件 Props 全表](../../reference/language-concepts/02-components-props.md) — FlatList 调参属性字典
@@ -159,3 +176,9 @@ A: 长文本拆段 + `numberOfLines` 限制；富文本分页虚拟化，Hermes 
 - 📄 [聊天应用实战](../../projects/03-chat-app.md) — 本文手法在真实项目中的组合
 - 🎓 [启动优化](./02-startup-optimization.md) — 性能的另一主战场
 - 🎓 [新架构解析](../architecture/01-new-architecture.md) — 本文的管线模型出处
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

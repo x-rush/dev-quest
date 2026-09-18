@@ -1,6 +1,9 @@
 # net/http - HTTP 服务端与客户端
 
-Go 标准库内置的 HTTP 实现，**无需任何第三方框架即可构建生产级服务**。本条目覆盖服务端路由、中间件模式与客户端请求全流程。
+Go 标准库内置的 HTTP 实现，可以不依赖第三方框架提供 HTTP 服务；生产使用仍需配置超时、资源限制、日志和关停策略。本条目覆盖服务端路由、中间件模式与客户端请求全流程。
+
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
 
 ## 📚 文档元数据
 
@@ -13,6 +16,8 @@ Go 标准库内置的 HTTP 实现，**无需任何第三方框架即可构建生
 | **更新日期** | `2026年9月` |
 | **作者** | Dev Quest Team |
 | **状态** | ✅ 已完成 |
+
+</details>
 
 ## 1. 服务端：Handler 与 ServeMux
 
@@ -105,16 +110,18 @@ mux := recoverPanic(logging(newMux()))
 
 ## 3. 客户端：请求全流程
 
+以下函数片段需与 User 定义放在同一包，并导入 context、encoding/json、fmt、io、net/http、net/url、time。baseURL 应由可信配置提供；不能直接接受任意用户地址。
+
 **关键纪律**：用 `NewRequestWithContext` 携带超时/取消语义；必须 `defer resp.Body.Close()`；必须自己检查 `StatusCode`（4xx/5xx **不会**自动返回 error）。
 
 ```go
-func fetchUser(baseURL, id string) (*User, error) {
+func fetchUser(parent context.Context, baseURL, id string) (*User, error) {
     // 3 秒超时，超时或取消时请求中断
-    ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+    ctx, cancel := context.WithTimeout(parent, 3*time.Second)
     defer cancel()
 
     req, err := http.NewRequestWithContext(ctx, http.MethodGet,
-        baseURL+"/users/"+id, nil)
+        baseURL+"/users/"+url.PathEscape(id), nil)
     if err != nil {
         return nil, fmt.Errorf("构造请求: %w", err)
     }
@@ -130,11 +137,13 @@ func fetchUser(baseURL, id string) (*User, error) {
         return nil, fmt.Errorf("意外状态码: %d %s", resp.StatusCode, resp.Status)
     }
 
-    body, err := io.ReadAll(resp.Body)
+    const maxBody = 1 << 20 // 示例上限 1 MiB
+    body, err := io.ReadAll(io.LimitReader(resp.Body, maxBody+1))
     if err != nil {
         return nil, fmt.Errorf("读取响应体: %w", err)
     }
 
+    if len(body) > maxBody { return nil, fmt.Errorf("响应体超过大小上限") }
     var u User
     if err := json.Unmarshal(body, &u); err != nil {
         return nil, fmt.Errorf("解析 JSON: %w", err)
@@ -158,9 +167,9 @@ resp, err := client.Get("https://api.example.com/health")
 |------|------|----------|
 | 忘记 `resp.Body.Close()` | 连接泄漏，文件描述符耗尽 | 拿到 resp 立即 defer Close |
 | 不检查 `resp.StatusCode` | 4xx/5xx 被当成正常响应处理 | 显式检查状态码 |
-| 用 `http.DefaultClient` 发生产请求 | 无超时，可能永久挂起 | `&http.Client{Timeout: ...}` |
+| 未设置 Client 或请求 context 的超时 | 可能无限等待 | 设置整体预算，并向下传递取消信号 |
 | `w.Write` 前未设置 Header | Header 修改无效（已隐式 200） | 先 `w.Header().Set` 再 Write |
-| Handler 里启动 goroutine 后返回 | Handler 用的 request 会被复用/取消 | 需要异步时复制所需值（`r.Clone` 或提取字段） |
+| Handler 返回后继续写响应或使用请求生命周期 | ResponseWriter 已失效，请求 context 会取消 | 提取必要数据，为独立任务明确生命周期；Clone 仍可能共享 Body，不能自动解决问题 |
 
 ## 🔗 交叉引用
 
@@ -174,3 +183,18 @@ resp, err := client.Get("https://api.example.com/health")
 **文档状态**: ✅ 已完成
 **最后更新**: 2026年9月
 **版本**: v1.0.0
+
+
+<!-- full-library-explanation -->
+## 一次请求从进入到释放资源
+
+前置是函数、接口、JSON 和 context。Handler 运行期间读取请求、验证身份和输入，再调用业务逻辑，最后写响应。首次 Write 会隐式提交 200；此后再设置状态码不能撤销已经发出的数据。因此 JSON 编码可能失败时，可先在大小受控的缓冲区完成编码，再提交响应。示例 recover 中间件只能展示恢复位置，无法把已经部分写出的成功响应变回完整的 500，生产实现还应记录错误并处理连接或流中断。
+
+客户端的网络错误与 HTTP 业务状态是两层问题：Do 返回 nil error 只说明拿到了响应，404/500 仍需要调用者判断。复用 Client 和 Transport 才能复用连接池；关闭 Body 释放资源，读取至 EOF 通常有利于 HTTP/1 连接复用，但不要为了复用而无限读取不可信响应。限制大小、检查状态、关闭响应体应同时做到。
+
+练习：用 httptest.NewRecorder 和 httptest.NewRequest 调用 newMux，分别断言 GET /users/42 为 200、POST 同路径为 405、未知路径为 404，并解码成功响应。GET 模式也匹配 HEAD；不要把“只注册 GET”误当作拒绝 HEAD。再用 httptest.Server 模拟 500 与超过大小上限的响应，fetchUser 都应返回错误。请求完成后不得继续使用 ResponseWriter，异步可靠工作应有独立生命周期。
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

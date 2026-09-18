@@ -6,6 +6,9 @@
 >
 > **前置知识**: 已完成 [Spring Boot 入门](../frameworks/01-spring-boot-basics.md)；Lambda 基础见 [现代 Java 特性](../basics/07-modern-features.md)
 
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
+
 ## 📚 文档元数据
 
 | 属性 | 内容 |
@@ -15,6 +18,8 @@
 | **难度** | ⭐⭐ |
 | **标签** | `#JUnit6` `#Mockito` `#TDD` `#单元测试` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ## 🎯 学习目标
 
@@ -146,15 +151,9 @@ given(payClient.call(any())).willThrow(new PaymentTimeoutException());
 
 ## 🎨 最佳实践
 
-### ✅ 推荐
-- 一测一意：方法名/`@DisplayName` 表达业务行为而非方法名
-- 优先构造器手写依赖（简单对象），Mock 只用于"边界"（网络、时钟、随机）
-- 用 `assertAll` 汇报全部失败，减少"改一个跑一次"
+一个用例围绕一个行为，但可以有多个相关断言，例如拒绝扣款后余额不变且返回错误。简单依赖直接构造，外部时钟、网络或随机可以替换；mock 的是边界，不是被测业务本身。
 
-### ❌ 陷阱
-- 测试断言 Mock 的调用次数却不断言结果：测试了实现而非行为
-- Mock 具体实现类而非接口：脆弱且难维护
-- 在 Spring 容器里跑纯逻辑单测：`@SpringBootTest` 拖慢反馈，仅限集成层
+调用次数在防止重复发送或扣费时属于契约，其余情况优先断言结果。纯逻辑不必启动 Spring 容器；需要验证装配或注解行为时再使用对应集成环境。测试名称写出条件和预期，失败报告才能直接帮助定位。
 
 ## 🚀 下一步
 
@@ -169,3 +168,9 @@ given(payClient.call(any())).willThrow(new PaymentTimeoutException());
 - 📄 [Spring Boot 入门](../frameworks/01-spring-boot-basics.md) — 被测代码的分层约定
 - 📄 [TODO API 项目](../projects/01-todo-api.md) — 综合练习对象
 - 📄 [集成测试](./02-integration-testing.md) — 下一篇：真实依赖验证
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../LEARNING_GUIDE.md) · [完整目录与版本](../README.md) · [通用术语](../../shared-resources/glossary.md)

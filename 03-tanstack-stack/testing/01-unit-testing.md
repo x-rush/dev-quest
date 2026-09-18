@@ -6,6 +6,9 @@
 >
 > **前置知识**: [Todo App](../projects/01-todo-app.md)、TypeScript 基础
 
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
+
 ## 📚 文档元数据
 
 | 属性 | 内容 |
@@ -15,6 +18,8 @@
 | **难度** | ⭐⭐ |
 | **标签** | `#vitest` `#单元测试` `#tanstack-query` |
 | **更新日期** | 2026年9月 |
+
+</details>
 
 ## 🎯 完成后你将能够
 
@@ -167,10 +172,9 @@ describe('applyMove', () => {
 
 ## 🎨 最佳实践速查
 
-- ✅ 优先测错误分支：Query 的价值一半在错误恢复
-- ✅ 把 setQueryData 的 updater 抽成纯函数，乐观更新从"难测"变"好测"
-- ❌ 不要在单元测试里挂载 Provider——那是集成测试的职责
-- ❌ 不要 mock 整个 @tanstack/react-query——测的就成了 mock 本身
+将乐观更新的数据变换提成纯函数，可以直接验证空列表、目标不存在和重复修改。需要验证 Hook 与缓存交互时，应使用独立 QueryClient 和 Provider；测试类别取决于验证边界，不存在“单元测试绝不能挂 Provider”的规则。
+
+保留 Query 的真实行为，优先替换网络边界，并控制重试和时间以获得可预测反馈。至少验证首次失败、重试成功、后台失败保留已有数据，避免只断言 mock 被调用过。
 
 ---
 
@@ -181,3 +185,16 @@ describe('applyMove', () => {
 - 📄 **[入门项目 Todo App](../projects/01-todo-app.md)** - 被测代码来源
 - 📄 **[Query 进阶](../frameworks/02-tanstack-query-advanced.md)** - 乐观更新器逻辑出处
 - 📄 **[CI/CD 流水线](../deployment/01-ci-cd-pipelines.md)** - 把本层测试挂进流水线
+
+
+<!-- acceptance-exercise -->
+## 练习与验收：验证键工厂与输入边界
+
+选择项目中的 queryKey 工厂和分页解析函数：同一资源的相同参数产生等价键，不同账号或分页不得误共用；非法页码回到约定默认值或明确拒绝。把账号字段故意从键里删除，至少一个隔离测试应失败。验收：恢复后测试通过，改变执行顺序仍通过；这组纯函数测试不需要真实网络，也不能证明 Provider 和界面订阅正确。
+
+以上是在个人或隔离测试环境中的练习，不是本轮已执行记录；实际运行范围见仓库文档质量报告。
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../LEARNING_GUIDE.md) · [完整目录与版本](../README.md) · [通用术语](../../shared-resources/glossary.md)

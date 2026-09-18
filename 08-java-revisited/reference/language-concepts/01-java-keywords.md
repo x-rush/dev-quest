@@ -1,10 +1,21 @@
 # Java 关键字详解
 
+## 先区分保留词、上下文词与库类型
+
+前置：类、方法与局部变量。class/if/return 属于语法，String/List 是库类型，var/record 等词有特定使用上下文。看到一个高亮词不意味着它在所有位置都禁止作名字；覆盖范围应以目标 JDK 的语言规范为准。
+
+final 局部变量不能重新赋值；它若引用 ArrayList，列表内容仍可改变。static 表示成员属于类层级，不表示它天然线程安全。synchronized 对明确的监视器互斥，不会自动把所有相关业务操作都组合成一次原子事务。
+
+自测：`final List<String> names = new ArrayList<>();` 后 names.add("Ada") 可以改变内容，names = new ArrayList<>() 则违反 final 约束。解释这两个操作分别改变什么，再继续读不可变集合、record 与并发词条。
+
 > **文档简介**: Java 全部关键字与保留字的分类速查，重点详解 record、sealed、var、yield、when 等新旧关键字与上下文关键字的语义、语法与陷阱
 >
 > **目标读者**: 需要系统核对 Java 关键字知识、特别是新版上下文关键字的开发者
 >
 > **前置知识**: 基本语法阅读能力；系统学习请先走 [basics 路径](../../basics/03-variables-types.md)
+
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
 
 ## 📚 文档元数据
 
@@ -15,6 +26,8 @@
 | **难度** | ⭐ |
 | **标签** | `#关键字` `#语法基础` `#语言概念` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ## 📋 关键字总表（按用途分组）
 
@@ -156,3 +169,9 @@ module com.example.app {
 - 📄 **[集合框架与泛型](./02-collections-generics.md)** - var 与泛型推断的配合
 - 📄 **[变量与类型](../../basics/03-variables-types.md)** - var 的教程式讲解
 - 📄 **[控制流程](../../basics/05-control-flow.md)** - switch/yield/when 的教程式讲解
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

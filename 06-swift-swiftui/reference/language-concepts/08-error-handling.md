@@ -6,6 +6,9 @@
 >
 > **前置知识**: 建议先学 [07-enums-pattern-matching.md](./07-enums-pattern-matching.md)
 
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
+
 ## 📚 文档元数据
 
 | 属性 | 内容 |
@@ -16,13 +19,15 @@
 | **标签** | `#Error` `#throws` `#do-catch` `#Result` `#typed-throws` |
 | **更新日期** | `2026年9月` |
 
+</details>
+
 ---
 
 ## 📌 定义
 
 Swift 的错误处理是**显式的错误传播模型**：任何可能失败的函数用 `throws` 声明，调用方必须用 `try` 承认、用 `do-catch` 处理或继续向上抛——编译器强制让"失败路径"出现在类型签名里。
 
-错误本身是值：任何遵循 `Error` 协议的类型（惯例是枚举）都能表示错误。与 Java/Kotlin 的受检异常不同，Swift 不要求逐个标注错误类型（typed throws 可选地缩小范围），也没有运行时栈展开的心智负担。
+错误本身是值：任何遵循 `Error` 协议的类型（惯例是枚举）都能表示错误。与 Java 的受检异常机制不同（Kotlin 不强制受检异常），Swift 不要求逐个标注错误类型（typed throws 可选地缩小范围），也没有运行时栈展开的心智负担。
 
 ## 📖 语法 / 签名
 
@@ -115,7 +120,7 @@ final class NotesModel {
         do {
             state = .loaded(try await api.fetchNotes())
         } catch is CancellationError {
-            state = .idle                    // 任务被取消不算错误
+            return // 不让旧任务的取消覆盖较新任务状态；完整实现还需请求身份校验
         } catch {
             state = .failed(error.localizedDescription)
         }
@@ -130,8 +135,17 @@ final class NotesModel {
 | `try?` 吞掉原因 | 只剩 nil，排查无线索 | 需要上报/展示的错误不要用 `try?` |
 | `try!` 进入生产 | 一旦失败直接崩溃 | 仅限测试与可证明的不变量 |
 | catch 分支覆盖不全 | 未匹配的 catch 会继续向外抛 | 保留无条件的默认 `catch` |
-| 把取消当失败 | Task 取消抛 `CancellationError` | catch 中单独处理 is CancellationError |
+| 把取消当失败 | 取消表现依 API 而异，可能是 CancellationError、URLError.cancelled 或需要主动检查 | catch 中单独处理 is CancellationError |
 | Result 与 throws 混用一层函数 | 两种风格嵌套难读 | 可抛函数内直接 throws；Result 只用于存储/跨边界 |
+
+<!-- full-library-explanation -->
+## 取消、失败和过期结果分开处理
+
+取消是协作信号，不保证每种 API 都抛同一个 CancellationError。URLSession 还可能返回取消类 URLError；catch 中可结合 Task.isCancelled 与具体错误判断。更关键的是，A 任务取消后的 catch 不应把正在加载 B 的状态重置为 idle。
+
+练习：给每次加载分配资源 ID 或递增代号，只有仍匹配当前请求的任务才能写状态。让 A 慢、B 快，取消 A 后启动 B。验收：B 的结果保持可见，A 的取消没有覆盖 B，也没有向用户显示无意义错误。
+
+typed throws 限制暴露的错误类型，不会自动把底层 JSONDecoder/URLSession 错误变成自定义枚举，必须显式转换。try? 适用于确实不需要原因的可选操作；defer 管作用域退出时的同步收尾，不保证应用被系统终止时执行。
 
 ## 🔗 相关条目
 
@@ -139,3 +153,9 @@ final class NotesModel {
 - 📄 [03-concurrency-api.md](./03-concurrency-api.md) — async throws 与任务取消
 - 📄 [02-troubleshooting.md](../quick-references/02-troubleshooting.md) — 真实报错对照
 - 📄 [projects/02-weather-app.md](../../projects/02-weather-app.md) — 网络 + 错误处理实战
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

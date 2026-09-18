@@ -6,6 +6,9 @@
 
 > **前置知识**: [Stream 与 Worker 教程](../../basics/07-streams-workers.md)
 
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
+
 ## 📚 文档元数据
 
 | 属性 | 内容 |
@@ -15,6 +18,8 @@
 | **难度** | ⭐⭐ |
 | **标签** | `#Readable` `#Writable` `#Transform` `#pipeline` `#背压` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ## 1. 四种流类型
 
@@ -65,7 +70,7 @@ writable.once("drain", () => {      // 缓冲清空后可继续
 writable.end(finalChunk);           // 通知写入完成（可带最后一块与完成回调）
 
 writable.writableLength;            // 当前缓冲字节数
-writable.writableHighWaterMark;     // 缓冲阈值（默认 16KB）
+writable.writableHighWaterMark;     // 缓冲阈值（依 Node 版本、平台、流类型与对象模式而异，读取实例值确认）
 writable.destroy();                 // 强制销毁，触发 close
 ```
 
@@ -94,7 +99,7 @@ class LineCounter extends Transform {
 
   // _flush：流结束前的收尾输出
   _flush(cb: (e: Error | null, d?: Buffer) => void) {
-    cb(null, Buffer.from(`共 ${this.count} 行\n`));
+    cb(null, Buffer.from(`共 ${this.count} 个换行符\n`));
   }
 }
 
@@ -125,7 +130,7 @@ await pipeline(
 
 // 单独等待一个流结束（HTTP 响应发送完成等场景）
 await finished(res);
-console.log("响应已全部刷写");
+console.log("流写入端已完成；不代表对端业务已处理成功");
 
 // PassThrough：既可读又可写，常用于"先拿到流、后喂数据"的解耦
 const pt = new PassThrough();
@@ -134,7 +139,7 @@ pt.end(someData);           // 再写入并结束
 ```
 
 ### 陷阱
-- 老代码的 `stream.pipe()` 只转发源流错误，下游错误静默丢失——迁移到 `pipeline`
+- stream.pipe 不提供 pipeline 式的全链路错误处理与清理；源和目标错误都需要显式处理
 - `pipeline` 出错时所有流被销毁，但**外部资源（临时文件）需自行清理**
 
 ## 5. 背压机制
@@ -173,8 +178,23 @@ async function manualCopy(src: Readable, dst: Writable) {
 
 ---
 
+<!-- full-library-explanation -->
+## 背压保护的是生产速度与消费速度的差距
+
+前置是 Buffer、异步操作与事件。write 返回 false 不表示这块数据被拒收，而是提醒生产者暂停继续写，等待 drain。若忽略该信号持续生产，慢磁盘或慢客户端会使缓冲不断增长。highWaterMark 是触发背压的阈值，不是严格内存上限；单块可能超过阈值，对象模式还按对象个数而非字节计数。
+
+pipeline 适合将来源、转换和目标组成统一完成过程，并传播失败。for await 顺序等待每轮处理时也能限制读取速度，但循环内部若启动大量 Promise 而不 await，就又失去并发上限。分块是传输边界，不是文本行、UTF-8 字符或 JSON 记录的边界；逐块 toString 可能拆开多字节字符，应使用解码器状态或先设置文本编码。
+
+练习：将包含中文和无末尾换行的文本拆成不同大小的 Buffer，要求转换后的文本和行数都不随分块方式变化。本页 LineCounter 实际统计换行符数，若需求是文本行数，必须说明非空最后一行是否计入，并在 flush 时处理尾部。再让 Writable 延迟完成 callback，观察生产是否受控；中途注入写入错误，pipeline 应拒绝且临时输出应被明确清理。
+
 ## 🔗 相关文档
 
 - 📄 **[Stream 与 Worker 教程](../../basics/07-streams-workers.md)** — 背压与 pipeline 的教学讲解
 - 📄 **[Node 核心模块 API](./03-node-core-api.md)** — fs 流式创建函数
 - 📄 **[常见故障排除](../quick-references/02-troubleshooting.md)** — 流内存泄漏排查
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

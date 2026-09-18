@@ -1,10 +1,23 @@
 # 实战项目四：生产级 iOS 应用
 
+## 分阶段练习与验收
+
+**最小阶段**：以一条完整业务流程构建发行版本。
+
+**验收结果**：真实目标设备可用，崩溃诊断可取得，升级后旧数据仍可读。
+
+**扩展顺序**：签名、测试分发、商店资料和数据迁移分别验收。
+
+建议保存一份正常输入、一份失败输入、实际输出和对应测试。先完成以上阶段再扩展正文中的完整设计；遇到省略实现或未定义依赖，应按文档上下文补齐，不能把代码片段拼接后当作已经验证的完整工程。
+
 > **文档简介**: 把"能跑的 App"升级为"能上线的 App"：架构分层、错误处理、无障碍、配置管理、发布前清单，一份可对照执行的生产化改造指南
 >
 > **目标读者**: 完成三个实战项目、准备把作品推向 App Store 的中高级学习者
 >
 > **前置知识**: [projects/03-habit-tracker.md](./03-habit-tracker.md)、[architecture/01-app-architecture.md](../advanced-topics/architecture/01-app-architecture.md)
+
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
 
 ## 📚 文档元数据
 
@@ -15,6 +28,8 @@
 | **难度** | ⭐⭐⭐ |
 | **标签** | `#生产化` `#架构分层` `#错误处理` `#无障碍` `#发布清单` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ## 🎯 本项目解决什么问题
 
@@ -190,3 +205,9 @@ Release 构建验证：`Product → Scheme → Edit Scheme → Run → Release`�
 - 📄 [01-app-release.md](../deployment/01-app-release.md) — 签名、Archive 与 TestFlight
 - 📄 [01-app-architecture.md](../advanced-topics/architecture/01-app-architecture.md) — 架构模式深度解释
 - 📄 [01-security-practices.md](../advanced-topics/security/01-security-practices.md) — 安全实践（密钥、Keychain）
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../LEARNING_GUIDE.md) · [完整目录与版本](../README.md) · [通用术语](../../shared-resources/glossary.md)

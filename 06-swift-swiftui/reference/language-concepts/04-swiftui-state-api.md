@@ -6,6 +6,9 @@
 >
 > **前置知识**: 建议先学 [basics/04-views-state.md](../../basics/04-views-state.md)
 
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
+
 ## 📚 文档元数据
 
 | 属性 | 内容 |
@@ -15,6 +18,8 @@
 | **难度** | ⭐⭐ |
 | **标签** | `#State` `#Binding` `#Observable` `#Environment` `#属性包装器` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ---
 
@@ -48,7 +53,7 @@ struct Counter: View {
 |------|------|
 | 存什么 | 值类型 UI 状态；或根视图创建的 `@Observable` 引用 |
 | 投影值 `$count` | `Binding<Int>` |
-| 必须 private | 是（iOS 17 起非 private 会告警） |
+| 访问控制 | 通常声明 private 以封装所有权；不是由 iOS 17 统一强制的语法规则 |
 | 生命周期 | 与视图身份绑定，视图移除即销毁 |
 
 **陷阱**: `@State private var list: [Item] = loadExpensive()` 的初始化表达式会在每次重建视图结构时重新求值（尽管 SwiftUI 通常只取首次）——昂贵初始化放 `.task` 或 store。
@@ -73,7 +78,7 @@ struct StepperRow: View {
 | 维度 | 说明 |
 |------|------|
 | 创建方式 | `$state`、`@Bindable` 的 `$model.x`、`Binding(get:set:)` 自定义 |
-| 常量绑定 | `let` 常量自动获得 `.constant` 绑定 |
+| 常量绑定 | 显式 `Binding.constant(value)`，常用于只读预览；let 不自动变成 Binding |
 
 ---
 
@@ -95,7 +100,7 @@ final class NoteStore {
 | 包装器 | 用途 | 示例 |
 |--------|------|------|
 | `@State` | 本视图**创建并拥有**该引用 | `@State private var store = NoteStore()` |
-| 普通属性 | 父视图传入，**只读使用** | `let store: NoteStore` |
+| 普通属性 | 父视图传入，无需 Binding；引用的 var 成员仍可修改 | `let store: NoteStore` |
 | `@Bindable` | 父视图传入，需要 **Binding**（表单/双向） | `@Bindable var store: NoteStore` |
 
 ```swift
@@ -152,7 +157,7 @@ WindowGroup { Root() }.environment(store)
 @Environment(NoteStore.self) private var store
 ```
 
-**陷阱**: 环境模型未注入就读取会**运行时崩溃**（或返回默认值取决于 API 版本），开发期用 `@Environment(NoteStore.self)` 后立刻访问验证。
+**陷阱**: 环境模型未注入就读取会**运行时崩溃**；有默认值的 EnvironmentKey 与可选模型读取是不同 API，开发期用 `@Environment(NoteStore.self)` 后立刻访问验证。
 
 ---
 
@@ -178,3 +183,18 @@ WindowGroup { Root() }.environment(store)
 
 - 📄 [02-swiftdata-observability.md](../framework-essentials/02-swiftdata-observability.md) — SwiftData 与 Observation 原理速查
 - 📄 [03-concurrency-api.md](./03-concurrency-api.md) — 与 @MainActor 的配合
+
+
+<!-- full-library-explanation -->
+## 先回答谁创建、谁修改、需要活多久
+
+一个页面创建草稿用 State；子编辑器修改该草稿用 Binding；多个页面共享可观察模型时由共同祖先持有，再传引用或注入环境。Bindable 只为已有 Observable 对象产生 Binding，不替你创建应用级单例，也不提供线程安全。
+
+练习：父视图保存整数 count，两个 StepperRow 同时绑定 `$count`。操作任一控件，另一处应立即更新。再让两个子视图各自创建 State count，观察它们变为独立计数，解释差异。最后用 `.constant(3)` 预览一个子视图，控件不会把 3 改成永久的新值。
+
+可观察对象使用 `let` 只限制引用重新赋值，不禁止修改其可变成员。若只想开放读取，应通过 private(set)、只读协议或值快照表达权限；普通属性不是只读对象保证。迁移旧 ObservableObject 时要连同所有权包装器一起调整，不能仅删除 @Published。
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

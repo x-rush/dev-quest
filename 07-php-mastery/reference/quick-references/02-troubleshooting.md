@@ -4,6 +4,9 @@
 
 按"报错信息 → 原因 → 修复"组织的故障排除手册，覆盖类型错误、依赖冲突、配置坑三类最高频问题。遇到报错先在此匹配错误关键字。
 
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
+
 ## 📚 文档元数据
 
 | 属性 | 内容 |
@@ -13,6 +16,8 @@
 | **难度** | ⭐ |
 | **标签** | `#故障排除` `#TypeError` `#Composer冲突` `#配置` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ## 1. 类型错误（TypeError / ValueError）
 
@@ -26,7 +31,8 @@
 echo strlen(intval($raw));
 
 // ✅ 修复：调用前显式转换或校验
-$raw = (string) ($_GET['id'] ?? '');
+$raw = $_GET['id'] ?? '';
+if (!is_string($raw)) { throw new InvalidArgumentException('id must be a string'); }
 echo strlen($raw);
 ```
 
@@ -39,7 +45,7 @@ echo strlen($raw);
 
 ```php
 $status = OrderStatus::tryFrom($row['status'])
-    ?? OrderStatus::Pending;   // 或抛出带上下文的业务异常
+    ?? throw new UnexpectedValueException('unknown order status'); // 不静默改写外部状态
 ```
 
 ### `Uncaught UnhandledMatchError`
@@ -62,7 +68,7 @@ $status = OrderStatus::tryFrom($row['status'])
 ### `Attempted to read property "name" on null`
 
 **原因**: 链式调用中途为 null（查询无结果、关联未加载）。
-**修复**: 空安全运算符 `$user?->name`，或在源头断言非空 `assert($user !== null)`；框架场景优先检查查询是否漏了 `findOrFail`。
+**修复**: 空安全运算符 `$user?->name`，或在源头显式判断并抛出业务异常（assert 可能在生产关闭）；框架场景优先检查查询是否漏了 `findOrFail`。
 
 ### `Cannot use object of type stdClass as array`（及反向）
 
@@ -118,7 +124,7 @@ sudo apt install php8.5-mbstring             # 按报错包名安装对应扩展
 
 ```bash
 php --ini                 # CLI 实际加载哪个 ini
-php -i | grep loaded      # 或查 web SAPI 的加载路径
+php -i | grep loaded      # 仍只检查 CLI；Web SAPI 应在受控服务端诊断入口单独检查
 ```
 
 - CLI 与 FPM 用**不同**的 ini（`/etc/php/8.5/cli/` vs `/etc/php/8.5/fpm/`）
@@ -139,10 +145,10 @@ php -i | grep loaded      # 或查 web SAPI 的加载路径
 
 **排查顺序**:
 
-1. `display_errors=Off` 是生产标配，看 `log_errors` 指向的日志文件
+1. `display_errors=Off` 是生产标配，确认 log_errors 已开启，再检查 error_log 指定位置或 SAPI 日志
 2. 检查 `error_reporting=E_ALL` 是否被关闭
-3. opcache 缓存旧代码：`opcache_reset()` 或重启 FPM
-4. 文件权限：`storage/`、`var/log/` 不可写是框架白屏头号原因
+3. opcache 缓存旧代码：通过对应 FPM 环境使缓存失效或按发布流程重启；CLI 的 opcache_reset 不会重置另一个 SAPI 的缓存
+4. 文件权限：`storage/`、`var/log/` 不可写是需要验证的常见原因之一
 
 ### Session 丢失 / Cookie 写不进去
 
@@ -156,7 +162,7 @@ php -i | grep loaded      # 或查 web SAPI 的加载路径
 | 断点不命中 | 确认 `xdebug.mode=debug`、端口 9003、IDE 监听已开启 |
 | CLI 不触发 | 设环境变量 `XDEBUG_SESSION=1` 再运行 |
 | 性能骤降 | 开发态正常；确认生产 `php -v` 无 Xdebug |
-| 死循环卡死 | 加 `xdebug.max_nesting_level` 与执行步数限制 |
+| 死循环卡死 | 递归失控可检查 xdebug.max_nesting_level；普通无限循环不增加嵌套深度，应暂停调试或终止进程 |
 
 ## 相关文档
 
@@ -164,3 +170,23 @@ php -i | grep loaded      # 或查 web SAPI 的加载路径
 - 📄 **[Composer 生态精选](../library-guides/02-composer-ecosystem.md)** — `why-not` 等诊断命令详解
 - 📄 **[教程：环境搭建](../../basics/01-environment-setup.md)** — 从源头减少环境问题
 - 📄 **[教程：错误与异常](../../basics/06-error-exceptions.md)** — 异常体系与兜底设计
+
+
+<!-- full-library-explanation -->
+## 每次只验证一个可反驳的原因
+
+前置是错误堆栈、配置文件与请求日志。先记录原始错误、发生环境、最近变更和最小输入，再提出可以验证的假设。例如“CLI 能找到类但 FPM 找不到”应先比较部署目录、autoload 文件与 PHP 配置，不要连续执行清缓存、升级全部包和重启，造成现象消失却无法定位原因。
+
+把输入问题、程序缺陷与环境问题分开：未知订单状态不应默默变为 Pending；必需用户查询失败不应仅用 ?-> 隐藏；缺失扩展不应通过忽略平台要求当作修复。每次修复需要一条回归案例，证明原失败输入现在得到预期结果，同时合法输入保持正确。
+
+**练习**：建立一个只在大小写不敏感文件系统上能自动加载的类，在 Linux CI 复现后改正文件名与命名空间。再制造不存在、为 null、为字符串 '0' 三种输入，比较 isset、array_key_exists 和 ??，写明哪一种适合当前字段契约。排障记录应包含证据、修改、复测命令和结果，而不只是“重启后好了”。
+
+依据：[错误配置](https://www.php.net/manual/en/errorfunc.configuration.php)、[Composer 故障排查](https://getcomposer.org/doc/articles/troubleshooting.md)。
+
+
+本轮未在本机执行 PHP 片段；文中的输出为预期值，版本相关行为请用项目运行时验证。
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

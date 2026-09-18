@@ -6,6 +6,9 @@
 >
 > **前置知识**: [服务层解耦](../projects/01-todo-api.md) 的目录结构、TypeScript 基础
 
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
+
 ## 📚 文档元数据
 
 | 属性 | 内容 |
@@ -15,6 +18,8 @@
 | **难度** | ⭐⭐ |
 | **标签** | `#vitest` `#unit-testing` `#mock` `#coverage` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 Vitest 与测试工具的条目式速查见 [`../reference/library-guides/02-ecosystem-libs.md`](../reference/library-guides/02-ecosystem-libs.md)。
 
@@ -157,10 +162,9 @@ it('过期的 refresh token 被拒绝', async () => {
 
 ## ✅ 最佳实践与陷阱
 
-- ✅ 测试命名描述行为（"分页参数正确换算"）而非函数名
-- ✅ `beforeEach` 里 `clearAllMocks`，用例之间零耦合
-- ❌ Mock 了被测对象本身——只 Mock 依赖边界
-- ❌ 追求 100% 覆盖率：70-80% 且断言有效，远胜注水刷满
+测试断言参数如何变成结果，例如分页输入被正确校验与换算。mock 清理要区分调用历史、实现和恢复原函数，clearAllMocks 不会替你清理数据库、全局状态或所有实现。
+
+覆盖率用于发现未触及的代码，不设通用 70–80% 合格线；高风险分支仍应有有效断言。让一个故意的业务错误能使测试失败，比为了数字执行更多无断言代码有意义。
 
 ## 🔗 相关文档
 
@@ -168,3 +172,16 @@ it('过期的 refresh token 被拒绝', async () => {
 - 📖 [后端生态库精选](../reference/library-guides/02-ecosystem-libs.md) — Vitest 速查
 - 📄 [认证服务实战](../projects/02-auth-service.md) — 令牌逻辑是单测最佳素材
 - 📖 [Node + TypeScript 常用模式](../reference/language-concepts/05-typescript-patterns.md) — 可注入设计的类型基础
+
+
+<!-- acceptance-exercise -->
+## 练习与验收：检查断言是否会拒绝错误行为
+
+为输入验证或状态转换写正常、边界和失败三个案例。先让被测函数始终返回成功，至少失败案例必须变红；恢复后全部通过。异步测试必须等待 Promise，故意延后一次拒绝仍应被测试框架捕获。验收中测试不访问真实网络、不依赖当前时间和随机值，且单独执行与整套执行一致。
+
+以上是在个人或隔离测试环境中的练习，不是本轮已执行记录；实际运行范围见仓库文档质量报告。
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../LEARNING_GUIDE.md) · [完整目录与版本](../README.md) · [通用术语](../../shared-resources/glossary.md)

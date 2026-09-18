@@ -6,6 +6,9 @@
 >
 > **前置知识**: [生产级 FastAPI 应用](../projects/04-production-fastapi-app.md)、[容器化部署](./01-docker-deployment.md)
 
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
+
 ## 📚 文档元数据
 
 | 属性 | 内容 |
@@ -15,6 +18,8 @@
 | **难度** | ⭐⭐⭐ |
 | **标签** | `#structlog` `#Sentry` `#Prometheus` `#日志` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ## 🎯 三支柱分工
 
@@ -139,9 +144,9 @@ async def health() -> dict[str, str]:
 
 ## ✅ 最佳实践
 
-- 日志先于告警：每条日志想清楚"半夜排障的我需要什么信息"
-- 指标看趋势、日志查个案、Sentry 定根因——三者应能互相跳转
-- 采样率与保留期控制成本，不必全量上报
+先选一个失败旅程，确保能从请求标识找到相关日志、错误与耗时。指标适合观察分布和趋势，日志保留个案上下文，错误平台帮助聚合；任何工具都不会自动给出根因。
+
+上报数据先脱敏，设置采样与保留期。告警描述用户影响及下一步排查，验证采集服务故障不会阻塞主业务或无限积压。
 
 ## ❓ 常见问题
 
@@ -160,3 +165,16 @@ JSON 结构化 + request_id 天然解决交错——每行自带字段，采集�
 - 🎓 **[安全实践](../advanced-topics/security/01-security-practices.md)** — 日志脱敏与 PII 防护
 - 📄 **[FastAPI 进阶](../frameworks/02-fastapi-advanced.md)** — 中间件机制详解
 - 🎓 **[性能剖析](../advanced-topics/performance/02-profiling-optimization.md)** — 指标异常后的下钻工具
+
+
+<!-- acceptance-exercise -->
+## 练习与验收：检查观测数据是否解释一次失败
+
+给一个测试请求附请求标识，让依赖返回受控超时。预期用户得到约定的错误响应，结构化日志有请求标识与错误类别，延迟指标计入失败请求，错误平台能关联发布版本。验收检查日志不含 Authorization 或正文；停掉采集端后服务仍按自己的超时预算返回，不把监控故障扩大成业务故障。
+
+以上是在个人或隔离测试环境中的练习，不是本轮已执行记录；实际运行范围见仓库文档质量报告。
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../LEARNING_GUIDE.md) · [完整目录与版本](../README.md) · [通用术语](../../shared-resources/glossary.md)

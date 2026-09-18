@@ -6,6 +6,9 @@
 >
 > **前置知识**: [CI/CD 流水线](./01-ci-cd-pipelines.md)、[Router 基础](../basics/05-router-fundamentals.md)
 
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
+
 ## 📚 文档元数据
 
 | 属性 | 内容 |
@@ -15,6 +18,8 @@
 | **难度** | ⭐⭐ |
 | **标签** | `#vercel` `#部署` `#spa` `#ssr` |
 | **更新日期** | 2026年9月 |
+
+</details>
 
 ## 🎯 完成后你将能够
 
@@ -40,22 +45,21 @@ vercel --prod # 部署生产
 
 纯客户端渲染（Vite + TanStack Router）必须处理两件事：**所有路径回落 index.html**、**静态资源长缓存**。
 
+文件：`vercel.json`（标准 JSON 不允许注释）。
+
 ```json
-// vercel.json
 {
   "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }],
   "headers": [
     {
       "source": "/assets/(.*)",
       "headers": [
-        // Vite 产物带内容哈希，可安全一年缓存
         { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
       ]
     },
     {
       "source": "/index.html",
       "headers": [
-        // 入口 HTML 不缓存，发版立即生效
         { "key": "Cache-Control", "value": "no-cache" }
       ]
     }
@@ -89,7 +93,7 @@ vercel env pull .env.local              # 拉到本地开发
 
 若迁移到 TanStack Start（基于 Router 的全栈框架），部署方式改变：
 
-- `vite build` 产出服务端 bundle，Vercel 以 Nitro/serverless target 承载，**不再需要 SPA rewrites**
+- `vite build` 产出服务端 bundle，由当前 Start 与 Vercel 支持的适配器产出服务端部署，**不再需要 SPA rewrites**
 - 服务端函数里可以安全使用运行期环境变量（密钥不进前端产物）
 - Router 的 loader 在服务端预取：首屏即带数据，SEO 友好
 - Query 在 SSR 场景用 `dehydrate/hydrate` 把服务端缓存注入客户端（见 [Router 框架要点](../reference/framework-essentials/02-router-essentials.md)）
@@ -102,8 +106,8 @@ vercel env pull .env.local              # 拉到本地开发
 
 - [ ] Preview 部署打开 `/dashboard` 深链不 404
 - [ ] 硬刷新后静态资源命中 immutable 缓存（DevTools Network 验证）
-- [ ] index.html 为 no-cache，新版发布后旧标签页能拿到新入口
-- [ ] `VITE_*` 中无任何密钥（`grep -r "sk_\|secret" dist/` 无结果）
+- [ ] 深链 HTML 的实际响应支持重验证；刷新或重新访问能发现新入口，旧标签页不会自动升级
+- [ ] 审查 VITE_* 变量与实际客户端产物；关键词扫描只能辅助，零匹配不能证明无密钥
 - [ ] Web Vitals 与 Sentry 接入生产域名（见 [可观测性](./03-observability.md)）
 
 ---
@@ -119,6 +123,17 @@ vercel env pull .env.local              # 拉到本地开发
 
 ---
 
+<!-- full-library-explanation -->
+## 路由回退和缓存需要实际响应验证
+
+先修：Vite 构建、HTTP 缓存、客户端路由。SPA 回退解决 HTML 入口查找，不会修复 API 路径或不存在的资源；若项目有同域 API，不应把 API 错误重写成状态 200 的 index.html。
+
+no-cache 表示使用前重验证，不是不存储。已经打开的标签页也不会仅因为这个响应头自动升级 JavaScript；需要刷新或应用自己的更新提示。检查深链 URL 的实际响应头，不能只检查 /index.html。
+
+带内容哈希的资源可以长期缓存，入口 HTML 应允许及时发现新版本。缺失脚本若被回退成 HTML，浏览器可能报告 MIME 类型错误；应分别测试真实资源、缺失资源、深链和 API。
+
+**练习：** 在 Preview 直接打开深链并刷新，再发布带版本标识的新构建，比较旧标签页和新访问。验收：能解释缓存命中与重验证，预览只连接测试服务。SSR/Start 部署按[当前 Hosting 文档](https://tanstack.com/start/latest/docs/framework/react/guide/hosting)配置适配器，不能把所有版本都称为同一种 Nitro 输出。
+
 ## 🔗 相关文档
 
 - 📄 **[CI/CD 流水线](./01-ci-cd-pipelines.md)** - 构建产物从哪来
@@ -126,3 +141,9 @@ vercel env pull .env.local              # 拉到本地开发
 - 📄 **[Router 框架要点](../reference/framework-essentials/02-router-essentials.md)** - SSR 集成与 hydration
 - 📄 **[安全实践](../advanced-topics/security/01-security-practices.md)** - 环境变量与密钥治理
 - 📄 **[SaaS 后台](../projects/04-saas-admin-platform.md)** - 完整交付链路的落点
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../LEARNING_GUIDE.md) · [完整目录与版本](../README.md) · [通用术语](../../shared-resources/glossary.md)

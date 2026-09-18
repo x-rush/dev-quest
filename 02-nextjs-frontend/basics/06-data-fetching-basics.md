@@ -1,5 +1,18 @@
 # Next.js 16 数据获取基础完整指南
 
+## 先理解，再动手
+
+先决定数据在服务端还是客户端取得，再考虑缓存。请求成功、HTTP 成功、JSON 格式合法和业务数据有效是不同检查。
+
+**本节自测**：读取列表，分别模拟空数组、404 和网络中断。
+
+<details>
+<summary>预期结果与参考思路（先尝试再展开）</summary>
+
+空数组是成功但无内容，404 与断网是错误；三者不应全部显示“加载中”。
+
+</details>
+
 > **文档简介**: Next.js 16 现代数据获取完整教程，涵盖Server Components、Client Components、API路由、缓存策略、错误处理等数据获取核心技术
 
 > **目标读者**: 具备Next.js基础的开发者，需要掌握现代数据获取和API集成的前端工程师
@@ -7,6 +20,9 @@
 > **前置知识**: Next.js基础、React组件基础、TypeScript基础、HTTP协议基础、异步编程概念
 
 > **预计时长**: 5-6小时
+
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
 
 ## 📚 文档元数据
 
@@ -19,6 +35,8 @@
 | **更新日期** | `2026年9月` |
 | **作者** | Dev Quest Team |
 | **状态** | ✅ 已完成 |
+
+</details>
 
 ## 🎯 学习目标
 
@@ -1081,7 +1099,7 @@ Next.js 16的数据获取生态系统为现代Web应用提供了强大而灵活�
 - 📄 **[相关的reference文档](../reference/language-concepts/02-nextjs-api-reference.md)**: 快速参考Next.js API和数据获取方法
 
 ### 参考章节
-- 📖 **[本模块其他章节]**: [样式设计](./05-styling-with-tailwind.md#加载组件) | [状态管理](./07-state-management.md#服务器状态管理)
+- 📖 **[本模块其他章节]**: [样式设计](./06-data-fetching-basics.md#加载组件) | [状态管理](./07-state-management.md#-服务器状态管理)
 - 📖 **[Knowledge Points快速参考]**: [数据获取模式](../reference/framework-patterns/04-data-fetching-patterns.md) | [Next.js API参考](../reference/language-concepts/02-nextjs-api-reference.md)
 
 ## 📝 总结
@@ -1119,3 +1137,8 @@ Next.js 16的数据获取生态系统为现代Web应用提供了强大而灵活�
 **文档状态**: ✅ 已完成
 **最后更新**: 2026年9月
 **版本**: v1.0.0
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../LEARNING_GUIDE.md) · [完整目录与版本](../README.md) · [通用术语](../../shared-resources/glossary.md)

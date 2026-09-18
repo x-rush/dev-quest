@@ -1,10 +1,10 @@
-# Go 标准库全包地图
+# Go 标准库导航与 API 查阅方法
 
-> **模块**: `01-go-backend` | **类型**: 字典条目（无难度门槛，支持任意跳入查阅）
+> **模块**: `01-go-backend` | **类型**: 字典条目（可独立查阅，按主题准备前置知识，支持任意跳入查阅）
 
 ## 📌 定义
 
-Go 1.25 标准库的**按用途分组全包地图**：每包一行"一句话职责 + 官方文档链接"。当你知道要做什么但不知道用哪个包时，从这里开始检索；已在本目录单独成篇的包，链接直接指向本目录条目。
+Go 标准库的**按用途分组导航**（选取常用公开包，完整目录以对应 Go 版本的官方列表为准）：每包一行"一句话职责 + 官方文档链接"。当你知道要做什么但不知道用哪个包时，从这里开始检索；已在本目录单独成篇的包，链接直接指向本目录条目。
 
 **阅读约定**：包名 + 一句话职责；`📖` 标记 = 本字典有专篇详解。链接统一指向 `pkg.go.dev`。
 
@@ -21,7 +21,7 @@ Go 1.25 标准库的**按用途分组全包地图**：每包一行"一句话职�
 - **[runtime](https://pkg.go.dev/runtime)** — 与 Go 运行时交互（GOMAXPROCS、GC 钩子、栈信息）
 - **[runtime/debug](https://pkg.go.dev/runtime/debug)** — 运行时调试开关与 panic 堆栈读取
 - **[syscall](https://pkg.go.dev/syscall)** — 底层系统调用原语（优先用 os 系列包装）
-- **[unsafe](https://pkg.go.dev/unsafe)** — 绕过类型系统的底层操作（标准库中唯一不保证兼容的包）
+- **[unsafe](https://pkg.go.dev/unsafe)** — 绕过类型系统的底层操作（其操作不受通常的 Go 兼容性保证保护，需核对平台与布局假设）
 
 ### 语言与基础数据结构
 
@@ -156,16 +156,27 @@ Go 1.25 标准库的**按用途分组全包地图**：每包一行"一句话职�
 - "等一组 goroutine / 保护一个 map" → sync；"传数据给另一 goroutine" → channel
 - "超时/取消" → context 一条路走到底
 - "CLI 解析" → flag（复杂子命令再评估第三方 cobra）
-- "日志" → log/slog，别再引入第三方日志库
+- "日志" → 先评估 log/slog；有特殊吞吐、生态或输出需求时再比较第三方方案
 
 ## ⚠️ 常见陷阱
 
-- ❌ **错误做法**：用 `io/ioutil`、`sort`、`math/rand` 老包写新代码。
-- ✅ **正确做法**：ioutil 已废弃（io/os 有等价物）、排序用 slices、随机用 math/rand/v2；遇到旧包先查是否已有现代替代。
-- ❌ **错误做法**：引入第三方库解决标准库已覆盖的需求（uuid、结构化日志、JSON）。
-- ✅ **正确做法**：先查本地图——crypto/rand 生成 token、slog 记日志、encoding/json 处理 JSON；标准库没有再引第三方（如 pgx、zap）。
+- ❌ **错误做法**：把“出现较早”与“已废弃”混为一谈。
+- ✅ **正确做法**：io/ioutil 已废弃，替代 API 位于 io/os；sort 和 math/rand 并非整个包都被废弃。泛型切片常用 slices，新项目可评估 math/rand/v2，并根据具体 API 的文档判断迁移。
+- ❌ **错误做法**：没有比较功能边界就认为随机 token、UUID、日志和 JSON 都是同一类标准库替代问题。
+- ✅ **正确做法**：crypto/rand 能生成安全随机数据，但随机 token 不等于符合某一 UUID 版本规范的标识符。slog 与 encoding/json 覆盖常见需求；需要额外语义时评估专用库及维护成本。
 - ❌ **错误做法**：把 crypto/md5/crypto/rand 等加密包当普通哈希用。
-- ✅ **正确做法**：校验和用 hash/crc32 系；任何涉及安全的摘要/随机只用 crypto/* 且按文档组合。
+- ✅ **正确做法**：校验和用 hash/crc32 系；安全用途必须选适合目标的原语；crypto/md5 和 crypto/sha1 不适合抗碰撞安全用途，位于 crypto 路径下不代表任何用法都安全。
+
+<!-- full-library-explanation -->
+## 从需求追到包，再追到 API 契约
+
+本页负责检索用途；每个包的导出 API 全集以相应版本的官方文档为准，不能把“一包一行”当作已经学会这个包。初学者可按三个任务串联标准库：文本报表使用 os → bufio → strings/strconv → encoding/csv；HTTP API 使用 net/http → encoding/json → context → database/sql；命令行批处理使用 flag → filepath → io → errors → log/slog。先完成其中一条完整的数据流，再扩展其他领域。
+
+查到一个函数后，至少读清输入、输出、错误、资源生命周期四项。例如 csv.Writer.Write 成功后仍要 Flush 并检查 Error；regexp.MatchString 用来匹配模式，不适合替代结构化 JSON 解析；html/template 自动按上下文转义，但把不可信字符串强制转成 template.HTML 会绕过保护。包名只是入口，契约决定能否正确组合。
+
+补充检索入口：math/big 提供任意精度整数与有理数，适合超出 int64 的计算但需限制不可信输入规模；regexp/regexp/syntax 分别提供正则匹配与语法处理；unicode/utf16 处理 UTF-16 编码单元；net/http/cookiejar 管理客户端 Cookie；go/build/constraint 解析构建条件；go/doc/comment 处理文档注释；debug 系列处理 ELF、PE、Mach-O 等二进制元信息。完整且随版本更新的包清单见 [官方标准库目录](https://pkg.go.dev/std)。
+
+练习：实现一个 CSV 统计命令，输入包含引号和逗号的字段，使用 encoding/csv 读取而非 strings.Split。验收应包含空文件、格式错误、较大数据和输出写入失败四种情况；对每种情况指出负责处理它的包。扩展到 gzip 输入时通过 gzip.Reader 接到同一读取流程，理解接口组合如何减少重复逻辑。
 
 ## 🔗 相关条目
 
@@ -177,3 +188,9 @@ Go 1.25 标准库的**按用途分组全包地图**：每包一行"一句话职�
 ---
 
 *最后更新: 2026年9月 | 本条目为模块知识字典的一部分，概念完整解释以此处为单一事实来源*
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

@@ -1,5 +1,25 @@
 # TypeScript 类型速查手册
 
+## 用一个请求边界理解类型
+
+前置：JavaScript 对象与函数。TypeScript 描述“代码允许怎样使用一个值”，不负责证明网络数据实际是什么。unknown 要求先检查，any 关闭很多检查，类型断言只是改变编译器的看法。
+
+局部示例：函数可放到普通 .ts 文件，由调用方传入已解析的 JSON。它不依赖 React。
+
+```ts
+function readTitle(input: unknown): string {
+  if (typeof input !== 'object' || input === null || !('title' in input)) {
+    throw new Error('缺少标题')
+  }
+  if (typeof input.title !== 'string' || !input.title.trim()) {
+    throw new Error('标题必须是非空文本')
+  }
+  return input.title.trim()
+}
+```
+
+自测传入 `{ title: ' A ' }` 应得到 A；传 null、空对象或数字标题应失败。对照 `input as {title: string}`：断言不会在运行时增加这些分支。联合类型表达不同可能，收窄是在分支里排除不可能的类型；泛型则保留输入输出之间的关系，不能把三者都当作“类型写得复杂”。
+
 > **文档简介**: TypeScript 7核心类型和实用类型快速参考，涵盖基础类型、高级类型、工具类型等
 >
 > **目标读者**: TypeScript开发者，需要快速查阅类型语法的开发者
@@ -7,6 +27,9 @@
 > **前置知识**: JavaScript基础、编程基础概念
 >
 > **预计时长**: 25-45分钟
+
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
 
 ## 📚 文档元数据
 
@@ -19,6 +42,8 @@
 | **更新日期** | `2026年9月` |
 | **作者** | Dev Quest Team |
 | **状态** | ✅ 已完成 |
+
+</details>
 
 ---
 
@@ -842,3 +867,8 @@ function Button({ variant }: { variant: keyof typeof buttonVariants }) {
 **文档状态**: ✅ 已完成
 **最后更新**: 2026年9月
 **版本**: v1.0.0
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

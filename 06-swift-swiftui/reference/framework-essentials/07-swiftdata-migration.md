@@ -1,185 +1,83 @@
-# SwiftData 模型迁移速查
+# SwiftData 迁移：升级结构时保住旧数据
 
-> **文档简介**: SwiftData schema 版本化与迁移的条目式参考：VersionedSchema 版本化枚举、SchemaMigrationPlan、MigrationStage.lightweight/custom，以及默认值/重命名/关系变化三类陷阱
->
-> **目标读者**: 已上架或已积累本地数据的 App，要改模型又不能丢旧数据的学习者
->
-> **前置知识**: [02-swiftdata-observability.md](./02-swiftdata-observability.md)（@Model 与 ModelContainer）；实战见 [projects/01-notes-app.md](../../projects/01-notes-app.md)
+前置：@Model、ModelContainer、ModelContext。最低基础为支持 SwiftData 的系统；具体 schema 能力仍需按目标 SDK 检查。本页代码用于 iOS 工程中的模型层，本轮未在 Apple SDK 编译或执行迁移。
 
-## 📚 文档元数据
+## 为什么新装成功不代表升级成功
 
-| 属性 | 内容 |
-|------|------|
-| **模块** | `06-swift-swiftui` |
-| **象限** | 字典 |
-| **难度** | ⭐⭐⭐ |
-| **标签** | `#SwiftData` `#迁移` `#VersionedSchema` `#SchemaMigrationPlan` `#iOS17+` |
-| **更新日期** | `2026年9月` |
+新装直接创建当前结构；升级必须读取用户磁盘上的旧结构。迁移负责解释两者的对应关系。框架可推断部分轻量变化，不能假设所有修改都自动安全，也不能遇到打开失败就删库重建。
 
----
+发布过的 VersionedSchema 应保留为历史快照。只修改新版本，在 SchemaMigrationPlan 中保留从受支持历史版本通往当前版本的路径。版本号不是绕过结构校验的开关。
 
-## 1. 为什么需要迁移
+## 字段重命名：使用 originalName 映射
 
-**定义**: App 已发布后磁盘上已有旧结构的数据库文件。此时改 @Model 而不做任何处理，旧 store 的新旧 schema 不匹配，容器创建/打开就会失败，用户数据"消失"。**迁移 = 告诉框架"数据怎么从旧结构搬到新结构"**。
-
-SwiftData 的做法分三步：
-
-1. 把每个历史版本的模型用 `VersionedSchema` 枚举冻结
-2. 用 `SchemaMigrationPlan` 声明"哪些版本、怎么迁移"
-3. 容器装配时挂上 `migrationPlan`
-
-> 核心纪律：**模型一旦发版，旧版本类就不再改**——要变就新建 SchemaV2 枚举里的新类。
-
-## 2. VersionedSchema：冻结每个版本
+下面保留旧版 content，把新代码中的属性称为 body。重命名不是必须写自定义搬运循环：@Attribute(originalName:) 可以表达同源属性。
 
 ```swift
+import Foundation
 import SwiftData
 
-// 旧版本（已发版，只读，永不修改）
-enum SchemaV1: VersionedSchema {
+enum NotesV1: VersionedSchema {
     static var versionIdentifier = Schema.Version(1, 0, 0)
-    static var models: [any PersistentModel.Type] { [SchemaV1.Note.self] }
-
-    @Model
-    final class Note {
-        var title: String
+    static var models: [any PersistentModel.Type] { [Note.self] }
+    @Model final class Note {
         var content: String
-        var createdAt: Date
-        init(title: String, content: String) {
-            self.title = title
-            self.content = content
-            self.createdAt = .now
-        }
+        init(content: String) { self.content = content }
     }
 }
 
-// 新版本（当前开发）
-enum SchemaV2: VersionedSchema {
+enum NotesV2: VersionedSchema {
     static var versionIdentifier = Schema.Version(2, 0, 0)
-    static var models: [any PersistentModel.Type] { [SchemaV2.Note.self] }
-
-    @Model
-    final class Note {
-        var title: String
-        var content: String
-        var color: String?          // 本次新增字段（可选 → 轻量迁移可处理）
-        var createdAt: Date
-        init(title: String, content: String, color: String? = nil) {
-            self.title = title
-            self.content = content
+    static var models: [any PersistentModel.Type] { [Note.self] }
+    @Model final class Note {
+        @Attribute(originalName: "content") var body: String
+        var color: String?
+        init(body: String, color: String? = nil) {
+            self.body = body
             self.color = color
-            self.createdAt = .now
         }
     }
 }
-```
 
-要点：
-
-- 每个版本枚举内**完整声明该版本用到的全部 @Model 类**（嵌套在枚举命名空间里）
-- `versionIdentifier` 每次 schema 变化必须递增，它是 store 里记录的版本标记
-- 视图/业务代码统一引用**最新版本**的类（`SchemaV2.Note`），旧枚举只为迁移服务
-
-## 3. SchemaMigrationPlan 与 MigrationStage
-
-**定义**: `SchemaMigrationPlan` 回答两个问题——"存在哪些版本"（`schemas`）与"每一步怎么迁"（`stages`）。每个 `MigrationStage` 是相邻两版之间的一次迁移。
-
-```swift
-enum NotesMigrationPlan: SchemaMigrationPlan {
-    static var schemas: [any VersionedSchema.Type] {
-        [SchemaV1.self, SchemaV2.self]          // 按版本顺序列出全部历史版本
-    }
-
+enum NotesPlan: SchemaMigrationPlan {
+    static var schemas: [any VersionedSchema.Type] { [NotesV1.self, NotesV2.self] }
     static var stages: [MigrationStage] {
-        [migrationV1toV2]
+        [.lightweight(fromVersion: NotesV1.self, toVersion: NotesV2.self)]
     }
+}
 
-    // 轻量迁移：加可选/带默认值字段这类可自动推断的改动
-    static let migrationV1toV2 = MigrationStage.lightweight(
-        fromVersion: SchemaV1.self,
-        toVersion: SchemaV2.self
-    )
-
-    // 自定义迁移：框架推断不了时，手动搬数据（旧数据术语里的"重量级"）
-    static let migrationV2toV3 = MigrationStage.custom(
-        fromVersion: SchemaV2.self,
-        toVersion: SchemaV3.self,
-        willMigrate: { context in
-            // 迁移前：旧 schema 的 ModelContext，可预读/暂存
-        },
-        didMigrate: { context in
-            // 迁移后：新 schema 的 ModelContext，在此改写数据
-        }
-    )
+func openNotes() throws -> ModelContainer {
+    try ModelContainer(for: NotesV2.Note.self, migrationPlan: NotesPlan.self)
 }
 ```
 
-| Stage | 何时用 |
-|-------|--------|
-| `MigrationStage.lightweight(fromVersion:toVersion:)` | 加/删字段（可选或有默认值）、加索引等框架可自动推断的变化 |
-| `MigrationStage.custom(fromVersion:toVersion:willMigrate:didMigrate:)` | 重命名、改类型、关系结构调整等推断不了的变化；两个闭包都可选 |
+生产容器还应明确配置持久化位置。测试 V1 与 V2 时必须指向同一个测试 store；两个内存容器不可能证明迁移成功。示例当前没有启用 CloudKit，不能直接当云同步迁移方案。
 
-容器装配：
+## 默认值、类型变化与自定义阶段
 
-```swift
-WindowGroup { ContentView() }
-    .modelContainer(for: SchemaV2.Note.self, migrationPlan: NotesMigrationPlan.self)
-```
+| 改动 | 判断依据 | 验证重点 |
+|---|---|---|
+| 新增可选属性 | 旧记录可用 nil 表达缺省 | nil 是否符合业务规则 |
+| 新增有存储默认值的属性 | schema 是否能够提供该默认值 | init 参数默认值不等于数据库迁移默认值 |
+| 属性重命名 | originalName 是否指向正确旧属性 | 所有旧文本逐条保留 |
+| String 改数值等类型变化 | 是否需要解析与异常处理 | 非法旧值不能静默变成 0 |
+| 增加唯一约束 | 旧库是否已有重复 | 先定义去重/合并规则，保留必要关联 |
+| 删除或重组关系 | 删除规则与引用是否有效 | 不产生孤立记录或意外级联删除 |
 
-> 实际迁移发生在**容器首次打开 store 时**（启动路径上）；成功后 store 的版本标记更新为新版本。
+自定义 MigrationStage 的 willMigrate 面向旧 schema，didMigrate 面向新 schema。不能在 didMigrate 中读取已经不存在的旧字段，也不能凭空创建一个未声明的 SchemaV3。复杂转换可设计过渡版本，先保留旧值并新增可选目标字段，完成转换与校验后再移除旧字段。把工作放进 custom 不会自动使启动变快；需要测量数据规模与迁移耗时。
 
-## 4. 什么改动能轻量迁移
+## 可重复的升级验收
 
-| 改动 | 能否 lightweight | 处理方式 |
-|------|------------------|----------|
-| 新增**可选**字段 | ✅ 通常可以 | 直接 lightweight |
-| 新增**有默认值**字段 | ✅ 通常可以 | init 默认值或属性默认值 |
-| 新增**无默认值必填**字段 | ❌ 不保证 | 补默认值/改为可选，或 custom |
-| 删除字段 | ✅ 通常可以 | 旧列被忽略 |
-| **重命名字段** | ❌ 框架不知道新旧字段同源 | custom stage：旧类读旧名 → 写入新类新名 |
-| **改字段类型**（如 Int → String） | ❌ | custom stage 逐条转换 |
-| **关系变化**（加关系/改删除规则/反转方向） | ⚠️ 视情况 | 加关系多为轻量；改删除规则/结构重组走 custom 验证 |
+1. 用真实历史模型生成专用 V1 测试库，含空文本、中文、长文本与关系边界数据，并保留原始副本。
+2. 用 V2 打开该测试库，验证条数与每条 body 的值，新增 color 应为 nil。
+3. 关闭后再次打开，确认不重复转换、不丢数据。
+4. 从每个承诺支持的历史版本直接升级，而不只测试相邻一版；在最低支持系统上重复验证。
+5. 模拟无可用空间或迁移错误，检查界面提供恢复与反馈路径，原库不会被自动删除。
 
-轻量能处理的就是"框架拿到新旧两份 schema 能自己算出怎么填空"的变化；**涉及数据判断与换算的一律 custom**。
+自测：为什么只给 `init(body: String = "")` 加默认参数不足以填充旧库必填字段？因为旧记录的迁移不是逐条调用业务构造器创建新对象。
 
-## 5. custom 迁移示例：字段重命名
+依据：[Apple 模型持久化说明](https://developer.apple.com/documentation/swiftdata/preserving-your-apps-model-data-across-launches)、[Attribute 原名称参数](https://developer.apple.com/documentation/swiftdata/attribute(_:originalname:hashmodifier:))。继续阅读 [SwiftData 基础](02-swiftdata-observability.md) 与 [笔记项目](../../projects/01-notes-app.md)。
 
-```swift
-// SchemaV3.Note 把 content 重命名为 body（并保留 color）
-static let migrationV2toV3 = MigrationStage.custom(
-    fromVersion: SchemaV2.self,
-    toVersion: SchemaV3.self,
-    willMigrate: { context in },
-    didMigrate: { context in
-        // didMigrate 拿到新 schema 上下文；旧值已由框架按同名/可推断字段搬运，
-        // 重命名的字段在此按业务规则补偿（简单场景可让新旧字段并存一版，这里搬值）
-        let notes = try context.fetch(FetchDescriptor<SchemaV3.Note>())
-        for note in notes where note.body == nil {
-            note.body = note.content        // 旧列值补到新列
-        }
-        try context.save()
-    }
-)
-```
+<!-- learning-navigation -->
+## 阅读导航
 
-> 重命名的"最省事"变体：**新旧字段并存一个版本**（保留旧列 + 新列一起写），下一版再删旧列走 lightweight——用两次轻量换一次 custom。
-
-## ⚠️ 高频陷阱速查
-
-- **迁移计划的 `schemas` 数组漏了历史版本**（指 SchemaMigrationPlan，VersionedSchema 用的是 `models`）：只写最新版，框架无法完成"旧 store → 新 schema"的链路，启动即迁移失败
-- **改了模型忘递增 `versionIdentifier`**：新代码配旧版本号，store 判断"无需迁移"却对不上结构，行为不可预期
-- **随手改已发版的旧枚举**：SchemaV1 是历史快照，动了它 = 伪造历史，老用户迁移必然错乱
-- **无默认值的必填新字段**：不属于可自动推断的变化，轻量迁移会失败——新字段一律给默认值或设为可选
-- **重命名当轻量处理**：SwiftData 没有 Core Data 的 renamingIdentifier 机制，直接改名对框架而言是"删一个加一个"，旧值丢失
-- **只在新装 App 上测**：新装根本不走迁移——必须用**旧版本 App 造好的旧数据**（模拟器保留旧 store）升级验证
-- **迁移跑在启动主线程**：数据量大时启动变慢；把重搬运的算术放 custom stage，必要时先 willMigrate 预聚合
-
-## 相关文档
-
-- 📄 [02-swiftdata-observability.md](./02-swiftdata-observability.md) — @Model/容器/@Query 基础
-- 📄 [01-notes-app.md](../../projects/01-notes-app.md) — 进阶挑战"数据迁移"的实战入口
-- 📄 [01-foundation-and-stdlib.md](../library-guides/01-foundation-and-stdlib.md) — Date 等基础类型
-
----
-
-*最后更新: 2026年9月 | 本条目为模块知识字典的一部分，SwiftData 迁移概念完整解释以此处为单一事实来源*
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

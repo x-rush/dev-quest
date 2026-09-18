@@ -81,7 +81,7 @@ export default defineConfig({
   ],
 
   webServer: {
-    command: "npm run dev",
+    command: process.env.CI ? "npm run start" : "npm run dev", // CI 此前先 npm run build
     url: "http://localhost:3000",
     reuseExistingServer: !process.env.CI,
   },
@@ -121,7 +121,7 @@ export { expect } from "@playwright/test"
 
 ```typescript
 // __tests__/e2e/homepage.spec.ts
-import { test, expect } from "../fixtures/auth"
+import { test, expect } from "./fixtures/auth"
 
 test.describe("首页功能测试", () => {
   test("应该正确加载首页", async ({ page }) => {
@@ -319,7 +319,7 @@ test.describe("用户登录流程", () => {
 
 ```typescript
 // __tests__/e2e/blog/blog-workflow.spec.ts
-import { test, expect } from "../fixtures/auth"
+import { test, expect } from "./fixtures/auth"
 
 test.describe("博客系统完整流程", () => {
   test.beforeEach(async ({ authenticatedPage }) => {
@@ -401,7 +401,7 @@ test.describe("博客系统完整流程", () => {
 
 ```typescript
 // __tests__/e2e/ecommerce/shopping-flow.spec.ts
-import { test, expect } from "../fixtures/auth"
+import { test, expect } from "./fixtures/auth"
 
 test.describe("电商购物流程", () => {
   test.beforeEach(async ({ page }) => {
@@ -493,7 +493,7 @@ test.describe("电商购物流程", () => {
 
 ```typescript
 // __tests__/e2e/profile/profile-management.spec.ts
-import { test, expect } from "../fixtures/auth"
+import { test, expect } from "./fixtures/auth"
 
 test.describe("用户资料管理", () => {
   test.beforeEach(async ({ authenticatedPage }) => {
@@ -711,25 +711,16 @@ test.describe("页面性能测试", () => {
   test("图片懒加载应该正常工作", async ({ page }) => {
     await page.goto("/products")
 
-    // 获取所有图片
-    const images = await page.locator("img[data-src]").count()
-    expect(images).toBeGreaterThan(0)
-
-    // 验证初始状态
-    const initialImages = await page.locator("img[src]").count()
-    expect(initialImages).toBeLessThan(images)
-
-    // 滚动页面
-    await page.evaluate(() => {
-      window.scrollTo(0, document.body.scrollHeight)
-    })
-
-    // 等待图片加载
-    await page.waitForTimeout(1000)
-
-    // 验证懒加载图片已加载
-    const loadedImages = await page.locator("img[src]").count()
-    expect(loadedImages).toBeGreaterThanOrEqual(images)
+    // 示例约定产品图片都有 data-testid="product-image"。
+    // next/image 不依赖 data-src；浏览器也可能提前加载临近视口图片。
+    const images = page.getByTestId("product-image")
+    expect(await images.count()).toBeGreaterThan(0)
+    const last = images.last()
+    await last.scrollIntoViewIfNeeded()
+    await expect.poll(() => last.evaluate((node: HTMLImageElement) =>
+      node.complete && node.naturalWidth > 0
+    )).toBe(true)
+    // 此断言证明滚到目标后图片成功解码；不能单独证明初始请求被延迟。
   })
 })
 ```
@@ -1182,6 +1173,17 @@ export class TestDataManager {
 - 前端E2E测试的特殊考虑
 - 现代测试工具的优势
 
+<!-- full-library-explanation -->
+## 独立数据和可观察等待让用例稳定
+
+前置是 HTTP、数据库与浏览器会话。每个用例分配独立账号或数据前缀，浏览器上下文隔离不会自动隔离数据库。fixture 中的默认账号必须由测试种子创建，不能假定页面存在该账号；涉及写入时验证页面结果和持久状态，再清理测试数据。
+
+自动等待只针对定位与动作的可执行条件，不知道业务任务是否完成。等待成功提示、目标 URL 或特定响应，比固定睡眠更可靠；networkidle 也不是通用完成信号，轮询与分析请求可能一直存在。重试用于收集偶发失败证据，不能把最终转绿当成稳定性证明。
+
+**练习**：给创建任务接口加入随机延迟，测试仍应通过明确结果等待成功。增加“未登录”和“登录为另一个用户”两条路径，验证服务端拒绝而不只检查按钮隐藏。CI 在构建后运行生产服务，发现开发服务器不会暴露的缓存、水合和资源问题；测试账号只接专用测试数据源。
+
+依据：[Playwright 最佳实践](https://playwright.dev/docs/best-practices)、[Next Playwright](https://nextjs.org/docs/app/guides/testing/playwright)。
+
 ## 🔗 相关资源链接
 
 ### 官方资源
@@ -1271,3 +1273,8 @@ export class TestDataManager {
 - 理论与实践时间比例: 3:7
 - 重点掌握Playwright和页面对象模式
 - 从简单流程开始，逐步构建复杂业务场景测试
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../LEARNING_GUIDE.md) · [完整目录与版本](../README.md) · [通用术语](../../shared-resources/glossary.md)

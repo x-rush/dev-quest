@@ -6,6 +6,9 @@
 >
 > **前置知识**: [09-tauri-2-essentials](./09-tauri-2-essentials.md)（Builder 与 invoke_handler）；Serde derive 基础
 
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
+
 ## 📚 文档元数据
 
 | 属性 | 内容 |
@@ -15,6 +18,8 @@
 | **难度** | ⭐⭐ |
 | **标签** | `#rust` `#tauri` `#reference` `#ipc` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 > 版本基线：Tauri **2.11** / Serde **1.0.229**（见模块 [README](../../README.md) 技术基线区块）。
 
@@ -306,15 +311,9 @@ struct ApiError {
 
 ## 🎨 最佳实践
 
-### ✅ 推荐做法
-- **命令粒度对齐业务操作**：一个命令 = 一次完整业务动作，避免前端拼装多次 invoke 的中间态
-- **长任务走事件**：超过几百毫秒的工作，立即 `emit` started，进度用事件推送，结束再 `emit` finished
-- **前端封装类型层**：`invoke<T>()` 泛型 + 每命令一个包装函数，把命令名与参数形状收敛到单文件
+命令粒度围绕可解释的业务动作，例如保存一条笔记；长任务可返回任务 id 或通过事件报告进度，但必须定义失败、取消和结束状态。类型参数只是前端声明，参数名称与返回结构还需两端契约测试。
 
-### ❌ 避免陷阱
-- **camelCase 拼写错位**：Rust `file_path` ↔ JS `filePath`，对不上报 `invalid args`，是最高频错误
-- **async + State 忘了 Result**：编译错误信息指向 Send 约束，记住"借用参数必 Result"
-- **事件监听不注销**：前端组件卸载时忘记 `unlisten()`，监听器随窗口累积
+异步命令涉及借用与 Send 等约束时，按实际签名和编译诊断调整，不能背诵“有借用必加 Result”作为普遍规则。事件订阅处理卸载与注册完成的竞态，快速重复进入页面后不应收到重复进度。
 
 ## ❓ 常见问题
 
@@ -360,3 +359,9 @@ struct ApiError {
 **文档版本**: v1.0.0
 **最后更新**: 2026年9月
 **维护团队**: Dev Quest Team
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

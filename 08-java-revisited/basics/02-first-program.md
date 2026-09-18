@@ -1,10 +1,26 @@
 # 第一个程序 - 从 javac 到现代工作流
 
+## 先理解，再动手
+
+源码先被编译为字节码，再由 JVM 执行。main 是程序入口，类名、文件名与包路径共同影响工具如何找到入口。
+
+**本节自测**：修改输出后先只运行旧 class，再重新编译运行。
+
+<details>
+<summary>预期结果与参考思路（先尝试再展开）</summary>
+
+能解释为何未重新编译可能看到旧输出；IDE 自动构建隐藏了这一步，不代表它不存在。
+
+</details>
+
 > **文档简介**: 体验 Java 程序从经典 javac 编译，到单文件直跑、JShell 交互探索、Maven/Gradle 工程化的完整演进
 >
 > **目标读者**: 有旧版 Java 经验，想快速掌握现代 Java 编译运行方式的学习者
 >
 > **前置知识**: 已完成[环境搭建](./01-environment-setup.md)，JDK 21+ 可用
+
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
 
 ## 📚 文档元数据
 
@@ -15,6 +31,8 @@
 | **难度** | ⭐ |
 | **标签** | `#HelloWorld` `#javac` `#JShell` `#Maven` `#Gradle` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ## 🎯 学习目标
 
@@ -181,3 +199,9 @@ Toolchain 让"项目要什么 JDK"成为工程配置的一部分，机器上装�
 - 📄 **[变量与类型](./03-variables-types.md)** - 下一站：Java 类型系统与 var 推断
 - 📄 **[环境搭建](./01-environment-setup.md)** - 工具安装细节回顾
 - 📄 **[标准库核心](../reference/library-guides/01-standard-library.md)** - JShell 中可探索的标准库速查
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../LEARNING_GUIDE.md) · [完整目录与版本](../README.md) · [通用术语](../../shared-resources/glossary.md)

@@ -2,7 +2,10 @@
 
 ## 概述
 
-生成器（Generator）用 `yield` 把"遍历过程"变成可暂停的函数，是 PHP 处理大集合、惰性序列与内存敏感场景的核心工具；迭代器接口族是它的类型契约。本文按字典条目组织，供跳入查阅。属语言稳定层，无版本门槛（Generator 5.5+、`yield from` 7.0+）。
+生成器（Generator）用 `yield` 把"遍历过程"变成可暂停的函数，是 PHP 处理大集合、惰性序列与内存敏感场景的核心工具；迭代器接口族是它的类型契约。本文按字典条目组织，供跳入查阅。Generator 自 5.5、yield from 自 7.0 引入；本页类型语法及字符串函数以 PHP 8.x 为前提。
+
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
 
 ## 📚 文档元数据
 
@@ -14,9 +17,11 @@
 | **标签** | `#生成器` `#yield` `#迭代器` `#内存` |
 | **更新日期** | `2026年9月` |
 
+</details>
+
 ## 条目 1：Generator 与 `yield`
 
-📌 **定义**: 含 `yield` 的函数调用时不执行函数体，而是返回一个 `Generator` 对象；每次迭代驱动函数运行到下一个 `yield` 处暂停。内存中只保留"当前一个值"，而非整个结果集。
+📌 **定义**: 含 `yield` 的函数调用时不执行函数体，而是返回一个 `Generator` 对象；每次迭代驱动函数运行到下一个 `yield` 处暂停。无需预先构建全部结果，但仍保留函数状态、局部变量及当前资源。
 
 📖 **语法/签名**:
 
@@ -38,12 +43,13 @@ declare(strict_types=1);
 function readLines(string $path): Generator
 {
     $fh = fopen($path, 'rb');
+    if ($fh === false) { throw new RuntimeException('无法打开文件'); }
     try {
         while (($line = fgets($fh)) !== false) {
-            yield trim($line);        // 一行一行给，不把整个文件读进内存
+            yield rtrim($line, "\r\n");        // 一行一行给，不把整个文件读进内存
         }
     } finally {
-        fclose($fh);                  // 迭代结束/中断时可靠关闭
+        fclose($fh);                  // 生成器正常结束、异常展开或销毁时清理；外部 break 后若仍持有生成器则可能尚未关闭
     }
 }
 
@@ -54,7 +60,7 @@ foreach (readLines('access.log') as $line) {
 }
 ```
 
-⚠️ **常见陷阱**: 生成器**只能向前**迭代（`rewind` 只能在开始前调用一次）；生成器是一次性的——迭代完毕即耗尽，重用需重新调用生成函数；`return $value` 的值进入 `getReturn()`，不会出现在产出序列里。
+⚠️ **常见陷阱**: 生成器**只能向前**迭代（rewind 只能在尚未越过第一个 yield 的阶段使用，不能任意倒回已经推进的生成器）；生成器是一次性的——迭代完毕即耗尽，重用需重新调用生成函数；`return $value` 的值进入 `getReturn()`，不会出现在产出序列里。
 
 🔗 **相关条目**: [数组操作模式](./05-arrays-patterns.md)、[Fibers](./03-types-oop-modern.md)
 
@@ -86,7 +92,7 @@ foreach (outer() as $value) {
 }
 ```
 
-⚠️ **常见陷阱**: `yield from` 对数组是逐个产出（键保留原数组键）；`getReturn()` 只能在最外层生成器上取值。
+⚠️ **常见陷阱**: `yield from` 对数组是逐个产出（键保留原数组键）；任意已完成的 Generator 对象都可调用 getReturn；外层不会自动继承内层返回值，需显式 return。
 
 🔗 **相关条目**: [Generator 对象的方法](#条目-3generator-对象的方法)
 
@@ -192,11 +198,10 @@ function naturals(int $from = 0): Generator
 // 截断函数：取前 n 个
 function take(iterable $it, int $n): Generator
 {
+    if ($n <= 0) { return; }
     foreach ($it as $value) {
-        if ($n-- <= 0) {
-            return;
-        }
         yield $value;
+        if (--$n === 0) { return; } // 在推进上游到下一项之前结束
     }
 }
 
@@ -225,3 +230,30 @@ foreach (take((static function (): Generator {
 **文档版本**: v2.0.0
 **最后更新**: 2026年9月
 **维护团队**: Dev Quest Team
+
+
+<!-- full-library-explanation -->
+## 惰性从第一次消费开始，资源一直跟着状态走
+
+前置是 foreach、函数返回值和 finally。调用生成器函数只得到 Generator，第一次 current、next、foreach 等操作才驱动函数体。yield 暂停时局部变量和资源仍可能被保留，所以内存不只是“一个返回值”的大小；消费端把全部结果存进数组也会失去节省内存的收益。
+
+```php
+<?php
+function steps(): Generator {
+    echo 'started', PHP_EOL;
+    yield 10;
+    yield 20;
+    return 'done';
+}
+$g = steps();
+echo 'created', PHP_EOL;
+foreach ($g as $value) { echo $value, PHP_EOL; }
+echo $g->getReturn(), PHP_EOL;
+```
+
+保存为 generator.php，预期依次输出 created、started、10、20、done。练习：在第一项后 break 并保留 $g，再检查它并未自然耗尽；只有走完 return 才可取得最终返回值。若多个 yield from 产生重复键，iterator_to_array 默认保留键会覆盖前值，想保留所有项应明确使用不保留键的模式。
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

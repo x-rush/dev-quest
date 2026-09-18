@@ -1,5 +1,8 @@
 # Go集成测试详解
 
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
+
 ## 📚 文档元数据
 
 | 属性 | 内容 |
@@ -11,6 +14,8 @@
 | **更新日期** | `2026年9月` |
 | **作者** | Dev Quest Team |
 | **状态** | ✅ 已完成 |
+
+</details>
 
 ## 概述
 集成测试是验证多个组件或系统协同工作是否正常的重要测试手段。与单元测试不同，集成测试关注的是组件之间的交互、数据流和整体功能。本指南将详细介绍Go语言集成测试的各个方面，包括测试策略、工具使用和最佳实践。
@@ -48,9 +53,9 @@
 /__________________\
 ```
 
-- **单元测试 (70%)**: 快速、隔离的测试
-- **集成测试 (20%)**: 组件间交互测试
-- **端到端测试 (10%)**: 完整业务流程测试
+- **单元测试（比例按风险调整）**: 快速、隔离的测试
+- **集成测试（覆盖真实边界）**: 组件间交互测试
+- **端到端测试（覆盖关键用户流程）**: 完整业务流程测试
 
 ### 2. 集成测试层次
 
@@ -82,6 +87,7 @@ import (
 	"testing"
 	"time"
 
+	_ "github.com/jackc/pgx/v5/stdlib" // 为 database/sql 注册 pgx 驱动
 	"github.com/testcontainers/testcontainers-go"
 	"github.com/testcontainers/testcontainers-go/modules/postgres"
 	"github.com/testcontainers/testcontainers-go/wait"
@@ -153,7 +159,7 @@ func TestUserRepositoryIntegration(t *testing.T) {
 	}
 
 	// 连接数据库
-	db, err := sql.Open("postgres", connStr)
+	db, err := sql.Open("pgx", connStr)
 	if err != nil {
 		t.Fatalf("Failed to connect to database: %v", err)
 	}
@@ -897,6 +903,7 @@ import (
 	"github.com/go-redis/redis/v8"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+	_ "github.com/jackc/pgx/v5/stdlib" // 为 database/sql 注册 pgx 驱动
 	"github.com/testcontainers/testcontainers-go"
 	"github.com/testcontainers/testcontainers-go/modules/redis"
 )
@@ -1389,6 +1396,7 @@ import (
 	"testing"
 	"time"
 
+	_ "github.com/jackc/pgx/v5/stdlib" // 为 database/sql 注册 pgx 驱动
 	"github.com/testcontainers/testcontainers-go"
 	"github.com/testcontainers/testcontainers-go/modules/postgres"
 	"github.com/testcontainers/testcontainers-go/wait"
@@ -1423,7 +1431,7 @@ func NewTestDatabase(t *testing.T) *DatabaseTestHelper {
 	require.NoError(t, err)
 
 	// 连接数据库
-	db, err := sql.Open("postgres", connStr)
+	db, err := sql.Open("pgx", connStr)
 	require.NoError(t, err)
 
 	return &DatabaseTestHelper{
@@ -1666,3 +1674,17 @@ func TestWithCleanup(t *testing.T) {
 通过合理应用这些策略和技巧，可以构建出稳定、可靠的集成测试套件，确保Go应用程序的质量和可靠性。
 
 *最后更新: 2025年9月*
+
+<!-- full-library-explanation -->
+## 集成测试验证真实边界，并隔离自己的数据
+
+前置是单元测试、SQL 和连接池。最值得保留的数据库集成测试包括真实迁移能否执行、NULL 是否正确映射、唯一约束如何报错、事务失败是否回滚。把数据库整个 mock 掉就无法回答这些问题。测试金字塔是成本与反馈速度的参考，不应把 70/20/10 当作固定配额；数据库密集型服务可能更依赖集成测试。
+
+每次运行使用专属容器、数据库或 schema，登记清理后才开始断言。仅给数据库起名 testdb 并不能保证它是当前测试独占的；清表辅助函数必须限定到本次测试创建的资源，动态表名需来自固定允许列表，不能把外部输入拼进 TRUNCATE。t.Fatal 后清理仍应执行，容器启动失败与业务断言失败要能区分。
+
+练习：从空库执行正式迁移，创建一条用户，再尝试相同邮箱写入，验证唯一约束错误而非仅检查非 nil；最后在事务中先写入后主动返回错误，确认没有残留记录。重复运行、单独运行子测试和改变执行顺序都应通过。需要 Docker、镜像拉取和数据库驱动的片段属于环境集成示例，启动时间预算应覆盖真实准备过程，不应通过固定 Sleep 猜测服务已就绪。
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../LEARNING_GUIDE.md) · [完整目录与版本](../README.md) · [通用术语](../../shared-resources/glossary.md)

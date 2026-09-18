@@ -1,10 +1,23 @@
 # 毕业项目：生产级 Laravel 应用
 
+## 分阶段练习与验收
+
+**最小阶段**：把一个已有业务项目补成可部署版本。
+
+**验收结果**：新环境可以按迁移和配置启动，队列失败能重试或定位。
+
+**扩展顺序**：缓存、队列、部署与回退逐项证明，不凭安装了工具就称生产可用。
+
+建议保存一份正常输入、一份失败输入、实际输出和对应测试。先完成以上阶段再扩展正文中的完整设计；遇到省略实现或未定义依赖，应按文档上下文补齐，不能把代码片段拼接后当作已经验证的完整工程。
+
 > **文档简介**: 把一个"能跑"的 Laravel 应用改造成"敢上线"的生产级工程——分层架构、配置治理、可观测性与发布清单
 >
 > **目标读者**: 已完成三个递进项目、准备把作品部署上线的开发者
 >
 > **前置知识**: [电商 API](./03-ecommerce-api.md)、[架构解析](../advanced-topics/architecture/01-laravel-architecture.md)、[Docker 部署](../deployment/01-docker-deployment.md)
+
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
 
 ## 📚 文档元数据
 
@@ -15,6 +28,8 @@
 | **难度** | ⭐⭐⭐ |
 | **标签** | `#Laravel` `#生产化` `#分层架构` `#可观测性` `#发布清单` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ## 🎯 项目目标
 
@@ -162,3 +177,9 @@ Route::get('/health', fn () => response()->json([
 - 📄 [安全实践](../advanced-topics/security/01-security-practices.md) — 上线前安全自查
 - 📄 [CI/CD 与可观测性](../deployment/03-ci-cd-observability.md) — 流水线与监控落地
 - 📄 [PHP 故障排除](../reference/quick-references/02-troubleshooting.md) — 线上问题应急速查
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../LEARNING_GUIDE.md) · [完整目录与版本](../README.md) · [通用术语](../../shared-resources/glossary.md)

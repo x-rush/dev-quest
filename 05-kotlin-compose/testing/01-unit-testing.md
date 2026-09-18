@@ -6,6 +6,9 @@
 >
 > **前置知识**: [生态集成](../frameworks/03-ecosystem-integration.md)、[协程与 Flow API 全表](../reference/language-concepts/03-coroutines-flow-api.md)
 
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
+
 ## 📚 文档元数据
 
 | 属性 | 内容 |
@@ -15,6 +18,8 @@
 | **难度** | ⭐⭐ |
 | **标签** | `#junit` `#mockk` `#coroutines-test` `#turbine` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ---
 
@@ -127,20 +132,25 @@ fun `UiState 依次经历 Loading 与 Success`() = runTest {
 
 ## 🎨 最佳实践
 
-### ✅ 推荐
+ViewModel 测试观察公开状态如何从初始变为加载、成功或失败，再验证重复触发和取消。依赖 WhileSubscribed 的流需要活跃收集者才能推动相应上游；测试应明确启动和清理收集，而不只读取初值。
 
-- ViewModel 状态机测试覆盖：初始态、成功、失败、重复触发
-- 用 `SharingStarted.WhileSubscribed(5_000)` 的 ViewModel 测试时先收集 `uiState` 再触发动作
-- 时间相关逻辑（防抖/超时/重试）全部走虚拟时间
-
-### ❌ 避免陷阱
-
-- 测试里 `Thread.sleep` / `runBlocking`——慢且不稳定，正确姿势是 `runTest` + `advanceUntilIdle`
-- Mock 掉被测对象自己负责的协作类，测试沦为"mock 剧本回放"
-- 断言私有状态或实现细节（如内部 MutableStateFlow），应断言公开的 `uiState` 与行为
+协程测试调度器可控制它管理的延时，但不会自动加速所有真实线程或外部 I/O。用可控时钟和依赖验证防抖、重试，不把每个等待都替换成无限 advanceUntilIdle。断言用户可见状态，避免绑定私有实现。
 
 ## 🔗 相关文档
 
 - 📖 概念字典：[协程与 Flow API 全表](../reference/language-concepts/03-coroutines-flow-api.md) ｜ [第三方库指南](../reference/library-guides/02-third-party-libs.md)
 - 🧪 同级指南：[Compose UI 测试](02-ui-testing.md) ｜ [集成与端到端测试](03-integration-e2e-testing.md)
 - 🚀 实战应用：[天气应用的状态机测试](../projects/02-weather-app.md) ｜ [生产级应用的质量门禁](../projects/04-production-android-app.md)
+
+
+<!-- acceptance-exercise -->
+## 练习与验收：让协程测试控制时间而不是等待运气
+
+选择带 debounce 的搜索逻辑，用测试调度器连续输入两个词，推进虚拟时间后只应提交最终词；再模拟服务失败，状态应进入可重试分支。预期测试不依赖真实 delay 等待，取消后不再提交旧结果。验收时去掉 debounce 或取消检查，应有对应断言失败；虚拟时间只控制使用该调度器的工作，不会自动推进所有外部线程。
+
+以上是在个人或隔离测试环境中的练习，不是本轮已执行记录；实际运行范围见仓库文档质量报告。
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../LEARNING_GUIDE.md) · [完整目录与版本](../README.md) · [通用术语](../../shared-resources/glossary.md)

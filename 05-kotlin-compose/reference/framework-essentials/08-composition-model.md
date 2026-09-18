@@ -1,5 +1,7 @@
 # @Composable 与组合模型
 
+> **阅读准备**：先理解 State 读取和重组，再区分组合、测量布局、绘制与视图身份。
+
 > Composable 函数的本质（编译器插件改写）、组合与重组的关系、调用上下文限制、重组局部性、跳过与稳定性契约的衔接
 
 | 属性 | 内容 |
@@ -77,8 +79,8 @@ fun Screen(user: User) {
     Column {
         Header(user.name)                      // name 不变 → 被跳过
         var liked by remember { mutableStateOf(false) }
-        LikeButton(liked, onLike = { liked = !liked })   // liked 变化 → 只重启这里
-        // Footer 不读 liked，完全不受影响
+        LikeButton(liked, onLike = { liked = !liked })   // 读取在外层作用域发生，不能声称只重启按钮
+        // 其他子调用是否跳过，还取决于参数、状态读取和编译器模式
     }
 }
 
@@ -101,12 +103,21 @@ fun MessageList(messages: List<Message>) {
   ✅ 只在组合上下文调用；组合结果由运行时持有，不由你持有。
 - ❌ 依赖执行顺序与次数（在 Composable 函数体里写计数器、发请求、改全局变量）——重组随时跳过或重复执行，行为随跳过漂移。
   ✅ 副作用交给 [副作用 API](./03-side-effects.md)（`LaunchedEffect`/`DisposableEffect`/`SideEffect`）。
-- ❌ 以为"参数没变就一定跳过"——前提是**参数类型稳定**：来自其他模块的无注解类、含 `List`/`Map` 接口属性的 data class 默认不稳定，整条调用链跳过失效。
-  ✅ `@Immutable`/`@Stable` 标注 + 保持 `equals` 与公开属性一致；细节与度量见 [重组与稳定性速查](./04-recomposition.md)。
+- ❌ 以为"参数没变就一定跳过"——还要考虑可重启性、状态失效和编译器模式；strong skipping 下不稳定参数也可能按身份比较后跳过。
+  ✅ 先保证类型确实满足契约，再考虑注解，不能靠注解冻结可变对象；细节与度量见 [重组与稳定性速查](./04-recomposition.md)。
 - ❌ 循环/条件分支里渲染同质子项时不给 `key()`——删除中间一项时，后续项按"调用位置"复用，`remember` 状态整体错位。
   ✅ `key(id) { ... }` 固定身份（LazyColumn 里对应 `items(key = { it.id })`）。
 - ❌ 在 Composable 函数体内直接调用 suspend 函数（编译错误：挂起调用只能在协程内）。
   ✅ `LaunchedEffect(key) { suspendFun() }`；事件回调里用 `rememberCoroutineScope().launch { }`。
+
+<!-- full-library-explanation -->
+## 身份为什么决定 remember 保存哪一份值
+
+假设循环显示 A、B、C，每一项内部 remember 一个展开标记。没有稳定身份时，在头部插入 X 可能让原本按位置保存的状态与记录错配；key(record.id) 让状态跟随业务记录。随机 key 每次都变又会造成反复重建，因此“唯一”还不够，必须跨更新稳定。
+
+练习：展开 B，插入 X，然后删除 A，观察展开状态跟随谁。验收：状态仍属于 B；删除 B 后，其副作用被清理。重新加入同 ID 的条目是否应恢复旧业务状态，需要应用自行定义，remember 不是历史数据库。
+
+组件通常返回 Unit，但 remember、rememberNavController 等 Composable 可以返回值；关键是必须在允许的组合上下文调用。普通 inline 集合函数在组合上下文中使用时，也可能包含 Composable 调用，不能只看 lambda 这个语法就判定非法。
 
 ## 🔗 相关条目
 
@@ -120,3 +131,9 @@ fun MessageList(messages: List<Message>) {
 ---
 
 *最后更新: 2026年9月 | 本条目为模块知识字典的一部分，概念完整解释以此处为单一事实来源*
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

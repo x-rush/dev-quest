@@ -1,10 +1,21 @@
 # Spring Boot 进阶 - Spring Data JPA、事务管理与 AOP
 
+## 先看框架承担哪部分职责
+
+**JPA 与事务**：持久化上下文追踪对象变化，事务规定数据库提交边界，AOP 通过代理等机制附加行为。理解调用路径才能判断注解是否生效。
+
+**最小练习与预期结果**：在实际事务边界模拟第二次写入失败并查询数据库；不能只断言仓库 mock 被调用两次。
+
+具体 API 与安装版本以[模块基线](../README.md)和本篇官方来源为准。先完成这条数据路径，再展开后面的高级配置；框架名称变化后，输入边界、状态归属和失败处理仍是需要理解的机制。
+
 > **文档简介**: 让 Spring Boot 应用真正"有数据、有边界、有横切能力"：用 Spring Data JPA 完成数据访问，用 `@Transactional` 划清事务边界，用 AOP 抽离横切逻辑
 >
 > **目标读者**: 已能写出基本 REST 接口、需要接入数据库的开发者
 >
 > **前置知识**: 已完成 [Spring Boot 入门](./01-spring-boot-basics.md)；注解基础见 [现代 Java 特性](../basics/07-modern-features.md)
+
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
 
 ## 📚 文档元数据
 
@@ -15,6 +26,8 @@
 | **难度** | ⭐⭐ |
 | **标签** | `#SpringDataJPA` `#事务` `#AOP` `#Hibernate` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ## 🎯 学习目标
 
@@ -189,15 +202,9 @@ public class AuditAspect {
 
 ## 🎨 最佳实践
 
-### ✅ 推荐
-- 事务方法保持短小，RPC/文件 IO 移出事务
-- `open-in-view: false` + 在服务层完成所有数据装配
-- 分页接口统一返回 `Page`/`Slice` 而非裸 `List`
+事务边界围绕需要一起成功或失败的数据库操作，避免在持有连接和锁时等待不受控外部 HTTP。禁用 open-in-view 后，应在明确的数据访问范围内取齐响应需要的数据；返回 DTO 的形状由 API 契约决定，不必暴露框架的 Page 类型。
 
-### ❌ 陷阱
-- `@Transactional` 加在 private 方法上：代理无法拦截，静默失效
-- 默认只回滚 `RuntimeException`：受检异常需显式 `rollbackFor = Exception.class`
-- 在事务内发 HTTP 请求：长事务拖垮连接池
+事务注解是否生效取决于代理调用路径、方法可见性与配置，自调用尤其要检查。回滚规则也可以被应用配置改变；显式为业务异常定义期望并测试，不能默认“加注解就一定回滚”。
 
 ## 🚀 下一步
 
@@ -211,3 +218,9 @@ public class AuditAspect {
 - 📖 [Spring Boot 核心速查](../reference/framework-essentials/01-spring-boot-essentials.md) — 配置绑定与 Actuator
 - 📄 [Spring Boot 入门](./01-spring-boot-basics.md) — 本文的前置
 - 📄 [异常处理](../basics/06-exceptions.md) — 受检/非受检异常影响回滚行为
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../LEARNING_GUIDE.md) · [完整目录与版本](../README.md) · [通用术语](../../shared-resources/glossary.md)

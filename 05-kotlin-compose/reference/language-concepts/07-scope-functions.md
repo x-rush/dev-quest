@@ -1,5 +1,7 @@
 # 作用域函数速查
 
+> **阅读准备**：Kotlin lambda、接收者、返回值与可空类型；读代码时先找 it/this 指向谁。
+
 > let / run / apply / also / with 五个作用域函数 + takeIf/takeUnless：临时作用域内访问对象、按"块内引用 + 返回值"选型的字典
 
 | 属性 | 内容 |
@@ -71,9 +73,33 @@ val id = intent.getStringExtra("id")?.takeIf { it.isNotEmpty() } ?: return
 - `with` 不是扩展函数，可空 receiver 无法 `?.with(...)`——改用 `run` 或先判空。
 - 同一条链里混用 `it` 与 `this` 容易混淆引用目标，保持风格一致。
 
+<!-- full-library-explanation -->
+## 先看表达式返回什么
+
+```kotlin
+fun main() {
+    val builder = StringBuilder("A")
+    val same = builder.apply { append("B") }
+    val length = builder.let { it.length }
+    println(same === builder) // true
+    println(length)           // 2
+    println("  ".takeIf { it.isNotBlank() }) // null
+}
+```
+
+apply 不复制对象，也不自动切线程；它返回同一接收者。let 的返回值是块最后的表达式，若把最后一行改成 println，结果类型就会变为 Unit。`?.let` 的判空来自 `?.`，不是 let 本身拒绝 null。
+
+练习：把 `loadExpensive().takeIf { enabled }` 改为 enabled 为真才调用加载函数。反馈：takeIf 在接收者已经求值后才执行，不能用它避免之前的昂贵或有副作用调用；明确的 if 往往更合适。
+
 ## 🔗 相关条目
 
 - 📄 [可空性与集合 API](./02-null-safety-collections.md) — `?.let` 组合的空安全语境
 - 📄 [扩展函数与扩展属性](./06-extension-functions.md)
 - 📄 [Lambda 与高阶函数](./08-lambdas-higher-order.md) — 作用域函数的函数类型本质
 - 📄 教程：[Kotlin 语法基础 - 作用域函数速览](../../basics/03-kotlin-syntax-essentials.md)
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

@@ -4,6 +4,9 @@
 
 `@dataclass` 自动生成 `__init__`/`__repr__`/`__eq__`，是纯数据建模的默认选择（教程见 [函数与类](../../basics/04-functions-oop.md)）。本条目覆盖字段级控制 `field()`、装饰器参数与序列化工具。
 
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
+
 ## 📚 文档元数据
 
 | 属性 | 内容 |
@@ -14,13 +17,15 @@
 | **标签** | `#dataclass` `#field` `#frozen` `#slots` `#建模` |
 | **更新日期** | `2026年9月` |
 
+</details>
+
 ## 装饰器参数总表
 
 | 参数 | 默认 | 作用 |
 |------|------|------|
-| `frozen=True` | `False` | 实例不可变：赋值抛 `FrozenInstanceError`；获得 `__hash__`，可入 set/dict 键 |
+| `frozen=True` | `False` | 阻止常规字段赋值；与 eq 等设置共同决定是否生成哈希，实际哈希仍要求参与字段可哈希 |
 | `order=True` | `False` | 生成 `__lt__`/`__le__`/`__gt__`/`__ge__`，按字段声明顺序比较，可直接 `sorted()` |
-| `slots=True` | `False` | 生成 `__slots__`：省内存、属性访问更快、禁止动态新增属性 |
+| `slots=True` | `False` | 生成槽位，通常减少实例字典成本；是否仍有 __dict__ 取决于继承结构，性能需实测 |
 | `kw_only=True` | `False` | 全部字段仅限关键字传参（多布尔参数的函数签名防呆） |
 | `init`/`repr`/`eq` | `True` | 对应魔术方法的生成开关 |
 
@@ -35,7 +40,7 @@ from dataclasses import dataclass, field
 class Bookmark:
     title: str
     url: str
-    tags: list[str] = field(default_factory=list)   # 可变默认值的唯一正确姿势
+    tags: list[str] = field(default_factory=list)   # 每次构造调用 list 工厂，避免共享默认列表
     pinned: bool = False
 
 bm = Bookmark("uv", "https://astral.sh")
@@ -50,6 +55,8 @@ print(bm == Bookmark("uv", "https://astral.sh"))   # True：eq 按字段逐个�
 ## 2. field() 参数全表
 
 ```python
+from uuid import uuid4
+
 @dataclass
 class Doc:
     id: int = field(compare=True)                 # 参与 == 与排序（默认即 True）
@@ -106,7 +113,7 @@ s = Slim()
 s.y = 1            # AttributeError：slots 禁止动态属性
 ```
 
-**陷阱**: `slots=True` 会重建类，`frozen` 的 `__setattr__` 需同时声明（`@dataclass(frozen=True, slots=True)`）；slots 类不再有 `__dict__`，依赖它的代码（如 `vars(obj)`）会失效。
+**陷阱**：slots 与 frozen 可以独立选择，并不要求同时开启。slots=True 返回一个新类；若实例没有 __dict__，vars(obj) 等依赖属性字典的代码会失败。基类提供 __dict__ 时，槽位不会自动移除它。
 
 ---
 
@@ -125,8 +132,40 @@ fields(Doc)             # (Field, ...) 内省字段定义
 
 ---
 
+<!-- full-library-explanation -->
+## 自动生成方法，不会自动建立业务不变量
+
+前置知识是类、默认参数和可变容器。dataclass 根据字段声明生成常用方法；字段注解不会自动校验运行时输入。`frozen=True` 限制字段重新赋值，`default_factory` 决定每次构造怎样取得默认对象，二者解决不同问题。
+
+完整示例保存为 `data_model.py` 后运行：
+
+```python
+from dataclasses import dataclass, field
+
+@dataclass(frozen=True)
+class Notebook:
+    tags: list[str] = field(default_factory=list)
+
+a, b = Notebook(), Notebook()
+a.tags.append("python")
+print(a.tags)
+print(b.tags)
+try:
+    hash(a)
+except TypeError:
+    print("not hashable")
+```
+
+输出 `['python']`、`[]` 和 `not hashable`。每个实例有独立列表，但冻结外层对象没有冻结列表，也没有使列表可哈希。练习：把字段改成 `tuple[str, ...] = ()`，解释为什么 `append` 不再可用，以及生成哈希为什么能够工作。
+
 ## 🔗 相关文档
 
 - 📄 **[函数与类](../../basics/04-functions-oop.md)** — dataclass 入门教程与建模练习
 - 📄 **[魔术方法与协议](./04-oop-protocols.md)** — 自动生成的 `__init__`/`__repr__`/`__eq__` 背后的协议
 - 📄 **[类型注解全表](./05-typing-annotations.md)** — 字段注解的进阶写法
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

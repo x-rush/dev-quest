@@ -1,6 +1,6 @@
 # database/sql - SQL 数据库访问层
 
-> **模块**: `01-go-backend` | **类型**: 字典条目（无难度门槛，支持任意跳入查阅）
+> **模块**: `01-go-backend` | **类型**: 字典条目（可独立查阅，按主题准备前置知识，支持任意跳入查阅）
 
 ## 📌 定义
 
@@ -9,8 +9,8 @@
 ## 📖 语法 / 签名
 
 ```go
-// 连接池模型：DB 是并发安全的长生命周期对象，全局一个
-db, err := sql.Open("pgx", dsn) // Open 惰性：此时不建连接
+// 连接池模型：DB 是并发安全的长生命周期对象，通常每个数据源复用一个
+db, err := sql.Open("pgx", dsn) // Open 不保证已连接；用 PingContext 验证可达性
 db.SetMaxOpenConns(25)          // 池内最大连接数（0 = 无限制）
 db.SetMaxIdleConns(25)          // 最大空闲连接数（默认 2，过小会频繁重建）
 db.SetConnMaxLifetime(5 * time.Minute)  // 连接最长寿命，防代际漂移
@@ -18,16 +18,18 @@ db.SetConnMaxIdleTime(10 * time.Minute) // 空闲超时回收
 
 // 三种执行语义
 row := db.QueryRowContext(ctx, "SELECT name FROM users WHERE id=$1", id)
-err := row.Scan(&name)                 // 恰一行；无行 → sql.ErrNoRows
+err := row.Scan(&name)                 // 读取首行；无行时 Scan 返回 sql.ErrNoRows，多余行不用于 Scan
 
 rows, err := db.QueryContext(ctx, "SELECT id, name FROM users") // 多行
-defer rows.Close()                     // 必须！否则连接被占用直至泄漏
+if err != nil { return err } // 片段位于返回 error 的函数内
+defer rows.Close()                     // 成功拿到 Rows 后才登记清理
 
 res, err := db.ExecContext(ctx, "UPDATE ...", args...)
 n, _ := res.RowsAffected()             // 影响行数；res.LastInsertId()（PG 不支持）
 
-// 预处理语句：参数化反复执行时复用服务端计划
+// 预处理语句：复用准备好的语句，服务端计划行为取决于驱动与数据库
 stmt, err := db.PrepareContext(ctx, "INSERT INTO logs(msg) VALUES($1)")
+if err != nil { return err }
 defer stmt.Close()
 _, err = stmt.ExecContext(ctx, "hello")
 ```
@@ -84,7 +86,7 @@ func main() {
 }
 ```
 
-**遍历多行的标准骨架**（生产代码直抄）：
+**遍历多行的函数骨架**（还需按实际表结构、数据量和超时要求调整）：
 
 ```go
 func listNames(ctx context.Context, db *sql.DB) ([]string, error) {
@@ -109,7 +111,7 @@ func listNames(ctx context.Context, db *sql.DB) ([]string, error) {
 ## ⚠️ 常见陷阱
 
 - ❌ **错误做法**：每次请求 `sql.Open` 新建 DB。
-- ✅ **正确做法**：DB 是连接池，应用启动时 Open 一次全局复用；Open 不做网络 IO，配置错误可能延迟到首次查询才暴露，可用 `db.PingContext` 探活。
+- ✅ **正确做法**：DB 是连接池，应用启动时 Open 一次全局复用；Open 的具体行为取决于驱动，不保证已经建立可用连接，连接错误可能延迟到首次查询才暴露，可用 `db.PingContext` 探活。
 - ❌ **错误做法**：遍历 rows 中途 return 或 panic，不 Close。
 - ✅ **正确做法**：拿到 rows 立即 `defer rows.Close()`；未 Close 的 Rows 会占死一条连接，池小则整库"卡死"。
 - ❌ **错误做法**：循环内忘记 `rows.Err()`，把迭代中断当成"没有更多数据"。
@@ -123,6 +125,15 @@ func listNames(ctx context.Context, db *sql.DB) ([]string, error) {
 - ❌ **错误做法**：PostgreSQL 里调用 `res.LastInsertId()`。
 - ✅ **正确做法**：PG 用 `INSERT ... RETURNING id` + QueryRow 取回自增 ID。
 
+<!-- full-library-explanation -->
+## 连接池等待、查询执行与事务边界
+
+前置是 SQL、context 与 defer。一次 QueryContext 可能先等待空闲连接，再执行数据库语句；池容量小不一定意味着数据库慢，可能是某条 Rows 未释放或事务长期占用连接。先查看 DB.Stats 中的 InUse、WaitCount、WaitDuration，并结合数据库端慢查询判断瓶颈，再调整上限。若每个应用副本都允许 25 个连接，扩容 10 个副本就可能占用 250 个，容量应按整个系统计算。
+
+事务中需要共同提交的操作应通过同一个 *sql.Tx 执行，混用 db.Exec 会跑到事务之外。BeginTx 成功后安排 Rollback 兜底，全部操作成功才 Commit，并检查 Commit 错误；一旦提交结果不确定，不能盲目重试非幂等业务。连接池解决连接复用，事务解决一组操作的原子性，两者不是同一层职责。
+
+练习：在独立测试数据库建立 email 可空的 users 表，分别存 NULL、空串和正常地址，验证 NullString.Valid 与 String；再让查询不存在的 id，错误应在 Scan 时被观察为 ErrNoRows。将池上限设为 1，故意保留一份 Rows，用短超时发第二次查询，观察等待超时；释放第一份后应恢复。该练习需要真实数据库和驱动，文中的纯 Go main 只演示值与错误分类。
+
 ## 🔗 相关条目
 
 - 📄 **[context 包](./05-context.md)** - QueryContext 超时链路
@@ -135,3 +146,9 @@ func listNames(ctx context.Context, db *sql.DB) ([]string, error) {
 ---
 
 *最后更新: 2026年9月 | 本条目为模块知识字典的一部分，概念完整解释以此处为单一事实来源*
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

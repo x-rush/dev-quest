@@ -6,6 +6,9 @@
 >
 > **前置知识**: [Laravel 进阶](../../frameworks/02-laravel-advanced.md)、[Laravel 核心速查](../../reference/framework-essentials/01-laravel-essentials.md)
 
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
+
 ## 📚 文档元数据
 
 | 属性 | 内容 |
@@ -15,6 +18,8 @@
 | **难度** | ⭐⭐⭐ |
 | **标签** | `#N+1` `#预加载` `#索引` `#EXPLAIN` `#性能` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ## 🎯 学习目标
 
@@ -65,7 +70,7 @@ $posts = Post::withExists('comments')->get();         // comments_exists
 $posts = Post::with('author:id,name')->get();
 
 // 预加载后按需取出，避免再次触发懒加载
-$first = $posts->first()->getRelation('author');
+$first = $posts->first()?->getRelation('author');
 ```
 
 **经验法则**：列表页需要什么就 `with` 什么；详情页关系统计用 `withCount`；排序/过滤用数据库子查询而不是 PHP 端 collection 操作。
@@ -80,7 +85,7 @@ Schema::create('orders', function (Blueprint $table): void {
     $table->timestamp('created_at');
     $table->timestamp('paid_at')->nullable();
 
-    // 1. 等值过滤列 + 低区分度列建普通索引
+    // 1. 候选索引；低区分度列单独索引未必有收益，需要检查选择性
     $table->index('status');
     // 2. 复合索引遵循最左前缀：此索引同时服务
     //    WHERE user_id = ? 与 WHERE user_id = ? AND status = ?
@@ -94,8 +99,8 @@ Schema::create('orders', function (Blueprint $table): void {
 
 ```sql
 EXPLAIN SELECT * FROM orders WHERE user_id = 1 AND status = 'paid' ORDER BY created_at DESC;
--- 关注 type（目标 ref/range，拒绝 ALL 全表扫）与 rows（预估扫描行数）
--- Extra 出现 Using filesort / Using temporary 通常是排序列未进索引
+-- 关注 type（结合实际行数判断；小表或大比例读取时全表扫描可能更合理）与 rows（预估扫描行数）
+-- Extra 出现 Using filesort / Using temporary 表示额外排序或临时结果，需结合完整查询分析，不能直接等同缺索引
 ```
 
 索引不是越多越好：每个索引都拖慢写入并占用存储；**删除从未命中的索引**与新增同等重要（用 `sys.schema_unused_indexes` 或慢查询日志佐证）。
@@ -112,11 +117,11 @@ Order::query()
         }
     });
 
-// 只需要遍历、内存受限：cursor 走 PDO 流式读取（保持一个连接）
+// 只需要遍历、内存受限：cursor 逐个创建模型，但 PDO 驱动可能缓冲原始结果；超大数据可考虑 lazyById
 foreach (Order::where('status', 'paid')->cursor() as $order) {
 }
 
-// 聚合永远下推数据库：collection 的 sum() 是把数据拉回 PHP 再算
+// 通常优先让数据库完成可表达的聚合，避免全量传输：collection 的 sum() 是把数据拉回 PHP 再算
 Order::where('status', 'paid')->sum('total_cents');
 ```
 
@@ -131,9 +136,29 @@ Order::where('status', 'paid')->sum('total_cents');
 
 缓解不了再考虑缓存层（见[缓存策略与队列调优](./02-caching-queues.md)）——缓存是"用复杂度换读性能"，先修查询再上缓存。
 
+<!-- full-library-explanation -->
+## 查询少了不代表端到端更快
+
+前置是 SQL 过滤、排序、关系外键。预加载把多次往返合并为批量查询，但若加载每篇文章的全部评论，返回行数、网络传输和对象内存仍可能大幅增长。先写出页面需要的字段与条数，再决定取模型、聚合值或分页结果。
+
+以 user_id 等值、status 等值、created_at 排序的查询为例，可比较 (user_id,status,created_at) 与现有索引的计划；不能只凭最左前缀口号宣布最佳方案。数据分布、LIMIT、表大小、覆盖列和写入成本都会影响选择。EXPLAIN 是估算，支持时再用执行分析比对实际行数和耗时，注意执行分析可能真的运行语句。
+
+**练习**：准备无文章、单篇文章、100 篇文章且作者重复三组数据，记录 SQL 次数、返回行数与响应时间。把 author 改成可空，确认预加载后的空关系不会触发属性错误。chunkById 遍历期间新增或修改数据不等于获得一致性快照；需要快照语义时必须另行设计事务或数据截止条件。
+
+依据：[查询构建器](https://laravel.com/docs/13.x/queries)、[Eloquent](https://laravel.com/docs/13.x/eloquent)。
+
+
+本轮未在本机执行 PHP 片段；文中的输出为预期值，版本相关行为请用项目运行时验证。
+
 ## 🔗 相关文档
 
 - 📄 [类型系统与现代 OOP](../../reference/language-concepts/03-types-oop-modern.md) — 闭包签名与可空类型
 - 📄 [Laravel 进阶](../../frameworks/02-laravel-advanced.md) — 关系定义与高级查询入门
 - 📄 [缓存策略与队列调优](./02-caching-queues.md) — 读放大之后的下一级优化
 - 📄 [Feature 测试与数据库测试](../../testing/03-feature-testing.md) — 防止回归的测试护栏
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

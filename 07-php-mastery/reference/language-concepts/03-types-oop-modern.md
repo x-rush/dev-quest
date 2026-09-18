@@ -4,6 +4,9 @@
 
 本文是 PHP 8.x 类型系统（联合、交叉、DNF）与现代 OOP 特性（枚举、属性、Fibers、一等公民 callable）的条目式权威速查。每条按"定义 → 语法 → 示例 → 陷阱"组织，可任意跳入查阅。
 
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
+
 ## 📚 文档元数据
 
 | 属性 | 内容 |
@@ -13,6 +16,8 @@
 | **难度** | ⭐⭐ |
 | **标签** | `#类型系统` `#联合类型` `#DNF` `#枚举` `#属性注解` `#Fibers` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ## 1. 基础类型声明
 
@@ -75,12 +80,12 @@ function handle(null|(Stringable&Countable)|array $input): void   // 与 null �
 | 类型 | 引入版本 | 语义 |
 |------|---------|------|
 | `mixed` | 8.0 | 任意值，等价于"无约束"（不等于缺省声明） |
-| `void` | 7.1 | 无返回值，函数必须裸 `return` |
+| `void` | 7.1 | 不返回值，可自然结束或使用裸 return |
 | `never` | 8.1 | 永不返回（抛异常/`exit`/死循环），静态分析利器 |
 | `static` | 8.0（返回类型） | 返回实际调用类实例 |
 | `iterable` | 7.1 | `array\|Traversable` 的别名 |
-| `callable` | 5.4 | 可调用结构；类上下文中不能与闭包类型混用 |
-| `true`/`false` | 8.2 | 可独立作为类型，如 `true\|false`、`false|null` |
+| `callable` | 5.4 | 可调用结构；可用于参数与返回类型，不能声明为普通属性类型 |
+| `true`/`false` | 8.2 | 可独立作为类型；true|false 应写 bool，false|null 为可用联合 |
 | `object` | 7.2 | 任意对象，但无法访问具体成员 |
 
 **陷阱**: `never` 函数必须以异常/exit 结束，写 `return` 直接报错；`callable` 参数不能用 `is_callable` 弱判定替代严格校验。
@@ -89,7 +94,7 @@ function handle(null|(Stringable&Countable)|array $input): void   // 与 null �
 
 ### readonly 属性（8.1+）
 
-**定义**: 初始化后禁止修改的属性，只能通过构造器（或提升参数）赋值一次。
+**定义**: 初始化后限制修改的属性，可在允许的写入作用域初始化，不限于构造器。
 
 ```php
 final class Vector
@@ -105,7 +110,7 @@ final class Vector
 }
 ```
 
-**陷阱**: 只保证引用不可变（浅只读），数组内部、对象内部仍可变；不支持默认值与构造器传值并存。
+**陷阱**: 保存对象时对象内部仍可变；保存数组时不能直接修改该属性的数组元素。提升参数的默认值属于参数，不能与普通 readonly 属性默认值混淆。
 
 ### 动态属性废弃（8.2+）
 
@@ -122,7 +127,7 @@ $obj = new Legacy();
 **定义**: 读写权限分离声明：`public private(set)` 外部可读、仅类内可写。
 
 ```php
-final class Meter
+class Meter
 {
     public private(set) int $count = 0;      // 等效自动 getter
     public protected(set) float $avg = 0.0;  // 子类可写
@@ -134,7 +139,7 @@ final class Meter
 }
 ```
 
-**陷阱**: 与 `readonly` 互斥；`new` 初始化器中的隐式初始化也算"类内写入"。
+**陷阱**: PHP 8.4 支持与 readonly 组合；写入权限与只能初始化一次是不同维度。
 
 ### 常量类型化（8.3+）
 
@@ -254,12 +259,12 @@ var_dump($mid, $end, $fiber->getReturn());   // string(6) "paused"、NULL、int(
 | `getReturn()` | 取 fiber 的 return 值，仅 `isTerminated()` 后可调（提前调用抛 Error） |
 | `isStarted/isSuspended/isRunning/isTerminated` | 状态查询 |
 
-**陷阱**: Fiber 不是线程/进程，无并行；在挂起状态销毁 Fiber 会导致后续 resume 抛 `FiberError`；阻塞 I/O 依旧阻塞整个进程。
+**陷阱**: Fiber 不是线程/进程，无并行；未启动、已结束或不处于挂起状态时调用 resume 会失败；销毁后的对象也不再可通过原变量调用；阻塞 I/O 依旧阻塞整个进程。
 
 ## 7. 其他现代 OOP 要点
 
 - **`::class` 常量对对象可用（8.0）**：`$obj::class` 获取运行时类名
-- **构造器内嵌 `new` 初始化器（8.1）**：`public Logger $log = new NullLogger();` 属性默认值可为 new 表达式（不能引用其他属性）
+- **构造器内嵌 `new` 初始化器（8.1）**：构造器提升参数可写 public Logger $log = new NullLogger()；普通属性声明不能直接照搬此 new 默认值
 - **抽象方法的可见性**：接口方法天然外部可见；抽象类中 `abstract protected` 常见，`abstract private` 不合法
 - **`enum` + `readonly` + DNF** 是 8.3 代码库主流的领域建模组合拳
 
@@ -268,3 +273,33 @@ var_dump($mid, $end, $fiber->getReturn());   // string(6) "paused"、NULL、int(
 - 📄 **[PHP 关键字详解](./01-php-keywords.md)** — `enum`/`readonly` 等关键字本身
 - 📄 **[数组操作模式](./05-arrays-patterns.md)** — 一等公民 callable 与集合操作结合
 - 📄 **[教程：高级特性](../../basics/07-advanced-features.md)** — 本表各特性的渐进式讲解
+
+
+<!-- full-library-explanation -->
+## 类型约束、只读约束和对象内容是三件事
+
+前置是类、接口和数组。联合类型表示可以是其中一种，交叉类型表示对象同时提供多种能力；它们不验证数组的每个键。readonly 限制属性存储槽的修改，若属性保存对象，仍可调用对象自身的可变方法；若保存数组，则不能直接修改这个 readonly 属性中的数组元素。
+
+完整实验保存为 readonly.php，在 PHP 8.1+ 运行 php readonly.php：
+
+```php
+<?php
+final class Box {
+    public function __construct(public readonly object $item) {}
+}
+$box = new Box((object) ['count' => 1]);
+$box->item->count++;
+echo $box->item->count, PHP_EOL;
+try {
+    $box->item = (object) ['count' => 3];
+} catch (Error $e) {
+    echo 'cannot replace', PHP_EOL;
+}
+```
+
+预期输出 2、cannot replace。练习：把对象属性改成 readonly array，并尝试修改元素，说明为何行为不同。Fiber 则保存可挂起调用栈，只有协作让出控制权才切换；包裹一个阻塞文件读取不会自动把它变成异步 I/O，也不会产生 CPU 并行。
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

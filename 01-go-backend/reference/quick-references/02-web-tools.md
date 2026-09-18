@@ -8,6 +8,9 @@
 >
 > **预计时长**: 20分钟速查
 
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
+
 ## 📚 文档元数据
 
 | 属性 | 内容 |
@@ -20,6 +23,8 @@
 | **作者** | Dev Quest Team |
 | **状态** | ✅ 已完成 |
 
+</details>
+
 ## 🎯 开发工具
 
 ### Go 命令
@@ -29,13 +34,13 @@ go mod init example.com/myapp
 
 # 下载依赖
 go get github.com/gin-gonic/gin
-go get -u ./...  # 更新所有依赖
+go list -m -u all # 查看可用更新；决定版本后按依赖升级并测试
 
 # 运行应用
 go run main.go
 
 # 构建应用
-go build -o myapp main.go
+go build -o myapp .
 
 # 测试
 go test ./...
@@ -190,6 +195,15 @@ http GET localhost:8080/api/users
 http POST localhost:8080/api/users name="John" email="john@example.com"
 ```
 
+<!-- full-library-explanation -->
+## 区分安装工具、管理依赖和验证构建
+
+前置是 module 与 package。go get 修改当前模块的依赖选择；go install module/cmd@version 用于安装指定版本的命令行工具，两者用途不同。go mod tidy 会根据导入整理 go.mod/go.sum，不能替代测试，也不意味着“所有依赖升级至最新”。go build . 构建当前包，go build main.go 只使用显式列出的源文件，项目拆成多个文件后后者容易漏掉实现。
+
+按一次真实开发变更练习：新增一个 Handler，先 gofmt 格式化，再 go test ./... 和 go vet ./...，最后 go build ./...。若测试依赖数据库，应独立说明启动方式和连接配置。可执行文件的目标操作系统由 GOOS/GOARCH 控制，交叉编译成功仍不能证明目标机运行时资源、CGO 和证书配置正确。
+
+本页 export 命令适用于类 Unix shell；PowerShell 可用 $env:PORT = '8080' 设置当前进程环境。GO_ENV 是应用自行约定的变量，Go 工具链不会自动按它加载配置。代理和校验数据库应按网络条件选择，不要因一次下载失败就关闭校验。依赖升级逐批执行，记录版本差异并复跑契约测试，避免把故障排查与全量升级混在同一次变更中。
+
 ## 🔗 相关资源
 
 - **深入学习**: [frameworks/01-gin-framework-basics.md](../../frameworks/01-gin-framework-basics.md)
@@ -199,3 +213,9 @@ http POST localhost:8080/api/users name="John" email="john@example.com"
 ---
 
 **更新日志**: 2026年9月 - 创建Go Web开发工具速查
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

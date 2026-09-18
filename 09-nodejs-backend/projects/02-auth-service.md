@@ -1,10 +1,23 @@
 # 进阶项目：认证服务（JWT + 刷新令牌）
 
+## 分阶段练习与验收
+
+**最小阶段**：先完成一次登录与受保护资源访问。
+
+**验收结果**：无效凭据失败、过期令牌不能访问、刷新策略可解释。
+
+**扩展顺序**：再设计令牌轮换与撤销；签名有效不等于请求有资源权限。
+
+建议保存一份正常输入、一份失败输入、实际输出和对应测试。先完成以上阶段再扩展正文中的完整设计；遇到省略实现或未定义依赖，应按文档上下文补齐，不能把代码片段拼接后当作已经验证的完整工程。
+
 > **文档简介**: 构建生产可用的认证服务——注册/登录、短效访问令牌 + 长效刷新令牌的轮换与撤销机制，覆盖密码哈希、Cookie 安全与令牌存储设计
 >
 > **目标读者**: 已完成入门项目、理解中间件机制的中级后端开发者
 >
 > **前置知识**: [Hono 进阶](../frameworks/02-hono-advanced.md) 的认证中间件、[生态集成](../frameworks/03-ecosystem-integration.md) 的 Prisma 用法
+
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
 
 ## 📚 文档元数据
 
@@ -15,6 +28,8 @@
 | **难度** | ⭐⭐ |
 | **标签** | `#auth` `#jwt` `#refresh-token` `#bcrypt` `#实战项目` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 安全攻防的全景视角见 [`../advanced-topics/security/01-security-practices.md`](../advanced-topics/security/01-security-practices.md)，本文聚焦认证服务的实现路径。
 
@@ -227,3 +242,9 @@ authApp.post('/logout', async (c) => { // 撤销 refresh token 并清除 cookie
 - 📄 [安全实践](../advanced-topics/security/01-security-practices.md) — 安全头、密钥管理与注入防护
 - 📖 [后端生态库精选](../reference/library-guides/02-ecosystem-libs.md) — bcryptjs/jsonwebtoken 速查
 - 📄 [文件存储服务](03-file-storage-service.md) — 同难度进阶项目
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../LEARNING_GUIDE.md) · [完整目录与版本](../README.md) · [通用术语](../../shared-resources/glossary.md)

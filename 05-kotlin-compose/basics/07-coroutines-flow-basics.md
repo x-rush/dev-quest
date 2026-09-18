@@ -1,10 +1,26 @@
 # 协程与 Flow 基础 - 在 ViewModel 中驱动异步数据
 
+## 先理解，再动手
+
+协程是一段可以挂起的工作，Flow 描述多次产生的值。谁创建作用域，谁就承担取消与生命周期责任。
+
+**本节自测**：让 ViewModel 暴露加载与成功状态，页面退出时观察界面收集。
+
+<details>
+<summary>预期结果与参考思路（先尝试再展开）</summary>
+
+区分停止 UI 收集与取消上游工作；不要假定所有 Flow 都会在无观察者时自动停止。
+
+</details>
+
 > **文档简介**: 学会用协程（Coroutines）写顺序风格的异步代码，用 Flow/StateFlow 把数据流接入 Compose 界面，完成"ViewModel 持有 UI 状态"的标准架构闭环
 >
 > **目标读者**: 已掌握 Compose 状态与导航、准备接入真实数据源（数据库/网络）的开发者
 >
 > **前置知识**: [Composable 与状态](./04-composables-state.md)；对异步编程（Promise/async-await 或 goroutine）有基本概念
+
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
 
 ## 📚 文档元数据
 
@@ -16,6 +32,8 @@
 | **标签** | `#协程` `#Flow` `#StateFlow` `#ViewModel` `#structured-concurrency` |
 | **更新日期** | `2026年9月` |
 
+</details>
+
 ## 🎯 学习目标
 
 - ✅ 用 `suspend` 函数与 `viewModelScope` 写异步任务
@@ -26,14 +44,14 @@
 
 ## 📋 目录
 
-- [为什么需要协程](#为什么需要协程)
-- [协程基础：launch、async 与 suspend](#协程基础launchasync-与-suspend)
-- [调度器与线程切换](#调度器与线程切换)
-- [结构化并发与 viewModelScope](#结构化并发与-viewmodelscope)
-- [Flow：异步数据流](#flow异步数据流)
-- [StateFlow 与 UI 状态](#stateflow-与-ui-状态)
-- [在 Compose 中收集](#在-compose-中收集)
-- [练习与实践](#练习与实践)
+- [为什么需要协程](#-为什么需要协程)
+- [协程基础：launch、async 与 suspend](#-协程基础launchasync-与-suspend)
+- [调度器与线程切换](#-调度器与线程切换)
+- [结构化并发与 viewModelScope](#-结构化并发与-viewmodelscope)
+- [Flow：异步数据流](#-flow异步数据流)
+- [StateFlow 与 UI 状态](#-stateflow-与-ui-状态)
+- [在 Compose 中收集](#️-在-compose-中收集)
+- [练习与实践](#-练习与实践)
 
 ---
 
@@ -251,3 +269,9 @@ fun TaskListScreen(viewModel: TaskViewModel) {
 - 📄 **[第一个项目：笔记应用](./08-first-project.md)** - 把本课架构落到完整项目
 - 📄 **[Compose 状态 API 详解](../reference/language-concepts/04-compose-state-api.md)** - collectAsState 与 Compose 状态的关系
 - 📖 **[Kotlin Coroutines 官方指南](https://kotlinlang.org/docs/coroutines-guide.html)** - 协程语言级文档
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../LEARNING_GUIDE.md) · [完整目录与版本](../README.md) · [通用术语](../../shared-resources/glossary.md)

@@ -1,10 +1,26 @@
 # 综合练习 - CLI 任务管理工具
 
+## 先理解，再动手
+
+CLI 工具也需要稳定的输入、输出和失败约定。保存文件时应把“读失败”和“第一次没有文件”区分开。
+
+**本节自测**：新增两条任务、完成一条、重启读取，再模拟 JSON 损坏。
+
+<details>
+<summary>预期结果与参考思路（先尝试再展开）</summary>
+
+正常记录保留，损坏数据明确报错；不能静默覆盖用户已有文件。
+
+</details>
+
 > **文档简介**: 综合运用前七篇知识，用 Composer PSR-4 项目结构从零实现一个命令行任务管理工具（增删改查 + JSON 持久化）
 >
 > **目标读者**: 已完成 basics 全部教程、准备第一次独立交付完整项目的学习者
 >
 > **前置知识**: [环境搭建](./01-environment-setup.md) 至 [高级特性](./07-advanced-features.md) 全部内容
+
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
 
 ## 📚 文档元数据
 
@@ -15,6 +31,8 @@
 | **难度** | ⭐ |
 | **标签** | `#实战项目` `#Composer` `#PSR-4` `#CLI` `#JSON存储` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ## 🎯 学习目标
 
@@ -405,11 +423,9 @@ php bin/task remove <id>
 
 ## ✅ 最佳实践
 
-- ✅ **分层单向依赖**：`bin → Service → Repository/Model`，上层依赖下层抽象，方便替换存储引擎
-- ✅ **序列化集中在 Model**：`fromArray/toArray` 是数据进出系统的唯一边界，格式变更只改一处
-- ✅ **CLI 必须有退出码**：成功 0、失败非 0，Shell 脚本与 CI 才能判断成败
-- ❌ **不要在 bin 脚本里堆业务逻辑**：入口只做参数解析与装配，逻辑下沉到 Service
-- ❌ **不要把 `tasks.json` 提交进版本库**：加入 `.gitignore`，数据文件属于运行时产物
+CLI 入口负责读参数、组装依赖和映射退出码，业务规则放在可直接测试的函数或服务中。存储格式转换集中在明确边界，放模型还是独立映射器取决于复用需求，不必宣布一个方法是系统唯一数据入口。
+
+运行数据与示例夹具分开：真实 tasks.json 通常不提交，合成测试数据可以入库。验证无效参数、损坏文件与写入失败时的退出码和数据完整性，再检查成功后重启仍能读取。
 
 ## ❓ 常见问题
 
@@ -440,3 +456,9 @@ php bin/task remove <id>
 - 📄 **[环境搭建](./01-environment-setup.md)** — 本项目使用其 Composer 配置
 - 📄 **[Composer 生态精选](../reference/library-guides/02-composer-ecosystem.md)** — PSR-4 与测试工具深入
 - 📄 **[Symfony 核心](../reference/framework-essentials/02-symfony-essentials.md)** — Console 组件进阶改造
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../LEARNING_GUIDE.md) · [完整目录与版本](../README.md) · [通用术语](../../shared-resources/glossary.md)

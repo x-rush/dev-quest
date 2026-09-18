@@ -4,6 +4,9 @@
 
 字符串处理是 PHP 的看家本领：多字节安全交给 `mb_*` 族，现代判断函数（8.0+ `str_contains` 等）取代 strpos 比较，复杂模式匹配交给 PCRE（`preg_*`）。本文收录日常最高频条目，属语言稳定层。
 
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
+
 ## 📚 文档元数据
 
 | 属性 | 内容 |
@@ -14,9 +17,11 @@
 | **标签** | `#字符串` `#多字节` `#正则` `#PCRE` |
 | **更新日期** | `2026年9月` |
 
+</details>
+
 ## 条目 1：多字节字符串（mb_* 族）
 
-📌 **定义**: UTF-8 下一个字符可占多字节，`strlen`/`substr` 等按**字节**计算；`mb_*` 族按**字符**计算。凡涉及用户可见文本的长度与截断，一律用 mb 系列。
+📌 **定义**: UTF-8 下一个字符可占多字节，`strlen`/`substr` 等按**字节**计算；`mb_*` 族按**字符**计算。文本处理先确定编码与计量单位；用户感知字形可能需要 intl 的 grapheme 系列。
 
 📖 **语法/签名**:
 
@@ -36,15 +41,15 @@ declare(strict_types=1);
 
 $title = 'PHP 中文手册';
 echo strlen($title), PHP_EOL;        // 按 UTF-8 字节计（每汉字 3 字节）
-echo mb_strlen($title), PHP_EOL;     // 8（字符）
+echo mb_strlen($title, 'UTF-8'), PHP_EOL;     // 8（字符）
 
-echo mb_substr($title, 0, 3), PHP_EOL;    // PHP
-echo mb_substr($title, 4, 2), PHP_EOL;    // 中文
+echo mb_substr($title, 0, 3, 'UTF-8'), PHP_EOL;    // PHP
+echo mb_substr($title, 4, 2, 'UTF-8'), PHP_EOL;    // 中文
 ```
 
 ⚠️ **常见陷阱**: `substr()` 截 UTF-8 会得到乱码半字符；表单"最多 20 字"校验用 `mb_strlen` 而非 `strlen`；数据库 varchar 长度按字符，与字节不一致。
 
-🔗 **相关条目**: [现代字符串判断函数](#条目-2现代字符串判断函数8-0)
+🔗 **相关条目**: [现代字符串判断函数](#条目-2现代字符串判断函数80)
 
 ## 条目 2：现代字符串判断函数（8.0+）
 
@@ -71,7 +76,7 @@ str_starts_with($path, '/api');       // true
 str_ends_with($path, 'orders');       // true
 str_contains($path, 'v1');            // true
 
-// 对照旧写法（不要再写）：
+// 需要匹配位置时仍可用 strpos；只判断包含关系时用现代布尔函数更直接：
 // strpos($path, '/api') === 0
 // strpos($path, 'v1') !== false
 ```
@@ -129,7 +134,9 @@ preg_quote(string $str, ?string $delimiter = null): string
 declare(strict_types=1);
 
 // 提取 + 命名分组
-preg_match('/^(?<user>[\w.]+)@(?<domain>[\w-]+)$/', 'ada@example.com', $m);
+if (preg_match('/^(?<user>[\w.]+)@(?<domain>[\w.-]+)$/', 'ada@example.com', $m) !== 1) {
+    throw new RuntimeException('示例输入未匹配');
+}
 echo $m['user'], PHP_EOL;      // ada
 echo $m['domain'], PHP_EOL;    // example.com
 
@@ -194,3 +201,18 @@ echo trim('xxhelloxx', 'x'), PHP_EOL;                  // hello
 **文档版本**: v2.0.0
 **最后更新**: 2026年9月
 **维护团队**: Dev Quest Team
+
+
+<!-- full-library-explanation -->
+## 输入编码、匹配结果和输出场景分别处理
+
+前置是字符串与异常。PHP 字符串可以保存任意字节；mb_strlen 需要知道输入编码，UTF-8 场景应显式传 UTF-8 并检查无效输入。按码点计数仍不等于用户看到的字形数量，组合重音和表情序列可用 intl 的 grapheme 函数按需求处理。
+
+preg_match 的结果是 1（匹配）、0（不匹配）或 false（错误），写成 bool 会把错误与正常不匹配混在一起。模式正确也不意味着业务有效：日期正则只能验证形状，不能证明 2 月 30 日存在；邮箱示例也只是提取结构，不能证明邮箱可接收邮件。
+
+**练习**：分别输入有效文本、不匹配文本和无效 UTF-8 到带 u 的模式，检查三种返回路径。对 HTML 文本输出使用 htmlspecialchars 的正确编码参数；SQL、URL、JavaScript 是不同上下文，不能用一种“转义函数”到处替代。仅判断位置时 strpos 仍有用途，必须用严格比较区分位置 0 与 false。
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

@@ -1,10 +1,23 @@
 # 异步 API 全表
 
+## 如何选择组合方式
+
+前置：Promise 有进行中、成功和失败状态；await 在 async 函数或 ESM 顶层等待结果。Promise.all 适用于所有结果都必需，allSettled 用于逐项处理成功失败，race 等待第一个结束，any 等待第一个成功。
+
+把“两家供应商报价”作为具体问题：要求两份都拿到才能比较，用 all；允许缺一份也展示，用 allSettled；只取最快成功报价，用 any。race 可能最先得到一个失败，不能把它称为最快成功。
+
+边界：这些组合器不会自动取消已经启动的底层任务。超时 Promise 赢得 race 后，网络请求仍可能继续；需要把 AbortSignal 传给支持取消的 API。
+
+自测：一个 Promise 立即拒绝，另一个稍后成功。all 与 race 会拒绝，any 可以成功，allSettled 返回两项状态。空输入时 all 和 allSettled 成功得到空数组，any 拒绝，race 保持 pending；不要用空 race 实现“无需工作”。
+
 > **文档简介**: Node.js 异步相关 API 的字典式速查——Promise 静态方法、定时器、queueMicrotask、process.nextTick 与 AbortSignal 全集
 
 > **目标读者**: 需要确认某个异步 API 精确语义的开发者
 
 > **前置知识**: [异步编程教程](../../basics/04-async-promises.md)
+
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
 
 ## 📚 文档元数据
 
@@ -15,6 +28,8 @@
 | **难度** | ⭐⭐ |
 | **标签** | `#Promise` `#定时器` `#AbortSignal` `#事件循环` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ## 1. Promise 静态方法
 
@@ -176,3 +191,9 @@ function log(msg: string) {
 - 📄 **[异步编程教程](../../basics/04-async-promises.md)** — 事件循环与并发控制的教学讲解
 - 📄 **[现代 JS 语法速查](./01-js-modern-syntax.md)** — async/await 语法细节
 - 📄 **[常见故障排除](../quick-references/02-troubleshooting.md)** — 未处理 rejection 排查
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

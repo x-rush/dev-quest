@@ -2,6 +2,9 @@
 
 > **难度**: ⭐ | **前置**: 无（按症状直接跳入查阅）
 
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
+
 ## 📚 文档元数据
 
 | 属性 | 内容 |
@@ -12,9 +15,11 @@
 | **标签** | `#白屏` `#签名` `#依赖冲突` `#鸿蒙适配` `#排错` |
 | **更新日期** | `2026年9月` |
 
+</details>
+
 ## 通用排查流程
 
-1. **先看 Metro 终端**——80% 的红屏在终端里有完整堆栈
+1. **先看 Metro 终端**——查找第一条错误与完整堆栈；同时检查原生日志
 2. `npx react-native info` / `npx expo-doctor` 收集环境信息
 3. 按"症状分类"对号入座下表；同类问题出现两次以上，记入个人踩坑笔记
 
@@ -35,7 +40,7 @@
 | 症状 | 解法 |
 |------|------|
 | `SDK location not found` | 创建 `android/local.properties` 写入 `sdk.dir=/path/to/Android/sdk` |
-| `Unsupported class file major version` | Gradle 与 JDK 版本不匹配，改用 JDK 17 |
+| `Unsupported class file major version` | 核对 Gradle、AGP 与 JDK 的支持矩阵，使用该工程要求的版本，不固定套用 JDK 17 |
 | `Duplicate class` / 依赖冲突 | `./gradlew app:dependencies` 找冲突库，用 `resolutionStrategy.force` 或升级统一版本 |
 | 安装失败 `INSTALL_PARSE_FAILED_NO_CERTIFICATES` | debug 签名缺失；确认 `debug.keystore` 存在且 build.gradle 引用正确 |
 | 内存不足 `OutOfMemoryError` | `gradle.properties` 调大 `org.gradle.jvmargs=-Xmx4g` |
@@ -45,7 +50,7 @@
 | 症状 | 解法 |
 |------|------|
 | `pod install` 卡在 CDN/源 | 更换镜像源或检查网络代理；`pod repo update` |
-| 头文件 not found | `rm -rf Pods Podfile.lock && pod install`；确认 Xcode Command Line Tools |
+| 头文件 not found | 先核对模块导入、Pod 配置与 Xcode 工具链，保留 Podfile.lock；仅在明确依赖产物异常时重装 |
 | 签名错误 "No profiles for ... were found" | Xcode → Signing & Capabilities 勾选自动签名并登录正确团队 |
 | 构建报 duplicate symbols | 三方库重复链接，`pod deintegrate` 后重装 |
 
@@ -55,7 +60,7 @@
 |------|------|
 | 签名失败 | DevEco → File → Project Structure → Signing Configs 自动签名；确认 AGC 账号已实名 |
 | `hvigorw` 构建失败 | 核对 `build-profile.json5` 的 SDK API 版本与 DevEco 安装版本一致 |
-| HAP 安装失败 | `hdc install` 前先卸载旧包；调试证书 profile 与设备 UDID 匹配 |
+| HAP 安装失败 | 先读安装错误并核对签名、包名及设备信息；卸载会删除数据，不应作为默认第一步 |
 
 ## 依赖冲突类
 
@@ -65,12 +70,12 @@ npm ls react-native            # 谁在依赖不同版本
 npm dedupe                     # 尝试自动去重
 
 # RN 三方库版本仲裁（Expo 工程）
-npx expo install --check       # 校正为 SDK 匹配版本
+npx expo install --check       # 检查 SDK 匹配情况；--check 本身不修复版本
 ```
 
 | 症状 | 解法 |
 |------|------|
-| `Unable to resolve module X` | `rm -rf node_modules && npm i`，必要时 `--reset-cache` 重启 Metro |
+| `Unable to resolve module X` | 先检查包是否安装、导入路径和导出条件；有缓存证据时再重置 Metro |
 | 装了库但原生方法 undefined | 原生代码未链接进工程：重新构建原生；iOS 补跑 `pod install` |
 | React 版本冲突警告 | 每个 RN 版本绑定固定 React 版本（如 RN 0.86 ↔ React 19.2），以官方版本表为准，不要单独升 React |
 | 同一库两个大版本并存 | peerDependencies 冲突，升级依赖它的库或用 overrides 钉住版本 |
@@ -105,6 +110,15 @@ npx expo install --check       # 校正为 SDK 匹配版本
 | 内存持续上涨 | 未清理的订阅/定时器/动画句柄 |
 | 启动慢 | bundle 体积、Hermes 是否开启、首屏请求数 |
 
+<!-- full-library-explanation -->
+## 把症状表当假设，不当唯一诊断
+
+白屏可能是 JS 异常、启动资源等待、根组件未注册或原生崩溃。先确认进程是否存活，再看原生日志和 JS 堆栈，最后检查网络及资源。表中原因是排查方向，不能用一个症状直接证明唯一根因。
+
+一次有效的问题记录应包含：版本组合、设备/系统、debug 或 release、最小复现步骤、第一条关键错误、最近变更、已排除的假设。日志中的 token、个人资料和签名秘密应先脱敏。
+
+练习：让启动数据请求失败，界面仍提供重试按钮；让一个必需原生模块缺失，给出构建能力错误。验收：两个故障有不同证据和处理路径。解决后重新执行原复现步骤，确认不只是清数据把现场暂时抹掉。
+
 ## 🔗 相关文档
 
 - 📄 **[CLI 命令与调试速查](./01-cli-and-debug-cheatsheet.md)**: 排错用命令
@@ -113,3 +127,9 @@ npx expo install --check       # 校正为 SDK 匹配版本
 - 📄 **[环境搭建教程](../../basics/01-environment-setup.md)**: 环境类问题的根因预防
 
 *延伸: React Native 官方 troubleshooting 页 · RNOH 仓库 Issue 区*
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

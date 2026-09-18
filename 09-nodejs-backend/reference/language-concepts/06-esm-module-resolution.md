@@ -6,6 +6,9 @@
 
 > **前置知识**: [模块系统与 ESM](../../basics/03-modules-esm.md)
 
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
+
 ## 📚 文档元数据
 
 | 属性 | 内容 |
@@ -15,6 +18,8 @@
 | **难度** | ⭐⭐ |
 | **标签** | `#ESM` `#exports` `#imports` `#模块解析` `#moduleResolution` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ## 1. 解析算法：标识符 → 文件
 
@@ -36,7 +41,7 @@ import { Hono } from "hono";     // 3) 裸说明符：node_modules/hono → 读 
 ## 2. exports 字段：包的公共 API
 
 ### 定义
-`exports` 同时是**入口映射**与**封箱**：列出的子路径外部可导入，未列出的路径一律拒绝（`ERR_PACKAGE_PATH_NOT_EXPORTED`）。发布库必写。
+`exports` 同时定义入口映射与按包名导入时的公共边界：列出的子路径外部可导入，未列出的路径一律拒绝（`ERR_PACKAGE_PATH_NOT_EXPORTED`）。新库可显式定义，存量库新增时要评估深层导入兼容性。
 
 ### 语法与示例
 
@@ -62,7 +67,7 @@ import { fmt } from "@quest/utils/fmt";      // ✅ 命中 "./fmt" 子路径
 import x from "@quest/utils/dist/index.js";  // ❌ ERR_PACKAGE_PATH_NOT_EXPORTED
 ```
 
-条件键按声明顺序先到先得：`node-addons` → `node`/`import`/`require` → `default`。**`types` 必须放最前**，否则 TypeScript 会跳过类型解析。
+条件键按声明顺序先到先得：`node-addons` → `node`/`import`/`require` → `default`。**`types` 必须放最前**，让类型条件优先匹配，避免其他条件先匹配后选到不合适的声明入口。
 
 ### 陷阱
 - 条件顺序不是"按运行时挑最优"，而是**第一个匹配即胜出**——`node` 写在 `import` 前会让 ESM 消费者也拿到 node 条件产物
@@ -95,12 +100,12 @@ import { env } from "#lib/env.js";     // → ./src/lib/env.js（* 通配）
 ### 陷阱
 - `#` 别名只在定义它的那个 package.json 作用域内有效——跨包引用会 `ERR_PACKAGE_IMPORT_NOT_DEFINED`
 - 别名键必须以 `#` 开头（与 npm scope 语法区分开）
-- 模式别名 `#lib/*.js` 的 `*` 只匹配一层 `*` 位置，两侧文字必须原样对应
+- 模式别名 `#lib/*.js` 的 * 是子路径字符串替换，匹配内容可以包含斜杠和多层路径，两侧文字必须原样对应
 
 ## 4. TypeScript 解析策略：Node16+/NodeNext
 
 ### 定义
-`tsconfig.json` 的 `"module": "node16"/"nodenext"`（配套 `"moduleResolution": "node16"/"nodenext"`）让 tsc 按 **Node 真实算法**解析：读 `exports` 的 `types` 条件、要求相对导入写全扩展名、以最近 package.json 的 `type` 判定模块格式。旧的 `"node"`（bundler 风格）允许省略扩展名，产出的代码在 Node 下跑不起来。
+`tsconfig.json` 的 `"module": "node16"/"nodenext"`（配套 `"moduleResolution": "node16"/"nodenext"`）让 tsc 按 **Node 真实算法**解析：读 `exports` 的 `types` 条件、要求相对导入写全扩展名、以最近 package.json 的 `type` 判定模块格式。旧的 node/node10 解析策略（并非 bundler 策略）允许省略扩展名，产出的代码在 Node 下跑不起来。
 
 ### 语法与示例
 
@@ -135,8 +140,23 @@ import { add } from "./add.js";   // 源文件是 add.ts
 
 ---
 
+<!-- full-library-explanation -->
+## 类型检查通过之后还要运行构建产物
+
+前置是 package.json、ESM 与 TypeScript 编译。导入路径在编辑器、编译器、打包器和 Node 中可能由不同规则解析。paths 别名让 TypeScript 找到类型，并不自动重写运行时 import；应用若直接运行 tsc 产物，就必须选择 Node 能理解的路径与包配置。Bundler 模式适合确实交给打包器处理的工程，不应为消除报错而随意切换。
+
+包的 exports 定义公共入口，不是文件系统安全沙箱。条件对象按键顺序匹配，types 给类型工具，import/require 给对应加载方式；两种产物还需要与模块格式匹配的声明文件。发布双格式包时，ESM 与 CJS 入口若各自创建一份缓存或类定义，可能出现状态分裂与 instanceof 不一致，不能只验证两边都能 import。
+
+练习：建立只有 index.js 与内部 helper.js 的小包，只导出主入口。按包名导入 helper 应得到未导出路径错误，包内相对导入仍可用。再分别用 ESM 和 CJS 消费构建后的发布目录，验证导出值、类型和运行行为。修改 type 字段后重新执行测试，确认 .mjs/.cjs 与 .js 的格式判定不会被编辑器的提示掩盖。
+
 ## 🔗 相关文档
 
 - 📄 **[模块系统与 ESM](../../basics/03-modules-esm.md)** — ESM/CJS 差异与 `type` 字段的教程
 - 📄 **[常见故障排除](../quick-references/02-troubleshooting.md)** — 模块类报错的症状→定位→修复
 - 📄 **[现代 JS 语法速查](./01-js-modern-syntax.md)** — import 语法变体与元属性
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

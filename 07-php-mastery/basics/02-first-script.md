@@ -1,10 +1,26 @@
 # 第一个 PHP 脚本 - CLI 与 Web 双运行模式
 
+## 先理解，再动手
+
+CLI 从参数和标准输入取数据，Web 从请求取数据。输出都可能用 echo，但状态码、请求头和生命周期不同。
+
+**本节自测**：同一问候逻辑分别通过 CLI 参数与 Web 查询参数调用。
+
+<details>
+<summary>预期结果与参考思路（先尝试再展开）</summary>
+
+业务函数可复用，输入适配不同；Web 输入必须当作不可信数据。
+
+</details>
+
 > **文档简介**: 编写并运行你的第一个现代 PHP 程序，同时掌握 CLI 与 Web 两种执行方式及各自适用场景
 >
 > **目标读者**: 已完成环境搭建、希望快速跑通第一个程序的 PHP 初学者
 >
 > **前置知识**: PHP 8.5+ 环境已就绪（见 [环境搭建](./01-environment-setup.md)），了解基本命令行操作
+
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
 
 ## 📚 文档元数据
 
@@ -15,6 +31,8 @@
 | **难度** | ⭐ |
 | **标签** | `#第一个程序` `#CLI` `#内置服务器` `#程序结构` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ## 🎯 学习目标
 
@@ -169,11 +187,9 @@ function divide(int $a, int $b): float
 
 ## ✅ 最佳实践
 
-- ✅ **每个纯 PHP 文件都加 `declare(strict_types=1)`**：一致性比个别文件的便利更重要
-- ✅ **CLI 输出用 `PHP_EOL`**：Windows 与 Unix 换行符不同，硬编码 `\n` 在 Windows 终端显示异常
-- ✅ **Web 输出前设置 `header()`**：明确 `Content-Type`，避免浏览器猜测编码
-- ❌ **不要省略开始标签前的空行检查**：`<?php` 之前任何字符（包括 BOM）都会被当作输出
-- ❌ **不要在文件末尾写 `?>`**：PSR-12 明确规定纯 PHP 文件应省略结束标签
+把脚本入口与可复用函数分开，成功返回 0，失败返回明确非零退出码，方便终端脚本判断是否继续。输出协议规定换行时遵循协议，PHP_EOL 用于本地文本方便；不能声称 Windows 普遍无法显示 Unix 换行。
+
+Web 响应的 header 必须在实际输出前发送，BOM 或意外空白也可能提前产生输出。纯 PHP 文件省略结束标签可减少末尾误输出。strict_types 影响特定标量类型转换规则，不会把所有外部输入自动验证成业务合法数据。
 
 ## ❓ 常见问题
 
@@ -204,3 +220,9 @@ function divide(int $a, int $b): float
 - 📄 **[变量与类型](./03-variables-types.md)** — 下一节：深入严格类型与类型系统
 - 📄 **[控制结构全表](../reference/language-concepts/04-control-flow.md)** — `match` 表达式的权威条目
 - 📄 **[常见错误排查](../reference/quick-references/02-troubleshooting.md)** — 运行报错速查
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../LEARNING_GUIDE.md) · [完整目录与版本](../README.md) · [通用术语](../../shared-resources/glossary.md)

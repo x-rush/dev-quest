@@ -1,72 +1,61 @@
-# 预取与 SSR 水合：prefetch、dehydrate 与流式预取
+# 预取与 SSR 水合：何时取数、传递什么
 
-> **模块**: `03-tanstack-stack` | **类型**: 字典条目（无难度门槛，支持任意跳入查阅）
+先修：QueryClient、queryKey、服务器渲染。预取把请求提前；脱水提取可传递的缓存状态；水合把状态放入浏览器缓存。它们不会自动保证数据永不过期，也不会自动把任意 Promise 流式传给浏览器。
 
-## 📌 定义
+## API 的职责
 
-预取与 SSR 水合解决"首屏白屏与请求瀑布"：服务端（或路由 loader）用 `prefetchQuery`/`ensureQueryData` 提前取数，`dehydrate` 把缓存序列化后随 HTML 下发，客户端 `hydrate` 还原进新的 `QueryClient`——组件首帧 `useQuery` 直接命中缓存，不再发起重复请求。TanStack Start 场景下还支持流式水合：关键数据先到先渲染，慢数据随流补齐。
+| API | 适合用途 | 关键边界 |
+|---|---|---|
+| prefetchQuery | 提前准备可能访问的数据 | 返回 Promise<void>，查询失败通常不向调用方抛出 |
+| fetchQuery | 必须获得符合新鲜度要求的数据 | 返回数据，失败抛出 |
+| ensureQueryData | 确保缓存中有数据可用 | 已有数据默认直接返回，即使过期；revalidateIfStale 可安排后台刷新 |
+| dehydrate | 提取缓存状态 | 默认包含成功查询；不是通用 JSON 序列化器 |
+| hydrate / HydrationBoundary | 恢复缓存状态 | 不能替代 Provider 或服务端请求隔离 |
 
-## 📖 语法 / 签名
+## 一个可运行的缓存传递实验
 
-```ts
-// 服务端 / loader 侧
-await queryClient.prefetchQuery({ queryKey, queryFn })   // 静默预取（出错不抛）
-await queryClient.ensureQueryData({ queryKey, queryFn }) // 新鲜直接返回，否则取回（可 await 阻塞）
-const dehydratedState = dehydrate(queryClient)           // 序列化缓存
+在已安装 @tanstack/react-query 的项目中，保存为 hydration-demo.mjs 并用 Node.js 执行。它演示缓存机制，不启动 React SSR 服务器。
 
-// 客户端侧
-const queryClient = new QueryClient()
-hydrate(queryClient, dehydratedState)                    // 还原进客户端缓存
+```js
+import { QueryClient, dehydrate, hydrate } from '@tanstack/react-query';
+
+const server = new QueryClient();
+await server.prefetchQuery({
+  queryKey: ['greeting'],
+  queryFn: async () => ({ text: '你好' }),
+});
+const payload = JSON.stringify(dehydrate(server));
+const browser = new QueryClient();
+hydrate(browser, JSON.parse(payload));
+console.log(browser.getQueryData(['greeting']).text);
+server.clear();
+browser.clear();
+// 预期：你好
 ```
 
-| API | 签名 | 说明 |
-|-----|------|------|
-| `prefetchQuery` | `(options) => Promise<void>` | 不抛错、不返回数据，适合"能取就取" |
-| `ensureQueryData` | `(options) => Promise<TData>` | 返回数据、抛出错误，适合"必须就位"的关键数据 |
-| `dehydrate` | `(client) => DehydratedState` | 默认不包含已过 `gcTime` 的条目 |
-| `hydrate` | `(client, state) => void` | 客户端须用**新建的** client 接收 |
+这里数据只有普通对象与字符串，所以 JSON 往返可保留结构。Date、BigInt、自定义类型以及安全嵌入 HTML 的问题需由框架序列化层处理，不能把任意 JSON 字符串直接拼进 script 标签。
 
-## 💡 示例
+## 在真实应用中放置这些步骤
 
-```tsx
-// TanStack Start / Next.js App Router 的请求级预取
-export async function loader({ context }: LoaderArgs) {
-  // 关键数据：阻塞渲染
-  await context.queryClient.ensureQueryData({
-    queryKey: ['post', id],
-    queryFn: () => fetchPost(id),
-  })
-  // 次要数据：不阻塞，随流补齐
-  void context.queryClient.prefetchQuery({
-    queryKey: ['comments', id],
-    queryFn: () => fetchComments(id),
-  })
-  return { dehydratedState: dehydrate(context.queryClient) }
-}
+服务端为每次请求创建 client，预取页面需要的数据，过滤不应发送给浏览器的字段，再由框架传递脱水状态。浏览器复用稳定 client，在 QueryClientProvider 内使用 HydrationBoundary 包裹读取这些数据的组件。
 
-// 客户端入口
-const [queryClient] = useState(() => {
-  const client = new QueryClient({ defaultOptions: { queries: { staleTime: 60_000 } } })
-  return client
-})
-hydrate(queryClient, serverState)
-```
+Next.js App Router 通常在服务器组件预取；TanStack Router/Start 通常在路由与其 Query 集成中组织预取。不能把一个导出的 loader 函数当作两个框架都自动识别的统一文件约定。
 
-## ⚠️ 常见陷阱
+两端必须使用相同键和兼容数据结构。水合后是否立即后台重取，取决于 dataUpdatedAt、staleTime 和触发条件；设置 staleTime 不能弥补两端键不同。
 
-- ❌ SSR 中使用模块级单例 QueryClient：A 请求的缓存渲染进 B 的 HTML，数据串页且水合报错——每请求新建
-- ❌ 服务端 prefetch 的 key 与客户端 `useQuery` 的 key 不一致：白取一次，水合后立刻重新请求并跳变——两端共用键工厂
-- ❌ 以为 `hydrate` 后数据永远新鲜：记得同步设 `staleTime`，否则水合完成即触发重取
-- ❌ `dehydrate` 大缓存全量下发：HTML 体积膨胀，只预取首屏真正需要的键
-- ✅ 预取分层：关键数据 `ensureQueryData` 阻塞、次要数据 `prefetchQuery` 非阻塞、慢数据交给流式水合
+## 非阻塞预取与流式传输
 
-## 🔗 相关条目
+`void client.prefetchQuery(...)` 只是“不等待这个 Promise”。紧接着调用默认 dehydrate 时，尚未成功的查询通常不会包含在结果中。要流式传输 pending 查询，需要支持该能力的框架集成、脱水选项和序列化流程；普通 JSON.stringify 不能完成它。
 
-- 📄 **[Query 核心 API](../language-concepts/01-query-core-api.md)** - prefetchQuery/ensureQueryData 所在方法全表
-- 📄 **[Suspense 查询](../language-concepts/09-suspense-query.md)** - 与流式预取组合的标准渲染模式
-- 📄 **[Router 框架要点](./02-router-essentials.md)** - loader/beforeLoad 中的预取时机
-- 📄 **[故障排除](../quick-references/02-troubleshooting.md)** - 水合不匹配的排查路径
+先实现 await 关键查询的版本，再按[官方高级 SSR 指南](https://tanstack.com/query/latest/docs/framework/react/guides/advanced-ssr)扩展。不要靠删除 await 就宣称首屏与慢数据自动流式水合。
 
----
+## 练习与验收
 
-*最后更新: 2026年9月 | 本条目为模块知识字典的一部分，概念完整解释以此处为单一事实来源*
+运行上述实验，把浏览器查询键改为另一个值，预期 getQueryData 返回 undefined；再恢复键并验证。随后让预取函数抛错，检查默认脱水内容，解释为什么不存在成功数据。
+
+在真实页面中记录服务器请求数和浏览器请求数，并设置合适 staleTime。验收不是“没有任何浏览器请求”，而是能解释每次请求的原因，并确认未把另一用户或无关页面的数据一起传出。
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

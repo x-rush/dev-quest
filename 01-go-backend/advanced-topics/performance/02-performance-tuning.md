@@ -8,6 +8,9 @@
 >
 > **预计时长**: 4-6小时学习 + 2-3小时实践
 
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
+
 ## 📚 文档元数据
 
 | 属性 | 内容 |
@@ -19,6 +22,8 @@
 | **更新日期** | `2026年9月` |
 | **作者** | Dev Quest Team |
 | **状态** | ✅ 已完成 |
+
+</details>
 
 ## 🎯 学习目标
 
@@ -85,8 +90,8 @@ import (
 )
 
 func cpuIntensiveTask() {
-    for i := 0; i < 1000000; i++ {
-        _ = fibonacci(i)
+    for i := 0; i < 5; i++ {
+        fmt.Println(fibonacci(30)) // 有界的演示负载，避免递归增长到无法完成
     }
 }
 
@@ -111,10 +116,11 @@ func main() {
     fmt.Printf("Task completed in %v\n", duration)
     
     // 创建内存profile
-    f, _ := os.Create("mem.prof")
+    f, err := os.Create("mem.prof")
+    if err != nil { log.Fatal(err) }
     runtime.GC()
-    pprof.WriteHeapProfile(f)
-    f.Close()
+    if err := pprof.WriteHeapProfile(f); err != nil { f.Close(); log.Fatal(err) }
+    if err := f.Close(); err != nil { log.Fatal(err) }
 }
 ```
 
@@ -247,6 +253,15 @@ func processItem(item WorkItem, workerID int) Result {
 2. **使用缓冲channel**：减少阻塞等待
 3. **避免全局变量**：减少锁竞争
 
+<!-- full-library-explanation -->
+## 用一个可重复的实验替代“性能更好”
+
+前置是基准测试、CPU/内存基本概念与并发。先定义用户可见目标，例如固定并发下 p95 延迟低于 200ms，同时记录错误率和吞吐。CPU profile 展示采样期间 CPU 时间花在哪里，不能直接解释等待数据库的时间；heap profile 需区分正在保留的内存与累计分配，goroutine profile 可帮助发现等待和泄漏。不同问题需要不同证据。
+
+建立基线后只改变一个因素：相同请求、数据规模、Go 版本、机器和并发度，保存改前改后的结果。少一次内存分配不一定让整个请求显著变快；若数据库占 95% 的耗时，优化 JSON 的收益有上限。sync.Pool 是可被运行时清空的临时对象复用工具，不能保存必须存在的业务状态，也不能在 Put 之后继续访问已交还的缓冲区。
+
+练习：为小、中、大三种输入比较两种字符串拼接实现，运行多次 benchmark 并报告 ns/op、B/op、allocs/op，而非只展示最好一次。引入工作池后同时测量排队时间与拒绝策略，队列无限增长会掩盖过载并最终耗尽内存。pprof 端点保留在受限管理入口，避免直接暴露运行时数据；示例使用有界计算任务，先确保能结束再采样。
+
 ## 🔗 相关资源
 
 - **深入学习**: [advanced-topics/performance/01-concurrency-patterns.md](01-concurrency-patterns.md)
@@ -256,3 +271,9 @@ func processItem(item WorkItem, workerID int) Result {
 ---
 
 **更新日志**: 2026年9月 - 创建Go性能调优实战文档
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

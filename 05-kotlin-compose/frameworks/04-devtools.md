@@ -1,10 +1,21 @@
 # 开发工具链 - Android Studio 高效工作流
 
+## 先看框架承担哪部分职责
+
+**Android 工具链**：Preview 验证外观，调试器观察执行，Profiler 观察资源，测试验证行为。一个工具不能代替所有层次的证据。
+
+**最小练习与预期结果**：设置断点查看按钮事件，再旋转设备测试状态；分别记录重组与 Activity 重建，而不是只统计日志行数。
+
+具体 API 与安装版本以[模块基线](../README.md)和本篇官方来源为准。先完成这条数据路径，再展开后面的高级配置；框架名称变化后，输入边界、状态归属和失败处理仍是需要理解的机制。
+
 > **文档简介**: 系统介绍 Android Studio（Quail 2026.1 及更新版本）中 Compose 开发的核心工具：Compose Preview、Layout Inspector、Logcat 与编译器诊断
 >
 > **目标读者**: 已能跑通 Hello Compose、希望提升日常开发与调试效率的所有学习者
 >
 > **前置知识**: [环境搭建](../basics/01-environment-setup.md)、[第一个 Compose 应用](../basics/02-first-compose-app.md)
+
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
 
 ## 📚 文档元数据
 
@@ -15,6 +26,8 @@
 | **难度** | ⭐ |
 | **标签** | `#android-studio` `#preview` `#layout-inspector` `#logcat` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ---
 
@@ -113,21 +126,18 @@ composeCompiler {
 
 ## 🎨 最佳实践
 
-### ✅ 推荐
+Preview 用合成状态展示空数据、加载、错误和长文本，便于不启动真实服务就比较界面。将可预览组件与负责取得 ViewModel 的入口分开，避免预览必须依赖数据库或登录环境。
 
-- 每个有意义的组件都配 Preview，逐渐积累成"活的设计规范"
-- 性能问题先量化（重组计数/指标文件）再动手，不凭感觉优化
-- Debug 构建集成 StrictMode，提前暴露主线程 IO 等问题
-
-### ❌ 避免陷阱
-
-- 预览函数里调用 ViewModel 或数据库——预览必然失败，还掩盖了"状态未提升"的设计问题
-- 只在模拟器验证：真机的字体缩放、深色模式、性能特征差异很大
-- 忽视 Gradle Sync 报错中的版本冲突提示，埋下依赖隐患（常用片段见
-  [一行式速查表](../reference/quick-references/01-kotlin-compose-cheatsheet.md)）
+卡顿使用同一交互的性能记录比较；主线程 I/O 可借助调试工具发现。模拟器适合功能反馈，目标真机负责补充字体、触控、系统权限和性能验证。构建失败先记录完整版本组合和首个相关错误，不反复清缓存来替代排查。
 
 ## 🔗 相关文档
 
 - 📖 概念字典：[Compose 核心组件速查](../reference/framework-essentials/01-compose-essentials.md) ｜ [常见错误与故障排除](../reference/quick-references/02-troubleshooting.md)
 - 📖 前置教程：[环境搭建](../basics/01-environment-setup.md) ｜ [第一个 Compose 应用](../basics/02-first-compose-app.md)
 - 🚀 后续学习：[Compose 入门核心](01-compose-basics.md) ｜ [性能：启动与内存优化](../advanced-topics/performance/02-startup-memory.md)
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../LEARNING_GUIDE.md) · [完整目录与版本](../README.md) · [通用术语](../../shared-resources/glossary.md)

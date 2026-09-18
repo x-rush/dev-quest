@@ -1,5 +1,7 @@
 # 集合操作算子导览
 
+> **阅读准备**：List/Set/Map、lambda 与可变/只读接口的区别；练习时为每步写出输入和输出类型。
+
 > List/Set/Map 链式变换的字典层导览：变换、过滤、聚合、分组、分区切片、关联、zip 七类算子——签名 + 一行语义 + 最小示例
 
 | 属性 | 内容 |
@@ -14,11 +16,11 @@
 
 ## 📌 定义
 
-集合操作算子（collection operations）是 Kotlin 标准库为 `Iterable`/`List`/`Map` 内置的链式变换函数：每个算子接收一个 lambda、返回**新集合**或聚合值，不修改原集合。所有算子默认**急切（eager）**执行——每一步立即生成中间集合；需要惰性流水线时用 `asSequence()`（见 [Sequence 惰性求值](./10-sequences.md)）。
+集合操作算子（collection operations）是 Kotlin 标准库为 `Iterable`/`List`/`Map` 内置的链式变换函数：这里主要讨论返回新集合或聚合值的操作；也有无 lambda 的算子、就地修改及延迟分组 API。List 的 map/filter 通常急切执行并生成结果集合；需要惰性流水线时用 `asSequence()`（见 [Sequence 惰性求值](./10-sequences.md)）。
 
 与 Java Stream 一句话对比：Kotlin 集合算子直接写在集合上、**免 `stream()` / `collect(Collectors.toList())` 样板**，且默认急切；`list.stream().filter(p).map(f).collect(toList())` 在 Kotlin 里就是 `list.filter(p).map(f)`。Stream 的惰性优势对应 Kotlin 的 `Sequence`。
 
-下文所有"结果注释"均经本机 kotlinc 2.4.20 编译运行验证。
+下文注释为预期结果；本轮未在 Kotlin/Android 工具链运行，不能作为预期行为记录。
 
 ## 📖 语法 / API 表
 
@@ -185,14 +187,14 @@ val bigSpenders: Map<Long, Int> =
         .mapValues { (_, list) ->                    // 桶内聚合
             list.map { it.product }.distinct().size  // 去重商品数
         }
-// {1=2, 2=1}
+// {1=1, 2=1}
 ```
 
 ## ⚠️ 常见陷阱
 
-- ❌ `list.reduce { ... }` 直接用于可能为空的集合——空集合抛 `UnsupportedOperationException`（本机实测异常类型即此，非 IllegalStateException）。
+- ❌ `list.reduce { ... }` 直接用于可能为空的集合——空集合抛 `UnsupportedOperationException`（本机预期行为异常类型即此，非 IllegalStateException）。
   ✅ 有"零值"语义时用 `fold(0) { acc, x -> acc + x }`；或 `reduceOrNull { ... }` + `?:`。
-- ❌ `users.maxBy { it.age }`——已废弃，且空集合会抛异常。
+- ❌ `users.maxBy { it.age }` 用于空集合会抛异常；当前 API 与旧版废弃重载要按版本区分。
   ✅ 一律 `maxByOrNull { ... }`，UI 层配合空态：`val top = users.maxByOrNull { it.age } ?: return`。
 - ❌ 以为 `associateBy` 遇到重复 key 会报错——实际**后者静默覆盖前者**（`listOf("a", "ab").associateBy { it.first() }` 结果为 `{a=ab}`）。
   ✅ key 可能重复时先 `groupBy`，或用 `associateBy` 前保证 key 唯一。
@@ -201,7 +203,16 @@ val bigSpenders: Map<Long, Int> =
 - ❌ 想就地排序调用 `list.sortedBy { ... }` 却发现原列表没变。
   ✅ `sortedBy` 返回新列表；就地排序用 `MutableList` 的 `sortWith`/`sortBy`。
 - ❌ `windowed(size, step)` 想要"分页式"切块——那是 `chunked` 的语义；`windowed` 是滑动窗口，且默认丢弃末尾不完整窗口。
-  ✅ 定长切块用 `chunked`；需要末尾残块时给 `windowed` 传 `partialWindows = true`（实测 `[1,2,3,4,5].windowed(3, step=3, partialWindows=true)` → `[[1,2,3],[4,5]]`）。
+  ✅ 定长切块用 `chunked`；需要末尾残块时给 `windowed` 传 `partialWindows = true`（预期行为 `[1,2,3,4,5].windowed(3, step=3, partialWindows=true)` → `[[1,2,3],[4,5]]`）。
+
+<!-- full-library-explanation -->
+## 把每一步的类型与业务含义写出来
+
+订单例子先过滤“单笔金额至少 100”的订单，然后分组，最后数这些订单中的不同商品。它不是“客户累计消费至少 100 后，统计该客户的所有商品”。原始数据中客户 1 的鼠标订单金额是 80，会被第一步丢弃，所以结果是 `{1=1, 2=1}`。
+
+练习：分别实现上述两种需求，给客户 3 添加两笔金额 60 的订单。验收：第一种没有客户 3，第二种应纳入客户 3；能解释 filter 与 groupBy 的顺序为何改变业务含义。金额练习使用整数最小单位或明确的十进制表示，示例 Double 不应直接作为支付计算方案。
+
+把空输入、重复 key 和只有一个元素加入自测：fold 返回初值，associateBy 按相同 key 覆盖，zip 截断到较短集合。需要报重复数据错误时，必须显式检查，不能指望 associateBy 抛错。
 
 ## 🔗 相关条目
 
@@ -215,3 +226,9 @@ val bigSpenders: Map<Long, Int> =
 ---
 
 *最后更新: 2026年9月 | 本条目为模块知识字典的一部分，概念完整解释以此处为单一事实来源*
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

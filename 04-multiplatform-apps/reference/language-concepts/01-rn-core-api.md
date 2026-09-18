@@ -2,6 +2,9 @@
 
 > **难度**: ⭐ | **前置**: React Native 基础（[02-first-app](../../basics/02-first-app.md)）
 
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
+
 ## 📚 文档元数据
 
 | 属性 | 内容 |
@@ -11,6 +14,8 @@
 | **难度** | ⭐ |
 | **标签** | `#核心API` `#AppRegistry` `#Platform` `#Dimensions` `#BackHandler` `#NetInfo` `#Appearance` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ## AppRegistry — 应用注册
 
@@ -40,7 +45,7 @@ AppRegistry.registerComponent('MyFirstApp', () => App);
 ```tsx
 import { Platform } from 'react-native';
 
-Platform.OS                    // 'ios' | 'android'（RNOH 环境下仍返回 'android'，鸿蒙判断见 RNOH 词条）
+Platform.OS                    // 常见为 'ios' | 'android'；RNOH 取值与扩展类型按适配版本核对，见 RNOH 词条
 Platform.Version               // Android: API level（数字）；iOS: 系统版本字符串
 Platform.select({ ios: x, android: y, default: z })  // 平台分支取值
 Platform.isPad                 // iPad 检测
@@ -57,7 +62,7 @@ const titleStyle = Platform.select({
 
 ### 陷阱
 - 平台分支文件用命名约定替代运行时判断更干净：`Button.ios.tsx` / `Button.android.tsx`（Metro 自动选择）
-- `Platform.OS` 不覆盖鸿蒙，RNOH 项目中鸿蒙特征用其注入的标记判断
+- RNOH 的平台标识与声明文件以适配版本为准，不把鸿蒙固定判断为 android，也不要依赖未经文档确认的注入标记
 
 ## Dimensions / useWindowDimensions — 屏幕尺寸
 
@@ -93,12 +98,16 @@ function ResponsiveGrid() {
 import { useEffect, useState } from 'react';
 import { AppState } from 'react-native';
 
-const [appState, setAppState] = useState(AppState.currentState);
-
-useEffect(() => {
-  const sub = AppState.addEventListener('change', setAppState);
-  return () => sub.remove(); // 订阅必须清理
-}, []);
+// 放在组件或自定义 Hook 内，不能在模块顶层调用 Hook。
+function useAppState() {
+  const [appState, setAppState] = useState(AppState.currentState);
+  useEffect(() => {
+    const sub = AppState.addEventListener('change', setAppState);
+    setAppState(AppState.currentState);
+    return () => sub.remove();
+  }, []);
+  return appState;
+}
 ```
 
 ### 陷阱
@@ -306,6 +315,19 @@ startTransition(() => {
 | `Share` | 系统分享 | 鸿蒙走 RNOH 适配 |
 | `PermissionsAndroid` | Android 运行时权限 | iOS 权限在 Info.plist + 三方库 |
 
+<!-- full-library-explanation -->
+## 先区分“读取快照”与“监听变化”
+
+`Dimensions.get`、`AppState.currentState` 是读取时刻的值；它们不是会自己更新的局部变量。订阅 API 返回清理入口，应该与组件或业务服务的生命周期配对。模块顶部立即 `sub.remove()` 的片段只是展示取消方法，实际代码应在离开作用域时取消。
+
+完整 AppState Hook 见 [Hooks 速查](./03-hooks-reference.md)。页面恢复到前台时可以重新校验数据，但要做请求去重；每收到一个事件就新建轮询器会造成重叠请求。
+
+### 深链也分冷启动和热启动
+
+已运行的应用通过 `url` 事件收到链接；冷启动还需要读取初始 URL，或交给导航库统一处理。链接里的资源 ID 是输入，必须校验格式，并由服务端验证当前用户权限。能跳到某页面不代表能读取其数据。
+
+练习：分别从已关闭应用和后台应用打开同一详情链接；输入不存在的 ID、退出登录再打开。验收：两条入口都到达相同路由，错误时显示可恢复状态，不崩溃、不泄露资源。网络 API 的连通标志只用于提示，真正请求仍须处理超时和 HTTP 错误。
+
 ## 🔗 相关文档
 
 - 📄 **[组件 Props 全表](./02-components-props.md)**: 核心组件属性字典
@@ -317,3 +339,9 @@ startTransition(() => {
 - 📄 **[故障排除](../quick-references/02-troubleshooting.md)**: 深链/权限相关报错
 
 *相关教程: [环境搭建](../../basics/01-environment-setup.md) · [第一个 App](../../basics/02-first-app.md)*
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

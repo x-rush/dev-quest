@@ -1,5 +1,7 @@
 # Canvas 自定义绘制
 
+> **阅读准备**：Compose 布局与状态，知道 dp 和像素不同；绘图还需理解坐标、路径与绘制顺序。
+
 > DrawScope 绘图原语、Path 构建、graphicsLayer 变换/裁剪/合成策略、状态驱动的"重绘"模式——View 时代 invalidate() 的 Compose 替代思维
 
 | 属性 | 内容 |
@@ -27,9 +29,9 @@ Compose 中没有独立的 Canvas 控件——绘制通过**绘制修饰符**挂
 | API | 签名要点 | 语义 |
 |-----|---------|------|
 | `Canvas(modifier, onDraw: DrawScope.() -> Unit)` | Composable 函数 | 纯绘制区域（= Spacer + drawBehind） |
-| `Modifier.drawBehind(onDraw)` | 在**内容之后**绘制（视觉上垫底） | 背景装饰 |
+| `Modifier.drawBehind(onDraw)` | 在内容后方绘制，即先绘制背景再绘制内容 | 背景装饰 |
 | `Modifier.drawWithContent(onDraw)` | 块内**手动调 `drawContent()`** 决定内容前/后 | 给内容叠加特效（遮罩、渐变） |
-| `Modifier.drawWithCache { onDrawBehind / onDrawWithContent }` | 块体在**尺寸不变时只执行一次**，可缓存 `Path`/`Brush` 等对象 | 避免每帧分配（⭐性能首选） |
+| `Modifier.drawWithCache { onDrawBehind / onDrawWithContent }` | 缓存随尺寸及缓存块中读取的状态等依赖失效而重建，可缓存 `Path`/`Brush` 等对象 | 避免每帧分配（⭐性能首选） |
 
 ### 2. DrawScope 原语
 
@@ -82,15 +84,16 @@ Modifier.graphicsLayer {
 // 1. 环形进度：状态驱动重绘（无 invalidate）
 @Composable
 fun ProgressRing(progress: Float) {
+    val primary = MaterialTheme.colorScheme.primary // 在组合上下文读取主题
     Canvas(Modifier.size(120.dp)) {
         drawArc(
             color = Color.LightGray, startAngle = 0f, sweepAngle = 360f, useCenter = false,
             style = Stroke(width = 12f, cap = StrokeCap.Round),
         )
         drawArc(
-            color = MaterialTheme.colorScheme.primary,
+            color = primary,
             startAngle = -90f,
-            sweepAngle = 360f * progress,          // 读状态：progress 变 → 仅绘制阶段重跑
+            sweepAngle = 360f * progress.coerceIn(0f, 1f), // 普通参数变化可能先引起组合更新
             useCenter = false,
             style = Stroke(width = 12f, cap = StrokeCap.Round),
         )
@@ -143,19 +146,28 @@ Spacer(
 ## ⚠️ 常见陷阱
 
 - ❌ 在 `drawBehind`/`Canvas` 的绘制块里 `Path()`/`Brush` 每帧新建——绘制块执行频率高，分配压力大。
-  ✅ 用 `drawWithCache` 块体缓存（尺寸变化才重建），或 `remember { Path() }` 后在块内 `reset()` 复用。
+  ✅ 用 `drawWithCache` 块体缓存（尺寸或缓存依赖变化时重建），或 `remember { Path() }` 后在块内 `reset()` 复用。
 - ❌ 沿用 View 思维找 `invalidate()` / `postInvalidate()`——Compose 没有这个概念，也不会"忘了重绘"。
   ✅ 把可变量做成状态（`mutableFloatStateOf` 等）并在绘制块里读取；变化自动触发**仅绘制阶段**重跑。
-- ❌ 用动画驱动 `Modifier.offset { }` 做图形位移动画——每帧改 offset 走布局阶段（测量+摆放）。
-  ✅ `graphicsLayer { translationX = 动画值 }`——只走绘制，动画不掉帧。
+- ❌ 用动画驱动 `Modifier.offset { }` 做图形位移动画——lambda 形式的 offset 可只重启摆放，不必每帧重新测量。
+  ✅ `graphicsLayer { translationX = 动画值 }`——可减少布局工作，但不保证动画无掉帧。
 - ❌ 以为 `drawText("hi")` 直接收字符串——文字绘制需要 `TextMeasurer` 参与测量排版。
   ✅ `val textMeasurer = rememberTextMeasurer()` 后 `drawText(textMeasurer, "hi")`。
-- ❌ 半透明元素叠加出现"叠黑"/意外遮挡——默认 `CompositingStrategy.Auto` 不建离屏层，alpha 逐元素混入背景。
+- ❌ 半透明元素叠加出现"叠黑"/意外遮挡——Auto 会按 alpha 等条件决定是否建立离屏层；ModulateAlpha 与 Offscreen 的叠加效果不同。
   ✅ 需要整体统一透明度时 `graphicsLayer { alpha = x; compositingStrategy = CompositingStrategy.Offscreen }`。
 - ❌ 从旧教程抄 `quadraticBezierTo`——已废弃。
   ✅ 用 `quadraticTo`（官方 API reference 明确标注替换关系）。
 - ❌ 在绘制块里读状态后又写状态——绘制阶段递归失效，死循环风险。
   ✅ 绘制块保持"读状态 → 画"的纯函数性；写状态放交互回调或副作用 API。
+
+<!-- full-library-explanation -->
+## 绘制坐标、布局坐标与可访问内容
+
+DrawScope 的尺寸和 Stroke 宽度通常是像素，dp 需在密度上下文中转换。graphicsLayer 改变视觉呈现，不重新分配兄弟元素的布局空间；图形移出原区域时还要验证裁剪、命中与语义。
+
+上例传入的是普通 Float，父级为了取得新值可能已发生组合读取，因此不能声称整个更新必定只有重绘。若要让绘制阶段直接观察状态，可把 State<Float> 或读取 lambda 传入，在绘制块内读取，并避免其他阶段也读取它。
+
+练习：用 0、0.5、1 和越界进度绘制圆环，再测试不同密度设备。验收：业务规定进度范围并处理越界，描边不意外裁切，屏幕阅读器能获取数值，不能只让 Canvas 画出一幅没有语义的图。动画性能仍需测量，使用 graphicsLayer 不能保证不掉帧。
 
 ## 🔗 相关条目
 
@@ -169,3 +181,9 @@ Spacer(
 ---
 
 *最后更新: 2026年9月 | 本条目为模块知识字典的一部分，概念完整解释以此处为单一事实来源*
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

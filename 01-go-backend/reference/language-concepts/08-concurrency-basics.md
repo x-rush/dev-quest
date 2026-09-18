@@ -1,6 +1,6 @@
 # Go 并发基础（goroutine / channel / select / sync）
 
-> **模块**: `01-go-backend` | **类型**: 字典条目（无难度门槛，支持任意跳入查阅）
+> **模块**: `01-go-backend` | **类型**: 字典条目（可独立查阅，按主题准备前置知识，支持任意跳入查阅）
 
 ## 📌 定义
 
@@ -43,7 +43,7 @@ mu.Lock(); defer mu.Unlock()
 | `chan T` | 类型 | 双向；`chan<- T` 只发送，`<-chan T` 只接收 |
 | `close(ch)` | 内置函数 | 只能关闭一次；向已关闭 channel 发送会 panic |
 | `sync.WaitGroup` | 结构体 | 计数器语义：Add 在启动前、Done 在 goroutine 内 defer |
-| `sync.Mutex` | 结构体 | 不可复制，跨函数传递需传指针 |
+| `sync.Mutex` | 结构体 | 首次使用后不可复制；通常通过指针传递 |
 
 ## 💡 示例
 
@@ -89,7 +89,7 @@ case <-time.After(2 * time.Second):
 ## ⚠️ 常见陷阱
 
 - ❌ **错误做法**：for 循环里直接 `go func() { use(i) }()` 并假设每次闭包拿到当次循环值。
-- ✅ **正确做法**：`go func(n int){...}(i)` 显式传参（或使用循环内局部副本），语义与旧版本行为差异无关，永远显式最安全。
+- ✅ **正确做法**：`go func(n int){...}(i)` 显式传参（或使用循环内局部副本），可明确传入本次值。Go 1.22 起，采用新语言版本且在循环中声明的迭代变量具有逐次独立语义；循环外声明再赋值则不同。
 - ❌ **错误做法**：从不关闭 channel，接收方的 `range` 永不结束。
 - ✅ **正确做法**：由发送方在"不会再发"时 `close(ch)`，一条管道一个关闭者。
 - ❌ **错误做法**：`wg.Done()` 忘记 defer，goroutine 提前 return 导致 Wait 永久阻塞；未 recover 的 goroutine panic 更严重——直接终止整个程序。
@@ -100,6 +100,15 @@ case <-time.After(2 * time.Second):
 - ✅ **正确做法**：用 `WaitGroup`、channel 信号或 `context` 取消来同步生命周期。
 - ❌ **错误做法**：认为并发安全 = 加锁越多越好。
 - ✅ **正确做法**：优先用 channel 归属权转移（同一时刻只有一个 goroutine 持有数据），锁只保护确需共享的状态；用 `-race` 检测数据竞争。
+
+<!-- full-library-explanation -->
+## 等待完成、取消工作、保护共享数据
+
+前置是函数、channel 和指针。这三件事需要分开：WaitGroup 等待任务结束，context 提供取消信号，Mutex 保护共享不变量。调用 cancel 并不代表 goroutine 已经退出；任务必须检查信号并自行返回，调用方必要时继续等待确认结束。
+
+运行本页完整程序，验收收到 10、20、30 各一次，并且循环正常结束；不要断言打印顺序。练习把 results 的缓冲从 3 改成 0，当前“独立 goroutine 等待并关闭、主 goroutine 持续接收”的结构仍应完成；若把 Wait 直接放到接收之前，则可能互相等待。
+
+再增加提前取消的消费者，检查生产者的发送是否也能退出。无界启动任务、没有接收者的发送和跨 goroutine 共享切片，分别涉及资源上限、生命周期与数据竞争，不能用“Go 并发轻量”忽略这些成本。
 
 ## 🔗 相关条目
 
@@ -112,3 +121,9 @@ case <-time.After(2 * time.Second):
 ---
 
 *最后更新: 2026年09月 | 本条目为模块知识字典的一部分，概念完整解释以此处为单一事实来源*
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

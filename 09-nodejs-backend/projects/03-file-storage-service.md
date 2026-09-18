@@ -1,10 +1,23 @@
 # 进阶项目：文件存储服务（上传 + S3 兼容存储）
 
+## 分阶段练习与验收
+
+**最小阶段**：先上传一份小文件并通过 ID 下载。
+
+**验收结果**：大小与类型限制生效，未知 ID 404，文件键不由不可信路径直接决定。
+
+**扩展顺序**：再增加流式上传、对象存储和失败清理；记录元数据与对象不同步时如何恢复。
+
+建议保存一份正常输入、一份失败输入、实际输出和对应测试。先完成以上阶段再扩展正文中的完整设计；遇到省略实现或未定义依赖，应按文档上下文补齐，不能把代码片段拼接后当作已经验证的完整工程。
+
 > **文档简介**: 构建文件存储服务——从本地 multipart 上传升级到 S3 兼容对象存储（MinIO/阿里云 OSS/R2 均适用），掌握预签名 URL 与流式上传下载
 >
 > **目标读者**: 已完成入门项目、接触过 multipart 表单上传的中级后端开发者
 >
 > **前置知识**: [Hono 进阶](../frameworks/02-hono-advanced.md) 的文件上传一节、[Stream 管道与多线程](../basics/07-streams-workers.md)
+
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
 
 ## 📚 文档元数据
 
@@ -15,6 +28,8 @@
 | **难度** | ⭐⭐ |
 | **标签** | `#s3` `#minio` `#presigned-url` `#stream` `#实战项目` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 Stream API 的完整字典见 [`../reference/language-concepts/04-streams-api.md`](../reference/language-concepts/04-streams-api.md)。
 
@@ -177,10 +192,9 @@ import { CreateMultipartUploadCommand, UploadPartCommand } from '@aws-sdk/client
 
 ## ✅ 最佳实践与陷阱
 
-- ✅ 对象 key 始终服务端生成（随机 UUID + 日期前缀），永不信任客户端文件名
-- ✅ 预签名 URL 短时效，过期自动失效
-- ❌ 用 `Buffer` 整读大文件再转存——内存峰值等于文件大小，改用流式（背压见 [`../reference/language-concepts/04-streams-api.md`](../reference/language-concepts/04-streams-api.md)）
-- ❌ 把 MinIO 内网 endpoint 直接暴露给公网客户端
+文件上传先校验用户对目标位置的权限，服务端生成对象 key，并限制允许的类型与大小。预签名 URL 在有效期内是一种访问能力，应限定对象、操作和时限，不能在签发后就忽略泄漏风险。
+
+大文件采用有背压的流式传输，客户端中断或下游失败时清理未完成对象。给外部客户端的下载地址必须可达且符合访问策略，不能直接假定内部服务 endpoint 可用。测试超限、重名、过期和中断，而不只检查小文件上传成功。
 
 ## 🔗 相关文档
 
@@ -188,3 +202,9 @@ import { CreateMultipartUploadCommand, UploadPartCommand } from '@aws-sdk/client
 - 📖 [Stream API 速查](../reference/language-concepts/04-streams-api.md) — pipeline 与背压字典
 - 📄 [Stream 管道与多线程](../basics/07-streams-workers.md) — 流式处理的教程版
 - 📄 [生产级 Node.js API](04-production-nodejs-api.md) — 精通路径的收官项目
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../LEARNING_GUIDE.md) · [完整目录与版本](../README.md) · [通用术语](../../shared-resources/glossary.md)

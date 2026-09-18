@@ -1,6 +1,17 @@
 # 组件生命周期 — 挂载、更新与卸载
 
+## 生命周期不是只执行一次的时间线
+
+前置：组件渲染与 useEffect。把渲染看作计算界面，把 effect 看作建立外部同步，把 cleanup 看作解除这次同步。挂载、依赖变化、卸载分别影响同步的建立和清理；开发检查还可能额外运行建立/清理来暴露问题。
+
+例如订阅聊天消息时，effect 依赖会话 ID。切换会话应先移除旧订阅再建立新订阅，卸载后不应继续接收更新。空依赖数组不代表整个应用生命期只执行一次，更不能替代稳定的服务端去重。
+
+自测：进会话 A、切到 B、离开页面，再进入 B。每条 B 消息只处理一次，A 消息不更新 B。用订阅数量或日志验证，而不是根据界面看起来正常推断没有泄漏。
+
 > **难度**: ⭐ | **前置**: 理解组件与 Props（[03-components-jsx](../../basics/03-components-jsx.md)）
+
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
 
 ## 📚 文档元数据
 
@@ -11,6 +22,8 @@
 | **难度** | ⭐ |
 | **标签** | `#生命周期` `#Effect` `#挂载` `#卸载` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ## 📌 定义
 
@@ -73,3 +86,9 @@ function AppStateBadge() {
 - 📄 [渲染性能](../../advanced-topics/performance/01-rendering-performance.md) — 更新阶段的成本分析
 
 *延伸: React 官方文档 "You Might Not Need an Effect"*
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

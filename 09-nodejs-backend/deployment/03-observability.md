@@ -6,6 +6,9 @@
 >
 > **前置知识**: [生产级 API](../projects/04-production-nodejs-api.md) 的探针与优雅关闭、[CI/CD](02-ci-cd-pipelines.md)
 
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
+
 ## 📚 文档元数据
 
 | 属性 | 内容 |
@@ -15,6 +18,8 @@
 | **难度** | ⭐⭐⭐ |
 | **标签** | `#pino` `#opentelemetry` `#sentry` `#logging` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ## 🎯 本节目标
 
@@ -166,10 +171,9 @@ app.onError((err, c) => {
 
 ## ✅ 最佳实践与陷阱
 
-- ✅ 日志写 stdout，由采集器（Loki/ELK）接管——容器时代不要自己写日志文件
-- ✅ 每个 handler 用 `c.get('log')`，让 requestId 自动贯穿
-- ❌ `console.log(obj)` 打印大对象——热路径上的同步序列化会拖慢事件循环（见 [`../advanced-topics/performance/01-event-loop.md`](../advanced-topics/performance/01-event-loop.md)）
-- ❌ 日志里记录完整 token/身份证号——`redact` 必须在上线前配置
+结构化日志记录请求身份标识、操作和错误上下文，方便从一次失败追到具体处理步骤；中间件先建立日志上下文，handler 才能正确取得它。容器场景常写 stdout 交采集器处理，其他部署也可以采用受管理文件输出。
+
+日志需要体积、级别与敏感字段控制，大对象序列化可能占用事件循环。用一次失败请求确认日志足够定位且不含令牌，采集故障时也不应无限堆积内存。
 
 ## 🔗 相关文档
 
@@ -177,3 +181,16 @@ app.onError((err, c) => {
 - 📄 [CI/CD 流水线](02-ci-cd-pipelines.md) — release 版本号如何进入 Sentry
 - 📖 [常见故障排除](../reference/quick-references/02-troubleshooting.md) — 日志定位后的修复手册
 - 📄 [事件循环原理](../advanced-topics/performance/01-event-loop.md) — 追踪图异常耗时的原理侧
+
+
+<!-- acceptance-exercise -->
+## 练习与验收：通过一个慢请求定位原因
+
+在本地数据库替身中增加受控延迟，发送一组固定请求。预期延迟分布上升，trace 的数据库阶段变长，请求日志可通过关联标识找到；恢复后指标回落。验收再关闭采集端，主业务不应无限阻塞或无界积压。指标标签使用路由模板，具体用户和请求标识留在适当脱敏的日志/trace 中。
+
+以上是在个人或隔离测试环境中的练习，不是本轮已执行记录；实际运行范围见仓库文档质量报告。
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../LEARNING_GUIDE.md) · [完整目录与版本](../README.md) · [通用术语](../../shared-resources/glossary.md)

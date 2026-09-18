@@ -2,6 +2,9 @@
 
 > **难度**: ⭐ | **前置**: 读过[导航基础教程](../../basics/05-navigation.md)更佳，非必需
 
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
+
 ## 📚 文档元数据
 
 | 属性 | 内容 |
@@ -11,6 +14,8 @@
 | **难度** | ⭐ |
 | **标签** | `#导航` `#路由` `#Stack` `#Tabs` `#深链` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ## 📌 定义
 
@@ -30,7 +35,7 @@
 
 ```tsx
 // 路由操作的核心动词（库无关的心智模型）
-navigation.navigate(name, params); // 去某页：栈中已存在则回到它（不重复压栈）
+navigation.navigate(name, params); // 导航到目标；是否复用路由由导航器、版本及身份配置决定
 navigation.push(name, params);     // 压栈：即使已存在也新建一份
 navigation.goBack();               // 出栈：回到历史中的上一条
 navigation.popToTop();             // 清空当前栈回到栈底
@@ -65,11 +70,20 @@ function FeedScreen() {
 
 ## ⚠️ 常见陷阱
 
-- **navigate 与 push 混用**：连续 push 同一详情页会堆出"返回地狱"；去"已存在"的页面用 navigate
+- **navigate 与 push 混用**：连续 push 同一详情页会堆出"返回地狱"；需要回到已有路由时核对当前版本的 popTo 等明确语义
 - **params 里塞大对象/函数**：params 必须可序列化（深链与状态恢复会把它变成字符串）；传 id、由目标页自取数据
-- **以为离开页面 = 卸载**：Tab 切走、被盖住都只是失焦，订阅不清理会重复触发；卸载只在出栈时发生
-- **嵌套导航器找不到 screen**：navigate 默认只作用于"最近的父导航器"；跨树跳转需写全目标导航器名
+- **以为离开页面 = 卸载**：Tab 切走、被盖住都只是失焦，订阅不清理会重复触发；出栈、导航树条件变化或组件身份变化都可能导致卸载
+- **嵌套导航器找不到 screen**：导航操作通常先由当前导航器处理，未处理时可向父级冒泡；跨树跳转需写全目标导航器名
 - **Android 返回键绕过应用内逻辑**：返回手势/返回键走的是导航器的 pop，拦截需用 preventRemove 类 API（未保存提示场景）
+
+<!-- full-library-explanation -->
+## 页面栈与应用状态的关系
+
+同一个 Detail 组件可以在栈中出现多次，每次有不同 route key 和参数；组件名称不是实例身份。Tab 内的 Stack 保持自己的返回历史，Android 返回键则按导航树和平台规则处理。一个导航操作没有被当前导航器处理时，可能向父级冒泡，并非永远只影响最近父级。
+
+练习：画出 Home → Detail(1) → Detail(2)，分别模拟 back、replace 和重置登录后的导航树。验收：返回不会进入已退出账户的私有页面；页面数据权限仍由服务端校验，删除导航记录不等于撤销会话。
+
+聚焦、挂载、应用前后台是三个独立状态。页面可能挂载却未聚焦；应用进入后台时当前页面仍在导航树顶端。摄像头或轮询需要结合所需状态启停，而非只写一个“页面加载时执行”。
 
 ## 🔗 相关条目
 
@@ -79,3 +93,9 @@ function FeedScreen() {
 - 📄 [Hooks 速查](./03-hooks-reference.md) — useNavigation/useFocusEffect 签名
 
 *延伸: React Navigation 官方文档 "Navigating without the navigation prop" · "Deep linking"*
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

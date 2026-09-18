@@ -8,6 +8,9 @@
 >
 > **预计时长**: 20-40分钟
 
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
+
 ## 📚 文档元数据
 
 | 属性 | 内容 |
@@ -19,6 +22,8 @@
 | **更新日期** | `2026年9月` |
 | **作者** | Dev Quest Team |
 | **状态** | ✅ 已完成 |
+
+</details>
 
 ---
 
@@ -363,8 +368,8 @@ import styled from 'styled-components'
 
 // 创建styled组件
 const Button = styled.button`
-  background: ${props => props.primary ? '#3b82f6' : '#f3f4f6'};
-  color: ${props => props.primary ? 'white' : '#1f2937'};
+  background: ${primary ? '#3b82f6' : '#f3f4f6'};
+  color: ${primary ? 'white' : '#1f2937'};
   border: none;
   padding: 0.5rem 1rem;
   border-radius: 4px;
@@ -511,12 +516,13 @@ function App() {
 ### Emotion
 ```jsx
 /** @jsxImportSource @emotion/react */
-import { css, styled } from '@emotion/react'
+import { css } from '@emotion/react'
+import styled from '@emotion/styled'
 
 // CSS prop 写法
-const buttonStyle = css`
-  background: ${props => props.primary ? '#3b82f6' : '#f3f4f6'};
-  color: ${props => props.primary ? 'white' : '#1f2937'};
+const buttonStyle = (primary) => css`
+  background: ${primary ? '#3b82f6' : '#f3f4f6'};
+  color: ${primary ? 'white' : '#1f2937'};
   border: none;
   padding: 0.5rem 1rem;
   border-radius: 4px;
@@ -530,7 +536,7 @@ const buttonStyle = css`
 
 function Button({ primary, children, ...props }) {
   return (
-    <button css={buttonStyle} primary={primary} {...props}>
+    <button css={buttonStyle(primary)} {...props}>
       {children}
     </button>
   )
@@ -571,8 +577,8 @@ import { css } from '@linaria/core'
 
 // 编译时CSS
 const StyledButton = styled.button`
-  background: ${props => props.primary ? '#3b82f6' : '#f3f4f6'};
-  color: ${props => props.primary ? 'white' : '#1f2937'};
+  background: ${primary ? '#3b82f6' : '#f3f4f6'};
+  color: ${primary ? 'white' : '#1f2937'};
   border: none;
   padding: 0.5rem 1rem;
   border-radius: 4px;
@@ -802,21 +808,21 @@ const OptimizedButton = styled.button.withConfig({
 `
 
 // 使用 Emotion 的 @emotion/babel-plugin
-// 配置后编译时提取CSS
+// 提供标签、压缩等编译优化，不等于自动提取成无运行时 CSS 文件
 
 // 使用 Linaria 零运行时方案
 import { styled } from '@linaria/react'
 
 const Button = styled.button`
-  /* 编译时提取，运行时零开销 */
+  /* 静态 CSS 在构建时提取；组件与动态值仍有运行时工作 */
   background: #3b82f6;
 `
 ```
 
 ### CSS 优化技巧
 ```jsx
-// 避免内联样式
-// ❌ 不推荐
+// 静态规则可复用类名；动态值使用内联样式也合理
+// 下面两种写法按需求选择
 <div style={{ backgroundColor: '#3b82f6', padding: '1rem' }}>
 
 // ✅ 推荐
@@ -941,3 +947,19 @@ const Button = styled.button`
 **文档状态**: ✅ 已完成
 **最后更新**: 2026年9月
 **版本**: v1.0.0
+
+<!-- full-library-explanation -->
+## 样式隔离、动态取值和首屏加载是三个问题
+
+前置是 CSS 选择器、层叠与布局。CSS Modules 主要隔离类名，CSS 变量负责运行时值，Tailwind 用预定义工具类表达规则。它们可以组合使用，不必为了主题切换引入一套运行时样式系统。类名局部化也不会取消继承、全局选择器或层叠层的影响。
+
+Tailwind 扫描源码中的完整类名，bg-${color}-500 这类动态拼接不保证生成对应 CSS；有限状态用完整类名映射，连续数值用 style 或 CSS 变量。内联样式适合动态位置等值，不能简单归类为性能错误。运行时 CSS-in-JS 在 Next App Router 中还要按库配置服务端样式收集与插入，避免首屏无样式或水合不一致。
+
+**练习**：做一个支持键盘操作的按钮，分别验证 hover、focus-visible、disabled 和高对比度状态。切换主题后刷新，检查首屏是否闪烁；在 prefers-reduced-motion 下减少非必要动画。用 320px 宽度和 200% 缩放检查卡片是否溢出，响应式不只是让几个断点截图看起来正确。
+
+依据：[Tailwind 源码检测](https://tailwindcss.com/docs/detecting-classes-in-source-files)、[Emotion CSS prop](https://emotion.sh/docs/css-prop)。
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

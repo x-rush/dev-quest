@@ -1,5 +1,8 @@
 # functools 与 subprocess — 函数工具与子进程
 
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
+
 ## 📚 文档元数据
 
 | 属性 | 内容 |
@@ -9,6 +12,8 @@
 | **难度** | ⭐⭐ |
 | **标签** | `#functools` `#subprocess` `#lru_cache` `#partial` `#wraps` `#singledispatch` `#shell注入` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ## 📌 定义
 
@@ -91,9 +96,10 @@ render(1.5)    # 'object: 1.5' —— 未注册类型回落兜底
 
 ```python
 import subprocess
+import sys
 
 r = subprocess.run(
-    ["ls", "-la"],          # 列表形式：参数不经 shell 解析
+    [sys.executable, "--version"],          # 列表形式：参数不经 shell 解析
     capture_output=True,    # 捕获 stdout/stderr
     text=True,              # 文本模式（默认 bytes）
     check=True,             # 非零退出码抛 CalledProcessError
@@ -123,11 +129,11 @@ subprocess.run(f"echo {user_input}", shell=True)   # ❌ user_input="x; rm -rf ~
 subprocess.run(["echo", user_input])               # ✅ 参数原样传递，无解析
 ```
 
-`shell=True` 只在命令本身是受信静态字符串（如 `ps aux | grep python` 管道）时使用；含用户输入一律列表参数 + 默认 `shell=False`。
+只有确实需要 shell 语法时才考虑 shell=True，并处理相应平台的引用规则。普通可执行程序优先使用参数列表和 shell=False；仍要防止目标程序自身的选项注入，不能把列表参数称为一切场景都安全。
 
 ## 💡 示例
 
-组合拳：`lru_cache` 给慢查询加缓存，`subprocess.run` 安全地查 git 版本（实测输出 `d9def1d`）：
+局部组合示例：查询仓库版本，并缓存同一路径的结果。仓库变化后必须调用 git_version.cache_clear() 或移除缓存，否则会返回旧版本；调用前将占位路径换成实际仓库：
 
 ```python
 from functools import lru_cache
@@ -159,6 +165,29 @@ git_version("/path/to/repo")     # 'd9def1d' —— 失败抛 CalledProcessError
 - ❌ **忘 timeout**：外部命令卡死拖垮调用方。
   ✅ 给有界超时并处理 `TimeoutExpired`（配合重试策略）。
 
+<!-- full-library-explanation -->
+## 缓存依赖输入，子进程依赖协议
+
+前置知识是函数参数、对象可变性和进程退出码。缓存把输入映射到先前结果，只有结果在缓存有效期间仍适用才有价值。给“查询当前 Git 提交”加无期限缓存，会在仓库改变后返回旧结果；需要明确清除时机，不能只考虑第一次运行快不快。
+
+完整且跨平台的小实验保存为 `child.py`：
+
+```python
+import subprocess
+import sys
+
+result = subprocess.run(
+    [sys.executable, "-c", "import sys; print(sys.argv[1])", "a b; c"],
+    capture_output=True, text=True, check=True, timeout=5,
+)
+print(result.stdout.strip())
+print(result.returncode)
+```
+
+输出 `a b; c` 和 `0`，空格与分号是一个普通参数的内容，没有被 shell 当作命令。练习：让子进程执行 `sys.exit(2)`，check=True 时应抛 CalledProcessError；改为 False 时应检查 returncode，不能把“没有异常”误当成执行成功。
+
+参数列表减少 shell 注入风险，但不替你验证目标程序的参数语义；例如用户提供的 `--delete` 仍可能被程序当成选项。还要限制允许执行的程序及参数，Windows 批处理文件等特殊入口应按平台规则另外评估。
+
 ## 🔗 相关条目
 
 - 📄 **[装饰器](../language-concepts/06-decorators.md)** — `@wraps` 的完整展开
@@ -170,3 +199,9 @@ git_version("/path/to/repo")     # 'd9def1d' —— 失败抛 CalledProcessError
 ---
 
 *最后更新: 2026年9月 | 本条目为模块知识字典的一部分，概念完整解释以此处为单一事实来源*
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

@@ -1,5 +1,18 @@
 # 导航基础 — React Navigation 栈/标签/抽屉
 
+## 先理解，再动手
+
+栈导航表达进入与返回，标签表达并列入口。路由参数适合传资源 ID，不适合承载整份可变业务对象。
+
+**本节自测**：列表进入详情，再返回；用 ID 重新找到最新记录。
+
+<details>
+<summary>预期结果与参考思路（先尝试再展开）</summary>
+
+详情更新后列表不应继续显示一份过期拷贝；导航状态与业务状态职责不同。
+
+</details>
+
 > **文档简介**: 用 React Navigation 7 搭建移动 App 的页面骨架：原生栈导航、底部标签、抽屉菜单，以及页面间参数传递
 >
 > **目标读者**: 已掌握组件与状态的初学者，准备把多个页面组织成完整应用
@@ -7,6 +20,9 @@
 > **前置知识**: 完成 [04-state-hooks](./04-state-hooks.md)，了解 React Context 基本用法
 >
 > ⚠️ **适用范围**：本篇 React Navigation 直接用法适用于 bare 工程 / React Navigation 模板工程；Expo 主线工程使用内置 expo-router（等价写法对照见下文），自 Expo SDK 56 起官方不再支持从应用代码直接 import `@react-navigation/*` 包——与本模块 [README 技术基线](../README.md) 一致。
+
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
 
 ## 📚 文档元数据
 
@@ -17,6 +33,8 @@
 | **难度** | ⭐ |
 | **标签** | `#导航` `#ReactNavigation` `#Stack` `#Tab` `#Drawer` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ## 🎯 学习目标
 
@@ -199,15 +217,9 @@ useEffect(() => {
 
 ## 🎨 最佳实践
 
-### ✅ 推荐做法
-- **类型集中声明**: `RootStackParamList` 放在单一文件，全 App 共享，获得完整的类型推导
-- **导航层级最多三层**: Stack > Tabs > 内部 Stack，超过就考虑拆模块或用 Modal
-- **动画依赖提前装好**: Reanimated 需要 babel 插件，顺序装错会导致启动崩溃
+导航结构应反映任务关系：列表到详情属于返回栈，平行功能可用 tabs，临时任务可用 modal。没有适用于所有应用的三层上限；检查返回键、深链接和状态恢复能否按预期工作，比分层数量更重要。
 
-### ❌ 避免陷阱
-- **在导航器外使用 `useNavigation`**: 必须在 `NavigationContainer` 之内的组件里调用
-- **参数里塞大对象**: 路由参数会被序列化，只传 id，数据从 store/query 取
-- **忘记 `headerShown: false`**: Tabs/Drawer 外层再套 Stack 时出现双头部
+路由参数尽量传稳定 id 与必要可序列化值，详情从数据层读取，避免携带过期的大对象。导航和动画依赖按安装版本配置；出现双导航栏时检查每层导航器的显示责任，而不是到处关闭 header。
 
 ## ❓ 常见问题
 
@@ -248,3 +260,9 @@ useEffect(() => {
 - 📄 **[Hooks 速查](../reference/language-concepts/03-hooks-reference.md)**: `useNavigation`/`useRoute` 等导航 Hook
 
 > 💡 **学习建议**: 先用最小结构（一个 Stack）跑通，再逐层加 Tabs 和 Drawer；每加一层都在真机上验证返回手势，导航问题一定要在三端真机上确认。
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../LEARNING_GUIDE.md) · [完整目录与版本](../README.md) · [通用术语](../../shared-resources/glossary.md)

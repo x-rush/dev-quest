@@ -1,10 +1,26 @@
 # Query 高级特性：乐观更新、无限查询与失效策略
 
+## 先理解，再动手
+
+乐观更新是在服务端确认前暂时显示预期结果，因此还欠一个失败恢复方案。并发修改时，旧请求的回滚不能随意覆盖新结果。
+
+**本节自测**：模拟一次成功与一次失败创建，观察临时记录何时出现、何时确认或移除。
+
+<details>
+<summary>预期结果与参考思路（先尝试再展开）</summary>
+
+失败后 UI 与服务端事实重新一致；若无法证明并发回滚正确，先采用成功后失效重取。
+
+</details>
+
 > **文档简介**: 进入 TanStack Query v5 的进阶模式——乐观更新、无限滚动加载、依赖查询，以及生产环境最关键的查询失效策略设计
 >
 > **目标读者**: 已熟练使用 useQuery/useMutation，想让交互体验与数据一致性更上一层楼的开发者
 >
 > **前置知识**: [Query 基础](./03-query-fundamentals.md)、[缓存键与失效策略](../reference/framework-essentials/01-query-essentials.md)
+
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
 
 ## 📚 文档元数据
 
@@ -15,6 +31,8 @@
 | **难度** | ⭐⭐ |
 | **标签** | `#乐观更新` `#useInfiniteQuery` `#依赖查询` `#失效策略` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ## 🎯 学习目标
 
@@ -76,13 +94,15 @@ function useToggleTodo() {
 
 ## ♾️ 无限查询：useInfiniteQuery
 
+以下为局部组件片段，api.fetchFeed 需由已有工程提供，返回 Promise<Page>；并非完整的 API 实现。
+
 ```tsx
 import { useInfiniteQuery } from '@tanstack/react-query'
 
 type Page = { items: string[]; nextCursor: number | null }
 
 function Feed() {
-  const { data, isPending, hasNextPage, isFetchingNextPage, fetchNextPage } =
+  const { data, isPending, isError, error, hasNextPage, isFetchingNextPage, fetchNextPage } =
     useInfiniteQuery({
       queryKey: ['feed'],
       queryFn: ({ pageParam }) => api.fetchFeed(pageParam as number),
@@ -90,8 +110,9 @@ function Feed() {
       getNextPageParam: (lastPage) => lastPage.nextCursor, // 返回 null/undefined 即无更多
     })
 
-  // 解构出的 isPending 无法收窄 data 类型，判 undefined 才能通过 strict 检查
-  if (isPending || data === undefined) return <p>加载中...</p>
+  // const 解构可以保留判别关系；依次处理 pending 与 error 后再使用成功数据。
+  if (isPending) return <p>加载中...</p>
+  if (isError) return <p role="alert">{error.message}</p>
 
   return (
     <>
@@ -193,3 +214,9 @@ queryClient.invalidateQueries({
 ---
 
 **最后更新**: 2026年9月 | Dev Quest · 03-tanstack-stack
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../LEARNING_GUIDE.md) · [完整目录与版本](../README.md) · [通用术语](../../shared-resources/glossary.md)

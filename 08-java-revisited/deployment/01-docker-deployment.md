@@ -6,6 +6,9 @@
 >
 > **前置知识**: 已完成 [开发工具链](../frameworks/04-devtools.md)；容器概念基础见 [第一个项目](../basics/08-first-project.md)
 
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
+
 ## 📚 文档元数据
 
 | 属性 | 内容 |
@@ -15,6 +18,8 @@
 | **难度** | ⭐⭐ |
 | **标签** | `#Docker` `#分层镜像` `#多阶段构建` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ## 🎯 学习目标
 
@@ -126,15 +131,9 @@ alpine 镜像默认 UTC：`ENV TZ=Asia/Shanghai` + `apk add tzdata`；`-Dfile.en
 
 ## 🎨 最佳实践
 
-### ✅ 推荐
-- 镜像 tag 用语义化版本 + commit SHA，禁止只打 `latest`
-- `.dockerignore` 排除 `target/`、`.git`，加速构建上下文
-- 运行镜像不含 Maven/JDK 编译链（多阶段构建隔离）
+构建镜像时把依赖获取与经常变化的源码分层，可减少无关变化造成的重复工作；若构建流程需要本地生成的 jar，不能又无条件把 target 全部排除。根据 Dockerfile 实际输入设计上下文。
 
-### ❌ 陷阱
-- 容器里 `-Xmx` 硬编码超过配额 → OOMKilled
-- 用 root 跑应用：容器逃逸攻击面变大
-- `COPY . .` 一步到位：任何文件变动都击穿全部缓存层
+运行镜像只带所需运行能力，内存预算包含堆外、线程等开销。版本标签方便识别但可能被覆盖，严格追溯需记录镜像摘要。用非特权身份运行并测试容器内文件权限，避免应用启动后才发现无法写必要目录。
 
 ## 🚀 下一步
 
@@ -149,3 +148,16 @@ alpine 镜像默认 UTC：`ENV TZ=Asia/Shanghai` + `apk add tzdata`；`-Dfile.en
 - 📄 [开发工具链](../frameworks/04-devtools.md) — Maven 打包基础
 - 📄 [K8s 部署](./02-kubernetes-deployment.md) — 下一篇：编排
 - 📄 [生产级 Spring Boot 应用](../projects/04-production-spring-app.md) — 容器化只是起点
+
+
+<!-- acceptance-exercise -->
+## 练习与验收：从最小镜像运行真实业务
+
+构建测试镜像，以非特权用户启动，注入测试数据库地址并完成创建、查询两步。预期 JVM 能读取所需证书与配置，应用就绪后才接流量。发送停止信号时，在途请求按设计结束且连接池关闭。验收记录镜像摘要、启动时间和终止时间；不要仅以镜像更小判断更好，缺失 CA、时区或原生库都可能在运行时暴露。
+
+以上是在个人或隔离测试环境中的练习，不是本轮已执行记录；实际运行范围见仓库文档质量报告。
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../LEARNING_GUIDE.md) · [完整目录与版本](../README.md) · [通用术语](../../shared-resources/glossary.md)

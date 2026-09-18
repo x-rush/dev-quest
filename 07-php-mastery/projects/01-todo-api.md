@@ -1,10 +1,23 @@
 # 入门项目：TODO REST API
 
+## 分阶段练习与验收
+
+**最小阶段**：先完成待办创建和详情，再补列表与修改。
+
+**验收结果**：无效标题不入库，不存在 ID 返回 404，JSON 结构一致。
+
+**扩展顺序**：认证、分页和发布是后续步骤，不要省略本阶段必要迁移与路由。
+
+建议保存一份正常输入、一份失败输入、实际输出和对应测试。先完成以上阶段再扩展正文中的完整设计；遇到省略实现或未定义依赖，应按文档上下文补齐，不能把代码片段拼接后当作已经验证的完整工程。
+
 > **文档简介**: 用 Laravel 13 从零构建一个符合 REST 风格的 TODO API，覆盖模型、验证、资源响应与路由设计的最小闭环
 >
 > **目标读者**: 学完 frameworks 入门篇、第一次用 Laravel 写完整接口的开发者
 >
 > **前置知识**: [Laravel 入门](../frameworks/01-laravel-basics.md)、[CLI 任务管理工具](../basics/08-first-project.md)；枚举前置：[高级特性 · 枚举](../basics/07-advanced-features.md)（第 1 节即可——项目直接使用 Backed Enum 与 `enum:` 校验规则）
+
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
 
 ## 📚 文档元数据
 
@@ -15,6 +28,8 @@
 | **难度** | ⭐ |
 | **标签** | `#Laravel` `#REST` `#实战项目` `#TODO` `#API` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ## 🎯 项目目标
 
@@ -230,3 +245,9 @@ curl -s localhost:8000/api/todos | php -r 'echo json_encode(json_decode(stream_g
 - 📄 [类型系统与现代 OOP](../reference/language-concepts/03-types-oop-modern.md) — 枚举语法详解
 - 📄 [博客平台实战](./02-blog-platform.md) — 加认证与关系的进阶项目
 - 📄 [PHP 故障排除](../reference/quick-references/02-troubleshooting.md) — 报错时先查这里
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../LEARNING_GUIDE.md) · [完整目录与版本](../README.md) · [通用术语](../../shared-resources/glossary.md)

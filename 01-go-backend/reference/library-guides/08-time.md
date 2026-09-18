@@ -1,10 +1,10 @@
 # time - 时间、时长与定时器
 
-> **模块**: `01-go-backend` | **类型**: 字典条目（无难度门槛，支持任意跳入查阅）
+> **模块**: `01-go-backend` | **类型**: 字典条目（可独立查阅，按主题准备前置知识，支持任意跳入查阅）
 
 ## 📌 定义
 
-time 包提供时间点（`time.Time`）与时长（`time.Duration`）两大值类型。两个独门心智模型——**值语义不可变**（Time 像 string，传值即可、并发安全）与**参考时间格式化**（用固定范例时间 `2006-01-02 15:04:05` 的写法当作格式模板）。
+time 包提供时间点（`time.Time`）与时长（`time.Duration`）两大值类型。两个独门心智模型——**通常按值传递**（Add 等操作返回新值；共享变量的写入及 Unmarshal 等指针方法仍需同步）与**参考时间格式化**（用固定范例时间 `2006-01-02 15:04:05` 的写法当作格式模板）。
 
 ## 📖 语法 / 签名
 
@@ -47,6 +47,7 @@ package main
 import (
 	"fmt"
 	"time"
+	_ "time/tzdata"
 )
 
 func main() {
@@ -60,12 +61,13 @@ func main() {
 	p, err := time.Parse("2006-01-02", "2026-09-14")
 	fmt.Println(p, err == nil) // 2026-09-14 00:00:00 +0000 UTC true
 
-	// 3. Duration 是 int64 别名，单位常量运算直观
+	// 3. Duration 是底层类型为 int64 的定义类型，单位常量运算直观
 	d := 90 * time.Minute
 	fmt.Println(d, d.Minutes()) // 1h30m0s 90
 
 	// 4. 时区转换：同一时刻不同显示
-	sh, _ := time.LoadLocation("Asia/Shanghai")
+	sh, err := time.LoadLocation("Asia/Shanghai")
+	if err != nil { panic(err) }
 	local := t.In(sh)
 	fmt.Println(local) // 2026-09-14 16:05:03 +0800 CST
 
@@ -104,12 +106,21 @@ func main() {
 - ✅ **正确做法**：`t.Equal(u)`；`==` 会连"位置"与单调读数一起比较，产生假不等。
 - ❌ **错误做法**：`time.Sleep` 实现超时控制，无法取消。
 - ✅ **正确做法**：`select + ctx.Done()/time.After` 或 `timer`，配合 context 可中断。
-- ❌ **错误做法**：Ticker/Timer 忘记 Stop，在高频路径持续泄漏。
-- ✅ **正确做法**：用完 `defer ticker.Stop()`；Reset 前先排干 channel（`for { select { case <-t.C: default: } }`）再 Reset。
+- ❌ **错误做法**：以为所有 Go 版本都需要相同的 Timer Stop/Reset 排空技巧。
+- ✅ **正确做法**：停止不再需要的周期任务时调用 Stop。Go 1.23 起采用新计时器语义的程序，Reset 返回后不会再收到旧配置的值，GC 也能回收不再引用的计时器；不要套用无限循环排空代码。旧 go 指令或 GODEBUG 配置可能启用旧语义，应核对项目环境。
 - ❌ **错误做法**：跨时区"加 8 小时"手工算。
 - ✅ **正确做法**：同一时刻用 `.In(loc)` 换显示位置；"天"的概念用 `time.Date(y, m, d, 0,0,0,0, loc)` 在目标时区构造。
-- ❌ **错误做法**：把 `time.After` 放进 for 循环当周期定时器（每次新 Timer，泄漏+不准）。
+- ❌ **错误做法**：把 `time.After` 放进 for 循环当周期定时器（每轮重新计时，周期会受任务耗时影响）。
 - ✅ **正确做法**：循环周期任务用 `time.NewTicker`。
+
+<!-- full-library-explanation -->
+## 日历上的一天与经过 24 小时
+
+前置是数值类型、错误处理与 channel。Duration 表示纳秒计数的时间间隔，Time 表示一个时间点。在采用夏令时的地区，AddDate(0, 0, 1) 保留当地日历的次日时刻，而 Add(24*time.Hour) 表示实实在在经过 24 小时，两者可能不同。账单按当地日期结算，延迟任务按经过时长触发，应先选择语义再选 API。
+
+测量本进程内耗时通常记录 start := time.Now()，结束后 time.Since(start)；不要先格式化或转换成 Unix 时间再相减，那样会失去单调时钟信息。跨进程传递的时间戳没有共享单调时钟，仍需面对系统时钟偏差。解析输入始终检查错误，并明确字符串是否带时区，避免服务器部署地区改变数据含义。
+
+练习：在 America/New_York 的 2026-03-07 中午，分别 AddDate(0, 0, 1) 和 Add(24*time.Hour)，前者应保持次日中午，后者会显示次日 13 点。再编写一个监听 ctx.Done 的 ticker 循环，取消后应退出；仅调用 ticker.Stop 不会关闭 ticker.C，也不能让 for range 自动结束。
 
 ## 🔗 相关条目
 
@@ -123,3 +134,9 @@ func main() {
 ---
 
 *最后更新: 2026年9月 | 本条目为模块知识字典的一部分，概念完整解释以此处为单一事实来源*
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

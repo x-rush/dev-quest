@@ -1,10 +1,21 @@
 # 开发工具链：Composer、Artisan、PHPStan 与 Xdebug
 
+## 先看框架承担哪部分职责
+
+**PHP 工具**：Composer 管依赖和自动加载，Artisan 执行框架任务，PHPStan 做静态分析，Xdebug 观察运行。它们不能互相替代。
+
+**最小练习与预期结果**：通过自动加载调用一个类，故意写错类名，再用静态分析检查；区分解析错误和运行时错误。
+
+具体 API 与安装版本以[模块基线](../README.md)和本篇官方来源为准。先完成这条数据路径，再展开后面的高级配置；框架名称变化后，输入边界、状态归属和失败处理仍是需要理解的机制。
+
 > **文档简介**: 配齐 PHP 开发者的四件日常武器——依赖管理、代码生成、静态分析与断点调试
 >
 > **目标读者**: 希望把本地开发效率提升一个档次的 PHP 学习者
 >
 > **前置知识**: [环境搭建](../basics/01-environment-setup.md)、[Composer 生态速查](../reference/library-guides/02-composer-ecosystem.md)
+
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
 
 ## 📚 文档元数据
 
@@ -15,6 +26,8 @@
 | **难度** | ⭐ |
 | **标签** | `#Composer` `#Artisan` `#PHPStan` `#Xdebug` `#工具链` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ## 🎯 学习目标
 
@@ -138,3 +151,9 @@ A: 给模型关系方法写明确的返回类型（`HasMany` 等），Larastan �
 - 📄 [PHP 快速速查表](../reference/quick-references/01-php-cheatsheet.md) — 语法级速查
 - 📄 [故障排除](../reference/quick-references/02-troubleshooting.md) — 常见报错对照
 - 📄 [单元测试](../testing/01-unit-testing.md) — 与静态分析互补的质量手段
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../LEARNING_GUIDE.md) · [完整目录与版本](../README.md) · [通用术语](../../shared-resources/glossary.md)

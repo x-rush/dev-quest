@@ -1,10 +1,21 @@
 # 错误处理库 - std Error / thiserror / anyhow
 
+## 错误的传播、描述与分类是三件事
+
+前置：Result、?、trait 与 From。Result<T, E> 的 E 可以是普通类型；? 的传播不要求 E 本身实现 Debug、Display 或 std::error::Error。能否使用 ? 取决于当前返回类型及所需的转换规则。
+
+当错误要对人展示时实现 Display，需要调试输出时实现 Debug，需要进入标准错误链生态时实现 Error。thiserror 帮助为具体错误类型生成实现；anyhow 方便应用入口汇集不同来源并追加上下文。它们减少样板，不取消“谁根据错误种类作决定”的设计责任。
+
+自测：库调用者要区分“文件不存在”和“格式错误”，是否只返回一段文字就够？不够，稳定的具体错误变体更适合分支处理。应用最外层只需记录诊断时，可保留 cause 链并添加“读取配置失败”等上下文。
+
 > **文档简介**: Rust 错误处理三件套速查——std 的 `Error` trait 与 source 链模型、thiserror 派生宏属性表、anyhow 的上下文与 downcast、附手写范式与"库层 vs 应用层"选型矩阵。
 >
 > **目标读者**: 已会用 `Result`/`?`、要为项目定型错误策略的中级开发者。
 >
 > **前置知识**: [错误处理基础（Result/panic）](../../basics/05-error-handling.md)、trait 对象
+
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
 
 ## 📚 文档元数据
 
@@ -15,6 +26,8 @@
 | **难度** | ⭐⭐ 进阶 |
 | **标签** | `#rust` `#error-handling` `#reference` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 **版本基线**: Rust **1.98.1**（edition 2024）见[模块 README](../../README.md)；thiserror / anyhow 未列入基线表，本文不标版本号（依赖用 `cargo add` 取当前稳定版）。
 
@@ -27,13 +40,13 @@
 
 ## 📋 目录
 
-- [std Error trait 与错误链](#std-error-trait-与错误链)
-- [手写范式](#手写范式)
-- [thiserror：派生宏属性表](#thiserror派生宏属性表)
-- [anyhow：应用层错误](#anyhow应用层错误)
-- [选型矩阵](#选型矩阵)
-- [最佳实践与陷阱](#最佳实践与陷阱)
-- [常见问题](#常见问题)
+- [std Error trait 与错误链](#-std-error-trait-与错误链)
+- [手写范式](#️-手写范式纯-std实测)
+- [thiserror：派生宏属性表](#️-thiserror派生宏属性表)
+- [anyhow：应用层错误](#-anyhow应用层错误)
+- [选型矩阵](#️-选型矩阵)
+- [最佳实践与陷阱](#-最佳实践与陷阱)
+- [常见问题](#-常见问题)
 
 ---
 
@@ -46,7 +59,7 @@ pub trait Error: Debug + Display {
 }
 ```
 
-Rust 错误是**普通值**：`Result<T, E>` 的 `E` 只要实现 `Debug + Display` 就能 `?` 传播；实现 `Error` trait 才能进入"错误链"生态——`source()` 声明"谁导致了我"，让整条因果链可遍历、可 downcast。`?` 的自动 `From` 转换负责**换型**，`source()` 负责**保留根因**，两者互补。
+Rust 错误是**普通值**：`Result<T, E>` 的 `E` 不必实现 Debug/Display；能否使用 `?` 取决于返回类型与错误转换约束；实现 `Error` trait 才能进入"错误链"生态——`source()` 声明"谁导致了我"，让整条因果链可遍历、可 downcast。`?` 的自动 `From` 转换负责**换型**，`source()` 负责**保留根因**，两者互补。
 
 - **`source()` 链**：从外到内逐层 `source()` 直到 `None` 即根因；Display 消息逐层叠加。
 - **downcast**：对 `&dyn Error` 可 `downcast_ref::<T>()` 取回具体类型（需 `'static`）。
@@ -227,17 +240,9 @@ e.root_cause().to_string();           // "not found: user #1"
 
 ## 🎨 最佳实践与陷阱
 
-### ✅ 推荐做法
-- **先分层再选库**：写库（会被别人依赖）→ thiserror；写应用（消费一切）→ anyhow。
-- **`#[from]` 只给"真的想隐式的"转换**：每个 `#[from]` 都是一条隐式 `?` 通路，多了会模糊错误来源。
-- **context 写"当时在做什么"**：`open(path).context("读取配置失败")`——上下文是操作语义，不是错误重复。
+错误库按调用方需要选择：稳定公共 API 常提供可区分的错误，应用聚合多种失败可使用统一容器。anyhow 支持向下转换已知类型，但不是自动生成的稳定业务错误枚举。context 说明当时的操作，避免只是重复底层消息。
 
-### ❌ 避免陷阱
-- **`io::Error::new(kind, payload).source()` 是 `None`（实测）**：自定义载荷要用 `get_ref()` 取，它不进 source 链；想要链就用包装类型或 anyhow 的 `.context()`。
-- **anyhow 的 Display 以为会显示全链**：只显示最外层；排障日志必须 `{:#}` 或 `{:?}`。
-- **thiserror 枚举里同类型两个 `#[from]`**：`From` 实现冲突，编译失败；第二个变体去掉 `#[from]` 手动构造。
-- **在库的公开签名里用 `anyhow::Error`**：调用方失去 match 能力；anyhow 留在二进制边界内。
-- **`unwrap()`/`expect()` 出现在库路径**：panic 不进错误链、跨 FFI/线程边界即炸；仅测试与"逻辑上不可能失败"处使用。
+从同一种错误类型到多个变体不能自动生成互相冲突的 From，实现中需明确选择。io::Error 的载荷访问与 source 链不同，不能对所有载荷一概断言 source 永远为空；排查时按实际错误结构检查。panic、线程和 FFI 各有边界，不用统一“跨界即炸”替代契约。
 
 ## ❓ 常见问题
 
@@ -273,3 +278,9 @@ e.root_cause().to_string();           // "not found: user #1"
 4. **选型看边界**：被依赖的层给类型，消费一切的层给动态；跨库桥接用 transparent 变体。
 
 **文档版本**: v1.0.0 | **最后更新**: 2026年9月 | **维护团队**: Dev Quest Team
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

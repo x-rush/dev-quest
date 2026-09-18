@@ -1,5 +1,7 @@
 # AndroidX 官方库指南
 
+> **阅读准备**：Android 生命周期、Kotlin 协程与 Flow；按持久化、后台工作、分页等需求分别选库。
+
 > ViewModel/Lifecycle/Room/DataStore/Navigation/WorkManager 六大官方库的字典式速查：核心 API、最小示例与陷阱
 
 | 属性 | 内容 |
@@ -15,7 +17,7 @@
 ## 1. ViewModel - 状态容器
 
 ### 定义
-以配置变更（旋转等）为界的 UI 状态持有者；销毁时回调 `onCleared()`，是 `viewModelScope` 的宿主。
+由 ViewModelStoreOwner 管理、通常可跨配置变更的 UI 状态持有者；销毁时回调 `onCleared()`，是 `viewModelScope` 的宿主。
 
 ### 语法和示例
 ```kotlin
@@ -45,7 +47,7 @@ val sharedVm: CartViewModel =
 
 ### 陷阱
 - ❌ 持有 Activity/Fragment/View/Context 引用——泄漏；需要 Application 用 `AndroidViewModel(app)`
-- ❌ 暴露 `MutableStateFlow` 或 suspend 写方法给 UI——对外只读（`.asStateFlow()`）+ 事件函数
+- ❌ 暴露 MutableStateFlow 会让 UI 任意写状态；可只读暴露并用事件函数，suspend 方法是否合适取决于调用方生命周期契约
 - ✅ ViewModel ≠ 数据层：纯展示转换放 UI 层，跨页面共享放 Repository
 
 ## 2. Lifecycle - 生命周期
@@ -58,7 +60,7 @@ val sharedVm: CartViewModel =
 // Compose：生命周期感知收集（推荐）
 val state by vm.uiState.collectAsStateWithLifecycle()
 
-// 非组合环境（Service/Receiver）：repeatOnLifecycle 模板
+// Activity/Fragment 等具有 LifecycleOwner 的环境：repeatOnLifecycle 模板；普通 Receiver 不直接提供该作用域
 lifecycleScope.launch {
     repeatOnLifecycle(Lifecycle.State.STARTED) {
         vm.events.collect { event -> handle(event) }   // STOP 自动取消，START 自动恢复
@@ -87,7 +89,8 @@ data class NoteEntity(
     @PrimaryKey(autoGenerate = true) val id: Long = 0,
     val title: String,
     val content: String,
-    val createdAt: Long
+    val createdAt: Long,
+    @ColumnInfo(defaultValue = "0") val pinned: Boolean = false
 )
 
 @Dao
@@ -155,7 +158,7 @@ class SettingsRepository(private val context: Context) {
 | 维度 | DataStore | SharedPreferences |
 |------|-----------|-------------------|
 | API | 全异步 Flow/suspend | 同步阻塞 |
-| 一致性 | 事务性 | 无 |
+| 一致性 | 提供串行事务式更新 | 有编辑提交语义，但读改写与并发需自行协调 |
 | 错误处理 | 显式（IOException 可捕获） | 静默失败 |
 
 ### 陷阱
@@ -189,7 +192,7 @@ NavHost(navController, startDestination = NotesRoute) {
 ## 6. WorkManager - 后台任务
 
 ### 定义
-可延迟、可约束（网络/充电）、保证执行的后台任务调度；重启后任务恢复。
+可延迟、可约束（网络/充电）的持久后台任务调度，不保证精确执行时间；重启后任务恢复。
 
 ### 语法和示例
 ```kotlin
@@ -217,7 +220,7 @@ WorkManager.getInstance(context).enqueue(request)
 | 数据类型 | 存储 |
 |----------|------|
 | 结构化记录（可查询/排序） | Room |
-| 用户设置/开关/Token | DataStore |
+| 用户设置/开关 | DataStore；Token 另评估加密与密钥管理 |
 | 页面状态（跨旋转） | ViewModel |
 | UI 瞬时状态 | remember/rememberSaveable |
 | 磁盘大文件 | File + MediaStore |
@@ -231,3 +234,20 @@ WorkManager.getInstance(context).enqueue(request)
 - 📄 **[第三方库指南](./02-third-party-libs.md)** - Hilt/Retrofit/Coil 等
 - 📄 **[第一个项目：笔记应用](../../basics/08-first-project.md)** - Room+ViewModel 的完整落地
 - 📖 **[Jetpack 官方文档](https://developer.android.com/jetpack)** - 全库总览
+
+
+<!-- full-library-explanation -->
+## 从一次保存操作理解各库边界
+
+点击保存由 ViewModel 接收意图，Repository 协调数据写入，Room 提供数据库事务，Flow 将变化传回界面。DataStore 适合少量配置，不自动提供秘密加密；WorkManager 处理可延迟的持久任务，也不是在指定秒数必达的闹钟。
+
+ViewModel 的生命周期由 ViewModelStoreOwner 决定。旋转通常复用它，导航出栈可能清除它，进程终止时不能指望 onCleared 一定被调用来保存重要数据。需要保存的草稿应及时持久化，而不是只在销毁回调写盘。
+
+练习：写一条笔记后旋转、返回列表、重启进程，再测试从数据库版本 1 升至 2。验收：数据仍在、schema 与 Entity 一致、UI 没持有可写数据库句柄；重复执行后台同步不会创建重复记录。WorkManager 的持久调度受系统与约束影响，任务逻辑需要幂等，[官方说明](https://developer.android.com/topic/libraries/architecture/workmanager)列出了适用范围。
+
+上文 factory、sharedViewModel、repo 是工程接入点，不是所有名字都来自 AndroidX。完整工程需要提供它们的实现与依赖注入配置。
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

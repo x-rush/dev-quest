@@ -2,6 +2,9 @@
 
 > **难度**: ⭐⭐ | **前置**: 了解原生模块概念（[06-native-modules](../../basics/06-native-modules.md)）
 
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
+
 ## 📚 文档元数据
 
 | 属性 | 内容 |
@@ -11,6 +14,8 @@
 | **难度** | ⭐⭐ |
 | **标签** | `#相机` `#推送` `#存储` `#传感器` `#权限` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ## 选型优先级
 
@@ -63,13 +68,14 @@ const token = (await Notifications.getDevicePushTokenAsync()).data;
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
     shouldShowBanner: true,
+    shouldShowList: true,
     shouldPlaySound: true,
     shouldSetBadge: false,
   }),
 });
 ```
 
-**陷阱**: iOS 模拟器收不到远程推送，必须真机调试；国内 Android 无 GMS 设备要走厂商通道（华为设备即 Push Kit）。
+**陷阱**: 部分 Xcode/系统/硬件组合支持模拟器远程通知，最终仍应在目标真机验证注册与展示；国内 Android 无 GMS 设备要走厂商通道（华为设备即 Push Kit）。
 
 ## 存储
 
@@ -107,10 +113,10 @@ if (status === 'granted') {
 |------|---------|-----|------|
 | 相机 | 运行时权限 + Manifest | Info.plist + 运行时 | module.json5 + 运行时授权 API |
 | 定位 | ACCESS_FINE_LOCATION | NSLocationWhenInUseUsageDescription | ohos.permission.LOCATION |
-| 推送 | POST_NOTIFICATIONS（13+） | APNs 注册即含 | Push Kit 授权 |
+| 推送 | POST_NOTIFICATIONS（13+） | 系统通知授权与 APNs 注册分别处理 | Push Kit 授权 |
 | 推荐库 | `react-native-permissions`（统一 API） | 同左 | HMS 侧单独处理 |
 
-**陷阱**: 权限被永久拒绝后 `request` 直接返回 denied——必须引导用户去 `Linking.openSettings()`。
+**陷阱**: 不同库对拒绝和不可再询问的状态命名不同；依据返回值与 canAskAgain 等字段决定是否引导到设置，不要反复弹窗。
 
 ## 鸿蒙适配检查要点
 
@@ -118,6 +124,15 @@ if (status === 'granted') {
 - ✅ 权限写入 `module.json5` 的 `requestPermissions`
 - ✅ 推送/支付/地图等华为系服务需在 AGC（AppGallery Connect）开通并配置
 - ✅ 无法适配的库用 ArkTS TurboModule 自研替代
+
+<!-- full-library-explanation -->
+## 能力调用的完整状态机
+
+以定位为例，页面至少区分未申请、申请中、允许、拒绝、无法再次弹窗、系统定位关闭、定位超时和成功。Manifest/Info.plist 声明解释应用需要什么；运行时授权表达用户当前是否同意；设备服务状态决定此刻能否获得结果。一个 granted 值覆盖不了全部情况。
+
+推送设备 token 是路由地址，不是登录凭证。应用账户切换、token 更新和注销时要同步服务端绑定；不能把旧用户的通知继续投递到新用户会话。系统展示通知的授权与获取设备 token 也是不同环节。
+
+练习：选一个能力，记录拒绝授权、允许后撤销、设备服务关闭三个场景。验收：页面给出能执行的下一步；拒绝后仍可使用不依赖该能力的功能；日志不记录精确位置或凭证。上文 upload 等名字是业务接入点，须自行实现上传和错误处理。
 
 ## 🔗 相关文档
 
@@ -128,3 +143,9 @@ if (status === 'granted') {
 - 📄 **[故障排除](../quick-references/02-troubleshooting.md)**: 权限/签名相关报错
 
 *延伸: React Native Directory（reactnative.directory）· RNOH 三方库适配列表*
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

@@ -6,6 +6,9 @@
 >
 > **前置知识**: [basics/09-concurrency-async](../../basics/09-concurrency-async.md)、[async 内核（Future/Pin/Waker）](../language-concepts/08-async-internals.md)
 
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
+
 ## 📚 文档元数据
 
 | 属性 | 内容 |
@@ -15,6 +18,8 @@
 | **难度** | ⭐⭐ 进阶 |
 | **标签** | `#rust` `#tokio` `#async` `#reference` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 **版本基线**: Tokio **1.53**（核实日期 2026-09-16，单一事实来源见[模块 README 技术基线](../../README.md)）。Stream trait 属独立 crate `tokio-stream`（版本未列入基线，不在此标注）。
 
@@ -27,14 +32,14 @@
 
 ## 📋 目录
 
-- [Runtime：创建与进入](#runtime-创建与进入)
-- [任务 spawn 与 JoinHandle](#任务-spawn-与-joinhandle)
-- [同步原语四兄弟](#同步原语四兄弟)
-- [select! 宏](#select-宏)
-- [time 定时器](#time-定时器)
-- [IO trait](#io-trait-异步读写)
-- [stream 适配](#stream-适配tokio-stream)
-- [最佳实践与陷阱](#最佳实践与陷阱)
+- [Runtime：创建与进入](#️-runtime创建与进入)
+- [任务 spawn 与 JoinHandle](#-任务-spawn-与-joinhandle)
+- [同步原语四兄弟](#-同步原语四兄弟)
+- [select! 宏](#-select-宏)
+- [time 定时器](#️-time-定时器)
+- [IO trait](#-io-trait异步读写)
+- [stream 适配](#-stream-适配tokio-stream)
+- [最佳实践与陷阱](#-最佳实践与陷阱)
 
 ---
 
@@ -284,17 +289,9 @@ while let Some((key, item)) = map.next().await { /* ... */ }
 
 ## 🎨 最佳实践与陷阱
 
-### ✅ 推荐做法
-- **容量即背压**：有界 mpsc 满了 `send().await` 自然等待，是流控的第一道闸。
-- **阻塞移出 worker**：文件 IO、重 CPU、FFI 调用一律 `spawn_blocking`。
-- **`select!` 分支保持取消安全**：非取消安全操作（如整段 `read_exact`）拆小或先落缓冲。
+有界通道让生产者在容量耗尽时等待，但总任务数量和生产速度也需限制，否则排队可能只是转移到任务堆积。阻塞调用可放合适执行器，已有异步 API 无需再全部包 spawn_blocking；CPU 密集工作同样要限并发。
 
-### ❌ 避免陷阱
-- **在 async fn 里 `std::thread::sleep`**：卡死整个 worker 线程；用 `tokio::time::sleep`。
-- **`current_thread` runtime 用 `block_in_place`**：会 panic，仅多线程 runtime 支持。
-- **spawn 出的"孤儿任务"失控**：保存 `JoinHandle` 或用 `JoinSet` 管理，需要时可 `abort`。
-- **broadcast 读者忽略 `Lagged`**：`Lagged(n)` 表示已丢 n 帧，必须显式决定重同步策略。
-- **手动 Builder 忘了 `enable_all()`**：`net`/`time` API 运行时 panic。
+select 丢弃未获选 Future 的语义要求检查取消安全，部分读写可能已经推进，不能简单重来。任务需要明确关闭与等待责任，abort 不会停止所有已经开始的阻塞工作。Runtime Builder 按需启用时间或 I/O 驱动，也可 enable_all；验收取消和关闭时资源确实释放。
 
 ## ❓ 常见问题
 
@@ -333,3 +330,9 @@ while let Some((key, item)) = map.next().await { /* ... */ }
 4. **Stream 是独立 crate**：`tokio-stream` 负责 trait 与适配，tokio 本体提供资源。
 
 **文档版本**: v1.0.0 | **最后更新**: 2026年9月 | **维护团队**: Dev Quest Team
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

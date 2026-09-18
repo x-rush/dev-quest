@@ -6,6 +6,9 @@
 >
 > **前置知识**: [frameworks/02-swiftui-advanced.md](../../frameworks/02-swiftui-advanced.md)（@Observable 追踪机制）、[frameworks/04-devtools.md](../../frameworks/04-devtools.md)（会用 Instruments 与 `Self._printChanges()`）
 
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
+
 ## 📚 文档元数据
 
 | 属性 | 内容 |
@@ -15,6 +18,8 @@
 | **难度** | ⭐⭐⭐ |
 | **标签** | `#渲染管线` `#Body求值` `#性能优化` `#Instruments` `#LazyStack` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ## 🔍 一、渲染管线：求值 ≠ 绘制
 
@@ -29,9 +34,9 @@ SwiftUI 的"刷新"分两个截然不同的阶段，混淆它们是绝大多数�
 
 **关键事实**：
 
-1. Body 求值很便宜——只是创建 struct 值，不碰像素；一帧内求值几百个视图是正常的
+1. Body 应保持轻量，但成本取决于内部计算与整个树的规模，不能用固定次数判断正常
 2. 求值多 ≠ 有问题；**求值期间做了昂贵计算**才是问题（在 body 里排序、加密、读盘）
-3. 求值后 SwiftUI 比较视图值决定是否重绘；`Equatable` 未变化的子树直接跳过
+3. 求值后 SwiftUI 比较视图值决定是否重绘；显式 .equatable() 可按等价规则影响更新判断，但状态与环境依赖仍需正确处理
 
 ## 🔍 二、Body 求值的触发源与观察方法
 
@@ -59,7 +64,7 @@ var body: some View {
 // 2. Instruments → SwiftUI 模板：按视图统计求值次数与耗时
 //    "View Body" 轨道里耗时高的条目就是优化靶点
 
-// 3. 画布下方的性能徽章（Xcode 16 起提供）：实时显示求值次数，改代码立即见效
+// 3. 用当前 Xcode 提供的 SwiftUI Instruments 轨道关联更新与耗时；工具界面随版本变化
 ```
 
 ## 🔍 三、五大优化手段（按收益排序）
@@ -113,10 +118,10 @@ ScrollView {
         }
     }
 }
-// VStack 会立即构建全部行——3000 行 = 3000 次 body 求值，直接卡死
+// VStack 可能提前参与大量子视图布局，实际成本取决于行复杂度；应测量而不是断言必然卡死
 ```
 
-规则：**内容可能超出两屏就必须 Lazy**（`LazyVStack`/`LazyHStack`/`List`/`LazyVGrid`）。
+规则：**大量可滚动内容优先评估惰性容器**（`LazyVStack`/`LazyHStack`/`List`/`LazyVGrid`）。
 
 ### 3.3 昂贵计算移出 body
 
@@ -126,7 +131,7 @@ var body: some View {
     List(habits.filter { $0.streak > 0 }.sorted { $0.streak > $1.streak }) { ... }
 }
 
-// 正例一：预计算成存储属性，随数据变化重算一次
+// 仅提取计算属性改善可读性；这仍然没有缓存，不能当性能修复
 struct TopHabitsView: View {
     let habits: [Habit]
     private var topHabits: [Habit] {          // 或在模型层预计算并缓存
@@ -159,7 +164,7 @@ struct StreakBadge: View {
 }
 ```
 
-**陷阱**：`dashboard` 整对象出现在插值里（如 `"\(dashboard)"`）会订阅全部属性，打印调试时尤其注意。
+**陷阱**：插值是否读取模型属性取决于描述实现，不会只因传入整对象就自动订阅所有字段；自定义 description 读取很多属性时可能扩大依赖。
 
 ### 3.5 稳定身份与 Equatable
 
@@ -169,14 +174,14 @@ ForEach(habits) { habit in ... }              // @Model 自带 persistentModelID
 ForEach(Array(habits.enumerated()), id: \.offset) { ... }   // ❌ 增删时全表错位
 
 // 图片等昂贵子视图：确保输入不变时结构不变，SwiftUI 自动跳过重绘
-HabitThumbnail(url: habit.iconURL)            // URL 不变 → 求值结果相等 → 不重绘
+HabitThumbnail(url: habit.iconURL)            // 保持稳定输入有助于优化，但不保证无其他依赖更新
 ```
 
 ## 🔍 四、动画与绘制的隐性成本
 
 - **绘制成本**（Render Server 侧）与求值无关：阴影（`.shadow`）、模糊（`.blur`）、半透明叠加（`.ultraThinMaterial`）都是 GPU 开销大户；滚动列表中大量使用会掉帧，即使 body 求值次数正常
 - **matchedGeometryEffect** 的匹配计算在大列表上开销高，限用于少量元素转场
-- 动画每帧触发 body 求值——确认动画视图足够小（手段 3.1）
+- 动画不一定每帧重新执行整个 body，应区分插值、布局和求值成本——确认动画视图足够小（手段 3.1）
 
 ## ✅ 优化检查清单
 
@@ -187,7 +192,7 @@ HabitThumbnail(url: habit.iconURL)            // URL 不变 → 求值结果相�
 
 ## ❌ 常见误区
 
-- ❌ "减少 body 求值次数是目标"——正确目标是**消灭昂贵求值**，便宜的求值成千上万也无妨
+- ❌ "减少 body 求值次数是目标"——正确目标是**消灭昂贵求值**，大量小成本仍可能累加成瓶颈，应看帧预算与总耗时
 - ❌ 上来就用 `EquatableView`/`.equatable()`——先拆视图，多数场景拆分就够了
 - ❌ 用 `@State` 缓存派生数据防重算——引入两份真相，刷新 bug 的头号来源
 
@@ -203,3 +208,18 @@ HabitThumbnail(url: habit.iconURL)            // URL 不变 → 求值结果相�
 - 📄 [01-swiftui-essentials.md](../../reference/framework-essentials/01-swiftui-essentials.md) — 求值相关 API 速查
 - 📄 [04-devtools.md](../../frameworks/04-devtools.md) — Instruments 与 _printChanges 的操作细节
 - 📄 [03-ci-cd-observability.md](../../deployment/03-ci-cd-observability.md) — 线上指标如何暴露这里的问题
+
+
+<!-- full-library-explanation -->
+## 建立能比较的性能证据
+
+固定设备、系统、构建配置、数据集和操作：例如发布构建下连续滚动 1000 行，每行同样的文本与图片。先记录卡顿次数、主线程长任务及峰值内存，再一次只改一个变量。调试打印本身会影响时间，正式测量时关闭。
+
+如果热点是排序，先把排序放在数据更新边界并正确失效缓存；如果热点是图片解码，控制实际解码像素；如果是布局或材质合成，减少对应工作。仅让 `_printChanges()` 输出变少不能证明帧时间降低。
+
+验收记录修改前后同一操作的 trace、设备与数据规模，并检查排序结果、状态恢复和无障碍没有退化。所谓“优化成功”是可复现的用户交互改善，不是获得固定次数的 body 调用。本轮未提供 iOS 真机性能测量值。
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

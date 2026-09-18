@@ -1,10 +1,26 @@
 # 综合项目 — 命令行书签管理器（typer + rich）
 
+## 先理解，再动手
+
+书签工具把输入解析、业务函数和文件存储连接起来。先用小 JSON 文件走通，再用 typer/rich 改善交互。
+
+**本节自测**：新增两个 URL，重启查询，模拟损坏文件与重复 URL。
+
+<details>
+<summary>预期结果与参考思路（先尝试再展开）</summary>
+
+持久化与重复策略可解释；显示漂亮表格不代表数据保存正确。
+
+</details>
+
 > **文档简介**: 综合运用入门路径全部知识，从零构建一个命令行书签管理器：typer 定义命令、rich 美化输出、JSON 持久化、dataclass 建模、异常体系兜底
 >
 > **目标读者**: 已完成 basics 01-07 的学习者，需要一个收束型的实战项目
 >
 > **前置知识**: 全部入门文档；异步与泛型部分不涉及，可回顾[高级特性](./07-advanced-features.md)
+
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
 
 ## 📚 文档元数据
 
@@ -15,6 +31,8 @@
 | **难度** | ⭐ |
 | **标签** | `#实战项目` `#typer` `#rich` `#CLI` `#JSON` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ## 🎯 学习目标
 
@@ -190,10 +208,9 @@ uv run bm add https://docs.python.org --title x && echo $?   # 1，重复被拒
 
 ## ✅ 最佳实践
 
-- ✅ **三层分离**：models/storage/cli 各司其职，存储可替换
-- ✅ **退出码语义化**：成功 0、业务失败 1、参数错误由 typer 处理
-- ✅ **用户输出与日志分离**：rich 面向人，异常栈面向调试
-- ❌ **避免**：把业务逻辑写进命令函数（保持"命令=编排"）；路径集中到 `storage.STORE_PATH` 常量
+命令入口解析输入，业务函数决定哪些操作允许，存储层负责持久化和错误传播；这些责任可以先在少量文件中表达，不必按目录数衡量架构。数据路径由配置或参数提供，测试使用临时路径，避免修改用户真实文件。
+
+人类提示与机器输出分开，成功和失败退出码明确。用损坏 JSON、不存在目录和重复记录测试失败后的文件状态，再验证重新启动能读取成功保存的数据。
 
 ---
 
@@ -216,3 +233,9 @@ uv run bm add https://docs.python.org --title x && echo $?   # 1，重复被拒
 - 📄 **[环境搭建](./01-environment-setup.md)** — 本项目的 uv 工作流来源
 - 📄 **[生态库精选](../reference/library-guides/02-ecosystem-libs.md)** — typer/rich 完整能力速查
 - 📄 **[FastAPI 速查](../reference/framework-essentials/01-fastapi-essentials.md)** — 相同哲学的 Web 框架进阶
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../LEARNING_GUIDE.md) · [完整目录与版本](../README.md) · [通用术语](../../shared-resources/glossary.md)

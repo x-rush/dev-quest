@@ -1,10 +1,10 @@
 # 内置扩展地图
 
-> **模块**: `07-php-mastery` | **类型**: 字典条目（无难度门槛，支持任意跳入查阅）
+> **模块**: `07-php-mastery` | **类型**: 字典条目（可独立查阅，按主题准备前置知识，支持任意跳入查阅）
 
 ## 📌 定义
 
-PHP 发行包自带的扩展速查地图：按用途分组，每个扩展一行"一句话职责 + 官方文档链接"。本机（PHP 8.5.10，asdf 安装）`php -m` 全量核对；个别扩展（如 gd/intl/pcntl）在发行包中默认关闭，编译/ini 启用后可用。
+PHP 发行包自带的扩展速查地图：按用途分组，每个扩展一行"一句话职责 + 官方文档链接"。实际可用项应通过目标环境 php -m 核对；部分扩展需要额外安装，且存在操作系统限制。
 
 ## 📖 字符串与文本
 
@@ -31,7 +31,7 @@ PHP 发行包自带的扩展速查地图：按用途分组，每个扩展一行"
 |------|-----------|
 | [json](https://www.php.net/manual/zh/book.json.php) | JSON 编解码（8.0 起内置不可禁用，详见 JSON 条目） |
 | [dom](https://www.php.net/manual/zh/book.dom.php) / [SimpleXML](https://www.php.net/manual/zh/book.simplexml.php) / [xmlreader](https://www.php.net/manual/zh/book.xmlreader.php) / [xmlwriter](https://www.php.net/manual/zh/book.xmlwriter.php) / [xml](https://www.php.net/manual/zh/book.xml.php) / [libxml](https://www.php.net/manual/zh/book.libxml.php) | XML 全家桶：DOM 树 / 简易遍历 / 流式读 / 流式写 / SAX / 底层库 |
-| [lexbor](https://www.php.net/manual/zh/book.dom.php) | HTML5 解析器库（Lexbor，随核心捆绑，本机 2.7.0） |
+| [lexbor](https://www.php.net/manual/zh/book.dom.php) | DOM HTML5 解析所用底层库；不是可独立启用的 PHP 扩展名 |
 | [intl](https://www.php.net/manual/zh/book.intl.php) | ICU 国际化（本地化格式、翻译、音译） |
 
 ## 📖 图像与文件类型
@@ -46,11 +46,11 @@ PHP 发行包自带的扩展速查地图：按用途分组，每个扩展一行"
 
 | 扩展 | 一句话职责 |
 |------|-----------|
-| [hash](https://www.php.net/manual/zh/book.hash.php) | 哈希摘要与 HMAC（password_hash 底层之一） |
+| [hash](https://www.php.net/manual/zh/book.hash.php) | 通用摘要与 HMAC；不能用快速通用摘要替代密码散列 |
 | [password hash](https://www.php.net/manual/zh/book.password.php) | 密码散列 API（password_hash/password_verify，标准库函数） |
 | [openssl](https://www.php.net/manual/zh/book.openssl.php) | TLS、证书、非对称加解密 |
 | [sodium](https://www.php.net/manual/zh/book.sodium.php) | 现代密码学库（libsodium，7.2 起随核心） |
-| [random](https://www.php.net/manual/zh/book.random.php) | 8.2+ 独立随机数扩展（Random\Randomizer、加密安全引擎） |
+| [random](https://www.php.net/manual/zh/book.random.php) | 8.2+ Random\Randomizer 与多种引擎；安全性取决于引擎，勿把全部引擎用于秘密值 |
 
 ## 📖 压缩与归档
 
@@ -85,6 +85,7 @@ curl_close($ch);
 $ch = curl_init('https://httpbin.org/post');
 curl_setopt_array($ch, [
     CURLOPT_POST           => true,
+    CURLOPT_TIMEOUT        => 5,
     CURLOPT_POSTFIELDS     => json_encode(['name' => 'php']),
     CURLOPT_HTTPHEADER     => ['Content-Type: application/json'],
     CURLOPT_RETURNTRANSFER => true,
@@ -108,7 +109,7 @@ curl_close($ch);
 
 | 扩展 | 一句话职责 |
 |------|-----------|
-| [pcntl](https://www.php.net/manual/zh/book.pcntl.php) | 进程控制（fork、信号，CLI 专用） |
+| [pcntl](https://www.php.net/manual/zh/book.pcntl.php) | 进程控制（fork、信号），面向 Unix 类系统进程任务，不用于 Web 请求环境 |
 | [posix](https://www.php.net/manual/zh/book.posix.php) | POSIX 系统接口（UID/PID/终端） |
 | [shmop](https://www.php.net/manual/zh/book.shmop.php) / [sysvmsg](https://www.php.net/manual/zh/book.sem.php) / [sysvsem](https://www.php.net/manual/zh/book.sem.php) / [sysvshm](https://www.php.net/manual/zh/book.sem.php) | System V 共享内存/消息队列/信号量族 |
 | [readline](https://www.php.net/manual/zh/book.readline.php) | 交互式命令行输入（REPL 工具基础） |
@@ -118,18 +119,32 @@ curl_close($ch);
 | [uri](https://www.php.net/manual/zh/book.uri.php) | WHATWG URL 标准解析（8.5 新增，`Uri\WhatWg\Url` 类） |
 | [Reflection](https://www.php.net/manual/zh/book.reflection.php) | 类/函数/属性的运行时反射 |
 | [SPL](https://www.php.net/manual/zh/book.spl.php) | 数据结构、迭代器、SplAutoload（详见 SPL 条目） |
-| [Zend OPcache](https://www.php.net/manual/zh/book.opcache.php) | 字节码缓存 + JIT（生产环境必开） |
+| [Zend OPcache](https://www.php.net/manual/zh/book.opcache.php) | 字节码缓存，以及可独立评估的 JIT 能力 |
 
 ## ⚠️ 常见陷阱
 
 - ❌ **假设所有扩展默认启用**：gd、intl、pcntl、sodium 等在发行包中常需显式启用。
-- ✅ 部署前 `php -m` 核对（本条目各扩展均经本机核对存在）。
+- ✅ 部署前 `php -m` 核对，并单独检查 Web SAPI。
 - ❌ **用 BCMath 处理浮点科学计算**：BCMath 是十进制字符串运算，不做超越函数。
 - ✅ 金额用 BCMath/整数分，科学计算用高精度专用库。
 - ❌ **密码用 `hash('md5', ...)`**：速度过快，不利抗暴力破解。
 - ✅ `password_hash()` / `password_verify()`（bcrypt/argon2）。
-- ❌ **生产环境关闭 OPcache**：每次请求重新编译全部文件，性能损失数倍。
+- ❌ **生产环境关闭 OPcache**：每次请求重新编译全部文件，性能影响需用实际负载测量。
 - ✅ `opcache.enable=1` 并合理设置内存与校验策略（FPM 下 `validate_timestamps` 按发布节奏权衡）。
+
+<!-- full-library-explanation -->
+## 从缺失函数定位到运行环境
+
+前置是 CLI、PHP 配置与 Composer。遇到 undefined function，先确认函数所属扩展，再查实际执行请求的 SAPI 是否加载它。终端 php -m 只能证明该 CLI 的状态，FPM、容器或另一版本 PHP 可能不同；在受控诊断入口读取 extension_loaded 和 php_ini_loaded_file，检查后移除入口，避免公开配置详情。
+
+按需要声明 ext-curl、ext-intl 等平台依赖，并用 composer check-platform-reqs 在部署环境验证。安装扩展还需匹配 PHP 版本、系统架构与构建方式。库随发行源码提供，不代表所有操作系统都能安装，pcntl 尤其不能当成 Windows 的通用进程 API。
+
+**练习**：为一个调用 curl 的小程序列出依赖，在没有 curl 的练习环境安装依赖，预期平台检查失败。再模拟 HTTP 404 与连接失败：curl_exec 为 false 是传输失败；默认情况下 HTTP 404 可以返回正文，需要另查状态码。GET 和 POST 都设置总超时，保留 curl_error 后再释放句柄。
+
+OPcache 缓存编译结果，JIT 尝试编译热点执行路径，两者目的不同；开启 OPcache 不要求开启 JIT。先用代表性负载测量，再判断 JIT 是否有收益。依据：[扩展索引](https://www.php.net/manual/en/extensions.php)、[cURL 选项](https://www.php.net/manual/en/function.curl-setopt.php)。
+
+
+本轮未在本机执行 PHP 片段；文中的输出为预期值，版本相关行为请用项目运行时验证。
 
 ## 🔗 相关条目
 
@@ -141,3 +156,9 @@ curl_close($ch);
 ---
 
 *最后更新: 2026年9月 | 本条目为模块知识字典的一部分，概念完整解释以此处为单一事实来源*
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

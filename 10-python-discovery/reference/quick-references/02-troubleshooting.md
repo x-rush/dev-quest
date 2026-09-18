@@ -4,6 +4,9 @@
 
 Python 新手到中级最常踩的坑集合：症状 → 原因 → 修复。每条可独立跳入阅读。
 
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
+
 ## 📚 文档元数据
 
 | 属性 | 内容 |
@@ -13,6 +16,8 @@ Python 新手到中级最常踩的坑集合：症状 → 原因 → 修复。每
 | **难度** | ⭐⭐ |
 | **标签** | `#排查` `#陷阱` `#GIL` `#循环导入` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ---
 
@@ -46,7 +51,7 @@ def add_item(item, items: list | None = None):
 
 **症状**: 多线程跑 CPU 密集任务，速度不升反降。
 
-**原因**: CPython 的全局解释器锁（GIL）保证同一时刻仅一个线程执行 Python 字节码。I/O 等待会释放 GIL（多线程对网络/磁盘有效），CPU 计算不释放。
+**原因**: CPython 的全局解释器锁（GIL）保证同一时刻仅一个线程执行 Python 字节码。I/O 等待会释放 GIL（多线程对网络/磁盘有效），纯 Python CPU 计算通常受 GIL 约束，部分原生扩展会释放它；free-threaded 构建的约束另行考虑。
 
 **决策表**:
 
@@ -71,7 +76,7 @@ with ProcessPoolExecutor() as pool:
 **症状**: `ImportError: cannot import name 'X' from partially initialized module`。
 
 ```python
-# models.py: from storage import save      # storage 又导入 models → 死锁
+# models.py: from storage import save      # storage 又导入 models → 可能访问尚未初始化的名字
 # storage.py: from models import Bookmark
 ```
 
@@ -99,7 +104,7 @@ def bump():
 
 ## 5. 浅拷贝假象
 
-**症状**: `b = a[:]` 后改 `b[0]`，`a[0]` 也变——切片/`copy()` 只复制外层容器。
+**症状**: `b = a[:]` 后原地修改 b[0] 指向的可变对象，a[0] 也能看到变化；给 b[0] 重新赋值则不同——切片/`copy()` 只复制外层容器。
 
 **修复**: 嵌套结构用 `copy.deepcopy(a)`。
 
@@ -109,9 +114,9 @@ def bump():
 
 **症状**: Windows 上读文件出现 `UnicodeDecodeError` 或乱码。
 
-**原因**: `open` 不写 `encoding` 时使用平台默认编码（Windows 非 UTF-8）。
+**原因**: open 的默认文本编码受 Python 版本、UTF-8 模式和区域设置影响，不能把 Windows 一概视为非 UTF-8。
 
-**修复**: 所有文本 IO 显式 `open(path, encoding="utf-8")`；跨平台 JSON 读写同理。
+**修复**：先确定文件实际编码；项目约定 UTF-8 时显式指定它，遗留编码文件使用匹配的编码再转换。强行按 UTF-8 解码所有输入不能消除编码错误。
 
 ---
 
@@ -125,7 +130,7 @@ def bump():
 
 ## 8. `is` vs `==`
 
-**症状**: `a = 256; b = 256; a is b` 为 True，`a = 257; b = 257` 为 False。
+**症状**：相同整数用 is 比较有时为 True、有时为 False；结果会受常量复用、执行方式与解释器实现影响。
 
 **原因**: 小整数缓存（-5~256）是解释器优化副作用，`is` 比较的是身份而非值。
 
@@ -160,7 +165,7 @@ xs = xs.sort()        # ❌ sort 原地排序返回 None
 xs = sorted(xs)       # ✅ sorted 返回新列表
 ```
 
-**修复**: 牢记"原地方法返回 None"；链式前检查每步返回值。
+**修复**：逐个确认返回契约。sort/append 返回 None，但 pop 原地修改并返回元素；不能把所有原地操作概括为同一返回值。
 
 ---
 
@@ -172,8 +177,23 @@ xs = sorted(xs)       # ✅ sorted 返回新列表
 
 ---
 
+<!-- full-library-explanation -->
+## 从现象到最小证据
+
+前置是能读取异常类型和定位文件行号。先记录解释器路径与版本、完整错误链、最小输入，再缩小复现范围。只记录“报错了”或最后一句文本，容易漏掉真正触发错误的上一层调用。
+
+练习用 `a = [[1]]; b = a.copy(); b[0].append(2)` 复现共享引用，检查 `a is b` 为 False、`a[0] is b[0]` 为 True。再改为 `b[0] = [9]`，此时改变的是副本中的元素引用，不会修改原内层列表。两种操作的差异比笼统说“浅拷贝不安全”更有用。
+
+排障结论应留下一个能重复执行的用例。涉及时间、网络和并发的问题，记录可验证的性质或事件顺序，避免把某次日志顺序、某台机器的整数缓存或默认编码当成语言保证。
+
 ## 🔗 相关文档
 
 - 📄 **[异常处理](../../basics/06-exceptions.md)** — 异常体系教程
 - 📄 **[函数与类](../../basics/04-functions-oop.md)** — 可变默认参数的完整语境
 - 📄 **[高级特性](../../basics/07-advanced-features.md)** — asyncio 阻塞问题的背景知识
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

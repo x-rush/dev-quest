@@ -1,10 +1,26 @@
 # Swift 并发 - async/await、Task 与 Actor
 
+## 先理解，再动手
+
+await 允许挂起，不承诺换后台线程。Actor 限制状态访问的隔离边界，Task 还需要取消和错误处理。
+
+**本节自测**：做一次可取消加载，快速离开页面后观察结果是否还修改已失效界面。
+
+<details>
+<summary>预期结果与参考思路（先尝试再展开）</summary>
+
+取消后停止不需要的工作；处理取消与真实失败时给出不同反馈。
+
+</details>
+
 > **文档简介**: 系统掌握 Swift Concurrency：async/await 语法、Task 任务管理、Actor 数据隔离与 MainActor，理解 SwiftUI 中异步数据的正确加载方式
 >
 > **目标读者**: 已掌握 SwiftUI 基础、准备处理网络请求等异步操作的学习者
 >
 > **前置知识**: [04-views-state.md](./04-views-state.md)；[03-swift-syntax-essentials.md](./03-swift-syntax-essentials.md) 的闭包部分
+
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
 
 ## 📚 文档元数据
 
@@ -15,6 +31,8 @@
 | **难度** | ⭐⭐ |
 | **标签** | `#async-await` `#Task` `#Actor` `#MainActor` `#并发` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ## 🎯 学习目标
 
@@ -192,10 +210,9 @@ struct ArticleListView: View {
 
 ## ✅ 最佳实践
 
-- ✅ **推荐**：视图触发的异步一律用 `.task` / `.task(id:)`，按钮触发才用 `Task {}`
-- ✅ **推荐**：`@Observable` store 标 `@MainActor`；网络/IO 层独立 actor 化
-- ❌ **避免**：`Task { sleep }` 硬编码延时等待业务结果；用信号或状态驱动
-- ❌ **避免**：在 `deinit`/`body` 里启动 Task 修改 UI；取消后仍写 `@State` 会引发警告
+任务应由真正负责它生命周期的对象持有。随页面存在而加载的数据可用 task/task(id:)，用户点击触发的任务则要考虑取消、重复点击和结果归属。取消是协作式的，任务内部或下游 API 仍需响应取消，不能视为免费清理一切。
+
+UI 状态通常需要遵守主 actor 隔离；网络层是否需要独立 actor 取决于是否管理共享可变状态，不必为每个服务都创建 actor。模拟快速切换查询条件，确认旧结果不会覆盖当前内容。
 
 ## ❓ 常见问题
 
@@ -218,3 +235,9 @@ struct ArticleListView: View {
 - 📄 [08-first-project.md](./08-first-project.md) — 综合运用：待办 App
 - 📄 [03-concurrency-api.md](../reference/language-concepts/03-concurrency-api.md) — Task/TaskGroup/AsyncSequence 全表
 - 📄 [01-swift-keywords.md](../reference/language-concepts/01-swift-keywords.md) — actor/sending 等关键字详解
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../LEARNING_GUIDE.md) · [完整目录与版本](../README.md) · [通用术语](../../shared-resources/glossary.md)

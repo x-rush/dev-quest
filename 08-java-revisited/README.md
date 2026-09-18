@@ -1,5 +1,10 @@
 # Java 知识回顾与现代化
 
+> **本轮增强与版本核对**：学习路径及正文增强范围见 [逐文件台账](../shared-resources/tools/document-quality/reports/coverage.md)。下方技术基线中的旧核对日期属于历史记录，不表示这次已重跑所有平台；安装与升级以官方兼容要求、项目锁文件和实际构建结果为准。
+
+
+> 第一次学习请从[理解地图与学习规划](LEARNING_GUIDE.md)开始；按关键词查阅可直接使用其中的完整参考导航。
+
 ## 📚 模块简介
 
 本模块面向**有 Java 开发经验的学习者**，旨在回顾 Java 核心知识、掌握 Java 21/25 LTS 与 Spring Boot 4.x 的现代化开发模式，并将 Java 设计思想与其他技术栈进行对比迁移。
@@ -67,7 +72,7 @@
 │   ├── 06-exceptions.md               # ⭐ 异常处理
 │   ├── 07-modern-features.md          # ⭐⭐ 现代 Java 特性（Lambda/Stream/虚拟线程）
 │   └── 08-first-project.md            # ⭐ 第一个项目
-├── reference/                         # 字典：全量参考，无难度门槛
+├── reference/                         # 字典：全量参考，可独立查阅，仍有前置知识
 │   ├── language-concepts/
 │   │   ├── 01-java-keywords.md        # Java 关键字详解
 │   │   ├── 02-collections-generics.md # 集合与泛型

@@ -1,10 +1,26 @@
 # 异常处理 - 异常体系与现代设计
 
+## 先理解，再动手
+
+异常把失败沿调用链传播。checked 异常要求声明或捕获；unchecked 不免除处理责任，只改变编译期要求。
+
+**本节自测**：用 try-with-resources 读取文件并模拟处理失败。
+
+<details>
+<summary>预期结果与参考思路（先尝试再展开）</summary>
+
+资源仍得到关闭；记录原始 cause，别只保留一条没有来源的错误文本。
+
+</details>
+
 > **文档简介**: 复习异常类层次与受检/非受检的划分逻辑，掌握 try-with-resources 与多异常捕获，建立"异常表达意外、消息说明细节"的现代异常设计观
 >
 > **目标读者**: 习惯 finally 手动关闭资源、异常使用随意的老 Java 开发者
 >
 > **前置知识**: 已掌握[控制流程](./05-control-flow.md)基础
+
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
 
 ## 📚 文档元数据
 
@@ -15,6 +31,8 @@
 | **难度** | ⭐ |
 | **标签** | `#异常处理` `#try-with-resources` `#错误设计` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ## 🎯 学习目标
 
@@ -114,12 +132,9 @@ Book book = books.stream()
 
 ## ✅ 最佳实践 / ❌ 陷阱清单
 
-- ✅ finally 只做资源清理，**不写 return**（会吞掉异常与返回值）
-- ✅ 捕获 `InterruptedException` 时恢复中断位：`Thread.currentThread().interrupt()`
-- ❌ 不捕获 `Throwable`/`Error`
-- ❌ 不用 `e.printStackTrace()`——用日志框架（SLF4J）记录
-- ❌ 不写 `catch (Exception e)` 大兜底掩盖具体问题
-- ❌ 不在循环内 try-catch 复用同一段大逻辑（粒度过粗）
+捕获异常后要决定恢复、转换还是传播，并在一个合适边界记录原因。InterruptedException 如果继续向上抛出就不必再原地恢复；若无法传播且终止本次工作，通常恢复中断标记让上层知道取消请求。
+
+使用 try-with-resources 关闭支持该协议的资源，finally 中不要返回新结果覆盖原异常。宽泛捕获可以用于服务边界兜底，但不能吞掉未知错误继续假装成功；底层日志与用户消息分开。
 
 ## 🎯 练习与实践
 
@@ -139,3 +154,9 @@ Book book = books.stream()
 - 📄 **[现代 Java 特性](./07-modern-features.md)** - 下一站：Lambda/Stream/Optional 全家桶
 - 📄 **[JPA 核心](../reference/framework-essentials/02-jpa-essentials.md)** - @Transactional 回滚与异常的关系
 - 📄 **[常见错误排查](../reference/quick-references/02-troubleshooting.md)** - NPE 等运行时异常速查
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../LEARNING_GUIDE.md) · [完整目录与版本](../README.md) · [通用术语](../../shared-resources/glossary.md)

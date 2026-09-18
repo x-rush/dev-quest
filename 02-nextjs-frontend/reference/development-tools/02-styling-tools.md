@@ -8,6 +8,9 @@
 
 > **预计时长**: 6-8小时
 
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
+
 ## 📚 文档元数据
 
 | 属性 | 内容 |
@@ -20,6 +23,8 @@
 | **作者** | Dev Quest Team |
 | **状态** | ✅ 已完成 |
 
+</details>
+
 ## 📚 概述
 
 Next.js 16 提供了丰富的样式解决方案，从传统的CSS Modules到现代的CSS-in-JS，从原子化CSS到组件级样式系统。本指南深入探讨企业级样式架构，涵盖性能优化、主题系统、响应式设计和可维护性最佳实践。
@@ -28,237 +33,49 @@ Next.js 16 提供了丰富的样式解决方案，从传统的CSS Modules到现�
 
 ### 基础配置
 
-```typescript
-// tailwind.config.ts
-import type { Config } from 'tailwindcss';
-import plugin from 'tailwindcss/plugin';
-import { fontFamily } from 'tailwindcss/defaultTheme';
+先安装构建依赖：npm install -D tailwindcss @tailwindcss/postcss postcss。以下文件分别保存，根布局导入 globals.css。
 
-export default {
-  content: [
-    './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
-    './src/components/**/*.{js,ts,jsx,tsx,mdx}',
-    './src/app/**/*.{js,ts,jsx,tsx,mdx}',
-  ],
-
-  // 主题配置
-  theme: {
-    extend: {
-      // 字体配置
-      fontFamily: {
-        sans: ['Inter', fontFamily.sans],
-        mono: ['JetBrains Mono', fontFamily.mono],
-        display: ['Cal Sans', fontFamily.sans],
-      },
-
-      // 颜色系统
-      colors: {
-        // 品牌色
-        brand: {
-          50: '#eff6ff',
-          100: '#dbeafe',
-          500: '#3b82f6',
-          600: '#2563eb',
-          700: '#1d4ed8',
-          900: '#1e3a8a',
-        },
-
-        // 中性色
-        neutral: {
-          50: '#fafafa',
-          100: '#f5f5f5',
-          200: '#e5e5e5',
-          300: '#d4d4d4',
-          400: '#a3a3a3',
-          500: '#737373',
-          600: '#525252',
-          700: '#404040',
-          800: '#262626',
-          900: '#171717',
-        },
-
-        // 语义化颜色
-        semantic: {
-          success: '#10b981',
-          warning: '#f59e0b',
-          error: '#ef4444',
-          info: '#3b82f6',
-        },
-      },
-
-      // 间距系统
-      spacing: {
-        '18': '4.5rem',
-        '88': '22rem',
-        '128': '32rem',
-        '144': '36rem',
-      },
-
-      // 字体大小
-      fontSize: {
-        '2xs': ['0.625rem', { lineHeight: '0.75rem' }],
-        '6xl': ['3.75rem', { lineHeight: '1' }],
-        '7xl': ['4.5rem', { lineHeight: '1' }],
-        '8xl': ['6rem', { lineHeight: '1' }],
-        '9xl': ['8rem', { lineHeight: '1' }],
-      },
-
-      // 阴影
-      boxShadow: {
-        'soft': '0 2px 15px -3px rgba(0, 0, 0, 0.07), 0 10px 20px -2px rgba(0, 0, 0, 0.04)',
-        'medium': '0 4px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
-        'hard': '0 10px 40px -10px rgba(0, 0, 0, 0.15), 0 2px 10px -2px rgba(0, 0, 0, 0.04)',
-      },
-
-      // 动画
-      animation: {
-        'fade-in': 'fadeIn 0.5s ease-in-out',
-        'slide-up': 'slideUp 0.3s ease-out',
-        'scale-in': 'scaleIn 0.2s ease-out',
-        'bounce-subtle': 'bounceSubtle 0.6s infinite',
-      },
-
-      // 关键帧
-      keyframes: {
-        fadeIn: {
-          '0%': { opacity: '0' },
-          '100%': { opacity: '1' },
-        },
-        slideUp: {
-          '0%': { transform: 'translateY(10px)', opacity: '0' },
-          '100%': { transform: 'translateY(0)', opacity: '1' },
-        },
-        scaleIn: {
-          '0%': { transform: 'scale(0.95)', opacity: '0' },
-          '100%': { transform: 'scale(1)', opacity: '1' },
-        },
-        bounceSubtle: {
-          '0%, 100%': { transform: 'translateY(0)' },
-          '50%': { transform: 'translateY(-5px)' },
-        },
-      },
-
-      // 断点
-      screens: {
-        'xs': '475px',
-        '3xl': '1600px',
-      },
-
-      // Z-index
-      zIndex: {
-        '60': '60',
-        '70': '70',
-        '80': '80',
-        '90': '90',
-        '100': '100',
-      },
-    },
-  },
-
-  // 插件配置
-  plugins: [
-    // 表单插件
-    require('@tailwindcss/forms'),
-
-    // 排版插件
-    require('@tailwindcss/typography'),
-
-    // 容器查询插件
-    require('@tailwindcss/container-queries'),
-
-    // 自定义插件
-    plugin(function({ addUtilities, addComponents, theme }) {
-      // 添加实用工具类
-      addUtilities({
-        '.text-balance': {
-          'text-wrap': 'balance',
-        },
-        '.text-pretty': {
-          'text-wrap': 'pretty',
-        },
-        '.scrollbar-hide': {
-          '-ms-overflow-style': 'none',
-          'scrollbar-width': 'none',
-          '&::-webkit-scrollbar': {
-            display: 'none',
-          },
-        },
-        '.glass': {
-          'background': 'rgba(255, 255, 255, 0.1)',
-          'backdrop-filter': 'blur(10px)',
-          'border': '1px solid rgba(255, 255, 255, 0.2)',
-        },
-      });
-
-      // 添加组件类
-      addComponents({
-        '.btn': {
-          '@apply inline-flex items-center justify-center rounded-md px-4 py-2 text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none': {},
-        },
-        '.btn-primary': {
-          '@apply bg-brand-600 text-white hover:bg-brand-700 focus:ring-brand-500': {},
-        },
-        '.btn-secondary': {
-          '@apply bg-neutral-100 text-neutral-900 hover:bg-neutral-200 focus:ring-neutral-500': {},
-        },
-        '.card': {
-          '@apply rounded-lg border border-neutral-200 bg-white p-6 shadow-soft': {},
-        },
-        '.input': {
-          '@apply block w-full rounded-md border border-neutral-300 px-3 py-2 text-sm placeholder:text-neutral-500 focus:border-brand-500 focus:outline-none focus:ring-1 focus:ring-brand-500 disabled:cursor-not-allowed disabled:opacity-50': {},
-        },
-      });
-    }),
-  ],
-
-  // 变体配置
-  variants: {
-    extend: {
-      // 父状态变体
-      parent: ['& > *'],
-      'first-child': ['&:first-child'],
-      'last-child': ['&:last-child'],
-      'not-last-child': ['&:not(:last-child)'],
-
-      // 群组变体
-      group: ['&:not([data-state="hidden"])'],
-      'peer-checked': ['&:checked ~ .peer'],
-      'peer-disabled': ['&:disabled ~ .peer'],
-
-      // 数据属性变体
-      'data-active': ['&[data-active="true"]'],
-      'data-loading': ['&[data-loading="true"]'],
-      'data-empty': ['&:empty'],
-
-      // 媒体查询变体
-      'portrait': ['@media (orientation: portrait)'],
-      'landscape': ['@media (orientation: landscape)'],
-      'motion-reduce': ['@media (prefers-reduced-motion: reduce)'],
-      'motion-safe': ['@media (prefers-reduced-motion: no-preference)'],
-    },
-  },
-
-  // 暗色模式
-  darkMode: ['class'],
-
-  // 前缀
-  prefix: 'tw-',
-
-  // 重要配置
-  important: false,
-
-  // 分离器
-  separator: '_',
-
-  // 核心插件
-  corePlugins: {
-    // 禁用不需要的插件
-    preflight: true,
-    container: false, // 使用自定义容器
-  },
-} satisfies Config;
+```js
+// postcss.config.mjs
+export default { plugins: { '@tailwindcss/postcss': {} } };
 ```
 
+```css
+/* src/app/globals.css：Tailwind 4 使用 CSS 优先配置 */
+@import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
+@theme {
+  --color-brand-500: #3b82f6;
+  --color-brand-600: #2563eb;
+  --color-brand-700: #1d4ed8;
+  --font-sans: Inter, ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+  --spacing-18: 4.5rem;
+  --shadow-soft: 0 2px 15px rgb(0 0 0 / 0.07);
+  --breakpoint-xs: 30rem;
+  --breakpoint-3xl: 100rem;
+  --color-primary: var(--app-primary);
+  --color-primary-foreground: white;
+  --color-background: var(--app-background);
+  --color-foreground: var(--app-foreground);
+  --color-border: #d4d4d4;
+  --color-input: #d4d4d4;
+  --color-ring: #2563eb;
+  --color-secondary: #f5f5f5;
+  --color-secondary-foreground: #171717;
+  --color-accent: #eff6ff;
+  --color-accent-foreground: #171717;
+  --color-destructive: #dc2626;
+  --color-destructive-foreground: white;
+}
+:root { --app-primary: #2563eb; --app-background: white; --app-foreground: #171717; }
+.dark { --app-primary: #60a5fa; --app-background: #171717; --app-foreground: #fafafa; }
+@layer components {
+  .card { @apply rounded-lg border border-border bg-background p-6 shadow-soft; }
+}
+```
+
+字体族声明不会下载字体，需用 next/font 或已有字体文件。旧 JavaScript 配置在 v4 不会自动检测，迁移时可用 @config 显式加载受支持部分；corePlugins、separator 等旧选项不能直接沿用。容器查询已内建，按实际需要添加 forms/typography 插件，避免堆叠未使用依赖。
 ### 自定义组件库
 
 ```typescript
@@ -514,14 +331,16 @@ export const darkTheme = css`
 `;
 
 // src/styles/globals.css
-@import './emotion';
-
+/* 普通 CSS 不能 import TS 对象或使用模板插值，以下使用真实 CSS 变量 */
 :root {
-  ${lightTheme}
+  --color-background: #ffffff;
+  --color-foreground: #171717;
+  --color-primary: #2563eb;
 }
-
 [data-theme="dark"] {
-  ${darkTheme}
+  --color-background: #0a0a0a;
+  --color-foreground: #ededed;
+  --color-primary: #60a5fa;
 }
 
 /* 全局重置 */
@@ -897,7 +716,7 @@ module.exports = {
 
 ```typescript
 // src/components/Card/Card.tsx
-import styled from '@linaria/react';
+import { styled } from '@linaria/react';
 import { css } from '@linaria/core';
 
 // 动态样式
@@ -1529,11 +1348,11 @@ export const ThemeToggle: React.FC = () => {
 - 📄 **[打包优化](../performance-optimization/02-bundle-optimization.md)**: CSS优化和打包策略
 
 ### 参考章节
-- 📖 **[Tailwind CSS配置](#tailwind-css-4-企业级配置)**: 原子化CSS框架配置
-- 📖 **[Emotion配置](#emotion-css-in-js-解决方案)**: CSS-in-JS解决方案
-- 📖 **[Linaria配置](#linaria-零运行时-css-in-js)**: 零运行时CSS-in-JS
-- 📖 **[CSS Modules](#css-modules-最佳实践)**: 模块化CSS解决方案
-- 📖 **[响应式设计](#响应式设计系统)**: 响应式布局和媒体查询
+- 📖 **[Tailwind CSS配置](#-tailwind-css-4-企业级配置)**: 原子化CSS框架配置
+- 📖 **[Emotion配置](#-css-in-js-解决方案)**: CSS-in-JS解决方案
+- 📖 **[Linaria配置](#-linaria-零运行时-css-in-js)**: 零运行时CSS-in-JS
+- 📖 **[CSS Modules](#-css-modules-最佳实践)**: 模块化CSS解决方案
+- 📖 **[响应式设计](#-响应式设计系统)**: 响应式布局和媒体查询
 
 ---
 
@@ -1590,3 +1409,19 @@ export const ThemeToggle: React.FC = () => {
 **文档状态**: ✅ 已完成 | 🚧 进行中 | 📋 计划中
 **最后更新**: 2026年9月
 **版本**: v1.0.0
+
+<!-- full-library-explanation -->
+## 让样式工具的输出能被检查
+
+前置是 CSS 层叠、构建插件和客户端边界。先让一条 bg-brand-600 在实际页面生效，检查生成 CSS 和计算样式，再扩展设计变量、组件变体与暗色主题。把几十个配置项粘贴进项目却没有消费它们，会增加排错成本，也不能证明组件体系完整。
+
+本页 Tailwind、Emotion、Linaria 是可选方案，各自有独立的构建和 SSR 接入要求，不能把多个代码块拼进同一个配置文件。Emotion 的模板插值属于 JavaScript，不可写进普通 .css；CSS 中运行时可变值用 var(--token)，或把整段放到 Emotion Global 组件中。Linaria 抽取静态 CSS 也仍需正确配置构建插件。
+
+**练习**：建立正常、悬停、键盘焦点、禁用四种按钮状态，给每种状态截图并检查键盘操作。删去一个 theme token，预期对应工具类失去规则，这能帮助理解变量与类名的关系。运行生产构建，检查首屏样式、主题刷新闪烁及无 JavaScript 时的基础可读性；开发热更新成功不等于 SSR 接入完成。
+
+依据：[Tailwind 4 迁移](https://tailwindcss.com/docs/upgrade-guide)、[自定义样式](https://tailwindcss.com/docs/adding-custom-styles)、[Linaria 基础](https://github.com/callstack/linaria/blob/master/docs/BASICS.md)。
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

@@ -8,6 +8,9 @@
 
 > **预计时长**: 6-10小时
 
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
+
 ## 📚 文档元数据
 
 | 属性 | 内容 |
@@ -19,6 +22,8 @@
 | **更新日期** | `2026年9月` |
 | **作者** | Dev Quest Team |
 | **状态** | ✅ 已完成 |
+
+</details>
 
 ## 📚 概述
 
@@ -148,12 +153,11 @@ export const BasicClientComponent: React.FC<
   const updateState = useCallback((
     updates: Partial<BasicClientComponentState>
   ) => {
-    setState(prevState => {
-      const newState = { ...prevState, ...updates };
-      onStateChange?.(newState);
-      return newState;
-    });
-  }, [onStateChange]);
+    setState(prevState => ({ ...prevState, ...updates }));
+  }, []);
+
+  // 通知已提交的状态；父级回调需稳定，且不要无条件反向更新本组件。
+  useEffect(() => { onStateChange?.(state); }, [state, onStateChange]);
 
   // 计算属性
   const computedValue = useMemo(() => {
@@ -346,7 +350,7 @@ interface UIState {
 type LocalAction =
   | { type: 'SET_USER'; payload: User | null }
   | { type: 'UPDATE_PREFERENCES'; payload: Partial<UserPreferences> }
-  | { type: 'ADD_NOTIFICATION'; payload: Omit<Notification, 'id' | 'timestamp'> }
+  | { type: 'ADD_NOTIFICATION'; payload: Notification }
   | { type: 'REMOVE_NOTIFICATION'; payload: string }
   | { type: 'TOGGLE_SIDEBAR' }
   | { type: 'SET_LOADING'; payload: boolean }
@@ -370,9 +374,7 @@ function localStateReducer(state: LocalState, action: LocalAction): LocalState {
         notifications: [
           ...state.notifications,
           {
-            ...action.payload,
-            id: Date.now().toString(),
-            timestamp: new Date()
+            ...action.payload // id 与时间由事件处理器生成，reducer 保持可重放
           }
         ]
       };
@@ -464,7 +466,7 @@ export const UserProfileComponent: React.FC = () => {
     dispatch({ type: 'SET_USER', payload: mockUser });
     dispatch({
       type: 'ADD_NOTIFICATION',
-      payload: { type: 'success', message: '登录成功' }
+      payload: { id: crypto.randomUUID(), timestamp: new Date(), type: 'success', message: '登录成功' }
     });
   }, [dispatch]);
 
@@ -472,7 +474,7 @@ export const UserProfileComponent: React.FC = () => {
     dispatch({ type: 'SET_USER', payload: null });
     dispatch({
       type: 'ADD_NOTIFICATION',
-      payload: { type: 'info', message: '已退出登录' }
+      payload: { id: crypto.randomUUID(), timestamp: new Date(), type: 'info', message: '已退出登录' }
     });
   }, [dispatch]);
 
@@ -1648,53 +1650,52 @@ export function DataFetcher<T>({
   onError
 }: DataFetcherProps<T>) {
   const [state, setState] = useState<DataState<T>>({
-    data: initialData || null,
-    loading: !initialData,
+    data: initialData ?? null,
+    loading: initialData === undefined,
     error: null
   });
 
-  const fetchData = useCallback(async () => {
-    setState(prev => ({ ...prev, loading: true, error: null }));
-
-    try {
-      const response = await fetch(url);
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
-      const data = await response.json();
-
-      setState({
-        data,
-        loading: false,
-        error: null
-      });
-
-      onSuccess?.(data);
-    } catch (error) {
-      const errorObj = error instanceof Error ? error : new Error('Unknown error');
-
-      setState({
-        data: null,
-        loading: false,
-        error: errorObj
-      });
-
-      onError?.(errorObj);
-    }
-  }, [url, onSuccess, onError]);
+  const callbacks = useRef({ onSuccess, onError });
+  useEffect(() => { callbacks.current = { onSuccess, onError }; }, [onSuccess, onError]);
 
   useEffect(() => {
-    if (!state.data && !state.error) {
-      fetchData();
-    }
-
-    if (refetchInterval) {
-      const interval = setInterval(fetchData, refetchInterval);
-      return () => clearInterval(interval);
-    }
-  }, [fetchData, refetchInterval, state.data, state.error]);
+    let active = true;
+    let sequence = 0;
+    let controller: AbortController | undefined;
+    setState({ data: null, loading: true, error: null }); // URL 切换不展示旧资源
+    const fetchData = async () => {
+      controller?.abort();
+      const current = ++sequence;
+      controller = new AbortController();
+      const signal = controller.signal;
+      setState(prev => ({ ...prev, loading: true, error: null }));
+      let data: T;
+      try {
+        const response = await fetch(url, { signal });
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        data = await response.json(); // 示例信任接口；真实边界还需 schema 校验
+      } catch (cause) {
+        if (!active || signal.aborted || current !== sequence) return;
+        const error = cause instanceof Error ? cause : new Error('Unknown error');
+        setState(prev => ({ ...prev, loading: false, error }));
+        callbacks.current.onError?.(error);
+        return;
+      }
+      if (!active || signal.aborted || current !== sequence) return;
+      setState({ data, loading: false, error: null });
+      callbacks.current.onSuccess?.(data);
+    };
+    // 回调自身抛错属于调用方错误，不冒充 HTTP 失败
+    const run = () => { void fetchData().catch(console.error); };
+    run();
+    const interval = refetchInterval && refetchInterval > 0
+      ? setInterval(run, refetchInterval) : undefined;
+    return () => {
+      active = false;
+      controller?.abort();
+      if (interval !== undefined) clearInterval(interval);
+    };
+  }, [url, refetchInterval]);
 
   return <>{children(state)}</>;
 }
@@ -1900,7 +1901,7 @@ export const DataFetcherExample: React.FC = () => {
 - 📄 **[表单验证模式](./06-form-validation-patterns.md)**: 构建企业级表单处理系统
 
 ### 参考章节
-- 📖 **[本模块其他章节]**: [状态管理模式](./05-state-management-patterns.md#客户端状态管理)中的客户端状态管理部分
+- 📖 **[本模块其他章节]**: [状态管理模式](./05-state-management-patterns.md#-本地状态管理模式)中的客户端状态管理部分
 - 📖 **[其他模块相关内容]**: [React语法速查表](../language-concepts/01-react-syntax-cheatsheet.md)
 
 ---
@@ -1942,3 +1943,19 @@ export const DataFetcherExample: React.FC = () => {
 **文档状态**: ✅ 已完成 | 🚧 进行中 | 📋 计划中
 **最后更新**: 2026年9月
 **版本**: v1.0.0
+
+<!-- full-library-explanation -->
+## 先用最小组件验证客户端边界
+
+前置是状态快照、Effect 清理与服务端渲染。use client 声明模块依赖边界，组件首屏仍可能在服务器预渲染，所以渲染期间不能依赖 window、当前时间或随机数产生不一致结果。把浏览器订阅放入 Effect，把用户动作放入事件处理器，传过边界的数据保持可序列化。
+
+本篇的元数据接口、HOC、Render Props 和通用缓存是模式材料，不是每个组件都要叠加的骨架。先实现只接收明确 props 的组件，再在出现实际复用时抽象。状态 updater 与 reducer 必须纯粹，不能在其中通知父组件、生成随机 ID 或写日志作为业务动作；React 可能重复调用它们检查纯度。
+
+**练习**：做一个查询框，让旧查询延迟 2 秒、新查询只延迟 100 毫秒，最终必须显示新查询结果。上方 DataFetcher 展示 Render Props，并加入 AbortController、请求序号与对称清理；共享缓存、重试、schema 校验仍不完整，不能当作生产请求库。练习重点是验证卸载、URL 切换和新请求开始后，旧结果不再写入。
+
+缓存还需包含 URL、用户和过滤条件；仅在组件 ref 中存 Map 不会自动跨组件共享。验收包括请求成功、失败、空结果、快速切换和卸载，不能只检查正常状态截图。依据：[客户端组件](https://nextjs.org/docs/app/getting-started/server-and-client-components)、[组件纯度](https://react.dev/learn/keeping-components-pure)。
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

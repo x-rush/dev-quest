@@ -1,6 +1,53 @@
 # Go内置函数详解
 
+## 先看是否修改原数据，是否必须接收返回值
+
+前置：切片、map、函数返回值。append 返回新的切片描述，底层数组可能复用也可能重新分配；因此通常写回原变量。copy 修改目标切片并返回实际复制数量；delete 修改 map 且不返回“删了几项”。函数名相似不能推导返回契约。
+
+完整示例，保存为 `main.go`，运行 `go run main.go`：
+
+```go
+package main
+
+import "fmt"
+
+func main() {
+    values := make([]int, 0, 3)
+    values = append(values, 10, 20)
+    fmt.Println(len(values), cap(values))
+    target := make([]int, 1)
+    copied := copy(target, values)
+    fmt.Println(copied, target)
+    clear(values)
+    fmt.Println(len(values), values)
+    names := map[int]string{1: "Ada"}
+    delete(names, 1)
+    _, exists := names[1]
+    fmt.Println(exists)
+}
+```
+
+预期依次为 `2 3`、`1 [10]`、`2 [0 0]`、`false`。copy 只复制目标当前长度容纳的部分，不按 cap 自动扩长。clear 清零切片元素而不改变长度；清空 map 则删除所有键。这些行为比“清空”“复制”两个中文词更精确。
+
+## 易混淆对照
+
+| 调用 | 返回或变化 | 常见误解 |
+|---|---|---|
+| `len(text)` | 字符串字节长度 | 中文字符数或可见字形数不是字节数 |
+| `make([]T, length, capacity)` | 初始化切片 | 长度为 3 时已有 3 个零值元素，不是仅预留容量 |
+| `new(T)` | 指向 T 零值的指针 | T 为 map 时得到指向 nil map 的指针，仍不可直接写键 |
+| `close(ch)` | 告知接收方不再发送 | 不是“释放 channel”；关闭后发送会 panic |
+| `recover()` | 在符合条件的 deferred 调用中取得 panic 值 | 不能跨 goroutine 捕获别人的 panic |
+| `min` / `max` | 比较有序参数得到极值 | 不是普通的变长参数函数，不能直接用 slice... 当作任意集合归约 |
+
+`new(T)` 是类型形式；新版本是否支持其他形式应查模块基线对应规范。下文标为“语法”的签名使用 Type/T 表示类型族，是阅读表示法，不是可单独编译的 Go 函数声明。
+
+自测：将 target 改为 `make([]int, 0, 5)`，copy 的结果为何是 0？因为它按长度而非容量决定可写元素范围。先调节长度或使用 append，再决定是否需要独立副本。
+
 Go语言提供了一些内置函数，这些函数无需导入任何包就可以直接使用。内置函数在Go编程中非常重要，它们提供了语言的核心功能。
+
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
 
 ## 📚 文档元数据
 
@@ -13,6 +60,8 @@ Go语言提供了一些内置函数，这些函数无需导入任何包就可以
 | **更新日期** | `2026年9月` |
 | **作者** | Dev Quest Team |
 | **状态** | ✅ 已完成 |
+
+</details>
 
 ## 1. append() - 切片追加
 
@@ -440,3 +489,8 @@ func receiver(ch <-chan int) {
 - 理解内置函数的工作原理对编写高效的Go代码很重要
 - 在生产代码中推荐使用fmt包而不是print/println
 - 善用内置函数可以编写更简洁、更高效的Go代码
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

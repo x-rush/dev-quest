@@ -8,6 +8,9 @@
 
 > **预计时长**: 3-4小时（理论学习）+ 2-3小时（实践练习）
 
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
+
 ## 📚 文档元数据
 
 | 属性 | 内容 |
@@ -19,6 +22,8 @@
 | **更新日期** | `2026年9月` |
 | **作者** | Dev Quest Team |
 | **状态** | ✅ 已完成 |
+
+</details>
 
 ## 🎯 学习目标
 
@@ -50,7 +55,7 @@
 
 ```bash
 # 安装RTL
-npm install -D @testing-library/react @testing-library/jest-dom
+npm install -D @testing-library/react @testing-library/jest-dom @testing-library/user-event
 ```
 
 **关键特性**:
@@ -64,7 +69,7 @@ npm install -D @testing-library/react @testing-library/jest-dom
 
 ```bash
 # Vitest配置支持
-npm install -D vitest @vitest/ui jsdom @vitest/coverage-v8
+npm install -D vitest @vitest/ui jsdom @vitest/coverage-v8 @vitejs/plugin-react
 ```
 
 **优势**:
@@ -125,28 +130,20 @@ export default defineConfig({
 
 ```typescript
 // __tests__/setup.ts
-import "@testing-library/jest-dom"
-import { beforeAll, afterEach, afterAll } from "vitest"
-import { setupServer } from "msw/node"
-import { rest } from "msw"
+import "@testing-library/jest-dom/vitest";
+import { beforeAll, afterEach, afterAll } from "vitest";
+import { setupServer } from "msw/node";
+import { http, HttpResponse } from "msw";
 
-// Mock API服务器
 export const server = setupServer(
-  // 示例API端点
-  rest.get("/api/users", (req, res, ctx) => {
-    return res(
-      ctx.json([
-        { id: 1, name: "John Doe", email: "john@example.com" },
-        { id: 2, name: "Jane Smith", email: "jane@example.com" },
-      ])
-    )
-  })
-)
-
-// 启动和关闭服务器
-beforeAll(() => server.listen())
-afterEach(() => server.resetHandlers())
-afterAll(() => server.close())
+  http.get("/api/users", () => HttpResponse.json([
+    { id: 1, name: "John Doe", email: "john@example.com" },
+    { id: 2, name: "Jane Smith", email: "jane@example.com" },
+  ])),
+);
+beforeAll(() => server.listen({ onUnhandledRequest: "error" }));
+afterEach(() => server.resetHandlers());
+afterAll(() => server.close());
 ```
 
 ### 3. 测试工具配置
@@ -1554,36 +1551,19 @@ export const FIXTURES = {
 
 **API Mock最佳实践**:
 ```typescript
-// __tests__/mocks/handlers.ts
-import { rest } from "msw"
-
+// __tests__/mocks/handlers.ts：MSW 2
+import { http, HttpResponse, delay } from "msw";
 export const handlers = [
-  // 成功响应
-  rest.get("/api/users", (req, res, ctx) => {
-    return res(
-      ctx.status(200),
-      ctx.json([{ id: 1, name: "John Doe" }])
-    )
+  http.get("/api/users", () => HttpResponse.json([{ id: 1, name: "John Doe" }])),
+  http.get("/api/users/:id", ({ params }) => {
+    const status = params.id === "999" ? 404 : 500;
+    return HttpResponse.json({ error: status === 404 ? "User not found" : "Server error" }, { status });
   }),
-
-  // 错误响应
-  rest.get("/api/users/:id", (req, res, ctx) => {
-    const { id } = req.params
-    if (id === "999") {
-      return res(ctx.status(404), ctx.json({ error: "User not found" }))
-    }
-    return res(ctx.status(500), ctx.json({ error: "Server error" }))
+  http.post("/api/users", async () => {
+    await delay(1000);
+    return HttpResponse.json({ id: 2, name: "New User" }, { status: 201 });
   }),
-
-  // 延迟响应（测试loading状态）
-  rest.post("/api/users", (req, res, ctx) => {
-    return res(
-      ctx.delay(1000),
-      ctx.status(201),
-      ctx.json({ id: 2, name: "New User" })
-    )
-  }),
-]
+];
 ```
 
 **组件Mock策略**:
@@ -2031,3 +2011,19 @@ describe("Component Performance", () => {
 **文档状态**: ✅ 已完成
 **最后更新**: 2026年9月
 **版本**: v1.0.0
+
+<!-- full-library-explanation -->
+## 组件测试应该验证用户能观察到的结果
+
+前置是 DOM、可访问名称和异步状态。getByRole 找当前应存在的元素，queryByRole 用于断言不存在，findByRole 等待异步出现。waitFor 会重复执行回调，因此把点击、提交等副作用放在回调外，只在其中等待断言成立；否则一次测试可能意外提交多次。
+
+MSW 2 使用 http/HttpResponse，旧 rest/ctx 示例不能直接与当前安装命令混用。Node 测试中的 setupServer 拦截请求，不启动真实 HTTP 服务器；它只模拟你写出的契约，不能证明后端真的如此响应。每条测试清理覆盖处理器，未匹配请求报错，避免测试静默打到真实服务。
+
+**练习**：同一表单覆盖成功、校验失败、网络失败和重复点击，断言按钮状态、错误文本与提交次数。给按钮删除可访问名称，getByRole 应暴露问题。jsdom 没有真实布局和浏览器渲染，视觉溢出、焦点细节及异步 Server Components 的完整行为另用真实浏览器验证。
+
+依据：[Testing Library 查询](https://testing-library.com/docs/queries/about/)、[MSW 入门](https://mswjs.io/docs/quick-start/)、[Next 测试边界](https://nextjs.org/docs/app/guides/testing)。
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../LEARNING_GUIDE.md) · [完整目录与版本](../README.md) · [通用术语](../../shared-resources/glossary.md)

@@ -2,6 +2,9 @@
 
 > **难度**: ⭐ | **前置**: 已完成环境搭建（[01-environment-setup](../../basics/01-environment-setup.md)）
 
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
+
 ## 📚 文档元数据
 
 | 属性 | 内容 |
@@ -11,6 +14,8 @@
 | **难度** | ⭐ |
 | **标签** | `#CLI` `#调试` `#DevTools` `#Hermes` `#hdc` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ## 工程生命周期命令
 
@@ -24,8 +29,9 @@ npx expo start                  # Expo；--tunnel 走内网穿透
 npx react-native start          # bare；--reset-cache 清缓存
 
 # 运行到设备
-npx expo run:android | run:ios  # Expo 编译原生并安装
-npm run android | npm run ios   # bare 工程
+npx expo run:android           # Android 编译安装
+# iOS 在 macOS 上单独执行 npx expo run:ios
+npm run android                # bare Android；iOS 另执行 npm run ios
 
 # 依赖管理
 npx expo install <pkg>          # Expo：自动装与 SDK 匹配的版本
@@ -50,7 +56,7 @@ npx expo install expo@latest --fix   # Expo SDK 升级
 | Perf Monitor | 菜单打开，观察 JS/UI 双线程帧率 |
 | 日志 | Metro 终端（console 输出）；`adb logcat *:S ReactNativeJS:V` |
 
-**关于 Flipper**: Flipper 已被官方弃用并从 RN 中移除（现行版本已不可用），统一使用 React Native DevTools + Hermes 调试协议与 Expo DevTools；老项目维护时才可能遇到它。
+**关于 Flipper**: Flipper 已不再作为 RN 默认集成调试方案，统一使用 React Native DevTools + Hermes 调试协议与 Expo DevTools；老项目维护时才可能遇到它。
 
 ## 设备与桥接命令（Android / adb）
 
@@ -60,7 +66,7 @@ adb reverse tcp:8081 tcp:8081                # 真机访问电脑 Metro（必会
 adb install -r app-debug.apk                 # 覆盖安装
 adb logcat --pid=$(adb shell pidof com.myapp) # 只看本应用日志
 adb shell input keyevent 82                  # 唤出开发者菜单（无按键设备）
-adb shell am start -W -n com.myapp/.MainActivity  # 冷启动计时
+adb shell am start -W -n com.myapp/.MainActivity  # 活动启动计时，是否冷启动取决于进程状态
 ```
 
 ## 设备与桥接命令（iOS / xcrun）
@@ -96,11 +102,8 @@ hdc file send local remote                   # 推文件
 ### Metro 缓存类问题
 ```bash
 # 症状：改了没生效 / 神秘语法错误 / 模块找不到
-watchman watch-del-all
-rm -rf node_modules && npm i
 npx react-native start --reset-cache
-# iOS 追加: cd ios && rm -rf Pods && pod install
-# Android 追加: cd android && ./gradlew clean
+# 先保留原错误与锁文件；只有证据指向依赖或原生构建产物时再做针对性清理。
 ```
 
 ### 网络抓包
@@ -115,6 +118,15 @@ npx expo-doctor                # Expo：检查依赖版本一致性
 node -v && npm -v && java -version
 ```
 
+<!-- full-library-explanation -->
+## 每条命令要知道在哪运行、改变什么
+
+项目命令在 package.json 所在目录执行；Gradle wrapper 在 Android 工程目录执行；xcrun 需要 macOS/Xcode。Android 调试还需设备授权。出现 shell“找不到命令”时先检查工具安装和 PATH，不能直接判断应用源码坏了。
+
+先用 `npx expo-doctor` 和 `npm ls react-native` 收集证据，再根据错误修改依赖。缓存重置只处理缓存问题；删除锁文件会重新解析版本，可能把原问题换成新的兼容性问题。`prebuild --clean`、卸载应用、发布更新分别会影响原生改动、设备数据、远端用户，不属于普通查看命令。
+
+练习：故意把一个 JS import 路径写错，记录第一条错误、所在文件和修复后结果；再模拟设备不能连接 Metro。验收：能分别定位模块解析和网络连接，不用同一套清缓存命令处理两个无关问题。
+
 ## 🔗 相关文档
 
 - 📄 **[故障排除](./02-troubleshooting.md)**: 按症状查解法
@@ -123,3 +135,9 @@ node -v && npm -v && java -version
 - 📄 **[高级特性教程](../../basics/07-advanced-features.md)**: 性能优化的系统视角
 
 *相关教程: [第一个 App](../../basics/02-first-app.md) 中的调试初体验*
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

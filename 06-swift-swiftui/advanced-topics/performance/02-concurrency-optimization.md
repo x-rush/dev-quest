@@ -6,6 +6,9 @@
 >
 > **前置知识**: [basics/07-concurrency-async-await.md](../../basics/07-concurrency-async-await.md)（async/await 入门）、[reference/language-concepts/03-concurrency-api.md](../../reference/language-concepts/03-concurrency-api.md)（并发 API 全表）
 
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
+
 ## 📚 文档元数据
 
 | 属性 | 内容 |
@@ -16,17 +19,19 @@
 | **标签** | `#Swift6` `#严格并发` `#Actor` `#TaskGroup` `#ModelActor` |
 | **更新日期** | `2026年9月` |
 
+</details>
+
 ## 🔍 一、严格并发在解决什么问题
 
 Swift 6 的严格并发检查把"数据竞争"从运行时崩溃提前到编译期错误。核心概念只有两个：
 
-1. **隔离域（isolation domain）**：一段代码"属于"哪个执行上下文。`@MainActor` 属于主线程；`actor` 声明属于自己；无隔离 = 并发执行池
+1. **隔离域（isolation domain）**：一段代码"属于"哪个执行上下文。`@MainActor` 属于主线程；`actor` 声明属于自己；非隔离不等于固定线程，异步函数执行行为还受工具链与隔离设置影响
 2. **可发送性（Sendable）**：值跨隔离域传递时的安全契约——传递后两边不会同时改它
 
 ```swift
 // 编译器视角的一次跨域调用
-@MainActor func refresh() async {
-    let items = try await service.fetch()   // fetch 跑在并发池
+@MainActor func refresh() async throws {
+    let items = try await service.fetch()   // fetch 的执行域取决于声明和构建设置
     render(items)                           // items 必须是 Sendable，否则编译错误
 }
 ```
@@ -51,14 +56,17 @@ actor ImageCache {
         let task = Task { try await download(url) }
         inflight[url] = task
 
+        defer { inflight[url] = nil } // 成功与失败都移除进行中记录
         let data = try await task.value
         storage[url] = data
-        inflight[url] = nil
         return data
     }
 
     private func download(_ url: URL) async throws -> Data {
-        let (data, _) = try await URLSession.shared.data(from: url)
+        let (data, response) = try await URLSession.shared.data(from: url)
+        guard let http = response as? HTTPURLResponse, (200..<300).contains(http.statusCode) else {
+            throw URLError(.badServerResponse)
+        }
         return data
     }
 }
@@ -99,7 +107,7 @@ try await withThrowingTaskGroup(of: WeatherSnapshot.self) { group in
     }
     return snapshots
 }
-// 任一子任务失败 → 整组取消传播 → 视图 .task 自动终止，无孤儿任务
+// for try await 观察到错误并向作用域外传播时，未完成子任务收到取消；仍要等待它们响应
 
 // 非结构化：Task { } 脱管运行——生命周期独立于创建者
 Task { await syncInBackground() }   // 视图销毁后它还在跑；仅用于确需存活的场景
@@ -117,25 +125,27 @@ Task { await syncInBackground() }   // 视图销毁后它还在跑；仅用于�
 }
 ```
 
-- `await` 是取消检查点；**纯 CPU 循环需要手动 `try Task.checkCancellation()`**
+- `await` 只标记可能挂起的位置，不保证自动检查取消；**纯 CPU 循环需要手动 `try Task.checkCancellation()`**
 - 取消不是强制中断而是"协作请求"——忽略取消是内存泄漏与旧数据覆盖的来源
 
 ## 🔍 四、@ModelActor：SwiftData 的并发写入
 
-`ModelContext` 不可跨线程，批量导入/后台同步必须用 `@ModelActor`：
+`ModelContext` 不可跨线程，可用 @ModelActor 把上下文限定在明确的 actor 中：
 
 ```swift
 import SwiftData
 
 @ModelActor
 actor DataImporter {
-    /// 后台批量导入打卡记录：不阻塞 UI 线程
+    /// 批量导入片段：是否占用主线程需检查创建上下文与实际 executor
     func importRecords(_ raw: [(name: String, day: Date)]) throws {
         let context = self.modelContext          // @ModelActor 自动生成，绑定本 actor
         for item in raw {
             let habit = try fetchOrCreateHabit(named: item.name, in: context)
-            context.insert(CheckIn(date: item.day))
-            habit.checkIns.append(CheckIn(date: item.day.startOfDay))
+            try Task.checkCancellation()
+            let checkIn = CheckIn(date: Calendar.current.startOfDay(for: item.day))
+            context.insert(checkIn)
+            habit.checkIns.append(checkIn)
         }
         try context.save()                       // 事务性保存
     }
@@ -156,7 +166,7 @@ actor DataImporter {
 }
 
 // UI 层调用：主线程只发指令，等结果
-try await importer.importRecords(rawRecords)     // 数据库工作全程在后台 actor
+try await importer.importRecords(rawRecords)     // 使用 importer 的隔离域；不应仅凭宏名断言后台线程
 ```
 
 ## 🔍 五、与 SwiftUI 的协作契约
@@ -209,3 +219,20 @@ final class SyncViewModel {
 - 📄 [01-rendering-performance.md](./01-rendering-performance.md) — 姊妹篇：渲染层性能
 - 📄 [07-concurrency-async-await.md](../../basics/07-concurrency-async-await.md) — 入门教程（本文的地基）
 - 📄 [01-app-architecture.md](../architecture/01-app-architecture.md) — 副作用边界的架构视角
+
+
+<!-- full-library-explanation -->
+## 失败清理与有界并发也是正确性
+
+ImageCache 用 inflight 合并同 URL 的请求，但共享任务取消策略要单独定义：一个页面离开不一定应取消其他页面仍需要的下载。示例选择让共享下载继续，实际产品可按消费者计数取消；同时为缓存加入容量限制，否则长期使用会持续增长。
+
+练习：并发请求同一 URL 五次，测试服务应只收到一次；第一次返回 500，再请求必须重新下载，不能永远复用失败 Task。随后请求 1000 个不同 URL，把同时执行数量限制为配置值，而不是一次创建所有网络任务。记录峰值并发和错误，结果按业务需要重新排序。
+
+actor 在 await 处可重入，应在恢复后重新检查依赖的不变量。TaskGroup 的取消是协作式，作用域退出会等待子任务结束；子任务不响应取消时仍可能拖住父任务。Sendable 描述安全跨域契约，struct 若包含不安全引用成员也不会自动满足要求。
+
+工具链、语言模式、默认 actor 隔离与 NonisolatedNonsendingByDefault 设置共同决定部分执行语义。不要用“async 就去后台”解释性能；参考 [SE-0461](https://github.com/swiftlang/swift-evolution/blob/main/proposals/0461-async-function-isolation.md)。本轮未执行 Swift 并发测试。
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

@@ -6,6 +6,9 @@
 >
 > **前置知识**: 已完成 [集成测试](./02-integration-testing.md)；REST 设计见 [Spring Boot 入门](../frameworks/01-spring-boot-basics.md)
 
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
+
 ## 📚 文档元数据
 
 | 属性 | 内容 |
@@ -15,6 +18,8 @@
 | **难度** | ⭐⭐ |
 | **标签** | `#MockMvc` `#RESTAssured` `#契约测试` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ## 🎯 学习目标
 
@@ -158,15 +163,9 @@ given()
 
 ## 🎨 最佳实践
 
-### ✅ 推荐
-- MockMvc 管"控制器单元"，REST Assured 管"整条链路验收"，各司其职
-- 测试里先创建数据再断言，不依赖其他测试留下的状态
-- 把核心接口的请求/响应样例沉淀为 API 文档（配合 springdoc-openapi）
+API 测试同时检查状态码、响应契约和持久化副作用。MockMvc 可在不同上下文中测试 MVC 链，不只等于“控制器单元”；真实端口测试则补充服务器与网络集成的边界。
 
-### ❌ 陷阱
-- MockMvc 断言整个 JSON 字符串：字段顺序变化就挂，用 `jsonPath` 逐字段断言
-- 验收测试共享可变状态（自增 ID）：改用创建后返回的 ID
-- 只测 happy path：401/404/400 分支必须有覆盖
+创建后使用服务返回的 id，JSON 按字段语义断言而非依赖对象键序。为成功、无效输入、无身份和无权限分别设计用例，尤其验证失败操作没有修改数据；样例可以沉淀为接口文档但要随契约更新。
 
 ## 🚀 下一步
 
@@ -180,3 +179,9 @@ given()
 - 📄 [单元测试](./01-unit-testing.md) — 服务层逻辑测试
 - 📄 [集成测试](./02-integration-testing.md) — 真实依赖环境
 - 📄 [TODO API 项目](../projects/01-todo-api.md) — 为其补 API 测试
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../LEARNING_GUIDE.md) · [完整目录与版本](../README.md) · [通用术语](../../shared-resources/glossary.md)

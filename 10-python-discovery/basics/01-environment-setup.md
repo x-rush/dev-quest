@@ -1,10 +1,26 @@
 # Python 环境搭建 — uv 与现代工具链
 
+## 先理解，再动手
+
+解释器决定语言行为，虚拟环境隔离项目依赖，uv 等工具管理安装与解析。当前终端找到的 Python 不一定是项目使用的 Python。
+
+**本节自测**：打印 sys.executable，安装依赖后在同一环境导入。
+
+<details>
+<summary>预期结果与参考思路（先尝试再展开）</summary>
+
+路径和导入结果一致；ModuleNotFoundError 时先查环境而不是重复全局安装。
+
+</details>
+
 > **文档简介**: 从零搭建 Python 3.14 开发环境，掌握 uv 包管理器、虚拟环境、ruff 代码检查与 VS Code 配置
 >
 > **目标读者**: 有其他语言经验、首次系统学习 Python 的开发者
 >
 > **前置知识**: 基本命令行操作，了解包管理器概念（npm/cargo/go mod 任一即可）
+
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
 
 ## 📚 文档元数据
 
@@ -15,6 +31,8 @@
 | **难度** | ⭐ |
 | **标签** | `#环境搭建` `#uv` `#虚拟环境` `#ruff` `#工具链` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ## 🎯 学习目标
 
@@ -188,11 +206,9 @@ select = ["E", "F", "I", "UP", "B"]  # 基础/导入/升级建议/bug 警告
 
 ## ✅ 最佳实践
 
-- ✅ **每个项目一个虚拟环境**：uv 会在 `uv add` 时自动创建 `.venv`
-- ✅ **提交 pyproject.toml 与 uv.lock**，忽略 `.venv/`（写入 .gitignore）
-- ✅ **工具统一走 `uv run`**：保证 `ruff`、`pytest` 等使用项目环境
-- ❌ **避免**：在系统解释器上 `pip install`；把 `.venv` 提交进 git
-- 💡 **技巧**：`uvx <tool>` 可免安装直接运行工具，如 `uvx ruff check .`
+为项目建立独立环境并记录解释器和依赖约定，避免一个项目升级库影响另一个。锁文件与项目清单可以提交，虚拟环境目录属于可重建产物，不应入库。
+
+uv run 让命令使用项目环境，uvx 通常使用隔离工具环境且可能需要下载，并非“无需安装即可获得任意工具”。CI 要按锁文件和约定版本重建，再实际执行测试，不能只检查文件存在。
 
 ---
 
@@ -217,3 +233,9 @@ select = ["E", "F", "I", "UP", "B"]  # 基础/导入/升级建议/bug 警告
 - 📄 **[第一个 Python 脚本](./02-first-script.md)** — 环境就绪后的下一步
 - 📄 **[Python 关键字详解](../reference/language-concepts/01-python-keywords.md)** — 语言核心概念入口
 - 📄 **[标准库导航](../reference/library-guides/01-standard-library.md)** — 了解解释器自带的能力边界
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../LEARNING_GUIDE.md) · [完整目录与版本](../README.md) · [通用术语](../../shared-resources/glossary.md)

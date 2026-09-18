@@ -28,7 +28,7 @@
 
 ```bash
 # 安装Vitest
-npm install -D vitest @vitest/ui jsdom @vitest/coverage-v8
+npm install -D vitest @vitest/ui jsdom @vitest/coverage-v8 @vitejs/plugin-react
 
 # 配置测试脚本
 {
@@ -69,7 +69,7 @@ npm install -D @testing-library/react @testing-library/jest-dom @testing-library
 
 ```typescript
 // src/test/setup.ts
-import "@testing-library/jest-dom"
+import "@testing-library/jest-dom/vitest"
 import { vi } from "vitest"
 
 // 模拟next/router
@@ -125,6 +125,7 @@ vi.mock("next/navigation", () => ({
 export function formatDate(date: Date | string): string {
   const d = new Date(date)
   return d.toLocaleDateString("zh-CN", {
+    timeZone: "UTC", // 本例明确使用 UTC，避免测试随机器时区变化
     year: "numeric",
     month: "long",
     day: "numeric",
@@ -143,6 +144,7 @@ export function truncateText(text: string, maxLength: number): string {
 
 export function generateSlug(text: string): string {
   return text
+    .trim()
     .toLowerCase()
     .replace(/[^\w\s-]/g, "")
     .replace(/\s+/g, "-")
@@ -1401,6 +1403,17 @@ export async function waitForLoadingToFinish() {
 - 前端测试的特殊考虑
 - 组件测试与单元测试的区别
 
+<!-- full-library-explanation -->
+## 从一个会失败的边界案例开始
+
+前置是纯函数、Promise 与 TypeScript。先定义输入输出契约，再挑能区分正确和错误实现的案例。例如 slug 前后空格应被移除，而不是先替换成连字符后留下 '-spaces-'；日期格式必须约定时区，否则 UTC 午夜在其他机器可能是前一天。测试不能把开发机的默认环境当成业务规则。
+
+把纯函数测试放在 node 环境，需要 DOM 的组件测试才用 jsdom。Vitest 转译 TypeScript 不等于完整类型检查，CI 另外执行 tsc --noEmit。异步测试必须 await 返回的 Promise；只调用函数不等待，测试可能在断言前就结束。
+
+**练习**：对 generateSlug 增加前后空格、连续连字符、中文标题三个输入，先决定是否支持 Unicode，再记录期望。让日期测试在两个时区执行，输出应遵守显式约定。临时引入一个已知缺陷，确认对应测试变红；覆盖率高但对缺陷不敏感，仍不是有效测试。
+
+依据：[Vitest 与 Next](https://nextjs.org/docs/app/guides/testing/vitest)、[Vitest 类型检查](https://vitest.dev/guide/testing-types)。本文历史片段未全量执行，需在练习项目中补齐组件和依赖后运行。
+
 ## 🔗 相关资源链接
 
 ### 官方资源
@@ -1489,3 +1502,8 @@ export async function waitForLoadingToFinish() {
 - 理论与实践时间比例: 4:6
 - 重点掌握组件测试和Hook测试
 - 从简单工具函数开始，逐步过渡到复杂组件测试
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../LEARNING_GUIDE.md) · [完整目录与版本](../README.md) · [通用术语](../../shared-resources/glossary.md)

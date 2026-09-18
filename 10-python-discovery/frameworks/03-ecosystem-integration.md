@@ -1,10 +1,21 @@
 # 生态集成 — SQLAlchemy 2.0、数据库与 Redis
 
+## 先看框架承担哪部分职责
+
+**SQLAlchemy 与 Redis**：Session 表达一段数据库工作，事务负责提交边界；同步与异步 API 要与执行模型匹配。缓存的数据不自动参加 SQL 事务。
+
+**最小练习与预期结果**：模拟提交失败并回滚，再重新查询；缓存不可用时按既定策略处理，避免留下半成功状态。
+
+具体 API 与安装版本以[模块基线](../README.md)和本篇官方来源为准。先完成这条数据路径，再展开后面的高级配置；框架名称变化后，输入边界、状态归属和失败处理仍是需要理解的机制。
+
 > **文档简介**: 把 FastAPI 连上真实存储：SQLAlchemy 2.0 异步 ORM 访问数据库、Redis 做缓存与计数、pydantic-settings 管配置、Alembic 管迁移
 >
 > **目标读者**: 需要给 API 接入数据库与缓存的开发者
 >
 > **前置知识**: [FastAPI 进阶（yield 依赖）](./02-fastapi-advanced.md)、异步基础（[basics 07](../basics/07-advanced-features.md)）
+
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
 
 ## 📚 文档元数据
 
@@ -15,6 +26,8 @@
 | **难度** | ⭐⭐ |
 | **标签** | `#SQLAlchemy` `#Redis` `#Alembic` `#pydantic-settings` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ## 🎯 学习目标
 
@@ -177,9 +190,9 @@ await r.incr(f"url:abc123:clicks")
 
 ## ✅ 最佳实践
 
-- 查询只取需要的列，列表接口强制 limit/offset
-- N+1 查询用 `selectinload` 预加载关系（剖析定位见[性能剖析](../advanced-topics/performance/02-profiling-optimization.md)）
-- 迁移文件随代码进仓库，`upgrade head` 必须可重复执行
+列表查询先约定分页方式和上限，offset 与游标各有适用场景，不能无条件强制同一种。遇到 N+1 时记录实际 SQL 与访问关系，选择 selectinload、join 等加载策略并比较结果数量和查询成本。
+
+迁移记录随代码管理，验证空库创建和旧版本数据升级。upgrade head 再运行通常不应重复应用已记录迁移，但这不等于每条迁移 SQL 天然可随意重放；失败恢复需要具体方案。
 
 ## ❓ 常见问题
 
@@ -199,3 +212,9 @@ await r.incr(f"url:abc123:clicks")
 - 🧪 **[集成测试](../testing/02-integration-testing.md)** — 测试数据库与依赖覆盖
 - 🎓 **[asyncio 异步并发模型](../advanced-topics/performance/01-async-python.md)** — 异步栈底层原理
 - 🚀 **[容器化部署](../deployment/01-docker-deployment.md)** — Compose 编排数据库与缓存
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../LEARNING_GUIDE.md) · [完整目录与版本](../README.md) · [通用术语](../../shared-resources/glossary.md)

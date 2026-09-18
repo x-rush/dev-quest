@@ -6,6 +6,9 @@
 >
 > **前置知识**: [单元测试](./01-unit-testing.md)、[生态集成：迁移与工厂](../frameworks/03-ecosystem-integration.md)
 
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
+
 ## 📚 文档元数据
 
 | 属性 | 内容 |
@@ -15,6 +18,8 @@
 | **难度** | ⭐⭐ |
 | **标签** | `#Laravel` `#Feature测试` `#RefreshDatabase` `#工厂` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ## 🎯 学习目标
 
@@ -26,7 +31,7 @@
 ## 1. 测试金字塔中的位置
 
 ```text
-        /\        Feature（慢，真实 HTTP+DB，数量少而关键）
+        /\        Feature（应用内 HTTP 请求与数据库协作）
        /--\       集成（服务层协作）
       /----\      单元（快，数量多）
 ```
@@ -48,17 +53,17 @@ abstract class TestCase extends BaseTestCase
 }
 ```
 
-`RefreshDatabase` 把每个用例包在数据库事务里，结束时回滚——用例之间完全隔离且速度快。注意：
+`RefreshDatabase` 把每个用例包在数据库事务里，结束时回滚——可隔离参与事务的数据库变更；外部资源和其他连接需要单独处理。注意：
 
 - 测试必须用独立数据库（`phpunit.xml` 的 `DB_DATABASE` 指向专用库，**永不指向生产**）
-- 测试体内嵌 `DB::transaction` 时事务回滚会失真，必要时改用 `DatabaseMigrations`
+- 普通嵌套事务通常可配合 savepoint；真正提交后的回调、其他连接以及隐式提交 DDL 需要专门验证，必要时用迁移或截断策略
 
 ## 3. 工厂造数：关联关系一行搞定
 
 ```php
 // 三种关联姿势
 $user  = User::factory()->create();                       // 单个
-$posts = Post::factory()->count(5)->for($user)->create(); // 属于该用户
+$posts = Post::factory()->count(5)->for($user, 'author')->create(); // 属于该用户
 $user  = User::factory()->has(Post::factory()->count(3))->create(); // 从上游挂下游
 
 // 工厂状态：语义化变体
@@ -98,7 +103,7 @@ it('游客可以浏览已发布文章列表', function (): void {
 });
 
 it('作者可以发布自己的草稿', function (): void {
-    $post = Post::factory()->for(User::factory()->create())->create();
+    $post = Post::factory()->for(User::factory()->create(), 'author')->create();
 
     $this->actingAs($post->author)
         ->postJson("/api/posts/{$post->id}/publish")
@@ -129,10 +134,24 @@ it('验证失败返回字段级错误', function (): void {
 ## ❓ 常见问题
 
 **Q: RefreshDatabase 每次都重新跑迁移，很慢？**
-A: 它默认只在首次跑迁移，后续用事务回滚。若仍慢，检查 `phpunit.xml` 是否误用 `DatabaseMigrations`，以及测试库是否在远程主机。
+A: 它默认只在首次跑迁移，后续用事务回滚。若仍慢，检查测试类或 Pest 配置是否另用了 DatabaseMigrations，以及测试库是否在远程主机。
 
 **Q: 测试里时间相关的断言不稳定？**
 A: 用 `Carbon::setTestNow('2026-09-01 10:00:00')` 冻结时间，用例末尾 `Carbon::setTestNow()` 还原。
+
+<!-- full-library-explanation -->
+## 区分进程内请求与真实部署链路
+
+前置是路由、中间件、数据库事务与工厂。getJson/postJson 在测试进程内调用应用，不经过真实网络、Nginx、TLS 或浏览器 Cookie 策略；它们验证应用协作很有效，但不能据此宣布部署链路可用。Laravel 测试环境通常绕过 CSRF 检查，需要专门的真实中间件或浏览器验证才能覆盖该防线。
+
+RefreshDatabase 管理测试数据库状态，不回滚 Redis、邮件、文件和已经启动的其他进程。外部副作用使用受控替身或独立资源并清理。数据库驱动也影响约束、JSON 查询和事务行为，SQLite 快速测试不能替代关键 MySQL/PostgreSQL 集成案例。
+
+**练习**：先创建一篇属于 B 的草稿，再让 A 发布，验证 403（或项目约定的隐藏资源响应），同时查库确认仍为草稿。列表测试除数量外还断言草稿 ID 不在结果中，防止“漏了一篇已发布又多了一篇草稿”抵消数量。冻结时间后用 finally 或测试框架清理机制恢复，即使断言失败也不污染下一条用例。
+
+依据：[HTTP 测试](https://laravel.com/docs/13.x/http-tests)、[数据库测试](https://laravel.com/docs/13.x/database-testing)。
+
+
+本轮未在本机执行 PHP 片段；文中的输出为预期值，版本相关行为请用项目运行时验证。
 
 ## 🔗 相关文档
 
@@ -140,3 +159,9 @@ A: 用 `Carbon::setTestNow('2026-09-01 10:00:00')` 冻结时间，用例末尾 `
 - 📄 [PHPUnit 单元测试](./01-unit-testing.md) — 分层职责与 Mock 纪律
 - 📄 [博客平台实战](../projects/02-blog-platform.md) — 为真实项目补 Feature 测试
 - 📄 [故障排除](../reference/quick-references/02-troubleshooting.md) — 测试报错速查
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../LEARNING_GUIDE.md) · [完整目录与版本](../README.md) · [通用术语](../../shared-resources/glossary.md)

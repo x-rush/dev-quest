@@ -1,10 +1,21 @@
 # 生态协作：Router + Table + Form 与 Query 集成
 
+## 先看框架承担哪部分职责
+
+**生态协作**：Router 管可分享位置，Query 管远端结果，Table 管展示变换，Form 管编辑过程。重复保存同一事实会增加同步问题。
+
+**最小练习与预期结果**：把筛选写入 URL 和查询键，表格消费查询结果；修改筛选后刷新页面仍能恢复同一结果条件。
+
+具体 API 与安装版本以[模块基线](../README.md)和本篇官方来源为准。先完成这条数据路径，再展开后面的高级配置；框架名称变化后，输入边界、状态归属和失败处理仍是需要理解的机制。
+
 > **文档简介**: 一次讲清 TanStack 四件套如何互相配合：Router 预取数据、Table 消费 Query 数据、Form 提交驱动 Mutation。
 >
 > **目标读者**: 已分别了解 Router/Table/Form 基础用法，需要搭建完整数据流的中级开发者
 >
 > **前置知识**: [Query 基础](./01-tanstack-query-basics.md)、[Router 基础](../basics/05-router-fundamentals.md)、[Table 基础](../basics/04-table-fundamentals.md)、[Form 基础](../basics/06-form-fundamentals.md)
+
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
 
 ## 📚 文档元数据
 
@@ -15,6 +26,8 @@
 | **难度** | ⭐⭐ |
 | **标签** | `#tanstack-router` `#tanstack-table` `#tanstack-form` `#数据流` `#预取` |
 | **更新日期** | 2026年9月 |
+
+</details>
 
 ## 🎯 完成后你将能够
 
@@ -201,11 +214,9 @@ export function UserTable() {
 
 ## 🎨 最佳实践速查
 
-- ✅ 预取键与组件消费键**完全一致**，否则白预取一次
-- ✅ 表格状态放 URL 搜索参数：可分享、可回退、刷新可恢复
-- ✅ 服务端分页必配 `placeholderData: (prev) => prev`（函数式写法，翻页保留旧数据），避免翻页闪烁
-- ❌ 不要在 loader 里 await 全部数据：关键数据 await，次要数据 prefetch
-- ❌ 不要让 Form 直接写缓存绕过 Mutation，会失去错误处理与失效时机
+路由预取与页面查询共享同一份结果身份，键和参数不一致就无法复用。需要分享或浏览器回退恢复的筛选条件可以放 URL；临时弹窗状态或敏感输入不必全部写进地址。
+
+翻页时保留上一页能减少空白，但须明确标记正在加载，不能让用户误以为旧数据已属于新页。loader 是否等待数据取决于首屏是否必须依赖它；次要区域可以独立加载。提交表单后验证相关缓存与 URL 表示的是同一个状态，不只检查提交按钮出现成功提示。
 
 ---
 
@@ -216,3 +227,9 @@ export function UserTable() {
 - 📄 **[Form 核心 API](../reference/language-concepts/04-form-core-api.md)** - useForm 与校验器字典
 - 📄 **[数据看板项目](../projects/02-data-dashboard.md)** - 本文 Table×Query 通路的完整落地
 - 📄 **[SaaS 后台项目](../projects/04-saas-admin-platform.md)** - 四件套协作的终极实战
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../LEARNING_GUIDE.md) · [完整目录与版本](../README.md) · [通用术语](../../shared-resources/glossary.md)

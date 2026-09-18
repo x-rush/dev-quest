@@ -1,10 +1,21 @@
 # Compose 进阶 - 侧效应、导航与动画
 
+## 先看框架承担哪部分职责
+
+**Compose 副作用**：副作用 API 把工作绑定到组合与 key 的生命周期，导航与动画也有自身状态。避免用“只执行一次”掩盖重入和取消。
+
+**最小练习与预期结果**：使用随参数改变的 LaunchedEffect，切换 key 并离开页面；旧工作应按协程规则取消，新工作使用新参数。
+
+具体 API 与安装版本以[模块基线](../README.md)和本篇官方来源为准。先完成这条数据路径，再展开后面的高级配置；框架名称变化后，输入边界、状态归属和失败处理仍是需要理解的机制。
+
 > **文档简介**: 掌握 Compose 侧效应处理（LaunchedEffect 等）、Navigation Compose 路由与常用动画 API 的任务式指南
 >
 > **目标读者**: 已能用 remember/布局搭出静态界面、准备开发多页面交互应用的进阶学习者
 >
 > **前置知识**: [Compose 入门核心](01-compose-basics.md)、[协程与 Flow 基础](../basics/07-coroutines-flow-basics.md)
+
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
 
 ## 📚 文档元数据
 
@@ -15,6 +26,8 @@
 | **难度** | ⭐⭐ |
 | **标签** | `#side-effects` `#navigation-compose` `#animation` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ---
 
@@ -171,20 +184,18 @@ fun Demo() {
 
 ## 🎨 最佳实践
 
-### ✅ 推荐
+LaunchedEffect 的 key 决定何时取消旧任务并重启，例如用户 id 改变就重新加载；计数器若确实代表“重试一次”也可以成为 key，关键是行为是否符合预期。任务不应重启但需要读取最新回调时，可用 rememberUpdatedState。见[官方副作用说明](https://developer.android.com/develop/ui/compose/side-effects)。
 
-- 优先 `LaunchedEffect`；需要手动控制的用户事件才用 `rememberCoroutineScope`
-- 成对注册/注销（监听器、广播）一律 `DisposableEffect`，杜绝泄漏
-- 动画参数带 `label`，便于工具链调试与代码审查
-
-### ❌ 避免陷阱
-
-- **用计数器当 LaunchedEffect 的 key**——key 应是数据标识（如 userId），不是 `remember` 出来的计数
-- 在 `LaunchedEffect` 里读"会被更新的回调"而不套 `rememberUpdatedState`，捕获了旧值
-- 为每个小变化堆动画：单次过渡超 400ms 会明显拖慢操作节奏
+有注册与注销的资源可在 DisposableEffect 中成对处理。测试离开页面后监听是否移除、快速切换 id 后旧结果是否还会覆盖新页面。动画时长按交互目的和用户设置决定，不用一个固定毫秒数判断全部动画。
 
 ## 🔗 相关文档
 
 - 📖 概念字典：[协程与 Flow API 全表](../reference/language-concepts/03-coroutines-flow-api.md) ｜ [Compose 状态 API 详解](../reference/language-concepts/04-compose-state-api.md) ｜ [副作用 API](../reference/framework-essentials/03-side-effects.md) ｜ [动画核心 API](../reference/framework-essentials/05-animation-core.md)
 - 📖 前置教程：[页面导航](../basics/06-navigation.md) ｜ [协程与 Flow 基础](../basics/07-coroutines-flow-basics.md)
 - 🚀 后续学习：[生态集成：Room + Hilt + Retrofit + ViewModel](03-ecosystem-integration.md) ｜ [重组优化](../advanced-topics/performance/01-recomposition-optimization.md)
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../LEARNING_GUIDE.md) · [完整目录与版本](../README.md) · [通用术语](../../shared-resources/glossary.md)

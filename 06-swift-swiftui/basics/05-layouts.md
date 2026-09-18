@@ -1,10 +1,26 @@
 # 布局系统 - Stack、Spacer 与滚动容器
 
+## 先理解，再动手
+
+Stack 排列内容，Spacer 消耗可用空间。布局是父子协商尺寸，固定 frame 与内容自身大小可能产生冲突。
+
+**本节自测**：用短标题和很长标题测试带尾部按钮的 HStack。
+
+<details>
+<summary>预期结果与参考思路（先尝试再展开）</summary>
+
+长标题不遮挡按钮，动态字体也可读；先修约束再加任意固定宽度。
+
+</details>
+
 > **文档简介**: 掌握 SwiftUI 布局的三步协商算法与核心容器：VStack/HStack/ZStack、Spacer 与 flexible frame、List 与 ScrollView，能搭出适配任意屏幕的界面
 >
 > **目标读者**: 已掌握状态管理、开始搭建完整界面的学习者
 >
 > **前置知识**: [04-views-state.md](./04-views-state.md)
+
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
 
 ## 📚 文档元数据
 
@@ -15,6 +31,8 @@
 | **难度** | ⭐ |
 | **标签** | `#布局` `#VStack` `#HStack` `#List` `#ScrollView` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ## 🎯 学习目标
 
@@ -171,11 +189,9 @@ List {
 
 ## ✅ 最佳实践
 
-- ✅ **推荐**：先想"哪根轴流动、哪根轴固定"，再选容器；间距交给容器 `spacing`，不要在子视图乱加 padding 凑
-- ✅ **推荐**：列表数据用 `List`，营销页/自由混排用 `ScrollView` + Lazy 容器
-- ✅ **推荐**：限宽居中模式（`.frame(maxWidth: 480)`）让同一界面在 iPad 也好看
-- ❌ **避免**：无差别用 `.fixedSize()`，它会拒绝协商导致文字被截断不换行
-- ❌ **避免**：在 ScrollView 内嵌套 List（滚动冲突、高度塌陷），需要表格式行就全程用 List
+布局从内容需求推导容器：垂直表单需要文本换行与键盘避让，平行操作需要横向空间分配，大量数据需要滚动和适当的延迟构建。不要只在一个固定设备尺寸下用 padding 凑位置。
+
+fixedSize 与 frame 会改变父子尺寸协商，可能帮助内容按理想尺寸展示，也可能让内容超出可用范围，不能统一解释成必然截断。验收至少包括大字体、窄屏和横屏；限宽数值从内容可读性选择，而非固定 480。
 
 ## ❓ 常见问题
 
@@ -211,3 +227,9 @@ ZStack 用 `alignment` 统一对齐所有子视图（默认 `.center`）。想�
 - 📄 [06-navigation.md](./06-navigation.md) — 下一篇：多页面导航
 - 📄 [01-swiftui-essentials.md](../reference/framework-essentials/01-swiftui-essentials.md) — 视图与修饰符全量速查
 - 📄 [02-troubleshooting.md](../reference/quick-references/02-troubleshooting.md) — 布局塌陷、滚动冲突等疑难排查
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../LEARNING_GUIDE.md) · [完整目录与版本](../README.md) · [通用术语](../../shared-resources/glossary.md)

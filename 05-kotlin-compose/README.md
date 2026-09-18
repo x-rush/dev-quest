@@ -1,5 +1,10 @@
 # 05 Kotlin Compose - Kotlin 2.4 + Jetpack Compose 现代化 Android 开发
 
+> **本轮增强与版本核对**：学习路径及正文增强范围见 [逐文件台账](../shared-resources/tools/document-quality/reports/coverage.md)。下方技术基线中的旧核对日期属于历史记录，不表示这次已重跑所有平台；安装与升级以官方兼容要求、项目锁文件和实际构建结果为准。
+
+
+> 第一次学习请从[理解地图与学习规划](LEARNING_GUIDE.md)开始；按关键词查阅可直接使用其中的完整参考导航。
+
 > **文档简介**: 05-kotlin-compose 模块总览——面向有 Go 后端与现代前端经验的学习者的 Android 原生开发完整学习路径
 >
 > **技术栈基线**: Kotlin 2.4（K2 编译器）· Jetpack Compose（BOM 2026.09.00）+ Material 3 · Android Studio（Quail 或更新）· Gradle Kotlin DSL——具体版本见下方「技术基线」
@@ -44,7 +49,7 @@
 | 🏗️ **操作指南** | [deployment/](deployment/) | 签名与混淆构建、Play Store 上架、GitHub Actions + Crashlytics | ✅ 3 篇 |
 | 🎓 **解释**（为什么这样设计） | [advanced-topics/](advanced-topics/) | 分层架构与 UDF、重组优化、启动与内存、安全实践（均 ⭐⭐⭐） | ✅ 4 篇 |
 
-**单一事实来源**：概念的完整解释只在 `reference/` 存在一处，其他目录链接过去；难度用 ⭐/⭐⭐/⭐⭐⭐ 标记在各篇元数据表中。
+**单一事实来源**：完整参考以 `reference/` 为主；教程就地解释当前步骤所需概念，再链接完整条目。
 
 ## 🛤️ 学习路径
 

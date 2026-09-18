@@ -4,6 +4,9 @@
 
 TanStack 官方生态除五大核心库外还有一批"小而美"的周边库。本篇按用途收录：调试、缓存持久化、虚拟滚动、滑块、轻量状态与速率控制。教程见 [环境搭建](../../basics/01-environment-setup.md)。
 
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
+
 ## 📚 文档元数据
 
 | 属性 | 内容 |
@@ -13,6 +16,8 @@ TanStack 官方生态除五大核心库外还有一批"小而美"的周边库。
 | **难度** | ⭐ |
 | **标签** | `#Devtools` `#persist-client` `#FormDevtools` `#Virtual` `#Ranger` `#Store` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ---
 
@@ -95,7 +100,7 @@ const asyncPersister = createAsyncStoragePersister({
 
 ### 陷阱
 
-- 持久化期间查询不自动重取，直到恢复完成——实时敏感数据要慎用
+- 恢复期间 Provider 协调查询启动；正常持久化订阅期间仍可重取——实时敏感数据要慎用
 - 大缓存（数 MB）同步序列化会阻塞主线程，移动端建议 `@tanstack/query-async-storage-persister` + IndexedDB
 - 忘改 `buster` 是"发版后旧数据污染"的经典来源
 
@@ -112,6 +117,7 @@ pnpm add @tanstack/react-virtual
 ```
 
 ```tsx
+import { useRef } from 'react'
 import { useVirtualizer } from '@tanstack/react-virtual'
 
 function VirtualRows({ rows }: { rows: string[] }) {
@@ -165,7 +171,7 @@ const rangerRef = useRef<HTMLDivElement>(null)
 const [values, setValues] = useState<number[]>([20, 80]) // 双把手区间
 
 const rangerInstance = useRanger<HTMLDivElement>({
-  values, onChange: setValues,
+  values, onChange: (instance) => setValues([...instance.sortedValues]),
   min: 0, max: 100, stepSize: 5,
   getRangerElement: () => rangerRef.current, // 轨道 DOM，把手 UI 自行渲染
 })
@@ -211,8 +217,7 @@ function PanelOnly() {
 
 ### 陷阱
 
-- 主入口是开发版实现；生产构建请从 `/production` 子路径导入（NoOp 实现，零开销）：
-  `import { formDevtoolsPlugin } from '@tanstack/react-form-devtools/production'`
+- 生产是否包含面板取决于包导出条件与构建配置，不要把 `/production` 名称直接等同于 NoOp；按安装版本的官方说明配置，并检查实际产物
 - 插件形态依赖 `@tanstack/react-devtools` 壳（`plugins` 数组）；只想在页面角落开面板用 `FormDevtoolsPanel` 即可
 
 ## 相关文档
@@ -222,3 +227,22 @@ function PanelOnly() {
 - 📄 **[缓存持久化](../language-concepts/14-query-persistence.md)** - persister 模式的字典级参考
 - 📄 **[Form 核心 API](../language-concepts/04-form-core-api.md)** - 面板中各状态的来源
 - 📄 **[相关库搭配](./02-related-libs.md)** - Zustand/Jotai 等三方选择
+
+
+<!-- full-library-explanation -->
+## 按具体缺口选择周边工具
+
+先修：Query、Table 或 Form 的一个最小应用。Devtools 帮助观察状态，Virtual 减少 DOM 数量，persister 负责恢复缓存，Ranger 提供滑块交互逻辑。它们解决不同问题，不需要为了“完整技术栈”全部安装。
+
+Virtual 不减少后端传输的数据量。十万条数据全部下载后仅渲染几十行，网络和内存成本仍存在；先判断需要分页、虚拟化还是两者组合。动态高度、键盘焦点、屏幕阅读器和滚动定位都应单独验证。
+
+本页存储示例依赖浏览器；localStorage 访问可能抛错，IndexedDB 的 idbGet/idbSet/idbRemove 也需要实际实现。完整边界与 gcTime/maxAge 配置见[持久化条目](../language-concepts/14-query-persistence.md)。
+
+**练习：** 对同一列表记录普通渲染与虚拟渲染的 DOM 节点数，再比较 HTTP 传输大小。验收：能解释为什么前者减少而后者不变。滑块还应测试键盘上下调节，不只测试鼠标拖动。
+
+官方参考：[Ranger 示例](https://tanstack.com/ranger/latest/docs/framework/react/examples/basic)、[Form Devtools](https://tanstack.com/form/latest/docs/framework/react/guides/devtools)。
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

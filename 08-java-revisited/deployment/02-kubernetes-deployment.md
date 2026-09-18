@@ -6,6 +6,9 @@
 >
 > **前置知识**: 已完成 [Docker 部署](./01-docker-deployment.md)；Actuator 探针见 [开发工具链](../frameworks/04-devtools.md)
 
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
+
 ## 📚 文档元数据
 
 | 属性 | 内容 |
@@ -15,6 +18,8 @@
 | **难度** | ⭐⭐⭐ |
 | **标签** | `#Kubernetes` `#探针` `#HPA` `#滚动更新` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ## 🎯 学习目标
 
@@ -151,15 +156,9 @@ spec:
 
 ## 🎨 最佳实践
 
-### ✅ 推荐
-- 探针端点走 Actuator 专用 liveness/readiness，与 `/health` 主端点分离
-- 所有配置经 ConfigMap/Secret 注入，镜像保持环境无关
-- 发布用固定 tag + `kubectl rollout undo` 一键回滚
+readiness 决定是否接收流量，liveness 用于判断是否需要重启，startup 给慢启动留出初始化窗口。若 liveness 直接依赖数据库，数据库故障可能触发全体应用反复重启；应先定义故障应由哪一层恢复。
 
-### ❌ 陷阱
-- livenessProbe 检查数据库连通性：DB 抖动 → 全体 Pod 被杀 → 雪崩
-- 没有 startupProbe 就配 liveness：慢启动应用永远起不来
-- CPU limit 设得过低：GC 与 JIT 线程被节流，延迟飙升
+发布固定产物并验证就绪与核心接口，回滚镜像不自动回滚数据库或外部状态。资源配额从实际负载测量，过紧的 CPU/内存限制可能增加延迟。练习让下游暂时不可用，观察系统是否停止接流量而非无休止重启。
 
 ## 🚀 下一步
 
@@ -173,3 +172,9 @@ spec:
 - 📄 [Docker 部署](./01-docker-deployment.md) — 本文的镜像来源
 - 📄 [CI/CD 与可观测性](./03-ci-cd-observability.md) — 部署自动化
 - 📄 [生产级 Spring Boot 应用](../projects/04-production-spring-app.md) — 综合演练
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../LEARNING_GUIDE.md) · [完整目录与版本](../README.md) · [通用术语](../../shared-resources/glossary.md)

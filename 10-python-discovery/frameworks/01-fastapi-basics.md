@@ -1,10 +1,21 @@
 # FastAPI 入门 — 路由、Pydantic 模型与自动文档
 
+## 先看框架承担哪部分职责
+
+**FastAPI 入门**：函数参数与类型注解被框架读取，用于路由绑定和校验。Pydantic 在边界处理数据，普通 Python 函数不会因此自动变成强制类型系统。
+
+**最小练习与预期结果**：分别提交合法、缺字段与错类型数据；观察校验响应，再测试纯业务函数的错误处理。
+
+具体 API 与安装版本以[模块基线](../README.md)和本篇官方来源为准。先完成这条数据路径，再展开后面的高级配置；框架名称变化后，输入边界、状态归属和失败处理仍是需要理解的机制。
+
 > **文档简介**: 用 FastAPI 从零构建一个类型安全的 REST API，掌握路由声明、Pydantic 请求/响应模型与自动生成的交互式文档
 >
 > **目标读者**: 已完成本模块 basics 入门路径、想用 Python 做 Web 后端的开发者
 >
 > **前置知识**: 类型注解（[reference 05](../reference/language-concepts/05-typing-annotations.md)）、uv 项目管理（[basics 01](../basics/01-environment-setup.md)）
+
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
 
 ## 📚 文档元数据
 
@@ -15,6 +26,8 @@
 | **难度** | ⭐ |
 | **标签** | `#FastAPI` `#Pydantic` `#REST` `#自动文档` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ## 🎯 学习目标
 
@@ -130,9 +143,9 @@ def list_todos(
 
 ## ✅ 最佳实践
 
-- **同步端点用 `def`**：FastAPI 会放进线程池，兼容阻塞库；`async def` 里不要混用阻塞调用（深入见[异步并发模型](../advanced-topics/performance/01-async-python.md)）
-- 入参/出参模型分开设（`TodoCreate` / `TodoRead`），避免字段随意外泄
-- 状态码用 `status` 常量而非魔法数字
+同步端点可通过框架的线程池运行阻塞代码，async 端点则应等待可异步的操作；随意把同步库调用放进 async 函数并不会自动变非阻塞。线程池同样有容量与排队成本，应在实际负载下观察。
+
+输入模型只允许客户端应填写的字段，输出模型只暴露需要返回的字段，防止数据库内部属性意外泄漏。校验成功还不代表有权操作资源，用跨用户访问和非法输入验证服务端边界。
 
 ## ❓ 常见问题
 
@@ -152,3 +165,9 @@ def list_todos(
 - 🚀 **[入门项目：TODO REST API](../projects/01-todo-api.md)** — 用本篇知识完成完整小项目
 - 📄 **[环境搭建](../basics/01-environment-setup.md)** — uv 与现代工具链基础
 - 📖 **[语法速查](../reference/quick-references/01-python-cheatsheet.md)** — 写示例时随查随用
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../LEARNING_GUIDE.md) · [完整目录与版本](../README.md) · [通用术语](../../shared-resources/glossary.md)

@@ -1,10 +1,13 @@
 # SwiftUI 应用架构深度解析 — 从 MV 到 TCA 思想
 
-> **文档简介**: 解释 SwiftUI 时代架构为何变"薄"：MV（Model-View）为什么够用、ViewModel 何时仍有价值、TCA 的单相数据流思想带来什么，帮助你按项目规模选型
+> **文档简介**: 解释 SwiftUI 时代架构为何变"薄"：MV（Model-View）为什么够用、ViewModel 何时仍有价值、TCA 的单向数据流思想带来什么，帮助你按项目规模选型
 >
 > **目标读者**: 已写过多个完整应用、要为团队或长期项目做架构决策的中高级学习者
 >
 > **前置知识**: [basics/04-views-state.md](../../basics/04-views-state.md)（数据流基础）、[frameworks/02-swiftui-advanced.md](../../frameworks/02-swiftui-advanced.md)（@Observable 与环境）
+
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
 
 ## 📚 文档元数据
 
@@ -15,6 +18,8 @@
 | **难度** | ⭐⭐⭐ |
 | **标签** | `#架构` `#MV` `#MVVM` `#TCA` `#单向数据流` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ## 🔍 一、为什么 SwiftUI 让架构变薄了
 
@@ -27,9 +32,9 @@
 | 列表 diff | `List`/`ForEach` 按 id 自动 diff | 数据 id 的稳定性 |
 | 导航栈管理 | `NavigationStack(path:)` 值驱动 | 路由值的设计 |
 
-**结论**：SwiftUI 中"架构问题"收缩为两个纯粹问题——**状态所有权**与**副作用边界**。一切模式分歧都源于这两点的不同答案。
+**结论**：本页优先讨论两个架构问题——**状态所有权**与**副作用边界**。项目还需要考虑测试、模块依赖、持久化一致性与团队维护成本。
 
-## 🔍 二、MV（Model-View）：SwiftUI 的默认架构
+## 🔍 二、MV（Model-View）：一种简化组织方式
 
 ### 2.1 形态与代码
 
@@ -54,6 +59,7 @@ final class HabitListModel {
 
 struct HabitListView: View {
     @State private var model: HabitListModel     // 视图持有模型
+    init(model: HabitListModel) { _model = State(initialValue: model) }
 
     var body: some View {
         List(model.habits) { habit in
@@ -66,7 +72,7 @@ struct HabitListView: View {
 ### 2.2 为什么对小中型项目"够"
 
 - 数据流路径最短：UI 事件 → 模型方法 → 属性变化 → UI 刷新，**没有转发层**
-- SwiftData `@Query` 本身就是"模型直连视图"，再包一层 ViewModel 纯属重复
+- SwiftData `@Query` 本身就是"模型直连视图"，若包装层只原样转发查询，收益有限；需要编排与测试边界时仍可能有价值
 - 可测试性由协议抽象保证（测试 `HabitListModel` 而非视图），不需要 VM 层才能测
 
 ### 2.3 MV 什么时候开始不够用
@@ -113,7 +119,7 @@ final class WeatherViewModel {
 }
 ```
 
-**VM 的三条纪律**（违反任何一条，说明这个 VM 是多余的）：
+**VM 的三条设计建议**（按职责与测试需求取舍）：
 1. 不 import SwiftUI（可与 Widget/macOS 共用）
 2. 只暴露**状态 + 意图方法**，不暴露服务句柄
 3. 所有依赖可注入，测试不需要网络与磁盘
@@ -122,7 +128,7 @@ MV vs MVVM 的判定一句话：**逻辑服务多个视图 → 提取 VM/模型�
 
 ## 🔍 四、TCA 思想：把"一切皆消息"推到极致
 
-The Composable Architecture（TCA）不只是一个库，更是一种可借鉴的思想——**单向数据流的完全体**：
+The Composable Architecture（TCA）不只是一个库，更是一种可借鉴的思想——一种强调状态、动作、副作用及组合测试的实现：
 
 ```swift
 // TCA 的核心心智模型（伪代码，非完整 Reducer API）
@@ -196,7 +202,7 @@ func reducer(state: inout FeatureState, action: FeatureAction) -> Effect<Feature
 
 ## ❌ 常见误区
 
-- ❌ "MVVM 是 SwiftUI 的标准架构"——SwiftUI 官方范式就是 MV，VM 是应对复杂度的可选项
+- ❌ "MVVM 是 SwiftUI 的标准架构"——SwiftUI 提供状态与依赖工具，并没有强制项目必须采用 MV 或 MVVM
 - ❌ 把 ViewModel 当"大杂烩"——混入 UI 格式化、服务调用、持久化三种职责的 VM 必然失控
 - ❌ 全局单例当依赖容器——编译期不可见、测试难替换，用构造器注入 + Environment
 
@@ -212,3 +218,18 @@ func reducer(state: inout FeatureState, action: FeatureAction) -> Effect<Feature
 - 📄 [04-swiftui-state-api.md](../../reference/language-concepts/04-swiftui-state-api.md) — 状态所有权工具全表
 - 📄 [02-swiftdata-observability.md](../../reference/framework-essentials/02-swiftdata-observability.md) — @Query 与架构的交互细节
 - 📄 [02-concurrency-optimization.md](../performance/02-concurrency-optimization.md) — 架构层的并发边界设计
+
+
+<!-- full-library-explanation -->
+## 用一次失败与一次替换检验架构
+
+“分层清晰”必须能观察：View 展示 phase 并发出动作；模型协调加载与保存；服务负责 HTTP 或数据库细节。把服务替换为内存实现时，View 不应修改；把 200 响应改成错误时，页面应从 loading 进入可重试状态。这比文件夹叫什么更能说明边界是否有效。
+
+练习：给天气页制造“先搜北京，立即搜上海，北京最后返回”。为每次加载记录请求标识，只有当前标识能提交结果；取消应与失败区分。@MainActor 能避免同步数据竞争，但 await 之间仍允许其他操作进入，不会自动保证请求顺序。缓存也要按位置键隔离，不能只保存“最后一个天气”。
+
+验收包含成功、失败、重试、取消、旧响应晚到五条路径，使用可控制返回顺序的假服务。复杂度确实来自跨功能动作与依赖测试时再评估 TCA；名称、页面数、是否有 ViewModel 不是质量评分。上面的 Habit/Weather 服务示例是架构集成片段，需要项目定义对应类型。
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

@@ -6,6 +6,9 @@
 >
 > **前置知识**: Docker 镜像与 Dockerfile 基础语法、Axum 路由与 Tokio 异步基础（见 [Axum 字典](../reference/framework-essentials/11-axum-essentials.md)）。
 
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
+
 ## 📚 文档元数据
 
 | 属性 | 内容 |
@@ -15,6 +18,8 @@
 | **难度** | ⭐⭐⭐ |
 | **标签** | `#rust` `#deployment` `#docker` `#axum` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ## 🎯 学习目标
 
@@ -27,12 +32,12 @@
 
 ## 📋 目录
 
-- [核心概念](#核心概念)
-- [实践指南](#实践指南)
-- [代码示例](#代码示例)
-- [最佳实践](#最佳实践)
-- [常见问题](#常见问题)
-- [相关资源](#相关资源)
+- [核心概念](#-核心概念)
+- [实践指南](#️-实践指南)
+- [代码示例](#-代码示例)
+- [最佳实践](#-最佳实践)
+- [常见问题](#-常见问题)
+- [相关资源](#-相关资源)
 
 ---
 
@@ -282,18 +287,9 @@ fn main() {
 
 ## 🎨 最佳实践
 
-### ✅ 推荐做法
+构建层与运行层的 libc、架构、证书和动态依赖要匹配，锁文件并不覆盖这些条件。非特权运行后验证所需目录与监听端口权限；构建上下文只包含实际需要的输入。
 
-- **`.dockerignore` 第一条写 `target/`**：构建上下文不带本地编译产物，缓存命中率与上下文上传速度双赢
-- **清单先行、`--locked` 构建**：`Cargo.lock` 进版本库，Dockerfile 中 `--locked` 锁死，镜像内容可复现
-- **非 root 运行**：distroless 的 `nonroot` 或 alpine 的 `USER 65532:65532`，监听 1024 以上端口即可
-
-### ❌ 避免陷阱
-
-- **监听 `127.0.0.1`**：容器内健康检查与端口映射全部失效，这是容器化 Rust 服务第一大事故来源
-- **glibc/musl 镜像错配**：gnu 产物放进 alpine 会报动态链接错误；产物与运行层 libc 类型必须一致
-- **把 C 依赖硬迁 musl**：`openssl-sys`、`ring` 等在 musl 下常触发编译失败，能用 rustls 替代就替代，不能就改走 distroless/glibc 路线
-- **compose 里 Postgres 无健康检查**：应用启动比数据库快，`depends_on` 不带 `condition: service_healthy` 会随机启动失败
+只绑定容器内 127.0.0.1 通常无法通过外部端口映射访问，但同容器回环健康检查可能仍成功，因此健康探测位置很重要。数据库未就绪时应用应有明确失败或重试策略，启动顺序不能保证下游以后永不掉线。
 
 ---
 
@@ -395,3 +391,9 @@ graph LR
 > 💡 **学习建议**: 两条路线（distroless / alpine-musl）各构建一次并对比体积，比读十篇文章更能建立直觉；探活子命令是 distroless 场景的独门技巧。
 >
 > 🎯 **下一步**: 进入 [多端发布流水线](../projects/05-multiplatform-release.md)，把 deployment 四篇串成一条完整发布链。
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../LEARNING_GUIDE.md) · [完整目录与版本](../README.md) · [通用术语](../../shared-resources/glossary.md)

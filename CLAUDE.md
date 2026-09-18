@@ -7,7 +7,7 @@
 Dev Quest 是一个**个人学习路径仓库**（纯文档项目，无可运行代码），采用双轨制学习模式组织 11 个技术模块：
 
 - **应用帝国矩阵（核心重点）**: `01-go-backend`、`02-nextjs-frontend`、`03-tanstack-stack`、`04-multiplatform-apps`、`05-kotlin-compose`、`06-swift-swiftui`
-- **技术探索系列（零散时间）**: `07-php-mastery`、`08-java-revisited`、`09-nodejs-backend`、`10-python-discovery`（维护冻结：只修确认级错误，不主动扩展）、`11-rust-cross-platform`（建设层）
+- **技术探索系列（零散时间）**: `07-php-mastery`、`08-java-revisited`、`09-nodejs-backend`、`10-python-discovery`（版本升级保持审慎；本轮按用户要求纳入全量文档质量增强）、`11-rust-cross-platform`（建设层）
 
 ## 模块结构规范
 
@@ -17,7 +17,7 @@ Dev Quest 是一个**个人学习路径仓库**（纯文档项目，无可运行
 NN-<tech>/
 ├── README.md              # 模块入口：四象限导览 + 入门/进阶/精通三路径视图
 ├── basics/                # 教程：按序学习入门（编号文档 01-xx.md）
-├── reference/             # 字典：全量参考（本模块知识字典，无难度门槛）
+├── reference/             # 字典：全量参考（本模块知识字典，可独立查阅，仍有前置知识）
 ├── frameworks/            # 操作指南：框架生态
 ├── projects/              # 操作指南：实战项目（⭐ 递进）
 ├── testing/               # 操作指南：测试工程
@@ -25,7 +25,7 @@ NN-<tech>/
 └── advanced-topics/       # 解释：高级主题（按专题分子目录）
 ```
 
-**单一事实来源**：概念的完整解释只在 `reference/` 中存在一份，其他目录链接过去。
+**单一事实来源**：完整参考条目以 `reference/` 为主；教程须就地解释完成当前步骤所需的概念，再链接完整条目。
 
 **技术基线**：每模块 README 顶部的"技术基线"区块是该模块版本号的单一事实来源（抗过时三层原则详见 `shared-resources/standards/documentation-guidelines.md`）。10 个模块均已具备标准结构内容。
 

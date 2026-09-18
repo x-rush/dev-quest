@@ -1,10 +1,23 @@
 # 进阶项目 — 短链接服务
 
+## 分阶段练习与验收
+
+**最小阶段**：先完成长地址到短码的创建与跳转。
+
+**验收结果**：未知短码失败，重复创建策略明确，目标 URL 的允许范围可解释。
+
+**扩展顺序**：再处理唯一性竞争与统计；不能用进程内 hash 代替稳定标识。
+
+建议保存一份正常输入、一份失败输入、实际输出和对应测试。先完成以上阶段再扩展正文中的完整设计；遇到省略实现或未定义依赖，应按文档上下文补齐，不能把代码片段拼接后当作已经验证的完整工程。
+
 > **文档简介**: 构建带 Redis 存储与点击统计的短链接服务，练习异步编程、原子计数与 lifespan 资源管理
 >
 > **目标读者**: 完成 TODO API 后想接触真实存储与并发计数的开发者
 >
 > **前置知识**: [生态集成（Redis）](../frameworks/03-ecosystem-integration.md)、[FastAPI 进阶](../frameworks/02-fastapi-advanced.md)
+
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
 
 ## 📚 文档元数据
 
@@ -15,6 +28,8 @@
 | **难度** | ⭐⭐ |
 | **标签** | `#Redis` `#FastAPI` `#异步` `#统计` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ## 🎯 项目目标
 
@@ -164,3 +179,9 @@ curl -s localhost:8000/urls/<code>/stats
 - 🚀 **[项目：数据处理管道](./03-data-pipeline.md)** — 下一关：定时任务与数据校验
 - 📖 **[生态库速查](../reference/library-guides/02-ecosystem-libs.md)** — Redis 命令与 API 字典
 - 🎓 **[asyncio 异步并发模型](../advanced-topics/performance/01-async-python.md)** — 本项目异步代码的底层原理
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../LEARNING_GUIDE.md) · [完整目录与版本](../README.md) · [通用术语](../../shared-resources/glossary.md)

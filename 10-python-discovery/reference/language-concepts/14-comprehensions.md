@@ -2,7 +2,10 @@
 
 ## 概述
 
-推导式（comprehension）把"建容器的循环"压缩为一行表达式，语义固定：**先 for 取值，后 if 过滤，最左输出表达式**。比等价循环更快，也是 Python 标志性的表达力工具。
+推导式（comprehension）把"建容器的循环"压缩为一行表达式，语义固定：**先 for 取值，后 if 过滤，最左输出表达式**。常能简洁表达数据变换；性能取决于解释器和工作负载，不应仅凭写法承诺更快。
+
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
 
 ## 📚 文档元数据
 
@@ -13,6 +16,8 @@
 | **难度** | ⭐ |
 | **标签** | `#推导式` `#comprehension` `#生成器` `#表达式` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ## 四种形态对照
 
@@ -72,7 +77,7 @@ records = [{"tags": ["web", "api"]}, {"tags": ["db"]}]
 all_tags = {t for r in records for t in r["tags"]}  # {'web', 'api', 'db'}
 ```
 
-**陷阱**: 多个 `for` 的书写顺序=嵌套从外到内，但读起来像"从左到右展平"；超过两层 `for` 或两个 `if` 应改回普通循环——可读性优先，一行不是目的。
+**陷阱**: 多个 `for` 的书写顺序=嵌套从外到内，但读起来像"从左到右展平"；当嵌套使数据流难以追踪时，应考虑改回普通循环或提取函数——可读性优先，一行不是目的。
 
 ---
 
@@ -91,8 +96,37 @@ has_admin = any(u["role"] == "admin" for u in users)   # any/all 短路，可能
 
 ---
 
+<!-- full-library-explanation -->
+## 展开成循环，检查有没有丢数据
+
+前置知识是 for、if 和容器。推导式适合“遍历、筛选、转换、收集”这条清晰的数据流。若需要多个副作用、复杂异常处理或逐步调试，普通循环通常更容易阅读。
+
+完整示例保存为 `comprehension.py`：
+
+```python
+words = ["py", "go", "rust"]
+lengths = {word: len(word) for word in words}
+reverse = {length: word for word, length in lengths.items()}
+print(lengths)
+print(reverse)
+groups = {}
+for word in words:
+    groups.setdefault(len(word), []).append(word)
+print(groups)
+```
+
+运行后第二行是 `{2: 'go', 4: 'rust'}`，第三行是 `{2: ['py', 'go'], 4: ['rust']}`。字典推导式遇到重复键会由后值覆盖前值；要保留一对多关系，应收集列表，而不是简单交换键值。
+
+练习：加入 `"js"`，判断两个结果各如何改变。反向字典的键 2 对应 js，分组结果则保留 py、go、js。能展开成等价循环，比记住一行语法更重要。
+
 ## 🔗 相关文档
 
 - 📄 **[控制流与推导式](../../basics/05-control-flow.md)** — 推导式实战教程（数据清洗三例）
 - 📄 **[数据结构速查](./03-data-structures.md)** — 产物容器的完整操作
 - 📄 **[生成器与迭代器](./07-generators-iterators.md)** — `yield` 函数与迭代协议的深入条目
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

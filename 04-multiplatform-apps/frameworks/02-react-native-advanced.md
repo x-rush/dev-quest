@@ -1,10 +1,21 @@
 # React Native 框架进阶 — 新架构、原生模块与动画
 
+## 先看框架承担哪部分职责
+
+**原生架构与动画**：跨 JS 与原生边界会涉及调用、线程和数据转换。动画流畅度还受布局和计算影响，新架构本身不是性能验收。
+
+**最小练习与预期结果**：为一个动画记录掉帧情境，移除同期重计算后比较；先证明瓶颈位置，再引入线程或原生模块。
+
+具体 API 与安装版本以[模块基线](../README.md)和本篇官方来源为准。先完成这条数据路径，再展开后面的高级配置；框架名称变化后，输入边界、状态归属和失败处理仍是需要理解的机制。
+
 > **文档简介**: 面向任务的新架构开发指南：理解 Fabric 与 TurboModules 对日常开发的影响，用 Expo Modules API 封装原生能力，用 Reanimated 写出 60fps+ 的手势驱动动画
 >
 > **目标读者**: 能独立完成常规页面开发、希望深入框架底层的开发者
 >
 > **前置知识**: 已完成 [React Native 框架入门](./01-react-native-basics.md)；建议先读 [新架构解析](../advanced-topics/architecture/01-new-architecture.md) 了解"为什么"
+
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
 
 ## 📚 文档元数据
 
@@ -15,6 +26,8 @@
 | **难度** | ⭐⭐ |
 | **标签** | `#新架构` `#TurboModules` `#原生模块` `#Reanimated` |
 | **更新日期** | 2026年9月 |
+
+</details>
 
 ## 🎯 学习目标
 
@@ -119,11 +132,9 @@ export function DraggableCard() {
 
 ## ✅ 最佳实践
 
-- ✅ **优先 Expo Modules API**，只有规格文件需求才写裸 TurboModule
-- ✅ **动画数值动画化**：位移/缩放用 `transform` 与共享值，避免触发布局重算的属性（width/height/margin）
-- ✅ **手势必须用 `react-native-gesture-handler`** 的 `GestureDetector`，原生 `onTouch` 拿不到 UI 线程
-- ❌ **不要在动画循环里 setState**，每帧过一次桥会让 JS 线程饱和
-- ❌ **不要混用旧版 `Animated` 与 Reanimated** 于同一节点，时序不可控
+拖拽动画的关键是高频位置更新不必触发整页 React 渲染。可以让动画系统管理连续数值，只在拖拽完成时提交最终业务状态；改变宽高等布局属性则需要测量布局成本。
+
+原生模块与手势方案按目标平台和库兼容性选择，并非所有项目只能使用某一个 API。若同一视觉属性同时被多个动画来源修改，应明确谁负责它。用相同拖动路径比较改动前后的帧表现，避免只凭“用了新架构”判断效果。
 
 ## ❓ 常见问题
 
@@ -146,3 +157,9 @@ A: RNOH 提供了 Fabric 与 Reanimated 的适配层，但部分版本支持滞�
 - 📄 [高级特性 — Fabric、Hermes 与动画](../basics/07-advanced-features.md) — 动画概念入门
 - 🎓 [Fabric/TurboModules/JSI 架构解析](../advanced-topics/architecture/01-new-architecture.md) — 本文的原理底座
 - 🚀 [聊天应用实战](../projects/03-chat-app.md) — 动画与列表优化的综合演练
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../LEARNING_GUIDE.md) · [完整目录与版本](../README.md) · [通用术语](../../shared-resources/glossary.md)

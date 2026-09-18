@@ -1,10 +1,26 @@
 # 错误与异常 - Throwable 的世界
 
+## 先理解，再动手
+
+Throwable 是可捕获错误与异常的共同接口。捕获后应恢复、转换或传播，不是把所有失败都变成成功返回。
+
+**本节自测**：读取不存在文件，检查返回 false，再把失败转成明确异常由入口处理。
+
+<details>
+<summary>预期结果与参考思路（先尝试再展开）</summary>
+
+并非所有函数失败都会自动抛异常；先看函数契约，避免 catch 永远等不到预期错误。
+
+</details>
+
 > **文档简介**: 理解 PHP 7+ 统一后的异常层次（Throwable/Error/Exception），学会自定义异常与分层捕获策略
 >
 > **目标读者**: 需要写出健壮错误处理逻辑的 PHP 初学者
 >
 > **前置知识**: 完成 [控制流程](./05-control-flow.md)，理解类的继承体系
+
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
 
 ## 📚 文档元数据
 
@@ -15,6 +31,8 @@
 | **难度** | ⭐ |
 | **标签** | `#异常` `#Throwable` `#错误处理` `#自定义异常` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ## 🎯 学习目标
 
@@ -212,11 +230,9 @@ Laravel/Symfony 项目中以上机制已由框架接管，直接写业务异常�
 
 ## ✅ 最佳实践
 
-- ✅ **每个模块建立 `abstract class XxxException extends RuntimeException` 基类**：上游捕获粒度可控
-- ✅ **异常消息面向开发者，错误码/文案面向用户**：两层分离，不要把 SQL 细节透出给用户
-- ✅ **`finally` 只做清理，不做业务分支**：保证可预测
-- ❌ **不要用异常做常规流程控制**：抛接成本高、堆栈难读，正常分支用返回值
-- ❌ **不要捕获 `Throwable` 后什么都不做**：最小也必须 `error_log($e)`
+异常分类应服务调用方决策，例如非法输入可提示修改，存储失败可能需要重试；只有存在共同处理需求时才建立异常基类，不必每个模块都先搭继承树。
+
+捕获后明确恢复、转换或继续传播，未知错误在边界记录经过脱敏的上下文，客户端得到稳定消息。finally 用于清理，避免 return 覆盖原结果。正常“没有找到”是返回值还是异常由接口契约决定，不能只按性能口号选择。
 
 ## ❓ 常见问题
 
@@ -247,3 +263,9 @@ Laravel/Symfony 项目中以上机制已由框架接管，直接写业务异常�
 - 📄 **[高级特性](./07-advanced-features.md)** — 下一节：枚举、属性注解与 Fibers
 - 📄 **[常见错误排查](../reference/quick-references/02-troubleshooting.md)** — 异常报错速查
 - 📄 **[Laravel 核心](../reference/framework-essentials/01-laravel-essentials.md)** — 框架如何接管异常渲染
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../LEARNING_GUIDE.md) · [完整目录与版本](../README.md) · [通用术语](../../shared-resources/glossary.md)

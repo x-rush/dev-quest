@@ -1,10 +1,26 @@
 # 异常处理 — 异常体系与上下文管理器
 
+## 先理解，再动手
+
+异常表达失败，with 保证按协议退出和清理。只捕获你能够处理的异常，不能把所有失败悄悄改成空数据。
+
+**本节自测**：处理合法整数、非法字符串，再比较 int(None) 的异常类型。
+
+<details>
+<summary>预期结果与参考思路（先尝试再展开）</summary>
+
+ValueError 与 TypeError 不同；能够解释捕获范围，而不是依赖 except Exception 隐藏原因。
+
+</details>
+
 > **文档简介**: 理解 Python 异常类层次与 EAFP 哲学，掌握 try/except/else/finally 全结构、自定义异常设计，以及 with 上下文管理器的资源管理模型
 >
 > **目标读者**: 已掌握控制流、即将编写真实 I/O 代码的开发者
 >
 > **前置知识**: 完成[控制流与推导式](./05-control-flow.md)，了解函数与类
+
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
 
 ## 📚 文档元数据
 
@@ -15,6 +31,8 @@
 | **难度** | ⭐ |
 | **标签** | `#异常` `#try-except` `#上下文管理器` `#EAFP` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ## 🎯 学习目标
 
@@ -185,12 +203,9 @@ def open_db(uri: str):
 
 ## ✅ 最佳实践
 
-- ✅ **try 块只包一行**可能出错的语句，成功逻辑放 else
-- ✅ **异常信息带上下文**：`raise ValueError(f"非法数字: {text!r}")`
-- ✅ **资源管理一律 with**，不手写 close
-- ❌ **避免**：`except Exception: pass` 静默吞异常
-- ❌ **避免**：用异常做常规流程控制（如循环里靠 IndexError 停止）
-- 💡 **技巧**：`except (A, B) as e` 元组捕获多类异常；`logging.exception` 自动记录栈
+try 的范围应覆盖同一个需要处理的失败操作，而非机械限制成一行；范围过大会把后续无关错误误当作同一种输入问题。捕获尽可能明确的类型，补上下文后保留原因，或交给能够处理它的上层。
+
+支持上下文管理协议的资源优先用 with，其他资源仍需按契约关闭。Python 中异常有时就是正常协议的一部分，如迭代结束，不应一概禁止；关键是不要吞掉未知错误或靠异常掩盖本来可清楚表达的控制流。
 
 ---
 
@@ -217,3 +232,9 @@ def open_db(uri: str):
 - 📄 **[高级特性](./07-advanced-features.md)** — 异步世界的异常传播
 - 📄 **[魔术方法与协议](../reference/language-concepts/04-oop-protocols.md)** — `__enter__`/`__exit__` 完整协议
 - 📄 **[常见错误排查](../reference/quick-references/02-troubleshooting.md)** — 异常相关高频坑
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../LEARNING_GUIDE.md) · [完整目录与版本](../README.md) · [通用术语](../../shared-resources/glossary.md)

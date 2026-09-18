@@ -1,374 +1,66 @@
-# iOS 原生开发学习路线 - 2026 前沿技术栈
-
-## 前言
-
-恭喜你选择了 iOS 原生开发！在 2026 年，iOS 开发已经进入了全新的时代，SwiftUI 和 Swift Concurrency 正在重塑开发范式。本学习路线将帮助你从零基础掌握现代 iOS 开发，构建高质量、高性能的原生应用。
-
-## 技术栈概览 (2026年最新)
-
-### 核心技术栈
-```swift
-// 编程语言
-Swift 6.3                    // 现代化、类型安全的编程语言（严格并发为默认语言模式）
-
-// UI 框架
-SwiftUI                     // 声明式 UI 框架（推荐）
-UIKit                       // 传统命令式 UI 框架（维护用）
-
-// 架构和模式
-Swift Concurrency           // async/await 并发编程
-Combine                     // 响应式编程框架
-MVVM + Coordinator          // 现代架构模式
-
-// 开发工具
-Xcode 26.x                  // 官方 IDE（基线 26.6，内含 Swift 6.3.3）
-Swift Package Manager       // 依赖管理（6.3 起 Swift Build 以 preview 形式集成，可选启用、尚未成为默认）
-TestFlight                   // 测试分发
-
-// 跨平台（了解即可，详见 04-multiplatform-apps 模块）
-Swift SDK for Android        // Swift 6.3 起：官方 Android 交叉编译支持（里程碑）
-```
-
-### 辅助技术栈
-```swift
-// 数据库
-Core Data                    // 苹果官方 ORM
-Realm                       // 跨平台移动数据库
-SQLite.swift                // SQLite 封装
-
-// 网络
-Alamofire                   // HTTP 网络库
-URLSession                  // 系统网络 API
-
-// 依赖注入
-SwiftUI + @Environment      // 现代依赖注入
-Factory Pattern             // 传统工厂模式
-
-// 动画和交互
-Lottie                       // 动画库
-SwiftUI Animations          // 原生动画框架
-
-// 测试
-Swift Testing                // 现代测试框架（新代码首选）
-XCTest                       // 传统测试框架（维护用）
-SwiftUI Preview              // 实时预览
-```
-
-## 学习阶段规划
-
-### 阶段一：Swift 语言基础
-
-#### 1. Swift 基础语法
-**学习目标**：掌握 Swift 核心语法和概念
-- **重点内容**：
-  - 变量、常量和数据类型
-  - 可选类型（Optional）和解包
-  - 函数和闭包
-  - 控制流和循环
-  - 集合类型（Array、Dictionary、Set）
-  - 结构体和类
-  - 协议和扩展
-  - 错误处理
-
-#### 2. Swift 高级特性
-**学习目标**：理解 Swift 的现代化特性
-- **重点内容**：
-  - 泛型编程
-  - 协议面向编程
-  - 属性包装器（Property Wrappers）
-  - 结果构建器（Result Builders）
-  - 不透明类型（Opaque Types）
-  - 并发安全（Concurrency Safety）
-
-#### 3. Swift 6 并发与新特性（当前 6.3）
-**学习目标**：掌握最新语言特性
-- **重点内容**：
-  - Data-race safety（严格并发，默认开启）
-  - Typed throws
-  - Pack iteration
-  - Noncopyable types
-  - 完整的并发检查
-
-**实践项目**：
-- Swift 命令行工具
-- 算法和数据结构练习
-- 小型游戏或工具应用
-
-### 阶段二：SwiftUI 声明式 UI
-
-#### 1. SwiftUI 基础
-**学习目标**：掌握声明式 UI 开发
-- **重点内容**：
-  - 视图和修饰符
-  - 布局系统（Stack、Grid、Lazy）
-  - 状态管理（@State、@Binding）
-  - 数据流（@Environment、@Observable）
-  - 导航系统（NavigationStack）
-  - 列表和集合视图
-
-#### 2. SwiftUI 进阶
-**学习目标**：掌握复杂的 UI 开发
-- **重点内容**：
-  - 自定义视图和组件
-  - 动画和过渡效果
-  - 手势识别
-  - 绘图和自定义形状
-  - 平台适配（iOS、iPadOS、macOS）
-  - 无障碍功能
-
-#### 3. SwiftUI 并发编程
-**学习目标**：掌握现代并发模式
-- **重点内容**：
-  - async/await 基础
-  - MainActor 和 UI 线程安全
-  - Task 和 TaskGroup
-  - AsyncStream 和 AsyncSequence
-  - SwiftUI 中的异步操作
-
-**实践项目**：
-- 天气应用（API 调用 + 数据展示）
-- 待办事项应用（本地存储 + 状态管理）
-- 简单的社交媒体应用
-
-### 阶段三：应用架构和设计模式
-
-#### 1. MVVM 架构
-**学习目标**：掌握现代 iOS 架构
-- **重点内容**：
-  - MVVM 设计模式
-  - 数据绑定和响应式编程
-  - ViewModel 设计
-  - 依赖注入模式
-  - 服务层抽象
-
-#### 2. Combine 框架
-**学习目标**：掌握响应式编程
-- **重点内容**：
-  - Publisher 和 Subscriber
-  - 操作符（Operators）
-  - 数据流管理
-  - 错误处理
-  - 内存管理
-
-#### 3. 数据持久化
-**学习目标**：掌握数据存储方案
-- **重点内容**：
-  - Core Data 基础
-  - Core Data Stack 配置
-  - 数据迁移
-  - iCloud 同步
-  - SQLite 和文件存储
-
-**实践项目**：
-- 笔记应用（Core Data + CloudKit）
-- 新闻阅读器（API + 缓存）
-- 个人财务管理应用
-
-### 阶段四：高级功能和优化
-
-#### 1. 网络和数据同步
-**学习目标**：掌握现代网络编程
-- **重点内容**：
-  - URLSession 和 Alamofire
-  - RESTful API 设计
-  - GraphQL 集成
-  - WebSocket 实时通信
-  - 离线同步策略
-  - 后台任务处理
-
-#### 2. 性能优化
-**学习目标**：掌握应用优化技巧
-- **重点内容**：
-  - 内存管理优化
-  - UI 性能优化
-  - 启动时间优化
-  - 电量优化
-  - Instruments 工具使用
-  - 性能测试和分析
-
-#### 3. 安全和隐私
-**学习目标**：掌握应用安全
-- **重点内容**：
-  - Keychain 使用
-  - 数据加密
-  - 网络安全
-  - 用户隐私保护
-  - App Store Connect 隐私配置
-
-**实践项目**：
-- 电商应用（支付集成 + 安全）
-- 社交应用（实时通信 + 隐私）
-- 企业级应用（安全 + 性能）
-
-### 阶段五：发布和运维
-
-#### 1. App Store 发布
-**学习目标**：掌握应用发布流程
-- **重点内容**：
-  - App Store Connect 配置
-  - 应用签名和证书管理
-  - App Review 审核指南
-  - 应用内购买配置
-  - 分析和崩溃报告
-
-#### 2. 持续集成和部署
-**学习目标**：掌握自动化流程
-- **重点内容**：
-  - GitHub Actions 配置
-  - 自动化测试
-  - 自动化构建和发布
-  - TestFlight 测试
-  - A/B 测试
-
-#### 3. 应用监控和分析
-**学习目标**：掌握运维监控
-- **重点内容**：
-  - Firebase Analytics
-  - 崩溃报告收集
-  - 性能监控
-  - 用户行为分析
-  - 远程配置
-
-**实践项目**：
-- 完整的商业应用（包含所有功能）
-- 应用发布到 App Store
-- 后续维护和更新
-
-## 开发工具和环境
-
-### 必备工具
-```bash
-# 开发环境
-Xcode 26.x                   # 官方 IDE（基线 26.6）
-Swift 6.3+                   # 编程语言
-iOS 26 Simulator             # 模拟器
-
-# 版本控制
-Git                         # 版本控制
-GitHub / GitLab              # 代码托管
-
-# 依赖管理
-Swift Package Manager         # 官方包管理器
-CocoaPods                   # 传统包管理器（维护用）
-
-# 设计工具
-Figma                        # UI 设计工具
-SwiftUI Preview             # 实时预览
-
-# 测试工具
-XCTest                      # 单元测试
-SwiftUI Preview            # UI 测试
-```
-
-### 推荐插件和扩展
-```bash
-# Xcode 插件
-SwiftUI Inspector           # UI 检查器
-CodeRunner                   # 代码运行器
-SwiftLint                    # 代码风格检查
-
-# VS Code 扩展
-Swift Language Support       # Swift 支持
-GitHub Copilot              # AI 代码助手
-```
-
-## 学习资源推荐
-
-### 官方资源
-- [Apple Developer Documentation](https://developer.apple.com/documentation/)
-- [SwiftUI Tutorials](https://developer.apple.com/tutorials/swiftui/)
-- [Swift by Apple](https://docs.swift.org/swift-book/)
-- [WWDC 2026 Videos](https://developer.apple.com/videos/)
-
-### 书籍推荐
-- "Swift Programming: The Big Nerd Ranch Guide"
-- "SwiftUI by Tutorials" - raywenderlich.com
-- "Modern Swift Concurrency" - objc.io
-- "iOS Apprentice" - raywenderlich.com
-
-### 在线课程
-- [Stanford CS193p](https://cs193p.sites.stanford.edu/)
-- [Udemy iOS Development Bootcamp]
-- [Coursera iOS Development Specialization]
-- [Kodeco Swift & SwiftUI Courses]
-
-### 社区资源
-- [Swift Forums](https://forums.swift.org/)
-- [Stack Overflow](https://stackoverflow.com/)
-- [Reddit r/iOSProgramming](https://www.reddit.com/r/iOSProgramming/)
-- [Hacking with Swift](https://www.hackingwithswift.com/)
-
-### 实践项目
-- [100 Days of SwiftUI](https://www.hackingwithswift.com/100/swiftui)
-- [Open Source iOS Projects](https://github.com/topics/ios)
-- [SwiftUI Sample Projects](https://developer.apple.com/documentation/swiftui/sample-code)
-
-## 学习建议
-
-### 1. 学习策略
-- **循序渐进**：从基础语法开始，不要急于求成
-- **实践为主**：每个阶段都要有实际项目练习
-- **代码质量**：重视代码规范和架构设计
-- **持续学习**：关注 WWDC 和苹果技术更新
-
-### 2. 实践建议
-- **从小项目开始**：先做简单的工具应用
-- **逐步复杂**：逐步增加功能和复杂度
-- **参与开源**：为开源项目贡献代码
-- **构建作品集**：准备展示给潜在雇主
-
-### 3. 职业发展
-- **准备作品集**：展示 3-5 个高质量项目
-- **参与社区**：在技术社区分享经验
-- **持续更新**：跟进行业最新趋势
-- **考取认证**：考虑苹果官方认证
-
-## 常见问题解答
-
-### Q: 需要 Mac 电脑吗？
-A: 是的，iOS 开发需要 Mac 电脑。推荐 M1/M2 芯片的 MacBook，至少 16GB 内存。
-
-### Q: 学习周期大概需要多长？
-A: 根据个人背景和投入时间不同，基础阶段需要掌握Swift和SwiftUI，熟练开发需要持续实践和项目积累。
-
-### Q: SwiftUI 还是 UIKit？
-A: **优先学习 SwiftUI**，这是未来的趋势。UIKit 仍需了解用于维护老项目。
-
-### Q: 需要数学基础吗？
-A: 基础数学即可，重点在编程思维和问题解决能力。
-
-### Q: 就业前景如何？
-A: iOS 开发者需求旺盛，薪资水平较高，技术栈稳定。
-
-## 项目实战建议
-
-### 初级项目
-1. **天气应用**：API 调用、位置服务、数据展示
-2. **待办事项**：本地存储、状态管理、用户交互
-3. **计算器**：UI 布局、事件处理、数据验证
-
-### 中级项目
-1. **笔记应用**：Core Data、CloudKit、分享功能
-2. **新闻阅读器**：API 集成、缓存、离线支持
-3. **音乐播放器**：媒体播放、后台任务、用户界面
-
-### 高级项目
-1. **社交媒体应用**：实时通信、图片处理、用户系统
-2. **电商应用**：支付集成、购物车、订单管理
-3. **企业级应用**：安全认证、数据同步、性能优化
-
-## 总结
-
-iOS 原生开发是一个充满机遇的领域。通过本学习路线，你将掌握：
-
-✅ **Swift 6.3**：现代化、类型安全的编程语言
-✅ **SwiftUI**：声明式 UI 开发范式
-✅ **Swift Concurrency**：现代并发编程模型
-✅ **完整开发生态**：从开发到发布的完整流程
-
-
-记住，技术学习是一个持续的过程。保持好奇心，多动手实践，你将成为一名优秀的 iOS 开发者！
-
----
-
-*最后更新: 2026年9月 - 基于 Apple 最新的技术和工具（Swift 6.3 / Xcode 26.6 / iOS 26 SDK）*
+# iOS 原生开发学习路线：从语言基础到可交付应用
+
+> **阅读准备**：会基本编程；语言基础阶段不要求 Apple 开发经验，界面与真机实践需要匹配的 macOS/Xcode 环境。
+
+适合已经会基本编程、尚不熟悉 Apple 技术栈的读者。以能完成的任务安排进度，不以学过多少框架或固定几周“精通”作为目标。你需要能运行目标 Xcode 的 Mac；本库在 Windows 的文档验证不能代替模拟器、真机与签名验证。
+
+## 起步：建立工具与反馈回路
+
+先完成 [环境准备](basics/01-environment-setup.md) 与 [第一个 SwiftUI 应用](basics/02-first-swiftui-app.md)。记录 Xcode、Swift 语言模式与最低部署目标，创建工程、编译、设置断点、查看控制台，并用 Git 保存首次可运行版本。
+
+验收：从干净检出能按 README 重建工程；修改一个 Text 后模拟器可看到变化；遇到编译错误知道先读第一条诊断。不要先引入网络库、架构库和自动化平台。
+
+## 阶段一：能读懂与预测 Swift
+
+按 [模块理解地图](LEARNING_GUIDE.md) 阅读语言基础，再以 reference 补齐查阅能力：
+
+| 主题 | 需要解释的行为 | 小练习 |
+|---|---|---|
+| let/var、值与引用 | 赋值后两份变量是否共享修改 | 对照 struct 与 class |
+| Optional、guard、错误 | 无值与失败原因如何表达 | 解析用户输入，区分空、非法、有效 |
+| 集合与闭包 | map/filter/compactMap/reduce 的输入输出 | 聚合一周阅读记录 |
+| 协议与泛型 | 约束、静态类型与存在类型 | 为存储定义可替换接口 |
+| Foundation | 文本索引、JSON、日历与文件边界 | 解码并格式化本地 JSON |
+
+查词入口：[关键字](reference/language-concepts/13-keywords-completion.md)、[集合与可选值](reference/language-concepts/02-optionals-collections.md)、[标准库与 Foundation](reference/library-guides/01-foundation-and-stdlib.md)。验收是能写输入、预测输出、说明错误行为，不只是编译成功。
+
+## 阶段二：用状态构建界面
+
+学习 View、State、Binding、Observation、布局、稳定身份、NavigationStack 与 Environment。制作内存版阅读清单：添加、编辑、完成、筛选与详情页。说明每份状态由谁持有、多久存活，正文不要塞入 body 的副作用中。
+
+验收：插入或排序后行状态不串位；编辑取消不会保存草稿；空列表有提示；大字体、深色模式和 VoiceOver 可操作。参考 [状态工具](reference/language-concepts/04-swiftui-state-api.md) 与 [数据流](reference/framework-essentials/05-data-flow.md)。
+
+## 阶段三：把数据接入真实边界
+
+先用 URLSession/Codable 理解 HTTP 状态、解码错误和取消，再用 SwiftData 或适合产品的存储方案保存数据。完成 [天气项目](projects/02-weather-app.md) 或 [笔记项目](projects/01-notes-app.md)，一次选择一个。
+
+验收：断网、404、错误 JSON、快速切换查询均有明确行为；旧响应不覆盖新查询；数据重启后还在；存储失败能反馈。随后增加 schema 版本并用旧测试库验证迁移，禁止靠删库“通过”升级测试。
+
+## 阶段四：高级特性按实际问题扩展
+
+| 问题 | 进阶内容 | 产出 |
+|---|---|---|
+| 请求重复或竞态 | actor、任务组、有界并发、取消 | 可控制返回顺序的测试 |
+| 多服务编排 | 状态机、依赖注入，必要时评估 MVVM/TCA | 可替换网络的功能测试 |
+| 滚动卡顿 | SwiftUI Instruments、图片尺寸、派生数据计算 | 同设备修改前后 trace |
+| 系统集成 | 通知、定位、WidgetKit/App Intents | 拒绝权限时仍可用的替代路径 |
+| 数据可视化 | Charts、日期聚合与统计口径 | 图表加文本/无障碍说明 |
+
+UIKit 仍是系统集成与既有项目的重要能力，不仅是“维护旧代码”。先学 UIViewRepresentable/UIViewControllerRepresentable 的生命周期和状态桥接，再按需求深入。
+
+## 阶段五：项目练习与交付
+
+阅读清单 → 持久化笔记 → 天气查询 → [习惯追踪](projects/03-habit-tracker.md) → [生产化项目](projects/04-production-ios-app.md)。每个项目先做最小闭环，再加入一个进阶目标，避免同一轮同时更换架构、数据库与网络库。
+
+最终交付包含可复现构建说明、核心流程测试、迁移测试、取消与错误行为、敏感数据处理、权限说明与性能证据。TestFlight/商店分发还需有效账号、签名和当时的提交要求，按 deployment 章节及 Apple 官方文档核对。
+
+## 框架选择与长期维护
+
+SwiftUI、Foundation、Swift Concurrency、SwiftData 与 UIKit 构成系统能力主线。第三方库只在明确缺口出现时引入，参见 [选型与边界](reference/library-guides/02-third-party-libs.md)。更新框架前阅读迁移说明、固定测试条件并保留回退点。没有框架能保证永不过时；状态所有权、类型、并发、数据一致性和验证方法更容易迁移到下一代工具。
+
+完整阅读顺序与文章索引见 [LEARNING_GUIDE](LEARNING_GUIDE.md)，工具版本入口见 [README](README.md)。
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](LEARNING_GUIDE.md) · [完整目录与版本](README.md) · [通用术语](../shared-resources/glossary.md)

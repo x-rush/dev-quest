@@ -1,0 +1,41 @@
+{
+  "node": "v24.19.0",
+  "results": [
+    {
+      "source": "09-nodejs-backend/reference/language-concepts/01-js-modern-syntax.md",
+      "status": "PASS",
+      "output": "3 0 null\nnode,js\n"
+    },
+    {
+      "source": "09-nodejs-backend/reference/language-concepts/03-node-core-api.md",
+      "status": "PASS",
+      "output": "start\nemit returned\nafter await\n"
+    },
+    {
+      "source": "09-nodejs-backend/reference/language-concepts/07-js-core-semantics.md",
+      "status": "PASS",
+      "output": "2\n0,1,2\n"
+    },
+    {
+      "source": "09-nodejs-backend/reference/language-concepts/08-type-coercion-collections.md",
+      "status": "PASS",
+      "output": "0 0 true\nfalse 2\n{\"empty\":null}\n"
+    },
+    {
+      "source": "09-nodejs-backend/reference/library-guides/04-child-process.md",
+      "status": "PASS",
+      "output": "a b; c\n"
+    },
+    {
+      "source": "09-nodejs-backend/reference/library-guides/05-buffer.md",
+      "status": "PASS",
+      "output": "1,9,3 2,3\n772\n"
+    },
+    {
+      "source": "09-nodejs-backend/reference/library-guides/08-test-runner.md",
+      "status": "PASS",
+      "output": "TAP version 13\n# Subtest: port input boundaries\nok 1 - port input boundaries\n  ---\n  duration_ms: 0.6558\n  type: 'test'\n  ...\n1..1\n# tests 1\n# suites 0\n# pass 1\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 58.7914\n"
+    }
+  ],
+  "scope": "Seven selected complete added examples only. Frameworks, databases, clusters, deployment and historical snippets are not executed by this check."
+}

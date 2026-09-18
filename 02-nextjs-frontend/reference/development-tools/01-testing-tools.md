@@ -8,6 +8,9 @@
 
 > **预计时长**: 6-8小时
 
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
+
 ## 📚 文档元数据
 
 | 属性 | 内容 |
@@ -20,6 +23,8 @@
 | **作者** | Dev Quest Team |
 | **状态** | ✅ 已完成 |
 
+</details>
+
 ## 📚 概述
 
 Next.js 16 结合现代测试工具链提供了全面的质量保证解决方案。本指南深入探讨企业级测试策略，涵盖单元测试、组件测试、端到端测试、API测试和性能测试，帮助开发团队建立可靠的质量保障体系。
@@ -28,43 +33,14 @@ Next.js 16 结合现代测试工具链提供了全面的质量保证解决方案
 
 ### 测试金字塔策略
 
-```typescript
-// testing/types/testing-hierarchy.ts
-export interface TestingHierarchy {
-  // 单元测试 - 快速、隔离、数量多
-  unit: {
-    tools: ['Vitest', 'Jest'];
-    coverage: '70-80%';
-    executionTime: '< 5ms per test';
-    examples: ['Utility functions', 'Business logic', 'Data transformation'];
-  };
+| 测试层 | 主要验证对象 | 典型边界 |
+|---|---|---|
+| 单元 | 纯函数、规则与状态转换 | 不证明数据库或浏览器行为 |
+| 组件 | 用户输入、可见状态与交互 | jsdom 不做真实布局 |
+| 集成 | 服务与真实依赖的协作 | 使用独立数据库等资源 |
+| E2E | 关键用户旅程 | 运行成本较高，仍需限定场景 |
 
-  // 组件测试 - 中等速度、模拟依赖
-  component: {
-    tools: ['React Testing Library', 'Vitest', 'Storybook'];
-    coverage: '50-60%';
-    executionTime: '< 50ms per test';
-    examples: ['UI components', 'User interactions', 'State changes'];
-  };
-
-  // 集成测试 - 较慢、真实环境
-  integration: {
-    tools: ['Vitest', 'Supertest', 'MSW'];
-    coverage: '30-40%';
-    executionTime: '< 500ms per test';
-    examples: ['API integration', 'Database operations', 'Component integration'];
-  };
-
-  // E2E测试 - 最慢、完整流程
-  e2e: {
-    tools: ['Playwright', 'Cypress'];
-    coverage: '10-20%';
-    executionTime: '< 5s per test';
-    examples: ['User journeys', 'Critical paths', 'Cross-browser testing'];
-  };
-}
-```
-
+按业务风险分配案例，测试比例与每例耗时没有通用百分比或毫秒保证。覆盖率只表示代码是否被执行，不能直接证明断言质量。
 ## 🧪 Vitest 单元测试配置
 
 ### 基础配置
@@ -93,18 +69,16 @@ export default defineConfig({
         '**/*.config.*'
       ],
       thresholds: {
-        global: {
-          branches: 80,
-          functions: 80,
-          lines: 80,
-          statements: 80
-        }
+        branches: 80,
+        functions: 80,
+        lines: 80,
+        statements: 80
       }
     },
 
     // 并发执行
-    threads: true,
-    concurrency: 4,
+    pool: 'threads',
+    maxConcurrency: 4,
 
     // 全局设置
     globals: true,
@@ -112,18 +86,14 @@ export default defineConfig({
     restoreMocks: true,
 
     // 报告器
-    reporter: ['verbose', 'json', 'html'],
+    reporters: ['verbose', 'json', 'html'],
     outputFile: {
       json: './test-results/results.json',
       html: './test-results/results.html'
     },
 
-    // 监听模式配置
-    watchExclude: [
-      'node_modules/',
-      'dist/',
-      '**/*.log'
-    ]
+    // 监听忽略使用所用 Vite/Vitest 版本支持的 server.watch 配置；
+    // 不把旧版本 watchExclude 当作通用配置。
   },
 
   // 路径解析
@@ -1048,7 +1018,7 @@ import { describe, it, expect, beforeAll, afterEach } from 'vitest';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { server } from '@/test/mocks/server';
-import { HttpResponse } from 'msw';
+import { http, HttpResponse } from 'msw';
 import { ProductCard } from '@/components/ProductCard/ProductCard';
 
 describe('ProductCard Component', () => {
@@ -1229,10 +1199,10 @@ jobs:
 - 📄 **[打包优化](../performance-optimization/02-bundle-optimization.md)**: 测试代码分割和打包策略
 
 ### 参考章节
-- 📖 **[Vitest配置](#vitest-单元测试配置)**: 单元测试环境搭建
-- 📖 **[React Testing Library](#react-testing-library-组件测试)**: 组件测试最佳实践
-- 📖 **[Playwright配置](#playwright-e2e测试)**: 端到端测试设置
-- 📖 **[MSW配置](#msw-api模拟)**: API模拟和集成测试
+- 📖 **[Vitest配置](#-vitest-单元测试配置)**: 单元测试环境搭建
+- 📖 **[React Testing Library](#-react-testing-library-组件测试)**: 组件测试最佳实践
+- 📖 **[Playwright配置](#-playwright-e2e-测试)**: 端到端测试设置
+- 📖 **[MSW配置](#-msw-api-模拟)**: API模拟和集成测试
 
 ---
 
@@ -1288,3 +1258,19 @@ jobs:
 **文档状态**: ✅ 已完成 | 🚧 进行中 | 📋 计划中
 **最后更新**: 2026年9月
 **版本**: v1.0.0
+
+<!-- full-library-explanation -->
+## 工具链先跑通一条最小闭环
+
+前置是 package.json、组件测试与网络请求。安装配置实际导入的依赖，包括 @vitejs/plugin-react、jsdom 和需要的 reporter/coverage 包，版本与 Vitest 主版本匹配。先只运行一个纯函数测试，再运行一个按钮交互，最后增加网络替身和端到端流程，能更容易定位环境故障。
+
+Vitest 的 Vite 转换链不会执行完整 Next 构建；next/navigation 的 mock 只验证组件如何使用路由接口，无法验证文件系统路由与服务器渲染协议。异步 Server Component 的完整行为优先通过 Next 服务和 Playwright 覆盖，不要用一层 mock 宣称整个框架行为已测试。
+
+**练习**：故意请求未注册的 MSW 地址，预期测试失败而非访问真实网络。让提交函数返回 500，断言错误反馈与重试入口；让回调被调用两次，确认次数断言能发现。所有 spy、计时器和网络覆盖在测试后还原，最后用生产构建跑一条登录到受保护页的旅程。
+
+依据：[Vitest 配置](https://vitest.dev/config/)、[Next 测试](https://nextjs.org/docs/app/guides/testing)。历史大型示例包含业务依赖，未在本轮完整搭建运行，需按模块实际契约集成。
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

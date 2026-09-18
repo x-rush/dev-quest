@@ -6,6 +6,9 @@
 >
 > **前置知识**: [生态集成](../../frameworks/03-ecosystem-integration.md)、[发布构建](../../deployment/01-release-build.md)、[应用架构](../architecture/01-app-architecture.md)
 
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
+
 ## 📚 文档元数据
 
 | 属性 | 内容 |
@@ -15,6 +18,8 @@
 | **难度** | ⭐⭐⭐ |
 | **标签** | `#keystore` `#datastore-security` `#network-security` `#play-integrity` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ---
 
@@ -120,20 +125,18 @@ val verdict = integrityManager.requestIntegrityToken(
 
 ## 🎨 最佳实践
 
-### ✅ 推荐
+先列出数据：公开缓存、个人资料、登录凭据分别需要多长保留期、是否允许备份、何时删除。选择存储与密钥方案后，用退出登录、备份恢复和设备锁定等场景验证，而不是只检查“启用了加密”。
 
-- 以"数据分类表"驱动存储选型，代码评审按表核对
-- 敏感界面 FLAG_SECURE + 备份排除两项一起上
-- release 构建集成 Play Integrity + 服务端风控，而非仅靠客户端手段
-
-### ❌ 避免陷阱
-
-- "本地存储而已，加密多余"——root 设备上明文 SQLite/SP 等于公开
-- 证书锁定当银弹：一次证书轮换事故的代价远大于收益，除非有完整运维能力
-- 把 API key 藏进字符串数组/NDK 就以为安全——静态分析均可提取，真正的防线是服务端鉴权
+截图限制、完整性信号等只能保护特定边界，不能取代服务端授权。客户端中的服务秘密不能靠混淆或放进原生库保证不可提取。证书锁定若采用，必须同时准备轮换和恢复；按真实威胁与维护能力选，不把它写成普遍必需或普遍无用。
 
 ## 🔗 相关文档
 
 - 📖 概念字典：[AndroidX 官方库指南](../../reference/library-guides/01-androidx-libraries.md) ｜ [第三方库指南](../../reference/library-guides/02-third-party-libs.md)
 - 📖 操作指南：[发布构建](../../deployment/01-release-build.md) ｜ [Play Store 上架流程](../../deployment/02-play-store-release.md)
 - 🎓 延伸解释：[应用架构](../architecture/01-app-architecture.md) ｜ [生产级 Android 应用](../../projects/04-production-android-app.md)
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

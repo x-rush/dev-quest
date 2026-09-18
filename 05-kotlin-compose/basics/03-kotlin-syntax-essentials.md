@@ -1,10 +1,26 @@
 # Kotlin 语法基础 - 面向 Compose 开发者
 
+## 先理解，再动手
+
+Compose 代码常混合 lambda、命名参数和属性委托。先识别“传入一个函数”与“立即调用函数”，再看界面代码。
+
+**本节自测**：写接收 () -> Unit 的函数，分别传 lambda 与错误地直接调用目标函数。
+
+<details>
+<summary>预期结果与参考思路（先尝试再展开）</summary>
+
+能解释前者把动作交出去，后者先执行并尝试传返回值；编译信息对应参数类型。
+
+</details>
+
 > **文档简介**: 只讲写 Compose 必需的 Kotlin 语法：可空性、data class、密封类、扩展函数与 lambda，让你能顺畅读懂并书写 Compose 代码
 >
 > **目标读者**: 有其他语言基础（Go/Java/JS/Python）、Kotlin 经验有限但即将投入 Compose 开发的学习者
 >
 > **前置知识**: 已运行第一个 Compose 应用（见[第一个 Compose 应用](./02-first-compose-app.md)）
+
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
 
 ## 📚 文档元数据
 
@@ -16,6 +32,8 @@
 | **标签** | `#Kotlin` `#语法基础` `#data-class` `#扩展函数` `#lambda` |
 | **更新日期** | `2026年9月` |
 
+</details>
+
 ## 🎯 学习目标
 
 - ✅ 掌握 Kotlin 空安全语法（`?.`、`?:`、`!!`）并理解其设计动机
@@ -26,14 +44,14 @@
 
 ## 📋 目录
 
-- [变量与函数](#变量与函数)
-- [空安全](#空安全)
-- [data class 与状态建模](#data-class-与状态建模)
-- [sealed interface 与枚举状态](#sealed-interface-与枚举状态)
-- [扩展函数](#扩展函数)
-- [Lambda 与尾随 lambda](#lambda-与尾随-lambda)
-- [作用域函数速览](#作用域函数速览)
-- [练习与实践](#练习与实践)
+- [变量与函数](#-变量与函数)
+- [空安全](#️-空安全)
+- [data class 与状态建模](#-data-class-与状态建模)
+- [sealed interface 与枚举状态](#-sealed-interface-与枚举状态)
+- [扩展函数](#-扩展函数)
+- [Lambda 与尾随 lambda](#-lambda-与尾随-lambda)
+- [作用域函数速览](#-作用域函数速览)
+- [练习与实践](#-练习与实践)
 
 ---
 
@@ -223,3 +241,9 @@ val intent = Intent(context, DetailActivity::class.java).apply {
 - 📄 **[作用域函数](../reference/language-concepts/07-scope-functions.md)** - let/run/apply/also/with 选型表
 - 📄 **[Lambda 与高阶函数](../reference/language-concepts/08-lambdas-higher-order.md)** - 尾随 lambda 与带接收者 lambda 全解
 - 📄 **[Composable 与状态](./04-composables-state.md)** - 下一篇：把 Kotlin 语法用到 Compose 状态管理中
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../LEARNING_GUIDE.md) · [完整目录与版本](../README.md) · [通用术语](../../shared-resources/glossary.md)

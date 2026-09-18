@@ -6,6 +6,9 @@
 
 > **前置知识**: [内置模块导航表](./01-core-modules.md)
 
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
+
 ## 📚 文档元数据
 
 | 属性 | 内容 |
@@ -15,6 +18,8 @@
 | **难度** | ⭐ |
 | **标签** | `#node:test` `#assert` `#mock` `#测试` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ## 1. 定位
 
@@ -69,7 +74,7 @@ assert.fail("不应到达这里");
 
 ### 陷阱
 - ❌ `import assert from "node:assert"`（非 strict）做测试——`equal` 是 `==` 语义，`'1' == 1` 通过，假阴性温床
-- ✅ 一律 `node:assert/strict`；生产代码里的内部不变量校验才用普通 `node:assert`
+- ✅ 一律 `node:assert/strict`；生产代码的内部不变量也可以使用 strict 入口；不需要因此回退到宽松比较
 - `assert.deepEqual` 在 strict 下要求**原型一致**：`Object.create(null)` 与 `{}` 不相等
 
 ## 4. 钩子
@@ -112,7 +117,7 @@ it("重试在 10s 后触发", (t) => {
 });
 ```
 
-- 配套方法：`t.mock.timers.tick(ms)` 推进、`setInterval` 场景 `tickAll()`、恢复真实时间用 `t.mock.timers.reset()`（用例结束自动恢复）
+- 配套方法：`t.mock.timers.tick(ms)` 推进、需要运行已安排计时器时可查看 runAll() 的约束，没有 tickAll() 这一方法、恢复真实时间用 `t.mock.timers.reset()`（用例结束自动恢复）
 - `t.mock` 上还有 `t.mock.method()`（记录调用）、`t.mock.fn()`（替换实现）——模拟 spies 的内置版
 
 ## 6. 命令行
@@ -130,7 +135,33 @@ node --test --experimental-test-coverage # 覆盖率
 ```
 
 - **运行约定**：推荐在项目根目录直接 `node --test`（按默认模式发现），或显式给文件路径；把目录当位置参数传入的兼容性一般（实测有把目录当单目标运行而整体报错的情况），默认发现最稳
-- 测试文件即普通 ESM 脚本：`node sample.test.mjs` 也能跑（无 TAP 汇总），说明它与运行时零耦合
+- 测试文件即普通 ESM 脚本：node sample.test.mjs 也能触发测试执行并输出结果；node --test 还提供测试发现和隔离等运行器能力，两者不能视作完全相同
+
+<!-- full-library-explanation -->
+## 异步断言必须属于测试的完成条件
+
+前置是 Promise、异常与模块。忘记 await assert.rejects 或忘记返回被测 Promise，测试可能在真正的行为发生前结束。子测试也要等待；计时器、网络和文件夹具应登记清理，避免一个通过的测试留下工作干扰后续用例。并行测试修改进程环境或全局 mock 时尤其容易互相污染。
+
+完整测试保存为 boundary.test.mjs，运行 node --test boundary.test.mjs：
+
+```js
+import test from 'node:test';
+import assert from 'node:assert/strict';
+function parsePort(text) {
+  if (!/^\d+$/.test(text)) throw new Error('invalid port');
+  const value = Number(text);
+  if (value < 1 || value > 65535) throw new Error('invalid port');
+  return value;
+}
+test('port input boundaries', () => {
+  assert.equal(parsePort('3000'), 3000);
+  for (const input of ['', 'abc', '0', '65536']) {
+    assert.throws(() => parsePort(input), /invalid port/);
+  }
+});
+```
+
+验收为一条测试通过，且错误输入均被拒绝。练习：删除上限检查，65536 用例必须变红；这证明断言能发现契约被破坏。假时钟适合验证重试调度，但不能替代真实网络超时集成测试，微任务推进也要按照当前运行器 API 理解。
 
 ## 🔗 相关文档
 
@@ -142,3 +173,9 @@ node --test --experimental-test-coverage # 覆盖率
 ---
 
 *最后更新: 2026年9月 | 本条目为模块知识字典的一部分，概念完整解释以此处为单一事实来源*
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

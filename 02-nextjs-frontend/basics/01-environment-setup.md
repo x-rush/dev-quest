@@ -1,5 +1,18 @@
 # Next.js 16 开发环境搭建完整指南
 
+## 先理解，再动手
+
+先确认 Node、包管理器和工程目录，再创建应用。锁文件记录依赖解析结果，脚手架版本与最终依赖版本并不是同一个概念。
+
+**本节自测**：创建项目后记录启动命令、package.json 的 scripts 和锁文件，再改首页标题。
+
+<details>
+<summary>预期结果与参考思路（先尝试再展开）</summary>
+
+应能在浏览器看到新标题；仅看到安装成功还没有证明项目启动和热更新正常。
+
+</details>
+
 > **文档简介**: Next.js 16 开发环境企业级搭建指南，涵盖Node.js安装、IDE配置、开发工具、版本控制、调试环境等现代化开发环境
 
 > **目标读者**: 初学者和需要环境升级的开发者，希望搭建标准化Next.js开发环境的前端工程师
@@ -7,6 +20,9 @@
 > **前置知识**: 基础命令行操作、Git版本控制基础、JavaScript基础概念
 
 > **预计时长**: 2-3小时
+
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
 
 ## 📚 文档元数据
 
@@ -19,6 +35,8 @@
 | **更新日期** | `2026年9月` |
 | **作者** | Dev Quest Team |
 | **状态** | ✅ 已完成 |
+
+</details>
 
 ## 🎯 学习目标
 
@@ -707,35 +725,9 @@ npm ci
 
 ## 📊 开发最佳实践
 
-### 1. 代码组织
-- 使用`src`目录结构以获得更好的组织
-- 按功能/域对组件进行分组
-- 使用一致的命名约定
-- 保持组件小而专注
+环境搭好后应能从干净目录安装、检查、构建并运行一个最小页面。src 目录和按功能分组有助定位代码，但不自动保证可维护；先把页面入口、复用组件与服务端代码边界说明白。
 
-### 2. 版本控制
-- 使用语义化版本
-- 编写清晰、描述性的提交信息
-- 为新工作创建功能分支
-- 定期提交并逻辑分组
-
-### 3. 依赖管理
-- 定期更新依赖
-- 使用锁文件确保一致的构建
-- 监控安全漏洞
-- 优先选择特定版本而不是版本范围
-
-### 4. 性能优化
-- 使用Turbopack进行更快的开发构建
-- 启用TypeScript严格模式
-- 配置代码分割
-- 监控包大小
-
-### 5. 代码质量
-- 启用严格的TypeScript配置
-- 使用ESLint进行代码质量检查
-- 用Prettier格式化代码
-- 为关键功能编写单元测试
+版本控制保存可解释的改动与依赖锁文件，升级按兼容性和维护需求进行。TypeScript 严格模式检查类型，lint 检查已配置规则，格式化统一文本，它们不等于性能优化或运行时验证。构建速度与首屏性能分别测量，不把换构建器当作全部问题的解法。
 
 ## 🎯 快速入门检查清单
 
@@ -798,7 +790,7 @@ npm ci
 - 📄 **[相关的reference文档](../reference/language-concepts/04-javascript-modern.md)**: 快速参考现代JavaScript语法特性
 
 ### 参考章节
-- 📖 **[本模块其他章节]**: [创建第一个Next.js应用](./02-first-nextjs-app.md#项目创建流程) | [TypeScript集成](./03-typescript-integration.md#typescript项目配置)
+- 📖 **[本模块其他章节]**: [创建第一个Next.js应用](./02-first-nextjs-app.md#️-项目创建流程) | [TypeScript集成](./03-typescript-integration.md#️-typescript项目配置)
 - 📖 **[Knowledge Points快速参考]**: [开发工具配置](../reference/development-tools/04-debugging-tools.md) | [JavaScript现代语法](../reference/language-concepts/04-javascript-modern.md)
 
 ## 📝 总结
@@ -836,3 +828,8 @@ npm ci
 **文档状态**: ✅ 已完成
 **最后更新**: 2026年9月
 **版本**: v1.0.0
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../LEARNING_GUIDE.md) · [完整目录与版本](../README.md) · [通用术语](../../shared-resources/glossary.md)

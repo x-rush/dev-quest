@@ -1,10 +1,26 @@
 # 环境搭建 - Android Studio 与 Kotlin 开发环境
 
+## 先理解，再动手
+
+Android Studio、JDK、Gradle 和 Android SDK 分别负责编辑、运行构建工具、执行构建和提供平台 API。版本错误要先定位层次。
+
+**本节自测**：创建模板工程并运行到设备，记录首次成功构建的工具链。
+
+<details>
+<summary>预期结果与参考思路（先尝试再展开）</summary>
+
+同步成功和设备启动成功分别验收；不要用任意升级一个插件来解释所有构建错误。
+
+</details>
+
 > **文档简介**: 从零搭建 Android + Jetpack Compose 开发环境：安装 Android Studio、配置 JDK 与 Android SDK、创建模拟器，并验证整条 Gradle 构建链路可用
 >
 > **目标读者**: 准备进入 Android 原生开发的初学者，以及从 Go、Web 等其他技术栈转来的开发者
 >
 > **前置知识**: 任意一门语言的编程基础；无需 Android 开发经验
+
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
 
 ## 📚 文档元数据
 
@@ -16,6 +32,8 @@
 | **标签** | `#环境搭建` `#Android-Studio` `#JDK` `#模拟器` `#Gradle` |
 | **更新日期** | `2026年9月` |
 
+</details>
+
 ## 🎯 学习目标
 
 - ✅ 安装 Android Studio 并完成首次启动配置
@@ -26,13 +44,13 @@
 
 ## 📋 目录
 
-- [工具链总览](#工具链总览)
-- [安装 Android Studio](#安装-android-studio)
-- [配置 Android SDK](#配置-android-sdk)
-- [创建模拟器 AVD](#创建模拟器-avd)
-- [验证开发环境](#验证开发环境)
-- [常见问题](#常见问题)
-- [练习与实践](#练习与实践)
+- [工具链总览](#-工具链总览)
+- [安装 Android Studio](#️-安装-android-studio)
+- [配置 Android SDK](#-配置-android-sdk)
+- [创建模拟器 AVD](#-创建模拟器-avd)
+- [验证开发环境](#-验证开发环境)
+- [常见问题](#-常见问题)
+- [练习与实践](#-练习与实践)
 
 ---
 
@@ -177,3 +195,9 @@ emulator-5554   device
 - 📄 **[第一个项目：笔记应用](./08-first-project.md)** - 综合运用本模块基础知识的实战项目
 - 📖 **[Android Studio 下载页](https://developer.android.com/studio)** - 官方安装指南与系统要求
 - 📖 **[Manage AVDs](https://developer.android.com/studio/run/managing-avds)** - 模拟器官方文档
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../LEARNING_GUIDE.md) · [完整目录与版本](../README.md) · [通用术语](../../shared-resources/glossary.md)

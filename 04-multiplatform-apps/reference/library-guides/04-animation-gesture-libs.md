@@ -2,6 +2,9 @@
 
 > **难度**: ⭐⭐ | **前置**: 读过[动画教程](../../basics/07-advanced-features.md)更佳
 
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
+
 ## 📚 文档元数据
 
 | 属性 | 内容 |
@@ -11,6 +14,8 @@
 | **难度** | ⭐⭐ |
 | **标签** | `#Reanimated` `#Gesture Handler` `#worklet` `#共享值` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ## 📌 定义
 
@@ -81,7 +86,7 @@ function ParallaxHeader() {
 | 维度 | 内置 Animated | Reanimated |
 |------|--------------|------------|
 | 驱动线程 | `useNativeDriver: true` 时插值在原生线程，否则全在 JS 线程（每帧过通信通道） | worklet 常驻 UI 线程，每帧更新不过 React |
-| 手势/滚动联动 | 事件回调回到 JS 侧处理，跟手有限 | Gesture Handler 事件流直达 worklet，逐帧跟手 |
+| 手势/滚动联动 | 可用 Animated.event 与支持的原生驱动事件联动；复杂手势组合需评估 | Gesture Handler 事件流直达 worklet，逐帧跟手 |
 | 动画中断接力 | 中断后需手动衔接 | `withSpring` 等物理动画自动接管当前值 |
 | 典型场景 | 入场淡入、一次性过渡、简单循环 | 跟手抽屉、视差滚动、手势打断、复杂编排 |
 | 创建入口 | `new Animated.Value()` 或 Hook `useAnimatedValue` | `useSharedValue` |
@@ -89,7 +94,7 @@ function ParallaxHeader() {
 选型两条硬规则：
 
 1. **简单一次性动画用内置 Animated 足够**——记得始终给 `useNativeDriver: true`（仅支持非布局属性：transform/opacity 等），布局属性动画留给布局重排或换实现
-2. **跟手、滚动帧级联动、可中断动画一律 Reanimated**——内置 Animated 的事件通道延迟做不了逐帧反馈
+2. **复杂手势与动画编排可选 Reanimated**；内置 Animated 也支持原生驱动的滚动事件映射，不能说它完全不能逐帧联动
 
 **混用禁令**：同一节点不要同时挂两套动画驱动（如 `Animated.View` 又接 Reanimated style），驱动时序不可控；两套体系可以共存于**不同**组件节点。`Animated.ScrollView` 等内置滚动容器要与 Reanimated 的 `useAnimatedScrollHandler` 联动时，改用 Reanimated 导出的 `Animated.ScrollView`。
 
@@ -97,10 +102,19 @@ function ParallaxHeader() {
 
 - **worklet 内 setState / 读外部可变量**：闭包捕获的是快照，且每帧 setState 会击穿 React；跨线程传值用共享值与 `runOnJS`
 - **动画布局属性**：width/height/margin 触发重布局，掉帧；位移缩放用 `transform`
-- **滚动联动不用 scrollHandler**：`onScroll` 回调在 JS 线程，每帧过桥必卡；用 `useAnimatedScrollHandler`
+- **滚动联动不用 scrollHandler**：`onScroll` 回调在 JS 线程，逐帧 JS 工作可能成为瓶颈，需结合负载测量；用 `useAnimatedScrollHandler`
 - **`scrollEventThrottle` 拉满却换 JS 回调**：节流解决不了线程问题，先选对通道
 - **未适配新架构的动画库版本**：现行 RN 生态的动画/手势主流库仅支持新架构，鸿蒙端还需 RNOH 适配分支（见 [RNOH 字典](../language-concepts/05-harmonyos-rnoh-api.md)）
 - **把 Animated（内置）与 Reanimated 混挂同一节点**：两套驱动时序不可控，二选一
+
+<!-- full-library-explanation -->
+## 拖动中的临时值与确认后的业务值
+
+拖拽时每帧位置放共享值，松手后的最终位置才按业务需要通知 JS 并保存。若每帧都跨线程调用 React setter，仍会制造大量工作。worklet 不是任意后台线程，里面的大排序或 JSON 解析会挤占交互时间。
+
+练习：让卡片横向拖动并松手回弹，快速连续拖动、触发手势取消，再打开系统“减少动态效果”。验收：取消后状态可解释，不遗留无限动画；减少动态效果时给出较温和反馈；业务保存次数对应确认动作而不是屏幕帧数。测试前按所用 Reanimated/Gesture Handler 版本完成安装、插件和根容器配置。
+
+插值还应明确超出输入范围的行为：滚动超过 200 后不希望透明度继续外推时，使用当前 API 的 clamp 选项。动画视觉正确不代表触摸区域、无障碍焦点和页面布局也自动正确，需分别验证。
 
 ## 🔗 相关条目
 
@@ -110,3 +124,9 @@ function ParallaxHeader() {
 - 📄 [桥接与原生通信原理](../language-concepts/08-bridge-principles.md) — 为什么 UI 线程动画能绕过 JS
 
 *延伸: Reanimated 官方文档 "Fundamentals" · Gesture Handler 文档 "Gestures API"*
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

@@ -2,7 +2,10 @@
 
 ## 概述
 
-Python 第三方生态是它统治多领域的核心原因。本条目精选六个高频库，按"HTTP 客户端 / 数据处理 / 数据校验 / 命令行体验"分组，给出选型与核心 API。
+Python 第三方生态覆盖网络、数据处理与命令行等领域。本条目精选六个高频库，按"HTTP 客户端 / 数据处理 / 数据校验 / 命令行体验"分组，给出选型与核心 API。
+
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
 
 ## 📚 文档元数据
 
@@ -13,6 +16,8 @@ Python 第三方生态是它统治多领域的核心原因。本条目精选六�
 | **难度** | ⭐⭐ |
 | **标签** | `#requests` `#httpx` `#pandas` `#pydantic` `#typer` `#rich` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ---
 
@@ -36,6 +41,8 @@ import httpx, asyncio
 async def fetch_all(urls: list[str]) -> list[dict]:
     async with httpx.AsyncClient(timeout=10) as client:
         rs = await asyncio.gather(*(client.get(u) for u in urls))
+        for response in rs:
+            response.raise_for_status()
         return [r.json() for r in rs]
 ```
 
@@ -60,7 +67,7 @@ df.merge(users, on="uid", how="left")         # 类 SQL join
 df.to_parquet("out.parquet")                  # 列式输出
 ```
 
-**陷阱**: 链式赋值 `df[a][b] = x` 触发 SettingWithCopyWarning，用 `.loc[mask, col] = x`；逐行 `iterrows` 慢百倍，能用向量化就不用循环。
+**陷阱**: 链式赋值 `df[a][b] = x` 触发 SettingWithCopyWarning，用 `.loc[mask, col] = x`；逐行处理可能成为热点，优先比较列运算与现有循环的实际耗时，并核对两者的缺失值和类型语义。
 
 > 数据科学纵深（NumPy/Matplotlib/scikit-learn）属模块 advanced-topics 规划范畴，此处仅导航。
 
@@ -123,7 +130,10 @@ from rich.progress import track
 console = Console()
 
 console.print("[bold red]错误[/]: 文件不存在")     # 标记语法着色
-console.print_exception()                        # 带语法高亮的异常栈
+try:
+    raise ValueError("示例错误")
+except ValueError:
+    console.print_exception()                    # 在异常处理上下文中展示异常栈
 
 table = Table(title="模块状态")
 table.add_column("模块"); table.add_column("进度", justify="right")
@@ -134,7 +144,7 @@ for step in track(range(100), description="处理中:"):
     ...
 ```
 
-**要点**: rich 是 typer 的底层依赖（`typer[all]` 已含）；日志美化用 `rich.logging.RichHandler`；Jupyter 中表格自动渲染。
+**要点**: 使用 rich 的代码应明确声明 rich 依赖；日志美化用 `rich.logging.RichHandler`；Jupyter 中表格自动渲染。
 
 ---
 
@@ -160,16 +170,31 @@ for step in track(range(100), description="处理中:"):
 |------|------|------|
 | 同步 HTTP | requests | httpx |
 | 异步 HTTP | httpx | aiohttp |
-| 表格分析 | pandas | polars（更快） |
-| 数据校验 | pydantic v2 | msgspec（更快） |
+| 表格分析 | pandas | polars（按工作负载比较） |
+| 数据校验 | pydantic v2 | msgspec（核对功能与类型范围） |
 | CLI | typer | argparse（零依赖） |
 | 终端输出 | rich | — |
 | 重试 | tenacity | 手写装饰器（见[高级特性](../../basics/07-advanced-features.md)） |
 
 ---
 
+<!-- full-library-explanation -->
+## 先明确输入契约，再选择第三方库
+
+前置知识是安装依赖、JSON 和异常。HTTP 客户端负责连接、超时和响应；Pydantic 负责解析字段；pandas 负责表格变换。三者边界不同：收到 HTTP 200 不保证 JSON 形状正确，JSON 能解析也不保证金额和日期满足业务要求。
+
+练习使用本地数据 `[{"region": "east", "amount": "12.5"}, {"region": "east", "amount": "bad"}]`。先规定非法金额是拒绝整批、单独记录还是允许缺失，再实现转换和分组。验收不能只有总额，还要确认错误行有可追踪结果；静默删除错误行会让报表看起来正常却丢失信息。
+
+新增依赖时在项目里记录负责的问题、支持的解释器范围、测试入口和替代成本。HTTPX 与 requests 都可执行同步请求，pandas 与其他表格库也各有数据模型和兼容条件；没有脱离工作负载的“某库必然更快”。具体 API 以锁定版本的官方文档为准。
+
 ## 🔗 相关文档
 
 - 📄 **[标准库导航](./01-standard-library.md)** — 免安装的基础能力
 - 📄 **[FastAPI 核心速查](../framework-essentials/01-fastapi-essentials.md)** — pydantic 的最大舞台
 - 📄 **[综合项目：书签管理器](../../basics/08-first-project.md)** — typer/rich 完整实战
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

@@ -6,6 +6,9 @@
 >
 > **前置知识**: 基本语法；系统学习见 [现代 Java 特性](../../basics/07-modern-features.md)
 
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
+
 ## 📚 文档元数据
 
 | 属性 | 内容 |
@@ -15,6 +18,8 @@
 | **难度** | ⭐⭐ |
 | **标签** | `#集合` `#泛型` `#数据结构` `#PECS` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ## 🌳 体系总览
 
@@ -135,12 +140,9 @@ arr[0] = 42;                    // 运行时 ArrayStoreException
 
 ## ✅ 最佳实践 / ❌ 陷阱清单
 
-- ✅ 集合选型默认 `ArrayList`/`HashMap`/`ArrayDeque`，有排序/并发需求再换
-- ✅ 对外暴露不可变集合（`List.copyOf`）或返回副本
-- ✅ 泛型方法优先于带通配符的签名；通配符遵循 PECS
-- ❌ 不要用 `Stack`/`Vector`/`Hashtable`（遗留类）——用 `ArrayDeque`/`ArrayList`/`HashMap`
-- ❌ 不要在不可变工厂集合里放 null
-- ❌ 不要用原始类型 `List`（raw type）——丢失全部类型检查
+集合先按操作选择：顺序遍历用列表、按键查询用映射、两端操作用队列；需要排序或并发再选择对应实现。List.copyOf 产生不可修改的浅层集合且拒绝 null，内部元素若可变仍可被修改。
+
+泛型让编译器检查元素契约，生产者/消费者通配符用于表达可接受范围；原始类型会削弱静态保障。替换旧同步集合前检查线程安全需求，不能把 Vector 换 ArrayList 后仍假定拥有相同并发行为。
 
 ## 🔗 相关文档
 
@@ -148,3 +150,9 @@ arr[0] = 42;                    // 运行时 ArrayStoreException
 - 📄 **[并发 API 速查](./04-concurrency-api.md)** - ConcurrentHashMap 与并发集合
 - 📄 **[常见错误排查](../quick-references/02-troubleshooting.md)** - 泛型擦除与 CME 问题
 - 📄 **[标准库核心](../library-guides/01-standard-library.md)** - java.util 其他工具类
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

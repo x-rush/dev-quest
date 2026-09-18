@@ -6,6 +6,9 @@
 >
 > **前置知识**: Maven 依赖管理（见 [环境搭建](../../basics/01-environment-setup.md)）
 
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
+
 ## 📚 文档元数据
 
 | 属性 | 内容 |
@@ -15,6 +18,8 @@
 | **难度** | ⭐⭐ |
 | **标签** | `#Lombok` `#Jackson` `#JUnit6` `#Mockito` `#MapStruct` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ## 🪄 Lombok - 编译期样板消除
 
@@ -158,14 +163,18 @@ public interface BookMapper {
 
 ## ✅ 最佳实践 / ❌ 陷阱清单
 
-- ✅ 新代码 DTO 优先 record；Lombok 只服务可变类与 @Builder 场景
-- ✅ Boot 项目用注入的 JsonMapper（Jackson 3），不自建
-- ✅ 测试命名表达行为；断言优先 AssertJ
-- ❌ 不要 JPA 实体上 `@Data`
-- ❌ 不要用反射式映射库（ModelMapper）处理关键字段
+选择库前先说明它替代哪段工作，例如序列化、映射或断言。复用框架配置的 JSON 映射器可保持日期和模块设置一致，自建实例必须显式保持同样契约。
+
+JPA 实体上的自动生成 equals/hashCode/toString 可能遍历懒加载关联或依赖可变字段，应按实体身份设计。DTO 与实体之间的关键字段映射用测试验证，包括权限字段不可被客户端覆盖；手写或生成映射都不能免除这项验证。
 
 ## 🔗 相关文档
 
 - 📄 **[JPA 核心速查](../framework-essentials/02-jpa-essentials.md)** - 实体与 DTO 分离
 - 📄 **[Spring Boot 核心速查](../framework-essentials/01-spring-boot-essentials.md)** - Jackson 自动配置
 - 📄 **[Record/Sealed/模式匹配](../language-concepts/05-records-sealed-patterns.md)** - record 语义
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

@@ -1,10 +1,26 @@
 # 控制流程 - 条件、循环与模式匹配
 
+## 先理解，再动手
+
+控制流程先关注输入覆盖与退出条件。switch 表达式产生值，语句形式组织动作，模式匹配还受类型与空值规则约束。
+
+**本节自测**：实现状态文本到枚举的映射，测试正常值、未知值和 null。
+
+<details>
+<summary>预期结果与参考思路（先尝试再展开）</summary>
+
+三个输入有明确处理；不把 default 当作能自动处理所有空值场景的万能分支。
+
+</details>
+
 > **文档简介**: 复习条件与循环语法，掌握 switch 表达式的箭头语法与 yield，学会用 instanceof 与 switch 模式匹配替代冗长的类型判断
 >
 > **目标读者**: 写过旧版 switch/if-else 链、想升级到模式匹配写法的 Java 开发者
 >
 > **前置知识**: 已掌握[类、接口与 Record](./04-classes-records.md)
+
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
 
 ## 📚 文档元数据
 
@@ -15,6 +31,8 @@
 | **难度** | ⭐ |
 | **标签** | `#控制流` `#switch表达式` `#模式匹配` `#instanceof` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ## 🎯 学习目标
 
@@ -135,11 +153,9 @@ for (var _ : data) { count++; }            // Java 22+：未命名变量 _，明
 
 ## ✅ 最佳实践
 
-- ✅ 多分支值映射优先 switch 表达式，而非 if-else 链
-- ✅ 枚举/密封类型 switch 省略 default，让编译器检查穷举
-- ✅ null 值显式 `case null`，不要依赖 default 隐式吞掉
-- ❌ 避免 `when` 守卫中写副作用与复杂业务逻辑
-- ❌ 避免用 switch 模式匹配替代多态——先考虑虚方法
+用 switch 表达式表示从状态到结果的映射，能减少每个分支重复赋值；连续范围判断仍适合 if。对封闭枚举或 sealed 层级进行穷尽处理，有助于新增类型时发现遗漏。
+
+null 的处理遵循所用 switch 形式与 Java 版本，不能假定 default 自动接住。守卫应尽量只判断条件，避免在匹配过程中改变业务状态；将判断与执行拆开后分别测试边界。
 
 ## 🎯 练习与实践
 
@@ -158,3 +174,9 @@ for (var _ : data) { count++; }            // Java 22+：未命名变量 _，明
 - 📄 **[异常处理](./06-exceptions.md)** - 下一站：现代异常设计
 - 📄 **[Record/Sealed/模式匹配](../reference/language-concepts/05-records-sealed-patterns.md)** - 模式匹配完整语法
 - 📄 **[Java 关键字详解](../reference/language-concepts/01-java-keywords.md)** - switch/yield/when 条目
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../LEARNING_GUIDE.md) · [完整目录与版本](../README.md) · [通用术语](../../shared-resources/glossary.md)

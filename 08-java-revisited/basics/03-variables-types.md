@@ -1,10 +1,26 @@
 # 变量与类型 - 基本类型、var 与包装类型
 
+## 先理解，再动手
+
+基本类型保存数值等基础值，包装类型是对象并可为 null。var 是局部类型推断，不是动态类型。
+
+**本节自测**：给 Integer 设为 null 后尝试赋给 int，再对比正常值。
+
+<details>
+<summary>预期结果与参考思路（先尝试再展开）</summary>
+
+自动拆箱需要对象存在，null 会失败；编译期推断不会在运行时替你处理缺失值。
+
+</details>
+
 > **文档简介**: 复习 Java 8 种基本类型，掌握 var 局部类型推断的使用边界，避开包装类型 == 与自动拆箱的经典陷阱
 >
 > **目标读者**: 有旧版 Java 经验，需要厘清现代类型写法与历史陷阱的学习者
 >
 > **前置知识**: 已完成[第一个程序](./02-first-program.md)，能在 JShell 或工程中运行代码
+
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
 
 ## 📚 文档元数据
 
@@ -15,6 +31,8 @@
 | **难度** | ⭐ |
 | **标签** | `#变量` `#类型系统` `#var` `#自动装箱` `#文本块` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ## 🎯 学习目标
 
@@ -145,11 +163,9 @@ String json = """
 
 ## ✅ 最佳实践
 
-- ✅ 默认 `int`/`double`，范围不够再升级 `long`
-- ✅ 右侧类型明确时局部变量优先 `var`
-- ✅ 包装类型比较一律 `equals`，空值用 `getOrDefault`/`Optional` 防护
-- ❌ 不用 `float`/`double` 表示金额
-- ❌ 不给可空包装类型直接赋给基本类型变量（隐式拆箱风险）
+数值类型由范围和精度需求决定：计数可能超出 int，金额通常需要约定十进制精度与舍入。var 保留静态类型推断，右侧无法一眼看出含义时显式类型可能更易读。
+
+包装类型可能为 null，自动拆箱会因此失败；Objects.equals 等空值安全比较与对象自身 equals 的前提不同。Map.getOrDefault 也不把所有显式 null 值变成默认值。用缺键、存在且为 null、正常值三个输入检查边界。
 
 ## 🎯 练习与实践
 
@@ -167,3 +183,9 @@ String json = """
 - 📄 **[类、接口与 Record](./04-classes-records.md)** - 下一站：从字段类型走向类型设计
 - 📄 **[Java 关键字详解](../reference/language-concepts/01-java-keywords.md)** - var 关键字条目
 - 📄 **[常见错误排查](../reference/quick-references/02-troubleshooting.md)** - NPE 与装箱问题速查
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../LEARNING_GUIDE.md) · [完整目录与版本](../README.md) · [通用术语](../../shared-resources/glossary.md)

@@ -1,10 +1,21 @@
 # FastAPI 进阶 — 依赖注入、后台任务与中间件
 
+## 先看框架承担哪部分职责
+
+**FastAPI 进阶**：Depends 组织依赖生命周期，中间件包住请求，后台任务在响应后继续工作。进程内后台任务不是耐久队列。
+
+**最小练习与预期结果**：让需要清理的依赖在成功与异常请求后都释放；关键任务不能仅因响应已返回就当作完成。
+
+具体 API 与安装版本以[模块基线](../README.md)和本篇官方来源为准。先完成这条数据路径，再展开后面的高级配置；框架名称变化后，输入边界、状态归属和失败处理仍是需要理解的机制。
+
 > **文档简介**: 掌握 FastAPI 的三大进阶机制——依赖注入系统、后台任务与中间件，写出可组合、可测试的服务端代码
 >
 > **目标读者**: 已能编写基础路由，准备构建多模块服务的开发者
 >
 > **前置知识**: [FastAPI 入门](./01-fastapi-basics.md)、函数与闭包（[basics 04](../basics/04-functions-oop.md)）
+
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
 
 ## 📚 文档元数据
 
@@ -15,6 +26,8 @@
 | **难度** | ⭐⭐ |
 | **标签** | `#FastAPI` `#依赖注入` `#中间件` `#后台任务` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ## 🎯 学习目标
 
@@ -159,9 +172,9 @@ app = FastAPI(lifespan=lifespan)
 
 ## ✅ 最佳实践
 
-- 业务逻辑别写进端点：用依赖注入服务函数，保持端点薄（架构原理见[项目分层与领域建模](../advanced-topics/architecture/01-project-architecture.md)）
-- 全局异常处理器只兜底未知异常，业务错误统一走 `HTTPException`
-- 中间件保持轻量：重逻辑交给依赖，避免每个请求的额外开销
+依赖注入把数据库会话、身份或服务交给端点使用，便于替换与测试；业务层可抛领域异常，由 HTTP 边界统一映射，不必把所有业务代码绑定到 HTTPException。
+
+中间件适合请求级通用工作，依赖适合按路由需求装配；把重计算移到依赖并不会让它免费。验证未知错误、安全响应和资源清理路径，确保测试替换只发生在预期边界。
 
 ## ❓ 常见问题
 
@@ -181,3 +194,9 @@ app = FastAPI(lifespan=lifespan)
 - 📄 **[Mock 测试](../testing/03-mocking-testing.md)** — 依赖替换在测试中的应用
 - 🎓 **[项目分层与领域建模](../advanced-topics/architecture/01-project-architecture.md)** — 依赖注入的架构价值
 - 🚀 **[生产级 FastAPI 应用](../projects/04-production-fastapi-app.md)** — 本篇机制的综合落地
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../LEARNING_GUIDE.md) · [完整目录与版本](../README.md) · [通用术语](../../shared-resources/glossary.md)

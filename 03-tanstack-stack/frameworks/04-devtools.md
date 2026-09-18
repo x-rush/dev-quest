@@ -1,10 +1,21 @@
 # 开发工具链：TanStack Devtools 与 ESLint Plugin Query
 
+## 先看框架承担哪部分职责
+
+**开发工具**：Devtools 展示的是框架内部状态，需要用一次具体用户操作去对应它，而不是凭颜色判断业务正确。
+
+**最小练习与预期结果**：发起一次失败请求，记录键、状态、重试次数与界面；修复后确认状态恢复，而非只清空报错。
+
+具体 API 与安装版本以[模块基线](../README.md)和本篇官方来源为准。先完成这条数据路径，再展开后面的高级配置；框架名称变化后，输入边界、状态归属和失败处理仍是需要理解的机制。
+
 > **文档简介**: 配置 Query/Router 双 Devtools 面板与 @tanstack/eslint-plugin-query，把缓存调试和 API 误用检查变成日常开发的自动兜底。
 >
 > **目标读者**: 已接入 TanStack Query，希望提升调试效率与代码质量的开发者
 >
 > **前置知识**: [Query 基础](./01-tanstack-query-basics.md)、[环境搭建](../basics/01-environment-setup.md)
+
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
 
 ## 📚 文档元数据
 
@@ -15,6 +26,8 @@
 | **难度** | ⭐ |
 | **标签** | `#devtools` `#eslint` `#调试` `#工程化` |
 | **更新日期** | 2026年9月 |
+
+</details>
 
 ## 🎯 完成后你将能够
 
@@ -137,10 +150,9 @@ export default [
 
 ## 🎨 最佳实践速查
 
-- ✅ Devtools 只装 devDependencies，组件挂载处做 PROD 判断
-- ✅ CI 中把 ESLint plugin 作为独立 lint 步骤跑，红线不进主干
-- ❌ 不要在测试环境打开 Devtools 面板（污染 DOM 快照与 user-event 定位）
-- ❌ 不要只靠"刷新页面好像就好了"定位缓存问题——先用 Query Explorer 重现时序
+调试缓存时先记录查询键、数据更新时间和触发请求的操作，再用 Devtools 观察状态变化。例如“返回页面重复请求”可能是数据已过期，不一定是缓存没有生效。保留可重复步骤比反复刷新更能定位原因。
+
+开发工具是否进入生产包由导入方式和构建流程共同决定，写进 devDependencies 不自动保证不会打包。检查生产产物及网络请求；测试中按需关闭调试面板，避免额外节点干扰定位。CI 的 lint 负责检查已配置规则，不能证明缓存语义正确。
 
 ---
 
@@ -151,3 +163,9 @@ export default [
 - 📄 **[五库语法速查表](../reference/quick-references/01-syntax-cheatsheet.md)** - 写码时随手对照
 - 📄 **[单元测试](../testing/01-unit-testing.md)** - Devtools 之外的第二双眼睛
 - 📄 **[CI/CD 流水线](../deployment/01-ci-cd-pipelines.md)** - 把 lint/测试固化到流水线
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../LEARNING_GUIDE.md) · [完整目录与版本](../README.md) · [通用术语](../../shared-resources/glossary.md)

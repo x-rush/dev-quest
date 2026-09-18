@@ -6,6 +6,9 @@
 >
 > **前置知识**: 已了解 [EAS Build](../../deployment/01-eas-build.md)（环境变量体系）与 [OTA 更新](../../deployment/03-ota-updates-observability.md)
 
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
+
 ## 📚 文档元数据
 
 | 属性 | 内容 |
@@ -15,6 +18,8 @@
 | **难度** | ⭐⭐⭐ |
 | **标签** | `#安全` `#SecureStore` `#网络安全` `#密钥保护` `#供应链` |
 | **更新日期** | 2026年9月 |
+
+</details>
 
 ## 🎯 学习目标
 
@@ -30,20 +35,21 @@
 | 数据级别 | 示例 | 正确介质 |
 |----------|------|---------|
 | 非敏感 | 主题、列表缓存 | MMKV / AsyncStorage（明文可，见[库指南](../../reference/library-guides/02-native-and-device-libs.md)） |
-| 敏感 | access token、个人资料 | `expo-secure-store`（iOS Keychain / Android Keystore 硬件加密） |
+| 敏感 | access token、个人资料 | `expo-secure-store`（iOS Keychain / Android 由 Keystore 密钥保护的加密存储） |
 | 绝不落盘 | 长期有效凭证、支付凭据 | 服务端持有，客户端只持短期 token |
 
 ```ts
 // expo-secure-store：系统级加密存储
 import * as SecureStore from 'expo-secure-store';
 
-await SecureStore.setItemAsync('access_token', token, {
+const issuedToken = '替换为登录服务返回的短期令牌';
+await SecureStore.setItemAsync('access_token', issuedToken, {
   keychainAccessible: SecureStore.WHEN_UNLOCKED_THIS_DEVICE_ONLY, // 不随云备份迁移
 });
 const token = await SecureStore.getItemAsync('access_token');
 ```
 
-**MMKV 与 SecureStore 分工**（MMKV 本身不加密）：速度敏感的非敏感数据走 MMKV；凭证一律 SecureStore；混合场景用"SecureStore 存加密 key + MMKV 存密文"组合。
+**MMKV 与 SecureStore 分工**（MMKV 可配置加密，默认存储与密钥管理仍需明确）：速度敏感的非敏感数据走 MMKV；凭证一律 SecureStore；混合场景用"SecureStore 存加密 key + MMKV 存密文"组合。
 
 ## 🌐 网络安全
 
@@ -97,7 +103,7 @@ export default function OAuthCallback() {
 }
 ```
 
-**WebView 红线**：只加载白名单域名；禁用 `javaScriptEnabled` 除非必需；不要通过 URL 注入 token（用 postMessage/安全桥接）。
+**WebView 红线**：只加载白名单域名；禁用 `javaScriptEnabled` 除非必需；不要通过 URL 注入 token；消息桥接也需验证来源、消息类型与权限。
 
 ## 📡 OTA 与供应链
 
@@ -116,7 +122,7 @@ export default function OAuthCallback() {
 ## ❓ 常见问题
 
 **Q1: SecureStore 有大小限制吗？**
-A: Android Keystore 单条约 2KB（大值需自加密后分块），iOS Keychain 无硬限但保持小体积是好习惯。
+A: 不要把 2KB 写成 Android Keystore 的通用限制。底层平台可能拒绝大值，某些历史 iOS 版本有约 2KB 限制；只保存小型凭证并处理失败，大对象按其存储需求另行设计。
 
 **Q2: 证书锁定导致 App 全量请求失败？**
 A: 典型的"锁过期"事故：pin 备份证书 + 服务端轮换提前发版；个人项目建议只在支付等链路使用。
@@ -126,6 +132,17 @@ A: 构建后解包检查（unzip aab / strings binary），配合 CI 跑 gitleak
 
 ---
 
+<!-- full-library-explanation -->
+## 用一次账户切换检查数据边界
+
+登录态不仅是一枚 token。页面缓存、查询缓存、磁盘缓存、通知中的内容和后台请求，都可能携带上一个账户的数据。退出登录时应停止或隔离旧请求、清除该账户的缓存与凭证，并让服务端按协议撤销会话。仅跳回登录页仍可能在下次登录时展示旧数据。
+
+SecureStore 用于少量秘密值，不是个人资料数据库。Android 的值由 Keystore 相关密钥保护，不能据此保证每台设备都采用硬件安全存储。API 调用要处理原生错误、凭证缺失和认证失效。[官方存储说明](https://docs.expo.dev/versions/latest/sdk/securestore/)也提醒不要把它当作不可替代数据的唯一副本。
+
+练习：A 登录并加载个人信息，触发一个延迟请求，退出后用 B 登录，再让 A 的旧请求完成。验收：B 页面没有出现 A 数据；日志没有 token；服务端不因客户端传入 A 的 ID 就返回其记录。另测卸载重装与生物识别设置变化，记录凭证是否仍可读及如何恢复登录。
+
+WebView 的 postMessage 不是自动安全通道：还要限制页面来源、导航与消息结构，避免把高权限操作直接暴露给任意网页。环境变量是否加 PUBLIC 前缀也不能证明秘密不会进包；判断标准是它最终是否被编译进客户端产物。
+
 ## 🔗 相关文档
 
 - 📖 [原生与设备能力库指南](../../reference/library-guides/02-native-and-device-libs.md) — 存储类库对比与权限说明
@@ -134,3 +151,9 @@ A: 构建后解包检查（unzip aab / strings binary），配合 CI 跑 gitleak
 - 📄 [OTA 更新与可观测性](../../deployment/03-ota-updates-observability.md) — OTA 通道与商店边界
 - 🚀 [生产级移动应用](../../projects/04-production-mobile-app.md) — 安全项在生产清单中的位置
 - 🎓 [新架构解析](../architecture/01-new-architecture.md) — Codegen/规格文件可审计性的机制背景
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

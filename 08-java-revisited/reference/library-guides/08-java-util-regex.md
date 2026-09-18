@@ -6,6 +6,9 @@
 >
 > **前置知识**: String 正则方法入口见 [字符串不可变语义](../language-concepts/07-string-immutability-pool.md)
 
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
+
 ## 📚 文档元数据
 
 | 属性 | 内容 |
@@ -16,11 +19,13 @@
 | **标签** | `#正则` `#Pattern` `#Matcher` `#标准库` |
 | **更新日期** | `2026年9月` |
 
+</details>
+
 ## 📌 定义
 
 `java.util.regex` 提供两阶段 API：`Pattern` 是**编译后的正则表达式**（线程安全、可复用），`Matcher` 是 Pattern 对具体输入序列的**匹配引擎**（有状态，不可跨线程共享）。
 
-> 💡 本文行为断言均在本机 JDK 21（javac 21.0.12.1）下编译运行验证。
+> 示例给出预期行为与规范依据。本轮环境未提供 Java 编译器，未复现历史运行记录；请在项目约定 JDK 上编译验证。
 
 ## 📖 语法 / 签名
 
@@ -34,13 +39,13 @@ while (m.find()) {
 }
 ```
 
-### 三种匹配语义（实测）
+### 三种匹配语义（预期）
 
 | 方法 | 语义 | `Pattern "\\d{4}-\\d{2}"` 对 `id=2026-09` |
 |------|------|------|
-| `matches()` | **整个**输入序列匹配 | false |
-| `lookingAt()` | 从**开头**前缀匹配（不要求到尾，但必须从 index 0 起） | false（前缀 `id=` 不匹配；对 `2026-09x` 为 true，实测） |
-| `find()` | 输入序列中**任意位置**查找，可迭代多次 | `"id=2026-09 and 2025-12"` 迭代 2 次（实测） |
+| `matches()` | **整个当前 region** 匹配 | false |
+| `lookingAt()` | 从**当前 region 开头**匹配（默认 region 为全部输入） | false（前缀 `id=` 不匹配；对 `2026-09x` 为 true，预期） |
+| `find()` | 输入序列中**任意位置**查找，可迭代多次 | `"id=2026-09 and 2025-12"` 迭代 2 次（预期） |
 
 ### 分组
 
@@ -49,11 +54,11 @@ Pattern date = Pattern.compile("(?<year>\\d{4})-(?<month>\\d{2})-(?<day>\\d{2})"
 Matcher m = date.matcher("发布于 2026-09-14");
 m.find();
 m.group();            // 整个匹配（= group(0)）
-m.group("year");      // 2026（命名分组，实测）
+m.group("year");      // 2026（命名分组，预期）
 m.group(2);           // 09（编号分组，从 1 起）
 
-"2026-09-14".replaceAll("(\\d{4})-(\\d{2})-(\\d{2})", "$3/$2/$1");  // 14/09/2026（实测）
-date.matcher("2026-09-14").replaceAll("${day}/${month}");           // 14/09（实测）
+"2026-09-14".replaceAll("(\\d{4})-(\\d{2})-(\\d{2})", "$3/$2/$1");  // 14/09/2026（预期）
+date.matcher("2026-09-14").replaceAll("${day}/${month}");           // 14/09（预期）
 ```
 
 ### 常用语法速查
@@ -63,15 +68,15 @@ date.matcher("2026-09-14").replaceAll("${day}/${month}");           // 14/09（�
 | `\d` `\w` `\s` | 数字 / 单词字符 / 空白（大写取反；Java 字符串里写 `\\d`） |
 | `.` | 任意字符（不含换行；`DOTALL` 下含） |
 | `*` `+` `?` `{n,m}` | 量词：≥0 / ≥1 / 0或1 / n 到 m 次 |
-| 量词后缀 `?` | 惰性：`<.+?>` 对 `<a><b>` 取 `<a>`，贪婪 `<.+>` 吃到 `<a><b>`（实测） |
-| `^` `$` | 行首行尾（`MULTILINE` 下对每行生效，实测） |
+| 量词后缀 `?` | 惰性：`<.+?>` 对 `<a><b>` 取 `<a>`，贪婪 `<.+>` 吃到 `<a><b>`（预期） |
+| `^` `$` | 行首行尾（`MULTILINE` 下对每行生效，预期） |
 | `[abc]` `[a-z]` `[^a]` | 字符类 / 范围 / 取反 |
 | `( )` / `(?: )` | 分组捕获 / 分组不捕获 |
 | `(?=)` `(?!)` | 环视：肯定/否定前瞻 |
 | `\|` | 或 |
 | `(?i)` | 内嵌标志（等价 `CASE_INSENSITIVE`） |
 
-### 标志位（实测）
+### 标志位（预期）
 
 ```java
 Pattern.compile("java", Pattern.CASE_INSENSITIVE).matcher("JAVA").matches(); // true
@@ -87,12 +92,12 @@ import java.util.regex.Pattern;
 
 public class RegexDemo {
     public static void main(String[] args) {
-        // 字面量切分：正则元字符要转义或 quote（实测）
+        // 字面量切分：正则元字符要转义或 quote（预期）
         System.out.println("a.b".split(".").length);              // 0！. 匹配一切
         System.out.println("a.b".split("\\.").length);            // 2
         System.out.println("a.b".split(Pattern.quote(".")).length); // 2
 
-        // 替换中的 $ 与 \ 是特殊字符（实测）
+        // 替换中的 $ 与 \ 是特殊字符（预期）
         System.out.println("a$b".replaceAll("a", Matcher.quoteReplacement("$"))); // $$b（"a"→"$" 后拼上原串的 "$b"）
     }
 }
@@ -100,7 +105,7 @@ public class RegexDemo {
 
 ### String.matches 与 Pattern 的关系
 
-`String.matches/replaceAll/split` **每次调用都会重新 `Pattern.compile`**。实测：同一正则执行 10 万次，`String.matches` 约 79ms，预编译 `Pattern` 约 15ms（约 5 倍差距，数值随机器波动）。语义完全等价：
+String 的正则便捷方法按给定表达式执行匹配；反复使用复杂模式时可显式预编译以复用。split 在部分简单分隔符上可能有快速路径，不应断言所有调用都编译 Pattern，也不应引用未附基准程序的固定倍数。matches 的语义示例：
 
 ```java
 "hello".matches("[a-z]+");          // 全串匹配，语义 = Pattern.matches("[a-z]+", "hello")
@@ -108,16 +113,25 @@ public class RegexDemo {
 
 ## ⚠️ 常见陷阱
 
-- ❌ **`String.matches` 当"包含"用**：它是**全串**匹配（实测 `"id=2026-09"` 对 `"\\d{4}-\\d{2}"` 为 false）。
+- ❌ **`String.matches` 当"包含"用**：它是**全串**匹配（预期 `"id=2026-09"` 对 `"\\d{4}-\\d{2}"` 为 false）。
   ✅ 包含判断用 `Pattern.compile(x).matcher(s).find()`。
-- ❌ **循环里调 `String.matches/split/replaceAll`**：每次重新编译 Pattern（实测 5 倍耗时差）。
+- ❌ **循环里调 `String.matches/split/replaceAll`**：可能反复承担模式处理成本，具体开销依 API、表达式及 JDK 而定。
   ✅ 循环外 `Pattern.compile` 一次，循环内复用。
-- ❌ **`split` 直接传标点**：`.` `|` 等是元字符，`"a.b".split(".")` 得到空数组（实测）。
+- ❌ **`split` 直接传标点**：`.` `|` 等是元字符，`"a.b".split(".")` 得到空数组（预期）。
   ✅ `split("\\.")` 或 `split(Pattern.quote("."))`。
-- ❌ **`replaceAll` 替换串里写裸 `$` 或 `\`**：被当分组引用/转义解析（实测裸 `$` 抛 `IllegalArgumentException: Illegal group reference: group index is missing`；而 `$N` 引用不存在的分组才抛 `IndexOutOfBoundsException: No group N`）。
+- ❌ **`replaceAll` 替换串里写裸 `$` 或 `\`**：被当分组引用/转义解析（预期裸 `$` 抛 `IllegalArgumentException: Illegal group reference: group index is missing`；而 `$N` 引用不存在的分组才抛 `IndexOutOfBoundsException: No group N`）。
   ✅ 用户输入作替换串时包 `Matcher.quoteReplacement(...)`；模式串用 `Pattern.quote(...)`。
 - ❌ **Matcher 跨线程共享**：内部有游标状态。
   ✅ Pattern 共享、每线程各自 `pattern.matcher(input)`。
+
+<!-- full-library-explanation -->
+## 模式文本与替换文本使用不同的转义规则
+
+Java 字符串先由语言解析，之后才交给正则引擎，因此源码中的 "\\d" 才向正则传递一个反斜杠加 d。Pattern.quote 把外部输入当作模式中的字面内容；Matcher.quoteReplacement 处理替换位置的美元符号和反斜杠，二者不能互换。只做普通文本替换时直接用 String.replace 更清楚。
+
+Matcher 会记住游标，只有成功匹配后才能读取 group。matches 检查整个当前 region，lookingAt 检查 region 前缀，find 向后寻找；设置 region 后并不总从原字符串下标 0 开始。默认 split 丢弃尾部空项，解析有固定列数的数据时可用负 limit 保留它们，但 CSV 引号规则仍需要专门解析器。
+
+**练习**：对 "a,b," 比较 split(",") 与 split(",", -1) 的长度，预期为 2 和 3；把用户输入 "$5" 分别作为裸替换串和 quoteReplacement 后的替换串，解释为何结果不同。对不可信长文本限制输入长度，并用失败匹配负载检查回溯成本；预编译仅减少编译工作，不会修复灾难性回溯。
 
 ## 🔗 相关条目
 
@@ -129,3 +143,9 @@ public class RegexDemo {
 ---
 
 *最后更新: 2026年9月 | 本条目为模块知识字典的一部分，概念完整解释以此处为单一事实来源*
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

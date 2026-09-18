@@ -2,6 +2,9 @@
 
 > **难度**: ⭐⭐ | **前置**: 理解持久化在状态分层中的位置（[07-state-management](../language-concepts/07-state-management.md)）
 
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
+
 ## 📚 文档元数据
 
 | 属性 | 内容 |
@@ -12,13 +15,15 @@
 | **标签** | `#AsyncStorage` `#MMKV` `#SecureStore` `#SQLite` `#文件系统` |
 | **更新日期** | `2026年9月` |
 
+</details>
+
 ## 📌 定义
 
 持久化按"数据形状 + 安全要求"选载体，四类场景各归其位：
 
 | 场景 | 数据形状 | 首选载体 | 理由 |
 |------|---------|---------|------|
-| 高频读写的小状态 | 键值，同步可读 | **MMKV** | 内存映射 + 同步 API，读写远快于异步键值存储 |
+| 高频读写的小状态 | 键值，同步可读 | **MMKV** | 内存映射 + 同步 API，适合频繁读取小型键值，需测量实际序列化和调用成本 |
 | token / 密钥等敏感值 | 小且必须加密 | **expo-secure-store** | 走系统安全区（Keychain / Keystore），加密落盘 |
 | 结构化查询数据 | 关系型、需索引/事务 | **expo-sqlite** | 真正的 SQL，支持索引、事务与扩展 |
 | 大文件与文档 | 二进制/媒体 | **expo-file-system** | 文件粒度读写、目录操作、资产访问 |
@@ -74,12 +79,21 @@ export const credentials = {
 
 ## ⚠️ 常见陷阱
 
-- **明文存 token**：键值存储（含 MMKV/AsyncStorage）不加密，敏感值一律 SecureStore
+- **明文存 token**：AsyncStorage 不提供秘密存储保证；MMKV 可配置加密，但密钥管理需要单独设计，敏感值一律 SecureStore
 - **AsyncStorage 承担高频同步读**：API 是异步的，启动串行 await 多个 key 会拖慢首屏；高频路径换 MMKV
 - **SQLite 当键值用**：单表 KV 不如键值存储直接；SQLite 的价值在索引、事务与复杂查询
 - **大 JSON 整块读写**：列表数据整包序列化导致读写放大；改 SQLite 行级存储或分片键
 - **存储与状态不同步**：持久化是"快照投影"，重启后必须有一致的 rehydrate 路径（配合 store 的 persist 中间件）
 - **忽略鸿蒙端适配**：三方原生存储库需确认 RNOH 适配版本，见 [RNOH 字典](../language-concepts/05-harmonyos-rnoh-api.md)
+
+<!-- full-library-explanation -->
+## 存下数据之后还要能升级与恢复
+
+键值中的 JSON 应带版本，并在读取时检查结构；SQLite 的表结构变化需要迁移。新版本把 `done: boolean` 改成状态枚举后，旧文件不会自动变成新格式。缓存可删除重建，用户尚未同步的笔记通常不可丢弃，这决定了失败处理方式。
+
+SQLite 参数绑定防止值被当作 SQL 代码，但 LIKE 模式中的 `%` 与 `_` 仍有通配语义；搜索需求若是字面量匹配，需单独处理模式转义。TypeScript 的查询结果泛型也不校验磁盘中每一行的真实类型。
+
+练习：写入版本 1 的设置，添加版本 2 字段和迁移函数，再输入损坏 JSON。验收：可恢复设置用默认值并报告恢复；不可替代数据保留原副本且提示修复。模拟磁盘失败时，不应显示“已保存”。同步 API 仍可能阻塞调用线程，不应循环读写大对象。
 
 ## 🔗 相关条目
 
@@ -89,3 +103,9 @@ export const credentials = {
 - 📄 [Expo 要点](../framework-essentials/01-expo-essentials.md) — expo-* 模块总览
 
 *延伸: expo-secure-store / expo-sqlite / expo-file-system 官方 API 文档 · MMKV README*
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

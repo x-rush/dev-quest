@@ -1,7 +1,18 @@
 # Go语言25个关键字详解
 
+## 不要把关键字、内置函数与标准库混为一谈
+
+前置：[首个 Go 程序](../../basics/02-first-program.md)。func、return、if 是关键字，len、append 是预声明的内置函数，fmt.Println 是需要导入 fmt 包才能访问的函数。它们在代码里都很常见，但扩展和命名规则不同。
+
+先按职责阅读：var/const/type 声明数据，func/return 描述调用边界，if/switch/for 组织流程，go/chan/select 描述并发协作，defer 安排当前函数返回前的清理。defer 的参数在登记时求值，函数调用在退出时执行；把这两个时间点分开，才能预测输出。
+
+自测：在 main 中令 x 为 1，执行 `defer fmt.Println(x)`，再令 x 为 2 并立即打印 x。预期先 2 后 1。将 defer 改成闭包读取 x，退出时才读取，因此结果会不同。完整语法逐项查下文，[官方关键字集合](https://go.dev/ref/spec#Keywords)用于核对覆盖范围。
+
 ## 概述
 Go语言共有25个关键字，这些关键字都是预定义的保留字，不能用作标识符（变量名、函数名等）。
+
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
 
 ## 📚 文档元数据
 
@@ -14,6 +25,8 @@ Go语言共有25个关键字，这些关键字都是预定义的保留字，不�
 | **更新日期** | `2026年9月` |
 | **作者** | Dev Quest Team |
 | **状态** | ✅ 已完成 |
+
+</details>
 
 ## 1. var - 变量声明
 
@@ -1593,3 +1606,8 @@ Go语言的25个关键字可以分为以下几类：
 4. **数据类型**: `map`, `range`
 
 这些关键字构成了Go语言的核心语法，掌握它们的使用方法对于成为Go语言开发者至关重要。
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

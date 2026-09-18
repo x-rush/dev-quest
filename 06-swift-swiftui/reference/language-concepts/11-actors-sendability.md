@@ -6,6 +6,9 @@
 >
 > **前置知识**: 建议先学 [basics/07-concurrency-async-await.md](../../basics/07-concurrency-async-await.md)
 
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
+
 ## 📚 文档元数据
 
 | 属性 | 内容 |
@@ -16,11 +19,13 @@
 | **标签** | `#actor` `#Sendable` `#MainActor` `#隔离` `#数据竞争` |
 | **更新日期** | `2026年9月` |
 
+</details>
+
 ---
 
 ## 📌 定义
 
-**actor** 是一种引用类型，它把自己的可变状态圈进一个**串行执行域**：同一时刻只有一个任务能访问其状态，外部访问必须 `await` 排队。**Sendable** 则标记"可以安全跨隔离域传递"的类型。两者配合，把数据竞争从运行时事故变成编译期错误。
+**actor** 是一种引用类型，它把自己的可变状态圈进一个**串行执行域**：同一时刻只有一个任务能访问其状态，跨隔离域访问隔离成员通常需要 await；nonisolated 成员等有不同规则。**Sendable** 则标记"可以安全跨隔离域传递"的类型。两者配合，把数据竞争从运行时事故变成编译期错误。
 
 严格并发检查在 Swift 6 **语言模式**下默认开启（本模块基线 6.3）：所有跨隔离域的引用都会被编译器审查。注意编译器的默认语言模式仍是 Swift 5，显式切换到 Swift 6 模式（`-swift-version 6`）后才默认获得严格并发。
 
@@ -108,8 +113,17 @@ actor DraftStore {
 | 后台任务直接改 UI 状态 | 数据竞争，编译器会拦 | 模型标 `@MainActor`，或在 `MainActor.run` 中更新 |
 | `@unchecked Sendable` 滥用 | 绕过检查，问题后移 | 只在用锁/队列实现真正线程安全时使用 |
 | 全局可变 `var` | 严格并发下报"shared mutable state" | 收进 actor、标注 @MainActor，或改为参数传递 |
-| 在 actor 里执行长阻塞操作 | 串行域被堵死，其他 await 全部排队 | 阻塞工作移交 Task.detached 或专用执行器 |
+| 在 actor 里执行长阻塞操作 | 串行域被堵死，其他 await 全部排队 | 优先采用异步 API；确需阻塞调用时使用受控执行资源，不能把 detached 当作通用阻塞池 |
 | 误以为 actor 等于线程 | actor 是隔离域不是线程 | 只需关心"谁能访问什么"，调度交给运行时 |
+
+<!-- full-library-explanation -->
+## await 之后重新检查假设
+
+actor 防止同一隔离状态被并发无序读写，但方法在 await 挂起期间可能让其他任务进入。若先检查余额、await 一个服务、再扣款，余额可能已被另一任务改变；这属于业务竞态，不会因为使用 actor 自动消失。
+
+练习：两个任务同时预订最后一张票，检查与扣减之间放一个可控挂起点。验收：只能一个成功；可以在不挂起的隔离代码段完成本地检查与预留，失败后按协议释放，服务端最终仍负责权威一致性。
+
+Sendable 不是“复制后就安全”的别名：包含普通可变 class 的 struct 仍可能不满足要求。Task.detached 不自动获得父任务取消与隔离，也不能把阻塞 I/O 变成非阻塞；需给阻塞库设计有界的执行策略。编译器诊断还取决于 Swift 语言模式、默认隔离和所用 SDK，记录这些设置再比较示例。
 
 ## 🔗 相关条目
 
@@ -117,3 +131,9 @@ actor DraftStore {
 - 📄 [06-closures.md](./06-closures.md) — 闭包捕获与 Sendable 的交集
 - 📄 [10-value-types-arc.md](./10-value-types-arc.md) — 值类型天然 Sendable 的原因
 - 📄 [advanced-topics/performance/02-concurrency-optimization.md](../../advanced-topics/performance/02-concurrency-optimization.md) — 并发深度专题
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

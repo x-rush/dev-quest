@@ -1,10 +1,26 @@
 # 变量与类型 — 动态类型、基本类型与 f-string
 
+## 先理解，再动手
+
+赋值把名字绑定到对象，两个名字可以指向同一个列表。不可变值的重新绑定与可变对象的原地修改需要分开理解。
+
+**本节自测**：a=[1]，b=a；修改 b，再令 b 指向新列表，观察 a。
+
+<details>
+<summary>预期结果与参考思路（先尝试再展开）</summary>
+
+append 会影响共享列表；重新绑定 b 不会把 a 一起改成新列表。
+
+</details>
+
 > **文档简介**: 掌握 Python 动态类型模型与六种基本类型，学会用类型注解约束变量、用 f-string 格式化输出
 >
 > **目标读者**: 已能运行脚本、想理解 Python 数据模型的开发者
 >
 > **前置知识**: 完成[第一个脚本](./02-first-script.md)，理解变量赋值与函数定义
+
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
 
 ## 📚 文档元数据
 
@@ -15,6 +31,8 @@
 | **难度** | ⭐ |
 | **标签** | `#动态类型` `#基本类型` `#f-string` `#类型注解` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ## 🎯 学习目标
 
@@ -185,12 +203,9 @@ if name:             # 同时排除 None 和 ""
 
 ## ✅ 最佳实践
 
-- ✅ **公共函数必写类型注解**，内部变量酌情省略
-- ✅ **f-string 统一格式化**，禁用 `%` 与 `.format()` 混用
-- ✅ **判空用真值语义**，`x == None` 改为 `x is None`
-- ❌ **避免**：依赖 `bool` 是 `int` 子类的副作用做算术
-- ❌ **避免**：对浮点数用 `==` 比较，改用 `math.isclose(a, b)`
-- 💡 **技巧**：`type(x)` 查确切类型，`isinstance(x, int)` 做类型判断（兼容子类）
+类型注解描述预期契约，运行时仍可收到不符合约定的值。判断“缺失”用 is None，判断“为空”可用相应长度或真值；0、空串与 None 不能因都为假就无条件视为同一业务情况。
+
+浮点近似比较要设置符合场景的相对或绝对容差，精确可表示值与特定协议也可能需要精确比较。f-string、format 和日志的延迟格式化各有用途，不必统一禁用。练习分别输入 None、0 和空串，确认不会误用默认值。
 
 ---
 
@@ -224,3 +239,9 @@ if name:             # 同时排除 None 和 ""
 - 📄 **[函数与类](./04-functions-oop.md)** — 把类型注解扩展到面向对象设计
 - 📄 **[数据结构速查](../reference/language-concepts/03-data-structures.md)** — list/dict/set/tuple 全操作
 - 📄 **[typing 注解全表](../reference/language-concepts/05-typing-annotations.md)** — 泛型、Protocol、TypedDict 进阶
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../LEARNING_GUIDE.md) · [完整目录与版本](../README.md) · [通用术语](../../shared-resources/glossary.md)

@@ -1,10 +1,26 @@
 # 核心组件、JSX 与 Flexbox 布局
 
+## 先理解，再动手
+
+JSX 表达组件树，View 组织布局，Text 显示文字。原生布局中的尺寸、主轴和交叉轴需要结合父容器理解。
+
+**本节自测**：做一行图标与可换行标题，再改为纵向排列。
+
+<details>
+<summary>预期结果与参考思路（先尝试再展开）</summary>
+
+能用 flexDirection 解释排列变化，并观察长文本是否挤出按钮。
+
+</details>
+
 > **文档简介**: 系统学习 React Native 的核心组件（View/Text/Image/ScrollView/FlatList）与样式系统，掌握移动端 Flexbox 布局思维
 >
 > **目标读者**: 已能运行 RN 工程、需要搭建真实界面的初学者
 >
 > **前置知识**: 完成 [02-first-app](./02-first-app.md)，有 Web Flexbox 经验更佳
+
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
 
 ## 📚 文档元数据
 
@@ -15,6 +31,8 @@
 | **难度** | ⭐ |
 | **标签** | `#核心组件` `#Flexbox` `#FlatList` `#样式` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ## 🎯 学习目标
 
@@ -153,15 +171,9 @@ FlatList 性能 props（`windowSize`、`removeClippedSubviews` 等）的完整�
 
 ## 🎨 最佳实践
 
-### ✅ 推荐做法
-- **`StyleSheet.create` 集中定义样式**: 获得类型检查，避免每次 render 创建新对象
-- **长列表交给 FlatList**: 配合 `keyExtractor` 稳定 key，避免渲染闪烁
-- **触控用 Pressable 或 TouchableOpacity**: 前者是 RN 官方推荐的现代化触控组件
+列表中的 key 用来识别项目身份，插入或排序后仍应对应同一条数据；用数组下标可能让输入状态跟错行。大量内容用虚拟列表减少同时挂载的项目，并通过滚动检查空白、复用和触控行为。
 
-### ❌ 避免陷阱
-- **忘写尺寸就渲染网络图**: `<Image source={{uri}} />` 不给宽高会显示空白
-- **在 ScrollView 里嵌套同向 FlatList**: 滚动事件冲突，表现异常
-- **用 `setTimeout` 延迟拿布局尺寸**: 应使用 `onLayout` 回调获取真实渲染尺寸
+StyleSheet 有助于组织与检查样式，动态样式对象也合法；是否值得稳定引用要看实际渲染成本。网络图需要可确定的布局尺寸，测量布局用 onLayout，不靠猜测延时。长列表的页头可交给列表自身，避免外层同向滚动容器削弱虚拟化。
 
 ## ❓ 常见问题
 
@@ -202,3 +214,9 @@ FlatList 性能 props（`windowSize`、`removeClippedSubviews` 等）的完整�
 - 📄 **[TS 类型模式](../reference/language-concepts/04-typescript-patterns.md)**: 给组件 Props 加类型
 
 > 💡 **学习建议**: 每学一个组件就在练习 App 里造一个真实场景的小界面，比通读文档十遍都有效。
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../LEARNING_GUIDE.md) · [完整目录与版本](../README.md) · [通用术语](../../shared-resources/glossary.md)

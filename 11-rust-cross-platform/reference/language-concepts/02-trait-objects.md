@@ -4,7 +4,10 @@
 >
 > **目标读者**: 需要在"泛型还是 dyn"之间做决策、或排查 E0038 的 Rust 使用者。
 >
-> **前置知识**: 无门槛（字典条目，支持任意跳入）；trait 与泛型系统学习见[trait 与泛型教程](../../basics/04-traits-generics.md)。
+> **前置知识**: 可独立查阅（仍需准备下列前置知识）；trait 与泛型系统学习见[trait 与泛型教程](../../basics/04-traits-generics.md)。
+
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
 
 ## 📚 文档元数据
 
@@ -12,25 +15,27 @@
 |------|------|
 | **模块** | `11-rust-cross-platform` |
 | **象限** | 字典（全量参考，单一事实来源） |
-| **难度** | ⭐⭐（无阅读门槛，内容纵深） |
+| **难度** | ⭐⭐（可独立查阅，仍有前置知识，内容纵深） |
 | **标签** | `#rust` `#reference` `#trait-object` `#dynamic-dispatch` |
 | **更新日期** | `2026年9月` |
 
-> 版本基线：Rust 1.98.1 / edition 2024（核实记录见模块 README）。本文用现行官方术语 **dyn 兼容**（dyn compatibility，旧称 object safe / 对象安全）；示例均经本机 rustc（edition 2024）编译运行实测。
+</details>
+
+> 版本基线：Rust 1.98.1 / edition 2024（核实记录见模块 README）。本文用现行官方术语 **dyn 兼容**（dyn compatibility，旧称 object safe / 对象安全）；本轮未在本机运行 rustc；下列输出为教学预期，不能视作当前验证记录。
 
 ## 📋 目录
 
-- [一、定义与胖指针](#一定义与胖指针)
-- [二、dyn 兼容性规则表](#二dyn-兼容性规则表)
-- [三、vtable 机制](#三vtable-机制)
-- [四、静态分发 vs 动态分发对比表](#四静态分发-vs-动态分发对比表)
-- [五、载体选择：&dyn / Box<dyn> / Rc·Arc<dyn>](#五载体选择dyn--boxdyn--rcarcdyn)
-- [六、trait 对象的默认生命周期](#六trait-对象的默认生命周期)
-- [七、supertrait 与向上转型、自动 trait](#七supertrait-与向上转型自动-trait)
-- [八、enum 封闭集合 vs dyn 开放集合](#八enum-封闭集合-vs-dyn-开放集合)
-- [九、错误码：E0038](#九错误码e0038)
+- [一、定义与胖指针](#-一定义与胖指针)
+- [二、dyn 兼容性规则表](#-二dyn-兼容性规则表)
+- [三、vtable 机制](#-三vtable-机制)
+- [四、静态分发 vs 动态分发对比表](#-四静态分发-vs-动态分发对比表)
+- [五、载体选择：&dyn / Box<dyn> / Rc·Arc<dyn>](#-五载体选择dyn--box--rcarc)
+- [六、trait 对象的默认生命周期](#-六trait-对象的默认生命周期)
+- [七、supertrait 与向上转型、自动 trait](#-七supertrait-与向上转型自动-trait)
+- [八、enum 封闭集合 vs dyn 开放集合](#-八enum-封闭集合-vs-dyn-开放集合)
+- [九、错误码：E0038](#-九错误码e0038)
 - [示例与编译失败演示](#-可运行示例)
-- [常见陷阱](#-常见陷阱)
+- [常见陷阱](#️-常见陷阱)
 - [相关条目](#-相关条目)
 
 ---
@@ -40,7 +45,7 @@
 **定义**: `dyn Trait` 是一个**动态大小类型（DST）**，表示"某个实现了 Trait 的类型，但编译期不知道是哪个"。方法调用经虚表（vtable）在运行期间接分发——即动态分发。
 
 - DST 不能直接存值（编译期大小未知），只能藏在指针后面：`&dyn Trait`、`Box<dyn Trait>`、`Rc<dyn Trait>`、`Arc<dyn Trait>`、`Pin<P>`、`*const dyn Trait`。
-- 指向 trait 对象的指针是**胖指针**：一个字宽存数据地址 + 一个字宽存 vtable 地址（普通引用是瘦指针，一个字宽）。此宽度事实经本机 `size_of` 实测（见示例三）。
+- 指向 trait 对象的指针是**胖指针**：一个字宽存数据地址 + 一个字宽存 vtable 地址（普通引用是瘦指针，一个字宽）。此宽度事实经常见平台的 size_of 观察（见示例三）。
 
 ---
 
@@ -59,7 +64,7 @@ trait 必须满足 dyn 兼容才能写成 `dyn Trait`。逐形态判定：
 | 接收者为 `&Self` / `&mut Self` / `Box<Self>` / `Rc<Self>` / `Arc<Self>` / `Pin<P>` | ✅ | 标准接收者集合 |
 | 有关联类型 | ✅ | 对象类型中需指定：`Box<dyn Iterator<Item = u32>>` |
 
-**典型非兼容 trait 的替代模式**: `Clone` 因 `clone(&self) -> Self` 不可直接 dyn；惯用出口是自定义 `fn clone_box(&self) -> Box<dyn Trait>`（返回 `Box<Self>` 是定长指针，dyn 兼容），为 `Box<dyn Trait>` 实现 `Clone` 委托之——完整可运行写法见示例五。
+**典型非兼容 trait 的替代模式**: `Clone` 因 `clone(&self) -> Self` 不可直接 dyn；惯用出口是自定义 `fn clone_box(&self) -> Box<dyn Trait>`（返回 Box<dyn Trait> 才擦除了 Self；返回 Box<Self> 仍可能破坏 dyn 兼容性），为 `Box<dyn Trait>` 实现 `Clone` 委托之——完整可运行写法见示例五。
 
 ---
 
@@ -68,7 +73,7 @@ trait 必须满足 dyn 兼容才能写成 `dyn Trait`。逐形态判定：
 - 每个具体类型为实现的所有 dyn 兼容 trait 各生成一张 vtable；表内含析构/清理入口、`size`、`align` 与各方法指针（按声明序）。
 - `w.draw()`（`w: &dyn Draw`）实际执行：读胖指针第二半 → 查表定位方法指针 → 以数据指针为 `self` 调用。
 - 代价：一次指针间接跳转，且通常阻断内联。
-- vtable 内存布局是编译器实现细节，跨版本不可依赖；可依赖的只有"胖指针两字宽"这类稳定事实。
+- vtable 内存布局是编译器实现细节，跨版本不可依赖；常见实现的两字宽表示用于理解机制，不应作为自定义 ABI、transmute 或字段布局的稳定保证。
 
 ---
 
@@ -109,15 +114,15 @@ trait 必须满足 dyn 兼容才能写成 `dyn Trait`。逐形态判定：
 | 类型参数位置等独立出现（如 `T = dyn Trait`） | `dyn Trait + 'static` |
 | `&'a dyn Trait` | `&'a (dyn Trait + 'a)` |
 
-含义：`Box<dyn Trait>` 默认只能装"常驻数据"（owned 类型或 `'static` 引用）；要装短命引用必须显式写 `Box<dyn Trait + 'a>`。生命周期含义的展开见[高级生命周期](./04-advanced-lifetimes.md)。
+含义：在没有其他推导约束的类型位置，`Box<dyn Trait>` 默认要求内部数据满足 static 生命周期约束（owned 类型或 `'static` 引用）；要装短命引用必须显式写 `Box<dyn Trait + 'a>`。生命周期含义的展开见[高级生命周期](./04-advanced-lifetimes.md)。
 
 ---
 
 ## 📌 七、supertrait 与向上转型、自动 trait
 
-- **向上转型（upcasting）**：`&dyn Sub` 可直接转 `&dyn Super`（`trait Sub: Super` 时），无需任何 crate 辅助。已实测（示例四）。反向（`&dyn Super` → `&dyn Sub`）仍不可，需在 trait 上提供安全的 downcast 方法（如返回 `Option<&dyn Any>`）。
+- **向上转型（upcasting）**：`&dyn Sub` 可直接转 `&dyn Super`（`trait Sub: Super` 时），无需任何 crate 辅助。预期结果（示例四）。反向（`&dyn Super` → `&dyn Sub`）仍不可，需在 trait 上提供安全的 downcast 方法（如返回 `Option<&dyn Any>`）。
 - **自动 trait 不随擦除传递**：具体类型是 `Send`/`Sync` 不代表 `dyn Trait` 是——跨线程必须显式写 `dyn Trait + Send`、`dyn Trait + Send + Sync`。
-- 可为对象类型实现新 trait：`impl Trait for dyn Trait`（如为 `Box<dyn Greeter>` 实现 `Clone`，见示例五）。
+- 在孤儿规则等约束允许时，可为对象类型实现另一个 trait；不能重复实现它本身已经实现的基础 trait（如为 `Box<dyn Greeter>` 实现 `Clone`，见示例五）。
 
 ---
 
@@ -187,7 +192,7 @@ fn main() {
 }
 ```
 
-已实测（输出三行：按钮、滑杆、预览）。
+预期结果（输出三行：按钮、滑杆、预览）。
 
 ### 示例二：同一 trait 的两种分发
 
@@ -228,7 +233,7 @@ fn main() {
 }
 ```
 
-已实测（`12.57 9.00` 两轮）。
+预期结果（`12.57 9.00` 两轮）。
 
 ### 示例三：胖指针宽度实证
 
@@ -262,7 +267,7 @@ fn main() {
 }
 ```
 
-已实测通过（主流平台两字宽断言成立）。
+预期结果通过（主流平台两字宽断言成立）。
 
 ### 示例四：trait 向上转型
 
@@ -293,14 +298,14 @@ fn main() {
 }
 ```
 
-已实测（输出 `pup says woof`）。
+预期结果（输出 `pup says woof`）。
 
 ### 示例五：让 `Box<dyn Trait>` 可克隆（clone_box 模式）
 
 ```rust
 trait Greeter {
     fn greet(&self) -> String;
-    // 为 dyn 兼容提供克隆出口：返回 Box<Self> 是定长指针
+    // 为 dyn 兼容提供克隆出口：返回 Box<dyn Greeter> 擦除具体类型
     fn clone_box(&self) -> Box<dyn Greeter>;
 }
 
@@ -328,11 +333,11 @@ fn main() {
 }
 ```
 
-已实测（输出 `hello hello`）。
+预期结果（输出 `hello hello`）。
 
 ## ⚠️ 编译失败演示
 
-**此块为编译失败演示，错误码已实测复核**（rustc，edition 2024）。
+**此块为编译失败演示，错误码预期结果复核**（rustc，edition 2024）。
 
 E0038：泛型方法破坏 dyn 兼容。
 
@@ -357,7 +362,7 @@ fn main() {
 }
 ```
 
-实测报错：`error[E0038]: the trait 'Collector' is not dyn compatible`。
+预期诊断：`error[E0038]: the trait 'Collector' is not dyn compatible`。
 
 ---
 
@@ -376,6 +381,15 @@ fn main() {
 
 ---
 
+<!-- full-library-explanation -->
+## 类型擦除之后，哪些能力还保留
+
+前置是 trait、泛型、借用与 Box。泛型函数在编译时保留具体类型信息，dyn Trait 只保留约定的接口能力。需要把多种实现放进同一个集合时，可以选择 enum 表达封闭的变体集合，或 Box<dyn Trait> 接受开放实现。dyn 不强制堆分配，&dyn Trait 可以借用已有值；Box 才决定拥有与分配方式。
+
+返回 Box<Self> 虽然有间接层，仍暴露具体 Self，不能仅凭“指针大小固定”判断 dyn 兼容。clone_box 的关键是返回 Box<dyn Trait>，把具体类型擦除。动态分发成本也不是固定的性能结论：优化器有时能去虚拟化，泛型过多实例化也可能增加代码体积，应按调用热度和扩展需求选择。
+
+练习：定义只包含 fn describe(&self)->String 的 trait，为两个类型实现并放入 Vec<Box<dyn Trait>>。再给 trait 添加返回 Self 的方法，观察 dyn 兼容性诊断；为该方法加 where Self: Sized 后，trait 对象恢复可用，但不能通过对象调用该方法。用借用局部字符串的实现测试 Box<dyn Trait + 'a>，说明 'static 约束限制内部借用，并不要求对象实际存活到进程结束。
+
 ## 🔗 相关条目
 
 - 📄 **[trait 与泛型（入门教程）](../../basics/04-traits-generics.md)** — 静态分发的系统学习路径
@@ -392,9 +406,15 @@ fn main() {
 1. **`dyn Trait` 是 DST**：只能活在指针后，胖指针 = 数据地址 + vtable 地址。
 2. **dyn 兼容性看成员**：无泛型方法、无 `Self` 按值、无关联常量/GAT；`where Self: Sized` 是成员级逃生口。
 3. **静态 vs 动态一句话**：泛型换内联与体积，dyn 换开放集合与多态返回。
-4. **默认 `'static`**：`Box<dyn Trait>` 只装常驻数据，短命引用要显式 `+ 'a`。
+4. **默认 `'static`**：常见独立类型位置的 Box<dyn Trait> 默认要求 static 约束；拥有的数据仍可正常提前析构，短期借用可显式 + 'a。
 5. **`E0038` = dyn 兼容性被破坏**，对照规则表逐成员定位。
 
 ---
 
 *最后更新: 2026年9月 | 本条目为模块知识字典的一部分，概念完整解释以此处为单一事实来源*
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

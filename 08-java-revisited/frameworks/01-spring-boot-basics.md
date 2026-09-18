@@ -1,10 +1,21 @@
 # Spring Boot 入门 - 依赖注入、自动配置与 REST Controller
 
+## 先看框架承担哪部分职责
+
+**Spring Boot 入门**：容器创建并连接对象，Controller 把 HTTP 转成方法调用，自动配置根据依赖和配置提供默认组件。业务函数仍应能脱离 HTTP 测试。
+
+**最小练习与预期结果**：用构造器注入一个服务，先直接单测它，再请求 Controller；分别验证业务行为与 HTTP 映射。
+
+具体 API 与安装版本以[模块基线](../README.md)和本篇官方来源为准。先完成这条数据路径，再展开后面的高级配置；框架名称变化后，输入边界、状态归属和失败处理仍是需要理解的机制。
+
 > **文档简介**: 用最短路径跑通 Spring Boot 4.x 应用的三大基石：IoC 容器与依赖注入、自动配置原理、REST Controller 开发，写出第一个规范的现代 Java Web 服务
 >
 > **目标读者**: 回归 Java、希望快速上手 Spring Boot 4.x 的开发者
 >
 > **前置知识**: 已完成 [现代 Java 特性](../basics/07-modern-features.md) 与 [第一个项目](../basics/08-first-project.md)；注解语法见 [类、接口与 Record](../basics/04-classes-records.md)
+
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
 
 ## 📚 文档元数据
 
@@ -15,6 +26,8 @@
 | **难度** | ⭐ |
 | **标签** | `#SpringBoot` `#依赖注入` `#自动配置` `#REST` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ## 🎯 学习目标
 
@@ -199,15 +212,9 @@ public class GlobalExceptionHandler {
 
 ## 🎨 最佳实践
 
-### ✅ 推荐
-- **构造器注入 + final 字段**：依赖显式、不可变、可测
-- **Record 做 DTO**：消除样板代码，天然不可变（语义详见 [Record / Sealed / 模式匹配速查](../reference/language-concepts/05-records-sealed-patterns.md)）
-- **DTO 与实体分层**：Web 层不直接暴露 JPA 实体
+构造器参数使依赖显式，测试可以传入替代实现。final 字段限制重新赋值，不会让依赖对象自动不可变；record 同样只提供浅层不可变的数据载体，成员若是可变集合仍需考虑防御性复制。
 
-### ❌ 陷阱
-- 循环依赖：A 构造注入 B、B 构造注入 A → 启动失败；用 `@Lazy` 或重新设计边界
-- 在构造器里做重活：初始化逻辑放 `@PostConstruct` 或 `ApplicationRunner`
-- 忽略 `jakarta` 与 `javax` 混用：Boot 3/4 下 `javax.validation` 注解静默失效
+Web DTO 与持久化实体分开可避免意外暴露字段和懒加载。循环依赖优先检查职责是否混在一起，Lazy 只能在有明确生命周期理由时使用。把重工作移到 PostConstruct 仍会影响启动，初始化应定义超时、失败和就绪语义。
 
 ## 🔗 相关文档
 
@@ -217,3 +224,9 @@ public class GlobalExceptionHandler {
 - 📄 [现代 Java 特性](../basics/07-modern-features.md) — 本文代码大量使用的 Lambda/Stream
 - 📄 [第一个项目](../basics/08-first-project.md) — 无框架的纯 Java 版本项目，可对照体会框架带来的差异
 - 📄 [Spring Boot 进阶](./02-spring-boot-advanced.md) — 下一篇：JPA、事务与 AOP
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../LEARNING_GUIDE.md) · [完整目录与版本](../README.md) · [通用术语](../../shared-resources/glossary.md)

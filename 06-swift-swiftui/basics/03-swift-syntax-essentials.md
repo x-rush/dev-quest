@@ -1,10 +1,26 @@
 # Swift 语法 Essentials - 写 SwiftUI 前必须会的 Swift
 
+## 先理解，再动手
+
+可选值把“没有值”写进类型；guard let 先处理缺失，让后面使用确定存在的值。强制解包只是延后风险。
+
+**本节自测**：把输入转为 Int?，分别测试 12、abc 与空串。
+
+<details>
+<summary>预期结果与参考思路（先尝试再展开）</summary>
+
+只有有效数字进入计算；无效输入走明确失败分支，而不是触发崩溃。
+
+</details>
+
 > **文档简介**: 精选写 SwiftUI 代码时高频使用的 Swift 语法：可选值、struct/class、闭包、enum 与扩展，帮你"够用地"读懂并写出现代 Swift
 >
 > **目标读者**: 有任意语言（Go/JS/Kotlin 等）基础、首次系统接触 Swift 的学习者
 >
 > **前置知识**: [02-first-swiftui-app.md](./02-first-swiftui-app.md)；建议先通读，遇到不懂再回查
+
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
 
 ## 📚 文档元数据
 
@@ -15,6 +31,8 @@
 | **难度** | ⭐ |
 | **标签** | `#Swift语法` `#可选值` `#结构体` `#闭包` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ## 🎯 学习目标
 
@@ -189,11 +207,9 @@ extension 无需源码即可为任意类型（包括 `String`、`View`）添加�
 
 ## ✅ 最佳实践
 
-- ✅ **推荐**：默认用 struct；只有需要引用语义/继承/OBJC 桥接时才用 class
-- ✅ **推荐**：解包优先级 `guard let` > `if let` > `??` > 可选链 > `!`
-- ✅ **推荐**：用 enum 表达互斥状态机（idle/loading/loaded/failed）
-- ❌ **避免**：滥用 `!` 强制解包——线上崩溃的头号来源
-- ❌ **避免**：`if x != nil` 后使用 `x!`，改用 `if let` 一步完成
+struct 适合独立值，class 适合需要共享身份的对象；选择依据是修改一处后其他持有者是否应看到同一个对象变化。不要用固定“优先级”代替可选值的语义判断：guard 适合前置条件失败即退出，if let 适合局部分支，?? 适合确有合理默认值的情况。
+
+强制解包表达“这里不允许没有值”，若该保证无法证明就显式处理 nil。用 enum 表示加载中、成功与失败，可以排除几个布尔值同时为真的矛盾状态；练习让空输入走失败分支，而非依靠崩溃暴露问题。
 
 ## ❓ 常见问题
 
@@ -216,3 +232,9 @@ extension 无需源码即可为任意类型（包括 `String`、`View`）添加�
 - 📄 [02-optionals-collections.md](../reference/language-concepts/02-optionals-collections.md) — 可选链与集合 API 全量字典
 - 📄 [05-protocols-generics.md](../reference/language-concepts/05-protocols-generics.md) — 协议与泛型的完整讲解
 - 📄 [01-swift-keywords.md](../reference/language-concepts/01-swift-keywords.md) — 全部关键字逐条详解
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../LEARNING_GUIDE.md) · [完整目录与版本](../README.md) · [通用术语](../../shared-resources/glossary.md)

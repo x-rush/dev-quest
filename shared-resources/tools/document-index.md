@@ -1,5 +1,19 @@
 # Dev Quest 文档索引系统
 
+## 新补语言基础入口
+
+- [JavaScript 关键词](../javascript-keywords.md)与[常用内置能力](../javascript-builtins.md)：02、03、04、09 模块共用。
+- [Rust 关键词](../../11-rust-cross-platform/reference/language-concepts/09-keywords-and-syntax.md)、[标准类型与方法](../../11-rust-cross-platform/reference/language-concepts/10-standard-types-and-methods.md)、[标准库地图](../../11-rust-cross-platform/reference/library-guides/15-standard-library-map.md)。
+
+## 从学习入口或参考入口进入
+
+[仓库首页](../../README.md)提供 11 个模块的选择表；每个模块的 LEARNING_GUIDE.md 提供前置知识、渐进路径和该模块现有 reference 文章的完整分类索引。无需把目录树当必读顺序。
+
+- [怎样学习与验收](../learning-guide.md)：建立运行、修改、解释的反馈过程。
+- [跨技术栈术语](../glossary.md)：理解请求、状态、异步、测试等共用概念。
+- [文档质量审查](./document-quality/README.md)：区分结构覆盖、正文增强和实际验证。
+
+
 > 📚 **智能文档导航**: 快速找到你需要的学习资源，建立知识关联，优化学习路径。
 
 ## 🎯 快速导航
@@ -11,17 +25,17 @@
 - 📱 **[04 React Native三端原生App](#04-react-native三端原生app)** - Android+iOS+鸿蒙原生开发 (已建设)
 - 🤖 **[05 Kotlin Compose](#05-kotlin-compose)** - Android官方原生开发 (已建设)
 - 🍎 **[06 SwiftUI](#06-swiftui)** - iOS官方原生开发 (已建设)
-- 🐘 **[07-10 技术探索系列](#技术探索系列-07-10)** - PHP/Java/Node.js/Python (已建设·维护冻结)
+- 🐘 **[07-10 技术探索系列](#技术探索系列-07-10)** - PHP/Java/Node.js/Python (已建设·本轮授权增强)
 - 🦀 **[11 Rust跨平台开发](#11-rust跨平台开发)** - Rust + Tauri 2 + Axum
 - 🧠 **[AI 协议层](#ai-协议层)** - MCP 协议精要 + Agent 模式语言 (框架无关)
-- 🧪 **[工程质量工具](#工程质量工具)** - 代码块全量机器验证 (code-block-verify) + 基线漂移检查 (baseline-check)
+- 🧪 **[工程质量工具](#-工程质量工具)** - 代码块全量机器验证 (code-block-verify) + 基线漂移检查 (baseline-check)
 
 ### 按内容类型
-- 📖 **[基础概念](#基础概念)** - 入门基础内容
-- 🛠️ **[框架工具](#框架工具)** - 开发框架和工具
-- 🚀 **[项目实战](#项目实战)** - 实际项目案例
-- 📚 **[知识字典](#知识字典-reference)** - 全量参考手册
-- 🔧 **[测试与部署](#测试与部署)** - 工程实践
+- 📖 **[基础概念](#-基础概念-basics)** - 入门基础内容
+- 🛠️ **[框架工具](#️-框架工具-frameworks)** - 开发框架和工具
+- 🚀 **[项目实战](#-项目实战-projects)** - 实际项目案例
+- 📚 **[知识字典](#-知识字典-reference)** - 全量参考手册
+- 🔧 **[测试与部署](#-测试与部署)** - 工程实践
 
 ---
 

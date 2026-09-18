@@ -1,10 +1,23 @@
 # 生产级项目：SaaS 后台平台
 
+## 分阶段练习与验收
+
+**最小阶段**：先做一份有权限边界的资源列表与表单。
+
+**验收结果**：切换账号或租户后缓存不泄露上一身份数据。
+
+**扩展顺序**：路由、表格、表单只在具体需求出现时组合，避免为集成而集成。
+
+建议保存一份正常输入、一份失败输入、实际输出和对应测试。先完成以上阶段再扩展正文中的完整设计；遇到省略实现或未定义依赖，应按文档上下文补齐，不能把代码片段拼接后当作已经验证的完整工程。
+
 > **文档简介**: 综合四件套构建生产级 SaaS 管理平台：RBAC 路由守卫、认证流、按特性组织的数据层、错误边界与审计日志，交付可上线的前端架构。
 >
 > **目标读者**: 已完成前三个项目、需要掌握企业级前端架构的进阶开发者
 >
 > **前置知识**: [生态协作](../frameworks/03-ecosystem-integration.md)、[协作看板](../projects/03-collaborative-kanban.md)、[安全实践](../advanced-topics/security/01-security-practices.md)
+
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
 
 ## 📚 文档元数据
 
@@ -15,6 +28,8 @@
 | **难度** | ⭐⭐⭐ |
 | **标签** | `#实战项目` `#saas` `#rbac` `#架构` `#生产级` |
 | **更新日期** | 2026年9月 |
+
+</details>
 
 ## 🎯 项目目标
 
@@ -216,3 +231,9 @@ export async function http<T>(url: string, init?: RequestInit): Promise<T> {
 - 📄 **[缓存架构](../advanced-topics/architecture/01-cache-architecture.md)** - 多租户缓存隔离的原理
 - 📄 **[CI/CD 流水线](../deployment/01-ci-cd-pipelines.md)** / **[Vercel 部署](../deployment/02-vercel-deployment.md)** - 交付链路
 - 📄 **[可观测性](../deployment/03-observability.md)** - Sentry 与 Web Vitals 落地
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../LEARNING_GUIDE.md) · [完整目录与版本](../README.md) · [通用术语](../../shared-resources/glossary.md)

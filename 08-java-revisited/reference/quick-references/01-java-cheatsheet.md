@@ -6,6 +6,9 @@
 >
 > **前置知识**: 已过一遍 [模块 README 的学习路径](../../README.md)
 
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
+
 ## 📚 文档元数据
 
 | 属性 | 内容 |
@@ -16,6 +19,8 @@
 | **标签** | `#速查` `#一行式` `#现代Java` |
 | **更新日期** | `2026年9月` |
 
+</details>
+
 ## 🔤 字符串
 
 ```java
@@ -23,13 +28,13 @@ var multiline = """
     第一行
     """;                                             // 文本块（开定界符 """ 后必须换行，不能单行书写）
 "%s-%d".formatted("id", 1);                          // 格式化
-"a,b,,c".split(",", -1);                             // 保留尾部空串
+"a,b,c,".split(",", -1);                             // 保留尾部空串
 " abc ".strip();                                     // Unicode 感知 trim
 "  ".isBlank();                                      // 空白判断
 String.join(" / ", list);                            // 拼接
-"a|b".lines().toList();                              // 按行收集
+"a\nb".lines().toList();                              // 按行收集
 "x".repeat(5);                                       // 重复
-str.chars().distinct().count();                      // 转字符流
+str.codePoints().distinct().count();                 // 统计不同 Unicode 码点；不等于显示字符数
 ```
 
 ## 📦 集合
@@ -41,7 +46,7 @@ List.copyOf(source);                                 // 防御性拷贝
 new ArrayList<>(List.of("x"));                       // 可变初始化
 list.getFirst(); list.getLast();                     // Java 21+
 list.reversed();                                     // 逆序视图 Java 21+
-map.getOrDefault("k", 0);                            // 免判空读
+map.getOrDefault("k", 0);                            // 仅在键缺失时使用默认值；已存 null 不被替换
 map.merge("k", 1, Integer::sum);                     // 计数
 map.computeIfAbsent("k", k -> new ArrayList<>()).add(v);  // 多值 map
 list.removeIf(String::isBlank);                      // 安全删除
@@ -93,8 +98,12 @@ var label = switch (shape) {                          // sealed 穷举
 ```java
 Files.readString(Path.of("a.txt"));                  // 全量读
 Files.writeString(Path.of("a.txt"), content);        // 全量写
-Files.lines(path).filter(...).toList();              // 逐行（包 try-with-resources）
-Files.walk(dir).filter(p -> p.toString().endsWith(".java")).count();
+try (var lines = Files.lines(path)) {
+    var nonBlank = lines.filter(s -> !s.isBlank()).toList();
+}
+try (var paths = Files.walk(dir)) {
+    long javaFiles = paths.filter(p -> p.toString().endsWith(".java")).count();
+}
 Files.createDirectories(Path.of("a/b/c"));
 Files.deleteIfExists(path);
 Files.mismatch(p1, p2);                              // 内容比对
@@ -119,8 +128,12 @@ Duration.between(t1, t2).toSeconds();
 Thread.startVirtualThread(() -> work());             // 虚拟线程
 try (var ex = Executors.newVirtualThreadPerTaskExecutor()) { jobs.forEach(ex::submit); }
 var q = new ArrayBlockingQueue<String>(100); q.put(x); q.take();
-new CountDownLatch(n).countDown();
-new Semaphore(10).acquire();
+// 多个任务必须持有同一个 latch；等待方调用同一实例的 await。
+var latch = new CountDownLatch(n);
+// permit 必须成对释放；acquire 失败时不能 release。
+var permits = new Semaphore(10);
+permits.acquire();
+try { work(); } finally { permits.release(); }
 lock.lock(); try { work(); } finally { lock.unlock(); }
 CompletableFuture.supplyAsync(ioTask, vthreadPool)
         .thenCombine(other, this::merge)
@@ -145,11 +158,27 @@ mvn clean verify                  # Maven 构建
 ./gradlew test                    # Gradle 测试
 java -jar app.jar                 # 运行 fat jar
 java -Xmx512m -Xms256m Foo        # 堆参数
-jps -l / jstack <pid>             # 进程/线程诊断
+jps -l                           # 列出进程
+jstack <pid>                     # 查看指定进程线程
 ```
+
+<!-- full-library-explanation -->
+## 速查片段如何变成一次完整验证
+
+这里的 list、repo、jobs 等代表已有变量，每段强调一种 API，不是可以整页复制运行的工程。先在 jshell 尝试无外部依赖的表达式，再把组合逻辑放进有明确输入输出的方法，最后写失败路径断言。带 Java 22+ 标记的语法不应放进目标 release=21 的源码。
+
+集合“不允许增删”与元素“不可修改”是不同承诺；List.of 和 copyOf 不递归复制元素。getOrDefault 只有键不存在才返回默认值，键已映射到 null 时仍返回 null。reversed 返回视图，修改与原集合的联系取决于底层集合支持的操作。
+
+**练习**：把可变对象放进 List.of 后修改其字段，确认列表结构不可变不代表元素被冻结；对包含 null 值的 HashMap 调用 getOrDefault 并拆箱，观察失败。文件流和锁的代码需要包含关闭或 finally，速查不应成为省略生命周期管理的理由。
 
 ## 🔗 相关文档
 
 - 📄 **[常见错误排查](./02-troubleshooting.md)** - 出错时从这里查
 - 📄 **[Stream/Optional API 速查](../language-concepts/03-streams-optional.md)** - Stream 全量 API
 - 📄 **[标准库核心](../library-guides/01-standard-library.md)** - API 背后的说明
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

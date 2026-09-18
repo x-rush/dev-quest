@@ -1,10 +1,23 @@
 # 项目实战 02 - 图书管理系统（JPA + 认证）
 
+## 分阶段练习与验收
+
+**最小阶段**：先完成图书录入与查询，再加入借阅和身份校验。
+
+**验收结果**：同一图书重复借出按规则拒绝，其他用户不可越权修改。
+
+**扩展顺序**：JPA 映射与事务分别检查，不把 ORM 操作成功当成业务一致性。
+
+建议保存一份正常输入、一份失败输入、实际输出和对应测试。先完成以上阶段再扩展正文中的完整设计；遇到省略实现或未定义依赖，应按文档上下文补齐，不能把代码片段拼接后当作已经验证的完整工程。
+
 > **文档简介**: 进阶项目：图书借阅管理，落地 Spring Data JPA 关联映射、Spring Security 7 认证授权、Flyway 数据库迁移与 Redis 缓存，体会"真实数据库 + 真实用户"下的开发节奏
 >
 > **目标读者**: 完成 TODO API、想练习多实体关联与安全控制的开发者
 >
 > **前置知识**: 已完成 [TODO API 项目](./01-todo-api.md)、[Spring Boot 进阶](../frameworks/02-spring-boot-advanced.md)、[生态集成](../frameworks/03-ecosystem-integration.md)
+
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
 
 ## 📚 文档元数据
 
@@ -15,6 +28,8 @@
 | **难度** | ⭐⭐ |
 | **标签** | `#JPA` `#关联映射` `#SpringSecurity` `#Flyway` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ## 🎯 项目目标
 
@@ -204,14 +219,9 @@ SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
 ## 🎨 最佳实践
 
-### ✅ 推荐
-- 枚举状态 + 领域方法（`markBorrowed`）替代裸 setter
-- 所有 `@ManyToOne` 显式 `LAZY`，列表接口用 JOIN FETCH 定向加载
+借阅状态通过明确领域操作改变，可以同时校验“已借出不能再次借出”等规则；直接暴露 setter 容易让调用者绕过这些条件。关联加载依据接口所需数据设计，LAZY 只是推迟查询，若逐行访问仍可能产生 N+1。
 
-### ❌ 陷阱
-- 双向关联直接序列化 → 无限递归；用 DTO 投影替代
-- 缓存实体对象：脱管后懒加载报错；缓存 DTO
-- 迁移文件重命名/修改导致 Flyway 校验失败
+API 返回明确 DTO，避免双向关系递归与意外字段泄漏。迁移一旦用于共享环境应保留历史，用新迁移修正；测试真实查询次数与重新查库的借阅结果，而不是只看内存实体状态。
 
 ## 🚀 下一步
 
@@ -225,3 +235,9 @@ SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 - 📄 [Spring Boot 进阶](../frameworks/02-spring-boot-advanced.md) — 事务与锁的前置
 - 📄 [集成测试](../testing/02-integration-testing.md) — Testcontainers 验证迁移脚本
 - 📄 [安全最佳实践](../advanced-topics/security/01-security-practices.md) — 认证方案选型
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../LEARNING_GUIDE.md) · [完整目录与版本](../README.md) · [通用术语](../../shared-resources/glossary.md)

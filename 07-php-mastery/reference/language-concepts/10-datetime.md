@@ -4,6 +4,9 @@
 
 PHP 日期时间围绕 `DateTime`/`DateTimeImmutable` 两个类与 `DateInterval`/`DatePeriod`/`DateTimeZone` 辅助类展开。核心纪律只有一条：**业务代码用 Immutable**。属语言稳定层（DateTimeImmutable 5.5+）。
 
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
+
 ## 📚 文档元数据
 
 | 属性 | 内容 |
@@ -13,6 +16,8 @@ PHP 日期时间围绕 `DateTime`/`DateTimeImmutable` 两个类与 `DateInterval
 | **难度** | ⭐ |
 | **标签** | `#日期` `#时间` `#DateTime` `#时区` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ## 条目 1：DateTime vs DateTimeImmutable
 
@@ -52,7 +57,7 @@ echo $start->format('H:i'), ' ~ ', $end->format('H:i'), PHP_EOL;   // 09:00 ~ 10
 
 ## 条目 2：format 与 createFromFormat
 
-📌 **定义**: `format()` 用格式符输出；`createFromFormat()` 按"给定格式"解析字符串——是解析非 ISO 格式日期的唯一正确姿势。
+📌 **定义**: `format()` 用格式符输出；`createFromFormat()` 按"给定格式"解析字符串——适合约定格式的解析；本地化文本也可按需要使用 IntlDateFormatter。
 
 📖 **语法/签名**:
 
@@ -78,9 +83,10 @@ echo $dt->format('U'), PHP_EOL;              // 时间戳
 echo $dt->format('l'), PHP_EOL;              // Friday（英文星期名）
 
 // 解析"11/09/2026"这类自定义格式——new DateTime() 会按美式月日误判！
-$dt2 = DateTimeImmutable::createFromFormat('d/m/Y', '11/09/2026');
-if ($dt2 === false) {
-    print_r(DateTime::getLastErrors());      // 解析错误/警告明细
+$dt2 = DateTimeImmutable::createFromFormat('!d/m/Y', '11/09/2026', new DateTimeZone('UTC'));
+$errors = DateTimeImmutable::getLastErrors();
+if ($dt2 === false || ($errors !== false && ($errors['warning_count'] > 0 || $errors['error_count'] > 0))) {
+    throw new InvalidArgumentException('日期格式或日期值无效');
 }
 echo $dt2->format('Y-m-d'), PHP_EOL;         // 2026-09-11
 ```
@@ -187,10 +193,10 @@ if ($now > $deadline) {
 }
 
 $left = $now->diff($deadline);
-printf('还剩 %d 天 %d 小时%s', $left->d, $left->h, PHP_EOL);
+printf('%s %d 天 %d 小时%s', $left->invert ? '已超过' : '还剩', $left->days, $left->h, PHP_EOL);
 ```
 
-⚠️ **常见陷阱**: 比较运算符 5.2 起即可用，"对象比较不可靠"的老文章结论早已失效；`time()`/`getTimestamp()` 是秒级，毫秒要用 `microtime(true)` 或 `format('v')`；`'@ts'` 构造的对象时区是 UTC，展示前先 `setTimezone`。
+⚠️ **常见陷阱**: 比较运算符 5.2 起即可用，"对象比较不可靠"的老文章结论早已失效；`time()`/`getTimestamp()` 是秒级，microtime(true) 返回含小数的秒，乘 1000 才是毫秒时间戳；format('v') 仅是当前秒内的毫秒分量；`'@ts'` 构造的对象时区是 UTC，展示前先 `setTimezone`。
 
 🔗 **相关条目**: [时区](#条目-4时区datetimezone)、[DateInterval 与 DatePeriod](#条目-3dateinterval-与-dateperiod)
 
@@ -205,3 +211,18 @@ printf('还剩 %d 天 %d 小时%s', $left->d, $left->h, PHP_EOL);
 **文档版本**: v2.0.0
 **最后更新**: 2026年9月
 **维护团队**: Dev Quest Team
+
+
+<!-- full-library-explanation -->
+## 日历运算和时间轴上的时长不同
+
+前置是对象和比较。给 1 月 31 日加一个月，需要约定是截到 2 月末还是按日历溢出；API 的默认归一化不能替代业务决定。跨夏令时时，某一天可能不是 24 小时。会议时刻适合存瞬间并保留展示时区，生日这种纯日期则不应强行转成 UTC 午夜。
+
+createFromFormat 不一定在非法日期时返回 false，可能返回归一化后的对象并记录警告。读取 getLastErrors 必须紧接解析，并兼容无错误时返回 false 的版本行为；格式前缀 ! 可将未提供字段重置到基准，避免无意继承当前时分秒。
+
+**练习**：解析 31/02/2026，要求业务验证拒绝归一化结果；用同一瞬间分别显示 UTC 与上海时间，确认 getTimestamp 相同。比较 2026-01-01 到 2026-03-01 的 diff->d 与 diff->days，前者是扣除月年后的日分量，后者才是总日数。代码中的“现在”最好可注入，便于测试截止前后边界。
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

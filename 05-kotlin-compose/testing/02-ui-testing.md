@@ -6,6 +6,9 @@
 >
 > **前置知识**: [Compose 入门核心](../frameworks/01-compose-basics.md)（尤其状态提升）、[Compose 状态 API 详解](../reference/language-concepts/04-compose-state-api.md)
 
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
+
 ## 📚 文档元数据
 
 | 属性 | 内容 |
@@ -15,6 +18,8 @@
 | **难度** | ⭐⭐ |
 | **标签** | `#compose-test` `#semantics` `#ui-test` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ---
 
@@ -118,20 +123,18 @@ fun `加载完成后 显示笔记列表`() {
 
 ## 🎨 最佳实践
 
-### ✅ 推荐
+UI 测试从用户动作出发：输入、点击，然后检查结果或错误提示。相同文案出现在多行时，先限定父节点或语义范围，必要时补 testTag，而不是依赖偶然的节点顺序。
 
-- 只测**行为**（点击后出现 X），不测实现（某私有组合被调用了几次）
-- 内容描述同步服务无障碍：测试通过 ≈ TalkBack 可用
-- 每个核心界面至少一条"正向路径 + 一条错误路径"
-
-### ❌ 避免陷阱
-
-- 用文本匹配唯一节点时文本不唯一（列表多行同文案）——改用 `testTag` 或 `onAllNodes` 收窄
-- 测试里直接操作内部状态绕过回调——绕过了 UDF，测不出真实链路
-- 在测试断言里硬编码等待毫秒数——用条件等待，CI 机器更慢
+等待异步状态满足明确条件，并保留超时诊断。语义节点与内容描述有助于无障碍，但测试能找到按钮不等于 TalkBack 已可用；仍需检查朗读顺序、焦点、可点击区域和真实交互。
 
 ## 🔗 相关文档
 
 - 📖 概念字典：[Compose 状态 API 详解](../reference/language-concepts/04-compose-state-api.md) ｜ [Compose 核心组件速查](../reference/framework-essentials/01-compose-essentials.md) ｜ [Compose 测试 API 速查](../reference/framework-essentials/07-compose-testing.md)
 - 🧪 同级指南：[单元测试](01-unit-testing.md) ｜ [集成与端到端测试](03-integration-e2e-testing.md)
 - 🚀 实战应用：[入门项目的 UI 验收](../projects/01-notes-app.md) ｜ [生产级应用的质量门禁](../projects/04-production-android-app.md)
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../LEARNING_GUIDE.md) · [完整目录与版本](../README.md) · [通用术语](../../shared-resources/glossary.md)

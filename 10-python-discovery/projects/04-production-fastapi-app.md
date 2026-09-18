@@ -1,10 +1,23 @@
 # 终极项目 — 生产级 FastAPI 应用
 
+## 分阶段练习与验收
+
+**最小阶段**：以已有 API 验证安装、迁移、启动和测试。
+
+**验收结果**：全新环境按清单成功，配置缺失快速报错，关闭时释放连接。
+
+**扩展顺序**：工作进程、监控、队列与部署扩展分开，避免把所有库一次加入。
+
+建议保存一份正常输入、一份失败输入、实际输出和对应测试。先完成以上阶段再扩展正文中的完整设计；遇到省略实现或未定义依赖，应按文档上下文补齐，不能把代码片段拼接后当作已经验证的完整工程。
+
 > **文档简介**: 把前面所有知识组装成一套生产就绪的 FastAPI 工程：分层架构、JWT 认证、数据库迁移、测试、容器化与可观测性
 >
 > **目标读者**: 完成 ⭐/⭐⭐ 项目、准备把服务推上生产的开发者
 >
 > **前置知识**: 本模块 frameworks / testing / deployment 三个目录的全部 ⭐⭐ 文档
+
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
 
 ## 📚 文档元数据
 
@@ -15,6 +28,8 @@
 | **难度** | ⭐⭐⭐ |
 | **标签** | `#生产级` `#架构` `#JWT` `#Docker` `#可观测性` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ## 🎯 生产就绪清单（本项目交付物）
 
@@ -198,3 +213,9 @@ CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--worker
 - 🚀 **[容器化部署](../deployment/01-docker-deployment.md)** / **[CI/CD](../deployment/02-ci-cd-pipelines.md)** / **[可观测性](../deployment/03-observability.md)** — 部署三部曲
 - 🧪 **[集成测试](../testing/02-integration-testing.md)** — 分层架构的测试策略
 - 📖 **[FastAPI 核心速查](../reference/framework-essentials/01-fastapi-essentials.md)** — 全程随查
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../LEARNING_GUIDE.md) · [完整目录与版本](../README.md) · [通用术语](../../shared-resources/glossary.md)

@@ -4,6 +4,9 @@
 
 高频惯用表达的一行式片段集：每个模式一行代码 + 注释示例。按场景分组，可作 REPL 伴侣。
 
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
+
 ## 📚 文档元数据
 
 | 属性 | 内容 |
@@ -13,6 +16,8 @@
 | **难度** | ⭐ |
 | **标签** | `#速查` `#一行式` `#惯用法` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ---
 
@@ -26,7 +31,7 @@ s.replace("World", "Python")               # 替换
 s.split(",")                               # 分割
 f"{price:>10,.2f}"                         # 右对齐+千分位+两位小数
 s.startswith(("http", "https"))            # 多前缀判断
-text.count("\n") + 1                       # 行数
+len(text.splitlines())                    # 按 splitlines 规则计行；空文本为 0
 ```
 
 ## 2. 列表与字典
@@ -68,7 +73,10 @@ value if value is not None else fallback   # 精确 None 判断
 Path("f.txt").read_text(encoding="utf-8").splitlines()    # 读行列表
 Path("out.txt").write_text("\n".join(lines), encoding="utf-8")
 with open("f.json", encoding="utf-8") as f: json.load(f)  # 读 JSON
-(line for line in open("big.log") if "ERROR" in line)     # 生成器惰性逐行
+with open("big.log", encoding="utf-8") as stream:
+    for line in stream:
+        if "ERROR" in line:
+            print(line.rstrip("\n"))
 ```
 
 ## 6. 常用内置组合
@@ -106,12 +114,27 @@ secrets.token_hex(16)                      # 安全令牌（勿用 random）
 
 - 一行式服务于**简单转换**；两步以上逻辑写正常函数
 - REPL 里先试一行式，成型后落盘
-- 生成器表达式优先于建中间列表
+- 单次流式消费可用生成器；需要重复遍历、随机访问或固定快照时使用列表
 
 ---
+
+<!-- full-library-explanation -->
+## 使用速查表前先补齐输入条件
+
+这里是局部表达式集合，xs、words、Path 等名字需要调用方定义或导入，不是一份能从上到下运行的脚本。前置是了解容器与异常；陌生表达式应回到对应参考正文，先确认输入和返回值。
+
+练习比较三组边界：`max([])` 会失败，`max([], default=None)` 返回 None；普通 zip 遇到长度不同会截断，`zip(..., strict=True)` 在消费时报告不匹配；`all([])` 为 True，而 `any([])` 为 False。它们都不是业务验证规则，是否允许空输入由你的需求决定。
+
+一行文件生成器没有显式表达关闭时机，尤其在提前停止消费时容易保留文件。需要读大文件时用 with 持有文件，再在块内消费生成器。若只处理小文本，read_text().splitlines() 更直接，但会读取全部内容。
 
 ## 🔗 相关文档
 
 - 📄 **[控制流与推导式](../../basics/05-control-flow.md)** — 推导式的教程讲解
 - 📄 **[数据结构速查](../language-concepts/03-data-structures.md)** — 一行式背后的容器操作
 - 📄 **[标准库导航](../library-guides/01-standard-library.md)** — itertools/collections 全貌
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

@@ -4,6 +4,9 @@
 
 FastAPI 是注解驱动的现代 Web 框架：类型注解同时充当参数校验、文档生成与编辑器提示。本条目覆盖路由、参数注入、依赖系统、Pydantic 模型与异步实践的完整核心面。
 
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
+
 ## 📚 文档元数据
 
 | 属性 | 内容 |
@@ -13,6 +16,10 @@ FastAPI 是注解驱动的现代 Web 框架：类型注解同时充当参数校�
 | **难度** | ⭐⭐ |
 | **标签** | `#FastAPI` `#Pydantic` `#异步` `#Web` `#API` |
 | **更新日期** | `2026年9月` |
+
+</details>
+
+后续各节默认是独立的局部片段：DB、User、auth、SessionLocal 等应用对象须由项目提供，不可直接串成一个文件执行。文末提供无这些依赖的完整请求实验。
 
 ## 最小应用
 
@@ -49,6 +56,7 @@ def get_bookmark(bookmark_id: int) -> dict:     # 注解 int → 自动类型转
 ## 2. 查询参数与请求体
 
 ```python
+from fastapi import Header, Query
 from pydantic import BaseModel, Field
 
 class BookmarkIn(BaseModel):
@@ -75,8 +83,9 @@ def create(bookmark: BookmarkIn,                # 请求体：Pydantic 模型
 
 ```python
 from fastapi import Depends, HTTPException
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 
-async def get_current_user(token: str = Depends(HTTPBearer())) -> User:
+async def get_current_user(token: HTTPAuthorizationCredentials = Depends(HTTPBearer())) -> User:
     if (user := await auth.verify(token.credentials)) is None:
         raise HTTPException(status_code=401, detail="无效令牌")
     return user
@@ -96,7 +105,7 @@ def read_me(user: User = Depends(get_current_user)):
 # 以 Page = Annotated[dict, Depends(pagination)] 在任意端点复用
 ```
 
-**要点**: 依赖可嵌套（依赖树自动解析），同一请求内同依赖只执行一次；生成器依赖 = with 语义的资源生命周期管理。
+**要点**: 依赖可嵌套（依赖树自动解析），同一请求内相同依赖通常复用缓存；use_cache=False 等配置会改变行为；生成器依赖 = with 语义的资源生命周期管理。
 
 ---
 
@@ -106,9 +115,12 @@ def read_me(user: User = Depends(get_current_user)):
 import httpx
 
 @app.get("/proxy")
-async def proxy(url: str) -> dict:
-    async with httpx.AsyncClient(timeout=10) as client:   # 真异步 I/O
-        return (await client.get(url)).json()
+async def proxy() -> dict:
+    # 教学固定上游，避免把任意用户 URL 变成服务器请求目标。
+    async with httpx.AsyncClient(timeout=10) as client:
+        response = await client.get("https://api.github.com/repos/fastapi/fastapi")
+        response.raise_for_status()
+        return response.json()
 ```
 
 **规则**:
@@ -167,14 +179,57 @@ def list_bookmarks(): ...
 | 陷阱 | 说明 |
 |------|------|
 | `async def` 里写阻塞调用 | 冻结事件循环，全服务卡死 |
-| 忘 `response_model` | 敏感字段（密码哈希）直接泄漏 |
-| 依赖里吞异常 | 依赖抛 HTTPException 才会转 4xx |
-| `--reload` 上生产 | 仅开发用；生产 uvicorn + gunicorn 多 worker |
+| 直接返回含敏感字段的对象 | 返回注解或 response_model 可约束输出，也可显式构造响应；必须验证敏感字段确实被排除 |
+| 依赖里吞异常 | 只捕获能够处理的错误；HTTPException 或配置的异常处理器都可决定响应，其他异常通常成为服务端错误 |
+| 把开发启动方式直接用于部署 | reload 用于开发；生产进程数与进程管理方式按部署环境选择，不要求固定搭配某个管理器 |
 
 ---
+
+<!-- full-library-explanation -->
+## 可独立运行的请求校验实验
+
+前置知识是 HTTP 路径、JSON 和 Python 注解。请求进入 FastAPI 后先匹配路由，再解析参数和模型，随后执行处理器；输出模型负责描述响应形状。业务权限与持久化并不会因为声明了类型而自动完成。
+
+安装 FastAPI、httpx 和 pytest 后，将下列完整实验保存为 `test_fastapi_boundary.py`，执行 `python -m pytest test_fastapi_boundary.py -q`。无需启动网络端口。
+
+```python
+from fastapi import FastAPI, HTTPException
+from fastapi.testclient import TestClient
+from pydantic import BaseModel, Field
+
+app = FastAPI()
+
+class Item(BaseModel):
+    title: str = Field(min_length=1, max_length=30)
+
+@app.post("/items", response_model=Item, status_code=201)
+def create(item: Item):
+    if not item.title.strip():
+        raise HTTPException(status_code=422, detail="blank title")
+    return Item(title=item.title.strip())
+
+def test_valid():
+    with TestClient(app) as client:
+        response = client.post("/items", json={"title": " learn "})
+        assert response.status_code == 201
+        assert response.json() == {"title": "learn"}
+
+def test_invalid():
+    with TestClient(app) as client:
+        assert client.post("/items", json={"title": ""}).status_code == 422
+        assert client.post("/items", json={"title": "   "}).status_code == 422
+```
+
+预期 2 个测试通过。空字符串被字段约束拒绝，纯空白由业务规则拒绝，正常输入被清理后返回。练习：增加独立读取端点后再称为“创建并保存”；目前这里只演示验证和响应，没有持久化，不应把 201 理解为数据库已写入。
 
 ## 🔗 相关文档
 
 - 📄 **[typing 注解全表](../language-concepts/05-typing-annotations.md)** — Pydantic 校验的类型学基础
 - 📄 **[Django 与 Flask 速查](./02-django-flask.md)** — 另两大 Web 框架对照
 - 📄 **[高级特性](../../basics/07-advanced-features.md)** — asyncio 与装饰器的前置知识
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

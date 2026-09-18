@@ -1,5 +1,8 @@
 # 字符串格式化 — f-string 全语法与 t-string
 
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
+
 ## 📚 文档元数据
 
 | 属性 | 内容 |
@@ -10,9 +13,11 @@
 | **标签** | `#f-string` `#t-string` `#格式化` `#PEP750` |
 | **更新日期** | `2026年9月` |
 
+</details>
+
 ## 📌 定义
 
-f-string（格式化字符串字面量）是在字符串前加 `f`、内嵌 `{表达式}` 的插值语法，是现代 Python 输出格式的默认选择。t-string（模板字符串，PEP 750）与 f-string 同形但返回**模板对象**而非 `str`，插值如何渲染交由消费库决定，主打安全的延迟渲染（HTML 转义、SQL 参数化）。
+f-string（格式化字符串字面量）是在字符串前加 `f`、内嵌 `{表达式}` 的插值语法，是现代 Python 输出格式的默认选择。t-string（模板字符串，PEP 750）与 f-string 同形但返回**模板对象**而非 `str`，插值如何渲染交由消费库决定，允许消费方按上下文执行渲染，例如 HTML 转义或 SQL 参数化；安全性取决于消费方的实现，不是 t 前缀自动提供。
 
 ## 📖 语法 / 签名
 
@@ -63,7 +68,26 @@ template = t"<h1>{title}</h1>"   # 由渲染库决定如何转义 title 再输�
 | 浮点显示精度 ≠ 精度修正 | `.2f` 只影响显示，金额运算用 `Decimal` |
 | t-string 当 f-string 用 | `t"..."` 不返回 `str`，直接 print 得到的是对象描述，需渲染库处理 |
 | 嵌套花括号未转义 | 字面 `{}` 需写成 `{{}}` |
-| 日志滥用 f-string | `logger.info(f"{expensive()}")` 无论级别都会求值；改用 `%s` 惰性参数风格 |
+| 把日志惰性格式化当成惰性函数调用 | `logger.info("%s", expensive())` 仍会先调用函数；需要跳过昂贵计算时，先用 `isEnabledFor` 判断级别 |
+
+<!-- full-library-explanation -->
+## 显示精度、求值时机与安全边界
+
+前置知识是表达式、字符串和函数调用。格式化把值转换为显示文本，不会改变值本身：`f"{1 / 3:.2f}"` 得到 `"0.33"`，原来的浮点值仍保持原精度。字段宽度通常按字符计，不等于终端里的视觉列宽，中英文混排不能仅靠 `<10` 保证对齐。
+
+完整小实验（Python 3.12+），保存为 `formatting.py` 后运行：
+
+```python
+value = 1 / 3
+print(f"{value:.2f}")
+print(value > 0.33)
+name = "Ada"
+print(f"{{name}} = {name!r}")
+```
+
+输出 `0.33`、`True` 和 `{name} = 'Ada'`。练习：改为 `.1%`，第一行应为 `33.3%`，因为百分比格式先按比例显示，再控制小数位。
+
+Python 3.14 的 t-string 保存模板片段与插值值，表达式在创建模板时仍会求值。它不会自动保证 HTML、SQL 或 shell 安全；消费方必须按目标上下文处理插值，不能先直接拼成字符串再宣称已经参数化。日志 `%s` 风格可以延迟字符串转换，却不能阻止参数表达式 `expensive()` 的调用；昂贵计算应先判断日志级别或换成更便宜的记录信息。
 
 ## 🔗 相关条目
 
@@ -71,3 +95,9 @@ template = t"<h1>{title}</h1>"   # 由渲染库决定如何转义 title 再输�
 - 📄 **[数据结构速查](./03-data-structures.md)** — 字符串方法全表
 - 📄 **[标准库导航](../library-guides/01-standard-library.md)** — `string`、`textwrap` 等文本工具
 - 📄 **[类型注解全表](./05-typing-annotations.md)** — 模板对象的静态描述方式
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

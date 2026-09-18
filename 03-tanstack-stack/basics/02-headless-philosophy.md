@@ -1,10 +1,26 @@
 # Headless 设计哲学
 
+## 先理解，再动手
+
+Headless 把行为与外观分开。表格库可以知道排序方向，却不知道你要蓝色按钮还是无边框表头。
+
+**本节自测**：同一份排序数据分别渲染成表格和卡片，保留同一排序操作。
+
+<details>
+<summary>预期结果与参考思路（先尝试再展开）</summary>
+
+数据顺序一致、外观可不同；如果只换外观就重写排序算法，说明职责没有分开。
+
+</details>
+
 > **文档简介**: 理解 Headless（无头）设计的核心思想——状态与逻辑与渲染彻底分离，这是贯穿整个 TanStack 生态的统一设计语言
 >
 > **目标读者**: 用过 Ant Design / MUI 等组件库，想理解 TanStack 为何"不带 UI"的开发者
 >
 > **前置知识**: [环境搭建](./01-environment-setup.md)已完成，了解 React 组件渲染模型
+
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
 
 ## 📚 文档元数据
 
@@ -15,6 +31,8 @@
 | **难度** | ⭐ |
 | **标签** | `#Headless` `#设计哲学` `#架构思维` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ## 🎯 学习目标
 
@@ -149,3 +167,9 @@ const table = useTable({ data, columns, features });
 ---
 
 **最后更新**: 2026年9月 | Dev Quest · 03-tanstack-stack
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../LEARNING_GUIDE.md) · [完整目录与版本](../README.md) · [通用术语](../../shared-resources/glossary.md)

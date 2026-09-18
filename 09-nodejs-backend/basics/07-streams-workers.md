@@ -1,10 +1,26 @@
 # Stream 管道与多线程
 
+## 先理解，再动手
+
+Stream 控制分块传输，Worker 用于另一个线程上的计算。把大文件全读进内存后再放进 Stream，并没有获得低峰值内存。
+
+**本节自测**：用流复制一个测试文件并比较内容，模拟目标写入失败。
+
+<details>
+<summary>预期结果与参考思路（先尝试再展开）</summary>
+
+成功时内容一致，失败时管道终止并报告错误；尊重背压与关闭资源。
+
+</details>
+
 > **文档简介**: 掌握 Node.js 的两大性能武器——Stream 流式处理（含背压）与 Worker Threads 多线程，让 I/O 与 CPU 密集任务不再拖垮服务
 
 > **目标读者**: 完成入门六课后，需要处理大文件、批量数据或计算密集任务的进阶学习者
 
 > **前置知识**: [异步编程](./04-async-promises.md)，[错误处理](./06-error-handling.md)
+
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
 
 ## 📚 文档元数据
 
@@ -15,6 +31,8 @@
 | **难度** | ⭐⭐ |
 | **标签** | `#Stream` `#pipeline` `#背压` `#WorkerThreads` `#cluster` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ## 🎯 学习目标
 
@@ -177,11 +195,9 @@ if (cluster.isPrimary) {
 
 ## 🎨 最佳实践
 
-- ✅ **一律 `pipeline`，禁用裸 `pipe`**：错误处理与清理自动完成
-- ✅ **HTTP 上传/下载走流**：`req`/`res` 本身就是流，别用 buffer 中转
-- ✅ **CPU 任务先测量再优化**：`console.time` 或 `perf_hooks` 确认超过 ~10ms 才值得上 worker
-- ❌ **不要在 worker 里访问主线程对象**：线程间只有消息传递
-- ❌ **不要用 cluster 解决 CPU 瓶颈**：每个子进程照样有自己阻塞的事件循环
+流适合数据较大或持续到达的场景，背压让上游配合下游消费速度。pipeline 常能统一传递错误和清理，手工 pipe 则需要自己承担这些责任；小而有明确上限的载荷可以缓冲，不必机械禁止 Buffer。
+
+worker 适合部分 CPU 工作，消息传递有复制或转移成本，也可使用受约束的共享内存。多进程能分担独立请求的计算，但单个进程中的长任务仍会影响该进程；选择方案后用相同输入和并发复测，不以固定 10ms 判断。
 
 ## ❓ 常见问题
 
@@ -218,3 +234,9 @@ if (cluster.isPrimary) {
 - 📄 **[Stream API 速查](../reference/language-concepts/04-streams-api.md)** — 四类流的方法与事件字典
 - 📄 **[Node 核心模块](../reference/language-concepts/03-node-core-api.md)** — fs/os/child_process 配合使用
 - 📄 **[第一个项目](./08-first-project.md)** — 综合运用到完整 API
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../LEARNING_GUIDE.md) · [完整目录与版本](../README.md) · [通用术语](../../shared-resources/glossary.md)

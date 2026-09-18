@@ -1,5 +1,7 @@
 # 泛型与委托属性速查
 
+> **阅读准备**：Kotlin 类、接口和函数类型；泛型约束与属性委托分别阅读，不需要一次掌握全部高级语法。
+
 > Kotlin 泛型（型变、约束、reified）与委托属性（by lazy / by viewModels / 自定义委托）的字典式速查：定义 → 语法 → 示例 → 陷阱
 
 | 属性 | 内容 |
@@ -117,7 +119,7 @@ val taxRate by lazy { loadTaxRateFromDisk() }     // 贵重计算，用到才算
 // 三种模式
 val a by lazy(LazyThreadSafetyMode.SYNCHRONIZED) { compute() }  // 默认：锁保证单次
 val b by lazy(LazyThreadSafetyMode.PUBLICATION)  { compute() }  // 允许多次算，取首个
-val c by lazy(LazyThreadSafetyMode.NONE)         { compute() }  // 单线程环境，零开销
+val c by lazy(LazyThreadSafetyMode.NONE)         { compute() }  // 不提供并发安全保证，不是零开销
 ```
 
 **陷阱**: lambda 捕获的依赖在初始化后才变化不会触发重算——需要"随依赖刷新"的用 `remember(key)` 或 Flow，而非 lazy。
@@ -165,7 +167,8 @@ val Context.settingsStore by preferencesDataStore(name = "settings")
 **定义**: 实现 `ReadOnlyProperty`/`ReadWriteProperty` 即可发明自己的属性行为。
 
 ```kotlin
-class NotEmptyString(private var value: String = "") : ReadWriteProperty<Any?, String> {
+class NotEmptyString(initial: String) : ReadWriteProperty<Any?, String> {
+    private var value = initial.trim().also { require(it.isNotEmpty()) }
     override fun getValue(thisRef: Any?, property: KProperty<*>): String = value
     override fun setValue(thisRef: Any?, property: KProperty<*>, v: String) {
         require(v.isNotBlank()) { "${property.name} 不能为空" }
@@ -174,7 +177,7 @@ class NotEmptyString(private var value: String = "") : ReadWriteProperty<Any?, S
 }
 
 class Form {
-    var title by NotEmptyString()          // 赋空串直接抛异常
+    var title by NotEmptyString("未命名")          // 赋空串直接抛异常
 }
 ```
 
@@ -199,3 +202,18 @@ class Form {
 - 📄 **[Compose 状态 API 详解](./04-compose-state-api.md)** - `var x by remember` 背后的委托机制
 - 📄 **[AndroidX 官方库指南](../library-guides/01-androidx-libraries.md)** - viewModels/DataStore 的库级用法
 - 📖 **[Kotlin 泛型官方文档](https://kotlinlang.org/docs/generics.html)** - 型变完整规则
+
+
+<!-- full-library-explanation -->
+## 泛型信息和属性行为的两条边界
+
+`reified T` 能帮助检查外层运行时类型，但 `List<String>` 的元素类型不会因此自动获得完整运行时校验。上面的 `T::class.java` JSON 写法只适用于目标库能正确处理的类型；嵌套泛型需其 TypeToken 或序列化器机制，并验证外部数据。
+
+`lazy` 决定初始化时间，不决定线程。首次在主线程读取时，初始化块也可能在主线程执行，因此磁盘读取仍会卡住界面。`PUBLICATION` 允许并发初始化多次，不适合不可重复的扣款、注册监听器等副作用。
+
+练习：在 lazy 初始化块打印标记，读取两次，应只得到一次成功初始化结果；再让初始化首次抛异常，下一次访问可重新尝试。验收：能区分“成功值缓存”和“异常永久缓存”。自定义非空字符串委托还应校验初值，否则 setter 严格而初始状态已违反约束。
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

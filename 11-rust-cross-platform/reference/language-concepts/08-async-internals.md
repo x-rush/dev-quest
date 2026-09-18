@@ -4,6 +4,9 @@
 
 `async/.await` 是语法糖，底层只有三个概念：**Future**（惰性的状态机）、**Pin**（"不再移动"的承诺）、**Waker**（类型擦除的唤醒句柄）。std 只定义接口，执行器（Tokio 等）负责调度——理解这三件套，`Box::pin`、`!Send` 报错、"为什么我的 Future 没跑"都有了答案。概念与 API 均属稳定层（基线 Rust 1.98.1 / edition 2024，见[模块 README](../../README.md)）。
 
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
+
 ## 📚 文档元数据
 
 | 属性 | 内容 |
@@ -13,6 +16,8 @@
 | **难度** | ⭐⭐ |
 | **标签** | `#rust` `#reference` `#async` `#Future` `#Pin` `#Waker` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 ## 条目 1：Future trait 与 Poll 状态机
 
@@ -28,11 +33,11 @@ enum Poll<T> { Ready(T), Pending }
 ```
 
 **poll 契约**:
-- 每次 `poll` 至多推进一个挂起点；返回 `Pending` 前必须已登记 waker（见条目 3）
+- 一次 poll 可以经过多个立即就绪的 await；返回 Pending 时要安排后续就绪通知（见条目 3）
 - 返回 `Ready` 后**不得再 poll**——属逻辑错误，实现可以 panic，但不是 UB
 - Future **惰性**：不 poll 就一行代码都不执行（`async fn f()` 调用后什么都不发生）
 
-💡 **示例**（手写 Future + 手写执行器 + 手工 noop Waker，本块经 rustc edition 2024 实测通过）:
+💡 **示例**（手写 Future + 手写执行器 + 手工 noop Waker，edition 2024 示例，本轮未运行）:
 
 ```rust
 use std::future::Future;
@@ -57,12 +62,13 @@ struct PollCounter {
 
 impl Future for PollCounter {
     type Output = u32;
-    fn poll(mut self: Pin<&mut Self>, _cx: &mut Context<'_>) -> Poll<Self::Output> {
+    fn poll(mut self: Pin<&mut Self>, cx: &mut Context<'_>) -> Poll<Self::Output> {
         if self.remaining == 0 {
             return Poll::Ready(self.remaining);
         }
         self.remaining -= 1; // Self: Unpin → Pin<&mut> 可直接解引拿 &mut
-        Poll::Pending // "还没好"——执行器稍后再问
+        cx.waker().wake_by_ref(); // 本例立即可继续推进，安排下一次 poll
+        Poll::Pending
     }
 }
 
@@ -115,7 +121,7 @@ fn main() {
 - 结构体含 `!Unpin` 字段时，`poll` 内访问字段要做**投影**（把 `Pin<&mut Self>` 拆成字段的 Pin）——手写繁琐，工程上用第三方 `pin-project` 宏
 - 违反 Pin 契约（移动已固定数据）= UB（见 [unsafe Rust](./06-unsafe.md) 的 UB 清单）
 
-⚠️ **常见陷阱**: `Unpin` 是"可以安全地从 Pin 里拿出来"，不是"可以移动"；`!Unpin` 类型也能正常 `let x = ...;` 绑定和移动——只有**在 poll 期间**（被 Pin 住之后）移动才违约。
+⚠️ **常见陷阱**: `Unpin` 是"可以安全地从 Pin 里拿出来"，不是"可以移动"；`!Unpin` 类型也能正常 `let x = ...;` 绑定和移动——一旦进入需要固定的状态，就要在整个固定生命周期维持承诺，不只在 poll 调用期间。
 
 🔗 **相关条目**: [条目 4：async fn 脱糖概览](#条目-4async-fn-脱糖概览)、[条目 5：为什么 Box::pin](#条目-5为什么-boxpin)
 
@@ -128,8 +134,8 @@ fn main() {
 | 方法 | 语义 |
 |------|------|
 | `wake()` | 消耗句柄，通知执行器"可以再 poll 了" |
-| `wake_by_ref()` | 同上但保留句柄（内部克隆） |
-| `will_wake(&other)` | 判断是否同一唤醒源，执行器可据此免于重复注册 |
+| `wake_by_ref()` | 通知执行器但保留句柄，不要求内部必须克隆 |
+| `will_wake(&other)` | true 保证唤醒同一任务，false 不保证不同；可用于优化 |
 | `Waker::noop()` | 标准库占位 waker（测试/手工驱动用） |
 
 底层是 `RawWaker` + `RawWakerVTable`（clone/wake/wake_by_ref/drop 四个函数指针）——示例块中的 `noop_waker` 即手工构造全过程。
@@ -139,73 +145,59 @@ fn main() {
 2. `wake` 后执行器可能 poll 若干次——Future 逻辑须对"多余 poll"幂等
 3. waker 可以被克隆送到任意线程（`Send` 语义），事件源不需要知道执行器是谁
 
-💡 **示例**（后台线程经 waker 唤醒主执行器，本块经 rustc edition 2024 实测通过）:
+💡 **示例**（后台线程经 waker 唤醒主执行器，edition 2024 示例，本轮未运行）:
 
 ```rust
 use std::future::Future;
 use std::pin::Pin;
-use std::ptr;
-use std::sync::atomic::{AtomicBool, Ordering};
 use std::sync::{Arc, Mutex};
-use std::task::{Context, Poll, RawWaker, RawWakerVTable, Waker};
+use std::task::{Context, Poll, Wake, Waker};
 use std::thread;
 use std::time::Duration;
 
-// 手工构造 noop Waker（本例只用其占位；真正唤醒靠共享槽位里的 waker）
-fn noop_waker() -> Waker {
-    unsafe fn noop_clone(p: *const ()) -> RawWaker {
-        RawWaker::new(p, &VTABLE)
-    }
-    unsafe fn noop(_p: *const ()) {}
-    static VTABLE: RawWakerVTable = RawWakerVTable::new(noop_clone, noop, noop, noop);
-    unsafe { Waker::from_raw(RawWaker::new(ptr::null(), &VTABLE)) }
+struct ThreadWake(thread::Thread);
+impl Wake for ThreadWake {
+    fn wake(self: Arc<Self>) { self.0.unpark(); }
+    fn wake_by_ref(self: &Arc<Self>) { self.0.unpark(); }
 }
-
-// 极简执行器：Pending 时忙等让出，等 waker.wake() 后继续 poll
-fn block_on<F: Future>(fut: F) -> F::Output {
-    let mut fut = Box::pin(fut);
-    let waker = noop_waker();
+fn block_on<F: Future>(future: F) -> F::Output {
+    let waker = Waker::from(Arc::new(ThreadWake(thread::current())));
     let mut cx = Context::from_waker(&waker);
+    let mut future = Box::pin(future);
     loop {
-        match fut.as_mut().poll(&mut cx) {
-            Poll::Ready(v) => return v,
-            Poll::Pending => std::thread::yield_now(),
+        match future.as_mut().poll(&mut cx) {
+            Poll::Ready(value) => return value,
+            Poll::Pending => thread::park(),
         }
     }
 }
-
-// 等待外部事件：就绪前登记 waker，由事件线程唤醒
-struct WaitFlag {
-    done: Arc<AtomicBool>,
-    waker_slot: Arc<Mutex<Option<Waker>>>,
-}
-
+struct State { done: bool, waker: Option<Waker> }
+struct WaitFlag(Arc<Mutex<State>>);
 impl Future for WaitFlag {
     type Output = ();
     fn poll(self: Pin<&mut Self>, cx: &mut Context<'_>) -> Poll<()> {
-        if self.done.load(Ordering::Acquire) {
-            return Poll::Ready(());
+        let mut state = self.0.lock().unwrap();
+        if state.done { Poll::Ready(()) }
+        else {
+            state.waker = Some(cx.waker().clone());
+            Poll::Pending
         }
-        // 把"怎么叫醒我"交给事件方：克隆 waker 存入共享槽位
-        *self.waker_slot.lock().unwrap() = Some(cx.waker().clone());
-        Poll::Pending
     }
 }
-
 fn main() {
-    let done = Arc::new(AtomicBool::new(false));
-    let slot: Arc<Mutex<Option<Waker>>> = Arc::new(Mutex::new(None));
-
-    let (d2, s2) = (Arc::clone(&done), Arc::clone(&slot));
-    thread::spawn(move || {
+    let state = Arc::new(Mutex::new(State { done: false, waker: None }));
+    let producer = Arc::clone(&state);
+    let handle = thread::spawn(move || {
         thread::sleep(Duration::from_millis(30));
-        d2.store(true, Ordering::Release);
-        if let Some(w) = s2.lock().unwrap().take() {
-            w.wake(); // 唤醒：执行器将重新 poll
-        }
+        let waker = {
+            let mut state = producer.lock().unwrap();
+            state.done = true;
+            state.waker.take()
+        };
+        if let Some(waker) = waker { waker.wake(); }
     });
-
-    block_on(WaitFlag { done, waker_slot: slot });
+    block_on(WaitFlag(state));
+    handle.join().unwrap();
     println!("被后台线程 wake 后完成");
 }
 ```
@@ -242,8 +234,8 @@ async {                                  // 体脱糖 → 匿名状态机枚举�
 | `async fn` 不调用不执行 | 返回的 Future 惰性，poll 才驱动 |
 | async Future 默认 `!Unpin` | 状态机可能自引用，需要 Pin 承诺 |
 | 非Send 局部变量（如 `std::sync::MutexGuard`）跨 await → Future `!Send` | 该变量成了状态机字段，随状态机一起"跨线程" |
-| 状态机大小 = 最大分支 | `.await` 两边的变量生命周期都算进字段 |
-| async 块零堆分配 | 状态机是普通值，`Box::pin` 后才上堆 |
+| 状态机大小取决于需要跨挂起点保存的数据、判别信息和布局优化 | `.await` 两边的变量生命周期都算进字段 |
+| 构造 async 状态机本身不必堆分配 | 状态机是普通值，`Box::pin` 后才上堆 |
 
 ⚠️ **常见陷阱**: 在 `.await` 之后还要用的值，其生命周期横跨挂起点——把"不需要跨 await 的值"放进更小的 `{}` 块，状态机更小、`Send` 判定更容易通过。
 
@@ -251,15 +243,15 @@ async {                                  // 体脱糖 → 匿名状态机枚举�
 
 ## 条目 5：为什么 Box::pin
 
-📌 **定义**: `Box::pin(x)` 把任意 Future 固定到堆上（`Pin<Box<T>>`，自动 `Unpin` 且 `'static`），一次解决执行器与类型系统的三个约束。
+📌 **定义**: `Box::pin(x)` 把任意 Future 固定到堆上（Pin<Box<T>>；可移动指针包装本身，但不会自动延长 T 中借用的生命周期），一次解决执行器与类型系统的三个约束。
 
 📖 **三个理由**:
 
 1. **执行器需要 `Pin<&mut Self>` 才能 poll**：`!Unpin` 的 Future 必须先固定——栈固定用 `pin!` 宏（作用域内），跨作用域/跨线程用 `Box::pin` 更通用
 2. **递归 async fn 无限大小**：递归调用点不 Box 会报 E0733（"recursion in an `async fn` requires boxing"）——`Box::pin(递归调用)` 用堆间接层打断类型自包含（下例）
-3. **spawn 需要 `'static`**：运行时的 `spawn(fut)` 要求 Future 拥有其全部数据（任务活得比调用栈久），`Box::pin` 装箱即得 `'static`（配合所有权收编）
+3. **spawn 需要 `'static`**：运行时的 `spawn(fut)` 要求 Future 拥有其全部数据（任务活得比调用栈久），装箱不会获得 static；需让 Future 的数据本身满足要求，例如移入拥有的值，或使用允许较短生命周期的执行方式
 
-💡 **示例**（递归 async fn，本块经 rustc edition 2024 实测通过）:
+💡 **示例**（递归 async fn，edition 2024 示例，本轮未运行）:
 
 ```rust
 use std::future::Future;
@@ -322,3 +314,18 @@ fn main() {
 **文档版本**: v2.0.0
 **最后更新**: 2026年9月
 **维护团队**: Dev Quest Team
+
+
+<!-- full-library-explanation -->
+## 把“等待发生”与“任务被安排再次运行”连起来
+
+前置是 Future、线程同步与所有权。Pending 不是让执行器不断来问的指令；Future 需要安排就绪通知，让任务有理由再次进入运行队列。检查状态与登记 waker 必须避免竞争窗口：若事件在“检查未就绪”之后、“登记 waker”之前完成，通知可能丢失。本页 WaitFlag 用同一把锁保护状态和 waker，生产方更新后取出 waker，再在锁外唤醒。
+
+pinning 与生命周期是两条约束。Box::pin 让被指对象具有稳定位置，不会把它借用的局部字符串变成 static。async move 可以把拥有的数据移入 Future，但若移动的是一个短期引用，引用的寿命仍没有增长。Tokio spawn 等 API 对 Send/static 的要求应分别检查，不能通过多包一层 Box 自动满足。
+
+练习：让事件在首次 poll 前完成，Future 应立即 Ready；让事件在 Pending 后完成，线程应被 unpark 唤醒；多次无关唤醒只会重新检查条件，不应导致提前成功。再将拥有的 String 与 &String 分别移入异步块，比较能否满足需要 static 的函数签名。这里的单任务执行器用于说明通知机制，不提供生产运行时的 IO 驱动、任务公平性和关闭管理。
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

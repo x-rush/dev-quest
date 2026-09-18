@@ -1,174 +1,59 @@
-# 协议与泛型速查
+# 协议、泛型与 some / any
 
-> **文档简介**: 协议（含关联类型与协议扩展）、泛型约束、some/any 的完整条目式参考，解释 SwiftUI 类型签名背后的原理
->
-> **目标读者**: 想读懂 `some View`/`any Shape` 背后机制的中级学习者
->
-> **前置知识**: 建议先学 [basics/03-swift-syntax-essentials.md](../../basics/03-swift-syntax-essentials.md)
+前置：会定义 struct 与函数。协议描述能力；泛型表达类型之间的关系。SwiftUI 的 some View 只是这些语言机制的一种应用，不应从 UI 性能传言反推语言规则。
 
-## 📚 文档元数据
-
-| 属性 | 内容 |
-|------|------|
-| **模块** | `06-swift-swiftui` |
-| **象限** | 字典 |
-| **难度** | ⭐⭐ |
-| **标签** | `#协议` `#泛型` `#associatedtype` `#some` `#any` |
-| **更新日期** | `2026年9月` |
-
----
-
-## 1. 协议基础
-
-**定义**: 方法、属性与关联类型的契约，类型通过遵循获得能力。
+## 协议要求与扩展新增方法
 
 ```swift
-protocol Drawable {
-    var color: Color { get }              // { get }：至少可读
-    func draw(in context: GraphicsContext)
+protocol Named { var name: String { get }; func greeting() -> String }
+extension Named {
+    func greeting() -> String { "hello" }
+    func debugLabel() -> String { "default label" }
 }
-
-struct Badge: Drawable {
-    let color: Color = .blue
-    func draw(in context: GraphicsContext) { /* … */ }
+struct User: Named {
+    let name: String
+    func greeting() -> String { "你好，\(name)" }
+    func debugLabel() -> String { "user label" }
 }
+let user = User(name: "Ada")
+let named: any Named = user
+print(named.greeting())  // 你好，Ada：greeting 是协议要求
+print(named.debugLabel()) // default label：仅扩展新增的方法
+print(user.debugLabel())  // user label
 ```
 
-### 1.1 协议扩展：默认实现与条件扩展
+这里关键是方法有没有声明为协议要求。不能把所有扩展默认实现概括成“any 调用时永远静态派发”。继承类遵循协议时还有 witness 等细节，库接口应尽量清楚表达可定制能力。
+
+## 泛型保留类型关系
 
 ```swift
-extension Drawable {
-    func debugDescription() -> String { "Drawable(color: \(color))" }  // 默认实现
+func firstEqual<T: Equatable>(_ values: [T], to target: T) -> T? {
+    values.first { $0 == target }
 }
-
-extension Array where Element: Drawable {          // 条件扩展
-    var colors: [Color] { map(\.color) }
-}
+print(firstEqual([1, 2, 3], to: 2) as Any) // Optional(2)
 ```
 
-**陷阱**: 默认实现走**静态派发**——用 `any Drawable` 调用时，若遵循者后来重写了同名方法，重写版本不会覆盖默认实现（与 class 虚函数不同）。
+同一个 T 将数组元素、target 和返回值连接起来。把所有参数改成 Any 会失去这个关系，调用方就要做运行时转换。associatedtype 让遵循者确定协议中的类型槽；where 用来限定槽之间的关系。主关联类型要在协议声明中明确列出，不能给任意协议凭空写 P<Int>。
 
-### 1.2 常用标准库协议
+## some 与 any 按谁选择具体类型区分
 
-| 协议 | 要求 | 用途 |
-|------|------|------|
-| `Identifiable` | `id` | SwiftUI ForEach/列表身份 |
-| `Hashable / Equatable` | 哈希/相等 | 导航值、Diffable、Set 键 |
-| `Codable` | 编解码 | JSON 持久化、网络 |
-| `Comparable` | `<` | 排序 |
-| `Sendable` | 跨隔离域安全 | Swift 并发 |
-| `Error` | 空协议 | throw 的类型约束 |
-| `CaseIterable` | `allCases` | 枚举遍历（Picker 常用） |
+| 形式 | 谁决定具体类型 | 适合什么 |
+|---|---|---|
+| 返回 `some P` | 实现者选定并隐藏同一种底层类型 | 保留类型身份但隐藏长类型名 |
+| 参数 `some P` / 泛型参数 | 调用者传入满足约束的具体类型 | 同一算法服务不同类型 |
+| `any P` | 值中封装某个符合协议的实例，可换成另一种 | 运行时异构存储与接口边界 |
 
----
+普通返回 some 的函数各返回分支须满足同一底层类型要求；ViewBuilder 可以把条件分支转换成一个统一的组合类型，所以 SwiftUI body 中的 if/switch 常常合法。any 可能引入装箱或动态派发，实际成本受表示和优化影响，不能绝对写成“some 零开销、any 必然堆分配”。
 
-## 2. 关联类型与主关联类型
+AnyView 是特定类型擦除包装器，any View 是语言存在类型，两者不等价。类型擦除可能影响 SwiftUI 身份与优化，但不能宣称每次更新必然整棵子树重建。先采用自然的 ViewBuilder 与子视图分解，有真实需求再擦除。
 
-**定义**: `associatedtype` 让协议带"待定类型"，遵循者决定具体类型。
+## 练习与反馈
 
-```swift
-protocol Stack {
-    associatedtype Element
-    mutating func push(_ item: Element)
-    mutating func pop() -> Element?    // popLast 改写 self，协议要求也须 mutating
-}
+把 greeting 从 Named 协议中移除，只保留扩展和 User 实现，预测上例调用结果。再写一个返回 some Named 的函数：分支返回两个不同具体类型时，解释编译器为什么拒绝。验收：能区别协议契约、类型身份和运行时容器，而不是只记“some 快、any 慢”。
 
-struct IntStack: Stack {
-    typealias Element = Int          // 可省略，编译器可推断
-    private var items: [Int] = []
-    mutating func push(_ item: Int) { items.append(item) }
-    mutating func pop() -> Int? { items.popLast() }
-}
-```
+标准协议入口：Equatable 管比较、Hashable 支持哈希集合、Codable 管编解码、Identifiable 管稳定身份、Sendable 管跨隔离域传递；它们都不会自动验证业务规则。参考 [Swift 官方 Opaque Types 源文档](https://github.com/swiftlang/swift-book/blob/main/TSPL.docc/LanguageGuide/OpaqueTypes.md)、[Actor 与 Sendable](./11-actors-sendability.md)。
 
-**使用关联类型协议的两种姿势**：
+<!-- learning-navigation -->
+## 阅读导航
 
-```swift
-// 泛型函数：编译期解析具体类型（保留类型信息）
-func drain<S: Stack>(_ stack: inout S) -> [S.Element] { … }
-
-// 存在类型 any：擦除类型，运行时派发
-let stacks: [any Stack] = [intStack, stringStack]   // 元素类型可不同
-```
-
-**主关联类型（primary associated types）**：
-
-```swift
-protocol Container<Item> {          // 尖括号声明主关联类型
-    associatedtype Item
-    var items: [Item] { get }
-}
-
-func merge<C: Container<String>>(_ c: C) { … }
-// 更简洁：func merge(_ c: some Container<String>)
-```
-
-Swift 标准库的 `Sequence<Element>`、`Collection<Element>` 均已声明主关联类型。
-
----
-
-## 3. 泛型
-
-### 3.1 函数与类型
-
-```swift
-func firstMatch<T: Equatable>(in list: [T], target: T) -> Int? {
-    list.firstIndex(of: target)
-}
-
-struct Cache<Key: Hashable, Value> {
-    private var store: [Key: Value] = [:]
-    subscript(key: Key) -> Value? {
-        get { store[key] }
-        set { store[key] = newValue }
-    }
-}
-```
-
-### 3.2 约束语法
-
-| 写法 | 含义 |
-|------|------|
-| `<T: Hashable>` | 遵循协议 |
-| `<T: Container>` | 遵循（含关联类型推断） |
-| `<T> where T.Element == String` | where 细化 |
-| `<T: Collection>` | 协议带主关联类型 |
-
----
-
-## 4. some vs any：SwiftUI 签名解密
-
-### 4.1 两种多态
-
-| 维度 | `some P`（不透明类型） | `any P`（存在类型） |
-|------|------------------------|---------------------|
-| 类型确定时机 | 编译期（调用方不可见） | 运行时 |
-| 性能 | 零开销（静态派发/特化） | 装箱 + 动态派发 |
-| 类型身份 | 保留 → 可 diff | 丢失 → 不可比较 |
-| 异构集合 | ❌ | ✅ |
-| 嵌套 | 不能再包 another protocol | ✅ |
-
-### 4.2 SwiftUI 为什么是 `some View`
-
-```swift
-var body: some View { … }
-```
-
-- 修饰符链产生的类型名长达数百字符（如 `ModifiedContent<ModifiedContent<…>>`），`some` 让你免写
-- 类型身份保留 → SwiftUI diff 引擎能逐层比较，只更新变化的真实视图
-- **返回 `any View` / `AnyView` 的代价**：丢身份、丢优化、强制 SwiftUI 整体重建该子树——仅用于打破无法统一的类型分歧
-
----
-
-## ⚠️ 高频陷阱速查
-
-- **分支返回不同类型 + some**：`if a { Text() } else { Image() }` 无法直接返回 `some View`——包进 ViewBuilder 或统一容器
-- **any 协议里再用关联类型**：`any Stack` 的 `Element` 未知，直接调 `pop()` 编译不过；用 `any Stack<Int>` 指定主关联类型
-- **协议扩展遮蔽**：类型自己的实现优先于协议扩展默认实现，但仅当静态类型是具体类型；`any` 引用可能走到默认实现
-- **`==` 需要两参数同类型**：Equatable 的 any 版本比较受限，跨类型比较先转具体类型
-
-## 相关文档
-
-- 📄 [01-swift-keywords.md](./01-swift-keywords.md) — some/any/associatedtype 关键字条目
-- 📄 [02-optionals-collections.md](./02-optionals-collections.md) — Collection 协议家族的使用侧
-- 📄 [01-swiftui-essentials.md](../framework-essentials/01-swiftui-essentials.md) — View 协议体系的应用侧
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)

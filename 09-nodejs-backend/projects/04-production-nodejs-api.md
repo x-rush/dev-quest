@@ -1,10 +1,23 @@
 # 精通项目：生产级 Node.js API
 
+## 分阶段练习与验收
+
+**最小阶段**：把已验证 API 容器化并启动在干净环境。
+
+**验收结果**：健康检查、正常请求、失败日志和关闭流程均可观察。
+
+**扩展顺序**：资源上限与多实例后置，先证明服务能正确启动和结束。
+
+建议保存一份正常输入、一份失败输入、实际输出和对应测试。先完成以上阶段再扩展正文中的完整设计；遇到省略实现或未定义依赖，应按文档上下文补齐，不能把代码片段拼接后当作已经验证的完整工程。
+
 > **文档简介**: 综合本模块全部知识，交付一个达到生产标准的 API 服务——配置校验、优雅关闭、限流、可观测性、容器化与 CI/CD 的完整闭环
 >
 > **目标读者**: 已完成⭐⭐项目、准备把服务真正上线的中高级后端开发者
 >
 > **前置知识**: 全部 frameworks 与 projects 文档、[集成测试](../testing/02-integration-testing.md)、[容器化部署](../deployment/01-docker-deployment.md)
+
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
 
 ## 📚 文档元数据
 
@@ -15,6 +28,8 @@
 | **难度** | ⭐⭐⭐ |
 | **标签** | `#production` `#graceful-shutdown` `#rate-limit` `#observability` `#精通项目` |
 | **更新日期** | `2026年9月` |
+
+</details>
 
 架构层面的"为什么"见 [`../advanced-topics/architecture/01-service-architecture.md`](../advanced-topics/architecture/01-service-architecture.md)，本文按上线路径推进。
 
@@ -189,3 +204,9 @@ app.get('/readyz', async (c) => {                               // 依赖就绪�
 - 📄 [事件循环原理](../advanced-topics/performance/01-event-loop.md) — 上线前的性能体检
 - 📄 [可观测性](../deployment/03-observability.md) — pino/OpenTelemetry/Sentry 详解
 - 📖 [常见故障排除](../reference/quick-references/02-troubleshooting.md) — 生产故障速查
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../LEARNING_GUIDE.md) · [完整目录与版本](../README.md) · [通用术语](../../shared-resources/glossary.md)

@@ -8,6 +8,9 @@
 >
 > **预计时长**: 30分钟速查
 
+<details>
+<summary>文档信息（用途、难度与维护记录）</summary>
+
 ## 📚 文档元数据
 
 | 属性 | 内容 |
@@ -19,6 +22,8 @@
 | **更新日期** | `2026年9月` |
 | **作者** | Dev Quest Team |
 | **状态** | ✅ 已完成 |
+
+</details>
 
 ## 🎯 快速索引
 
@@ -175,6 +180,29 @@ func ProcessData(data interface{}) {
 }
 ```
 
+<!-- full-library-explanation -->
+## 方法接收者与接口满足条件
+
+前置是结构体、指针和函数。方法是带接收者的函数；指针接收者允许修改原对象。编译器对可寻址变量的方法调用可提供取址便利，但把值放进接口时仍按方法集检查，不会自动把 T 转成 *T。
+
+完整程序保存为 main.go 后运行：
+
+```go
+package main
+import "fmt"
+type Counter struct { n int }
+func (c *Counter) Increment() { c.n++ }
+type Incrementer interface { Increment() }
+func main() {
+    c := Counter{}
+    var worker Incrementer = &c
+    worker.Increment()
+    fmt.Println(c.n)
+}
+```
+
+输出 1。练习：把 &c 改成 c，编译应失败，因为 Increment 属于 *Counter 的方法集。结构体嵌入用于组合和方法提升，不等于具有虚方法覆盖语义的类继承；出现同名成员时要明确选择访问路径。
+
 ## 🔗 相关资源
 
 - **深入学习**: [basics/05-functions-methods.md](../../basics/05-functions-methods.md)
@@ -184,3 +212,9 @@ func ProcessData(data interface{}) {
 ---
 
 **更新日志**: 2026年9月 - 创建Go面向对象概念速查手册
+
+
+<!-- learning-navigation -->
+## 阅读导航
+
+[本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)
