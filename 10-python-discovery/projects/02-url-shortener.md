@@ -42,7 +42,7 @@
 
 | 方法 | 路径 | 请求 | 响应 |
 |------|------|------|------|
-| POST | `/urls` | `{"url": "https://..."}` | 201 + `{"code", "short_url"}` |
+| POST | `/urls` | `{"url": "https://example.com/articles/python"}` | 201 + `{"code", "short_url"}` |
 | GET | `/{code}` | — | 307 跳转到长链 |
 | GET | `/urls/{code}/stats` | — | 200 + `{"clicks", "target"}` |
 
