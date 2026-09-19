@@ -66,7 +66,7 @@
 
 **关键特性**:
 
-- 纯 Rust 代码交叉编译通常零阻力——rustc 自带各 target 的 std 预编译产物
+- 纯 Rust 代码通常少一个 C linker 依赖，但目标的标准库组件仍要用 `rustup target add <triple>` 安装；Tier、可安装性和交叉链接能力以当前工具链为准
 - 一旦依赖含 C 代码的 crate（如 `ring`、`openssl-sys`），就需要为目标平台准备 C 工具链或 linker
 - 操作系统绑定约束无法绕过：macOS 产物（含签名/打包环节）只能在 macOS 上完成，见下文 Tauri 一节
 
@@ -131,7 +131,7 @@ cargo build --release --target aarch64-apple-darwin
 3. 在 `.cargo/config.toml` 显式声明静态链接意图（见下方代码示例）
 4. 构建并在运行镜像中只拷贝一个二进制，详见 [容器化服务](./04-containerized-services.md)
 
-**验证方法**: `ldd target/x86_64-unknown-linux-musl/release/<二进制名>` 输出 "not a dynamic executable" 即为纯静态。
+**验证方法**: 用 `file` 确认架构和 ELF 类型；在与目标接近的最小运行镜像或真实目标机执行 `--help`/健康检查，再检查退出码。`ldd` 显示“不依赖动态库”只能说明当前动态链接检查结果，不能证明架构、内核、CPU 特性、证书、配置文件或系统调用在目标机都兼容。
 
 ### 步骤四：Android targets 与 linker 配置
 
@@ -271,7 +271,7 @@ gnu/musl 选择要匹配运行环境和 C 依赖，不因追求小镜像就强�
 2. 配置 `crt-static` 并完成 musl 构建
 3. 用 `ldd` 验证产物为纯静态，并记录二进制体积
 
-**评估标准**: `ldd` 输出 "not a dynamic executable" 且产物可拷贝到任意 x64 Linux 运行。
+**评估标准**: `file` 显示预期的 x64 musl ELF；在一个与生产目标接近的干净容器或主机执行成功并记录镜像/系统、内核、架构、命令和退出码。静态链接不等于可拷贝到“任意 x64 Linux”：CPU 指令、内核 ABI、配置与外部资源仍会影响运行。
 
 ### 练习二：cross 产出 ARM64
 
@@ -281,6 +281,15 @@ gnu/musl 选择要匹配运行环境和 C 依赖，不因追求小镜像就强�
 - 若有 ARM 设备（树莓派/云主机），在该设备上运行产物并记录退出码；没有则使用 `qemu-user` 或容器模拟
 
 **提示**: 首次运行 cross 会拉取较大容器镜像，耐心等待；失败信息通常直接指出缺哪个包。
+
+## ✅ 交叉编译验收
+
+对每个准备交付的 target，保存以下证据：
+
+1. `rustup target list --installed` 中包含目标 triple，`cargo build --release --locked --target <triple>` 成功，且构建日志关联到 `Cargo.lock` 摘要与 rustc 版本。
+2. `file` 或平台等价工具显示正确架构与文件格式；不要仅凭扩展名判断 Windows、macOS 或 Linux 产物。
+3. 在真实设备、受控模拟器或接近生产的容器中执行最小命令，记录 stdout/stderr、退出码、系统版本和 CPU 架构。不能执行的 target 必须标为未验证，不以交叉编译成功代替运行验证。
+4. 对包含 C/系统依赖或 Tauri 打包的产物，分别验证 linker、动态库/系统包、签名和安装路径；一个纯 Rust CLI 的通过结果不能覆盖这些边界。
 
 ---
 
