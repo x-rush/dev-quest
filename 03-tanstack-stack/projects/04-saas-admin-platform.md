@@ -176,16 +176,18 @@ export function IfAllowed({ p, children }: { p: Permission; children: React.Reac
 // src/shared/query-client.ts
 import { QueryCache, QueryClient } from '@tanstack/react-query'
 import { toast } from '@/shared/toast'
+import { HttpError } from '@/shared/http'
 
 export const queryClient = new QueryClient({
   queryCache: new QueryCache({
-    // 全局兜底：任何查询错误都到这里，页面各自再做细化处理
+    // 查询的全局兜底；mutation 要在调用点显示与该操作匹配的反馈。
     onError: (error) => {
-      if ((error as Error).message === 'UNAUTHORIZED') {
-        window.location.href = '/login' // 会话过期统一跳转
+      if (error instanceof HttpError && error.status === 401) {
+        // 只发起一次导航；路由还应能显示返回地址。
+        window.location.replace('/login')
         return
       }
-      toast.error((error as Error).message)
+      toast.error(error instanceof Error ? error.message : '请求失败，请稍后重试')
     },
   }),
   defaultOptions: {
@@ -198,6 +200,17 @@ export const queryClient = new QueryClient({
 
 ```ts
 // src/shared/http.ts —— JSON 响应专用；204 用独立的无返回值请求函数处理
+export class HttpError extends Error {
+  constructor(
+    readonly status: number,
+    message: string,
+    readonly code?: string,
+  ) {
+    super(message)
+    this.name = 'HttpError'
+  }
+}
+
 export async function http<T>(url: string, init?: RequestInit): Promise<T> {
   const headers = new Headers(init?.headers)
   if (typeof init?.body === 'string' && !headers.has('Content-Type')) {
@@ -208,14 +221,16 @@ export async function http<T>(url: string, init?: RequestInit): Promise<T> {
     credentials: 'same-origin',
     headers,
   })
-  if (res.status === 401) throw new Error('UNAUTHORIZED')
   if (!res.ok) {
     const body = await res.json().catch(() => ({}))
-    throw new Error(body.message ?? `请求失败 ${res.status}`)
+    // status 供重试、路由和会话处理判断；code 是稳定的业务分类，不能靠翻译后的 message 分支。
+    throw new HttpError(res.status, body.message ?? `请求失败 ${res.status}`, body.code)
   }
   return res.json()
 }
 ```
+
+错误的归属要分层：`HttpError` 保存可程序化判断的状态和业务码；查询缓存负责没有局部处理的读取失败；表单 mutation 在提交按钮旁显示字段或操作错误；路由错误边界只处理无法渲染该路由的异常。401 的导航逻辑也要避免多个并发请求重复跳转。对于 429、503 或网络异常，是否重试取决于请求是否幂等、服务端的 `Retry-After` 与用户能否安全重复操作，不能由 `retry: 2` 一概决定。
 
 ---
 
@@ -236,7 +251,7 @@ export async function http<T>(url: string, init?: RequestInit): Promise<T> {
 - [ ] **权限**：受保护路由有 beforeLoad；写按钮有 IfAllowed；服务端逐请求验证身份、租户和权限
 - [ ] **审计**：服务端记录写操作主体、租户、资源、结果和时间；前端埋点仅补充体验信息
 - [ ] **缓存**：登出 `qc.clear()`；切换租户同上
-- [ ] **错误**：QueryCache.onError 兜底 + 特性级错误边界 + Sentry 上报
+- [ ] **错误**：查询全局兜底、mutation 局部反馈与路由错误边界职责分开；按 `status` / `code` 而非错误文案分支，并验证并发 401 只导航一次
 - [ ] **性能**：按 Router 构建插件的代码分割配置或 `.lazy.tsx` 路由实现拆包，并检查构建产物；单独调用 `createFileRoute` 不保证自动拆包
 - [ ] **交付**：CI 全绿、预览环境冒烟通过、Web Vitals 基线记录
 
