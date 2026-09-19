@@ -12,6 +12,7 @@ const cases = [
   { id: 'next-js-bindings', marker: 'next-js-bindings', source: '02-nextjs-frontend/reference/language-concepts/09-js-core-semantics.md', language: 'js', image: 'node:24-bookworm-slim', command: ['node', 'Case.mjs'], expected: 'JavaScript binding contracts passed\n' },
   { id: 'tanstack-query-key-factory', marker: 'tanstack-query-key-factory', source: '03-tanstack-stack/reference/language-concepts/05-typescript-patterns.md', language: 'js', image: 'node:24-bookworm-slim', command: ['node', 'Case.mjs'], expected: '[["todos"],["todos","list"],["todos","detail",3],["todos","list",{"page":2,"status":"open"}]]\n' },
   { id: 'react-native-amount-input', marker: 'react-native-amount-input', source: '04-multiplatform-apps/reference/language-concepts/02-components-props.md', language: 'js', image: 'node:24-bookworm-slim', command: ['node', 'Case.mjs'], expected: 'React Native amount-input contracts passed\n' },
+  { id: 'react-native-deeplink-input', marker: 'react-native-deeplink-input', source: '04-multiplatform-apps/reference/language-concepts/01-rn-core-api.md', language: 'js', image: 'node:24-bookworm-slim', command: ['node', 'Case.mjs'], expected: 'React Native deep-link input contracts passed\n' },
   { id: 'kotlin-sequence-short-circuit', marker: 'kotlin-sequence-short-circuit', source: '05-kotlin-compose/reference/language-concepts/10-sequences.md', language: 'kotlin', image: 'dev-quest-validation:local', command: ['sh', '-lc', 'kotlinc Case.kt -include-runtime -d /tmp/case.jar && java -jar /tmp/case.jar'], expected: 'Sequence short-circuit contracts passed\n' },
   { id: 'swift-optionals-collections', marker: 'swift-optionals-collections', source: '06-swift-swiftui/reference/language-concepts/02-optionals-collections.md', language: 'swift', image: 'swift:6.3.3-noble', command: ['swift', 'Case.swift'], expected: 'Swift optional and collection contracts passed\n' },
 ];
@@ -53,7 +54,7 @@ const results = cases.map((testCase) => {
 });
 
 const report = {
-  scope: 'Five P1 core or standard-library pages selected outside the earlier named validation pages. Each program is extracted unchanged from its Markdown body by its p1-runtime-case marker.',
+  scope: 'Six P1 core or standard-library pages selected outside the earlier named validation pages. Each program is extracted unchanged from its Markdown body by its p1-runtime-case marker.',
   execution: 'Docker containers run without network, with a read-only root filesystem, dropped capabilities, and bounded PID, memory, and tmpfs resources.',
   not_verified: ['Next.js rendering, routing, or build', 'TanStack Query cache integration', 'React Native device/UI/accessibility behavior', 'Compose or Android runtime', 'SwiftUI or iOS runtime'],
   passed: results.filter((result) => result.status === 'PASS').length,

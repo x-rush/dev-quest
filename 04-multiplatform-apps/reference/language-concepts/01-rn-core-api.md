@@ -326,6 +326,43 @@ startTransition(() => {
 
 已运行的应用通过 `url` 事件收到链接；冷启动还需要读取初始 URL，或交给导航库统一处理。链接里的资源 ID 是输入，必须校验格式，并由服务端验证当前用户权限。能跳到某页面不代表能读取其数据。
 
+下面是路由器之前可独立测试的输入边界。它只接受本应用约定的 `devquest://todo/<id>`，拒绝错误协议、错误宿主、空 ID、额外查询参数和不符合白名单的 ID；通过格式检查也**不代表**该用户有读取该待办的权限。
+
+<!-- p1-runtime-case: react-native-deeplink-input -->
+```js
+function readTodoId(rawUrl) {
+  let url;
+  try {
+    url = new URL(rawUrl);
+  } catch {
+    return null;
+  }
+
+  if (url.protocol !== 'devquest:' || url.hostname !== 'todo') return null;
+  if (url.search || url.hash) return null;
+
+  const id = url.pathname.slice(1);
+  return /^[A-Za-z0-9_-]{1,32}$/.test(id) ? id : null;
+}
+
+const accepted = readTodoId('devquest://todo/Ada_42');
+const rejected = [
+  'https://todo/Ada_42',
+  'devquest://profile/Ada_42',
+  'devquest://todo/',
+  'devquest://todo/Ada%2042',
+  'devquest://todo/Ada_42?preview=1',
+  'not a url',
+].map(readTodoId);
+
+if (accepted !== 'Ada_42' || rejected.some((value) => value !== null)) {
+  throw new Error('deep-link input contract failed');
+}
+console.log('React Native deep-link input contracts passed');
+```
+
+这段程序只验证 URL 解析和白名单；不验证 `Linking` 冷启动读取、React Navigation 配置、Android/iOS/OpenHarmony 的 scheme 注册、设备跳转或服务端鉴权。
+
 练习：分别从已关闭应用和后台应用打开同一详情链接；输入不存在的 ID、退出登录再打开。验收：两条入口都到达相同路由，错误时显示可恢复状态，不崩溃、不泄露资源。网络 API 的连通标志只用于提示，真正请求仍须处理超时和 HTTP 错误。
 
 ## 🔗 相关文档

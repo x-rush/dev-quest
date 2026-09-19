@@ -1,5 +1,5 @@
 {
-  "scope": "Five P1 core or standard-library pages selected outside the earlier named validation pages. Each program is extracted unchanged from its Markdown body by its p1-runtime-case marker.",
+  "scope": "Six P1 core or standard-library pages selected outside the earlier named validation pages. Each program is extracted unchanged from its Markdown body by its p1-runtime-case marker.",
   "execution": "Docker containers run without network, with a read-only root filesystem, dropped capabilities, and bounded PID, memory, and tmpfs resources.",
   "not_verified": [
     "Next.js rendering, routing, or build",
@@ -8,8 +8,8 @@
     "Compose or Android runtime",
     "SwiftUI or iOS runtime"
   ],
-  "passed": 5,
-  "total": 5,
+  "passed": 6,
+  "total": 6,
   "results": [
     {
       "id": "next-js-bindings",
@@ -54,6 +54,22 @@
       "extracted_code_sha256": "c400c0ec1ef26e0232ebfbecd79125320800b099dec7ed2fa9c87d2a3ac8d9f3",
       "expected_stdout": "React Native amount-input contracts passed\n",
       "stdout": "React Native amount-input contracts passed\n",
+      "stderr": "",
+      "exit_code": 0,
+      "error": null,
+      "status": "PASS"
+    },
+    {
+      "id": "react-native-deeplink-input",
+      "source": "04-multiplatform-apps/reference/language-concepts/01-rn-core-api.md",
+      "marker": "react-native-deeplink-input",
+      "language": "js",
+      "image": "node:24-bookworm-slim",
+      "command": "node Case.mjs",
+      "source_sha256": "4e9995a3ca20b87c1910b27ecf5000b1a400ff2794a177e823ae8f7afebab4ea",
+      "extracted_code_sha256": "1de1ee72b20e7964761cd6bfb7b5563ffe902591b82fe7f39f37f302f8a26566",
+      "expected_stdout": "React Native deep-link input contracts passed\n",
+      "stdout": "React Native deep-link input contracts passed\n",
       "stderr": "",
       "exit_code": 0,
       "error": null,
