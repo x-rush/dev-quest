@@ -7,10 +7,10 @@
 | 指标 | 数量 |
 |---|---:|
 | 纳入模块文档 | 642 |
-| 主状态：not_verified | 470 |
-| 主状态：runtime | 172 |
-| 验证措辞出现次数 | 141 |
-| 措辞分类：source_has_limited_runtime_evidence | 87 |
+| 主状态：not_verified | 469 |
+| 主状态：runtime | 173 |
+| 验证措辞出现次数 | 142 |
+| 措辞分类：source_has_limited_runtime_evidence | 88 |
 | 措辞分类：unbound_verification_wording | 54 |
 
 ## 语法级覆盖（不能当作运行覆盖）
@@ -102,7 +102,7 @@
 | Go | [01-go-backend/reference/library-guides/14-strconv.md](../../../../01-go-backend/reference/library-guides/14-strconv.md) | `runtime` | 1 | 0 |
 | Go | [01-go-backend/reference/library-guides/15-log-slog.md](../../../../01-go-backend/reference/library-guides/15-log-slog.md) | `runtime` | 1 | 0 |
 | Go | [01-go-backend/reference/library-guides/16-flag.md](../../../../01-go-backend/reference/library-guides/16-flag.md) | `runtime` | 1 | 1 |
-| Go | [01-go-backend/reference/library-guides/17-std-package-map.md](../../../../01-go-backend/reference/library-guides/17-std-package-map.md) | `not_verified` | 0 | 0 |
+| Go | [01-go-backend/reference/library-guides/17-std-package-map.md](../../../../01-go-backend/reference/library-guides/17-std-package-map.md) | `runtime` | 1 | 1 |
 | Go | [01-go-backend/reference/quick-references/01-syntax-cheatsheet.md](../../../../01-go-backend/reference/quick-references/01-syntax-cheatsheet.md) | `not_verified` | 0 | 0 |
 | Go | [01-go-backend/reference/quick-references/02-web-tools.md](../../../../01-go-backend/reference/quick-references/02-web-tools.md) | `not_verified` | 0 | 0 |
 | Go | [01-go-backend/reference/quick-references/03-troubleshooting.md](../../../../01-go-backend/reference/quick-references/03-troubleshooting.md) | `not_verified` | 0 | 0 |

@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-19T17:11:42.743516+00:00",
-  "purpose": "Twenty-fifth-round runtime evidence for six marked Go core-document fences.",
+  "generated_at": "2026-09-19T17:20:01.335779+00:00",
+  "purpose": "Twenty-fifth-round runtime evidence for seven marked Go core-document fences.",
   "isolation": "No network, read-only container root, dropped capabilities, no-new-privileges, bounded CPU/memory/PIDs, and tmpfs-only writable workspace. Image must already exist because --pull=never is used.",
-  "scope": "Only the six named complete Go fences extracted unchanged after CRLF-to-LF normalization were executed. Other fences, toolchain setup, web services, filesystem integrations, concurrency scheduling, performance, and projects remain outside this evidence.",
+  "scope": "Only the seven named complete Go fences extracted unchanged after CRLF-to-LF normalization were executed. Other fences, toolchain setup, web services, filesystem integrations, concurrency scheduling, performance, and projects remain outside this evidence.",
   "results": [
     {
       "id": "go-first-program-hello",
@@ -88,10 +88,24 @@
       "stderr": "",
       "exit_code": 0,
       "status": "PASS"
+    },
+    {
+      "id": "go-csv-reader-writer",
+      "language": "go",
+      "document": "01-go-backend/reference/library-guides/17-std-package-map.md",
+      "image": "golang:1.25-alpine",
+      "document_sha256": "d3da0b85ff5f5a65799bb678ac266f8a7d75f806d1031cb812bc8cafb3a356eb",
+      "code_sha256": "dae06ecd4d768e1cbe7cfdd24268d0f73deda9d2ec3f1f55621f844056999536",
+      "command": "GOCACHE=/tmp/go-build go run /tmp/main.go",
+      "expected_stdout": "\"北京,中国\",2\n上海,1\n",
+      "stdout": "\"北京,中国\",2\n上海,1\n",
+      "stderr": "",
+      "exit_code": 0,
+      "status": "PASS"
     }
   ],
   "summary": {
-    "passed": 6,
-    "total": 6
+    "passed": 7,
+    "total": 7
   }
 }

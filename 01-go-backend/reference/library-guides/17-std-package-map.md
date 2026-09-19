@@ -178,6 +178,54 @@ Go 标准库的**按用途分组导航**（选取常用公开包，完整目录�
 
 练习：实现一个 CSV 统计命令，输入包含引号和逗号的字段，使用 encoding/csv 读取而非 strings.Split。验收应包含空文件、格式错误、较大数据和输出写入失败四种情况；对每种情况指出负责处理它的包。扩展到 gzip 输入时通过 gzip.Reader 接到同一读取流程，理解接口组合如何减少重复逻辑。
 
+### 可运行的 CSV 最小验收
+
+下面的程序故意把 `"北京,中国"` 放进一个字段：`encoding/csv.Reader` 会按 CSV 规则保留它，而 `strings.Split(line, ",")` 会把它错误拆成两列。示例把输入写成 `io.Reader`、输出写成 `io.Writer`，因此同一逻辑可用于文件、网络响应或内存测试。
+
+<!-- doc-verify:go-csv-reader-writer -->
+```go
+package main
+
+import (
+	"encoding/csv"
+	"fmt"
+	"io"
+	"strings"
+)
+
+func countCities(input io.Reader, output io.Writer) error {
+	r := csv.NewReader(input)
+	w := csv.NewWriter(output)
+	counts := map[string]int{}
+	for {
+		record, err := r.Read()
+		if err == io.EOF { break }
+		if err != nil { return fmt.Errorf("read CSV: %w", err) }
+		if len(record) != 2 { return fmt.Errorf("want 2 columns, got %d", len(record)) }
+		counts[record[1]]++
+	}
+	for _, city := range []string{"北京,中国", "上海"} {
+		if err := w.Write([]string{city, fmt.Sprint(counts[city])}); err != nil { return err }
+	}
+	w.Flush()
+	return w.Error()
+}
+
+func main() {
+	input := strings.NewReader("name,city\n张三,\"北京,中国\"\n李四,上海\n王五,\"北京,中国\"\n")
+	var output strings.Builder
+	if err := countCities(input, &output); err != nil { panic(err) }
+	fmt.Print(output.String())
+}
+```
+
+预期输出如下；带逗号的城市会再次按 CSV 规则加引号。若把输入改成 `broken,\"unterminated`，`Read` 会返回解析错误，调用方可据此停止并报告行号。空输入会生成两行计数为零的输出；实际命令可按产品要求选择输出空表或直接返回“没有数据”。
+
+```text
+"北京,中国",2
+上海,1
+```
+
 ## 🔗 相关条目
 
 - 📄 **[net/http](./03-net-http.md)** / **[encoding/json](./04-encoding-json.md)** / **[context](./05-context.md)** / **[sync](./06-sync.md)** / **[database/sql](./07-database-sql.md)** - 本目录各专篇

@@ -17,12 +17,12 @@
   "summary": {
     "documents": 642,
     "by_primary_state": {
-      "not_verified": 470,
-      "runtime": 172
+      "not_verified": 469,
+      "runtime": 173
     },
-    "verification_wording_occurrences": 141,
+    "verification_wording_occurrences": 142,
     "marker_classification": {
-      "source_has_limited_runtime_evidence": 87,
+      "source_has_limited_runtime_evidence": 88,
       "unbound_verification_wording": 54
     }
   },
@@ -152,7 +152,7 @@
           "mode": "runtime",
           "status": "PASS",
           "report": "go-core-twentyfive-runtime.json",
-          "scope": "Only the six named complete Go fences extracted unchanged after CRLF-to-LF normalization were executed. Other fences, toolchain setup, web services, filesystem integrations, concurrency scheduling, performance, and projects remain outside this evidence."
+          "scope": "Only the seven named complete Go fences extracted unchanged after CRLF-to-LF normalization were executed. Other fences, toolchain setup, web services, filesystem integrations, concurrency scheduling, performance, and projects remain outside this evidence."
         }
       ],
       "marker_count": 0
@@ -215,7 +215,7 @@
           "mode": "runtime",
           "status": "PASS",
           "report": "go-core-twentyfive-runtime.json",
-          "scope": "Only the six named complete Go fences extracted unchanged after CRLF-to-LF normalization were executed. Other fences, toolchain setup, web services, filesystem integrations, concurrency scheduling, performance, and projects remain outside this evidence."
+          "scope": "Only the seven named complete Go fences extracted unchanged after CRLF-to-LF normalization were executed. Other fences, toolchain setup, web services, filesystem integrations, concurrency scheduling, performance, and projects remain outside this evidence."
         }
       ],
       "marker_count": 0
@@ -660,7 +660,7 @@
           "mode": "runtime",
           "status": "PASS",
           "report": "go-core-twentyfive-runtime.json",
-          "scope": "Only the six named complete Go fences extracted unchanged after CRLF-to-LF normalization were executed. Other fences, toolchain setup, web services, filesystem integrations, concurrency scheduling, performance, and projects remain outside this evidence."
+          "scope": "Only the seven named complete Go fences extracted unchanged after CRLF-to-LF normalization were executed. Other fences, toolchain setup, web services, filesystem integrations, concurrency scheduling, performance, and projects remain outside this evidence."
         }
       ],
       "marker_count": 0
@@ -725,7 +725,7 @@
           "mode": "runtime",
           "status": "PASS",
           "report": "go-core-twentyfive-runtime.json",
-          "scope": "Only the six named complete Go fences extracted unchanged after CRLF-to-LF normalization were executed. Other fences, toolchain setup, web services, filesystem integrations, concurrency scheduling, performance, and projects remain outside this evidence."
+          "scope": "Only the seven named complete Go fences extracted unchanged after CRLF-to-LF normalization were executed. Other fences, toolchain setup, web services, filesystem integrations, concurrency scheduling, performance, and projects remain outside this evidence."
         }
       ],
       "marker_count": 1
@@ -738,7 +738,7 @@
           "mode": "runtime",
           "status": "PASS",
           "report": "go-core-twentyfive-runtime.json",
-          "scope": "Only the six named complete Go fences extracted unchanged after CRLF-to-LF normalization were executed. Other fences, toolchain setup, web services, filesystem integrations, concurrency scheduling, performance, and projects remain outside this evidence."
+          "scope": "Only the seven named complete Go fences extracted unchanged after CRLF-to-LF normalization were executed. Other fences, toolchain setup, web services, filesystem integrations, concurrency scheduling, performance, and projects remain outside this evidence."
         }
       ],
       "marker_count": 0
@@ -751,7 +751,7 @@
           "mode": "runtime",
           "status": "PASS",
           "report": "go-core-twentyfive-runtime.json",
-          "scope": "Only the six named complete Go fences extracted unchanged after CRLF-to-LF normalization were executed. Other fences, toolchain setup, web services, filesystem integrations, concurrency scheduling, performance, and projects remain outside this evidence."
+          "scope": "Only the seven named complete Go fences extracted unchanged after CRLF-to-LF normalization were executed. Other fences, toolchain setup, web services, filesystem integrations, concurrency scheduling, performance, and projects remain outside this evidence."
         }
       ],
       "marker_count": 0
@@ -985,16 +985,16 @@
     },
     {
       "path": "01-go-backend/reference/library-guides/17-std-package-map.md",
-      "sha256": "fe5c410b3cadd8209f9badb1e6d6f99e7b6fcee0441257eef96967211f4623e2",
+      "sha256": "d3da0b85ff5f5a65799bb678ac266f8a7d75f806d1031cb812bc8cafb3a356eb",
       "verification": [
         {
-          "mode": "not_verified",
-          "status": "NOT_VERIFIED",
-          "report": null,
-          "scope": "No named runtime or syntax evidence is recorded for this document."
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "go-core-twentyfive-runtime.json",
+          "scope": "Only the seven named complete Go fences extracted unchanged after CRLF-to-LF normalization were executed. Other fences, toolchain setup, web services, filesystem integrations, concurrency scheduling, performance, and projects remain outside this evidence."
         }
       ],
-      "marker_count": 0
+      "marker_count": 1
     },
     {
       "path": "01-go-backend/reference/quick-references/01-syntax-cheatsheet.md",
@@ -9111,6 +9111,12 @@
       "path": "01-go-backend/reference/library-guides/16-flag.md",
       "line": 75,
       "excerpt": "运行实测（go1.25.14）：`./prog -port=9000 -verbose -tags \"a, b\" pos1 pos2` → `9000 true 3 a,b` + `位置参数: [pos1 pos2]`（tags 打印的是自定义 `String()` 的逗号连接，不是切片格式）。",
+      "classification": "source_has_limited_runtime_evidence"
+    },
+    {
+      "path": "01-go-backend/reference/library-guides/17-std-package-map.md",
+      "line": 181,
+      "excerpt": "### 可运行的 CSV 最小验收",
       "classification": "source_has_limited_runtime_evidence"
     },
     {
