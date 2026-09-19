@@ -1,0 +1,59 @@
+{
+  "scope": "complete fences added to two control-flow documents; excludes framework, web, random, and partial snippets",
+  "documents": {
+    "07-php-mastery/basics/05-control-flow.md": "bf43559f0933c900e01893626d5dc72218e70ab7cf2790876e8a48b72555370e",
+    "08-java-revisited/basics/05-control-flow.md": "536c0b5f1fbf6105f6e431bef62d20dd69629f04a8ef377e01b9fdd5168f6b14"
+  },
+  "cases": [
+    {
+      "id": "php-control-flow-match-enum",
+      "document": "07-php-mastery/basics/05-control-flow.md",
+      "source_sha256": "82135b9f5f875d22e0bf062f4dbe88edb2f93de175d8f6cdc4d51e7f8eb094f5",
+      "expected_stdout": "integer|default|已支付\n",
+      "commands": [
+        {
+          "command": [
+            "php",
+            "-d",
+            "display_errors=stderr",
+            "control-flow.php"
+          ],
+          "exit_code": 0,
+          "stdout": "integer|default|已支付\n",
+          "stderr": ""
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "java-control-flow-pattern-switch",
+      "document": "08-java-revisited/basics/05-control-flow.md",
+      "source_sha256": "99033b64d53d07f3980ab1d95c8ab07b53e062527957a9aa6e52b45756d80a62",
+      "expected_stdout": "null\npositive\nnon-positive\nstring:2\n12.0\n",
+      "commands": [
+        {
+          "command": [
+            "javac",
+            "--release",
+            "21",
+            "ControlFlowVerification.java"
+          ],
+          "exit_code": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "java",
+            "ControlFlowVerification"
+          ],
+          "exit_code": 0,
+          "stdout": "null\npositive\nnon-positive\nstring:2\n12.0\n",
+          "stderr": ""
+        }
+      ],
+      "passed": true
+    }
+  ],
+  "passed": true
+}

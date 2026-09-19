@@ -17,8 +17,8 @@
   "summary": {
     "documents": 642,
     "by_primary_state": {
-      "not_verified": 541,
-      "runtime": 101
+      "not_verified": 537,
+      "runtime": 105
     },
     "verification_wording_occurrences": 123,
     "marker_classification": {
@@ -159,13 +159,19 @@
     },
     {
       "path": "01-go-backend/basics/03-variables-constants.md",
-      "sha256": "905c66fb924ce6e14510a372d4fd6307460ac3c01eba77f620662fea07f6ee7d",
+      "sha256": "dcdce57171a5b86077b1b8e05e4afb4c3aeb2a8356f47b739325dd54e0420a97",
       "verification": [
         {
-          "mode": "not_verified",
-          "status": "NOT_VERIFIED",
-          "report": null,
-          "scope": "No named runtime or syntax evidence is recorded for this document."
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "go-rust-p1-basics-runtime.json",
+          "scope": "Three standalone Go programs and one Rust test module extracted verbatim from the named pages. No whole-document, benchmark, panic, network, or external-service claim is made."
+        },
+        {
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "go-rust-p1-basics-runtime.json",
+          "scope": "Three standalone Go programs and one Rust test module extracted verbatim from the named pages. No whole-document, benchmark, panic, network, or external-service claim is made."
         }
       ],
       "marker_count": 0
@@ -2933,7 +2939,7 @@
     },
     {
       "path": "04-multiplatform-apps/basics/08-first-project.md",
-      "sha256": "bfec4da64f29480ef327dd145f6ab5370d04eca4114f7a0759971f5ffb2c97c1",
+      "sha256": "fde8ff30885fa899a7bdcee585bdd46ce341a43ba6e49fc7fca653fee5c9cf45",
       "verification": [
         {
           "mode": "runtime",
@@ -3609,7 +3615,7 @@
     },
     {
       "path": "05-kotlin-compose/basics/08-first-project.md",
-      "sha256": "0bea374743d1fa4a8ba058fe17cdb40695707c6c9374d8efc44f7e6ec440bcc6",
+      "sha256": "f5d9fa5bb821fa9817bf48b35b1cf6a2f1bf9f563cfc8a92fdf2e0bdd6075b3d",
       "verification": [
         {
           "mode": "runtime",
@@ -4161,7 +4167,7 @@
     },
     {
       "path": "06-swift-swiftui/README.md",
-      "sha256": "4a05d106d4a91b3fe7e4c15cbf2e6b703763e192ab568038bfad0376ca6beed4",
+      "sha256": "13b6859d5f5b283fee61ede7e5318acb523bc4611e16a44a7ea849074bb5745f",
       "verification": [
         {
           "mode": "not_verified",
@@ -5077,13 +5083,13 @@
     },
     {
       "path": "07-php-mastery/basics/05-control-flow.md",
-      "sha256": "5b826790dd9eab30ccb495e26b29239d0644d1b7270199faabc1f73ef2a174e6",
+      "sha256": "ebf4c19002a3dca40fed03d5f7ea70757e4725ac9f35852a5d1f6b078d057faa",
       "verification": [
         {
-          "mode": "not_verified",
-          "status": "NOT_VERIFIED",
-          "report": null,
-          "scope": "No named runtime or syntax evidence is recorded for this document."
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "php-java-control-flow.json",
+          "scope": "complete fences added to two control-flow documents; excludes framework, web, random, and partial snippets"
         }
       ],
       "marker_count": 0
@@ -5896,13 +5902,13 @@
     },
     {
       "path": "08-java-revisited/basics/05-control-flow.md",
-      "sha256": "716565c5e37ce7005690d0964d5e6d3fd6e6e7964c2eba591b1de8327d7bc735",
+      "sha256": "a838e599f92af163243c4ca81d718728585711336dfb47bb50fbcd74aa678188",
       "verification": [
         {
-          "mode": "not_verified",
-          "status": "NOT_VERIFIED",
-          "report": null,
-          "scope": "No named runtime or syntax evidence is recorded for this document."
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "php-java-control-flow.json",
+          "scope": "complete fences added to two control-flow documents; excludes framework, web, random, and partial snippets"
         }
       ],
       "marker_count": 0
@@ -8178,13 +8184,13 @@
     },
     {
       "path": "11-rust-cross-platform/basics/06-collections-iterators.md",
-      "sha256": "352031cd3c78212c1021ae4c025f49bf1c86492f9729ef7f7999a4eaef52db0c",
+      "sha256": "ca9f51afc83fa5ff68112dfd592b33a2fec6a93745c1611bbda40e797ea0b902",
       "verification": [
         {
-          "mode": "not_verified",
-          "status": "NOT_VERIFIED",
-          "report": null,
-          "scope": "No named runtime or syntax evidence is recorded for this document."
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "go-rust-p1-basics-runtime.json",
+          "scope": "Three standalone Go programs and one Rust test module extracted verbatim from the named pages. No whole-document, benchmark, panic, network, or external-service claim is made."
         }
       ],
       "marker_count": 0
@@ -8953,7 +8959,7 @@
     },
     {
       "path": "04-multiplatform-apps/basics/08-first-project.md",
-      "line": 329,
+      "line": 337,
       "excerpt": "将读写存储放到可单测的函数或服务；需要与组件生命周期结合时再封装 Hook。表单在小屏、键盘弹起和大字体下都应能提交，键盘避让策略按平台实测，不把某个 behavior 写成固定答案。",
       "classification": "source_has_limited_runtime_evidence"
     },
@@ -8989,13 +8995,13 @@
     },
     {
       "path": "05-kotlin-compose/basics/08-first-project.md",
-      "line": 97,
-      "excerpt": "`libs.versions.toml`（以下是一组教学基线；开始实际项目时，优先使用仓库锁定且已验证的兼容组合。不要因为“最新稳定版”就单独升级某一个插件或库）：",
+      "line": 105,
+      "excerpt": "`gradle/libs.versions.toml`（在你新建的工程中编辑；以下是待构建验证的教学配置，本仓库没有可直接复用的已验证 Android 工程锁文件。不要因为“最新稳定版”就单独升级某一个插件或库）：",
       "classification": "source_has_limited_runtime_evidence"
     },
     {
       "path": "05-kotlin-compose/basics/08-first-project.md",
-      "line": 99,
+      "line": 107,
       "excerpt": "将下面条目合并到已有同名节，不要重复创建 `[plugins]` 或 `[libraries]`。本例 Room 2.8 系列要求 `minSdk >= 23`；Room 插件版本不会替库声明版本，三个库必须显式使用同一个版本。先保留 Android Studio 空 Compose 工程已有的 AGP、Kotlin、Compose、Activity 和 Lifecycle 版本。本文尚无 Android 构建证据，不能把以下配置称为“已验证兼容组合”。",
       "classification": "source_has_limited_runtime_evidence"
     },

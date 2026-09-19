@@ -36,6 +36,8 @@
 | [PHP 与 Java 数据管道验证](reports/php-java-pipelines-validation.md) | PHP 数组/生成器以及 Java Stream/Optional、IO 的 12 个正文完整程序验证 |
 | [Node 与 Python P1 核心验证](reports/node-python-core-p1.md) | Node 异步/核心模块与 Python 内置函数/标准库的 4 个正文完整程序验证 |
 | [前端与移动端 P1 核心验证](reports/p1-frontend-mobile-core-runtime.md) | TypeScript、TanStack Query key、Kotlin Sequence、Swift Optional/Collection 的 4 个限定运行案例 |
+| [Go 与 Rust P1 基础验证](reports/go-rust-p1-basics-runtime.md) | Go 常量及 Rust 集合迭代器的 3 个通过案例；另有 1 个 Go 案例因本机执行策略受阻，未计为通过 |
+| [PHP 与 Java 控制流验证](reports/php-java-control-flow.md) | PHP match/enum 与 Java 21 模式 switch 的 2 个正文完整程序验证 |
 | [验证覆盖状态台账](reports/verification-coverage.md) | 逐文件区分限定运行证据、语法检查和未验证状态，避免把验证措辞或代码围栏当成通过证明 |
 | [本轮交付状态](reports/delivery-status-2026-09-19.md) | 已修复项、已验证项与仍未达到全库交付条件的范围 |
 

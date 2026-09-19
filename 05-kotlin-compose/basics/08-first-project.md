@@ -58,6 +58,14 @@ Room 保存数据，ViewModel 组织页面状态，Composable 显示和发事件
 
 构建 **QuickNotes**：一个本地笔记应用。
 
+### 开工检查与交付物
+
+本模块提供文档和代码片段，不附带已配置好的 QuickNotes 工程。先完成[第一个 Compose 应用](./02-first-compose-app.md)，在 Android Studio 创建自己的空 Compose 工程并成功显示模板页面；保留生成的 Gradle Wrapper、版本目录和应用包名。需要能解释 `suspend`、`Flow` 和 `viewModelScope` 的用途，不清楚时先完成[协程与 Flow](./07-coroutines-flow-basics.md)。
+
+首次实现按本文顺序完成数据层到 UI，随后接入“运行验证”中的 `MainActivity` 与 import；仅粘贴 Entity/Dao 不会出现界面。Room 的 KSP 配置不清楚时先查[KSP 配置指南](../reference/library-guides/03-ksp-configuration.md)。
+
+交付自己的工程源文件、Gradle Wrapper、`gradle/libs.versions.toml`、导出的 Room schema，以及一份验收记录。记录要分别列出构建结果、设备型号/系统、新增 A/B 后删除 B 再重启的结果、空白标题结果、旋转时草稿结果；未执行项写“未验证”。构建成功后仍需完成文末设备验收。通过后进入[本地笔记应用](../projects/01-notes-app.md)，继续实现编辑与搜索。
+
 **功能清单**：
 1. 笔记列表（按创建时间倒序）
 2. 点击 FAB 弹出对话框新增笔记（标题 + 内容）
@@ -94,7 +102,7 @@ Room 保存数据，ViewModel 组织页面状态，Composable 显示和发事件
 
 ### 1. 添加 Room 依赖（KSP）
 
-`libs.versions.toml`（以下是一组教学基线；开始实际项目时，优先使用仓库锁定且已验证的兼容组合。不要因为“最新稳定版”就单独升级某一个插件或库）：
+`gradle/libs.versions.toml`（在你新建的工程中编辑；以下是待构建验证的教学配置，本仓库没有可直接复用的已验证 Android 工程锁文件。不要因为“最新稳定版”就单独升级某一个插件或库）：
 
 将下面条目合并到已有同名节，不要重复创建 `[plugins]` 或 `[libraries]`。本例 Room 2.8 系列要求 `minSdk >= 23`；Room 插件版本不会替库声明版本，三个库必须显式使用同一个版本。先保留 Android Studio 空 Compose 工程已有的 AGP、Kotlin、Compose、Activity 和 Lifecycle 版本。本文尚无 Android 构建证据，不能把以下配置称为“已验证兼容组合”。
 

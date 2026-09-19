@@ -581,7 +581,7 @@ const s = "Hello"
 // ✅ 选择合适的类型
 var age uint8 = 25        // 年龄用uint8足够(0-255)
 var count int = 1000000    // 大数量用int
-var price float64 = 19.99  // 金融计算用float64避免精度问题
+var price float64 = 19.99  // 科学计算中常用；金融金额应按业务选择最小货币单位的整数或十进制类型
 ```
 
 ### 2. 避免不必要的类型转换

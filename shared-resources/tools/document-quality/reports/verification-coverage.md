@@ -7,8 +7,8 @@
 | 指标 | 数量 |
 |---|---:|
 | 纳入模块文档 | 642 |
-| 主状态：not_verified | 541 |
-| 主状态：runtime | 101 |
+| 主状态：not_verified | 537 |
+| 主状态：runtime | 105 |
 | 验证措辞出现次数 | 123 |
 | 措辞分类：source_has_limited_runtime_evidence | 79 |
 | 措辞分类：unbound_verification_wording | 44 |
@@ -41,7 +41,7 @@
 | Go | [01-go-backend/advanced-topics/security/01-security-best-practices.md](../../../../01-go-backend/advanced-topics/security/01-security-best-practices.md) | `runtime` | 1 | 1 |
 | Go | [01-go-backend/basics/01-environment-setup.md](../../../../01-go-backend/basics/01-environment-setup.md) | `not_verified` | 0 | 0 |
 | Go | [01-go-backend/basics/02-first-program.md](../../../../01-go-backend/basics/02-first-program.md) | `not_verified` | 0 | 0 |
-| Go | [01-go-backend/basics/03-variables-constants.md](../../../../01-go-backend/basics/03-variables-constants.md) | `not_verified` | 0 | 0 |
+| Go | [01-go-backend/basics/03-variables-constants.md](../../../../01-go-backend/basics/03-variables-constants.md) | `runtime` | 2 | 0 |
 | Go | [01-go-backend/basics/04-composite-types.md](../../../../01-go-backend/basics/04-composite-types.md) | `runtime` | 4 | 0 |
 | Go | [01-go-backend/basics/05-functions-methods.md](../../../../01-go-backend/basics/05-functions-methods.md) | `not_verified` | 0 | 0 |
 | Go | [01-go-backend/basics/06-control-structures.md](../../../../01-go-backend/basics/06-control-structures.md) | `not_verified` | 0 | 0 |
@@ -411,7 +411,7 @@
 | PHP | [07-php-mastery/basics/02-first-script.md](../../../../07-php-mastery/basics/02-first-script.md) | `not_verified` | 0 | 0 |
 | PHP | [07-php-mastery/basics/03-variables-types.md](../../../../07-php-mastery/basics/03-variables-types.md) | `runtime` | 2 | 0 |
 | PHP | [07-php-mastery/basics/04-functions-oop.md](../../../../07-php-mastery/basics/04-functions-oop.md) | `not_verified` | 0 | 0 |
-| PHP | [07-php-mastery/basics/05-control-flow.md](../../../../07-php-mastery/basics/05-control-flow.md) | `not_verified` | 0 | 0 |
+| PHP | [07-php-mastery/basics/05-control-flow.md](../../../../07-php-mastery/basics/05-control-flow.md) | `runtime` | 1 | 0 |
 | PHP | [07-php-mastery/basics/06-error-exceptions.md](../../../../07-php-mastery/basics/06-error-exceptions.md) | `not_verified` | 0 | 0 |
 | PHP | [07-php-mastery/basics/07-advanced-features.md](../../../../07-php-mastery/basics/07-advanced-features.md) | `runtime` | 3 | 0 |
 | PHP | [07-php-mastery/basics/08-first-project.md](../../../../07-php-mastery/basics/08-first-project.md) | `runtime` | 1 | 0 |
@@ -468,7 +468,7 @@
 | Java | [08-java-revisited/basics/02-first-program.md](../../../../08-java-revisited/basics/02-first-program.md) | `not_verified` | 0 | 0 |
 | Java | [08-java-revisited/basics/03-variables-types.md](../../../../08-java-revisited/basics/03-variables-types.md) | `runtime` | 2 | 0 |
 | Java | [08-java-revisited/basics/04-classes-records.md](../../../../08-java-revisited/basics/04-classes-records.md) | `runtime` | 1 | 0 |
-| Java | [08-java-revisited/basics/05-control-flow.md](../../../../08-java-revisited/basics/05-control-flow.md) | `not_verified` | 0 | 0 |
+| Java | [08-java-revisited/basics/05-control-flow.md](../../../../08-java-revisited/basics/05-control-flow.md) | `runtime` | 1 | 0 |
 | Java | [08-java-revisited/basics/06-exceptions.md](../../../../08-java-revisited/basics/06-exceptions.md) | `not_verified` | 0 | 0 |
 | Java | [08-java-revisited/basics/07-modern-features.md](../../../../08-java-revisited/basics/07-modern-features.md) | `not_verified` | 0 | 0 |
 | Java | [08-java-revisited/basics/08-first-project.md](../../../../08-java-revisited/basics/08-first-project.md) | `runtime` | 1 | 2 |
@@ -632,7 +632,7 @@
 | Rust / Cross-platform | [11-rust-cross-platform/basics/03-structs-enums-patterns.md](../../../../11-rust-cross-platform/basics/03-structs-enums-patterns.md) | `not_verified` | 0 | 0 |
 | Rust / Cross-platform | [11-rust-cross-platform/basics/04-traits-generics.md](../../../../11-rust-cross-platform/basics/04-traits-generics.md) | `not_verified` | 0 | 0 |
 | Rust / Cross-platform | [11-rust-cross-platform/basics/05-error-handling.md](../../../../11-rust-cross-platform/basics/05-error-handling.md) | `not_verified` | 0 | 2 |
-| Rust / Cross-platform | [11-rust-cross-platform/basics/06-collections-iterators.md](../../../../11-rust-cross-platform/basics/06-collections-iterators.md) | `not_verified` | 0 | 0 |
+| Rust / Cross-platform | [11-rust-cross-platform/basics/06-collections-iterators.md](../../../../11-rust-cross-platform/basics/06-collections-iterators.md) | `runtime` | 1 | 0 |
 | Rust / Cross-platform | [11-rust-cross-platform/basics/07-lifetimes.md](../../../../11-rust-cross-platform/basics/07-lifetimes.md) | `not_verified` | 0 | 0 |
 | Rust / Cross-platform | [11-rust-cross-platform/basics/08-smart-pointers.md](../../../../11-rust-cross-platform/basics/08-smart-pointers.md) | `not_verified` | 0 | 0 |
 | Rust / Cross-platform | [11-rust-cross-platform/basics/09-concurrency-async.md](../../../../11-rust-cross-platform/basics/09-concurrency-async.md) | `not_verified` | 0 | 1 |

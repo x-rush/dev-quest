@@ -103,6 +103,13 @@ def records_from_reports():
     for row in go_composite_rust_macros.get("results", []):
         mode = "runtime" if row.get("mode") == "runtime" else "compile_contract"
         add_record(records, row.get("source"), mode, "go-composite-rust-macros.json", go_composite_rust_macros.get("scope", "selected Go composite-type and Rust macro example"), "PASS" if row.get("status", "").upper() == "PASS" else "FAIL")
+    go_rust_p1 = load("go-rust-p1-basics-runtime.json")
+    for row in go_rust_p1.get("results", []):
+        if row.get("status", "").upper() == "PASSED":
+            add_record(records, row.get("source"), "runtime", "go-rust-p1-basics-runtime.json", go_rust_p1.get("scope", "selected Go/Rust P1 basic program"), "PASS")
+    php_java_control_flow = load("php-java-control-flow.json")
+    for row in php_java_control_flow.get("cases", []):
+        add_record(records, row.get("document"), "runtime", "php-java-control-flow.json", php_java_control_flow.get("scope", "selected PHP/Java control-flow program"), "PASS" if row.get("passed") else "FAIL")
     rust_ecosystem = load("rust-ecosystem-runtime.json")
     for row in rust_ecosystem.get("cases", []):
         add_record(records, row.get("document"), "runtime", "rust-ecosystem-runtime.json", rust_ecosystem.get("scope", "selected Rust ecosystem example"), "PASS" if row.get("status", "").upper() == "PASS" else "FAIL")

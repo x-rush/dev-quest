@@ -99,6 +99,44 @@ if (str_contains($userAgent, 'Chrome')) {
 
 `match` 是 PHP 8 最重要的流程控制新特性：它是**表达式**（有返回值）、使用**严格比较**、无穿透、未命中抛 `UnhandledMatchError`。
 
+### 可完整运行的验证示例
+
+下面的代码块是本页可直接提取执行的最小示例：它同时验证 `match` 的严格比较、默认分支和穷尽枚举分支。其余代码块用于说明局部语法，需放入已有的应用上下文。
+
+```php
+<?php
+
+declare(strict_types=1);
+
+enum VerificationStatus: string
+{
+    case Pending = 'pending';
+    case Paid = 'paid';
+}
+
+function verificationLabel(VerificationStatus $status): string
+{
+    return match ($status) {
+        VerificationStatus::Pending => '待支付',
+        VerificationStatus::Paid => '已支付',
+    };
+}
+
+$integerMatch = match (1) {
+    '1' => 'string',
+    1 => 'integer',
+    default => 'other',
+};
+$fallback = match ('unknown') {
+    'known' => 'known',
+    default => 'default',
+};
+
+echo "$integerMatch|$fallback|", verificationLabel(VerificationStatus::Paid), PHP_EOL;
+```
+
+预期输出为 `integer|default|已支付`。本例不依赖 Web 请求、随机数或扩展，适合用 CLI 重放。
+
 ### 基本形态
 
 ```php

@@ -140,12 +140,51 @@ static double area(Shape shape) {
 
 将来新增 `Triangle` 子类时，所有遗漏它的 switch 都会在编译期报错——这是旧版"default 兜底"永远给不了的安全感。
 
+### 可完整编译和运行的验证示例（Java 21）
+
+下面的代码块可作为一个完整的 `ControlFlowVerification.java` 文件提取。它验证 Java 21 已正式支持的 switch 模式匹配、`case null`、守卫和 sealed 层级穷尽性；本页其余片段为局部示意，需要已有变量或类型。
+
+```java
+public class ControlFlowVerification {
+    sealed interface VerificationShape permits Circle, Rectangle {}
+    record Circle(double radius) implements VerificationShape {}
+    record Rectangle(double width, double height) implements VerificationShape {}
+
+    static String describe(Object value) {
+        return switch (value) {
+            case null -> "null";
+            case Integer i when i > 0 -> "positive";
+            case Integer i -> "non-positive";
+            case String s -> "string:" + s.length();
+            default -> "other";
+        };
+    }
+
+    static double area(VerificationShape shape) {
+        return switch (shape) {
+            case Circle c -> Math.PI * c.radius() * c.radius();
+            case Rectangle r -> r.width() * r.height();
+        };
+    }
+
+    public static void main(String[] args) {
+        System.out.println(describe(null));
+        System.out.println(describe(3));
+        System.out.println(describe(0));
+        System.out.println(describe("hi"));
+        System.out.printf("%.1f%n", area(new Rectangle(3, 4)));
+    }
+}
+```
+
+在 JDK 21 中，预期输出依次为 `null`、`positive`、`non-positive`、`string:2` 和 `12.0`。`for (var _ : data)` 是 Java 22+ 的未命名变量语法，不能放进此 JDK 21 验证文件。
+
 ## 🔁 循环要点复习
 
 ```java
 for (var entry : map.entrySet()) { ... }   // 增强 for 可用 var
 
-for (var _ : data) { count++; }            // Java 22+：未命名变量 _，明确"不用这个元素"
+for (var ignored : data) { count++; }      // Java 21：普通未使用变量；Java 22+ 可写为 _
 ```
 
 - `while`/`do-while` 语义未变；标签 break/continue 少用，复杂跳转优先提取方法

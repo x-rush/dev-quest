@@ -9,7 +9,7 @@
 
 > **文档简介**: Dev Quest 应用帝国矩阵的 iOS 支柱模块：以 Swift 6.3 严格并发为地基，用 SwiftUI + Observation + SwiftData 构建现代原生应用，直至上架与运维
 >
-> **目标读者**: 有 Go 后端与现代前端开发经验、想系统掌握 iOS 原生开发的学习者
+> **目标读者**: 会基本编程、初次学习 Swift 与 iOS 的学习者；Go 后端与前端经验可用于对照，不是前提
 >
 > **前置知识**: 需基本编程和 Swift 语法；有任一声明式 UI 框架（React/Compose）经验可显著加速
 
@@ -64,9 +64,11 @@
 
 ### 入门路径（⭐）
 
-环境搭建 → Swift 语法要点 → 第一个 SwiftUI App → 视图与状态 → 布局系统 → 导航模式 → SwiftUI 基础任务指南 → Xcode 工具链 → 本地笔记应用
+环境搭建 → Swift 语法要点 → 第一个 SwiftUI App → 视图与状态 → 布局系统 → 导航模式 → 首个完整项目 → 本地笔记应用
 
-[01 环境搭建](./basics/01-environment-setup.md) → [03 Swift 语法要点](./basics/03-swift-syntax-essentials.md) → [02 第一个 SwiftUI App](./basics/02-first-swiftui-app.md) → [04 视图与状态](./basics/04-views-state.md) → [05 布局系统](./basics/05-layouts.md) → [06 导航模式](./basics/06-navigation.md) → [SwiftUI 基础任务指南](./frameworks/01-swiftui-basics.md) → [Xcode 工具链](./frameworks/04-devtools.md) → [项目：本地笔记应用](./projects/01-notes-app.md)
+[01 环境搭建](./basics/01-environment-setup.md) → [03 Swift 语法要点](./basics/03-swift-syntax-essentials.md) → [02 第一个 SwiftUI App](./basics/02-first-swiftui-app.md) → [04 视图与状态](./basics/04-views-state.md) → [05 布局系统](./basics/05-layouts.md) → [06 导航模式](./basics/06-navigation.md) → [08 首个完整项目：待办记账](./basics/08-first-project.md) → [项目：本地笔记应用](./projects/01-notes-app.md)
+
+首项目需要可用的 macOS/Xcode、iOS 17 或更高的运行目标，以及可选值、数组和错误处理基础。交付自己的 Xcode 工程和验收记录：新增 A/B、完成并删除 B，终止应用再启动后 A 仍在且 B 不在；支出 `0.10` 与 `0.20` 合计显示 0.30 元，非法金额不能保存。先完成待办阶段，再加入记账；未运行的设备检查标为未验证。遇到视图问题查[SwiftUI 基础任务指南](./frameworks/01-swiftui-basics.md)，工程启动问题查[Xcode 工具链](./frameworks/04-devtools.md)。完成后再做笔记应用的编辑与搜索；[并发入门](./basics/07-concurrency-async-await.md)在进入网络项目之前学习。
 
 ### 进阶路径（⭐⭐）
 
