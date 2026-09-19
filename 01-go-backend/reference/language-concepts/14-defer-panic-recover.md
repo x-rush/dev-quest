@@ -33,6 +33,7 @@ defer func() {
 
 ## 💡 示例
 
+<!-- doc-verify:go-defer-panic-recover -->
 ```go
 package main
 

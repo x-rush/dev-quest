@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-19T17:09:53.185393+00:00",
-  "purpose": "Twenty-fifth-round runtime evidence for five marked Go core-document fences.",
+  "generated_at": "2026-09-19T17:11:42.743516+00:00",
+  "purpose": "Twenty-fifth-round runtime evidence for six marked Go core-document fences.",
   "isolation": "No network, read-only container root, dropped capabilities, no-new-privileges, bounded CPU/memory/PIDs, and tmpfs-only writable workspace. Image must already exist because --pull=never is used.",
-  "scope": "Only the five named complete Go fences extracted unchanged after CRLF-to-LF normalization were executed. Other fences, toolchain setup, web services, filesystem integrations, concurrency scheduling, performance, and projects remain outside this evidence.",
+  "scope": "Only the six named complete Go fences extracted unchanged after CRLF-to-LF normalization were executed. Other fences, toolchain setup, web services, filesystem integrations, concurrency scheduling, performance, and projects remain outside this evidence.",
   "results": [
     {
       "id": "go-first-program-hello",
@@ -74,10 +74,24 @@
       "stderr": "",
       "exit_code": 0,
       "status": "PASS"
+    },
+    {
+      "id": "go-defer-panic-recover",
+      "language": "go",
+      "document": "01-go-backend/reference/language-concepts/14-defer-panic-recover.md",
+      "image": "golang:1.25-alpine",
+      "document_sha256": "c37991e2e7b5b30be2fd8402bf7b7e1d821d56979a9815820b7c4c2cf59909fd",
+      "code_sha256": "d495568c23c1e3bb5c509726b602acf03b98725a60b6b66a559afcf8a91a6bdd",
+      "command": "GOCACHE=/tmp/go-build go run /tmp/main.go",
+      "expected_stdout": "defer 闭包（延迟求值）: 99\ndefer 参数（立即求值）: 1\nbody\nsecond registered\nfirst registered\ndouble(3) = 30\nrecovered: boom\n",
+      "stdout": "defer 闭包（延迟求值）: 99\ndefer 参数（立即求值）: 1\nbody\nsecond registered\nfirst registered\ndouble(3) = 30\nrecovered: boom\n",
+      "stderr": "",
+      "exit_code": 0,
+      "status": "PASS"
     }
   ],
   "summary": {
-    "passed": 5,
-    "total": 5
+    "passed": 6,
+    "total": 6
   }
 }
