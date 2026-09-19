@@ -116,6 +116,42 @@ secrets.token_hex(16)                      # 安全令牌（勿用 random）
 - REPL 里先试一行式，成型后落盘
 - 单次流式消费可用生成器；需要重复遍历、随机访问或固定快照时使用列表
 
+### 可复现验收：空输入、严格配对与资源关闭
+
+以下完整程序把速查中的几个边界放到同一处执行。它不是让所有业务都接受空输入，而是让调用者先看清 Python 的默认语义，再在业务层决定是否拒绝。
+
+```python verify:python-cheatsheet-boundaries
+from pathlib import Path
+from tempfile import TemporaryDirectory
+
+print(f"max={max([], default=None)}")
+
+try:
+    list(zip(["a"], [1, 2], strict=True))
+except ValueError:
+    print("zip=strict-error")
+
+print(f"all-empty={all([])} any-empty={any([])}")
+
+with TemporaryDirectory() as directory:
+    path = Path(directory) / "sample.txt"
+    path.write_text("first\nsecond\n", encoding="utf-8")
+    with path.open(encoding="utf-8") as stream:
+        assert next(stream) == "first\n"
+    print(f"closed={stream.closed}")
+```
+
+预期输出：
+
+```text
+max=None
+zip=strict-error
+all-empty=True any-empty=False
+closed=True
+```
+
+`zip(..., strict=True)` 的长度不匹配在迭代消费时出现，因此只创建 iterator 并不能验证输入；文件对象由 `with` 管理，即使中途抛出异常也会走关闭路径。
+
 ---
 
 <!-- full-library-explanation -->

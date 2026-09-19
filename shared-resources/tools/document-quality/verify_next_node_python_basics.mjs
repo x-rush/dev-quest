@@ -20,6 +20,7 @@ const cases = [
   ['node-first-server-routing', '09-nodejs-backend/basics/02-first-server.md', 'js', 'node'],
   ['node-lifecycle-idempotent-shutdown', '09-nodejs-backend/reference/library-guides/07-process-lifecycle.md', 'js', 'node'],
   ['node-stream-worker-boundaries', '09-nodejs-backend/basics/07-streams-workers.md', 'js', 'node'],
+  ['python-cheatsheet-boundaries', '10-python-discovery/reference/quick-references/01-python-cheatsheet.md', 'python', 'python'],
   ['python-bindings-formatting', '10-python-discovery/basics/03-variables-types.md', 'python', 'python'],
 ];
 
@@ -63,8 +64,8 @@ try {
     fs.writeFileSync(path.join(temp, fileName), extracted.code, 'utf8');
     const image = runtime === 'python' ? 'python:3.14-alpine' : 'node:24-bookworm-slim';
     const command = runtime === 'python'
-      ? ['run', '--rm', '--network', 'none', '--read-only', '-v', `${temp}:/input:ro`, image, 'python', '-I', `/input/${fileName}`]
-      : ['run', '--rm', '--network', 'none', '--read-only', '-v', `${temp}:/input:ro`, image, 'node', '--experimental-strip-types', `/input/${fileName}`];
+      ? ['run', '--rm', '--network', 'none', '--read-only', '--tmpfs', '/tmp:rw,exec,nosuid,nodev,size=32m', '-v', `${temp}:/input:ro`, image, 'python', '-I', `/input/${fileName}`]
+      : ['run', '--rm', '--network', 'none', '--read-only', '--tmpfs', '/tmp:rw,exec,nosuid,nodev,size=32m', '-v', `${temp}:/input:ro`, image, 'node', '--experimental-strip-types', `/input/${fileName}`];
     return {
       id,
       source: `dev-quest/${relative}`,
@@ -83,7 +84,7 @@ try {
 
 const report = {
   generated_at: new Date().toISOString(),
-  purpose: 'Limited direct-body extraction verification for six P1 basics documents.',
+  purpose: 'Limited direct-body extraction verification for seven P1 basics documents.',
   passed: results.filter((result) => result.status === 'PASS').length,
   total: results.length,
   results,

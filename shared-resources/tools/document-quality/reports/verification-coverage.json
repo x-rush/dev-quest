@@ -17,8 +17,8 @@
   "summary": {
     "documents": 642,
     "by_primary_state": {
-      "not_verified": 460,
-      "runtime": 182
+      "not_verified": 459,
+      "runtime": 183
     },
     "verification_wording_occurrences": 143,
     "marker_classification": {
@@ -8234,13 +8234,13 @@
     },
     {
       "path": "10-python-discovery/reference/quick-references/01-python-cheatsheet.md",
-      "sha256": "e649fa740f33cb2db14310a8a92429b1fcdd2ed63e6e8a0db6b647b483b5495b",
+      "sha256": "4abd3c22e2a4a3b5b95ae9bac3bd8cfc0b63c8196f85fa179dd8897c278bb08d",
       "verification": [
         {
-          "mode": "not_verified",
-          "status": "NOT_VERIFIED",
-          "report": null,
-          "scope": "No named runtime or syntax evidence is recorded for this document."
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "next-node-python-basics-results.json",
+          "scope": "Only this named, complete code block; no whole-document, framework, network, or application coverage."
         }
       ],
       "marker_count": 0

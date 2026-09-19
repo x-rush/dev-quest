@@ -7,8 +7,8 @@
 | 指标 | 数量 |
 |---|---:|
 | 纳入模块文档 | 642 |
-| 主状态：not_verified | 460 |
-| 主状态：runtime | 182 |
+| 主状态：not_verified | 459 |
+| 主状态：runtime | 183 |
 | 验证措辞出现次数 | 143 |
 | 措辞分类：source_has_limited_runtime_evidence | 88 |
 | 措辞分类：unbound_verification_wording | 55 |
@@ -619,7 +619,7 @@
 | Python | [10-python-discovery/reference/library-guides/04-os-sys.md](../../../../10-python-discovery/reference/library-guides/04-os-sys.md) | `runtime` | 2 | 5 |
 | Python | [10-python-discovery/reference/library-guides/05-enum-module.md](../../../../10-python-discovery/reference/library-guides/05-enum-module.md) | `runtime` | 3 | 0 |
 | Python | [10-python-discovery/reference/library-guides/06-functools-subprocess.md](../../../../10-python-discovery/reference/library-guides/06-functools-subprocess.md) | `runtime` | 4 | 0 |
-| Python | [10-python-discovery/reference/quick-references/01-python-cheatsheet.md](../../../../10-python-discovery/reference/quick-references/01-python-cheatsheet.md) | `not_verified` | 0 | 0 |
+| Python | [10-python-discovery/reference/quick-references/01-python-cheatsheet.md](../../../../10-python-discovery/reference/quick-references/01-python-cheatsheet.md) | `runtime` | 1 | 0 |
 | Python | [10-python-discovery/reference/quick-references/02-troubleshooting.md](../../../../10-python-discovery/reference/quick-references/02-troubleshooting.md) | `not_verified` | 0 | 0 |
 | Python | [10-python-discovery/testing/01-unit-testing.md](../../../../10-python-discovery/testing/01-unit-testing.md) | `not_verified` | 0 | 0 |
 | Python | [10-python-discovery/testing/02-integration-testing.md](../../../../10-python-discovery/testing/02-integration-testing.md) | `not_verified` | 0 | 0 |
