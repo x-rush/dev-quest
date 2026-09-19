@@ -34,7 +34,7 @@
 | **标签** | `#数组` `#切片` `#映射` `#结构体` |
 | **更新日期** | `2026年9月` |
 | **作者** | Dev Quest Team |
-| **状态** | ✅ 已完成 |
+| **验证范围** | 文末 4 个完整实验；其他片段用于逐步讲解 |
 
 </details>
 
@@ -136,10 +136,12 @@ fmt.Println(langs) // [Go Rust Java] —— 原切片被改了！
 ```go
 dst := make([]string, len(langs))
 n := copy(dst, langs)
-fmt.Println(n, dst) // 3 [Go Rust Java] —— dst 与 langs 完全独立
+fmt.Println(n, dst) // 3 [Go Rust Java] —— 这里复制的是 string 元素
 ```
 
-> ⚠️ **必须掌握的陷阱**：函数内对参数切片 `append` 后返回，若触发扩容则原调用方切片看不到新元素。惯用法是**始终接收 append 的返回值**：`s = append(s, x)`。
+`copy` 复制 `min(len(dst), len(src))` 项，允许源和目标重叠。仅预留容量、长度为 0 的目标复制不了元素。复制 `[][]int` 或 `[]*T` 时只复制内部切片值或指针，仍共享内部对象。
+
+> ⚠️ **必须掌握的陷阱**：无论是否扩容，另一个切片变量执行 append 都不会自动改变调用方原切片的长度；未扩容时可能覆盖共享数组中原长度以外的数据。函数追加后应返回切片，调用方接收返回值。三下标 `s[:len(s):len(s)]` 限制容量，可让后续非空追加分配新数组，但直接修改已有元素仍会共享。
 
 ## 📝 映射：键值对集合
 
@@ -181,7 +183,7 @@ delete(ages, "alice")
 _, ok := ages["alice"]
 fmt.Println(ok) // false
 
-// 遍历顺序是随机的！需要有序输出时先对键排序
+// 遍历顺序没有保证；需要有序输出时先对键排序
 for name, age := range ages {
     fmt.Println(name, age)
 }
@@ -201,7 +203,7 @@ type Point struct {
 }
 
 p1 := Point{X: 1, Y: 2}   // 字段名初始化（推荐）
-p2 := Point{3, 4}          // 顺序初始化（不推荐，字段变动即编译错误）
+p2 := Point{3, 4}          // 同类型字段调换顺序可能静默改变含义，优先具名初始化
 var p3 Point               // 零值: {0 0}
 ```
 
@@ -218,7 +220,7 @@ fmt.Println(p1) // {1 20}
 
 ### 3. 结构体是值类型
 
-与数组一样，赋值和传参复制整个结构体：
+与数组一样，赋值和传参复制结构体字段的值；其中的切片、map、指针仍可引用共享数据，外层复制不等于深拷贝：
 
 ```go
 p4 := p1
@@ -237,13 +239,17 @@ p2 := Point{3, 4}
 fmt.Println(p2 == Point{X: 3, Y: 4}) // true
 ```
 
-> ⚠️ 含切片、映射、函数字段的**结构体不可比较**，编译器会直接报错。
+> ⚠️ 含切片、映射、函数字段的**结构体不可比较**，编译器会直接报错。若字段类型为接口，结构体在静态类型上可比较，但字段装入切片等不可比较动态值后参与比较仍可能 panic。`map[any]V` 使用切片动态值作键也会 panic。
 
 ## 📝 组合示例：结构体切片
 
 结构体 + 切片是Go中最常见的数据建模组合（对应真实项目中的记录列表）：
 
 ```go
+package main
+
+import "fmt"
+
 type Todo struct {
     Title string
     Done  bool
@@ -274,9 +280,9 @@ func main() {
 |------|------|----------|
 | nil map 写入 | panic: assignment to entry in nil map | `make(map[K]V)` 或字面量初始化 |
 | 子切片修改污染原切片 | 子切片赋值后原切片"莫名"变化 | 需要独立数据时用 `copy` |
-| append 忽略返回值 | 扩容后改动丢失 | 始终 `s = append(s, x)` |
-| 依赖 map 遍历顺序 | 每次运行顺序不同 | 先 `sort` 键再遍历 |
-| 大结构体按值传参 | 复制开销大 | 传 `*T` 指针 |
+| append 不把结果传回调用者 | 原切片长度未更新，底层元素可能已修改 | 返回新切片并接收返回值 |
+| 依赖 map 遍历顺序 | 顺序没有保证，也可能重复 | 先排序键再遍历 |
+| 只看字段数决定使用指针 | 可能引入共享修改与额外逃逸 | 先定义值语义，再测量成本 |
 
 ## 📈 性能提示
 
@@ -293,7 +299,7 @@ for _, u := range users {
 
 ### 大结构体传指针
 
-结构体字段较多时，按值传递每次都复制全部字段；传指针只复制 8 字节地址。小结构体（两三个字段）按值传递反而更利于局部性，不必教条。
+指针大小依平台而定，不能固定假设为 8 字节。按值传参在语言语义上复制字段；实际机器代码可能经过优化。指针会引入共享修改、逃逸与 GC 成本，不能仅凭字段多就断言更快；先确定是否需要修改原值，再用 benchmark 判断性能。
 
 ## 🔗 文档交叉引用
 
@@ -325,7 +331,7 @@ for _, u := range users {
 
 ---
 
-**文档状态**: ✅ 已完成
+**文档状态**: 已补充共享、nil 与比较边界；运行证据仅覆盖命名实验
 **最后更新**: 2026年9月
 **版本**: v1.0.0
 
@@ -336,6 +342,186 @@ for _, u := range users {
 > - 遇到"改了 A 却影响 B"的问题，第一时间想到共享底层数组
 > - 结构体的值/指针语义将在函数和方法一文中与接收者选择呼应
 
+
+## 独立实验：检查共享、空值和删除契约
+
+上面的短片段用于解释单个操作；下面每个 Go 围栏都是一个独立 `main.go`。一次复制一块，执行 `go run main.go`，对照紧随其后的输出。[验证报告](../../shared-resources/tools/document-quality/reports/go-composite-rust-macros.md)记录这四个案例的直接正文抽取结果。
+
+### 实验 1：限制容量与复制内部引用
+
+<!-- verified-case: go-composite-alias -->
+```go
+package main
+
+import "fmt"
+
+func main() {
+    base := []int{10, 20, 30, 40}
+    part := base[:2]
+    grown := append(part, 99)
+    fmt.Println(base, part, grown)
+    limited := base[:2:2]
+    detached := append(limited, 77)
+    detached[0] = 8
+    fmt.Println(base, detached)
+
+    type Profile struct { Name string; Tags []string }
+    original := Profile{"Ada", []string{"go"}}
+    cloned := original
+    cloned.Name = "Lin"
+    cloned.Tags[0] = "rust"
+    fmt.Println(original.Name, original.Tags, cloned.Name)
+    cloned.Tags = append([]string(nil), original.Tags...)
+    cloned.Tags[0] = "python"
+    fmt.Println(original.Tags, cloned.Tags)
+}
+```
+
+```text
+[10 20 99 40] [10 20] [10 20 99]
+[10 20 99 40] [8 20 77]
+Ada [rust] Lin
+[rust] [python]
+```
+
+### 实验 2：copy 看长度，map 要检查存在性
+
+nil 切片和非 nil 空切片都可以 range、len、append，但并非所有 API 都把它们当作相同值。nil map 可读、len、range、delete、clear，但新增键值会 panic。map 赋值仍共享数据；多个 goroutine 有写操作时需要同步。
+
+<!-- verified-case: go-composite-empty -->
+```go
+package main
+
+import (
+    "fmt"
+    "sort"
+)
+
+func main() {
+    var empty []int
+    allocated := make([]int, 0)
+    fmt.Println(empty == nil, allocated == nil, len(empty), len(allocated))
+    src := []int{1, 2, 3}
+    dst := make([]int, 0, len(src))
+    fmt.Println(copy(dst, src))
+    dst = dst[:len(src)]
+    fmt.Println(copy(dst, src), dst)
+    fmt.Println(copy(dst[1:], dst[:2]), dst)
+
+    var missing map[string]int
+    value, ok := missing["Ada"]
+    delete(missing, "Ada")
+    fmt.Println(value, ok, len(missing))
+    scores := map[string]int{"Ada": 0, "Lin": 2}
+    alias := scores
+    alias["Lin"] = 3
+    value, ok = scores["Ada"]
+    fmt.Println(value, ok, scores["Lin"])
+    keys := make([]string, 0, len(scores))
+    for key := range scores { keys = append(keys, key) }
+    sort.Strings(keys)
+    fmt.Println(keys)
+}
+```
+
+```text
+true false 0 0
+0
+3 [1 2 3]
+2 [1 1 2]
+0 false 0
+0 true 3
+[Ada Lin]
+```
+
+### 实验 3：预期失败也要有明确原因
+
+下例只为观察语言失败而捕获 panic。真实业务优先选择合适的键和值类型，不应把无效输入捕获成成功。接口字段使比较通过编译，不保证动态比较安全。
+
+<!-- verified-case: go-composite-panic -->
+```go
+package main
+
+import "fmt"
+
+func panics(f func()) (result bool) {
+    defer func() { if recover() != nil { result = true } }()
+    f()
+    return false
+}
+
+func main() {
+    fmt.Println(panics(func() {
+        var m map[string]int
+        m["x"] = 1
+    }))
+    fmt.Println(panics(func() {
+        type Box struct{ Value any }
+        b := Box{Value: []int{1}}
+        _ = b == b
+    }))
+    fmt.Println(panics(func() {
+        m := make(map[any]int)
+        m[[]int{1}] = 1
+    }))
+}
+```
+
+```text
+true
+true
+true
+```
+
+### 实验 4：删除一项，保持旧列表不变
+
+这个实现返回新切片，非法索引保留原值并报错。Todo 当前只有 string/bool 字段，复制元素即满足独立修改要求；若以后加入切片字段，必须重新判断深拷贝边界。若选择原地删除，则需要左移、清零末尾槽位并缩短长度，以免长寿命底层数组保留不需要的对象引用。
+
+<!-- verified-case: go-composite-remove -->
+```go
+package main
+
+import "fmt"
+
+type Todo struct { Title string; Done bool }
+
+func removeAt(items []Todo, index int) ([]Todo, error) {
+    if index < 0 || index >= len(items) {
+        return items, fmt.Errorf("index out of range: %d", index)
+    }
+    result := make([]Todo, len(items)-1)
+    copy(result, items[:index])
+    copy(result[index:], items[index+1:])
+    return result, nil
+}
+
+func main() {
+    original := []Todo{{"数组", true}, {"切片", false}, {"映射", false}}
+    next, err := removeAt(original, 1)
+    fmt.Println(err == nil, len(original), len(next), next[1].Title)
+    next[0].Title = "结构体"
+    fmt.Println(original[0].Title, next[0].Title)
+    unchanged, err := removeAt(original, -1)
+    fmt.Println(err != nil, len(unchanged))
+    _, err = removeAt(original, len(original))
+    fmt.Println(err != nil)
+    last, err := removeAt([]Todo{{Title: "唯一一项"}}, 0)
+    fmt.Println(err == nil, len(last))
+    _, err = removeAt(nil, 0)
+    fmt.Println(err != nil)
+}
+```
+
+```text
+true 3 2 映射
+数组 结构体
+true 3
+true
+true 0
+true
+```
+
+验收时尝试先预测四段输出，再改成首项删除、尾项删除和嵌套切片复制，解释变化来自长度、容量还是共享存储。不要假定扩容倍数、map 的随机性或指针字节数。
 
 <!-- learning-navigation -->
 ## 阅读导航

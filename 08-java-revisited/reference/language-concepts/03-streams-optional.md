@@ -8,7 +8,7 @@
 
 自测：为什么昂贵的默认值更适合 orElseGet(() -> loadDefault())？orElse(loadDefault()) 的参数会在调用前求值，即使已有结果也可能执行；Supplier 让需要回退时才计算。Stream 消费后不能再用同一个实例重跑，应重新从集合创建。
 
-> **文档简介**: Stream 创建/中间/终止操作、Collector 收集器、原始类型流与 Optional 全 API 的条目式速查，含并行流与常见误用陷阱
+> **文档简介**: 以 Java 21 为基线，查阅 Stream、Collector、原始类型流与 Optional 的常用契约。短片段用于检索；下方完整实验可分别保存为 Main.java 后编译运行。
 >
 > **目标读者**: 已会基本用法、需要按 API 名快速检索的开发者
 >
@@ -36,7 +36,7 @@ list.stream()                              // 集合
 Stream.of("a", "b")                        // 显式元素
 Arrays.stream(array)                       // 数组
 Stream.iterate(1, n -> n * 2).limit(10)    // 迭代生成
-Stream.generate(() -> UUID.randomUUID())   // 供给生成（必须 limit）
+Stream.generate(() -> UUID.randomUUID())   // 无限供给；需 limit 或其他能结束的短路消费
 Files.lines(path)                          // 逐行读文件（需关闭，见陷阱）
 IntStream.range(0, 100)                    // 原始类型区间 [0,100)
 IntStream.rangeClosed(1, 10)               // 闭区间
@@ -62,18 +62,19 @@ new Random().ints(10, 0, 100)              // 随机数流
 
 | API | 说明 |
 |-----|------|
-| `toList()` | 收集为不可变 List（Java 16+，首选） |
+| `toList()` | 收集为不可修改 List（Java 16+）；不保证元素深不可变，允许 null 元素 |
 | `collect(Collector)` | 通用收集 |
-| `forEach` / `forEachOrdered` | 遍历（后者保证并行时顺序） |
+| `forEach` / `forEachOrdered` | 遍历；后者遵循源本身有定义的 encounter order，不给无序源创造业务顺序 |
 | `reduce(初值, 累加器)` / `reduce(累加器)` | 归约 |
-| `count()` / `min(cmp)` / `max(cmp)` | 统计（返回 Optional） |
+| `count()` | 返回 long；实现可能利用已知大小跳过 map/peek 等步骤 |
+| `min(cmp)` / `max(cmp)` | 返回 Optional；空流无结果 |
 | `anyMatch` / `allMatch` / `noneMatch` | 短路判断（返回 boolean） |
 | `findFirst` / `findAny` | 取元素（返回 Optional） |
 | `toArray(String[]::new)` | 转数组 |
 
 ```java
 // mapMulti：一对多且不想创建中间 List
-stream.mapMulti((book, downstream) -> {
+stream.<String>mapMulti((book, downstream) -> {
     if (book.available()) downstream.accept(book.title());
 })
 
@@ -84,17 +85,19 @@ int total = books.stream().mapToInt(Book::year).reduce(0, Integer::sum);
 ## 🧺 Collectors 收集器
 
 ```java
-.collect(Collectors.toList())               // 等价 toList()（旧写法）
+.collect(Collectors.toList())               // 不保证具体类型、可修改性或线程安全性
+.collect(Collectors.toCollection(ArrayList::new)) // 需要可修改 List 时显式指定
+.collect(Collectors.toUnmodifiableList())  // 不可修改；拒绝 null 元素
 .collect(Collectors.toSet())
 .collect(Collectors.toMap(Book::isbn, b -> b))       // 键冲突需第三参合并函数
 .collect(Collectors.groupingBy(Book::author))        // Map<作者, List<Book>>
 .collect(Collectors.groupingBy(Book::author, Collectors.counting()))
 .collect(Collectors.partitioningBy(Book::available)) // 按布尔分两组
 .collect(Collectors.joining(", ", "[", "]"))         // 字符串拼接
-.collect(Collectors.teeing(sumA, sumB, (a, b) -> a + b)) // 双流合并（Java 12+）
+.collect(Collectors.teeing(sumA, sumB, (a, b) -> a + b)) // 同一批输入分别交给两个下游收集器，再合并结果（Java 12+）
 ```
 
-**陷阱**: `toMap` 键重复直接抛 `IllegalStateException`——提供合并函数 `toMap(k, v, (a, b) -> b)`。
+**陷阱**: 双参数 `toMap` 遇重复键抛 `IllegalStateException`。只有业务明确“后值覆盖前值”时才用合并函数 `(a, b) -> b`；重复订单号等冲突通常应拒绝。需要稳定迭代顺序时再传 `LinkedHashMap::new`。不要假设这些收集器都能接收 null 值。
 
 ## 🔢 原始类型流（IntStream/LongStream/DoubleStream）
 
@@ -105,17 +108,18 @@ intStream.summaryStatistics();                // {count,min,max,sum,average}
 stream.boxed().collect(toList());             // 原始流 → 包装流
 ```
 
-## 🫙 Optional API 全表
+## 🫙 Optional API（Java 21）
 
 | 分类 | API | 说明 |
 |------|-----|------|
 | 创建 | `of(v)` / `ofNullable(v)` / `empty()` | 值确定非空 / 可能空 / 空 |
-| 判断 | `isPresent()` / `isEmpty()` | 是否有值（Java 11+） |
-| 取值 | `orElse(默认)` / `orElseGet(供给)` / `orElseThrow()` / `orElseThrow(异常供给)` | 优先 orElseThrow；orElse 的参数总是被计算 |
+| 判断 | `isPresent()` / `isEmpty()` | isPresent 自 Java 8；isEmpty 自 Java 11 |
+| 取值 | `get()` / `orElse(默认)` / `orElseGet(供给)` / `orElseThrow()` / `orElseThrow(异常供给)` | get 和无参 orElseThrow 在空时抛 NoSuchElementException；依据业务选择缺省值或异常 |
 | 转换 | `map(f)` / `flatMap(f)` / `filter(p)` | 链式处理 |
 | 消费 | `ifPresent(c)` / `ifPresentOrElse(c, r)`（Java 9+） | 有值/无值双路径 |
 | 组合 | `or(供给)`（Java 9+） | 备选 Optional |
 | 流化 | `stream()`（Java 9+） | 融入 Stream 管道 |
+| 值语义 | `equals(o)` / `hashCode()` / `toString()` | 相等取决于所含值；不要用身份比较或锁住 Optional，调试字符串格式不是持久化协议 |
 
 ```java
 // orElse vs orElseGet：默认值计算昂贵时用 orElseGet
@@ -130,9 +134,9 @@ ids.stream()
 
 **陷阱清单**:
 - ❌ `get()` 裸取值（空时抛 NoSuchElementException）
-- ❌ Optional 作字段/参数/集合元素——它只是返回值契约
+- Optional 主要用于方法返回值；用作参数或字段并非语法错误，但通常增加包装、序列化和调用成本，应说明缺失含义。
 - ❌ 返回 null 的 Optional（自相矛盾）
-- ❌ `isPresent()+get()` 组合——应直接 map/ifPresent
+- 在已确认非空的同一个 Optional 上 get 并不错误；map/ifPresent 常能减少分支，复杂控制流则以可读性为准。
 
 ## ⚡ 并行流
 
@@ -143,9 +147,111 @@ bigList.parallelStream()            // 或 stream().parallel()
 ```
 
 **陷阱**:
-- 默认使用 `ForkJoinPool.commonPool()`，共享全局——阻塞操作会拖垮整个 JVM 的并行任务
-- 仅在**数据量大、无 IO、无共享可变状态**时考虑；小流并行反而更慢
-- 现代替代：大 IO 任务直接用虚拟线程（见[并发 API](./04-concurrency-api.md)）
+- 常见 JDK 实现利用 ForkJoinPool；在普通调用环境中经常共享 common pool，但 Stream API 不承诺某个固定线程池。阻塞回调可能拖慢共享池上的其他任务。
+- 对 CPU 密集、可拆分且操作独立的输入测量串行与并行耗时；并行开销、顺序约束和数据规模共同影响收益，不能由数据量单独决定。
+- I/O 并发可考虑虚拟线程，但仍需超时、取消和资源并发上限（见[并发 API](./04-concurrency-api.md)）；线程便宜不等于数据库连接无限。
+
+## 完整实验：列表契约与冲突策略
+
+分别保存每个完整实验为 `Main.java`，执行 `javac --release 21 -encoding UTF-8 Main.java && java Main`。这组实验的输入包括 null、重复键和可变元素，避免只用正常字符串掩盖边界。
+
+<!-- reference-case: {"id":"java-stream-collection-contracts","stdout":"[a, null]\nlist-rejects-add\n[changed]\n[a, b]\ncollector-rejects-null\nduplicate-rejected\n{a=3}\n"} -->
+```java
+import java.util.*;
+import java.util.stream.*;
+
+public class Main {
+    public static void main(String[] args) {
+        var list = Stream.of("a", (String) null).toList();
+        System.out.println(list);
+        try { list.add("b"); }
+        catch (UnsupportedOperationException e) { System.out.println("list-rejects-add"); }
+
+        var item = new StringBuilder("before");
+        var shallow = Stream.of(item).toList();
+        item.replace(0, item.length(), "changed");
+        System.out.println(shallow);
+
+        var mutable = Stream.of("a").collect(Collectors.toCollection(ArrayList::new));
+        mutable.add("b");
+        System.out.println(mutable);
+        try { Stream.of("a", (String) null).collect(Collectors.toUnmodifiableList()); }
+        catch (NullPointerException e) { System.out.println("collector-rejects-null"); }
+        try { Stream.of("a", "a").collect(Collectors.toMap(s -> s, String::length)); }
+        catch (IllegalStateException e) { System.out.println("duplicate-rejected"); }
+        var counts = Stream.of("a", "a", "a").collect(
+            Collectors.toMap(s -> s, s -> 1, Integer::sum, LinkedHashMap::new));
+        System.out.println(counts);
+    }
+}
+```
+
+`toList()` 限制的是列表结构，元素对象仍可改变。`Collectors.toList()` 的契约没有承诺可修改性，因此实验需要可修改列表时使用 `toCollection`，不把某次返回 ArrayList 的现象当规范。
+
+## 完整实验：空值与默认值何时计算
+
+<!-- reference-case: {"id":"java-optional-fallbacks","stdout":"fallback\nx\nx\ntrue\nflatMap-rejects-null\nempty-rejected\n[x]\n"} -->
+```java
+import java.util.*;
+import java.util.stream.*;
+
+public class Main {
+    static String fallback() {
+        System.out.println("fallback");
+        return "default";
+    }
+    public static void main(String[] args) {
+        var value = Optional.of("x");
+        System.out.println(value.orElse(fallback()));
+        System.out.println(value.orElseGet(Main::fallback));
+        System.out.println(value.map(v -> (String) null).isEmpty());
+        try { value.flatMap(v -> (Optional<String>) null); }
+        catch (NullPointerException e) { System.out.println("flatMap-rejects-null"); }
+        try { Optional.empty().orElseThrow(); }
+        catch (NoSuchElementException e) { System.out.println("empty-rejected"); }
+        System.out.println(Stream.of(value, Optional.<String>empty())
+            .flatMap(Optional::stream).toList());
+    }
+}
+```
+
+`map` 把映射得到的 null 转成空 Optional；`flatMap` 要求回调返回 Optional 对象，null 会破坏这层契约。练习：改成 `Optional.empty()`，确认两条默认值路径都执行；再让 fallback 抛异常，观察有值时 orElse 仍会失败。
+
+## 完整实验：短路、归约和资源
+
+<!-- reference-case: {"id":"java-stream-lifecycle","stdout":"true\nfalse\n6\n[a, b]\nreused-rejected\n2\ntrue\n"} -->
+```java
+import java.nio.charset.StandardCharsets;
+import java.nio.file.*;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.stream.*;
+
+public class Main {
+    public static void main(String[] args) throws Exception {
+        System.out.println(Stream.<Integer>empty().allMatch(n -> n > 0));
+        System.out.println(Stream.<Integer>empty().anyMatch(n -> n > 0));
+        System.out.println(IntStream.rangeClosed(1, 3).parallel().reduce(0, Integer::sum));
+        var stream = Stream.of("a", "b");
+        System.out.println(stream.toList());
+        try { stream.count(); }
+        catch (IllegalStateException e) { System.out.println("reused-rejected"); }
+        Path file = Files.createTempFile("stream-", ".txt");
+        var closed = new AtomicBoolean();
+        try {
+            Files.writeString(file, "a\nb\n", StandardCharsets.UTF_8);
+            try (var lines = Files.lines(file, StandardCharsets.UTF_8)
+                    .onClose(() -> closed.set(true))) {
+                System.out.println(lines.count());
+            }
+            System.out.println(closed.get());
+        } finally { Files.deleteIfExists(file); }
+    }
+}
+```
+
+空流的 allMatch 返回 true、anyMatch 返回 false，这是逻辑约定，不能拿 allMatch 单独证明“至少有一条合格数据”。reduce 的初值必须是单位元，累加运算需满足结合律；例如用减法或把初值设成 10 后直接并行，分区合并就可能改变含义。若需要明确处理每项，使用 forEach 或循环；不要依赖 peek 搭配 count 完成保存。
+
+官方契约：[Stream](https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/stream/Stream.html)、[Collectors](https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/stream/Collectors.html)、[Optional](https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Optional.html)。限定运行范围见[本批验证报告](../../../shared-resources/tools/document-quality/reports/php-java-pipelines-validation.md)。
 
 ## 🔗 相关文档
 

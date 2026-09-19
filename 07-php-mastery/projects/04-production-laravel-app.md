@@ -165,7 +165,7 @@ Route::get('/health', fn () => response()->json([
 
 ```text
 [ ] phpstan level 6 通过（frameworks/04-devtools.md）
-[ ] 全量测试通过且覆盖核心业务流（testing/03-feature-testing.md）
+[ ] 运行全量测试，并确认核心业务流的断言覆盖（testing/03-feature-testing.md）
 [ ] migrate 已在灰度库演练，down() 可回滚
 [ ] optimize:clear 后重新 php artisan optimize
 [ ] 队列 worker 由 Supervisor 托管，failed_jobs 有告警

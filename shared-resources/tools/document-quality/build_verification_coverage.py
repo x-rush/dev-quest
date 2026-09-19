@@ -86,10 +86,17 @@ def records_from_reports():
     php_java_types = load("php-java-types.json")
     for row in php_java_types.get("cases", []):
         add_record(records, row.get("document"), "runtime", "php-java-types.json", php_java_types.get("scope", "selected PHP/Java type example"), "PASS" if row.get("passed") else "FAIL")
+    php_java_pipelines = load("php-java-pipelines.json")
+    for row in php_java_pipelines.get("cases", []):
+        add_record(records, row.get("document"), "runtime", "php-java-pipelines.json", php_java_pipelines.get("scope", "selected PHP/Java pipeline example"), "PASS" if row.get("passed") else "FAIL")
     go_rust_basics = load("go-rust-basics.json")
     for row in go_rust_basics.get("results", []):
         mode = "runtime" if row.get("mode") == "runtime" else "compile_contract"
         add_record(records, row.get("source"), mode, "go-rust-basics.json", go_rust_basics.get("scope", "selected Go/Rust basic example"), "PASS" if row.get("status", "").upper() == "PASS" else "FAIL")
+    go_composite_rust_macros = load("go-composite-rust-macros.json")
+    for row in go_composite_rust_macros.get("results", []):
+        mode = "runtime" if row.get("mode") == "runtime" else "compile_contract"
+        add_record(records, row.get("source"), mode, "go-composite-rust-macros.json", go_composite_rust_macros.get("scope", "selected Go composite-type and Rust macro example"), "PASS" if row.get("status", "").upper() == "PASS" else "FAIL")
     rust_ecosystem = load("rust-ecosystem-runtime.json")
     for row in rust_ecosystem.get("cases", []):
         add_record(records, row.get("document"), "runtime", "rust-ecosystem-runtime.json", rust_ecosystem.get("scope", "selected Rust ecosystem example"), "PASS" if row.get("status", "").upper() == "PASS" else "FAIL")

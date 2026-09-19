@@ -36,7 +36,7 @@ var_dump($mixed2);   // [1 => 'c']
 
 ## 2. map：逐元素变换
 
-**定义**: `array_map(callable $fn, array $arr): array` 对每个元素应用回调，返回新数组（不改变原数组）。
+**定义**: `array_map(?callable $callback, array $array, array ...$arrays): array` 返回变换后的数组。函数本身不会替换原数组槽位；回调若修改元素对象或外部引用，仍会造成可见副作用。只传一个数组保留键，传多个数组会重新编号。
 
 ```php
 $prices = [100, 250, 80];
@@ -85,7 +85,7 @@ array_any($users, fn(array $u): bool => $u['age'] < 10);     // true
 array_all($users, fn(array $u): bool => $u['age'] > 0);      // true
 ```
 
-**陷阱**: 结果键不连续——必须 `array_values()` 重索引再 `json_encode`，否则输出成对象；无回调的弱过滤会把 `'0'` 一并剔除。
+**陷阱**: 若业务需要 JSON 列表，过滤后用 `array_values()` 重索引；若键是用户 ID 则应保留映射。并非每次过滤都会产生不连续键。无回调的弱过滤会把 `'0'` 一并剔除。`array_find` 返回 null 也可能表示找到了值为 null 的元素；需要区分时用 `array_find_key`，键不会是 null。空数组的 `array_all` 为 true、`array_any` 为 false，不代表已经检查到任何数据。
 
 ## 4. reduce：归约为单值
 
@@ -117,27 +117,31 @@ $counts = array_reduce($words, function (array $c, string $w): array {
 
 ## 5. 组合范式：管道式数据处理
 
+下面的金额以“分”为整数单位，输入已由边界校验为合法记录；演示不承担任意外部 JSON 的校验。整数仍有范围上限，金融业务应先约定最大金额和累计策略。
+
+<!-- reference-case: {"id":"php-array-paid-pipeline","stdout":"47500\n"} -->
 ```php
 <?php
 
 declare(strict_types=1);
 
 $orders = [
-    ['id' => 1, 'total' => 120.0, 'status' => 'paid'],
-    ['id' => 2, 'total' => 80.0,  'status' => 'pending'],
-    ['id' => 3, 'total' => 300.0, 'status' => 'paid'],
-    ['id' => 4, 'total' => 55.0,  'status' => 'paid'],
+    ['id' => 1, 'total' => 12000, 'status' => 'paid'],
+    ['id' => 2, 'total' => 8000,  'status' => 'pending'],
+    ['id' => 3, 'total' => 30000, 'status' => 'paid'],
+    ['id' => 4, 'total' => 5500,  'status' => 'paid'],
 ];
 
 // 需求：已支付订单的金额总和（过滤 → 映射 → 归约）
 $paidTotal = array_reduce(
     array_map(
-        fn(array $o): float => $o['total'],
+        fn(array $o): int => $o['total'],
         array_filter($orders, fn(array $o): bool => $o['status'] === 'paid'),
     ),
-    fn(float $c, float $t): float => $c + $t,
-    0.0,
-);   // 475.0
+    fn(int $c, int $t): int => $c + $t,
+    0,
+);
+echo $paidTotal, PHP_EOL; // 47500 分
 ```
 
 ### 等价替代函数对照
@@ -147,7 +151,7 @@ $paidTotal = array_reduce(
 | 求和 | `array_reduce($nums, fn($c, $n) => $c + $n, 0)` | `array_sum()` |
 | 计数 | reduce 累加 | `count()` |
 | 首个满足 | filter + reset | `array_find()`（8.4+） |
-| 去重 | — | `array_unique()` / `array_flip()` 技巧 |
+| 去重 | — | `array_unique()` 需约定比较模式；`array_flip()` 只接受 int/string 值且冲突覆盖 |
 | 极值 | — | `max()` / `min()` |
 | 判存在 | filter + count | `in_array($v, $arr, true)` |
 
@@ -193,7 +197,74 @@ $flipped = array_flip(['a' => 1]);                   // [1 => 'a']
 $deep    = array_merge_recursive($a, $b);            // ⚠️ 同名键递归成数组，慎用
 ```
 
-**陷阱**: `+` 与 `array_merge` 对数字键行为不同（`+` 保留左侧、merge 重索引追加）；`array_merge_recursive` 极易产生意外深嵌套，多数场景该用 `...` 展开。
+**陷阱**: `+` 与 `array_merge` 对数字键行为不同（`+` 保留左侧、merge 重索引追加）。`array_merge_recursive` 把冲突字符串键的值合并成数组；`...` 是浅合并，不是“递归覆盖”的替代品。要递归替换，应明确检查 `array_replace_recursive` 的规则。`array_diff`/`array_intersect` 按值转成字符串后比较，不能直接当严格类型集合运算。
+
+## 完整实验：键、JSON 和重复元素
+
+保存下面的程序为 `main.php`，执行 `php -d error_reporting=-1 main.php`。先观察过滤后的结构，再决定是否重编号。示例使用 PHP 8.3 可用的 API；上方的 array_find/any/all 需要 PHP 8.4+，不由这个实验覆盖。
+
+<!-- reference-case: {"id":"php-array-key-contracts","stdout":"{\"0\":0,\"2\":2}\n[0,2]\n[\"0\",0,false,\"\"]\n{\"a\":2,\"b\":4}\n[2,4]\n{\"name\":\"left\",\"0\":\"L\"}\n{\"name\":\"right\",\"0\":\"L\",\"1\":\"R\"}\n[]\n[1]\nduplicate-id\n"} -->
+```php
+<?php
+declare(strict_types=1);
+function show(array $value): void {
+    echo json_encode($value, JSON_THROW_ON_ERROR), PHP_EOL;
+}
+$filtered = array_filter([0, 1, 2], fn(int $n): bool => $n !== 1);
+show($filtered);
+show(array_values($filtered));
+show(array_values(array_filter(['0', 0, null, false, ''], fn($v) => $v !== null)));
+show(array_map(fn(int $n): int => $n * 2, ['a' => 1, 'b' => 2]));
+show(array_map(fn(int $a, int $b): int => $a + $b, ['a' => 1, 'b' => 2], [1, 2]));
+$left = ['name' => 'left', 0 => 'L'];
+$right = ['name' => 'right', 0 => 'R'];
+show($left + $right);
+show(array_merge($left, $right));
+show(array_diff([1], ['1']));
+show(array_values(array_filter([1], fn($v) => !in_array($v, ['1'], true))));
+$byId = [];
+try {
+    foreach ([['id' => 1], ['id' => 1]] as $row) {
+        if (array_key_exists($row['id'], $byId)) {
+            throw new DomainException('duplicate-id');
+        }
+        $byId[$row['id']] = $row;
+    }
+} catch (DomainException $e) { echo $e->getMessage(), PHP_EOL; }
+```
+
+`array_diff([1], ['1'])` 得到空数组，证明它并不是严格的整数集合差。最后一段用显式循环拒绝重复 ID；如果业务需要覆盖，删除拒绝分支会改变契约，不能作为纯重构看待。
+
+## 完整实验：复制数组不等于复制其中对象
+
+<!-- reference-case: {"id":"php-array-object-and-sort","stdout":"changed\n[2,3,1]\n[20,10]\n"} -->
+```php
+<?php
+declare(strict_types=1);
+$item = (object) ['name' => 'before'];
+$original = [$item];
+$mapped = array_map(function (object $row): object {
+    $row->name = 'changed';
+    return $row;
+}, $original);
+echo $original[0]->name, PHP_EOL;
+
+$staff = [
+    ['id' => 1, 'dept' => 'B', 'salary' => 10],
+    ['id' => 2, 'dept' => 'A', 'salary' => 20],
+    ['id' => 3, 'dept' => 'A', 'salary' => 10],
+];
+usort($staff, fn(array $a, array $b): int =>
+    ($a['dept'] <=> $b['dept']) ?: ($b['salary'] <=> $a['salary']));
+echo json_encode(array_column($staff, 'id'), JSON_THROW_ON_ERROR), PHP_EOL;
+$scores = [10 => 30, 20 => 5];
+asort($scores);
+echo json_encode(array_keys($scores), JSON_THROW_ON_ERROR), PHP_EOL;
+```
+
+排序比较器把“部门升序、薪资降序”拆成两步，便于修改和检查；`asort` 保留业务键，`usort` 会重新编号。练习：增加同部门、同薪资员工，观察 PHP 8 稳定排序保留其原相对顺序；不要用 `(int)($a - $b)` 比较小数，小于 1 的差会错误地变成相等。
+
+官方依据：[array_map](https://www.php.net/manual/en/function.array-map.php)、[array_diff](https://www.php.net/manual/en/function.array-diff.php)、[array_find](https://www.php.net/manual/en/function.array-find.php)。命名程序的限定结果见[验证报告](../../../shared-resources/tools/document-quality/reports/php-java-pipelines-validation.md)。
 
 ## 相关文档
 

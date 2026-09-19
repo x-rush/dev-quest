@@ -1411,7 +1411,7 @@ func main() {
 
     err = validate.Struct(validUser)
     if err == nil {
-        fmt.Println("用户验证通过")
+        fmt.Println("用户字段符合规则")
     }
 
     // 验证产品
@@ -1447,7 +1447,7 @@ func main() {
 
     err = validate.Struct(event)
     if err == nil {
-        fmt.Println("事件验证通过")
+        fmt.Println("事件字段符合规则")
     }
 
     // 翻译错误消息

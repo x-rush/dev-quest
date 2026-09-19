@@ -1336,7 +1336,7 @@ func TestUserService_GetUserByEmail(t *testing.T) {
     err := userService.CreateUser(user)
     assert.NoError(t, err)
 
-    // 测试通过邮箱查找用户
+    // 断言可按邮箱找回同一用户
     foundUser, err := userService.GetUserByEmail("test@example.com")
     assert.NoError(t, err)
     assert.Equal(t, user.ID, foundUser.ID)

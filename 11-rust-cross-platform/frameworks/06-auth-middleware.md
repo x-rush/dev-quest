@@ -94,7 +94,7 @@ jsonwebtoken::decode::<Claims>(
 - `FromRequestParts` 在 Axum 0.8 是**原生 async trait**（RPITIT），实现里直接写 `async fn from_request_parts`，不需要 `#[async_trait]`
 - extractor 的 `type Rejection` 决定失败响应：实现 `IntoResponse` 后，handler 里照样可以用 `Result`/直接参数两种形态
 
-这一组合的收益：**decode 只在中间件发生一次**，handler 用 `AuthUser` 参数拿到的永远是已验证身份；万一中间件漏挂，extractor 拿不到值会返回 500——把接线错误暴露成服务端错误而不是放行。
+这一组合的收益：**decode 只在中间件发生一次**，handler 用 `AuthUser` 参数拿到的是中间件写入的身份结果；万一中间件漏挂，extractor 拿不到值会返回 500——把接线错误暴露成服务端错误而不是放行。
 
 ---
 
@@ -354,9 +354,9 @@ async fn main() {
 - 404 请求不经过守卫：未登录探测 `/api/xxx` 得到 404，不泄露"这里其实有守卫"的信号
 - `AuthUser(user): AuthUser` 参数失败时自动由 `Rejection`（AuthError::Missing → 500）应答
 
-### 示例三：Authorization 头解析纯函数（去依赖化实测）
+### 示例三：Authorization 头解析纯函数（去依赖化练习）
 
-> 以下块不依赖任何第三方 crate，已写入 `/tmp/rustwave2a/06.rs` 并以 `rustc --edition 2024` 本机实测通过，运行输出"extract_bearer 6 项断言全部通过"。示例一中的 `extract_bearer` 即取自这里。
+> 以下块不依赖任何第三方 crate。保存为 `extract.rs` 后，以 `rustc --edition 2024 extract.rs && ./extract` 运行；应看到 `extract_bearer 6 项断言完成`。示例一中的 `extract_bearer` 即取自这里。目标框架与路由接线仍需在 Axum 工程中另行测试。
 
 ```rust
 // Authorization 头解析（去依赖化演示）
@@ -462,7 +462,7 @@ curl -i http://localhost:3000/api/no-such-route
 
 ## 🧭 模式不变量
 
-1. **认证早于业务**: 身份判定在 handler 之前完成（守卫层），业务代码只消费"已验证身份"这一事实——校验与业务解耦后，任何新路由默认继承防护
+1. **认证早于业务**: 身份判定在 handler 之前完成（守卫层），业务代码只消费守卫写入的身份结果——校验与业务解耦后，新路由仍须确认已挂载守卫
 2. **404 与 401 不可互换**: 资源是否存在与调用者是否有权是正交事实，守卫必须在路由命中后生效（与 04 篇不变量呼应）
 3. **令牌无状态，校验每请求重做**: JWT 免共享存储，代价是把信任检查压缩进每个请求的 decode——任何"缓存校验结果"的优化都要重新论证撤销语义
 4. **凭据只走头，不走 URL**: 传输通道的选择决定凭据的泄露面（日志/Referer/历史），这与具体框架无关

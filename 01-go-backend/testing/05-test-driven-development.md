@@ -96,7 +96,7 @@ undefined: ReverseString
 
 #### 最简单的实现
 ```go
-// 最少代码使测试通过
+// 为当前断言写出最少实现
 func ReverseString(s string) string {
     // 硬编码解决当前测试
     if s == "hello" {
@@ -109,12 +109,12 @@ func ReverseString(s string) string {
 #### 运行测试（通过）
 ```bash
 $ go test
-PASS
+PASS  # 预期的示例输出
 ok      example.com/stringutils    0.002s
 ```
 
 #### 绿色阶段原则
-- **最快通过**: 用最简单的方式使测试通过
+- **最小实现**: 用最简单的方式满足当前断言
 - **不要完美**: 避免过度设计
 - **专注目标**: 只解决当前测试的需求
 
@@ -138,7 +138,7 @@ func ReverseString(s string) string {
 #### 验证重构
 ```bash
 $ go test
-PASS
+PASS  # 预期的示例输出
 ok      example.com/stringutils    0.002s
 ```
 

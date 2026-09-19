@@ -1,6 +1,6 @@
 # Rust 单元与集成测试：#[test] 到 tests/ 目录
 
-> **文档简介**: 只用 Rust 内建测试设施——`#[test]`、`#[cfg(test)]`、`tests/` 集成测试、文档测试——搭建三层测试防线，本文代码块均经 `rustc --edition 2024` 本机实测
+> **文档简介**: 只用 Rust 内建测试设施——`#[test]`、`#[cfg(test)]`、`tests/` 集成测试、文档测试——搭建三层测试防线。请将完整示例放入 Cargo 项目，以 `cargo test` 在自己的工具链中验证；单个片段不代表完整工程已通过。
 >
 > **目标读者**: 已理解所有权与模块系统、开始写真实工程的 Rust 学习者（中级）
 >
@@ -80,7 +80,7 @@
 
 **目标**: 在 `src/lib.rs`（或任意模块文件）内建立与被测代码同包的测试模块。
 
-**操作指南**（本篇全部代码已用 `rustc --test --edition 2024` 实测通过；此处为节选，含 4 个代表性测试）:
+**操作指南**（此处是节选，含 4 个代表性测试；将它们与被测代码放入同一个 Cargo 项目，再用 `cargo test` 验收）:
 
 ```rust
 #[derive(Debug, PartialEq)]
@@ -148,7 +148,7 @@ mod tests {
 
 **关键点解析**:
 
-- `#[should_panic(expected = "…")]` 校验的是 panic 消息的**子串**，不是全等。注意：返回 `Result` 的函数**不会**触发 `#[should_panic]`——本机实测时，把 `strict_new` 换成返回 `Err` 的 `new` 会让该测试直接失败（"test did not panic as expected"）。两种错误风格要配两种测试写法
+- `#[should_panic(expected = "…")]` 校验的是 panic 消息的**子串**，不是全等。返回 `Result` 的函数不会触发 `#[should_panic]`；把 `strict_new` 换成返回 `Err` 的 `new` 后，这个用例应失败并显示 `test did not panic as expected`。两种错误风格要配两种测试写法
 - 返回 `Result<(), E>` 的测试体内可用 `?`，让断言前的准备工作更干净
 - 单元测试与被测代码同包（`use super::*`），因此**私有函数也可以直接测**——这是与集成测试的本质差异
 
@@ -205,14 +205,14 @@ pub fn add_two(a: i32) -> i32 {
 
 **关键点解析**:
 
-- 共享代码必须放在 `tests/common/mod.rs`（或 `tests/common/` 目录形式）。如果写成 `tests/common.rs`，cargo 会把它当作一个独立集成测试去执行——这是实测可复现的最常见坑
+- 共享代码必须放在 `tests/common/mod.rs`（或 `tests/common/` 目录形式）。如果写成 `tests/common.rs`，cargo 会把它当作一个独立集成测试去执行；建立最小项目后可用 `cargo test -- --list` 观察这个差异
 - 集成测试只认 `pub` 项：私有实现细节测不到，这正是它测「契约」而非「实现」的价值
 
 ### 步骤三：文档测试（doctest）
 
 **目标**: 让文档里的示例代码成为可执行测试，杜绝「示例过期」。
 
-**操作指南**: 在 `///` 或 `//!` 文档注释中写 ```` ```rust ```` 代码块（如上方 `src/lib.rs` 所示）。`cargo test` 的输出会呈现清晰的三段结构（本机实测输出，节选）:
+**操作指南**: 在 `///` 或 `//!` 文档注释中写 ```` ```rust ```` 代码块（如上方 `src/lib.rs` 所示）。执行 `cargo test` 后，输出通常分成单元、集成和文档测试三段；以下仅展示一种输出格式：
 
 ```text
 running 0 tests          # src/lib.rs 内没有 #[test]（单元段）

@@ -130,7 +130,7 @@ row := pool.QueryRow(ctx, "SELECT name, age FROM users WHERE id = $1", 42)
 
 | 能力 | 说明 |
 |------|------|
-| `CopyFrom` | PostgreSQL COPY 协议批量写入，可减少逐条 INSERT 的往返与处理成本，收益依数据量和约束实测 |
+| `CopyFrom` | PostgreSQL COPY 协议批量写入，可减少逐条 INSERT 的往返与处理成本；实际收益取决于数据量、索引和约束，应在目标库中测量 |
 | `pgtype` 类型系统 | 原生映射 JSONB、数组、uuid、numeric、timestamptz 等 PG 专有类型 |
 | `LISTEN/NOTIFY` | 直接消费 PG 的发布订阅通知（`WaitForNotification`） |
 | Large Objects | 大对象流式读写 |

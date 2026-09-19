@@ -70,7 +70,8 @@ def marker_priority(source_line: str, kind: str) -> tuple[str, str, str]:
     )
     instructional = re.search(
         r"(?:最小可运行骨架|开始.*项目|重新.*(?:验证|构建|测试)|需要.*(?:验证|运行|测试)|"
-        r"^[-*]\s*\[[ xX]\].*(?:验证|通过|测试|运行)|^\*\*Q\d+:)",
+        r"^[-*]\s*\[[ xX]\].*(?:验证|通过|测试|运行)|^\*\*Q\d+:|"
+        r"预期(?:的)?(?:示例)?输出|示例输出格式|不能单独编译|非可运行块)",
         source_line,
         re.IGNORECASE,
     )

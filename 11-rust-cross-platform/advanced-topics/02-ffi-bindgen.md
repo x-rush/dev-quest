@@ -21,7 +21,7 @@
 
 </details>
 
-> 语法基线：edition 2024（Rust 1.98.1，见模块 README）。注意 edition 2024 对本文两处关键语法的强制要求：`#[unsafe(no_mangle)]` 与 `unsafe extern` 块——本文代码已按此编写并经 `rustc --edition 2024` 实测。
+> 语法基线：edition 2024（Rust 1.98.1，见模块 README）。注意 edition 2024 对本文两处关键语法的强制要求：`#[unsafe(no_mangle)]` 与 `unsafe extern` 块。请用该版本或兼容版本编译本文完整 crate；片段本身不能代替目标平台、C 编译器和链接器上的集成验证。
 
 ## 🎯 学习目标
 
@@ -73,7 +73,7 @@
 
 ### 步骤一：导出可被 C 调用的 Rust 库
 
-**目标**: 写一组覆盖「计算 / 字符串移交 / 释放 / panic 拦截」四类边界的导出函数（已实测编译运行通过）:
+**目标**: 写一组覆盖「计算 / 字符串移交 / 释放 / panic 拦截」四类边界的导出函数。完成后同时编译 Rust 库和 C 调用端，检查返回值、释放次数与 panic 路径：
 
 ```rust
 // FFI 导出边界全景：C ABI / 所有权移交 / CString-CStr / panic 拦截
@@ -136,7 +136,7 @@ fn main() {
 
 - `#[unsafe(no_mangle)]`：edition 2024 起，`no_mangle` 是必须显式标 `unsafe(...)` 的属性——它关闭名字修饰，本来就是高危操作
 - `into_raw()` / `from_raw()` 是**成对**的所有权移交原语：`into_raw` 放弃 Rust 的自动析构（否则返回后 CString 被 drop，指针悬空）；`from_raw` 把所有权接回来重新接管析构
-- `checked_div` 实测时会在 stderr 看到 `attempt to divide by zero` 的打印——那是**默认 panic hook** 的输出，它先于 `catch_unwind` 生效；边界库可用 `std::panic::set_hook` 定制它，避免污染宿主的日志
+- 默认 panic hook 可能会把 `attempt to divide by zero` 写到 stderr，它先于 `catch_unwind` 生效；在你的目标版本上运行除零案例来确认行为。边界库可用 `std::panic::set_hook` 定制日志，避免污染宿主输出
 
 ### 步骤二：从 Rust 调用 C
 
@@ -329,7 +329,7 @@ graph TD
 
 ### 相关文档
 
-- 📄 **[内存布局与性能](./01-memory-layout-performance.md)** - repr(C) 与对齐的实测基础
+- 📄 **[内存布局与性能](./01-memory-layout-performance.md)** - repr(C) 与对齐的测量方法
 - 📄 **[unsafe 字典](../reference/language-concepts/06-unsafe.md)** - 本文每个 unsafe 块的语义出处
 - 📄 **[wasm32 target](./03-wasm32-target.md)** - 另一种 ABI 边界：wasm 与 JS 的互操作
 - 📄 **[安全实践](./04-security-practices.md)** - 把 FFI 层纳入 unsafe 最小化与审计范围

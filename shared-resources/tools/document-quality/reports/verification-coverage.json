@@ -17,13 +17,13 @@
   "summary": {
     "documents": 642,
     "by_primary_state": {
-      "not_verified": 553,
-      "runtime": 89
+      "not_verified": 547,
+      "runtime": 95
     },
-    "verification_wording_occurrences": 163,
+    "verification_wording_occurrences": 123,
     "marker_classification": {
       "source_has_limited_runtime_evidence": 78,
-      "unbound_verification_wording": 85
+      "unbound_verification_wording": 45
     }
   },
   "documents": [
@@ -172,13 +172,31 @@
     },
     {
       "path": "01-go-backend/basics/04-composite-types.md",
-      "sha256": "ecf05abcab6852f5644b8aaedc6778d7329024c16b849b3b5ce58f557c279a12",
+      "sha256": "96cb8919fe3da6256ad28b142d75d9e9d562cc931be8ff20657dfffde11783b4",
       "verification": [
         {
-          "mode": "not_verified",
-          "status": "NOT_VERIFIED",
-          "report": null,
-          "scope": "No named runtime or syntax evidence is recorded for this document."
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "go-composite-rust-macros.json",
+          "scope": "4 Go programs, 4 Rust programs, 2 expected Rust compilation errors; only named cases"
+        },
+        {
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "go-composite-rust-macros.json",
+          "scope": "4 Go programs, 4 Rust programs, 2 expected Rust compilation errors; only named cases"
+        },
+        {
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "go-composite-rust-macros.json",
+          "scope": "4 Go programs, 4 Rust programs, 2 expected Rust compilation errors; only named cases"
+        },
+        {
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "go-composite-rust-macros.json",
+          "scope": "4 Go programs, 4 Rust programs, 2 expected Rust compilation errors; only named cases"
         }
       ],
       "marker_count": 0
@@ -279,7 +297,7 @@
     },
     {
       "path": "01-go-backend/deployment/01-containerization.md",
-      "sha256": "d09091388372cf9f3ba8f24917b19471f7faeb18209cef9057b0542e0c24cc19",
+      "sha256": "a8ca226e5392cc6e9a118c62198533b6db89f47f3e37ff6f6962fbf318eb699e",
       "verification": [
         {
           "mode": "not_verified",
@@ -288,7 +306,7 @@
           "scope": "No named runtime or syntax evidence is recorded for this document."
         }
       ],
-      "marker_count": 2
+      "marker_count": 1
     },
     {
       "path": "01-go-backend/deployment/02-ci-cd-pipelines.md",
@@ -487,7 +505,7 @@
     },
     {
       "path": "01-go-backend/reference/framework-essentials/02-gorm-orm.md",
-      "sha256": "2fafd8bea6be7cb36aa93aba500bf0306be9ada768e493b373ac9147f8133d05",
+      "sha256": "24432f9c56659824bf31730d161f8b3756c88a2686ee8e0a7a013d40d9911e3a",
       "verification": [
         {
           "mode": "not_verified",
@@ -496,11 +514,11 @@
           "scope": "No named runtime or syntax evidence is recorded for this document."
         }
       ],
-      "marker_count": 1
+      "marker_count": 0
     },
     {
       "path": "01-go-backend/reference/framework-essentials/03-sqlc-vs-gorm.md",
-      "sha256": "2eb4941a17ec0ef821e279f2878eef2bbc43a8161c9add5f402789286bc343c2",
+      "sha256": "211dac4881b82226c5f08ad4ed558cffbecf093297d9bb839b6f6b627739d1bc",
       "verification": [
         {
           "mode": "not_verified",
@@ -509,7 +527,7 @@
           "scope": "No named runtime or syntax evidence is recorded for this document."
         }
       ],
-      "marker_count": 1
+      "marker_count": 0
     },
     {
       "path": "01-go-backend/reference/framework-essentials/04-router-selection.md",
@@ -552,7 +570,7 @@
     },
     {
       "path": "01-go-backend/reference/language-concepts/01-go-keywords.md",
-      "sha256": "683bc209c84eb0603d14fb313caa94eeec1cadea75b32577c2b4d71684af1b2b",
+      "sha256": "c2215a0b999c1a5aa86b075db2aa7819a76c4b16e24b86bfb2b6551e1e63d98a",
       "verification": [
         {
           "mode": "not_verified",
@@ -561,7 +579,7 @@
           "scope": "No named runtime or syntax evidence is recorded for this document."
         }
       ],
-      "marker_count": 1
+      "marker_count": 0
     },
     {
       "path": "01-go-backend/reference/language-concepts/02-go-built-in-functions.md",
@@ -760,7 +778,7 @@
     },
     {
       "path": "01-go-backend/reference/library-guides/02-third-party-libs.md",
-      "sha256": "784a4e039f238b1bee7952501e1893989380d39362b1069b7a36f76212324b37",
+      "sha256": "7add766a957d3552f0c5f04ccbb241991ea4afc35060310f0d299965ad0800e9",
       "verification": [
         {
           "mode": "not_verified",
@@ -769,7 +787,7 @@
           "scope": "No named runtime or syntax evidence is recorded for this document."
         }
       ],
-      "marker_count": 2
+      "marker_count": 0
     },
     {
       "path": "01-go-backend/reference/library-guides/03-net-http.md",
@@ -1059,7 +1077,7 @@
     },
     {
       "path": "01-go-backend/testing/05-test-driven-development.md",
-      "sha256": "316475f0cac05dabad8085c04ee6557a3511c7be8d1e7027b5d6d596f66959bf",
+      "sha256": "c51b9256986aa1e681651d282121627beddd00dfc99f4821ccd49dce1e0184d3",
       "verification": [
         {
           "mode": "not_verified",
@@ -1068,7 +1086,7 @@
           "scope": "No named runtime or syntax evidence is recorded for this document."
         }
       ],
-      "marker_count": 4
+      "marker_count": 2
     },
     {
       "path": "02-nextjs-frontend/LEARNING_GUIDE.md",
@@ -4897,7 +4915,7 @@
     },
     {
       "path": "07-php-mastery/advanced-topics/architecture/01-laravel-architecture.md",
-      "sha256": "bd4380df849117d4c1354da627b9bbd95ad3f2f0a6645685562bc7ac56e93fcf",
+      "sha256": "2cd4a5cda9cbd9db6c1977564b4720cd70e24d362f3aca470767da1014c5a120",
       "verification": [
         {
           "mode": "not_verified",
@@ -4906,7 +4924,7 @@
           "scope": "No named runtime or syntax evidence is recorded for this document."
         }
       ],
-      "marker_count": 1
+      "marker_count": 0
     },
     {
       "path": "07-php-mastery/advanced-topics/performance/01-query-optimization.md",
@@ -4975,7 +4993,7 @@
     },
     {
       "path": "07-php-mastery/advanced-topics/runtime/04-swoole-ecosystem.md",
-      "sha256": "eb3f7a42a795a2ecae7523b376ba379c41fb0fd2f16a3ddbba1c389ae74db9b3",
+      "sha256": "4e3a27cebd3a5b947454d87c1beaca2e6f89553793c2d3e39ede61f50a713def",
       "verification": [
         {
           "mode": "not_verified",
@@ -4984,7 +5002,7 @@
           "scope": "No named runtime or syntax evidence is recorded for this document."
         }
       ],
-      "marker_count": 1
+      "marker_count": 0
     },
     {
       "path": "07-php-mastery/advanced-topics/security/01-security-practices.md",
@@ -5253,7 +5271,7 @@
     },
     {
       "path": "07-php-mastery/projects/04-production-laravel-app.md",
-      "sha256": "6c5899014788160fc19da36acf718a980dad565a8d1bb8044dab61cc5faeea65",
+      "sha256": "1b94ca81c149c9bcb5d08a232a921f3ad1b5c14650de732cd28db12abba8b27b",
       "verification": [
         {
           "mode": "not_verified",
@@ -5262,7 +5280,7 @@
           "scope": "No named runtime or syntax evidence is recorded for this document."
         }
       ],
-      "marker_count": 1
+      "marker_count": 0
     },
     {
       "path": "07-php-mastery/reference/framework-essentials/01-laravel-essentials.md",
@@ -5380,26 +5398,50 @@
     },
     {
       "path": "07-php-mastery/reference/language-concepts/05-arrays-patterns.md",
-      "sha256": "bfca74c947ec9ebfb86e12b90d3e06bab74c721157f0f4ea6a17536a71790b39",
+      "sha256": "7d0b4cbd0a27062d37034423078562b7f1d9108e72bf0ae2f657a5c0039dc673",
       "verification": [
         {
-          "mode": "not_verified",
-          "status": "NOT_VERIFIED",
-          "report": null,
-          "scope": "No named runtime or syntax evidence is recorded for this document."
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "php-java-pipelines.json",
+          "scope": "marked complete examples only; not framework or network validation"
+        },
+        {
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "php-java-pipelines.json",
+          "scope": "marked complete examples only; not framework or network validation"
+        },
+        {
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "php-java-pipelines.json",
+          "scope": "marked complete examples only; not framework or network validation"
         }
       ],
       "marker_count": 0
     },
     {
       "path": "07-php-mastery/reference/language-concepts/06-generators-iterators.md",
-      "sha256": "2f0bbb51dbfee59867b98fe44c11839a931a4acfd4985e2ce446bf5b41f8dcac",
+      "sha256": "813677f45c9d52d6acd3884dd3a536f321bf582bb0abd97bcac380f16c2fb568",
       "verification": [
         {
-          "mode": "not_verified",
-          "status": "NOT_VERIFIED",
-          "report": null,
-          "scope": "No named runtime or syntax evidence is recorded for this document."
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "php-java-pipelines.json",
+          "scope": "marked complete examples only; not framework or network validation"
+        },
+        {
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "php-java-pipelines.json",
+          "scope": "marked complete examples only; not framework or network validation"
+        },
+        {
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "php-java-pipelines.json",
+          "scope": "marked complete examples only; not framework or network validation"
         }
       ],
       "marker_count": 0
@@ -5731,7 +5773,7 @@
     },
     {
       "path": "08-java-revisited/README.md",
-      "sha256": "210f0f810bfad6085034a201b8bdace04a9565d560b24422a078d8ab3e2c5c16",
+      "sha256": "eaf2d0d5639888a3983d76bf9947d6e10fcfd97071eb7148154c2368e06e015e",
       "verification": [
         {
           "mode": "not_verified",
@@ -6196,13 +6238,25 @@
     },
     {
       "path": "08-java-revisited/reference/language-concepts/03-streams-optional.md",
-      "sha256": "e16b2238929e65f92c04e9b261ed896d7489ba4975c6cb8a0549c2c99391b3d1",
+      "sha256": "885bb60c0f5495973bc1ca2b548a84b9bd1d7dd14148abfec20bec701f0473ea",
       "verification": [
         {
-          "mode": "not_verified",
-          "status": "NOT_VERIFIED",
-          "report": null,
-          "scope": "No named runtime or syntax evidence is recorded for this document."
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "php-java-pipelines.json",
+          "scope": "marked complete examples only; not framework or network validation"
+        },
+        {
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "php-java-pipelines.json",
+          "scope": "marked complete examples only; not framework or network validation"
+        },
+        {
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "php-java-pipelines.json",
+          "scope": "marked complete examples only; not framework or network validation"
         }
       ],
       "marker_count": 0
@@ -6369,13 +6423,25 @@
     },
     {
       "path": "08-java-revisited/reference/library-guides/04-java-io.md",
-      "sha256": "61c56b009cffc63c590776df080800ca5064a31c1701c88f96318e17e0f5bcfb",
+      "sha256": "8db927797c987d527597c11b3368a5a4d8a030ae7d8f26fbd9c0b810bf7a79bd",
       "verification": [
         {
-          "mode": "not_verified",
-          "status": "NOT_VERIFIED",
-          "report": null,
-          "scope": "No named runtime or syntax evidence is recorded for this document."
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "php-java-pipelines.json",
+          "scope": "marked complete examples only; not framework or network validation"
+        },
+        {
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "php-java-pipelines.json",
+          "scope": "marked complete examples only; not framework or network validation"
+        },
+        {
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "php-java-pipelines.json",
+          "scope": "marked complete examples only; not framework or network validation"
         }
       ],
       "marker_count": 0
@@ -7983,7 +8049,7 @@
     },
     {
       "path": "11-rust-cross-platform/advanced-topics/01-memory-layout-performance.md",
-      "sha256": "06d7fe473f805ebaebaa2601a49775293320a46b7771ec058118e52c6cc9902e",
+      "sha256": "80a3fc884962876f29fbfe647a4b17f2afb7a02bd3f7c420358a4ddd07f5fec0",
       "verification": [
         {
           "mode": "not_verified",
@@ -7992,11 +8058,11 @@
           "scope": "No named runtime or syntax evidence is recorded for this document."
         }
       ],
-      "marker_count": 9
+      "marker_count": 1
     },
     {
       "path": "11-rust-cross-platform/advanced-topics/02-ffi-bindgen.md",
-      "sha256": "befb28d553fa2254e3b72912b587b0d00d44adb2ca5b4acbb914d4bd9aca284e",
+      "sha256": "1fbe6ae402ce7046404c4df4ea6d14ffaae91fb6127de82c39568a1441205674",
       "verification": [
         {
           "mode": "not_verified",
@@ -8005,7 +8071,7 @@
           "scope": "No named runtime or syntax evidence is recorded for this document."
         }
       ],
-      "marker_count": 4
+      "marker_count": 0
     },
     {
       "path": "11-rust-cross-platform/advanced-topics/03-wasm32-target.md",
@@ -8165,7 +8231,7 @@
     },
     {
       "path": "11-rust-cross-platform/deployment/01-cross-compilation-targets.md",
-      "sha256": "05ac0a1c83dac5d2494e80d72298b3990251f1f7558d605cf6847ef6d6a257ee",
+      "sha256": "596dec01f1ee6a24f2f0ceeb4a2c02a52e3f59b8f2d1908a52464672d60d0320",
       "verification": [
         {
           "mode": "not_verified",
@@ -8174,7 +8240,7 @@
           "scope": "No named runtime or syntax evidence is recorded for this document."
         }
       ],
-      "marker_count": 1
+      "marker_count": 0
     },
     {
       "path": "11-rust-cross-platform/deployment/02-github-actions-ci.md",
@@ -8191,7 +8257,7 @@
     },
     {
       "path": "11-rust-cross-platform/deployment/03-signing-auto-update.md",
-      "sha256": "6464a43d1aa9783bcb192d8ffbd63a688d6d303a69484c755134c460ca421114",
+      "sha256": "4f03bc95a411e9ce389e12575af46fc31102cdae821de23bb514877d2f3b9b81",
       "verification": [
         {
           "mode": "not_verified",
@@ -8200,11 +8266,11 @@
           "scope": "No named runtime or syntax evidence is recorded for this document."
         }
       ],
-      "marker_count": 1
+      "marker_count": 0
     },
     {
       "path": "11-rust-cross-platform/deployment/04-containerized-services.md",
-      "sha256": "0c22aa339d0a2353bd9b20d0f5afa45574bed0536976a59775dc2cdf179ffa84",
+      "sha256": "ba947e80db31ddb5c7063382ef5e51413744177f2098f65126a9b8ca9ed8297a",
       "verification": [
         {
           "mode": "not_verified",
@@ -8213,7 +8279,7 @@
           "scope": "No named runtime or syntax evidence is recorded for this document."
         }
       ],
-      "marker_count": 3
+      "marker_count": 0
     },
     {
       "path": "11-rust-cross-platform/frameworks/01-tauri-2-architecture.md",
@@ -8282,7 +8348,7 @@
     },
     {
       "path": "11-rust-cross-platform/frameworks/06-auth-middleware.md",
-      "sha256": "5a7b3ed497c3380a0bf7b6ea4b8264d730326fda284aba14396b669ffb26470a",
+      "sha256": "1b91bba45692d71bb42bdcedfc09702082c5028651207e48242bfdd9bd8d0b7f",
       "verification": [
         {
           "mode": "not_verified",
@@ -8291,7 +8357,7 @@
           "scope": "No named runtime or syntax evidence is recorded for this document."
         }
       ],
-      "marker_count": 6
+      "marker_count": 2
     },
     {
       "path": "11-rust-cross-platform/frameworks/07-desktop-packaging.md",
@@ -8500,16 +8566,46 @@
     },
     {
       "path": "11-rust-cross-platform/reference/language-concepts/05-macros.md",
-      "sha256": "ea4b71a5e5d21a44a2f9ce88006f0ad93705f4996967af646b836cd4aa9c8796",
+      "sha256": "1d18b11dac2f09e1ebfd4e92cd8627a7dcde7bf472fbcc2a25f0653d72b8b1e2",
       "verification": [
         {
-          "mode": "not_verified",
-          "status": "NOT_VERIFIED",
-          "report": null,
-          "scope": "No named runtime or syntax evidence is recorded for this document."
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "go-composite-rust-macros.json",
+          "scope": "4 Go programs, 4 Rust programs, 2 expected Rust compilation errors; only named cases"
+        },
+        {
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "go-composite-rust-macros.json",
+          "scope": "4 Go programs, 4 Rust programs, 2 expected Rust compilation errors; only named cases"
+        },
+        {
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "go-composite-rust-macros.json",
+          "scope": "4 Go programs, 4 Rust programs, 2 expected Rust compilation errors; only named cases"
+        },
+        {
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "go-composite-rust-macros.json",
+          "scope": "4 Go programs, 4 Rust programs, 2 expected Rust compilation errors; only named cases"
+        },
+        {
+          "mode": "compile_contract",
+          "status": "PASS",
+          "report": "go-composite-rust-macros.json",
+          "scope": "4 Go programs, 4 Rust programs, 2 expected Rust compilation errors; only named cases"
+        },
+        {
+          "mode": "compile_contract",
+          "status": "PASS",
+          "report": "go-composite-rust-macros.json",
+          "scope": "4 Go programs, 4 Rust programs, 2 expected Rust compilation errors; only named cases"
         }
       ],
-      "marker_count": 1
+      "marker_count": 0
     },
     {
       "path": "11-rust-cross-platform/reference/language-concepts/06-unsafe.md",
@@ -8539,7 +8635,7 @@
     },
     {
       "path": "11-rust-cross-platform/reference/language-concepts/08-async-internals.md",
-      "sha256": "3b16a2525b5debdc06864f4a0cf376d0226645818c3adc159055b545047d7ec1",
+      "sha256": "a83e8bad720c87b7db7d7999d038f5329057fc58838f868bde38b8d1a14bdecf",
       "verification": [
         {
           "mode": "not_verified",
@@ -8548,7 +8644,7 @@
           "scope": "No named runtime or syntax evidence is recorded for this document."
         }
       ],
-      "marker_count": 1
+      "marker_count": 0
     },
     {
       "path": "11-rust-cross-platform/reference/language-concepts/09-keywords-and-syntax.md",
@@ -8672,20 +8768,7 @@
     },
     {
       "path": "11-rust-cross-platform/testing/01-unit-integration-tests.md",
-      "sha256": "55857056b70a51c13ae4eb0056ec858f898febc58177c8e08730ff6740f93a69",
-      "verification": [
-        {
-          "mode": "not_verified",
-          "status": "NOT_VERIFIED",
-          "report": null,
-          "scope": "No named runtime or syntax evidence is recorded for this document."
-        }
-      ],
-      "marker_count": 6
-    },
-    {
-      "path": "11-rust-cross-platform/testing/02-criterion-benchmarks.md",
-      "sha256": "cef372cc1af27139e44438aa8d33ec24acfb4dbb9835c49c88ad7992cba8c8e4",
+      "sha256": "71b17e9f70aeaf80d63f2c4f6662cc77a21ed74b2f2e448ecfed84f85f7c77f0",
       "verification": [
         {
           "mode": "not_verified",
@@ -8695,6 +8778,19 @@
         }
       ],
       "marker_count": 1
+    },
+    {
+      "path": "11-rust-cross-platform/testing/02-criterion-benchmarks.md",
+      "sha256": "64cb846df32bdcdd36a0b51bc304f5a11a3697c524070f6ed0630a1b7987af39",
+      "verification": [
+        {
+          "mode": "not_verified",
+          "status": "NOT_VERIFIED",
+          "report": null,
+          "scope": "No named runtime or syntax evidence is recorded for this document."
+        }
+      ],
+      "marker_count": 0
     },
     {
       "path": "11-rust-cross-platform/testing/03-tauri-e2e-webdriver.md",
@@ -8725,12 +8821,6 @@
     },
     {
       "path": "01-go-backend/deployment/01-containerization.md",
-      "line": 3,
-      "excerpt": "> **阅读准备**：已有可在本机启动的 Go 服务，理解端口、环境变量与进程退出，并具备可运行的 Docker 环境。",
-      "classification": "unbound_verification_wording"
-    },
-    {
-      "path": "01-go-backend/deployment/01-containerization.md",
       "line": 934,
       "excerpt": "多阶段构建把编译工具与运行产物分开，减少运行镜像携带的内容；基础镜像还必须具备程序需要的 libc、证书与时区等能力。先验证可运行，再比较镜像大小与构建时间，不能只追求最小体积。",
       "classification": "unbound_verification_wording"
@@ -8748,39 +8838,9 @@
       "classification": "source_has_limited_runtime_evidence"
     },
     {
-      "path": "01-go-backend/reference/framework-essentials/02-gorm-orm.md",
-      "line": 1339,
-      "excerpt": "// 测试通过邮箱查找用户",
-      "classification": "unbound_verification_wording"
-    },
-    {
-      "path": "01-go-backend/reference/framework-essentials/03-sqlc-vs-gorm.md",
-      "line": 133,
-      "excerpt": "| `CopyFrom` | PostgreSQL COPY 协议批量写入，可减少逐条 INSERT 的往返与处理成本，收益依数据量和约束实测 |",
-      "classification": "unbound_verification_wording"
-    },
-    {
-      "path": "01-go-backend/reference/language-concepts/01-go-keywords.md",
-      "line": 82,
-      "excerpt": "完整示例把声明、方法、接口和函数值放进一个真正可运行的程序：",
-      "classification": "unbound_verification_wording"
-    },
-    {
       "path": "01-go-backend/reference/language-concepts/12-channel-semantics.md",
       "line": 129,
       "excerpt": "**经典死锁场景**：所有 goroutine 都在阻塞等待、无人再能推进时，runtime 报 `fatal error: all goroutines are asleep - deadlock!`（注意：若仍有其他可运行 goroutine 则不会触发检测，改为永久卡死）。",
-      "classification": "unbound_verification_wording"
-    },
-    {
-      "path": "01-go-backend/reference/library-guides/02-third-party-libs.md",
-      "line": 1414,
-      "excerpt": "fmt.Println(\"用户验证通过\")",
-      "classification": "unbound_verification_wording"
-    },
-    {
-      "path": "01-go-backend/reference/library-guides/02-third-party-libs.md",
-      "line": 1450,
-      "excerpt": "fmt.Println(\"事件验证通过\")",
       "classification": "unbound_verification_wording"
     },
     {
@@ -8815,26 +8875,14 @@
     },
     {
       "path": "01-go-backend/testing/05-test-driven-development.md",
-      "line": 99,
-      "excerpt": "// 最少代码使测试通过",
-      "classification": "unbound_verification_wording"
-    },
-    {
-      "path": "01-go-backend/testing/05-test-driven-development.md",
       "line": 112,
-      "excerpt": "PASS",
-      "classification": "unbound_verification_wording"
-    },
-    {
-      "path": "01-go-backend/testing/05-test-driven-development.md",
-      "line": 117,
-      "excerpt": "- **最快通过**: 用最简单的方式使测试通过",
+      "excerpt": "PASS  # 预期的示例输出",
       "classification": "unbound_verification_wording"
     },
     {
       "path": "01-go-backend/testing/05-test-driven-development.md",
       "line": 141,
-      "excerpt": "PASS",
+      "excerpt": "PASS  # 预期的示例输出",
       "classification": "unbound_verification_wording"
     },
     {
@@ -8994,18 +9042,6 @@
       "classification": "unbound_verification_wording"
     },
     {
-      "path": "07-php-mastery/advanced-topics/architecture/01-laravel-architecture.md",
-      "line": 125,
-      "excerpt": "前置是接口、构造器和容器绑定。以创建订单为例，Controller 负责从 HTTP 取得已验证输入并转换响应；Action 编排库存检查、订单保存与提交后的通知；Model 表达数据访问与模型规则。抽出 Action 的理由是用例边界和复用需求，类名本身不会产生隔离。",
-      "classification": "unbound_verification_wording"
-    },
-    {
-      "path": "07-php-mastery/advanced-topics/runtime/04-swoole-ecosystem.md",
-      "line": 144,
-      "excerpt": "连接池应匹配协议与客户端契约，借出的连接要正确归还且不能跨请求残留事务。hook 只覆盖支持的操作，应实测所用扩展是否仍会阻塞。连续交错运行两个租户请求，验证上下文、连接与错误路径都隔离，再观察持续负载下的内存。",
-      "classification": "unbound_verification_wording"
-    },
-    {
       "path": "07-php-mastery/advanced-topics/security/01-security-practices.md",
       "line": 171,
       "excerpt": "前置是 HTTP、数据库参数和浏览器渲染。输入验证确认形状与范围，授权确认当前主体能否访问资源，输出编码确认数据在目标上下文中不会变成代码。三者解决不同问题：合法整数订单 ID 仍可能属于别人；已验证文本进入 HTML、URL 或 JavaScript 时仍需各自的安全处理。",
@@ -9016,12 +9052,6 @@
       "line": 175,
       "excerpt": "**练习**：用户 A 请求用户 B 的订单，预期拒绝且不泄露订单内容；把 sort 改成不允许的字段，预期校验失败；提交带脚本标签的标题，页面显示文本而不执行。对 Cookie 认证的写接口分别发送缺失、错误和正确 CSRF 凭据，在启用真实中间件的环境验证。测试通过的结论应限定在覆盖的入口和输入。",
       "classification": "source_has_limited_runtime_evidence"
-    },
-    {
-      "path": "07-php-mastery/projects/04-production-laravel-app.md",
-      "line": 168,
-      "excerpt": "[ ] 全量测试通过且覆盖核心业务流（testing/03-feature-testing.md）",
-      "classification": "unbound_verification_wording"
     },
     {
       "path": "07-php-mastery/reference/language-concepts/13-weak-comparison.md",
@@ -9038,7 +9068,7 @@
     {
       "path": "08-java-revisited/README.md",
       "line": 35,
-      "excerpt": "- 将业务结果映射成 HTTP 响应，使用真实测试数据库验证约束与事务。",
+      "excerpt": "- 将业务结果映射成 HTTP 响应；在后续练习中用真实测试数据库检查约束与事务。",
       "classification": "unbound_verification_wording"
     },
     {
@@ -9445,80 +9475,8 @@
     },
     {
       "path": "11-rust-cross-platform/advanced-topics/01-memory-layout-performance.md",
-      "line": 3,
-      "excerpt": "> **文档简介**: 用 `size_of`/`align_of` 实测数据拆解 Rust 的内存布局规则——repr(Rust) 的重排自由、repr(C) 的确定性、栈堆句柄的真实尺寸、String/&str/Cow 的分配取舍，以及迭代器零成本抽象的实证视角",
-      "classification": "unbound_verification_wording"
-    },
-    {
-      "path": "11-rust-cross-platform/advanced-topics/01-memory-layout-performance.md",
-      "line": 24,
-      "excerpt": "> 本文所有实测输出来自 `rustc --edition 2024`（基线见模块 README，Rust 1.98.1），本机为 x86_64 Linux；对齐与尺寸在主流 64 位平台上一致。",
-      "classification": "unbound_verification_wording"
-    },
-    {
-      "path": "11-rust-cross-platform/advanced-topics/01-memory-layout-performance.md",
-      "line": 67,
-      "excerpt": "**实测证据**（本机 `rustc --edition 2024` 输出）:",
-      "classification": "unbound_verification_wording"
-    },
-    {
-      "path": "11-rust-cross-platform/advanced-topics/01-memory-layout-performance.md",
-      "line": 113,
-      "excerpt": "**实测输出**:",
-      "classification": "unbound_verification_wording"
-    },
-    {
-      "path": "11-rust-cross-platform/advanced-topics/01-memory-layout-performance.md",
-      "line": 222,
-      "excerpt": "**实测输出**（`rustc -O`，两次运行）:",
-      "classification": "unbound_verification_wording"
-    },
-    {
-      "path": "11-rust-cross-platform/advanced-topics/01-memory-layout-performance.md",
-      "line": 257,
-      "excerpt": "**实测输出**: `align = 8, size = 16`",
-      "classification": "unbound_verification_wording"
-    },
-    {
-      "path": "11-rust-cross-platform/advanced-topics/01-memory-layout-performance.md",
-      "line": 262,
-      "excerpt": "- 默认 repr(Rust) 下编译器已把字段重排塞紧（16 字节）；若要按声明顺序发给 C，加 `#[repr(C)]` 则为 24 字节（对照第一节实测）",
-      "classification": "unbound_verification_wording"
-    },
-    {
-      "path": "11-rust-cross-platform/advanced-topics/01-memory-layout-performance.md",
-      "line": 314,
-      "excerpt": "**评估标准**: 手算与实测一致；重排后比原声明少一个数量级的填充字节。",
-      "classification": "unbound_verification_wording"
-    },
-    {
-      "path": "11-rust-cross-platform/advanced-topics/01-memory-layout-performance.md",
       "line": 361,
       "excerpt": "- [ ] 能对任意 struct 心算 repr(C) 的填充并实测验证",
-      "classification": "unbound_verification_wording"
-    },
-    {
-      "path": "11-rust-cross-platform/advanced-topics/02-ffi-bindgen.md",
-      "line": 24,
-      "excerpt": "> 语法基线：edition 2024（Rust 1.98.1，见模块 README）。注意 edition 2024 对本文两处关键语法的强制要求：`#[unsafe(no_mangle)]` 与 `unsafe extern` 块——本文代码已按此编写并经 `rustc --edition 2024` 实测。",
-      "classification": "unbound_verification_wording"
-    },
-    {
-      "path": "11-rust-cross-platform/advanced-topics/02-ffi-bindgen.md",
-      "line": 76,
-      "excerpt": "**目标**: 写一组覆盖「计算 / 字符串移交 / 释放 / panic 拦截」四类边界的导出函数（已实测编译运行通过）:",
-      "classification": "unbound_verification_wording"
-    },
-    {
-      "path": "11-rust-cross-platform/advanced-topics/02-ffi-bindgen.md",
-      "line": 139,
-      "excerpt": "- `checked_div` 实测时会在 stderr 看到 `attempt to divide by zero` 的打印——那是**默认 panic hook** 的输出，它先于 `catch_unwind` 生效；边界库可用 `std::panic::set_hook` 定制它，避免污染宿主的日志",
-      "classification": "unbound_verification_wording"
-    },
-    {
-      "path": "11-rust-cross-platform/advanced-topics/02-ffi-bindgen.md",
-      "line": 332,
-      "excerpt": "- 📄 **[内存布局与性能](./01-memory-layout-performance.md)** - repr(C) 与对齐的实测基础",
       "classification": "unbound_verification_wording"
     },
     {
@@ -9546,42 +9504,6 @@
       "classification": "unbound_verification_wording"
     },
     {
-      "path": "11-rust-cross-platform/deployment/01-cross-compilation-targets.md",
-      "line": 281,
-      "excerpt": "- 若有 ARM 设备（树莓派/云主机）则实测运行；没有则用 `qemu-user` 或容器模拟验证",
-      "classification": "unbound_verification_wording"
-    },
-    {
-      "path": "11-rust-cross-platform/deployment/03-signing-auto-update.md",
-      "line": 48,
-      "excerpt": "**定义**: tauri 更新器采用 minisign 风格的签名验证——**私钥离线签产物，公钥内嵌进应用**，客户端只信\"对应公钥验证通过的更新包\"，与托管服务器是否被入侵无关。",
-      "classification": "unbound_verification_wording"
-    },
-    {
-      "path": "11-rust-cross-platform/deployment/04-containerized-services.md",
-      "line": 111,
-      "excerpt": "1. 路由挂载 `health` handler（代码示例三，已按 Axum 0.8 API 实测编译通过），端点只做\"进程能应答\"这一件事——数据库连通性之类的重检查放 `/ready`",
-      "classification": "unbound_verification_wording"
-    },
-    {
-      "path": "11-rust-cross-platform/deployment/04-containerized-services.md",
-      "line": 218,
-      "excerpt": "**关键点解析**: 返回值 `(StatusCode, &'static str)` 是 Axum 的 `IntoResponse` 组合用法；端口须与 `EXPOSE`、compose 映射、探活 URL 三处一致；片段已按 Axum 0.8 API 实测编译通过。",
-      "classification": "unbound_verification_wording"
-    },
-    {
-      "path": "11-rust-cross-platform/deployment/04-containerized-services.md",
-      "line": 262,
-      "excerpt": "distroless 里没有 `wget`/`curl`，让二进制自己支持探活子命令即可——这段 std 实现已用 `rustc --edition 2024` 实测编译并验证两种退出路径：",
-      "classification": "unbound_verification_wording"
-    },
-    {
-      "path": "11-rust-cross-platform/frameworks/06-auth-middleware.md",
-      "line": 97,
-      "excerpt": "这一组合的收益：**decode 只在中间件发生一次**，handler 用 `AuthUser` 参数拿到的永远是已验证身份；万一中间件漏挂，extractor 拿不到值会返回 500——把接线错误暴露成服务端错误而不是放行。",
-      "classification": "unbound_verification_wording"
-    },
-    {
       "path": "11-rust-cross-platform/frameworks/06-auth-middleware.md",
       "line": 132,
       "excerpt": "**验证方法**: 该块不依赖任何第三方 crate，已用 `rustc --edition 2024` 本机实测（6 项断言全部通过），可直接 `rustc extract.rs && ./extract` 复现。",
@@ -9589,26 +9511,8 @@
     },
     {
       "path": "11-rust-cross-platform/frameworks/06-auth-middleware.md",
-      "line": 357,
-      "excerpt": "### 示例三：Authorization 头解析纯函数（去依赖化实测）",
-      "classification": "unbound_verification_wording"
-    },
-    {
-      "path": "11-rust-cross-platform/frameworks/06-auth-middleware.md",
-      "line": 359,
-      "excerpt": "> 以下块不依赖任何第三方 crate，已写入 `/tmp/rustwave2a/06.rs` 并以 `rustc --edition 2024` 本机实测通过，运行输出\"extract_bearer 6 项断言全部通过\"。示例一中的 `extract_bearer` 即取自这里。",
-      "classification": "unbound_verification_wording"
-    },
-    {
-      "path": "11-rust-cross-platform/frameworks/06-auth-middleware.md",
       "line": 441,
       "excerpt": "认证验证身份，资源授权判断当前身份能做什么；已验证身份可供后续处理复用，但不同入口仍需各自保证没有绕过检查。route_layer 与其他层的覆盖范围按路由组合实测，不能由返回 401 或 404 单独推断泄漏与否。",
-      "classification": "unbound_verification_wording"
-    },
-    {
-      "path": "11-rust-cross-platform/frameworks/06-auth-middleware.md",
-      "line": 465,
-      "excerpt": "1. **认证早于业务**: 身份判定在 handler 之前完成（守卫层），业务代码只消费\"已验证身份\"这一事实——校验与业务解耦后，任何新路由默认继承防护",
       "classification": "unbound_verification_wording"
     },
     {
@@ -9630,63 +9534,15 @@
       "classification": "source_has_limited_runtime_evidence"
     },
     {
-      "path": "11-rust-cross-platform/reference/language-concepts/05-macros.md",
-      "line": 233,
-      "excerpt": "📖 **语法/签名**（示意，非可运行块）:",
-      "classification": "unbound_verification_wording"
-    },
-    {
       "path": "11-rust-cross-platform/reference/language-concepts/06-unsafe.md",
       "line": 214,
       "excerpt": "💡 **示例**（edition 2024 示例，本轮未运行；含一个实测踩到的陷阱）:",
       "classification": "unbound_verification_wording"
     },
     {
-      "path": "11-rust-cross-platform/reference/language-concepts/08-async-internals.md",
-      "line": 27,
-      "excerpt": "// std::future::Future（签名摘录，非可运行块）",
-      "classification": "unbound_verification_wording"
-    },
-    {
-      "path": "11-rust-cross-platform/testing/01-unit-integration-tests.md",
-      "line": 3,
-      "excerpt": "> **文档简介**: 只用 Rust 内建测试设施——`#[test]`、`#[cfg(test)]`、`tests/` 集成测试、文档测试——搭建三层测试防线，本文代码块均经 `rustc --edition 2024` 本机实测",
-      "classification": "unbound_verification_wording"
-    },
-    {
-      "path": "11-rust-cross-platform/testing/01-unit-integration-tests.md",
-      "line": 83,
-      "excerpt": "**操作指南**（本篇全部代码已用 `rustc --test --edition 2024` 实测通过；此处为节选，含 4 个代表性测试）:",
-      "classification": "unbound_verification_wording"
-    },
-    {
-      "path": "11-rust-cross-platform/testing/01-unit-integration-tests.md",
-      "line": 151,
-      "excerpt": "- `#[should_panic(expected = \"…\")]` 校验的是 panic 消息的**子串**，不是全等。注意：返回 `Result` 的函数**不会**触发 `#[should_panic]`——本机实测时，把 `strict_new` 换成返回 `Err` 的 `new` 会让该测试直接失败（\"test did not panic as expected\"）。两种错误风格要配两种测试写法",
-      "classification": "unbound_verification_wording"
-    },
-    {
-      "path": "11-rust-cross-platform/testing/01-unit-integration-tests.md",
-      "line": 208,
-      "excerpt": "- 共享代码必须放在 `tests/common/mod.rs`（或 `tests/common/` 目录形式）。如果写成 `tests/common.rs`，cargo 会把它当作一个独立集成测试去执行——这是实测可复现的最常见坑",
-      "classification": "unbound_verification_wording"
-    },
-    {
-      "path": "11-rust-cross-platform/testing/01-unit-integration-tests.md",
-      "line": 215,
-      "excerpt": "**操作指南**: 在 `///` 或 `//!` 文档注释中写 ```` ```rust ```` 代码块（如上方 `src/lib.rs` 所示）。`cargo test` 的输出会呈现清晰的三段结构（本机实测输出，节选）:",
-      "classification": "unbound_verification_wording"
-    },
-    {
       "path": "11-rust-cross-platform/testing/01-unit-integration-tests.md",
       "line": 247,
       "excerpt": "**验证方法**: 过滤器命中数会体现在 `test result` 行的 `filtered out` 计数中（本机实测确认）。",
-      "classification": "unbound_verification_wording"
-    },
-    {
-      "path": "11-rust-cross-platform/testing/02-criterion-benchmarks.md",
-      "line": 54,
-      "excerpt": "- **stable 可用**: 内建的 `#[bench]` 属性依赖 nightly 工具链，Criterion 自带 main 函数（`harness = false`），stable 即可运行",
       "classification": "unbound_verification_wording"
     }
   ],

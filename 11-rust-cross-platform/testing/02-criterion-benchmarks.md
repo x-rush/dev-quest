@@ -51,7 +51,7 @@
 
 **关键特性**:
 
-- **stable 可用**: 内建的 `#[bench]` 属性依赖 nightly 工具链，Criterion 自带 main 函数（`harness = false`），stable 即可运行
+- **stable 工具链**: 内建的 `#[bench]` 属性依赖 nightly 工具链；Criterion 自带 main 函数（`harness = false`），可在 stable 工具链中构建，具体兼容性以项目锁定版本为准
 - **统计结论而非单次数字**: 输出均值/中位数/斜率的 95% 置信区间，以及「有变化/无变化」的判定
 - **自动基线对比**: 每次运行默认与上一次比较；也支持命名基线（`--save-baseline`/`--baseline`）做跨版本对比
 - **HTML 报告与图表**: 报告落在 `target/criterion/report/index.html`

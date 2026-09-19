@@ -24,7 +24,7 @@
 📌 **定义**: Future 是"**尚未完成的计算**"：`poll` 被执行器调用时推进到下一个挂起点——要么就绪（`Ready`），要么"稍后再问"（`Pending`）。签名（std 定义，示意）：
 
 ```rust
-// std::future::Future（签名摘录，非可运行块）
+// std::future::Future（签名摘录，不能单独编译）
 trait Future {
     type Output;
     fn poll(self: Pin<&mut Self>, cx: &mut Context<'_>) -> Poll<Self::Output>;

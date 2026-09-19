@@ -108,7 +108,7 @@
 
 **操作指南**:
 
-1. 路由挂载 `health` handler（代码示例三，已按 Axum 0.8 API 实测编译通过），端点只做"进程能应答"这一件事——数据库连通性之类的重检查放 `/ready`
+1. 路由挂载 `health` handler（代码示例三按 Axum 0.8 API 编写）；端点只做"进程能应答"这一件事——数据库连通性之类的重检查放 `/ready`。将它放入锁定版本的 Axum 工程后再编译。
 2. 在 Dockerfile/compose 中配置 HEALTHCHECK 消费该端点（见示例一、四）
 
 ### 步骤四：compose 编排 Axum + Postgres
@@ -215,7 +215,7 @@ async fn main() {
 }
 ```
 
-**关键点解析**: 返回值 `(StatusCode, &'static str)` 是 Axum 的 `IntoResponse` 组合用法；端口须与 `EXPOSE`、compose 映射、探活 URL 三处一致；片段已按 Axum 0.8 API 实测编译通过。
+**关键点解析**: 返回值 `(StatusCode, &'static str)` 是 Axum 的 `IntoResponse` 组合用法；端口须与 `EXPOSE`、compose 映射、探活 URL 三处一致。将片段合入锁定依赖版本的项目后执行 `cargo check`。
 
 ### 示例四：compose 编排（Axum + Postgres）
 
@@ -259,7 +259,7 @@ volumes:
 
 ### 示例五：distroless 探活自检子命令
 
-distroless 里没有 `wget`/`curl`，让二进制自己支持探活子命令即可——这段 std 实现已用 `rustc --edition 2024` 实测编译并验证两种退出路径：
+distroless 里没有 `wget`/`curl`，让二进制自己支持探活子命令即可。以下 std 实现需要以 `rustc --edition 2024` 编译，并分别以健康和不健康输入检查两条退出路径：
 
 ```rust
 // 供 distroless 镜像 HEALTHCHECK 调用的自检子命令（镜像内无 shell/wget）

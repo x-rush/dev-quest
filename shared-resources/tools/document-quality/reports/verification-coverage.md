@@ -7,11 +7,11 @@
 | 指标 | 数量 |
 |---|---:|
 | 纳入模块文档 | 642 |
-| 主状态：not_verified | 553 |
-| 主状态：runtime | 89 |
-| 验证措辞出现次数 | 163 |
+| 主状态：not_verified | 547 |
+| 主状态：runtime | 95 |
+| 验证措辞出现次数 | 123 |
 | 措辞分类：source_has_limited_runtime_evidence | 78 |
-| 措辞分类：unbound_verification_wording | 85 |
+| 措辞分类：unbound_verification_wording | 45 |
 
 ## 语法级覆盖（不能当作运行覆盖）
 
@@ -42,12 +42,12 @@
 | Go | [01-go-backend/basics/01-environment-setup.md](../../../../01-go-backend/basics/01-environment-setup.md) | `not_verified` | 0 | 0 |
 | Go | [01-go-backend/basics/02-first-program.md](../../../../01-go-backend/basics/02-first-program.md) | `not_verified` | 0 | 0 |
 | Go | [01-go-backend/basics/03-variables-constants.md](../../../../01-go-backend/basics/03-variables-constants.md) | `not_verified` | 0 | 0 |
-| Go | [01-go-backend/basics/04-composite-types.md](../../../../01-go-backend/basics/04-composite-types.md) | `not_verified` | 0 | 0 |
+| Go | [01-go-backend/basics/04-composite-types.md](../../../../01-go-backend/basics/04-composite-types.md) | `runtime` | 4 | 0 |
 | Go | [01-go-backend/basics/05-functions-methods.md](../../../../01-go-backend/basics/05-functions-methods.md) | `not_verified` | 0 | 0 |
 | Go | [01-go-backend/basics/06-control-structures.md](../../../../01-go-backend/basics/06-control-structures.md) | `not_verified` | 0 | 0 |
 | Go | [01-go-backend/basics/07-concurrency-basics.md](../../../../01-go-backend/basics/07-concurrency-basics.md) | `runtime` | 4 | 0 |
 | Go | [01-go-backend/basics/08-error-handling.md](../../../../01-go-backend/basics/08-error-handling.md) | `runtime` | 5 | 0 |
-| Go | [01-go-backend/deployment/01-containerization.md](../../../../01-go-backend/deployment/01-containerization.md) | `not_verified` | 0 | 2 |
+| Go | [01-go-backend/deployment/01-containerization.md](../../../../01-go-backend/deployment/01-containerization.md) | `not_verified` | 0 | 1 |
 | Go | [01-go-backend/deployment/02-ci-cd-pipelines.md](../../../../01-go-backend/deployment/02-ci-cd-pipelines.md) | `not_verified` | 0 | 0 |
 | Go | [01-go-backend/deployment/03-kubernetes-deployment.md](../../../../01-go-backend/deployment/03-kubernetes-deployment.md) | `not_verified` | 0 | 0 |
 | Go | [01-go-backend/deployment/04-observability.md](../../../../01-go-backend/deployment/04-observability.md) | `not_verified` | 0 | 0 |
@@ -63,12 +63,12 @@
 | Go | [01-go-backend/projects/03-real-time-app.md](../../../../01-go-backend/projects/03-real-time-app.md) | `not_verified` | 0 | 0 |
 | Go | [01-go-backend/projects/04-cli-tool.md](../../../../01-go-backend/projects/04-cli-tool.md) | `not_verified` | 0 | 0 |
 | Go | [01-go-backend/reference/framework-essentials/01-gin-framework.md](../../../../01-go-backend/reference/framework-essentials/01-gin-framework.md) | `not_verified` | 0 | 0 |
-| Go | [01-go-backend/reference/framework-essentials/02-gorm-orm.md](../../../../01-go-backend/reference/framework-essentials/02-gorm-orm.md) | `not_verified` | 0 | 1 |
-| Go | [01-go-backend/reference/framework-essentials/03-sqlc-vs-gorm.md](../../../../01-go-backend/reference/framework-essentials/03-sqlc-vs-gorm.md) | `not_verified` | 0 | 1 |
+| Go | [01-go-backend/reference/framework-essentials/02-gorm-orm.md](../../../../01-go-backend/reference/framework-essentials/02-gorm-orm.md) | `not_verified` | 0 | 0 |
+| Go | [01-go-backend/reference/framework-essentials/03-sqlc-vs-gorm.md](../../../../01-go-backend/reference/framework-essentials/03-sqlc-vs-gorm.md) | `not_verified` | 0 | 0 |
 | Go | [01-go-backend/reference/framework-essentials/04-router-selection.md](../../../../01-go-backend/reference/framework-essentials/04-router-selection.md) | `not_verified` | 0 | 0 |
 | Go | [01-go-backend/reference/framework-essentials/05-mongo-driver.md](../../../../01-go-backend/reference/framework-essentials/05-mongo-driver.md) | `not_verified` | 0 | 0 |
 | Go | [01-go-backend/reference/framework-essentials/06-go-redis.md](../../../../01-go-backend/reference/framework-essentials/06-go-redis.md) | `not_verified` | 0 | 0 |
-| Go | [01-go-backend/reference/language-concepts/01-go-keywords.md](../../../../01-go-backend/reference/language-concepts/01-go-keywords.md) | `not_verified` | 0 | 1 |
+| Go | [01-go-backend/reference/language-concepts/01-go-keywords.md](../../../../01-go-backend/reference/language-concepts/01-go-keywords.md) | `not_verified` | 0 | 0 |
 | Go | [01-go-backend/reference/language-concepts/02-go-built-in-functions.md](../../../../01-go-backend/reference/language-concepts/02-go-built-in-functions.md) | `not_verified` | 0 | 0 |
 | Go | [01-go-backend/reference/language-concepts/03-go-programming-essentials.md](../../../../01-go-backend/reference/language-concepts/03-go-programming-essentials.md) | `not_verified` | 0 | 0 |
 | Go | [01-go-backend/reference/language-concepts/04-go-data-types.md](../../../../01-go-backend/reference/language-concepts/04-go-data-types.md) | `runtime` | 1 | 0 |
@@ -84,7 +84,7 @@
 | Go | [01-go-backend/reference/language-concepts/14-defer-panic-recover.md](../../../../01-go-backend/reference/language-concepts/14-defer-panic-recover.md) | `not_verified` | 0 | 0 |
 | Go | [01-go-backend/reference/language-concepts/15-nil-semantics.md](../../../../01-go-backend/reference/language-concepts/15-nil-semantics.md) | `not_verified` | 0 | 0 |
 | Go | [01-go-backend/reference/library-guides/01-go-standard-library.md](../../../../01-go-backend/reference/library-guides/01-go-standard-library.md) | `not_verified` | 0 | 0 |
-| Go | [01-go-backend/reference/library-guides/02-third-party-libs.md](../../../../01-go-backend/reference/library-guides/02-third-party-libs.md) | `not_verified` | 0 | 2 |
+| Go | [01-go-backend/reference/library-guides/02-third-party-libs.md](../../../../01-go-backend/reference/library-guides/02-third-party-libs.md) | `not_verified` | 0 | 0 |
 | Go | [01-go-backend/reference/library-guides/03-net-http.md](../../../../01-go-backend/reference/library-guides/03-net-http.md) | `runtime` | 1 | 1 |
 | Go | [01-go-backend/reference/library-guides/04-encoding-json.md](../../../../01-go-backend/reference/library-guides/04-encoding-json.md) | `runtime` | 1 | 1 |
 | Go | [01-go-backend/reference/library-guides/05-context.md](../../../../01-go-backend/reference/library-guides/05-context.md) | `runtime` | 1 | 0 |
@@ -107,7 +107,7 @@
 | Go | [01-go-backend/testing/02-mocking-stubbing.md](../../../../01-go-backend/testing/02-mocking-stubbing.md) | `not_verified` | 0 | 0 |
 | Go | [01-go-backend/testing/03-integration-testing.md](../../../../01-go-backend/testing/03-integration-testing.md) | `not_verified` | 0 | 0 |
 | Go | [01-go-backend/testing/04-benchmarking.md](../../../../01-go-backend/testing/04-benchmarking.md) | `not_verified` | 0 | 0 |
-| Go | [01-go-backend/testing/05-test-driven-development.md](../../../../01-go-backend/testing/05-test-driven-development.md) | `not_verified` | 0 | 4 |
+| Go | [01-go-backend/testing/05-test-driven-development.md](../../../../01-go-backend/testing/05-test-driven-development.md) | `not_verified` | 0 | 2 |
 | Next.js / TypeScript | [02-nextjs-frontend/LEARNING_GUIDE.md](../../../../02-nextjs-frontend/LEARNING_GUIDE.md) | `not_verified` | 0 | 0 |
 | Next.js / TypeScript | [02-nextjs-frontend/README.md](../../../../02-nextjs-frontend/README.md) | `not_verified` | 0 | 0 |
 | Next.js / TypeScript | [02-nextjs-frontend/advanced-topics/api-integration/01-graphql-apollo.md](../../../../02-nextjs-frontend/advanced-topics/api-integration/01-graphql-apollo.md) | `not_verified` | 0 | 0 |
@@ -399,13 +399,13 @@
 | Swift / SwiftUI | [06-swift-swiftui/testing/03-integration-testing.md](../../../../06-swift-swiftui/testing/03-integration-testing.md) | `not_verified` | 0 | 0 |
 | PHP | [07-php-mastery/LEARNING_GUIDE.md](../../../../07-php-mastery/LEARNING_GUIDE.md) | `not_verified` | 0 | 0 |
 | PHP | [07-php-mastery/README.md](../../../../07-php-mastery/README.md) | `not_verified` | 0 | 0 |
-| PHP | [07-php-mastery/advanced-topics/architecture/01-laravel-architecture.md](../../../../07-php-mastery/advanced-topics/architecture/01-laravel-architecture.md) | `not_verified` | 0 | 1 |
+| PHP | [07-php-mastery/advanced-topics/architecture/01-laravel-architecture.md](../../../../07-php-mastery/advanced-topics/architecture/01-laravel-architecture.md) | `not_verified` | 0 | 0 |
 | PHP | [07-php-mastery/advanced-topics/performance/01-query-optimization.md](../../../../07-php-mastery/advanced-topics/performance/01-query-optimization.md) | `not_verified` | 0 | 0 |
 | PHP | [07-php-mastery/advanced-topics/performance/02-caching-queues.md](../../../../07-php-mastery/advanced-topics/performance/02-caching-queues.md) | `not_verified` | 0 | 0 |
 | PHP | [07-php-mastery/advanced-topics/runtime/01-fpm-vs-resident.md](../../../../07-php-mastery/advanced-topics/runtime/01-fpm-vs-resident.md) | `not_verified` | 0 | 0 |
 | PHP | [07-php-mastery/advanced-topics/runtime/02-workerman-principles.md](../../../../07-php-mastery/advanced-topics/runtime/02-workerman-principles.md) | `not_verified` | 0 | 0 |
 | PHP | [07-php-mastery/advanced-topics/runtime/03-webman-practice.md](../../../../07-php-mastery/advanced-topics/runtime/03-webman-practice.md) | `not_verified` | 0 | 0 |
-| PHP | [07-php-mastery/advanced-topics/runtime/04-swoole-ecosystem.md](../../../../07-php-mastery/advanced-topics/runtime/04-swoole-ecosystem.md) | `not_verified` | 0 | 1 |
+| PHP | [07-php-mastery/advanced-topics/runtime/04-swoole-ecosystem.md](../../../../07-php-mastery/advanced-topics/runtime/04-swoole-ecosystem.md) | `not_verified` | 0 | 0 |
 | PHP | [07-php-mastery/advanced-topics/security/01-security-practices.md](../../../../07-php-mastery/advanced-topics/security/01-security-practices.md) | `runtime` | 1 | 2 |
 | PHP | [07-php-mastery/basics/01-environment-setup.md](../../../../07-php-mastery/basics/01-environment-setup.md) | `not_verified` | 0 | 0 |
 | PHP | [07-php-mastery/basics/02-first-script.md](../../../../07-php-mastery/basics/02-first-script.md) | `not_verified` | 0 | 0 |
@@ -425,15 +425,15 @@
 | PHP | [07-php-mastery/projects/01-todo-api.md](../../../../07-php-mastery/projects/01-todo-api.md) | `not_verified` | 0 | 0 |
 | PHP | [07-php-mastery/projects/02-blog-platform.md](../../../../07-php-mastery/projects/02-blog-platform.md) | `not_verified` | 0 | 0 |
 | PHP | [07-php-mastery/projects/03-ecommerce-api.md](../../../../07-php-mastery/projects/03-ecommerce-api.md) | `not_verified` | 0 | 0 |
-| PHP | [07-php-mastery/projects/04-production-laravel-app.md](../../../../07-php-mastery/projects/04-production-laravel-app.md) | `not_verified` | 0 | 1 |
+| PHP | [07-php-mastery/projects/04-production-laravel-app.md](../../../../07-php-mastery/projects/04-production-laravel-app.md) | `not_verified` | 0 | 0 |
 | PHP | [07-php-mastery/reference/framework-essentials/01-laravel-essentials.md](../../../../07-php-mastery/reference/framework-essentials/01-laravel-essentials.md) | `not_verified` | 0 | 0 |
 | PHP | [07-php-mastery/reference/framework-essentials/02-symfony-essentials.md](../../../../07-php-mastery/reference/framework-essentials/02-symfony-essentials.md) | `not_verified` | 0 | 0 |
 | PHP | [07-php-mastery/reference/language-concepts/01-php-keywords.md](../../../../07-php-mastery/reference/language-concepts/01-php-keywords.md) | `runtime` | 3 | 0 |
 | PHP | [07-php-mastery/reference/language-concepts/02-built-in-functions.md](../../../../07-php-mastery/reference/language-concepts/02-built-in-functions.md) | `runtime` | 5 | 0 |
 | PHP | [07-php-mastery/reference/language-concepts/03-types-oop-modern.md](../../../../07-php-mastery/reference/language-concepts/03-types-oop-modern.md) | `not_verified` | 0 | 0 |
 | PHP | [07-php-mastery/reference/language-concepts/04-control-flow.md](../../../../07-php-mastery/reference/language-concepts/04-control-flow.md) | `not_verified` | 0 | 0 |
-| PHP | [07-php-mastery/reference/language-concepts/05-arrays-patterns.md](../../../../07-php-mastery/reference/language-concepts/05-arrays-patterns.md) | `not_verified` | 0 | 0 |
-| PHP | [07-php-mastery/reference/language-concepts/06-generators-iterators.md](../../../../07-php-mastery/reference/language-concepts/06-generators-iterators.md) | `not_verified` | 0 | 0 |
+| PHP | [07-php-mastery/reference/language-concepts/05-arrays-patterns.md](../../../../07-php-mastery/reference/language-concepts/05-arrays-patterns.md) | `runtime` | 3 | 0 |
+| PHP | [07-php-mastery/reference/language-concepts/06-generators-iterators.md](../../../../07-php-mastery/reference/language-concepts/06-generators-iterators.md) | `runtime` | 3 | 0 |
 | PHP | [07-php-mastery/reference/language-concepts/07-namespaces-autoloading.md](../../../../07-php-mastery/reference/language-concepts/07-namespaces-autoloading.md) | `not_verified` | 0 | 0 |
 | PHP | [07-php-mastery/reference/language-concepts/08-reflection-attributes.md](../../../../07-php-mastery/reference/language-concepts/08-reflection-attributes.md) | `not_verified` | 0 | 0 |
 | PHP | [07-php-mastery/reference/language-concepts/09-strings-regex.md](../../../../07-php-mastery/reference/language-concepts/09-strings-regex.md) | `not_verified` | 0 | 0 |
@@ -492,7 +492,7 @@
 | Java | [08-java-revisited/reference/framework-essentials/07-rest-client-essentials.md](../../../../08-java-revisited/reference/framework-essentials/07-rest-client-essentials.md) | `not_verified` | 0 | 0 |
 | Java | [08-java-revisited/reference/language-concepts/01-java-keywords.md](../../../../08-java-revisited/reference/language-concepts/01-java-keywords.md) | `runtime` | 4 | 1 |
 | Java | [08-java-revisited/reference/language-concepts/02-collections-generics.md](../../../../08-java-revisited/reference/language-concepts/02-collections-generics.md) | `runtime` | 3 | 0 |
-| Java | [08-java-revisited/reference/language-concepts/03-streams-optional.md](../../../../08-java-revisited/reference/language-concepts/03-streams-optional.md) | `not_verified` | 0 | 0 |
+| Java | [08-java-revisited/reference/language-concepts/03-streams-optional.md](../../../../08-java-revisited/reference/language-concepts/03-streams-optional.md) | `runtime` | 3 | 0 |
 | Java | [08-java-revisited/reference/language-concepts/04-concurrency-api.md](../../../../08-java-revisited/reference/language-concepts/04-concurrency-api.md) | `not_verified` | 0 | 0 |
 | Java | [08-java-revisited/reference/language-concepts/05-records-sealed-patterns.md](../../../../08-java-revisited/reference/language-concepts/05-records-sealed-patterns.md) | `not_verified` | 0 | 0 |
 | Java | [08-java-revisited/reference/language-concepts/06-exceptions-resources.md](../../../../08-java-revisited/reference/language-concepts/06-exceptions-resources.md) | `runtime` | 2 | 0 |
@@ -503,7 +503,7 @@
 | Java | [08-java-revisited/reference/library-guides/01-standard-library.md](../../../../08-java-revisited/reference/library-guides/01-standard-library.md) | `runtime` | 5 | 1 |
 | Java | [08-java-revisited/reference/library-guides/02-third-party-libs.md](../../../../08-java-revisited/reference/library-guides/02-third-party-libs.md) | `not_verified` | 0 | 0 |
 | Java | [08-java-revisited/reference/library-guides/03-java-lang.md](../../../../08-java-revisited/reference/library-guides/03-java-lang.md) | `not_verified` | 0 | 0 |
-| Java | [08-java-revisited/reference/library-guides/04-java-io.md](../../../../08-java-revisited/reference/library-guides/04-java-io.md) | `not_verified` | 0 | 0 |
+| Java | [08-java-revisited/reference/library-guides/04-java-io.md](../../../../08-java-revisited/reference/library-guides/04-java-io.md) | `runtime` | 3 | 0 |
 | Java | [08-java-revisited/reference/library-guides/05-java-util-function.md](../../../../08-java-revisited/reference/library-guides/05-java-util-function.md) | `not_verified` | 0 | 0 |
 | Java | [08-java-revisited/reference/library-guides/06-java-math.md](../../../../08-java-revisited/reference/library-guides/06-java-math.md) | `not_verified` | 0 | 0 |
 | Java | [08-java-revisited/reference/library-guides/07-java-text-and-time-format.md](../../../../08-java-revisited/reference/library-guides/07-java-text-and-time-format.md) | `not_verified` | 0 | 0 |
@@ -623,8 +623,8 @@
 | Python | [10-python-discovery/testing/03-mocking-testing.md](../../../../10-python-discovery/testing/03-mocking-testing.md) | `not_verified` | 0 | 1 |
 | Rust / Cross-platform | [11-rust-cross-platform/LEARNING_GUIDE.md](../../../../11-rust-cross-platform/LEARNING_GUIDE.md) | `not_verified` | 0 | 0 |
 | Rust / Cross-platform | [11-rust-cross-platform/README.md](../../../../11-rust-cross-platform/README.md) | `not_verified` | 0 | 0 |
-| Rust / Cross-platform | [11-rust-cross-platform/advanced-topics/01-memory-layout-performance.md](../../../../11-rust-cross-platform/advanced-topics/01-memory-layout-performance.md) | `not_verified` | 0 | 9 |
-| Rust / Cross-platform | [11-rust-cross-platform/advanced-topics/02-ffi-bindgen.md](../../../../11-rust-cross-platform/advanced-topics/02-ffi-bindgen.md) | `not_verified` | 0 | 4 |
+| Rust / Cross-platform | [11-rust-cross-platform/advanced-topics/01-memory-layout-performance.md](../../../../11-rust-cross-platform/advanced-topics/01-memory-layout-performance.md) | `not_verified` | 0 | 1 |
+| Rust / Cross-platform | [11-rust-cross-platform/advanced-topics/02-ffi-bindgen.md](../../../../11-rust-cross-platform/advanced-topics/02-ffi-bindgen.md) | `not_verified` | 0 | 0 |
 | Rust / Cross-platform | [11-rust-cross-platform/advanced-topics/03-wasm32-target.md](../../../../11-rust-cross-platform/advanced-topics/03-wasm32-target.md) | `not_verified` | 0 | 0 |
 | Rust / Cross-platform | [11-rust-cross-platform/advanced-topics/04-security-practices.md](../../../../11-rust-cross-platform/advanced-topics/04-security-practices.md) | `not_verified` | 0 | 0 |
 | Rust / Cross-platform | [11-rust-cross-platform/basics/01-environment-setup.md](../../../../11-rust-cross-platform/basics/01-environment-setup.md) | `not_verified` | 0 | 1 |
@@ -637,16 +637,16 @@
 | Rust / Cross-platform | [11-rust-cross-platform/basics/08-smart-pointers.md](../../../../11-rust-cross-platform/basics/08-smart-pointers.md) | `not_verified` | 0 | 0 |
 | Rust / Cross-platform | [11-rust-cross-platform/basics/09-concurrency-async.md](../../../../11-rust-cross-platform/basics/09-concurrency-async.md) | `not_verified` | 0 | 1 |
 | Rust / Cross-platform | [11-rust-cross-platform/basics/10-cargo-testing.md](../../../../11-rust-cross-platform/basics/10-cargo-testing.md) | `not_verified` | 0 | 0 |
-| Rust / Cross-platform | [11-rust-cross-platform/deployment/01-cross-compilation-targets.md](../../../../11-rust-cross-platform/deployment/01-cross-compilation-targets.md) | `not_verified` | 0 | 1 |
+| Rust / Cross-platform | [11-rust-cross-platform/deployment/01-cross-compilation-targets.md](../../../../11-rust-cross-platform/deployment/01-cross-compilation-targets.md) | `not_verified` | 0 | 0 |
 | Rust / Cross-platform | [11-rust-cross-platform/deployment/02-github-actions-ci.md](../../../../11-rust-cross-platform/deployment/02-github-actions-ci.md) | `not_verified` | 0 | 0 |
-| Rust / Cross-platform | [11-rust-cross-platform/deployment/03-signing-auto-update.md](../../../../11-rust-cross-platform/deployment/03-signing-auto-update.md) | `not_verified` | 0 | 1 |
-| Rust / Cross-platform | [11-rust-cross-platform/deployment/04-containerized-services.md](../../../../11-rust-cross-platform/deployment/04-containerized-services.md) | `not_verified` | 0 | 3 |
+| Rust / Cross-platform | [11-rust-cross-platform/deployment/03-signing-auto-update.md](../../../../11-rust-cross-platform/deployment/03-signing-auto-update.md) | `not_verified` | 0 | 0 |
+| Rust / Cross-platform | [11-rust-cross-platform/deployment/04-containerized-services.md](../../../../11-rust-cross-platform/deployment/04-containerized-services.md) | `not_verified` | 0 | 0 |
 | Rust / Cross-platform | [11-rust-cross-platform/frameworks/01-tauri-2-architecture.md](../../../../11-rust-cross-platform/frameworks/01-tauri-2-architecture.md) | `not_verified` | 0 | 0 |
 | Rust / Cross-platform | [11-rust-cross-platform/frameworks/02-tauri-plugins.md](../../../../11-rust-cross-platform/frameworks/02-tauri-plugins.md) | `not_verified` | 0 | 0 |
 | Rust / Cross-platform | [11-rust-cross-platform/frameworks/03-tauri-frontend-react.md](../../../../11-rust-cross-platform/frameworks/03-tauri-frontend-react.md) | `not_verified` | 0 | 0 |
 | Rust / Cross-platform | [11-rust-cross-platform/frameworks/04-axum-web-stack.md](../../../../11-rust-cross-platform/frameworks/04-axum-web-stack.md) | `not_verified` | 0 | 0 |
 | Rust / Cross-platform | [11-rust-cross-platform/frameworks/05-state-and-database-sqlx.md](../../../../11-rust-cross-platform/frameworks/05-state-and-database-sqlx.md) | `not_verified` | 0 | 0 |
-| Rust / Cross-platform | [11-rust-cross-platform/frameworks/06-auth-middleware.md](../../../../11-rust-cross-platform/frameworks/06-auth-middleware.md) | `not_verified` | 0 | 6 |
+| Rust / Cross-platform | [11-rust-cross-platform/frameworks/06-auth-middleware.md](../../../../11-rust-cross-platform/frameworks/06-auth-middleware.md) | `not_verified` | 0 | 2 |
 | Rust / Cross-platform | [11-rust-cross-platform/frameworks/07-desktop-packaging.md](../../../../11-rust-cross-platform/frameworks/07-desktop-packaging.md) | `not_verified` | 0 | 0 |
 | Rust / Cross-platform | [11-rust-cross-platform/projects/01-cli-tool.md](../../../../11-rust-cross-platform/projects/01-cli-tool.md) | `runtime` | 1 | 0 |
 | Rust / Cross-platform | [11-rust-cross-platform/projects/02-tauri-notes-app.md](../../../../11-rust-cross-platform/projects/02-tauri-notes-app.md) | `not_verified` | 0 | 0 |
@@ -660,18 +660,18 @@
 | Rust / Cross-platform | [11-rust-cross-platform/reference/language-concepts/02-trait-objects.md](../../../../11-rust-cross-platform/reference/language-concepts/02-trait-objects.md) | `not_verified` | 0 | 0 |
 | Rust / Cross-platform | [11-rust-cross-platform/reference/language-concepts/03-const-generics.md](../../../../11-rust-cross-platform/reference/language-concepts/03-const-generics.md) | `not_verified` | 0 | 1 |
 | Rust / Cross-platform | [11-rust-cross-platform/reference/language-concepts/04-advanced-lifetimes.md](../../../../11-rust-cross-platform/reference/language-concepts/04-advanced-lifetimes.md) | `runtime` | 4 | 2 |
-| Rust / Cross-platform | [11-rust-cross-platform/reference/language-concepts/05-macros.md](../../../../11-rust-cross-platform/reference/language-concepts/05-macros.md) | `not_verified` | 0 | 1 |
+| Rust / Cross-platform | [11-rust-cross-platform/reference/language-concepts/05-macros.md](../../../../11-rust-cross-platform/reference/language-concepts/05-macros.md) | `runtime` | 4 | 0 |
 | Rust / Cross-platform | [11-rust-cross-platform/reference/language-concepts/06-unsafe.md](../../../../11-rust-cross-platform/reference/language-concepts/06-unsafe.md) | `not_verified` | 0 | 1 |
 | Rust / Cross-platform | [11-rust-cross-platform/reference/language-concepts/07-smart-pointers.md](../../../../11-rust-cross-platform/reference/language-concepts/07-smart-pointers.md) | `not_verified` | 0 | 0 |
-| Rust / Cross-platform | [11-rust-cross-platform/reference/language-concepts/08-async-internals.md](../../../../11-rust-cross-platform/reference/language-concepts/08-async-internals.md) | `not_verified` | 0 | 1 |
+| Rust / Cross-platform | [11-rust-cross-platform/reference/language-concepts/08-async-internals.md](../../../../11-rust-cross-platform/reference/language-concepts/08-async-internals.md) | `not_verified` | 0 | 0 |
 | Rust / Cross-platform | [11-rust-cross-platform/reference/language-concepts/09-keywords-and-syntax.md](../../../../11-rust-cross-platform/reference/language-concepts/09-keywords-and-syntax.md) | `not_verified` | 0 | 0 |
 | Rust / Cross-platform | [11-rust-cross-platform/reference/language-concepts/10-standard-types-and-methods.md](../../../../11-rust-cross-platform/reference/language-concepts/10-standard-types-and-methods.md) | `runtime` | 1 | 0 |
 | Rust / Cross-platform | [11-rust-cross-platform/reference/library-guides/12-tokio-guide.md](../../../../11-rust-cross-platform/reference/library-guides/12-tokio-guide.md) | `runtime` | 4 | 0 |
 | Rust / Cross-platform | [11-rust-cross-platform/reference/library-guides/13-serde-guide.md](../../../../11-rust-cross-platform/reference/library-guides/13-serde-guide.md) | `runtime` | 4 | 0 |
 | Rust / Cross-platform | [11-rust-cross-platform/reference/library-guides/14-error-libraries.md](../../../../11-rust-cross-platform/reference/library-guides/14-error-libraries.md) | `runtime` | 2 | 0 |
 | Rust / Cross-platform | [11-rust-cross-platform/reference/library-guides/15-standard-library-map.md](../../../../11-rust-cross-platform/reference/library-guides/15-standard-library-map.md) | `runtime` | 1 | 0 |
-| Rust / Cross-platform | [11-rust-cross-platform/testing/01-unit-integration-tests.md](../../../../11-rust-cross-platform/testing/01-unit-integration-tests.md) | `not_verified` | 0 | 6 |
-| Rust / Cross-platform | [11-rust-cross-platform/testing/02-criterion-benchmarks.md](../../../../11-rust-cross-platform/testing/02-criterion-benchmarks.md) | `not_verified` | 0 | 1 |
+| Rust / Cross-platform | [11-rust-cross-platform/testing/01-unit-integration-tests.md](../../../../11-rust-cross-platform/testing/01-unit-integration-tests.md) | `not_verified` | 0 | 1 |
+| Rust / Cross-platform | [11-rust-cross-platform/testing/02-criterion-benchmarks.md](../../../../11-rust-cross-platform/testing/02-criterion-benchmarks.md) | `not_verified` | 0 | 0 |
 | Rust / Cross-platform | [11-rust-cross-platform/testing/03-tauri-e2e-webdriver.md](../../../../11-rust-cross-platform/testing/03-tauri-e2e-webdriver.md) | `not_verified` | 0 | 0 |
 
 ## 重新生成

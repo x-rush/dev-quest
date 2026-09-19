@@ -1,0 +1,348 @@
+{
+  "scope": "4 Go programs, 4 Rust programs, 2 expected Rust compilation errors; only named cases",
+  "toolchains": {
+    "go": {
+      "command": [
+        "go",
+        "version"
+      ],
+      "returncode": 0,
+      "stdout": "go version go1.27.1 linux/amd64\n",
+      "stderr": ""
+    },
+    "rust": {
+      "command": [
+        "rustc",
+        "--version"
+      ],
+      "returncode": 0,
+      "stdout": "rustc 1.98.1 (48a229cea 2026-09-01)\n",
+      "stderr": ""
+    },
+    "platform": {
+      "command": [
+        "uname",
+        "-sm"
+      ],
+      "returncode": 0,
+      "stdout": "Linux x86_64\n",
+      "stderr": ""
+    }
+  },
+  "results": [
+    {
+      "case": "go-composite-alias",
+      "source": "01-go-backend/basics/04-composite-types.md",
+      "source_line": 352,
+      "document_sha256": "96cb8919fe3da6256ad28b142d75d9e9d562cc931be8ff20657dfffde11783b4",
+      "code_sha256": "512a1278e40819ce5c27896d75e941e9da5124dfa4185b967fc056a0df906e68",
+      "mode": "runtime",
+      "expected_error": null,
+      "expected_stdout": "[10 20 99 40] [10 20] [10 20 99]\n[10 20 99 40] [8 20 77]\nAda [rust] Lin\n[rust] [python]\n",
+      "build": {
+        "command": [
+          "go",
+          "build",
+          "-race",
+          "-o",
+          "/tmp/composite-macros-1sporv5y/example",
+          "/tmp/composite-macros-1sporv5y/main.go"
+        ],
+        "returncode": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "execution": {
+        "command": [
+          "/tmp/composite-macros-1sporv5y/example"
+        ],
+        "returncode": 0,
+        "stdout": "[10 20 99 40] [10 20] [10 20 99]\n[10 20 99 40] [8 20 77]\nAda [rust] Lin\n[rust] [python]\n",
+        "stderr": ""
+      },
+      "status": "PASS"
+    },
+    {
+      "case": "go-composite-empty",
+      "source": "01-go-backend/basics/04-composite-types.md",
+      "source_line": 391,
+      "document_sha256": "96cb8919fe3da6256ad28b142d75d9e9d562cc931be8ff20657dfffde11783b4",
+      "code_sha256": "efe06502258d4c14813b9d293bdef8a41ee5e8454e972b3899df826ed660b64d",
+      "mode": "runtime",
+      "expected_error": null,
+      "expected_stdout": "true false 0 0\n0\n3 [1 2 3]\n2 [1 1 2]\n0 false 0\n0 true 3\n[Ada Lin]\n",
+      "build": {
+        "command": [
+          "go",
+          "build",
+          "-race",
+          "-o",
+          "/tmp/composite-macros-5lppffhf/example",
+          "/tmp/composite-macros-5lppffhf/main.go"
+        ],
+        "returncode": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "execution": {
+        "command": [
+          "/tmp/composite-macros-5lppffhf/example"
+        ],
+        "returncode": 0,
+        "stdout": "true false 0 0\n0\n3 [1 2 3]\n2 [1 1 2]\n0 false 0\n0 true 3\n[Ada Lin]\n",
+        "stderr": ""
+      },
+      "status": "PASS"
+    },
+    {
+      "case": "go-composite-panic",
+      "source": "01-go-backend/basics/04-composite-types.md",
+      "source_line": 441,
+      "document_sha256": "96cb8919fe3da6256ad28b142d75d9e9d562cc931be8ff20657dfffde11783b4",
+      "code_sha256": "454d4f77725fa5df515df3cb0614ab94b2d48c5b423bb7f7e71bcd99c8951cd9",
+      "mode": "runtime",
+      "expected_error": null,
+      "expected_stdout": "true\ntrue\ntrue\n",
+      "build": {
+        "command": [
+          "go",
+          "build",
+          "-race",
+          "-o",
+          "/tmp/composite-macros-r03ebxh8/example",
+          "/tmp/composite-macros-r03ebxh8/main.go"
+        ],
+        "returncode": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "execution": {
+        "command": [
+          "/tmp/composite-macros-r03ebxh8/example"
+        ],
+        "returncode": 0,
+        "stdout": "true\ntrue\ntrue\n",
+        "stderr": ""
+      },
+      "status": "PASS"
+    },
+    {
+      "case": "go-composite-remove",
+      "source": "01-go-backend/basics/04-composite-types.md",
+      "source_line": 480,
+      "document_sha256": "96cb8919fe3da6256ad28b142d75d9e9d562cc931be8ff20657dfffde11783b4",
+      "code_sha256": "a1977efbee88fb8a5dd3d4c4536bb078d2089543665df966043257e79782c479",
+      "mode": "runtime",
+      "expected_error": null,
+      "expected_stdout": "true 3 2 映射\n数组 结构体\ntrue 3\ntrue\ntrue 0\ntrue\n",
+      "build": {
+        "command": [
+          "go",
+          "build",
+          "-race",
+          "-o",
+          "/tmp/composite-macros-xdy1thdh/example",
+          "/tmp/composite-macros-xdy1thdh/main.go"
+        ],
+        "returncode": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "execution": {
+        "command": [
+          "/tmp/composite-macros-xdy1thdh/example"
+        ],
+        "returncode": 0,
+        "stdout": "true 3 2 映射\n数组 结构体\ntrue 3\ntrue\ntrue 0\ntrue\n",
+        "stderr": ""
+      },
+      "status": "PASS"
+    },
+    {
+      "case": "rust-macro-max",
+      "source": "11-rust-cross-platform/reference/language-concepts/05-macros.md",
+      "source_line": 95,
+      "document_sha256": "1d18b11dac2f09e1ebfd4e92cd8627a7dcde7bf472fbcc2a25f0653d72b8b1e2",
+      "code_sha256": "a13fb97b7ef28847f05c3148c632dbee5de1d6937e1ef9e460c77ebe2e7caf0a",
+      "mode": "runtime",
+      "expected_error": null,
+      "expected_stdout": "汪汪\n3\n9\n-0.5\n8 2\n",
+      "build": {
+        "command": [
+          "rustc",
+          "--edition",
+          "2024",
+          "--error-format=json",
+          "/tmp/composite-macros-7dvs9pps/main.rs",
+          "-o",
+          "/tmp/composite-macros-7dvs9pps/example"
+        ],
+        "returncode": 0,
+        "stdout": "",
+        "stderr": "{\"$message_type\":\"diagnostic\",\"message\":\"variable does not need to be mutable\",\"code\":{\"code\":\"unused_mut\",\"explanation\":null},\"level\":\"warning\",\"spans\":[{\"file_name\":\"/tmp/composite-macros-7dvs9pps/main.rs\",\"byte_start\":443,\"byte_end\":450,\"line_start\":17,\"line_end\":17,\"column_start\":13,\"column_end\":20,\"is_primary\":true,\"text\":[{\"text\":\"        let mut acc = $first;\",\"highlight_start\":13,\"highlight_end\":20}],\"label\":null,\"suggested_replacement\":null,\"suggestion_applicability\":null,\"expansion\":{\"span\":{\"file_name\":\"/tmp/composite-macros-7dvs9pps/main.rs\",\"byte_start\":734,\"byte_end\":744,\"line_start\":31,\"line_end\":31,\"column_start\":20,\"column_end\":30,\"is_primary\":false,\"text\":[{\"text\":\"    println!(\\\"{}\\\", max_of!(3));\",\"highlight_start\":20,\"highlight_end\":30}],\"label\":null,\"suggested_replacement\":null,\"suggestion_applicability\":null,\"expansion\":null},\"macro_decl_name\":\"max_of!\",\"def_site_span\":{\"file_name\":\"/tmp/composite-macros-7dvs9pps/main.rs\",\"byte_start\":362,\"byte_end\":381,\"line_start\":15,\"line_end\":15,\"column_start\":1,\"column_end\":20,\"is_primary\":false,\"text\":[{\"text\":\"macro_rules! max_of {\",\"highlight_start\":1,\"highlight_end\":20}],\"label\":null,\"suggested_replacement\":null,\"suggestion_applicability\":null,\"expansion\":null}}}],\"children\":[{\"message\":\"`#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default\",\"code\":null,\"level\":\"note\",\"spans\":[],\"children\":[],\"rendered\":null},{\"message\":\"remove this `mut`\",\"code\":null,\"level\":\"help\",\"spans\":[{\"file_name\":\"/tmp/composite-macros-7dvs9pps/main.rs\",\"byte_start\":443,\"byte_end\":447,\"line_start\":17,\"line_end\":17,\"column_start\":13,\"column_end\":17,\"is_primary\":true,\"text\":[{\"text\":\"        let mut acc = $first;\",\"highlight_start\":13,\"highlight_end\":17}],\"label\":null,\"suggested_replacement\":\"\",\"suggestion_applicability\":\"MachineApplicable\",\"expansion\":{\"span\":{\"file_name\":\"/tmp/composite-macros-7dvs9pps/main.rs\",\"byte_start\":734,\"byte_end\":744,\"line_start\":31,\"line_end\":31,\"column_start\":20,\"column_end\":30,\"is_primary\":false,\"text\":[{\"text\":\"    println!(\\\"{}\\\", max_of!(3));\",\"highlight_start\":20,\"highlight_end\":30}],\"label\":null,\"suggested_replacement\":null,\"suggestion_applicability\":null,\"expansion\":null},\"macro_decl_name\":\"max_of!\",\"def_site_span\":{\"file_name\":\"/tmp/composite-macros-7dvs9pps/main.rs\",\"byte_start\":362,\"byte_end\":381,\"line_start\":15,\"line_end\":15,\"column_start\":1,\"column_end\":20,\"is_primary\":false,\"text\":[{\"text\":\"macro_rules! max_of {\",\"highlight_start\":1,\"highlight_end\":20}],\"label\":null,\"suggested_replacement\":null,\"suggestion_applicability\":null,\"expansion\":null}}}],\"children\":[],\"rendered\":null}],\"rendered\":\"warning: variable does not need to be mutable\\n  --> /tmp/composite-macros-7dvs9pps/main.rs:17:13\\n   |\\n17 |         let mut acc = $first;\\n   |             ----^^^\\n   |             |\\n   |             help: remove this `mut`\\n...\\n31 |     println!(\\\"{}\\\", max_of!(3));\\n   |                    ---------- in this macro invocation\\n   |\\n   = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default\\n   = note: this warning originates in the macro `max_of` (in Nightly builds, run with -Z macro-backtrace for more info)\\n\\n\"}\n{\"$message_type\":\"diagnostic\",\"message\":\"1 warning emitted\",\"code\":null,\"level\":\"warning\",\"spans\":[],\"children\":[],\"rendered\":\"warning: 1 warning emitted\\n\\n\"}\n"
+      },
+      "execution": {
+        "command": [
+          "/tmp/composite-macros-7dvs9pps/example"
+        ],
+        "returncode": 0,
+        "stdout": "汪汪\n3\n9\n-0.5\n8 2\n",
+        "stderr": ""
+      },
+      "status": "PASS"
+    },
+    {
+      "case": "rust-macro-hygiene",
+      "source": "11-rust-cross-platform/reference/language-concepts/05-macros.md",
+      "source_line": 162,
+      "document_sha256": "1d18b11dac2f09e1ebfd4e92cd8627a7dcde7bf472fbcc2a25f0653d72b8b1e2",
+      "code_sha256": "14065d0f3e680cac1cab5a0cc231fa8c6f817c4465b9abdb07db54835cff1f00",
+      "mode": "runtime",
+      "expected_error": null,
+      "expected_stdout": "10\n调用处的 x = 1\n",
+      "build": {
+        "command": [
+          "rustc",
+          "--edition",
+          "2024",
+          "--error-format=json",
+          "/tmp/composite-macros-xdlduqlu/main.rs",
+          "-o",
+          "/tmp/composite-macros-xdlduqlu/example"
+        ],
+        "returncode": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "execution": {
+        "command": [
+          "/tmp/composite-macros-xdlduqlu/example"
+        ],
+        "returncode": 0,
+        "stdout": "10\n调用处的 x = 1\n",
+        "stderr": ""
+      },
+      "status": "PASS"
+    },
+    {
+      "case": "rust-macro-derive",
+      "source": "11-rust-cross-platform/reference/language-concepts/05-macros.md",
+      "source_line": 228,
+      "document_sha256": "1d18b11dac2f09e1ebfd4e92cd8627a7dcde7bf472fbcc2a25f0653d72b8b1e2",
+      "code_sha256": "9ed9360f6eb25386b641e3e1687084280d1b723ac2bca51df663542ebe1857f0",
+      "mode": "runtime",
+      "expected_error": null,
+      "expected_stdout": "Point { x: 1, y: 2 } 相等: true\n",
+      "build": {
+        "command": [
+          "rustc",
+          "--edition",
+          "2024",
+          "--error-format=json",
+          "/tmp/composite-macros-4au1jpy9/main.rs",
+          "-o",
+          "/tmp/composite-macros-4au1jpy9/example"
+        ],
+        "returncode": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "execution": {
+        "command": [
+          "/tmp/composite-macros-4au1jpy9/example"
+        ],
+        "returncode": 0,
+        "stdout": "Point { x: 1, y: 2 } 相等: true\n",
+        "stderr": ""
+      },
+      "status": "PASS"
+    },
+    {
+      "case": "rust-macro-edition",
+      "source": "11-rust-cross-platform/reference/language-concepts/05-macros.md",
+      "source_line": 309,
+      "document_sha256": "1d18b11dac2f09e1ebfd4e92cd8627a7dcde7bf472fbcc2a25f0653d72b8b1e2",
+      "code_sha256": "001b615b7c611ddd5ef5531e65622db1bd7cb97b8f956d5d76bb570c54eecafa",
+      "mode": "runtime",
+      "expected_error": null,
+      "expected_stdout": "expr const\nexpr\ntrue false\n",
+      "build": {
+        "command": [
+          "rustc",
+          "--edition",
+          "2024",
+          "--error-format=json",
+          "/tmp/composite-macros-fb1wb4sb/main.rs",
+          "-o",
+          "/tmp/composite-macros-fb1wb4sb/example"
+        ],
+        "returncode": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "execution": {
+        "command": [
+          "/tmp/composite-macros-fb1wb4sb/example"
+        ],
+        "returncode": 0,
+        "stdout": "expr const\nexpr\ntrue false\n",
+        "stderr": ""
+      },
+      "status": "PASS"
+    },
+    {
+      "case": "rust-macro-move",
+      "source": "11-rust-cross-platform/reference/language-concepts/05-macros.md",
+      "source_line": 346,
+      "document_sha256": "1d18b11dac2f09e1ebfd4e92cd8627a7dcde7bf472fbcc2a25f0653d72b8b1e2",
+      "code_sha256": "ba196067341adc0a38aeff4ae827f3a2b0314a16364b80cea04f2c1eb529d9ee",
+      "mode": "compile_error",
+      "expected_error": "E0382",
+      "expected_stdout": null,
+      "build": {
+        "command": [
+          "rustc",
+          "--edition",
+          "2024",
+          "--error-format=json",
+          "/tmp/composite-macros-p8a60_cl/main.rs",
+          "-o",
+          "/tmp/composite-macros-p8a60_cl/example"
+        ],
+        "returncode": 1,
+        "stdout": "",
+        "stderr": "{\"$message_type\":\"diagnostic\",\"message\":\"borrow of moved value: `title`\",\"code\":{\"code\":\"E0382\",\"explanation\":\"A variable was used after its contents have been moved elsewhere.\\n\\nErroneous code example:\\n\\n```compile_fail,E0382\\nstruct MyStruct { s: u32 }\\n\\nfn main() {\\n    let mut x = MyStruct{ s: 5u32 };\\n    let y = x;\\n    x.s = 6;\\n    println!(\\\"{}\\\", x.s);\\n}\\n```\\n\\nSince `MyStruct` is a type that is not marked `Copy`, the data gets moved out\\nof `x` when we set `y`. This is fundamental to Rust's ownership system: outside\\nof workarounds like `Rc`, a value cannot be owned by more than one variable.\\n\\nSometimes we don't need to move the value. Using a reference, we can let another\\nfunction borrow the value without changing its ownership. In the example below,\\nwe don't actually have to move our string to `calculate_length`, we can give it\\na reference to it with `&` instead.\\n\\n```\\nfn main() {\\n    let s1 = String::from(\\\"hello\\\");\\n\\n    let len = calculate_length(&s1);\\n\\n    println!(\\\"The length of '{}' is {}.\\\", s1, len);\\n}\\n\\nfn calculate_length(s: &String) -> usize {\\n    s.len()\\n}\\n```\\n\\nA mutable reference can be created with `&mut`.\\n\\nSometimes we don't want a reference, but a duplicate. All types marked `Clone`\\ncan be duplicated by calling `.clone()`. Subsequent changes to a clone do not\\naffect the original variable.\\n\\nMost types in the standard library are marked `Clone`. The example below\\ndemonstrates using `clone()` on a string. `s1` is first set to \\\"many\\\", and then\\ncopied to `s2`. Then the first character of `s1` is removed, without affecting\\n`s2`. \\\"any many\\\" is printed to the console.\\n\\n```\\nfn main() {\\n    let mut s1 = String::from(\\\"many\\\");\\n    let s2 = s1.clone();\\n    s1.remove(0);\\n    println!(\\\"{} {}\\\", s1, s2);\\n}\\n```\\n\\nIf we control the definition of a type, we can implement `Clone` on it ourselves\\nwith `#[derive(Clone)]`.\\n\\nSome types have no ownership semantics at all and are trivial to duplicate. An\\nexample is `i32` and the other number types. We don't have to call `.clone()` to\\nclone them, because they are marked `Copy` in addition to `Clone`. Implicit\\ncloning is more convenient in this case. We can mark our own types `Copy` if\\nall their members also are marked `Copy`.\\n\\nIn the example below, we implement a `Point` type. Because it only stores two\\nintegers, we opt-out of ownership semantics with `Copy`. Then we can\\n`let p2 = p1` without `p1` being moved.\\n\\n```\\n#[derive(Copy, Clone)]\\nstruct Point { x: i32, y: i32 }\\n\\nfn main() {\\n    let mut p1 = Point{ x: -1, y: 2 };\\n    let p2 = p1;\\n    p1.x = 1;\\n    println!(\\\"p1: {}, {}\\\", p1.x, p1.y);\\n    println!(\\\"p2: {}, {}\\\", p2.x, p2.y);\\n}\\n```\\n\\nAlternatively, if we don't control the struct's definition, or mutable shared\\nownership is truly required, we can use `Rc` and `RefCell`:\\n\\n```\\nuse std::cell::RefCell;\\nuse std::rc::Rc;\\n\\nstruct MyStruct { s: u32 }\\n\\nfn main() {\\n    let mut x = Rc::new(RefCell::new(MyStruct{ s: 5u32 }));\\n    let y = x.clone();\\n    x.borrow_mut().s = 6;\\n    println!(\\\"{}\\\", x.borrow().s);\\n}\\n```\\n\\nWith this approach, x and y share ownership of the data via the `Rc` (reference\\ncount type). `RefCell` essentially performs runtime borrow checking: ensuring\\nthat at most one writer or multiple readers can access the data at any one time.\\n\\nIf you wish to learn more about ownership in Rust, start with the\\n[Understanding Ownership][understanding-ownership] chapter in the Book.\\n\\n[understanding-ownership]: https://doc.rust-lang.org/book/ch04-00-understanding-ownership.html\\n\"},\"level\":\"error\",\"spans\":[{\"file_name\":\"/tmp/composite-macros-p8a60_cl/main.rs\",\"byte_start\":166,\"byte_end\":171,\"line_start\":6,\"line_end\":6,\"column_start\":29,\"column_end\":34,\"is_primary\":false,\"text\":[{\"text\":\"    println!(\\\"{}\\\", consume!(title));\",\"highlight_start\":29,\"highlight_end\":34}],\"label\":\"value moved here\",\"suggested_replacement\":null,\"suggestion_applicability\":null,\"expansion\":null},{\"file_name\":\"/tmp/composite-macros-p8a60_cl/main.rs\",\"byte_start\":190,\"byte_end\":195,\"line_start\":7,\"line_end\":7,\"column_start\":16,\"column_end\":21,\"is_primary\":true,\"text\":[{\"text\":\"    println!(\\\"{title}\\\");\",\"highlight_start\":16,\"highlight_end\":21}],\"label\":\"value borrowed here after move\",\"suggested_replacement\":null,\"suggestion_applicability\":null,\"expansion\":{\"span\":{\"file_name\":\"/rustc/48a229ceaefd4985c50990b14116b6d856af0985/library/std/src/macros.rs\",\"byte_start\":4432,\"byte_end\":4465,\"line_start\":146,\"line_end\":146,\"column_start\":28,\"column_end\":61,\"is_primary\":false,\"text\":[],\"label\":null,\"suggested_replacement\":null,\"suggestion_applicability\":null,\"expansion\":{\"span\":{\"file_name\":\"/rustc/48a229ceaefd4985c50990b14116b6d856af0985/library/std/src/macros.rs\",\"byte_start\":4432,\"byte_end\":4465,\"line_start\":146,\"line_end\":146,\"column_start\":28,\"column_end\":61,\"is_primary\":false,\"text\":[],\"label\":null,\"suggested_replacement\":null,\"suggestion_applicability\":null,\"expansion\":{\"span\":{\"file_name\":\"/tmp/composite-macros-p8a60_cl/main.rs\",\"byte_start\":179,\"byte_end\":198,\"line_start\":7,\"line_end\":7,\"column_start\":5,\"column_end\":24,\"is_primary\":false,\"text\":[{\"text\":\"    println!(\\\"{title}\\\");\",\"highlight_start\":5,\"highlight_end\":24}],\"label\":null,\"suggested_replacement\":null,\"suggestion_applicability\":null,\"expansion\":null},\"macro_decl_name\":\"println!\",\"def_site_span\":{\"file_name\":\"/rustc/48a229ceaefd4985c50990b14116b6d856af0985/library/std/src/macros.rs\",\"byte_start\":4310,\"byte_end\":4330,\"line_start\":141,\"line_end\":141,\"column_start\":1,\"column_end\":21,\"is_primary\":false,\"text\":[],\"label\":null,\"suggested_replacement\":null,\"suggestion_applicability\":null,\"expansion\":null}}},\"macro_decl_name\":\"$crate::format_args_nl!\",\"def_site_span\":{\"file_name\":\"/rustc/48a229ceaefd4985c50990b14116b6d856af0985/library/core/src/macros/mod.rs\",\"byte_start\":36216,\"byte_end\":36243,\"line_start\":1026,\"line_end\":1026,\"column_start\":5,\"column_end\":32,\"is_primary\":false,\"text\":[],\"label\":null,\"suggested_replacement\":null,\"suggestion_applicability\":null,\"expansion\":null}}},\"macro_decl_name\":\"desugaring of format string literal\",\"def_site_span\":{\"file_name\":\"/tmp/composite-macros-p8a60_cl/main.rs\",\"byte_start\":0,\"byte_end\":0,\"line_start\":1,\"line_end\":1,\"column_start\":1,\"column_end\":1,\"is_primary\":false,\"text\":[],\"label\":null,\"suggested_replacement\":null,\"suggestion_applicability\":null,\"expansion\":null}}},{\"file_name\":\"/tmp/composite-macros-p8a60_cl/main.rs\",\"byte_start\":107,\"byte_end\":112,\"line_start\":5,\"line_end\":5,\"column_start\":9,\"column_end\":14,\"is_primary\":false,\"text\":[{\"text\":\"    let title = String::from(\\\"draft\\\");\",\"highlight_start\":9,\"highlight_end\":14}],\"label\":\"move occurs because `title` has type `String`, which does not implement the `Copy` trait\",\"suggested_replacement\":null,\"suggestion_applicability\":null,\"expansion\":null}],\"children\":[{\"message\":\"consider cloning the value if the performance cost is acceptable\",\"code\":null,\"level\":\"help\",\"spans\":[{\"file_name\":\"/tmp/composite-macros-p8a60_cl/main.rs\",\"byte_start\":171,\"byte_end\":171,\"line_start\":6,\"line_end\":6,\"column_start\":34,\"column_end\":34,\"is_primary\":true,\"text\":[{\"text\":\"    println!(\\\"{}\\\", consume!(title));\",\"highlight_start\":34,\"highlight_end\":34}],\"label\":null,\"suggested_replacement\":\".clone()\",\"suggestion_applicability\":\"MachineApplicable\",\"expansion\":null}],\"children\":[],\"rendered\":null}],\"rendered\":\"error[E0382]: borrow of moved value: `title`\\n --> /tmp/composite-macros-p8a60_cl/main.rs:7:16\\n  |\\n5 |     let title = String::from(\\\"draft\\\");\\n  |         ----- move occurs because `title` has type `String`, which does not implement the `Copy` trait\\n6 |     println!(\\\"{}\\\", consume!(title));\\n  |                             ----- value moved here\\n7 |     println!(\\\"{title}\\\");\\n  |                ^^^^^ value borrowed here after move\\n  |\\nhelp: consider cloning the value if the performance cost is acceptable\\n  |\\n6 |     println!(\\\"{}\\\", consume!(title.clone()));\\n  |                                  ++++++++\\n\\n\"}\n{\"$message_type\":\"diagnostic\",\"message\":\"aborting due to 1 previous error\",\"code\":null,\"level\":\"error\",\"spans\":[],\"children\":[],\"rendered\":\"error: aborting due to 1 previous error\\n\\n\"}\n{\"$message_type\":\"diagnostic\",\"message\":\"For more information about this error, try `rustc --explain E0382`.\",\"code\":null,\"level\":\"failure-note\",\"spans\":[],\"children\":[],\"rendered\":\"For more information about this error, try `rustc --explain E0382`.\\n\"}\n"
+      },
+      "execution": null,
+      "status": "PASS"
+    },
+    {
+      "case": "rust-macro-cfg",
+      "source": "11-rust-cross-platform/reference/language-concepts/05-macros.md",
+      "source_line": 362,
+      "document_sha256": "1d18b11dac2f09e1ebfd4e92cd8627a7dcde7bf472fbcc2a25f0653d72b8b1e2",
+      "code_sha256": "2b017990624b257573eeffcfde45947995b0710526d234895a7f2b9af57a27e5",
+      "mode": "compile_error",
+      "expected_error": "E0425",
+      "expected_stdout": null,
+      "build": {
+        "command": [
+          "rustc",
+          "--edition",
+          "2024",
+          "--error-format=json",
+          "/tmp/composite-macros-aczzxxuk/main.rs",
+          "-o",
+          "/tmp/composite-macros-aczzxxuk/example"
+        ],
+        "returncode": 1,
+        "stdout": "",
+        "stderr": "{\"$message_type\":\"diagnostic\",\"message\":\"cannot find function `missing_platform_function` in this scope\",\"code\":{\"code\":\"E0425\",\"explanation\":\"An unresolved name was used.\\n\\nErroneous code examples:\\n\\n```compile_fail,E0425\\nsomething_that_doesnt_exist::foo;\\n// error: unresolved name `something_that_doesnt_exist::foo`\\n\\n// or:\\n\\ntrait Foo {\\n    fn bar() {\\n        Self; // error: unresolved name `Self`\\n    }\\n}\\n\\n// or:\\n\\nlet x = unknown_variable;  // error: unresolved name `unknown_variable`\\n```\\n\\nPlease verify that the name wasn't misspelled and ensure that the\\nidentifier being referred to is valid for the given situation. Example:\\n\\n```\\nenum something_that_does_exist {\\n    Foo,\\n}\\n```\\n\\nOr:\\n\\n```\\nmod something_that_does_exist {\\n    pub static foo : i32 = 0i32;\\n}\\n\\nsomething_that_does_exist::foo; // ok!\\n```\\n\\nOr:\\n\\n```\\nlet unknown_variable = 12u32;\\nlet x = unknown_variable; // ok!\\n```\\n\\nIf the item is not defined in the current module, it must be imported using a\\n`use` statement, like so:\\n\\n```\\n# mod foo { pub fn bar() {} }\\n# fn main() {\\nuse foo::bar;\\nbar();\\n# }\\n```\\n\\nIf the item you are importing is not defined in some super-module of the\\ncurrent module, then it must also be declared as public (e.g., `pub fn`).\\n\"},\"level\":\"error\",\"spans\":[{\"file_name\":\"/tmp/composite-macros-aczzxxuk/main.rs\",\"byte_start\":41,\"byte_end\":66,\"line_start\":3,\"line_end\":3,\"column_start\":9,\"column_end\":34,\"is_primary\":true,\"text\":[{\"text\":\"        missing_platform_function();\",\"highlight_start\":9,\"highlight_end\":34}],\"label\":\"not found in this scope\",\"suggested_replacement\":null,\"suggestion_applicability\":null,\"expansion\":null}],\"children\":[],\"rendered\":\"error[E0425]: cannot find function `missing_platform_function` in this scope\\n --> /tmp/composite-macros-aczzxxuk/main.rs:3:9\\n  |\\n3 |         missing_platform_function();\\n  |         ^^^^^^^^^^^^^^^^^^^^^^^^^ not found in this scope\\n\\n\"}\n{\"$message_type\":\"diagnostic\",\"message\":\"aborting due to 1 previous error\",\"code\":null,\"level\":\"error\",\"spans\":[],\"children\":[],\"rendered\":\"error: aborting due to 1 previous error\\n\\n\"}\n{\"$message_type\":\"diagnostic\",\"message\":\"For more information about this error, try `rustc --explain E0425`.\",\"code\":null,\"level\":\"failure-note\",\"spans\":[],\"children\":[],\"rendered\":\"For more information about this error, try `rustc --explain E0425`.\\n\"}\n"
+      },
+      "execution": null,
+      "status": "PASS"
+    }
+  ],
+  "passed": 10,
+  "total": 10
+}

@@ -32,6 +32,8 @@
 | [PHP 与 Java 类型验证](reports/php-java-types-validation.md) | PHP 声明类型、Java 基本类型与 record 的 5 个正文完整程序验证 |
 | [Go 与 Rust 基础验证](reports/go-rust-basics.md) | Go 并发/错误处理和 Rust 生命周期的 13 个运行案例、3 个预期编译失败案例 |
 | [Rust 生态验证](reports/rust-ecosystem-validation.md) | Tokio、Serde 与错误处理库的 10 个锁定依赖、无网络运行案例 |
+| [Go 复合类型与 Rust 宏验证](reports/go-composite-rust-macros.md) | Go 切片、map、接口与 Rust 宏系统的 8 个运行案例、2 个预期编译失败案例 |
+| [PHP 与 Java 数据管道验证](reports/php-java-pipelines-validation.md) | PHP 数组/生成器以及 Java Stream/Optional、IO 的 12 个正文完整程序验证 |
 | [验证覆盖状态台账](reports/verification-coverage.md) | 逐文件区分限定运行证据、语法检查和未验证状态，避免把验证措辞或代码围栏当成通过证明 |
 | [本轮交付状态](reports/delivery-status-2026-09-19.md) | 已修复项、已验证项与仍未达到全库交付条件的范围 |
 

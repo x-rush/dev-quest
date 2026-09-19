@@ -55,20 +55,24 @@ Rust 宏是**编译期代码生成**机制：在类型检查与代码生成之�
 | 匹配器 | 匹配内容 | 示例输入 |
 |--------|---------|---------|
 | `expr` | 表达式 | `1 + 2`、`f(x)` |
+| `expr_2021` | 不含顶层 `_` 与 `const { ... }` 的表达式 | 保留旧版匹配行为 |
 | `ident` | 标识符/关键字 | `foo`、`self`、`u32` |
 | `tt` | 单个语法树（单 token 或括号组） | `+`、`(a b)` |
 | `literal` | 字面量 | `42`、`"str"`、`'c'` |
 | `ty` | 类型 | `Vec<u8>`、`&str` |
 | `pat` | 模式（match 分支左侧） | `Some(x)`、`1..=9` |
+| `pat_param` | 不含顶层或模式的模式 | 匹配器后需要接 `\|` 的语法 |
 | `path` | 路径 | `std::mem`、`Option::None` |
-| `stmt` | 语句 | `let x = 1;` |
+| `stmt` | 语句，通常不含尾随分号；需分号的 item 语句除外 | `let x = 1` |
 | `block` | 块表达式 | `{ ... }` |
 | `item` | 项（fn/struct/impl…） | `fn f() {}` |
 | `vis` | 可见性限定（可为空） | `pub`、`pub(crate)`、空 |
 | `lifetime` | 生命周期 | `'a` |
 | `meta` | 属性体（括号内内容） | `derive(Debug)` |
 
-⚠️ **常见陷阱**: `expr` 等"不可再细分"的匹配器之后只允许跟 `=>`、`,`、`;` 这类终结 token（**follow set** 限制），直接跟 `ty` 会报 ambiguous——需要继续加工时改用 `tt` 自己消化；`ident` 会连关键字一起匹配，模板中直接可用。
+⚠️ **常见陷阱**: `expr` / `expr_2021` 之后只允许跟 `=>`、`,`、`;`（follow-set 限制），直接接 `$t:ty` 在定义时被拒绝，与调用时 local ambiguity 不同。`ident` 可匹配关键字，但把捕获的 `fn` 用作变量名仍不合法；匹配成功不保证展开代码合法。`expr` 转发给另一个宏后是不可拆的语法片段，不能再用字面 token `3` 匹配内部；`ident`、`lifetime`、`tt` 是可继续字面匹配的例外。
+
+edition 看的是宏定义所在 crate：2024 的 `expr` 接受顶层 `const { ... }` 与 `_`，`expr_2021` 保留旧行为；2021 起 `pat` 接受顶层 `A | B`，`pat_param` 不接受。迁移 edition 可能改变首先匹配的宏臂，不能只改 Cargo.toml 就假定行为相同。规则见 [Rust Reference](https://doc.rust-lang.org/reference/macros-by-example.html)。
 
 🔗 **相关条目**: [条目 3：重复语法](#条目-3重复语法)
 
@@ -83,11 +87,12 @@ Rust 宏是**编译期代码生成**机制：在类型检查与代码生成之�
 | `$(...),*` | 零次或多次，逗号分隔 |
 | `$(...)+` | 一次或多次（至少一个） |
 | `$(...)?` | 至多一次（可选） |
-| `$(...);*` | 分隔符可换成任意单 token（`;` `\|` 等） |
+| `$(...);*` | 分隔符可用 `;`、`\|` 等单 token，不能是括号定界符或 `*`、`+`、`?` |
 | `$(,)?` | 惯用法：容忍调用方尾随逗号 |
 
-💡 **示例**（edition 2024 示例，本轮未运行）:
+💡 **示例**（完整程序，每个输入只求值一次）:
 
+<!-- verified-case: rust-macro-max -->
 ```rust
 // 匹配器类型 + 重复语法 + 宏生成 item
 macro_rules! make_shout {
@@ -122,7 +127,18 @@ fn main() {
     println!("{}", max_of!(3));
     println!("{}", max_of!(3, 9, 2,));
     println!("{}", max_of!(-1.5, -2.5, -0.5));
+    let mut calls = 0;
+    let result = max_of!({ calls += 1; 2 }, { calls += 1; 8 });
+    println!("{result} {calls}");
 }
+```
+
+```text
+汪汪
+3
+9
+-0.5
+8 2
 ```
 
 **关键点解析**:
@@ -131,7 +147,7 @@ fn main() {
 - `$(,)?` 使 `max_of!(3, 9, 2,)` 的尾随逗号合法。
 - `{{ }}`：外层 `{}` 是宏臂模板定界，内层 `{}` 是块表达式，使宏能声明局部变量并返回值。
 
-⚠️ **常见陷阱**: 嵌套重复时 metavariable 必须"维度对齐"——内层重复只能引用内层捕获的变量；`*` 与 `+` 选错会错误地接受/拒绝空参数列表。
+⚠️ **常见陷阱**: 捕获变量在输出中须保留对应的重复层数、顺序与次数约束，同一次重复里的变量数量也要相容。`?` 不能带分隔符；`$(,)?` 是把逗号放在可选组内部。`max_of!` 参数可能被移动，浮点 NaN 也不具有通常的全序；需要总序时应另定义比较策略。
 
 🔗 **相关条目**: [条目 4：递归宏](#条目-4递归宏)
 
@@ -139,10 +155,11 @@ fn main() {
 
 📌 **定义**: 宏模板中可再次调用宏自身，以"每次剥掉一个参数"的方式推进，必须提供**终止臂**。重复语法 `$(...)*` 一次展开到底；递归宏适合需要**逐个累积/嵌套构造**的场景。
 
-📖 **语法/签名**: 臂按声明顺序匹配——终止臂写在递归臂**之前**（`()` 在前，`$head, ...` 在后），否则空输入落入递归臂导致无限展开。
+📖 **语法/签名**: 臂按声明顺序匹配。只有递归臂也能接受终止输入时，才会遮蔽后面的终止臂。下面 `$head:expr` 必须存在，无法匹配空输入；将 `()` 放在前面是清晰的风格，并非该示例终止的必要条件。
 
-💡 **示例**（与条目 5 共用一块，edition 2024 示例，本轮未运行）:
+💡 **示例**（与条目 5 共用一块）:
 
+<!-- verified-case: rust-macro-hygiene -->
 ```rust
 #![allow(unused_variables)]
 
@@ -169,11 +186,16 @@ fn main() {
 }
 ```
 
+```text
+10
+调用处的 x = 1
+```
+
 **关键点解析**:
 - `sum_all!(1, 2, 3, 4)` 展开为 `1 + sum_all!(2, 3, 4)` → … → `4 + sum_all!()` → `4 + 0`。
 - 进阶写法 **tt muncher**：以 `tt` 匹配逐 token 消化输入、维护累积状态，是 `macro_rules!` 的图灵机式用法；解析复杂到这个程度就该转过程宏。
 
-⚠️ **常见陷阱**: 臂顺序错误会把终止臂永久遮蔽；递归展开无显式深度上限，但超过编译器限制会报错——报错信息不会指向"递归层数"。
+⚠️ **常见陷阱**: 过宽的递归臂可能遮蔽终止臂。编译器通过 crate 的 `recursion_limit` 限制包括宏展开在内的编译期递归；达到限制通常报告 `recursion limit reached`。不要靠提高限制修复不终止的宏，先确认每步缩小输入。
 
 🔗 **相关条目**: [条目 3：重复语法](#条目-3重复语法)、[条目 5：宏卫生](#条目-5宏卫生hygiene)
 
@@ -201,8 +223,9 @@ fn main() {
 | 属性宏 | `#[my_attr(arg)]` | 修饰的 item + 属性参数 | **完全替换**该 item |
 | 函数式宏 | `my_fn!(tokens)` | 调用处 token 树 | 替换调用处 |
 
-💡 **使用侧示例**（edition 2024 示例，本轮未运行；derive 是过程宏最常见入口）:
+💡 **使用侧示例**（使用编译器内置 derive 演示生成 trait 实现；不验证第三方过程宏 crate）:
 
+<!-- verified-case: rust-macro-derive -->
 ```rust
 #[derive(Debug, Clone, PartialEq)]
 struct Point {
@@ -215,6 +238,10 @@ fn main() {
     let b = a.clone();
     println!("{:?} 相等: {}", a, a == b); // Point { x: 1, y: 2 } 相等: true
 }
+```
+
+```text
+Point { x: 1, y: 2 } 相等: true
 ```
 
 **关键点解析**:
@@ -230,7 +257,7 @@ fn main() {
 
 📌 **定义**: 声明宏用 `#[macro_export]` 导出到 crate 根，使用者可 `use my_crate::my_macro;` 路径导入；同 crate 内**未导出**的宏遵循文本顺序——必须先定义后使用（宏不像普通 item 可以乱序）。
 
-📖 **语法/签名**（示意，非可运行块）:
+📖 **语法/签名**（示意；不能单独编译）:
 
 ```rust
 #[macro_export]
@@ -270,6 +297,78 @@ macro_rules! my_vec { /* ... */ }
 一个看似简单的 max 宏如果把参数展开两次，传入读取迭代器、增加计数或发送请求的表达式就可能执行两遍。应将每个输入先绑定到局部变量，再参与比较；需要引用输入时还要说明是否会移动值。跨 crate 导出的宏使用 $crate 指向定义方的项，避免依赖调用方恰好导入同名模块。
 
 练习：给 max_of 的某个输入传入“计数器加一再返回数值”的代码块，调用一次后每个输入都应只求值一次。再为零参数、一个参数、尾随逗号和类型不匹配分别设计编译成功或失败用例。过程宏测试还应包含带泛型、生命周期与 where 子句的类型，不能只验证最简单 struct。cfg! 返回布尔值，不移除不选分支中的代码；需要条件编译掉整项时使用 #[cfg(...)]。
+
+## 实验：edition 匹配与展开后的类型检查
+
+下列程序与前面三个完整示例由[宏与复合类型验证器](../../../shared-resources/tools/document-quality/verify_go_composite_rust_macros.py)直接抽取。执行结果与限制记录在[验证报告](../../../shared-resources/tools/document-quality/reports/go-composite-rust-macros.md)。普通程序保存为 `main.rs`，执行 `rustc --edition 2024 main.rs` 后运行生成的程序；标明编译失败的程序不要混入其他案例。
+
+### edition 2024 的首个匹配臂
+
+`expr` 先捕获了 const 块，因此第二臂不会再尝试。换成 `expr_2021` 后 const 块落到第二臂。`pat_param` 留出外层 `|` 给宏语法，`pat` 可以直接捕获整个或模式。这里的判断只看语法，不需要执行输入表达式。
+
+<!-- verified-case: rust-macro-edition -->
+```rust
+macro_rules! modern {
+    ($e:expr) => { "expr" };
+    (const $e:expr) => { "const" };
+}
+macro_rules! compatible {
+    ($e:expr_2021) => { "expr_2021" };
+    (const $e:expr) => { "const" };
+}
+macro_rules! either {
+    ($left:pat_param | $right:pat_param, $value:expr) => {
+        matches!($value, $left | $right)
+    };
+}
+macro_rules! whole_pattern {
+    ($pattern:pat, $value:expr) => { matches!($value, $pattern) };
+}
+fn main() {
+    println!("{} {}", modern!(const { 1 }), compatible!(const { 1 }));
+    println!("{}", modern!(_));
+    println!("{} {}", either!(1 | 2, 2), whole_pattern!(1 | 2, 3));
+}
+```
+
+```text
+expr const
+expr
+true false
+```
+
+`modern!(_)` 成功是因为捕获结果被丢弃，展开只有字符串字面量；不是说 `_` 可以在任意表达式位置当作值。
+
+### 反例：宏不会绕过移动规则
+
+宏中 `let stored = value` 移动了 String，后续访问原变量预期出现 **E0382**。若想保留原值，可让宏接收借用或在业务需要复制时显式 clone，并说明成本。
+
+<!-- verified-case: rust-macro-move; error=E0382 -->
+```rust
+macro_rules! consume {
+    ($value:expr) => {{ let stored = $value; stored.len() }};
+}
+fn main() {
+    let title = String::from("draft");
+    println!("{}", consume!(title));
+    println!("{title}");
+}
+```
+
+### 反例：cfg! 不会删除分支
+
+`cfg!(any())` 恒为 false，但 if 分支仍会名称解析与类型检查。下面预期 **E0425**（找不到函数）；只有 `#[cfg(...)]` 才可在条件不满足时移除相应代码项。
+
+<!-- verified-case: rust-macro-cfg; error=E0425 -->
+```rust
+fn main() {
+    if cfg!(any()) {
+        missing_platform_function();
+    }
+}
+```
+
+练习验收：把递归求和的两个宏臂对调，解释为何仍能终止；给 `max_of!` 传空列表观察匹配错误；让两个候选值类型不同观察类型错误。它们与上面两种反例属于不同阶段，调试时应先找出失败发生在匹配、展开、名称解析还是类型/借用检查。
 
 <!-- learning-navigation -->
 ## 阅读导航
