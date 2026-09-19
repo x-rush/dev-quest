@@ -134,6 +134,7 @@
       "reference_signals": {
         "keyword_reference": [
           "01-go-backend/reference/language-concepts/01-go-keywords.md",
+          "01-go-backend/reference/language-concepts/02-go-built-in-functions.md",
           "01-go-backend/reference/language-concepts/04-go-data-types.md",
           "01-go-backend/reference/language-concepts/07-error-handling.md",
           "01-go-backend/reference/language-concepts/08-concurrency-basics.md",
@@ -160,7 +161,7 @@
           "01-go-backend/reference/framework-essentials/01-gin-framework.md",
           "01-go-backend/reference/framework-essentials/04-router-selection.md",
           "01-go-backend/reference/language-concepts/01-go-keywords.md",
-          "01-go-backend/reference/language-concepts/08-concurrency-basics.md",
+          "01-go-backend/reference/language-concepts/02-go-built-in-functions.md",
           "01-go-backend/reference/language-concepts/10-slice-semantics.md",
           "01-go-backend/reference/language-concepts/11-map-semantics.md",
           "01-go-backend/reference/language-concepts/13-interface-semantics.md",
@@ -174,7 +175,8 @@
           "01-go-backend/reference/library-guides/13-slices-maps.md",
           "01-go-backend/reference/library-guides/15-log-slog.md",
           "01-go-backend/reference/library-guides/16-flag.md",
-          "01-go-backend/reference/library-guides/17-std-package-map.md"
+          "01-go-backend/reference/library-guides/17-std-package-map.md",
+          "01-go-backend/reference/quick-references/01-syntax-cheatsheet.md"
         ]
       },
       "exercise_signal_documents": [
@@ -183,12 +185,9 @@
         "01-go-backend/basics/03-variables-constants.md",
         "01-go-backend/basics/04-composite-types.md",
         "01-go-backend/basics/05-functions-methods.md",
-        "01-go-backend/basics/06-control-structures.md",
-        "01-go-backend/basics/07-concurrency-basics.md",
-        "01-go-backend/basics/08-error-handling.md"
+        "01-go-backend/basics/06-control-structures.md"
       ],
       "project_acceptance_signal_documents": [
-        "01-go-backend/projects/00-stdlib-todo-cli.md",
         "01-go-backend/projects/01-rest-api-server.md",
         "01-go-backend/projects/02-microservices-demo.md",
         "01-go-backend/projects/03-real-time-app.md",
@@ -225,7 +224,7 @@
       "readme_path_evidence": {
         "入门": true,
         "进阶": true,
-        "精通": true
+        "精通": false
       },
       "categories": {
         "basics": {
@@ -337,12 +336,10 @@
         "keyword_reference": [
           "02-nextjs-frontend/reference/development-tools/03-package-managers.md",
           "02-nextjs-frontend/reference/framework-patterns/01-app-router-patterns.md",
-          "02-nextjs-frontend/reference/framework-patterns/09-async-request-apis.md",
-          "02-nextjs-frontend/reference/language-concepts/10-web-platform-apis.md"
+          "02-nextjs-frontend/reference/framework-patterns/09-async-request-apis.md"
         ],
         "built_in_reference": [
           "02-nextjs-frontend/reference/framework-patterns/06-form-validation-patterns.md",
-          "02-nextjs-frontend/reference/framework-patterns/07-authentication-flows.md",
           "02-nextjs-frontend/reference/framework-patterns/14-env-vars.md",
           "02-nextjs-frontend/reference/language-concepts/07-type-narrowing-guards.md",
           "02-nextjs-frontend/reference/language-concepts/08-ts-declarations-modules.md",
@@ -350,10 +347,14 @@
           "02-nextjs-frontend/reference/library-guides/03-ecosystem-map.md",
           "02-nextjs-frontend/reference/performance-optimization/03-image-font-optimization.md"
         ],
-        "standard_library_reference": [],
+        "standard_library_reference": [
+          "02-nextjs-frontend/reference/language-concepts/09-js-core-semantics.md",
+          "02-nextjs-frontend/reference/language-concepts/10-web-platform-apis.md"
+        ],
         "shared_javascript_reference": [
           "shared-resources/javascript-keywords.md",
-          "shared-resources/javascript-builtins.md"
+          "shared-resources/javascript-builtins.md",
+          "shared-resources/javascript-standard-library.md"
         ]
       },
       "exercise_signal_documents": [
@@ -387,7 +388,6 @@
         "02-nextjs-frontend/reference/framework-patterns/02-server-components-patterns.md",
         "02-nextjs-frontend/reference/framework-patterns/04-data-fetching-patterns.md",
         "02-nextjs-frontend/reference/framework-patterns/06-form-validation-patterns.md",
-        "02-nextjs-frontend/reference/framework-patterns/07-authentication-flows.md",
         "02-nextjs-frontend/reference/framework-patterns/08-caching-patterns.md",
         "02-nextjs-frontend/reference/framework-patterns/10-proxy-patterns.md",
         "02-nextjs-frontend/reference/framework-patterns/13-route-segment-config.md",
@@ -404,6 +404,7 @@
         "02-nextjs-frontend/projects/02-ecommerce-store.md",
         "02-nextjs-frontend/projects/03-dashboard-analytics.md",
         "02-nextjs-frontend/projects/04-saas-platform.md",
+        "02-nextjs-frontend/testing/01-unit-testing.md",
         "02-nextjs-frontend/testing/02-component-testing.md",
         "02-nextjs-frontend/testing/03-e2e-testing.md",
         "02-nextjs-frontend/testing/04-performance-testing.md",
@@ -440,7 +441,7 @@
         },
         "reference": {
           "directory_exists": true,
-          "document_count": 31,
+          "document_count": 32,
           "documents": [
             "03-tanstack-stack/reference/framework-essentials/01-query-essentials.md",
             "03-tanstack-stack/reference/framework-essentials/02-router-essentials.md",
@@ -471,6 +472,7 @@
             "03-tanstack-stack/reference/language-concepts/21-usefield-and-createformhook.md",
             "03-tanstack-stack/reference/library-guides/01-ecosystem-integrations.md",
             "03-tanstack-stack/reference/library-guides/02-related-libs.md",
+            "03-tanstack-stack/reference/library-guides/03-language-web-foundations.md",
             "03-tanstack-stack/reference/quick-references/01-syntax-cheatsheet.md",
             "03-tanstack-stack/reference/quick-references/02-troubleshooting.md"
           ]
@@ -527,20 +529,26 @@
       },
       "reference_signals": {
         "keyword_reference": [
-          "03-tanstack-stack/reference/language-concepts/04-form-core-api.md"
+          "03-tanstack-stack/reference/language-concepts/04-form-core-api.md",
+          "03-tanstack-stack/reference/library-guides/03-language-web-foundations.md"
         ],
         "built_in_reference": [
           "03-tanstack-stack/reference/language-concepts/02-table-core-api.md",
           "03-tanstack-stack/reference/language-concepts/07-infinite-query.md",
           "03-tanstack-stack/reference/language-concepts/08-placeholder-data.md",
           "03-tanstack-stack/reference/language-concepts/21-usefield-and-createformhook.md",
+          "03-tanstack-stack/reference/library-guides/02-related-libs.md",
+          "03-tanstack-stack/reference/library-guides/03-language-web-foundations.md",
           "03-tanstack-stack/reference/quick-references/01-syntax-cheatsheet.md",
           "03-tanstack-stack/reference/quick-references/02-troubleshooting.md"
         ],
-        "standard_library_reference": [],
+        "standard_library_reference": [
+          "03-tanstack-stack/reference/library-guides/03-language-web-foundations.md"
+        ],
         "shared_javascript_reference": [
           "shared-resources/javascript-keywords.md",
-          "shared-resources/javascript-builtins.md"
+          "shared-resources/javascript-builtins.md",
+          "shared-resources/javascript-standard-library.md"
         ]
       },
       "exercise_signal_documents": [
@@ -561,6 +569,7 @@
       ],
       "duplicate_h1_groups": [],
       "time_sensitive_claim_documents": [
+        "03-tanstack-stack/LEARNING_GUIDE.md",
         "03-tanstack-stack/basics/01-environment-setup.md",
         "03-tanstack-stack/basics/03-query-fundamentals.md",
         "03-tanstack-stack/reference/framework-essentials/01-query-essentials.md",
@@ -578,6 +587,7 @@
         "03-tanstack-stack/reference/language-concepts/10-network-mode.md",
         "03-tanstack-stack/reference/language-concepts/11-search-params.md",
         "03-tanstack-stack/reference/language-concepts/12-use-queries.md",
+        "03-tanstack-stack/reference/language-concepts/13-use-is-fetching-use-is-mutating.md",
         "03-tanstack-stack/reference/language-concepts/14-query-persistence.md",
         "03-tanstack-stack/reference/language-concepts/15-enabled-conditional-queries.md",
         "03-tanstack-stack/reference/language-concepts/16-render-optimization.md",
@@ -589,7 +599,12 @@
         "03-tanstack-stack/reference/library-guides/01-ecosystem-integrations.md",
         "03-tanstack-stack/reference/quick-references/01-syntax-cheatsheet.md",
         "03-tanstack-stack/frameworks/01-tanstack-query-basics.md",
+        "03-tanstack-stack/frameworks/02-tanstack-query-advanced.md",
+        "03-tanstack-stack/frameworks/04-devtools.md",
         "03-tanstack-stack/projects/01-todo-app.md",
+        "03-tanstack-stack/projects/02-data-dashboard.md",
+        "03-tanstack-stack/projects/03-collaborative-kanban.md",
+        "03-tanstack-stack/projects/04-saas-admin-platform.md",
         "03-tanstack-stack/deployment/01-ci-cd-pipelines.md",
         "03-tanstack-stack/deployment/02-vercel-deployment.md",
         "03-tanstack-stack/deployment/03-observability.md",
@@ -716,7 +731,8 @@
         "standard_library_reference": [],
         "shared_javascript_reference": [
           "shared-resources/javascript-keywords.md",
-          "shared-resources/javascript-builtins.md"
+          "shared-resources/javascript-builtins.md",
+          "shared-resources/javascript-standard-library.md"
         ]
       },
       "exercise_signal_documents": [
@@ -741,16 +757,20 @@
         "04-multiplatform-apps/basics/01-environment-setup.md",
         "04-multiplatform-apps/basics/02-first-app.md",
         "04-multiplatform-apps/basics/05-navigation.md",
+        "04-multiplatform-apps/basics/07-advanced-features.md",
         "04-multiplatform-apps/basics/08-first-project.md",
         "04-multiplatform-apps/reference/framework-essentials/01-expo-essentials.md",
         "04-multiplatform-apps/reference/framework-essentials/02-navigation-essentials.md",
         "04-multiplatform-apps/reference/framework-essentials/04-dev-client-and-updates.md",
         "04-multiplatform-apps/reference/language-concepts/05-harmonyos-rnoh-api.md",
         "04-multiplatform-apps/reference/language-concepts/09-navigation-model.md",
+        "04-multiplatform-apps/reference/language-concepts/12-list-performance-model.md",
         "04-multiplatform-apps/reference/language-concepts/13-platform-api-map.md",
+        "04-multiplatform-apps/reference/library-guides/03-storage-options.md",
         "04-multiplatform-apps/reference/quick-references/01-cli-and-debug-cheatsheet.md",
         "04-multiplatform-apps/frameworks/03-ecosystem-integration.md",
         "04-multiplatform-apps/projects/01-todo-app.md",
+        "04-multiplatform-apps/projects/02-weather-app.md",
         "04-multiplatform-apps/testing/03-e2e-testing.md",
         "04-multiplatform-apps/deployment/02-app-store-release.md",
         "04-multiplatform-apps/advanced-topics/performance/01-rendering-performance.md",
@@ -785,7 +805,7 @@
         },
         "reference": {
           "directory_exists": true,
-          "document_count": 26,
+          "document_count": 27,
           "documents": [
             "05-kotlin-compose/reference/framework-essentials/01-compose-essentials.md",
             "05-kotlin-compose/reference/framework-essentials/02-compose-material3.md",
@@ -808,6 +828,7 @@
             "05-kotlin-compose/reference/language-concepts/09-collections-operations.md",
             "05-kotlin-compose/reference/language-concepts/10-sequences.md",
             "05-kotlin-compose/reference/language-concepts/11-text-and-regex.md",
+            "05-kotlin-compose/reference/language-concepts/12-kotlin-built-in-functions.md",
             "05-kotlin-compose/reference/library-guides/01-androidx-libraries.md",
             "05-kotlin-compose/reference/library-guides/02-third-party-libs.md",
             "05-kotlin-compose/reference/library-guides/03-ksp-configuration.md",
@@ -868,14 +889,20 @@
         "keyword_reference": [
           "05-kotlin-compose/reference/language-concepts/01-kotlin-keywords.md",
           "05-kotlin-compose/reference/language-concepts/06-extension-functions.md",
-          "05-kotlin-compose/reference/language-concepts/08-lambdas-higher-order.md"
+          "05-kotlin-compose/reference/language-concepts/07-scope-functions.md",
+          "05-kotlin-compose/reference/language-concepts/08-lambdas-higher-order.md",
+          "05-kotlin-compose/reference/language-concepts/12-kotlin-built-in-functions.md"
         ],
         "built_in_reference": [
-          "05-kotlin-compose/reference/language-concepts/09-collections-operations.md"
+          "05-kotlin-compose/reference/language-concepts/09-collections-operations.md",
+          "05-kotlin-compose/reference/language-concepts/12-kotlin-built-in-functions.md"
         ],
         "standard_library_reference": [
+          "05-kotlin-compose/reference/language-concepts/07-scope-functions.md",
           "05-kotlin-compose/reference/language-concepts/09-collections-operations.md",
-          "05-kotlin-compose/reference/language-concepts/11-text-and-regex.md"
+          "05-kotlin-compose/reference/language-concepts/10-sequences.md",
+          "05-kotlin-compose/reference/language-concepts/11-text-and-regex.md",
+          "05-kotlin-compose/reference/language-concepts/12-kotlin-built-in-functions.md"
         ]
       },
       "exercise_signal_documents": [
@@ -946,7 +973,7 @@
         },
         "reference": {
           "directory_exists": true,
-          "document_count": 28,
+          "document_count": 29,
           "documents": [
             "06-swift-swiftui/reference/framework-essentials/01-swiftui-essentials.md",
             "06-swift-swiftui/reference/framework-essentials/02-swiftdata-observability.md",
@@ -972,6 +999,7 @@
             "06-swift-swiftui/reference/language-concepts/14-regex.md",
             "06-swift-swiftui/reference/language-concepts/15-urlsession.md",
             "06-swift-swiftui/reference/language-concepts/16-stdlib-foundation-map.md",
+            "06-swift-swiftui/reference/language-concepts/17-swift-built-in-functions.md",
             "06-swift-swiftui/reference/library-guides/01-foundation-and-stdlib.md",
             "06-swift-swiftui/reference/library-guides/02-third-party-libs.md",
             "06-swift-swiftui/reference/quick-references/01-swift-swiftui-cheatsheet.md",
@@ -1030,15 +1058,18 @@
       "reference_signals": {
         "keyword_reference": [
           "06-swift-swiftui/reference/language-concepts/01-swift-keywords.md",
-          "06-swift-swiftui/reference/language-concepts/13-keywords-completion.md"
+          "06-swift-swiftui/reference/language-concepts/13-keywords-completion.md",
+          "06-swift-swiftui/reference/language-concepts/17-swift-built-in-functions.md"
         ],
         "built_in_reference": [
-          "06-swift-swiftui/reference/language-concepts/03-concurrency-api.md"
+          "06-swift-swiftui/reference/language-concepts/03-concurrency-api.md",
+          "06-swift-swiftui/reference/language-concepts/17-swift-built-in-functions.md"
         ],
         "standard_library_reference": [
           "06-swift-swiftui/reference/language-concepts/07-enums-pattern-matching.md",
           "06-swift-swiftui/reference/language-concepts/10-value-types-arc.md",
           "06-swift-swiftui/reference/language-concepts/16-stdlib-foundation-map.md",
+          "06-swift-swiftui/reference/language-concepts/17-swift-built-in-functions.md",
           "06-swift-swiftui/reference/library-guides/01-foundation-and-stdlib.md"
         ]
       },
@@ -1186,12 +1217,12 @@
         "keyword_reference": [
           "07-php-mastery/reference/language-concepts/01-php-keywords.md",
           "07-php-mastery/reference/language-concepts/03-types-oop-modern.md",
-          "07-php-mastery/reference/language-concepts/16-operators.md",
           "07-php-mastery/reference/quick-references/02-troubleshooting.md"
         ],
         "built_in_reference": [
           "07-php-mastery/reference/language-concepts/02-built-in-functions.md",
           "07-php-mastery/reference/language-concepts/03-types-oop-modern.md",
+          "07-php-mastery/reference/language-concepts/06-generators-iterators.md",
           "07-php-mastery/reference/language-concepts/08-reflection-attributes.md",
           "07-php-mastery/reference/language-concepts/09-strings-regex.md",
           "07-php-mastery/reference/language-concepts/12-modern-php-85.md",
@@ -1204,8 +1235,6 @@
         ],
         "standard_library_reference": [
           "07-php-mastery/reference/library-guides/01-standard-library-spl.md",
-          "07-php-mastery/reference/library-guides/03-pdo.md",
-          "07-php-mastery/reference/library-guides/04-json.md",
           "07-php-mastery/reference/library-guides/07-extension-map.md"
         ]
       },
@@ -1227,7 +1256,9 @@
       ],
       "duplicate_h1_groups": [],
       "time_sensitive_claim_documents": [
+        "07-php-mastery/README.md",
         "07-php-mastery/basics/01-environment-setup.md",
+        "07-php-mastery/basics/03-variables-types.md",
         "07-php-mastery/reference/framework-essentials/01-laravel-essentials.md",
         "07-php-mastery/reference/language-concepts/01-php-keywords.md",
         "07-php-mastery/reference/language-concepts/03-types-oop-modern.md",
@@ -1358,17 +1389,18 @@
         "keyword_reference": [
           "08-java-revisited/reference/framework-essentials/02-jpa-essentials.md",
           "08-java-revisited/reference/language-concepts/01-java-keywords.md",
-          "08-java-revisited/reference/language-concepts/05-records-sealed-patterns.md",
           "08-java-revisited/reference/language-concepts/06-exceptions-resources.md"
         ],
         "built_in_reference": [
           "08-java-revisited/reference/framework-essentials/06-spring-security-essentials.md",
+          "08-java-revisited/reference/language-concepts/01-java-keywords.md",
           "08-java-revisited/reference/language-concepts/08-enums.md",
           "08-java-revisited/reference/language-concepts/09-annotations.md",
           "08-java-revisited/reference/library-guides/05-java-util-function.md",
           "08-java-revisited/reference/library-guides/09-jdk-package-map.md"
         ],
         "standard_library_reference": [
+          "08-java-revisited/reference/language-concepts/01-java-keywords.md",
           "08-java-revisited/reference/library-guides/01-standard-library.md",
           "08-java-revisited/reference/library-guides/03-java-lang.md",
           "08-java-revisited/reference/library-guides/04-java-io.md",
@@ -1397,6 +1429,7 @@
       ],
       "duplicate_h1_groups": [],
       "time_sensitive_claim_documents": [
+        "08-java-revisited/README.md",
         "08-java-revisited/basics/01-environment-setup.md",
         "08-java-revisited/reference/framework-essentials/07-rest-client-essentials.md",
         "08-java-revisited/reference/language-concepts/09-annotations.md",
@@ -1511,7 +1544,8 @@
       },
       "reference_signals": {
         "keyword_reference": [
-          "09-nodejs-backend/reference/language-concepts/01-js-modern-syntax.md"
+          "09-nodejs-backend/reference/language-concepts/01-js-modern-syntax.md",
+          "09-nodejs-backend/reference/language-concepts/07-js-core-semantics.md"
         ],
         "built_in_reference": [
           "09-nodejs-backend/reference/framework-essentials/01-hono-essentials.md",
@@ -1529,11 +1563,13 @@
           "09-nodejs-backend/reference/quick-references/01-node-cheatsheet.md"
         ],
         "standard_library_reference": [
-          "09-nodejs-backend/reference/library-guides/01-core-modules.md"
+          "09-nodejs-backend/reference/library-guides/01-core-modules.md",
+          "09-nodejs-backend/reference/library-guides/09-zlib.md"
         ],
         "shared_javascript_reference": [
           "shared-resources/javascript-keywords.md",
-          "shared-resources/javascript-builtins.md"
+          "shared-resources/javascript-builtins.md",
+          "shared-resources/javascript-standard-library.md"
         ]
       },
       "exercise_signal_documents": [
@@ -1686,7 +1722,8 @@
           "10-python-discovery/reference/language-concepts/02-built-in-functions.md",
           "10-python-discovery/reference/language-concepts/11-modules-imports.md",
           "10-python-discovery/reference/language-concepts/13-dataclasses.md",
-          "10-python-discovery/reference/language-concepts/17-functions-parameters.md"
+          "10-python-discovery/reference/language-concepts/17-functions-parameters.md",
+          "10-python-discovery/reference/library-guides/06-functools-subprocess.md"
         ],
         "built_in_reference": [
           "10-python-discovery/reference/framework-essentials/02-django-flask.md",
@@ -1707,8 +1744,7 @@
           "10-python-discovery/reference/language-concepts/09-asyncio-concurrency.md",
           "10-python-discovery/reference/language-concepts/12-string-formatting.md",
           "10-python-discovery/reference/library-guides/01-standard-library.md",
-          "10-python-discovery/reference/library-guides/04-os-sys.md",
-          "10-python-discovery/reference/quick-references/01-python-cheatsheet.md"
+          "10-python-discovery/reference/library-guides/04-os-sys.md"
         ]
       },
       "exercise_signal_documents": [
@@ -1729,11 +1765,11 @@
       ],
       "duplicate_h1_groups": [],
       "time_sensitive_claim_documents": [
-        "10-python-discovery/README.md",
         "10-python-discovery/basics/01-environment-setup.md",
         "10-python-discovery/reference/framework-essentials/03-uv-package-manager.md",
         "10-python-discovery/reference/language-concepts/05-typing-annotations.md",
         "10-python-discovery/reference/library-guides/04-os-sys.md",
+        "10-python-discovery/projects/01-todo-api.md",
         "10-python-discovery/deployment/02-ci-cd-pipelines.md"
       ],
       "gaps": []
@@ -1744,8 +1780,8 @@
       "learning_guide_exists": true,
       "readme_path_evidence": {
         "入门": true,
-        "进阶": true,
-        "精通": true
+        "进阶": false,
+        "精通": false
       },
       "categories": {
         "basics": {
@@ -1856,7 +1892,6 @@
         "standard_library_reference": [
           "11-rust-cross-platform/reference/language-concepts/05-macros.md",
           "11-rust-cross-platform/reference/language-concepts/09-keywords-and-syntax.md",
-          "11-rust-cross-platform/reference/language-concepts/10-standard-types-and-methods.md",
           "11-rust-cross-platform/reference/library-guides/15-standard-library-map.md"
         ]
       },
@@ -1887,6 +1922,7 @@
         "11-rust-cross-platform/frameworks/01-tauri-2-architecture.md",
         "11-rust-cross-platform/frameworks/02-tauri-plugins.md",
         "11-rust-cross-platform/frameworks/03-tauri-frontend-react.md",
+        "11-rust-cross-platform/projects/01-cli-tool.md",
         "11-rust-cross-platform/projects/02-tauri-notes-app.md",
         "11-rust-cross-platform/projects/05-multiplatform-release.md",
         "11-rust-cross-platform/testing/02-criterion-benchmarks.md",

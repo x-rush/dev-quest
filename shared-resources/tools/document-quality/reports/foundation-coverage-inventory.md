@@ -8,27 +8,22 @@
 
 | 模块 | 主要语言/运行时 | 参考文档 | 关键词 | 内置能力 | 标准库 | 语言围栏候选 | 作者显式标为可运行 | 验证状态 |
 |---|---|---:|---|---|---|---:|---:|---|
-| 01-go-backend | Go | 32 | 有机械线索 | 有机械线索 | 有机械线索 | 186 | 0 | 待具名证据关联 |
-| 02-nextjs-frontend | JavaScript / TypeScript | 11 | 有机械线索 | 有机械线索 | 待人工确认 | 139 | 0 | 待具名证据关联 |
-| 03-tanstack-stack | JavaScript / TypeScript | 23 | 有机械线索 | 待人工确认 | 待人工确认 | 70 | 0 | 待具名证据关联 |
-| 04-multiplatform-apps | JavaScript / TypeScript / ArkTS | 17 | 有机械线索 | 待人工确认 | 待人工确认 | 62 | 0 | 待具名证据关联 |
-| 05-kotlin-compose | Kotlin | 14 | 有机械线索 | 待人工确认 | 有机械线索 | 124 | 0 | 待具名证据关联 |
-| 06-swift-swiftui | Swift | 18 | 有机械线索 | 待人工确认 | 有机械线索 | 116 | 0 | 待具名证据关联 |
-| 07-php-mastery | PHP | 25 | 有机械线索 | 有机械线索 | 有机械线索 | 164 | 0 | 待具名证据关联 |
-| 08-java-revisited | Java | 19 | 有机械线索 | 有机械线索 | 有机械线索 | 87 | 0 | 待具名证据关联 |
-| 09-nodejs-backend | JavaScript / TypeScript | 18 | 有机械线索 | 有机械线索 | 有机械线索 | 97 | 0 | 待具名证据关联 |
-| 10-python-discovery | Python | 23 | 有机械线索 | 有机械线索 | 有机械线索 | 136 | 0 | 待具名证据关联 |
-| 11-rust-cross-platform | Rust | 14 | 有机械线索 | 有机械线索 | 有机械线索 | 65 | 0 | 待具名证据关联 |
+| 01-go-backend | Go | 32 | 有机械线索 | 有机械线索 | 有机械线索 | 196 | 0 | 待具名证据关联 |
+| 02-nextjs-frontend | JavaScript / TypeScript | 11 | 有机械线索 | 有机械线索 | 有机械线索 | 148 | 0 | 待具名证据关联 |
+| 03-tanstack-stack | JavaScript / TypeScript | 24 | 有机械线索 | 有机械线索 | 有机械线索 | 75 | 0 | 待具名证据关联 |
+| 04-multiplatform-apps | JavaScript / TypeScript / ArkTS | 17 | 有机械线索 | 有机械线索 | 有机械线索 | 68 | 0 | 待具名证据关联 |
+| 05-kotlin-compose | Kotlin | 15 | 有机械线索 | 有机械线索 | 有机械线索 | 132 | 0 | 待具名证据关联 |
+| 06-swift-swiftui | Swift | 19 | 有机械线索 | 有机械线索 | 有机械线索 | 124 | 0 | 待具名证据关联 |
+| 07-php-mastery | PHP | 25 | 有机械线索 | 有机械线索 | 有机械线索 | 176 | 0 | 待具名证据关联 |
+| 08-java-revisited | Java | 19 | 有机械线索 | 有机械线索 | 有机械线索 | 100 | 0 | 待具名证据关联 |
+| 09-nodejs-backend | JavaScript / TypeScript | 18 | 有机械线索 | 有机械线索 | 有机械线索 | 112 | 0 | 待具名证据关联 |
+| 10-python-discovery | Python | 23 | 有机械线索 | 有机械线索 | 有机械线索 | 146 | 0 | 待具名证据关联 |
+| 11-rust-cross-platform | Rust | 14 | 有机械线索 | 有机械线索 | 有机械线索 | 74 | 0 | 待具名证据关联 |
 
 ## 需要优先确认的缺口
 
 下列项目是机械信号缺失，不是自动判错。审查时应先查看共享参考、模块 README 和文章正文，确认是否以不同命名覆盖；如果确实缺失，再新增或重构基础参考。
 
-- **02-nextjs-frontend**：标准库。
-- **03-tanstack-stack**：内置函数/能力、标准库。
-- **04-multiplatform-apps**：内置函数/能力、标准库。
-- **05-kotlin-compose**：内置函数/能力。
-- **06-swift-swiftui**：内置函数/能力。
 
 ## 如何使用这份队列
 
@@ -39,7 +34,7 @@
 
 ## 汇总
 
-- reference 文档：214 篇。
-- 与模块主要语言匹配的非空围栏候选：1246 个。
+- reference 文档：217 篇。
+- 与模块主要语言匹配的非空围栏候选：1351 个。
 - 作者在围栏前明确写出可运行/运行方式标记的候选：0 个。
-- 有至少一个基础主题机械缺口的模块：5 个。
+- 有至少一个基础主题机械缺口的模块：0 个。

@@ -52,17 +52,17 @@
       "fence_languages": {
         "bash": 21,
         "dockerfile": 1,
-        "go": 186,
+        "go": 196,
         "gomod": 2,
         "json": 1,
         "makefile": 1,
         "mermaid": 2,
-        "text": 18,
+        "text": 23,
         "toml": 1,
         "unlabeled": 1,
         "yaml": 2
       },
-      "language_fence_candidates": 186,
+      "language_fence_candidates": 196,
       "author_marked_runnable_examples": 0,
       "verification_status": "未由本盘点推断；需链接到具名验证报告或真实工具链记录。"
     },
@@ -72,20 +72,29 @@
       "reference_documents": 11,
       "topic_signals": {
         "keywords": [
-          "02-nextjs-frontend/reference/language-concepts/10-web-platform-apis.md"
+          "02-nextjs-frontend/reference/language-concepts/10-web-platform-apis.md",
+          "shared-resources/javascript-builtins.md",
+          "shared-resources/javascript-keywords.md",
+          "shared-resources/javascript-standard-library.md"
         ],
         "builtins": [
-          "02-nextjs-frontend/reference/library-guides/03-ecosystem-map.md"
+          "02-nextjs-frontend/reference/language-concepts/10-web-platform-apis.md",
+          "02-nextjs-frontend/reference/library-guides/03-ecosystem-map.md",
+          "shared-resources/javascript-builtins.md",
+          "shared-resources/javascript-keywords.md",
+          "shared-resources/javascript-standard-library.md"
         ],
-        "standard_library": []
+        "standard_library": [
+          "02-nextjs-frontend/reference/language-concepts/09-js-core-semantics.md",
+          "02-nextjs-frontend/reference/language-concepts/10-web-platform-apis.md",
+          "shared-resources/javascript-standard-library.md"
+        ]
       },
-      "missing_topic_signals": [
-        "standard_library"
-      ],
+      "missing_topic_signals": [],
       "fence_languages": {
         "css": 8,
         "javascript": 18,
-        "js": 6,
+        "js": 15,
         "json": 1,
         "jsx": 19,
         "ts": 20,
@@ -94,31 +103,42 @@
         "typescript": 17,
         "unlabeled": 1
       },
-      "language_fence_candidates": 139,
+      "language_fence_candidates": 148,
       "author_marked_runnable_examples": 0,
       "verification_status": "未由本盘点推断；需链接到具名验证报告或真实工具链记录。"
     },
     {
       "module": "03-tanstack-stack",
       "language_or_runtime": "JavaScript / TypeScript",
-      "reference_documents": 23,
+      "reference_documents": 24,
       "topic_signals": {
         "keywords": [
-          "03-tanstack-stack/reference/language-concepts/04-form-core-api.md"
+          "03-tanstack-stack/reference/language-concepts/04-form-core-api.md",
+          "03-tanstack-stack/reference/library-guides/03-language-web-foundations.md",
+          "shared-resources/javascript-builtins.md",
+          "shared-resources/javascript-keywords.md",
+          "shared-resources/javascript-standard-library.md"
         ],
-        "builtins": [],
-        "standard_library": []
+        "builtins": [
+          "03-tanstack-stack/reference/library-guides/02-related-libs.md",
+          "03-tanstack-stack/reference/library-guides/03-language-web-foundations.md",
+          "shared-resources/javascript-builtins.md",
+          "shared-resources/javascript-keywords.md",
+          "shared-resources/javascript-standard-library.md"
+        ],
+        "standard_library": [
+          "03-tanstack-stack/reference/library-guides/03-language-web-foundations.md",
+          "shared-resources/javascript-standard-library.md"
+        ]
       },
-      "missing_topic_signals": [
-        "builtins",
-        "standard_library"
-      ],
+      "missing_topic_signals": [],
       "fence_languages": {
         "bash": 5,
+        "js": 4,
         "ts": 26,
-        "tsx": 44
+        "tsx": 45
       },
-      "language_fence_candidates": 70,
+      "language_fence_candidates": 75,
       "author_marked_runnable_examples": 0,
       "verification_status": "未由本盘点推断；需链接到具名验证报告或真实工具链记录。"
     },
@@ -128,91 +148,107 @@
       "reference_documents": 17,
       "topic_signals": {
         "keywords": [
-          "04-multiplatform-apps/reference/library-guides/03-storage-options.md"
+          "04-multiplatform-apps/reference/library-guides/03-storage-options.md",
+          "shared-resources/javascript-builtins.md",
+          "shared-resources/javascript-keywords.md",
+          "shared-resources/javascript-standard-library.md"
         ],
-        "builtins": [],
-        "standard_library": []
+        "builtins": [
+          "04-multiplatform-apps/reference/language-concepts/13-platform-api-map.md",
+          "shared-resources/javascript-builtins.md",
+          "shared-resources/javascript-keywords.md",
+          "shared-resources/javascript-standard-library.md"
+        ],
+        "standard_library": [
+          "shared-resources/javascript-standard-library.md"
+        ]
       },
-      "missing_topic_signals": [
-        "builtins",
-        "standard_library"
-      ],
+      "missing_topic_signals": [],
       "fence_languages": {
         "arkts": 1,
         "bash": 1,
+        "js": 3,
         "json": 1,
-        "ts": 9,
-        "tsx": 52,
+        "ts": 11,
+        "tsx": 53,
         "unlabeled": 3
       },
-      "language_fence_candidates": 62,
+      "language_fence_candidates": 68,
       "author_marked_runnable_examples": 0,
       "verification_status": "未由本盘点推断；需链接到具名验证报告或真实工具链记录。"
     },
     {
       "module": "05-kotlin-compose",
       "language_or_runtime": "Kotlin",
-      "reference_documents": 14,
+      "reference_documents": 15,
       "topic_signals": {
         "keywords": [
           "05-kotlin-compose/reference/language-concepts/01-kotlin-keywords.md",
           "05-kotlin-compose/reference/language-concepts/02-null-safety-collections.md",
           "05-kotlin-compose/reference/language-concepts/05-generics-delegates.md",
           "05-kotlin-compose/reference/language-concepts/06-extension-functions.md",
-          "05-kotlin-compose/reference/language-concepts/08-lambdas-higher-order.md"
+          "05-kotlin-compose/reference/language-concepts/07-scope-functions.md",
+          "05-kotlin-compose/reference/language-concepts/08-lambdas-higher-order.md",
+          "05-kotlin-compose/reference/language-concepts/12-kotlin-built-in-functions.md"
         ],
-        "builtins": [],
+        "builtins": [
+          "05-kotlin-compose/reference/language-concepts/07-scope-functions.md",
+          "05-kotlin-compose/reference/language-concepts/12-kotlin-built-in-functions.md"
+        ],
         "standard_library": [
           "05-kotlin-compose/reference/language-concepts/02-null-safety-collections.md",
           "05-kotlin-compose/reference/language-concepts/05-generics-delegates.md",
+          "05-kotlin-compose/reference/language-concepts/07-scope-functions.md",
           "05-kotlin-compose/reference/language-concepts/09-collections-operations.md",
           "05-kotlin-compose/reference/language-concepts/10-sequences.md",
-          "05-kotlin-compose/reference/language-concepts/11-text-and-regex.md"
+          "05-kotlin-compose/reference/language-concepts/11-text-and-regex.md",
+          "05-kotlin-compose/reference/language-concepts/12-kotlin-built-in-functions.md"
         ]
       },
-      "missing_topic_signals": [
-        "builtins"
-      ],
+      "missing_topic_signals": [],
       "fence_languages": {
-        "kotlin": 124,
+        "kotlin": 132,
         "toml": 1
       },
-      "language_fence_candidates": 124,
+      "language_fence_candidates": 132,
       "author_marked_runnable_examples": 0,
       "verification_status": "未由本盘点推断；需链接到具名验证报告或真实工具链记录。"
     },
     {
       "module": "06-swift-swiftui",
       "language_or_runtime": "Swift",
-      "reference_documents": 18,
+      "reference_documents": 19,
       "topic_signals": {
         "keywords": [
           "06-swift-swiftui/reference/language-concepts/01-swift-keywords.md",
           "06-swift-swiftui/reference/language-concepts/02-optionals-collections.md",
           "06-swift-swiftui/reference/language-concepts/03-concurrency-api.md",
-          "06-swift-swiftui/reference/language-concepts/13-keywords-completion.md"
+          "06-swift-swiftui/reference/language-concepts/13-keywords-completion.md",
+          "06-swift-swiftui/reference/language-concepts/17-swift-built-in-functions.md"
         ],
-        "builtins": [],
+        "builtins": [
+          "06-swift-swiftui/reference/language-concepts/17-swift-built-in-functions.md"
+        ],
         "standard_library": [
+          "06-swift-swiftui/reference/language-concepts/01-swift-keywords.md",
           "06-swift-swiftui/reference/language-concepts/02-optionals-collections.md",
           "06-swift-swiftui/reference/language-concepts/07-enums-pattern-matching.md",
           "06-swift-swiftui/reference/language-concepts/10-value-types-arc.md",
           "06-swift-swiftui/reference/language-concepts/14-regex.md",
           "06-swift-swiftui/reference/language-concepts/15-urlsession.md",
           "06-swift-swiftui/reference/language-concepts/16-stdlib-foundation-map.md",
+          "06-swift-swiftui/reference/language-concepts/17-swift-built-in-functions.md",
           "06-swift-swiftui/reference/library-guides/01-foundation-and-stdlib.md",
           "06-swift-swiftui/reference/library-guides/02-third-party-libs.md"
         ]
       },
-      "missing_topic_signals": [
-        "builtins"
-      ],
+      "missing_topic_signals": [],
       "fence_languages": {
         "bash": 4,
-        "swift": 116,
+        "swift": 124,
         "yaml": 1
       },
-      "language_fence_candidates": 116,
+      "language_fence_candidates": 124,
       "author_marked_runnable_examples": 0,
       "verification_status": "未由本盘点推断；需链接到具名验证报告或真实工具链记录。"
     },
@@ -229,11 +265,9 @@
         ],
         "builtins": [
           "07-php-mastery/reference/language-concepts/02-built-in-functions.md",
-          "07-php-mastery/reference/language-concepts/05-arrays-patterns.md",
           "07-php-mastery/reference/language-concepts/07-namespaces-autoloading.md",
           "07-php-mastery/reference/language-concepts/09-strings-regex.md",
           "07-php-mastery/reference/language-concepts/10-datetime.md",
-          "07-php-mastery/reference/library-guides/01-standard-library-spl.md",
           "07-php-mastery/reference/library-guides/02-composer-ecosystem.md"
         ],
         "standard_library": [
@@ -243,7 +277,6 @@
           "07-php-mastery/reference/library-guides/02-composer-ecosystem.md",
           "07-php-mastery/reference/library-guides/03-pdo.md",
           "07-php-mastery/reference/library-guides/04-json.md",
-          "07-php-mastery/reference/library-guides/05-file-stream-io.md",
           "07-php-mastery/reference/library-guides/07-extension-map.md"
         ]
       },
@@ -252,11 +285,11 @@
         "bash": 5,
         "html": 1,
         "json": 2,
-        "php": 164,
-        "text": 2,
+        "php": 176,
+        "text": 7,
         "unlabeled": 1
       },
-      "language_fence_candidates": 164,
+      "language_fence_candidates": 176,
       "author_marked_runnable_examples": 0,
       "verification_status": "未由本盘点推断；需链接到具名验证报告或真实工具链记录。"
     },
@@ -273,11 +306,11 @@
           "08-java-revisited/reference/library-guides/02-third-party-libs.md"
         ],
         "builtins": [
+          "08-java-revisited/reference/language-concepts/01-java-keywords.md",
           "08-java-revisited/reference/library-guides/05-java-util-function.md"
         ],
         "standard_library": [
-          "08-java-revisited/reference/language-concepts/02-collections-generics.md",
-          "08-java-revisited/reference/language-concepts/06-exceptions-resources.md",
+          "08-java-revisited/reference/language-concepts/01-java-keywords.md",
           "08-java-revisited/reference/library-guides/01-standard-library.md",
           "08-java-revisited/reference/library-guides/03-java-lang.md",
           "08-java-revisited/reference/library-guides/04-java-io.md",
@@ -291,11 +324,11 @@
       "missing_topic_signals": [],
       "fence_languages": {
         "bash": 1,
-        "java": 87,
+        "java": 100,
         "unlabeled": 1,
         "xml": 5
       },
-      "language_fence_candidates": 87,
+      "language_fence_candidates": 100,
       "author_marked_runnable_examples": 0,
       "verification_status": "未由本盘点推断；需链接到具名验证报告或真实工具链记录。"
     },
@@ -305,24 +338,35 @@
       "reference_documents": 18,
       "topic_signals": {
         "keywords": [
-          "09-nodejs-backend/reference/language-concepts/01-js-modern-syntax.md"
+          "09-nodejs-backend/reference/language-concepts/01-js-modern-syntax.md",
+          "09-nodejs-backend/reference/language-concepts/07-js-core-semantics.md",
+          "shared-resources/javascript-builtins.md",
+          "shared-resources/javascript-keywords.md",
+          "shared-resources/javascript-standard-library.md"
         ],
         "builtins": [
-          "09-nodejs-backend/reference/library-guides/09-zlib.md"
+          "09-nodejs-backend/reference/language-concepts/08-type-coercion-collections.md",
+          "09-nodejs-backend/reference/library-guides/09-zlib.md",
+          "shared-resources/javascript-builtins.md",
+          "shared-resources/javascript-keywords.md",
+          "shared-resources/javascript-standard-library.md"
         ],
         "standard_library": [
-          "09-nodejs-backend/reference/library-guides/01-core-modules.md"
+          "09-nodejs-backend/reference/library-guides/01-core-modules.md",
+          "09-nodejs-backend/reference/library-guides/09-zlib.md",
+          "shared-resources/javascript-standard-library.md"
         ]
       },
       "missing_topic_signals": [],
       "fence_languages": {
         "bash": 1,
-        "js": 8,
+        "js": 23,
         "json": 3,
         "prisma": 1,
+        "text": 2,
         "ts": 89
       },
-      "language_fence_candidates": 97,
+      "language_fence_candidates": 112,
       "author_marked_runnable_examples": 0,
       "verification_status": "未由本盘点推断；需链接到具名验证报告或真实工具链记录。"
     },
@@ -337,8 +381,8 @@
           "10-python-discovery/reference/language-concepts/11-modules-imports.md",
           "10-python-discovery/reference/language-concepts/13-dataclasses.md",
           "10-python-discovery/reference/language-concepts/15-closures-and-scope.md",
-          "10-python-discovery/reference/language-concepts/16-classes-and-inheritance.md",
-          "10-python-discovery/reference/language-concepts/17-functions-parameters.md"
+          "10-python-discovery/reference/language-concepts/17-functions-parameters.md",
+          "10-python-discovery/reference/library-guides/06-functools-subprocess.md"
         ],
         "builtins": [
           "10-python-discovery/reference/language-concepts/01-python-keywords.md",
@@ -355,18 +399,16 @@
           "10-python-discovery/reference/language-concepts/12-string-formatting.md",
           "10-python-discovery/reference/library-guides/01-standard-library.md",
           "10-python-discovery/reference/library-guides/02-ecosystem-libs.md",
-          "10-python-discovery/reference/library-guides/04-os-sys.md",
-          "10-python-discovery/reference/library-guides/05-enum-module.md",
-          "10-python-discovery/reference/library-guides/06-functools-subprocess.md"
+          "10-python-discovery/reference/library-guides/04-os-sys.md"
         ]
       },
       "missing_topic_signals": [],
       "fence_languages": {
         "bash": 1,
-        "python": 136,
+        "python": 146,
         "text": 2
       },
-      "language_fence_candidates": 136,
+      "language_fence_candidates": 146,
       "author_marked_runnable_examples": 0,
       "verification_status": "未由本盘点推断；需链接到具名验证报告或真实工具链记录。"
     },
@@ -396,21 +438,20 @@
       },
       "missing_topic_signals": [],
       "fence_languages": {
-        "bash": 1,
-        "rust": 65,
-        "text": 1,
-        "toml": 1,
+        "rust": 74,
+        "text": 9,
+        "toml": 3,
         "unlabeled": 1
       },
-      "language_fence_candidates": 65,
+      "language_fence_candidates": 74,
       "author_marked_runnable_examples": 0,
       "verification_status": "未由本盘点推断；需链接到具名验证报告或真实工具链记录。"
     }
   ],
   "totals": {
-    "reference_documents": 214,
-    "language_fence_candidates": 1246,
+    "reference_documents": 217,
+    "language_fence_candidates": 1351,
     "author_marked_runnable_examples": 0,
-    "modules_with_missing_topic_signal": 5
+    "modules_with_missing_topic_signal": 0
   }
 }

@@ -85,6 +85,7 @@ def module_row(module: Path) -> dict:
         ref_signals["shared_javascript_reference"] = [
             "shared-resources/javascript-keywords.md",
             "shared-resources/javascript-builtins.md",
+            "shared-resources/javascript-standard-library.md",
         ]
     basics = md_files(module / "basics")
     projects = md_files(module / "projects")
@@ -174,12 +175,12 @@ def main() -> None:
             module=row["module"], guide="✓" if row["learning_guide_exists"] else "×", paths=path_state, gaps=len(row["gaps"]),
             **category_counts))
     lines += ["", "`三阶段路径证据` 的顺序是入门/进阶/精通，接受旧模块的等价名称；数字是相应目录下的 Markdown 文档数。", "", "## 参考覆盖信号", "",
-        "以下信号只用来发现可能漏项。JavaScript 生态模块在根 README 明确复用 shared-resources 的 JavaScript 关键词与内置能力参考，因此单列为共享入口。", ""]
+        "以下信号只用来发现可能漏项。JavaScript 生态模块在根 README 明确复用 shared-resources 的 JavaScript 关键词、内置能力与标准库参考，因此单列为共享入口。", ""]
     for row in rows:
         signals = row["reference_signals"]
         lines.append(f"### {row['module']}")
         lines.append("")
-        for key, label in (("keyword_reference", "关键词"), ("built_in_reference", "内置能力"), ("standard_library_reference", "标准库"), ("shared_javascript_reference", "共享 JavaScript 参考")):
+        for key, label in (("keyword_reference", "关键词"), ("built_in_reference", "内置能力"), ("standard_library_reference", "标准库"), ("shared_javascript_reference", "共享 JavaScript 基础参考（关键词、内置能力、标准库）")):
             if key in signals:
                 value = signals[key]
                 lines.append(f"- {label}：{'；'.join(value) if value else '未找到机械信号'}")
