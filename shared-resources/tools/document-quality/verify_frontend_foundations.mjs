@@ -70,7 +70,6 @@ for (const id of expectations.keys()) {
 }
 await mkdir(dirname(output), { recursive: true });
 await writeFile(output, JSON.stringify({
-  generated_at: new Date().toISOString(),
   runtime: { node: process.version, platform: process.platform, arch: process.arch },
   command: 'node shared-resources/tools/document-quality/verify_frontend_foundations.mjs',
   scope: 'Eight marked complete programs, executed verbatim with Node; no browser UI, network, SSR or framework build validation.',

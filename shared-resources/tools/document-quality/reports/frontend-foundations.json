@@ -1,8 +1,7 @@
 {
-  "generated_at": "2026-09-19T11:01:21.562Z",
   "runtime": {
-    "node": "v24.19.0",
-    "platform": "win32",
+    "node": "v24.21.0",
+    "platform": "linux",
     "arch": "x64"
   },
   "command": "node shared-resources/tools/document-quality/verify_frontend_foundations.mjs",
@@ -15,7 +14,7 @@
       "id": "object-lifetimes",
       "source": "02-nextjs-frontend/reference/language-concepts/09-js-core-semantics.md",
       "line": 128,
-      "source_sha256": "2ec07bc0b65691ec38008d26d6914ff5b0bbc818759952a621d39afdb9753a36",
+      "source_sha256": "4303f573cfea3138630f719862b72f2878885876ca6195ba32b8d4563b941685",
       "code_sha256": "0f782a289055dfc649b47dc4cf1e53ebc51f5ba11b6359bac5ae4d72deb3e536",
       "status": "PASS",
       "code": "class Basket {\n  items = [];\n  add(item) { this.items.push(item); }\n}\nconst a = new Basket();\nconst b = new Basket();\na.add('book');\nconsole.log([Object.hasOwn(a, 'items'), Object.hasOwn(a, 'add')].join(','));\nconsole.log(Object.getPrototypeOf(a) === Basket.prototype);\nconsole.log(a.add === b.add);\nconsole.log([a.items.length, b.items.length].join(','));\nfunction append(item, items = []) {\n  if (item !== undefined) items.push(item);\n  return items;\n}\nconst first = append('book');\nconst second = append();\nconsole.log([first.length, second.length].join(','));",
@@ -30,7 +29,7 @@
       "id": "bindings",
       "source": "02-nextjs-frontend/reference/language-concepts/09-js-core-semantics.md",
       "line": 156,
-      "source_sha256": "2ec07bc0b65691ec38008d26d6914ff5b0bbc818759952a621d39afdb9753a36",
+      "source_sha256": "4303f573cfea3138630f719862b72f2878885876ca6195ba32b8d4563b941685",
       "code_sha256": "9f7f6f2020b6c069ceefd4fee3dc132ee5b923ef14529d389de815ac1bea63d4",
       "status": "PASS",
       "code": "let value = 1;\nconst read = () => value;\nvalue = 2;\nconsole.log(read());\nconst readers = [];\nfor (let i = 0; i < 3; i++) readers.push(() => i);\nconsole.log(readers.map((fn) => fn()).join(','));\nconst model = {\n  value: 7,\n  read() { return this?.value; },\n  makeReader() { return () => this.value; },\n};\nconsole.log(model.read());\nconst detached = model.read;\nconsole.log(detached());\nconst arrow = model.makeReader();\nmodel.value = 8;\nconsole.log(arrow.call({ value: 99 }));",
@@ -44,8 +43,8 @@
     {
       "id": "iteration",
       "source": "02-nextjs-frontend/reference/language-concepts/09-js-core-semantics.md",
-      "line": 184,
-      "source_sha256": "2ec07bc0b65691ec38008d26d6914ff5b0bbc818759952a621d39afdb9753a36",
+      "line": 213,
+      "source_sha256": "4303f573cfea3138630f719862b72f2878885876ca6195ba32b8d4563b941685",
       "code_sha256": "450b17294c23aa10bfc31dee4bdd89980bc9706a439b92523e794fdb22541fee",
       "status": "PASS",
       "code": "function* range(end) {\n  for (let i = 0; i < end; i++) yield i;\n}\nconst iterator = range(3);\nconsole.log([...iterator].join(','));\nconsole.log([...iterator].join(','));\nconst record = { a: 1, b: 2 };\nconsole.log(Object.entries(record).map(([key, value]) => `${key}:${value}`).join(','));",
