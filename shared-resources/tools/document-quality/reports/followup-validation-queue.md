@@ -15,9 +15,9 @@
 
 ## 汇总
 
-- 队列条目：511 条，其中文件级证据缺口 455 条，逐行未绑定验证措辞 56 条。
-- 优先级：P0 0；P1 205；P2 150；P3 156。
-- 分类：核心基础 189；首项目 16；框架 111；部署 39；进阶与测试 156。
+- 队列条目：510 条，其中文件级证据缺口 454 条，逐行未绑定验证措辞 56 条。
+- 优先级：P0 0；P1 204；P2 150；P3 156。
+- 分类：核心基础 188；首项目 16；框架 111；部署 39；进阶与测试 156。
 
 ## 明细
 
@@ -25,7 +25,6 @@
 |---|---|---|---|---|---|
 | P1 | 核心基础 | Go | [01-go-backend/LEARNING_GUIDE.md](../../../../01-go-backend/LEARNING_GUIDE.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
 | P1 | 核心基础 | Go | [01-go-backend/README.md](../../../../01-go-backend/README.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
-| P1 | 核心基础 | Go | [01-go-backend/reference/language-concepts/03-go-programming-essentials.md](../../../../01-go-backend/reference/language-concepts/03-go-programming-essentials.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
 | P1 | 核心基础 | Go | [01-go-backend/reference/quick-references/02-web-tools.md](../../../../01-go-backend/reference/quick-references/02-web-tools.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
 | P1 | 核心基础 | Go | [01-go-backend/reference/quick-references/03-troubleshooting.md](../../../../01-go-backend/reference/quick-references/03-troubleshooting.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
 | P1 | 核心基础 | Java | [08-java-revisited/LEARNING_GUIDE.md](../../../../08-java-revisited/LEARNING_GUIDE.md#L22):22 | 保留诚实的验证边界，并在补证据时决定是否增加最小练习<br/>保持已有边界说明；若新增示例，记录工具链、命令、预期行为和未覆盖范围。 | \| 5：持久化与生产准备 \| JPA/事务 → 测试 → Docker/可观测性 \| 带真实测试数据库的集成测试、镜像构建记录 \| 事务中途失败后验证没有半提交数据 \| 先通过测试和镜像构建，再考虑部署与性能调优 \| |

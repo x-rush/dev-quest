@@ -741,41 +741,75 @@ func (r *RedisStore) SetWithTTL(ctx context.Context, key string, value []byte, t
 
 ### 依赖注入模式
 
-#### 构造函数注入
+#### 构造函数注入：把变化的实现留在边界
+
+依赖注入不是“为所有类型创建接口”，而是让业务逻辑接收它真正需要的能力。下面的 `UserService` 只需要保存用户的能力，因此接口定义在消费者一侧。内存仓库用于测试；生产代码可提供数据库实现，调用 `Register` 的业务规则不变。
+
+<!-- doc-verify:go-di-register-contract -->
 ```go
-type UserService struct {
-    userRepo       UserRepository
-    authRepo       AuthRepository
-    emailService   EmailService
-    passwordHasher PasswordHasher
-    logger         Logger
+package main
+
+import (
+	"context"
+	"errors"
+	"fmt"
+	"strings"
+)
+
+var ErrDuplicateEmail = errors.New("duplicate email")
+
+type User struct{ Email string }
+
+type UserStore interface {
+	Save(context.Context, User) error
 }
 
-func NewUserService(
-    userRepo UserRepository,
-    authRepo AuthRepository,
-    emailService EmailService,
-    passwordHasher PasswordHasher,
-    logger Logger,
-) *UserService {
-    return &UserService{
-        userRepo:       userRepo,
-        authRepo:       authRepo,
-        emailService:   emailService,
-        passwordHasher: passwordHasher,
-        logger:         logger,
-    }
+type UserService struct{ store UserStore }
+
+func NewUserService(store UserStore) (*UserService, error) {
+	if store == nil {
+		return nil, errors.New("user store is required")
+	}
+	return &UserService{store: store}, nil
 }
 
-func (s *UserService) RegisterUser(ctx context.Context, req *RegisterUserRequest) (*User, error) {
-    s.logger.Info("开始注册用户", "email", req.Email)
+func (s *UserService) Register(ctx context.Context, email string) (User, error) {
+	email = strings.TrimSpace(strings.ToLower(email))
+	if email == "" {
+		return User{}, errors.New("email is required")
+	}
+	user := User{Email: email}
+	if err := s.store.Save(ctx, user); err != nil {
+		return User{}, fmt.Errorf("save user: %w", err)
+	}
+	return user, nil
+}
 
-    // 业务逻辑...
+type memoryStore struct{ emails map[string]bool }
 
-    s.logger.Info("用户注册成功", "userID", user.ID)
-    return user, nil
+func (m *memoryStore) Save(_ context.Context, user User) error {
+	if m.emails[user.Email] {
+		return ErrDuplicateEmail
+	}
+	m.emails[user.Email] = true
+	return nil
+}
+
+func main() {
+	service, _ := NewUserService(&memoryStore{emails: map[string]bool{}})
+	user, firstErr := service.Register(context.Background(), " Ada@Example.com ")
+	_, secondErr := service.Register(context.Background(), "ada@example.com")
+	fmt.Printf("email=%s first=%v duplicate=%v\n", user.Email, firstErr == nil, errors.Is(secondErr, ErrDuplicateEmail))
 }
 ```
+
+预期输出：
+
+```text
+email=ada@example.com first=true duplicate=true
+```
+
+这个例子验证了三件事：构造函数拒绝缺失依赖；输入规范化在进入存储层前完成；调用者能用 `errors.Is` 判断重复邮箱。它没有验证数据库事务、密码哈希、电子邮件投递或 HTTP 认证；那些依赖分别应在各自的集成测试中验收。
 
 #### 工厂模式
 ```go
@@ -1600,9 +1634,10 @@ func (s *UserService) GetUser(ctx context.Context, id int) (*User, error) {
 
 ### 内存优化
 
-#### 避免内存泄漏
+#### 不把 `sync.Pool` 当作内存泄漏修复工具
 ```go
-// ❌ 可能导致内存泄漏
+// 有退出条件的循环不会因为 ticker 本身“泄漏”；真正要审查的是：
+// processChanges 是否长期持有 changes、是否有无限队列、以及 ctx 是否会取消。
 func (s *Service) WatchChanges() {
     ticker := time.NewTicker(time.Second)
     defer ticker.Stop()
@@ -1619,37 +1654,28 @@ func (s *Service) WatchChanges() {
     }
 }
 
-// ✅ 使用对象池避免内存泄漏
-func (s *Service) WatchChanges() {
-    ticker := time.NewTicker(time.Second)
-    defer ticker.Stop()
+```
 
-    // 使用对象池
-    changePool := &sync.Pool{
-        New: func() interface{} {
-            return make([]Change, 0, 100)
-        },
-    }
+`sync.Pool` 只能在压测已经证明短命分配是瓶颈后，作为减少分配的候选方案；GC 可以随时清空池，不能把它当缓存或资源所有权机制。更严重的是，把 `Get()` 得到的切片马上用 `s.getChanges()` 覆盖，再 `Put()` 回去，既没有复用缓冲区，也可能把过大的底层数组长期保留。
 
-    for {
-        select {
-        case <-ticker.C:
-            // 从池中获取切片
-            changes := changePool.Get().([]Change)
-            changes = changes[:0] // 重置长度但保留容量
+如果确实需要复用，由获取函数接收目标缓冲区，并在归还前限制容量；下面是接口约束，而不是“所有轮询服务都必须用池”的建议：
 
-            changes = s.getChanges()
-            processChanges(changes)
+```go
+func (s *Service) getChangesInto(dst []Change) []Change {
+	return dst[:0] // 示例：实际实现向 dst 追加读取到的变更
+}
 
-            // 归还到池中
-            changePool.Put(changes)
-
-        case <-s.ctx.Done():
-            return
-        }
-    }
+func (s *Service) processOnce(buf []Change) []Change {
+	changes := s.getChangesInto(buf[:0])
+	processChanges(changes)
+	if cap(changes) > 4_096 { // 避免偶发大批量被长期保留
+		return nil
+	}
+	return changes[:0]
 }
 ```
+
+先用 `go test -bench`、`pprof` 或分配基准确认瓶颈，再决定是否引入复用。无界队列、未取消的 goroutine 和被全局变量持有的对象，不能靠对象池修复。
 
 #### 字符串优化
 ```go

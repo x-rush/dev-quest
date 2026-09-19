@@ -7,8 +7,8 @@
 | 指标 | 数量 |
 |---|---:|
 | 纳入模块文档 | 642 |
-| 主状态：not_verified | 455 |
-| 主状态：runtime | 187 |
+| 主状态：not_verified | 454 |
+| 主状态：runtime | 188 |
 | 验证措辞出现次数 | 144 |
 | 措辞分类：source_has_limited_runtime_evidence | 88 |
 | 措辞分类：unbound_verification_wording | 56 |
@@ -73,7 +73,7 @@
 | Go | [01-go-backend/reference/framework-essentials/06-go-redis.md](../../../../01-go-backend/reference/framework-essentials/06-go-redis.md) | `not_verified` | 0 | 0 |
 | Go | [01-go-backend/reference/language-concepts/01-go-keywords.md](../../../../01-go-backend/reference/language-concepts/01-go-keywords.md) | `runtime` | 1 | 0 |
 | Go | [01-go-backend/reference/language-concepts/02-go-built-in-functions.md](../../../../01-go-backend/reference/language-concepts/02-go-built-in-functions.md) | `runtime` | 1 | 0 |
-| Go | [01-go-backend/reference/language-concepts/03-go-programming-essentials.md](../../../../01-go-backend/reference/language-concepts/03-go-programming-essentials.md) | `not_verified` | 0 | 0 |
+| Go | [01-go-backend/reference/language-concepts/03-go-programming-essentials.md](../../../../01-go-backend/reference/language-concepts/03-go-programming-essentials.md) | `runtime` | 1 | 0 |
 | Go | [01-go-backend/reference/language-concepts/04-go-data-types.md](../../../../01-go-backend/reference/language-concepts/04-go-data-types.md) | `runtime` | 1 | 0 |
 | Go | [01-go-backend/reference/language-concepts/05-go-control-flow.md](../../../../01-go-backend/reference/language-concepts/05-go-control-flow.md) | `runtime` | 1 | 0 |
 | Go | [01-go-backend/reference/language-concepts/06-go-oop-concepts.md](../../../../01-go-backend/reference/language-concepts/06-go-oop-concepts.md) | `runtime` | 1 | 0 |

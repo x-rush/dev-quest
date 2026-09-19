@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-19T18:31:45.817849+00:00",
-  "purpose": "Twenty-fifth-round runtime evidence for seventeen marked Go core-document fences.",
+  "generated_at": "2026-09-19T18:35:27.485708+00:00",
+  "purpose": "Twenty-fifth-round runtime evidence for eighteen marked Go core-document fences.",
   "isolation": "No network, read-only container root, dropped capabilities, no-new-privileges, bounded CPU/memory/PIDs, and tmpfs-only writable workspace. Image must already exist because --pull=never is used.",
-  "scope": "Only the seventeen named complete Go fences extracted unchanged after CRLF-to-LF normalization were executed. Other fences, SDK installation, toolchain setup, web services, filesystem integrations, concurrency scheduling, performance, and projects remain outside this evidence.",
+  "scope": "Only the eighteen named complete Go fences extracted unchanged after CRLF-to-LF normalization were executed. Other fences, SDK installation, toolchain setup, web services, filesystem integrations, concurrency scheduling, performance, and projects remain outside this evidence.",
   "results": [
     {
       "id": "go-environment-toolchain-hello",
@@ -29,6 +29,20 @@
       "command": "GOCACHE=/tmp/go-build go run /tmp/main.go",
       "expected_stdout": "zero=0,true missing=0,false items=[1 2]\n",
       "stdout": "zero=0,true missing=0,false items=[1 2]\n",
+      "stderr": "",
+      "exit_code": 0,
+      "status": "PASS"
+    },
+    {
+      "id": "go-di-register-contract",
+      "language": "go",
+      "document": "01-go-backend/reference/language-concepts/03-go-programming-essentials.md",
+      "image": "golang:1.25-alpine",
+      "document_sha256": "4ce85b8a60560df944e33340e55f32ed9f2996bc7dd70bf74deb5b2ff3ed24a0",
+      "code_sha256": "3b38437c3c7bf44c03bb71477175bfe6696a9656e74903c35769c7747ebb2f1a",
+      "command": "GOCACHE=/tmp/go-build go run /tmp/main.go",
+      "expected_stdout": "email=ada@example.com first=true duplicate=true\n",
+      "stdout": "email=ada@example.com first=true duplicate=true\n",
       "stderr": "",
       "exit_code": 0,
       "status": "PASS"
@@ -245,7 +259,7 @@
     }
   ],
   "summary": {
-    "passed": 17,
-    "total": 17
+    "passed": 18,
+    "total": 18
   }
 }
