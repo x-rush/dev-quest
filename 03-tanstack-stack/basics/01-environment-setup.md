@@ -61,7 +61,8 @@ pnpm -v
 
 ```bash
 corepack enable
-corepack prepare pnpm@latest --activate
+# 用团队/课程约定版本替换 <pnpm-version>，并记录 packageManager 字段。
+corepack prepare pnpm@<pnpm-version> --activate
 ```
 
 > 💡 npm/yarn 同样可用，本模块示例统一使用 pnpm。
@@ -69,11 +70,14 @@ corepack prepare pnpm@latest --activate
 ## 🚀 2. 创建 Vite 项目
 
 ```bash
-pnpm create vite@latest tanstack-lab -- --template react-ts
+# 初次探索可用 latest；要复现练习则固定经核对的脚手架版本。
+pnpm create vite@<vite-version> tanstack-lab -- --template react-ts
 cd tanstack-lab
 pnpm install
 pnpm dev
 ```
+
+`latest` 会随时间改变，不能同时承担“开始探索”和“可重复课程”的角色。首次生成后提交 `package.json`、`pnpm-lock.yaml` 与 `packageManager`，用 `pnpm --version`、`node --version` 记录工具链；升级 Vite、pnpm 或 TanStack 包时单独提交并运行类型检查、测试和关键页面验收。
 
 浏览器访问 `http://localhost:5173`，看到 Vite 欢迎页即成功。
 

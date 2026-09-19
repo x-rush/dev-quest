@@ -196,7 +196,15 @@ pnpm create next-app my-nextjs-app --typescript --tailwind --app --src-dir --imp
 
 # 进入项目目录
 cd my-nextjs-app
+
+# 立即记录脚手架实际写入的版本；后续学习与排错都以它们为准。
+npm ls next react react-dom typescript
+git init
+git add package.json package-lock.json
+git commit -m "chore: scaffold next app"
 ```
+
+`create-next-app@latest` 适合开始一次新脚手架尝试，但它的模板和依赖会随日期改变。要复现本章练习，保存首次生成的 `package.json` 与 lock 文件；团队项目应在约定的脚手架版本和 Node 版本下生成，再由升级任务显式变更。不要把命令里的 `latest` 误解成项目会持续自动升级。
 
 #### 项目选项说明
 - `--typescript`: 使用TypeScript确保类型安全
