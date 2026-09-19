@@ -85,7 +85,7 @@
 | Go | [01-go-backend/reference/language-concepts/12-channel-semantics.md](../../../../01-go-backend/reference/language-concepts/12-channel-semantics.md) | `runtime` | 1 | 1 |
 | Go | [01-go-backend/reference/language-concepts/13-interface-semantics.md](../../../../01-go-backend/reference/language-concepts/13-interface-semantics.md) | `runtime` | 1 | 0 |
 | Go | [01-go-backend/reference/language-concepts/14-defer-panic-recover.md](../../../../01-go-backend/reference/language-concepts/14-defer-panic-recover.md) | `runtime` | 1 | 0 |
-| Go | [01-go-backend/reference/language-concepts/15-nil-semantics.md](../../../../01-go-backend/reference/language-concepts/15-nil-semantics.md) | `runtime` | 1 | 0 |
+| Go | [01-go-backend/reference/language-concepts/15-nil-semantics.md](../../../../01-go-backend/reference/language-concepts/15-nil-semantics.md) | `runtime` | 2 | 0 |
 | Go | [01-go-backend/reference/library-guides/01-go-standard-library.md](../../../../01-go-backend/reference/library-guides/01-go-standard-library.md) | `runtime` | 1 | 0 |
 | Go | [01-go-backend/reference/library-guides/02-third-party-libs.md](../../../../01-go-backend/reference/library-guides/02-third-party-libs.md) | `not_verified` | 0 | 0 |
 | Go | [01-go-backend/reference/library-guides/03-net-http.md](../../../../01-go-backend/reference/library-guides/03-net-http.md) | `runtime` | 1 | 1 |

@@ -31,6 +31,7 @@ if err != nil {}      // error：标准三段式
 ## 💡 示例
 
 <!-- go-rust-node-tenth-case: go-nil-semantics -->
+<!-- doc-verify:go-nil-value-boundaries -->
 ```go
 package main
 

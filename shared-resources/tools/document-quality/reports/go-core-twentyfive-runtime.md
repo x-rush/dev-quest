@@ -1,6 +1,6 @@
 # Go 核心基础页第二十五批运行验证
 
-仅运行下列七个正文中有 `doc-verify` 标记的完整 Go 围栏。报告不将结果扩大为整页、工具链或项目验证。
+仅运行下列八个正文中有 `doc-verify` 标记的完整 Go 围栏。报告不将结果扩大为整页、工具链或项目验证。
 
 | 文档 | 示例 | 结果 |
 |---|---|---|
@@ -11,5 +11,6 @@
 | [01-go-backend/reference/language-concepts/13-interface-semantics.md](../../../../01-go-backend/reference/language-concepts/13-interface-semantics.md) | `go-interface-typed-nil` | PASS |
 | [01-go-backend/reference/language-concepts/14-defer-panic-recover.md](../../../../01-go-backend/reference/language-concepts/14-defer-panic-recover.md) | `go-defer-panic-recover` | PASS |
 | [01-go-backend/reference/library-guides/17-std-package-map.md](../../../../01-go-backend/reference/library-guides/17-std-package-map.md) | `go-csv-reader-writer` | PASS |
+| [01-go-backend/reference/language-concepts/15-nil-semantics.md](../../../../01-go-backend/reference/language-concepts/15-nil-semantics.md) | `go-nil-value-boundaries` | PASS |
 
 隔离条件、原文与代码 SHA-256、完整输出和命令见同名 JSON。

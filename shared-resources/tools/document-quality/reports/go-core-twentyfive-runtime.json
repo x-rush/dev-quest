@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-19T17:20:01.335779+00:00",
-  "purpose": "Twenty-fifth-round runtime evidence for seven marked Go core-document fences.",
+  "generated_at": "2026-09-19T17:22:20.851803+00:00",
+  "purpose": "Twenty-fifth-round runtime evidence for eight marked Go core-document fences.",
   "isolation": "No network, read-only container root, dropped capabilities, no-new-privileges, bounded CPU/memory/PIDs, and tmpfs-only writable workspace. Image must already exist because --pull=never is used.",
-  "scope": "Only the seven named complete Go fences extracted unchanged after CRLF-to-LF normalization were executed. Other fences, toolchain setup, web services, filesystem integrations, concurrency scheduling, performance, and projects remain outside this evidence.",
+  "scope": "Only the eight named complete Go fences extracted unchanged after CRLF-to-LF normalization were executed. Other fences, toolchain setup, web services, filesystem integrations, concurrency scheduling, performance, and projects remain outside this evidence.",
   "results": [
     {
       "id": "go-first-program-hello",
@@ -102,10 +102,24 @@
       "stderr": "",
       "exit_code": 0,
       "status": "PASS"
+    },
+    {
+      "id": "go-nil-value-boundaries",
+      "language": "go",
+      "document": "01-go-backend/reference/language-concepts/15-nil-semantics.md",
+      "image": "golang:1.25-alpine",
+      "document_sha256": "2aed965a491491640f3b468256bdfae4c3fc7b4e84eceb3c830b9357edc545e3",
+      "code_sha256": "33c8bbac462653c31f44952dd9f355110ff997900cc3b6f33a233d2daf1fe062",
+      "command": "GOCACHE=/tmp/go-build go run /tmp/main.go",
+      "expected_stdout": "0 0\n[1]\n0\n0\ntrue\ntrue\ntrue\n",
+      "stdout": "0 0\n[1]\n0\n0\ntrue\ntrue\ntrue\n",
+      "stderr": "",
+      "exit_code": 0,
+      "status": "PASS"
     }
   ],
   "summary": {
-    "passed": 7,
-    "total": 7
+    "passed": 8,
+    "total": 8
   }
 }
