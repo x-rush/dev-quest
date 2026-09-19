@@ -145,19 +145,32 @@ Buffer.from("abcd").subarray(1, 3);   // 'bc'：视图共享内存，不拷贝
 
 前置是数组、引用与编码。Buffer.from(existingBuffer) 复制字节；Buffer.from(arrayBuffer,offset,length) 则建立共享视图。TypedArray 的 buffer 可能比当前视图大，直接传整个 buffer 可能包含前后不属于本视图的数据。跨边界传递时同时保留 byteOffset 和 byteLength，避免泄露或读取无关字节。
 
-保存为 buffer.mjs 后运行：
+保存为 `buffer.mjs` 后运行。先区分“视图”和“副本”：`subarray` 不分配新字节，改动会回写原 Buffer；`Buffer.from(view)` 则复制当前视图内的字节。读取定宽字段前要先确认长度，不能用捕获 RangeError 代替协议校验。
 
+<!-- terra-fifteenth-case: node-buffer-view-and-bounds -->
 ```js
-const original = Buffer.from([1, 2, 3]);
+import { Buffer } from "node:buffer";
+
+const original = Buffer.from([1, 2, 3, 4]);
 const view = original.subarray(1);
 const copy = Buffer.from(view);
 view[0] = 9;
-console.log([...original].join(','), [...copy].join(','));
-const bytes = Buffer.from([1, 2, 3, 4]);
-console.log(bytes.readUInt16BE(2));
+console.log(`shared=${[...original].join(",")} copy=${[...copy].join(",")}`);
+
+function readTrailer(bytes) {
+  if (bytes.length < 2) throw new RangeError("trailer needs two bytes");
+  return bytes.readUInt16BE(bytes.length - 2);
+}
+
+console.log(`trailer=${readTrailer(original)}`);
+try {
+  readTrailer(Buffer.from([0xff]));
+} catch (error) {
+  console.log(`short=${error.message}`);
+}
 ```
 
-预期为 `1,9,3 2,3` 和 `772`。练习：把读取偏移从 2 改为 3，才会因剩余不足两个字节而报错。解析外部二进制协议先验证总长度、字段长度和字节序，再按偏移读取；长度字段本身也可能恶意夸大。字符串的 length 是 UTF-16 码元数，Buffer 长度是字节数，二者不能互换。
+预期为 `shared=1,9,3,4 copy=2,3,4`、`trailer=772` 与 `short=trailer needs two bytes`。读到的 772 来自末尾 `0x03 0x04` 的大端表示。练习：把 `readUInt16BE` 改为 `readUInt16LE`，解释为什么同一对字节得到不同整数。解析外部二进制协议先验证总长度、字段长度和字节序，再按偏移读取；长度字段本身也可能恶意夸大。字符串的 `length` 是 UTF-16 码元数，Buffer 长度是字节数，二者不能互换。
 
 ## 🔗 相关文档
 

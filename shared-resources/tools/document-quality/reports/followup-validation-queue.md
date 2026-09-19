@@ -11,24 +11,24 @@
 - **P2**：框架与部署文档没有命名运行证据。优先建立版本锁定的最小工程、构建或部署演练。
 - **P3**：进阶、测试和其他专题没有命名运行证据。按依赖关系排入后续批次。
 
-台账对应的 46 条未绑定措辞全部保留，并在生成时重新定位到当前源码行。明确写出“尚未验证”、说明如何验证或给出练习要求的行，按所属文件的普通优先级排序，不会被误报成 P0 通过性断言。同一文件可同时有一条文件级缺口和多条逐行任务；两者不能互相抵消。每次验证只能声明其命名案例和环境覆盖的范围。
+台账对应的 49 条未绑定措辞全部保留，并在生成时重新定位到当前源码行。明确写出“尚未验证”、说明如何验证或给出练习要求的行，按所属文件的普通优先级排序，不会被误报成 P0 通过性断言。同一文件可同时有一条文件级缺口和多条逐行任务；两者不能互相抵消。每次验证只能声明其命名案例和环境覆盖的范围。
 
 ## 汇总
 
-- 队列条目：535 条，其中文件级证据缺口 489 条，逐行未绑定验证措辞 46 条。
-- 优先级：P0 0；P1 233；P2 149；P3 153。
-- 分类：核心基础 217；首项目 16；框架 110；部署 39；进阶与测试 153。
+- 队列条目：537 条，其中文件级证据缺口 488 条，逐行未绑定验证措辞 49 条。
+- 优先级：P0 1；P1 232；P2 149；P3 155。
+- 分类：核心基础 216；首项目 16；框架 110；部署 39；进阶与测试 156。
 
 ## 明细
 
 | 优先级 | 分类 | 模块 | 文件:行 | 下一步 | 原因 / 定位文字 |
 |---|---|---|---|---|---|
+| P0 | 进阶与测试 | TanStack / TypeScript | [03-tanstack-stack/projects/02-data-dashboard.md](../../../../03-tanstack-stack/projects/02-data-dashboard.md#L268):268 | 绑定命名验证证据，或把验证措辞收窄为可证明的范围<br/>优先复跑该行承诺的完整示例；若环境不可得，删除绝对化结果并说明实际未验证范围。 | **官方回查（2026-09-19）**：&#91;Table v9 Quick Start&#93;(https://tanstack.com/table/latest/docs/framework/react/quick-start)、&#91;Query 请求取消&#93;(https://tanstack.com/query/latest/docs/framework/react/guides/query-cancellation)、&#91;React useDeferredValue&#93;(https://react.dev/reference/react/useDeferredVal |
 | P1 | 核心基础 | Go | [01-go-backend/LEARNING_GUIDE.md](../../../../01-go-backend/LEARNING_GUIDE.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
 | P1 | 核心基础 | Go | [01-go-backend/README.md](../../../../01-go-backend/README.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
 | P1 | 核心基础 | Go | [01-go-backend/basics/01-environment-setup.md](../../../../01-go-backend/basics/01-environment-setup.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
 | P1 | 核心基础 | Go | [01-go-backend/basics/02-first-program.md](../../../../01-go-backend/basics/02-first-program.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
 | P1 | 核心基础 | Go | [01-go-backend/basics/05-functions-methods.md](../../../../01-go-backend/basics/05-functions-methods.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
-| P1 | 核心基础 | Go | [01-go-backend/basics/06-control-structures.md](../../../../01-go-backend/basics/06-control-structures.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
 | P1 | 核心基础 | Go | [01-go-backend/reference/language-concepts/03-go-programming-essentials.md](../../../../01-go-backend/reference/language-concepts/03-go-programming-essentials.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
 | P1 | 核心基础 | Go | [01-go-backend/reference/language-concepts/05-go-control-flow.md](../../../../01-go-backend/reference/language-concepts/05-go-control-flow.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
 | P1 | 核心基础 | Go | [01-go-backend/reference/language-concepts/07-error-handling.md](../../../../01-go-backend/reference/language-concepts/07-error-handling.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
@@ -552,8 +552,10 @@
 | P3 | 进阶与测试 | TanStack / TypeScript | [03-tanstack-stack/advanced-topics/performance/01-query-optimization.md](../../../../03-tanstack-stack/advanced-topics/performance/01-query-optimization.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
 | P3 | 进阶与测试 | TanStack / TypeScript | [03-tanstack-stack/advanced-topics/performance/02-rendering-performance.md](../../../../03-tanstack-stack/advanced-topics/performance/02-rendering-performance.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
 | P3 | 进阶与测试 | TanStack / TypeScript | [03-tanstack-stack/advanced-topics/security/01-security-practices.md](../../../../03-tanstack-stack/advanced-topics/security/01-security-practices.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
+| P3 | 进阶与测试 | TanStack / TypeScript | [03-tanstack-stack/projects/02-data-dashboard.md](../../../../03-tanstack-stack/projects/02-data-dashboard.md#L236):236 | 保留诚实的验证边界，并在补证据时决定是否增加最小练习<br/>保持已有边界说明；若新增示例，记录工具链、命令、预期行为和未覆盖范围。 | `DashboardPage` 负责组合搜索表单与 `UserTable`；`user-columns` 至少定义 `name`、`createdAt` 两个允许排序的列。其他列配置 `enableSorting: false`，与 URL 白名单一致。v9 列类型需使用 `ColumnDef<typeof features, UserRow>`，因此把 §3 的 `tableFeatures(...)` 提取到模块级并导出，供列定义和 `useTable` 共享。此处不把未提供的应用外壳当作独立可运行工程。 |
 | P3 | 进阶与测试 | TanStack / TypeScript | [03-tanstack-stack/projects/02-data-dashboard.md](../../../../03-tanstack-stack/projects/02-data-dashboard.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
 | P3 | 进阶与测试 | TanStack / TypeScript | [03-tanstack-stack/projects/03-collaborative-kanban.md](../../../../03-tanstack-stack/projects/03-collaborative-kanban.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
+| P3 | 进阶与测试 | TanStack / TypeScript | [03-tanstack-stack/projects/04-saas-admin-platform.md](../../../../03-tanstack-stack/projects/04-saas-admin-platform.md#L258):258 | 保留诚实的验证边界，并在补证据时决定是否增加最小练习<br/>保持已有边界说明；若新增示例，记录工具链、命令、预期行为和未覆盖范围。 | **下一步与证据**：记录上述五项的账号、请求状态和可见结果；后端权限与审计测试通过后，再进入部署文档。仅静态阅读这些片段不构成生产验证。Query 取消行为可回查&#91;官方请求取消指南&#93;(https://tanstack.com/query/latest/docs/framework/react/guides/query-cancellation)，Router context 接线可回查&#91;官方认证路由指南&#93;(https://tanstack.com/router/latest/docs/framework/react/guide/authenticate |
 | P3 | 进阶与测试 | TanStack / TypeScript | [03-tanstack-stack/projects/04-saas-admin-platform.md](../../../../03-tanstack-stack/projects/04-saas-admin-platform.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
 | P3 | 进阶与测试 | TanStack / TypeScript | [03-tanstack-stack/testing/02-mocking-server.md](../../../../03-tanstack-stack/testing/02-mocking-server.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
 | P3 | 进阶与测试 | TanStack / TypeScript | [03-tanstack-stack/testing/03-integration-testing.md](../../../../03-tanstack-stack/testing/03-integration-testing.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |

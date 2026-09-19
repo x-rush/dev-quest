@@ -1,0 +1,178 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-09-19T15:53:08.989239+00:00",
+  "scope": "Three named, complete P1 core/standard-library Markdown programs extracted byte-for-byte from their marked fences. A pass verifies only the listed output contracts.",
+  "method": "Each marked fence is written unchanged to a temporary directory and executed in a pre-existing Docker image with network disabled, a read-only root filesystem, dropped capabilities, and bounded resources.",
+  "not_verified": [
+    "all other prose and code fences in these documents",
+    "compile-failure snippets and deliberately unsafe examples",
+    "network, database, framework, performance, concurrency, and platform-specific behavior"
+  ],
+  "docker": {
+    "command": [
+      "docker",
+      "--version"
+    ],
+    "exit_code": 0,
+    "stdout": "Docker version 29.8.0, build 88096ef\n",
+    "stderr": ""
+  },
+  "cases": [
+    {
+      "id": "go-control-flow-contract",
+      "language": "Go",
+      "source": "01-go-backend/basics/06-control-structures.md",
+      "image": "golang:1.27",
+      "document_sha256": "ae3a113bfb05921740c8620af7e7ef4cd1311d338a9697348d95d17fadc8400b",
+      "code_sha256": "149b29de2dab43ffa41e0486cb4d96a34f3d2e1eb3a95c6a5a59453147d43d25",
+      "expected_stdout": "sum=5 skipped=1 stopped=true\nresult=complete-before-sentinel\n",
+      "toolchain": {
+        "command": [
+          "docker",
+          "run",
+          "--rm",
+          "--pull=never",
+          "--network=none",
+          "golang:1.27",
+          "go",
+          "version"
+        ],
+        "exit_code": 0,
+        "stdout": "go version go1.27.1 linux/amd64\n",
+        "stderr": ""
+      },
+      "execution": {
+        "command": [
+          "docker",
+          "run",
+          "--rm",
+          "--pull=never",
+          "--network=none",
+          "--read-only",
+          "--cap-drop=ALL",
+          "--pids-limit=64",
+          "--memory=512m",
+          "--cpus=1",
+          "--tmpfs",
+          "/tmp:rw,exec,nosuid,size=256m",
+          "--env",
+          "GOCACHE=/tmp/go-build-cache",
+          "--workdir=/work",
+          "--mount",
+          "type=bind,source=C:\\Users\\77958\\AppData\\Local\\Temp\\dev-quest-fifteenth-u55skvxf\\go-control-flow-contract,target=/work,readonly",
+          "golang:1.27",
+          "go",
+          "run",
+          "main.go"
+        ],
+        "exit_code": 0,
+        "stdout": "sum=5 skipped=1 stopped=true\nresult=complete-before-sentinel\n",
+        "stderr": ""
+      },
+      "status": "PASS"
+    },
+    {
+      "id": "node-buffer-view-and-bounds",
+      "language": "Node.js",
+      "source": "09-nodejs-backend/reference/library-guides/05-buffer.md",
+      "image": "node:24-bookworm-slim",
+      "document_sha256": "07fdf02fb043b1ee88958b06b97b65cb87b803b84156e6e55dd80567453faac8",
+      "code_sha256": "98a4d24e25f20676da0fb406fc80caf1725ea5ad9a378b8ac6a57c26849c0b15",
+      "expected_stdout": "shared=1,9,3,4 copy=2,3,4\ntrailer=772\nshort=trailer needs two bytes\n",
+      "toolchain": {
+        "command": [
+          "docker",
+          "run",
+          "--rm",
+          "--pull=never",
+          "--network=none",
+          "node:24-bookworm-slim",
+          "node",
+          "--version"
+        ],
+        "exit_code": 0,
+        "stdout": "v24.21.0\n",
+        "stderr": ""
+      },
+      "execution": {
+        "command": [
+          "docker",
+          "run",
+          "--rm",
+          "--pull=never",
+          "--network=none",
+          "--read-only",
+          "--cap-drop=ALL",
+          "--pids-limit=64",
+          "--memory=512m",
+          "--cpus=1",
+          "--tmpfs",
+          "/tmp:rw,exec,nosuid,size=256m",
+          "--workdir=/work",
+          "--mount",
+          "type=bind,source=C:\\Users\\77958\\AppData\\Local\\Temp\\dev-quest-fifteenth-u55skvxf\\node-buffer-view-and-bounds,target=/work,readonly",
+          "node:24-bookworm-slim",
+          "node",
+          "buffer.mjs"
+        ],
+        "exit_code": 0,
+        "stdout": "shared=1,9,3,4 copy=2,3,4\ntrailer=772\nshort=trailer needs two bytes\n",
+        "stderr": ""
+      },
+      "status": "PASS"
+    },
+    {
+      "id": "python-context-lifecycle",
+      "language": "Python",
+      "source": "10-python-discovery/reference/language-concepts/08-context-managers.md",
+      "image": "python:3.14-alpine",
+      "document_sha256": "db1a85d5e46e2c794a4f2a1972ceb382a2c49d7e3ced857a42b5c165f44b09b6",
+      "code_sha256": "6481279a1062f6517d10e9bbc8956eae83c7751cc256164088777bae40183741",
+      "expected_stdout": "context-lifecycle: open:first | open:second | close:second | close:first | handled:work failed\n",
+      "toolchain": {
+        "command": [
+          "docker",
+          "run",
+          "--rm",
+          "--pull=never",
+          "--network=none",
+          "python:3.14-alpine",
+          "python",
+          "--version"
+        ],
+        "exit_code": 0,
+        "stdout": "Python 3.14.7\n",
+        "stderr": ""
+      },
+      "execution": {
+        "command": [
+          "docker",
+          "run",
+          "--rm",
+          "--pull=never",
+          "--network=none",
+          "--read-only",
+          "--cap-drop=ALL",
+          "--pids-limit=64",
+          "--memory=512m",
+          "--cpus=1",
+          "--tmpfs",
+          "/tmp:rw,exec,nosuid,size=256m",
+          "--workdir=/work",
+          "--mount",
+          "type=bind,source=C:\\Users\\77958\\AppData\\Local\\Temp\\dev-quest-fifteenth-u55skvxf\\python-context-lifecycle,target=/work,readonly",
+          "python:3.14-alpine",
+          "python",
+          "-I",
+          "lifecycle.py"
+        ],
+        "exit_code": 0,
+        "stdout": "context-lifecycle: open:first | open:second | close:second | close:first | handled:work failed\n",
+        "stderr": ""
+      },
+      "status": "PASS"
+    }
+  ],
+  "passed": 3,
+  "total": 3
+}

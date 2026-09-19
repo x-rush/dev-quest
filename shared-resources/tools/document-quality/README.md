@@ -53,6 +53,7 @@
 | [Java、Node 与 Python 异常验证](reports/java-node-python-exceptions-report.md) | try-with-resources、Error.cause 和 Python 异常链的 3 个正文完整程序验证 |
 | [Go、Node 与 Python 第十三批运行验证](reports/go-node-python-thirteenth-runtime.md) | Go 泛型、Node ESM 公开边界与 Python 可变默认参数的 3 个正文完整程序验证 |
 | [PHP、Java 与 Rust 第十四批正文验证](reports/php-java-rust-fourteenth-body-validation.md) | PHP 文件锁、Java 严格日期格式化和 Rust trait/泛型的 3 个正文完整程序验证 |
+| [Go、Node 与 Python 第十五批运行验证](reports/go-node-python-fifteenth-runtime.md) | Go 控制流、Node Buffer 边界和 Python 上下文清理的 3 个正文完整程序验证 |
 | [Next、TanStack 与移动端第十一批报告](reports/next-tanstack-mobile-eleventh-body-validation.json) | Next/TanStack 的 2 个纯逻辑运行结果，以及 RN/Kotlin/Swift 的明确未验证边界 |
 | [PHP 与 Java 参考案例验证](reports/php-java-reference-cases-report.md) | PHP/Java 关键词、内置函数和标准库的 17 个正文完整程序验证 |
 | [Rust、PHP 与 Java 第八批正文验证](reports/rust-php-java-eighth-body-validation.md) | 三个此前未验证核心页面的 Rust 所有权、PHP 控制流与 Java 函数式接口案例 |

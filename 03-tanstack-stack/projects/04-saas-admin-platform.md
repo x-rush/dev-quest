@@ -8,7 +8,23 @@
 
 **扩展顺序**：路由、表格、表单只在具体需求出现时组合，避免为集成而集成。
 
-建议保存一份正常输入、一份失败输入、实际输出和对应测试。先完成以上阶段再扩展正文中的完整设计；遇到省略实现或未定义依赖，应按文档上下文补齐，不能把代码片段拼接后当作已经验证的完整工程。
+### 先交付一条有身份边界的数据流
+
+前置验收是 [数据看板](02-data-dashboard.md) 的分页与失败重试已通过，并能解释查询键为什么包含筛选条件。准备两个练习账号：租户 A 的 admin 和租户 B 的 viewer；各自有不同的用户列表。本篇使用 Query v5 / Router v1，Table 与 Form 沿用模块基线；下面的片段需要已配置 Provider、路由树和同源 API 的 React 工程。
+
+第一轮只实现“登录 → 查看本租户用户 → 尝试新建 → 登出”。服务端提供以下契约，先用固定测试数据完成集成，再接真实数据库：
+
+| 请求 | 成功输出 | 失败输出及 UI 行为 |
+|---|---|---|
+| `POST /api/login`，输入练习账号凭据 | 设置会话 Cookie，返回 204；随后重取会话 | 401 显示登录失败，不进入受保护页 |
+| `GET /api/me` | `{ user: { id, name, role }, tenantId, expiresAt }`，expiresAt 为毫秒时间戳 | 401 视为未登录；500 显示可重试错误 |
+| `GET /api/tenants/A/users` | 只返回授权租户资源 | 未登录 401；跨租户 403，不能信任 URL 中的 A |
+| `POST /api/tenants/A/users` | 201 返回已创建用户 | viewer 得到 403；字段错误 400；不得写入数据 |
+| `POST /api/logout` | 服务端撤销会话并清除 Cookie，204 | 网络失败显示重试；不能宣称服务端已登出 |
+
+先使用服务端设置的 `HttpOnly`、`Secure` 会话 Cookie。服务端还需按部署方式配置 SameSite 并校验写请求的 CSRF 防护；这些属性不能由前端代码替代。测试替身只能证明界面接线，不证明权限安全。
+
+验收后依次增加：租户切换 → 表单校验 → 审计查询 → 监控与发布。本文是架构练习路径，标题中的“生产级”是目标，不能凭几个前端守卫判定已可上线。
 
 > **文档简介**: 综合四件套构建生产级 SaaS 管理平台：RBAC 路由守卫、认证流、按特性组织的数据层、错误边界与审计日志，交付可上线的前端架构。
 >
@@ -33,7 +49,7 @@
 
 ## 🎯 项目目标
 
-- 登录/登出/会话过期全链路，token 安全存储与自动续期
+- 登录/登出/会话过期全链路；续期须由后端会话协议单独实现
 - RBAC：角色决定"路由能不能进 + 按钮能不能点"
 - 数据层按特性分域，键工厂 + 统一错误处理
 - 审计日志、操作反馈、灰度发布位一一落地
@@ -71,24 +87,21 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 
 export interface Session {
   user: { id: string; name: string; role: 'admin' | 'manager' | 'viewer' }
+  tenantId: string
   expiresAt: number
 }
 
-// 会话就是一条查询：无 token 时禁用
+// Cookie 是否存在由服务端判断；首次进入应用也必须请求会话。
 export function useSession() {
-  const token = localStorage.getItem('access_token')
   return useQuery({
     queryKey: ['auth', 'session'],
-    queryFn: async () => {
-      const res = await fetch('/api/me', {
-        headers: { Authorization: `Bearer ${token}` },
-      })
-      if (res.status === 401) throw new Error('UNAUTHORIZED')
+    queryFn: async ({ signal }): Promise<Session | null> => {
+      const res = await fetch('/api/me', { credentials: 'same-origin', signal })
+      if (res.status === 401) return null
       if (!res.ok) throw new Error('会话获取失败')
       return (await res.json()) as Session
     },
-    enabled: !!token,
-    staleTime: 10 * 60_000,
+    staleTime: 0,
     retry: false, // 401 不该被重试放大
   })
 }
@@ -96,16 +109,20 @@ export function useSession() {
 export function useLogout() {
   const qc = useQueryClient()
   return useMutation({
-    mutationFn: () => fetch('/api/logout', { method: 'POST' }),
-    onSettled: () => {
-      localStorage.removeItem('access_token')
-      qc.clear() // 登出清空一切缓存，防止下一个用户读到前任数据
+    mutationFn: async () => {
+      const res = await fetch('/api/logout', { method: 'POST', credentials: 'same-origin' })
+      if (!res.ok) throw new Error('登出失败，请重试')
+    },
+    onSuccess: async () => {
+      await qc.cancelQueries()
+      qc.clear()
+      window.location.replace('/login')
     },
   })
 }
 ```
 
-> token 存储的完整权衡（为什么 localStorage 在 XSS 面前不是终点、何时用 HttpOnly Cookie）见 [安全实践](../advanced-topics/security/01-security-practices.md)。
+登录成功后也要先取消并清除上一身份的查询，再重新读取会话、进入受保护路由。`staleTime: 0` 不是自动续期定时器；会话到期后的任意 API 都必须重新由服务端判断权限。完整边界见 [安全实践](../advanced-topics/security/01-security-practices.md)。
 
 ---
 
@@ -129,7 +146,8 @@ import { createFileRoute, redirect, notFound } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/_protected/users')({
   beforeLoad: async ({ context }) => {
-    // context.ensureSession 由根路由 beforeLoad 注入（内部与会话查询同源）
+    // 应用自定义依赖：在 createRootRouteWithContext 的类型与 router context 中注入；不是 Router 内置 API。
+    // ensureSession 应复用 /api/me 契约，401 返回 null，网络/500 抛错交给路由错误页。
     const session = await context.ensureSession()
     if (!session) throw redirect({ to: '/login', search: { from: '/users' } })
     if (!can(session.user.role, 'users:read')) throw notFound() // 无权访问按 404 处理，不暴露路径存在性
@@ -179,16 +197,16 @@ export const queryClient = new QueryClient({
 配合 React 19 错误边界兜住渲染期异常；API 层统一封装：
 
 ```ts
-// src/shared/http.ts —— 携带 token、处理 401、透出业务错误码
+// src/shared/http.ts —— JSON 响应专用；204 用独立的无返回值请求函数处理
 export async function http<T>(url: string, init?: RequestInit): Promise<T> {
-  const token = localStorage.getItem('access_token')
+  const headers = new Headers(init?.headers)
+  if (typeof init?.body === 'string' && !headers.has('Content-Type')) {
+    headers.set('Content-Type', 'application/json')
+  }
   const res = await fetch(url, {
     ...init,
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`,
-      ...init?.headers,
-    },
+    credentials: 'same-origin',
+    headers,
   })
   if (res.status === 401) throw new Error('UNAUTHORIZED')
   if (!res.ok) {
@@ -203,11 +221,23 @@ export async function http<T>(url: string, init?: RequestInit): Promise<T> {
 
 ## 5. 上线前 checklist
 
-- [ ] **权限**：每个路由有 beforeLoad 守卫；每个写按钮有 IfAllowed
-- [ ] **审计**：所有写操作 mutation 的 onSuccess 调用 auditApi.log（谁、何时、改了什么）
+先给用户列表建立键 `['tenant', session.tenantId, 'actor', session.user.id, 'users', filters]`；查询函数仍访问服务端授权后的接口，并将 Query 的 `signal` 传给 `fetch`。切换期间停止挂载旧身份页面，等待正在提交的写操作明确结束，再取消查询、清缓存、取得新会话并刷新路由。清缓存不会撤销已经发出的服务端写入。
+
+| 可复现输入 | 预期结果 | 失败时回查 |
+|---|---|---|
+| A admin 登录、读取后登出，再 B viewer 登录 | 列表和 Query Devtools 中没有 A 的资源 | 查询键身份作用域、取消请求和清缓存顺序 |
+| viewer 手工发送创建请求 | 服务端 403，数据库无新增行 | 服务端授权；隐藏按钮无法修复此问题 |
+| 删除 Cookie 后刷新 `/users` | 会话为 null，跳登录；网络断开时显示错误而非伪装未登录 | ensureSession 的 401 与网络错误分流 |
+| `/api/logout` 返回 500 | UI 报失败并允许重试，不显示“已退出” | fetch 不会因 HTTP 500 自动 reject |
+| 写入成功后前端立刻断网 | 服务端已有审计记录 | 审计必须与服务端业务操作关联，不能依赖 onSuccess |
+
+路由片段中的 `UsersPage`、`can`，以及组件片段中的 `Permission`、`useSession` 需由对应模块导入；`toast` 是项目自定义 UI。先用原生错误文本完成闭环，再接这些组件，不要把占位名称当成库导出。
+
+- [ ] **权限**：受保护路由有 beforeLoad；写按钮有 IfAllowed；服务端逐请求验证身份、租户和权限
+- [ ] **审计**：服务端记录写操作主体、租户、资源、结果和时间；前端埋点仅补充体验信息
 - [ ] **缓存**：登出 `qc.clear()`；切换租户同上
 - [ ] **错误**：QueryCache.onError 兜底 + 特性级错误边界 + Sentry 上报
-- [ ] **性能**：路由级代码分割（`createFileRoute` 自动 lazy）；大表格虚拟化
+- [ ] **性能**：按 Router 构建插件的代码分割配置或 `.lazy.tsx` 路由实现拆包，并检查构建产物；单独调用 `createFileRoute` 不保证自动拆包
 - [ ] **交付**：CI 全绿、预览环境冒烟通过、Web Vitals 基线记录
 
 ---
@@ -217,13 +247,15 @@ export async function http<T>(url: string, init?: RequestInit): Promise<T> {
 | 现象 | 原因 | 修复 |
 |------|------|------|
 | 会话过期后页面白屏 | 401 只在个别 hook 处理 | 收敛到 QueryCache.onError 全局跳转 |
-| 登出后新账号看到旧数据 | 缓存未清空 | onSettled 里 `qc.clear()` |
+| 登出后新账号看到旧数据 | 身份切换顺序或查询键有误 | 成功退出后取消请求并清缓存；键中加入身份与租户 |
 | viewer 角色能点导出按钮 | 只做了路由级守卫 | 补按钮级 IfAllowed |
-| 深链分享后 404 | 守卫未 await ensureSession | beforeLoad 全部 await |
+| 深链刷新后 404 | 可能是宿主未配置 SPA 回退，也可能是权限守卫 | 先确认请求是否到达应用，再查 await 会话与角色权限 |
 
 ---
 
 ## 🔗 相关文档
+
+**下一步与证据**：记录上述五项的账号、请求状态和可见结果；后端权限与审计测试通过后，再进入部署文档。仅静态阅读这些片段不构成生产验证。Query 取消行为可回查[官方请求取消指南](https://tanstack.com/query/latest/docs/framework/react/guides/query-cancellation)，Router context 接线可回查[官方认证路由指南](https://tanstack.com/router/latest/docs/framework/react/guide/authenticated-routes)。
 
 - 📄 **[生态协作](../frameworks/03-ecosystem-integration.md)** - 四件套协作基础
 - 📄 **[协作看板](../projects/03-collaborative-kanban.md)** - 实时特性可直接平移进本平台

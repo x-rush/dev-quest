@@ -833,6 +833,53 @@ func containsValueMap(set map[int]struct{}) bool {
 }
 ```
 
+## 可运行的控制流契约：先写出每个分支的结果
+
+前置知识是函数、切片和 `fmt`。阅读较长的 `if`、`switch` 或循环时，先把输入和预期输出列出来；这会迫使我们同时覆盖正常路径、跳过路径和提前退出路径。下面是一个完整程序：它用 `continue` 跳过负数、用 `break` 在遇到 0 时停止，并用无表达式 `switch` 给最终状态分类。`break` 只结束最近的一层 `for`；若有嵌套循环，需要标签才可以结束外层循环。
+
+将其保存为 `main.go` 后执行 `go run main.go`：
+
+<!-- terra-fifteenth-case: go-control-flow-contract -->
+```go
+package main
+
+import "fmt"
+
+func summarize(values []int) (sum int, skipped int, stopped bool) {
+
+    for _, value := range values {
+        switch {
+        case value < 0:
+            skipped++
+            continue
+        case value == 0:
+            stopped = true
+            break
+        default:
+            sum += value
+        }
+        if stopped {
+            break
+        }
+    }
+    return sum, skipped, stopped
+}
+
+func main() {
+    sum, skipped, stopped := summarize([]int{2, -1, 3, 0, 99})
+    fmt.Printf("sum=%d skipped=%d stopped=%t\n", sum, skipped, stopped)
+
+    switch {
+    case sum >= 5 && stopped:
+        fmt.Println("result=complete-before-sentinel")
+    default:
+        fmt.Println("result=unexpected")
+    }
+}
+```
+
+输出必须是 `sum=5 skipped=1 stopped=true` 与 `result=complete-before-sentinel`。`continue` 立刻开始下一次迭代，所以负数既不加入总和也不会触发停止；`break` 从 `switch` 退出后仍会执行紧随其后的检查，然后由该检查结束 `for`。这里特意没有把 99 计入总和，作为“停止确实生效”的可观察证据。实际业务中，若 0 是合法数据而不是哨兵值，应把停止条件做成单独的布尔结果、错误或显式长度，避免让数据值兼任控制信号。
+
 ## 🔗 文档交叉引用
 
 ### 相关文档

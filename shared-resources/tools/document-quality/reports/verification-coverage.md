@@ -7,11 +7,11 @@
 | 指标 | 数量 |
 |---|---:|
 | 纳入模块文档 | 642 |
-| 主状态：not_verified | 489 |
-| 主状态：runtime | 153 |
-| 验证措辞出现次数 | 129 |
-| 措辞分类：source_has_limited_runtime_evidence | 83 |
-| 措辞分类：unbound_verification_wording | 46 |
+| 主状态：not_verified | 488 |
+| 主状态：runtime | 154 |
+| 验证措辞出现次数 | 134 |
+| 措辞分类：source_has_limited_runtime_evidence | 85 |
+| 措辞分类：unbound_verification_wording | 49 |
 
 ## 语法级覆盖（不能当作运行覆盖）
 
@@ -47,7 +47,7 @@
 | Go | [01-go-backend/basics/03-variables-constants.md](../../../../01-go-backend/basics/03-variables-constants.md) | `runtime` | 2 | 0 |
 | Go | [01-go-backend/basics/04-composite-types.md](../../../../01-go-backend/basics/04-composite-types.md) | `runtime` | 4 | 0 |
 | Go | [01-go-backend/basics/05-functions-methods.md](../../../../01-go-backend/basics/05-functions-methods.md) | `not_verified` | 0 | 0 |
-| Go | [01-go-backend/basics/06-control-structures.md](../../../../01-go-backend/basics/06-control-structures.md) | `not_verified` | 0 | 0 |
+| Go | [01-go-backend/basics/06-control-structures.md](../../../../01-go-backend/basics/06-control-structures.md) | `runtime` | 1 | 1 |
 | Go | [01-go-backend/basics/07-concurrency-basics.md](../../../../01-go-backend/basics/07-concurrency-basics.md) | `runtime` | 4 | 0 |
 | Go | [01-go-backend/basics/08-error-handling.md](../../../../01-go-backend/basics/08-error-handling.md) | `runtime` | 5 | 0 |
 | Go | [01-go-backend/deployment/01-containerization.md](../../../../01-go-backend/deployment/01-containerization.md) | `not_verified` | 0 | 1 |
@@ -197,9 +197,9 @@
 | TanStack / TypeScript | [03-tanstack-stack/frameworks/03-ecosystem-integration.md](../../../../03-tanstack-stack/frameworks/03-ecosystem-integration.md) | `not_verified` | 0 | 0 |
 | TanStack / TypeScript | [03-tanstack-stack/frameworks/04-devtools.md](../../../../03-tanstack-stack/frameworks/04-devtools.md) | `not_verified` | 0 | 0 |
 | TanStack / TypeScript | [03-tanstack-stack/projects/01-todo-app.md](../../../../03-tanstack-stack/projects/01-todo-app.md) | `runtime` | 1 | 0 |
-| TanStack / TypeScript | [03-tanstack-stack/projects/02-data-dashboard.md](../../../../03-tanstack-stack/projects/02-data-dashboard.md) | `not_verified` | 0 | 0 |
+| TanStack / TypeScript | [03-tanstack-stack/projects/02-data-dashboard.md](../../../../03-tanstack-stack/projects/02-data-dashboard.md) | `not_verified` | 0 | 2 |
 | TanStack / TypeScript | [03-tanstack-stack/projects/03-collaborative-kanban.md](../../../../03-tanstack-stack/projects/03-collaborative-kanban.md) | `not_verified` | 0 | 0 |
-| TanStack / TypeScript | [03-tanstack-stack/projects/04-saas-admin-platform.md](../../../../03-tanstack-stack/projects/04-saas-admin-platform.md) | `not_verified` | 0 | 0 |
+| TanStack / TypeScript | [03-tanstack-stack/projects/04-saas-admin-platform.md](../../../../03-tanstack-stack/projects/04-saas-admin-platform.md) | `not_verified` | 0 | 1 |
 | TanStack / TypeScript | [03-tanstack-stack/reference/framework-essentials/01-query-essentials.md](../../../../03-tanstack-stack/reference/framework-essentials/01-query-essentials.md) | `not_verified` | 0 | 0 |
 | TanStack / TypeScript | [03-tanstack-stack/reference/framework-essentials/02-router-essentials.md](../../../../03-tanstack-stack/reference/framework-essentials/02-router-essentials.md) | `not_verified` | 0 | 0 |
 | TanStack / TypeScript | [03-tanstack-stack/reference/framework-essentials/03-queryclient-config.md](../../../../03-tanstack-stack/reference/framework-essentials/03-queryclient-config.md) | `not_verified` | 0 | 0 |
@@ -558,7 +558,7 @@
 | Node.js | [09-nodejs-backend/reference/library-guides/02-ecosystem-libs.md](../../../../09-nodejs-backend/reference/library-guides/02-ecosystem-libs.md) | `not_verified` | 0 | 0 |
 | Node.js | [09-nodejs-backend/reference/library-guides/03-crypto.md](../../../../09-nodejs-backend/reference/library-guides/03-crypto.md) | `runtime` | 1 | 0 |
 | Node.js | [09-nodejs-backend/reference/library-guides/04-child-process.md](../../../../09-nodejs-backend/reference/library-guides/04-child-process.md) | `runtime` | 3 | 1 |
-| Node.js | [09-nodejs-backend/reference/library-guides/05-buffer.md](../../../../09-nodejs-backend/reference/library-guides/05-buffer.md) | `runtime` | 1 | 3 |
+| Node.js | [09-nodejs-backend/reference/library-guides/05-buffer.md](../../../../09-nodejs-backend/reference/library-guides/05-buffer.md) | `runtime` | 2 | 3 |
 | Node.js | [09-nodejs-backend/reference/library-guides/06-util.md](../../../../09-nodejs-backend/reference/library-guides/06-util.md) | `runtime` | 1 | 0 |
 | Node.js | [09-nodejs-backend/reference/library-guides/07-process-lifecycle.md](../../../../09-nodejs-backend/reference/library-guides/07-process-lifecycle.md) | `not_verified` | 0 | 0 |
 | Node.js | [09-nodejs-backend/reference/library-guides/08-test-runner.md](../../../../09-nodejs-backend/reference/library-guides/08-test-runner.md) | `runtime` | 1 | 6 |
@@ -603,7 +603,7 @@
 | Python | [10-python-discovery/reference/language-concepts/05-typing-annotations.md](../../../../10-python-discovery/reference/language-concepts/05-typing-annotations.md) | `runtime` | 1 | 0 |
 | Python | [10-python-discovery/reference/language-concepts/06-decorators.md](../../../../10-python-discovery/reference/language-concepts/06-decorators.md) | `runtime` | 1 | 0 |
 | Python | [10-python-discovery/reference/language-concepts/07-generators-iterators.md](../../../../10-python-discovery/reference/language-concepts/07-generators-iterators.md) | `runtime` | 1 | 0 |
-| Python | [10-python-discovery/reference/language-concepts/08-context-managers.md](../../../../10-python-discovery/reference/language-concepts/08-context-managers.md) | `runtime` | 1 | 0 |
+| Python | [10-python-discovery/reference/language-concepts/08-context-managers.md](../../../../10-python-discovery/reference/language-concepts/08-context-managers.md) | `runtime` | 2 | 1 |
 | Python | [10-python-discovery/reference/language-concepts/09-asyncio-concurrency.md](../../../../10-python-discovery/reference/language-concepts/09-asyncio-concurrency.md) | `runtime` | 1 | 7 |
 | Python | [10-python-discovery/reference/language-concepts/10-exceptions-system.md](../../../../10-python-discovery/reference/language-concepts/10-exceptions-system.md) | `runtime` | 1 | 0 |
 | Python | [10-python-discovery/reference/language-concepts/11-modules-imports.md](../../../../10-python-discovery/reference/language-concepts/11-modules-imports.md) | `runtime` | 1 | 0 |

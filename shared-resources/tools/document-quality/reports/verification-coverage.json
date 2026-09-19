@@ -17,13 +17,13 @@
   "summary": {
     "documents": 642,
     "by_primary_state": {
-      "not_verified": 489,
-      "runtime": 153
+      "not_verified": 488,
+      "runtime": 154
     },
-    "verification_wording_occurrences": 129,
+    "verification_wording_occurrences": 134,
     "marker_classification": {
-      "source_has_limited_runtime_evidence": 83,
-      "unbound_verification_wording": 46
+      "source_has_limited_runtime_evidence": 85,
+      "unbound_verification_wording": 49
     }
   },
   "documents": [
@@ -222,16 +222,16 @@
     },
     {
       "path": "01-go-backend/basics/06-control-structures.md",
-      "sha256": "21ed67d89b3537db1089a9ef3fef9763ead124ed538ea393bebc89fadae764b4",
+      "sha256": "af63a27fdb7da2f06a841ab90c9fbc6a800583398eb0c2d9e305fa50fc1df90d",
       "verification": [
         {
-          "mode": "not_verified",
-          "status": "NOT_VERIFIED",
-          "report": null,
-          "scope": "No named runtime or syntax evidence is recorded for this document."
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "go-node-python-fifteenth-runtime.json",
+          "scope": "Three named, complete P1 core/standard-library Markdown programs extracted byte-for-byte from their marked fences. A pass verifies only the listed output contracts."
         }
       ],
-      "marker_count": 0
+      "marker_count": 1
     },
     {
       "path": "01-go-backend/basics/07-concurrency-basics.md",
@@ -2250,7 +2250,7 @@
     },
     {
       "path": "03-tanstack-stack/projects/02-data-dashboard.md",
-      "sha256": "5fc3de8e97c8a1e2fac8fae1c9890813c6e18e47c2e9da88ea61d5da7185b2f9",
+      "sha256": "a45d51b792d03f4f98cfa7bccddecd65fff2883251f7733586eb23006017ede0",
       "verification": [
         {
           "mode": "not_verified",
@@ -2259,7 +2259,7 @@
           "scope": "No named runtime or syntax evidence is recorded for this document."
         }
       ],
-      "marker_count": 0
+      "marker_count": 2
     },
     {
       "path": "03-tanstack-stack/projects/03-collaborative-kanban.md",
@@ -2276,7 +2276,7 @@
     },
     {
       "path": "03-tanstack-stack/projects/04-saas-admin-platform.md",
-      "sha256": "60d39d615be0474ceecc8e5c8c001b73ab279dc1b046fb89b439d89c1472fcad",
+      "sha256": "38a328da81bf45d219f39af4d47a460fbddbb4b573491982b89790ed1a65db80",
       "verification": [
         {
           "mode": "not_verified",
@@ -2285,7 +2285,7 @@
           "scope": "No named runtime or syntax evidence is recorded for this document."
         }
       ],
-      "marker_count": 0
+      "marker_count": 1
     },
     {
       "path": "03-tanstack-stack/reference/framework-essentials/01-query-essentials.md",
@@ -7315,13 +7315,19 @@
     },
     {
       "path": "09-nodejs-backend/reference/library-guides/05-buffer.md",
-      "sha256": "36ee08f474bcec68ea9d7eab0c0b83ec8bdef49d95f98c9db296b95e64f9ab2e",
+      "sha256": "2494b67147b9564b7fd9fb948801ca198291f3e0e96eeff8bc66cf4def03bd95",
       "verification": [
         {
           "mode": "runtime",
           "status": "PASS",
           "report": "node-reference-examples.json",
           "scope": "selected complete Node.js reference example"
+        },
+        {
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "go-node-python-fifteenth-runtime.json",
+          "scope": "Three named, complete P1 core/standard-library Markdown programs extracted byte-for-byte from their marked fences. A pass verifies only the listed output contracts."
         }
       ],
       "marker_count": 3
@@ -7918,16 +7924,22 @@
     },
     {
       "path": "10-python-discovery/reference/language-concepts/08-context-managers.md",
-      "sha256": "063128a4296bcd6868aa76e0ca2d9a6381b211084f731b5b65acb360759a0ce1",
+      "sha256": "524c4314a2f50c26259d18cba29c02f65a3e1c4d52be4108b8f483f97bab231e",
       "verification": [
         {
           "mode": "runtime",
           "status": "PASS",
           "report": "reference-examples.json",
           "scope": "selected Python reference example"
+        },
+        {
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "go-node-python-fifteenth-runtime.json",
+          "scope": "Three named, complete P1 core/standard-library Markdown programs extracted byte-for-byte from their marked fences. A pass verifies only the listed output contracts."
         }
       ],
-      "marker_count": 0
+      "marker_count": 1
     },
     {
       "path": "10-python-discovery/reference/language-concepts/09-asyncio-concurrency.md",
@@ -9024,6 +9036,12 @@
       "classification": "source_has_limited_runtime_evidence"
     },
     {
+      "path": "01-go-backend/basics/06-control-structures.md",
+      "line": 836,
+      "excerpt": "## 可运行的控制流契约：先写出每个分支的结果",
+      "classification": "source_has_limited_runtime_evidence"
+    },
+    {
       "path": "01-go-backend/deployment/01-containerization.md",
       "line": 934,
       "excerpt": "多阶段构建把编译工具与运行产物分开，减少运行镜像携带的内容；基础镜像还必须具备程序需要的 libc、证书与时区等能力。先验证可运行，再比较镜像大小与构建时间，不能只追求最小体积。",
@@ -9117,6 +9135,24 @@
       "path": "02-nextjs-frontend/testing/04-performance-testing.md",
       "line": 138,
       "excerpt": "本章提供可复现的操作方法，未声称已对某个业务站点完成性能实测。",
+      "classification": "unbound_verification_wording"
+    },
+    {
+      "path": "03-tanstack-stack/projects/02-data-dashboard.md",
+      "line": 236,
+      "excerpt": "`DashboardPage` 负责组合搜索表单与 `UserTable`；`user-columns` 至少定义 `name`、`createdAt` 两个允许排序的列。其他列配置 `enableSorting: false`，与 URL 白名单一致。v9 列类型需使用 `ColumnDef<typeof features, UserRow>`，因此把 §3 的 `tableFeatures(...)` 提取到模块级并导出，供列定义和 `useTable` 共享。此处不把未",
+      "classification": "unbound_verification_wording"
+    },
+    {
+      "path": "03-tanstack-stack/projects/02-data-dashboard.md",
+      "line": 268,
+      "excerpt": "**官方回查（2026-09-19）**：[Table v9 Quick Start](https://tanstack.com/table/latest/docs/framework/react/quick-start)、[Query 请求取消](https://tanstack.com/query/latest/docs/framework/react/guides/query-cancellation)、[React useDeferredValue](https://",
+      "classification": "unbound_verification_wording"
+    },
+    {
+      "path": "03-tanstack-stack/projects/04-saas-admin-platform.md",
+      "line": 258,
+      "excerpt": "**下一步与证据**：记录上述五项的账号、请求状态和可见结果；后端权限与审计测试通过后，再进入部署文档。仅静态阅读这些片段不构成生产验证。Query 取消行为可回查[官方请求取消指南](https://tanstack.com/query/latest/docs/framework/react/guides/query-cancellation)，Router context 接线可回查[官方认证路由指南](https://tanstack.com/router/latest",
       "classification": "unbound_verification_wording"
     },
     {
@@ -9555,6 +9591,12 @@
       "path": "10-python-discovery/reference/language-concepts/03-data-structures.md",
       "line": 76,
       "excerpt": "**slice 对象与自定义类**：`a[1:3]` 只是 `a[slice(1, 3)]` 的语法糖（内置 [`slice`](./02-built-in-functions.md) 生成）。自定义类想支持切片，在 `__getitem__` 里判断参数类型；`slice.indices(len)` 负责把负数与 step 换算成绝对下标（实测）：",
+      "classification": "source_has_limited_runtime_evidence"
+    },
+    {
+      "path": "10-python-discovery/reference/language-concepts/08-context-managers.md",
+      "line": 116,
+      "excerpt": "## 可运行的资源生命周期：异常传播与 ExitStack",
       "classification": "source_has_limited_runtime_evidence"
     },
     {

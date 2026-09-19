@@ -113,6 +113,43 @@ except ValueError:
 
 输出为 `open`、`resource`、`close`、`handled`，证明清理发生在外层处理异常之前。练习：把抛错改为正常退出，前面三行应保留，`handled` 不再出现。退出操作本身也可能失败；强制终止进程等情况不属于 Python 正常展开控制流的保证范围。
 
+## 可运行的资源生命周期：异常传播与 ExitStack
+
+前置知识是异常和生成器。`__exit__` 的返回值决定原异常是否继续向外传播：返回假值时传播，只有确认异常已经被处理时才返回真值。多个资源数量在运行时才确定时，`ExitStack` 按进入的反序退出；即使块内失败，也不会跳过已经登记的清理函数。
+
+保存为 `lifecycle.py` 后运行 `python -I lifecycle.py`：
+
+<!-- terra-fifteenth-case: python-context-lifecycle -->
+```python
+from contextlib import ExitStack, contextmanager
+
+events: list[str] = []
+
+@contextmanager
+def resource(name: str):
+    events.append(f"open:{name}")
+    try:
+        yield name
+    finally:
+        events.append(f"close:{name}")
+
+try:
+    with ExitStack() as stack:
+        first = stack.enter_context(resource("first"))
+        second = stack.enter_context(resource("second"))
+        assert (first, second) == ("first", "second")
+        raise ValueError("work failed")
+except ValueError as error:
+    events.append(f"handled:{error}")
+
+assert events == [
+    "open:first", "open:second", "close:second", "close:first", "handled:work failed"
+]
+print("context-lifecycle: " + " | ".join(events))
+```
+
+输出表明关闭顺序是 `second`、`first`，并且两个关闭都发生在外层 `except` 记录错误之前。若 `resource` 在 `yield` 之前失败，它尚未成为已进入的上下文，不会有它自己的 `close` 记录；应由获取代码清理已创建的局部资源。不要为了“让程序继续”让 `__exit__` 无条件返回 `True`，那会把编程错误和 I/O 失败伪装成成功。
+
 ## 🔗 相关条目
 
 - 📄 **[异常处理教程](../../basics/06-exceptions.md)** — with 与异常体系的关系

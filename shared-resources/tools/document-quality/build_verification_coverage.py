@@ -145,6 +145,9 @@ def records_from_reports():
     php_java_rust_fourteenth = load("php-java-rust-fourteenth-body-validation.json")
     for row in php_java_rust_fourteenth.get("results", []):
         add_record(records, row.get("document"), "runtime", "php-java-rust-fourteenth-body-validation.json", php_java_rust_fourteenth.get("scope", "selected PHP/Java/Rust fourteenth body example"), "PASS" if row.get("status", "").upper() == "PASSED" else "FAIL")
+    go_node_python_fifteenth = load("go-node-python-fifteenth-runtime.json")
+    for row in go_node_python_fifteenth.get("cases", []):
+        add_record(records, row.get("source"), "runtime", "go-node-python-fifteenth-runtime.json", go_node_python_fifteenth.get("scope", "selected Go/Node/Python fifteenth body example"), "PASS" if row.get("status", "").upper() == "PASS" else "FAIL")
     next_node_python_basics = load("next-node-python-basics-results.json")
     for row in next_node_python_basics.get("results", []):
         add_record(records, row.get("source"), "runtime", "next-node-python-basics-results.json", row.get("scope", "selected Next/Node/Python basic example"), "PASS" if row.get("status", "").upper() == "PASS" else "FAIL")
