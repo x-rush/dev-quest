@@ -7,8 +7,8 @@
 | 指标 | 数量 |
 |---|---:|
 | 纳入模块文档 | 642 |
-| 主状态：not_verified | 450 |
-| 主状态：runtime | 192 |
+| 主状态：not_verified | 449 |
+| 主状态：runtime | 193 |
 | 验证措辞出现次数 | 144 |
 | 措辞分类：source_has_limited_runtime_evidence | 88 |
 | 措辞分类：unbound_verification_wording | 56 |
@@ -549,7 +549,7 @@
 | Node.js | [09-nodejs-backend/reference/language-concepts/02-async-api.md](../../../../09-nodejs-backend/reference/language-concepts/02-async-api.md) | `runtime` | 1 | 0 |
 | Node.js | [09-nodejs-backend/reference/language-concepts/03-node-core-api.md](../../../../09-nodejs-backend/reference/language-concepts/03-node-core-api.md) | `runtime` | 2 | 0 |
 | Node.js | [09-nodejs-backend/reference/language-concepts/04-streams-api.md](../../../../09-nodejs-backend/reference/language-concepts/04-streams-api.md) | `runtime` | 1 | 0 |
-| Node.js | [09-nodejs-backend/reference/language-concepts/05-typescript-patterns.md](../../../../09-nodejs-backend/reference/language-concepts/05-typescript-patterns.md) | `not_verified` | 0 | 0 |
+| Node.js | [09-nodejs-backend/reference/language-concepts/05-typescript-patterns.md](../../../../09-nodejs-backend/reference/language-concepts/05-typescript-patterns.md) | `runtime` | 1 | 0 |
 | Node.js | [09-nodejs-backend/reference/language-concepts/06-esm-module-resolution.md](../../../../09-nodejs-backend/reference/language-concepts/06-esm-module-resolution.md) | `runtime` | 1 | 1 |
 | Node.js | [09-nodejs-backend/reference/language-concepts/07-js-core-semantics.md](../../../../09-nodejs-backend/reference/language-concepts/07-js-core-semantics.md) | `runtime` | 2 | 1 |
 | Node.js | [09-nodejs-backend/reference/language-concepts/08-type-coercion-collections.md](../../../../09-nodejs-backend/reference/language-concepts/08-type-coercion-collections.md) | `runtime` | 2 | 5 |

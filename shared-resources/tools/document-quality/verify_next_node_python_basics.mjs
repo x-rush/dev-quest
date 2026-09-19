@@ -22,6 +22,7 @@ const cases = [
   ['node-stream-worker-boundaries', '09-nodejs-backend/basics/07-streams-workers.md', 'js', 'node'],
   ['node-request-body-boundaries', '09-nodejs-backend/basics/05-http-routing.md', 'js', 'node'],
   ['node-error-cause-chain', '09-nodejs-backend/basics/06-error-handling.md', 'js', 'node'],
+  ['node-typescript-error-guard', '09-nodejs-backend/reference/language-concepts/05-typescript-patterns.md', 'ts', 'node'],
   ['python-cheatsheet-boundaries', '10-python-discovery/reference/quick-references/01-python-cheatsheet.md', 'python', 'python'],
   ['python-bindings-formatting', '10-python-discovery/basics/03-variables-types.md', 'python', 'python'],
 ];
@@ -86,7 +87,7 @@ try {
 
 const report = {
   generated_at: new Date().toISOString(),
-  purpose: 'Limited direct-body extraction verification for nine P1 basics documents.',
+  purpose: 'Limited direct-body extraction verification for ten P1 basics documents.',
   passed: results.filter((result) => result.status === 'PASS').length,
   total: results.length,
   results,

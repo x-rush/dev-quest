@@ -145,6 +145,48 @@ if (result.error instanceof z.ZodError) { /* 校验错误分支 */ }
 - 跨构建产物/多次打包后 `instanceof` 可能失效（不同类副本），可改用 `err.name` 判别
 - 谎报的 `e is X` 守卫比没有守卫更危险，守卫逻辑必须与声明严格一致
 
+### 可复现验收：`unknown` 进入错误出口前必须被收窄
+
+此例把一个已知 `HttpError` 和一个普通 `Error` 分别交给错误映射函数。只有守卫成功时才读取 `status` 与 `code`；未知错误得到通用的 500 响应，避免依赖断言或泄露内部信息。它不验证 Hono 的 `app.onError`、跨 bundle 的 `instanceof` 或日志传输。
+
+```ts verify:node-typescript-error-guard
+class HttpError extends Error {
+  status: number;
+  code: string;
+
+  constructor(
+    status: number,
+    code: string,
+    message: string,
+  ) {
+    super(message);
+    this.status = status;
+    this.code = code;
+  }
+}
+
+function isHttpError(error: unknown): error is HttpError {
+  return error instanceof HttpError;
+}
+
+function responseFor(error: unknown): string {
+  if (isHttpError(error)) {
+    return `${error.status}:${error.code}`;
+  }
+  return "500:INTERNAL_ERROR";
+}
+
+console.log(responseFor(new HttpError(422, "INVALID_TITLE", "title is blank")));
+console.log(responseFor(new Error("database unavailable")));
+```
+
+预期输出：
+
+```text
+422:INVALID_TITLE
+500:INTERNAL_ERROR
+```
+
 ---
 
 <!-- full-library-explanation -->
