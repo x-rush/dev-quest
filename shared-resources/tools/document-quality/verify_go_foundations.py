@@ -23,21 +23,27 @@ CASE = re.compile(
 )
 
 
-def run(command: list[str], cwd: Path, env: dict[str, str]) -> dict:
+def run(command: list[str], cwd: Path, env: dict[str, str], display_root: Path | None = None) -> dict:
     try:
         process = subprocess.run(
             command, cwd=cwd, env=env, capture_output=True, text=True,
             encoding="utf-8", timeout=60,
         )
+        report_command = [str(part).replace(str(display_root), "<temporary-workdir>")
+                          if display_root else part for part in command]
+        report_cwd = "<temporary-workdir>" if display_root else str(cwd)
         return {
-            "command": command, "cwd": str(cwd), "returncode": process.returncode,
+            "command": report_command, "cwd": report_cwd, "returncode": process.returncode,
             "stdout": process.stdout, "stderr": process.stderr,
         }
     except subprocess.TimeoutExpired as exc:
         def decode(value):
             return value.decode("utf-8", errors="replace") if isinstance(value, bytes) else (value or "")
+        report_command = [str(part).replace(str(display_root), "<temporary-workdir>")
+                          if display_root else part for part in command]
+        report_cwd = "<temporary-workdir>" if display_root else str(cwd)
         return {
-            "command": command, "cwd": str(cwd), "returncode": None,
+            "command": report_command, "cwd": report_cwd, "returncode": None,
             "stdout": decode(exc.stdout), "stderr": decode(exc.stderr),
             "error": "timeout after 60 seconds",
         }
@@ -84,7 +90,7 @@ def main() -> int:
                 module = "module example.com/devquest/foundations\n\ngo 1.27\n"
                 (working / "go.mod").write_text(module, encoding="utf-8")
                 binary = working / ("example.exe" if os.name == "nt" else "example")
-                build = run([args.go, "build", "-o", str(binary), "."], working, env)
+                build = run([args.go, "build", "-o", str(binary), "."], working, env, working)
                 execution = None
                 if kind == "compile-error":
                     passed = (
@@ -92,7 +98,7 @@ def main() -> int:
                         and re.search(diagnostic, build["stderr"]) is not None
                     )
                 elif build["returncode"] == 0:
-                    execution = run([str(binary)], working, env)
+                    execution = run([str(binary)], working, env, working)
                     passed = (
                         execution["returncode"] == 0
                         and execution["stdout"] == expected_output

@@ -40,19 +40,19 @@
           "go",
           "build",
           "-o",
-          "/tmp/go-foundations-crmr7ny9/example",
+          "<temporary-workdir>/example",
           "."
         ],
-        "cwd": "/tmp/go-foundations-crmr7ny9",
+        "cwd": "<temporary-workdir>",
         "returncode": 0,
         "stdout": "",
         "stderr": ""
       },
       "execution": {
         "command": [
-          "/tmp/go-foundations-crmr7ny9/example"
+          "<temporary-workdir>/example"
         ],
-        "cwd": "/tmp/go-foundations-crmr7ny9",
+        "cwd": "<temporary-workdir>",
         "returncode": 0,
         "stdout": "package name is not an import path\n",
         "stderr": ""
@@ -77,19 +77,19 @@
           "go",
           "build",
           "-o",
-          "/tmp/go-foundations-hnczzy2q/example",
+          "<temporary-workdir>/example",
           "."
         ],
-        "cwd": "/tmp/go-foundations-hnczzy2q",
+        "cwd": "<temporary-workdir>",
         "returncode": 0,
         "stdout": "",
         "stderr": ""
       },
       "execution": {
         "command": [
-          "/tmp/go-foundations-hnczzy2q/example"
+          "<temporary-workdir>/example"
         ],
-        "cwd": "/tmp/go-foundations-hnczzy2q",
+        "cwd": "<temporary-workdir>",
         "returncode": 0,
         "stdout": "\"\" 0 1 Ada\n8 12\n",
         "stderr": ""
@@ -114,19 +114,19 @@
           "go",
           "build",
           "-o",
-          "/tmp/go-foundations-l6c4s2ac/example",
+          "<temporary-workdir>/example",
           "."
         ],
-        "cwd": "/tmp/go-foundations-l6c4s2ac",
+        "cwd": "<temporary-workdir>",
         "returncode": 0,
         "stdout": "",
         "stderr": ""
       },
       "execution": {
         "command": [
-          "/tmp/go-foundations-l6c4s2ac/example"
+          "<temporary-workdir>/example"
         ],
-        "cwd": "/tmp/go-foundations-l6c4s2ac",
+        "cwd": "<temporary-workdir>",
         "returncode": 0,
         "stdout": "invalid pass perfect\nmatched 2\nran body of 99\nstring bytes: 5\n",
         "stderr": ""
@@ -151,19 +151,19 @@
           "go",
           "build",
           "-o",
-          "/tmp/go-foundations-i37ur9hs/example",
+          "<temporary-workdir>/example",
           "."
         ],
-        "cwd": "/tmp/go-foundations-i37ur9hs",
+        "cwd": "<temporary-workdir>",
         "returncode": 0,
         "stdout": "",
         "stderr": ""
       },
       "execution": {
         "command": [
-          "/tmp/go-foundations-i37ur9hs/example"
+          "<temporary-workdir>/example"
         ],
-        "cwd": "/tmp/go-foundations-i37ur9hs",
+        "cwd": "<temporary-workdir>",
         "returncode": 0,
         "stdout": "sum: 2\ncopy: [1 2]\nindex: [10 20]\n0:A\n1:中\nfresh: 0 1 2\nshared: 2 2 2\niterator: [0 1]\n",
         "stderr": ""
@@ -188,19 +188,19 @@
           "go",
           "build",
           "-o",
-          "/tmp/go-foundations-54nxaohs/example",
+          "<temporary-workdir>/example",
           "."
         ],
-        "cwd": "/tmp/go-foundations-54nxaohs",
+        "cwd": "<temporary-workdir>",
         "returncode": 0,
         "stdout": "",
         "stderr": ""
       },
       "execution": {
         "command": [
-          "/tmp/go-foundations-54nxaohs/example"
+          "<temporary-workdir>/example"
         ],
-        "cwd": "/tmp/go-foundations-54nxaohs",
+        "cwd": "<temporary-workdir>",
         "returncode": 0,
         "stdout": "1 2\nbody: 2\nclosure: 2\nargument: 1\n",
         "stderr": ""
@@ -225,19 +225,19 @@
           "go",
           "build",
           "-o",
-          "/tmp/go-foundations-7f9wbdor/example",
+          "<temporary-workdir>/example",
           "."
         ],
-        "cwd": "/tmp/go-foundations-7f9wbdor",
+        "cwd": "<temporary-workdir>",
         "returncode": 0,
         "stdout": "",
         "stderr": ""
       },
       "execution": {
         "command": [
-          "/tmp/go-foundations-7f9wbdor/example"
+          "<temporary-workdir>/example"
         ],
-        "cwd": "/tmp/go-foundations-7f9wbdor",
+        "cwd": "<temporary-workdir>",
         "returncode": 0,
         "stdout": "values: [0 1 4]\nnothing ready\nclosed: 0 false\n",
         "stderr": ""
@@ -262,19 +262,19 @@
           "go",
           "build",
           "-o",
-          "/tmp/go-foundations-8lroyqkm/example",
+          "<temporary-workdir>/example",
           "."
         ],
-        "cwd": "/tmp/go-foundations-8lroyqkm",
+        "cwd": "<temporary-workdir>",
         "returncode": 0,
         "stdout": "",
         "stderr": ""
       },
       "execution": {
         "command": [
-          "/tmp/go-foundations-8lroyqkm/example"
+          "<temporary-workdir>/example"
         ],
-        "cwd": "/tmp/go-foundations-8lroyqkm",
+        "cwd": "<temporary-workdir>",
         "returncode": 0,
         "stdout": "0 false 0\n0 true 1\n9\n",
         "stderr": ""
@@ -299,19 +299,19 @@
           "go",
           "build",
           "-o",
-          "/tmp/go-foundations-9seb80oi/example",
+          "<temporary-workdir>/example",
           "."
         ],
-        "cwd": "/tmp/go-foundations-9seb80oi",
+        "cwd": "<temporary-workdir>",
         "returncode": 0,
         "stdout": "",
         "stderr": ""
       },
       "execution": {
         "command": [
-          "/tmp/go-foundations-9seb80oi/example"
+          "<temporary-workdir>/example"
         ],
-        "cwd": "/tmp/go-foundations-9seb80oi",
+        "cwd": "<temporary-workdir>",
         "returncode": 0,
         "stdout": "0\n1\n",
         "stderr": ""
@@ -336,10 +336,10 @@
           "go",
           "build",
           "-o",
-          "/tmp/go-foundations-hbcp7d2z/example",
+          "<temporary-workdir>/example",
           "."
         ],
-        "cwd": "/tmp/go-foundations-hbcp7d2z",
+        "cwd": "<temporary-workdir>",
         "returncode": 1,
         "stdout": "",
         "stderr": "# example.com/devquest/foundations\n./main.go:4:10: goto Done jumps over declaration of x at ./main.go:5:7\n"
@@ -365,19 +365,19 @@
           "go",
           "build",
           "-o",
-          "/tmp/go-foundations-lrb3_c3l/example",
+          "<temporary-workdir>/example",
           "."
         ],
-        "cwd": "/tmp/go-foundations-lrb3_c3l",
+        "cwd": "<temporary-workdir>",
         "returncode": 0,
         "stdout": "",
         "stderr": ""
       },
       "execution": {
         "command": [
-          "/tmp/go-foundations-lrb3_c3l/example"
+          "<temporary-workdir>/example"
         ],
-        "cwd": "/tmp/go-foundations-lrb3_c3l",
+        "cwd": "<temporary-workdir>",
         "returncode": 0,
         "stdout": "uint8 int32 int32\nempty title true true\n[Go SQL]\n",
         "stderr": ""
@@ -402,19 +402,19 @@
           "go",
           "build",
           "-o",
-          "/tmp/go-foundations-z4uokmz5/example",
+          "<temporary-workdir>/example",
           "."
         ],
-        "cwd": "/tmp/go-foundations-z4uokmz5",
+        "cwd": "<temporary-workdir>",
         "returncode": 0,
         "stdout": "",
         "stderr": ""
       },
       "execution": {
         "command": [
-          "/tmp/go-foundations-z4uokmz5/example"
+          "<temporary-workdir>/example"
         ],
-        "cwd": "/tmp/go-foundations-z4uokmz5",
+        "cwd": "<temporary-workdir>",
         "returncode": 0,
         "stdout": "shared: [1 9 3] [1 9]\nseparate: [1 9 3] [7 8]\nempty copy: 0\ncopied: 2 [1 9]\noverlap: 2 [1 1 9]\ntext: Go 好 3 中\n",
         "stderr": ""
@@ -439,19 +439,19 @@
           "go",
           "build",
           "-o",
-          "/tmp/go-foundations-dwny8c76/example",
+          "<temporary-workdir>/example",
           "."
         ],
-        "cwd": "/tmp/go-foundations-dwny8c76",
+        "cwd": "<temporary-workdir>",
         "returncode": 0,
         "stdout": "",
         "stderr": ""
       },
       "execution": {
         "command": [
-          "/tmp/go-foundations-dwny8c76/example"
+          "<temporary-workdir>/example"
         ],
-        "cwd": "/tmp/go-foundations-dwny8c76",
+        "cwd": "<temporary-workdir>",
         "returncode": 0,
         "stdout": "slice: 2 3 [0 0 3]\ndelete: 1 false\nmap: 0 false\nnil: 0 true\nNaN delete: 1\nNaN clear: 0\n",
         "stderr": ""
@@ -476,19 +476,19 @@
           "go",
           "build",
           "-o",
-          "/tmp/go-foundations-r2s_ipqf/example",
+          "<temporary-workdir>/example",
           "."
         ],
-        "cwd": "/tmp/go-foundations-r2s_ipqf",
+        "cwd": "<temporary-workdir>",
         "returncode": 0,
         "stdout": "",
         "stderr": ""
       },
       "execution": {
         "command": [
-          "/tmp/go-foundations-r2s_ipqf/example"
+          "<temporary-workdir>/example"
         ],
-        "cwd": "/tmp/go-foundations-r2s_ipqf",
+        "cwd": "<temporary-workdir>",
         "returncode": 0,
         "stdout": "text: 4 2\nnil: 0 0 0 0 0\narray pointer: 4 4\nchannel: 1 2\n",
         "stderr": ""
@@ -513,19 +513,19 @@
           "go",
           "build",
           "-o",
-          "/tmp/go-foundations-mzomf6_m/example",
+          "<temporary-workdir>/example",
           "."
         ],
-        "cwd": "/tmp/go-foundations-mzomf6_m",
+        "cwd": "<temporary-workdir>",
         "returncode": 0,
         "stdout": "",
         "stderr": ""
       },
       "execution": {
         "command": [
-          "/tmp/go-foundations-mzomf6_m/example"
+          "<temporary-workdir>/example"
         ],
-        "cwd": "/tmp/go-foundations-mzomf6_m",
+        "cwd": "<temporary-workdir>",
         "returncode": 0,
         "stdout": "make: [0 0] 2 4 1\nnew: 0 7 9\nexpression type: *bool true\nmap zero: true\nmap initialized: 1\n",
         "stderr": ""
@@ -550,19 +550,19 @@
           "go",
           "build",
           "-o",
-          "/tmp/go-foundations-k2pjdnq1/example",
+          "<temporary-workdir>/example",
           "."
         ],
-        "cwd": "/tmp/go-foundations-k2pjdnq1",
+        "cwd": "<temporary-workdir>",
         "returncode": 0,
         "stdout": "",
         "stderr": ""
       },
       "execution": {
         "command": [
-          "/tmp/go-foundations-k2pjdnq1/example"
+          "<temporary-workdir>/example"
         ],
-        "cwd": "/tmp/go-foundations-k2pjdnq1",
+        "cwd": "<temporary-workdir>",
         "returncode": 0,
         "stdout": "buffer: 0 true\ndrained: 0 false\nclose twice: true\nsend closed: true\nclose nil: true\n",
         "stderr": ""
@@ -587,19 +587,19 @@
           "go",
           "build",
           "-o",
-          "/tmp/go-foundations-922h66e9/example",
+          "<temporary-workdir>/example",
           "."
         ],
-        "cwd": "/tmp/go-foundations-922h66e9",
+        "cwd": "<temporary-workdir>",
         "returncode": 0,
         "stdout": "",
         "stderr": ""
       },
       "execution": {
         "command": [
-          "/tmp/go-foundations-922h66e9/example"
+          "<temporary-workdir>/example"
         ],
-        "cwd": "/tmp/go-foundations-922h66e9",
+        "cwd": "<temporary-workdir>",
         "returncode": 0,
         "stdout": "complex64 (3+4i)\nfloat32 3 4\ncomplex128 (1+2i)\n(4+6i) (-5+10i)\n",
         "stderr": ""
@@ -624,19 +624,19 @@
           "go",
           "build",
           "-o",
-          "/tmp/go-foundations-zfcs666e/example",
+          "<temporary-workdir>/example",
           "."
         ],
-        "cwd": "/tmp/go-foundations-zfcs666e",
+        "cwd": "<temporary-workdir>",
         "returncode": 0,
         "stdout": "",
         "stderr": ""
       },
       "execution": {
         "command": [
-          "/tmp/go-foundations-zfcs666e/example"
+          "<temporary-workdir>/example"
         ],
-        "cwd": "/tmp/go-foundations-zfcs666e",
+        "cwd": "<temporary-workdir>",
         "returncode": 0,
         "stdout": "3 8 7\nGo Rust\nslice: 3\nNaN: true\nzero signs: true false\n",
         "stderr": ""
@@ -661,10 +661,10 @@
           "go",
           "build",
           "-o",
-          "/tmp/go-foundations-t8x78345/example",
+          "<temporary-workdir>/example",
           "."
         ],
-        "cwd": "/tmp/go-foundations-t8x78345",
+        "cwd": "<temporary-workdir>",
         "returncode": 1,
         "stdout": "",
         "stderr": "# example.com/devquest/foundations\n./main.go:5:9: invalid operation: invalid use of ... with built-in min\n"
@@ -690,19 +690,19 @@
           "go",
           "build",
           "-o",
-          "/tmp/go-foundations-asqbx1r3/example",
+          "<temporary-workdir>/example",
           "."
         ],
-        "cwd": "/tmp/go-foundations-asqbx1r3",
+        "cwd": "<temporary-workdir>",
         "returncode": 0,
         "stdout": "",
         "stderr": ""
       },
       "execution": {
         "command": [
-          "/tmp/go-foundations-asqbx1r3/example"
+          "<temporary-workdir>/example"
         ],
-        "cwd": "/tmp/go-foundations-asqbx1r3",
+        "cwd": "<temporary-workdir>",
         "returncode": 0,
         "stdout": "normal: 4 <nil>\nfailure: 0 calculation failed: division by zero\noutside panic: true\n",
         "stderr": ""
@@ -727,19 +727,19 @@
           "go",
           "build",
           "-o",
-          "/tmp/go-foundations-zwtgufjy/example",
+          "<temporary-workdir>/example",
           "."
         ],
-        "cwd": "/tmp/go-foundations-zwtgufjy",
+        "cwd": "<temporary-workdir>",
         "returncode": 0,
         "stdout": "",
         "stderr": ""
       },
       "execution": {
         "command": [
-          "/tmp/go-foundations-zwtgufjy/example"
+          "<temporary-workdir>/example"
         ],
-        "cwd": "/tmp/go-foundations-zwtgufjy",
+        "cwd": "<temporary-workdir>",
         "returncode": 0,
         "stdout": "stable: 2\n",
         "stderr": "debug: 2\n"

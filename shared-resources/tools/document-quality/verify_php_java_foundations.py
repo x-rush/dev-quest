@@ -21,10 +21,12 @@ PATTERN = re.compile(
 )
 
 
-def command(args, cwd):
+def command(args, cwd, display_root=None):
     result = subprocess.run(args, cwd=cwd, capture_output=True, text=True,
                             encoding="utf-8", timeout=45)
-    return {"command": args, "exit_code": result.returncode,
+    report_args = [str(arg).replace(str(display_root), "<temporary-workdir>")
+                   if display_root else arg for arg in args]
+    return {"command": report_args, "exit_code": result.returncode,
             "stdout": result.stdout, "stderr": result.stderr}
 
 
@@ -66,13 +68,13 @@ def main():
                     (Path(tmp) / filename).write_text(source + "\n", encoding="utf-8")
                     if language == "java":
                         item["commands"].append(command(
-                            ["javac", "--release", "21", "-encoding", "UTF-8", filename], tmp))
+                            ["javac", "--release", "21", "-encoding", "UTF-8", filename], tmp, tmp))
                         if item["commands"][-1]["exit_code"] != 0:
                             raise RuntimeError("compilation failed")
-                        run = command(["java", "-cp", tmp, "Main"], tmp)
+                        run = command(["java", "-cp", tmp, "Main"], tmp, tmp)
                     else:
                         run = command(["php", "-d", "display_errors=stderr",
-                                       "-d", "error_reporting=-1", filename], tmp)
+                                       "-d", "error_reporting=-1", filename], tmp, tmp)
                     item["commands"].append(run)
                     item["passed"] = (run["exit_code"] == 0 and not run["stderr"]
                                       and run["stdout"] == spec["stdout"])

@@ -38,7 +38,10 @@ def main():
                 raise AssertionError({'path': path, 'output': output, 'stderr': process.stderr, 'expected': expected})
             if expected is None and ('# pass 1' not in output or '# fail 0' not in output):
                 raise AssertionError(output)
-            results.append({'source': path, 'status': 'PASS', 'output': output})
+            # TAP includes scheduler-dependent timing. Keep it out of the committed
+            # evidence while retaining the semantic pass/fail counters above.
+            report_output = re.sub(r'(duration_ms: )\d+(?:\.\d+)?', r'\1<variable>', output)
+            results.append({'source': path, 'status': 'PASS', 'output': report_output})
     version = subprocess.check_output([args.node, '--version'], text=True).strip()
     report = {'node': version, 'results': results, 'scope': 'Seven selected complete added examples only. Frameworks, databases, clusters, deployment and historical snippets are not executed by this check.'}
     args.report.parent.mkdir(parents=True, exist_ok=True)
