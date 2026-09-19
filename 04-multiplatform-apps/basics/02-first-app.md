@@ -152,7 +152,7 @@ const styles = StyleSheet.create({
 });
 ```
 
-保存后设备上的文案会立即热更新——这就是 Metro 的 Fast Refresh。
+保存后 Metro 会尝试通过 Fast Refresh 更新设备上的界面；能否保留组件状态取决于改动是否满足刷新边界。若更新失败或状态不符合预期，按提示完整重新加载再判断代码效果。
 
 ## 🛠️ 真机运行
 

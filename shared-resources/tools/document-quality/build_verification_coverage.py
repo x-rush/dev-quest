@@ -112,6 +112,9 @@ def records_from_reports():
     go_rust_seventh = load("go-rust-seventh-body-validation.json")
     for row in go_rust_seventh.get("cases", []):
         add_record(records, row.get("path"), "runtime", "go-rust-seventh-body-validation.json", go_rust_seventh.get("scope", "selected Go/Rust seventh body example"), "PASS" if row.get("passed") else "FAIL")
+    go_php_java_ninth = load("go-php-java-ninth-runtime.json")
+    for row in go_php_java_ninth.get("results", []):
+        add_record(records, row.get("document"), "runtime", "go-php-java-ninth-runtime.json", go_php_java_ninth.get("scope", "selected Go/PHP/Java ninth runtime example"), "PASS" if row.get("passed") else "FAIL")
     php_java_p1_runtime = load("php-java-p1-runtime-results.json")
     for row in php_java_p1_runtime.get("cases", []):
         add_record(records, row.get("document"), "runtime", "php-java-p1-runtime-results.json", php_java_p1_runtime.get("scope", "selected PHP/Java P1 runtime example"), "PASS" if row.get("passed") else "FAIL")

@@ -82,9 +82,11 @@ struct SwiftNotesApp: App {
         }
         .modelContainer(for: Note.self)          // SwiftData 容器（详见第 08 课）
         
+        #if os(macOS)
         Settings {
-            SettingsView()                        // macOS/iOS 设置场景
+            SettingsView()                        // macOS 设置场景
         }
+        #endif
     }
 }
 ```
@@ -164,7 +166,7 @@ struct CounterView: View {
 }
 ```
 
-按下 `⌥⌘↩` 切换到 Canvas，即可实时预览；直接在预览中点击、滚动，交互与真机一致。改代码，预览增量刷新，无需 `⌘R`。
+按下 `⌥⌘↩` 切换到 Canvas，即可查看预览；可在支持的预览中进行部分点击和滚动交互。它适合快速检查布局与状态展示，但不能替代模拟器或真机对生命周期、权限、网络和系统行为的验证。改代码后预览通常会增量刷新，无需每次都 `⌘R`。
 
 ### 4.2 让预览更接近真实
 

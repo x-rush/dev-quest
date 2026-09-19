@@ -7,11 +7,11 @@
 | 指标 | 数量 |
 |---|---:|
 | 纳入模块文档 | 642 |
-| 主状态：not_verified | 511 |
-| 主状态：runtime | 131 |
+| 主状态：not_verified | 508 |
+| 主状态：runtime | 134 |
 | 验证措辞出现次数 | 126 |
-| 措辞分类：source_has_limited_runtime_evidence | 81 |
-| 措辞分类：unbound_verification_wording | 45 |
+| 措辞分类：source_has_limited_runtime_evidence | 82 |
+| 措辞分类：unbound_verification_wording | 44 |
 
 ## 语法级覆盖（不能当作运行覆盖）
 
@@ -80,7 +80,7 @@
 | Go | [01-go-backend/reference/language-concepts/07-error-handling.md](../../../../01-go-backend/reference/language-concepts/07-error-handling.md) | `not_verified` | 0 | 0 |
 | Go | [01-go-backend/reference/language-concepts/08-concurrency-basics.md](../../../../01-go-backend/reference/language-concepts/08-concurrency-basics.md) | `not_verified` | 0 | 0 |
 | Go | [01-go-backend/reference/language-concepts/09-generics.md](../../../../01-go-backend/reference/language-concepts/09-generics.md) | `not_verified` | 0 | 0 |
-| Go | [01-go-backend/reference/language-concepts/10-slice-semantics.md](../../../../01-go-backend/reference/language-concepts/10-slice-semantics.md) | `not_verified` | 0 | 0 |
+| Go | [01-go-backend/reference/language-concepts/10-slice-semantics.md](../../../../01-go-backend/reference/language-concepts/10-slice-semantics.md) | `runtime` | 1 | 0 |
 | Go | [01-go-backend/reference/language-concepts/11-map-semantics.md](../../../../01-go-backend/reference/language-concepts/11-map-semantics.md) | `not_verified` | 0 | 0 |
 | Go | [01-go-backend/reference/language-concepts/12-channel-semantics.md](../../../../01-go-backend/reference/language-concepts/12-channel-semantics.md) | `not_verified` | 0 | 1 |
 | Go | [01-go-backend/reference/language-concepts/13-interface-semantics.md](../../../../01-go-backend/reference/language-concepts/13-interface-semantics.md) | `not_verified` | 0 | 0 |
@@ -443,7 +443,7 @@
 | PHP | [07-php-mastery/reference/language-concepts/10-datetime.md](../../../../07-php-mastery/reference/language-concepts/10-datetime.md) | `not_verified` | 0 | 0 |
 | PHP | [07-php-mastery/reference/language-concepts/11-errors-exceptions.md](../../../../07-php-mastery/reference/language-concepts/11-errors-exceptions.md) | `not_verified` | 0 | 0 |
 | PHP | [07-php-mastery/reference/language-concepts/12-modern-php-85.md](../../../../07-php-mastery/reference/language-concepts/12-modern-php-85.md) | `not_verified` | 0 | 0 |
-| PHP | [07-php-mastery/reference/language-concepts/13-weak-comparison.md](../../../../07-php-mastery/reference/language-concepts/13-weak-comparison.md) | `not_verified` | 0 | 1 |
+| PHP | [07-php-mastery/reference/language-concepts/13-weak-comparison.md](../../../../07-php-mastery/reference/language-concepts/13-weak-comparison.md) | `runtime` | 1 | 1 |
 | PHP | [07-php-mastery/reference/language-concepts/14-references-value-semantics.md](../../../../07-php-mastery/reference/language-concepts/14-references-value-semantics.md) | `not_verified` | 0 | 0 |
 | PHP | [07-php-mastery/reference/language-concepts/15-superglobals.md](../../../../07-php-mastery/reference/language-concepts/15-superglobals.md) | `not_verified` | 0 | 0 |
 | PHP | [07-php-mastery/reference/language-concepts/16-operators.md](../../../../07-php-mastery/reference/language-concepts/16-operators.md) | `not_verified` | 0 | 0 |
@@ -499,7 +499,7 @@
 | Java | [08-java-revisited/reference/language-concepts/04-concurrency-api.md](../../../../08-java-revisited/reference/language-concepts/04-concurrency-api.md) | `not_verified` | 0 | 0 |
 | Java | [08-java-revisited/reference/language-concepts/05-records-sealed-patterns.md](../../../../08-java-revisited/reference/language-concepts/05-records-sealed-patterns.md) | `not_verified` | 0 | 0 |
 | Java | [08-java-revisited/reference/language-concepts/06-exceptions-resources.md](../../../../08-java-revisited/reference/language-concepts/06-exceptions-resources.md) | `runtime` | 2 | 0 |
-| Java | [08-java-revisited/reference/language-concepts/07-string-immutability-pool.md](../../../../08-java-revisited/reference/language-concepts/07-string-immutability-pool.md) | `not_verified` | 0 | 0 |
+| Java | [08-java-revisited/reference/language-concepts/07-string-immutability-pool.md](../../../../08-java-revisited/reference/language-concepts/07-string-immutability-pool.md) | `runtime` | 1 | 0 |
 | Java | [08-java-revisited/reference/language-concepts/08-enums.md](../../../../08-java-revisited/reference/language-concepts/08-enums.md) | `not_verified` | 0 | 0 |
 | Java | [08-java-revisited/reference/language-concepts/09-annotations.md](../../../../08-java-revisited/reference/language-concepts/09-annotations.md) | `not_verified` | 0 | 0 |
 | Java | [08-java-revisited/reference/language-concepts/10-interface-semantics.md](../../../../08-java-revisited/reference/language-concepts/10-interface-semantics.md) | `not_verified` | 0 | 0 |

@@ -17,13 +17,13 @@
   "summary": {
     "documents": 642,
     "by_primary_state": {
-      "not_verified": 511,
-      "runtime": 131
+      "not_verified": 508,
+      "runtime": 134
     },
     "verification_wording_occurrences": 126,
     "marker_classification": {
-      "source_has_limited_runtime_evidence": 81,
-      "unbound_verification_wording": 45
+      "source_has_limited_runtime_evidence": 82,
+      "unbound_verification_wording": 44
     }
   },
   "documents": [
@@ -693,13 +693,13 @@
     },
     {
       "path": "01-go-backend/reference/language-concepts/10-slice-semantics.md",
-      "sha256": "aeb276ad60cac655da0162cfa6bed24bf940783db7754bdff20c4117f1c224ea",
+      "sha256": "6749b6d99eeb7adc96ac08e4a69ff0aa253d948744b434a62f1b4391262d666d",
       "verification": [
         {
-          "mode": "not_verified",
-          "status": "NOT_VERIFIED",
-          "report": null,
-          "scope": "No named runtime or syntax evidence is recorded for this document."
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "go-php-java-ninth-runtime.json",
+          "scope": "Three named P1 core/standard-library Markdown programs (one each for Go, PHP, and Java) extracted unchanged from pages that had no runtime-evidence marker. Portable language/library behavior only."
         }
       ],
       "marker_count": 0
@@ -2055,7 +2055,7 @@
     },
     {
       "path": "03-tanstack-stack/basics/02-headless-philosophy.md",
-      "sha256": "6ddc299b47155b559f5d6ccbef1e6d70e1cc788674ffaf5ce35f1f5dd4730323",
+      "sha256": "763a7a3c8ca38673982918503316d45c311dc07bdb5cb25ca599b13593c89f6b",
       "verification": [
         {
           "mode": "not_verified",
@@ -2873,7 +2873,7 @@
     },
     {
       "path": "04-multiplatform-apps/basics/02-first-app.md",
-      "sha256": "729c74b9dac17560ede8e5ce588e17ea79a031b609873705573e6b2dedbe9462",
+      "sha256": "5fd3928a783afb4511917cbbd557a4b6868059184a9ca50d1403d54917ec754c",
       "verification": [
         {
           "mode": "not_verified",
@@ -3549,7 +3549,7 @@
     },
     {
       "path": "05-kotlin-compose/basics/02-first-compose-app.md",
-      "sha256": "007e759b2fbfa6f887705c2071f024a4664a47721bcdcbb19a0dc0c794d708d0",
+      "sha256": "a81ba72de989f51a269ca85bffd34acf6f9971c79796f1bacc19e7b662b70d03",
       "verification": [
         {
           "mode": "not_verified",
@@ -4263,7 +4263,7 @@
     },
     {
       "path": "06-swift-swiftui/basics/02-first-swiftui-app.md",
-      "sha256": "eb581aaad9df3df7a44fdabe9eb2b1347c9114640de766656cb493643dfc0d44",
+      "sha256": "94cc7c29b2d392da20cc750b9b8f48a6b6c04ab8ec29603c62f813b5bd198d48",
       "verification": [
         {
           "mode": "not_verified",
@@ -5616,13 +5616,13 @@
     },
     {
       "path": "07-php-mastery/reference/language-concepts/13-weak-comparison.md",
-      "sha256": "fab0973d70f44855d290585a2f7be218312d64fb65c1559e6434a2d9cb3a1a5b",
+      "sha256": "cd09ea26b9452879d24e076c3d57d358433c024859b38ac4f90d8f4a7e763812",
       "verification": [
         {
-          "mode": "not_verified",
-          "status": "NOT_VERIFIED",
-          "report": null,
-          "scope": "No named runtime or syntax evidence is recorded for this document."
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "go-php-java-ninth-runtime.json",
+          "scope": "Three named P1 core/standard-library Markdown programs (one each for Go, PHP, and Java) extracted unchanged from pages that had no runtime-evidence marker. Portable language/library behavior only."
         }
       ],
       "marker_count": 1
@@ -5850,7 +5850,7 @@
     },
     {
       "path": "08-java-revisited/LEARNING_GUIDE.md",
-      "sha256": "cc9d2caaa7ffc5a13b19b21d7ce459d78d2baaf67c817f619524454967cd5103",
+      "sha256": "05cc1b0bf926c20f92998d0c308e32b7c7b9691572aeaa16e182bdfa264c8170",
       "verification": [
         {
           "mode": "not_verified",
@@ -6428,13 +6428,13 @@
     },
     {
       "path": "08-java-revisited/reference/language-concepts/07-string-immutability-pool.md",
-      "sha256": "424949e73ad896383785cd737dcd36e200507c27d9974c45dc209bbdfdb56e7e",
+      "sha256": "074f75bc187c473e23bd70e96c3c4f3dc406695bb7e1829f861f8309da17e2d1",
       "verification": [
         {
-          "mode": "not_verified",
-          "status": "NOT_VERIFIED",
-          "report": null,
-          "scope": "No named runtime or syntax evidence is recorded for this document."
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "go-php-java-ninth-runtime.json",
+          "scope": "Three named P1 core/standard-library Markdown programs (one each for Go, PHP, and Java) extracted unchanged from pages that had no runtime-evidence marker. Portable language/library behavior only."
         }
       ],
       "marker_count": 0
@@ -8227,7 +8227,7 @@
     },
     {
       "path": "11-rust-cross-platform/LEARNING_GUIDE.md",
-      "sha256": "e4ee8c9f6cd7f265da04784bae2415a8456ffe565d4faf006f3c263fdc768531",
+      "sha256": "c605fc8d41493b7372dd17234c1d33886f184956f7d218d39ab1102127b90133",
       "verification": [
         {
           "mode": "not_verified",
@@ -9271,9 +9271,9 @@
     },
     {
       "path": "07-php-mastery/reference/language-concepts/13-weak-comparison.md",
-      "line": 112,
+      "line": 127,
       "excerpt": "前置是类型、布尔值和数组。强制转换不是验证：把 'abc' 转为 int 会丢失原始信息，之后再 === 0 也无法知道输入原来不是零。先验证原始类型、格式和范围，再把已验证的值转为内部类型，最后做业务比较。",
-      "classification": "unbound_verification_wording"
+      "classification": "source_has_limited_runtime_evidence"
     },
     {
       "path": "08-java-revisited/LEARNING_GUIDE.md",

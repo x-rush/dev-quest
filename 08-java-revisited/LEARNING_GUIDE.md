@@ -41,7 +41,7 @@ JDK 与框架基线见[模块 README](README.md)。语言基础和控制台首�
 
 | 阶段与入口 | 练习输入与动作 | 通过条件 |
 | --- | --- | --- |
-| 普通对象：[控制台图书项目](basics/08-first-project.md) | 新增图书、查询已有和未知 ID | 不启动 Spring 也能运行；未知 ID 按契约返回空结果或业务异常，测试与说明保持一致 |
+| 普通对象：[控制台图书项目](basics/08-first-project.md) | 新增 ISBN、借出后用新进程查询，再执行 `find` 查询未知 ISBN；另用 `search` 查询无匹配词 | 已借出状态可读回；未知 ISBN 的 `find` 报错并退出 1，`search` 无匹配则成功输出空列表；不能把内部 Optional 的空值当作 CLI 成功结果 |
 | HTTP 映射：[Todo API](projects/01-todo-api.md) | 创建合法条目、提交空标题、查询不存在 ID | 状态码和响应与接口约定一致；能指出 Java 异常在哪一层转成 HTTP 响应 |
 | 持久化：[图书管理系统](projects/02-library-management.md) | 写入后重启；制造一组操作中的第二步失败 | 持久数据可读回，事务应回滚的部分确实未保留；验证使用真实测试数据库而非只检查 Mock 调用 |
 

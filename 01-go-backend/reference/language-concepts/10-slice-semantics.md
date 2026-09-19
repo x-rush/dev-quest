@@ -9,7 +9,7 @@
 ## 📖 语法 / 签名
 
 ```go
-// 切片头（runtime 内部表示，约 24 字节）：ptr + len + cap
+// 切片头（概念模型；实际运行时布局和大小不是语言契约）：ptr + len + cap
 type slice struct {
     array unsafe.Pointer // 指向底层数组某元素
     len   int            // 当前元素个数
@@ -37,6 +37,24 @@ s5 := arr[1:3:3]              // cap = max - low，append 不再写回原数组
 **append 的规范保证与实现细节**：容量足够时可复用原数组，不足时会分配足够大的新数组。具体增长比例、初次容量和内存规格取整不是语言契约，会随实现和元素大小变化。原先列出的固定容量序列不能作为跨版本验收标准；实验应记录本机结果，并验证数据和共享关系。
 
 ## 💡 示例
+
+<!-- ninth-reference-case: {"id":"go-slice-full-expression","stdout":"[9 2 3]\n[9 8]\n"} -->
+```go
+package main
+
+import "fmt"
+
+func main() {
+	a := []int{1, 2, 3}
+	s := a[:1:1]
+	s[0] = 9
+	fmt.Println(a)
+	s = append(s, 8)
+	fmt.Println(s)
+}
+```
+
+这个完整程序同时证明两件容易混淆的事：三索引切片不会隔离既有元素的写入，但会使随后超出容量的 `append` 分配新底层数组。
 
 ```go
 package main

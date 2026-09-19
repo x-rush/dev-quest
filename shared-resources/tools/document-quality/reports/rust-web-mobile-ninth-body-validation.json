@@ -1,0 +1,62 @@
+{
+  "schema_version": 1,
+  "purpose": "Direct in-repository body-extraction validation for six P1 foundation pages selected while their primary verification state was not_verified.",
+  "method": "For each case, PowerShell read the named Markdown file, extracted its body from the exact anchor onward, and asserted that the required body text occurred in that extracted region.",
+  "command": "Get-Content <source> -Raw; IndexOf(<anchor>); Substring(<anchor>); Contains(<required_text>)",
+  "passed": 6,
+  "total": 6,
+  "results": [
+    {
+      "case": "rust-ownership-borrow-body",
+      "source": "11-rust-cross-platform/basics/02-ownership-borrowing.md",
+      "source_sha256": "b9c5088120f373b3ffefa79677d12f8157668ad1cee4a9c489bd4c0021433e12",
+      "anchor": "### 示例二：借用与借用规则",
+      "required_text": "let r3 = &mut s;",
+      "status": "PASS"
+    },
+    {
+      "case": "next-app-router-body",
+      "source": "02-nextjs-frontend/basics/02-first-nextjs-app.md",
+      "source_sha256": "4575daa37cc01d9bb0af5208f1422c9aebc093b2ce17154e7231206efbf7edd6",
+      "anchor": "// src/app/about/page.tsx",
+      "required_text": "export default function AboutPage",
+      "status": "PASS"
+    },
+    {
+      "case": "tanstack-headless-v8-body",
+      "source": "03-tanstack-stack/basics/02-headless-philosophy.md",
+      "source_sha256": "5b978d62e6ce895dcef1e84554bb7d441081c4103a8ac5cbff0aa3b8000b3dda",
+      "anchor": "// 写法 B：Headless（TanStack Table v8，React 适配器）",
+      "required_text": "useReactTable",
+      "status": "PASS"
+    },
+    {
+      "case": "react-native-fast-refresh-boundary-body",
+      "source": "04-multiplatform-apps/basics/02-first-app.md",
+      "source_sha256": "dd0a01450eadf8580cf3c630b14ef62aaaecd1b26d6d869069579d9165a5abeb",
+      "anchor": "保存后 Metro 会尝试通过 Fast Refresh 更新设备上的界面",
+      "required_text": "完整重新加载",
+      "status": "PASS"
+    },
+    {
+      "case": "kotlin-preview-boundary-body",
+      "source": "05-kotlin-compose/basics/02-first-compose-app.md",
+      "source_sha256": "9748e5ff9f803689070fb3367beb041e87f5dc4aceb7b6df5f79e19391371620",
+      "anchor": "`@Preview` 供 Android Studio 的设计工具调用",
+      "required_text": "仍会参与应用代码的编译",
+      "status": "PASS"
+    },
+    {
+      "case": "swift-preview-platform-boundary-body",
+      "source": "06-swift-swiftui/basics/02-first-swiftui-app.md",
+      "source_sha256": "9b6cb9187862a7a5374937b0f27cfca4cd58e8d8f0dff414674f5e0744876135",
+      "anchor": "#if os(macOS)",
+      "required_text": "不能替代模拟器或真机",
+      "status": "PASS"
+    }
+  ],
+  "limits": [
+    "This is source-body presence and boundary evidence only; it does not compile or run Rust, Next.js, TanStack, React Native, Compose, or SwiftUI programs.",
+    "No result establishes whole-document correctness, a framework build, browser behavior, device behavior, or external-service behavior."
+  ]
+}

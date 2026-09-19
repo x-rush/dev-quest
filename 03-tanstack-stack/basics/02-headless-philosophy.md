@@ -73,14 +73,26 @@ UI 定制     = 你的 JSX + 你的样式方案（Tailwind / CSS Modules / 任�
 ```
 
 ```tsx
-// 写法 B：Headless（TanStack Table v9）
-// 状态逻辑全部就绪，DOM 结构完全自主
-const features = tableFeatures({
-  rowSortingFeature,                        // 排序特性（逻辑层）
-  columnVisibilityFeature,                  // 可见性特性：row.getVisibleCells() 需注册本特性
-  sortedRowModel: createSortedRowModel(),   // 排序逻辑，不是 UI
+// 写法 B：Headless（TanStack Table v8，React 适配器）
+// 表格状态与行模型由库管理；DOM 结构仍完全自主
+import { useState } from 'react'
+import {
+  flexRender,
+  getCoreRowModel,
+  getSortedRowModel,
+  useReactTable,
+} from '@tanstack/react-table'
+import type { SortingState } from '@tanstack/react-table'
+
+const [sorting, setSorting] = useState<SortingState>([])
+const table = useReactTable({
+  data,
+  columns,
+  state: { sorting },
+  onSortingChange: setSorting,
+  getCoreRowModel: getCoreRowModel(),
+  getSortedRowModel: getSortedRowModel(),
 })
-const table = useTable({ data, columns, features });
 
 // 渲染层完全由你掌控——可以是 <table>，也可以是 <div> 网格
 <table className="w-full border-collapse">
@@ -124,7 +136,7 @@ const table = useTable({ data, columns, features });
 | 库 | 版本 | 职责 | Headless 体现在 |
 |----|------|------|----------------|
 | Query | v5 | 服务端状态：缓存/失效/重试/乐观更新 | 与请求库、UI 框架解耦 |
-| Table | v9 | 表格状态机：排序/筛选/分组/分页 | 无任何表格 DOM |
+| Table | v8 | 表格状态机：排序/筛选/分组/分页 | 无任何表格 DOM |
 | Router | v1 | 类型安全文件路由 | 内置方案不绑定 UI，导航与布局自定 |
 | Form | v1 | 表单状态与校验 | 字段渲染完全自主 |
 | Start | v1 | 基于 Router + Query 的全栈 SSR 框架 | 渲染层可配 |
@@ -134,7 +146,7 @@ const table = useTable({ data, columns, features });
 
 - **关注点分离**：数据逻辑与视觉呈现的变化频率不同，分开演化互不拖累
 - **样式方案自由**：Tailwind、shadcn/ui、自研设计系统都能无缝接入
-- **逻辑可测试**：`useTable`、`QueryClient` 都是纯 JS 对象，可用 Vitest 单测状态机而无需渲染
+- **逻辑可测试**：可将列定义、排序状态和数据转换抽成纯函数；`QueryClient` 也可在不渲染组件时单测。`useReactTable` 是 React Hook，应在组件或 Hook 测试环境中调用。
 - **升级独立**：UI 重构不必连带重写业务逻辑；TanStack 升级也不污染你的视觉层
 
 **代价也要清楚**：

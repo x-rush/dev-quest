@@ -45,6 +45,7 @@
 | [Go P1 页面验证](reports/go-rust-p1-page-validation.md) | Go 内置函数和标准库页面的 2 个正文完整程序验证；报告不主张 Rust 覆盖 |
 | [PHP 与 Java P1 运行验证](reports/php-java-p1-runtime-report.md) | PHP/Java 关键词、内置 API 和标准库中的 6 个正文完整程序验证 |
 | [Go 第七批正文验证](reports/go-rust-seventh-body-validation.md) | Go 关键词、内置函数、context 和数据类型的 4 个正文完整程序验证；报告不主张 Rust 覆盖 |
+| [Go、PHP 与 Java 第九批运行验证](reports/go-php-java-ninth-runtime.md) | Go 切片、PHP 弱比较与 Java String 的 3 个正文完整程序验证 |
 | [PHP 与 Java 参考案例验证](reports/php-java-reference-cases-report.md) | PHP/Java 关键词、内置函数和标准库的 17 个正文完整程序验证 |
 | [Rust、PHP 与 Java 第八批正文验证](reports/rust-php-java-eighth-body-validation.md) | 三个此前未验证核心页面的 Rust 所有权、PHP 控制流与 Java 函数式接口案例 |
 | [Next、Node 与 Python 基础验证](reports/next-node-python-basics-report.md) | 三个此前未验证基础页面的 TypeScript 边界、Node ESM 和 Python 绑定示例；Next 仅验证类型擦除执行 |

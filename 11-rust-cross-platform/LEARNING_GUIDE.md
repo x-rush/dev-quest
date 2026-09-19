@@ -42,10 +42,14 @@ Rust 把所有权与借用约束放进类型检查。先用 CLI 理解数据如�
 | 阶段与入口 | 练习输入与动作 | 通过条件 |
 | --- | --- | --- |
 | 借用与结果：[所有权](basics/02-ownership-borrowing.md)、[错误处理](basics/05-error-handling.md) | 用 &str 接收同一个 String 两次；再改成按值接收并比较编译结果 | 能解释移动和借用；涉及长度时声明计算字节数还是字符数，中文输入也符合契约 |
-| 完整工具：[Cargo 与测试](basics/10-cargo-testing.md)、[CLI 项目](projects/01-cli-tool.md) | 正常输入、格式错误、文件不存在 | Result 的错误有调用方处理，单元测试和命令行结果一致；不使用 unwrap 隐藏预期输入错误 |
+| 完整工具：[Cargo 与测试](basics/10-cargo-testing.md)、[CLI 项目](projects/01-cli-tool.md) | 指向尚不存在的测试文件执行 `list`，再新增、重启读取；分别提交空白任务、未知 ID 和损坏 JSON | 文件不存在时成功显示空列表；成功新增后可读回；空白任务、未知 ID、损坏 JSON 非零退出且原数据不变，不能把所有读取错误都当首次运行 |
 | 应用分支：[桌面笔记](projects/02-tauri-notes-app.md)或 [Axum API](projects/03-axum-rest-api.md) | 选择一条路径，完成一次创建和读取，再触发非法输入 | 桌面命令或 HTTP 路由能往返；界面/接口能显示失败。平台打包、数据库与 WebSocket 另设验收 |
 
 每阶段保留实际输入、输出和一个失败案例。只阅读或复制成功代码，不等同于已经通过验收。练习用小功能承接已学知识，大型项目的扩展需求可按需选做。
+
+进入 CLI 前，先能解释 [Result 的传播](basics/05-error-handling.md)，并完成 [Cargo 与单元测试](basics/10-cargo-testing.md) 的基础部分。交付 `Cargo.toml`、`Cargo.lock`、按正文四个代码块顺序组成的 `src/main.rs`，以及记录命令、退出码和文件变化的 `LEARNING.md`。在独立练习目录使用同一个 `--file` 路径运行全部案例；相对路径跟随当前工作目录，换目录后的空列表不能当作持久化失败。
+
+编译或依赖失败回 [环境与工具链](basics/01-environment-setup.md)，任务操作失败回 [CLI 正文](projects/01-cli-tool.md) 的 `run` 分支，损坏文件行为回该页 `load` 和测试；先保留失败证据，不要删除数据来消除错误。`cargo test --locked` 通过后仍需用新进程验证一次新增与读回。通过这两个层级后，再补 [并发与 async](basics/09-concurrency-async.md)，选择上表桌面或 API 分支；安装到 PATH 与发布不属于首次完成的必要条件。
 
 ## 框架与高级主题怎么选
 

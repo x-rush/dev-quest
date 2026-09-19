@@ -82,6 +82,21 @@ array_search("a", ["a", "b"]);  // 返回 0——索引 0 本身是假值！
 
 ## 💡 正确姿势
 
+<!-- ninth-reference-case: {"id":"php-strict-search-and-match","stdout":"found:0\ny\n"} -->
+```php
+<?php
+
+$index = array_search('a', ['a', 'b'], true);
+echo $index !== false ? "found:$index\n" : "missing\n";
+
+echo match (0) {
+    'a' => 'x',
+    0 => 'y',
+} . "\n";
+```
+
+这里直接展示两个边界：索引 `0` 必须和 `false` 严格区分，而 `match` 按 `===` 选择整数分支。
+
 ```php
 // 白名单 + 强比较
 $allowed = ['a', 'b'];

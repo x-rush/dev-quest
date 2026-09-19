@@ -62,9 +62,25 @@ final String FINAL_PART = "llo";
 | `formatted(...)` | 格式化 | Java 15+，实例版 `String.format` |
 | `split(regex)` | 正则切分 | 参数是**正则**，见 [java.util.regex 导览](../library-guides/08-java-util-regex.md) |
 | `indexOf` / `contains` / `replace` | 查找与替换 | `replace` 不改原串，返回新串 |
-| `toUpperCase()` / `toLowerCase()` | 大小写转换 | locale 相关，返回新对象 |
+| `toUpperCase()` / `toLowerCase()` | 大小写转换 | locale 相关；结果不变时可以返回原对象，不能把是否新建对象当作语义 |
 
 ## 💡 示例
+
+<!-- ninth-reference-case: {"id":"java-string-pool-and-content","stdout":"true\nfalse\ntrue\nabc\n"} -->
+```java
+public class Main {
+    public static void main(String[] args) {
+        String literal = "abc";
+        String constructed = new String("abc");
+        System.out.println(literal == "a" + "bc");
+        System.out.println(literal == constructed);
+        System.out.println(literal.equals(constructed));
+        System.out.println(literal.toUpperCase().toLowerCase());
+    }
+}
+```
+
+程序把对象身份和内容相等分开：常量表达式拼接与字面量共享池中实例，`new String` 不共享，但两个对象的内容仍由 `equals` 判定为相等。
 
 ```java
 public class StringPoolDemo {

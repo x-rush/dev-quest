@@ -1,0 +1,107 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-09-19T14:34:49.317Z",
+  "scope": "Three named P1 core/standard-library Markdown programs (one each for Go, PHP, and Java) extracted unchanged from pages that had no runtime-evidence marker. Portable language/library behavior only.",
+  "execution_boundary": "Docker network disabled; read-only root filesystem and source mount; only /tmp is writable. This does not validate whole documents, frameworks, servers, databases, browsers, devices, or platform integrations.",
+  "results": [
+    {
+      "id": "go-slice-full-expression",
+      "document": "01-go-backend/reference/language-concepts/10-slice-semantics.md",
+      "language": "go",
+      "image": "golang:1.27",
+      "source_sha256": "1b0c33f3b821902fff1a5aa78cdfaef426d320090f4694f72656f7020b21992f",
+      "expected_stdout": "[9 2 3]\n[9 8]\n",
+      "actual_stdout": "[9 2 3]\n[9 8]\n",
+      "execution": {
+        "command": [
+          "docker",
+          "run",
+          "--rm",
+          "--network",
+          "none",
+          "--read-only",
+          "--tmpfs",
+          "/tmp:exec",
+          "-v",
+          "C:\\Users\\77958\\AppData\\Local\\Temp\\dq-go-php-java-ninth-nhxPBT\\go-slice-full-expression:/work:ro",
+          "-w",
+          "/work",
+          "golang:1.27",
+          "sh",
+          "-c",
+          "GOCACHE=/tmp/go-cache go run main.go"
+        ],
+        "exit_code": 0,
+        "stdout": "[9 2 3]\n[9 8]\n",
+        "stderr": ""
+      },
+      "passed": true
+    },
+    {
+      "id": "php-strict-search-and-match",
+      "document": "07-php-mastery/reference/language-concepts/13-weak-comparison.md",
+      "language": "php",
+      "image": "php:8.5-cli",
+      "source_sha256": "3e0885daa6de0a1d16d31c38510dc8c02582d3675d24cd2e34fe0f5505a04071",
+      "expected_stdout": "found:0\ny\n",
+      "actual_stdout": "found:0\ny\n",
+      "execution": {
+        "command": [
+          "docker",
+          "run",
+          "--rm",
+          "--network",
+          "none",
+          "--read-only",
+          "--tmpfs",
+          "/tmp:exec",
+          "-v",
+          "C:\\Users\\77958\\AppData\\Local\\Temp\\dq-go-php-java-ninth-nhxPBT\\php-strict-search-and-match:/work:ro",
+          "-w",
+          "/work",
+          "php:8.5-cli",
+          "php",
+          "main.php"
+        ],
+        "exit_code": 0,
+        "stdout": "found:0\ny\n",
+        "stderr": ""
+      },
+      "passed": true
+    },
+    {
+      "id": "java-string-pool-and-content",
+      "document": "08-java-revisited/reference/language-concepts/07-string-immutability-pool.md",
+      "language": "java",
+      "image": "eclipse-temurin:21-jdk",
+      "source_sha256": "07c6a70988bb64ff11dc80e3cd1efebce1af1042ae57552998eac4aab16b4b05",
+      "expected_stdout": "true\nfalse\ntrue\nabc\n",
+      "actual_stdout": "true\nfalse\ntrue\nabc\n",
+      "execution": {
+        "command": [
+          "docker",
+          "run",
+          "--rm",
+          "--network",
+          "none",
+          "--read-only",
+          "--tmpfs",
+          "/tmp:exec",
+          "-v",
+          "C:\\Users\\77958\\AppData\\Local\\Temp\\dq-go-php-java-ninth-nhxPBT\\java-string-pool-and-content:/work:ro",
+          "-w",
+          "/work",
+          "eclipse-temurin:21-jdk",
+          "sh",
+          "-c",
+          "javac --release 21 -d /tmp/classes Main.java && java -cp /tmp/classes Main"
+        ],
+        "exit_code": 0,
+        "stdout": "true\nfalse\ntrue\nabc\n",
+        "stderr": ""
+      },
+      "passed": true
+    }
+  ],
+  "passed": true
+}
