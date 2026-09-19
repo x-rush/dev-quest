@@ -39,7 +39,7 @@ useState 保存组件状态，useEffect 用于与外部系统同步。派生值�
 完成本文档后，你将能够：
 
 - ✅ 用 useState/useEffect 实现计时器、表单等交互界面
-- ✅ 正确处理 useEffect 的清理函数，避免移动端特有的内存泄漏
+- ✅ 正确处理 useEffect 的清理函数，避免卸载后的无效更新和重复订阅
 - ✅ 把设备能力（网络状态、屏幕方向）封装成可复用的自定义 Hook
 - ✅ 用 Context + useMemo 组织轻量全局状态
 
@@ -80,13 +80,15 @@ function Timer() {
 
   useEffect(() => {
     const id = setInterval(() => setSeconds((s) => s + 1), 1000);
-    // 清理函数：离开页面必须清除定时器，否则泄漏
+    // 清理函数：组件卸载或 effect 重跑前停止仍在运行的 interval
     return () => clearInterval(id);
   }, []); // 空依赖 = 只在挂载后执行一次
 
   return <Text>计时 {seconds} 秒</Text>;
 }
 ```
+
+开发模式的 Strict Mode 可能额外执行一次“设置 → 清理 → 设置”来暴露不完整的清理逻辑，因此订阅回调与清理函数都应能安全地重复执行。
 
 **RN 场景下 useEffect 最常见的三个用途**：
 
@@ -112,14 +114,16 @@ export function useNetworkStatus() {
       setIsConnected(Boolean(state.isConnected));
     });
     // 切回前台时主动刷新一次，模拟器/真机切换网络时更可靠
-    const appState = AppState.addEventListener('change', (s) => {
+    const appStateSubscription = AppState.addEventListener('change', (s) => {
       if (s === 'active') {
-        NetInfo.fetch().then((state) => setIsConnected(Boolean(state.isConnected)));
+        NetInfo.fetch()
+          .then((state) => setIsConnected(Boolean(state.isConnected)))
+          .catch(() => setIsConnected(false)); // 按产品策略选择“未知”或“离线”
       }
     });
     return () => {
       unsubscribe();
-      appState.remove();
+      appStateSubscription.remove();
     };
   }, []);
 
@@ -174,12 +178,12 @@ export function useTheme() {
 
 useState 可以接收对象或数组，React 不会每次渲染都重新采用初始值；只有创建初始值的计算昂贵时，惰性初始化才有实际收益。更新对象时生成新的值，并明确哪些组件需要共享它。[React 的 useState 说明](https://react.dev/reference/react/useState)区分了初始参数与后续更新。
 
-Effect 用于同步订阅等外部系统，注册后应清理；循环更新要查“Effect 修改的状态是否又改变依赖”。Context value 的变化会影响相应消费者，但不能概括成必然重渲染整棵树。先复现一次不必要更新，再决定是否用 memo。
+Effect 用于同步订阅等外部系统；仍可能在组件离开后完成的请求，应取消或忽略其结果。循环更新要查“Effect 修改的状态是否又改变依赖”。Context value 的变化会影响相应消费者，但不能概括成必然重渲染整棵树。先复现一次不必要更新，再决定是否用 memo。
 
 ## ❓ 常见问题
 
 ### Q1: 页面跳走后定时器还在跑？
-**A**: 定时器写在 useEffect 且没有返回清理函数。任何 `setInterval`/`setTimeout`/订阅都必须在 cleanup 中回收；导航卸载时 RN 不会替你做。
+**A**: 经常是 `setInterval` 或订阅写在 useEffect 中却没有返回清理函数。仍会触发的 interval、监听器和请求都应在 cleanup 中停止、取消或让结果失效；已经自然结束且不会再回调的单次 timeout 不必为了形式额外保留。导航页面是否卸载也取决于导航器配置，不能假定跳走必然触发 cleanup。
 
 ### Q2: useEffect 里的接口请求竞态怎么处理？
 **A**: 快速切换参数时旧请求可能后返回覆盖新数据。用 `AbortController` 取消旧请求，或在 setState 前比对请求序号（建议直接用 TanStack Query，见库指南）。
@@ -195,7 +199,7 @@ Effect 用于同步订阅等外部系统，注册后应清理；循环更新要�
 1. 实现 `useCountdown(targetDate)` 返回剩余"天/时/分/秒"
 2. 在界面上展示倒计时，组件卸载后用日志确认定时器已清除
 
-**评估标准**: 1 秒 tick 一次且无泄漏警告。
+**评估标准**: 记录目标时间、连续三次输出和卸载后至少等待两秒的日志；卸载后不再出现 tick。没有警告只是一条线索，不能代替这项行为观察。
 
 ### 练习二：屏幕方向 Hook
 
