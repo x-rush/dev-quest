@@ -160,6 +160,9 @@ def records_from_reports():
     php_java_rust_twentieth = load("php-java-rust-twentieth-runtime.json")
     for row in php_java_rust_twentieth.get("cases", []):
         add_record(records, row.get("source"), "runtime", "php-java-rust-twentieth-runtime.json", php_java_rust_twentieth.get("scope", "selected PHP/Java/Rust twentieth body example"), "PASS" if row.get("status", "").upper() == "PASS" else "FAIL")
+    go_node_python_twentyfirst = load("go-node-python-twentyfirst-runtime.json")
+    for row in go_node_python_twentyfirst.get("cases", []):
+        add_record(records, row.get("source"), "runtime", "go-node-python-twentyfirst-runtime.json", go_node_python_twentyfirst.get("scope", "selected Go/Node/Python twentyfirst body example"), "PASS" if row.get("status", "").upper() == "PASS" else "FAIL")
     next_node_python_basics = load("next-node-python-basics-results.json")
     for row in next_node_python_basics.get("results", []):
         add_record(records, row.get("source"), "runtime", "next-node-python-basics-results.json", row.get("scope", "selected Next/Node/Python basic example"), "PASS" if row.get("status", "").upper() == "PASS" else "FAIL")

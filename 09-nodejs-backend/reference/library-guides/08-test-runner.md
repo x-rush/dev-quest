@@ -163,6 +163,34 @@ test('port input boundaries', () => {
 
 验收为一条测试通过，且错误输入均被拒绝。练习：删除上限检查，65536 用例必须变红；这证明断言能发现契约被破坏。假时钟适合验证重试调度，但不能替代真实网络超时集成测试，微任务推进也要按照当前运行器 API 理解。
 
+## 可复现验证：异步拒绝必须被等待
+
+下面完整文件保存为 `async-boundary.test.mjs`，通过 `node --test async-boundary.test.mjs` 执行。`assert.rejects` 是 Promise；回调标记为 `async`，因此运行器会把这项断言纳入该测试的完成条件。
+
+<!-- terra-twentyfirst-case: node-test-async-rejection -->
+```js
+import test from 'node:test';
+import assert from 'node:assert/strict';
+
+async function parsePositive(text) {
+  await Promise.resolve();
+  if (!/^\d+$/.test(text) || Number(text) < 1) {
+    throw new RangeError('positive integer required');
+  }
+  return Number(text);
+}
+
+test('async boundary accepts valid input and waits for rejection assertions', async () => {
+  assert.equal(await parsePositive('42'), 42);
+  await assert.rejects(parsePositive('0'), {
+    name: 'RangeError', message: 'positive integer required',
+  });
+  await assert.rejects(parsePositive('x'), RangeError);
+});
+```
+
+验收输出包含一个通过的子测试、`# pass 1` 和 `# fail 0`。报告验证器同时拒绝 `not ok` 行；TAP 的持续时间字段由运行器生成，不能作为固定文本契约。此案例不覆盖并发测试的共享状态、计时器 mock 或网络资源清理。
+
 ## 🔗 相关文档
 
 - 📄 **[全局对象速查](../language-concepts/09-globals-reference.md)** — `AbortSignal.timeout` 在集成测试中的超时用法

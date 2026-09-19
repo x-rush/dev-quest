@@ -5,16 +5,16 @@
   "scope": "verification-coverage.json 的 11 个现行教学模块；不含生成报告、归档和不活跃文件。",
   "method": "为 not_verified 文件建立文件级任务，并按覆盖台账同一标记规则重新扫描当前源码以定位逐行任务；仅通过性断言升为 P0，不判断教学内容真伪。",
   "summary": {
-    "items": 530,
+    "items": 533,
     "file_level_items": 479,
-    "unbound_wording_items": 51,
+    "unbound_wording_items": 54,
     "by_priority": {
-      "P1": 225,
+      "P1": 228,
       "P2": 150,
       "P3": 155
     },
     "by_kind": {
-      "核心基础": 209,
+      "核心基础": 212,
       "首项目": 16,
       "框架": 111,
       "部署": 39,
@@ -1394,6 +1394,17 @@
     {
       "priority": "P1",
       "kind": "核心基础",
+      "task": "保留诚实的验证边界，并在补证据时决定是否增加最小练习",
+      "reason": "这行是未验证范围或验证步骤的披露，不是声称已经通过的证据。",
+      "module": "React Native / Multi-platform",
+      "path": "04-multiplatform-apps/reference/language-concepts/10-styling-model.md",
+      "line": 98,
+      "source_excerpt": "**验证边界：** 本轮未构建或运行 RN/鸿蒙工程，未实测旋转与字体缩放。依据官方 [Style](https://reactnative.dev/docs/style)、[Flexbox](https://reactnative.dev/docs/flexbox) 和 [useWindowDimensions](https://reactnative.dev/docs/usewindowdimensions) 核对；以上验收仍待各目标平台执行。",
+      "evidence_action": "保持已有边界说明；若新增示例，记录工具链、命令、预期行为和未覆盖范围。"
+    },
+    {
+      "priority": "P1",
+      "kind": "核心基础",
       "task": "为文档选择一个最小可复现案例并记录限定运行证据",
       "reason": "当前没有与此文件绑定的命名运行或语法证据。",
       "module": "React Native / Multi-platform",
@@ -1863,6 +1874,28 @@
       "line": null,
       "source_excerpt": null,
       "evidence_action": "抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。"
+    },
+    {
+      "priority": "P1",
+      "kind": "核心基础",
+      "task": "保留诚实的验证边界，并在补证据时决定是否增加最小练习",
+      "reason": "这行是未验证范围或验证步骤的披露，不是声称已经通过的证据。",
+      "module": "Swift / SwiftUI",
+      "path": "06-swift-swiftui/reference/language-concepts/09-property-wrappers.md",
+      "line": 87,
+      "source_excerpt": "以下是语法示意，Wrapper 与 x 未定义，不能直接拼入可运行文件。带参数的包装器必须实际声明匹配初始化器；`projectedValue` 只是普通参数标签，不是编译器自动提供的构造方法。",
+      "evidence_action": "保持已有边界说明；若新增示例，记录工具链、命令、预期行为和未覆盖范围。"
+    },
+    {
+      "priority": "P1",
+      "kind": "核心基础",
+      "task": "保留诚实的验证边界，并在补证据时决定是否增加最小练习",
+      "reason": "这行是未验证范围或验证步骤的披露，不是声称已经通过的证据。",
+      "module": "Swift / SwiftUI",
+      "path": "06-swift-swiftui/reference/language-concepts/09-property-wrappers.md",
+      "line": 163,
+      "source_excerpt": "**验证边界与来源：** 本轮核对 [Swift 语言手册：Properties / Property Wrappers](https://docs.swift.org/swift-book/documentation/the-swift-programming-language/properties/)，未执行此 Swift 文件、Xcode 构建或 Toggle 交互。实验给出待验证输入输出，不代表 UserDefaults 持久化、SwiftUI 更新或并发安全已验证。",
+      "evidence_action": "保持已有边界说明；若新增示例，记录工具链、命令、预期行为和未覆盖范围。"
     },
     {
       "priority": "P1",

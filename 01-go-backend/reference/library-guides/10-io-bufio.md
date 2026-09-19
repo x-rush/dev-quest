@@ -152,6 +152,60 @@ func main() {
 
 练习：用 testing/iotest.DataErrReader 包装一个字符串 Reader，使最后数据与 EOF 一起返回，比较你的复制循环与 io.Copy 的结果，应完全一致。再让目标 Writer 在若干字节后返回自定义错误，确认错误能传回调用者。只检查复制出的前缀而不检查错误，会把截断文件误判为成功。选择 io.Reader 参数是为了表达最小能力；若函数还需要 Seek 或 Stat，应使用相应接口或具体文件类型。
 
+## 可复现验证：短读、EOF 与 Scanner 上限
+
+下面的完整程序只使用 `io`、`bufio` 与内存 Reader。它先验证读取循环在同一次调用得到字节和 `io.EOF` 时仍会保留字节，再验证 Scanner 的默认上限会报错，而显式上限能接收同一行。
+
+<!-- terra-twentyfirst-case: go-io-bufio-read-contract -->
+```go
+package main
+
+import (
+	"bufio"
+	"fmt"
+	"io"
+	"strings"
+	"testing/iotest"
+)
+
+func readAll(reader io.Reader) (string, error) {
+	buffer := make([]byte, 2)
+	var output strings.Builder
+	for {
+		n, err := reader.Read(buffer)
+		output.Write(buffer[:n]) // n 个字节必须先处理，即使 err 同时为 EOF
+		if err != nil {
+			if err == io.EOF {
+				return output.String(), nil
+			}
+			return "", err
+		}
+	}
+}
+
+func main() {
+	text, err := readAll(iotest.DataErrReader(strings.NewReader("last")))
+	if err != nil || text != "last" {
+		panic("reader lost final bytes")
+	}
+
+	line := strings.Repeat("x", bufio.MaxScanTokenSize+1)
+	tooSmall := bufio.NewScanner(strings.NewReader(line))
+	if tooSmall.Scan() || tooSmall.Err() == nil {
+		panic("default scanner unexpectedly accepted an oversized token")
+	}
+
+	largeEnough := bufio.NewScanner(strings.NewReader(line))
+	largeEnough.Buffer(make([]byte, 0, 1024), len(line)+1)
+	if !largeEnough.Scan() || len(largeEnough.Text()) != len(line) || largeEnough.Err() != nil {
+		panic("configured scanner did not accept the token")
+	}
+	fmt.Println("io-bufio: final-bytes, default-limit, configured-limit")
+}
+```
+
+预期输出为 `io-bufio: final-bytes, default-limit, configured-limit`。案例只说明 Scanner 的 token 上限与 Reader 的返回契约；它不替代对真实文件、网络连接、缓冲写入错误或内存预算的验证。
+
 ## 🔗 相关条目
 
 - 📄 **[os 包](./11-os.md)** - 文件作为 io.Reader/Writer 的来源

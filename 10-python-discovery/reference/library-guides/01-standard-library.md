@@ -235,6 +235,34 @@ from functools import lru_cache
 def fetch_user(uid: int) -> dict: ...
 ```
 
+## 可复现验证：时区感知时间与 JSON 边界
+
+下面完整程序使用标准库构造 UTC 时间、做 JSON 往返，并确认 naive 时间不能与 aware 时间比较。协议中应明确把 datetime 转成字符串；`json.dumps` 不会自动理解 datetime 对象。
+
+<!-- terra-twentyfirst-case: python-stdlib-time-json-contract -->
+```python
+import json
+from datetime import datetime, timezone
+
+created_at = datetime(2026, 9, 20, 8, 30, tzinfo=timezone.utc)
+payload = {"created_at": created_at.isoformat(), "count": 2}
+encoded = json.dumps(payload, ensure_ascii=False, sort_keys=True)
+decoded = json.loads(encoded)
+
+assert decoded == {"count": 2, "created_at": "2026-09-20T08:30:00+00:00"}
+assert datetime.fromisoformat(decoded["created_at"]) == created_at
+try:
+    _ = datetime(2026, 9, 20, 8, 30) < created_at
+except TypeError:
+    pass
+else:
+    raise AssertionError("naive and aware datetimes compared")
+
+print("stdlib-time-json: UTC round-trip, naive-aware boundary")
+```
+
+预期输出为 `stdlib-time-json: UTC round-trip, naive-aware boundary`。该程序验证内存中的格式和比较边界，不验证本地时区数据库、数据库列类型或 API 的 schema 校验。
+
 > 🧭 深入专篇：[os 与 sys](./04-os-sys.md) · [enum](./05-enum-module.md) · [functools 与 subprocess](./06-functools-subprocess.md)
 
 ---

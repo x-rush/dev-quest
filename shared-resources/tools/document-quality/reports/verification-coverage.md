@@ -9,9 +9,9 @@
 | 纳入模块文档 | 642 |
 | 主状态：not_verified | 479 |
 | 主状态：runtime | 163 |
-| 验证措辞出现次数 | 137 |
+| 验证措辞出现次数 | 140 |
 | 措辞分类：source_has_limited_runtime_evidence | 86 |
-| 措辞分类：unbound_verification_wording | 51 |
+| 措辞分类：unbound_verification_wording | 54 |
 
 ## 语法级覆盖（不能当作运行覆盖）
 
@@ -95,7 +95,7 @@
 | Go | [01-go-backend/reference/library-guides/07-database-sql.md](../../../../01-go-backend/reference/library-guides/07-database-sql.md) | `runtime` | 1 | 0 |
 | Go | [01-go-backend/reference/library-guides/08-time.md](../../../../01-go-backend/reference/library-guides/08-time.md) | `runtime` | 1 | 0 |
 | Go | [01-go-backend/reference/library-guides/09-errors.md](../../../../01-go-backend/reference/library-guides/09-errors.md) | `runtime` | 1 | 0 |
-| Go | [01-go-backend/reference/library-guides/10-io-bufio.md](../../../../01-go-backend/reference/library-guides/10-io-bufio.md) | `runtime` | 1 | 0 |
+| Go | [01-go-backend/reference/library-guides/10-io-bufio.md](../../../../01-go-backend/reference/library-guides/10-io-bufio.md) | `runtime` | 2 | 0 |
 | Go | [01-go-backend/reference/library-guides/11-os.md](../../../../01-go-backend/reference/library-guides/11-os.md) | `runtime` | 1 | 0 |
 | Go | [01-go-backend/reference/library-guides/12-testing.md](../../../../01-go-backend/reference/library-guides/12-testing.md) | `runtime` | 1 | 0 |
 | Go | [01-go-backend/reference/library-guides/13-slices-maps.md](../../../../01-go-backend/reference/library-guides/13-slices-maps.md) | `runtime` | 1 | 0 |
@@ -275,7 +275,7 @@
 | React Native / Multi-platform | [04-multiplatform-apps/reference/language-concepts/07-state-management.md](../../../../04-multiplatform-apps/reference/language-concepts/07-state-management.md) | `not_verified` | 0 | 0 |
 | React Native / Multi-platform | [04-multiplatform-apps/reference/language-concepts/08-bridge-principles.md](../../../../04-multiplatform-apps/reference/language-concepts/08-bridge-principles.md) | `not_verified` | 0 | 0 |
 | React Native / Multi-platform | [04-multiplatform-apps/reference/language-concepts/09-navigation-model.md](../../../../04-multiplatform-apps/reference/language-concepts/09-navigation-model.md) | `not_verified` | 0 | 0 |
-| React Native / Multi-platform | [04-multiplatform-apps/reference/language-concepts/10-styling-model.md](../../../../04-multiplatform-apps/reference/language-concepts/10-styling-model.md) | `not_verified` | 0 | 0 |
+| React Native / Multi-platform | [04-multiplatform-apps/reference/language-concepts/10-styling-model.md](../../../../04-multiplatform-apps/reference/language-concepts/10-styling-model.md) | `not_verified` | 0 | 1 |
 | React Native / Multi-platform | [04-multiplatform-apps/reference/language-concepts/11-new-architecture-terms.md](../../../../04-multiplatform-apps/reference/language-concepts/11-new-architecture-terms.md) | `not_verified` | 0 | 0 |
 | React Native / Multi-platform | [04-multiplatform-apps/reference/language-concepts/12-list-performance-model.md](../../../../04-multiplatform-apps/reference/language-concepts/12-list-performance-model.md) | `not_verified` | 0 | 0 |
 | React Native / Multi-platform | [04-multiplatform-apps/reference/language-concepts/13-platform-api-map.md](../../../../04-multiplatform-apps/reference/language-concepts/13-platform-api-map.md) | `not_verified` | 0 | 0 |
@@ -385,7 +385,7 @@
 | Swift / SwiftUI | [06-swift-swiftui/reference/language-concepts/06-closures.md](../../../../06-swift-swiftui/reference/language-concepts/06-closures.md) | `not_verified` | 0 | 0 |
 | Swift / SwiftUI | [06-swift-swiftui/reference/language-concepts/07-enums-pattern-matching.md](../../../../06-swift-swiftui/reference/language-concepts/07-enums-pattern-matching.md) | `runtime` | 1 | 0 |
 | Swift / SwiftUI | [06-swift-swiftui/reference/language-concepts/08-error-handling.md](../../../../06-swift-swiftui/reference/language-concepts/08-error-handling.md) | `not_verified` | 0 | 0 |
-| Swift / SwiftUI | [06-swift-swiftui/reference/language-concepts/09-property-wrappers.md](../../../../06-swift-swiftui/reference/language-concepts/09-property-wrappers.md) | `not_verified` | 0 | 0 |
+| Swift / SwiftUI | [06-swift-swiftui/reference/language-concepts/09-property-wrappers.md](../../../../06-swift-swiftui/reference/language-concepts/09-property-wrappers.md) | `not_verified` | 0 | 2 |
 | Swift / SwiftUI | [06-swift-swiftui/reference/language-concepts/10-value-types-arc.md](../../../../06-swift-swiftui/reference/language-concepts/10-value-types-arc.md) | `not_verified` | 0 | 0 |
 | Swift / SwiftUI | [06-swift-swiftui/reference/language-concepts/11-actors-sendability.md](../../../../06-swift-swiftui/reference/language-concepts/11-actors-sendability.md) | `not_verified` | 0 | 0 |
 | Swift / SwiftUI | [06-swift-swiftui/reference/language-concepts/12-initialization.md](../../../../06-swift-swiftui/reference/language-concepts/12-initialization.md) | `not_verified` | 0 | 0 |
@@ -561,7 +561,7 @@
 | Node.js | [09-nodejs-backend/reference/library-guides/05-buffer.md](../../../../09-nodejs-backend/reference/library-guides/05-buffer.md) | `runtime` | 2 | 3 |
 | Node.js | [09-nodejs-backend/reference/library-guides/06-util.md](../../../../09-nodejs-backend/reference/library-guides/06-util.md) | `runtime` | 1 | 0 |
 | Node.js | [09-nodejs-backend/reference/library-guides/07-process-lifecycle.md](../../../../09-nodejs-backend/reference/library-guides/07-process-lifecycle.md) | `not_verified` | 0 | 0 |
-| Node.js | [09-nodejs-backend/reference/library-guides/08-test-runner.md](../../../../09-nodejs-backend/reference/library-guides/08-test-runner.md) | `runtime` | 1 | 6 |
+| Node.js | [09-nodejs-backend/reference/library-guides/08-test-runner.md](../../../../09-nodejs-backend/reference/library-guides/08-test-runner.md) | `runtime` | 2 | 6 |
 | Node.js | [09-nodejs-backend/reference/library-guides/09-zlib.md](../../../../09-nodejs-backend/reference/library-guides/09-zlib.md) | `runtime` | 2 | 0 |
 | Node.js | [09-nodejs-backend/reference/quick-references/01-node-cheatsheet.md](../../../../09-nodejs-backend/reference/quick-references/01-node-cheatsheet.md) | `not_verified` | 0 | 0 |
 | Node.js | [09-nodejs-backend/reference/quick-references/02-troubleshooting.md](../../../../09-nodejs-backend/reference/quick-references/02-troubleshooting.md) | `not_verified` | 0 | 0 |
@@ -613,7 +613,7 @@
 | Python | [10-python-discovery/reference/language-concepts/15-closures-and-scope.md](../../../../10-python-discovery/reference/language-concepts/15-closures-and-scope.md) | `runtime` | 1 | 2 |
 | Python | [10-python-discovery/reference/language-concepts/16-classes-and-inheritance.md](../../../../10-python-discovery/reference/language-concepts/16-classes-and-inheritance.md) | `runtime` | 1 | 0 |
 | Python | [10-python-discovery/reference/language-concepts/17-functions-parameters.md](../../../../10-python-discovery/reference/language-concepts/17-functions-parameters.md) | `runtime` | 1 | 9 |
-| Python | [10-python-discovery/reference/library-guides/01-standard-library.md](../../../../10-python-discovery/reference/library-guides/01-standard-library.md) | `runtime` | 1 | 0 |
+| Python | [10-python-discovery/reference/library-guides/01-standard-library.md](../../../../10-python-discovery/reference/library-guides/01-standard-library.md) | `runtime` | 2 | 0 |
 | Python | [10-python-discovery/reference/library-guides/02-ecosystem-libs.md](../../../../10-python-discovery/reference/library-guides/02-ecosystem-libs.md) | `not_verified` | 0 | 0 |
 | Python | [10-python-discovery/reference/library-guides/03-pytest-testing.md](../../../../10-python-discovery/reference/library-guides/03-pytest-testing.md) | `runtime` | 1 | 1 |
 | Python | [10-python-discovery/reference/library-guides/04-os-sys.md](../../../../10-python-discovery/reference/library-guides/04-os-sys.md) | `runtime` | 2 | 5 |

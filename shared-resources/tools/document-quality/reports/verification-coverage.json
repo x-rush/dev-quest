@@ -20,10 +20,10 @@
       "not_verified": 479,
       "runtime": 163
     },
-    "verification_wording_occurrences": 137,
+    "verification_wording_occurrences": 140,
     "marker_classification": {
       "source_has_limited_runtime_evidence": 86,
-      "unbound_verification_wording": 51
+      "unbound_verification_wording": 54
     }
   },
   "documents": [
@@ -888,13 +888,19 @@
     },
     {
       "path": "01-go-backend/reference/library-guides/10-io-bufio.md",
-      "sha256": "106dfa31b913624507a6bb2f69951bab1472f6a46579fa9e42d1a7011dc067db",
+      "sha256": "1c86f26bde2a930c525b36df73f338485d6d4274447389f070e85c0587b8462d",
       "verification": [
         {
           "mode": "runtime",
           "status": "PASSED",
           "report": "go-reference-examples.json",
           "scope": "selected complete program"
+        },
+        {
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "go-node-python-twentyfirst-runtime.json",
+          "scope": "Three named complete P1 core/standard-library Markdown programs are extracted byte-for-byte from marked fences. PASS covers only each listed command and assertion."
         }
       ],
       "marker_count": 0
@@ -3224,7 +3230,7 @@
     },
     {
       "path": "04-multiplatform-apps/reference/language-concepts/06-component-lifecycle.md",
-      "sha256": "117c8c0693e8cc080d54053b701250dbef3d600cfff66bf2105934339710e0e7",
+      "sha256": "a9d73cf2a840e7261a7d504702ca6f84ad614049219c23f2ce337805168b7c19",
       "verification": [
         {
           "mode": "not_verified",
@@ -3276,7 +3282,7 @@
     },
     {
       "path": "04-multiplatform-apps/reference/language-concepts/10-styling-model.md",
-      "sha256": "d566ed388b2244a9f8e269ad7ffafcfe0438e63bcfb85d692f511d9eea7afb25",
+      "sha256": "70531120e4da79c7fc8307e2f6d04711a27fd3bc6a09fe4684592093fe3d7add",
       "verification": [
         {
           "mode": "not_verified",
@@ -3285,7 +3291,7 @@
           "scope": "No named runtime or syntax evidence is recorded for this document."
         }
       ],
-      "marker_count": 0
+      "marker_count": 1
     },
     {
       "path": "04-multiplatform-apps/reference/language-concepts/11-new-architecture-terms.md",
@@ -4724,7 +4730,7 @@
     },
     {
       "path": "06-swift-swiftui/reference/language-concepts/09-property-wrappers.md",
-      "sha256": "b6fe09ea22b3ec43e1a33e30e36cab86a5f8fc81b07277a24004fecf51a65e36",
+      "sha256": "2253686ebc7f9eb2b209c853ef45bfb69e0a7629a3b82c6c2a48eb8cb508d1e3",
       "verification": [
         {
           "mode": "not_verified",
@@ -4733,7 +4739,7 @@
           "scope": "No named runtime or syntax evidence is recorded for this document."
         }
       ],
-      "marker_count": 0
+      "marker_count": 2
     },
     {
       "path": "06-swift-swiftui/reference/language-concepts/10-value-types-arc.md",
@@ -7360,13 +7366,19 @@
     },
     {
       "path": "09-nodejs-backend/reference/library-guides/08-test-runner.md",
-      "sha256": "ab4281598466bc634a018324a22fbef41e0a02931bec856b48071922e25f51a3",
+      "sha256": "481c1c733ec695bbd8c0cc96c1c20ed990e48a8472fa152810bfe029a895645b",
       "verification": [
         {
           "mode": "runtime",
           "status": "PASS",
           "report": "node-reference-examples.json",
           "scope": "selected complete Node.js reference example"
+        },
+        {
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "go-node-python-twentyfirst-runtime.json",
+          "scope": "Three named complete P1 core/standard-library Markdown programs are extracted byte-for-byte from marked fences. PASS covers only each listed command and assertion."
         }
       ],
       "marker_count": 6
@@ -8060,13 +8072,19 @@
     },
     {
       "path": "10-python-discovery/reference/library-guides/01-standard-library.md",
-      "sha256": "359910897762656290004e903739b60eeb26954fd6eb2692dab8e748e9057959",
+      "sha256": "66b66a8079e31d6baaebc7b6eb03242f3b511a3dd3cfdef450783cc33cf0708d",
       "verification": [
         {
           "mode": "runtime",
           "status": "PASS",
           "report": "node-python-core-p1.json",
           "scope": "Four named, complete programs extracted unchanged from two Node and two Python P1 core-reference documents. They run in pre-existing local Docker images with network disabled, a read-only root filesystem and a temporary input bind mount. Only the listed contracts execute; no whole-document, network, database, permission, platform, or framework coverage is claimed."
+        },
+        {
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "go-node-python-twentyfirst-runtime.json",
+          "scope": "Three named complete P1 core/standard-library Markdown programs are extracted byte-for-byte from marked fences. PASS covers only each listed command and assertion."
         }
       ],
       "marker_count": 0
@@ -9216,6 +9234,12 @@
       "classification": "unbound_verification_wording"
     },
     {
+      "path": "04-multiplatform-apps/reference/language-concepts/10-styling-model.md",
+      "line": 98,
+      "excerpt": "**验证边界：** 本轮未构建或运行 RN/鸿蒙工程，未实测旋转与字体缩放。依据官方 [Style](https://reactnative.dev/docs/style)、[Flexbox](https://reactnative.dev/docs/flexbox) 和 [useWindowDimensions](https://reactnative.dev/docs/usewindowdimensions) 核对；以上验收仍待各目标平台执行。",
+      "classification": "unbound_verification_wording"
+    },
+    {
       "path": "04-multiplatform-apps/reference/library-guides/03-storage-options.md",
       "line": 87,
       "excerpt": "- **把异步读当同步初值**：AsyncStorage 返回 Promise。先显示恢复中状态，成功后再开放编辑；反复读取可优先使用内存状态，只有实测需要时再改变底层库",
@@ -9321,6 +9345,18 @@
       "path": "06-swift-swiftui/reference/framework-essentials/06-swift-charts.md",
       "line": 201,
       "excerpt": "折线数据先按时间排序；同一日期多系列使用稳定的系列标识。柱状图通常从零起，截断坐标轴应明确标注。验收包含大字体、VoiceOver、色觉差异以及空数据，颜色不能是表达完成状态的唯一渠道。本页前面的 habit/data 等是项目集成片段，需配套模型，不是独立可运行文件。",
+      "classification": "unbound_verification_wording"
+    },
+    {
+      "path": "06-swift-swiftui/reference/language-concepts/09-property-wrappers.md",
+      "line": 87,
+      "excerpt": "以下是语法示意，Wrapper 与 x 未定义，不能直接拼入可运行文件。带参数的包装器必须实际声明匹配初始化器；`projectedValue` 只是普通参数标签，不是编译器自动提供的构造方法。",
+      "classification": "unbound_verification_wording"
+    },
+    {
+      "path": "06-swift-swiftui/reference/language-concepts/09-property-wrappers.md",
+      "line": 163,
+      "excerpt": "**验证边界与来源：** 本轮核对 [Swift 语言手册：Properties / Property Wrappers](https://docs.swift.org/swift-book/documentation/the-swift-programming-language/properties/)，未执行此 Swift 文件、Xcode 构建或 Toggle 交互。实验给出待验证输入输出，不代表 UserDefaults 持久化、SwiftUI 更新或并发安全已验证。",
       "classification": "unbound_verification_wording"
     },
     {

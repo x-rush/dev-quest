@@ -11,13 +11,13 @@
 - **P2**：框架与部署文档没有命名运行证据。优先建立版本锁定的最小工程、构建或部署演练。
 - **P3**：进阶、测试和其他专题没有命名运行证据。按依赖关系排入后续批次。
 
-台账对应的 51 条未绑定措辞全部保留，并在生成时重新定位到当前源码行。明确写出“尚未验证”、说明如何验证或给出练习要求的行，按所属文件的普通优先级排序，不会被误报成 P0 通过性断言。同一文件可同时有一条文件级缺口和多条逐行任务；两者不能互相抵消。每次验证只能声明其命名案例和环境覆盖的范围。
+台账对应的 54 条未绑定措辞全部保留，并在生成时重新定位到当前源码行。明确写出“尚未验证”、说明如何验证或给出练习要求的行，按所属文件的普通优先级排序，不会被误报成 P0 通过性断言。同一文件可同时有一条文件级缺口和多条逐行任务；两者不能互相抵消。每次验证只能声明其命名案例和环境覆盖的范围。
 
 ## 汇总
 
-- 队列条目：530 条，其中文件级证据缺口 479 条，逐行未绑定验证措辞 51 条。
-- 优先级：P0 0；P1 225；P2 150；P3 155。
-- 分类：核心基础 209；首项目 16；框架 111；部署 39；进阶与测试 155。
+- 队列条目：533 条，其中文件级证据缺口 479 条，逐行未绑定验证措辞 54 条。
+- 优先级：P0 0；P1 228；P2 150；P3 155。
+- 分类：核心基础 212；首项目 16；框架 111；部署 39；进阶与测试 155。
 
 ## 明细
 
@@ -147,6 +147,7 @@
 | P1 | 核心基础 | React Native / Multi-platform | [04-multiplatform-apps/reference/language-concepts/07-state-management.md](../../../../04-multiplatform-apps/reference/language-concepts/07-state-management.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
 | P1 | 核心基础 | React Native / Multi-platform | [04-multiplatform-apps/reference/language-concepts/08-bridge-principles.md](../../../../04-multiplatform-apps/reference/language-concepts/08-bridge-principles.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
 | P1 | 核心基础 | React Native / Multi-platform | [04-multiplatform-apps/reference/language-concepts/09-navigation-model.md](../../../../04-multiplatform-apps/reference/language-concepts/09-navigation-model.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
+| P1 | 核心基础 | React Native / Multi-platform | [04-multiplatform-apps/reference/language-concepts/10-styling-model.md](../../../../04-multiplatform-apps/reference/language-concepts/10-styling-model.md#L98):98 | 保留诚实的验证边界，并在补证据时决定是否增加最小练习<br/>保持已有边界说明；若新增示例，记录工具链、命令、预期行为和未覆盖范围。 | **验证边界：** 本轮未构建或运行 RN/鸿蒙工程，未实测旋转与字体缩放。依据官方 &#91;Style&#93;(https://reactnative.dev/docs/style)、&#91;Flexbox&#93;(https://reactnative.dev/docs/flexbox) 和 &#91;useWindowDimensions&#93;(https://reactnative.dev/docs/usewindowdimensions) 核对；以上验收仍待各目标平台执行。 |
 | P1 | 核心基础 | React Native / Multi-platform | [04-multiplatform-apps/reference/language-concepts/10-styling-model.md](../../../../04-multiplatform-apps/reference/language-concepts/10-styling-model.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
 | P1 | 核心基础 | React Native / Multi-platform | [04-multiplatform-apps/reference/language-concepts/11-new-architecture-terms.md](../../../../04-multiplatform-apps/reference/language-concepts/11-new-architecture-terms.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
 | P1 | 核心基础 | React Native / Multi-platform | [04-multiplatform-apps/reference/language-concepts/12-list-performance-model.md](../../../../04-multiplatform-apps/reference/language-concepts/12-list-performance-model.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
@@ -190,6 +191,8 @@
 | P1 | 核心基础 | Swift / SwiftUI | [06-swift-swiftui/reference/language-concepts/05-protocols-generics.md](../../../../06-swift-swiftui/reference/language-concepts/05-protocols-generics.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
 | P1 | 核心基础 | Swift / SwiftUI | [06-swift-swiftui/reference/language-concepts/06-closures.md](../../../../06-swift-swiftui/reference/language-concepts/06-closures.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
 | P1 | 核心基础 | Swift / SwiftUI | [06-swift-swiftui/reference/language-concepts/08-error-handling.md](../../../../06-swift-swiftui/reference/language-concepts/08-error-handling.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
+| P1 | 核心基础 | Swift / SwiftUI | [06-swift-swiftui/reference/language-concepts/09-property-wrappers.md](../../../../06-swift-swiftui/reference/language-concepts/09-property-wrappers.md#L87):87 | 保留诚实的验证边界，并在补证据时决定是否增加最小练习<br/>保持已有边界说明；若新增示例，记录工具链、命令、预期行为和未覆盖范围。 | 以下是语法示意，Wrapper 与 x 未定义，不能直接拼入可运行文件。带参数的包装器必须实际声明匹配初始化器；`projectedValue` 只是普通参数标签，不是编译器自动提供的构造方法。 |
+| P1 | 核心基础 | Swift / SwiftUI | [06-swift-swiftui/reference/language-concepts/09-property-wrappers.md](../../../../06-swift-swiftui/reference/language-concepts/09-property-wrappers.md#L163):163 | 保留诚实的验证边界，并在补证据时决定是否增加最小练习<br/>保持已有边界说明；若新增示例，记录工具链、命令、预期行为和未覆盖范围。 | **验证边界与来源：** 本轮核对 &#91;Swift 语言手册：Properties / Property Wrappers&#93;(https://docs.swift.org/swift-book/documentation/the-swift-programming-language/properties/)，未执行此 Swift 文件、Xcode 构建或 Toggle 交互。实验给出待验证输入输出，不代表 UserDefaults 持久化、SwiftUI 更新或并发安全已验证。 |
 | P1 | 核心基础 | Swift / SwiftUI | [06-swift-swiftui/reference/language-concepts/09-property-wrappers.md](../../../../06-swift-swiftui/reference/language-concepts/09-property-wrappers.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
 | P1 | 核心基础 | Swift / SwiftUI | [06-swift-swiftui/reference/language-concepts/10-value-types-arc.md](../../../../06-swift-swiftui/reference/language-concepts/10-value-types-arc.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
 | P1 | 核心基础 | Swift / SwiftUI | [06-swift-swiftui/reference/language-concepts/11-actors-sendability.md](../../../../06-swift-swiftui/reference/language-concepts/11-actors-sendability.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
