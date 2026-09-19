@@ -7,10 +7,10 @@
 | 指标 | 数量 |
 |---|---:|
 | 纳入模块文档 | 642 |
-| 主状态：not_verified | 513 |
-| 主状态：runtime | 129 |
-| 验证措辞出现次数 | 127 |
-| 措辞分类：source_has_limited_runtime_evidence | 82 |
+| 主状态：not_verified | 511 |
+| 主状态：runtime | 131 |
+| 验证措辞出现次数 | 126 |
+| 措辞分类：source_has_limited_runtime_evidence | 81 |
 | 措辞分类：unbound_verification_wording | 45 |
 
 ## 语法级覆盖（不能当作运行覆盖）
@@ -26,6 +26,9 @@
 |---|---|
 | `runtime` | 存在命名的实际运行记录；范围由该记录的 `scope` 限定。 |
 | `not_verified` | 没有找到与此文件绑定的命名运行记录。不是技术错误结论。 |
+
+历史 Web 报告 `final-web-examples.json` 的结果混合运行与 TypeScript 编译检查，未逐用例绑定来源。其结果与来源集合保留在 JSON 的 `corpus_checks`，不能据此给来源文档自动赋予 `runtime/PASS`。
+
 
 ## 文档级证据
 
@@ -114,11 +117,11 @@
 | Next.js / TypeScript | [02-nextjs-frontend/advanced-topics/architecture/01-scaling-patterns.md](../../../../02-nextjs-frontend/advanced-topics/architecture/01-scaling-patterns.md) | `not_verified` | 0 | 0 |
 | Next.js / TypeScript | [02-nextjs-frontend/advanced-topics/architecture/02-micro-frontends.md](../../../../02-nextjs-frontend/advanced-topics/architecture/02-micro-frontends.md) | `not_verified` | 0 | 0 |
 | Next.js / TypeScript | [02-nextjs-frontend/advanced-topics/performance/01-core-web-vitals.md](../../../../02-nextjs-frontend/advanced-topics/performance/01-core-web-vitals.md) | `not_verified` | 0 | 0 |
-| Next.js / TypeScript | [02-nextjs-frontend/advanced-topics/performance/02-advanced-optimization.md](../../../../02-nextjs-frontend/advanced-topics/performance/02-advanced-optimization.md) | `runtime` | 1 | 0 |
+| Next.js / TypeScript | [02-nextjs-frontend/advanced-topics/performance/02-advanced-optimization.md](../../../../02-nextjs-frontend/advanced-topics/performance/02-advanced-optimization.md) | `not_verified` | 0 | 0 |
 | Next.js / TypeScript | [02-nextjs-frontend/advanced-topics/security/01-security-best-practices.md](../../../../02-nextjs-frontend/advanced-topics/security/01-security-best-practices.md) | `not_verified` | 0 | 0 |
 | Next.js / TypeScript | [02-nextjs-frontend/basics/01-environment-setup.md](../../../../02-nextjs-frontend/basics/01-environment-setup.md) | `not_verified` | 0 | 0 |
 | Next.js / TypeScript | [02-nextjs-frontend/basics/02-first-nextjs-app.md](../../../../02-nextjs-frontend/basics/02-first-nextjs-app.md) | `not_verified` | 0 | 0 |
-| Next.js / TypeScript | [02-nextjs-frontend/basics/03-typescript-integration.md](../../../../02-nextjs-frontend/basics/03-typescript-integration.md) | `not_verified` | 0 | 0 |
+| Next.js / TypeScript | [02-nextjs-frontend/basics/03-typescript-integration.md](../../../../02-nextjs-frontend/basics/03-typescript-integration.md) | `runtime` | 1 | 0 |
 | Next.js / TypeScript | [02-nextjs-frontend/basics/04-layouts-routing.md](../../../../02-nextjs-frontend/basics/04-layouts-routing.md) | `runtime` | 1 | 0 |
 | Next.js / TypeScript | [02-nextjs-frontend/basics/05-styling-with-tailwind.md](../../../../02-nextjs-frontend/basics/05-styling-with-tailwind.md) | `not_verified` | 0 | 0 |
 | Next.js / TypeScript | [02-nextjs-frontend/basics/06-data-fetching-basics.md](../../../../02-nextjs-frontend/basics/06-data-fetching-basics.md) | `not_verified` | 0 | 0 |
@@ -142,7 +145,7 @@
 | Next.js / TypeScript | [02-nextjs-frontend/reference/development-tools/04-debugging-tools.md](../../../../02-nextjs-frontend/reference/development-tools/04-debugging-tools.md) | `not_verified` | 0 | 0 |
 | Next.js / TypeScript | [02-nextjs-frontend/reference/framework-patterns/01-app-router-patterns.md](../../../../02-nextjs-frontend/reference/framework-patterns/01-app-router-patterns.md) | `not_verified` | 0 | 0 |
 | Next.js / TypeScript | [02-nextjs-frontend/reference/framework-patterns/02-server-components-patterns.md](../../../../02-nextjs-frontend/reference/framework-patterns/02-server-components-patterns.md) | `not_verified` | 0 | 0 |
-| Next.js / TypeScript | [02-nextjs-frontend/reference/framework-patterns/03-client-components-patterns.md](../../../../02-nextjs-frontend/reference/framework-patterns/03-client-components-patterns.md) | `runtime` | 1 | 0 |
+| Next.js / TypeScript | [02-nextjs-frontend/reference/framework-patterns/03-client-components-patterns.md](../../../../02-nextjs-frontend/reference/framework-patterns/03-client-components-patterns.md) | `not_verified` | 0 | 0 |
 | Next.js / TypeScript | [02-nextjs-frontend/reference/framework-patterns/04-data-fetching-patterns.md](../../../../02-nextjs-frontend/reference/framework-patterns/04-data-fetching-patterns.md) | `not_verified` | 0 | 0 |
 | Next.js / TypeScript | [02-nextjs-frontend/reference/framework-patterns/05-state-management-patterns.md](../../../../02-nextjs-frontend/reference/framework-patterns/05-state-management-patterns.md) | `not_verified` | 0 | 0 |
 | Next.js / TypeScript | [02-nextjs-frontend/reference/framework-patterns/06-form-validation-patterns.md](../../../../02-nextjs-frontend/reference/framework-patterns/06-form-validation-patterns.md) | `not_verified` | 0 | 0 |
@@ -200,7 +203,7 @@
 | TanStack / TypeScript | [03-tanstack-stack/reference/framework-essentials/01-query-essentials.md](../../../../03-tanstack-stack/reference/framework-essentials/01-query-essentials.md) | `not_verified` | 0 | 0 |
 | TanStack / TypeScript | [03-tanstack-stack/reference/framework-essentials/02-router-essentials.md](../../../../03-tanstack-stack/reference/framework-essentials/02-router-essentials.md) | `not_verified` | 0 | 0 |
 | TanStack / TypeScript | [03-tanstack-stack/reference/framework-essentials/03-queryclient-config.md](../../../../03-tanstack-stack/reference/framework-essentials/03-queryclient-config.md) | `not_verified` | 0 | 0 |
-| TanStack / TypeScript | [03-tanstack-stack/reference/framework-essentials/04-prefetch-ssr.md](../../../../03-tanstack-stack/reference/framework-essentials/04-prefetch-ssr.md) | `runtime` | 1 | 1 |
+| TanStack / TypeScript | [03-tanstack-stack/reference/framework-essentials/04-prefetch-ssr.md](../../../../03-tanstack-stack/reference/framework-essentials/04-prefetch-ssr.md) | `not_verified` | 0 | 0 |
 | TanStack / TypeScript | [03-tanstack-stack/reference/framework-essentials/05-mutation-state.md](../../../../03-tanstack-stack/reference/framework-essentials/05-mutation-state.md) | `not_verified` | 0 | 0 |
 | TanStack / TypeScript | [03-tanstack-stack/reference/framework-essentials/06-start-server-functions.md](../../../../03-tanstack-stack/reference/framework-essentials/06-start-server-functions.md) | `not_verified` | 0 | 0 |
 | TanStack / TypeScript | [03-tanstack-stack/reference/language-concepts/01-query-core-api.md](../../../../03-tanstack-stack/reference/language-concepts/01-query-core-api.md) | `runtime` | 1 | 0 |
@@ -213,7 +216,7 @@
 | TanStack / TypeScript | [03-tanstack-stack/reference/language-concepts/08-placeholder-data.md](../../../../03-tanstack-stack/reference/language-concepts/08-placeholder-data.md) | `not_verified` | 0 | 0 |
 | TanStack / TypeScript | [03-tanstack-stack/reference/language-concepts/09-suspense-query.md](../../../../03-tanstack-stack/reference/language-concepts/09-suspense-query.md) | `not_verified` | 0 | 0 |
 | TanStack / TypeScript | [03-tanstack-stack/reference/language-concepts/10-network-mode.md](../../../../03-tanstack-stack/reference/language-concepts/10-network-mode.md) | `not_verified` | 0 | 0 |
-| TanStack / TypeScript | [03-tanstack-stack/reference/language-concepts/11-search-params.md](../../../../03-tanstack-stack/reference/language-concepts/11-search-params.md) | `runtime` | 1 | 0 |
+| TanStack / TypeScript | [03-tanstack-stack/reference/language-concepts/11-search-params.md](../../../../03-tanstack-stack/reference/language-concepts/11-search-params.md) | `not_verified` | 0 | 0 |
 | TanStack / TypeScript | [03-tanstack-stack/reference/language-concepts/12-use-queries.md](../../../../03-tanstack-stack/reference/language-concepts/12-use-queries.md) | `not_verified` | 0 | 0 |
 | TanStack / TypeScript | [03-tanstack-stack/reference/language-concepts/13-use-is-fetching-use-is-mutating.md](../../../../03-tanstack-stack/reference/language-concepts/13-use-is-fetching-use-is-mutating.md) | `not_verified` | 0 | 0 |
 | TanStack / TypeScript | [03-tanstack-stack/reference/language-concepts/14-query-persistence.md](../../../../03-tanstack-stack/reference/language-concepts/14-query-persistence.md) | `not_verified` | 0 | 0 |
@@ -431,7 +434,7 @@
 | PHP | [07-php-mastery/reference/language-concepts/01-php-keywords.md](../../../../07-php-mastery/reference/language-concepts/01-php-keywords.md) | `runtime` | 7 | 0 |
 | PHP | [07-php-mastery/reference/language-concepts/02-built-in-functions.md](../../../../07-php-mastery/reference/language-concepts/02-built-in-functions.md) | `runtime` | 11 | 0 |
 | PHP | [07-php-mastery/reference/language-concepts/03-types-oop-modern.md](../../../../07-php-mastery/reference/language-concepts/03-types-oop-modern.md) | `not_verified` | 0 | 0 |
-| PHP | [07-php-mastery/reference/language-concepts/04-control-flow.md](../../../../07-php-mastery/reference/language-concepts/04-control-flow.md) | `not_verified` | 0 | 0 |
+| PHP | [07-php-mastery/reference/language-concepts/04-control-flow.md](../../../../07-php-mastery/reference/language-concepts/04-control-flow.md) | `runtime` | 1 | 0 |
 | PHP | [07-php-mastery/reference/language-concepts/05-arrays-patterns.md](../../../../07-php-mastery/reference/language-concepts/05-arrays-patterns.md) | `runtime` | 3 | 0 |
 | PHP | [07-php-mastery/reference/language-concepts/06-generators-iterators.md](../../../../07-php-mastery/reference/language-concepts/06-generators-iterators.md) | `runtime` | 3 | 0 |
 | PHP | [07-php-mastery/reference/language-concepts/07-namespaces-autoloading.md](../../../../07-php-mastery/reference/language-concepts/07-namespaces-autoloading.md) | `not_verified` | 0 | 0 |
@@ -504,7 +507,7 @@
 | Java | [08-java-revisited/reference/library-guides/02-third-party-libs.md](../../../../08-java-revisited/reference/library-guides/02-third-party-libs.md) | `not_verified` | 0 | 0 |
 | Java | [08-java-revisited/reference/library-guides/03-java-lang.md](../../../../08-java-revisited/reference/library-guides/03-java-lang.md) | `runtime` | 1 | 0 |
 | Java | [08-java-revisited/reference/library-guides/04-java-io.md](../../../../08-java-revisited/reference/library-guides/04-java-io.md) | `runtime` | 3 | 0 |
-| Java | [08-java-revisited/reference/library-guides/05-java-util-function.md](../../../../08-java-revisited/reference/library-guides/05-java-util-function.md) | `not_verified` | 0 | 0 |
+| Java | [08-java-revisited/reference/library-guides/05-java-util-function.md](../../../../08-java-revisited/reference/library-guides/05-java-util-function.md) | `runtime` | 1 | 0 |
 | Java | [08-java-revisited/reference/library-guides/06-java-math.md](../../../../08-java-revisited/reference/library-guides/06-java-math.md) | `runtime` | 1 | 0 |
 | Java | [08-java-revisited/reference/library-guides/07-java-text-and-time-format.md](../../../../08-java-revisited/reference/library-guides/07-java-text-and-time-format.md) | `not_verified` | 0 | 0 |
 | Java | [08-java-revisited/reference/library-guides/08-java-util-regex.md](../../../../08-java-revisited/reference/library-guides/08-java-util-regex.md) | `not_verified` | 0 | 0 |
@@ -523,7 +526,7 @@
 | Node.js | [09-nodejs-backend/advanced-topics/security/01-security-practices.md](../../../../09-nodejs-backend/advanced-topics/security/01-security-practices.md) | `runtime` | 1 | 3 |
 | Node.js | [09-nodejs-backend/basics/01-environment-setup.md](../../../../09-nodejs-backend/basics/01-environment-setup.md) | `not_verified` | 0 | 0 |
 | Node.js | [09-nodejs-backend/basics/02-first-server.md](../../../../09-nodejs-backend/basics/02-first-server.md) | `not_verified` | 0 | 0 |
-| Node.js | [09-nodejs-backend/basics/03-modules-esm.md](../../../../09-nodejs-backend/basics/03-modules-esm.md) | `not_verified` | 0 | 0 |
+| Node.js | [09-nodejs-backend/basics/03-modules-esm.md](../../../../09-nodejs-backend/basics/03-modules-esm.md) | `runtime` | 1 | 0 |
 | Node.js | [09-nodejs-backend/basics/04-async-promises.md](../../../../09-nodejs-backend/basics/04-async-promises.md) | `runtime` | 2 | 0 |
 | Node.js | [09-nodejs-backend/basics/05-http-routing.md](../../../../09-nodejs-backend/basics/05-http-routing.md) | `not_verified` | 0 | 0 |
 | Node.js | [09-nodejs-backend/basics/06-error-handling.md](../../../../09-nodejs-backend/basics/06-error-handling.md) | `not_verified` | 0 | 0 |
@@ -573,7 +576,7 @@
 | Python | [10-python-discovery/advanced-topics/security/01-security-practices.md](../../../../10-python-discovery/advanced-topics/security/01-security-practices.md) | `runtime` | 1 | 1 |
 | Python | [10-python-discovery/basics/01-environment-setup.md](../../../../10-python-discovery/basics/01-environment-setup.md) | `not_verified` | 0 | 0 |
 | Python | [10-python-discovery/basics/02-first-script.md](../../../../10-python-discovery/basics/02-first-script.md) | `not_verified` | 0 | 0 |
-| Python | [10-python-discovery/basics/03-variables-types.md](../../../../10-python-discovery/basics/03-variables-types.md) | `not_verified` | 0 | 0 |
+| Python | [10-python-discovery/basics/03-variables-types.md](../../../../10-python-discovery/basics/03-variables-types.md) | `runtime` | 1 | 0 |
 | Python | [10-python-discovery/basics/04-functions-oop.md](../../../../10-python-discovery/basics/04-functions-oop.md) | `not_verified` | 0 | 0 |
 | Python | [10-python-discovery/basics/05-control-flow.md](../../../../10-python-discovery/basics/05-control-flow.md) | `runtime` | 1 | 0 |
 | Python | [10-python-discovery/basics/06-exceptions.md](../../../../10-python-discovery/basics/06-exceptions.md) | `not_verified` | 0 | 0 |
@@ -656,7 +659,7 @@
 | Rust / Cross-platform | [11-rust-cross-platform/reference/framework-essentials/09-tauri-2-essentials.md](../../../../11-rust-cross-platform/reference/framework-essentials/09-tauri-2-essentials.md) | `not_verified` | 0 | 0 |
 | Rust / Cross-platform | [11-rust-cross-platform/reference/framework-essentials/10-tauri-ipc-commands.md](../../../../11-rust-cross-platform/reference/framework-essentials/10-tauri-ipc-commands.md) | `not_verified` | 0 | 0 |
 | Rust / Cross-platform | [11-rust-cross-platform/reference/framework-essentials/11-axum-essentials.md](../../../../11-rust-cross-platform/reference/framework-essentials/11-axum-essentials.md) | `not_verified` | 0 | 0 |
-| Rust / Cross-platform | [11-rust-cross-platform/reference/language-concepts/01-ownership-dictionary.md](../../../../11-rust-cross-platform/reference/language-concepts/01-ownership-dictionary.md) | `not_verified` | 0 | 0 |
+| Rust / Cross-platform | [11-rust-cross-platform/reference/language-concepts/01-ownership-dictionary.md](../../../../11-rust-cross-platform/reference/language-concepts/01-ownership-dictionary.md) | `runtime` | 1 | 0 |
 | Rust / Cross-platform | [11-rust-cross-platform/reference/language-concepts/02-trait-objects.md](../../../../11-rust-cross-platform/reference/language-concepts/02-trait-objects.md) | `not_verified` | 0 | 0 |
 | Rust / Cross-platform | [11-rust-cross-platform/reference/language-concepts/03-const-generics.md](../../../../11-rust-cross-platform/reference/language-concepts/03-const-generics.md) | `not_verified` | 0 | 1 |
 | Rust / Cross-platform | [11-rust-cross-platform/reference/language-concepts/04-advanced-lifetimes.md](../../../../11-rust-cross-platform/reference/language-concepts/04-advanced-lifetimes.md) | `runtime` | 4 | 2 |

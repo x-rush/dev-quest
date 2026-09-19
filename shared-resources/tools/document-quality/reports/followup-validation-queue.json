@@ -5,25 +5,25 @@
   "scope": "verification-coverage.json 的 11 个现行教学模块；不含生成报告、归档和不活跃文件。",
   "method": "为 not_verified 文件建立文件级任务，并按覆盖台账同一标记规则重新扫描当前源码以定位逐行任务；仅通过性断言升为 P0，不判断教学内容真伪。",
   "summary": {
-    "items": 558,
-    "file_level_items": 513,
+    "items": 556,
+    "file_level_items": 511,
     "unbound_wording_items": 45,
     "by_priority": {
-      "P1": 258,
-      "P2": 149,
-      "P3": 151
+      "P1": 253,
+      "P2": 150,
+      "P3": 153
     },
     "by_kind": {
-      "核心基础": 242,
+      "核心基础": 237,
       "首项目": 16,
-      "框架": 110,
+      "框架": 111,
       "部署": 39,
-      "进阶与测试": 151
+      "进阶与测试": 153
     },
     "excluded": {
       "inactive_or_archived": 0,
       "generated_or_report": 0,
-      "runtime_document": 129
+      "runtime_document": 131
     }
   },
   "items": [
@@ -440,17 +440,6 @@
       "task": "为文档选择一个最小可复现案例并记录限定运行证据",
       "reason": "当前没有与此文件绑定的命名运行或语法证据。",
       "module": "Java",
-      "path": "08-java-revisited/reference/library-guides/05-java-util-function.md",
-      "line": null,
-      "source_excerpt": null,
-      "evidence_action": "抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。"
-    },
-    {
-      "priority": "P1",
-      "kind": "核心基础",
-      "task": "为文档选择一个最小可复现案例并记录限定运行证据",
-      "reason": "当前没有与此文件绑定的命名运行或语法证据。",
-      "module": "Java",
       "path": "08-java-revisited/reference/library-guides/08-java-util-regex.md",
       "line": null,
       "source_excerpt": null,
@@ -825,17 +814,6 @@
       "task": "为文档选择一个最小可复现案例并记录限定运行证据",
       "reason": "当前没有与此文件绑定的命名运行或语法证据。",
       "module": "Next.js / TypeScript",
-      "path": "02-nextjs-frontend/basics/03-typescript-integration.md",
-      "line": null,
-      "source_excerpt": null,
-      "evidence_action": "抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。"
-    },
-    {
-      "priority": "P1",
-      "kind": "核心基础",
-      "task": "为文档选择一个最小可复现案例并记录限定运行证据",
-      "reason": "当前没有与此文件绑定的命名运行或语法证据。",
-      "module": "Next.js / TypeScript",
       "path": "02-nextjs-frontend/basics/05-styling-with-tailwind.md",
       "line": null,
       "source_excerpt": null,
@@ -991,17 +969,6 @@
       "reason": "当前没有与此文件绑定的命名运行或语法证据。",
       "module": "Node.js",
       "path": "09-nodejs-backend/basics/02-first-server.md",
-      "line": null,
-      "source_excerpt": null,
-      "evidence_action": "抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。"
-    },
-    {
-      "priority": "P1",
-      "kind": "核心基础",
-      "task": "为文档选择一个最小可复现案例并记录限定运行证据",
-      "reason": "当前没有与此文件绑定的命名运行或语法证据。",
-      "module": "Node.js",
-      "path": "09-nodejs-backend/basics/03-modules-esm.md",
       "line": null,
       "source_excerpt": null,
       "evidence_action": "抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。"
@@ -1200,17 +1167,6 @@
       "reason": "当前没有与此文件绑定的命名运行或语法证据。",
       "module": "PHP",
       "path": "07-php-mastery/reference/language-concepts/03-types-oop-modern.md",
-      "line": null,
-      "source_excerpt": null,
-      "evidence_action": "抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。"
-    },
-    {
-      "priority": "P1",
-      "kind": "核心基础",
-      "task": "为文档选择一个最小可复现案例并记录限定运行证据",
-      "reason": "当前没有与此文件绑定的命名运行或语法证据。",
-      "module": "PHP",
-      "path": "07-php-mastery/reference/language-concepts/04-control-flow.md",
       "line": null,
       "source_excerpt": null,
       "evidence_action": "抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。"
@@ -1475,17 +1431,6 @@
       "reason": "当前没有与此文件绑定的命名运行或语法证据。",
       "module": "Python",
       "path": "10-python-discovery/basics/02-first-script.md",
-      "line": null,
-      "source_excerpt": null,
-      "evidence_action": "抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。"
-    },
-    {
-      "priority": "P1",
-      "kind": "核心基础",
-      "task": "为文档选择一个最小可复现案例并记录限定运行证据",
-      "reason": "当前没有与此文件绑定的命名运行或语法证据。",
-      "module": "Python",
-      "path": "10-python-discovery/basics/03-variables-types.md",
       "line": null,
       "source_excerpt": null,
       "evidence_action": "抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。"
@@ -2013,17 +1958,6 @@
       "task": "为文档选择一个最小可复现案例并记录限定运行证据",
       "reason": "当前没有与此文件绑定的命名运行或语法证据。",
       "module": "Rust / Cross-platform",
-      "path": "11-rust-cross-platform/reference/language-concepts/01-ownership-dictionary.md",
-      "line": null,
-      "source_excerpt": null,
-      "evidence_action": "抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。"
-    },
-    {
-      "priority": "P1",
-      "kind": "核心基础",
-      "task": "为文档选择一个最小可复现案例并记录限定运行证据",
-      "reason": "当前没有与此文件绑定的命名运行或语法证据。",
-      "module": "Rust / Cross-platform",
       "path": "11-rust-cross-platform/reference/language-concepts/02-trait-objects.md",
       "line": null,
       "source_excerpt": null,
@@ -2531,6 +2465,17 @@
       "reason": "当前没有与此文件绑定的命名运行或语法证据。",
       "module": "TanStack / TypeScript",
       "path": "03-tanstack-stack/reference/language-concepts/10-network-mode.md",
+      "line": null,
+      "source_excerpt": null,
+      "evidence_action": "抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。"
+    },
+    {
+      "priority": "P1",
+      "kind": "核心基础",
+      "task": "为文档选择一个最小可复现案例并记录限定运行证据",
+      "reason": "当前没有与此文件绑定的命名运行或语法证据。",
+      "module": "TanStack / TypeScript",
+      "path": "03-tanstack-stack/reference/language-concepts/11-search-params.md",
       "line": null,
       "source_excerpt": null,
       "evidence_action": "抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。"
@@ -4059,6 +4004,17 @@
       "task": "为文档选择一个最小可复现案例并记录限定运行证据",
       "reason": "当前没有与此文件绑定的命名运行或语法证据。",
       "module": "TanStack / TypeScript",
+      "path": "03-tanstack-stack/reference/framework-essentials/04-prefetch-ssr.md",
+      "line": null,
+      "source_excerpt": null,
+      "evidence_action": "抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。"
+    },
+    {
+      "priority": "P2",
+      "kind": "框架",
+      "task": "为文档选择一个最小可复现案例并记录限定运行证据",
+      "reason": "当前没有与此文件绑定的命名运行或语法证据。",
+      "module": "TanStack / TypeScript",
       "path": "03-tanstack-stack/reference/framework-essentials/05-mutation-state.md",
       "line": null,
       "source_excerpt": null,
@@ -4972,6 +4928,17 @@
       "task": "为文档选择一个最小可复现案例并记录限定运行证据",
       "reason": "当前没有与此文件绑定的命名运行或语法证据。",
       "module": "Next.js / TypeScript",
+      "path": "02-nextjs-frontend/advanced-topics/performance/02-advanced-optimization.md",
+      "line": null,
+      "source_excerpt": null,
+      "evidence_action": "抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。"
+    },
+    {
+      "priority": "P3",
+      "kind": "进阶与测试",
+      "task": "为文档选择一个最小可复现案例并记录限定运行证据",
+      "reason": "当前没有与此文件绑定的命名运行或语法证据。",
+      "module": "Next.js / TypeScript",
       "path": "02-nextjs-frontend/advanced-topics/security/01-security-best-practices.md",
       "line": null,
       "source_excerpt": null,
@@ -5072,6 +5039,17 @@
       "reason": "当前没有与此文件绑定的命名运行或语法证据。",
       "module": "Next.js / TypeScript",
       "path": "02-nextjs-frontend/reference/framework-patterns/02-server-components-patterns.md",
+      "line": null,
+      "source_excerpt": null,
+      "evidence_action": "抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。"
+    },
+    {
+      "priority": "P3",
+      "kind": "进阶与测试",
+      "task": "为文档选择一个最小可复现案例并记录限定运行证据",
+      "reason": "当前没有与此文件绑定的命名运行或语法证据。",
+      "module": "Next.js / TypeScript",
+      "path": "02-nextjs-frontend/reference/framework-patterns/03-client-components-patterns.md",
       "line": null,
       "source_excerpt": null,
       "evidence_action": "抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。"

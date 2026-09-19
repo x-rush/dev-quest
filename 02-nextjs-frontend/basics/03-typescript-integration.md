@@ -863,6 +863,32 @@ type UserWithDisplayName = {
 
 ## ✅ 总结
 
+### 正文验证：未知 JSON 先收窄再使用
+
+下面是本页“类型断言不验证外部 JSON”的最小 TypeScript 契约。验证脚本会直接从此 Markdown 代码块提取内容并以 `tsc --strict --noEmit` 检查；它验证类型收窄，不构建 Next.js 应用或调用网络。
+
+```ts verify:next-typescript-boundary
+type Todo = { id: string; title: string; done: boolean };
+
+function isTodo(value: unknown): value is Todo {
+  if (typeof value !== 'object' || value === null) return false;
+  const record = value as Record<string, unknown>;
+  return typeof record.id === 'string'
+    && typeof record.title === 'string'
+    && typeof record.done === 'boolean';
+}
+
+const response: unknown = { id: '1', done: false };
+if (isTodo(response)) {
+  const title: string = response.title;
+  void title;
+} else {
+  // 缺少 title 的输入不会被断言伪装成 Todo。
+  const rejected: true = true;
+  void rejected;
+}
+```
+
 通过本教程，你已经掌握了：
 
 1. **配置管理**: Next.js 16中TypeScript的完整配置

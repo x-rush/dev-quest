@@ -106,13 +106,40 @@ public class FunctionDemo {
 }
 ```
 
+### 正文提取验证：组合顺序与短路
+
+这个完整围栏只使用 `java.util.function`。它验证 `andThen`/`compose` 的顺序，也验证 `Predicate.and` 在左侧为 `false` 时不会调用右侧谓词。
+
+```java
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Function;
+import java.util.function.Predicate;
+
+public class FunctionVerification {
+    public static void main(String[] args) {
+        Function<Integer, Integer> twice = n -> n * 2;
+        Function<Integer, Integer> increment = n -> n + 1;
+        AtomicInteger rightCalls = new AtomicInteger();
+        Predicate<Integer> never = n -> false;
+        Predicate<Integer> right = n -> {
+            rightCalls.incrementAndGet();
+            return true;
+        };
+
+        System.out.println(twice.andThen(increment).apply(5));
+        System.out.println(twice.compose(increment).apply(5));
+        System.out.println(never.and(right).test(1) + "|" + rightCalls.get());
+    }
+}
+```
+
 ## ⚠️ 常见陷阱
 
 - ❌ **`andThen` 与 `compose` 顺序记反**：`f.andThen(g)` = f 先 g 后；`f.compose(g)` = g 先 f 后（预期：`twice.andThen(inc)` 11 vs `twice.compose(inc)` 12）。
   ✅ 记忆锚点：`andThen` 是"然后"，`compose` 是"先经过 g"。
 - ❌ **用 `Function<Integer,Integer>` 处理大量基本类型**：自动装箱开销。
   ✅ 流里 `mapToInt/mapToLong/...`，独立接口选 `IntPredicate` 等特化版。
-- ❌ **lambda 里修改外部可变状态还指望并行安全**：Consumer 的副作用在并行流下是竞态。
+- ❌ **lambda 写入共享可变状态还指望并行安全**：并行流会并发调用 Consumer；共享的 `ArrayList`、计数器等若没有同步就会产生竞态。副作用本身不必然不安全，关键在于状态是否共享及其同步契约。
   ✅ 中间操作保持无状态；并行终止操作同样需要线程安全或正确的归约，不能共享无保护的可变容器。
 - ❌ **方法引用歧义时硬读**：重载方法的方法引用可能匹配多个函数式接口。
   ✅ 显式声明目标类型变量，或退回写 lambda。

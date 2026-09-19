@@ -12,9 +12,11 @@
 | dehydrate | 提取缓存状态 | 默认包含成功查询；不是通用 JSON 序列化器 |
 | hydrate / HydrationBoundary | 恢复缓存状态 | 不能替代 Provider 或服务端请求隔离 |
 
-## 一个可运行的缓存传递实验
+## 缓存传递实验：在练习环境中执行并验收
 
 在已安装 @tanstack/react-query 的项目中，保存为 hydration-demo.mjs 并用 Node.js 执行。它演示缓存机制，不启动 React SSR 服务器。
+
+验收要求：在自己的练习环境运行以下程序，记录 Node.js 与依赖版本，确认输出为“你好”。历史 Web 检查报告未逐用例绑定本页来源，因此本页当前没有命名的文件级运行证据；以下输出是学习者需要核对的预期结果，也不能证明 React SSR、Next.js 构建或实际浏览器水合已经通过。
 
 ```js
 import { QueryClient, dehydrate, hydrate } from '@tanstack/react-query';

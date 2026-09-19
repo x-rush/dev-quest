@@ -44,7 +44,7 @@ if ($a > $b) {
 <?php endif; ?>
 ```
 
-**陷阱**: PHP 中严格写作 `elseif`（`else if` 分开写也合法但语义是嵌套 if）；条件内赋值 `if ($x = f())` 合法但高危。
+**陷阱**: 花括号语法中 `elseif` 与 `else if` 都可用；但替代语法必须写成 `elseif: ... endif;`，不要把两个词拆开，否则会按嵌套 `if` 的形式解析而无法与 `endif` 正确配对。条件内赋值 `if ($x = f())` 合法但高危。
 
 ### 三元运算符 `? :` 与空合并 `??`
 
@@ -85,6 +85,30 @@ $op = match ($status) {
 ```
 
 **陷阱**: 分支体只能是一个表达式（不能用语句块）；`match (true)` 按书写顺序求值，注意条件先后；无 `default` 时未命中即抛异常。
+
+### 正文提取验证：match 的严格比较与未命中
+
+下面是可独立执行的完整围栏。它刻意把整数 `1` 与字符串 `'1'` 放在一起：`match` 不做 `switch` 那样的弱比较；没有 `default` 的未命中会抛 `UnhandledMatchError`。
+
+```php
+<?php
+declare(strict_types=1);
+
+$numberCase = match (1) {
+    '1' => 'string',
+    1 => 'integer',
+};
+
+try {
+    match ('missing') {
+        'ok' => 'ok',
+    };
+} catch (UnhandledMatchError) {
+    $unmatched = 'unmatched';
+}
+
+echo "$numberCase|$unmatched\n";
+```
 
 ### switch（遗留兼容）
 

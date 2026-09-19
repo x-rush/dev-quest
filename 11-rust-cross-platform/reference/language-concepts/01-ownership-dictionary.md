@@ -52,7 +52,7 @@
 | move | 所有权的转移；原变量进入"未初始化"状态 |
 | Copy | 赋值/传参时的隐式位复制（不转移所有权） |
 | borrow | 通过 `&T` / `&mut T` 临时访问值而不取得所有权 |
-| drop | 所有者析构：`Drop::drop` → 逐字段 drop → 释放内存 |
+| drop | 所有者析构：drop glue 先调用 `Drop::drop`（若实现），再逐字段 drop；若该值拥有堆分配，释放由其字段/类型的析构逻辑完成 |
 
 ---
 
@@ -249,6 +249,44 @@ fn main() {
 ```
 
 预期输出顺序：内层块结束 → `inner` → `Pair`（自身 Drop）→ 字段 first → 字段 second → `b` → `a`——演示局部变量与结构体字段的顺序；该程序没有验证 Vec 元素析构顺序。
+
+### 正文提取验证：重新借用与字段析构
+
+下面的完整围栏验证两项容易混淆的规则：将 `&mut T` 传给函数会发生临时重新借用，调用结束后原引用仍可用；实现 `Drop` 的结构体先运行自身的 `drop`，字段随后按声明顺序析构。
+
+```rust
+struct Probe(&'static str);
+
+impl Drop for Probe {
+    fn drop(&mut self) {
+        print!("{} ", self.0);
+    }
+}
+
+struct Pair {
+    first: Probe,
+    second: Probe,
+}
+
+impl Drop for Pair {
+    fn drop(&mut self) {
+        print!("pair ");
+    }
+}
+
+fn append_mark(text: &mut String) {
+    text.push('!');
+}
+
+fn main() {
+    let mut text = String::from("ok");
+    let reference = &mut text;
+    append_mark(reference);
+    reference.push('?');
+    println!("{reference}");
+    let _pair = Pair { first: Probe("first"), second: Probe("second") };
+}
+```
 
 ## ⚠️ 编译失败演示
 

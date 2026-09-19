@@ -1,0 +1,68 @@
+{
+  "status": "PASS",
+  "scope": "Reporting rule regression only; no tutorial execution",
+  "checks": [
+    {
+      "check": "验收：测试通过并保存日志。",
+      "status": "PASS",
+      "expected": "P1"
+    },
+    {
+      "check": "**验收标准**：示例可运行。",
+      "status": "PASS",
+      "expected": "P1"
+    },
+    {
+      "check": "- 验收要求：所有测试通过。",
+      "status": "PASS",
+      "expected": "P1"
+    },
+    {
+      "check": "1. 完成标准：测试通过。",
+      "status": "PASS",
+      "expected": "P1"
+    },
+    {
+      "check": "- [ ] 至少 3 条服务层测试通过",
+      "status": "PASS",
+      "expected": "P1"
+    },
+    {
+      "check": "PASS # 预期的示例输出",
+      "status": "PASS",
+      "expected": "P1"
+    },
+    {
+      "check": "该工程尚未实测。",
+      "status": "PASS",
+      "expected": "P1"
+    },
+    {
+      "check": "本机实测通过。",
+      "status": "PASS",
+      "expected": "P0"
+    },
+    {
+      "check": "已验证：运行通过。",
+      "status": "PASS",
+      "expected": "P0"
+    },
+    {
+      "check": "示例可运行。",
+      "status": "PASS",
+      "expected": "P0"
+    },
+    {
+      "check": "source inventory with PASS cannot imply file runtime",
+      "status": "PASS"
+    },
+    {
+      "check": "source inventory with FAIL cannot imply file runtime",
+      "status": "PASS"
+    },
+    {
+      "check": "explicit case binding preserves mode and failure",
+      "status": "PASS"
+    }
+  ]
+}

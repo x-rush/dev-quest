@@ -75,11 +75,18 @@ def marker_priority(source_line: str, kind: str) -> tuple[str, str, str]:
         source_line,
         re.IGNORECASE,
     )
+    # Acceptance targets ask the learner to produce a result; they do not
+    # certify that the author already ran it. Keep this anchored to avoid
+    # suppressing a real claim merely because it mentions acceptance later.
+    acceptance_target = re.search(
+        r"^(?:[-*]\s+|\d+[.)、]\s*)?(?:\*\*)?(?:验收(?:要求|标准|条件|目标)?|练习要求|完成标准)(?:\*\*)?\s*[:：]",
+        source_line,
+    )
     conditional_or_next_step = re.search(
         r"(?:先|再|然后|后).{0,18}(?:实测|验证|测试|运行)|(?:实测|验证|测试|运行).{0,18}(?:候选|实现|步骤|方法)",
         compact,
     )
-    if honest_disclosure or instructional or conditional_or_next_step:
+    if honest_disclosure or instructional or conditional_or_next_step or acceptance_target:
         return (
             file_priority(kind),
             "保留诚实的验证边界，并在补证据时决定是否增加最小练习",

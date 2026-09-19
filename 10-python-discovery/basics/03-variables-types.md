@@ -13,7 +13,7 @@ append 会影响共享列表；重新绑定 b 不会把 a 一起改成新列表�
 
 </details>
 
-> **文档简介**: 掌握 Python 动态类型模型与六种基本类型，学会用类型注解约束变量、用 f-string 格式化输出
+> **文档简介**: 掌握 Python 动态类型模型与六种常见基础类型，学会用类型注解约束变量、用 f-string 格式化输出
 >
 > **目标读者**: 已能运行脚本、想理解 Python 数据模型的开发者
 >
@@ -69,7 +69,7 @@ print(a)       # [1, 2, 3, 4] —— 同一对象被两个名字观察
 
 ---
 
-## 2. 六种基本类型
+## 2. 六种常见基础类型
 
 | 类型 | 示例 | 可变 | 说明 |
 |------|------|------|------|
@@ -165,7 +165,7 @@ def find_user(uid: int) -> str | None:
 
 类型演进对照（旧代码里会遇到，新代码用右列）：
 
-| 旧写法（3.8 及以前） | 3.12+ 写法 |
+| 旧写法（3.8 及以前） | 3.10+ 写法（3.12 仍推荐） |
 |------|------|
 | `Optional[str]` | `str \| None` |
 | `Union[int, str]` | `int \| str` |
@@ -220,6 +220,26 @@ if name:             # 同时排除 None 和 ""
 ---
 
 ## 🎯 练习与实践
+
+### 正文验证：绑定、不可变值与格式化
+
+下面程序是本页关键对象模型与 f-string 规则的独立版本。验证脚本会直接提取这个 Markdown 代码块，用隔离的 Python 容器执行；它不覆盖类型检查器、第三方库或本页其他示例。
+
+```python verify:python-bindings-formatting
+a = [1]
+b = a
+b.append(2)
+assert a == [1, 2]
+
+b = [9]
+assert a == [1, 2] and b == [9]
+
+name, price, qty = 'keyboard', 399.5, 2
+assert f'{price * qty:.2f}' == '799.00'
+assert f'{name:*>10}' == '**keyboard'
+assert 0.1 + 0.2 != 0.3
+print('python-bindings: alias, rebinding, f-string, float')
+```
 
 ### 练习一：类型观察
 1. 在 REPL 中依次执行 `type(1)`、`type(True)`、`isinstance(True, int)`，解释输出

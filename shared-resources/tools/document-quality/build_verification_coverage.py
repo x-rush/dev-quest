@@ -33,6 +33,8 @@ def load(name):
 
 
 def add_record(records, path, mode, report, scope, status="PASS"):
+    if path and path.startswith("dev-quest/"):
+        path = path.removeprefix("dev-quest/")
     if path:
         records[path].append({"mode": mode, "status": status, "report": report, "scope": scope})
 
@@ -116,6 +118,12 @@ def records_from_reports():
     php_java_reference_cases = load("php-java-reference-cases-results.json")
     for row in php_java_reference_cases.get("cases", []):
         add_record(records, row.get("document"), "runtime", "php-java-reference-cases-results.json", php_java_reference_cases.get("scope", "selected PHP/Java reference case"), "PASS" if row.get("passed") else "FAIL")
+    rust_php_java_eighth = load("rust-php-java-eighth-body-validation.json")
+    for row in rust_php_java_eighth.get("cases", []):
+        add_record(records, row.get("document"), "runtime", "rust-php-java-eighth-body-validation.json", rust_php_java_eighth.get("scope", "selected Rust/PHP/Java eighth body example"), "PASS" if row.get("status", "").upper() == "PASSED" else "FAIL")
+    next_node_python_basics = load("next-node-python-basics-results.json")
+    for row in next_node_python_basics.get("results", []):
+        add_record(records, row.get("source"), "runtime", "next-node-python-basics-results.json", row.get("scope", "selected Next/Node/Python basic example"), "PASS" if row.get("status", "").upper() == "PASS" else "FAIL")
     next_first_project = load("next-first-project-2026-09-19.json")
     add_record(records, next_first_project.get("source"), "runtime", "next-first-project-2026-09-19.json", next_first_project.get("limits", "selected Next first-project JSDOM check"), next_first_project.get("status", "FAIL"))
     php_java_core = load("php-java-core-boundaries.json")
@@ -151,11 +159,12 @@ def records_from_reports():
     rust_ecosystem = load("rust-ecosystem-runtime.json")
     for row in rust_ecosystem.get("cases", []):
         add_record(records, row.get("document"), "runtime", "rust-ecosystem-runtime.json", rust_ecosystem.get("scope", "selected Rust ecosystem example"), "PASS" if row.get("status", "").upper() == "PASS" else "FAIL")
-    # The web report names its source set rather than assigning a result per source.
+    # A source inventory alone does not bind any result to a document.
     web = load("final-web-examples.json")
-    for source in web.get("sources", []):
-        path = source.get("path") if isinstance(source, dict) else source
-        add_record(records, path, "runtime", "final-web-examples.json", "one of seven extracted Web checks; see named cases", "PASS")
+    for row in web.get("results", []):
+        if row.get("source") and row.get("case"):
+            add_record(records, row["source"], row.get("mode", "runtime"), "final-web-examples.json",
+                       row["case"] + "; " + web.get("scope", "selected named case only"), row.get("status", "NOT_VERIFIED"))
     return records
 
 
@@ -194,12 +203,17 @@ def main():
         "documents": document_rows,
         "verification_wording": marker_rows,
         "corpus_checks": [
+            {"mode": "mixed_report", "report": "final-web-examples.json", "status": "REPORT_ONLY",
+             "results": load("final-web-examples.json").get("results", []),
+             "sources": load("final-web-examples.json").get("sources", []),
+             "scope": "Historical report contains runtime and TypeScript compile checks but no per-case source bindings. Source inventory is retained as corpus evidence, not file-level runtime/PASS."},
             {"mode": "syntax", "report": "tsjs-validation-2026-09-19.md", "status": "PASS_SYNTAX",
              "count": 1165, "scope": "TS/JS fenced-code parsing only; not per-document runtime or framework-build evidence."},
             {"mode": "syntax", "report": "tsjs-validation-2026-09-19.md", "status": "NOT_VERIFIED_ARKTS",
              "count": 1, "scope": "ArkTS shell example requires the OpenHarmony toolchain."},
         ],
         "known_limits": [
+            "final-web-examples.json source inventory does not establish per-document runtime evidence; its unbound cases are retained under corpus_checks.",
             "No evidence record means not verified; it is not a correctness finding.",
             "Syntax-only TS/JS coverage is recorded at corpus level in tsjs-validation-2026-09-19.md and is not promoted to per-document runtime evidence.",
             "Framework builds, devices, external services, deployments, and historical snippets outside named cases remain outside this ledger.",
@@ -212,6 +226,7 @@ def main():
     lines += [f"| 验证措辞出现次数 | {len(marker_rows)} |"]
     for key, value in sorted(marker_counts.items()): lines.append(f"| 措辞分类：{key} | {value} |")
     lines += ["", "## 语法级覆盖（不能当作运行覆盖）", "", "| 检查 | 数量 | 范围 |", "|---|---:|---|", "| `PASS_SYNTAX` | 1,165 | TS/JS 围栏纯语法解析；不验证类型、Hook、依赖版本或框架工程。 |", "| `NOT_VERIFIED_ARKTS` | 1 | ArkTS 壳工程示意，缺少 OpenHarmony 工具链。 |", "", "## 状态定义", "", "| 状态 | 含义 |", "|---|---|", "| `runtime` | 存在命名的实际运行记录；范围由该记录的 `scope` 限定。 |", "| `not_verified` | 没有找到与此文件绑定的命名运行记录。不是技术错误结论。 |", "", "## 文档级证据", "", "| 模块 | 文档 | 主状态 | 命名运行记录数 | 验证措辞数 |", "|---|---|---|---:|---:|"]
+    lines[-5:-5] = ["", "历史 Web 报告 `final-web-examples.json` 的结果混合运行与 TypeScript 编译检查，未逐用例绑定来源。其结果与来源集合保留在 JSON 的 `corpus_checks`，不能据此给来源文档自动赋予 `runtime/PASS`。", ""]
     for row in document_rows:
         module = MODULES[row["path"].split("/", 1)[0]]
         state = row["verification"][0]["mode"]

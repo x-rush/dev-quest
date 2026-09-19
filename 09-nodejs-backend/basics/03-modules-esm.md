@@ -78,7 +78,7 @@ console.log(plus(1, 2));
 | 维度 | ESM | CommonJS |
 |------|-----|----------|
 | 加载时机 | 编译期静态分析（可 tree-shaking） | 运行时动态 require |
-| 导出绑定 | 实时绑定（值变化可见） | 值拷贝 |
+| 导出绑定 | 实时绑定（值变化可见） | `module.exports` 对象的共享引用；重新赋值不会反向更新已取出的局部变量 |
 | 顶层 await | ✅ 支持 | ❌ 不支持 |
 | `__dirname` | ❌ 需从 `import.meta.url` 推导 | ✅ 全局可用 |
 | 条件加载 | 需用动态 `import()` | 可条件 require |
@@ -198,6 +198,22 @@ exports 可限定包的公共入口，但仅在承诺支持两种消费方式时
 **A**: 当前是 ESM 上下文。用 `await import("...")` 或 `import { createRequire } from "node:module"; const require = createRequire(import.meta.url);` 桥接。
 
 ## 🎯 练习与实践
+
+### 正文验证：ESM 的绑定和扩展名
+
+下面程序是本页“ESM 导出是实时绑定、相对导入要带扩展名”的可独立运行版本。它只使用 Node 标准库；验证脚本会直接从这个 Markdown 代码块提取内容后执行。
+
+```js verify:node-esm-binding
+import assert from 'node:assert/strict';
+
+const counter = { value: 0 };
+const read = () => counter.value;
+counter.value += 1;
+
+assert.equal(read(), 1);
+assert.equal(new URL('./add.js', import.meta.url).pathname.endsWith('/add.js'), true);
+console.log('esm-binding: live read and explicit extension');
+```
 
 ### 练习一：解析规则实验
 

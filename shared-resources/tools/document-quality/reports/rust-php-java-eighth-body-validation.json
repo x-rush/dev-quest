@@ -1,0 +1,52 @@
+{
+  "schema_version": 1,
+  "purpose": "Runtime evidence for three named P1 foundation or standard-library pages whose primary verification state was not_verified when selected.",
+  "scope": "Each case is a complete fenced program extracted directly from the named Markdown body by the section heading and fence language. This report covers only those three fenced programs; it is not whole-document, framework, deployment, or external-service verification.",
+  "extraction": {
+    "method": "PowerShell reads each Markdown file and selects the first php, java, or rust fenced block following the named validation heading; the selected text is piped unchanged to the container command.",
+    "container_images": [
+      "php:8.5-cli-alpine",
+      "eclipse-temurin:21-jdk-noble",
+      "rust:1-slim-bookworm"
+    ]
+  },
+  "cases": [
+    {
+      "id": "php-match-strict-comparison-and-unmatched",
+      "document": "07-php-mastery/reference/language-concepts/04-control-flow.md",
+      "document_sha256": "4fb3ae82df45e78b5494008b52c295a78144dd41d8548c75fe8927804a0a1dd3",
+      "section": "正文提取验证：match 的严格比较与未命中",
+      "command": ["docker", "run", "--rm", "-i", "php:8.5-cli-alpine", "php"],
+      "exit_code": 0,
+      "stdout": "integer|unmatched\\n",
+      "stderr": "",
+      "assertion": "The integer arm is selected over the string arm and an unmatched expression without default is caught as UnhandledMatchError.",
+      "status": "passed"
+    },
+    {
+      "id": "java-function-composition-and-predicate-short-circuit",
+      "document": "08-java-revisited/reference/library-guides/05-java-util-function.md",
+      "document_sha256": "1b7b2ff80b1d5d580e40ee12a9866c5790639fe2a565351ee7256545c16752c2",
+      "section": "正文提取验证：组合顺序与短路",
+      "command": ["docker", "run", "--rm", "-i", "eclipse-temurin:21-jdk-noble", "sh", "-c", "cat > /tmp/FunctionVerification.java && javac /tmp/FunctionVerification.java && java -cp /tmp FunctionVerification"],
+      "exit_code": 0,
+      "stdout": "11\\n12\\nfalse|0\\n",
+      "stderr": "",
+      "assertion": "andThen applies twice then increment, compose applies increment then twice, and a false left Predicate prevents the right Predicate from running.",
+      "status": "passed"
+    },
+    {
+      "id": "rust-mut-reborrow-and-field-drop-order",
+      "document": "11-rust-cross-platform/reference/language-concepts/01-ownership-dictionary.md",
+      "document_sha256": "bb4a0968b56d56264286d79174706e23c2058ddd26e78c6c1ea2a865280d2fbe",
+      "section": "正文提取验证：重新借用与字段析构",
+      "command": ["docker", "run", "--rm", "-i", "rust:1-slim-bookworm", "sh", "-c", "cat > /tmp/main.rs && rustc --edition 2024 /tmp/main.rs -o /tmp/verify && /tmp/verify"],
+      "exit_code": 0,
+      "stdout": "ok!?\\npair first second ",
+      "stderr": "warning: fields `first` and `second` are never read (rustc dead_code warning)",
+      "assertion": "The original mutable reference remains usable after the call, and the observed drop sequence is Pair::drop then first then second.",
+      "status": "passed"
+    }
+  ],
+  "summary": {"passed": 3, "failed": 0, "blocked": 0}
+}

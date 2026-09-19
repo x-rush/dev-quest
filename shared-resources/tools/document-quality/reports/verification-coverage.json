@@ -17,12 +17,12 @@
   "summary": {
     "documents": 642,
     "by_primary_state": {
-      "not_verified": 513,
-      "runtime": 129
+      "not_verified": 511,
+      "runtime": 131
     },
-    "verification_wording_occurrences": 127,
+    "verification_wording_occurrences": 126,
     "marker_classification": {
-      "source_has_limited_runtime_evidence": 82,
+      "source_has_limited_runtime_evidence": 81,
       "unbound_verification_wording": 45
     }
   },
@@ -1177,10 +1177,10 @@
       "sha256": "e08db848998d0e8d67163e122e4ac6f2b684fe4c20d98072c4a94c104766ddc9",
       "verification": [
         {
-          "mode": "runtime",
-          "status": "PASS",
-          "report": "final-web-examples.json",
-          "scope": "one of seven extracted Web checks; see named cases"
+          "mode": "not_verified",
+          "status": "NOT_VERIFIED",
+          "report": null,
+          "scope": "No named runtime or syntax evidence is recorded for this document."
         }
       ],
       "marker_count": 0
@@ -1226,13 +1226,13 @@
     },
     {
       "path": "02-nextjs-frontend/basics/03-typescript-integration.md",
-      "sha256": "52ba64c2adb3cc2219cabf3d1ed1b7c9f6de05ce907805060c601169086f002e",
+      "sha256": "773013c4e7ddc2488f98c6a8f9e69c9b7f4948ac642bafc3754da9382b07fd82",
       "verification": [
         {
-          "mode": "not_verified",
-          "status": "NOT_VERIFIED",
-          "report": null,
-          "scope": "No named runtime or syntax evidence is recorded for this document."
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "next-node-python-basics-results.json",
+          "scope": "Only this named, complete code block; no whole-document, framework, network, or application coverage."
         }
       ],
       "marker_count": 0
@@ -1541,10 +1541,10 @@
       "sha256": "2ca960812df44b60d588afefc88d6cf2bf0e8ce248aff0c27aee665ef2fb8bc1",
       "verification": [
         {
-          "mode": "runtime",
-          "status": "PASS",
-          "report": "final-web-examples.json",
-          "scope": "one of seven extracted Web checks; see named cases"
+          "mode": "not_verified",
+          "status": "NOT_VERIFIED",
+          "report": null,
+          "scope": "No named runtime or syntax evidence is recorded for this document."
         }
       ],
       "marker_count": 0
@@ -2328,16 +2328,16 @@
     },
     {
       "path": "03-tanstack-stack/reference/framework-essentials/04-prefetch-ssr.md",
-      "sha256": "176540d5ea489576127fbd61a6abe75ca68880296a9ab1032a54c51629f8c29f",
+      "sha256": "f7d164b2ad64c249f2bcbd5843fdd9356d58483c246987a4e0f9ccef7b0be8b1",
       "verification": [
         {
-          "mode": "runtime",
-          "status": "PASS",
-          "report": "final-web-examples.json",
-          "scope": "one of seven extracted Web checks; see named cases"
+          "mode": "not_verified",
+          "status": "NOT_VERIFIED",
+          "report": null,
+          "scope": "No named runtime or syntax evidence is recorded for this document."
         }
       ],
-      "marker_count": 1
+      "marker_count": 0
     },
     {
       "path": "03-tanstack-stack/reference/framework-essentials/05-mutation-state.md",
@@ -2506,10 +2506,10 @@
       "sha256": "bd9997b0187f73aec697f9f7473ed8b34194f79710b07aa22a632beef1f84e28",
       "verification": [
         {
-          "mode": "runtime",
-          "status": "PASS",
-          "report": "final-web-examples.json",
-          "scope": "one of seven extracted Web checks; see named cases"
+          "mode": "not_verified",
+          "status": "NOT_VERIFIED",
+          "report": null,
+          "scope": "No named runtime or syntax evidence is recorded for this document."
         }
       ],
       "marker_count": 0
@@ -5475,13 +5475,13 @@
     },
     {
       "path": "07-php-mastery/reference/language-concepts/04-control-flow.md",
-      "sha256": "6c679d2abf7e6e21cdfd9bf6f7336e06c54eb97a1f3020a4315abbdefda40cce",
+      "sha256": "b2c8a2fb38b0cb0bc58d222c7c74715f87a96c3b3c3a84e3a7d7ba0097d00b46",
       "verification": [
         {
-          "mode": "not_verified",
-          "status": "NOT_VERIFIED",
-          "report": null,
-          "scope": "No named runtime or syntax evidence is recorded for this document."
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "rust-php-java-eighth-body-validation.json",
+          "scope": "Each case is a complete fenced program extracted directly from the named Markdown body by the section heading and fence language. This report covers only those three fenced programs; it is not whole-document, framework, deployment, or external-service verification."
         }
       ],
       "marker_count": 0
@@ -6604,13 +6604,13 @@
     },
     {
       "path": "08-java-revisited/reference/library-guides/05-java-util-function.md",
-      "sha256": "a7a90327fb256b2ce323a587f9e44de61da7e782acea724dc59f218861394b05",
+      "sha256": "ddf7cc6e2387bcf645dbb50e38a78ac74014fd8702aa452fb3e380db50da55ee",
       "verification": [
         {
-          "mode": "not_verified",
-          "status": "NOT_VERIFIED",
-          "report": null,
-          "scope": "No named runtime or syntax evidence is recorded for this document."
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "rust-php-java-eighth-body-validation.json",
+          "scope": "Each case is a complete fenced program extracted directly from the named Markdown body by the section heading and fence language. This report covers only those three fenced programs; it is not whole-document, framework, deployment, or external-service verification."
         }
       ],
       "marker_count": 0
@@ -6851,13 +6851,13 @@
     },
     {
       "path": "09-nodejs-backend/basics/03-modules-esm.md",
-      "sha256": "61c32da9793e771a9dd2031b99f4a64e34dad53f2ee902642f13bbb5b83c96bb",
+      "sha256": "4291d23e656dd443235d3ae22c6f6f071c1579e5f00deb53a9059b87f7062556",
       "verification": [
         {
-          "mode": "not_verified",
-          "status": "NOT_VERIFIED",
-          "report": null,
-          "scope": "No named runtime or syntax evidence is recorded for this document."
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "next-node-python-basics-results.json",
+          "scope": "Only this named, complete code block; no whole-document, framework, network, or application coverage."
         }
       ],
       "marker_count": 0
@@ -7555,13 +7555,13 @@
     },
     {
       "path": "10-python-discovery/basics/03-variables-types.md",
-      "sha256": "9496e639fd27d27487a51468f3e48ae4cd8b5d6ff93d8b4fca4314082415dd15",
+      "sha256": "7066ed3c38ce394bf4a757b3f4a19742b65370d36ca11f635657d6d8a80ba3f4",
       "verification": [
         {
-          "mode": "not_verified",
-          "status": "NOT_VERIFIED",
-          "report": null,
-          "scope": "No named runtime or syntax evidence is recorded for this document."
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "next-node-python-basics-results.json",
+          "scope": "Only this named, complete code block; no whole-document, framework, network, or application coverage."
         }
       ],
       "marker_count": 0
@@ -8682,13 +8682,13 @@
     },
     {
       "path": "11-rust-cross-platform/reference/language-concepts/01-ownership-dictionary.md",
-      "sha256": "36d8ba0c286b951327cc2869642cc9b0e7804e9982128ea790678f10b7364ad3",
+      "sha256": "dbb2f9f3eb17c6c2beb71f55fa08276c7d5a6c2bc8a78d71090e23594f41d42f",
       "verification": [
         {
-          "mode": "not_verified",
-          "status": "NOT_VERIFIED",
-          "report": null,
-          "scope": "No named runtime or syntax evidence is recorded for this document."
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "rust-php-java-eighth-body-validation.json",
+          "scope": "Each case is a complete fenced program extracted directly from the named Markdown body by the section heading and fence language. This report covers only those three fenced programs; it is not whole-document, framework, deployment, or external-service verification."
         }
       ],
       "marker_count": 0
@@ -9118,12 +9118,6 @@
       "line": 138,
       "excerpt": "本章提供可复现的操作方法，未声称已对某个业务站点完成性能实测。",
       "classification": "unbound_verification_wording"
-    },
-    {
-      "path": "03-tanstack-stack/reference/framework-essentials/04-prefetch-ssr.md",
-      "line": 15,
-      "excerpt": "## 一个可运行的缓存传递实验",
-      "classification": "source_has_limited_runtime_evidence"
     },
     {
       "path": "03-tanstack-stack/reference/language-concepts/05-typescript-patterns.md",
@@ -9776,6 +9770,61 @@
   ],
   "corpus_checks": [
     {
+      "mode": "mixed_report",
+      "report": "final-web-examples.json",
+      "status": "REPORT_ONLY",
+      "results": [
+        {
+          "case": "LRU demo and eviction/update/invalid-capacity assertions",
+          "output": "undefined 1 3",
+          "status": "PASS"
+        },
+        {
+          "case": "Query dehydrate JSON hydrate round trip",
+          "status": "PASS"
+        },
+        {
+          "case": "pageNumber unknown input and range rejection",
+          "status": "PASS"
+        },
+        {
+          "case": "DataFetcher and pageNumber TypeScript strict with actual dependencies",
+          "status": "PASS"
+        },
+        {
+          "case": "Old response cannot overwrite new URL even when mock ignores abort",
+          "status": "PASS"
+        },
+        {
+          "case": "HTTP failure reaches error state",
+          "status": "PASS"
+        },
+        {
+          "case": "Unmount cancels and ignores late completion",
+          "status": "PASS"
+        }
+      ],
+      "sources": [
+        {
+          "path": "02-nextjs-frontend/advanced-topics/performance/02-advanced-optimization.md",
+          "sha256": "970a0c3f885d646adf9def6542e2b5db76ecfa6621cf623a23a3ff134cc7b1f7"
+        },
+        {
+          "path": "03-tanstack-stack/reference/framework-essentials/04-prefetch-ssr.md",
+          "sha256": "c0a6803dc710cd6ed9beba27a7735dd1deab62850ddcb64f6e4448ec86105823"
+        },
+        {
+          "path": "03-tanstack-stack/reference/language-concepts/11-search-params.md",
+          "sha256": "c6816dc283ddd63950d34875131a3aa9115a0e4408da5387db2a048edf07434c"
+        },
+        {
+          "path": "02-nextjs-frontend/reference/framework-patterns/03-client-components-patterns.md",
+          "sha256": "2ca960812df44b60d588afefc88d6cf2bf0e8ce248aff0c27aee665ef2fb8bc1"
+        }
+      ],
+      "scope": "Historical report contains runtime and TypeScript compile checks but no per-case source bindings. Source inventory is retained as corpus evidence, not file-level runtime/PASS."
+    },
+    {
       "mode": "syntax",
       "report": "tsjs-validation-2026-09-19.md",
       "status": "PASS_SYNTAX",
@@ -9791,6 +9840,7 @@
     }
   ],
   "known_limits": [
+    "final-web-examples.json source inventory does not establish per-document runtime evidence; its unbound cases are retained under corpus_checks.",
     "No evidence record means not verified; it is not a correctness finding.",
     "Syntax-only TS/JS coverage is recorded at corpus level in tsjs-validation-2026-09-19.md and is not promoted to per-document runtime evidence.",
     "Framework builds, devices, external services, deployments, and historical snippets outside named cases remain outside this ledger."

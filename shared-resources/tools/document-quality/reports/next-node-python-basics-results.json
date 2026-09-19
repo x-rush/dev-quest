@@ -1,0 +1,92 @@
+{
+  "generated_at": "2026-09-19T14:23:51.380Z",
+  "purpose": "Limited direct-body extraction verification for three P1 basics documents.",
+  "passed": 3,
+  "total": 3,
+  "results": [
+    {
+      "id": "next-typescript-boundary",
+      "source": "dev-quest/02-nextjs-frontend/basics/03-typescript-integration.md",
+      "source_sha256": "773013c4e7ddc2488f98c6a8f9e69c9b7f4948ac642bafc3754da9382b07fd82",
+      "line": 871,
+      "code_sha256": "91ee703cea5f9876e3d9b54a403c44e1c2f2d010de36499726dc36c13e8215eb",
+      "extracted_directly_from_markdown": true,
+      "environment": "node:24-bookworm-slim",
+      "command": [
+        "docker",
+        "run",
+        "--rm",
+        "--network",
+        "none",
+        "--read-only",
+        "-v",
+        "C:\\Users\\77958\\AppData\\Local\\Temp\\dq-next-node-python-WraCWK:/input:ro",
+        "node:24-bookworm-slim",
+        "node",
+        "--experimental-strip-types",
+        "/input/next-typescript-boundary.ts"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": "",
+      "status": "PASS",
+      "scope": "Only this named, complete code block; no whole-document, framework, network, or application coverage."
+    },
+    {
+      "id": "node-esm-binding",
+      "source": "dev-quest/09-nodejs-backend/basics/03-modules-esm.md",
+      "source_sha256": "4291d23e656dd443235d3ae22c6f6f071c1579e5f00deb53a9059b87f7062556",
+      "line": 207,
+      "code_sha256": "ba63a923bc724d994b3982b3295a96ec289e863800a92584da10e927143fdb7d",
+      "extracted_directly_from_markdown": true,
+      "environment": "node:24-bookworm-slim",
+      "command": [
+        "docker",
+        "run",
+        "--rm",
+        "--network",
+        "none",
+        "--read-only",
+        "-v",
+        "C:\\Users\\77958\\AppData\\Local\\Temp\\dq-next-node-python-WraCWK:/input:ro",
+        "node:24-bookworm-slim",
+        "node",
+        "--experimental-strip-types",
+        "/input/node-esm-binding.mjs"
+      ],
+      "exit_code": 0,
+      "stdout": "esm-binding: live read and explicit extension\n",
+      "stderr": "",
+      "status": "PASS",
+      "scope": "Only this named, complete code block; no whole-document, framework, network, or application coverage."
+    },
+    {
+      "id": "python-bindings-formatting",
+      "source": "dev-quest/10-python-discovery/basics/03-variables-types.md",
+      "source_sha256": "7066ed3c38ce394bf4a757b3f4a19742b65370d36ca11f635657d6d8a80ba3f4",
+      "line": 229,
+      "code_sha256": "f861c02130f19e426678f817a7e5932e78282fe7f25d7d58d5921d4623698d33",
+      "extracted_directly_from_markdown": true,
+      "environment": "python:3.14-alpine",
+      "command": [
+        "docker",
+        "run",
+        "--rm",
+        "--network",
+        "none",
+        "--read-only",
+        "-v",
+        "C:\\Users\\77958\\AppData\\Local\\Temp\\dq-next-node-python-WraCWK:/input:ro",
+        "python:3.14-alpine",
+        "python",
+        "-I",
+        "/input/python-bindings-formatting.py"
+      ],
+      "exit_code": 0,
+      "stdout": "python-bindings: alias, rebinding, f-string, float\n",
+      "stderr": "",
+      "status": "PASS",
+      "scope": "Only this named, complete code block; no whole-document, framework, network, or application coverage."
+    }
+  ]
+}
