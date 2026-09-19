@@ -108,7 +108,7 @@ harness = false
 **操作指南**（文件：`benches/fib_bench.rs`）:
 
 ```rust
-use criterion::{criterion_group, criterion_main, BenchmarkId, Criterion, Throughput};
+use criterion::{criterion_group, criterion_main, BenchmarkId, Criterion};
 use std::hint::black_box;
 
 // 被测函数：递归斐波那契（故意低效，便于观察优化前后差异）
@@ -123,7 +123,8 @@ fn bench_fib(c: &mut Criterion) {
     // 分组：报告中聚合为 fib/10、fib/15、fib/20 三条曲线
     let mut group = c.benchmark_group("fib");
     for size in [10u64, 15, 20] {
-        group.throughput(Throughput::Elements(size)); // 报告可换算为单元素耗时
+        // fib 的 size 是递归深度，不是“处理了 size 个独立元素”。这里不声明
+        // Throughput，避免报告把指数计算误读成线性的每元素吞吐量。
         group.bench_with_input(BenchmarkId::from_parameter(size), &size, |b, &n| {
             b.iter(|| fib(black_box(n))) // black_box 阻止编译器把调用优化掉
         });
@@ -138,7 +139,7 @@ criterion_main!(benches); // harness = false 时，这里就是基准的 main
 **关键点解析**:
 
 - `b.iter(|| …)` 的闭包返回值会被 Criterion 吞掉（用 `black_box` 消费），防止「算了个寂寞」的假基准
-- `BenchmarkId` + `benchmark_group` 让多输入规模共享一组配置，报告按 `组名/参数` 命名
+- `BenchmarkId` + `benchmark_group` 让多输入规模共享一组配置，报告按 `组名/参数` 命名。只有基准确实处理固定数量的字节或元素时，才使用 `Throughput::Bytes/Elements`；对于递归深度、压缩级别等参数，直接比较时间更诚实。
 
 **验证方法**: `cargo bench --bench fib_bench` 只运行这一个基准目标。
 
@@ -269,16 +270,16 @@ criterion_main!(benches);
 2. 故意引入一个低效改动（如把 `Vec` 换成 `into_iter().collect::<Vec<_>>().iter()` 绕一圈）
 3. 用 `--baseline main` 观察报告如何指认回归
 
-**评估标准**: 报告出现明确的 regressed 结论，且回退改动后回到「No change」。
+**评估标准**: 在同一台受控机器、相同工具链和相同命名基线下，报告出现明确的 regressed 结论；回退改动后重新运行，变化区间不再支持“回归”。保留两次终端输出、`Cargo.lock` 与运行环境，避免把一次共享 runner 的噪声当作性能结论。
 
 ### 练习二：多规模基准
 
 **挑战任务**:
 
 - 用 `benchmark_group` + `BenchmarkId` 对同一算法测 10/100/1000 三种规模
-- 声明 `Throughput::Elements` 后，检查报告中单元素耗时是否随规模线性
+- 若每个规模都处理确切的元素数量，声明 `Throughput::Elements` 后检查吞吐量；如果算法复杂度本就不是线性，报告不应被解读为“单元素耗时线性”
 
-**提示**: 规模跳跃处的单元素耗时变化，往往是缓存层级切换的信号。
+**提示**: 规模跳跃处的吞吐量变化可能来自缓存层级、分支、分配或算法复杂度；先用 profile、输入分布和重复运行排除混杂因素，再给出原因。
 
 ---
 
