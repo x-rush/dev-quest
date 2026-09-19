@@ -6,11 +6,12 @@
 
 | 项目 | 处理结果 | 证据 |
 | --- | --- | --- |
-| 全库课程骨架与风险队列 | 11 个现行模块均有导读、入门/进阶/深入路径证据和七类目录；195 篇含易变版本或 API 表述进入人工复核队列 | [学习路径与参考库存](learning-reference-inventory.md) |
+| 全库课程骨架与风险队列 | 11 个现行模块均有导读、入门/进阶/深入路径证据和七类目录；195 篇含易变版本或 API 表述进入人工复核队列，已生成逐行定位 | [学习路径与参考库存](learning-reference-inventory.md)、[易变事实队列](time-sensitive-review-queue.md) |
 | Go 初学路径 | 错误处理移动到并发之前；增加无框架、无网络的标准库待办命令行项目，先完成输入、校验、状态、输出和测试，再进入并发/HTTP | [Go 导读](../../../../01-go-backend/LEARNING_GUIDE.md)、[待办项目](../../../../01-go-backend/projects/00-stdlib-todo-cli.md) |
 | Go 入门练习 | 变量与常量练习改为明确任务、预期输出、失败行为和提示 | [变量与常量](../../../../01-go-backend/basics/03-variables-constants.md) |
 | Go 参考示例 | 修复 `ProcessUsers` 对比代码的重复声明、缺失类型和指针/值不一致；README 的 REST 项目数据库描述统一为 PostgreSQL | [编程精华](../../../../01-go-backend/reference/language-concepts/03-go-programming-essentials.md)、[模块入口](../../../../01-go-backend/README.md) |
 | Go 标准库运行证据 | 18 个可独立运行的标准库程序或测试在网络关闭、源码只读的 Go 1.27.1 容器中通过；验证器修复了“只跑第一个程序却断言第二个输出”的漏检 | [运行报告](go-runtime-validation.md) |
+| Go 基础语言参考 | 25 个关键字、44 个预声明标识符和 18 个内置函数已重新按有限集合组织；修复过时循环语义、非法包名、`make` 容量提示、错误恢复等问题，并对 18 个完整程序及 2 个反例实际验证 | [基础参考验证](go-foundations-validation.md) |
 | 新增待办项目 | `go test ./...`、`go run . demo` 与空标题非零退出均在同一离线容器中实际通过 | 本批执行记录；复现命令见该项目的运行段落 |
 
 ## 尚未达到全库交付条件的工作
