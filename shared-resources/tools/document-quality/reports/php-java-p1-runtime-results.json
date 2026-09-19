@@ -1,6 +1,7 @@
 {
-  "scope": "Eleven explicitly marked, complete examples: PHP and Java keyword, built-in/API, standard-library, Java first-program, modern-features, enum-semantics, interface-semantics, and quick-reference pages. Excludes existing control-flow evidence and all unmarked partial snippets.",
+  "scope": "Twelve explicitly marked, complete examples: PHP first-script, keyword, built-in/API, standard-library, Java first-program, modern-features, enum-semantics, interface-semantics, and quick-reference pages. Excludes existing control-flow evidence and all unmarked partial snippets.",
   "documents": {
+    "07-php-mastery/basics/02-first-script.md": "5e90414a8e755d6ff512070e2a14f56907c9f75b24b105bc5e41281364c3b389",
     "07-php-mastery/reference/language-concepts/01-php-keywords.md": "867df9b19bf026d7f474899698db2a752d67d1cdfcce82b9d73458c8e1efc1a1",
     "07-php-mastery/reference/language-concepts/02-built-in-functions.md": "f2e60510ec55dd5bef56adeed3ba0cd66be01009f1e474a90e601ec8917ac11f",
     "07-php-mastery/reference/library-guides/01-standard-library-spl.md": "e7cfaba59931a3ca7d47b14f24190149b964a5b45926e0c8480cbd0201537771",
@@ -14,6 +15,33 @@
     "08-java-revisited/reference/library-guides/01-standard-library.md": "3df9f4557447a022165742bcdfab31e5291fae5c0ee586e669f71ad1342fefc7"
   },
   "cases": [
+    {
+      "id": "php-first-script-cli-contract",
+      "category": "first PHP script",
+      "language": "php",
+      "document": "07-php-mastery/basics/02-first-script.md",
+      "source_sha256": "b42fb69a947e652acc1cee0ca7283fe916fc44f53db3b06238dd779a67140f7a",
+      "runner": "php:8.5-cli-alpine container",
+      "expected_stdout": "PHP Learner\nAda\nstrict-type-error\n",
+      "commands": [
+        {
+          "command": [
+            "docker",
+            "run",
+            "--rm",
+            "-i",
+            "php:8.5-cli-alpine",
+            "php",
+            "-d",
+            "display_errors=stderr"
+          ],
+          "exit_code": 0,
+          "stdout": "PHP Learner\nAda\nstrict-type-error\n",
+          "stderr": ""
+        }
+      ],
+      "passed": true
+    },
     {
       "id": "php-keyword-values",
       "category": "keyword",

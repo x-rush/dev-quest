@@ -92,6 +92,44 @@ echo greet($name), PHP_EOL;  // echo 可一次输出多个表达式，PHP_EOL �
 - **`declare(strict_types=1)`**：现代 PHP 项目标配。开启后 `greet(123)` 会抛出 `TypeError`，而不是静默把 `123` 转成 `"123"`——错误尽早暴露
 - **`$argv`**：仅 CLI 模式可用的超全局变量，`$argv[0]` 是脚本名，`$argv[1]` 起才是真实参数
 
+### 可复现验收：严格类型与默认 CLI 输入
+
+下面的案例不依赖 PHP 小版本字符串，也不启动 HTTP 服务。它只验证本节的两个语言契约：未传参数时使用默认值；严格类型下把整数传给 `string` 参数会抛出 `TypeError`。真实脚本仍应通过 `php hello.php Ada` 读取终端参数；这个固定案例用于确认你理解了函数边界。
+
+<!-- reference-case: {"id":"php-first-script-cli-contract","stdout":"PHP Learner\nAda\nstrict-type-error\n"} -->
+```php
+<?php
+
+declare(strict_types=1);
+
+function greet(string $name): string
+{
+    return $name;
+}
+
+function nameFromArgs(array $args): string
+{
+    return $args[1] ?? 'PHP Learner';
+}
+
+echo greet(nameFromArgs(['hello.php'])), PHP_EOL;
+echo greet(nameFromArgs(['hello.php', 'Ada'])), PHP_EOL;
+
+try {
+    greet(42);
+} catch (TypeError) {
+    echo "strict-type-error", PHP_EOL;
+}
+```
+
+预期输出：
+
+```text
+PHP Learner
+Ada
+strict-type-error
+```
+
 ## 2. 运行方式一：CLI（命令行）
 
 ```bash

@@ -17,8 +17,8 @@
   "summary": {
     "documents": 642,
     "by_primary_state": {
-      "not_verified": 454,
-      "runtime": 188
+      "not_verified": 453,
+      "runtime": 189
     },
     "verification_wording_occurrences": 144,
     "marker_classification": {
@@ -4980,7 +4980,7 @@
     },
     {
       "path": "07-php-mastery/README.md",
-      "sha256": "f2d1827340d460680ac2e2661cd68850dedc414eb26a2738ac29de87dd9a1080",
+      "sha256": "cfc60bce05584dc74e70ebeeb1dd8881cc33ce6dd60fd89eb2ee31a01e6663ce",
       "verification": [
         {
           "mode": "not_verified",
@@ -5110,13 +5110,13 @@
     },
     {
       "path": "07-php-mastery/basics/02-first-script.md",
-      "sha256": "cb61272e96b21ca9b46da780ca61bf8d01a52ccdc4935fbfff3977024e764ac8",
+      "sha256": "c5d80f5432820ae321302c58003a02a5191eee8516826b98613501e691cb8391",
       "verification": [
         {
-          "mode": "not_verified",
-          "status": "NOT_VERIFIED",
-          "report": null,
-          "scope": "No named runtime or syntax evidence is recorded for this document."
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "php-java-p1-runtime-results.json",
+          "scope": "Twelve explicitly marked, complete examples: PHP first-script, keyword, built-in/API, standard-library, Java first-program, modern-features, enum-semantics, interface-semantics, and quick-reference pages. Excludes existing control-flow evidence and all unmarked partial snippets."
         }
       ],
       "marker_count": 0
@@ -5412,7 +5412,7 @@
           "mode": "runtime",
           "status": "PASS",
           "report": "php-java-p1-runtime-results.json",
-          "scope": "Eleven explicitly marked, complete examples: PHP and Java keyword, built-in/API, standard-library, Java first-program, modern-features, enum-semantics, interface-semantics, and quick-reference pages. Excludes existing control-flow evidence and all unmarked partial snippets."
+          "scope": "Twelve explicitly marked, complete examples: PHP first-script, keyword, built-in/API, standard-library, Java first-program, modern-features, enum-semantics, interface-semantics, and quick-reference pages. Excludes existing control-flow evidence and all unmarked partial snippets."
         },
         {
           "mode": "runtime",
@@ -5473,7 +5473,7 @@
           "mode": "runtime",
           "status": "PASS",
           "report": "php-java-p1-runtime-results.json",
-          "scope": "Eleven explicitly marked, complete examples: PHP and Java keyword, built-in/API, standard-library, Java first-program, modern-features, enum-semantics, interface-semantics, and quick-reference pages. Excludes existing control-flow evidence and all unmarked partial snippets."
+          "scope": "Twelve explicitly marked, complete examples: PHP first-script, keyword, built-in/API, standard-library, Java first-program, modern-features, enum-semantics, interface-semantics, and quick-reference pages. Excludes existing control-flow evidence and all unmarked partial snippets."
         },
         {
           "mode": "runtime",
@@ -5748,7 +5748,7 @@
           "mode": "runtime",
           "status": "PASS",
           "report": "php-java-p1-runtime-results.json",
-          "scope": "Eleven explicitly marked, complete examples: PHP and Java keyword, built-in/API, standard-library, Java first-program, modern-features, enum-semantics, interface-semantics, and quick-reference pages. Excludes existing control-flow evidence and all unmarked partial snippets."
+          "scope": "Twelve explicitly marked, complete examples: PHP first-script, keyword, built-in/API, standard-library, Java first-program, modern-features, enum-semantics, interface-semantics, and quick-reference pages. Excludes existing control-flow evidence and all unmarked partial snippets."
         }
       ],
       "marker_count": 0
@@ -5911,7 +5911,7 @@
     },
     {
       "path": "08-java-revisited/README.md",
-      "sha256": "eaf2d0d5639888a3983d76bf9947d6e10fcfd97071eb7148154c2368e06e015e",
+      "sha256": "512cee8d6caa50d3e63096d710a789ad799c6019ca9a709a0af1935c3e5a6d82",
       "verification": [
         {
           "mode": "not_verified",
@@ -5995,7 +5995,7 @@
           "mode": "runtime",
           "status": "PASS",
           "report": "php-java-p1-runtime-results.json",
-          "scope": "Eleven explicitly marked, complete examples: PHP and Java keyword, built-in/API, standard-library, Java first-program, modern-features, enum-semantics, interface-semantics, and quick-reference pages. Excludes existing control-flow evidence and all unmarked partial snippets."
+          "scope": "Twelve explicitly marked, complete examples: PHP first-script, keyword, built-in/API, standard-library, Java first-program, modern-features, enum-semantics, interface-semantics, and quick-reference pages. Excludes existing control-flow evidence and all unmarked partial snippets."
         }
       ],
       "marker_count": 0
@@ -6066,7 +6066,7 @@
           "mode": "runtime",
           "status": "PASS",
           "report": "php-java-p1-runtime-results.json",
-          "scope": "Eleven explicitly marked, complete examples: PHP and Java keyword, built-in/API, standard-library, Java first-program, modern-features, enum-semantics, interface-semantics, and quick-reference pages. Excludes existing control-flow evidence and all unmarked partial snippets."
+          "scope": "Twelve explicitly marked, complete examples: PHP first-script, keyword, built-in/API, standard-library, Java first-program, modern-features, enum-semantics, interface-semantics, and quick-reference pages. Excludes existing control-flow evidence and all unmarked partial snippets."
         }
       ],
       "marker_count": 0
@@ -6350,7 +6350,7 @@
           "mode": "runtime",
           "status": "PASS",
           "report": "php-java-p1-runtime-results.json",
-          "scope": "Eleven explicitly marked, complete examples: PHP and Java keyword, built-in/API, standard-library, Java first-program, modern-features, enum-semantics, interface-semantics, and quick-reference pages. Excludes existing control-flow evidence and all unmarked partial snippets."
+          "scope": "Twelve explicitly marked, complete examples: PHP first-script, keyword, built-in/API, standard-library, Java first-program, modern-features, enum-semantics, interface-semantics, and quick-reference pages. Excludes existing control-flow evidence and all unmarked partial snippets."
         },
         {
           "mode": "runtime",
@@ -6495,7 +6495,7 @@
           "mode": "runtime",
           "status": "PASS",
           "report": "php-java-p1-runtime-results.json",
-          "scope": "Eleven explicitly marked, complete examples: PHP and Java keyword, built-in/API, standard-library, Java first-program, modern-features, enum-semantics, interface-semantics, and quick-reference pages. Excludes existing control-flow evidence and all unmarked partial snippets."
+          "scope": "Twelve explicitly marked, complete examples: PHP first-script, keyword, built-in/API, standard-library, Java first-program, modern-features, enum-semantics, interface-semantics, and quick-reference pages. Excludes existing control-flow evidence and all unmarked partial snippets."
         }
       ],
       "marker_count": 0
@@ -6521,7 +6521,7 @@
           "mode": "runtime",
           "status": "PASS",
           "report": "php-java-p1-runtime-results.json",
-          "scope": "Eleven explicitly marked, complete examples: PHP and Java keyword, built-in/API, standard-library, Java first-program, modern-features, enum-semantics, interface-semantics, and quick-reference pages. Excludes existing control-flow evidence and all unmarked partial snippets."
+          "scope": "Twelve explicitly marked, complete examples: PHP first-script, keyword, built-in/API, standard-library, Java first-program, modern-features, enum-semantics, interface-semantics, and quick-reference pages. Excludes existing control-flow evidence and all unmarked partial snippets."
         }
       ],
       "marker_count": 0
@@ -6564,7 +6564,7 @@
           "mode": "runtime",
           "status": "PASS",
           "report": "php-java-p1-runtime-results.json",
-          "scope": "Eleven explicitly marked, complete examples: PHP and Java keyword, built-in/API, standard-library, Java first-program, modern-features, enum-semantics, interface-semantics, and quick-reference pages. Excludes existing control-flow evidence and all unmarked partial snippets."
+          "scope": "Twelve explicitly marked, complete examples: PHP first-script, keyword, built-in/API, standard-library, Java first-program, modern-features, enum-semantics, interface-semantics, and quick-reference pages. Excludes existing control-flow evidence and all unmarked partial snippets."
         },
         {
           "mode": "runtime",
@@ -6620,7 +6620,7 @@
           "mode": "runtime",
           "status": "PASS",
           "report": "php-java-p1-runtime-results.json",
-          "scope": "Eleven explicitly marked, complete examples: PHP and Java keyword, built-in/API, standard-library, Java first-program, modern-features, enum-semantics, interface-semantics, and quick-reference pages. Excludes existing control-flow evidence and all unmarked partial snippets."
+          "scope": "Twelve explicitly marked, complete examples: PHP first-script, keyword, built-in/API, standard-library, Java first-program, modern-features, enum-semantics, interface-semantics, and quick-reference pages. Excludes existing control-flow evidence and all unmarked partial snippets."
         }
       ],
       "marker_count": 0
@@ -6723,7 +6723,7 @@
           "mode": "runtime",
           "status": "PASS",
           "report": "php-java-p1-runtime-results.json",
-          "scope": "Eleven explicitly marked, complete examples: PHP and Java keyword, built-in/API, standard-library, Java first-program, modern-features, enum-semantics, interface-semantics, and quick-reference pages. Excludes existing control-flow evidence and all unmarked partial snippets."
+          "scope": "Twelve explicitly marked, complete examples: PHP first-script, keyword, built-in/API, standard-library, Java first-program, modern-features, enum-semantics, interface-semantics, and quick-reference pages. Excludes existing control-flow evidence and all unmarked partial snippets."
         }
       ],
       "marker_count": 0

@@ -1,9 +1,10 @@
 # PHP / Java P1 正文提取运行验证
 
-范围只包括十一个带命名标记的完整代码围栏：覆盖 PHP/Java 的关键字、内置 API/函数和标准库，以及 Java 的第一个程序、现代特性、枚举语义、接口语义和速查边界。控制流程页已有独立证据，未重新计入；无标记的教学片段也不计入。
+范围只包括十二个带命名标记的完整代码围栏：覆盖 PHP 的第一个脚本、关键字、内置 API/函数和标准库，以及 Java 的第一个程序、现代特性、枚举语义、接口语义和速查边界。控制流程页已有独立证据，未重新计入；无标记的教学片段也不计入。
 
 | Case | Category | Document | Runner | Result |
 | --- | --- | --- | --- | --- |
+| `php-first-script-cli-contract` | first PHP script | `07-php-mastery/basics/02-first-script.md` | php:8.5-cli-alpine container | PASS |
 | `php-keyword-values` | keyword | `07-php-mastery/reference/language-concepts/01-php-keywords.md` | php:8.5-cli-alpine container | PASS |
 | `php-array` | built-in functions | `07-php-mastery/reference/language-concepts/02-built-in-functions.md` | php:8.5-cli-alpine container | PASS |
 | `php-spl-core` | standard library | `07-php-mastery/reference/library-guides/01-standard-library-spl.md` | php:8.5-cli-alpine container | PASS |

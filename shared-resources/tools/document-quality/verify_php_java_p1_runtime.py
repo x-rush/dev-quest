@@ -25,6 +25,7 @@ OUT = REPORTS / "php-java-p1-runtime-results.json"
 REPORT = REPORTS / "php-java-p1-runtime-report.md"
 
 CASES = (
+    ("php-first-script-cli-contract", "07-php-mastery/basics/02-first-script.md", "reference-case", "php", "PHP Learner\nAda\nstrict-type-error\n", "first PHP script"),
     ("php-keyword-values", "07-php-mastery/reference/language-concepts/01-php-keywords.md", "reference-case", "php", "strict rejected\n6\n10\nstring\n", "keyword"),
     ("php-array", "07-php-mastery/reference/language-concepts/02-built-in-functions.md", "reference-case", "php", "int(0)\nbool(true)\n{\"1\":2,\"2\":4}\n[2,4]\nbool(true)\nbool(false)\n", "built-in functions"),
     ("php-spl-core", "07-php-mastery/reference/library-guides/01-standard-library-spl.md", "runtime-evidence", "php", "first\n2\n[\"a\",\"b\"]\n", "standard library"),
@@ -123,7 +124,7 @@ def main() -> None:
                 "passed": passed,
             })
     data = {
-        "scope": "Eleven explicitly marked, complete examples: PHP and Java keyword, built-in/API, standard-library, Java first-program, modern-features, enum-semantics, interface-semantics, and quick-reference pages. Excludes existing control-flow evidence and all unmarked partial snippets.",
+        "scope": "Twelve explicitly marked, complete examples: PHP first-script, keyword, built-in/API, standard-library, Java first-program, modern-features, enum-semantics, interface-semantics, and quick-reference pages. Excludes existing control-flow evidence and all unmarked partial snippets.",
         "documents": {relative: hashlib.sha256((ROOT / relative).read_bytes()).hexdigest() for _, relative, *_ in CASES},
         "cases": records,
         "passed": all(record["passed"] for record in records),
@@ -132,7 +133,7 @@ def main() -> None:
     rows = [
         "# PHP / Java P1 正文提取运行验证",
         "",
-        "范围只包括十一个带命名标记的完整代码围栏：覆盖 PHP/Java 的关键字、内置 API/函数和标准库，以及 Java 的第一个程序、现代特性、枚举语义、接口语义和速查边界。控制流程页已有独立证据，未重新计入；无标记的教学片段也不计入。",
+        "范围只包括十二个带命名标记的完整代码围栏：覆盖 PHP 的第一个脚本、关键字、内置 API/函数和标准库，以及 Java 的第一个程序、现代特性、枚举语义、接口语义和速查边界。控制流程页已有独立证据，未重新计入；无标记的教学片段也不计入。",
         "",
         "| Case | Category | Document | Runner | Result |",
         "| --- | --- | --- | --- | --- |",
