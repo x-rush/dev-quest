@@ -17,15 +17,15 @@
 
 ## 🧪 技术基线
 
-> 本模块所有文档的版本基线，核实日期 **2026-09-16**，来源为各项目官方发布页。正文中旧版本引用以本基线为准对齐。
+> 本模块所有文档的版本基线，最近核实日期 **2026-09-20**，来源为各项目官方发布页。正文中旧版本引用以本基线为准对齐；这份兼容基线不替代各示例的锁文件或实际构建记录。
 
 | 技术 | 版本 | 核实日期 | 来源 |
 |------|------|---------|------|
-| Go | 1.27（1.27.1；go.dev/dl 官方版本 JSON 实核，按官方“出现两个更新主版本后停止支持”的政策，1.26 仍在支持窗口；1.25 已退出支持窗口，1.25.x 旧断言以本基线为准对齐） | 2026-09-16 | [go.dev/dl](https://go.dev/dl/) |
-| Gin | 1.12.0（满足 ≥1.10 基线） | 2026-09-11 | [gin-gonic/gin releases](https://github.com/gin-gonic/gin/releases) |
-| GORM | v1.31.2（最新稳定版；v1.30.0 起提供 `gorm.G[T]` 泛型 API） | 2026-09-11 | [pkg.go.dev/gorm.io/gorm](https://pkg.go.dev/gorm.io/gorm) |
-| MongoDB Go Driver | v2.9.1（最新稳定版；v1 路径已进入维护模式，新项目使用 `/v2`） | 2026-09-11 | [mongodb/mongo-go-driver releases](https://github.com/mongodb/mongo-go-driver/releases) |
-| go-redis | v9.22.0（v9 系列） | 2026-09-11 | [redis/go-redis releases](https://github.com/redis/go-redis/releases) |
+| Go | 1.27（1.27.1；go.dev/dl 官方版本 JSON 实核，按官方“出现两个更新主版本后停止支持”的政策，1.26 仍在支持窗口；1.25 已退出支持窗口，1.25.x 旧断言以本基线为准对齐） | 2026-09-20 | [go.dev/dl](https://go.dev/dl/) |
+| Gin | 1.12.0（满足 ≥1.10 基线） | 2026-09-20 | [gin-gonic/gin releases](https://github.com/gin-gonic/gin/releases) |
+| GORM | v1.31.2（提供 `gorm.G[T]` 泛型 API） | 2026-09-20 | [pkg.go.dev/gorm.io/gorm](https://pkg.go.dev/gorm.io/gorm) |
+| MongoDB Go Driver | v2.9.1（v2 使用 `/v2` 导入路径；新项目按 v2 文档选型） | 2026-09-20 | [mongodb/mongo-go-driver releases](https://github.com/mongodb/mongo-go-driver/releases) |
+| go-redis | v9.22.0（v9 系列） | 2026-09-20 | [redis/go-redis releases](https://github.com/redis/go-redis/releases) |
 
 <details>
 <summary>文档信息（用途、难度与维护记录）</summary>
