@@ -7,8 +7,8 @@
 | 指标 | 数量 |
 |---|---:|
 | 纳入模块文档 | 642 |
-| 主状态：not_verified | 469 |
-| 主状态：runtime | 173 |
+| 主状态：not_verified | 468 |
+| 主状态：runtime | 174 |
 | 验证措辞出现次数 | 142 |
 | 措辞分类：source_has_limited_runtime_evidence | 88 |
 | 措辞分类：unbound_verification_wording | 54 |
@@ -78,7 +78,7 @@
 | Go | [01-go-backend/reference/language-concepts/05-go-control-flow.md](../../../../01-go-backend/reference/language-concepts/05-go-control-flow.md) | `runtime` | 1 | 0 |
 | Go | [01-go-backend/reference/language-concepts/06-go-oop-concepts.md](../../../../01-go-backend/reference/language-concepts/06-go-oop-concepts.md) | `runtime` | 1 | 0 |
 | Go | [01-go-backend/reference/language-concepts/07-error-handling.md](../../../../01-go-backend/reference/language-concepts/07-error-handling.md) | `runtime` | 1 | 0 |
-| Go | [01-go-backend/reference/language-concepts/08-concurrency-basics.md](../../../../01-go-backend/reference/language-concepts/08-concurrency-basics.md) | `not_verified` | 0 | 0 |
+| Go | [01-go-backend/reference/language-concepts/08-concurrency-basics.md](../../../../01-go-backend/reference/language-concepts/08-concurrency-basics.md) | `runtime` | 1 | 0 |
 | Go | [01-go-backend/reference/language-concepts/09-generics.md](../../../../01-go-backend/reference/language-concepts/09-generics.md) | `runtime` | 2 | 0 |
 | Go | [01-go-backend/reference/language-concepts/10-slice-semantics.md](../../../../01-go-backend/reference/language-concepts/10-slice-semantics.md) | `runtime` | 2 | 0 |
 | Go | [01-go-backend/reference/language-concepts/11-map-semantics.md](../../../../01-go-backend/reference/language-concepts/11-map-semantics.md) | `runtime` | 2 | 0 |

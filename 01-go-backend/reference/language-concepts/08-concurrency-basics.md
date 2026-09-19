@@ -75,6 +75,52 @@ func main() {
 }
 ```
 
+### 可复现验收：等待、关闭与接收
+
+goroutine 的完成顺序没有保证，因此不要以逐行打印的顺序验收并发程序。下面的程序让工作 goroutine 把值写入 channel，由单独的 goroutine 在 `Wait` 返回后关闭它；主 goroutine 完整接收后排序。固定输出证明三件事：三项任务都完成、接收循环因关闭而退出、没有依赖调度顺序。
+
+<!-- doc-verify:go-concurrency-collect-close -->
+```go
+package main
+
+import (
+	"fmt"
+	"sort"
+	"sync"
+)
+
+func main() {
+	results := make(chan int, 3)
+	var wg sync.WaitGroup
+
+	for _, id := range []int{1, 2, 3} {
+		wg.Add(1)
+		go func(n int) {
+			defer wg.Done()
+			results <- n * 10
+		}(id)
+	}
+
+	go func() {
+		wg.Wait()
+		close(results)
+	}()
+
+	values := make([]int, 0, 3)
+	for value := range results {
+		values = append(values, value)
+	}
+	sort.Ints(values)
+	fmt.Println(values)
+}
+```
+
+预期输出：
+
+```text
+[10 20 30]
+```
+
 带超时的多路复用：
 
 ```go

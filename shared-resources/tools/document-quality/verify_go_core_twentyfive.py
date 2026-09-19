@@ -27,6 +27,7 @@ CASES = (
     ("go-control-flow-contract", "01-go-backend/basics/06-control-structures.md", "sum=5 skipped=1 stopped=true\nresult=complete-before-sentinel\n"),
     ("go-context-cancellation", "01-go-backend/reference/library-guides/05-context.md", "context deadline exceeded\n两个子 ctx 都已取消\n42\n"),
     ("go-sync-mutex-waitgroup-once", "01-go-backend/reference/library-guides/06-sync.md", "hits=100 once=1 atomic=5\n"),
+    ("go-concurrency-collect-close", "01-go-backend/reference/language-concepts/08-concurrency-basics.md", "[10 20 30]\n"),
 )
 
 def fence(text: str, identifier: str) -> str:
@@ -70,9 +71,9 @@ def main() -> None:
         })
     report = {
         "schema_version": 1, "generated_at": datetime.now(timezone.utc).isoformat(),
-        "purpose": "Twenty-fifth-round runtime evidence for fourteen marked Go core-document fences.",
+        "purpose": "Twenty-fifth-round runtime evidence for fifteen marked Go core-document fences.",
         "isolation": "No network, read-only container root, dropped capabilities, no-new-privileges, bounded CPU/memory/PIDs, and tmpfs-only writable workspace. Image must already exist because --pull=never is used.",
-        "scope": "Only the fourteen named complete Go fences extracted unchanged after CRLF-to-LF normalization were executed. Other fences, toolchain setup, web services, filesystem integrations, concurrency scheduling, performance, and projects remain outside this evidence.",
+        "scope": "Only the fifteen named complete Go fences extracted unchanged after CRLF-to-LF normalization were executed. Other fences, toolchain setup, web services, filesystem integrations, concurrency scheduling, performance, and projects remain outside this evidence.",
         "results": results, "summary": {"passed": sum(x["status"] == "PASS" for x in results), "total": len(results)},
     }
     REPORTS.mkdir(exist_ok=True)
@@ -82,7 +83,7 @@ def main() -> None:
             raise SystemExit(1)
         return
     (REPORTS / "go-core-twentyfive-runtime.json").write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf8")
-    lines = ["# Go 核心基础页第二十五批运行验证", "", "仅运行下列十四个正文中有 `doc-verify` 标记的完整 Go 围栏。报告不将结果扩大为整页、工具链或项目验证。", "", "| 文档 | 示例 | 结果 |", "|---|---|---|"]
+    lines = ["# Go 核心基础页第二十五批运行验证", "", "仅运行下列十五个正文中有 `doc-verify` 标记的完整 Go 围栏。报告不将结果扩大为整页、工具链或项目验证。", "", "| 文档 | 示例 | 结果 |", "|---|---|---|"]
     lines += [f"| [{x['document']}](../../../../{x['document']}) | `{x['id']}` | {x['status']} |" for x in results]
     lines += ["", "隔离条件、原文与代码 SHA-256、完整输出和命令见同名 JSON。"]
     (REPORTS / "go-core-twentyfive-runtime.md").write_text("\n".join(lines) + "\n", encoding="utf8")
