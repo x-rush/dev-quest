@@ -341,6 +341,24 @@ startTransition(() => {
 *相关教程: [环境搭建](../../basics/01-environment-setup.md) · [第一个 App](../../basics/02-first-app.md)*
 
 
+<!-- full-library-explanation -->
+## 尺寸快照与尺寸订阅要配对清理
+
+`Dimensions.get('window')` 给出读取那一刻的尺寸。旋转、折叠屏变化或多窗口调整后，保存下来的对象不会自行变化；应在组件存活期间订阅，并在离开时移除。React Native 版本的订阅返回对象以实际版本类型为准，下面表达的是生命周期关系：
+
+```ts
+useEffect(() => {
+  const subscription = Dimensions.addEventListener('change', ({ window }) => {
+    setWidth(window.width);
+  });
+  return () => subscription.remove();
+}, []);
+```
+
+不要在模块顶层订阅，也不要在每次渲染都注册监听器。两者都会让旧页面或热更新后的回调持续存在。布局应优先由 Flexbox、`useWindowDimensions` 或导航库提供的上下文响应尺寸；仅在业务确实需要数值时保存它。
+
+练习：把设备旋转两次、切入分屏再返回，记录回调次数。验收：组件卸载后不再调用 setState，宽度变化时 UI 可用；模拟器上的结果仍不代表所有 Android、iOS 与 OpenHarmony 设备行为。该段只校验了订阅清理的 JavaScript 生命周期模型，未在原生运行时执行。
+
 <!-- learning-navigation -->
 ## 阅读导航
 

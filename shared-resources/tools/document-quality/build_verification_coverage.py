@@ -118,6 +118,9 @@ def records_from_reports():
     go_rust_node_tenth = load("go-rust-node-tenth-runtime.json")
     for row in go_rust_node_tenth.get("results", []):
         add_record(records, row.get("source"), "runtime", "go-rust-node-tenth-runtime.json", go_rust_node_tenth.get("scope", "selected Go/Rust/Node tenth runtime example"), "PASS" if row.get("status", "").upper() == "PASS" else "FAIL")
+    go_php_java_python_eleventh = load("go-php-java-python-eleventh-runtime.json")
+    for row in go_php_java_python_eleventh.get("results", []):
+        add_record(records, row.get("file"), "runtime", "go-php-java-python-eleventh-runtime.json", go_php_java_python_eleventh.get("scope", "selected Go/PHP/Java/Python eleventh runtime example"), "PASS" if row.get("status", "").upper() == "PASS" else "FAIL")
     php_java_p1_runtime = load("php-java-p1-runtime-results.json")
     for row in php_java_p1_runtime.get("cases", []):
         add_record(records, row.get("document"), "runtime", "php-java-p1-runtime-results.json", php_java_p1_runtime.get("scope", "selected PHP/Java P1 runtime example"), "PASS" if row.get("passed") else "FAIL")
@@ -133,6 +136,10 @@ def records_from_reports():
     next_node_python_basics = load("next-node-python-basics-results.json")
     for row in next_node_python_basics.get("results", []):
         add_record(records, row.get("source"), "runtime", "next-node-python-basics-results.json", row.get("scope", "selected Next/Node/Python basic example"), "PASS" if row.get("status", "").upper() == "PASS" else "FAIL")
+    next_tanstack_mobile_eleventh = load("next-tanstack-mobile-eleventh-body-validation.json")
+    for row in next_tanstack_mobile_eleventh.get("results", []):
+        if row.get("status", "").upper() == "PASS":
+            add_record(records, row.get("path"), "runtime", "next-tanstack-mobile-eleventh-body-validation.json", row.get("limits", "selected Next/TanStack/mobile eleventh body example"), "PASS")
     next_first_project = load("next-first-project-2026-09-19.json")
     add_record(records, next_first_project.get("source"), "runtime", "next-first-project-2026-09-19.json", next_first_project.get("limits", "selected Next first-project JSDOM check"), next_first_project.get("status", "FAIL"))
     php_java_core = load("php-java-core-boundaries.json")

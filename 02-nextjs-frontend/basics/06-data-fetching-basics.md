@@ -1138,6 +1138,36 @@ Next.js 16的数据获取生态系统为现代Web应用提供了强大而灵活�
 **最后更新**: 2026年9月
 **版本**: v1.0.0
 
+<!-- full-library-explanation -->
+## 请求结果不是自动可信的数据
+
+`fetch()` 在网络能连通时也会为 404、500 返回一个已兑现的 Promise；只有网络层失败才会抛出。因此先检查 `ok`，再把 JSON 当作外部输入校验。下面的解析函数没有依赖 Next.js，可放进 Server Component、Route Handler 或客户端请求封装；三者的缓存和凭证边界仍要分别设计。
+
+```ts
+type Todo = { id: string; title: string };
+
+export function parseTodo(value: unknown): Todo {
+  if (typeof value !== 'object' || value === null || Array.isArray(value)) {
+    throw new Error('响应不是对象');
+  }
+  const { id, title } = value as Record<string, unknown>;
+  if (typeof id !== 'string' || typeof title !== 'string') {
+    throw new Error('响应字段无效');
+  }
+  return { id, title };
+}
+
+export async function fetchTodo(id: string): Promise<Todo> {
+  const response = await fetch(`https://api.example.test/todos/${encodeURIComponent(id)}`);
+  if (!response.ok) throw new Error(`HTTP ${response.status}`);
+  return parseTodo(await response.json());
+}
+```
+
+`encodeURIComponent` 只是在 URL 路径中编码一个值，不能取代服务端的认证与资源授权。不要把 `response.json() as Todo` 当作运行时校验：断言不会改变收到的值。
+
+练习：分别模拟 404、`{ id: 1 }` 和合法对象；验收时确认 UI 能显示可恢复错误，且没有把错误页面的 HTML 当 JSON 成功数据写入缓存。此段纯解析逻辑已在仓库验证记录中以提取后的 JavaScript 等价用例执行；完整 Next.js 渲染、缓存和部署环境未由该用例验证。
+
 <!-- learning-navigation -->
 ## 阅读导航
 

@@ -7,8 +7,8 @@
 | 指标 | 数量 |
 |---|---:|
 | 纳入模块文档 | 642 |
-| 主状态：not_verified | 505 |
-| 主状态：runtime | 137 |
+| 主状态：not_verified | 501 |
+| 主状态：runtime | 141 |
 | 验证措辞出现次数 | 126 |
 | 措辞分类：source_has_limited_runtime_evidence | 82 |
 | 措辞分类：unbound_verification_wording | 44 |
@@ -81,7 +81,7 @@
 | Go | [01-go-backend/reference/language-concepts/08-concurrency-basics.md](../../../../01-go-backend/reference/language-concepts/08-concurrency-basics.md) | `not_verified` | 0 | 0 |
 | Go | [01-go-backend/reference/language-concepts/09-generics.md](../../../../01-go-backend/reference/language-concepts/09-generics.md) | `not_verified` | 0 | 0 |
 | Go | [01-go-backend/reference/language-concepts/10-slice-semantics.md](../../../../01-go-backend/reference/language-concepts/10-slice-semantics.md) | `runtime` | 1 | 0 |
-| Go | [01-go-backend/reference/language-concepts/11-map-semantics.md](../../../../01-go-backend/reference/language-concepts/11-map-semantics.md) | `not_verified` | 0 | 0 |
+| Go | [01-go-backend/reference/language-concepts/11-map-semantics.md](../../../../01-go-backend/reference/language-concepts/11-map-semantics.md) | `runtime` | 1 | 0 |
 | Go | [01-go-backend/reference/language-concepts/12-channel-semantics.md](../../../../01-go-backend/reference/language-concepts/12-channel-semantics.md) | `not_verified` | 0 | 1 |
 | Go | [01-go-backend/reference/language-concepts/13-interface-semantics.md](../../../../01-go-backend/reference/language-concepts/13-interface-semantics.md) | `not_verified` | 0 | 0 |
 | Go | [01-go-backend/reference/language-concepts/14-defer-panic-recover.md](../../../../01-go-backend/reference/language-concepts/14-defer-panic-recover.md) | `not_verified` | 0 | 0 |
@@ -440,7 +440,7 @@
 | PHP | [07-php-mastery/reference/language-concepts/07-namespaces-autoloading.md](../../../../07-php-mastery/reference/language-concepts/07-namespaces-autoloading.md) | `not_verified` | 0 | 0 |
 | PHP | [07-php-mastery/reference/language-concepts/08-reflection-attributes.md](../../../../07-php-mastery/reference/language-concepts/08-reflection-attributes.md) | `not_verified` | 0 | 0 |
 | PHP | [07-php-mastery/reference/language-concepts/09-strings-regex.md](../../../../07-php-mastery/reference/language-concepts/09-strings-regex.md) | `not_verified` | 0 | 0 |
-| PHP | [07-php-mastery/reference/language-concepts/10-datetime.md](../../../../07-php-mastery/reference/language-concepts/10-datetime.md) | `not_verified` | 0 | 0 |
+| PHP | [07-php-mastery/reference/language-concepts/10-datetime.md](../../../../07-php-mastery/reference/language-concepts/10-datetime.md) | `runtime` | 1 | 0 |
 | PHP | [07-php-mastery/reference/language-concepts/11-errors-exceptions.md](../../../../07-php-mastery/reference/language-concepts/11-errors-exceptions.md) | `not_verified` | 0 | 0 |
 | PHP | [07-php-mastery/reference/language-concepts/12-modern-php-85.md](../../../../07-php-mastery/reference/language-concepts/12-modern-php-85.md) | `not_verified` | 0 | 0 |
 | PHP | [07-php-mastery/reference/language-concepts/13-weak-comparison.md](../../../../07-php-mastery/reference/language-concepts/13-weak-comparison.md) | `runtime` | 1 | 1 |
@@ -510,7 +510,7 @@
 | Java | [08-java-revisited/reference/library-guides/05-java-util-function.md](../../../../08-java-revisited/reference/library-guides/05-java-util-function.md) | `runtime` | 1 | 0 |
 | Java | [08-java-revisited/reference/library-guides/06-java-math.md](../../../../08-java-revisited/reference/library-guides/06-java-math.md) | `runtime` | 1 | 0 |
 | Java | [08-java-revisited/reference/library-guides/07-java-text-and-time-format.md](../../../../08-java-revisited/reference/library-guides/07-java-text-and-time-format.md) | `not_verified` | 0 | 0 |
-| Java | [08-java-revisited/reference/library-guides/08-java-util-regex.md](../../../../08-java-revisited/reference/library-guides/08-java-util-regex.md) | `not_verified` | 0 | 0 |
+| Java | [08-java-revisited/reference/library-guides/08-java-util-regex.md](../../../../08-java-revisited/reference/library-guides/08-java-util-regex.md) | `runtime` | 1 | 0 |
 | Java | [08-java-revisited/reference/library-guides/09-jdk-package-map.md](../../../../08-java-revisited/reference/library-guides/09-jdk-package-map.md) | `not_verified` | 0 | 0 |
 | Java | [08-java-revisited/reference/quick-references/01-java-cheatsheet.md](../../../../08-java-revisited/reference/quick-references/01-java-cheatsheet.md) | `not_verified` | 0 | 0 |
 | Java | [08-java-revisited/reference/quick-references/02-troubleshooting.md](../../../../08-java-revisited/reference/quick-references/02-troubleshooting.md) | `not_verified` | 0 | 0 |
@@ -580,7 +580,7 @@
 | Python | [10-python-discovery/basics/04-functions-oop.md](../../../../10-python-discovery/basics/04-functions-oop.md) | `not_verified` | 0 | 0 |
 | Python | [10-python-discovery/basics/05-control-flow.md](../../../../10-python-discovery/basics/05-control-flow.md) | `runtime` | 1 | 0 |
 | Python | [10-python-discovery/basics/06-exceptions.md](../../../../10-python-discovery/basics/06-exceptions.md) | `not_verified` | 0 | 0 |
-| Python | [10-python-discovery/basics/07-advanced-features.md](../../../../10-python-discovery/basics/07-advanced-features.md) | `not_verified` | 0 | 0 |
+| Python | [10-python-discovery/basics/07-advanced-features.md](../../../../10-python-discovery/basics/07-advanced-features.md) | `runtime` | 1 | 0 |
 | Python | [10-python-discovery/basics/08-first-project.md](../../../../10-python-discovery/basics/08-first-project.md) | `not_verified` | 0 | 0 |
 | Python | [10-python-discovery/deployment/01-docker-deployment.md](../../../../10-python-discovery/deployment/01-docker-deployment.md) | `not_verified` | 0 | 0 |
 | Python | [10-python-discovery/deployment/02-ci-cd-pipelines.md](../../../../10-python-discovery/deployment/02-ci-cd-pipelines.md) | `not_verified` | 0 | 2 |

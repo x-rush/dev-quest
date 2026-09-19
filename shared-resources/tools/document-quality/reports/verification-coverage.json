@@ -17,8 +17,8 @@
   "summary": {
     "documents": 642,
     "by_primary_state": {
-      "not_verified": 505,
-      "runtime": 137
+      "not_verified": 501,
+      "runtime": 141
     },
     "verification_wording_occurrences": 126,
     "marker_classification": {
@@ -706,13 +706,13 @@
     },
     {
       "path": "01-go-backend/reference/language-concepts/11-map-semantics.md",
-      "sha256": "0ac9d9fd677d61489694e657e5ee9e8547c90877cd84feae9b5d94231be6014c",
+      "sha256": "27fd06e834d58504d4eea7429a7e704ec981542bea31c477a7b0711cad4f3107",
       "verification": [
         {
-          "mode": "not_verified",
-          "status": "NOT_VERIFIED",
-          "report": null,
-          "scope": "No named runtime or syntax evidence is recorded for this document."
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "go-php-java-python-eleventh-runtime.json",
+          "scope": "Four named complete fenced programs extracted unchanged from current P1 core/standard-library pages: Go map semantics, PHP DateTimeImmutable, Java java.util.regex, and Python asyncio."
         }
       ],
       "marker_count": 0
@@ -1265,7 +1265,7 @@
     },
     {
       "path": "02-nextjs-frontend/basics/06-data-fetching-basics.md",
-      "sha256": "8879c5986b1356c41a575ae5da8323d71013a6fea0e9b28dd96749ce625dacaa",
+      "sha256": "cd821739bb596d635389e607e1be504c42d0147ff3b52c04533e7acdbe501191",
       "verification": [
         {
           "mode": "not_verified",
@@ -2289,7 +2289,7 @@
     },
     {
       "path": "03-tanstack-stack/reference/framework-essentials/01-query-essentials.md",
-      "sha256": "392cd4135579aab530fbbfaf5786ade2a8f117d93449dc6975e9970530ab7f25",
+      "sha256": "d781c32eeab8b1aaf2ce67e488e6df9f3ae8df06693374bbc8316d4c9f96a3df",
       "verification": [
         {
           "mode": "not_verified",
@@ -2769,7 +2769,7 @@
     },
     {
       "path": "04-multiplatform-apps/LEARNING_GUIDE.md",
-      "sha256": "be0849fd2cd2f23e7e27303071a37d0bd5365d7fa73f8b5ed213aa13c4c4620d",
+      "sha256": "6970aec6ab74e96fb6270c512e218a9d4f79567a1d8c29ac79b5a6183d131545",
       "verification": [
         {
           "mode": "not_verified",
@@ -3159,7 +3159,7 @@
     },
     {
       "path": "04-multiplatform-apps/reference/language-concepts/01-rn-core-api.md",
-      "sha256": "06bad3cb89337e1d17fc2f6a02b9eec4376274e5037520cbea847310238cb337",
+      "sha256": "4c89ffa430891bee2a3ec140d80c42fb2567c80c87faae9b63cdc4d3b622040a",
       "verification": [
         {
           "mode": "not_verified",
@@ -3913,7 +3913,7 @@
     },
     {
       "path": "05-kotlin-compose/reference/language-concepts/01-kotlin-keywords.md",
-      "sha256": "f5235225f9e79c46f71c35917efe1e09d66326c3ceb149528dacc1ea82a98c86",
+      "sha256": "bc90befa29e08e9ac9f34dd4c8b99552d22126bd8e6744cad44fb558c59f53fd",
       "verification": [
         {
           "mode": "not_verified",
@@ -4172,7 +4172,7 @@
     },
     {
       "path": "06-swift-swiftui/LEARNING_GUIDE.md",
-      "sha256": "ff85d47e2c30983acfcf6d4284a9799c3c56a368ff340b87cc427f0dcdcd9dcf",
+      "sha256": "8e06e23feaad50db18b51b8778ab1acdc1b929fa58cbe0f3fb3ce9203b33f7d9",
       "verification": [
         {
           "mode": "not_verified",
@@ -4815,7 +4815,7 @@
     },
     {
       "path": "06-swift-swiftui/reference/language-concepts/16-stdlib-foundation-map.md",
-      "sha256": "6e00b50d51c9cdef86f4323951874e62771fd91c771ef45d570a2f385cadf5ff",
+      "sha256": "b3e206ea5cc3a8b49b013c5cd85540753d21f0387ec9a1ca9b6216f67755a061",
       "verification": [
         {
           "mode": "not_verified",
@@ -5580,10 +5580,10 @@
       "sha256": "dbffbb152236dd556d0ffc92188458f7c0bdd9ca71f11583ee61cfa97c6ae073",
       "verification": [
         {
-          "mode": "not_verified",
-          "status": "NOT_VERIFIED",
-          "report": null,
-          "scope": "No named runtime or syntax evidence is recorded for this document."
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "go-php-java-python-eleventh-runtime.json",
+          "scope": "Four named complete fenced programs extracted unchanged from current P1 core/standard-library pages: Go map semantics, PHP DateTimeImmutable, Java java.util.regex, and Python asyncio."
         }
       ],
       "marker_count": 0
@@ -6643,13 +6643,13 @@
     },
     {
       "path": "08-java-revisited/reference/library-guides/08-java-util-regex.md",
-      "sha256": "25bc71255c9cb58ccec6f553633a28b04fa82365c7e7beb5d3b19898523d8b71",
+      "sha256": "6b59fd878170f586c5a590180d93abcbcee7436558e25dae6d7787d2edac6a3a",
       "verification": [
         {
-          "mode": "not_verified",
-          "status": "NOT_VERIFIED",
-          "report": null,
-          "scope": "No named runtime or syntax evidence is recorded for this document."
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "go-php-java-python-eleventh-runtime.json",
+          "scope": "Four named complete fenced programs extracted unchanged from current P1 core/standard-library pages: Go map semantics, PHP DateTimeImmutable, Java java.util.regex, and Python asyncio."
         }
       ],
       "marker_count": 0
@@ -7610,10 +7610,10 @@
       "sha256": "e37d3ff31b9184e7e27fecba172a2e64a0e6d84e0d193b280fce432db9480620",
       "verification": [
         {
-          "mode": "not_verified",
-          "status": "NOT_VERIFIED",
-          "report": null,
-          "scope": "No named runtime or syntax evidence is recorded for this document."
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "go-php-java-python-eleventh-runtime.json",
+          "scope": "Four named complete fenced programs extracted unchanged from current P1 core/standard-library pages: Go map semantics, PHP DateTimeImmutable, Java java.util.regex, and Python asyncio."
         }
       ],
       "marker_count": 0

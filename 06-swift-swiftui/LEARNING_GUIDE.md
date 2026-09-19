@@ -38,10 +38,14 @@ Swift 值与可选值 → View → State/Binding → 布局与身份 → 导航 
 | 阶段与入口 | 练习输入与动作 | 通过条件 |
 | --- | --- | --- |
 | 状态与绑定：[视图状态](basics/04-views-state.md) | 父视图展示数字，子视图增加和重置 | 数值一致；能解释 Binding 修改的是哪份状态 |
-| 导航与持久化：[导航](basics/06-navigation.md)、[笔记应用](projects/01-notes-app.md) | 编辑笔记、进入详情再返回、保存后终止应用并重新启动 | 分别解释导航保留与持久化；数据库保存的内容可读回，空白输入按约定处理 |
+| 导航与持久化：[导航](basics/06-navigation.md)、[首项目](basics/08-first-project.md)，通过后再做 [笔记应用](projects/01-notes-app.md) | 首项目新增 A/B、完成并删除 B、终止后重启；再在独立笔记工程练习编辑、取消与搜索 | A 保留、B 不恢复，空白标题被拒绝；能区分草稿、模型变化与保存成功，笔记项目再验证编辑和删除的持久化 |
 | 异步请求：[并发入门](basics/07-concurrency-async-await.md)、[天气应用](projects/02-weather-app.md) | 成功、请求失败、请求中离开页面 | 有加载和恢复入口；取消与真正失败区分处理。验收在声明的 Apple 目标上执行，不能用 Linux 解析代替 |
 
 每阶段保留实际输入、输出和一个失败案例。只阅读或复制成功代码，不等同于已经通过验收。练习用小功能承接已学知识，大型项目的扩展需求可按需选做。
+
+进入持久化阶段前，先完成 [视图状态](basics/04-views-state.md) 与 [导航](basics/06-navigation.md)，能读懂可选值、数组和 [错误处理](reference/language-concepts/08-error-handling.md)。在 macOS/Xcode 创建 iOS 17 或更高目标，按 [首项目](basics/08-first-project.md) 交付含唯一 `@main` 的工程和设备验收记录；先验证待办新增、保存与重启读取，再增加金额与统计。保存失败应保留表单并展示错误，未执行的设备或故障用例写“未验证”。
+
+构建失败先回 [环境搭建](basics/01-environment-setup.md) 核对 SDK 与部署目标；界面已变但重启丢数据，回首项目检查显式保存和回滚分支，模型或容器问题查 [SwiftData](reference/framework-essentials/02-swiftdata-observability.md)。首项目闭环通过后，按 [笔记应用](projects/01-notes-app.md) 新建独立 Notes 工程，避免直接替换已有数据库的模型；笔记新增、编辑、删除和失败恢复通过后，再进入 [天气应用](projects/02-weather-app.md) 学习请求与取消。
 
 ## 框架与高级主题怎么选
 

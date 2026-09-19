@@ -678,6 +678,23 @@ var score = 0
 - 📄 **[Kotlin 语法基础](../../basics/03-kotlin-syntax-essentials.md)** - 入门视角的语法教程
 
 
+<!-- full-library-explanation -->
+## `val`、`var` 与可变对象是两层含义
+
+`val` 限制的是引用不能重新赋值，并不冻结对象内容；`var` 允许引用改指向另一个值。把这两层混在一起，常会误判状态是否能改变：
+
+```kotlin
+val names = mutableListOf("Ada")
+names.add("Lin")              // 可以：同一个 MutableList 的内容改变
+// names = mutableListOf()     // 不可以：val 引用不能重新赋值
+
+val labels: List<String> = names // 只读接口，不等于底层对象不可变
+```
+
+`List` 是只读接口，调用方不能经由 `labels` 调用 `add`；但若仍持有 `names`，它的变化仍会从该视图可见。需要不可变快照时复制并且不要暴露可变别名，例如 `names.toList()`。这也不是线程安全承诺；跨协程共享可变状态还需要明确的同步或状态所有权。
+
+在 Compose 中，改变普通可变集合的内容不会天然让 UI 重新组合。使用受 Compose 观察的 state 容器，或以新不可变值赋给 state，并按实际依赖版本验证。练习：先让 `labels` 观察到 `names.add` 的变化，再改为快照，解释为什么结果不同。当前工作区未发现 Kotlin 编译器，因此本段没有声称运行验证。
+
 <!-- learning-navigation -->
 ## 阅读导航
 

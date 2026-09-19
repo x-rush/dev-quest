@@ -1,0 +1,58 @@
+{
+  "schema_version": 1,
+  "purpose": "Limited direct body-extraction validation for five P1 foundation or standard-library pages selected while their primary verification state was not_verified. Each result covers only the named extracted logic; it does not change the coverage ledger or verify a full framework runtime.",
+  "executed_at": "2026-09-19",
+  "runner": {
+    "command": "node -",
+    "available": true,
+    "scope": "A dependency-free JavaScript transcription of the two TypeScript examples was executed with explicit assertions."
+  },
+  "cases": [
+    {
+      "path": "02-nextjs-frontend/basics/06-data-fetching-basics.md",
+      "section": "请求结果不是自动可信的数据",
+      "source_kind": "direct body extraction with TypeScript annotations removed",
+      "status": "PASS",
+      "assertions": [
+        "parseTodo accepts { id: '3', title: 'ship' }",
+        "parseTodo rejects a numeric id"
+      ],
+      "limits": "Does not run fetch, Next.js, cache behavior, or a deployment environment."
+    },
+    {
+      "path": "03-tanstack-stack/reference/framework-essentials/01-query-essentials.md",
+      "section": "查询键的相等性与失效范围",
+      "source_kind": "direct body extraction with TypeScript annotations and const assertions removed",
+      "status": "PASS",
+      "assertions": [
+        "list key retains tenantId and status",
+        "detail key retains tenantId and id"
+      ],
+      "limits": "Does not install or execute TanStack Query and therefore does not verify invalidation, observers, or network behavior."
+    },
+    {
+      "path": "04-multiplatform-apps/reference/language-concepts/01-rn-core-api.md",
+      "section": "尺寸快照与尺寸订阅要配对清理",
+      "status": "NOT_VERIFIED",
+      "reason": "No React Native runtime or target emulator was available; the page states this limitation."
+    },
+    {
+      "path": "05-kotlin-compose/reference/language-concepts/01-kotlin-keywords.md",
+      "section": "val、var 与可变对象是两层含义",
+      "status": "NOT_VERIFIED",
+      "reason": "No Kotlin compiler was available in the current workspace."
+    },
+    {
+      "path": "06-swift-swiftui/reference/language-concepts/16-stdlib-foundation-map.md",
+      "section": "Date 是时间点，日历规则来自 Calendar",
+      "status": "NOT_VERIFIED",
+      "reason": "No Swift toolchain was available in the current Windows workspace."
+    }
+  ],
+  "observed_output": {
+    "todo": { "id": "3", "title": "ship" },
+    "invalidRejected": true,
+    "listKey": ["todos", "list", { "tenantId": "tenant-a", "status": "open" }],
+    "detailKey": ["todos", "detail", { "tenantId": "tenant-a", "id": "3" }]
+  }
+}

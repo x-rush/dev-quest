@@ -173,6 +173,25 @@ staleTime 到期本身不是定时器触发请求：它改变“是否过期”�
 
 **练习：** 预置两个列表和一个详情，调用一次前缀失效，观察哪些查询被标记、哪些立即请求。验收：解释 active 与 inactive 的差异，并确认权限错误不会反复重试。参考[查询键](https://tanstack.com/query/latest/docs/framework/react/guides/query-keys)与[重要默认值](https://tanstack.com/query/latest/docs/framework/react/guides/important-defaults)。
 
+<!-- full-library-explanation -->
+## 查询键的相等性与失效范围
+
+查询键应由会改变结果的输入组成。不要把函数、`AbortSignal` 或每次变化的 UI 临时对象塞进键；它们既不描述服务器结果，也会使缓存边界难以解释。以下工厂把列表和详情分开，并保留租户这个会影响授权结果的维度：
+
+```ts
+export const todoKeys = {
+  all: ['todos'] as const,
+  list: (tenantId: string, status: 'open' | 'done') =>
+    [...todoKeys.all, 'list', { tenantId, status }] as const,
+  detail: (tenantId: string, id: string) =>
+    [...todoKeys.all, 'detail', { tenantId, id }] as const,
+};
+```
+
+完成一个待办后，失效 `todoKeys.all` 是较保守的正确起点；若只失效详情，已挂载列表可能保持旧状态。范围越小，越需要证明所有受影响视图都被覆盖。`invalidateQueries` 把匹配项标为 stale；是否立即请求还取决于 `refetchType`、观察者和网络状态，不能把“失效”理解为“已经拿到新数据”。
+
+练习：预置两个租户各一条 list，完成 A 租户任务后只失效 A 的键前缀。验收：B 的查询不被影响；离线时 A 被标 stale，恢复网络后才可能重取。键数组构造已在仓库的提取用例中执行并比较输出；该用例不运行 TanStack Query 本身，也不证明缓存策略适合实际产品。
+
 <!-- learning-navigation -->
 ## 阅读导航
 

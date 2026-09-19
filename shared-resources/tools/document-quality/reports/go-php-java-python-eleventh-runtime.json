@@ -1,0 +1,70 @@
+{
+  "scope": "Four named complete fenced programs extracted unchanged from current P1 core/standard-library pages: Go map semantics, PHP DateTimeImmutable, Java java.util.regex, and Python asyncio.",
+  "execution": "Existing local Docker images; network disabled, read-only root filesystem, capabilities dropped, bounded CPU/memory/processes, a read-only extracted source mount, and disposable writable output/tmp mounts only for compiler/runtime artifacts.",
+  "not_verified": [
+    "Other fences or prose in these pages",
+    "Go map concurrent-access/race behaviour",
+    "PHP timezone/database/framework integration",
+    "Java regex performance or project-specific JDK behaviour",
+    "Python external I/O, type checking, or framework integration"
+  ],
+  "passed": 4,
+  "total": 4,
+  "results": [
+    {
+      "id": "go-map-semantics",
+      "file": "01-go-backend/reference/language-concepts/11-map-semantics.md",
+      "language": "go",
+      "status": "PASS",
+      "command": "docker run --rm --network none --read-only --cap-drop ALL --pids-limit 64 --memory 256m --cpus 1 --tmpfs /tmp:rw,nosuid,size=256m -e GOCACHE=/output/go-build -v C:/Users/77958/AppData/Local/Temp/dev-quest-eleventh-oRGqCO:/work:ro -v C:/Users/77958/AppData/Local/Temp/dev-quest-eleventh-output-3nHuSV:/output golang:1.27 sh -c go build -o /output/main /work/main.go && /output/main",
+      "expected_output_fragments": [
+        "no rust",
+        "alice 25",
+        "bob 28",
+        "carol 30",
+        "1"
+      ],
+      "output": "no rust\nalice 25\nbob 28\ncarol 30\n1\n",
+      "missing_output_fragments": []
+    },
+    {
+      "id": "php-datetime-immutable",
+      "file": "07-php-mastery/reference/language-concepts/10-datetime.md",
+      "language": "php",
+      "status": "PASS",
+      "command": "docker run --rm --network none --read-only --cap-drop ALL --pids-limit 64 --memory 256m --cpus 1 --tmpfs /tmp:rw,nosuid,size=256m -v C:/Users/77958/AppData/Local/Temp/dev-quest-eleventh-UGLAGX:/work:ro -v C:/Users/77958/AppData/Local/Temp/dev-quest-eleventh-output-w4wxhf:/output php:8.5-cli php /work/main.php",
+      "expected_output_fragments": [
+        "09:00 ~ 10:00"
+      ],
+      "output": "09:00 ~ 10:00\n",
+      "missing_output_fragments": []
+    },
+    {
+      "id": "java-regex",
+      "file": "08-java-revisited/reference/library-guides/08-java-util-regex.md",
+      "language": "java",
+      "status": "PASS",
+      "command": "docker run --rm --network none --read-only --cap-drop ALL --pids-limit 64 --memory 256m --cpus 1 --tmpfs /tmp:rw,nosuid,size=256m -v C:/Users/77958/AppData/Local/Temp/dev-quest-eleventh-PUTDFq:/work:ro -v C:/Users/77958/AppData/Local/Temp/dev-quest-eleventh-output-lWT50u:/output eclipse-temurin:21-jdk sh -c javac -d /tmp/classes /work/RegexDemo.java && java -cp /tmp/classes RegexDemo",
+      "expected_output_fragments": [
+        "0",
+        "2",
+        "2",
+        "$$b"
+      ],
+      "output": "0\n2\n2\n$$b\n",
+      "missing_output_fragments": []
+    },
+    {
+      "id": "python-asyncio",
+      "file": "10-python-discovery/basics/07-advanced-features.md",
+      "language": "python",
+      "status": "PASS",
+      "command": "docker run --rm --network none --read-only --cap-drop ALL --pids-limit 64 --memory 256m --cpus 1 --tmpfs /tmp:rw,nosuid,size=256m -v C:/Users/77958/AppData/Local/Temp/dev-quest-eleventh-yXaLHt:/work:ro -v C:/Users/77958/AppData/Local/Temp/dev-quest-eleventh-output-ht8Ec2:/output python:3.14-alpine python /work/main.py",
+      "expected_output_fragments": [
+        "['A 完成', 'B 完成', 'C 完成']"
+      ],
+      "output": "['A 完成', 'B 完成', 'C 完成']\n",
+      "missing_output_fragments": []
+    }
+  ]
+}

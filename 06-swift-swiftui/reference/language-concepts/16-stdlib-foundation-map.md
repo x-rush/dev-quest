@@ -107,6 +107,25 @@
 *最后更新: 2026年9月 | 本条目为模块知识字典的一部分，概念完整解释以此处为单一事实来源*
 
 
+<!-- full-library-explanation -->
+## `Date` 是时间点，日历规则来自 `Calendar`
+
+`Date` 表示一个绝对时间点，并不自带“明天 09:00”这样的地区日历语义。向某个时间点加 86,400 秒，在夏令时切换日可能不是当地日历的下一天同一时刻；面向用户的日、月、工作日和时区规则应交给明确配置的 `Calendar`。
+
+```swift
+var calendar = Calendar(identifier: .gregorian)
+calendar.timeZone = TimeZone(identifier: "Asia/Shanghai")!
+let tomorrowAtNine = calendar.nextDate(
+  after: Date(),
+  matching: DateComponents(hour: 9, minute: 0),
+  matchingPolicy: .nextTime
+)
+```
+
+这里 `!` 仅因示例中使用了已知 IANA 标识；产品代码面对来自配置或用户输入的时区时应处理 `nil`。展示给用户时也要让 `DateFormatter` 或 `FormatStyle` 使用与产品一致的 locale、calendar 和 time zone，不能把调试输出当作稳定格式或网络协议。
+
+练习：分别以夏令时地区和上海时区生成“明天 09:00”，记录绝对时间与本地展示。验收：提醒的保存值是明确时间点，用户改变时区后的展示规则有定义。当前 Windows 工作区未发现 Swift 工具链，因此本段没有声称运行验证。
+
 <!-- learning-navigation -->
 ## 阅读导航
 

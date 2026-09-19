@@ -38,10 +38,14 @@ React Native 用 React 思维描述原生界面，不是把 HTML 放进手机。
 | 阶段与入口 | 练习输入与动作 | 通过条件 |
 | --- | --- | --- |
 | 一台设备：[首个 App](basics/02-first-app.md)、[状态](basics/04-state-hooks.md) | 修改文本并添加点击计数 | 真机或模拟器能看到变化；记录设备、系统和构建方式，知道刷新 JS 与重建原生应用的区别 |
-| 本地应用：[Todo 项目](projects/01-todo-app.md) | 添加普通标题，拒绝空白标题，删除所有项，再重启 | 操作有反馈，空列表可继续添加；接入持久化后重启仍能读回数据 |
+| 本地应用：[首项目第一阶段：记账](basics/08-first-project.md)，通过后再做 [Todo 项目](projects/01-todo-app.md) | 先录入 0.10 与 0.20，拒绝非法金额，重启读回；随后为待办新增 A/B、删除 B 并重启 | 记账合计为 0.30；待办 A 保留、B 不恢复；两种业务使用独立存储键，写入失败时保留输入并显示错误 |
 | 网络与平台：[天气项目](projects/02-weather-app.md) | 请求成功、断网、拒绝定位授权、手动选城市 | 失败与拒绝均可恢复；第二平台重新构建并重复检查，多端成功分别记录 |
 
 每阶段保留实际输入、输出和一个失败案例。只阅读或复制成功代码，不等同于已经通过验收。练习用小功能承接已学知识，大型项目的扩展需求可按需选做。
+
+本地应用阶段先完成 [状态与 Hooks](basics/04-state-hooks.md) 和 [导航](basics/05-navigation.md)，在已启动的单平台 Expo 工程中交付记账页面、存储 Hook、锁文件与设备验收记录。首项目提供的实现使用 AsyncStorage；通过金额校验和重启读回后，再按 [Todo 项目进入条件](projects/01-todo-app.md) 实现独立的 `useTodos` 和 `todos.v1`。该页 MMKV 路线另需 development build，不能把安装依赖后的 Expo Go 刷新当成原生构建完成。
+
+金额或保存行为失败回查 [首项目](basics/08-first-project.md) 的金额解析、加载锁和写入分支；界面未更新回查 [状态与 Hooks](basics/04-state-hooks.md)，原生模块找不到回查 [故障排除](reference/quick-references/02-troubleshooting.md)。待办验收通过后回首项目完成第二阶段的标签导航与统计，再进入 [天气项目](projects/02-weather-app.md)；每个平台只记录实际执行过的构建和交互结果。
 
 ## 框架与高级主题怎么选
 
