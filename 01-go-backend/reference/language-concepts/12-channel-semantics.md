@@ -71,6 +71,7 @@ func main() {
 
 ## 💡 示例
 
+<!-- doc-verify:go-channel-close-select -->
 ```go
 package main
 

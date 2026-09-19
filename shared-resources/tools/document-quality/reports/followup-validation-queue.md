@@ -11,13 +11,13 @@
 - **P2**：框架与部署文档没有命名运行证据。优先建立版本锁定的最小工程、构建或部署演练。
 - **P3**：进阶、测试和其他专题没有命名运行证据。按依赖关系排入后续批次。
 
-台账对应的 55 条未绑定措辞全部保留，并在生成时重新定位到当前源码行。明确写出“尚未验证”、说明如何验证或给出练习要求的行，按所属文件的普通优先级排序，不会被误报成 P0 通过性断言。同一文件可同时有一条文件级缺口和多条逐行任务；两者不能互相抵消。每次验证只能声明其命名案例和环境覆盖的范围。
+台账对应的 54 条未绑定措辞全部保留，并在生成时重新定位到当前源码行。明确写出“尚未验证”、说明如何验证或给出练习要求的行，按所属文件的普通优先级排序，不会被误报成 P0 通过性断言。同一文件可同时有一条文件级缺口和多条逐行任务；两者不能互相抵消。每次验证只能声明其命名案例和环境覆盖的范围。
 
 ## 汇总
 
-- 队列条目：528 条，其中文件级证据缺口 473 条，逐行未绑定验证措辞 55 条。
-- 优先级：P0 0；P1 223；P2 150；P3 155。
-- 分类：核心基础 207；首项目 16；框架 111；部署 39；进阶与测试 155。
+- 队列条目：526 条，其中文件级证据缺口 472 条，逐行未绑定验证措辞 54 条。
+- 优先级：P0 0；P1 221；P2 150；P3 155。
+- 分类：核心基础 205；首项目 16；框架 111；部署 39；进阶与测试 155。
 
 ## 明细
 
@@ -28,8 +28,6 @@
 | P1 | 核心基础 | Go | [01-go-backend/basics/01-environment-setup.md](../../../../01-go-backend/basics/01-environment-setup.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
 | P1 | 核心基础 | Go | [01-go-backend/reference/language-concepts/03-go-programming-essentials.md](../../../../01-go-backend/reference/language-concepts/03-go-programming-essentials.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
 | P1 | 核心基础 | Go | [01-go-backend/reference/language-concepts/08-concurrency-basics.md](../../../../01-go-backend/reference/language-concepts/08-concurrency-basics.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
-| P1 | 核心基础 | Go | [01-go-backend/reference/language-concepts/12-channel-semantics.md](../../../../01-go-backend/reference/language-concepts/12-channel-semantics.md#L129):129 | 保留诚实的验证边界，并在补证据时决定是否增加最小练习<br/>保持已有边界说明；若新增示例，记录工具链、命令、预期行为和未覆盖范围。 | **经典死锁场景**：所有 goroutine 都在阻塞等待、无人再能推进时，runtime 报 `fatal error: all goroutines are asleep - deadlock!`（注意：若仍有其他可运行 goroutine 则不会触发检测，改为永久卡死）。 |
-| P1 | 核心基础 | Go | [01-go-backend/reference/language-concepts/12-channel-semantics.md](../../../../01-go-backend/reference/language-concepts/12-channel-semantics.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
 | P1 | 核心基础 | Go | [01-go-backend/reference/language-concepts/13-interface-semantics.md](../../../../01-go-backend/reference/language-concepts/13-interface-semantics.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
 | P1 | 核心基础 | Go | [01-go-backend/reference/language-concepts/14-defer-panic-recover.md](../../../../01-go-backend/reference/language-concepts/14-defer-panic-recover.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
 | P1 | 核心基础 | Go | [01-go-backend/reference/library-guides/17-std-package-map.md](../../../../01-go-backend/reference/library-guides/17-std-package-map.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |

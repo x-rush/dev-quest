@@ -7,11 +7,11 @@
 | 指标 | 数量 |
 |---|---:|
 | 纳入模块文档 | 642 |
-| 主状态：not_verified | 473 |
-| 主状态：runtime | 169 |
+| 主状态：not_verified | 472 |
+| 主状态：runtime | 170 |
 | 验证措辞出现次数 | 141 |
-| 措辞分类：source_has_limited_runtime_evidence | 86 |
-| 措辞分类：unbound_verification_wording | 55 |
+| 措辞分类：source_has_limited_runtime_evidence | 87 |
+| 措辞分类：unbound_verification_wording | 54 |
 
 ## 语法级覆盖（不能当作运行覆盖）
 
@@ -82,7 +82,7 @@
 | Go | [01-go-backend/reference/language-concepts/09-generics.md](../../../../01-go-backend/reference/language-concepts/09-generics.md) | `runtime` | 1 | 0 |
 | Go | [01-go-backend/reference/language-concepts/10-slice-semantics.md](../../../../01-go-backend/reference/language-concepts/10-slice-semantics.md) | `runtime` | 1 | 0 |
 | Go | [01-go-backend/reference/language-concepts/11-map-semantics.md](../../../../01-go-backend/reference/language-concepts/11-map-semantics.md) | `runtime` | 1 | 0 |
-| Go | [01-go-backend/reference/language-concepts/12-channel-semantics.md](../../../../01-go-backend/reference/language-concepts/12-channel-semantics.md) | `not_verified` | 0 | 1 |
+| Go | [01-go-backend/reference/language-concepts/12-channel-semantics.md](../../../../01-go-backend/reference/language-concepts/12-channel-semantics.md) | `runtime` | 1 | 1 |
 | Go | [01-go-backend/reference/language-concepts/13-interface-semantics.md](../../../../01-go-backend/reference/language-concepts/13-interface-semantics.md) | `not_verified` | 0 | 0 |
 | Go | [01-go-backend/reference/language-concepts/14-defer-panic-recover.md](../../../../01-go-backend/reference/language-concepts/14-defer-panic-recover.md) | `not_verified` | 0 | 0 |
 | Go | [01-go-backend/reference/language-concepts/15-nil-semantics.md](../../../../01-go-backend/reference/language-concepts/15-nil-semantics.md) | `runtime` | 1 | 0 |
