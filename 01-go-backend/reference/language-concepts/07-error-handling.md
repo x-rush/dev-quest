@@ -36,6 +36,7 @@ recover() any                                // 只在 defer 的函数中直接�
 
 ## 💡 示例
 
+<!-- doc-verify:go-error-wrap-is -->
 ```go
 package main
 

@@ -1,0 +1,55 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-09-19T17:06:05.390741+00:00",
+  "purpose": "Twenty-fifth-round runtime evidence for three marked Go core-document fences.",
+  "isolation": "No network, read-only container root, dropped capabilities, no-new-privileges, bounded CPU/memory/PIDs, and tmpfs-only writable workspace. Image must already exist because --pull=never is used.",
+  "scope": "Only the three named complete Go fences extracted unchanged after CRLF-to-LF normalization were executed. Other fences, toolchain setup, web services, filesystem integrations, concurrency scheduling, performance, and projects remain outside this evidence.",
+  "results": [
+    {
+      "id": "go-first-program-hello",
+      "language": "go",
+      "document": "01-go-backend/basics/02-first-program.md",
+      "image": "golang:1.25-alpine",
+      "document_sha256": "83f21ea6d09b62969ab76f3ef9ff1c0924d91e22012b90a3d99cdb0306fcd9bc",
+      "code_sha256": "5aee510fd0e5a84cbbe2e3c63a0395b140902d89ac917e61f12d1f091e449b26",
+      "command": "GOCACHE=/tmp/go-build go run /tmp/main.go",
+      "expected_stdout": "Hello, World!\n欢迎来到Go语言的世界!\n",
+      "stdout": "Hello, World!\n欢迎来到Go语言的世界!\n",
+      "stderr": "",
+      "exit_code": 0,
+      "status": "PASS"
+    },
+    {
+      "id": "go-method-receiver-mutation",
+      "language": "go",
+      "document": "01-go-backend/basics/05-functions-methods.md",
+      "image": "golang:1.25-alpine",
+      "document_sha256": "be8e18a39ab20fdb2c2c1cc37a9965a2bb9f9b1b07eabaef3cdb6ab542173c7c",
+      "code_sha256": "a36d16e9c6ae47b07a8cac28e0bec8ccdd9f5a6406847965ac0a4001fb5da357",
+      "command": "GOCACHE=/tmp/go-build go run /tmp/main.go",
+      "expected_stdout": "初始值: 0\n值接收者内部: 1\n值接收者调用后: 0\n指针接收者内部: 1\n指针接收者调用后: 1\n",
+      "stdout": "初始值: 0\n值接收者内部: 1\n值接收者调用后: 0\n指针接收者内部: 1\n指针接收者调用后: 1\n",
+      "stderr": "",
+      "exit_code": 0,
+      "status": "PASS"
+    },
+    {
+      "id": "go-error-wrap-is",
+      "language": "go",
+      "document": "01-go-backend/reference/language-concepts/07-error-handling.md",
+      "image": "golang:1.25-alpine",
+      "document_sha256": "d07ba5aa5c45d6d668d78e7459cc0241b746e77b254da5ce56815fd7e8f9c56a",
+      "code_sha256": "7aa3c443c96e3f11fa5cf0bcd4c0ef8ad47f51eb382511541848f2a4905d0b2f",
+      "command": "GOCACHE=/tmp/go-build go run /tmp/main.go",
+      "expected_stdout": "文件不存在，使用默认配置\nloadConfig \"missing.toml\": open missing.toml: no such file or directory\n",
+      "stdout": "文件不存在，使用默认配置\nloadConfig \"missing.toml\": open missing.toml: no such file or directory\n",
+      "stderr": "",
+      "exit_code": 0,
+      "status": "PASS"
+    }
+  ],
+  "summary": {
+    "passed": 3,
+    "total": 3
+  }
+}

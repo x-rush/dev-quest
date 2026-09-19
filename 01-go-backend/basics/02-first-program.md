@@ -53,6 +53,7 @@ Print 不自动添加换行，Println 会；文件保存后重新运行才会看
 
 创建你的第一个Go程序文件 `hello.go`：
 
+<!-- doc-verify:go-first-program-hello -->
 ```go
 package main
 

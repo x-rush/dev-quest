@@ -450,6 +450,29 @@ func main() {
 }
 ```
 
+下面这段是可独立运行的最小对照：值接收者修改的是副本；指针接收者通过地址修改原对象。
+
+<!-- doc-verify:go-method-receiver-mutation -->
+```go
+package main
+
+import "fmt"
+
+type Counter struct{ count int }
+
+func (c Counter) Increment() { c.count++; fmt.Println("值接收者内部:", c.count) }
+func (c *Counter) IncrementPtr() { c.count++; fmt.Println("指针接收者内部:", c.count) }
+
+func main() {
+	c := Counter{}
+	fmt.Println("初始值:", c.count)
+	c.Increment()
+	fmt.Println("值接收者调用后:", c.count)
+	c.IncrementPtr()
+	fmt.Println("指针接收者调用后:", c.count)
+}
+```
+
 ## 🧩 接口初识
 
 方法的价值在于支撑**接口**（interface）——Go 实现多态的核心机制。这里只建立直觉，完整语义见 [Go OOP 概念字典](../reference/language-concepts/06-go-oop-concepts.md)。

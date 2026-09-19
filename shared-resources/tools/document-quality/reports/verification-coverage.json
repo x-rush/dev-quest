@@ -17,8 +17,8 @@
   "summary": {
     "documents": 642,
     "by_primary_state": {
-      "not_verified": 476,
-      "runtime": 166
+      "not_verified": 473,
+      "runtime": 169
     },
     "verification_wording_occurrences": 141,
     "marker_classification": {
@@ -146,13 +146,13 @@
     },
     {
       "path": "01-go-backend/basics/02-first-program.md",
-      "sha256": "4d66e60eb226734e6acbae558b2e258ea721339cf0f8538fb5749832bf06340a",
+      "sha256": "83f21ea6d09b62969ab76f3ef9ff1c0924d91e22012b90a3d99cdb0306fcd9bc",
       "verification": [
         {
-          "mode": "not_verified",
-          "status": "NOT_VERIFIED",
-          "report": null,
-          "scope": "No named runtime or syntax evidence is recorded for this document."
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "go-core-twentyfive-runtime.json",
+          "scope": "Only the three named complete Go fences extracted unchanged after CRLF-to-LF normalization were executed. Other fences, toolchain setup, web services, filesystem integrations, concurrency scheduling, performance, and projects remain outside this evidence."
         }
       ],
       "marker_count": 0
@@ -209,13 +209,13 @@
     },
     {
       "path": "01-go-backend/basics/05-functions-methods.md",
-      "sha256": "e4041263b1dee8328ce6547be90eff0c8923b9461e11518c6f49dea294b78a81",
+      "sha256": "be8e18a39ab20fdb2c2c1cc37a9965a2bb9f9b1b07eabaef3cdb6ab542173c7c",
       "verification": [
         {
-          "mode": "not_verified",
-          "status": "NOT_VERIFIED",
-          "report": null,
-          "scope": "No named runtime or syntax evidence is recorded for this document."
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "go-core-twentyfive-runtime.json",
+          "scope": "Only the three named complete Go fences extracted unchanged after CRLF-to-LF normalization were executed. Other fences, toolchain setup, web services, filesystem integrations, concurrency scheduling, performance, and projects remain outside this evidence."
         }
       ],
       "marker_count": 0
@@ -654,13 +654,13 @@
     },
     {
       "path": "01-go-backend/reference/language-concepts/07-error-handling.md",
-      "sha256": "c5da2701ff7ee74a1f079d7ef20eb6706aa5657de7e18f446f8cab01c886ebe5",
+      "sha256": "d07ba5aa5c45d6d668d78e7459cc0241b746e77b254da5ce56815fd7e8f9c56a",
       "verification": [
         {
-          "mode": "not_verified",
-          "status": "NOT_VERIFIED",
-          "report": null,
-          "scope": "No named runtime or syntax evidence is recorded for this document."
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "go-core-twentyfive-runtime.json",
+          "scope": "Only the three named complete Go fences extracted unchanged after CRLF-to-LF normalization were executed. Other fences, toolchain setup, web services, filesystem integrations, concurrency scheduling, performance, and projects remain outside this evidence."
         }
       ],
       "marker_count": 0

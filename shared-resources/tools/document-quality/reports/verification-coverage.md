@@ -7,8 +7,8 @@
 | 指标 | 数量 |
 |---|---:|
 | 纳入模块文档 | 642 |
-| 主状态：not_verified | 476 |
-| 主状态：runtime | 166 |
+| 主状态：not_verified | 473 |
+| 主状态：runtime | 169 |
 | 验证措辞出现次数 | 141 |
 | 措辞分类：source_has_limited_runtime_evidence | 86 |
 | 措辞分类：unbound_verification_wording | 55 |
@@ -43,10 +43,10 @@
 | Go | [01-go-backend/advanced-topics/performance/02-performance-tuning.md](../../../../01-go-backend/advanced-topics/performance/02-performance-tuning.md) | `not_verified` | 0 | 0 |
 | Go | [01-go-backend/advanced-topics/security/01-security-best-practices.md](../../../../01-go-backend/advanced-topics/security/01-security-best-practices.md) | `runtime` | 1 | 1 |
 | Go | [01-go-backend/basics/01-environment-setup.md](../../../../01-go-backend/basics/01-environment-setup.md) | `not_verified` | 0 | 0 |
-| Go | [01-go-backend/basics/02-first-program.md](../../../../01-go-backend/basics/02-first-program.md) | `not_verified` | 0 | 0 |
+| Go | [01-go-backend/basics/02-first-program.md](../../../../01-go-backend/basics/02-first-program.md) | `runtime` | 1 | 0 |
 | Go | [01-go-backend/basics/03-variables-constants.md](../../../../01-go-backend/basics/03-variables-constants.md) | `runtime` | 2 | 0 |
 | Go | [01-go-backend/basics/04-composite-types.md](../../../../01-go-backend/basics/04-composite-types.md) | `runtime` | 4 | 0 |
-| Go | [01-go-backend/basics/05-functions-methods.md](../../../../01-go-backend/basics/05-functions-methods.md) | `not_verified` | 0 | 0 |
+| Go | [01-go-backend/basics/05-functions-methods.md](../../../../01-go-backend/basics/05-functions-methods.md) | `runtime` | 1 | 0 |
 | Go | [01-go-backend/basics/06-control-structures.md](../../../../01-go-backend/basics/06-control-structures.md) | `runtime` | 1 | 1 |
 | Go | [01-go-backend/basics/07-concurrency-basics.md](../../../../01-go-backend/basics/07-concurrency-basics.md) | `runtime` | 4 | 0 |
 | Go | [01-go-backend/basics/08-error-handling.md](../../../../01-go-backend/basics/08-error-handling.md) | `runtime` | 5 | 0 |
@@ -77,7 +77,7 @@
 | Go | [01-go-backend/reference/language-concepts/04-go-data-types.md](../../../../01-go-backend/reference/language-concepts/04-go-data-types.md) | `runtime` | 1 | 0 |
 | Go | [01-go-backend/reference/language-concepts/05-go-control-flow.md](../../../../01-go-backend/reference/language-concepts/05-go-control-flow.md) | `runtime` | 1 | 0 |
 | Go | [01-go-backend/reference/language-concepts/06-go-oop-concepts.md](../../../../01-go-backend/reference/language-concepts/06-go-oop-concepts.md) | `runtime` | 1 | 0 |
-| Go | [01-go-backend/reference/language-concepts/07-error-handling.md](../../../../01-go-backend/reference/language-concepts/07-error-handling.md) | `not_verified` | 0 | 0 |
+| Go | [01-go-backend/reference/language-concepts/07-error-handling.md](../../../../01-go-backend/reference/language-concepts/07-error-handling.md) | `runtime` | 1 | 0 |
 | Go | [01-go-backend/reference/language-concepts/08-concurrency-basics.md](../../../../01-go-backend/reference/language-concepts/08-concurrency-basics.md) | `not_verified` | 0 | 0 |
 | Go | [01-go-backend/reference/language-concepts/09-generics.md](../../../../01-go-backend/reference/language-concepts/09-generics.md) | `runtime` | 1 | 0 |
 | Go | [01-go-backend/reference/language-concepts/10-slice-semantics.md](../../../../01-go-backend/reference/language-concepts/10-slice-semantics.md) | `runtime` | 1 | 0 |
