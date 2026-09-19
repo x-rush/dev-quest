@@ -30,6 +30,7 @@ def main():
     parser.add_argument("--work", type=Path, required=True, help="dedicated disposable build directory")
     parser.add_argument("--prepare", action="store_true")
     parser.add_argument("--lockfile", type=Path, help="reuse the published Cargo.lock rather than resolve new versions")
+    parser.add_argument("--report", type=Path, help="write stable, repository-safe evidence after a successful run")
     args = parser.parse_args()
     work = args.work.resolve()
     work.mkdir(parents=True, exist_ok=True)
@@ -135,6 +136,23 @@ def main():
     lock = rust_cli / "Cargo.lock"
     evidence["cargo_lock_sha256"] = hashlib.sha256(lock.read_bytes()).hexdigest()
     (work / "evidence.json").write_text(json.dumps(evidence, ensure_ascii=False, indent=2), encoding="utf-8")
+    if args.report:
+        # Build directories include random names and may expose a local user path.
+        # Keep the committed ledger reproducible while retaining the full raw
+        # evidence in the caller-provided disposable directory.
+        published = json.loads(json.dumps(evidence))
+        actual = str(work)
+        stable = "/work/go-rust-projects"
+        for command_entry in published["commands"]:
+            command_entry["argv"] = [value.replace(actual, stable) for value in command_entry["argv"]]
+            command_entry["cwd"] = command_entry["cwd"].replace(actual, stable)
+            command_entry["stdout"] = command_entry["stdout"].replace(actual, stable)
+            command_entry["stderr"] = command_entry["stderr"].replace(actual, stable)
+            command_entry["cwd"] = re.sub(r"rtask-cases-[^/\\]+", "rtask-cases-<temporary>", command_entry["cwd"])
+            command_entry["stdout"] = re.sub(r"finished in [0-9.]+s", "finished in <variable>", command_entry["stdout"])
+            command_entry["stderr"] = re.sub(r"target\\(s\\) in [0-9.]+s", "target(s) in <variable>", command_entry["stderr"])
+        args.report.parent.mkdir(parents=True, exist_ok=True)
+        args.report.write_text(json.dumps(published, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     print(f"{len(evidence['commands'])} commands passed; evidence: {work / 'evidence.json'}")
 
 
