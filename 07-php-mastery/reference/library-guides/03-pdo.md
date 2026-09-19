@@ -87,6 +87,46 @@ try {
 }
 ```
 
+### 可复现验收：绑定值与回滚是否真的生效
+
+以下案例用内存 SQLite 验证两件独立的事：参数中的单引号仍作为数据保存；事务中第二步失败后，第一步写入也不会留下。SQLite 适合验证 PDO API 契约，不代表 MySQL/PostgreSQL 的隔离级别、锁、序列或驱动类型转换已经验证。
+
+<!-- runtime-evidence: {"id":"php-pdo-bind-and-rollback","stdout":"name=Ada's task\nrows-after-rollback=1\n"} -->
+```php
+<?php
+
+declare(strict_types=1);
+
+$pdo = new PDO('sqlite::memory:', null, null, [
+    PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+]);
+$pdo->exec('CREATE TABLE tasks (id INTEGER PRIMARY KEY, name TEXT NOT NULL UNIQUE)');
+
+$insert = $pdo->prepare('INSERT INTO tasks (name) VALUES (:name)');
+$insert->execute(['name' => "Ada's task"]);
+echo 'name=', $pdo->query('SELECT name FROM tasks')->fetchColumn(), PHP_EOL;
+
+try {
+    $pdo->beginTransaction();
+    $insert->execute(['name' => 'first inside transaction']);
+    $insert->execute(['name' => 'first inside transaction']); // UNIQUE 约束失败
+    $pdo->commit();
+} catch (Throwable) {
+    if ($pdo->inTransaction()) {
+        $pdo->rollBack();
+    }
+}
+
+echo 'rows-after-rollback=', $pdo->query('SELECT COUNT(*) FROM tasks')->fetchColumn(), PHP_EOL;
+```
+
+预期输出：
+
+```text
+name=Ada's task
+rows-after-rollback=1
+```
+
 ## 📖 注入防护要点
 
 - **只有"参数化"是防护**：`prepare` + 占位符绑定，让值永远不参与 SQL 解析。
