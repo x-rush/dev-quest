@@ -254,6 +254,39 @@ file_put_contents(
 
 **练习**：建立无参类、依赖具体类的类、需要接口的类和循环依赖类，让 build 前两种成功、后两种给出清晰失败。再定义一个构造时递增计数器的 Attribute，对比 getAttributes 与 newInstance，确认行为何时发生。性能优化应基于剖析结果，不能把每次反射都直接定性为事故。
 
+## 正文提取验证：重复属性的反射实例化
+
+下面的单文件程序从方法读取两个重复的 `Route` 属性，再逐个 `newInstance()`。它验证元数据先被读取、随后按声明参数构造属性对象的最小路径。
+
+<!-- terra-twentytwo-case: php-reflection-repeatable-route -->
+```php
+<?php
+
+declare(strict_types=1);
+
+#[Attribute(Attribute::TARGET_METHOD | Attribute::IS_REPEATABLE)]
+final class Route
+{
+    /** @param list<string> $methods */
+    public function __construct(public string $path, public array $methods = ['GET']) {}
+}
+
+final class HealthController
+{
+    #[Route('/health')]
+    #[Route('/ping', ['GET', 'HEAD'])]
+    public function check(): void {}
+}
+
+$method = new ReflectionMethod(HealthController::class, 'check');
+foreach ($method->getAttributes(Route::class) as $attribute) {
+    $route = $attribute->newInstance();
+    echo $route->path, ':', implode(',', $route->methods), PHP_EOL;
+}
+```
+
+预期输出是 `/health:GET` 与 `/ping:GET,HEAD`。验证不涉及路由分发、HTTP 请求或容器扫描。
+
 <!-- learning-navigation -->
 ## 阅读导航
 

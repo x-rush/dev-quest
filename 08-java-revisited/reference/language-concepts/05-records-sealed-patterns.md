@@ -148,6 +148,34 @@ sealed 适合已知且受控的类型集合，例如一组领域事件；新增�
 
 record 适合数据载体，自动生成相等比较不等于内部成员深度不可变。若可变集合影响 hashCode，把 record 用作 Map key 后再修改成员可能破坏查找；采用不可变成员或复制，并测试这一边界。
 
+## 正文提取验证：sealed 穷尽 switch 与 record 访问器
+
+下面是 Java 21 的单文件程序。两个 `record` 是密封接口仅有的许可实现，`switch` 不需要 `default`；输出同时证明 record 的访问器和模式分支实际被调用。
+
+<!-- terra-twentytwo-case: java-sealed-record-exhaustive-switch -->
+```java
+sealed interface Shape permits Circle, Square {}
+
+record Circle(int radius) implements Shape {}
+record Square(int side) implements Shape {}
+
+public class Main {
+    static int measure(Shape shape) {
+        return switch (shape) {
+            case Circle(int radius) -> radius * 2;
+            case Square(int side) -> side * 4;
+        };
+    }
+
+    public static void main(String[] args) {
+        System.out.println(measure(new Circle(3)));
+        System.out.println(measure(new Square(4)));
+    }
+}
+```
+
+预期输出为 `6` 和 `16`。它不验证 `null`、守卫、开放层级或 Java 22+ 的未命名模式。
+
 ## 🔗 相关文档
 
 - 📄 **[Java 关键字详解](./01-java-keywords.md)** - record/sealed/yield/when 关键字条目

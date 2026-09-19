@@ -323,6 +323,40 @@ enum 表达互斥状态，可避免 loading 与 failed 同时为真；多个可�
 
 对可能缺失的外部数据显式处理 None/Err；unwrap/expect 只在不变量确实保证成功时使用，并说明理由。derive(Debug) 有助调试，但含敏感字段时检查输出。新增变体后编译并测试所有状态转换，不用通配分支无声忽略新情况。
 
+## 正文提取验证：枚举数据与穷尽匹配
+
+该单文件程序为每个变体提供一个分支并读取变体携带的数据。`Message` 新增变体时，`describe` 将因不穷尽而无法编译，除非同步更新分支。
+
+<!-- terra-twentytwo-case: rust-enum-exhaustive-message -->
+```rust
+enum Message {
+    Quit,
+    Move { x: i32, y: i32 },
+    Write(String),
+}
+
+fn describe(message: &Message) -> String {
+    match message {
+        Message::Quit => "quit".to_string(),
+        Message::Move { x, y } => format!("move:{x},{y}"),
+        Message::Write(text) => format!("write:{text}"),
+    }
+}
+
+fn main() {
+    let messages = [
+        Message::Quit,
+        Message::Move { x: 2, y: -1 },
+        Message::Write("hi".to_string()),
+    ];
+    for message in &messages {
+        println!("{}", describe(message));
+    }
+}
+```
+
+预期输出为 `quit`、`move:2,-1`、`write:hi`。运行不覆盖借用复杂场景、匹配守卫或跨线程传递。
+
 ---
 
 ## ❓ 常见问题

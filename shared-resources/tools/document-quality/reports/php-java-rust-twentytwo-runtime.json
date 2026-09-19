@@ -1,0 +1,55 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-09-20T00:00:00+08:00",
+  "purpose": "Twenty-second-round runtime evidence for three named complete P1 PHP, Java, and Rust core body programs.",
+  "isolation": "No network, read-only container root, dropped capabilities, no-new-privileges, bounded CPU/memory/PIDs, and tmpfs-only writable workspace. Images were required to exist because --pull=never was used.",
+  "scope": "Only the three unique named complete fences were extracted unchanged after CRLF-to-LF normalization and executed. Other prose/fences, framework integration, HTTP, filesystem behavior, concurrency, performance, Miri/sanitizers, external dependencies, and full projects remain outside this evidence.",
+  "results": [
+    {
+      "id": "php-reflection-repeatable-route",
+      "language": "php",
+      "document": "07-php-mastery/reference/language-concepts/08-reflection-attributes.md",
+      "image": "php:8.5-cli-alpine",
+      "document_sha256": "f24ab3f8a5a6aa675f6ca19f881c156ee5237cee8faefc59939fb1f284d8645b",
+      "code_sha256": "bd94122e07096ef326411aee6bf70eae071b54829baa84f494be5d86a336a872",
+      "expected_stdout": "/health:GET\n/ping:GET,HEAD\n",
+      "command": "php /tmp/main.php",
+      "docker_command": "docker run --rm -i --pull=never --network=none --read-only --cap-drop=ALL --security-opt=no-new-privileges --pids-limit=64 --memory=512m --cpus=1 --tmpfs /tmp:rw,exec,nosuid,nodev,size=64m php:8.5-cli-alpine sh -c 'cat > /tmp/main.php && exec \"$@\"' document-program php /tmp/main.php",
+      "exit_code": 0,
+      "stdout": "/health:GET\n/ping:GET,HEAD\n",
+      "stderr": "",
+      "status": "PASS"
+    },
+    {
+      "id": "java-sealed-record-exhaustive-switch",
+      "language": "java",
+      "document": "08-java-revisited/reference/language-concepts/05-records-sealed-patterns.md",
+      "image": "eclipse-temurin:21-jdk-noble",
+      "document_sha256": "61a4e1a04e040548edd6c06d4ba3598a2c9c3c79c3bb5485abacf0686fce9097",
+      "code_sha256": "5251363424dbae5237a565eb3cf62a037c31d1c3cc2911130ed2cfb035df02fd",
+      "expected_stdout": "6\n16\n",
+      "command": "javac --release 21 -encoding UTF-8 -d /tmp /tmp/Main.java && java -cp /tmp Main",
+      "docker_command": "docker run --rm -i --pull=never --network=none --read-only --cap-drop=ALL --security-opt=no-new-privileges --pids-limit=64 --memory=512m --cpus=1 --tmpfs /tmp:rw,exec,nosuid,nodev,size=64m eclipse-temurin:21-jdk-noble sh -c 'cat > /tmp/Main.java && exec \"$@\"' document-program sh -c 'javac --release 21 -encoding UTF-8 -d /tmp /tmp/Main.java && java -cp /tmp Main'",
+      "exit_code": 0,
+      "stdout": "6\n16\n",
+      "stderr": "",
+      "status": "PASS"
+    },
+    {
+      "id": "rust-enum-exhaustive-message",
+      "language": "rust",
+      "document": "11-rust-cross-platform/basics/03-structs-enums-patterns.md",
+      "image": "rust:1-slim-bookworm",
+      "document_sha256": "cb636b9352a4814d2225d5dae67bb96eb7732842a2a68216b5491986579d9aee",
+      "code_sha256": "8ed048e261b59805c03ad993434b150c396073def467d5a373cbc47ba11edf44",
+      "expected_stdout": "quit\nmove:2,-1\nwrite:hi\n",
+      "command": "rustc --edition 2024 /tmp/main.rs -o /tmp/main && /tmp/main",
+      "docker_command": "docker run --rm -i --pull=never --network=none --read-only --cap-drop=ALL --security-opt=no-new-privileges --pids-limit=64 --memory=512m --cpus=1 --tmpfs /tmp:rw,exec,nosuid,nodev,size=64m rust:1-slim-bookworm sh -c 'cat > /tmp/main.rs && exec \"$@\"' document-program sh -c 'rustc --edition 2024 /tmp/main.rs -o /tmp/main && /tmp/main'",
+      "exit_code": 0,
+      "stdout": "quit\nmove:2,-1\nwrite:hi\n",
+      "stderr": "",
+      "status": "PASS"
+    }
+  ],
+  "summary": { "passed": 3, "total": 3 }
+}
