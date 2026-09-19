@@ -152,7 +152,7 @@
           "mode": "runtime",
           "status": "PASS",
           "report": "go-core-twentyfive-runtime.json",
-          "scope": "Only the ten named complete Go fences extracted unchanged after CRLF-to-LF normalization were executed. Other fences, toolchain setup, web services, filesystem integrations, concurrency scheduling, performance, and projects remain outside this evidence."
+          "scope": "Only the eleven named complete Go fences extracted unchanged after CRLF-to-LF normalization were executed. Other fences, toolchain setup, web services, filesystem integrations, concurrency scheduling, performance, and projects remain outside this evidence."
         }
       ],
       "marker_count": 0
@@ -215,7 +215,7 @@
           "mode": "runtime",
           "status": "PASS",
           "report": "go-core-twentyfive-runtime.json",
-          "scope": "Only the ten named complete Go fences extracted unchanged after CRLF-to-LF normalization were executed. Other fences, toolchain setup, web services, filesystem integrations, concurrency scheduling, performance, and projects remain outside this evidence."
+          "scope": "Only the eleven named complete Go fences extracted unchanged after CRLF-to-LF normalization were executed. Other fences, toolchain setup, web services, filesystem integrations, concurrency scheduling, performance, and projects remain outside this evidence."
         }
       ],
       "marker_count": 0
@@ -660,7 +660,7 @@
           "mode": "runtime",
           "status": "PASS",
           "report": "go-core-twentyfive-runtime.json",
-          "scope": "Only the ten named complete Go fences extracted unchanged after CRLF-to-LF normalization were executed. Other fences, toolchain setup, web services, filesystem integrations, concurrency scheduling, performance, and projects remain outside this evidence."
+          "scope": "Only the eleven named complete Go fences extracted unchanged after CRLF-to-LF normalization were executed. Other fences, toolchain setup, web services, filesystem integrations, concurrency scheduling, performance, and projects remain outside this evidence."
         }
       ],
       "marker_count": 0
@@ -692,7 +692,7 @@
           "mode": "runtime",
           "status": "PASS",
           "report": "go-core-twentyfive-runtime.json",
-          "scope": "Only the ten named complete Go fences extracted unchanged after CRLF-to-LF normalization were executed. Other fences, toolchain setup, web services, filesystem integrations, concurrency scheduling, performance, and projects remain outside this evidence."
+          "scope": "Only the eleven named complete Go fences extracted unchanged after CRLF-to-LF normalization were executed. Other fences, toolchain setup, web services, filesystem integrations, concurrency scheduling, performance, and projects remain outside this evidence."
         }
       ],
       "marker_count": 0
@@ -711,20 +711,26 @@
           "mode": "runtime",
           "status": "PASS",
           "report": "go-core-twentyfive-runtime.json",
-          "scope": "Only the ten named complete Go fences extracted unchanged after CRLF-to-LF normalization were executed. Other fences, toolchain setup, web services, filesystem integrations, concurrency scheduling, performance, and projects remain outside this evidence."
+          "scope": "Only the eleven named complete Go fences extracted unchanged after CRLF-to-LF normalization were executed. Other fences, toolchain setup, web services, filesystem integrations, concurrency scheduling, performance, and projects remain outside this evidence."
         }
       ],
       "marker_count": 0
     },
     {
       "path": "01-go-backend/reference/language-concepts/11-map-semantics.md",
-      "sha256": "27fd06e834d58504d4eea7429a7e704ec981542bea31c477a7b0711cad4f3107",
+      "sha256": "a9d729a2308d6ae39d6d62ab1ba9bf3cad692721d325425accd10995207a6ff5",
       "verification": [
         {
           "mode": "runtime",
           "status": "PASS",
           "report": "go-php-java-python-eleventh-runtime.json",
           "scope": "Four named complete fenced programs extracted unchanged from current P1 core/standard-library pages: Go map semantics, PHP DateTimeImmutable, Java java.util.regex, and Python asyncio."
+        },
+        {
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "go-core-twentyfive-runtime.json",
+          "scope": "Only the eleven named complete Go fences extracted unchanged after CRLF-to-LF normalization were executed. Other fences, toolchain setup, web services, filesystem integrations, concurrency scheduling, performance, and projects remain outside this evidence."
         }
       ],
       "marker_count": 0
@@ -737,7 +743,7 @@
           "mode": "runtime",
           "status": "PASS",
           "report": "go-core-twentyfive-runtime.json",
-          "scope": "Only the ten named complete Go fences extracted unchanged after CRLF-to-LF normalization were executed. Other fences, toolchain setup, web services, filesystem integrations, concurrency scheduling, performance, and projects remain outside this evidence."
+          "scope": "Only the eleven named complete Go fences extracted unchanged after CRLF-to-LF normalization were executed. Other fences, toolchain setup, web services, filesystem integrations, concurrency scheduling, performance, and projects remain outside this evidence."
         }
       ],
       "marker_count": 1
@@ -750,7 +756,7 @@
           "mode": "runtime",
           "status": "PASS",
           "report": "go-core-twentyfive-runtime.json",
-          "scope": "Only the ten named complete Go fences extracted unchanged after CRLF-to-LF normalization were executed. Other fences, toolchain setup, web services, filesystem integrations, concurrency scheduling, performance, and projects remain outside this evidence."
+          "scope": "Only the eleven named complete Go fences extracted unchanged after CRLF-to-LF normalization were executed. Other fences, toolchain setup, web services, filesystem integrations, concurrency scheduling, performance, and projects remain outside this evidence."
         }
       ],
       "marker_count": 0
@@ -763,7 +769,7 @@
           "mode": "runtime",
           "status": "PASS",
           "report": "go-core-twentyfive-runtime.json",
-          "scope": "Only the ten named complete Go fences extracted unchanged after CRLF-to-LF normalization were executed. Other fences, toolchain setup, web services, filesystem integrations, concurrency scheduling, performance, and projects remain outside this evidence."
+          "scope": "Only the eleven named complete Go fences extracted unchanged after CRLF-to-LF normalization were executed. Other fences, toolchain setup, web services, filesystem integrations, concurrency scheduling, performance, and projects remain outside this evidence."
         }
       ],
       "marker_count": 0
@@ -782,7 +788,7 @@
           "mode": "runtime",
           "status": "PASS",
           "report": "go-core-twentyfive-runtime.json",
-          "scope": "Only the ten named complete Go fences extracted unchanged after CRLF-to-LF normalization were executed. Other fences, toolchain setup, web services, filesystem integrations, concurrency scheduling, performance, and projects remain outside this evidence."
+          "scope": "Only the eleven named complete Go fences extracted unchanged after CRLF-to-LF normalization were executed. Other fences, toolchain setup, web services, filesystem integrations, concurrency scheduling, performance, and projects remain outside this evidence."
         }
       ],
       "marker_count": 0
@@ -1009,7 +1015,7 @@
           "mode": "runtime",
           "status": "PASS",
           "report": "go-core-twentyfive-runtime.json",
-          "scope": "Only the ten named complete Go fences extracted unchanged after CRLF-to-LF normalization were executed. Other fences, toolchain setup, web services, filesystem integrations, concurrency scheduling, performance, and projects remain outside this evidence."
+          "scope": "Only the eleven named complete Go fences extracted unchanged after CRLF-to-LF normalization were executed. Other fences, toolchain setup, web services, filesystem integrations, concurrency scheduling, performance, and projects remain outside this evidence."
         }
       ],
       "marker_count": 1

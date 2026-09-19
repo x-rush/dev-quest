@@ -84,6 +84,37 @@ func main() {
 
 **互斥锁 map vs sync.Map 怎么选**：读多写少、key 集合基本稳定（如配置缓存）→ `sync.Map`；读写均衡、需要类型安全、可用 `slices`/`maps` 工具函数 → `RWMutex` + 普通 map。大多数业务代码首选后者，语义更直白。
 
+### 零值和缺失键的最小验收
+
+读取结果为零不表示键不存在；只有双值读取的 `ok` 能表达这个区别。`delete` 对不存在的键和 nil map 都是安全 no-op，而向 nil map 写入会 panic，因此不把写入放进这个可继续执行的示例。
+
+<!-- doc-verify:go-map-zero-and-missing -->
+```go
+package main
+
+import "fmt"
+
+func main() {
+	m := map[string]int{"zero": 0}
+	zero, zeroOK := m["zero"]
+	missing, missingOK := m["missing"]
+	fmt.Println(zero, zeroOK)
+	fmt.Println(missing, missingOK)
+
+	var nilMap map[string]int
+	delete(nilMap, "missing")
+	fmt.Println(nilMap == nil, len(nilMap), nilMap["missing"])
+}
+```
+
+预期输出：
+
+```text
+0 true
+0 false
+true 0 0
+```
+
 ## ⚠️ 常见陷阱
 
 - ❌ **错误做法**：`var m map[string]int` 后直接 `m["k"] = 1`。

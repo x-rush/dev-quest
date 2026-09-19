@@ -1,6 +1,6 @@
 # Go 核心基础页第二十五批运行验证
 
-仅运行下列十个正文中有 `doc-verify` 标记的完整 Go 围栏。报告不将结果扩大为整页、工具链或项目验证。
+仅运行下列十一个正文中有 `doc-verify` 标记的完整 Go 围栏。报告不将结果扩大为整页、工具链或项目验证。
 
 | 文档 | 示例 | 结果 |
 |---|---|---|
@@ -14,5 +14,6 @@
 | [01-go-backend/reference/language-concepts/15-nil-semantics.md](../../../../01-go-backend/reference/language-concepts/15-nil-semantics.md) | `go-nil-value-boundaries` | PASS |
 | [01-go-backend/reference/language-concepts/09-generics.md](../../../../01-go-backend/reference/language-concepts/09-generics.md) | `go-generics-named-type` | PASS |
 | [01-go-backend/reference/language-concepts/10-slice-semantics.md](../../../../01-go-backend/reference/language-concepts/10-slice-semantics.md) | `go-slice-full-expression` | PASS |
+| [01-go-backend/reference/language-concepts/11-map-semantics.md](../../../../01-go-backend/reference/language-concepts/11-map-semantics.md) | `go-map-zero-and-missing` | PASS |
 
 隔离条件、原文与代码 SHA-256、完整输出和命令见同名 JSON。
