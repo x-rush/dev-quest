@@ -55,7 +55,7 @@
     },
     {
       "path": "01-go-backend/advanced-topics/api-advanced/01-restful-patterns.md",
-      "sha256": "3c9cf61c04f1e5bbc44b605659cd1bdaf314b5df66662dcfe16f992d8507a6c0",
+      "sha256": "0a0b32847c3d22cf93211fb851f0b0f5d2704e4f817a4c9d558f098ddb51c62f",
       "verification": [
         {
           "mode": "not_verified",
@@ -335,7 +335,7 @@
     },
     {
       "path": "01-go-backend/deployment/03-kubernetes-deployment.md",
-      "sha256": "6dfdf8b09148be91a9f8e48838aa34d215f736418c675656377727568ce0b567",
+      "sha256": "d492ec1fd3576b6f1d053e96066963b48bc35a922f8d23370b6ac346df44b5bb",
       "verification": [
         {
           "mode": "not_verified",
@@ -4998,7 +4998,7 @@
     },
     {
       "path": "06-swift-swiftui/testing/03-integration-testing.md",
-      "sha256": "3dce940681882adfcbb925a3078da4991c15ff04e6f30f717d01ff6dde334355",
+      "sha256": "da7b2b1f79d7a05c24515fc5a9b925e1b06f9a1275301b8d7a57444c577329c3",
       "verification": [
         {
           "mode": "not_verified",
@@ -8569,7 +8569,7 @@
     },
     {
       "path": "11-rust-cross-platform/deployment/01-cross-compilation-targets.md",
-      "sha256": "596dec01f1ee6a24f2f0ceeb4a2c02a52e3f59b8f2d1908a52464672d60d0320",
+      "sha256": "7c7c9cc31d8cfe4b1f16eea7560c2e647873b7aa19b12e5e2208cafb3975e3c8",
       "verification": [
         {
           "mode": "not_verified",
@@ -8582,7 +8582,7 @@
     },
     {
       "path": "11-rust-cross-platform/deployment/02-github-actions-ci.md",
-      "sha256": "526cdab5b19bc8501000b711e5afec30010b9ea83f761712174912336463284d",
+      "sha256": "77fe6a6060146c5d7aafcf4c878426f4f1ff277084c995bd2fc562a04d605a6b",
       "verification": [
         {
           "mode": "not_verified",

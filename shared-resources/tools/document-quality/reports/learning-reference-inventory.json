@@ -1925,7 +1925,6 @@
         "11-rust-cross-platform/projects/01-cli-tool.md",
         "11-rust-cross-platform/projects/02-tauri-notes-app.md",
         "11-rust-cross-platform/projects/05-multiplatform-release.md",
-        "11-rust-cross-platform/testing/02-criterion-benchmarks.md",
         "11-rust-cross-platform/deployment/01-cross-compilation-targets.md",
         "11-rust-cross-platform/deployment/02-github-actions-ci.md",
         "11-rust-cross-platform/deployment/03-signing-auto-update.md",

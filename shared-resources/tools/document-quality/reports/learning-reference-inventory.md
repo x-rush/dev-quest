@@ -116,7 +116,7 @@
 - 内置能力：11-rust-cross-platform/reference/language-concepts/03-const-generics.md；11-rust-cross-platform/reference/language-concepts/10-standard-types-and-methods.md；11-rust-cross-platform/reference/library-guides/15-standard-library-map.md
 - 标准库：11-rust-cross-platform/reference/language-concepts/05-macros.md；11-rust-cross-platform/reference/language-concepts/09-keywords-and-syntax.md；11-rust-cross-platform/reference/library-guides/15-standard-library-map.md
 - basics 练习/自测信号：10 篇；projects 验收信号：5 篇。
-- 完全相同的一级标题组：0 组；含易变版本/API 用语的文档：14 篇（仅表示需要随技术基线复核，不表示已过期）。
+- 完全相同的一级标题组：0 组；含易变版本/API 用语的文档：13 篇（仅表示需要随技术基线复核，不表示已过期）。
 
 ## 待人工确认的结构缺口
 
