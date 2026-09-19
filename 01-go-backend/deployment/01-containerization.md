@@ -960,6 +960,83 @@ networks:
 
 *最后更新: 2025年9月*
 
+---
+
+<!-- full-library-explanation -->
+## 可直接采用的生产构建模板
+
+前置是项目有 `go.mod`、`go.sum`，并且 `./cmd/api` 能构建出一个监听 `8080`、提供 `/healthz` 的服务。下面的版本把依赖下载、交叉编译和运行镜像分开；`-trimpath` 与 `-buildvcs=false` 减少构建路径和 VCS 元数据进入二进制，`CGO_ENABLED=0` 使其可运行在无 shell 的 distroless 镜像中。
+
+```dockerfile
+# syntax=docker/dockerfile:1
+FROM golang:1.25-bookworm AS build
+WORKDIR /src
+
+# 先下载模块，业务代码变化不会让这一层失效。
+COPY go.mod go.sum ./
+RUN go mod download
+
+COPY . .
+RUN CGO_ENABLED=0 GOOS=linux go build \
+    -trimpath -buildvcs=false -ldflags="-s -w" \
+    -o /out/api ./cmd/api
+
+FROM gcr.io/distroless/static-debian12:nonroot
+WORKDIR /app
+COPY --from=build /out/api /app/api
+USER nonroot:nonroot
+EXPOSE 8080
+ENTRYPOINT ["/app/api"]
+```
+
+配套 `.dockerignore` 应至少排除构建上下文中不需要的文件：
+
+```text
+.git
+bin
+tmp
+coverage.out
+*.test
+.env
+.env.*
+```
+
+Compose 中把应用和依赖服务分开，并让应用使用服务 DNS 名称，而不是 `localhost`：
+
+```yaml
+services:
+  api:
+    build: .
+    ports: ["8080:8080"]
+    environment:
+      DATABASE_URL: postgres://app:app@db:5432/app?sslmode=disable
+    depends_on:
+      db:
+        condition: service_healthy
+
+  db:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_USER: app
+      POSTGRES_PASSWORD: app # 仅用于本地示例；生产环境注入密钥
+      POSTGRES_DB: app
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U app -d app"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+```
+
+## 构建后的验收
+
+```bash
+docker build -t go-api:local .
+docker run --rm -p 8080:8080 go-api:local
+# 另一个终端：curl -f http://127.0.0.1:8080/healthz
+```
+
+成功 build 只能证明 Dockerfile 的编译链路可用。还应检查健康端点、停止信号下的优雅退出，以及容器删除后的数据生命周期。运行镜像没有 shell 是有意的安全边界；调试时使用独立的调试镜像或临时 sidecar，不要为了 `sh` 把构建工具带回生产镜像。镜像标签会移动，发布记录应保存实际镜像摘要。
+
 <!-- learning-navigation -->
 ## 阅读导航
 
