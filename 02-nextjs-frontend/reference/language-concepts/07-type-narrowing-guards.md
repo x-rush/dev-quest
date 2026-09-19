@@ -141,6 +141,30 @@ console.log(isProduct({ id: 'p1', price: 0 })); // true
 console.log(isProduct({ id: 'p1', price: '0' })); // false
 ```
 
+### 可直接提取的运行案例
+
+下面的程序刻意只验证守卫的 JavaScript 行为；`value is Product` 的编译期收窄仍须由 TypeScript 编译器检查。
+
+```js
+function isProduct(value) {
+  return typeof value === 'object' && value !== null
+    && 'id' in value && typeof value.id === 'string'
+    && 'price' in value && typeof value.price === 'number'
+    && Number.isFinite(value.price) && value.price >= 0;
+}
+
+const actual = [
+  isProduct({ id: 'p1', price: 0 }),
+  isProduct({ id: 'p1', price: '0' }),
+  isProduct(null),
+  isProduct({ id: 'p1', price: NaN }),
+  isProduct({ id: 'p1', price: -1 }),
+];
+const expected = [true, false, false, false, false];
+if (JSON.stringify(actual) !== JSON.stringify(expected)) throw new Error(JSON.stringify(actual));
+console.log('Product guard runtime contracts passed');
+```
+
 **练习**：增加 null、空对象、NaN、负价格输入，预期全部 false。再给判别联合新增一种状态，确认 never 分支让遗漏的处理成为编译错误。穷尽性只约束已声明的联合，来自网络的未知 kind 仍要先验证；as Shape 不会制造运行时保障。
 
 依据：[TypeScript 4.6 解构联合收窄](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-4-6.html)、[收窄](https://www.typescriptlang.org/docs/handbook/2/narrowing.html)。本轮没有复现原文声称的各编译器版本测试，以下结论以机制与官方说明为依据。

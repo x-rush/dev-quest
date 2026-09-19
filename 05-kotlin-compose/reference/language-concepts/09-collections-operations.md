@@ -190,6 +190,27 @@ val bigSpenders: Map<Long, Int> =
 // {1=1, 2=1}
 ```
 
+### 可直接提取的运行案例
+
+以下为完整 Kotlin 标准库程序，验证本页组合管道、重复 key 与空集合的边界；不涉及 Compose 或 Android 运行时。
+
+```kotlin
+data class Order(val customerId: Long, val amount: Double, val product: String)
+
+fun main() {
+    val orders = listOf(
+        Order(1, 120.0, "keyboard"), Order(1, 80.0, "mouse"),
+        Order(2, 250.0, "monitor"), Order(2, 250.0, "monitor"),
+    )
+    val actual = orders.filter { it.amount >= 100 }.groupBy { it.customerId }
+        .mapValues { (_, rows) -> rows.map { it.product }.distinct().size }
+    check(actual == mapOf(1L to 1, 2L to 1))
+    check(listOf("a", "ab").associateBy { it.first() } == mapOf('a' to "ab"))
+    check(emptyList<Int>().fold(0) { acc, value -> acc + value } == 0)
+    println("Collection operation contracts passed")
+}
+```
+
 ## ⚠️ 常见陷阱
 
 - ❌ `list.reduce { ... }` 直接用于可能为空的集合——空集合抛 `UnsupportedOperationException`（本机预期行为异常类型即此，非 IllegalStateException）。

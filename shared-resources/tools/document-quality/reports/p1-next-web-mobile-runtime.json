@@ -1,0 +1,91 @@
+{
+  "scope": "Five P1 queue core/standard-library pages without prior named runtime evidence; each program is extracted unchanged from its source body.",
+  "execution": "Docker containers: network disabled, read-only root filesystem, capabilities dropped, and bounded PID/memory/tmpfs resources.",
+  "not_verified": [
+    "TypeScript compiler diagnostics",
+    "Next.js browser, SSR, routing, or build",
+    "TanStack Query cache invalidation/refetch runtime",
+    "React Navigation or device runtime",
+    "Compose/Android runtime",
+    "SwiftUI/iOS runtime"
+  ],
+  "passed": 5,
+  "total": 5,
+  "results": [
+    {
+      "id": "next-product-guard",
+      "source": "02-nextjs-frontend/reference/language-concepts/07-type-narrowing-guards.md",
+      "language": "js",
+      "image": "node:24-bookworm-slim",
+      "command": "node Case.mjs",
+      "source_sha256": "731863933cebfeb0d8626f9ddfa996040c0727c0c655fc4b3683dca44ab3a5a9",
+      "extracted_code_sha256": "239aebecf48d83bf5abfbc76256401b8160c41233e775a72bdaf574774af627f",
+      "expected_stdout": "Product guard runtime contracts passed\n",
+      "stdout": "Product guard runtime contracts passed\n",
+      "stderr": "",
+      "exit_code": 0,
+      "error": null,
+      "status": "PASS"
+    },
+    {
+      "id": "tanstack-query-key-factory-core-api",
+      "source": "03-tanstack-stack/reference/language-concepts/01-query-core-api.md",
+      "language": "js",
+      "image": "node:24-bookworm-slim",
+      "command": "node Case.mjs",
+      "source_sha256": "54687a4251ac48de01581a2f4b94cd2f52c1c4e73232b4f6768fa7e9baca1b5f",
+      "extracted_code_sha256": "7cff04a5fa491605fa4e0877ece43af2b0f3ffac522f1402410eb16e925404e7",
+      "expected_stdout": "Query key factory contracts passed\n",
+      "stdout": "Query key factory contracts passed\n",
+      "stderr": "",
+      "exit_code": 0,
+      "error": null,
+      "status": "PASS"
+    },
+    {
+      "id": "react-native-detail-parameter-boundary",
+      "source": "04-multiplatform-apps/reference/language-concepts/04-typescript-patterns.md",
+      "language": "js",
+      "image": "node:24-bookworm-slim",
+      "command": "node Case.mjs",
+      "source_sha256": "7a7ee24005fee1b4e0279e08ee05a0638888289706ad0502d073043a59838074",
+      "extracted_code_sha256": "0179390d449f5bf0801608469d1174a8ad83b86bc22f630d1ec9327588cf5fc6",
+      "expected_stdout": "Detail parameter boundary contracts passed\n",
+      "stdout": "Detail parameter boundary contracts passed\n",
+      "stderr": "",
+      "exit_code": 0,
+      "error": null,
+      "status": "PASS"
+    },
+    {
+      "id": "kotlin-collection-operations",
+      "source": "05-kotlin-compose/reference/language-concepts/09-collections-operations.md",
+      "language": "kotlin",
+      "image": "dev-quest-validation:local",
+      "command": "sh -lc kotlinc Case.kt -include-runtime -d /tmp/case.jar && java -jar /tmp/case.jar",
+      "source_sha256": "6c6a06aa838ed71624417aed0bd91cba8fd52869e51c906e0cc83aa599212bee",
+      "extracted_code_sha256": "810e87f4a9e84d02ced87f8c6c90952972691252b6d6dc586b59e9cfe33a11a8",
+      "expected_stdout": "Collection operation contracts passed\n",
+      "stdout": "Collection operation contracts passed\n",
+      "stderr": "",
+      "exit_code": 0,
+      "error": null,
+      "status": "PASS"
+    },
+    {
+      "id": "swift-enum-pattern-matching",
+      "source": "06-swift-swiftui/reference/language-concepts/07-enums-pattern-matching.md",
+      "language": "swift",
+      "image": "swift:6.3.3-noble",
+      "command": "swift Case.swift",
+      "source_sha256": "2a6fb48511e93922a9dc49194a2fbafd680645d38ddb0ccb9698589c8cd9e9a3",
+      "extracted_code_sha256": "dc370b43f1546d0ced935baa750ac0c13f06a0c5cfc97661b6da8a18cb2a3b1a",
+      "expected_stdout": "Enum pattern-matching contracts passed\n",
+      "stdout": "Enum pattern-matching contracts passed\n",
+      "stderr": "",
+      "exit_code": 0,
+      "error": null,
+      "status": "PASS"
+    }
+  ]
+}

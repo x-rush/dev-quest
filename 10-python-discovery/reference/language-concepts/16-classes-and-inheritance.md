@@ -67,7 +67,7 @@ class X(B, A, C): pass
 
 ### super() 的真实语义
 
-`super().method()` = 在“**当前类在 MRO 中的位置**”之后继续找 `method`——不是“直接父类”。菱形结构靠它实现每层只执行一次的协作式初始化；运行下例确认输出顺序是否为 Child → Left → Right → Base：
+`super().method()` = 在“**当前类在 MRO 中的位置**”之后继续找 `method`——不是“直接父类”。菱形结构靠它实现每层只执行一次的协作式初始化；运行下例确认输出顺序是否为 Child → Left → Right → Base。这里的 `**kw` 必须在到达 `object.__init__` 前被某一层消费；本例为空所以可以原样传到底：
 
 ```python
 class Base:
@@ -172,6 +172,44 @@ isinstance(dog, Animal)      # True
 用上文 A/B/C/D 示例，在文件末尾添加 `print(D().who())`，输出应为 `D|B|C|A`。练习：将 B 的实现改为直接 `return "B|" + A.who(self)`，输出将变成 `D|B|A`，C 被跳过。这说明 super 的价值在于遵守实际实例的解析顺序，而不是缩写某个父类名。
 
 继承用于表达可替换的行为关系；若只是希望借用一个功能，也可让实例持有另一个对象并调用它。比如业务服务持有存储对象，测试时替换存储实现，比让业务服务继承数据库客户端更容易明确职责。
+
+<!-- node-python-p1-next-case: python-class-mro-slots -->
+下面是可直接运行的最小验证，保存为 `class-contracts.py` 后执行 `python class-contracts.py`。它覆盖菱形 MRO 中的协作式 `super()`，并确认 `__slots__` 禁止未声明属性；不会验证所有继承、描述符或序列化场景。
+
+```python
+class A:
+    def who(self):
+        return "A"
+
+class B(A):
+    def who(self):
+        return "B|" + super().who()
+
+class C(A):
+    def who(self):
+        return "C|" + super().who()
+
+class D(B, C):
+    def who(self):
+        return "D|" + super().who()
+
+class Slim:
+    __slots__ = ("x",)
+
+slim = Slim()
+slim.x = 1
+try:
+    slim.extra = 2
+except AttributeError:
+    blocked = True
+else:
+    blocked = False
+
+assert [cls.__name__ for cls in D.__mro__] == ["D", "B", "C", "A", "object"]
+assert D().who() == "D|B|C|A"
+assert blocked and not hasattr(slim, "__dict__")
+print("class-contracts: D|B|C|A; slots block undeclared attributes")
+```
 
 ## 🔗 相关条目
 

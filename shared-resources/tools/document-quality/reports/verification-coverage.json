@@ -17,8 +17,8 @@
   "summary": {
     "documents": 642,
     "by_primary_state": {
-      "not_verified": 537,
-      "runtime": 105
+      "not_verified": 530,
+      "runtime": 112
     },
     "verification_wording_occurrences": 123,
     "marker_classification": {
@@ -1772,13 +1772,13 @@
     },
     {
       "path": "02-nextjs-frontend/reference/language-concepts/07-type-narrowing-guards.md",
-      "sha256": "9b656b577d9393170d9459eeffe76f517232f8c7d7d705481fdf01de982f4691",
+      "sha256": "773d2617049c1e19a081621fa2ddb810f1a3b62820dadc5cb3fd6a5798000cd5",
       "verification": [
         {
-          "mode": "not_verified",
-          "status": "NOT_VERIFIED",
-          "report": null,
-          "scope": "No named runtime or syntax evidence is recorded for this document."
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "p1-next-web-mobile-runtime.json",
+          "scope": "Five P1 queue core/standard-library pages without prior named runtime evidence; each program is extracted unchanged from its source body."
         }
       ],
       "marker_count": 0
@@ -2361,13 +2361,13 @@
     },
     {
       "path": "03-tanstack-stack/reference/language-concepts/01-query-core-api.md",
-      "sha256": "438e0cf5c12104f40e30f65448c84dea0a24769e4916fc9e569390912a187713",
+      "sha256": "54a0c47f8ac510396574baa1cdb727d75a1dada24c2501f87bf3d94e086d1327",
       "verification": [
         {
-          "mode": "not_verified",
-          "status": "NOT_VERIFIED",
-          "report": null,
-          "scope": "No named runtime or syntax evidence is recorded for this document."
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "p1-next-web-mobile-runtime.json",
+          "scope": "Five P1 queue core/standard-library pages without prior named runtime evidence; each program is extracted unchanged from its source body."
         }
       ],
       "marker_count": 0
@@ -3186,13 +3186,13 @@
     },
     {
       "path": "04-multiplatform-apps/reference/language-concepts/04-typescript-patterns.md",
-      "sha256": "8c86994b9fb334f686974023fe96dec3ec8d5486b368222b8661ee8fb9093c67",
+      "sha256": "15767498de4943b484d11b1b3b0e513b69334e4bef0b673bbbf7e25fc0c89aa4",
       "verification": [
         {
-          "mode": "not_verified",
-          "status": "NOT_VERIFIED",
-          "report": null,
-          "scope": "No named runtime or syntax evidence is recorded for this document."
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "p1-next-web-mobile-runtime.json",
+          "scope": "Five P1 queue core/standard-library pages without prior named runtime evidence; each program is extracted unchanged from its source body."
         }
       ],
       "marker_count": 0
@@ -4011,13 +4011,13 @@
     },
     {
       "path": "05-kotlin-compose/reference/language-concepts/09-collections-operations.md",
-      "sha256": "22ac3dd00400197dc045a328b49146787d3522300ea9e1b75dd1a8f39f115c31",
+      "sha256": "6e9851648e673ea0c6c238ded91daa93ce33f1cf350caf97c740fec50c0f7b5e",
       "verification": [
         {
-          "mode": "not_verified",
-          "status": "NOT_VERIFIED",
-          "report": null,
-          "scope": "No named runtime or syntax evidence is recorded for this document."
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "p1-next-web-mobile-runtime.json",
+          "scope": "Five P1 queue core/standard-library pages without prior named runtime evidence; each program is extracted unchanged from its source body."
         }
       ],
       "marker_count": 0
@@ -4674,13 +4674,13 @@
     },
     {
       "path": "06-swift-swiftui/reference/language-concepts/07-enums-pattern-matching.md",
-      "sha256": "dc5ae0d4e5a08090bde04aa1810b02556c3ee81bb674ab8b6c21e616fc0e5229",
+      "sha256": "d391405f30b1d2fa23be5cdf7ff1ee41ba825795ba1a2961f5371a4e34096ab7",
       "verification": [
         {
-          "mode": "not_verified",
-          "status": "NOT_VERIFIED",
-          "report": null,
-          "scope": "No named runtime or syntax evidence is recorded for this document."
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "p1-next-web-mobile-runtime.json",
+          "scope": "Five P1 queue core/standard-library pages without prior named runtime evidence; each program is extracted unchanged from its source body."
         }
       ],
       "marker_count": 0
@@ -7154,13 +7154,13 @@
     },
     {
       "path": "09-nodejs-backend/reference/library-guides/06-util.md",
-      "sha256": "aaf36dbb6bd5b6c9afe4ce7b2ffc273a04cd2de09973968accd63ea3026819ba",
+      "sha256": "a4821b91aa0b418c80edc50411bdd10373ebac75af4e4a7ddc3d3032b39b6d69",
       "verification": [
         {
-          "mode": "not_verified",
-          "status": "NOT_VERIFIED",
-          "report": null,
-          "scope": "No named runtime or syntax evidence is recorded for this document."
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "node-python-p1-next.json",
+          "scope": "Two named, complete programs extracted unchanged from one Node utility-library and one Python language-foundation P1 document. They run in pre-existing local Docker images with network disabled, a read-only root filesystem and a temporary input bind mount. Only the listed contracts execute; no whole-document, network, database, permission, platform, or framework coverage is claimed."
         }
       ],
       "marker_count": 0
@@ -7842,13 +7842,13 @@
     },
     {
       "path": "10-python-discovery/reference/language-concepts/16-classes-and-inheritance.md",
-      "sha256": "89b9cd12350d3aac86cd7b3b28f6701bab426f0145bb2cf35f476eb251820dba",
+      "sha256": "857bc2597b128d219e0a635250e0264ae3f8ae888cd3ffa12c8b775ac66ffb8c",
       "verification": [
         {
-          "mode": "not_verified",
-          "status": "NOT_VERIFIED",
-          "report": null,
-          "scope": "No named runtime or syntax evidence is recorded for this document."
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "node-python-p1-next.json",
+          "scope": "Two named, complete programs extracted unchanged from one Node utility-library and one Python language-foundation P1 document. They run in pre-existing local Docker images with network disabled, a read-only root filesystem and a temporary input bind mount. Only the listed contracts execute; no whole-document, network, database, permission, platform, or framework coverage is claimed."
         }
       ],
       "marker_count": 0

@@ -1,0 +1,93 @@
+{
+  "generated_at": "2026-09-19T13:11:01.705Z",
+  "scope": "Two named, complete programs extracted unchanged from one Node utility-library and one Python language-foundation P1 document. They run in pre-existing local Docker images with network disabled, a read-only root filesystem and a temporary input bind mount. Only the listed contracts execute; no whole-document, network, database, permission, platform, or framework coverage is claimed.",
+  "source_hash_normalization": "Node UTF-8 reads normalize CRLF to LF; extracted programs end with exactly one LF.",
+  "command": "node shared-resources/tools/document-quality/verify-node-python-p1-next.mjs --report ... --markdown-report ...",
+  "runtimes": {
+    "js": {
+      "image": "node:24-bookworm-slim",
+      "image_id": "sha256:2fe369e969550cde8e867afc3fe370b260140cab4a23d467074295b42163d553",
+      "version": "v24.21.0"
+    },
+    "python": {
+      "image": "python:3.14-alpine",
+      "image_id": "sha256:016508ba505da24f7139765bc4bb669df4e88eb2f12eeadd571bf2f88d7533df",
+      "version": "Python 3.14.7"
+    }
+  },
+  "passed": 2,
+  "total": 2,
+  "results": [
+    {
+      "id": "node-util-contracts",
+      "source": "09-nodejs-backend/reference/library-guides/06-util.md",
+      "language": "js",
+      "runtime": "v24.21.0",
+      "image": "node:24-bookworm-slim",
+      "image_id": "sha256:2fe369e969550cde8e867afc3fe370b260140cab4a23d467074295b42163d553",
+      "command": [
+        "docker",
+        "run",
+        "--rm",
+        "--pull=never",
+        "--network=none",
+        "--read-only",
+        "--cap-drop=ALL",
+        "--pids-limit=64",
+        "--memory=128m",
+        "--cpus=1",
+        "--tmpfs",
+        "/tmp:rw,nosuid,size=16m",
+        "--workdir=/tmp",
+        "--mount",
+        "type=bind,source=C:\\Users\\77958\\AppData\\Local\\Temp\\dev-quest-p1-next-XNNuUX,target=/input,readonly",
+        "node:24-bookworm-slim",
+        "node",
+        "/input/case-0.mjs"
+      ],
+      "source_sha256": "a7bce58b10b06858afb6728beed62fd760695052d243ed1710a1c1e4a19ef2c5",
+      "code_sha256": "f5259af6b259a0a4f25b1b3696303b8d69c6d0ad430622d9c0b203d2b706b8ab",
+      "expected_stdout": "util-contracts: { outer: [Object] }; a,b; file.txt; \"\\u001b[44mok\\u001b[49m\"\n",
+      "stdout": "util-contracts: { outer: [Object] }; a,b; file.txt; \"\\u001b[44mok\\u001b[49m\"\n",
+      "stderr": "",
+      "exit_code": 0,
+      "status": "PASS"
+    },
+    {
+      "id": "python-class-mro-slots",
+      "source": "10-python-discovery/reference/language-concepts/16-classes-and-inheritance.md",
+      "language": "python",
+      "runtime": "Python 3.14.7",
+      "image": "python:3.14-alpine",
+      "image_id": "sha256:016508ba505da24f7139765bc4bb669df4e88eb2f12eeadd571bf2f88d7533df",
+      "command": [
+        "docker",
+        "run",
+        "--rm",
+        "--pull=never",
+        "--network=none",
+        "--read-only",
+        "--cap-drop=ALL",
+        "--pids-limit=64",
+        "--memory=128m",
+        "--cpus=1",
+        "--tmpfs",
+        "/tmp:rw,nosuid,size=16m",
+        "--workdir=/tmp",
+        "--mount",
+        "type=bind,source=C:\\Users\\77958\\AppData\\Local\\Temp\\dev-quest-p1-next-XNNuUX,target=/input,readonly",
+        "python:3.14-alpine",
+        "python",
+        "-I",
+        "/input/case-1.py"
+      ],
+      "source_sha256": "9a0ab55a7464207a18538587259aee46971cf1d2c35810b15d1777ba9be7dc73",
+      "code_sha256": "2866f36b6dec5f7e0a75ada0b2372c59bac03821bbc4e2b78b1bd14d682af30e",
+      "expected_stdout": "class-contracts: D|B|C|A; slots block undeclared attributes\n",
+      "stdout": "class-contracts: D|B|C|A; slots block undeclared attributes\n",
+      "stderr": "",
+      "exit_code": 0,
+      "status": "PASS"
+    }
+  ]
+}

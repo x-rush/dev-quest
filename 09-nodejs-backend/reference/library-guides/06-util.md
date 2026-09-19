@@ -118,7 +118,7 @@ styleText("blue", url, { validateStream: false });  // 跳过 TTY 检测强制�
 
 | format 类别 | 取值 |
 |------------|------|
-| 颜色 | `red` `green` `yellow` `blue` `magenta` `cyan` `white` `gray`（前缀 `bg`/`fg` 指背景） |
+| 颜色 | `red` `green` `yellow` `blue` `magenta` `cyan` `white` `gray`；背景色使用 `bgRed`、`bgBlue` 等 `bg` 前缀（没有 `fgBlue` 形式） |
 | 修饰 | `bold` `dim` `italic` `underline` `strikethrough` |
 | 特殊 | `reset` |
 
@@ -156,6 +156,26 @@ oldFn(1);    // 正常执行，并向 stderr 发出 DeprecationWarning
 promisify 默认期待最后一个参数是 error-first 回调。若旧函数使用 cb(value)，该 value 会被当作错误参数，而不是自动成为成功结果；对象方法还可能依赖 this，需要先绑定接收者。已有 Promise API 不需要再次包装，多个回调成功值要检查是否有自定义 promisify 实现，否则不能假定全部保留。
 
 练习：用 parseArgs 解析 --port 3000 与 --port abc，它们都会得到字符串；下一步才做数值格式与范围验证。再为调用依赖 this.base 的旧对象方法分别使用直接 promisify 和绑定后 promisify，解释差异。测试 CLI 输出时默认不依赖 ANSI 颜色，面向机器的 JSON 输出与面向人的彩色提示应有明确出口。
+
+<!-- node-python-p1-next-case: node-util-contracts -->
+下面的完整程序可保存为 `util-contracts.mjs` 并用 `node util-contracts.mjs` 运行。它固定验证 `inspect` 的深度截断、`parseArgs` 的重复参数和 `styleText` 的背景色；`validateStream: false` 使颜色检查不依赖 TTY。`fgBlue` 不是有效格式名，前景色直接写 `blue`，背景色写 `bgBlue`。
+
+```js
+import { inspect, parseArgs, styleText } from "node:util";
+
+const shown = inspect({ outer: { inner: 1 } }, { depth: 0 });
+const { values, positionals } = parseArgs({
+  args: ["--out", "a", "--out", "b", "file.txt"],
+  options: { out: { type: "string", multiple: true } },
+  allowPositionals: true,
+});
+const colored = styleText("bgBlue", "ok", { validateStream: false });
+
+if (shown !== "{ outer: [Object] }" || values.out.join(",") !== "a,b" || positionals[0] !== "file.txt") {
+  throw new Error("node:util contract changed");
+}
+console.log(`util-contracts: ${shown}; ${values.out.join(",")}; ${positionals[0]}; ${JSON.stringify(colored)}`);
+```
 
 ## 🔗 相关文档
 

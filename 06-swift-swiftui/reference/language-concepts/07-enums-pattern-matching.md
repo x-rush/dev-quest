@@ -132,6 +132,35 @@ enum Direction: Equatable { case north, turn(Int) }
 Direction.turn(3) == Direction.turn(3)   // true
 ```
 
+### 可直接提取的运行案例
+
+该完整 Swift 标准库程序验证关联值、`switch` 与 `if case` 的值层语义；SwiftUI 的 ViewBuilder 和 Apple SDK 类型不在本案例范围。
+
+```swift
+enum LoadState: Equatable {
+    case idle
+    case loaded(String)
+    case failed(String)
+}
+
+func label(for state: LoadState) -> String {
+    switch state {
+    case .idle: return "idle"
+    case .loaded(let value): return "loaded:" + value
+    case .failed(let message): return "failed:" + message
+    }
+}
+
+let states: [LoadState] = [.idle, .loaded("note"), .failed("offline")]
+let loaded = states.compactMap { state -> String? in
+    if case .loaded(let value) = state { return value }
+    return nil
+}
+precondition(states.map(label(for:)) == ["idle", "loaded:note", "failed:offline"])
+precondition(loaded == ["note"])
+print("Enum pattern-matching contracts passed")
+```
+
 ## ⚠️ 常见陷阱
 
 | 陷阱 | 说明 | 解法 |

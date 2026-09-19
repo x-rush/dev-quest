@@ -202,6 +202,22 @@ console.log(parseDetail({ id: '42' }), parseDetail({ id: 42 }));
 // { id: '42' }、null
 ```
 
+### 可直接提取的运行案例
+
+该程序只验证外部参数进入内部形状前的 JavaScript 检查；React Navigation 的 `ParamList` 编译期约束和设备导航行为不在此范围。
+
+```js
+function parseDetail(input) {
+  if (typeof input !== 'object' || input === null || !('id' in input)) return null;
+  return typeof input.id === 'string' && input.id.trim() !== '' ? { id: input.id } : null;
+}
+
+const actual = [parseDetail({ id: '42' }), parseDetail({ id: 42 }), parseDetail({ id: '  ' }), parseDetail(null)];
+const expected = [{ id: '42' }, null, null, null];
+if (JSON.stringify(actual) !== JSON.stringify(expected)) throw new Error(JSON.stringify(actual));
+console.log('Detail parameter boundary contracts passed');
+```
+
 练习：新增 Row 的 `loading` 分支，令 switch 的 default 调用接收 never 的穷尽检查函数。验收：遗漏新分支会得到编译错误；将网络响应改成错误形状时，由解析函数返回可处理的失败，而不是依赖编译器发现运行时数据问题。
 
 ## 🔗 相关文档

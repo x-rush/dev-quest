@@ -149,8 +149,26 @@ queryClient.invalidateQueries({ queryKey: ['todos', 1], exact: true }) // 仅精
 ### 陷阱
 
 - `invalidateQueries` 默认只对**挂载中的查询**立即重取（`refetchType: 'active'`）
-- `setQueryData` 的 updater 返回 `undefined` 会**清空**该缓存条目
+- `setQueryData` 的 updater 返回 `undefined` 是 no-op；它不会创建或清空缓存条目。删除条目请用 `removeQueries`
 - `initialData` 会重置 staleTime 计时；只想"占位不标鲜"用 `placeholderData`
+
+### 可直接提取的运行案例：键前缀匹配
+
+QueryClient 的完整失效与重取行为依赖 TanStack Query 运行时。下面只把本页“键按数组前缀组织”的纯逻辑写成完整程序，用来防止文档中的键工厂示例发生排序或层级漂移。
+
+```js
+const todoKeys = {
+  all: ['todos'],
+  lists: () => [...todoKeys.all, 'list'],
+  list: (filters) => [...todoKeys.lists(), filters],
+  detail: (id) => [...todoKeys.all, 'detail', id],
+};
+
+const actual = [todoKeys.all, todoKeys.lists(), todoKeys.list({ page: 2 }), todoKeys.detail(3)];
+const expected = [['todos'], ['todos', 'list'], ['todos', 'list', { page: 2 }], ['todos', 'detail', 3]];
+if (JSON.stringify(actual) !== JSON.stringify(expected)) throw new Error(JSON.stringify(actual));
+console.log('Query key factory contracts passed');
+```
 
 ## 相关文档
 
