@@ -135,6 +135,49 @@ try {
 }
 ```
 
+### 可复现验收：异常链与 `finally` 的顺序
+
+这段完整程序验证三个事实：外层得到的是业务异常；`getPrevious()` 保留根因；即使重新抛出，`finally` 仍在外层 catch 前执行。它不表示捕获任意 `Error` 后业务都能继续，也不验证真实支付状态或资源清理。
+
+<!-- reference-case: {"id":"php-exception-chain-finally","stdout":"finally\nouter=payment failed\nprevious=amount must be positive\n"} -->
+```php
+<?php
+
+declare(strict_types=1);
+
+final class PaymentFailed extends RuntimeException
+{
+}
+
+function charge(int $cents): void
+{
+    try {
+        if ($cents <= 0) {
+            throw new InvalidArgumentException('amount must be positive');
+        }
+    } catch (InvalidArgumentException $error) {
+        throw new PaymentFailed('payment failed', 0, $error);
+    } finally {
+        echo "finally", PHP_EOL;
+    }
+}
+
+try {
+    charge(0);
+} catch (PaymentFailed $error) {
+    echo 'outer=', $error->getMessage(), PHP_EOL;
+    echo 'previous=', $error->getPrevious()?->getMessage(), PHP_EOL;
+}
+```
+
+预期输出：
+
+```text
+finally
+outer=payment failed
+previous=amount must be positive
+```
+
 ⚠️ **常见陷阱**: 重抛时丢掉 `$previous` 是日志排障的头号灾难；`finally` 里再抛异常会**顶替**原异常；catch 顺序从具体到宽泛，`catch (Exception)` 放前面会让后面的具体 catch 变死代码。
 
 🔗 **相关条目**: [自定义异常体系](#条目-3自定义异常体系)

@@ -1,11 +1,12 @@
 {
-  "scope": "Thirteen explicitly marked, complete examples: PHP first-script, keyword, built-in/API, standard-library, PDO transaction/binding, Java first-program, modern-features, enum-semantics, interface-semantics, and quick-reference pages. Excludes existing control-flow evidence and all unmarked partial snippets.",
+  "scope": "Fourteen explicitly marked, complete examples: PHP first-script, keyword, built-in/API, standard-library, PDO transaction/binding, exception chain/finally, Java first-program, modern-features, enum-semantics, interface-semantics, and quick-reference pages. Excludes existing control-flow evidence and all unmarked partial snippets.",
   "documents": {
     "07-php-mastery/basics/02-first-script.md": "5e90414a8e755d6ff512070e2a14f56907c9f75b24b105bc5e41281364c3b389",
     "07-php-mastery/reference/language-concepts/01-php-keywords.md": "867df9b19bf026d7f474899698db2a752d67d1cdfcce82b9d73458c8e1efc1a1",
     "07-php-mastery/reference/language-concepts/02-built-in-functions.md": "f2e60510ec55dd5bef56adeed3ba0cd66be01009f1e474a90e601ec8917ac11f",
     "07-php-mastery/reference/library-guides/01-standard-library-spl.md": "e7cfaba59931a3ca7d47b14f24190149b964a5b45926e0c8480cbd0201537771",
     "07-php-mastery/reference/library-guides/03-pdo.md": "5f4f95789e3c6f489086288bf1dc0f5a4afeb3da7bcc35d3b24446d99d463a23",
+    "07-php-mastery/reference/language-concepts/11-errors-exceptions.md": "7510de07dc43d3b21fa7d7194d4519ee2752f4ac656160424b7c06d4071185eb",
     "08-java-revisited/reference/language-concepts/01-java-keywords.md": "b3b6f875d877a1df7bbca90f2e05252990092ff468c03e21050ef20f0059a224",
     "08-java-revisited/basics/02-first-program.md": "a21b66cb245876b2b1f1ae17ab9411e2724c5f0a3d3343766dd776764b9e8daa",
     "08-java-revisited/reference/language-concepts/08-enums.md": "d798fc10ce7b89f4cb9249df5536586c0bfee3bca1c1b213688a15d1ef4dce71",
@@ -146,6 +147,33 @@
           ],
           "exit_code": 0,
           "stdout": "name=Ada's task\nrows-after-rollback=1\n",
+          "stderr": ""
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "php-exception-chain-finally",
+      "category": "exception chain and finally",
+      "language": "php",
+      "document": "07-php-mastery/reference/language-concepts/11-errors-exceptions.md",
+      "source_sha256": "b76fd6c7ea12529d3d790fa0056a5866dfcd0fe80834d0ecac41c3801cfdd932",
+      "runner": "php:8.5-cli-alpine container",
+      "expected_stdout": "finally\nouter=payment failed\nprevious=amount must be positive\n",
+      "commands": [
+        {
+          "command": [
+            "docker",
+            "run",
+            "--rm",
+            "-i",
+            "php:8.5-cli-alpine",
+            "php",
+            "-d",
+            "display_errors=stderr"
+          ],
+          "exit_code": 0,
+          "stdout": "finally\nouter=payment failed\nprevious=amount must be positive\n",
           "stderr": ""
         }
       ],

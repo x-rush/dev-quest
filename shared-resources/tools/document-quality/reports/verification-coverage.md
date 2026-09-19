@@ -7,8 +7,8 @@
 | 指标 | 数量 |
 |---|---:|
 | 纳入模块文档 | 642 |
-| 主状态：not_verified | 452 |
-| 主状态：runtime | 190 |
+| 主状态：not_verified | 451 |
+| 主状态：runtime | 191 |
 | 验证措辞出现次数 | 144 |
 | 措辞分类：source_has_limited_runtime_evidence | 88 |
 | 措辞分类：unbound_verification_wording | 56 |
@@ -441,7 +441,7 @@
 | PHP | [07-php-mastery/reference/language-concepts/08-reflection-attributes.md](../../../../07-php-mastery/reference/language-concepts/08-reflection-attributes.md) | `runtime` | 1 | 0 |
 | PHP | [07-php-mastery/reference/language-concepts/09-strings-regex.md](../../../../07-php-mastery/reference/language-concepts/09-strings-regex.md) | `not_verified` | 0 | 0 |
 | PHP | [07-php-mastery/reference/language-concepts/10-datetime.md](../../../../07-php-mastery/reference/language-concepts/10-datetime.md) | `runtime` | 1 | 0 |
-| PHP | [07-php-mastery/reference/language-concepts/11-errors-exceptions.md](../../../../07-php-mastery/reference/language-concepts/11-errors-exceptions.md) | `not_verified` | 0 | 0 |
+| PHP | [07-php-mastery/reference/language-concepts/11-errors-exceptions.md](../../../../07-php-mastery/reference/language-concepts/11-errors-exceptions.md) | `runtime` | 1 | 0 |
 | PHP | [07-php-mastery/reference/language-concepts/12-modern-php-85.md](../../../../07-php-mastery/reference/language-concepts/12-modern-php-85.md) | `not_verified` | 0 | 0 |
 | PHP | [07-php-mastery/reference/language-concepts/13-weak-comparison.md](../../../../07-php-mastery/reference/language-concepts/13-weak-comparison.md) | `runtime` | 1 | 1 |
 | PHP | [07-php-mastery/reference/language-concepts/14-references-value-semantics.md](../../../../07-php-mastery/reference/language-concepts/14-references-value-semantics.md) | `not_verified` | 0 | 0 |
