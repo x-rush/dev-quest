@@ -459,17 +459,6 @@
     {
       "priority": "P1",
       "kind": "核心基础",
-      "task": "保留诚实的验证边界，并在补证据时决定是否增加最小练习",
-      "reason": "这行是未验证范围或验证步骤的披露，不是声称已经通过的证据。",
-      "module": "Kotlin / Compose",
-      "path": "05-kotlin-compose/basics/06-navigation.md",
-      "line": 91,
-      "source_excerpt": "最小可运行骨架：",
-      "evidence_action": "保持已有边界说明；若新增示例，记录工具链、命令、预期行为和未覆盖范围。"
-    },
-    {
-      "priority": "P1",
-      "kind": "核心基础",
       "task": "为文档选择一个最小可复现案例并记录限定运行证据",
       "reason": "当前没有与此文件绑定的命名运行或语法证据。",
       "module": "Kotlin / Compose",
@@ -1786,6 +1775,17 @@
       "line": null,
       "source_excerpt": null,
       "evidence_action": "抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。"
+    },
+    {
+      "priority": "P1",
+      "kind": "核心基础",
+      "task": "保留诚实的验证边界，并在补证据时决定是否增加最小练习",
+      "reason": "这行是未验证范围或验证步骤的披露，不是声称已经通过的证据。",
+      "module": "Swift / SwiftUI",
+      "path": "06-swift-swiftui/basics/06-navigation.md",
+      "line": 225,
+      "source_excerpt": "本轮未在 Xcode 编译，也未执行 iOS 模拟器或真机；这些是待执行预期，不能标为原生 UI 已验证。在工程选定实际 scheme 和模拟器后执行 Build、Run，逐项记录 Xcode/iOS 版本、输入及界面结果。单纯 Swift 语法检查不能证明 SwiftUI 的呈现与返回行为。",
+      "evidence_action": "保持已有边界说明；若新增示例，记录工具链、命令、预期行为和未覆盖范围。"
     },
     {
       "priority": "P1",

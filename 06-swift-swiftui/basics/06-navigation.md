@@ -100,7 +100,9 @@ struct InboxView: View {
             }
             .toolbar {
                 Button("跳到第一个") {
-                    path = [friends[0]]         // 压栈到指定位置
+                    if let first = friends.first {
+                        path = [first]         // 替换为仅含该目的地的路径
+                    }
                 }
             }
         }
@@ -182,7 +184,7 @@ struct TaskList: View {
 |------|------|----------|
 | `.sheet` | 底部弹出的卡片，可下拉关闭 | 新建/编辑、详情预览 |
 | `.fullScreenCover` | 覆盖全屏 | 相机、登录、引导页 |
-| `.alert` | 系统警告框 | 不可超过两个操作的确认 |
+| `.alert` | 系统警告框 | 简短的确认与错误提示；现代 actions 构建器并非固定两按钮限制 |
 
 ### 3.3 关闭与回调
 
@@ -202,9 +204,27 @@ sheet 内容里用 `@Environment(\.dismiss) private var dismiss` 获取关闭动
 
 ### Q2: sheet 里的环境（如 SwiftData context）丢失？
 
-sheet 呈现的是**新的呈现层级**，部分环境不会自动继承。在 sheet 内容上重新注入：`.sheet(...) { Editor().modelContext(container) }`。
+先检查 `.modelContainer(container)` 是否装在呈现者与 sheet 的共同祖先（通常为 App 的 WindowGroup）。SwiftData 的 `modelContext` 从环境读取，不能把 `ModelContainer` 当作 `ModelContext` 传入 `.modelContext(...)`。独立 Preview、另一窗口或手动创建的宿主也要配置容器；仅出现 sheet 不足以推断环境必然丢失。参见 [modelContainer](https://developer.apple.com/documentation/swiftui/view/modelcontainer(_:)) 与 [modelContext](https://developer.apple.com/documentation/swiftui/environmentvalues/modelcontext)。
 
 ## 🎯 练习与实践
+
+### 先交付一个列表、详情与草稿编辑闭环
+
+前置：macOS、Xcode 与 iOS 16+ SwiftUI App 工程，先让 ContentView 出现在模拟器。本文的 Friend、FriendRow、FriendDetail、TaskEditor 是示意类型，需自行定义；`NavigationLink(value:)` 的值必须 Hashable，`sheet(item:)` 的 item 必须 Identifiable。SwiftData 环境讨论额外要求 iOS 17+，本练习先用内存数组，不引入数据库。
+
+产物：父视图保存一条 `id=1, title=第一条笔记`；导航路径保存 ID，详情按 ID 查父数据。sheet 打开时把标题复制到局部 draft，取消只 dismiss，保存才回调父视图修改标题并 dismiss。这样取消不会偷偷改动列表。为未知 ID 显示“笔记不存在”，不要对查找结果强制解包。
+
+| 输入 | 预期输出 | 失败回查 |
+|---|---|---|
+| 列表点击 1 | 详情显示原题，出现返回入口 | destination 的值类型是否与 Link 相同，是否挂在 Stack 内 |
+| 编辑为“改名”后取消 | 详情与列表仍为原题 | draft 是否直接绑定了正式记录 |
+| 再编辑并保存 | 详情与列表都显示“改名” | 是否按稳定 ID 更新父状态，详情是否保存了过期副本 |
+| 返回根，再打开未知 ID | 显示缺失状态，仍可返回 | 是否使用数组下标代替稳定 ID |
+| 清空列表后点“跳到第一个” | 不跳转、不崩溃 | 是否仍用 friends[0] 越界取值 |
+
+本轮未在 Xcode 编译，也未执行 iOS 模拟器或真机；这些是待执行预期，不能标为原生 UI 已验证。在工程选定实际 scheme 和模拟器后执行 Build、Run，逐项记录 Xcode/iOS 版本、输入及界面结果。单纯 Swift 语法检查不能证明 SwiftUI 的呈现与返回行为。
+
+下一步接入 [异步并发](./07-concurrency-async-await.md)，用 ID 异步加载详情；覆盖等待、失败与记录已删除三种状态后，再增加独立标签页导航栈。参考 [Apple NavigationStack](https://developer.apple.com/documentation/swiftui/navigationstack) 与 [现代 alert API](https://developer.apple.com/documentation/swiftui/view/alert(_:isPresented:actions:))。
 
 ### 练习一：基础练习
 

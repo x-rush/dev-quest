@@ -300,7 +300,7 @@
 | Kotlin / Compose | [05-kotlin-compose/basics/03-kotlin-syntax-essentials.md](../../../../05-kotlin-compose/basics/03-kotlin-syntax-essentials.md) | `runtime` | 1 | 0 |
 | Kotlin / Compose | [05-kotlin-compose/basics/04-composables-state.md](../../../../05-kotlin-compose/basics/04-composables-state.md) | `not_verified` | 0 | 0 |
 | Kotlin / Compose | [05-kotlin-compose/basics/05-layouts.md](../../../../05-kotlin-compose/basics/05-layouts.md) | `not_verified` | 0 | 1 |
-| Kotlin / Compose | [05-kotlin-compose/basics/06-navigation.md](../../../../05-kotlin-compose/basics/06-navigation.md) | `not_verified` | 0 | 1 |
+| Kotlin / Compose | [05-kotlin-compose/basics/06-navigation.md](../../../../05-kotlin-compose/basics/06-navigation.md) | `not_verified` | 0 | 0 |
 | Kotlin / Compose | [05-kotlin-compose/basics/07-coroutines-flow-basics.md](../../../../05-kotlin-compose/basics/07-coroutines-flow-basics.md) | `not_verified` | 0 | 0 |
 | Kotlin / Compose | [05-kotlin-compose/basics/08-first-project.md](../../../../05-kotlin-compose/basics/08-first-project.md) | `runtime` | 1 | 2 |
 | Kotlin / Compose | [05-kotlin-compose/deployment/01-release-build.md](../../../../05-kotlin-compose/deployment/01-release-build.md) | `not_verified` | 0 | 0 |
@@ -354,7 +354,7 @@
 | Swift / SwiftUI | [06-swift-swiftui/basics/03-swift-syntax-essentials.md](../../../../06-swift-swiftui/basics/03-swift-syntax-essentials.md) | `runtime` | 1 | 0 |
 | Swift / SwiftUI | [06-swift-swiftui/basics/04-views-state.md](../../../../06-swift-swiftui/basics/04-views-state.md) | `not_verified` | 0 | 0 |
 | Swift / SwiftUI | [06-swift-swiftui/basics/05-layouts.md](../../../../06-swift-swiftui/basics/05-layouts.md) | `not_verified` | 0 | 1 |
-| Swift / SwiftUI | [06-swift-swiftui/basics/06-navigation.md](../../../../06-swift-swiftui/basics/06-navigation.md) | `not_verified` | 0 | 0 |
+| Swift / SwiftUI | [06-swift-swiftui/basics/06-navigation.md](../../../../06-swift-swiftui/basics/06-navigation.md) | `not_verified` | 0 | 1 |
 | Swift / SwiftUI | [06-swift-swiftui/basics/07-concurrency-async-await.md](../../../../06-swift-swiftui/basics/07-concurrency-async-await.md) | `not_verified` | 0 | 0 |
 | Swift / SwiftUI | [06-swift-swiftui/basics/08-first-project.md](../../../../06-swift-swiftui/basics/08-first-project.md) | `runtime` | 1 | 1 |
 | Swift / SwiftUI | [06-swift-swiftui/deployment/01-app-release.md](../../../../06-swift-swiftui/deployment/01-app-release.md) | `not_verified` | 0 | 0 |

@@ -56,7 +56,7 @@
 
 ## 📦 添加依赖
 
-在 `gradle/libs.versions.toml` 中添加（版本以官方最新稳定版为准）：
+在 `gradle/libs.versions.toml` 中添加以下固定版本示例；它不是“当前最新”的声明。已有项目应保留自己的版本目录，并核对 Navigation、Kotlin 与 Compose 工具链兼容性：
 
 ```toml
 [versions]
@@ -88,7 +88,7 @@ Navigation Compose 由三个角色组成：
 | **NavHost** | `NavHost(navController, startDestination)` | 容器，根据当前目的地切换内容 |
 | **目的地** | `composable("route") { }` | 一条路由对应一个 Composable 页面 |
 
-最小可运行骨架：
+导航接线骨架（`TaskListScreen` 等页面需由项目提供，不能整段当作独立应用运行）：
 
 ```kotlin
 @Composable
@@ -169,7 +169,7 @@ navController.popBackStack()
 navController.navigate("list") {
     launchSingleTop = true                         // 目的地已在栈顶则不重复创建
     popUpTo("list") { inclusive = false }          // 弹出到 list 为止
-    // popUpTo(navController.graph.startDestinationId) { inclusive = true } // 清空返回栈（登出场景）
+    // inclusive 也会移除目标条目；嵌套图下必须选对目标，不能视作通用“清空栈”。
 }
 ```
 
@@ -256,11 +256,29 @@ NavHost(navController, startDestination = "auth") {
 }
 ```
 
-价值：整组页面可作为一个单位出栈/入栈；`route = "auth"` 的外层路由可被深链（Deep Link）直接命中。
+嵌套图把认证流程编组，`popUpTo("auth") { inclusive = true }` 用于移除该流程。仅声明 `route = "auth"` 不会自动注册外部深链；还需声明 deepLinks，外部 URL 入口还涉及 Manifest 的 intent filter。参见 [Android 深链说明](https://developer.android.com/guide/navigation/design/deep-link)。
 
 ---
 
 ## 🎯 练习与实践
+
+### 先交付可回查的两页练习
+
+前置：Android Studio 中已有 Empty Activity Compose 项目，Gradle 同步成功，设备能显示静态 Text；下文沿用 Navigation 2.x 字符串路由，不能与 Navigation 3 的 API 混写。把 NavHost 放进 Activity 的 `setContent`，补齐 runtime、Material3 与 navigation-compose 的 import。文中的页面组件是接线占位，需自行实现。
+
+产物：列表页固定展示 `id=1, title=第一条笔记`，详情只接收 Long ID，再从固定 Map 查询标题；提供返回按钮及“打开不存在的 999”按钮。详情查不到时显示“笔记不存在”，仍允许返回。导航层传 `onOpen(id)` 和 `onBack()` 回调给页面，页面不必直接持有 NavController，便于单独检查 UI。
+
+| 输入 | 预期输出 | 失败回查 |
+|---|---|---|
+| 列表点 1 | 详情显示“第一条笔记” | route 占位名、NavType.LongType 与 getLong 的键是否一致 |
+| 点返回 | 回到列表 | popBackStack 是否返回 false，是否已经位于根目的地 |
+| 打开 999 | 明确缺失状态，可返回 | 是否把 ID 存在误当作业务记录存在 |
+| 连续导航同一栈顶详情 | 配置 launchSingleTop 时不重复入栈 | 它只作用于栈顶，不负责全栈去重 |
+| 详情按系统返回 | 回到列表 | 自定义 BackHandler 是否拦截事件 |
+
+本轮未执行 Gradle 构建、Android 模拟器或真机，以上为验收预期，原生导航仍未验证。接入后先执行项目的 `gradlew.bat :app:assembleDebug`，再在设备走完整操作表，记录 Android API、Navigation 版本与截图；编译成功不等于回栈行为正确。
+
+下一步先接入 [协程与 Flow](./07-coroutines-flow-basics.md)，把固定 Map 换成按 ID 查询的数据源，再检查删除记录后返回详情的缺失状态。最后才扩展标签页保存恢复和外部深链。参考 [官方导航操作](https://developer.android.com/guide/navigation/use-graph/navigate)。
 
 ### 基础练习
 - [ ] 为笔记应用加上两个页面：列表页 + 详情页，点击条目携带 id 跳转

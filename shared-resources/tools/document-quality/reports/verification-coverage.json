@@ -1278,7 +1278,7 @@
     },
     {
       "path": "02-nextjs-frontend/basics/07-state-management.md",
-      "sha256": "b99e909e9a7b23d4716b889d1baaa7063cf70b80954fdeb65c9e5b748c90e223",
+      "sha256": "36ffee6f51716167f35ac6d920d96c44be05d6927199c2aaa77a3e09af444c8a",
       "verification": [
         {
           "mode": "not_verified",
@@ -3601,7 +3601,7 @@
     },
     {
       "path": "05-kotlin-compose/basics/06-navigation.md",
-      "sha256": "777b92dc343367b805fec6ca03b452a65f67a7714b5fe983331ee7608b74c43d",
+      "sha256": "3f9b498852364fbd353b0fdb33ade3db940d0bc4a773f2179eca86f9421eac83",
       "verification": [
         {
           "mode": "not_verified",
@@ -3610,7 +3610,7 @@
           "scope": "No named runtime or syntax evidence is recorded for this document."
         }
       ],
-      "marker_count": 1
+      "marker_count": 0
     },
     {
       "path": "05-kotlin-compose/basics/07-coroutines-flow-basics.md",
@@ -4315,7 +4315,7 @@
     },
     {
       "path": "06-swift-swiftui/basics/06-navigation.md",
-      "sha256": "ce76e1b63996de07d6ff41e29087cf05829156f089dac8ee7cac135e80cc20eb",
+      "sha256": "a1a790afaa567a8e6344d5fb084f22e96b2c3e832c1c0042d25127d0196622cc",
       "verification": [
         {
           "mode": "not_verified",
@@ -4324,7 +4324,7 @@
           "scope": "No named runtime or syntax evidence is recorded for this document."
         }
       ],
-      "marker_count": 0
+      "marker_count": 1
     },
     {
       "path": "06-swift-swiftui/basics/07-concurrency-async-await.md",
@@ -9240,12 +9240,6 @@
       "classification": "unbound_verification_wording"
     },
     {
-      "path": "05-kotlin-compose/basics/06-navigation.md",
-      "line": 91,
-      "excerpt": "最小可运行骨架：",
-      "classification": "unbound_verification_wording"
-    },
-    {
       "path": "05-kotlin-compose/basics/08-first-project.md",
       "line": 105,
       "excerpt": "`gradle/libs.versions.toml`（在你新建的工程中编辑；以下是待构建验证的教学配置，本仓库没有可直接复用的已验证 Android 工程锁文件。不要因为“最新稳定版”就单独升级某一个插件或库）：",
@@ -9309,6 +9303,12 @@
       "path": "06-swift-swiftui/basics/05-layouts.md",
       "line": 214,
       "excerpt": "### 先完成一个可运行的联系人屏幕",
+      "classification": "unbound_verification_wording"
+    },
+    {
+      "path": "06-swift-swiftui/basics/06-navigation.md",
+      "line": 225,
+      "excerpt": "本轮未在 Xcode 编译，也未执行 iOS 模拟器或真机；这些是待执行预期，不能标为原生 UI 已验证。在工程选定实际 scheme 和模拟器后执行 Build、Run，逐项记录 Xcode/iOS 版本、输入及界面结果。单纯 Swift 语法检查不能证明 SwiftUI 的呈现与返回行为。",
       "classification": "unbound_verification_wording"
     },
     {

@@ -2,6 +2,24 @@
 
 ## 先理解，再动手
 
+## 本轮先交付一个状态归属练习
+
+前置：已有能启动的 Next.js App Router + TypeScript 项目，知道客户端组件与事件处理器。本文包含多个独立片段，Context、Zustand、查询库与表单部分不是一套可直接拼接的应用；先只接入下文 Counter，暂不安装其他状态库。
+
+产物：一个 `/state-lab` 页面、Counter 组件和一张操作记录。页面作为客户端组件，渲染 `<Counter initialValue={1} min={0} max={2} onChange={setLast} />`，在父组件用 `useState<number | null>(null)` 保存 `last` 并显示它。这能观察“子组件拥有 count、父组件收到通知”的边界。若父组件也必须控制 count，则改为 `value/onChange` 受控接口，只保留一个拥有者，参见 [共享状态](https://react.dev/learn/sharing-state-between-components)。
+
+| 输入操作 | 预期界面输出 | 失败时回查 |
+|---|---|---|
+| 初次进入 | count 为 1，last 为 null | 是否在挂载或渲染期间错误调用回调 |
+| 点击加号一次 | count 与 last 都为 2，加号禁用 | 是否把 onChange 留在 updater 中 |
+| 连点减号直到下限 | 停在 0，减号禁用 | 边界是否同时作用于按钮与计算 |
+| 点击重置 | 两处显示 1 | reset 是否使用同一个初始值 |
+| 浏览器刷新 | count 回到 1，last 回到 null | 本地内存状态本就不保证持久化 |
+
+这些是待执行的验收预期。本轮未启动 Next.js、未执行浏览器交互或生产构建，不能据此宣称框架项目通过。执行时记录 Node/Next/React 版本、锁文件与浏览器结果；项目使用 npm 时先运行既有的 `npm run dev`，再运行 `npm run build`，分别记录开发交互与构建结果。
+
+下一步：把“已提交搜索词”迁入 URL，再用刷新和浏览器后退检查恢复；保留输入草稿在组件内。先写出草稿、URL 和远端结果各由谁拥有，再决定是否引入 Context 或查询库。
+
 状态按拥有者分层：输入框文本在本地，分享筛选在 URL，服务器记录以远端为准。复制一份远端数据到全局 store 会增加同步责任。
 
 **本节自测**：给搜索页列出输入草稿、已提交关键词、查询结果的归属。
@@ -119,20 +137,16 @@ export function Counter({
   const [count, setCount] = useState(initialValue)
 
   const increment = useCallback(() => {
-    setCount(prev => {
-      const newValue = Math.min(prev + 1, max)
-      onChange?.(newValue)
-      return newValue
-    })
-  }, [max, onChange])
+    const next = Math.min(count + 1, max)
+    setCount(next)
+    onChange?.(next)
+  }, [count, max, onChange])
 
   const decrement = useCallback(() => {
-    setCount(prev => {
-      const newValue = Math.max(prev - 1, min)
-      onChange?.(newValue)
-      return newValue
-    })
-  }, [min, onChange])
+    const next = Math.max(count - 1, min)
+    setCount(next)
+    onChange?.(next)
+  }, [count, min, onChange])
 
   const reset = useCallback(() => {
     setCount(initialValue)
@@ -173,6 +187,8 @@ export function Counter({
 ```
 
 ### 复杂组件状态
+
+上面的按钮每次用户事件只执行一次状态转换，回调放在事件处理器里。不要把通知父组件、写存储或发请求放进 updater：updater 必须纯净，开发环境 Strict Mode 可能重复调用它。若同一事件要连续累加三次，应使用三个纯 updater，或者一次计算最终值；不要把本例的 `increment()` 连调三次当作 `+3`。`initialValue` 只初始化首次挂载，后续 props 改变不会自动重置 count。参见 [React useState](https://react.dev/reference/react/useState)。
 
 ```tsx
 // src/components/TodoList.tsx
