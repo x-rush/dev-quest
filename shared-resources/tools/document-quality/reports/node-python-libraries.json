@@ -1,0 +1,196 @@
+{
+  "generated_at": "2026-09-19T11:55:33.710812+00:00",
+  "scope": "Nine named complete programs extracted unchanged from four standard-library documents. No external commands, HTTP middleware, Windows batch, fork IPC, process-tree management or entire-document runtime coverage is claimed.",
+  "source_hash_normalization": "UTF-8 read_text normalizes CRLF to LF; code ends in one LF",
+  "environment": {
+    "node:24-bookworm-slim": {
+      "image_id": "sha256:2fe369e969550cde8e867afc3fe370b260140cab4a23d467074295b42163d553",
+      "version": "v24.21.0"
+    },
+    "python:3.14-alpine": {
+      "image_id": "sha256:016508ba505da24f7139765bc4bb669df4e88eb2f12eeadd571bf2f88d7533df",
+      "version": "Python 3.14.7"
+    }
+  },
+  "command": "python shared-resources/tools/document-quality/verify_node_python_libraries.py",
+  "passed": 9,
+  "total": 9,
+  "results": [
+    {
+      "id": "node-child-buffer",
+      "source": "09-nodejs-backend/reference/library-guides/04-child-process.md",
+      "line": 166,
+      "source_sha256": "91c7eff28bcc811653ee0403b04de99b68272fb3dc1235e34eba43acc3b62376",
+      "code": "import assert from 'node:assert/strict';\nimport { execFile } from 'node:child_process';\nimport { promisify } from 'node:util';\n\nconst run = promisify(execFile);\nconst options = { timeout: 5000, maxBuffer: 1024, encoding: 'utf8' };\nconst literal = await run(process.execPath, [\n  '-e', 'process.stdout.write(process.argv[1])', 'a b; c',\n], options);\nassert.equal(literal.stdout, 'a b; c');\nassert.equal(literal.stderr, '');\nawait assert.rejects(\n  run(process.execPath, ['-e', \"process.stderr.write('bad input'); process.exitCode = 2\"], options),\n  error => error.code === 2 && error.stderr === 'bad input',\n);\nawait assert.rejects(\n  run(process.execPath, ['-e', \"process.stdout.write('x'.repeat(4096))\"], options),\n  error => error.code === 'ERR_CHILD_PROCESS_STDIO_MAXBUFFER',\n);\nconsole.log('child-buffer: literal, nonzero, maxBuffer');\n",
+      "language": "js",
+      "expected_stdout": "child-buffer: literal, nonzero, maxBuffer\n",
+      "image": "node:24-bookworm-slim",
+      "command": [
+        "node",
+        "/input/case.mjs"
+      ],
+      "code_sha256": "4a56601fc596dcedfdd504084262c7d75ce9b7d572a0966360ea18768d104374",
+      "status": "PASS",
+      "stdout": "child-buffer: literal, nonzero, maxBuffer\n",
+      "stderr": "",
+      "exit_code": 0
+    },
+    {
+      "id": "node-child-stream",
+      "source": "09-nodejs-backend/reference/library-guides/04-child-process.md",
+      "line": 194,
+      "source_sha256": "91c7eff28bcc811653ee0403b04de99b68272fb3dc1235e34eba43acc3b62376",
+      "code": "import assert from 'node:assert/strict';\nimport { spawn } from 'node:child_process';\nimport { once } from 'node:events';\n\nconst child = spawn(process.execPath, ['-e',\n  \"process.stdout.write('x'.repeat(128 * 1024)); process.stderr.write('y'.repeat(96 * 1024));\",\n], { stdio: ['ignore', 'pipe', 'pipe'], timeout: 5000 });\nconst closed = once(child, 'close');\nasync function countBytes(stream) {\n  let size = 0;\n  for await (const chunk of stream) size += chunk.length;\n  return size;\n}\nconst [outBytes, errBytes, [code, signal]] = await Promise.all([\n  countBytes(child.stdout), countBytes(child.stderr), closed,\n]);\nassert.equal(code, 0);\nassert.equal(signal, null);\nassert.equal(outBytes, 128 * 1024);\nassert.equal(errBytes, 96 * 1024);\nconsole.log('child-stream: 131072 stdout, 98304 stderr, exit 0');\n",
+      "language": "js",
+      "expected_stdout": "child-stream: 131072 stdout, 98304 stderr, exit 0\n",
+      "image": "node:24-bookworm-slim",
+      "command": [
+        "node",
+        "/input/case.mjs"
+      ],
+      "code_sha256": "0b68f7f219b98ce33e5c58a0173fa264668417fc5c41bb3bebe6be3342f89916",
+      "status": "PASS",
+      "stdout": "child-stream: 131072 stdout, 98304 stderr, exit 0\n",
+      "stderr": "",
+      "exit_code": 0
+    },
+    {
+      "id": "node-zlib-roundtrip",
+      "source": "09-nodejs-backend/reference/library-guides/09-zlib.md",
+      "line": 109,
+      "source_sha256": "1e8f4a1f84ccb063f6d0648c42342523a069ff7e09ccd1b9f2728743da13f371",
+      "code": "import assert from 'node:assert/strict';\nimport {\n  gzipSync, gunzipSync, deflateSync, inflateSync,\n  deflateRawSync, inflateRawSync, brotliCompressSync, brotliDecompressSync,\n} from 'node:zlib';\n\nconst source = Buffer.from('任务清单\\n'.repeat(1024), 'utf8');\nfor (const [compress, decompress] of [\n  [gzipSync, gunzipSync], [deflateSync, inflateSync],\n  [deflateRawSync, inflateRawSync], [brotliCompressSync, brotliDecompressSync],\n]) {\n  assert.deepEqual(decompress(compress(source)), source);\n}\nassert.throws(() => gunzipSync(deflateSync(source)), { code: 'Z_DATA_ERROR' });\nassert.throws(() => gunzipSync(gzipSync(source), { maxOutputLength: 1024 }),\n  { code: 'ERR_BUFFER_TOO_LARGE' });\nconsole.log('zlib-roundtrip: 4 formats, mismatch, output limit');\n",
+      "language": "js",
+      "expected_stdout": "zlib-roundtrip: 4 formats, mismatch, output limit\n",
+      "image": "node:24-bookworm-slim",
+      "command": [
+        "node",
+        "/input/case.mjs"
+      ],
+      "code_sha256": "a15960251675870d88b10798a7da283ea39c14d306af7c01400490a1818c51e2",
+      "status": "PASS",
+      "stdout": "zlib-roundtrip: 4 formats, mismatch, output limit\n",
+      "stderr": "",
+      "exit_code": 0
+    },
+    {
+      "id": "node-zlib-stream-limit",
+      "source": "09-nodejs-backend/reference/library-guides/09-zlib.md",
+      "line": 134,
+      "source_sha256": "1e8f4a1f84ccb063f6d0648c42342523a069ff7e09ccd1b9f2728743da13f371",
+      "code": "import assert from 'node:assert/strict';\nimport { Readable, Transform, Writable } from 'node:stream';\nimport { pipeline } from 'node:stream/promises';\nimport { createGunzip, gzipSync } from 'node:zlib';\n\nfunction byteLimit(maxBytes) {\n  let total = 0;\n  return new Transform({\n    transform(chunk, encoding, callback) {\n      total += chunk.length;\n      if (total > maxBytes) {\n        const error = new Error('decompressed data exceeds limit');\n        error.code = 'ERR_OUTPUT_LIMIT';\n        callback(error);\n      } else callback(null, chunk);\n    },\n  });\n}\nasync function unpackSize(compressed, limit) {\n  let accepted = 0;\n  const sink = new Writable({\n    write(chunk, encoding, callback) { accepted += chunk.length; callback(); },\n  });\n  await pipeline(Readable.from([compressed]), createGunzip(), byteLimit(limit), sink);\n  return accepted;\n}\n\nconst compressed = gzipSync(Buffer.alloc(128 * 1024, 97));\nassert.equal(await unpackSize(compressed, 128 * 1024), 128 * 1024);\nawait assert.rejects(unpackSize(compressed, 1024), { code: 'ERR_OUTPUT_LIMIT' });\nawait assert.rejects(unpackSize(Buffer.from('invalid gzip'), 1024),\n  { code: 'Z_DATA_ERROR' });\nconsole.log('zlib-stream: exact limit, overflow, invalid format');\n",
+      "language": "js",
+      "expected_stdout": "zlib-stream: exact limit, overflow, invalid format\n",
+      "image": "node:24-bookworm-slim",
+      "command": [
+        "node",
+        "/input/case.mjs"
+      ],
+      "code_sha256": "9b1000a67d96a7ef3a1a912677474409f54b49437ca6f65a848a46fec9273bf7",
+      "status": "PASS",
+      "stdout": "zlib-stream: exact limit, overflow, invalid format\n",
+      "stderr": "",
+      "exit_code": 0
+    },
+    {
+      "id": "python-functools-cache",
+      "source": "10-python-discovery/reference/library-guides/06-functools-subprocess.md",
+      "line": 208,
+      "source_sha256": "d987d2c1d8b013bb9c316f771b1af61bbf100484eac7bb1c16ae32cd8d1b8b06",
+      "code": "from functools import lru_cache\n\ncalls = 0\n\n@lru_cache(maxsize=2)\ndef square(n):\n    global calls\n    calls += 1\n    return n * n\n\nassert square(3) == square(3) == 9\nassert calls == 1\nassert square.cache_info().hits == 1\nsquare(4)\nsquare(5)\nassert square.cache_info().currsize == 2\nsquare(3)  # 3 是最久未使用的键，已被淘汰\nassert calls == 4\ntry:\n    square([])\nexcept TypeError:\n    pass\nelse:\n    raise AssertionError('unhashable input was accepted')\nsquare.cache_clear()\nassert square.cache_info().currsize == 0\n\n@lru_cache(maxsize=1)\ndef cached_titles():\n    return ['learn']\n\nfirst = cached_titles()\nfirst.append('changed')\nassert cached_titles() is first\nassert cached_titles() == ['learn', 'changed']\n\ndef fresh_titles():\n    return cached_titles().copy()  # 复制必须发生在缓存边界之外\n\ncopy = fresh_titles()\ncopy.append('local')\nassert fresh_titles() == ['learn', 'changed']\nprint('functools-cache: hit, eviction, invalid key, shared result, copy')\n",
+      "language": "python",
+      "expected_stdout": "functools-cache: hit, eviction, invalid key, shared result, copy\n",
+      "image": "python:3.14-alpine",
+      "command": [
+        "python",
+        "-I",
+        "/input/case.py"
+      ],
+      "code_sha256": "6c06d7bfbb930c8267e5180c18bd5f31acf3b395d5f981b5dce0083101690f2f",
+      "status": "PASS",
+      "stdout": "functools-cache: hit, eviction, invalid key, shared result, copy\n",
+      "stderr": "",
+      "exit_code": 0
+    },
+    {
+      "id": "python-functools-dispatch",
+      "source": "10-python-discovery/reference/library-guides/06-functools-subprocess.md",
+      "line": 259,
+      "source_sha256": "d987d2c1d8b013bb9c316f771b1af61bbf100484eac7bb1c16ae32cd8d1b8b06",
+      "code": "from functools import partial, singledispatch, wraps\n\ndef traced(function):\n    @wraps(function)\n    def wrapper(*args, **kwargs):\n        return function(*args, **kwargs)\n    return wrapper\n\n@traced\ndef greet(name):\n    \"\"\"Create a greeting.\"\"\"\n    return f'hello {name}'\n\nassert greet('Ada') == 'hello Ada'\nassert greet.__name__ == 'greet'\nassert greet.__doc__ == 'Create a greeting.'\nassert greet.__wrapped__('Ada') == 'hello Ada'\nbinary = partial(int, base=2)\nassert binary('101') == 5\nassert binary('11', base=10) == 11  # 调用处可覆盖预先绑定的关键字\n\n@singledispatch\ndef kind(value):\n    return 'object'\n\n@kind.register(int)\ndef _(value):\n    return 'integer'\n\nassert kind(1) == kind(True) == 'integer'\nassert kind('1') == 'object'\n\n@kind.register(bool)\ndef _(value):\n    return 'boolean'\n\nassert kind(True) == 'boolean'\nassert kind(1) == 'integer'\nprint('functools-dispatch: metadata, override, inheritance, specialization')\n",
+      "language": "python",
+      "expected_stdout": "functools-dispatch: metadata, override, inheritance, specialization\n",
+      "image": "python:3.14-alpine",
+      "command": [
+        "python",
+        "-I",
+        "/input/case.py"
+      ],
+      "code_sha256": "5405faff2ff8294334bb8392e14b80d589180c4fca92c14439bbebe740e9e28d",
+      "status": "PASS",
+      "stdout": "functools-dispatch: metadata, override, inheritance, specialization\n",
+      "stderr": "",
+      "exit_code": 0
+    },
+    {
+      "id": "python-subprocess-contract",
+      "source": "10-python-discovery/reference/library-guides/06-functools-subprocess.md",
+      "line": 306,
+      "source_sha256": "d987d2c1d8b013bb9c316f771b1af61bbf100484eac7bb1c16ae32cd8d1b8b06",
+      "code": "import subprocess\nimport sys\n\nresult = subprocess.run(\n    [sys.executable, '-c', 'import sys; print(sys.argv[1])', 'a b; c'],\n    capture_output=True, text=True, encoding='utf-8', check=True, timeout=5,\n)\nassert result.stdout == 'a b; c\\n'\nassert result.stderr == '' and result.returncode == 0\n\ntry:\n    subprocess.run(\n        [sys.executable, '-c', \"import sys; sys.stderr.write('invalid'); sys.exit(2)\"],\n        capture_output=True, text=True, check=True, timeout=5,\n    )\nexcept subprocess.CalledProcessError as error:\n    assert error.returncode == 2 and error.stderr == 'invalid'\nelse:\n    raise AssertionError('nonzero exit was accepted')\n\ntry:\n    subprocess.run([sys.executable, '-c', 'import time; time.sleep(10)'], timeout=0.5)\nexcept subprocess.TimeoutExpired:\n    pass  # run 已终止并等待这个直接子进程\nelse:\n    raise AssertionError('expected timeout')\n\nwith subprocess.Popen(\n    [sys.executable, '-c', 'import time; time.sleep(10)'],\n    stdout=subprocess.PIPE, stderr=subprocess.PIPE,\n) as process:\n    try:\n        process.communicate(timeout=0.5)\n    except subprocess.TimeoutExpired:\n        process.kill()       # communicate 超时不会替我们终止它\n        process.communicate()  # 完成管道读取并等待回收\n    else:\n        raise AssertionError('expected communicate timeout')\n    assert process.returncode is not None\nprint('subprocess: literal, nonzero, run timeout, communicate cleanup')\n",
+      "language": "python",
+      "expected_stdout": "subprocess: literal, nonzero, run timeout, communicate cleanup\n",
+      "image": "python:3.14-alpine",
+      "command": [
+        "python",
+        "-I",
+        "/input/case.py"
+      ],
+      "code_sha256": "adfe4c3b92eaa068ef06be32fec32ba2ffb73565618c4493390b5ab250f73652",
+      "status": "PASS",
+      "stdout": "subprocess: literal, nonzero, run timeout, communicate cleanup\n",
+      "stderr": "",
+      "exit_code": 0
+    },
+    {
+      "id": "python-enum-contract",
+      "source": "10-python-discovery/reference/library-guides/05-enum-module.md",
+      "line": 189,
+      "source_sha256": "1d6f2b770a4425e44bc1bf9c0a6c04a014f7e666bb2a0f3541fce155bbdf4bfe",
+      "code": "from enum import Enum, IntEnum, StrEnum, auto, unique\n\nclass Color(Enum):\n    RED = 1\n    GREEN = 2\n    BLUE = auto()\n    CRIMSON = 1\n\nassert Color(1) is Color.RED\nassert Color['RED'] is Color.RED\nassert Color.CRIMSON is Color.RED\nassert [member.name for member in Color] == ['RED', 'GREEN', 'BLUE']\nassert list(Color.__members__) == ['RED', 'GREEN', 'BLUE', 'CRIMSON']\nassert Color.RED != 1\nassert {Color.RED: 'stop'}[Color.CRIMSON] == 'stop'\n\nfor lookup, error_type in [(lambda: Color(99), ValueError),\n                           (lambda: Color['MISSING'], KeyError)]:\n    try:\n        lookup()\n    except error_type:\n        pass\n    else:\n        raise AssertionError('invalid lookup succeeded')\n\ntry:\n    @unique\n    class Duplicate(Enum):\n        A = 1\n        B = 1\nexcept ValueError:\n    pass\nelse:\n    raise AssertionError('duplicate values accepted by unique')\n\nclass Level(IntEnum):\n    LOW = 1\n    HIGH = 2\n\nclass Format(StrEnum):\n    TEXT = auto()\n\nassert Level.HIGH == 2\nassert type(Level.HIGH + 1) is int\nassert str(Format.TEXT) == 'text'\nassert Format.TEXT == 'text'\nassert type(Format.TEXT.upper()) is str\nprint('enum-contract: identity, alias, lookup, unique, mixed types')\n",
+      "language": "python",
+      "expected_stdout": "enum-contract: identity, alias, lookup, unique, mixed types\n",
+      "image": "python:3.14-alpine",
+      "command": [
+        "python",
+        "-I",
+        "/input/case.py"
+      ],
+      "code_sha256": "6b1075a31bd87ded11e268ec1f385cf87efeb0042ac2b075fed297381d646bb0",
+      "status": "PASS",
+      "stdout": "enum-contract: identity, alias, lookup, unique, mixed types\n",
+      "stderr": "",
+      "exit_code": 0
+    },
+    {
+      "id": "python-enum-transition",
+      "source": "10-python-discovery/reference/library-guides/05-enum-module.md",
+      "line": 245,
+      "source_sha256": "1d6f2b770a4425e44bc1bf9c0a6c04a014f7e666bb2a0f3541fce155bbdf4bfe",
+      "code": "from enum import Flag, StrEnum, auto\n\nclass State(StrEnum):\n    PENDING = 'pending'\n    SHIPPED = 'shipped'\n    CANCELLED = 'cancelled'\n\ndef parse_state(raw):\n    if not isinstance(raw, str):\n        raise TypeError('state must be text')\n    return State(raw)\n\ndef ship(state):\n    if not isinstance(state, State):\n        raise TypeError('convert input to State first')\n    if state is not State.PENDING:\n        raise ValueError('only pending orders may ship')\n    return State.SHIPPED\n\nassert ship(parse_state('pending')) is State.SHIPPED\nfor action, expected in [\n    (lambda: parse_state('unknown'), ValueError),\n    (lambda: parse_state(1), TypeError),\n    (lambda: ship('pending'), TypeError),\n    (lambda: ship(State.SHIPPED), ValueError),\n    (lambda: ship(State.CANCELLED), ValueError),\n]:\n    try:\n        action()\n    except expected:\n        pass\n    else:\n        raise AssertionError('invalid state or transition accepted')\n\nclass Permission(Flag):\n    READ = auto()\n    WRITE = auto()\n\ngranted = Permission.READ | Permission.WRITE\nassert (granted & Permission.READ) == Permission.READ\nassert (Permission.READ & Permission.WRITE) == Permission(0)\nprint('enum-transition: input boundary, state rule, flags')\n",
+      "language": "python",
+      "expected_stdout": "enum-transition: input boundary, state rule, flags\n",
+      "image": "python:3.14-alpine",
+      "command": [
+        "python",
+        "-I",
+        "/input/case.py"
+      ],
+      "code_sha256": "7074467a8785eab116a2368f7f04218dcd3c4d37731288dd679ddc354d1effc5",
+      "status": "PASS",
+      "stdout": "enum-transition: input boundary, state rule, flags\n",
+      "stderr": "",
+      "exit_code": 0
+    }
+  ]
+}

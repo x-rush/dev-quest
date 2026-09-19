@@ -1,0 +1,56 @@
+{
+  "scope": "Exact marked Kotlin/Swift programs and unchanged Kotlin project input rules plus the documented main entry. No synthetic Android/Room APIs.",
+  "not_verified": [
+    "Android SDK/Gradle/KSP build",
+    "Compose UI/lifecycle and Room persistence",
+    "SwiftUI/SwiftData/macOS/iOS builds",
+    "Concurrent lifecycle and device behavior"
+  ],
+  "results": [
+    {
+      "case": "kotlin-syntax-contracts",
+      "source": "05-kotlin-compose/basics/03-kotlin-syntax-essentials.md",
+      "source_sha256": "c63d1c7b1aa56122e0fa82a2b3201f80da7a3eb57a09d829ce42d2be1384a3d0",
+      "extracted_code_sha256": "c41dc0eb4ae2d587ab661f8e7cefff7f9ff0273ed711593164724c13bd37042c",
+      "extracted_code": "data class Draft(val title: String, val tags: MutableList<String>)\n\nfun normalizeTitle(raw: String?): String? = raw?.trim()?.takeIf { it.isNotEmpty() }\nfun runAction(action: () -> Unit) { action() }\n\nfun main() {\n    val original = Draft(\"read\", mutableListOf(\"kotlin\"))\n    val shallow = original.copy(title = \"write\")\n    shallow.tags.add(\"shared\")\n    check(original.title == \"read\")\n    check(original.tags == listOf(\"kotlin\", \"shared\"))\n    val detached = original.copy(tags = original.tags.toMutableList())\n    detached.tags.clear()\n    check(original.tags.size == 2)\n    check(normalizeTitle(null) == null)\n    check(normalizeTitle(\"   \") == null)\n    check(normalizeTitle(\" learn \") == \"learn\")\n    var calls = 0\n    val callback: () -> Unit = { calls += 1 }\n    check(calls == 0)\n    runAction(callback)\n    check(calls == 1)\n    // runAction(callback()) 不编译：callback() 已执行并返回 Unit，不是函数。\n    println(\"Kotlin syntax contracts passed\")\n}\n",
+      "image": "dev-quest-validation:local",
+      "toolchain": "info: kotlinc-jvm 2.4.20 (JRE 21.0.12+8-LTS)\nopenjdk version \"21.0.12\" 2026-07-21 LTS\nOpenJDK Runtime Environment Temurin-21.0.12+8 (build 21.0.12+8-LTS)\nOpenJDK 64-Bit Server VM Temurin-21.0.12+8 (build 21.0.12+8-LTS, mixed mode, sharing)\n",
+      "command": "kotlinc Main.kt -include-runtime -d /tmp/main.jar && java -jar /tmp/main.jar",
+      "exit_code": 0,
+      "stdout": "Kotlin syntax contracts passed\n",
+      "stderr": "",
+      "expected_stdout": "Kotlin syntax contracts passed\n",
+      "status": "PASS"
+    },
+    {
+      "case": "kotlin-note-rules",
+      "source": "05-kotlin-compose/basics/08-first-project.md",
+      "source_sha256": "c153bbf835a6a4068d723fc371b188b14158e82e924105286dccafddda2ef1cc",
+      "extracted_code_sha256": "585ced0c954823020463566d887c68d9ba167553e796c3f8abfe9bccbb9f08a4",
+      "extracted_code": "data class NoteDraft(val title: String, val content: String)\n\nfun validateNote(title: String, content: String): NoteDraft {\n    val normalized = title.trim()\n    require(normalized.isNotEmpty()) { \"标题不能为空\" }\n    require(normalized.length <= 120) { \"标题最多 120 个 UTF-16 单元\" }\n    require(content.length <= 10_000) { \"内容最多 10000 个 UTF-16 单元\" }\n    return NoteDraft(normalized, content)\n}\n\nfun main() {\n    check(validateNote(\"  hello  \", \" body \") == NoteDraft(\"hello\", \" body \"))\n    check(validateNote(\"a\".repeat(120), \"b\".repeat(10_000)).title.length == 120)\n    for ((title, body) in listOf(\"  \" to \"ok\", \"a\".repeat(121) to \"\", \"ok\" to \"b\".repeat(10_001))) {\n        check(runCatching { validateNote(title, body) }.exceptionOrNull() is IllegalArgumentException)\n    }\n    println(\"Kotlin note rules passed\")\n}\n",
+      "image": "dev-quest-validation:local",
+      "toolchain": "info: kotlinc-jvm 2.4.20 (JRE 21.0.12+8-LTS)\nopenjdk version \"21.0.12\" 2026-07-21 LTS\nOpenJDK Runtime Environment Temurin-21.0.12+8 (build 21.0.12+8-LTS)\nOpenJDK 64-Bit Server VM Temurin-21.0.12+8 (build 21.0.12+8-LTS, mixed mode, sharing)\n",
+      "command": "kotlinc Main.kt -include-runtime -d /tmp/main.jar && java -jar /tmp/main.jar",
+      "exit_code": 0,
+      "stdout": "Kotlin note rules passed\n",
+      "stderr": "",
+      "expected_stdout": "Kotlin note rules passed\n",
+      "status": "PASS"
+    },
+    {
+      "case": "swift-syntax-contracts",
+      "source": "06-swift-swiftui/basics/03-swift-syntax-essentials.md",
+      "source_sha256": "459b1ad322c1cbdb08b770ef3ed8868e2656632a29d3a37e6fbc2920a3ea4713",
+      "extracted_code_sha256": "713ed886f3a296d44472dd76dcfce8b5722a49e3b738b80f8b62ff28c7769698",
+      "extracted_code": "import Foundation\n\nstruct SavedTask: Codable {\n    let id: UUID\n    var title: String\n    init(id: UUID = UUID(), title: String) {\n        self.id = id\n        self.title = title\n    }\n}\n\nfinal class SharedCounter { var value = 0 }\nstruct Wrapper { let counter: SharedCounter }\n\nfunc parseAge(_ raw: String?) -> Int? {\n    guard let raw,\n          let value = Int(raw.trimmingCharacters(in: .whitespacesAndNewlines)),\n          (0...150).contains(value) else { return nil }\n    return value\n}\n\nlet original = SavedTask(title: \"learn\")\nlet data = try JSONEncoder().encode(original)\nlet restored = try JSONDecoder().decode(SavedTask.self, from: data)\nprecondition(restored.id == original.id)\nvar edited = restored\nedited.title = \"practice\"\nprecondition(restored.title == \"learn\")\nlet first = Wrapper(counter: SharedCounter())\nlet second = first\nsecond.counter.value = 3\nprecondition(first.counter.value == 3)\nprecondition(parseAge(\"0\") == 0)\nprecondition(parseAge(\" 12 \") == 12)\nfor invalid: String? in [nil, \"\", \"abc\", \"-1\", \"151\", \"1.5\"] {\n    precondition(parseAge(invalid) == nil)\n}\nprint(\"Swift syntax contracts passed\")\n",
+      "image": "swift:6.3.3-noble",
+      "toolchain": "Swift version 6.3.3 (swift-6.3.3-RELEASE)\nTarget: x86_64-unknown-linux-gnu\n",
+      "command": "swift Main.swift",
+      "exit_code": 0,
+      "stdout": "Swift syntax contracts passed\n",
+      "stderr": "",
+      "expected_stdout": "Swift syntax contracts passed\n",
+      "status": "PASS"
+    }
+  ]
+}

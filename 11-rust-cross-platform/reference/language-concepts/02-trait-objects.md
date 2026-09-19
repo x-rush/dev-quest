@@ -34,7 +34,7 @@
 - [七、supertrait 与向上转型、自动 trait](#-七supertrait-与向上转型自动-trait)
 - [八、enum 封闭集合 vs dyn 开放集合](#-八enum-封闭集合-vs-dyn-开放集合)
 - [九、错误码：E0038](#-九错误码e0038)
-- [示例与编译失败演示](#-可运行示例)
+- [示例与编译失败演示](#-完整示例)
 - [常见陷阱](#️-常见陷阱)
 - [相关条目](#-相关条目)
 
@@ -64,7 +64,7 @@ trait 必须满足 dyn 兼容才能写成 `dyn Trait`。逐形态判定：
 | 接收者为 `&Self` / `&mut Self` / `Box<Self>` / `Rc<Self>` / `Arc<Self>` / `Pin<P>` | ✅ | 标准接收者集合 |
 | 有关联类型 | ✅ | 对象类型中需指定：`Box<dyn Iterator<Item = u32>>` |
 
-**典型非兼容 trait 的替代模式**: `Clone` 因 `clone(&self) -> Self` 不可直接 dyn；惯用出口是自定义 `fn clone_box(&self) -> Box<dyn Trait>`（返回 Box<dyn Trait> 才擦除了 Self；返回 Box<Self> 仍可能破坏 dyn 兼容性），为 `Box<dyn Trait>` 实现 `Clone` 委托之——完整可运行写法见示例五。
+**典型非兼容 trait 的替代模式**: `Clone` 因 `clone(&self) -> Self` 不可直接 dyn；惯用出口是自定义 `fn clone_box(&self) -> Box<dyn Trait>`（返回 Box<dyn Trait> 才擦除了 Self；返回 Box<Self> 仍可能破坏 dyn 兼容性），为 `Box<dyn Trait>` 实现 `Clone` 委托之——完整写法见示例五。
 
 ---
 
@@ -143,7 +143,7 @@ trait 必须满足 dyn 兼容才能写成 `dyn Trait`。逐形态判定：
 
 ---
 
-## 💡 可运行示例
+## 💡 完整示例
 
 ### 示例一：异构集合与 `&dyn` 传参
 

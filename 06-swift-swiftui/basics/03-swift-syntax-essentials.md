@@ -17,7 +17,7 @@
 >
 > **目标读者**: 有任意语言（Go/JS/Kotlin 等）基础、首次系统接触 Swift 的学习者
 >
-> **前置知识**: [02-first-swiftui-app.md](./02-first-swiftui-app.md)；建议先通读，遇到不懂再回查
+> **前置知识**: 会变量、函数与条件判断。本页纯 Swift 程序可以先在命令行完成，再进入[第一个 SwiftUI 应用](./02-first-swiftui-app.md)；SwiftUI 片段需要 Xcode 工程。
 
 <details>
 <summary>文档信息（用途、难度与维护记录）</summary>
@@ -45,7 +45,7 @@
 
 ## 🔍 一、可选值（Optional）
 
-Swift 没有 `nil` 崩溃的隐式可能——所有"可能没有值"的地方都被类型系统显式标注为 `Optional`。
+Swift 通常用 `Optional` 把“可能没有值”写进类型。类型系统要求先处理缺失，但 `!`、隐式解包可选值以及不正确的外部 API 契约仍可能导致运行时崩溃。
 
 ```swift
 var nickname: String? = nil       // String? 表示"可能没有 String"
@@ -69,14 +69,14 @@ let firstChar = nickname?.first   // Character? 类型
 let forced = nickname!
 ```
 
-Swift 5.7+ 的**影子类型简化**：当两侧名字相同时可省略绑定名：
+Swift 5.7+ 支持**可选绑定简写**：当新局部变量与原可选值同名时，可以省略右侧表达式：
 
 ```swift
 if let nickname {                 // 等价于 if let nickname = nickname
     print(nickname)
 }
 
-guard let nickname else { return }  // 同理
+// 在函数体内同理可写 guard let nickname else { return }
 ```
 
 `guard` 的特点：**早退出 + 绑定提升**。条件不满足就离开当前作用域，满足则绑定值在后续代码全程可用——SwiftUI 项目中最常见的解包方式。
@@ -89,16 +89,24 @@ guard let nickname else { return }  // 同理
 
 | 类型 | 语义 | 继承 | 并发 | 典型用途 |
 |------|------|------|------|----------|
-| `struct` | 值类型（拷贝） | ❌ | 天然安全 | 模型、视图、一切默认选择 |
+| `struct` | 值类型（拷贝） | ❌ | 不自动并发安全；成员也可能是共享引用 | 独立模型与视图描述 |
 | `class` | 引用类型（共享） | ✅ 单继承 | 需手动同步 | 需要继承/被 Objective-C 桥接的场景 |
-| `actor` | 引用类型 + 隔离 | ❌ | 串行保护 | 可变共享状态（见 [07-concurrency-async-await.md](./07-concurrency-async-await.md)） |
+| `actor` | 引用类型 + 隔离 | ❌ | 保护隔离状态；跨 `await` 仍可能交错 | 可变共享状态（见 [07-concurrency-async-await.md](./07-concurrency-async-await.md)） |
 
 ```swift
-// struct：SwiftUI 世界的默认选择
+import Foundation
+
+// id 在 init 中提供默认值，使 Codable 解码仍能恢复持久化的 id。
 struct TaskItem: Identifiable, Codable {
-    let id = UUID()
+    let id: UUID
     var title: String
-    var isDone = false
+    var isDone: Bool
+
+    init(id: UUID = UUID(), title: String, isDone: Bool = false) {
+        self.id = id
+        self.title = title
+        self.isDone = isDone
+    }
 }
 
 // 值语义演示
@@ -108,7 +116,7 @@ b.isDone = true
 print(a.isDone)   // false —— b 是 a 的拷贝，互不影响
 ```
 
-> 💡 SwiftUI 的 `View` 全部是 struct。值语义 + 不可变描述，是声明式 UI 能安全重建视图的根基。
+SwiftUI 的自定义视图通常声明为 struct；`View` 是协议，不应据此断言所有符合者都是 struct。值类型里包含 class 引用时，复制外层值不会深拷贝内部对象；跨并发域还需检查 `Sendable`、隔离与可变访问。
 
 ### class 与引用语义
 
@@ -221,9 +229,57 @@ struct 适合独立值，class 适合需要共享身份的对象；选择依据�
 
 ### 练习一：基础练习
 
-- [ ] 写函数 `parseAge(_ input: String?) -> Int`：能解析返回年龄，不能返回 0，全程不用 `!`
+- [ ] 写函数 `parseAge(_ input: String?) -> Int?`：只接受 0...150 的整数；缺失、非法文本和越界均返回 nil，不能把失败伪装成合法年龄 0。
 - [ ] 定义 `enum Weather`：晴/雨/多云三种 case，其中"雨"关联降水量 Double，并用 switch 打印描述
 - [ ] 将数组 `[8, 3, 5]` 用闭包简写完成降序排序
+
+### 完整程序：身份恢复、值与引用
+
+保存为 `Main.swift`，运行 `swift Main.swift`。它只使用 Foundation，完整正文直接参与[本轮运行验证](../../shared-resources/tools/document-quality/reports/kotlin-swift-core-validation.md)。把 `let id: UUID` 改成声明时初始化的 `let id = UUID()` 再观察编译警告和 round-trip 断言，可以理解为什么“成功解码”还不等于“恢复同一身份”。
+
+<!-- dq-case: swift-syntax-contracts -->
+```swift
+import Foundation
+
+struct SavedTask: Codable {
+    let id: UUID
+    var title: String
+    init(id: UUID = UUID(), title: String) {
+        self.id = id
+        self.title = title
+    }
+}
+
+final class SharedCounter { var value = 0 }
+struct Wrapper { let counter: SharedCounter }
+
+func parseAge(_ raw: String?) -> Int? {
+    guard let raw,
+          let value = Int(raw.trimmingCharacters(in: .whitespacesAndNewlines)),
+          (0...150).contains(value) else { return nil }
+    return value
+}
+
+let original = SavedTask(title: "learn")
+let data = try JSONEncoder().encode(original)
+let restored = try JSONDecoder().decode(SavedTask.self, from: data)
+precondition(restored.id == original.id)
+var edited = restored
+edited.title = "practice"
+precondition(restored.title == "learn")
+let first = Wrapper(counter: SharedCounter())
+let second = first
+second.counter.value = 3
+precondition(first.counter.value == 3)
+precondition(parseAge("0") == 0)
+precondition(parseAge(" 12 ") == 12)
+for invalid: String? in [nil, "", "abc", "-1", "151", "1.5"] {
+    precondition(parseAge(invalid) == nil)
+}
+print("Swift syntax contracts passed")
+```
+
+需要分别解释两个结果：`edited.title` 独立变化，因为 String 是值；`second.counter.value` 影响 `first`，因为两份 Wrapper 持有同一个 class 实例。官方资料：[结构体与类](https://docs.swift.org/swift-book/documentation/the-swift-programming-language/classesandstructures/)、[并发与 Sendable](https://docs.swift.org/swift-book/documentation/the-swift-programming-language/concurrency/)。
 
 ---
 

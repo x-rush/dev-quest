@@ -74,6 +74,12 @@ def records_from_reports():
         add_record(records, row.get("source"), "runtime", "testing-projects.json", testing.get("scope", "selected testing/project behavior block"), "PASS" if row.get("status", "").upper() == "PASS" else "FAIL")
     client_storage = load("client-storage.json")
     add_record(records, client_storage.get("source"), "runtime", "client-storage.json", client_storage.get("scope", "selected React/jsdom and SSR storage checks"), "PASS" if client_storage.get("passed") else "FAIL")
+    kotlin_swift = load("kotlin-swift-core.json")
+    for row in kotlin_swift.get("results", []):
+        add_record(records, row.get("source"), "runtime", "kotlin-swift-core.json", kotlin_swift.get("scope", "selected Kotlin/Swift core program"), "PASS" if row.get("status", "").upper() == "PASS" else "FAIL")
+    node_python = load("node-python-libraries.json")
+    for row in node_python.get("results", []):
+        add_record(records, row.get("source"), "runtime", "node-python-libraries.json", node_python.get("scope", "selected Node/Python standard-library program"), "PASS" if row.get("status", "").upper() == "PASS" else "FAIL")
     # The web report names its source set rather than assigning a result per source.
     web = load("final-web-examples.json")
     for source in web.get("sources", []):

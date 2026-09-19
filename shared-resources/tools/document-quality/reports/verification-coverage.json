@@ -17,13 +17,13 @@
   "summary": {
     "documents": 641,
     "by_primary_state": {
-      "not_verified": 569,
-      "runtime": 72
+      "not_verified": 565,
+      "runtime": 76
     },
-    "verification_wording_occurrences": 259,
+    "verification_wording_occurrences": 200,
     "marker_classification": {
-      "source_has_limited_runtime_evidence": 101,
-      "unbound_verification_wording": 158
+      "source_has_limited_runtime_evidence": 74,
+      "unbound_verification_wording": 126
     }
   },
   "documents": [
@@ -3439,16 +3439,16 @@
     },
     {
       "path": "05-kotlin-compose/basics/03-kotlin-syntax-essentials.md",
-      "sha256": "b38f861cd489259f1b71c890d1d02f3d07d028d3bdfb9cab85e8f35e48aea018",
+      "sha256": "b574e63ef55717f08a0b72bdb6ff3add112764bef429488356624674c55338db",
       "verification": [
         {
-          "mode": "not_verified",
-          "status": "NOT_VERIFIED",
-          "report": null,
-          "scope": "No named runtime or syntax evidence is recorded for this document."
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "kotlin-swift-core.json",
+          "scope": "Exact marked Kotlin/Swift programs and unchanged Kotlin project input rules plus the documented main entry. No synthetic Android/Room APIs."
         }
       ],
-      "marker_count": 1
+      "marker_count": 0
     },
     {
       "path": "05-kotlin-compose/basics/04-composables-state.md",
@@ -3504,16 +3504,16 @@
     },
     {
       "path": "05-kotlin-compose/basics/08-first-project.md",
-      "sha256": "95aa9e8a5fe0af499de5b900e47d23c70a1d657732fb0a5587b541061c7dfc08",
+      "sha256": "0bea374743d1fa4a8ba058fe17cdb40695707c6c9374d8efc44f7e6ec440bcc6",
       "verification": [
         {
-          "mode": "not_verified",
-          "status": "NOT_VERIFIED",
-          "report": null,
-          "scope": "No named runtime or syntax evidence is recorded for this document."
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "kotlin-swift-core.json",
+          "scope": "Exact marked Kotlin/Swift programs and unchanged Kotlin project input rules plus the documented main entry. No synthetic Android/Room APIs."
         }
       ],
-      "marker_count": 1
+      "marker_count": 2
     },
     {
       "path": "05-kotlin-compose/deployment/01-release-build.md",
@@ -3816,7 +3816,7 @@
     },
     {
       "path": "05-kotlin-compose/reference/language-concepts/01-kotlin-keywords.md",
-      "sha256": "7d972bb9e08b93df87c7901f23f3fa51dcb483e139ca85bb74d0c4a27357ed13",
+      "sha256": "f5235225f9e79c46f71c35917efe1e09d66326c3ceb149528dacc1ea82a98c86",
       "verification": [
         {
           "mode": "not_verified",
@@ -3825,7 +3825,7 @@
           "scope": "No named runtime or syntax evidence is recorded for this document."
         }
       ],
-      "marker_count": 18
+      "marker_count": 3
     },
     {
       "path": "05-kotlin-compose/reference/language-concepts/02-null-safety-collections.md",
@@ -4147,13 +4147,13 @@
     },
     {
       "path": "06-swift-swiftui/basics/03-swift-syntax-essentials.md",
-      "sha256": "98992891883c4d823f62190f571d9f238f1f634121800a7555d72993156fac84",
+      "sha256": "e6ab2f1dc0135ccc0f310378fce9e8b003c22663ffb9849e5eb38e1788b2175a",
       "verification": [
         {
-          "mode": "not_verified",
-          "status": "NOT_VERIFIED",
-          "report": null,
-          "scope": "No named runtime or syntax evidence is recorded for this document."
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "kotlin-swift-core.json",
+          "scope": "Exact marked Kotlin/Swift programs and unchanged Kotlin project input rules plus the documented main entry. No synthetic Android/Room APIs."
         }
       ],
       "marker_count": 0
@@ -6935,16 +6935,28 @@
     },
     {
       "path": "09-nodejs-backend/reference/library-guides/04-child-process.md",
-      "sha256": "42de2393870b8906b42751ba2a0d116694f2c17d475b7237e7dbb4a37c7d9d37",
+      "sha256": "91c7eff28bcc811653ee0403b04de99b68272fb3dc1235e34eba43acc3b62376",
       "verification": [
         {
           "mode": "runtime",
           "status": "PASS",
           "report": "node-reference-examples.json",
           "scope": "selected complete Node.js reference example"
+        },
+        {
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "node-python-libraries.json",
+          "scope": "Nine named complete programs extracted unchanged from four standard-library documents. No external commands, HTTP middleware, Windows batch, fork IPC, process-tree management or entire-document runtime coverage is claimed."
+        },
+        {
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "node-python-libraries.json",
+          "scope": "Nine named complete programs extracted unchanged from four standard-library documents. No external commands, HTTP middleware, Windows batch, fork IPC, process-tree management or entire-document runtime coverage is claimed."
         }
       ],
-      "marker_count": 2
+      "marker_count": 1
     },
     {
       "path": "09-nodejs-backend/reference/library-guides/05-buffer.md",
@@ -7000,13 +7012,19 @@
     },
     {
       "path": "09-nodejs-backend/reference/library-guides/09-zlib.md",
-      "sha256": "0b93d066038f474325a9224c713e12470d38ba6c660102e8a31edb0a3e4ad9cf",
+      "sha256": "1e8f4a1f84ccb063f6d0648c42342523a069ff7e09ccd1b9f2728743da13f371",
       "verification": [
         {
-          "mode": "not_verified",
-          "status": "NOT_VERIFIED",
-          "report": null,
-          "scope": "No named runtime or syntax evidence is recorded for this document."
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "node-python-libraries.json",
+          "scope": "Nine named complete programs extracted unchanged from four standard-library documents. No external commands, HTTP middleware, Windows batch, fork IPC, process-tree management or entire-document runtime coverage is claimed."
+        },
+        {
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "node-python-libraries.json",
+          "scope": "Nine named complete programs extracted unchanged from four standard-library documents. No external commands, HTTP middleware, Windows batch, fork IPC, process-tree management or entire-document runtime coverage is claimed."
         }
       ],
       "marker_count": 0
@@ -7715,29 +7733,59 @@
     },
     {
       "path": "10-python-discovery/reference/library-guides/05-enum-module.md",
-      "sha256": "6a2f42db8a1d39364cfc0c1e251184c759bac731cd2dce6222b5527e6066195e",
+      "sha256": "1d6f2b770a4425e44bc1bf9c0a6c04a014f7e666bb2a0f3541fce155bbdf4bfe",
       "verification": [
         {
           "mode": "runtime",
           "status": "PASS",
           "report": "reference-examples.json",
           "scope": "selected Python reference example"
+        },
+        {
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "node-python-libraries.json",
+          "scope": "Nine named complete programs extracted unchanged from four standard-library documents. No external commands, HTTP middleware, Windows batch, fork IPC, process-tree management or entire-document runtime coverage is claimed."
+        },
+        {
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "node-python-libraries.json",
+          "scope": "Nine named complete programs extracted unchanged from four standard-library documents. No external commands, HTTP middleware, Windows batch, fork IPC, process-tree management or entire-document runtime coverage is claimed."
         }
       ],
-      "marker_count": 17
+      "marker_count": 0
     },
     {
       "path": "10-python-discovery/reference/library-guides/06-functools-subprocess.md",
-      "sha256": "2b4861ae3d17fd3747e1d7a2076f9ed131fc71efbab8522b335c9f53c36fb795",
+      "sha256": "d987d2c1d8b013bb9c316f771b1af61bbf100484eac7bb1c16ae32cd8d1b8b06",
       "verification": [
         {
           "mode": "runtime",
           "status": "PASS",
           "report": "reference-examples.json",
           "scope": "selected Python reference example"
+        },
+        {
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "node-python-libraries.json",
+          "scope": "Nine named complete programs extracted unchanged from four standard-library documents. No external commands, HTTP middleware, Windows batch, fork IPC, process-tree management or entire-document runtime coverage is claimed."
+        },
+        {
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "node-python-libraries.json",
+          "scope": "Nine named complete programs extracted unchanged from four standard-library documents. No external commands, HTTP middleware, Windows batch, fork IPC, process-tree management or entire-document runtime coverage is claimed."
+        },
+        {
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "node-python-libraries.json",
+          "scope": "Nine named complete programs extracted unchanged from four standard-library documents. No external commands, HTTP middleware, Windows batch, fork IPC, process-tree management or entire-document runtime coverage is claimed."
         }
       ],
-      "marker_count": 11
+      "marker_count": 0
     },
     {
       "path": "10-python-discovery/reference/quick-references/01-python-cheatsheet.md",
@@ -7858,7 +7906,59 @@
     },
     {
       "path": "11-rust-cross-platform/basics/01-environment-setup.md",
-      "sha256": "21122691e3d10cf6f03afc3fe99323c7dacf3035d9bc5b5356a00a7f31ab889c",
+      "sha256": "3796799e3635d2c49d8ade86501ccbc9d9644021b0c7d3cca3b78e15c701e59a",
+      "verification": [
+        {
+          "mode": "not_verified",
+          "status": "NOT_VERIFIED",
+          "report": null,
+          "scope": "No named runtime or syntax evidence is recorded for this document."
+        }
+      ],
+      "marker_count": 1
+    },
+    {
+      "path": "11-rust-cross-platform/basics/02-ownership-borrowing.md",
+      "sha256": "472958a065113bfa0861d4bb1491686ba3f6f754dc971bddfebc2ec8809f2d77",
+      "verification": [
+        {
+          "mode": "not_verified",
+          "status": "NOT_VERIFIED",
+          "report": null,
+          "scope": "No named runtime or syntax evidence is recorded for this document."
+        }
+      ],
+      "marker_count": 0
+    },
+    {
+      "path": "11-rust-cross-platform/basics/03-structs-enums-patterns.md",
+      "sha256": "532e3b0a53688e0d9c27c17e6344f99c7f5ccb4f9d2569e958f6accea01bcb61",
+      "verification": [
+        {
+          "mode": "not_verified",
+          "status": "NOT_VERIFIED",
+          "report": null,
+          "scope": "No named runtime or syntax evidence is recorded for this document."
+        }
+      ],
+      "marker_count": 0
+    },
+    {
+      "path": "11-rust-cross-platform/basics/04-traits-generics.md",
+      "sha256": "ee99d041fb8c7264565cea4dc7114b065304931874f757bbf996c68fc892f936",
+      "verification": [
+        {
+          "mode": "not_verified",
+          "status": "NOT_VERIFIED",
+          "report": null,
+          "scope": "No named runtime or syntax evidence is recorded for this document."
+        }
+      ],
+      "marker_count": 0
+    },
+    {
+      "path": "11-rust-cross-platform/basics/05-error-handling.md",
+      "sha256": "bef9f97c6fe0940f1ef70f4b7697306ec71ce61a19c5e04b0d78f1031e36accc",
       "verification": [
         {
           "mode": "not_verified",
@@ -7868,58 +7968,6 @@
         }
       ],
       "marker_count": 2
-    },
-    {
-      "path": "11-rust-cross-platform/basics/02-ownership-borrowing.md",
-      "sha256": "1a43fbfd44b1973b42ed8aeb95e4d03bbcb25ada7907bba04a1137695f0400fc",
-      "verification": [
-        {
-          "mode": "not_verified",
-          "status": "NOT_VERIFIED",
-          "report": null,
-          "scope": "No named runtime or syntax evidence is recorded for this document."
-        }
-      ],
-      "marker_count": 1
-    },
-    {
-      "path": "11-rust-cross-platform/basics/03-structs-enums-patterns.md",
-      "sha256": "2144033a652382662db9e2a848ecf63556ac6dc6f39ba99452d724b217e1365d",
-      "verification": [
-        {
-          "mode": "not_verified",
-          "status": "NOT_VERIFIED",
-          "report": null,
-          "scope": "No named runtime or syntax evidence is recorded for this document."
-        }
-      ],
-      "marker_count": 1
-    },
-    {
-      "path": "11-rust-cross-platform/basics/04-traits-generics.md",
-      "sha256": "423c04295574dfc12a37934cc6dc2ac9d5ec586bbc19dab59157b7861c52ec3c",
-      "verification": [
-        {
-          "mode": "not_verified",
-          "status": "NOT_VERIFIED",
-          "report": null,
-          "scope": "No named runtime or syntax evidence is recorded for this document."
-        }
-      ],
-      "marker_count": 1
-    },
-    {
-      "path": "11-rust-cross-platform/basics/05-error-handling.md",
-      "sha256": "1c7490aa68136acc509083017a2a1e49605941206c53cbbea74063e7abf04ab1",
-      "verification": [
-        {
-          "mode": "not_verified",
-          "status": "NOT_VERIFIED",
-          "report": null,
-          "scope": "No named runtime or syntax evidence is recorded for this document."
-        }
-      ],
-      "marker_count": 3
     },
     {
       "path": "11-rust-cross-platform/basics/06-collections-iterators.md",
@@ -7949,7 +7997,7 @@
     },
     {
       "path": "11-rust-cross-platform/basics/08-smart-pointers.md",
-      "sha256": "2e9d422a77fa66a857a30b7c7d5ab71bca35f6f61579db9e3335280b0c01f13d",
+      "sha256": "be29a545bc04677b219819df2421a90888cca0a6c80c42ab06cf6c83aadaca88",
       "verification": [
         {
           "mode": "not_verified",
@@ -7958,7 +8006,7 @@
           "scope": "No named runtime or syntax evidence is recorded for this document."
         }
       ],
-      "marker_count": 1
+      "marker_count": 0
     },
     {
       "path": "11-rust-cross-platform/basics/09-concurrency-async.md",
@@ -8261,7 +8309,7 @@
     },
     {
       "path": "11-rust-cross-platform/reference/language-concepts/01-ownership-dictionary.md",
-      "sha256": "3cd35e5bb06ddc2bd3c4a84e38c939b668b66e02fed74a45e747cf6b4eaa2d86",
+      "sha256": "36d8ba0c286b951327cc2869642cc9b0e7804e9982128ea790678f10b7364ad3",
       "verification": [
         {
           "mode": "not_verified",
@@ -8270,11 +8318,11 @@
           "scope": "No named runtime or syntax evidence is recorded for this document."
         }
       ],
-      "marker_count": 3
+      "marker_count": 0
     },
     {
       "path": "11-rust-cross-platform/reference/language-concepts/02-trait-objects.md",
-      "sha256": "b10b645f05a65fc8af5c0ac8acf69139e07236cbb36f843578f1bc90849436bd",
+      "sha256": "8a306a8dd6b61c390aea6968e69c9481fa59f2b45e6adec9e204c768b7f304f1",
       "verification": [
         {
           "mode": "not_verified",
@@ -8283,11 +8331,11 @@
           "scope": "No named runtime or syntax evidence is recorded for this document."
         }
       ],
-      "marker_count": 3
+      "marker_count": 0
     },
     {
       "path": "11-rust-cross-platform/reference/language-concepts/03-const-generics.md",
-      "sha256": "09be9dcb3a416d8137ffe455dc3ed78e5e05b7a648ba20f55da203898e7be873",
+      "sha256": "de4dfda69cd6d1993875a1c6521a233aff3631833ddeef4d63fc4c079adc97cb",
       "verification": [
         {
           "mode": "not_verified",
@@ -8296,7 +8344,7 @@
           "scope": "No named runtime or syntax evidence is recorded for this document."
         }
       ],
-      "marker_count": 4
+      "marker_count": 1
     },
     {
       "path": "11-rust-cross-platform/reference/language-concepts/04-advanced-lifetimes.md",
@@ -8741,12 +8789,6 @@
       "classification": "unbound_verification_wording"
     },
     {
-      "path": "05-kotlin-compose/basics/03-kotlin-syntax-essentials.md",
-      "line": 20,
-      "excerpt": "> **前置知识**: 已运行第一个 Compose 应用（见[第一个 Compose 应用](./02-first-compose-app.md)）",
-      "classification": "unbound_verification_wording"
-    },
-    {
       "path": "05-kotlin-compose/basics/06-navigation.md",
       "line": 91,
       "excerpt": "最小可运行骨架：",
@@ -8756,7 +8798,13 @@
       "path": "05-kotlin-compose/basics/08-first-project.md",
       "line": 97,
       "excerpt": "`libs.versions.toml`（以下是一组教学基线；开始实际项目时，优先使用仓库锁定且已验证的兼容组合。不要因为“最新稳定版”就单独升级某一个插件或库）：",
-      "classification": "unbound_verification_wording"
+      "classification": "source_has_limited_runtime_evidence"
+    },
+    {
+      "path": "05-kotlin-compose/basics/08-first-project.md",
+      "line": 99,
+      "excerpt": "将下面条目合并到已有同名节，不要重复创建 `[plugins]` 或 `[libraries]`。本例 Room 2.8 系列要求 `minSdk >= 23`；Room 插件版本不会替库声明版本，三个库必须显式使用同一个版本。先保留 Android Studio 空 Compose 工程已有的 AGP、Kotlin、Compose、Activity 和 Lifecycle 版本。本文尚无 Android 构建证据，不能把以下配置称为“已验证兼容组合”。",
+      "classification": "source_has_limited_runtime_evidence"
     },
     {
       "path": "05-kotlin-compose/README.md",
@@ -8784,68 +8832,8 @@
     },
     {
       "path": "05-kotlin-compose/reference/language-concepts/01-kotlin-keywords.md",
-      "line": 11,
-      "excerpt": "> Compose/Android 开发高频的 Kotlin 关键字速查字典：官方关键字总索引 + 按\"声明 → 继承 → 并发 → 其他\"分组的高频词条，每个词条包含定义、语法、示例与陷阱。标注（实测）的断言均经本机 kotlinc 2.4.20 编译运行验证",
-      "classification": "unbound_verification_wording"
-    },
-    {
-      "path": "05-kotlin-compose/reference/language-concepts/01-kotlin-keywords.md",
-      "line": 381,
-      "excerpt": "check(v !is Int)                    // （实测）",
-      "classification": "unbound_verification_wording"
-    },
-    {
-      "path": "05-kotlin-compose/reference/language-concepts/01-kotlin-keywords.md",
       "line": 396,
       "excerpt": "`as` 不安全转换，失败抛异常（类型不符实测抛 `ClassCastException`）；`as?` 安全转换，失败返回 null。",
-      "classification": "unbound_verification_wording"
-    },
-    {
-      "path": "05-kotlin-compose/reference/language-concepts/01-kotlin-keywords.md",
-      "line": 400,
-      "excerpt": "val s = obj as String                 // 失败即抛（实测 ClassCastException）",
-      "classification": "unbound_verification_wording"
-    },
-    {
-      "path": "05-kotlin-compose/reference/language-concepts/01-kotlin-keywords.md",
-      "line": 401,
-      "excerpt": "val len = (obj as? String)?.length    // 失败得到 null（实测）",
-      "classification": "unbound_verification_wording"
-    },
-    {
-      "path": "05-kotlin-compose/reference/language-concepts/01-kotlin-keywords.md",
-      "line": 432,
-      "excerpt": "// 标签跳转（实测：hits == 2）",
-      "classification": "unbound_verification_wording"
-    },
-    {
-      "path": "05-kotlin-compose/reference/language-concepts/01-kotlin-keywords.md",
-      "line": 463,
-      "excerpt": "fun who() = this@Outer2.tag        // 限定到外层接收者（实测）",
-      "classification": "unbound_verification_wording"
-    },
-    {
-      "path": "05-kotlin-compose/reference/language-concepts/01-kotlin-keywords.md",
-      "line": 470,
-      "excerpt": "override fun who() = super<A>.who() + super<B>.who()   // 实测 == \"AB\"",
-      "classification": "unbound_verification_wording"
-    },
-    {
-      "path": "05-kotlin-compose/reference/language-concepts/01-kotlin-keywords.md",
-      "line": 513,
-      "excerpt": "typealias Handler = (Int, String) -> Unit        // 顶层（实测）",
-      "classification": "unbound_verification_wording"
-    },
-    {
-      "path": "05-kotlin-compose/reference/language-concepts/01-kotlin-keywords.md",
-      "line": 520,
-      "excerpt": "// fun f() { typealias Local = Int }             // 函数体内：实验特性，需 -Xlocal-type-aliases（实测编译错误）",
-      "classification": "unbound_verification_wording"
-    },
-    {
-      "path": "05-kotlin-compose/reference/language-concepts/01-kotlin-keywords.md",
-      "line": 533,
-      "excerpt": "@JvmInline value class Meters(val value: Double)   // 实测",
       "classification": "unbound_verification_wording"
     },
     {
@@ -8856,38 +8844,8 @@
     },
     {
       "path": "05-kotlin-compose/reference/language-concepts/01-kotlin-keywords.md",
-      "line": 553,
-      "excerpt": "fun ping() = tag            // inner 才能访问外部实例成员（实测）",
-      "classification": "unbound_verification_wording"
-    },
-    {
-      "path": "05-kotlin-compose/reference/language-concepts/01-kotlin-keywords.md",
-      "line": 573,
-      "excerpt": "total(*arr, 6)                     // 展开 + 追加实参（实测 == 15）",
-      "classification": "unbound_verification_wording"
-    },
-    {
-      "path": "05-kotlin-compose/reference/language-concepts/01-kotlin-keywords.md",
-      "line": 587,
-      "excerpt": "tailrec fun gcd(a: Long, b: Long): Long = if (b == 0L) a else gcd(b, a % b)   // 实测",
-      "classification": "unbound_verification_wording"
-    },
-    {
-      "path": "05-kotlin-compose/reference/language-concepts/01-kotlin-keywords.md",
       "line": 658,
       "excerpt": "var temperature = 50                   // 初始化直写幕后字段——不走 setter（实测：读到 50 而非 40）",
-      "classification": "unbound_verification_wording"
-    },
-    {
-      "path": "05-kotlin-compose/reference/language-concepts/01-kotlin-keywords.md",
-      "line": 661,
-      "excerpt": "// 之后 thermostat.temperature = 99 → 读到 40（实测）",
-      "classification": "unbound_verification_wording"
-    },
-    {
-      "path": "05-kotlin-compose/reference/language-concepts/01-kotlin-keywords.md",
-      "line": 668,
-      "excerpt": "- **属性初始化器直写幕后字段、绕过自定义 setter**（实测：上例初始值 50 而非 40）——初始约束放 `init` 块或工厂函数",
       "classification": "unbound_verification_wording"
     },
     {
@@ -9096,14 +9054,8 @@
     },
     {
       "path": "09-nodejs-backend/reference/library-guides/04-child-process.md",
-      "line": 37,
-      "excerpt": "### 实测对照（Node 24）",
-      "classification": "source_has_limited_runtime_evidence"
-    },
-    {
-      "path": "09-nodejs-backend/reference/library-guides/04-child-process.md",
-      "line": 72,
-      "excerpt": "// 实测：2MB 输出触发错误",
+      "line": 130,
+      "excerpt": "| CPU 密集且要共享内存 | 比较 worker_threads 与进程池的实测成本；共享内存需额外同步 |",
       "classification": "source_has_limited_runtime_evidence"
     },
     {
@@ -9401,174 +9353,6 @@
       "classification": "source_has_limited_runtime_evidence"
     },
     {
-      "path": "10-python-discovery/reference/library-guides/05-enum-module.md",
-      "line": 20,
-      "excerpt": "enum 用\"有限的、命名的常量集合\"替代裸字符串与魔法数字：`OrderState.SHIPPED` 可读、可被 IDE 重构、拼错在定义处就报错。成员是**单例**，普通 Enum 的默认相等语义基于成员身份，可用 == 比较成员——`Color.RED == 1` 为 `False`（实测），这是特性：防止枚举与裸值混用。状态、方向等有限集合可以使用枚举；开放字符串集合或简单布尔开关未必需要单独建枚举。",
-      "classification": "source_has_limited_runtime_evidence"
-    },
-    {
-      "path": "10-python-discovery/reference/library-guides/05-enum-module.md",
-      "line": 40,
-      "excerpt": "Color.RED is Color(1)        # True：按值反查（实测）",
-      "classification": "source_has_limited_runtime_evidence"
-    },
-    {
-      "path": "10-python-discovery/reference/library-guides/05-enum-module.md",
-      "line": 41,
-      "excerpt": "Color[\"RED\"] is Color.RED    # True：按名查（实测）",
-      "classification": "source_has_limited_runtime_evidence"
-    },
-    {
-      "path": "10-python-discovery/reference/library-guides/05-enum-module.md",
-      "line": 42,
-      "excerpt": "Color.RED == 1               # False：与裸值比较永假（实测）",
-      "classification": "source_has_limited_runtime_evidence"
-    },
-    {
-      "path": "10-python-discovery/reference/library-guides/05-enum-module.md",
-      "line": 44,
-      "excerpt": "Color.RED in Color           # True：成员判断（实测）",
-      "classification": "source_has_limited_runtime_evidence"
-    },
-    {
-      "path": "10-python-discovery/reference/library-guides/05-enum-module.md",
-      "line": 58,
-      "excerpt": "Level.HIGH > Level.LOW       # True：可与 int 比较、排序（实测）",
-      "classification": "source_has_limited_runtime_evidence"
-    },
-    {
-      "path": "10-python-discovery/reference/library-guides/05-enum-module.md",
-      "line": 64,
-      "excerpt": "str(Format.TEXT)             # 'text'：f\"{Format.TEXT}\" 直接插值（实测）",
-      "classification": "source_has_limited_runtime_evidence"
-    },
-    {
-      "path": "10-python-discovery/reference/library-guides/05-enum-module.md",
-      "line": 74,
-      "excerpt": "B = 1            # 不报错：B 成为 A 的别名（实测 Loose.B is Loose.A，遍历只出 1 个）",
-      "classification": "source_has_limited_runtime_evidence"
-    },
-    {
-      "path": "10-python-discovery/reference/library-guides/05-enum-module.md",
-      "line": 81,
-      "excerpt": "B = 1            # ValueError: duplicate values found in <enum 'Strict'>: B -> A（实测）",
-      "classification": "source_has_limited_runtime_evidence"
-    },
-    {
-      "path": "10-python-discovery/reference/library-guides/05-enum-module.md",
-      "line": 88,
-      "excerpt": "成员 value 可以是元组，配合自定义 `__init__` 拆成属性（官方 Planet 模式，实测）：",
-      "classification": "source_has_limited_runtime_evidence"
-    },
-    {
-      "path": "10-python-discovery/reference/library-guides/05-enum-module.md",
-      "line": 109,
-      "excerpt": "Status = Enum(\"Status\", \"OK FAIL\")                        # 空格分隔名（实测）",
-      "classification": "source_has_limited_runtime_evidence"
-    },
-    {
-      "path": "10-python-discovery/reference/library-guides/05-enum-module.md",
-      "line": 110,
-      "excerpt": "HttpStatus = Enum(\"HttpStatus\", [(\"OK\", 200), (\"NOT_FOUND\", 404)])   # 名值对（实测）",
-      "classification": "source_has_limited_runtime_evidence"
-    },
-    {
-      "path": "10-python-discovery/reference/library-guides/05-enum-module.md",
-      "line": 117,
-      "excerpt": "订单状态机：StrEnum + auto()（值自动取小写成员名，实测 `['pending', 'shipped']`）：",
-      "classification": "source_has_limited_runtime_evidence"
-    },
-    {
-      "path": "10-python-discovery/reference/library-guides/05-enum-module.md",
-      "line": 132,
-      "excerpt": "f\"state={OrderState.SHIPPED}\"            # 'state=shipped' —— JSON/日志友好（实测）",
-      "classification": "source_has_limited_runtime_evidence"
-    },
-    {
-      "path": "10-python-discovery/reference/library-guides/05-enum-module.md",
-      "line": 139,
-      "excerpt": "- ❌ **期待 `Color.RED == 1` 为 True**：普通 Enum 与裸值永不相等（实测 False）。",
-      "classification": "source_has_limited_runtime_evidence"
-    },
-    {
-      "path": "10-python-discovery/reference/library-guides/05-enum-module.md",
-      "line": 141,
-      "excerpt": "- ❌ **重复 value 当两个成员用**：第二个静默变成别名（实测）。",
-      "classification": "source_has_limited_runtime_evidence"
-    },
-    {
-      "path": "10-python-discovery/reference/library-guides/05-enum-module.md",
-      "line": 143,
-      "excerpt": "- ❌ **动态名/值查询不设防**：`Color[\"PURPLE\"]` 抛 KeyError、`Color(99)` 抛 ValueError（实测）。",
-      "classification": "source_has_limited_runtime_evidence"
-    },
-    {
-      "path": "10-python-discovery/reference/library-guides/06-functools-subprocess.md",
-      "line": 28,
-      "excerpt": "| `@lru_cache(maxsize=128)` | LRU 记忆化 | 参数必须可哈希（实测 dict 参数抛 TypeError）；`maxsize=None` 即无界 |",
-      "classification": "source_has_limited_runtime_evidence"
-    },
-    {
-      "path": "10-python-discovery/reference/library-guides/06-functools-subprocess.md",
-      "line": 30,
-      "excerpt": "| `partial(func, *a, **kw)` | 固定部分参数 | `partial(int, base=2)(\"101\")` → 5（实测） |",
-      "classification": "source_has_limited_runtime_evidence"
-    },
-    {
-      "path": "10-python-discovery/reference/library-guides/06-functools-subprocess.md",
-      "line": 32,
-      "excerpt": "| `@wraps(func)` | 装饰器保元数据 | 保留 `__name__`/`__doc__`/`__wrapped__`（实测） |",
-      "classification": "source_has_limited_runtime_evidence"
-    },
-    {
-      "path": "10-python-discovery/reference/library-guides/06-functools-subprocess.md",
-      "line": 35,
-      "excerpt": "记忆化与 unhashable 陷阱（本机 3.14.7 实测）：",
-      "classification": "source_has_limited_runtime_evidence"
-    },
-    {
-      "path": "10-python-discovery/reference/library-guides/06-functools-subprocess.md",
-      "line": 46,
-      "excerpt": "fib({\"a\": 1})           # TypeError: unhashable type: 'dict'（实测）",
-      "classification": "source_has_limited_runtime_evidence"
-    },
-    {
-      "path": "10-python-discovery/reference/library-guides/06-functools-subprocess.md",
-      "line": 49,
-      "excerpt": "`@wraps` 前后对比（实测）：",
-      "classification": "source_has_limited_runtime_evidence"
-    },
-    {
-      "path": "10-python-discovery/reference/library-guides/06-functools-subprocess.md",
-      "line": 73,
-      "excerpt": "`singledispatch` 按类型分派（实测）：",
-      "classification": "source_has_limited_runtime_evidence"
-    },
-    {
-      "path": "10-python-discovery/reference/library-guides/06-functools-subprocess.md",
-      "line": 111,
-      "excerpt": "关键行为（本机 3.14.7 实测）：",
-      "classification": "source_has_limited_runtime_evidence"
-    },
-    {
-      "path": "10-python-discovery/reference/library-guides/06-functools-subprocess.md",
-      "line": 122,
-      "excerpt": "p.returncode                 # 0（实测）",
-      "classification": "source_has_limited_runtime_evidence"
-    },
-    {
-      "path": "10-python-discovery/reference/library-guides/06-functools-subprocess.md",
-      "line": 155,
-      "excerpt": "- ❌ **lru_cache 直接吃 dict/list 参数**：`TypeError: unhashable type`（实测）。",
-      "classification": "source_has_limited_runtime_evidence"
-    },
-    {
-      "path": "10-python-discovery/reference/library-guides/06-functools-subprocess.md",
-      "line": 159,
-      "excerpt": "- ❌ **装饰器忘 `@wraps`**：`__name__` 变 'wrapper'、`__doc__` 丢失（实测）。",
-      "classification": "source_has_limited_runtime_evidence"
-    },
-    {
       "path": "10-python-discovery/testing/03-mocking-testing.md",
       "line": 145,
       "excerpt": "**Q1: patch 之后测试通过但线上失败？**",
@@ -9659,36 +9443,6 @@
       "classification": "unbound_verification_wording"
     },
     {
-      "path": "11-rust-cross-platform/basics/01-environment-setup.md",
-      "line": 223,
-      "excerpt": "> 以下两段示例均已在本机以 `rustc --edition 2024` 实测编译并运行通过。",
-      "classification": "unbound_verification_wording"
-    },
-    {
-      "path": "11-rust-cross-platform/basics/02-ownership-borrowing.md",
-      "line": 147,
-      "excerpt": "> 以下四段示例均已在本机以 `rustc --edition 2024` 实测编译并运行通过。",
-      "classification": "unbound_verification_wording"
-    },
-    {
-      "path": "11-rust-cross-platform/basics/03-structs-enums-patterns.md",
-      "line": 140,
-      "excerpt": "> 以下四段示例均已在本机以 `rustc --edition 2024` 实测编译并运行通过。",
-      "classification": "unbound_verification_wording"
-    },
-    {
-      "path": "11-rust-cross-platform/basics/04-traits-generics.md",
-      "line": 137,
-      "excerpt": "> 以下四段示例均已在本机以 `rustc --edition 2024` 实测编译并运行通过。",
-      "classification": "unbound_verification_wording"
-    },
-    {
-      "path": "11-rust-cross-platform/basics/05-error-handling.md",
-      "line": 135,
-      "excerpt": "> 示例一至示例四（纯标准库）均已在本机以 `rustc --edition 2024` 实测编译并运行通过；示例五、六依赖 crates.io 第三方库，说明见各节标注。",
-      "classification": "unbound_verification_wording"
-    },
-    {
       "path": "11-rust-cross-platform/basics/05-error-handling.md",
       "line": 306,
       "excerpt": "> ⚠️ 本段依赖 crates.io 的 thiserror，不在自包含实测范围内；用法以官方文档为准。`#[error(\"...\")]` 生成 Display，`#[from]` 生成 `From<io::Error>` 使 `?` 自动转换生效——与示例三逐项对应。",
@@ -9698,12 +9452,6 @@
       "path": "11-rust-cross-platform/basics/05-error-handling.md",
       "line": 326,
       "excerpt": "> ⚠️ 本段依赖 crates.io 的 anyhow，不在自包含实测范围内；用法以官方文档为准。`Result` 是 `anyhow::Result`（错误类型为动态的 `anyhow::Error`），`.context(...)` 给错误链挂上\"当时在做什么\"的描述。",
-      "classification": "unbound_verification_wording"
-    },
-    {
-      "path": "11-rust-cross-platform/basics/08-smart-pointers.md",
-      "line": 135,
-      "excerpt": "**验证方法**: `should_panic` 测试通过（见示例六）。",
       "classification": "unbound_verification_wording"
     },
     {
@@ -9776,60 +9524,6 @@
       "path": "11-rust-cross-platform/frameworks/06-auth-middleware.md",
       "line": 465,
       "excerpt": "1. **认证早于业务**: 身份判定在 handler 之前完成（守卫层），业务代码只消费\"已验证身份\"这一事实——校验与业务解耦后，任何新路由默认继承防护",
-      "classification": "unbound_verification_wording"
-    },
-    {
-      "path": "11-rust-cross-platform/reference/language-concepts/01-ownership-dictionary.md",
-      "line": 36,
-      "excerpt": "- [示例与编译失败演示](#-可运行示例)",
-      "classification": "unbound_verification_wording"
-    },
-    {
-      "path": "11-rust-cross-platform/reference/language-concepts/01-ownership-dictionary.md",
-      "line": 139,
-      "excerpt": "| 对象 | 顺序 | 实测 |",
-      "classification": "unbound_verification_wording"
-    },
-    {
-      "path": "11-rust-cross-platform/reference/language-concepts/01-ownership-dictionary.md",
-      "line": 175,
-      "excerpt": "## 💡 可运行示例",
-      "classification": "unbound_verification_wording"
-    },
-    {
-      "path": "11-rust-cross-platform/reference/language-concepts/02-trait-objects.md",
-      "line": 37,
-      "excerpt": "- [示例与编译失败演示](#-可运行示例)",
-      "classification": "unbound_verification_wording"
-    },
-    {
-      "path": "11-rust-cross-platform/reference/language-concepts/02-trait-objects.md",
-      "line": 67,
-      "excerpt": "**典型非兼容 trait 的替代模式**: `Clone` 因 `clone(&self) -> Self` 不可直接 dyn；惯用出口是自定义 `fn clone_box(&self) -> Box<dyn Trait>`（返回 Box<dyn Trait> 才擦除了 Self；返回 Box<Self> 仍可能破坏 dyn 兼容性），为 `Box<dyn Trait>` 实现 `Clone` 委托之——完整可运行写法见示例五。",
-      "classification": "unbound_verification_wording"
-    },
-    {
-      "path": "11-rust-cross-platform/reference/language-concepts/02-trait-objects.md",
-      "line": 146,
-      "excerpt": "## 💡 可运行示例",
-      "classification": "unbound_verification_wording"
-    },
-    {
-      "path": "11-rust-cross-platform/reference/language-concepts/03-const-generics.md",
-      "line": 36,
-      "excerpt": "- [示例与编译失败演示](#-可运行示例)",
-      "classification": "unbound_verification_wording"
-    },
-    {
-      "path": "11-rust-cross-platform/reference/language-concepts/03-const-generics.md",
-      "line": 49,
-      "excerpt": "// 声明位置示意（可运行完整示例见下文示例一/示例二/示例三）",
-      "classification": "unbound_verification_wording"
-    },
-    {
-      "path": "11-rust-cross-platform/reference/language-concepts/03-const-generics.md",
-      "line": 150,
-      "excerpt": "## 💡 可运行示例",
       "classification": "unbound_verification_wording"
     },
     {

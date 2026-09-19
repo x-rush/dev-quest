@@ -144,7 +144,7 @@ cargo new borrow-lab && cd borrow-lab
 
 ## 💻 代码示例
 
-> 以下四段示例均已在本机以 `rustc --edition 2024` 实测编译并运行通过。
+> 以下四段是可用 `rustc --edition 2024` 复核的完整示例。请在自己的工具链中编译、运行，并记录实际版本和输出。
 
 ### 示例一：move 语义
 

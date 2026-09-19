@@ -8,7 +8,7 @@
 
 自测：令 name 为 null，预测 `name?.length ?: 0` 的结果为 0；把它换成 `name!!.length` 会失败。随后说明为什么“有默认值”不总是正确业务处理：缺少必填标题时可能应显示错误，而不是默默填空串。
 
-> Compose/Android 开发高频的 Kotlin 关键字速查字典：官方关键字总索引 + 按"声明 → 继承 → 并发 → 其他"分组的高频词条，每个词条包含定义、语法、示例与陷阱。标注（实测）的断言均经本机 kotlinc 2.4.20 编译运行验证
+> Compose/Android 开发高频的 Kotlin 关键字速查字典：官方关键字总索引 + 按"声明 → 继承 → 并发 → 其他"分组的高频词条，每个词条包含定义、语法、示例与陷阱。示例应在你的 Kotlin/Android 工具链中编译并观察结果；本页不把本地编辑记录当作可复现的运行证据。
 
 | 属性 | 内容 |
 |------|------|
@@ -378,7 +378,7 @@ do { loadPage() } while (hasMore)
 3 !in 1..2                          // true
 
 val v: Any = "text"
-check(v !is Int)                    // （实测）
+check(v !is Int)                    // 预期成立
 if (v is String) check(v.length == 4)   // is 通过后 v 已智能转换为 String
 when (v) {
     is Int -> println(v + 1)
@@ -397,8 +397,8 @@ when (v) {
 
 ### 语法和示例
 ```kotlin
-val s = obj as String                 // 失败即抛（实测 ClassCastException）
-val len = (obj as? String)?.length    // 失败得到 null（实测）
+val s = obj as String                 // 类型不符时抛 ClassCastException
+val len = (obj as? String)?.length    // 类型不符时得到 null
 val t = n as? String ?: "<unknown>"   // 安全转换 + Elvis 兜底
 ```
 
@@ -429,7 +429,7 @@ val name = raw ?: throw IllegalArgumentException("name 必填")          // thro
 
 ### 语法和示例
 ```kotlin
-// 标签跳转（实测：hits == 2）
+// 标签跳转后，预期 hits == 2
 var hits = 0
 loop@ for (i in 1..5) {
     for (j in 1..5) {
@@ -460,14 +460,14 @@ fun findUser(id: Long): User? {
 class Outer2 {
     val tag = "outer"
     inner class Inner2 {
-        fun who() = this@Outer2.tag        // 限定到外层接收者（实测）
+        fun who() = this@Outer2.tag        // 限定到外层接收者
     }
 }
 
 interface A { fun who() = "A" }
 interface B { fun who() = "B" }
 class C : A, B {
-    override fun who() = super<A>.who() + super<B>.who()   // 实测 == "AB"
+    override fun who() = super<A>.who() + super<B>.who()   // 结果为 "AB"
 }
 ```
 
@@ -510,14 +510,14 @@ val name: String? = null            // 非空类型不能赋 null
 
 ### 语法和示例
 ```kotlin
-typealias Handler = (Int, String) -> Unit        // 顶层（实测）
+typealias Handler = (Int, String) -> Unit        // 顶层声明
 typealias Users = Map<String, User>
 
 class Repo {
     typealias Callback = (Boolean) -> Unit       // 类内嵌套（1.7+ 稳定）
 }
 
-// fun f() { typealias Local = Int }             // 函数体内：实验特性，需 -Xlocal-type-aliases（实测编译错误）
+// fun f() { typealias Local = Int }             // 函数体内：实验特性，需 -Xlocal-type-aliases；默认编译会拒绝
 ```
 
 ### 陷阱
@@ -530,7 +530,7 @@ class Repo {
 
 ### 语法和示例
 ```kotlin
-@JvmInline value class Meters(val value: Double)   // 实测
+@JvmInline value class Meters(val value: Double)   // 值类声明
 @JvmInline value class TaskId(val id: Long)
 
 fun fetch(id: TaskId) { /* 参数层即文档：Double 传不进来 */ }
@@ -550,7 +550,7 @@ Kotlin 嵌套类**默认不持有外部实例**（≈ Java 静态嵌套类）；
 class Outer {
     private val tag = "outer"
     inner class Inner {
-        fun ping() = tag            // inner 才能访问外部实例成员（实测）
+        fun ping() = tag            // inner 才能访问外部实例成员
     }
 }
 // 无 inner 的嵌套类访问不到外部实例成员，直接编译错误
@@ -570,7 +570,7 @@ fun total(vararg nums: Int) = nums.sum()
 
 total(1, 2, 3)
 val arr = intArrayOf(4, 5)
-total(*arr, 6)                     // 展开 + 追加实参（实测 == 15）
+total(*arr, 6)                     // 展开 + 追加实参，结果为 15
 ```
 
 ### 陷阱
@@ -584,7 +584,7 @@ total(*arr, 6)                     // 展开 + 追加实参（实测 == 15）
 
 ### 语法和示例
 ```kotlin
-tailrec fun gcd(a: Long, b: Long): Long = if (b == 0L) a else gcd(b, a % b)   // 实测
+tailrec fun gcd(a: Long, b: Long): Long = if (b == 0L) a else gcd(b, a % b)   // 尾递归候选
 tailrec fun countDown(n: Int): Int = if (n == 0) n else countDown(n - 1)
 ```
 
@@ -658,14 +658,14 @@ class Thermostat {
     var temperature = 50                   // 初始化直写幕后字段——不走 setter（实测：读到 50 而非 40）
         set(value) { field = value.coerceAtMost(40) }
 }
-// 之后 thermostat.temperature = 99 → 读到 40（实测）
+// 之后 thermostat.temperature = 99 → 读到 40
 
 var score = 0
     get() = field.coerceIn(0, 100)         // getter 里用 field 即有幕后字段
 ```
 
 ### 陷阱
-- **属性初始化器直写幕后字段、绕过自定义 setter**（实测：上例初始值 50 而非 40）——初始约束放 `init` 块或工厂函数
+- **属性初始化器直写幕后字段、绕过自定义 setter**（上例初始值为 50 而非 40）——初始约束放 `init` 块或工厂函数
 - 访问器里不引用 `field` 则该属性没有幕后字段（纯计算属性）；此时写 `field` 编译错误
 
 ---

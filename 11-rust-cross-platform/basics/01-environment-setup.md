@@ -220,7 +220,7 @@ components = ["clippy", "rustfmt"]
 
 ## 💻 代码示例
 
-> 以下两段示例均已在本机以 `rustc --edition 2024` 实测编译并运行通过。
+> 以下两段是可用 `rustc --edition 2024` 复核的完整示例。请在自己的工具链中编译、运行，并把实际版本和输出记入项目记录。
 
 ### 示例一：Hello World 与变量预览
 

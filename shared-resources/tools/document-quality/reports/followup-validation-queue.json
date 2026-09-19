@@ -5,18 +5,18 @@
   "scope": "verification-coverage.json 的 11 个现行教学模块；不含生成报告、归档和不活跃文件。",
   "method": "为 not_verified 文件建立文件级任务，并按覆盖台账同一标记规则重新扫描当前源码以定位逐行任务；仅通过性断言升为 P0，不判断教学内容真伪。",
   "summary": {
-    "items": 727,
-    "file_level_items": 569,
-    "unbound_wording_items": 158,
+    "items": 691,
+    "file_level_items": 565,
+    "unbound_wording_items": 126,
     "by_priority": {
-      "P0": 121,
-      "P1": 313,
+      "P0": 90,
+      "P1": 308,
       "P2": 148,
       "P3": 145
     },
     "by_kind": {
-      "核心基础": 365,
-      "首项目": 18,
+      "核心基础": 331,
+      "首项目": 16,
       "框架": 120,
       "部署": 45,
       "进阶与测试": 179
@@ -24,7 +24,7 @@
     "excluded": {
       "inactive_or_archived": 0,
       "generated_or_report": 0,
-      "runtime_document": 72
+      "runtime_document": 76
     }
   },
   "items": [
@@ -48,182 +48,6 @@
       "path": "08-java-revisited/README.md",
       "line": 35,
       "source_excerpt": "- 将业务结果映射成 HTTP 响应，使用真实测试数据库验证约束与事务。",
-      "evidence_action": "优先复跑该行承诺的完整示例；若环境不可得，删除绝对化结果并说明实际未验证范围。"
-    },
-    {
-      "priority": "P0",
-      "kind": "核心基础",
-      "task": "绑定命名验证证据，或把验证措辞收窄为可证明的范围",
-      "reason": "正文含有未绑定到该文件运行记录的验证性措辞；这不是自动技术错误结论。",
-      "module": "Kotlin / Compose",
-      "path": "05-kotlin-compose/basics/03-kotlin-syntax-essentials.md",
-      "line": 20,
-      "source_excerpt": "> **前置知识**: 已运行第一个 Compose 应用（见[第一个 Compose 应用](./02-first-compose-app.md)）",
-      "evidence_action": "优先复跑该行承诺的完整示例；若环境不可得，删除绝对化结果并说明实际未验证范围。"
-    },
-    {
-      "priority": "P0",
-      "kind": "核心基础",
-      "task": "绑定命名验证证据，或把验证措辞收窄为可证明的范围",
-      "reason": "正文含有未绑定到该文件运行记录的验证性措辞；这不是自动技术错误结论。",
-      "module": "Kotlin / Compose",
-      "path": "05-kotlin-compose/reference/language-concepts/01-kotlin-keywords.md",
-      "line": 11,
-      "source_excerpt": "> Compose/Android 开发高频的 Kotlin 关键字速查字典：官方关键字总索引 + 按\"声明 → 继承 → 并发 → 其他\"分组的高频词条，每个词条包含定义、语法、示例与陷阱。标注（实测）的断言均经本机 kotlinc 2.4.20 编译运行验证",
-      "evidence_action": "优先复跑该行承诺的完整示例；若环境不可得，删除绝对化结果并说明实际未验证范围。"
-    },
-    {
-      "priority": "P0",
-      "kind": "核心基础",
-      "task": "绑定命名验证证据，或把验证措辞收窄为可证明的范围",
-      "reason": "正文含有未绑定到该文件运行记录的验证性措辞；这不是自动技术错误结论。",
-      "module": "Kotlin / Compose",
-      "path": "05-kotlin-compose/reference/language-concepts/01-kotlin-keywords.md",
-      "line": 381,
-      "source_excerpt": "check(v !is Int) // （实测）",
-      "evidence_action": "优先复跑该行承诺的完整示例；若环境不可得，删除绝对化结果并说明实际未验证范围。"
-    },
-    {
-      "priority": "P0",
-      "kind": "核心基础",
-      "task": "绑定命名验证证据，或把验证措辞收窄为可证明的范围",
-      "reason": "正文含有未绑定到该文件运行记录的验证性措辞；这不是自动技术错误结论。",
-      "module": "Kotlin / Compose",
-      "path": "05-kotlin-compose/reference/language-concepts/01-kotlin-keywords.md",
-      "line": 400,
-      "source_excerpt": "val s = obj as String // 失败即抛（实测 ClassCastException）",
-      "evidence_action": "优先复跑该行承诺的完整示例；若环境不可得，删除绝对化结果并说明实际未验证范围。"
-    },
-    {
-      "priority": "P0",
-      "kind": "核心基础",
-      "task": "绑定命名验证证据，或把验证措辞收窄为可证明的范围",
-      "reason": "正文含有未绑定到该文件运行记录的验证性措辞；这不是自动技术错误结论。",
-      "module": "Kotlin / Compose",
-      "path": "05-kotlin-compose/reference/language-concepts/01-kotlin-keywords.md",
-      "line": 401,
-      "source_excerpt": "val len = (obj as? String)?.length // 失败得到 null（实测）",
-      "evidence_action": "优先复跑该行承诺的完整示例；若环境不可得，删除绝对化结果并说明实际未验证范围。"
-    },
-    {
-      "priority": "P0",
-      "kind": "核心基础",
-      "task": "绑定命名验证证据，或把验证措辞收窄为可证明的范围",
-      "reason": "正文含有未绑定到该文件运行记录的验证性措辞；这不是自动技术错误结论。",
-      "module": "Kotlin / Compose",
-      "path": "05-kotlin-compose/reference/language-concepts/01-kotlin-keywords.md",
-      "line": 432,
-      "source_excerpt": "// 标签跳转（实测：hits == 2）",
-      "evidence_action": "优先复跑该行承诺的完整示例；若环境不可得，删除绝对化结果并说明实际未验证范围。"
-    },
-    {
-      "priority": "P0",
-      "kind": "核心基础",
-      "task": "绑定命名验证证据，或把验证措辞收窄为可证明的范围",
-      "reason": "正文含有未绑定到该文件运行记录的验证性措辞；这不是自动技术错误结论。",
-      "module": "Kotlin / Compose",
-      "path": "05-kotlin-compose/reference/language-concepts/01-kotlin-keywords.md",
-      "line": 463,
-      "source_excerpt": "fun who() = this@Outer2.tag // 限定到外层接收者（实测）",
-      "evidence_action": "优先复跑该行承诺的完整示例；若环境不可得，删除绝对化结果并说明实际未验证范围。"
-    },
-    {
-      "priority": "P0",
-      "kind": "核心基础",
-      "task": "绑定命名验证证据，或把验证措辞收窄为可证明的范围",
-      "reason": "正文含有未绑定到该文件运行记录的验证性措辞；这不是自动技术错误结论。",
-      "module": "Kotlin / Compose",
-      "path": "05-kotlin-compose/reference/language-concepts/01-kotlin-keywords.md",
-      "line": 470,
-      "source_excerpt": "override fun who() = super<A>.who() + super<B>.who() // 实测 == \"AB\"",
-      "evidence_action": "优先复跑该行承诺的完整示例；若环境不可得，删除绝对化结果并说明实际未验证范围。"
-    },
-    {
-      "priority": "P0",
-      "kind": "核心基础",
-      "task": "绑定命名验证证据，或把验证措辞收窄为可证明的范围",
-      "reason": "正文含有未绑定到该文件运行记录的验证性措辞；这不是自动技术错误结论。",
-      "module": "Kotlin / Compose",
-      "path": "05-kotlin-compose/reference/language-concepts/01-kotlin-keywords.md",
-      "line": 513,
-      "source_excerpt": "typealias Handler = (Int, String) -> Unit // 顶层（实测）",
-      "evidence_action": "优先复跑该行承诺的完整示例；若环境不可得，删除绝对化结果并说明实际未验证范围。"
-    },
-    {
-      "priority": "P0",
-      "kind": "核心基础",
-      "task": "绑定命名验证证据，或把验证措辞收窄为可证明的范围",
-      "reason": "正文含有未绑定到该文件运行记录的验证性措辞；这不是自动技术错误结论。",
-      "module": "Kotlin / Compose",
-      "path": "05-kotlin-compose/reference/language-concepts/01-kotlin-keywords.md",
-      "line": 520,
-      "source_excerpt": "// fun f() { typealias Local = Int } // 函数体内：实验特性，需 -Xlocal-type-aliases（实测编译错误）",
-      "evidence_action": "优先复跑该行承诺的完整示例；若环境不可得，删除绝对化结果并说明实际未验证范围。"
-    },
-    {
-      "priority": "P0",
-      "kind": "核心基础",
-      "task": "绑定命名验证证据，或把验证措辞收窄为可证明的范围",
-      "reason": "正文含有未绑定到该文件运行记录的验证性措辞；这不是自动技术错误结论。",
-      "module": "Kotlin / Compose",
-      "path": "05-kotlin-compose/reference/language-concepts/01-kotlin-keywords.md",
-      "line": 533,
-      "source_excerpt": "@JvmInline value class Meters(val value: Double) // 实测",
-      "evidence_action": "优先复跑该行承诺的完整示例；若环境不可得，删除绝对化结果并说明实际未验证范围。"
-    },
-    {
-      "priority": "P0",
-      "kind": "核心基础",
-      "task": "绑定命名验证证据，或把验证措辞收窄为可证明的范围",
-      "reason": "正文含有未绑定到该文件运行记录的验证性措辞；这不是自动技术错误结论。",
-      "module": "Kotlin / Compose",
-      "path": "05-kotlin-compose/reference/language-concepts/01-kotlin-keywords.md",
-      "line": 553,
-      "source_excerpt": "fun ping() = tag // inner 才能访问外部实例成员（实测）",
-      "evidence_action": "优先复跑该行承诺的完整示例；若环境不可得，删除绝对化结果并说明实际未验证范围。"
-    },
-    {
-      "priority": "P0",
-      "kind": "核心基础",
-      "task": "绑定命名验证证据，或把验证措辞收窄为可证明的范围",
-      "reason": "正文含有未绑定到该文件运行记录的验证性措辞；这不是自动技术错误结论。",
-      "module": "Kotlin / Compose",
-      "path": "05-kotlin-compose/reference/language-concepts/01-kotlin-keywords.md",
-      "line": 573,
-      "source_excerpt": "total(*arr, 6) // 展开 + 追加实参（实测 == 15）",
-      "evidence_action": "优先复跑该行承诺的完整示例；若环境不可得，删除绝对化结果并说明实际未验证范围。"
-    },
-    {
-      "priority": "P0",
-      "kind": "核心基础",
-      "task": "绑定命名验证证据，或把验证措辞收窄为可证明的范围",
-      "reason": "正文含有未绑定到该文件运行记录的验证性措辞；这不是自动技术错误结论。",
-      "module": "Kotlin / Compose",
-      "path": "05-kotlin-compose/reference/language-concepts/01-kotlin-keywords.md",
-      "line": 587,
-      "source_excerpt": "tailrec fun gcd(a: Long, b: Long): Long = if (b == 0L) a else gcd(b, a % b) // 实测",
-      "evidence_action": "优先复跑该行承诺的完整示例；若环境不可得，删除绝对化结果并说明实际未验证范围。"
-    },
-    {
-      "priority": "P0",
-      "kind": "核心基础",
-      "task": "绑定命名验证证据，或把验证措辞收窄为可证明的范围",
-      "reason": "正文含有未绑定到该文件运行记录的验证性措辞；这不是自动技术错误结论。",
-      "module": "Kotlin / Compose",
-      "path": "05-kotlin-compose/reference/language-concepts/01-kotlin-keywords.md",
-      "line": 661,
-      "source_excerpt": "// 之后 thermostat.temperature = 99 → 读到 40（实测）",
-      "evidence_action": "优先复跑该行承诺的完整示例；若环境不可得，删除绝对化结果并说明实际未验证范围。"
-    },
-    {
-      "priority": "P0",
-      "kind": "核心基础",
-      "task": "绑定命名验证证据，或把验证措辞收窄为可证明的范围",
-      "reason": "正文含有未绑定到该文件运行记录的验证性措辞；这不是自动技术错误结论。",
-      "module": "Kotlin / Compose",
-      "path": "05-kotlin-compose/reference/language-concepts/01-kotlin-keywords.md",
-      "line": 668,
-      "source_excerpt": "- **属性初始化器直写幕后字段、绕过自定义 setter**（实测：上例初始值 50 而非 40）——初始约束放 `init` 块或工厂函数",
       "evidence_action": "优先复跑该行承诺的完整示例；若环境不可得，删除绝对化结果并说明实际未验证范围。"
     },
     {
@@ -312,171 +136,6 @@
       "path": "04-multiplatform-apps/reference/library-guides/04-animation-gesture-libs.md",
       "line": 25,
       "source_excerpt": "- **worklet**：声明可运行在 UI 线程的小函数（`useAnimatedStyle` 回调、手势回调天然是 worklet）。worklet 里引用 JS 可变变量只拿到快照，跨线程通信必须经共享值或 `runOnJS`",
-      "evidence_action": "优先复跑该行承诺的完整示例；若环境不可得，删除绝对化结果并说明实际未验证范围。"
-    },
-    {
-      "priority": "P0",
-      "kind": "核心基础",
-      "task": "绑定命名验证证据，或把验证措辞收窄为可证明的范围",
-      "reason": "正文含有未绑定到该文件运行记录的验证性措辞；这不是自动技术错误结论。",
-      "module": "Rust / Cross-platform",
-      "path": "11-rust-cross-platform/basics/01-environment-setup.md",
-      "line": 223,
-      "source_excerpt": "> 以下两段示例均已在本机以 `rustc --edition 2024` 实测编译并运行通过。",
-      "evidence_action": "优先复跑该行承诺的完整示例；若环境不可得，删除绝对化结果并说明实际未验证范围。"
-    },
-    {
-      "priority": "P0",
-      "kind": "核心基础",
-      "task": "绑定命名验证证据，或把验证措辞收窄为可证明的范围",
-      "reason": "正文含有未绑定到该文件运行记录的验证性措辞；这不是自动技术错误结论。",
-      "module": "Rust / Cross-platform",
-      "path": "11-rust-cross-platform/basics/02-ownership-borrowing.md",
-      "line": 147,
-      "source_excerpt": "> 以下四段示例均已在本机以 `rustc --edition 2024` 实测编译并运行通过。",
-      "evidence_action": "优先复跑该行承诺的完整示例；若环境不可得，删除绝对化结果并说明实际未验证范围。"
-    },
-    {
-      "priority": "P0",
-      "kind": "核心基础",
-      "task": "绑定命名验证证据，或把验证措辞收窄为可证明的范围",
-      "reason": "正文含有未绑定到该文件运行记录的验证性措辞；这不是自动技术错误结论。",
-      "module": "Rust / Cross-platform",
-      "path": "11-rust-cross-platform/basics/03-structs-enums-patterns.md",
-      "line": 140,
-      "source_excerpt": "> 以下四段示例均已在本机以 `rustc --edition 2024` 实测编译并运行通过。",
-      "evidence_action": "优先复跑该行承诺的完整示例；若环境不可得，删除绝对化结果并说明实际未验证范围。"
-    },
-    {
-      "priority": "P0",
-      "kind": "核心基础",
-      "task": "绑定命名验证证据，或把验证措辞收窄为可证明的范围",
-      "reason": "正文含有未绑定到该文件运行记录的验证性措辞；这不是自动技术错误结论。",
-      "module": "Rust / Cross-platform",
-      "path": "11-rust-cross-platform/basics/04-traits-generics.md",
-      "line": 137,
-      "source_excerpt": "> 以下四段示例均已在本机以 `rustc --edition 2024` 实测编译并运行通过。",
-      "evidence_action": "优先复跑该行承诺的完整示例；若环境不可得，删除绝对化结果并说明实际未验证范围。"
-    },
-    {
-      "priority": "P0",
-      "kind": "核心基础",
-      "task": "绑定命名验证证据，或把验证措辞收窄为可证明的范围",
-      "reason": "正文含有未绑定到该文件运行记录的验证性措辞；这不是自动技术错误结论。",
-      "module": "Rust / Cross-platform",
-      "path": "11-rust-cross-platform/basics/05-error-handling.md",
-      "line": 135,
-      "source_excerpt": "> 示例一至示例四（纯标准库）均已在本机以 `rustc --edition 2024` 实测编译并运行通过；示例五、六依赖 crates.io 第三方库，说明见各节标注。",
-      "evidence_action": "优先复跑该行承诺的完整示例；若环境不可得，删除绝对化结果并说明实际未验证范围。"
-    },
-    {
-      "priority": "P0",
-      "kind": "核心基础",
-      "task": "绑定命名验证证据，或把验证措辞收窄为可证明的范围",
-      "reason": "正文含有未绑定到该文件运行记录的验证性措辞；这不是自动技术错误结论。",
-      "module": "Rust / Cross-platform",
-      "path": "11-rust-cross-platform/basics/08-smart-pointers.md",
-      "line": 135,
-      "source_excerpt": "**验证方法**: `should_panic` 测试通过（见示例六）。",
-      "evidence_action": "优先复跑该行承诺的完整示例；若环境不可得，删除绝对化结果并说明实际未验证范围。"
-    },
-    {
-      "priority": "P0",
-      "kind": "核心基础",
-      "task": "绑定命名验证证据，或把验证措辞收窄为可证明的范围",
-      "reason": "正文含有未绑定到该文件运行记录的验证性措辞；这不是自动技术错误结论。",
-      "module": "Rust / Cross-platform",
-      "path": "11-rust-cross-platform/reference/language-concepts/01-ownership-dictionary.md",
-      "line": 36,
-      "source_excerpt": "- [示例与编译失败演示](#-可运行示例)",
-      "evidence_action": "优先复跑该行承诺的完整示例；若环境不可得，删除绝对化结果并说明实际未验证范围。"
-    },
-    {
-      "priority": "P0",
-      "kind": "核心基础",
-      "task": "绑定命名验证证据，或把验证措辞收窄为可证明的范围",
-      "reason": "正文含有未绑定到该文件运行记录的验证性措辞；这不是自动技术错误结论。",
-      "module": "Rust / Cross-platform",
-      "path": "11-rust-cross-platform/reference/language-concepts/01-ownership-dictionary.md",
-      "line": 139,
-      "source_excerpt": "| 对象 | 顺序 | 实测 |",
-      "evidence_action": "优先复跑该行承诺的完整示例；若环境不可得，删除绝对化结果并说明实际未验证范围。"
-    },
-    {
-      "priority": "P0",
-      "kind": "核心基础",
-      "task": "绑定命名验证证据，或把验证措辞收窄为可证明的范围",
-      "reason": "正文含有未绑定到该文件运行记录的验证性措辞；这不是自动技术错误结论。",
-      "module": "Rust / Cross-platform",
-      "path": "11-rust-cross-platform/reference/language-concepts/01-ownership-dictionary.md",
-      "line": 175,
-      "source_excerpt": "## 💡 可运行示例",
-      "evidence_action": "优先复跑该行承诺的完整示例；若环境不可得，删除绝对化结果并说明实际未验证范围。"
-    },
-    {
-      "priority": "P0",
-      "kind": "核心基础",
-      "task": "绑定命名验证证据，或把验证措辞收窄为可证明的范围",
-      "reason": "正文含有未绑定到该文件运行记录的验证性措辞；这不是自动技术错误结论。",
-      "module": "Rust / Cross-platform",
-      "path": "11-rust-cross-platform/reference/language-concepts/02-trait-objects.md",
-      "line": 37,
-      "source_excerpt": "- [示例与编译失败演示](#-可运行示例)",
-      "evidence_action": "优先复跑该行承诺的完整示例；若环境不可得，删除绝对化结果并说明实际未验证范围。"
-    },
-    {
-      "priority": "P0",
-      "kind": "核心基础",
-      "task": "绑定命名验证证据，或把验证措辞收窄为可证明的范围",
-      "reason": "正文含有未绑定到该文件运行记录的验证性措辞；这不是自动技术错误结论。",
-      "module": "Rust / Cross-platform",
-      "path": "11-rust-cross-platform/reference/language-concepts/02-trait-objects.md",
-      "line": 67,
-      "source_excerpt": "**典型非兼容 trait 的替代模式**: `Clone` 因 `clone(&self) -> Self` 不可直接 dyn；惯用出口是自定义 `fn clone_box(&self) -> Box<dyn Trait>`（返回 Box<dyn Trait> 才擦除了 Self；返回 Box<Self> 仍可能破坏 dyn 兼容性），为 `Box<dyn Trait>` 实现 `Clone` 委托之——完整可运行写法见示例五。",
-      "evidence_action": "优先复跑该行承诺的完整示例；若环境不可得，删除绝对化结果并说明实际未验证范围。"
-    },
-    {
-      "priority": "P0",
-      "kind": "核心基础",
-      "task": "绑定命名验证证据，或把验证措辞收窄为可证明的范围",
-      "reason": "正文含有未绑定到该文件运行记录的验证性措辞；这不是自动技术错误结论。",
-      "module": "Rust / Cross-platform",
-      "path": "11-rust-cross-platform/reference/language-concepts/02-trait-objects.md",
-      "line": 146,
-      "source_excerpt": "## 💡 可运行示例",
-      "evidence_action": "优先复跑该行承诺的完整示例；若环境不可得，删除绝对化结果并说明实际未验证范围。"
-    },
-    {
-      "priority": "P0",
-      "kind": "核心基础",
-      "task": "绑定命名验证证据，或把验证措辞收窄为可证明的范围",
-      "reason": "正文含有未绑定到该文件运行记录的验证性措辞；这不是自动技术错误结论。",
-      "module": "Rust / Cross-platform",
-      "path": "11-rust-cross-platform/reference/language-concepts/03-const-generics.md",
-      "line": 36,
-      "source_excerpt": "- [示例与编译失败演示](#-可运行示例)",
-      "evidence_action": "优先复跑该行承诺的完整示例；若环境不可得，删除绝对化结果并说明实际未验证范围。"
-    },
-    {
-      "priority": "P0",
-      "kind": "核心基础",
-      "task": "绑定命名验证证据，或把验证措辞收窄为可证明的范围",
-      "reason": "正文含有未绑定到该文件运行记录的验证性措辞；这不是自动技术错误结论。",
-      "module": "Rust / Cross-platform",
-      "path": "11-rust-cross-platform/reference/language-concepts/03-const-generics.md",
-      "line": 49,
-      "source_excerpt": "// 声明位置示意（可运行完整示例见下文示例一/示例二/示例三）",
-      "evidence_action": "优先复跑该行承诺的完整示例；若环境不可得，删除绝对化结果并说明实际未验证范围。"
-    },
-    {
-      "priority": "P0",
-      "kind": "核心基础",
-      "task": "绑定命名验证证据，或把验证措辞收窄为可证明的范围",
-      "reason": "正文含有未绑定到该文件运行记录的验证性措辞；这不是自动技术错误结论。",
-      "module": "Rust / Cross-platform",
-      "path": "11-rust-cross-platform/reference/language-concepts/03-const-generics.md",
-      "line": 150,
-      "source_excerpt": "## 💡 可运行示例",
       "evidence_action": "优先复跑该行承诺的完整示例；若环境不可得，删除绝对化结果并说明实际未验证范围。"
     },
     {
@@ -2069,17 +1728,6 @@
       "task": "为文档选择一个最小可复现案例并记录限定运行证据",
       "reason": "当前没有与此文件绑定的命名运行或语法证据。",
       "module": "Kotlin / Compose",
-      "path": "05-kotlin-compose/basics/03-kotlin-syntax-essentials.md",
-      "line": null,
-      "source_excerpt": null,
-      "evidence_action": "抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。"
-    },
-    {
-      "priority": "P1",
-      "kind": "核心基础",
-      "task": "为文档选择一个最小可复现案例并记录限定运行证据",
-      "reason": "当前没有与此文件绑定的命名运行或语法证据。",
-      "module": "Kotlin / Compose",
       "path": "05-kotlin-compose/basics/04-composables-state.md",
       "line": null,
       "source_excerpt": null,
@@ -2708,17 +2356,6 @@
       "reason": "当前没有与此文件绑定的命名运行或语法证据。",
       "module": "Node.js",
       "path": "09-nodejs-backend/reference/library-guides/07-process-lifecycle.md",
-      "line": null,
-      "source_excerpt": null,
-      "evidence_action": "抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。"
-    },
-    {
-      "priority": "P1",
-      "kind": "核心基础",
-      "task": "为文档选择一个最小可复现案例并记录限定运行证据",
-      "reason": "当前没有与此文件绑定的命名运行或语法证据。",
-      "module": "Node.js",
-      "path": "09-nodejs-backend/reference/library-guides/09-zlib.md",
       "line": null,
       "source_excerpt": null,
       "evidence_action": "抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。"
@@ -3994,17 +3631,6 @@
       "task": "为文档选择一个最小可复现案例并记录限定运行证据",
       "reason": "当前没有与此文件绑定的命名运行或语法证据。",
       "module": "Swift / SwiftUI",
-      "path": "06-swift-swiftui/basics/03-swift-syntax-essentials.md",
-      "line": null,
-      "source_excerpt": null,
-      "evidence_action": "抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。"
-    },
-    {
-      "priority": "P1",
-      "kind": "核心基础",
-      "task": "为文档选择一个最小可复现案例并记录限定运行证据",
-      "reason": "当前没有与此文件绑定的命名运行或语法证据。",
-      "module": "Swift / SwiftUI",
       "path": "06-swift-swiftui/basics/04-views-state.md",
       "line": null,
       "source_excerpt": null,
@@ -4644,28 +4270,6 @@
       "reason": "当前没有与此文件绑定的命名运行或语法证据。",
       "module": "Java",
       "path": "08-java-revisited/projects/01-todo-api.md",
-      "line": null,
-      "source_excerpt": null,
-      "evidence_action": "抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。"
-    },
-    {
-      "priority": "P1",
-      "kind": "首项目",
-      "task": "保留诚实的验证边界，并在补证据时决定是否增加最小练习",
-      "reason": "这行是未验证范围或验证步骤的披露，不是声称已经通过的证据。",
-      "module": "Kotlin / Compose",
-      "path": "05-kotlin-compose/basics/08-first-project.md",
-      "line": 97,
-      "source_excerpt": "`libs.versions.toml`（以下是一组教学基线；开始实际项目时，优先使用仓库锁定且已验证的兼容组合。不要因为“最新稳定版”就单独升级某一个插件或库）：",
-      "evidence_action": "保持已有边界说明；若新增示例，记录工具链、命令、预期行为和未覆盖范围。"
-    },
-    {
-      "priority": "P1",
-      "kind": "首项目",
-      "task": "为文档选择一个最小可复现案例并记录限定运行证据",
-      "reason": "当前没有与此文件绑定的命名运行或语法证据。",
-      "module": "Kotlin / Compose",
-      "path": "05-kotlin-compose/basics/08-first-project.md",
       "line": null,
       "source_excerpt": null,
       "evidence_action": "抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。"

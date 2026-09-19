@@ -17,7 +17,7 @@ Compose 代码常混合 lambda、命名参数和属性委托。先识别“传�
 >
 > **目标读者**: 有其他语言基础（Go/Java/JS/Python）、Kotlin 经验有限但即将投入 Compose 开发的学习者
 >
-> **前置知识**: 已运行第一个 Compose 应用（见[第一个 Compose 应用](./02-first-compose-app.md)）
+> **前置知识**: 会变量、函数与条件判断即可。先用 Kotlin/JVM 学本页语言语义，再到[第一个 Compose 应用](./02-first-compose-app.md)；Compose 片段需要 Android 工程，不能放进普通 JVM 文件。
 
 <details>
 <summary>文档信息（用途、难度与维护记录）</summary>
@@ -68,7 +68,7 @@ fun add(a: Int, b: Int = 10): Int {   // 参数可带默认值，返回类型在
 fun double(x: Int): Int = x * 2       // 单表达式函数：省略 return 与花括号
 ```
 
-与 Go 的关键差异：类型写在**后面**、用冒号分隔；没有分号；参数默认可空性为**非空**。
+类型写在变量名后面，用冒号分隔；分号通常可以省略；`String` 与 `String?` 是不同类型。`val` 只禁止重新赋值，不保证其引用的列表或对象不可变；`var` 本身也不会触发 Compose 重组，界面要观察 `State`、`StateFlow` 等状态容器。
 
 ---
 
@@ -107,18 +107,18 @@ data class Task(
     val done: Boolean = false
 )
 
-// copy：基于现有实例生成"改动部分字段"的新实例（不可变更新）
+// copy：生成修改了部分构造属性的新实例；这是浅拷贝
 val t1 = Task(id = 1, title = "学 Compose")
 val t2 = t1.copy(done = true)
 
 // 解构声明
 val (id, title, done) = t2
 
-// data class 的 equals 按字段比较
+// 默认 equals 比较主构造函数中的属性，不包含类体里另声明的属性
 println(t1 == Task(1, "学 Compose"))   // true
 ```
 
-为什么 Compose 喜欢 data class：重组时靠 `equals` 快速判断"状态没变就跳过刷新"，见[状态与重组](./04-composables-state.md)。
+`data class` 适合把相关状态作为一个值传递，但它不自动让对象不可变，也不保证 Compose 跳过重组。`copy` 内含的可变列表仍共享；Compose 是否跳过还取决于状态观察、参数稳定性与编译器模式。先做到“创建新状态后交给可观察容器”，再根据性能证据优化。参见 [Kotlin data class 规则](https://kotlinlang.org/docs/data-classes.html) 和 [Compose strong skipping](https://developer.android.com/develop/ui/compose/performance/stability/strongskipping)。
 
 ---
 
@@ -141,7 +141,7 @@ fun render(state: UiState): String = when (state) {
 }
 ```
 
-与 `enum` 的区别：enum 的每个值都是单例常量，而 sealed 的子类可以携带不同字段（如 `Error(message)`）。网络/UI 状态建模几乎总是用 sealed。
+`enum` 的每个条目是固定实例，也可以声明属性和方法；`sealed` 的不同子类型可以拥有不同结构和任意多个实例，例如不同错误消息。只有固定选项时用 enum；不同状态所需的数据不同，用 sealed 可以减少无效组合。
 
 > 📖 密封类、可见性等修饰符的完整字典见 [Kotlin 关键字详解](../reference/language-concepts/01-kotlin-keywords.md)。
 
@@ -153,10 +153,12 @@ fun render(state: UiState): String = when (state) {
 
 ```kotlin
 // 给 String 添加扩展函数
-fun String.truncate(max: Int): String =
-    if (length <= max) this else take(max) + "..."
+fun String.truncate(max: Int): String {
+    require(max >= 0) { "max must be non-negative" }
+    return if (length <= max) this else take(max) + "..."
+}
 
-println("Jetpack Compose".truncate(10))   // Jetpack C...
+println("Jetpack Compose".truncate(10))   // Jetpack Co...
 
 // Compose 生态实例：给 Modifier 链式扩展（这就是 Modifier 的工作原理）
 fun Modifier.cardStyle(): Modifier = this
@@ -164,7 +166,7 @@ fun Modifier.cardStyle(): Modifier = this
     .clip(RoundedCornerShape(12.dp))
 ```
 
-调用时与成员方法毫无区别，IDE 会用斜体图标提示。阅读 Compose 代码时会遇到大量 `Modifier.xxx()` 扩展与 `Context.toast()` 之类的工具扩展。
+扩展函数的调用外形像成员，但它按接收者的声明类型静态解析，不能覆盖真正成员，也不能访问类的私有成员。这里的 `length`/`take` 按 UTF-16 单元计数，不能作为面向任意 emoji 的用户可见截断器。规则见 [Kotlin 扩展文档](https://kotlinlang.org/docs/extensions.html)。
 
 ---
 
@@ -176,7 +178,7 @@ fun Modifier.cardStyle(): Modifier = this
 val sum: (Int, Int) -> Int = { a, b -> a + b }
 
 // 尾随 lambda：函数的最后一个参数是 lambda 时，可把 lambda 挪到括号外
-fun onClick(handler: () -> Unit) { /* ... */ }
+fun onClick(handler: () -> Unit) { handler() }
 onClick { println("clicked") }        // 等价于 onClick(handler = { ... })
 
 // 单参数 lambda 默认命名为 it
@@ -195,7 +197,7 @@ Button(onClick = { /* 处理点击 */ }) {
 
 ## 🧰 作用域函数速览
 
-五个作用域函数只在"如何引用对象"上有差别，先记最常用的两个：
+作用域函数同时区别接收者写法、返回值与调用形式；不要只记 `this`/`it` 而忽略表达式的最终结果：
 
 | 函数 | 引用方式 | 返回值 | 典型场景 |
 |------|----------|--------|----------|
@@ -219,6 +221,39 @@ val intent = Intent(context, DetailActivity::class.java).apply {
 
 ## 🎯 练习与实践
 
+### 一个不用 Android 的完整验收程序
+
+保存为 `Main.kt`，运行 `kotlinc Main.kt -include-runtime -d main.jar`、`java -jar main.jar`。下面的断言把 `val`、浅拷贝、默认值和回调时序放在一起，任何错误都会使程序失败。只有此完整程序绑定到[本轮运行证据](../../shared-resources/tools/document-quality/reports/kotlin-swift-core-validation.md)，上面的界面片段仍需在 Compose 工程验收。
+
+<!-- dq-case: kotlin-syntax-contracts -->
+```kotlin
+data class Draft(val title: String, val tags: MutableList<String>)
+
+fun normalizeTitle(raw: String?): String? = raw?.trim()?.takeIf { it.isNotEmpty() }
+fun runAction(action: () -> Unit) { action() }
+
+fun main() {
+    val original = Draft("read", mutableListOf("kotlin"))
+    val shallow = original.copy(title = "write")
+    shallow.tags.add("shared")
+    check(original.title == "read")
+    check(original.tags == listOf("kotlin", "shared"))
+    val detached = original.copy(tags = original.tags.toMutableList())
+    detached.tags.clear()
+    check(original.tags.size == 2)
+    check(normalizeTitle(null) == null)
+    check(normalizeTitle("   ") == null)
+    check(normalizeTitle(" learn ") == "learn")
+    var calls = 0
+    val callback: () -> Unit = { calls += 1 }
+    check(calls == 0)
+    runAction(callback)
+    check(calls == 1)
+    // runAction(callback()) 不编译：callback() 已执行并返回 Unit，不是函数。
+    println("Kotlin syntax contracts passed")
+}
+```
+
 ### 基础练习
 - [ ] 写一个 `data class User(name: String, age: Int)`，练习 `copy` 与解构
 - [ ] 把一个 `String?` 依次用 `?.`、`?:`、`!!` 三种方式处理，观察编译器提示
@@ -228,7 +263,7 @@ val intent = Intent(context, DetailActivity::class.java).apply {
 ### 进阶挑战
 - [ ] 不查资料，解释 `Button(onClick = { ... }) { Text("OK") }` 中两个 lambda 各自对应哪个参数
 - [ ] 用 `apply` 重写一段"创建后逐个 set 属性"的 Java 风格代码
-- [ ] 思考：为什么 Compose 中的 UI 状态推荐 `data class` + `val`，而不是一堆 `var`？（提示：equals 与重组）
+- [ ] 给 `Draft` 的 `tags` 增加元素，解释为什么 `copy` 后原对象也变了；然后改为传入独立列表，并通过上面的断言。
 
 ---
 

@@ -7,11 +7,11 @@
 | 指标 | 数量 |
 |---|---:|
 | 纳入模块文档 | 641 |
-| 主状态：not_verified | 569 |
-| 主状态：runtime | 72 |
-| 验证措辞出现次数 | 259 |
-| 措辞分类：source_has_limited_runtime_evidence | 101 |
-| 措辞分类：unbound_verification_wording | 158 |
+| 主状态：not_verified | 565 |
+| 主状态：runtime | 76 |
+| 验证措辞出现次数 | 200 |
+| 措辞分类：source_has_limited_runtime_evidence | 74 |
+| 措辞分类：unbound_verification_wording | 126 |
 
 ## 语法级覆盖（不能当作运行覆盖）
 
@@ -291,12 +291,12 @@
 | Kotlin / Compose | [05-kotlin-compose/Android原生开发学习路线.md](../../../../05-kotlin-compose/Android原生开发学习路线.md) | `not_verified` | 0 | 0 |
 | Kotlin / Compose | [05-kotlin-compose/basics/01-environment-setup.md](../../../../05-kotlin-compose/basics/01-environment-setup.md) | `not_verified` | 0 | 0 |
 | Kotlin / Compose | [05-kotlin-compose/basics/02-first-compose-app.md](../../../../05-kotlin-compose/basics/02-first-compose-app.md) | `not_verified` | 0 | 1 |
-| Kotlin / Compose | [05-kotlin-compose/basics/03-kotlin-syntax-essentials.md](../../../../05-kotlin-compose/basics/03-kotlin-syntax-essentials.md) | `not_verified` | 0 | 1 |
+| Kotlin / Compose | [05-kotlin-compose/basics/03-kotlin-syntax-essentials.md](../../../../05-kotlin-compose/basics/03-kotlin-syntax-essentials.md) | `runtime` | 1 | 0 |
 | Kotlin / Compose | [05-kotlin-compose/basics/04-composables-state.md](../../../../05-kotlin-compose/basics/04-composables-state.md) | `not_verified` | 0 | 0 |
 | Kotlin / Compose | [05-kotlin-compose/basics/05-layouts.md](../../../../05-kotlin-compose/basics/05-layouts.md) | `not_verified` | 0 | 0 |
 | Kotlin / Compose | [05-kotlin-compose/basics/06-navigation.md](../../../../05-kotlin-compose/basics/06-navigation.md) | `not_verified` | 0 | 1 |
 | Kotlin / Compose | [05-kotlin-compose/basics/07-coroutines-flow-basics.md](../../../../05-kotlin-compose/basics/07-coroutines-flow-basics.md) | `not_verified` | 0 | 0 |
-| Kotlin / Compose | [05-kotlin-compose/basics/08-first-project.md](../../../../05-kotlin-compose/basics/08-first-project.md) | `not_verified` | 0 | 1 |
+| Kotlin / Compose | [05-kotlin-compose/basics/08-first-project.md](../../../../05-kotlin-compose/basics/08-first-project.md) | `runtime` | 1 | 2 |
 | Kotlin / Compose | [05-kotlin-compose/deployment/01-release-build.md](../../../../05-kotlin-compose/deployment/01-release-build.md) | `not_verified` | 0 | 0 |
 | Kotlin / Compose | [05-kotlin-compose/deployment/02-play-store-release.md](../../../../05-kotlin-compose/deployment/02-play-store-release.md) | `not_verified` | 0 | 0 |
 | Kotlin / Compose | [05-kotlin-compose/deployment/03-ci-cd-observability.md](../../../../05-kotlin-compose/deployment/03-ci-cd-observability.md) | `not_verified` | 0 | 0 |
@@ -320,7 +320,7 @@
 | Kotlin / Compose | [05-kotlin-compose/reference/framework-essentials/08-composition-model.md](../../../../05-kotlin-compose/reference/framework-essentials/08-composition-model.md) | `not_verified` | 0 | 1 |
 | Kotlin / Compose | [05-kotlin-compose/reference/framework-essentials/09-gestures.md](../../../../05-kotlin-compose/reference/framework-essentials/09-gestures.md) | `not_verified` | 0 | 1 |
 | Kotlin / Compose | [05-kotlin-compose/reference/framework-essentials/10-canvas-drawing.md](../../../../05-kotlin-compose/reference/framework-essentials/10-canvas-drawing.md) | `not_verified` | 0 | 1 |
-| Kotlin / Compose | [05-kotlin-compose/reference/language-concepts/01-kotlin-keywords.md](../../../../05-kotlin-compose/reference/language-concepts/01-kotlin-keywords.md) | `not_verified` | 0 | 18 |
+| Kotlin / Compose | [05-kotlin-compose/reference/language-concepts/01-kotlin-keywords.md](../../../../05-kotlin-compose/reference/language-concepts/01-kotlin-keywords.md) | `not_verified` | 0 | 3 |
 | Kotlin / Compose | [05-kotlin-compose/reference/language-concepts/02-null-safety-collections.md](../../../../05-kotlin-compose/reference/language-concepts/02-null-safety-collections.md) | `not_verified` | 0 | 0 |
 | Kotlin / Compose | [05-kotlin-compose/reference/language-concepts/03-coroutines-flow-api.md](../../../../05-kotlin-compose/reference/language-concepts/03-coroutines-flow-api.md) | `not_verified` | 0 | 0 |
 | Kotlin / Compose | [05-kotlin-compose/reference/language-concepts/04-compose-state-api.md](../../../../05-kotlin-compose/reference/language-concepts/04-compose-state-api.md) | `not_verified` | 0 | 0 |
@@ -345,7 +345,7 @@
 | Swift / SwiftUI | [06-swift-swiftui/advanced-topics/security/01-security-practices.md](../../../../06-swift-swiftui/advanced-topics/security/01-security-practices.md) | `not_verified` | 0 | 0 |
 | Swift / SwiftUI | [06-swift-swiftui/basics/01-environment-setup.md](../../../../06-swift-swiftui/basics/01-environment-setup.md) | `not_verified` | 0 | 0 |
 | Swift / SwiftUI | [06-swift-swiftui/basics/02-first-swiftui-app.md](../../../../06-swift-swiftui/basics/02-first-swiftui-app.md) | `not_verified` | 0 | 0 |
-| Swift / SwiftUI | [06-swift-swiftui/basics/03-swift-syntax-essentials.md](../../../../06-swift-swiftui/basics/03-swift-syntax-essentials.md) | `not_verified` | 0 | 0 |
+| Swift / SwiftUI | [06-swift-swiftui/basics/03-swift-syntax-essentials.md](../../../../06-swift-swiftui/basics/03-swift-syntax-essentials.md) | `runtime` | 1 | 0 |
 | Swift / SwiftUI | [06-swift-swiftui/basics/04-views-state.md](../../../../06-swift-swiftui/basics/04-views-state.md) | `not_verified` | 0 | 0 |
 | Swift / SwiftUI | [06-swift-swiftui/basics/05-layouts.md](../../../../06-swift-swiftui/basics/05-layouts.md) | `not_verified` | 0 | 0 |
 | Swift / SwiftUI | [06-swift-swiftui/basics/06-navigation.md](../../../../06-swift-swiftui/basics/06-navigation.md) | `not_verified` | 0 | 0 |
@@ -553,12 +553,12 @@
 | Node.js | [09-nodejs-backend/reference/library-guides/01-core-modules.md](../../../../09-nodejs-backend/reference/library-guides/01-core-modules.md) | `runtime` | 1 | 0 |
 | Node.js | [09-nodejs-backend/reference/library-guides/02-ecosystem-libs.md](../../../../09-nodejs-backend/reference/library-guides/02-ecosystem-libs.md) | `not_verified` | 0 | 0 |
 | Node.js | [09-nodejs-backend/reference/library-guides/03-crypto.md](../../../../09-nodejs-backend/reference/library-guides/03-crypto.md) | `not_verified` | 0 | 0 |
-| Node.js | [09-nodejs-backend/reference/library-guides/04-child-process.md](../../../../09-nodejs-backend/reference/library-guides/04-child-process.md) | `runtime` | 1 | 2 |
+| Node.js | [09-nodejs-backend/reference/library-guides/04-child-process.md](../../../../09-nodejs-backend/reference/library-guides/04-child-process.md) | `runtime` | 3 | 1 |
 | Node.js | [09-nodejs-backend/reference/library-guides/05-buffer.md](../../../../09-nodejs-backend/reference/library-guides/05-buffer.md) | `runtime` | 1 | 3 |
 | Node.js | [09-nodejs-backend/reference/library-guides/06-util.md](../../../../09-nodejs-backend/reference/library-guides/06-util.md) | `not_verified` | 0 | 0 |
 | Node.js | [09-nodejs-backend/reference/library-guides/07-process-lifecycle.md](../../../../09-nodejs-backend/reference/library-guides/07-process-lifecycle.md) | `not_verified` | 0 | 0 |
 | Node.js | [09-nodejs-backend/reference/library-guides/08-test-runner.md](../../../../09-nodejs-backend/reference/library-guides/08-test-runner.md) | `runtime` | 1 | 6 |
-| Node.js | [09-nodejs-backend/reference/library-guides/09-zlib.md](../../../../09-nodejs-backend/reference/library-guides/09-zlib.md) | `not_verified` | 0 | 0 |
+| Node.js | [09-nodejs-backend/reference/library-guides/09-zlib.md](../../../../09-nodejs-backend/reference/library-guides/09-zlib.md) | `runtime` | 2 | 0 |
 | Node.js | [09-nodejs-backend/reference/quick-references/01-node-cheatsheet.md](../../../../09-nodejs-backend/reference/quick-references/01-node-cheatsheet.md) | `not_verified` | 0 | 0 |
 | Node.js | [09-nodejs-backend/reference/quick-references/02-troubleshooting.md](../../../../09-nodejs-backend/reference/quick-references/02-troubleshooting.md) | `not_verified` | 0 | 0 |
 | Node.js | [09-nodejs-backend/testing/01-unit-testing.md](../../../../09-nodejs-backend/testing/01-unit-testing.md) | `not_verified` | 0 | 0 |
@@ -613,8 +613,8 @@
 | Python | [10-python-discovery/reference/library-guides/02-ecosystem-libs.md](../../../../10-python-discovery/reference/library-guides/02-ecosystem-libs.md) | `not_verified` | 0 | 0 |
 | Python | [10-python-discovery/reference/library-guides/03-pytest-testing.md](../../../../10-python-discovery/reference/library-guides/03-pytest-testing.md) | `runtime` | 1 | 1 |
 | Python | [10-python-discovery/reference/library-guides/04-os-sys.md](../../../../10-python-discovery/reference/library-guides/04-os-sys.md) | `runtime` | 1 | 5 |
-| Python | [10-python-discovery/reference/library-guides/05-enum-module.md](../../../../10-python-discovery/reference/library-guides/05-enum-module.md) | `runtime` | 1 | 17 |
-| Python | [10-python-discovery/reference/library-guides/06-functools-subprocess.md](../../../../10-python-discovery/reference/library-guides/06-functools-subprocess.md) | `runtime` | 1 | 11 |
+| Python | [10-python-discovery/reference/library-guides/05-enum-module.md](../../../../10-python-discovery/reference/library-guides/05-enum-module.md) | `runtime` | 3 | 0 |
+| Python | [10-python-discovery/reference/library-guides/06-functools-subprocess.md](../../../../10-python-discovery/reference/library-guides/06-functools-subprocess.md) | `runtime` | 4 | 0 |
 | Python | [10-python-discovery/reference/quick-references/01-python-cheatsheet.md](../../../../10-python-discovery/reference/quick-references/01-python-cheatsheet.md) | `not_verified` | 0 | 0 |
 | Python | [10-python-discovery/reference/quick-references/02-troubleshooting.md](../../../../10-python-discovery/reference/quick-references/02-troubleshooting.md) | `not_verified` | 0 | 0 |
 | Python | [10-python-discovery/testing/01-unit-testing.md](../../../../10-python-discovery/testing/01-unit-testing.md) | `not_verified` | 0 | 0 |
@@ -624,14 +624,14 @@
 | Rust / Cross-platform | [11-rust-cross-platform/advanced-topics/02-ffi-bindgen.md](../../../../11-rust-cross-platform/advanced-topics/02-ffi-bindgen.md) | `not_verified` | 0 | 4 |
 | Rust / Cross-platform | [11-rust-cross-platform/advanced-topics/03-wasm32-target.md](../../../../11-rust-cross-platform/advanced-topics/03-wasm32-target.md) | `not_verified` | 0 | 0 |
 | Rust / Cross-platform | [11-rust-cross-platform/advanced-topics/04-security-practices.md](../../../../11-rust-cross-platform/advanced-topics/04-security-practices.md) | `not_verified` | 0 | 0 |
-| Rust / Cross-platform | [11-rust-cross-platform/basics/01-environment-setup.md](../../../../11-rust-cross-platform/basics/01-environment-setup.md) | `not_verified` | 0 | 2 |
-| Rust / Cross-platform | [11-rust-cross-platform/basics/02-ownership-borrowing.md](../../../../11-rust-cross-platform/basics/02-ownership-borrowing.md) | `not_verified` | 0 | 1 |
-| Rust / Cross-platform | [11-rust-cross-platform/basics/03-structs-enums-patterns.md](../../../../11-rust-cross-platform/basics/03-structs-enums-patterns.md) | `not_verified` | 0 | 1 |
-| Rust / Cross-platform | [11-rust-cross-platform/basics/04-traits-generics.md](../../../../11-rust-cross-platform/basics/04-traits-generics.md) | `not_verified` | 0 | 1 |
-| Rust / Cross-platform | [11-rust-cross-platform/basics/05-error-handling.md](../../../../11-rust-cross-platform/basics/05-error-handling.md) | `not_verified` | 0 | 3 |
+| Rust / Cross-platform | [11-rust-cross-platform/basics/01-environment-setup.md](../../../../11-rust-cross-platform/basics/01-environment-setup.md) | `not_verified` | 0 | 1 |
+| Rust / Cross-platform | [11-rust-cross-platform/basics/02-ownership-borrowing.md](../../../../11-rust-cross-platform/basics/02-ownership-borrowing.md) | `not_verified` | 0 | 0 |
+| Rust / Cross-platform | [11-rust-cross-platform/basics/03-structs-enums-patterns.md](../../../../11-rust-cross-platform/basics/03-structs-enums-patterns.md) | `not_verified` | 0 | 0 |
+| Rust / Cross-platform | [11-rust-cross-platform/basics/04-traits-generics.md](../../../../11-rust-cross-platform/basics/04-traits-generics.md) | `not_verified` | 0 | 0 |
+| Rust / Cross-platform | [11-rust-cross-platform/basics/05-error-handling.md](../../../../11-rust-cross-platform/basics/05-error-handling.md) | `not_verified` | 0 | 2 |
 | Rust / Cross-platform | [11-rust-cross-platform/basics/06-collections-iterators.md](../../../../11-rust-cross-platform/basics/06-collections-iterators.md) | `not_verified` | 0 | 0 |
 | Rust / Cross-platform | [11-rust-cross-platform/basics/07-lifetimes.md](../../../../11-rust-cross-platform/basics/07-lifetimes.md) | `not_verified` | 0 | 0 |
-| Rust / Cross-platform | [11-rust-cross-platform/basics/08-smart-pointers.md](../../../../11-rust-cross-platform/basics/08-smart-pointers.md) | `not_verified` | 0 | 1 |
+| Rust / Cross-platform | [11-rust-cross-platform/basics/08-smart-pointers.md](../../../../11-rust-cross-platform/basics/08-smart-pointers.md) | `not_verified` | 0 | 0 |
 | Rust / Cross-platform | [11-rust-cross-platform/basics/09-concurrency-async.md](../../../../11-rust-cross-platform/basics/09-concurrency-async.md) | `not_verified` | 0 | 1 |
 | Rust / Cross-platform | [11-rust-cross-platform/basics/10-cargo-testing.md](../../../../11-rust-cross-platform/basics/10-cargo-testing.md) | `not_verified` | 0 | 0 |
 | Rust / Cross-platform | [11-rust-cross-platform/deployment/01-cross-compilation-targets.md](../../../../11-rust-cross-platform/deployment/01-cross-compilation-targets.md) | `not_verified` | 0 | 1 |
@@ -655,9 +655,9 @@
 | Rust / Cross-platform | [11-rust-cross-platform/reference/framework-essentials/09-tauri-2-essentials.md](../../../../11-rust-cross-platform/reference/framework-essentials/09-tauri-2-essentials.md) | `not_verified` | 0 | 0 |
 | Rust / Cross-platform | [11-rust-cross-platform/reference/framework-essentials/10-tauri-ipc-commands.md](../../../../11-rust-cross-platform/reference/framework-essentials/10-tauri-ipc-commands.md) | `not_verified` | 0 | 0 |
 | Rust / Cross-platform | [11-rust-cross-platform/reference/framework-essentials/11-axum-essentials.md](../../../../11-rust-cross-platform/reference/framework-essentials/11-axum-essentials.md) | `not_verified` | 0 | 0 |
-| Rust / Cross-platform | [11-rust-cross-platform/reference/language-concepts/01-ownership-dictionary.md](../../../../11-rust-cross-platform/reference/language-concepts/01-ownership-dictionary.md) | `not_verified` | 0 | 3 |
-| Rust / Cross-platform | [11-rust-cross-platform/reference/language-concepts/02-trait-objects.md](../../../../11-rust-cross-platform/reference/language-concepts/02-trait-objects.md) | `not_verified` | 0 | 3 |
-| Rust / Cross-platform | [11-rust-cross-platform/reference/language-concepts/03-const-generics.md](../../../../11-rust-cross-platform/reference/language-concepts/03-const-generics.md) | `not_verified` | 0 | 4 |
+| Rust / Cross-platform | [11-rust-cross-platform/reference/language-concepts/01-ownership-dictionary.md](../../../../11-rust-cross-platform/reference/language-concepts/01-ownership-dictionary.md) | `not_verified` | 0 | 0 |
+| Rust / Cross-platform | [11-rust-cross-platform/reference/language-concepts/02-trait-objects.md](../../../../11-rust-cross-platform/reference/language-concepts/02-trait-objects.md) | `not_verified` | 0 | 0 |
+| Rust / Cross-platform | [11-rust-cross-platform/reference/language-concepts/03-const-generics.md](../../../../11-rust-cross-platform/reference/language-concepts/03-const-generics.md) | `not_verified` | 0 | 1 |
 | Rust / Cross-platform | [11-rust-cross-platform/reference/language-concepts/04-advanced-lifetimes.md](../../../../11-rust-cross-platform/reference/language-concepts/04-advanced-lifetimes.md) | `not_verified` | 0 | 13 |
 | Rust / Cross-platform | [11-rust-cross-platform/reference/language-concepts/05-macros.md](../../../../11-rust-cross-platform/reference/language-concepts/05-macros.md) | `not_verified` | 0 | 1 |
 | Rust / Cross-platform | [11-rust-cross-platform/reference/language-concepts/06-unsafe.md](../../../../11-rust-cross-platform/reference/language-concepts/06-unsafe.md) | `not_verified` | 0 | 1 |
