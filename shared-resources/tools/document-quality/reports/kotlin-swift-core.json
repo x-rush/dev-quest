@@ -25,7 +25,7 @@
     {
       "case": "kotlin-note-rules",
       "source": "05-kotlin-compose/basics/08-first-project.md",
-      "source_sha256": "c153bbf835a6a4068d723fc371b188b14158e82e924105286dccafddda2ef1cc",
+      "source_sha256": "5ae10b427dcee3c64c1f8f1617b55248966ea681f39c9ab9ab165107d08902e7",
       "extracted_code_sha256": "585ced0c954823020463566d887c68d9ba167553e796c3f8abfe9bccbb9f08a4",
       "extracted_code": "data class NoteDraft(val title: String, val content: String)\n\nfun validateNote(title: String, content: String): NoteDraft {\n    val normalized = title.trim()\n    require(normalized.isNotEmpty()) { \"标题不能为空\" }\n    require(normalized.length <= 120) { \"标题最多 120 个 UTF-16 单元\" }\n    require(content.length <= 10_000) { \"内容最多 10000 个 UTF-16 单元\" }\n    return NoteDraft(normalized, content)\n}\n\nfun main() {\n    check(validateNote(\"  hello  \", \" body \") == NoteDraft(\"hello\", \" body \"))\n    check(validateNote(\"a\".repeat(120), \"b\".repeat(10_000)).title.length == 120)\n    for ((title, body) in listOf(\"  \" to \"ok\", \"a\".repeat(121) to \"\", \"ok\" to \"b\".repeat(10_001))) {\n        check(runCatching { validateNote(title, body) }.exceptionOrNull() is IllegalArgumentException)\n    }\n    println(\"Kotlin note rules passed\")\n}\n",
       "image": "dev-quest-validation:local",
