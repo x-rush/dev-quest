@@ -59,11 +59,11 @@
 
 ### 概念二：rust-cache 与缓存失效
 
-**定义**: [Swatinem/rust-cache](https://github.com/Swatinem/rust-cache) 是 Rust CI 的事实标准缓存 action，缓存对象是 `~/.cargo`（registry、git 依赖）与 `target/` 编译增量。
+**定义**: [Swatinem/rust-cache](https://github.com/Swatinem/rust-cache) 是常见的 Rust CI 缓存 action 之一，缓存对象通常包括 `~/.cargo`（registry、git 依赖）与 `target/` 编译增量。是否采用它取决于组织的 action 来源策略、缓存配额和可审计要求。
 
 **关键特性**:
 
-- 缓存键自动纳入 `Cargo.lock` 内容、`rustc` 版本与工作流文件——依赖一变即换新缓存，无需手工管 key
+- 缓存键的组成与失效策略由 action 版本和配置决定；依赖、工具链或构建环境变化后，查看 action 日志确认是否命中/失效，不把“有缓存步骤”当作缓存正确的证据
 - `key` 参数可追加自定义维度（如矩阵的 target），避免不同平台互相污染
 - 缓存只加速重复构建，首次运行必然全量编译；日常 PR 的 CI 时间可从十几分钟降到几分钟
 
@@ -134,8 +134,8 @@ channel = "1.98.1"
 
 ```yaml
 # .github/workflows/ci.yml
-# 注意：文中 action 的主版本 tag（@v4/@v2 等）为中性示意，
-# 使用前请以各 action 官方仓库 README 推荐的最新主版本为准
+# 示例只说明步骤关系。实际仓库应按组织供应链策略固定 action 的
+# 已审查主版本或 commit SHA；不要在 CI 中用浮动 latest 标签。
 name: CI
 
 on:
@@ -284,6 +284,16 @@ jobs:
 本地与 CI 使用同一组格式、lint、构建和测试命令，让失败可以复现；本地没有执行并不使 CI 门禁失效，只会延后反馈。locked 模式防止悄悄修改依赖解析，系统依赖与工具链也需记录。
 
 矩阵是否 fail-fast 按成本和诊断需求选择，缓存键包括会影响产物的条件而不是随意时间戳。保存各目标的失败日志和实际命令；需要平台打包与签名时使用受支持环境。
+
+## ✅ CI 交付验收
+
+将工作流提交到一个测试分支后，按以下顺序留下可审查结果：
+
+1. 在一个 Rust 文件制造可识别的格式违规，确认 `lint` job 在 `cargo fmt --check` 处失败，后续 `build` job 未启动。
+2. 恢复格式后制造一个会被当前 clippy 规则报告的问题，确认日志包含文件与行号；修复后 `cargo clippy --all-targets --all-features -- -D warnings` 成功。
+3. 让一个业务测试故意失败，确认 `test` job 阻断矩阵构建；恢复断言后，保存该次运行的 commit SHA、工具链版本、Cargo.lock 摘要和各 job 日志链接。
+4. 对每个实际启用的 target 下载 artifact，核对文件名、目标三元组、大小和 SHA-256；发布 job 必须使用该产物或其可追溯重建结果，而不是重新构建一个不可关联的二进制。
+5. 在测试环境从已知好提交重新运行或回退一次，确认健康检查/桌面启动与一条关键操作仍成功。仅有 Actions 页面绿色不构成发布可回退的证明。
 
 ---
 
