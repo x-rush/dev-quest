@@ -48,6 +48,12 @@
       "status": "PASS",
       "output": "2,7,10\n19\nfalse\ntrue\ntrue\n",
       "source": "shared-resources/javascript-builtins.md"
+    },
+    {
+      "case": "standard-library.mjs",
+      "status": "PASS",
+      "output": "saved\nundefined\na,b\n",
+      "source": "shared-resources/javascript-standard-library.md"
     }
   ],
   "scope": "Only named complete examples; no Java, Go, Rust, PHP or native UI execution."

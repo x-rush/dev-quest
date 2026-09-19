@@ -90,6 +90,8 @@ def main():
                  "shared-js-keywords-binding-flow", "read\ntrue\nfinished\n"),
                 ("shared-resources/javascript-builtins.md", "builtins.mjs",
                  "shared-js-builtins-data-cleaning", "2,7,10\n19\nfalse\ntrue\ntrue\n"),
+                ("shared-resources/javascript-standard-library.md", "standard-library.mjs",
+                 "shared-js-standard-library-map-set", "saved\nundefined\na,b\n"),
             ]:
                 result = run_case([args.node], work / name, marked_block(source, "js", marker), expected)
                 result["source"] = source

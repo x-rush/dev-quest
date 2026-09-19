@@ -23,6 +23,7 @@
 
 `Array` 保留顺序，适合列表展示；`Map` 按键保存值，适合缓存、索引和对象键；`Set` 只保留唯一值。`Map`/`Set` 对对象使用引用身份：两个字段相同但分别创建的对象不是同一个键。
 
+<!-- verification-case: shared-js-standard-library-map-set -->
 ```js
 const first = { id: "a" };
 const sameShape = { id: "a" };
@@ -34,6 +35,8 @@ console.log(index.get(sameShape)); // undefined
 const ids = new Set(["a", "a", "b"]);
 console.log([...ids].join(","));  // a,b
 ```
+
+在 Node 运行此完整片段时，预期输出依次是 `saved`、`undefined`、`a,b`。它只验证 ECMAScript `Map`/`Set` 的身份和去重语义，不证明浏览器缓存、React 状态或跨端存储行为。
 
 若业务身份来自 API，应优先使用稳定字符串或数字 ID 作为键。把整个响应对象作为键会在每次重新获取后失去命中。`WeakMap` 与 `WeakSet` 只能用对象键且不可枚举，适合给对象附加不控制其生命周期的元数据；它们不适合构建需要列出全部成员的业务缓存。
 

@@ -6,12 +6,12 @@
 
 | 指标 | 数量 |
 |---|---:|
-| 纳入模块文档 | 642 |
-| 主状态：not_verified | 448 |
+| 纳入模块文档 | 644 |
+| 主状态：not_verified | 450 |
 | 主状态：runtime | 194 |
-| 验证措辞出现次数 | 149 |
+| 验证措辞出现次数 | 151 |
 | 措辞分类：source_has_limited_runtime_evidence | 91 |
-| 措辞分类：unbound_verification_wording | 58 |
+| 措辞分类：unbound_verification_wording | 60 |
 
 ## 语法级覆盖（不能当作运行覆盖）
 
@@ -38,7 +38,7 @@
 | Go | [01-go-backend/README.md](../../../../01-go-backend/README.md) | `not_verified` | 0 | 0 |
 | Go | [01-go-backend/advanced-topics/api-advanced/01-restful-patterns.md](../../../../01-go-backend/advanced-topics/api-advanced/01-restful-patterns.md) | `not_verified` | 0 | 0 |
 | Go | [01-go-backend/advanced-topics/api-advanced/02-graphql-apis.md](../../../../01-go-backend/advanced-topics/api-advanced/02-graphql-apis.md) | `not_verified` | 0 | 1 |
-| Go | [01-go-backend/advanced-topics/architecture/01-microservices-design.md](../../../../01-go-backend/advanced-topics/architecture/01-microservices-design.md) | `not_verified` | 0 | 0 |
+| Go | [01-go-backend/advanced-topics/architecture/01-microservices-design.md](../../../../01-go-backend/advanced-topics/architecture/01-microservices-design.md) | `not_verified` | 0 | 2 |
 | Go | [01-go-backend/advanced-topics/performance/01-concurrency-patterns.md](../../../../01-go-backend/advanced-topics/performance/01-concurrency-patterns.md) | `not_verified` | 0 | 0 |
 | Go | [01-go-backend/advanced-topics/performance/02-performance-tuning.md](../../../../01-go-backend/advanced-topics/performance/02-performance-tuning.md) | `not_verified` | 0 | 0 |
 | Go | [01-go-backend/advanced-topics/security/01-security-best-practices.md](../../../../01-go-backend/advanced-topics/security/01-security-best-practices.md) | `runtime` | 1 | 1 |
@@ -335,6 +335,7 @@
 | Kotlin / Compose | [05-kotlin-compose/reference/language-concepts/09-collections-operations.md](../../../../05-kotlin-compose/reference/language-concepts/09-collections-operations.md) | `runtime` | 1 | 0 |
 | Kotlin / Compose | [05-kotlin-compose/reference/language-concepts/10-sequences.md](../../../../05-kotlin-compose/reference/language-concepts/10-sequences.md) | `runtime` | 2 | 0 |
 | Kotlin / Compose | [05-kotlin-compose/reference/language-concepts/11-text-and-regex.md](../../../../05-kotlin-compose/reference/language-concepts/11-text-and-regex.md) | `not_verified` | 0 | 0 |
+| Kotlin / Compose | [05-kotlin-compose/reference/language-concepts/12-kotlin-built-in-functions.md](../../../../05-kotlin-compose/reference/language-concepts/12-kotlin-built-in-functions.md) | `not_verified` | 0 | 0 |
 | Kotlin / Compose | [05-kotlin-compose/reference/library-guides/01-androidx-libraries.md](../../../../05-kotlin-compose/reference/library-guides/01-androidx-libraries.md) | `not_verified` | 0 | 0 |
 | Kotlin / Compose | [05-kotlin-compose/reference/library-guides/02-third-party-libs.md](../../../../05-kotlin-compose/reference/library-guides/02-third-party-libs.md) | `not_verified` | 0 | 0 |
 | Kotlin / Compose | [05-kotlin-compose/reference/library-guides/03-ksp-configuration.md](../../../../05-kotlin-compose/reference/library-guides/03-ksp-configuration.md) | `not_verified` | 0 | 0 |
@@ -393,6 +394,7 @@
 | Swift / SwiftUI | [06-swift-swiftui/reference/language-concepts/14-regex.md](../../../../06-swift-swiftui/reference/language-concepts/14-regex.md) | `not_verified` | 0 | 0 |
 | Swift / SwiftUI | [06-swift-swiftui/reference/language-concepts/15-urlsession.md](../../../../06-swift-swiftui/reference/language-concepts/15-urlsession.md) | `not_verified` | 0 | 0 |
 | Swift / SwiftUI | [06-swift-swiftui/reference/language-concepts/16-stdlib-foundation-map.md](../../../../06-swift-swiftui/reference/language-concepts/16-stdlib-foundation-map.md) | `not_verified` | 0 | 0 |
+| Swift / SwiftUI | [06-swift-swiftui/reference/language-concepts/17-swift-built-in-functions.md](../../../../06-swift-swiftui/reference/language-concepts/17-swift-built-in-functions.md) | `not_verified` | 0 | 0 |
 | Swift / SwiftUI | [06-swift-swiftui/reference/library-guides/01-foundation-and-stdlib.md](../../../../06-swift-swiftui/reference/library-guides/01-foundation-and-stdlib.md) | `not_verified` | 0 | 0 |
 | Swift / SwiftUI | [06-swift-swiftui/reference/library-guides/02-third-party-libs.md](../../../../06-swift-swiftui/reference/library-guides/02-third-party-libs.md) | `not_verified` | 0 | 0 |
 | Swift / SwiftUI | [06-swift-swiftui/reference/quick-references/01-swift-swiftui-cheatsheet.md](../../../../06-swift-swiftui/reference/quick-references/01-swift-swiftui-cheatsheet.md) | `not_verified` | 0 | 0 |

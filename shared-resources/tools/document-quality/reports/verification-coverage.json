@@ -15,15 +15,15 @@
     "11-rust-cross-platform": "Rust / Cross-platform"
   },
   "summary": {
-    "documents": 642,
+    "documents": 644,
     "by_primary_state": {
-      "not_verified": 448,
+      "not_verified": 450,
       "runtime": 194
     },
-    "verification_wording_occurrences": 149,
+    "verification_wording_occurrences": 151,
     "marker_classification": {
       "source_has_limited_runtime_evidence": 91,
-      "unbound_verification_wording": 58
+      "unbound_verification_wording": 60
     }
   },
   "documents": [
@@ -81,7 +81,7 @@
     },
     {
       "path": "01-go-backend/advanced-topics/architecture/01-microservices-design.md",
-      "sha256": "0d687c5b5db422059285464f5b294efaf17faaf39cc3a8abfaeea5351fbcb9e3",
+      "sha256": "c9972e7cd5fa45f82b6be5e593bec997868e42cbd5ca497afcb54b394c2450b7",
       "verification": [
         {
           "mode": "not_verified",
@@ -90,7 +90,7 @@
           "scope": "No named runtime or syntax evidence is recorded for this document."
         }
       ],
-      "marker_count": 0
+      "marker_count": 2
     },
     {
       "path": "01-go-backend/advanced-topics/performance/01-concurrency-patterns.md",
@@ -133,7 +133,7 @@
     },
     {
       "path": "01-go-backend/basics/01-environment-setup.md",
-      "sha256": "c6cb50d1222a328ff2808bbf26f53970e2022ce734f27d4ea6e416699d561232",
+      "sha256": "7762ab472ed40b7c9ecc44293c8436f071fa5c61d84633451f60376e4cb29a50",
       "verification": [
         {
           "mode": "runtime",
@@ -1248,7 +1248,7 @@
     },
     {
       "path": "02-nextjs-frontend/basics/01-environment-setup.md",
-      "sha256": "7fa7a9479efa18b867418d671efbc83a9b459ea1807677beabd02206993ee69a",
+      "sha256": "ae69194119f3d5a2e532c0a452a7ccf8dfdfaa45b8bf98276291573be8eafe1e",
       "verification": [
         {
           "mode": "not_verified",
@@ -2090,7 +2090,7 @@
     },
     {
       "path": "03-tanstack-stack/basics/01-environment-setup.md",
-      "sha256": "eef539e1b574bbca3afb7b3647d2a1eb79262980aa31750cdf43f75e46544681",
+      "sha256": "f81154c81d85cf4668fd80d2e5af2eefd06d1cd3864b27a5b5e64ce9aaea2f68",
       "verification": [
         {
           "mode": "not_verified",
@@ -3012,7 +3012,7 @@
     },
     {
       "path": "04-multiplatform-apps/deployment/01-eas-build.md",
-      "sha256": "400205ed4723cfaee5d8a1e7c09b9970756cad647f8cd1e84cbc1ac142e007e4",
+      "sha256": "0572dd4c8ac11e205f2fb8f54b2a1943522e84e7ea8d8aea248e7e0efe2f1060",
       "verification": [
         {
           "mode": "not_verified",
@@ -3038,7 +3038,7 @@
     },
     {
       "path": "04-multiplatform-apps/deployment/03-ota-updates-observability.md",
-      "sha256": "acba632b8089b9610615f3f980b6843518759bef53a1bd2b4639865a56c28212",
+      "sha256": "2ac32bd6dca55242dbc6fd80208277103224fa660e49ecf529c003ee5194ba81",
       "verification": [
         {
           "mode": "not_verified",
@@ -4115,6 +4115,19 @@
       "marker_count": 0
     },
     {
+      "path": "05-kotlin-compose/reference/language-concepts/12-kotlin-built-in-functions.md",
+      "sha256": "72ba03e82bd1d347e6696d3de3215ef09c67e9f28f451eb486cf5faac0671d65",
+      "verification": [
+        {
+          "mode": "not_verified",
+          "status": "NOT_VERIFIED",
+          "report": null,
+          "scope": "No named runtime or syntax evidence is recorded for this document."
+        }
+      ],
+      "marker_count": 0
+    },
+    {
       "path": "05-kotlin-compose/reference/library-guides/01-androidx-libraries.md",
       "sha256": "487dc5525ccc0d46c8ef479f51b2ef2ad5fd90154f92389065f42bd1b98c48e4",
       "verification": [
@@ -4875,6 +4888,19 @@
       "marker_count": 0
     },
     {
+      "path": "06-swift-swiftui/reference/language-concepts/17-swift-built-in-functions.md",
+      "sha256": "240103d1876033dd8ad6f0a1917c680b1e13404be24cf6e102aad69b7171afb2",
+      "verification": [
+        {
+          "mode": "not_verified",
+          "status": "NOT_VERIFIED",
+          "report": null,
+          "scope": "No named runtime or syntax evidence is recorded for this document."
+        }
+      ],
+      "marker_count": 0
+    },
+    {
       "path": "06-swift-swiftui/reference/library-guides/01-foundation-and-stdlib.md",
       "sha256": "a674c820080fa608d777c9d4475dab7b2094107211f0fd23ffc71e493027a8a4",
       "verification": [
@@ -4928,7 +4954,7 @@
     },
     {
       "path": "06-swift-swiftui/testing/01-unit-testing.md",
-      "sha256": "3c4db05d9b1164070c9a45ccc5990129181be90e6eb19a9407961b5dc365641d",
+      "sha256": "10cfed3b9dc9323b80542ba00311f48833b12751ac11955b06241447cd452cfc",
       "verification": [
         {
           "mode": "not_verified",
@@ -9075,7 +9101,7 @@
     },
     {
       "path": "11-rust-cross-platform/testing/02-criterion-benchmarks.md",
-      "sha256": "64cb846df32bdcdd36a0b51bc304f5a11a3697c524070f6ed0630a1b7987af39",
+      "sha256": "d0ffc44f2c6593b3b068d5513484f762c8c0163df149dad53aa73d372044f1e2",
       "verification": [
         {
           "mode": "not_verified",
@@ -9105,6 +9131,18 @@
       "path": "01-go-backend/advanced-topics/api-advanced/02-graphql-apis.md",
       "line": 1149,
       "excerpt": "按 0→1 顺序练习：先通过 gqlgen init 得到与固定版本匹配的项目，只实现 hello 查询；再加入单用户查询、一个 mutation、数据访问接口，最后才加入批量加载与订阅。验收包含未知字段被 schema 拒绝、无权限字段不泄露、复杂度上限生效、订阅取消后 goroutine 退出。本文各节模型和 resolver 是主题片段，不能全部拼接成一个可运行项目；以 gqlgen.yml 和生成的接口为准填入实现，避免手写与生成结构冲突。",
+      "classification": "unbound_verification_wording"
+    },
+    {
+      "path": "01-go-backend/advanced-topics/architecture/01-microservices-design.md",
+      "line": 1629,
+      "excerpt": "- **Micronaut**：可作为 JVM 服务框架候选；用冷启动、内存、测试与团队熟悉度的实测数据比较，而不以“现代”作为选择理由。",
+      "classification": "unbound_verification_wording"
+    },
+    {
+      "path": "01-go-backend/advanced-topics/architecture/01-microservices-design.md",
+      "line": 1661,
+      "excerpt": "演进顺序由上述证据决定，而不是固定的“服务发现 → 熔断器 → Kubernetes → 服务网格”阶梯。每引入一项基础设施，都保留一次可运行的最小演练和一次移除/回退路径。",
       "classification": "unbound_verification_wording"
     },
     {
