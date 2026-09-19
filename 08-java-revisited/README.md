@@ -11,22 +11,22 @@
 
 本模块面向会基本编程、初次接触 Java 的读者，也供已有经验者查阅。先理解类、接口、集合和异常，再用 Spring 组织请求与依赖；不会其他后端框架也可以沿导读入门。
 
-- **技术栈基线**：Java 21 LTS（虚拟线程、Record、模式匹配、Sealed 类；25 LTS 已发布可选用）· Spring Boot 4.x（Spring Framework 7 / Jakarta EE 11 命名空间）· Maven/Gradle · JUnit 6（Jupiter）
+- **技术栈基线**：Java 21 LTS 是教程默认编译基线；需要验证最新 LTS 特性时再选择 Java 25。框架示例采用 Spring Boot 4.1.x（Spring Framework 7 / Jakarta EE 11 命名空间）与 Maven 或 Gradle Wrapper。测试章节以项目锁定的 JUnit Jupiter 版本为准，不能从本文假定某个测试库版本已经可用。
 - **模块定位**：语言参考与渐进实践并行，先完成普通 Java 小程序，再逐项接入 Spring、持久化、测试和部署
 
-## 🧱 技术基线（2026-09-11 核实）
+## 🧱 技术基线与升级动作（2026-09 核对）
 
-| 技术 | 版本 | 说明 |
+“最新版本”不是课程的稳定知识。这里固定教学所需的语言基线，把会变化的框架和库版本交给构建文件、BOM 与官方兼容矩阵决定。创建或升级项目时，应先查看 [Spring Boot 系统要求](https://docs.spring.io/spring-boot/system-requirements.html) 和 [Spring Boot 当前发布线](https://spring.io/projects/spring-boot)，再修改 Wrapper 与依赖版本。
+
+| 项目 | 教学默认 | 创建或升级时要验证什么 |
 |------|------|------|
-| Java | **21 LTS**（默认基线） | 25 LTS（2025-09 发布）已全面支持，可选用 |
-| Spring Boot | **4.1.x**（4.1.0，2026-06-10 发布） | 4.0 于 2025-11-20 发布；4.0/3.5 维护线并行服务中 |
-| Spring Framework | **7.0.x** | JSpecify 空安全、API 版本化、JUnit 6 支持 |
-| Spring Security | **7.1.x**（4.1 BOM 管理 7.1.0） | Lambda DSL 延续，Security FilterChain 不变 |
-| Hibernate / JPA | Hibernate **7.4.x**（4.1 BOM 管理 7.4.1.Final）· Jakarta Persistence 3.2 | Jakarta EE 11 基线（Servlet 6.1 / Validation 3.1） |
-| Jackson | **3.1**（`tools.jackson`） | `JsonMapper` 不可变构建；Jackson 2 自动配置已废弃 |
-| JUnit / Testcontainers | JUnit **6**（Jupiter） · Testcontainers **2.0** | Boot 4 默认测试栈；Testcontainers artifact 改名 `testcontainers-*` |
-| Maven / Gradle | Maven 3.6.3+ · Gradle 8.14+（8.x 需 8.14 或 9.x；Boot Gradle 插件 4.1.x） | 构建脚本统一用 Wrapper 锁定版本 |
-| GraalVM | 25 | Native Image 需 GraalVM 25+（本模块未展开） |
+| Java | **21 LTS**；Java 25 用于额外的 LTS 对照 | `java -version`、`javac --release 21` 与项目 CI 使用同一 toolchain；不要因框架要求“至少 17”就误以为所有源码可使用更高版本 API。 |
+| Spring Boot | **4.1.x** | 当前 4.1.1 要求 Java 17+、兼容至 Java 26；以生成项目的 BOM 管理 Spring Framework、Security、Jackson 等传递版本，避免手工拼一张会过期的版本表。 |
+| Maven / Gradle | Maven **3.6.3+**；Gradle **8.14+ 或 9.x** | 只运行 `./mvnw` 或 `./gradlew`；将 Wrapper 文件提交进仓库，并在升级后执行完整测试。 |
+| JUnit、Testcontainers、数据库驱动 | 由项目的 BOM 或显式锁文件决定 | 用实际的 `test` 任务和测试容器验证版本组合；版本号本身不证明迁移完成。 |
+| GraalVM Native Image | 按目标 Boot 版本的系统要求选择 | 当前 Boot 4.1 文档要求 GraalVM 25+；先让 JVM 构建、测试、镜像构建都通过，再评估 native image。 |
+
+本表只说明兼容与选择动作，不替代每个项目的依赖锁定与实际构建记录。
 
 ### 🎯 学习目标
 
