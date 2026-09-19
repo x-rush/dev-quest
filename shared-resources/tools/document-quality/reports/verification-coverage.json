@@ -17,8 +17,8 @@
   "summary": {
     "documents": 642,
     "by_primary_state": {
-      "not_verified": 463,
-      "runtime": 179
+      "not_verified": 462,
+      "runtime": 180
     },
     "verification_wording_occurrences": 143,
     "marker_classification": {
@@ -6886,13 +6886,13 @@
     },
     {
       "path": "09-nodejs-backend/basics/02-first-server.md",
-      "sha256": "a0c08ae762c9c0ef18b39326ace8f0d2c69a0de6c7e45d910a8905a5b53f1729",
+      "sha256": "86c8df8ef8568dcdd56eea7945418e86bafc2823f29e9592e9505e26a0d89962",
       "verification": [
         {
-          "mode": "not_verified",
-          "status": "NOT_VERIFIED",
-          "report": null,
-          "scope": "No named runtime or syntax evidence is recorded for this document."
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "next-node-python-basics-results.json",
+          "scope": "Only this named, complete code block; no whole-document, framework, network, or application coverage."
         }
       ],
       "marker_count": 0

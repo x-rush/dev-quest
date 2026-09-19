@@ -17,6 +17,7 @@ const tick = String.fromCharCode(96);
 const cases = [
   ['next-typescript-boundary', '02-nextjs-frontend/basics/03-typescript-integration.md', 'ts', 'node'],
   ['node-esm-binding', '09-nodejs-backend/basics/03-modules-esm.md', 'js', 'node'],
+  ['node-first-server-routing', '09-nodejs-backend/basics/02-first-server.md', 'js', 'node'],
   ['python-bindings-formatting', '10-python-discovery/basics/03-variables-types.md', 'python', 'python'],
 ];
 
@@ -80,7 +81,7 @@ try {
 
 const report = {
   generated_at: new Date().toISOString(),
-  purpose: 'Limited direct-body extraction verification for three P1 basics documents.',
+  purpose: 'Limited direct-body extraction verification for four P1 basics documents.',
   passed: results.filter((result) => result.status === 'PASS').length,
   total: results.length,
   results,
@@ -91,7 +92,7 @@ const rows = results.map((result) => `| \`${result.source}\` | \`${result.id}\` 
 const markdown = [
   '# Next、Node 与 Python P1 基础页限定验证',
   '',
-  '该报告只覆盖以下从 Markdown 正文直接提取的具名程序，不代表整篇页面、Next.js 应用、网络或第三方依赖已经验证。',
+  '该报告只覆盖以下从 Markdown 正文直接提取的具名程序，不代表整篇页面、Next.js 应用、外部网络或第三方依赖已经验证。',
   '',
   '| 页面 | 程序 | 行 | 结果 |',
   '| --- | --- | ---: | --- |',

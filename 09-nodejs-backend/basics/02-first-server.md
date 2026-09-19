@@ -104,6 +104,65 @@ server.listen(3000);
 
 能跑，但路径多了之后 if-else 会失控，且没有中间件、错误兜底、参数解析。这正是框架要解决的问题。
 
+### 可复现验收：响应契约，不是“端口能监听”
+
+启动日志只能说明端口已绑定，不能证明路由行为正确。下面的完整程序用端口 `0` 让操作系统分配临时端口，只在同一进程的回环地址发起三次请求；检查结束后关闭 server，因此不会占用开发机的 3000 端口。它验证成功响应的 JSON 内容类型、未知路径的 404、以及同一路径错误方法的 405。
+
+```js verify:node-first-server-routing
+import { createServer, request } from "node:http";
+
+function sendJson(res, status, body) {
+  res.writeHead(status, { "content-type": "application/json; charset=utf-8" });
+  res.end(JSON.stringify(body));
+}
+
+const server = createServer((req, res) => {
+  const url = new URL(req.url ?? "/", "http://localhost");
+  if (url.pathname === "/health") {
+    if (req.method !== "GET") return sendJson(res, 405, { error: "Method Not Allowed" });
+    return sendJson(res, 200, { ok: true });
+  }
+  return sendJson(res, 404, { error: "Not Found" });
+});
+
+function inspect(port, method, path) {
+  return new Promise((resolve, reject) => {
+    const req = request({ host: "127.0.0.1", port, method, path }, (res) => {
+      let text = "";
+      res.setEncoding("utf8");
+      res.on("data", (chunk) => { text += chunk; });
+      res.on("end", () => resolve({ status: res.statusCode, type: res.headers["content-type"], text }));
+    });
+    req.on("error", reject);
+    req.end();
+  });
+}
+
+server.listen(0, "127.0.0.1", async () => {
+  try {
+    const { port } = server.address();
+    const health = await inspect(port, "GET", "/health");
+    const missing = await inspect(port, "GET", "/missing");
+    const wrongMethod = await inspect(port, "POST", "/health");
+    console.log(`${health.status} ${health.type} ${health.text}`);
+    console.log(`${missing.status} ${missing.text}`);
+    console.log(`${wrongMethod.status} ${wrongMethod.text}`);
+  } finally {
+    server.close();
+  }
+});
+```
+
+预期输出：
+
+```text
+200 application/json; charset=utf-8 {"ok":true}
+404 {"error":"Not Found"}
+405 {"error":"Method Not Allowed"}
+```
+
+这不是性能、TLS、代理或真实网络的测试；它只固定 HTTP 处理器的最小路由契约。将程序保存为 `server-native.mjs` 时，Node 18+ 可直接用 `node server-native.mjs` 运行；使用 TypeScript 则应通过项目的 TypeScript 工具链或目标 Node 版本支持的类型擦除方式运行，不能假设所有旧 Node 都能执行 `.ts` 文件。
+
 ## 🛠️ 步骤二：Hono 4 版本
 
 ```bash
