@@ -48,7 +48,7 @@ def inspect(path):
     if active and path.name != "README.md" and not re.search(r"前置|先修|阅读准备", body):
         flags.append("未显式说明阅读前提")
     if active and kind in {"basics", "projects", "frameworks", "testing", "deployment"}:
-        if not re.search(r"预期|期望|应看到|应得到|验收|输出[：:]", body):
+        if not re.search(r"预期|期望|应看到|应得到|验收|评估标准|通过条件|输出[：:]", body):
             flags.append("缺少明确结果信号")
         if not re.search(r"练习|自测|检查点|验收", body):
             flags.append("缺少练习或验收信号")
