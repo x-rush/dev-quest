@@ -1,6 +1,6 @@
 # React Native：理解地图与学习规划
 
-> 前置：React、TypeScript 和异步请求；先选择 Android 或 iOS 一个可运行目标。iOS 原生本地构建需要 macOS/Xcode，鸿蒙适配单独核查。
+> 前置：React、TypeScript 和异步请求；先选择 Android 或 iOS 作为**计划中的首个本地运行目标**。iOS 原生本地构建需要 macOS/Xcode，鸿蒙适配单独核查。本仓库没有 Android、iOS 或鸿蒙工程运行记录；开始前请在目标工具链完成后文的构建与设备验收。
 
 ## 先回答一个问题
 

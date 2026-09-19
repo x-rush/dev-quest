@@ -5,26 +5,26 @@
   "scope": "verification-coverage.json 的 11 个现行教学模块；不含生成报告、归档和不活跃文件。",
   "method": "为 not_verified 文件建立文件级任务，并按覆盖台账同一标记规则重新扫描当前源码以定位逐行任务；仅通过性断言升为 P0，不判断教学内容真伪。",
   "summary": {
-    "items": 691,
-    "file_level_items": 565,
-    "unbound_wording_items": 126,
+    "items": 656,
+    "file_level_items": 559,
+    "unbound_wording_items": 97,
     "by_priority": {
-      "P0": 90,
-      "P1": 308,
+      "P0": 62,
+      "P1": 301,
       "P2": 148,
       "P3": 145
     },
     "by_kind": {
-      "核心基础": 331,
+      "核心基础": 301,
       "首项目": 16,
-      "框架": 120,
+      "框架": 118,
       "部署": 45,
-      "进阶与测试": 179
+      "进阶与测试": 176
     },
     "excluded": {
       "inactive_or_archived": 0,
       "generated_or_report": 0,
-      "runtime_document": 76
+      "runtime_document": 82
     }
   },
   "items": [
@@ -48,237 +48,6 @@
       "path": "08-java-revisited/README.md",
       "line": 35,
       "source_excerpt": "- 将业务结果映射成 HTTP 响应，使用真实测试数据库验证约束与事务。",
-      "evidence_action": "优先复跑该行承诺的完整示例；若环境不可得，删除绝对化结果并说明实际未验证范围。"
-    },
-    {
-      "priority": "P0",
-      "kind": "核心基础",
-      "task": "绑定命名验证证据，或把验证措辞收窄为可证明的范围",
-      "reason": "正文含有未绑定到该文件运行记录的验证性措辞；这不是自动技术错误结论。",
-      "module": "PHP",
-      "path": "07-php-mastery/basics/07-advanced-features.md",
-      "line": 167,
-      "source_excerpt": "**陷阱（提升参数上的注解）**：写在构造器提升参数上的注解会同时出现在 ReflectionParameter 与 ReflectionProperty 的 `getAttributes()` 结果里，但 `#[MaxLength]` 声明的 target 是 `TARGET_PROPERTY`——从参数侧 `$param->getAttributes(...)[0]->newInstance()` 会抛 `Error: Attribute \"MaxLength\" cannot target parameter (allowed targets: pr",
-      "evidence_action": "优先复跑该行承诺的完整示例；若环境不可得，删除绝对化结果并说明实际未验证范围。"
-    },
-    {
-      "priority": "P0",
-      "kind": "核心基础",
-      "task": "绑定命名验证证据，或把验证措辞收窄为可证明的范围",
-      "reason": "正文含有未绑定到该文件运行记录的验证性措辞；这不是自动技术错误结论。",
-      "module": "React Native / Multi-platform",
-      "path": "04-multiplatform-apps/LEARNING_GUIDE.md",
-      "line": 3,
-      "source_excerpt": "> 前置：React、TypeScript 和异步请求；先选择 Android 或 iOS 一个可运行目标。iOS 原生本地构建需要 macOS/Xcode，鸿蒙适配单独核查。",
-      "evidence_action": "优先复跑该行承诺的完整示例；若环境不可得，删除绝对化结果并说明实际未验证范围。"
-    },
-    {
-      "priority": "P0",
-      "kind": "核心基础",
-      "task": "绑定命名验证证据，或把验证措辞收窄为可证明的范围",
-      "reason": "正文含有未绑定到该文件运行记录的验证性措辞；这不是自动技术错误结论。",
-      "module": "React Native / Multi-platform",
-      "path": "04-multiplatform-apps/README.md",
-      "line": 41,
-      "source_excerpt": "| **内容形式** | 纯文档学习路径（本仓库无可运行代码） |",
-      "evidence_action": "优先复跑该行承诺的完整示例；若环境不可得，删除绝对化结果并说明实际未验证范围。"
-    },
-    {
-      "priority": "P0",
-      "kind": "核心基础",
-      "task": "绑定命名验证证据，或把验证措辞收窄为可证明的范围",
-      "reason": "正文含有未绑定到该文件运行记录的验证性措辞；这不是自动技术错误结论。",
-      "module": "React Native / Multi-platform",
-      "path": "04-multiplatform-apps/basics/04-state-hooks.md",
-      "line": 87,
-      "source_excerpt": "return <Text>已运行 {seconds} 秒</Text>;",
-      "evidence_action": "优先复跑该行承诺的完整示例；若环境不可得，删除绝对化结果并说明实际未验证范围。"
-    },
-    {
-      "priority": "P0",
-      "kind": "核心基础",
-      "task": "绑定命名验证证据，或把验证措辞收窄为可证明的范围",
-      "reason": "正文含有未绑定到该文件运行记录的验证性措辞；这不是自动技术错误结论。",
-      "module": "React Native / Multi-platform",
-      "path": "04-multiplatform-apps/reference/language-concepts/12-list-performance-model.md",
-      "line": 42,
-      "source_excerpt": "| `removeClippedSubviews` | 裁剪视口外子视图 | Android 默认 true，其他平台按版本核对 | Android 收益明显，iOS 需实测 |",
-      "evidence_action": "优先复跑该行承诺的完整示例；若环境不可得，删除绝对化结果并说明实际未验证范围。"
-    },
-    {
-      "priority": "P0",
-      "kind": "核心基础",
-      "task": "绑定命名验证证据，或把验证措辞收窄为可证明的范围",
-      "reason": "正文含有未绑定到该文件运行记录的验证性措辞；这不是自动技术错误结论。",
-      "module": "React Native / Multi-platform",
-      "path": "04-multiplatform-apps/reference/language-concepts/12-list-performance-model.md",
-      "line": 79,
-      "source_excerpt": "**何时换 FlashList**：条目上千、行结构复杂、`windowSize`/批次调参后白屏仍明显。FlashList v2（新架构专用）已转为 **JS-only 实现**：不再要求行高估计（v1 的 `estimatedItemSize` 在 v2 已不存在，无需提供），视图回收复用仍保留——只是从 v1 的原生视图池挪到了 JS 层。Expo 工程用 `npx expo install @shopify/flash-list` 安装版本对齐的包（新架构工程装 2.x；v1→v2 还有 blankArea 语义等多项差异，升级前对照官方 v2 ",
-      "evidence_action": "优先复跑该行承诺的完整示例；若环境不可得，删除绝对化结果并说明实际未验证范围。"
-    },
-    {
-      "priority": "P0",
-      "kind": "核心基础",
-      "task": "绑定命名验证证据，或把验证措辞收窄为可证明的范围",
-      "reason": "正文含有未绑定到该文件运行记录的验证性措辞；这不是自动技术错误结论。",
-      "module": "React Native / Multi-platform",
-      "path": "04-multiplatform-apps/reference/language-concepts/12-list-performance-model.md",
-      "line": 106,
-      "source_excerpt": "- 📄 **[渲染性能（解释篇）](../../advanced-topics/performance/01-rendering-performance.md)** — FlashList 对比实测、掉帧归因清单",
-      "evidence_action": "优先复跑该行承诺的完整示例；若环境不可得，删除绝对化结果并说明实际未验证范围。"
-    },
-    {
-      "priority": "P0",
-      "kind": "核心基础",
-      "task": "绑定命名验证证据，或把验证措辞收窄为可证明的范围",
-      "reason": "正文含有未绑定到该文件运行记录的验证性措辞；这不是自动技术错误结论。",
-      "module": "React Native / Multi-platform",
-      "path": "04-multiplatform-apps/reference/library-guides/04-animation-gesture-libs.md",
-      "line": 25,
-      "source_excerpt": "- **worklet**：声明可运行在 UI 线程的小函数（`useAnimatedStyle` 回调、手势回调天然是 worklet）。worklet 里引用 JS 可变变量只拿到快照，跨线程通信必须经共享值或 `runOnJS`",
-      "evidence_action": "优先复跑该行承诺的完整示例；若环境不可得，删除绝对化结果并说明实际未验证范围。"
-    },
-    {
-      "priority": "P0",
-      "kind": "核心基础",
-      "task": "绑定命名验证证据，或把验证措辞收窄为可证明的范围",
-      "reason": "正文含有未绑定到该文件运行记录的验证性措辞；这不是自动技术错误结论。",
-      "module": "Rust / Cross-platform",
-      "path": "11-rust-cross-platform/reference/language-concepts/04-advanced-lifetimes.md",
-      "line": 32,
-      "source_excerpt": "> 版本基线：Rust 1.98.1 / edition 2024（核实记录见模块 README）。本文示例均经本机 rustc（edition 2024）编译运行实测。",
-      "evidence_action": "优先复跑该行承诺的完整示例；若环境不可得，删除绝对化结果并说明实际未验证范围。"
-    },
-    {
-      "priority": "P0",
-      "kind": "核心基础",
-      "task": "绑定命名验证证据，或把验证措辞收窄为可证明的范围",
-      "reason": "正文含有未绑定到该文件运行记录的验证性措辞；这不是自动技术错误结论。",
-      "module": "Rust / Cross-platform",
-      "path": "11-rust-cross-platform/reference/language-concepts/04-advanced-lifetimes.md",
-      "line": 44,
-      "source_excerpt": "- [示例与编译失败演示](#-可运行示例)",
-      "evidence_action": "优先复跑该行承诺的完整示例；若环境不可得，删除绝对化结果并说明实际未验证范围。"
-    },
-    {
-      "priority": "P0",
-      "kind": "核心基础",
-      "task": "绑定命名验证证据，或把验证措辞收窄为可证明的范围",
-      "reason": "正文含有未绑定到该文件运行记录的验证性措辞；这不是自动技术错误结论。",
-      "module": "Rust / Cross-platform",
-      "path": "11-rust-cross-platform/reference/language-concepts/04-advanced-lifetimes.md",
-      "line": 100,
-      "source_excerpt": "已实测形态见下文示例三。",
-      "evidence_action": "优先复跑该行承诺的完整示例；若环境不可得，删除绝对化结果并说明实际未验证范围。"
-    },
-    {
-      "priority": "P0",
-      "kind": "核心基础",
-      "task": "绑定命名验证证据，或把验证措辞收窄为可证明的范围",
-      "reason": "正文含有未绑定到该文件运行记录的验证性措辞；这不是自动技术错误结论。",
-      "module": "Rust / Cross-platform",
-      "path": "11-rust-cross-platform/reference/language-concepts/04-advanced-lifetimes.md",
-      "line": 113,
-      "source_excerpt": "- `T: 'static` ≠ \"T 是活到程序结束的引用\"——`fn keep<T: 'static>(v: T)` 接受任何 owned 值（已实测，见示例四）。",
-      "evidence_action": "优先复跑该行承诺的完整示例；若环境不可得，删除绝对化结果并说明实际未验证范围。"
-    },
-    {
-      "priority": "P0",
-      "kind": "核心基础",
-      "task": "绑定命名验证证据，或把验证措辞收窄为可证明的范围",
-      "reason": "正文含有未绑定到该文件运行记录的验证性措辞；这不是自动技术错误结论。",
-      "module": "Rust / Cross-platform",
-      "path": "11-rust-cross-platform/reference/language-concepts/04-advanced-lifetimes.md",
-      "line": 135,
-      "source_excerpt": "推论：**两个输入引用 + 一个输出引用**必然推不出（规则 2 失效）→ 必须显式 `<'a>` 关联（已实测演示二）。",
-      "evidence_action": "优先复跑该行承诺的完整示例；若环境不可得，删除绝对化结果并说明实际未验证范围。"
-    },
-    {
-      "priority": "P0",
-      "kind": "核心基础",
-      "task": "绑定命名验证证据，或把验证措辞收窄为可证明的范围",
-      "reason": "正文含有未绑定到该文件运行记录的验证性措辞；这不是自动技术错误结论。",
-      "module": "Rust / Cross-platform",
-      "path": "11-rust-cross-platform/reference/language-concepts/04-advanced-lifetimes.md",
-      "line": 161,
-      "source_excerpt": "## 💡 可运行示例",
-      "evidence_action": "优先复跑该行承诺的完整示例；若环境不可得，删除绝对化结果并说明实际未验证范围。"
-    },
-    {
-      "priority": "P0",
-      "kind": "核心基础",
-      "task": "绑定命名验证证据，或把验证措辞收窄为可证明的范围",
-      "reason": "正文含有未绑定到该文件运行记录的验证性措辞；这不是自动技术错误结论。",
-      "module": "Rust / Cross-platform",
-      "path": "11-rust-cross-platform/reference/language-concepts/04-advanced-lifetimes.md",
-      "line": 199,
-      "source_excerpt": "已实测（输出三行 `long string first`）。",
-      "evidence_action": "优先复跑该行承诺的完整示例；若环境不可得，删除绝对化结果并说明实际未验证范围。"
-    },
-    {
-      "priority": "P0",
-      "kind": "核心基础",
-      "task": "绑定命名验证证据，或把验证措辞收窄为可证明的范围",
-      "reason": "正文含有未绑定到该文件运行记录的验证性措辞；这不是自动技术错误结论。",
-      "module": "Rust / Cross-platform",
-      "path": "11-rust-cross-platform/reference/language-concepts/04-advanced-lifetimes.md",
-      "line": 224,
-      "source_excerpt": "已实测（两行输出，协变收窄全通过）。",
-      "evidence_action": "优先复跑该行承诺的完整示例；若环境不可得，删除绝对化结果并说明实际未验证范围。"
-    },
-    {
-      "priority": "P0",
-      "kind": "核心基础",
-      "task": "绑定命名验证证据，或把验证措辞收窄为可证明的范围",
-      "reason": "正文含有未绑定到该文件运行记录的验证性措辞；这不是自动技术错误结论。",
-      "module": "Rust / Cross-platform",
-      "path": "11-rust-cross-platform/reference/language-concepts/04-advanced-lifetimes.md",
-      "line": 248,
-      "source_excerpt": "已实测（`HRTB` 与 `sugar` 两行）。",
-      "evidence_action": "优先复跑该行承诺的完整示例；若环境不可得，删除绝对化结果并说明实际未验证范围。"
-    },
-    {
-      "priority": "P0",
-      "kind": "核心基础",
-      "task": "绑定命名验证证据，或把验证措辞收窄为可证明的范围",
-      "reason": "正文含有未绑定到该文件运行记录的验证性措辞；这不是自动技术错误结论。",
-      "module": "Rust / Cross-platform",
-      "path": "11-rust-cross-platform/reference/language-concepts/04-advanced-lifetimes.md",
-      "line": 275,
-      "source_excerpt": "已实测——第五节两种含义的对照实证。",
-      "evidence_action": "优先复跑该行承诺的完整示例；若环境不可得，删除绝对化结果并说明实际未验证范围。"
-    },
-    {
-      "priority": "P0",
-      "kind": "核心基础",
-      "task": "绑定命名验证证据，或把验证措辞收窄为可证明的范围",
-      "reason": "正文含有未绑定到该文件运行记录的验证性措辞；这不是自动技术错误结论。",
-      "module": "Rust / Cross-platform",
-      "path": "11-rust-cross-platform/reference/language-concepts/04-advanced-lifetimes.md",
-      "line": 279,
-      "source_excerpt": "**以下两块为编译失败演示，错误码已实测复核**（rustc，edition 2024）。",
-      "evidence_action": "优先复跑该行承诺的完整示例；若环境不可得，删除绝对化结果并说明实际未验证范围。"
-    },
-    {
-      "priority": "P0",
-      "kind": "核心基础",
-      "task": "绑定命名验证证据，或把验证措辞收窄为可证明的范围",
-      "reason": "正文含有未绑定到该文件运行记录的验证性措辞；这不是自动技术错误结论。",
-      "module": "Rust / Cross-platform",
-      "path": "11-rust-cross-platform/reference/language-concepts/04-advanced-lifetimes.md",
-      "line": 298,
-      "source_excerpt": "实测报错：`error[E0597]: 'local' does not live long enough`。",
-      "evidence_action": "优先复跑该行承诺的完整示例；若环境不可得，删除绝对化结果并说明实际未验证范围。"
-    },
-    {
-      "priority": "P0",
-      "kind": "核心基础",
-      "task": "绑定命名验证证据，或把验证措辞收窄为可证明的范围",
-      "reason": "正文含有未绑定到该文件运行记录的验证性措辞；这不是自动技术错误结论。",
-      "module": "Rust / Cross-platform",
-      "path": "11-rust-cross-platform/reference/language-concepts/04-advanced-lifetimes.md",
-      "line": 316,
-      "source_excerpt": "实测报错：`error[E0106]: missing lifetime specifier`（提示两个输入引用各自独立生命周期，输出无法继承）。",
       "evidence_action": "优先复跑该行承诺的完整示例；若环境不可得，删除绝对化结果并说明实际未验证范围。"
     },
     {
@@ -415,28 +184,6 @@
     },
     {
       "priority": "P0",
-      "kind": "核心基础",
-      "task": "绑定命名验证证据，或把验证措辞收窄为可证明的范围",
-      "reason": "正文含有未绑定到该文件运行记录的验证性措辞；这不是自动技术错误结论。",
-      "module": "TanStack / TypeScript",
-      "path": "03-tanstack-stack/reference/language-concepts/05-typescript-patterns.md",
-      "line": 190,
-      "source_excerpt": "先修：泛型、unknown、联合类型。queryFn 的返回类型会影响 data 推断；但给 JSON 写 `as User[]` 并不会检查接口真实返回值。应在网络边界解析，再把已验证的类型交给 Query。",
-      "evidence_action": "优先复跑该行承诺的完整示例；若环境不可得，删除绝对化结果并说明实际未验证范围。"
-    },
-    {
-      "priority": "P0",
-      "kind": "核心基础",
-      "task": "绑定命名验证证据，或把验证措辞收窄为可证明的范围",
-      "reason": "正文含有未绑定到该文件运行记录的验证性措辞；这不是自动技术错误结论。",
-      "module": "TanStack / TypeScript",
-      "path": "03-tanstack-stack/reference/library-guides/01-ecosystem-integrations.md",
-      "line": 152,
-      "source_excerpt": "- `estimateSize` 严重失准时滚动条会跳动，动态行高用 `measureElement` 实测",
-      "evidence_action": "优先复跑该行承诺的完整示例；若环境不可得，删除绝对化结果并说明实际未验证范围。"
-    },
-    {
-      "priority": "P0",
       "kind": "首项目",
       "task": "绑定命名验证证据，或把验证措辞收窄为可证明的范围",
       "reason": "正文含有未绑定到该文件运行记录的验证性措辞；这不是自动技术错误结论。",
@@ -543,28 +290,6 @@
       "path": "11-rust-cross-platform/frameworks/06-auth-middleware.md",
       "line": 465,
       "source_excerpt": "1. **认证早于业务**: 身份判定在 handler 之前完成（守卫层），业务代码只消费\"已验证身份\"这一事实——校验与业务解耦后，任何新路由默认继承防护",
-      "evidence_action": "优先复跑该行承诺的完整示例；若环境不可得，删除绝对化结果并说明实际未验证范围。"
-    },
-    {
-      "priority": "P0",
-      "kind": "框架",
-      "task": "绑定命名验证证据，或把验证措辞收窄为可证明的范围",
-      "reason": "正文含有未绑定到该文件运行记录的验证性措辞；这不是自动技术错误结论。",
-      "module": "Swift / SwiftUI",
-      "path": "06-swift-swiftui/frameworks/03-ecosystem-integration.md",
-      "line": 211,
-      "source_excerpt": "**Q2: 关系字段要双向声明吗？** 单向即可运行；声明反向属性便于从记录找城市，代价是级联语义要明确 `deleteRule`。",
-      "evidence_action": "优先复跑该行承诺的完整示例；若环境不可得，删除绝对化结果并说明实际未验证范围。"
-    },
-    {
-      "priority": "P0",
-      "kind": "框架",
-      "task": "绑定命名验证证据，或把验证措辞收窄为可证明的范围",
-      "reason": "正文含有未绑定到该文件运行记录的验证性措辞；这不是自动技术错误结论。",
-      "module": "Swift / SwiftUI",
-      "path": "06-swift-swiftui/reference/framework-essentials/01-swiftui-essentials.md",
-      "line": 200,
-      "source_excerpt": "TextField 和 Stepper 通过 Binding 写回同一份状态，Text 从状态推导说明，无须额外保存 summary。验收：输入名称立即更新说明；步进器不能低于 1；切换提醒不清空名称；大字体与深色模式下仍可操作。本轮没有 Apple SDK 实测。",
       "evidence_action": "优先复跑该行承诺的完整示例；若环境不可得，删除绝对化结果并说明实际未验证范围。"
     },
     {
@@ -693,17 +418,6 @@
       "kind": "进阶与测试",
       "task": "绑定命名验证证据，或把验证措辞收窄为可证明的范围",
       "reason": "正文含有未绑定到该文件运行记录的验证性措辞；这不是自动技术错误结论。",
-      "module": "Next.js / TypeScript",
-      "path": "02-nextjs-frontend/reference/framework-patterns/14-env-vars.md",
-      "line": 123,
-      "source_excerpt": "env.d.ts 把字段声明为 string 不会校验部署配置，反而可能掩盖 undefined。先用启动或请求入口的解析函数检查必需值、URL 协议与允许范围，再把结果作为已验证配置使用。服务端读取也可能发生在预渲染时，只有处于请求时执行的路径才读取该次运行环境。",
-      "evidence_action": "优先复跑该行承诺的完整示例；若环境不可得，删除绝对化结果并说明实际未验证范围。"
-    },
-    {
-      "priority": "P0",
-      "kind": "进阶与测试",
-      "task": "绑定命名验证证据，或把验证措辞收窄为可证明的范围",
-      "reason": "正文含有未绑定到该文件运行记录的验证性措辞；这不是自动技术错误结论。",
       "module": "Node.js",
       "path": "09-nodejs-backend/projects/04-production-nodejs-api.md",
       "line": 5,
@@ -774,17 +488,6 @@
       "path": "10-python-discovery/testing/03-mocking-testing.md",
       "line": 145,
       "source_excerpt": "**Q1: patch 之后测试通过但线上失败？**",
-      "evidence_action": "优先复跑该行承诺的完整示例；若环境不可得，删除绝对化结果并说明实际未验证范围。"
-    },
-    {
-      "priority": "P0",
-      "kind": "进阶与测试",
-      "task": "绑定命名验证证据，或把验证措辞收窄为可证明的范围",
-      "reason": "正文含有未绑定到该文件运行记录的验证性措辞；这不是自动技术错误结论。",
-      "module": "React Native / Multi-platform",
-      "path": "04-multiplatform-apps/advanced-topics/performance/02-startup-optimization.md",
-      "line": 35,
-      "source_excerpt": "需实测 需实测 需实测 ★ ★",
       "evidence_action": "优先复跑该行承诺的完整示例；若环境不可得，删除绝对化结果并说明实际未验证范围。"
     },
     {
@@ -1008,17 +711,6 @@
       "evidence_action": "优先复跑该行承诺的完整示例；若环境不可得，删除绝对化结果并说明实际未验证范围。"
     },
     {
-      "priority": "P0",
-      "kind": "进阶与测试",
-      "task": "绑定命名验证证据，或把验证措辞收窄为可证明的范围",
-      "reason": "正文含有未绑定到该文件运行记录的验证性措辞；这不是自动技术错误结论。",
-      "module": "Swift / SwiftUI",
-      "path": "06-swift-swiftui/iOS原生开发学习路线.md",
-      "line": 9,
-      "source_excerpt": "先完成 [环境准备](basics/01-environment-setup.md) 与 [第一个 SwiftUI 应用](basics/02-first-swiftui-app.md)。记录 Xcode、Swift 语言模式与最低部署目标，创建工程、编译、设置断点、查看控制台，并用 Git 保存首次可运行版本。",
-      "evidence_action": "优先复跑该行承诺的完整示例；若环境不可得，删除绝对化结果并说明实际未验证范围。"
-    },
-    {
       "priority": "P1",
       "kind": "核心基础",
       "task": "为文档选择一个最小可复现案例并记录限定运行证据",
@@ -1102,28 +794,6 @@
       "reason": "当前没有与此文件绑定的命名运行或语法证据。",
       "module": "Go",
       "path": "01-go-backend/basics/06-control-structures.md",
-      "line": null,
-      "source_excerpt": null,
-      "evidence_action": "抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。"
-    },
-    {
-      "priority": "P1",
-      "kind": "核心基础",
-      "task": "为文档选择一个最小可复现案例并记录限定运行证据",
-      "reason": "当前没有与此文件绑定的命名运行或语法证据。",
-      "module": "Go",
-      "path": "01-go-backend/basics/07-concurrency-basics.md",
-      "line": null,
-      "source_excerpt": null,
-      "evidence_action": "抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。"
-    },
-    {
-      "priority": "P1",
-      "kind": "核心基础",
-      "task": "为文档选择一个最小可复现案例并记录限定运行证据",
-      "reason": "当前没有与此文件绑定的命名运行或语法证据。",
-      "module": "Go",
-      "path": "01-go-backend/basics/08-error-handling.md",
       "line": null,
       "source_excerpt": null,
       "evidence_action": "抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。"
@@ -1464,17 +1134,6 @@
       "task": "为文档选择一个最小可复现案例并记录限定运行证据",
       "reason": "当前没有与此文件绑定的命名运行或语法证据。",
       "module": "Java",
-      "path": "08-java-revisited/reference/language-concepts/02-collections-generics.md",
-      "line": null,
-      "source_excerpt": null,
-      "evidence_action": "抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。"
-    },
-    {
-      "priority": "P1",
-      "kind": "核心基础",
-      "task": "为文档选择一个最小可复现案例并记录限定运行证据",
-      "reason": "当前没有与此文件绑定的命名运行或语法证据。",
-      "module": "Java",
       "path": "08-java-revisited/reference/language-concepts/03-streams-optional.md",
       "line": null,
       "source_excerpt": null,
@@ -1498,17 +1157,6 @@
       "reason": "当前没有与此文件绑定的命名运行或语法证据。",
       "module": "Java",
       "path": "08-java-revisited/reference/language-concepts/05-records-sealed-patterns.md",
-      "line": null,
-      "source_excerpt": null,
-      "evidence_action": "抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。"
-    },
-    {
-      "priority": "P1",
-      "kind": "核心基础",
-      "task": "为文档选择一个最小可复现案例并记录限定运行证据",
-      "reason": "当前没有与此文件绑定的命名运行或语法证据。",
-      "module": "Java",
-      "path": "08-java-revisited/reference/language-concepts/06-exceptions-resources.md",
       "line": null,
       "source_excerpt": null,
       "evidence_action": "抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。"
@@ -2466,28 +2114,6 @@
       "reason": "当前没有与此文件绑定的命名运行或语法证据。",
       "module": "PHP",
       "path": "07-php-mastery/basics/06-error-exceptions.md",
-      "line": null,
-      "source_excerpt": null,
-      "evidence_action": "抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。"
-    },
-    {
-      "priority": "P1",
-      "kind": "核心基础",
-      "task": "保留诚实的验证边界，并在补证据时决定是否增加最小练习",
-      "reason": "这行是未验证范围或验证步骤的披露，不是声称已经通过的证据。",
-      "module": "PHP",
-      "path": "07-php-mastery/basics/07-advanced-features.md",
-      "line": 248,
-      "source_excerpt": "**两个\"返回值\"不要混淆**（实测 8.5.10）：",
-      "evidence_action": "保持已有边界说明；若新增示例，记录工具链、命令、预期行为和未覆盖范围。"
-    },
-    {
-      "priority": "P1",
-      "kind": "核心基础",
-      "task": "为文档选择一个最小可复现案例并记录限定运行证据",
-      "reason": "当前没有与此文件绑定的命名运行或语法证据。",
-      "module": "PHP",
-      "path": "07-php-mastery/basics/07-advanced-features.md",
       "line": null,
       "source_excerpt": null,
       "evidence_action": "抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。"
@@ -3467,17 +3093,6 @@
       "reason": "当前没有与此文件绑定的命名运行或语法证据。",
       "module": "Rust / Cross-platform",
       "path": "11-rust-cross-platform/reference/language-concepts/03-const-generics.md",
-      "line": null,
-      "source_excerpt": null,
-      "evidence_action": "抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。"
-    },
-    {
-      "priority": "P1",
-      "kind": "核心基础",
-      "task": "为文档选择一个最小可复现案例并记录限定运行证据",
-      "reason": "当前没有与此文件绑定的命名运行或语法证据。",
-      "module": "Rust / Cross-platform",
-      "path": "11-rust-cross-platform/reference/language-concepts/04-advanced-lifetimes.md",
       "line": null,
       "source_excerpt": null,
       "evidence_action": "抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。"

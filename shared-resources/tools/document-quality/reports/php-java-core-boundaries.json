@@ -1,0 +1,272 @@
+{
+  "scope": "marked complete examples only; not framework or network validation",
+  "versions": {
+    "php": {
+      "command": [
+        "php",
+        "--version"
+      ],
+      "exit_code": 0,
+      "stdout": "PHP 8.3.6 (cli) (built: Sep  2 2026 12:56:02) (NTS)\nCopyright (c) The PHP Group\nZend Engine v4.3.6, Copyright (c) Zend Technologies\n    with Zend OPcache v8.3.6, Copyright (c), by Zend Technologies\n",
+      "stderr": ""
+    },
+    "javac": {
+      "command": [
+        "javac",
+        "-version"
+      ],
+      "exit_code": 0,
+      "stdout": "javac 21.0.12\n",
+      "stderr": ""
+    },
+    "java": {
+      "command": [
+        "java",
+        "-version"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": "openjdk version \"21.0.12\" 2026-07-21 LTS\nOpenJDK Runtime Environment Temurin-21.0.12+8 (build 21.0.12+8-LTS)\nOpenJDK 64-Bit Server VM Temurin-21.0.12+8 (build 21.0.12+8-LTS, mixed mode, sharing)\n"
+    }
+  },
+  "documents": {
+    "07-php-mastery/basics/07-advanced-features.md": "7b1865c0a8e856dcdd43b7a8d7b2e865c424a898128b7c3d06c9664eae6f36be",
+    "08-java-revisited/reference/language-concepts/02-collections-generics.md": "7ef8d81bcd1a79841560e95dd083ec1c2185a5700b322952c4481a6f8927435f",
+    "08-java-revisited/reference/language-concepts/06-exceptions-resources.md": "de5b7f438a355aef7c5d45c1e62a3abe8fa6d5cb42829c66db6da30afbee9953"
+  },
+  "cases": [
+    {
+      "id": "php-promoted-attributes",
+      "document": "07-php-mastery/basics/07-advanced-features.md",
+      "source_sha256": "a105a90f8652e5c51fc2d837ad0944d5414fceafbb0dd870aeb31b145547f386",
+      "expected_stdout": "users\n20\n1\nparameter-target-rejected\n",
+      "commands": [
+        {
+          "command": [
+            "php",
+            "-d",
+            "display_errors=stderr",
+            "-d",
+            "error_reporting=-1",
+            "main.php"
+          ],
+          "exit_code": 0,
+          "stdout": "users\n20\n1\nparameter-target-rejected\n",
+          "stderr": ""
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "php-fiber-return-channels",
+      "document": "07-php-mastery/basics/07-advanced-features.md",
+      "source_sha256": "448cf4362034bd42c863e9154c5e9f4316d29b0156960707812ab31f990a2492",
+      "expected_stdout": "执行 任务A 前半段\n主流程拿到: 任务A-等待中\n恢复，收到: 外部数据\nNULL\n任务A-完成\n",
+      "commands": [
+        {
+          "command": [
+            "php",
+            "-d",
+            "display_errors=stderr",
+            "-d",
+            "error_reporting=-1",
+            "main.php"
+          ],
+          "exit_code": 0,
+          "stdout": "执行 任务A 前半段\n主流程拿到: 任务A-等待中\n恢复，收到: 外部数据\nNULL\n任务A-完成\n",
+          "stderr": ""
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "php-fiber-lifecycle",
+      "document": "07-php-mastery/basics/07-advanced-features.md",
+      "source_sha256": "123641e084365c1bfb874cf6405e7be3022de51d0ea391f2e8af5a8fc379e7b5",
+      "expected_stdout": "bool(false)\nbool(true)\n",
+      "commands": [
+        {
+          "command": [
+            "php",
+            "-d",
+            "display_errors=stderr",
+            "-d",
+            "error_reporting=-1",
+            "main.php"
+          ],
+          "exit_code": 0,
+          "stdout": "bool(false)\nbool(true)\n",
+          "stderr": ""
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "java-collection-snapshot-view",
+      "document": "08-java-revisited/reference/language-concepts/02-collections-generics.md",
+      "source_sha256": "b8523cb056df2af0a8cb8c0d36d1a07070cd885c3c77d2b129f079f904d879bb",
+      "expected_stdout": "2:1\nab\nstructure-rejected\n[c, b, a]\n",
+      "commands": [
+        {
+          "command": [
+            "javac",
+            "--release",
+            "21",
+            "-encoding",
+            "UTF-8",
+            "Main.java"
+          ],
+          "exit_code": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "java",
+            "-cp",
+            "/tmp/reference-tcko_qgl",
+            "Main"
+          ],
+          "exit_code": 0,
+          "stdout": "2:1\nab\nstructure-rejected\n[c, b, a]\n",
+          "stderr": ""
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "java-map-null-contract",
+      "document": "08-java-revisited/reference/language-concepts/02-collections-generics.md",
+      "source_sha256": "62896fed2c6bacc438527d21e2f06a433d130161310e67b878dea140dfa109c4",
+      "expected_stdout": "null\n0\n4\n7\n",
+      "commands": [
+        {
+          "command": [
+            "javac",
+            "--release",
+            "21",
+            "-encoding",
+            "UTF-8",
+            "Main.java"
+          ],
+          "exit_code": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "java",
+            "-cp",
+            "/tmp/reference-idaaaosb",
+            "Main"
+          ],
+          "exit_code": 0,
+          "stdout": "null\n0\n4\n7\n",
+          "stderr": ""
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "java-pecs-copy",
+      "document": "08-java-revisited/reference/language-concepts/02-collections-generics.md",
+      "source_sha256": "160908d19444754e370cf560009de3bfc9e938920ec18dc9b183feff44365f9a",
+      "expected_stdout": "[1, 2]\n[2]\n",
+      "commands": [
+        {
+          "command": [
+            "javac",
+            "--release",
+            "21",
+            "-encoding",
+            "UTF-8",
+            "Main.java"
+          ],
+          "exit_code": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "java",
+            "-cp",
+            "/tmp/reference-xd3t2fla",
+            "Main"
+          ],
+          "exit_code": 0,
+          "stdout": "[1, 2]\n[2]\n",
+          "stderr": ""
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "java-resource-body-and-close",
+      "document": "08-java-revisited/reference/language-concepts/06-exceptions-resources.md",
+      "source_sha256": "cdad808111d3bd01e2528dfb0b74aefa67fda46106589787102bb792cd087f0c",
+      "expected_stdout": "body\nclose\n",
+      "commands": [
+        {
+          "command": [
+            "javac",
+            "--release",
+            "21",
+            "-encoding",
+            "UTF-8",
+            "Main.java"
+          ],
+          "exit_code": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "java",
+            "-cp",
+            "/tmp/reference-wjz_tz19",
+            "Main"
+          ],
+          "exit_code": 0,
+          "stdout": "body\nclose\n",
+          "stderr": ""
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "java-resource-initialization-order",
+      "document": "08-java-revisited/reference/language-concepts/06-exceptions-resources.md",
+      "source_sha256": "297076bdc4368c0153afe08a23f66964576064fe854fba91b2f0a9d69f72e39a",
+      "expected_stdout": "close:b\nclose:a\nprimary:close:b\nsuppressed:close:a\nclose:a\nprimary:init:b\nsuppressed:close:a\n",
+      "commands": [
+        {
+          "command": [
+            "javac",
+            "--release",
+            "21",
+            "-encoding",
+            "UTF-8",
+            "Main.java"
+          ],
+          "exit_code": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "java",
+            "-cp",
+            "/tmp/reference-7j7fuw7u",
+            "Main"
+          ],
+          "exit_code": 0,
+          "stdout": "close:b\nclose:a\nprimary:close:b\nsuppressed:close:a\nclose:a\nprimary:init:b\nsuppressed:close:a\n",
+          "stderr": ""
+        }
+      ],
+      "passed": true
+    }
+  ],
+  "passed": 8,
+  "total": 8
+}

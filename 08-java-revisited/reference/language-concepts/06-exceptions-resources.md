@@ -93,17 +93,18 @@ public record Loan(String isbn, LocalDate dueDate) {
 - **捕获 `Throwable`/`Error`**：连 `OutOfMemoryError` 都吞掉，掩盖 JVM 故障
 - **受检异常层层 throws**：接口被 `throws Exception` 污染——避免宽泛 throws Exception，按调用方恢复责任选择具体异常并保留 cause
 - **异常当流程控制**：用异常驱动正常分支，性能差且可读性崩坏
-- **异常类型与事务回滚**：默认回滚规则只覆盖 `RuntimeException`/`Error`（见[事务速查](../framework-essentials/05-transaction-essentials.md)）
+- **异常类型与事务回滚**：Spring 声明式事务的常见默认规则对 `RuntimeException`/`Error` 回滚；这不是 Java 语言规则，配置、调用是否经过代理和异常是否被吞掉都会影响实际行为（见[事务速查](../framework-essentials/05-transaction-essentials.md)）
 
 <!-- full-library-explanation -->
 ## 主体失败和关闭失败是两条信息
 
 try-with-resources 按资源声明的逆序关闭。若主体先失败，关闭时又失败，主体异常继续向外传播，关闭异常附加到 suppressed 列表；若主体正常而关闭失败，关闭异常本身成为传播的异常。第二个资源初始化失败时，第一个已经成功创建的资源仍会关闭。
 
-完整实验保存为 ResourceDemo.java，使用项目 JDK 运行 `javac ResourceDemo.java`、`java ResourceDemo`：
+完整实验保存为 `Main.java`，使用 JDK 21 运行 `javac --release 21 Main.java`、`java Main`：
 
+<!-- reference-case: {"id":"java-resource-body-and-close","stdout":"body\nclose\n"} -->
 ```java
-public class ResourceDemo {
+public class Main {
     static class Resource implements AutoCloseable {
         public void close() { throw new IllegalStateException("close"); }
     }
@@ -120,8 +121,50 @@ public class ResourceDemo {
 
 预期依次输出 body、close。删掉主体的 throw 再观察：这次没有 suppressed 元素，直接访问下标会出错，应先查看数组长度。练习的目标是保留两个失败的因果信息，而不是把所有异常改成同一种类型。受检与非受检是接口契约的选择；无法恢复时向有上下文的边界传播，能恢复时才在当地处理。
 
+再独立运行第二个 `Main.java`，观察“后创建先关闭”和“创建第二个资源失败”的路径。构造器抛异常的资源没有成功进入 try-with-resources 管理，构造器自己取得但尚未交付的资源必须自己清理。
+
+<!-- reference-case: {"id":"java-resource-initialization-order","stdout":"close:b\nclose:a\nprimary:close:b\nsuppressed:close:a\nclose:a\nprimary:init:b\nsuppressed:close:a\n"} -->
+```java
+public class Main {
+    static final class Resource implements AutoCloseable {
+        private final String name;
+        Resource(String name, boolean fail) {
+            this.name = name;
+            if (fail) throw new IllegalArgumentException("init:" + name);
+        }
+        @Override public void close() {
+            System.out.println("close:" + name);
+            throw new IllegalStateException("close:" + name);
+        }
+    }
+    static void show(Exception error) {
+        System.out.println("primary:" + error.getMessage());
+        for (Throwable suppressed : error.getSuppressed()) {
+            System.out.println("suppressed:" + suppressed.getMessage());
+        }
+    }
+    public static void main(String[] args) {
+        try (var a = new Resource("a", false); var b = new Resource("b", false)) {
+            // 主体正常结束，b 的关闭异常成为主异常，a 的关闭异常被附加。
+        } catch (Exception error) {
+            show(error);
+        }
+        try (var a = new Resource("a", false); var b = new Resource("b", true)) {
+            throw new AssertionError("b 初始化失败，不能进入主体");
+        } catch (Exception error) {
+            show(error);
+        }
+    }
+}
+```
+
+预期第一段先关闭 b 再关闭 a，主异常是 `close:b`；第二段只关闭 a，主异常是 `init:b`。两段都把 `close:a` 保留在 suppressed 中。这里没有真实文件和数据库，验证范围仅是 Java 资源关闭与异常传播契约，见 [两个完整程序的运行证据](../../../shared-resources/tools/document-quality/reports/php-java-core-boundaries.md)。
+
+实际读取文件时可按调用者责任划分：缺失的可选配置允许使用默认值；配置格式损坏应拒绝启动；保存失败必须返回失败，不能日志记录后仍返回成功。包装成业务异常时传入原异常作为 cause，日志只在负责诊断的边界记录一次，避免每一层重复输出同一条堆栈。
+
 ## 🔗 相关条目
 
+- [JLS 21：try-with-resources 的初始化、关闭与异常传播](https://docs.oracle.com/javase/specs/jls/se21/html/jls-14.html#jls-14.20.3)
 - 📄 **[Java 关键字详解](./01-java-keywords.md)** — `throw`/`throws`/`try`/`finally` 条目
 - 📄 **[异常处理教程](../../basics/06-exceptions.md)** - 入门版讲解
 - 📄 **[事务传播与隔离速查](../framework-essentials/05-transaction-essentials.md)** — 异常类型决定回滚

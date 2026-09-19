@@ -1,0 +1,534 @@
+{
+  "scope": "9 complete Go programs built with -race, 4 Rust programs and 3 expected compile failures; no unmarked snippets or external services",
+  "toolchains": {
+    "go": {
+      "command": [
+        "go",
+        "version"
+      ],
+      "returncode": 0,
+      "stdout": "go version go1.27.1 linux/amd64\n",
+      "stderr": ""
+    },
+    "rust": {
+      "command": [
+        "rustc",
+        "--version"
+      ],
+      "returncode": 0,
+      "stdout": "rustc 1.98.1 (48a229cea 2026-09-01)\n",
+      "stderr": ""
+    },
+    "platform": {
+      "command": [
+        "uname",
+        "-sm"
+      ],
+      "returncode": 0,
+      "stdout": "Linux x86_64\n",
+      "stderr": ""
+    }
+  },
+  "results": [
+    {
+      "case": "go-concurrency-results",
+      "source": "01-go-backend/basics/07-concurrency-basics.md",
+      "source_line": 13,
+      "document_sha256": "97b4eb77a0a833cef83b6f4c658225b64bb34629792cc44c20b95049e50c5e14",
+      "code_sha256": "66c4fe39ea593073aef7633cc20e1bfed5cd536578064fb2f55fb9f9e63586e1",
+      "mode": "runtime",
+      "expected_error": null,
+      "expected_stdout": "14\n",
+      "build": {
+        "command": [
+          "go",
+          "build",
+          "-race",
+          "-o",
+          "/tmp/go-rust-basics-f22h5cnz/example",
+          "/tmp/go-rust-basics-f22h5cnz/main.go"
+        ],
+        "returncode": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "execution": {
+        "command": [
+          "/tmp/go-rust-basics-f22h5cnz/example"
+        ],
+        "returncode": 0,
+        "stdout": "14\n",
+        "stderr": ""
+      },
+      "status": "PASS"
+    },
+    {
+      "case": "go-concurrency-channel",
+      "source": "01-go-backend/basics/07-concurrency-basics.md",
+      "source_line": 70,
+      "document_sha256": "97b4eb77a0a833cef83b6f4c658225b64bb34629792cc44c20b95049e50c5e14",
+      "code_sha256": "39fd0bf1fa910622bf19cb4c38cb355e04a5481321fa3b51aee27f8ab7f69d7c",
+      "mode": "runtime",
+      "expected_error": null,
+      "expected_stdout": "7 true\n0 false\nno ready channel\n",
+      "build": {
+        "command": [
+          "go",
+          "build",
+          "-race",
+          "-o",
+          "/tmp/go-rust-basics-qa53ad2g/example",
+          "/tmp/go-rust-basics-qa53ad2g/main.go"
+        ],
+        "returncode": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "execution": {
+        "command": [
+          "/tmp/go-rust-basics-qa53ad2g/example"
+        ],
+        "returncode": 0,
+        "stdout": "7 true\n0 false\nno ready channel\n",
+        "stderr": ""
+      },
+      "status": "PASS"
+    },
+    {
+      "case": "go-concurrency-cancel",
+      "source": "01-go-backend/basics/07-concurrency-basics.md",
+      "source_line": 116,
+      "document_sha256": "97b4eb77a0a833cef83b6f4c658225b64bb34629792cc44c20b95049e50c5e14",
+      "code_sha256": "6507a0ece2dc67202b72c88a84f3c8c7f6a4d2faf90d17d8761b63c2e4926617",
+      "mode": "runtime",
+      "expected_error": null,
+      "expected_stdout": "0\ncontext canceled\n",
+      "build": {
+        "command": [
+          "go",
+          "build",
+          "-race",
+          "-o",
+          "/tmp/go-rust-basics-k3bger46/example",
+          "/tmp/go-rust-basics-k3bger46/main.go"
+        ],
+        "returncode": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "execution": {
+        "command": [
+          "/tmp/go-rust-basics-k3bger46/example"
+        ],
+        "returncode": 0,
+        "stdout": "0\ncontext canceled\n",
+        "stderr": ""
+      },
+      "status": "PASS"
+    },
+    {
+      "case": "go-concurrency-mutex",
+      "source": "01-go-backend/basics/07-concurrency-basics.md",
+      "source_line": 162,
+      "document_sha256": "97b4eb77a0a833cef83b6f4c658225b64bb34629792cc44c20b95049e50c5e14",
+      "code_sha256": "d4a6e387424796c400d9c2df09251c9ad578fec9fc8129226ceed4aca8a6d7c5",
+      "mode": "runtime",
+      "expected_error": null,
+      "expected_stdout": "100 100\n",
+      "build": {
+        "command": [
+          "go",
+          "build",
+          "-race",
+          "-o",
+          "/tmp/go-rust-basics-pd8prncl/example",
+          "/tmp/go-rust-basics-pd8prncl/main.go"
+        ],
+        "returncode": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "execution": {
+        "command": [
+          "/tmp/go-rust-basics-pd8prncl/example"
+        ],
+        "returncode": 0,
+        "stdout": "100 100\n",
+        "stderr": ""
+      },
+      "status": "PASS"
+    },
+    {
+      "case": "go-errors-contract",
+      "source": "01-go-backend/basics/08-error-handling.md",
+      "source_line": 23,
+      "document_sha256": "1d5e851d10b7a50cd2d403303a05d02bf0d3a9c2b6f619ea059fca88ef586a5d",
+      "code_sha256": "86cd285a53e76e6708cb128b73f4155debde85719a1fdc2278bc0a9973866206",
+      "mode": "runtime",
+      "expected_error": null,
+      "expected_stdout": "Ada\ninvalid id\nnot found\nfalse\ntrue true\ntrue\n",
+      "build": {
+        "command": [
+          "go",
+          "build",
+          "-race",
+          "-o",
+          "/tmp/go-rust-basics-wy2jqgk4/example",
+          "/tmp/go-rust-basics-wy2jqgk4/main.go"
+        ],
+        "returncode": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "execution": {
+        "command": [
+          "/tmp/go-rust-basics-wy2jqgk4/example"
+        ],
+        "returncode": 0,
+        "stdout": "Ada\ninvalid id\nnot found\nfalse\ntrue true\ntrue\n",
+        "stderr": ""
+      },
+      "status": "PASS"
+    },
+    {
+      "case": "go-errors-typed-nil",
+      "source": "01-go-backend/basics/08-error-handling.md",
+      "source_line": 92,
+      "document_sha256": "1d5e851d10b7a50cd2d403303a05d02bf0d3a9c2b6f619ea059fca88ef586a5d",
+      "code_sha256": "2f8193afe11bedee880164985d0ccbeef657dc3d1b25f470f4a87d85406b84c6",
+      "mode": "runtime",
+      "expected_error": null,
+      "expected_stdout": "false\ntrue\n",
+      "build": {
+        "command": [
+          "go",
+          "build",
+          "-race",
+          "-o",
+          "/tmp/go-rust-basics-g7yt518k/example",
+          "/tmp/go-rust-basics-g7yt518k/main.go"
+        ],
+        "returncode": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "execution": {
+        "command": [
+          "/tmp/go-rust-basics-g7yt518k/example"
+        ],
+        "returncode": 0,
+        "stdout": "false\ntrue\n",
+        "stderr": ""
+      },
+      "status": "PASS"
+    },
+    {
+      "case": "go-errors-cleanup",
+      "source": "01-go-backend/basics/08-error-handling.md",
+      "source_line": 131,
+      "document_sha256": "1d5e851d10b7a50cd2d403303a05d02bf0d3a9c2b6f619ea059fca88ef586a5d",
+      "code_sha256": "08b4442790d4d25a1554abca7bc47e3f987c3f7d0b1132bd7e8d4dd78d777619",
+      "mode": "runtime",
+      "expected_error": null,
+      "expected_stdout": "true\ntrue true\ncurrent 2\ncaptured 1\nlast\n",
+      "build": {
+        "command": [
+          "go",
+          "build",
+          "-race",
+          "-o",
+          "/tmp/go-rust-basics-ahuvpi3m/example",
+          "/tmp/go-rust-basics-ahuvpi3m/main.go"
+        ],
+        "returncode": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "execution": {
+        "command": [
+          "/tmp/go-rust-basics-ahuvpi3m/example"
+        ],
+        "returncode": 0,
+        "stdout": "true\ntrue true\ncurrent 2\ncaptured 1\nlast\n",
+        "stderr": ""
+      },
+      "status": "PASS"
+    },
+    {
+      "case": "go-errors-recover",
+      "source": "01-go-backend/basics/08-error-handling.md",
+      "source_line": 195,
+      "document_sha256": "1d5e851d10b7a50cd2d403303a05d02bf0d3a9c2b6f619ea059fca88ef586a5d",
+      "code_sha256": "9c20c95a1c99a5c15c5aef383fbb4b402bdbd0b32c01f6b07eaede036495d29a",
+      "mode": "runtime",
+      "expected_error": null,
+      "expected_stdout": "true\ntrue false\nouter received unexpected\n",
+      "build": {
+        "command": [
+          "go",
+          "build",
+          "-race",
+          "-o",
+          "/tmp/go-rust-basics-r31sukhf/example",
+          "/tmp/go-rust-basics-r31sukhf/main.go"
+        ],
+        "returncode": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "execution": {
+        "command": [
+          "/tmp/go-rust-basics-r31sukhf/example"
+        ],
+        "returncode": 0,
+        "stdout": "true\ntrue false\nouter received unexpected\n",
+        "stderr": ""
+      },
+      "status": "PASS"
+    },
+    {
+      "case": "go-errors-http",
+      "source": "01-go-backend/basics/08-error-handling.md",
+      "source_line": 251,
+      "document_sha256": "1d5e851d10b7a50cd2d403303a05d02bf0d3a9c2b6f619ea059fca88ef586a5d",
+      "code_sha256": "9f345703f54d2a4629091882e0cd863f0544edc8b2e41f9c85cda24dfc4b7c55",
+      "mode": "runtime",
+      "expected_error": null,
+      "expected_stdout": "400 {\"error\":\"invalid id\"}\n200 {\"name\":\"Ada\"}\n404 {\"error\":\"not found\"}\n500 {\"error\":\"internal error\"}\n",
+      "build": {
+        "command": [
+          "go",
+          "build",
+          "-race",
+          "-o",
+          "/tmp/go-rust-basics-gbysbr66/example",
+          "/tmp/go-rust-basics-gbysbr66/main.go"
+        ],
+        "returncode": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "execution": {
+        "command": [
+          "/tmp/go-rust-basics-gbysbr66/example"
+        ],
+        "returncode": 0,
+        "stdout": "400 {\"error\":\"invalid id\"}\n200 {\"name\":\"Ada\"}\n404 {\"error\":\"not found\"}\n500 {\"error\":\"internal error\"}\n",
+        "stderr": ""
+      },
+      "status": "PASS"
+    },
+    {
+      "case": "rust-lifetime-nll",
+      "source": "11-rust-cross-platform/reference/language-concepts/04-advanced-lifetimes.md",
+      "source_line": 165,
+      "document_sha256": "7acf63db105538c1d6ff91474edebc2ee5737bc8eb59c09aec19fe3d5dc738d3",
+      "code_sha256": "3102d1db9d936bd6690bdc054b12ba4e241c6b6502d72cecb0c91fe35ab59048",
+      "mode": "runtime",
+      "expected_error": null,
+      "expected_stdout": "long string first\nlong string first / long string first\n",
+      "build": {
+        "command": [
+          "rustc",
+          "--edition",
+          "2024",
+          "--error-format=json",
+          "/tmp/go-rust-basics-2ytoy5kk/main.rs",
+          "-o",
+          "/tmp/go-rust-basics-2ytoy5kk/example"
+        ],
+        "returncode": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "execution": {
+        "command": [
+          "/tmp/go-rust-basics-2ytoy5kk/example"
+        ],
+        "returncode": 0,
+        "stdout": "long string first\nlong string first / long string first\n",
+        "stderr": ""
+      },
+      "status": "PASS"
+    },
+    {
+      "case": "rust-lifetime-covariance",
+      "source": "11-rust-cross-platform/reference/language-concepts/04-advanced-lifetimes.md",
+      "source_line": 209,
+      "document_sha256": "7acf63db105538c1d6ff91474edebc2ee5737bc8eb59c09aec19fe3d5dc738d3",
+      "code_sha256": "f5c8a6d14f7129e0689db082c9b80d870e40bb92fa0ca4eeb55f7e7435fc9bb7",
+      "mode": "runtime",
+      "expected_error": null,
+      "expected_stdout": "字面量天然 'static / 字面量天然 'static\n常驻文本\n",
+      "build": {
+        "command": [
+          "rustc",
+          "--edition",
+          "2024",
+          "--error-format=json",
+          "/tmp/go-rust-basics-fdarydkk/main.rs",
+          "-o",
+          "/tmp/go-rust-basics-fdarydkk/example"
+        ],
+        "returncode": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "execution": {
+        "command": [
+          "/tmp/go-rust-basics-fdarydkk/example"
+        ],
+        "returncode": 0,
+        "stdout": "字面量天然 'static / 字面量天然 'static\n常驻文本\n",
+        "stderr": ""
+      },
+      "status": "PASS"
+    },
+    {
+      "case": "rust-lifetime-hrtb",
+      "source": "11-rust-cross-platform/reference/language-concepts/04-advanced-lifetimes.md",
+      "source_line": 240,
+      "document_sha256": "7acf63db105538c1d6ff91474edebc2ee5737bc8eb59c09aec19fe3d5dc738d3",
+      "code_sha256": "3c0dcc9e80d1975981a1346ba04a7b5ec94a048283b59d724da6c8c8e7523b1b",
+      "mode": "runtime",
+      "expected_error": null,
+      "expected_stdout": "HRTB\nsugar\nclosure\n",
+      "build": {
+        "command": [
+          "rustc",
+          "--edition",
+          "2024",
+          "--error-format=json",
+          "/tmp/go-rust-basics-fnaplf5y/main.rs",
+          "-o",
+          "/tmp/go-rust-basics-fnaplf5y/example"
+        ],
+        "returncode": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "execution": {
+        "command": [
+          "/tmp/go-rust-basics-fnaplf5y/example"
+        ],
+        "returncode": 0,
+        "stdout": "HRTB\nsugar\nclosure\n",
+        "stderr": ""
+      },
+      "status": "PASS"
+    },
+    {
+      "case": "rust-lifetime-static",
+      "source": "11-rust-cross-platform/reference/language-concepts/04-advanced-lifetimes.md",
+      "source_line": 274,
+      "document_sha256": "7acf63db105538c1d6ff91474edebc2ee5737bc8eb59c09aec19fe3d5dc738d3",
+      "code_sha256": "4ceaa625edf5e35626ee39f80d1cf12793ecb41da867cc9fe397a8df3f3b0507",
+      "mode": "runtime",
+      "expected_error": null,
+      "expected_stdout": "owned 也满足 'static 约束\n字面量\n局部值\n",
+      "build": {
+        "command": [
+          "rustc",
+          "--edition",
+          "2024",
+          "--error-format=json",
+          "/tmp/go-rust-basics-46vwif6k/main.rs",
+          "-o",
+          "/tmp/go-rust-basics-46vwif6k/example"
+        ],
+        "returncode": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "execution": {
+        "command": [
+          "/tmp/go-rust-basics-46vwif6k/example"
+        ],
+        "returncode": 0,
+        "stdout": "owned 也满足 'static 约束\n字面量\n局部值\n",
+        "stderr": ""
+      },
+      "status": "PASS"
+    },
+    {
+      "case": "rust-lifetime-dangling",
+      "source": "11-rust-cross-platform/reference/language-concepts/04-advanced-lifetimes.md",
+      "source_line": 312,
+      "document_sha256": "7acf63db105538c1d6ff91474edebc2ee5737bc8eb59c09aec19fe3d5dc738d3",
+      "code_sha256": "68f64ca42546bfcb8a94bdd1b238dec8bed5b9520276dd16a2e106acaa3bc5fb",
+      "mode": "compile_error",
+      "expected_error": "E0597",
+      "expected_stdout": null,
+      "build": {
+        "command": [
+          "rustc",
+          "--edition",
+          "2024",
+          "--error-format=json",
+          "/tmp/go-rust-basics-s7d3w_cf/main.rs",
+          "-o",
+          "/tmp/go-rust-basics-s7d3w_cf/example"
+        ],
+        "returncode": 1,
+        "stdout": "",
+        "stderr": "{\"$message_type\":\"diagnostic\",\"message\":\"`local` does not live long enough\",\"code\":{\"code\":\"E0597\",\"explanation\":\"This error occurs because a value was dropped while it was still borrowed.\\n\\nErroneous code example:\\n\\n```compile_fail,E0597\\nstruct Foo<'a> {\\n    x: Option<&'a u32>,\\n}\\n\\nlet mut x = Foo { x: None };\\n{\\n    let y = 0;\\n    x.x = Some(&y); // error: `y` does not live long enough\\n}\\nprintln!(\\\"{:?}\\\", x.x);\\n```\\n\\nHere, `y` is dropped at the end of the inner scope, but it is borrowed by\\n`x` until the `println`. To fix the previous example, just remove the scope\\nso that `y` isn't dropped until after the println\\n\\n```\\nstruct Foo<'a> {\\n    x: Option<&'a u32>,\\n}\\n\\nlet mut x = Foo { x: None };\\n\\nlet y = 0;\\nx.x = Some(&y);\\n\\nprintln!(\\\"{:?}\\\", x.x);\\n```\\n\"},\"level\":\"error\",\"spans\":[{\"file_name\":\"/tmp/go-rust-basics-s7d3w_cf/main.rs\",\"byte_start\":148,\"byte_end\":154,\"line_start\":9,\"line_end\":9,\"column_start\":28,\"column_end\":34,\"is_primary\":true,\"text\":[{\"text\":\"        r = Reader { text: &local };\",\"highlight_start\":28,\"highlight_end\":34}],\"label\":\"borrowed value does not live long enough\",\"suggested_replacement\":null,\"suggestion_applicability\":null,\"expansion\":null},{\"file_name\":\"/tmp/go-rust-basics-s7d3w_cf/main.rs\",\"byte_start\":162,\"byte_end\":163,\"line_start\":10,\"line_end\":10,\"column_start\":5,\"column_end\":6,\"is_primary\":false,\"text\":[{\"text\":\"    } // local 在此销毁\",\"highlight_start\":5,\"highlight_end\":6}],\"label\":\"`local` dropped here while still borrowed\",\"suggested_replacement\":null,\"suggestion_applicability\":null,\"expansion\":null},{\"file_name\":\"/tmp/go-rust-basics-s7d3w_cf/main.rs\",\"byte_start\":83,\"byte_end\":88,\"line_start\":8,\"line_end\":8,\"column_start\":13,\"column_end\":18,\"is_primary\":false,\"text\":[{\"text\":\"        let local = String::from(\\\"临时数据\\\");\",\"highlight_start\":13,\"highlight_end\":18}],\"label\":\"binding `local` declared here\",\"suggested_replacement\":null,\"suggestion_applicability\":null,\"expansion\":null},{\"file_name\":\"/tmp/go-rust-basics-s7d3w_cf/main.rs\",\"byte_start\":205,\"byte_end\":211,\"line_start\":11,\"line_end\":11,\"column_start\":20,\"column_end\":26,\"is_primary\":false,\"text\":[{\"text\":\"    println!(\\\"{}\\\", r.text); // r 仍存活并使用 local 的数据 → 错误\",\"highlight_start\":20,\"highlight_end\":26}],\"label\":\"borrow later used here\",\"suggested_replacement\":null,\"suggestion_applicability\":null,\"expansion\":{\"span\":{\"file_name\":\"/rustc/48a229ceaefd4985c50990b14116b6d856af0985/library/std/src/macros.rs\",\"byte_start\":4432,\"byte_end\":4465,\"line_start\":146,\"line_end\":146,\"column_start\":28,\"column_end\":61,\"is_primary\":false,\"text\":[],\"label\":null,\"suggested_replacement\":null,\"suggestion_applicability\":null,\"expansion\":{\"span\":{\"file_name\":\"/rustc/48a229ceaefd4985c50990b14116b6d856af0985/library/std/src/macros.rs\",\"byte_start\":4432,\"byte_end\":4465,\"line_start\":146,\"line_end\":146,\"column_start\":28,\"column_end\":61,\"is_primary\":false,\"text\":[],\"label\":null,\"suggested_replacement\":null,\"suggestion_applicability\":null,\"expansion\":{\"span\":{\"file_name\":\"/tmp/go-rust-basics-s7d3w_cf/main.rs\",\"byte_start\":190,\"byte_end\":212,\"line_start\":11,\"line_end\":11,\"column_start\":5,\"column_end\":27,\"is_primary\":false,\"text\":[{\"text\":\"    println!(\\\"{}\\\", r.text); // r 仍存活并使用 local 的数据 → 错误\",\"highlight_start\":5,\"highlight_end\":27}],\"label\":null,\"suggested_replacement\":null,\"suggestion_applicability\":null,\"expansion\":null},\"macro_decl_name\":\"println!\",\"def_site_span\":{\"file_name\":\"/rustc/48a229ceaefd4985c50990b14116b6d856af0985/library/std/src/macros.rs\",\"byte_start\":4310,\"byte_end\":4330,\"line_start\":141,\"line_end\":141,\"column_start\":1,\"column_end\":21,\"is_primary\":false,\"text\":[],\"label\":null,\"suggested_replacement\":null,\"suggestion_applicability\":null,\"expansion\":null}}},\"macro_decl_name\":\"$crate::format_args_nl!\",\"def_site_span\":{\"file_name\":\"/rustc/48a229ceaefd4985c50990b14116b6d856af0985/library/core/src/macros/mod.rs\",\"byte_start\":36216,\"byte_end\":36243,\"line_start\":1026,\"line_end\":1026,\"column_start\":5,\"column_end\":32,\"is_primary\":false,\"text\":[],\"label\":null,\"suggested_replacement\":null,\"suggestion_applicability\":null,\"expansion\":null}}},\"macro_decl_name\":\"desugaring of format string literal\",\"def_site_span\":{\"file_name\":\"/tmp/go-rust-basics-s7d3w_cf/main.rs\",\"byte_start\":0,\"byte_end\":0,\"line_start\":1,\"line_end\":1,\"column_start\":1,\"column_end\":1,\"is_primary\":false,\"text\":[],\"label\":null,\"suggested_replacement\":null,\"suggestion_applicability\":null,\"expansion\":null}}}],\"children\":[],\"rendered\":\"error[E0597]: `local` does not live long enough\\n  --> /tmp/go-rust-basics-s7d3w_cf/main.rs:9:28\\n   |\\n 8 |         let local = String::from(\\\"临时数据\\\");\\n   |             ----- binding `local` declared here\\n 9 |         r = Reader { text: &local };\\n   |                            ^^^^^^ borrowed value does not live long enough\\n10 |     } // local 在此销毁\\n   |     - `local` dropped here while still borrowed\\n11 |     println!(\\\"{}\\\", r.text); // r 仍存活并使用 local 的数据 → 错误\\n   |                    ------ borrow later used here\\n\\n\"}\n{\"$message_type\":\"diagnostic\",\"message\":\"aborting due to 1 previous error\",\"code\":null,\"level\":\"error\",\"spans\":[],\"children\":[],\"rendered\":\"error: aborting due to 1 previous error\\n\\n\"}\n{\"$message_type\":\"diagnostic\",\"message\":\"For more information about this error, try `rustc --explain E0597`.\",\"code\":null,\"level\":\"failure-note\",\"spans\":[],\"children\":[],\"rendered\":\"For more information about this error, try `rustc --explain E0597`.\\n\"}\n"
+      },
+      "execution": null,
+      "status": "PASS"
+    },
+    {
+      "case": "rust-lifetime-elision",
+      "source": "11-rust-cross-platform/reference/language-concepts/04-advanced-lifetimes.md",
+      "source_line": 332,
+      "document_sha256": "7acf63db105538c1d6ff91474edebc2ee5737bc8eb59c09aec19fe3d5dc738d3",
+      "code_sha256": "c0f232004af1396dd4f8d77bd66d9accd9b7bf105c56491fa4f1f7277dda9f5b",
+      "mode": "compile_error",
+      "expected_error": "E0106",
+      "expected_stdout": null,
+      "build": {
+        "command": [
+          "rustc",
+          "--edition",
+          "2024",
+          "--error-format=json",
+          "/tmp/go-rust-basics-o_bl8u4a/main.rs",
+          "-o",
+          "/tmp/go-rust-basics-o_bl8u4a/example"
+        ],
+        "returncode": 1,
+        "stdout": "",
+        "stderr": "{\"$message_type\":\"diagnostic\",\"message\":\"missing lifetime specifier\",\"code\":{\"code\":\"E0106\",\"explanation\":\"This error indicates that a lifetime is missing from a type. If it is an error\\ninside a function signature, the problem may be with failing to adhere to the\\nlifetime elision rules (see below).\\n\\nErroneous code examples:\\n\\n```compile_fail,E0106\\nstruct Foo1 { x: &bool }\\n              // ^ expected lifetime parameter\\nstruct Foo2<'a> { x: &'a bool } // correct\\n\\nstruct Bar1 { x: Foo2 }\\n              // ^^^^ expected lifetime parameter\\nstruct Bar2<'a> { x: Foo2<'a> } // correct\\n\\nenum Baz1 { A(u8), B(&bool), }\\n                  // ^ expected lifetime parameter\\nenum Baz2<'a> { A(u8), B(&'a bool), } // correct\\n\\ntype MyStr1 = &str;\\n           // ^ expected lifetime parameter\\ntype MyStr2<'a> = &'a str; // correct\\n```\\n\\nLifetime elision is a special, limited kind of inference for lifetimes in\\nfunction signatures which allows you to leave out lifetimes in certain cases.\\nFor more background on lifetime elision see [the book][book-le].\\n\\nThe lifetime elision rules require that any function signature with an elided\\noutput lifetime must either have:\\n\\n - exactly one input lifetime\\n - or, multiple input lifetimes, but the function must also be a method with a\\n   `&self` or `&mut self` receiver\\n\\nIn the first case, the output lifetime is inferred to be the same as the unique\\ninput lifetime. In the second case, the lifetime is instead inferred to be the\\nsame as the lifetime on `&self` or `&mut self`.\\n\\nHere are some examples of elision errors:\\n\\n```compile_fail,E0106\\n// error, no input lifetimes\\nfn foo() -> &str { }\\n\\n// error, `x` and `y` have distinct lifetimes inferred\\nfn bar(x: &str, y: &str) -> &str { }\\n\\n// error, `y`'s lifetime is inferred to be distinct from `x`'s\\nfn baz<'a>(x: &'a str, y: &str) -> &str { }\\n```\\n\\n[book-le]: https://doc.rust-lang.org/book/ch10-03-lifetime-syntax.html#lifetime-elision\\n\"},\"level\":\"error\",\"spans\":[{\"file_name\":\"/tmp/go-rust-basics-o_bl8u4a/main.rs\",\"byte_start\":29,\"byte_end\":30,\"line_start\":1,\"line_end\":1,\"column_start\":30,\"column_end\":31,\"is_primary\":true,\"text\":[{\"text\":\"fn pick(a: &str, b: &str) -> &str {\",\"highlight_start\":30,\"highlight_end\":31}],\"label\":\"expected named lifetime parameter\",\"suggested_replacement\":null,\"suggestion_applicability\":null,\"expansion\":null},{\"file_name\":\"/tmp/go-rust-basics-o_bl8u4a/main.rs\",\"byte_start\":11,\"byte_end\":15,\"line_start\":1,\"line_end\":1,\"column_start\":12,\"column_end\":16,\"is_primary\":false,\"text\":[{\"text\":\"fn pick(a: &str, b: &str) -> &str {\",\"highlight_start\":12,\"highlight_end\":16}],\"label\":\"\",\"suggested_replacement\":null,\"suggestion_applicability\":null,\"expansion\":null},{\"file_name\":\"/tmp/go-rust-basics-o_bl8u4a/main.rs\",\"byte_start\":20,\"byte_end\":24,\"line_start\":1,\"line_end\":1,\"column_start\":21,\"column_end\":25,\"is_primary\":false,\"text\":[{\"text\":\"fn pick(a: &str, b: &str) -> &str {\",\"highlight_start\":21,\"highlight_end\":25}],\"label\":\"\",\"suggested_replacement\":null,\"suggestion_applicability\":null,\"expansion\":null}],\"children\":[{\"message\":\"this function's return type contains a borrowed value, but the signature does not say whether it is borrowed from `a` or `b`\",\"code\":null,\"level\":\"help\",\"spans\":[],\"children\":[],\"rendered\":null},{\"message\":\"consider introducing a named lifetime parameter\",\"code\":null,\"level\":\"help\",\"spans\":[{\"file_name\":\"/tmp/go-rust-basics-o_bl8u4a/main.rs\",\"byte_start\":7,\"byte_end\":7,\"line_start\":1,\"line_end\":1,\"column_start\":8,\"column_end\":8,\"is_primary\":true,\"text\":[{\"text\":\"fn pick(a: &str, b: &str) -> &str {\",\"highlight_start\":8,\"highlight_end\":8}],\"label\":null,\"suggested_replacement\":\"<'a>\",\"suggestion_applicability\":\"MaybeIncorrect\",\"expansion\":null},{\"file_name\":\"/tmp/go-rust-basics-o_bl8u4a/main.rs\",\"byte_start\":30,\"byte_end\":30,\"line_start\":1,\"line_end\":1,\"column_start\":31,\"column_end\":31,\"is_primary\":true,\"text\":[{\"text\":\"fn pick(a: &str, b: &str) -> &str {\",\"highlight_start\":31,\"highlight_end\":31}],\"label\":null,\"suggested_replacement\":\"'a \",\"suggestion_applicability\":\"MaybeIncorrect\",\"expansion\":null},{\"file_name\":\"/tmp/go-rust-basics-o_bl8u4a/main.rs\",\"byte_start\":12,\"byte_end\":12,\"line_start\":1,\"line_end\":1,\"column_start\":13,\"column_end\":13,\"is_primary\":true,\"text\":[{\"text\":\"fn pick(a: &str, b: &str) -> &str {\",\"highlight_start\":13,\"highlight_end\":13}],\"label\":null,\"suggested_replacement\":\"'a \",\"suggestion_applicability\":\"MaybeIncorrect\",\"expansion\":null},{\"file_name\":\"/tmp/go-rust-basics-o_bl8u4a/main.rs\",\"byte_start\":21,\"byte_end\":21,\"line_start\":1,\"line_end\":1,\"column_start\":22,\"column_end\":22,\"is_primary\":true,\"text\":[{\"text\":\"fn pick(a: &str, b: &str) -> &str {\",\"highlight_start\":22,\"highlight_end\":22}],\"label\":null,\"suggested_replacement\":\"'a \",\"suggestion_applicability\":\"MaybeIncorrect\",\"expansion\":null}],\"children\":[],\"rendered\":null}],\"rendered\":\"error[E0106]: missing lifetime specifier\\n --> /tmp/go-rust-basics-o_bl8u4a/main.rs:1:30\\n  |\\n1 | fn pick(a: &str, b: &str) -> &str {\\n  |            ----     ----     ^ expected named lifetime parameter\\n  |\\n  = help: this function's return type contains a borrowed value, but the signature does not say whether it is borrowed from `a` or `b`\\nhelp: consider introducing a named lifetime parameter\\n  |\\n1 | fn pick<'a>(a: &'a str, b: &'a str) -> &'a str {\\n  |        ++++     ++          ++          ++\\n\\n\"}\n{\"$message_type\":\"diagnostic\",\"message\":\"aborting due to 1 previous error\",\"code\":null,\"level\":\"error\",\"spans\":[],\"children\":[],\"rendered\":\"error: aborting due to 1 previous error\\n\\n\"}\n{\"$message_type\":\"diagnostic\",\"message\":\"For more information about this error, try `rustc --explain E0106`.\",\"code\":null,\"level\":\"failure-note\",\"spans\":[],\"children\":[],\"rendered\":\"For more information about this error, try `rustc --explain E0106`.\\n\"}\n"
+      },
+      "execution": null,
+      "status": "PASS"
+    },
+    {
+      "case": "rust-lifetime-owned-borrow",
+      "source": "11-rust-cross-platform/reference/language-concepts/04-advanced-lifetimes.md",
+      "source_line": 351,
+      "document_sha256": "7acf63db105538c1d6ff91474edebc2ee5737bc8eb59c09aec19fe3d5dc738d3",
+      "code_sha256": "28a9e116cbfdb37d2ecb52a9bb35b78c13f5e012883c708f1fb0e62be78004fd",
+      "mode": "compile_error",
+      "expected_error": "E0597",
+      "expected_stdout": null,
+      "build": {
+        "command": [
+          "rustc",
+          "--edition",
+          "2024",
+          "--error-format=json",
+          "/tmp/go-rust-basics-_a870tl4/main.rs",
+          "-o",
+          "/tmp/go-rust-basics-_a870tl4/example"
+        ],
+        "returncode": 1,
+        "stdout": "",
+        "stderr": "{\"$message_type\":\"diagnostic\",\"message\":\"`local` does not live long enough\",\"code\":{\"code\":\"E0597\",\"explanation\":\"This error occurs because a value was dropped while it was still borrowed.\\n\\nErroneous code example:\\n\\n```compile_fail,E0597\\nstruct Foo<'a> {\\n    x: Option<&'a u32>,\\n}\\n\\nlet mut x = Foo { x: None };\\n{\\n    let y = 0;\\n    x.x = Some(&y); // error: `y` does not live long enough\\n}\\nprintln!(\\\"{:?}\\\", x.x);\\n```\\n\\nHere, `y` is dropped at the end of the inner scope, but it is borrowed by\\n`x` until the `println`. To fix the previous example, just remove the scope\\nso that `y` isn't dropped until after the println\\n\\n```\\nstruct Foo<'a> {\\n    x: Option<&'a u32>,\\n}\\n\\nlet mut x = Foo { x: None };\\n\\nlet y = 0;\\nx.x = Some(&y);\\n\\nprintln!(\\\"{:?}\\\", x.x);\\n```\\n\"},\"level\":\"error\",\"spans\":[{\"file_name\":\"/tmp/go-rust-basics-_a870tl4/main.rs\",\"byte_start\":122,\"byte_end\":127,\"line_start\":5,\"line_end\":5,\"column_start\":23,\"column_end\":28,\"is_primary\":true,\"text\":[{\"text\":\"    let values = vec![local.as_str()];\",\"highlight_start\":23,\"highlight_end\":28}],\"label\":\"borrowed value does not live long enough\",\"suggested_replacement\":null,\"suggestion_applicability\":null,\"expansion\":null},{\"file_name\":\"/tmp/go-rust-basics-_a870tl4/main.rs\",\"byte_start\":165,\"byte_end\":166,\"line_start\":7,\"line_end\":7,\"column_start\":1,\"column_end\":2,\"is_primary\":false,\"text\":[{\"text\":\"}\",\"highlight_start\":1,\"highlight_end\":2}],\"label\":\"`local` dropped here while still borrowed\",\"suggested_replacement\":null,\"suggestion_applicability\":null,\"expansion\":null},{\"file_name\":\"/tmp/go-rust-basics-_a870tl4/main.rs\",\"byte_start\":66,\"byte_end\":71,\"line_start\":4,\"line_end\":4,\"column_start\":9,\"column_end\":14,\"is_primary\":false,\"text\":[{\"text\":\"    let local = String::from(\\\"borrowed\\\");\",\"highlight_start\":9,\"highlight_end\":14}],\"label\":\"binding `local` declared here\",\"suggested_replacement\":null,\"suggestion_applicability\":null,\"expansion\":null},{\"file_name\":\"/tmp/go-rust-basics-_a870tl4/main.rs\",\"byte_start\":151,\"byte_end\":163,\"line_start\":6,\"line_end\":6,\"column_start\":13,\"column_end\":25,\"is_primary\":false,\"text\":[{\"text\":\"    let _ = keep(values);\",\"highlight_start\":13,\"highlight_end\":25}],\"label\":\"argument requires that `local` is borrowed for `'static`\",\"suggested_replacement\":null,\"suggestion_applicability\":null,\"expansion\":null}],\"children\":[{\"message\":\"requirement that the value outlives `'static` introduced here\",\"code\":null,\"level\":\"note\",\"spans\":[{\"file_name\":\"/tmp/go-rust-basics-_a870tl4/main.rs\",\"byte_start\":11,\"byte_end\":18,\"line_start\":1,\"line_end\":1,\"column_start\":12,\"column_end\":19,\"is_primary\":true,\"text\":[{\"text\":\"fn keep<T: 'static>(value: T) -> T { value }\",\"highlight_start\":12,\"highlight_end\":19}],\"label\":null,\"suggested_replacement\":null,\"suggestion_applicability\":null,\"expansion\":null}],\"children\":[],\"rendered\":null}],\"rendered\":\"error[E0597]: `local` does not live long enough\\n --> /tmp/go-rust-basics-_a870tl4/main.rs:5:23\\n  |\\n4 |     let local = String::from(\\\"borrowed\\\");\\n  |         ----- binding `local` declared here\\n5 |     let values = vec![local.as_str()];\\n  |                       ^^^^^ borrowed value does not live long enough\\n6 |     let _ = keep(values);\\n  |             ------------ argument requires that `local` is borrowed for `'static`\\n7 | }\\n  | - `local` dropped here while still borrowed\\n  |\\nnote: requirement that the value outlives `'static` introduced here\\n --> /tmp/go-rust-basics-_a870tl4/main.rs:1:12\\n  |\\n1 | fn keep<T: 'static>(value: T) -> T { value }\\n  |            ^^^^^^^\\n\\n\"}\n{\"$message_type\":\"diagnostic\",\"message\":\"aborting due to 1 previous error\",\"code\":null,\"level\":\"error\",\"spans\":[],\"children\":[],\"rendered\":\"error: aborting due to 1 previous error\\n\\n\"}\n{\"$message_type\":\"diagnostic\",\"message\":\"For more information about this error, try `rustc --explain E0597`.\",\"code\":null,\"level\":\"failure-note\",\"spans\":[],\"children\":[],\"rendered\":\"For more information about this error, try `rustc --explain E0597`.\\n\"}\n"
+      },
+      "execution": null,
+      "status": "PASS"
+    }
+  ],
+  "passed": 16,
+  "total": 16
+}

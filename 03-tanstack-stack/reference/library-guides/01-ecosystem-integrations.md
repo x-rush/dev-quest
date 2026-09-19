@@ -149,7 +149,7 @@ function VirtualRows({ rows }: { rows: string[] }) {
 
 ### 陷阱
 
-- `estimateSize` 严重失准时滚动条会跳动，动态行高用 `measureElement` 实测
+- `estimateSize` 严重失准时可能造成滚动位置跳动；动态行高时使用 `measureElement`，并在目标数据集和设备上记录测量结果
 - 与 Table 组合时虚拟化的是 `table.getRowModel().rows`，行定位用绝对位移替代 `<table>` 原生布局
 
 ## 4. 滑块：TanStack Ranger

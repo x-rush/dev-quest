@@ -208,7 +208,7 @@ Codable 描述编解码，Sendable 描述跨并发边界传递的安全契约，
 
 **Q1: Preview 里没有数据？** 用 `isStoredInMemoryOnly: true` 的容器 + `SampleData` 预填。
 
-**Q2: 关系字段要双向声明吗？** 单向即可运行；声明反向属性便于从记录找城市，代价是级联语义要明确 `deleteRule`。
+**Q2: 关系字段要双向声明吗？** 是否只声明单向关系取决于模型与查询需求；若声明反向属性，便于从记录找城市，但须明确 `deleteRule`。在目标 Xcode 与 SwiftData 版本中编译并做插入、查询、删除练习后，才能确认自己的模型配置。
 
 **Q3: API 域名没配 HTTPS 会被拒吗？** 会。ATS 默认强制 HTTPS，例外配置与原因见 [security-practices 专题](../advanced-topics/security/01-security-practices.md)。
 

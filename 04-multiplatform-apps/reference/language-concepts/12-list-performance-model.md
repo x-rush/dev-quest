@@ -39,7 +39,7 @@ FlatList 的核心是**虚拟化（windowing）**：只渲染视口附近的一�
 | `maxToRenderPerBatch` | 每批增量渲染上限 | 10 | 调大→白屏少但每批 JS 工作量大、易掉帧 |
 | `updateCellsBatchingPeriod` | 增量批次间隔（ms） | 50 | 调小→补渲染更密、更跟手，但 JS 更忙 |
 | `getItemLayout` | 条目**定高**时提供 `(data, index) => {length, offset, index}`，跳过异步测量 | 无 | 定高列表必给；跳转/滚动定位性能大增 |
-| `removeClippedSubviews` | 裁剪视口外子视图 | Android 默认 true，其他平台按版本核对 | Android 收益明显，iOS 需实测 |
+| `removeClippedSubviews` | 裁剪视口外子视图 | Android 常见默认值为 true；其他平台与当前版本须查官方 API | 先在目标设备记录内存、白屏、触摸和滚动结果；不能预先承诺收益 |
 | `onEndReachedThreshold` | 触底加载的提前量（视口高度比例） | — | 配合分页请求，避免触底后等待感 |
 
 ### 白屏滚动：成因链与调参顺序
@@ -76,7 +76,7 @@ const ITEM_H = 64; // 行高严格一致（含分隔线）
 />
 ```
 
-**何时换 FlashList**：条目上千、行结构复杂、`windowSize`/批次调参后白屏仍明显。FlashList v2（新架构专用）已转为 **JS-only 实现**：不再要求行高估计（v1 的 `estimatedItemSize` 在 v2 已不存在，无需提供），视图回收复用仍保留——只是从 v1 的原生视图池挪到了 JS 层。Expo 工程用 `npx expo install @shopify/flash-list` 安装版本对齐的包（新架构工程装 2.x；v1→v2 还有 blankArea 语义等多项差异，升级前对照官方 v2 迁移说明）；用法差异与实测对比见 [渲染性能](../../advanced-topics/performance/01-rendering-performance.md)。
+**何时评估 FlashList**：条目上千、行结构复杂、`windowSize`/批次调参后白屏仍明显时，把它作为候选方案。FlashList v2 的新架构要求、JS 实现与 `estimatedItemSize` 迁移规则均会随版本变化，安装或升级前应对照所用版本的官方迁移说明。Expo 工程可用 `npx expo install @shopify/flash-list` 选择与 SDK 相容的包；随后在相同设备、数据量和交互脚本下比较首屏、滚动、内存与正确性。本文未提供 FlashList 的设备对比结果。
 
 ## ⚠️ 常见陷阱
 
@@ -103,7 +103,7 @@ const ITEM_H = 64; // 行高严格一致（含分隔线）
 ## 🔗 相关条目
 
 - 📄 **[核心组件 Props 全表](./02-components-props.md)** — FlatList 基础 Props 与性能 Props 速查
-- 📄 **[渲染性能（解释篇）](../../advanced-topics/performance/01-rendering-performance.md)** — FlashList 对比实测、掉帧归因清单
+- 📄 **[渲染性能（解释篇）](../../advanced-topics/performance/01-rendering-performance.md)** — FlashList 对比的测量方案、掉帧归因清单
 - 📄 **[动画与手势库](../library-guides/04-animation-gesture-libs.md)** — 滚动联动的帧级通道（worklet）
 - 📄 **[CLI 与调试速查](../quick-references/01-cli-and-debug-cheatsheet.md)** — 列表掉帧的调试手法
 - 📄 **[实战：聊天应用](../../projects/03-chat-app.md)** — 大列表替换 FlashList 的落地场景

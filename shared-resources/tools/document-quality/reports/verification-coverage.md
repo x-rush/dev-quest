@@ -7,11 +7,11 @@
 | 指标 | 数量 |
 |---|---:|
 | 纳入模块文档 | 641 |
-| 主状态：not_verified | 565 |
-| 主状态：runtime | 76 |
-| 验证措辞出现次数 | 200 |
-| 措辞分类：source_has_limited_runtime_evidence | 74 |
-| 措辞分类：unbound_verification_wording | 126 |
+| 主状态：not_verified | 559 |
+| 主状态：runtime | 82 |
+| 验证措辞出现次数 | 173 |
+| 措辞分类：source_has_limited_runtime_evidence | 76 |
+| 措辞分类：unbound_verification_wording | 97 |
 
 ## 语法级覆盖（不能当作运行覆盖）
 
@@ -43,8 +43,8 @@
 | Go | [01-go-backend/basics/04-composite-types.md](../../../../01-go-backend/basics/04-composite-types.md) | `not_verified` | 0 | 0 |
 | Go | [01-go-backend/basics/05-functions-methods.md](../../../../01-go-backend/basics/05-functions-methods.md) | `not_verified` | 0 | 0 |
 | Go | [01-go-backend/basics/06-control-structures.md](../../../../01-go-backend/basics/06-control-structures.md) | `not_verified` | 0 | 0 |
-| Go | [01-go-backend/basics/07-concurrency-basics.md](../../../../01-go-backend/basics/07-concurrency-basics.md) | `not_verified` | 0 | 0 |
-| Go | [01-go-backend/basics/08-error-handling.md](../../../../01-go-backend/basics/08-error-handling.md) | `not_verified` | 0 | 0 |
+| Go | [01-go-backend/basics/07-concurrency-basics.md](../../../../01-go-backend/basics/07-concurrency-basics.md) | `runtime` | 4 | 0 |
+| Go | [01-go-backend/basics/08-error-handling.md](../../../../01-go-backend/basics/08-error-handling.md) | `runtime` | 5 | 0 |
 | Go | [01-go-backend/deployment/01-containerization.md](../../../../01-go-backend/deployment/01-containerization.md) | `not_verified` | 0 | 2 |
 | Go | [01-go-backend/deployment/02-ci-cd-pipelines.md](../../../../01-go-backend/deployment/02-ci-cd-pipelines.md) | `not_verified` | 0 | 0 |
 | Go | [01-go-backend/deployment/03-kubernetes-deployment.md](../../../../01-go-backend/deployment/03-kubernetes-deployment.md) | `not_verified` | 0 | 0 |
@@ -153,7 +153,7 @@
 | Next.js / TypeScript | [02-nextjs-frontend/reference/framework-patterns/11-error-loading-patterns.md](../../../../02-nextjs-frontend/reference/framework-patterns/11-error-loading-patterns.md) | `not_verified` | 0 | 0 |
 | Next.js / TypeScript | [02-nextjs-frontend/reference/framework-patterns/12-metadata-and-script.md](../../../../02-nextjs-frontend/reference/framework-patterns/12-metadata-and-script.md) | `not_verified` | 0 | 0 |
 | Next.js / TypeScript | [02-nextjs-frontend/reference/framework-patterns/13-route-segment-config.md](../../../../02-nextjs-frontend/reference/framework-patterns/13-route-segment-config.md) | `not_verified` | 0 | 0 |
-| Next.js / TypeScript | [02-nextjs-frontend/reference/framework-patterns/14-env-vars.md](../../../../02-nextjs-frontend/reference/framework-patterns/14-env-vars.md) | `not_verified` | 0 | 1 |
+| Next.js / TypeScript | [02-nextjs-frontend/reference/framework-patterns/14-env-vars.md](../../../../02-nextjs-frontend/reference/framework-patterns/14-env-vars.md) | `not_verified` | 0 | 0 |
 | Next.js / TypeScript | [02-nextjs-frontend/reference/language-concepts/01-react-syntax-cheatsheet.md](../../../../02-nextjs-frontend/reference/language-concepts/01-react-syntax-cheatsheet.md) | `not_verified` | 0 | 0 |
 | Next.js / TypeScript | [02-nextjs-frontend/reference/language-concepts/02-nextjs-api-reference.md](../../../../02-nextjs-frontend/reference/language-concepts/02-nextjs-api-reference.md) | `not_verified` | 0 | 0 |
 | Next.js / TypeScript | [02-nextjs-frontend/reference/language-concepts/03-typescript-types.md](../../../../02-nextjs-frontend/reference/language-concepts/03-typescript-types.md) | `not_verified` | 0 | 0 |
@@ -207,7 +207,7 @@
 | TanStack / TypeScript | [03-tanstack-stack/reference/language-concepts/02-table-core-api.md](../../../../03-tanstack-stack/reference/language-concepts/02-table-core-api.md) | `not_verified` | 0 | 0 |
 | TanStack / TypeScript | [03-tanstack-stack/reference/language-concepts/03-router-core-api.md](../../../../03-tanstack-stack/reference/language-concepts/03-router-core-api.md) | `not_verified` | 0 | 0 |
 | TanStack / TypeScript | [03-tanstack-stack/reference/language-concepts/04-form-core-api.md](../../../../03-tanstack-stack/reference/language-concepts/04-form-core-api.md) | `not_verified` | 0 | 0 |
-| TanStack / TypeScript | [03-tanstack-stack/reference/language-concepts/05-typescript-patterns.md](../../../../03-tanstack-stack/reference/language-concepts/05-typescript-patterns.md) | `not_verified` | 0 | 2 |
+| TanStack / TypeScript | [03-tanstack-stack/reference/language-concepts/05-typescript-patterns.md](../../../../03-tanstack-stack/reference/language-concepts/05-typescript-patterns.md) | `not_verified` | 0 | 1 |
 | TanStack / TypeScript | [03-tanstack-stack/reference/language-concepts/06-optimistic-update.md](../../../../03-tanstack-stack/reference/language-concepts/06-optimistic-update.md) | `not_verified` | 0 | 0 |
 | TanStack / TypeScript | [03-tanstack-stack/reference/language-concepts/07-infinite-query.md](../../../../03-tanstack-stack/reference/language-concepts/07-infinite-query.md) | `not_verified` | 0 | 0 |
 | TanStack / TypeScript | [03-tanstack-stack/reference/language-concepts/08-placeholder-data.md](../../../../03-tanstack-stack/reference/language-concepts/08-placeholder-data.md) | `not_verified` | 0 | 0 |
@@ -224,7 +224,7 @@
 | TanStack / TypeScript | [03-tanstack-stack/reference/language-concepts/19-outlet-and-route-components.md](../../../../03-tanstack-stack/reference/language-concepts/19-outlet-and-route-components.md) | `not_verified` | 0 | 0 |
 | TanStack / TypeScript | [03-tanstack-stack/reference/language-concepts/20-use-match-hooks.md](../../../../03-tanstack-stack/reference/language-concepts/20-use-match-hooks.md) | `not_verified` | 0 | 0 |
 | TanStack / TypeScript | [03-tanstack-stack/reference/language-concepts/21-usefield-and-createformhook.md](../../../../03-tanstack-stack/reference/language-concepts/21-usefield-and-createformhook.md) | `not_verified` | 0 | 0 |
-| TanStack / TypeScript | [03-tanstack-stack/reference/library-guides/01-ecosystem-integrations.md](../../../../03-tanstack-stack/reference/library-guides/01-ecosystem-integrations.md) | `not_verified` | 0 | 1 |
+| TanStack / TypeScript | [03-tanstack-stack/reference/library-guides/01-ecosystem-integrations.md](../../../../03-tanstack-stack/reference/library-guides/01-ecosystem-integrations.md) | `not_verified` | 0 | 0 |
 | TanStack / TypeScript | [03-tanstack-stack/reference/library-guides/02-related-libs.md](../../../../03-tanstack-stack/reference/library-guides/02-related-libs.md) | `not_verified` | 0 | 0 |
 | TanStack / TypeScript | [03-tanstack-stack/reference/quick-references/01-syntax-cheatsheet.md](../../../../03-tanstack-stack/reference/quick-references/01-syntax-cheatsheet.md) | `not_verified` | 0 | 0 |
 | TanStack / TypeScript | [03-tanstack-stack/reference/quick-references/02-troubleshooting.md](../../../../03-tanstack-stack/reference/quick-references/02-troubleshooting.md) | `not_verified` | 0 | 0 |
@@ -234,12 +234,12 @@
 | TanStack / TypeScript | [03-tanstack-stack/testing/04-e2e-testing.md](../../../../03-tanstack-stack/testing/04-e2e-testing.md) | `not_verified` | 0 | 0 |
 | React Native / Multi-platform | [04-multiplatform-apps/advanced-topics/architecture/01-new-architecture.md](../../../../04-multiplatform-apps/advanced-topics/architecture/01-new-architecture.md) | `not_verified` | 0 | 1 |
 | React Native / Multi-platform | [04-multiplatform-apps/advanced-topics/performance/01-rendering-performance.md](../../../../04-multiplatform-apps/advanced-topics/performance/01-rendering-performance.md) | `not_verified` | 0 | 0 |
-| React Native / Multi-platform | [04-multiplatform-apps/advanced-topics/performance/02-startup-optimization.md](../../../../04-multiplatform-apps/advanced-topics/performance/02-startup-optimization.md) | `not_verified` | 0 | 1 |
+| React Native / Multi-platform | [04-multiplatform-apps/advanced-topics/performance/02-startup-optimization.md](../../../../04-multiplatform-apps/advanced-topics/performance/02-startup-optimization.md) | `not_verified` | 0 | 0 |
 | React Native / Multi-platform | [04-multiplatform-apps/advanced-topics/security/01-security-practices.md](../../../../04-multiplatform-apps/advanced-topics/security/01-security-practices.md) | `not_verified` | 0 | 0 |
 | React Native / Multi-platform | [04-multiplatform-apps/basics/01-environment-setup.md](../../../../04-multiplatform-apps/basics/01-environment-setup.md) | `not_verified` | 0 | 0 |
 | React Native / Multi-platform | [04-multiplatform-apps/basics/02-first-app.md](../../../../04-multiplatform-apps/basics/02-first-app.md) | `not_verified` | 0 | 0 |
 | React Native / Multi-platform | [04-multiplatform-apps/basics/03-components-jsx.md](../../../../04-multiplatform-apps/basics/03-components-jsx.md) | `not_verified` | 0 | 0 |
-| React Native / Multi-platform | [04-multiplatform-apps/basics/04-state-hooks.md](../../../../04-multiplatform-apps/basics/04-state-hooks.md) | `not_verified` | 0 | 1 |
+| React Native / Multi-platform | [04-multiplatform-apps/basics/04-state-hooks.md](../../../../04-multiplatform-apps/basics/04-state-hooks.md) | `not_verified` | 0 | 0 |
 | React Native / Multi-platform | [04-multiplatform-apps/basics/05-navigation.md](../../../../04-multiplatform-apps/basics/05-navigation.md) | `not_verified` | 0 | 0 |
 | React Native / Multi-platform | [04-multiplatform-apps/basics/06-native-modules.md](../../../../04-multiplatform-apps/basics/06-native-modules.md) | `not_verified` | 0 | 0 |
 | React Native / Multi-platform | [04-multiplatform-apps/basics/07-advanced-features.md](../../../../04-multiplatform-apps/basics/07-advanced-features.md) | `not_verified` | 0 | 0 |
@@ -251,13 +251,13 @@
 | React Native / Multi-platform | [04-multiplatform-apps/frameworks/02-react-native-advanced.md](../../../../04-multiplatform-apps/frameworks/02-react-native-advanced.md) | `not_verified` | 0 | 0 |
 | React Native / Multi-platform | [04-multiplatform-apps/frameworks/03-ecosystem-integration.md](../../../../04-multiplatform-apps/frameworks/03-ecosystem-integration.md) | `not_verified` | 0 | 0 |
 | React Native / Multi-platform | [04-multiplatform-apps/frameworks/04-devtools.md](../../../../04-multiplatform-apps/frameworks/04-devtools.md) | `not_verified` | 0 | 0 |
-| React Native / Multi-platform | [04-multiplatform-apps/LEARNING_GUIDE.md](../../../../04-multiplatform-apps/LEARNING_GUIDE.md) | `not_verified` | 0 | 1 |
+| React Native / Multi-platform | [04-multiplatform-apps/LEARNING_GUIDE.md](../../../../04-multiplatform-apps/LEARNING_GUIDE.md) | `not_verified` | 0 | 0 |
 | React Native / Multi-platform | [04-multiplatform-apps/projects/01-todo-app.md](../../../../04-multiplatform-apps/projects/01-todo-app.md) | `runtime` | 1 | 1 |
 | React Native / Multi-platform | [04-multiplatform-apps/projects/02-weather-app.md](../../../../04-multiplatform-apps/projects/02-weather-app.md) | `not_verified` | 0 | 0 |
 | React Native / Multi-platform | [04-multiplatform-apps/projects/03-chat-app.md](../../../../04-multiplatform-apps/projects/03-chat-app.md) | `not_verified` | 0 | 0 |
 | React Native / Multi-platform | [04-multiplatform-apps/projects/04-production-mobile-app.md](../../../../04-multiplatform-apps/projects/04-production-mobile-app.md) | `not_verified` | 0 | 0 |
 | React Native / Multi-platform | [04-multiplatform-apps/React Native三端原生应用学习路线.md](../../../../04-multiplatform-apps/React Native三端原生应用学习路线.md) | `not_verified` | 0 | 0 |
-| React Native / Multi-platform | [04-multiplatform-apps/README.md](../../../../04-multiplatform-apps/README.md) | `not_verified` | 0 | 1 |
+| React Native / Multi-platform | [04-multiplatform-apps/README.md](../../../../04-multiplatform-apps/README.md) | `not_verified` | 0 | 0 |
 | React Native / Multi-platform | [04-multiplatform-apps/reference/framework-essentials/01-expo-essentials.md](../../../../04-multiplatform-apps/reference/framework-essentials/01-expo-essentials.md) | `not_verified` | 0 | 0 |
 | React Native / Multi-platform | [04-multiplatform-apps/reference/framework-essentials/02-navigation-essentials.md](../../../../04-multiplatform-apps/reference/framework-essentials/02-navigation-essentials.md) | `not_verified` | 0 | 0 |
 | React Native / Multi-platform | [04-multiplatform-apps/reference/framework-essentials/03-config-plugins-prebuild.md](../../../../04-multiplatform-apps/reference/framework-essentials/03-config-plugins-prebuild.md) | `not_verified` | 0 | 0 |
@@ -273,12 +273,12 @@
 | React Native / Multi-platform | [04-multiplatform-apps/reference/language-concepts/09-navigation-model.md](../../../../04-multiplatform-apps/reference/language-concepts/09-navigation-model.md) | `not_verified` | 0 | 0 |
 | React Native / Multi-platform | [04-multiplatform-apps/reference/language-concepts/10-styling-model.md](../../../../04-multiplatform-apps/reference/language-concepts/10-styling-model.md) | `not_verified` | 0 | 0 |
 | React Native / Multi-platform | [04-multiplatform-apps/reference/language-concepts/11-new-architecture-terms.md](../../../../04-multiplatform-apps/reference/language-concepts/11-new-architecture-terms.md) | `not_verified` | 0 | 0 |
-| React Native / Multi-platform | [04-multiplatform-apps/reference/language-concepts/12-list-performance-model.md](../../../../04-multiplatform-apps/reference/language-concepts/12-list-performance-model.md) | `not_verified` | 0 | 3 |
+| React Native / Multi-platform | [04-multiplatform-apps/reference/language-concepts/12-list-performance-model.md](../../../../04-multiplatform-apps/reference/language-concepts/12-list-performance-model.md) | `not_verified` | 0 | 0 |
 | React Native / Multi-platform | [04-multiplatform-apps/reference/language-concepts/13-platform-api-map.md](../../../../04-multiplatform-apps/reference/language-concepts/13-platform-api-map.md) | `not_verified` | 0 | 0 |
 | React Native / Multi-platform | [04-multiplatform-apps/reference/library-guides/01-state-and-data.md](../../../../04-multiplatform-apps/reference/library-guides/01-state-and-data.md) | `not_verified` | 0 | 0 |
 | React Native / Multi-platform | [04-multiplatform-apps/reference/library-guides/02-native-and-device-libs.md](../../../../04-multiplatform-apps/reference/library-guides/02-native-and-device-libs.md) | `not_verified` | 0 | 0 |
 | React Native / Multi-platform | [04-multiplatform-apps/reference/library-guides/03-storage-options.md](../../../../04-multiplatform-apps/reference/library-guides/03-storage-options.md) | `not_verified` | 0 | 0 |
-| React Native / Multi-platform | [04-multiplatform-apps/reference/library-guides/04-animation-gesture-libs.md](../../../../04-multiplatform-apps/reference/library-guides/04-animation-gesture-libs.md) | `not_verified` | 0 | 1 |
+| React Native / Multi-platform | [04-multiplatform-apps/reference/library-guides/04-animation-gesture-libs.md](../../../../04-multiplatform-apps/reference/library-guides/04-animation-gesture-libs.md) | `not_verified` | 0 | 0 |
 | React Native / Multi-platform | [04-multiplatform-apps/reference/quick-references/01-cli-and-debug-cheatsheet.md](../../../../04-multiplatform-apps/reference/quick-references/01-cli-and-debug-cheatsheet.md) | `not_verified` | 0 | 0 |
 | React Native / Multi-platform | [04-multiplatform-apps/reference/quick-references/02-troubleshooting.md](../../../../04-multiplatform-apps/reference/quick-references/02-troubleshooting.md) | `not_verified` | 0 | 0 |
 | React Native / Multi-platform | [04-multiplatform-apps/testing/01-unit-testing.md](../../../../04-multiplatform-apps/testing/01-unit-testing.md) | `not_verified` | 0 | 0 |
@@ -356,16 +356,16 @@
 | Swift / SwiftUI | [06-swift-swiftui/deployment/03-ci-cd-observability.md](../../../../06-swift-swiftui/deployment/03-ci-cd-observability.md) | `not_verified` | 0 | 0 |
 | Swift / SwiftUI | [06-swift-swiftui/frameworks/01-swiftui-basics.md](../../../../06-swift-swiftui/frameworks/01-swiftui-basics.md) | `not_verified` | 0 | 0 |
 | Swift / SwiftUI | [06-swift-swiftui/frameworks/02-swiftui-advanced.md](../../../../06-swift-swiftui/frameworks/02-swiftui-advanced.md) | `not_verified` | 0 | 0 |
-| Swift / SwiftUI | [06-swift-swiftui/frameworks/03-ecosystem-integration.md](../../../../06-swift-swiftui/frameworks/03-ecosystem-integration.md) | `not_verified` | 0 | 1 |
+| Swift / SwiftUI | [06-swift-swiftui/frameworks/03-ecosystem-integration.md](../../../../06-swift-swiftui/frameworks/03-ecosystem-integration.md) | `not_verified` | 0 | 0 |
 | Swift / SwiftUI | [06-swift-swiftui/frameworks/04-devtools.md](../../../../06-swift-swiftui/frameworks/04-devtools.md) | `not_verified` | 0 | 0 |
-| Swift / SwiftUI | [06-swift-swiftui/iOS原生开发学习路线.md](../../../../06-swift-swiftui/iOS原生开发学习路线.md) | `not_verified` | 0 | 1 |
+| Swift / SwiftUI | [06-swift-swiftui/iOS原生开发学习路线.md](../../../../06-swift-swiftui/iOS原生开发学习路线.md) | `not_verified` | 0 | 0 |
 | Swift / SwiftUI | [06-swift-swiftui/LEARNING_GUIDE.md](../../../../06-swift-swiftui/LEARNING_GUIDE.md) | `not_verified` | 0 | 0 |
 | Swift / SwiftUI | [06-swift-swiftui/projects/01-notes-app.md](../../../../06-swift-swiftui/projects/01-notes-app.md) | `not_verified` | 0 | 0 |
 | Swift / SwiftUI | [06-swift-swiftui/projects/02-weather-app.md](../../../../06-swift-swiftui/projects/02-weather-app.md) | `not_verified` | 0 | 0 |
 | Swift / SwiftUI | [06-swift-swiftui/projects/03-habit-tracker.md](../../../../06-swift-swiftui/projects/03-habit-tracker.md) | `not_verified` | 0 | 0 |
 | Swift / SwiftUI | [06-swift-swiftui/projects/04-production-ios-app.md](../../../../06-swift-swiftui/projects/04-production-ios-app.md) | `not_verified` | 0 | 0 |
 | Swift / SwiftUI | [06-swift-swiftui/README.md](../../../../06-swift-swiftui/README.md) | `not_verified` | 0 | 0 |
-| Swift / SwiftUI | [06-swift-swiftui/reference/framework-essentials/01-swiftui-essentials.md](../../../../06-swift-swiftui/reference/framework-essentials/01-swiftui-essentials.md) | `not_verified` | 0 | 1 |
+| Swift / SwiftUI | [06-swift-swiftui/reference/framework-essentials/01-swiftui-essentials.md](../../../../06-swift-swiftui/reference/framework-essentials/01-swiftui-essentials.md) | `not_verified` | 0 | 0 |
 | Swift / SwiftUI | [06-swift-swiftui/reference/framework-essentials/02-swiftdata-observability.md](../../../../06-swift-swiftui/reference/framework-essentials/02-swiftdata-observability.md) | `not_verified` | 0 | 0 |
 | Swift / SwiftUI | [06-swift-swiftui/reference/framework-essentials/03-state-driven-views.md](../../../../06-swift-swiftui/reference/framework-essentials/03-state-driven-views.md) | `not_verified` | 0 | 0 |
 | Swift / SwiftUI | [06-swift-swiftui/reference/framework-essentials/04-view-modifier.md](../../../../06-swift-swiftui/reference/framework-essentials/04-view-modifier.md) | `not_verified` | 0 | 0 |
@@ -410,7 +410,7 @@
 | PHP | [07-php-mastery/basics/04-functions-oop.md](../../../../07-php-mastery/basics/04-functions-oop.md) | `not_verified` | 0 | 0 |
 | PHP | [07-php-mastery/basics/05-control-flow.md](../../../../07-php-mastery/basics/05-control-flow.md) | `not_verified` | 0 | 0 |
 | PHP | [07-php-mastery/basics/06-error-exceptions.md](../../../../07-php-mastery/basics/06-error-exceptions.md) | `not_verified` | 0 | 0 |
-| PHP | [07-php-mastery/basics/07-advanced-features.md](../../../../07-php-mastery/basics/07-advanced-features.md) | `not_verified` | 0 | 2 |
+| PHP | [07-php-mastery/basics/07-advanced-features.md](../../../../07-php-mastery/basics/07-advanced-features.md) | `runtime` | 3 | 0 |
 | PHP | [07-php-mastery/basics/08-first-project.md](../../../../07-php-mastery/basics/08-first-project.md) | `runtime` | 1 | 0 |
 | PHP | [07-php-mastery/deployment/01-docker-deployment.md](../../../../07-php-mastery/deployment/01-docker-deployment.md) | `not_verified` | 0 | 0 |
 | PHP | [07-php-mastery/deployment/02-server-deployment.md](../../../../07-php-mastery/deployment/02-server-deployment.md) | `not_verified` | 0 | 0 |
@@ -490,11 +490,11 @@
 | Java | [08-java-revisited/reference/framework-essentials/06-spring-security-essentials.md](../../../../08-java-revisited/reference/framework-essentials/06-spring-security-essentials.md) | `not_verified` | 0 | 0 |
 | Java | [08-java-revisited/reference/framework-essentials/07-rest-client-essentials.md](../../../../08-java-revisited/reference/framework-essentials/07-rest-client-essentials.md) | `not_verified` | 0 | 0 |
 | Java | [08-java-revisited/reference/language-concepts/01-java-keywords.md](../../../../08-java-revisited/reference/language-concepts/01-java-keywords.md) | `runtime` | 4 | 1 |
-| Java | [08-java-revisited/reference/language-concepts/02-collections-generics.md](../../../../08-java-revisited/reference/language-concepts/02-collections-generics.md) | `not_verified` | 0 | 0 |
+| Java | [08-java-revisited/reference/language-concepts/02-collections-generics.md](../../../../08-java-revisited/reference/language-concepts/02-collections-generics.md) | `runtime` | 3 | 0 |
 | Java | [08-java-revisited/reference/language-concepts/03-streams-optional.md](../../../../08-java-revisited/reference/language-concepts/03-streams-optional.md) | `not_verified` | 0 | 0 |
 | Java | [08-java-revisited/reference/language-concepts/04-concurrency-api.md](../../../../08-java-revisited/reference/language-concepts/04-concurrency-api.md) | `not_verified` | 0 | 0 |
 | Java | [08-java-revisited/reference/language-concepts/05-records-sealed-patterns.md](../../../../08-java-revisited/reference/language-concepts/05-records-sealed-patterns.md) | `not_verified` | 0 | 0 |
-| Java | [08-java-revisited/reference/language-concepts/06-exceptions-resources.md](../../../../08-java-revisited/reference/language-concepts/06-exceptions-resources.md) | `not_verified` | 0 | 0 |
+| Java | [08-java-revisited/reference/language-concepts/06-exceptions-resources.md](../../../../08-java-revisited/reference/language-concepts/06-exceptions-resources.md) | `runtime` | 2 | 0 |
 | Java | [08-java-revisited/reference/language-concepts/07-string-immutability-pool.md](../../../../08-java-revisited/reference/language-concepts/07-string-immutability-pool.md) | `not_verified` | 0 | 0 |
 | Java | [08-java-revisited/reference/language-concepts/08-enums.md](../../../../08-java-revisited/reference/language-concepts/08-enums.md) | `not_verified` | 0 | 0 |
 | Java | [08-java-revisited/reference/language-concepts/09-annotations.md](../../../../08-java-revisited/reference/language-concepts/09-annotations.md) | `not_verified` | 0 | 0 |
@@ -658,7 +658,7 @@
 | Rust / Cross-platform | [11-rust-cross-platform/reference/language-concepts/01-ownership-dictionary.md](../../../../11-rust-cross-platform/reference/language-concepts/01-ownership-dictionary.md) | `not_verified` | 0 | 0 |
 | Rust / Cross-platform | [11-rust-cross-platform/reference/language-concepts/02-trait-objects.md](../../../../11-rust-cross-platform/reference/language-concepts/02-trait-objects.md) | `not_verified` | 0 | 0 |
 | Rust / Cross-platform | [11-rust-cross-platform/reference/language-concepts/03-const-generics.md](../../../../11-rust-cross-platform/reference/language-concepts/03-const-generics.md) | `not_verified` | 0 | 1 |
-| Rust / Cross-platform | [11-rust-cross-platform/reference/language-concepts/04-advanced-lifetimes.md](../../../../11-rust-cross-platform/reference/language-concepts/04-advanced-lifetimes.md) | `not_verified` | 0 | 13 |
+| Rust / Cross-platform | [11-rust-cross-platform/reference/language-concepts/04-advanced-lifetimes.md](../../../../11-rust-cross-platform/reference/language-concepts/04-advanced-lifetimes.md) | `runtime` | 4 | 2 |
 | Rust / Cross-platform | [11-rust-cross-platform/reference/language-concepts/05-macros.md](../../../../11-rust-cross-platform/reference/language-concepts/05-macros.md) | `not_verified` | 0 | 1 |
 | Rust / Cross-platform | [11-rust-cross-platform/reference/language-concepts/06-unsafe.md](../../../../11-rust-cross-platform/reference/language-concepts/06-unsafe.md) | `not_verified` | 0 | 1 |
 | Rust / Cross-platform | [11-rust-cross-platform/reference/language-concepts/07-smart-pointers.md](../../../../11-rust-cross-platform/reference/language-concepts/07-smart-pointers.md) | `not_verified` | 0 | 0 |

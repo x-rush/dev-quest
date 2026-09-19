@@ -1,83 +1,26 @@
-# Go 错误处理机制
+# Go 错误处理：错误契约、资源清理与边界响应
 
-## 先理解，再动手
+前置：[函数和方法](05-functions-methods.md)、[控制结构](06-control-structures.md)。完成本章后，应能回答三个问题：调用者如何识别失败，失败以后资源如何清理，外部用户最终看到什么。
 
-error 是返回值约定，调用者必须决定恢复、补充上下文或返回给上层。panic 通常表达无法继续的异常，不是普通输入校验的替代品。
+`error` 是一个只有 `Error() string` 方法的接口。它让函数把失败作为结果交给调用者决定。文件不存在、输入无效、请求超时通常是调用契约中的失败，不应改成 panic。panic 适合无法维持内部不变量的程序错误；在边界恢复时，也不能把失败伪装成成功。
 
-**本节自测**：写 parseAge，合法整数返回年龄，空文本和负数返回不同说明；调用方只在 err 为 nil 时使用结果。
+本文五个完整程序可分别保存为 `main.go` 并执行 `go run main.go`，不要把它们拼成一个文件。它们由[验证器](../../shared-resources/tools/document-quality/verify_go_rust_basics.py)直接抽取并比较输出，限定证据见[报告](../../shared-resources/tools/document-quality/reports/go-rust-basics.md)。表格中的规则仍需结合具体 API 契约理解。
 
-<details>
-<summary>预期结果与参考思路（先尝试再展开）</summary>
+## 1. 先设计调用者需要判断什么
 
-解析失败与业务不合法是两条路径；不能忽略 err 再把默认 0 当作有效年龄。
+| 形式 | 适用场景 | 调用方做法 | 边界 |
+|---|---|---|---|
+| `errors.New` | 稳定的错误类别，如未找到 | 导出的同一个哨兵值配合 `errors.Is` | 每次新建同文案错误不是同一个哨兵 |
+| 自定义错误类型 | 调用者需要字段，如哪个输入无效 | `errors.As` 提取字段 | 类型指针和值必须匹配 |
+| `fmt.Errorf("...: %w", err)` | 增加操作上下文并保留底层类别 | 继续 `Is`/`As` | 包装会把底层错误纳入公开契约 |
+| `errors.Join(a, b)` | 多个独立失败都值得保留 | `Is`/`As` 遍历错误树 | `errors.Unwrap` 不遍历 `Unwrap() []error` |
+| 文案错误 | 只需人类诊断，不提供稳定类别 | 显示或记录，避免按字符串分支 | 文案变化不应破坏业务逻辑 |
 
-</details>
+### 包装后的错误还能按类别或类型判断
 
-> **文档简介**: 全面掌握Go语言的错误处理机制，学会编写健壮、可靠的错误处理代码
->
-> **字典速查**: [Go 错误处理](../reference/language-concepts/07-error-handling.md) - 概念的字典级定义以此处为单一事实来源，本教程按序展开学习路径
+下面只用内存数据，聚焦错误协议。`findUser` 先校验 ID，再访问数据；业务层增加上下文但不重复记录日志。边界层最后统一解释结果。
 
-> **目标读者**: Go初学者，需要掌握Go错误处理最佳实践的开发者
-
-> **前置知识**: 已掌握Go基础语法、函数定义和接口概念
-
-> **预计时长**: 2-3小时学习 + 实践
-
-<details>
-<summary>文档信息（用途、难度与维护记录）</summary>
-
-## 📚 文档元数据
-
-| 属性 | 内容 |
-|------|------|
-| **模块** | `01-go-backend` |
-| **分类** | `basics/programming-fundamentals` |
-| **难度** | ⭐⭐⭐ (3/5) |
-| **标签** | `#错误处理` `#error接口` `#panic-recover` `#异常处理` |
-| **更新日期** | `2026年9月` |
-| **作者** | Dev Quest Team |
-| **状态** | ✅ 已完成 |
-
-</details>
-
-## 🎯 学习目标
-
-通过本文档学习，您将能够：
-- 理解Go的错误处理哲学和设计理念
-- 掌握error接口的使用和自定义错误类型
-- 学会使用errors包进行错误包装和链式处理
-- 掌握panic和recover机制的使用场景
-- 建立良好的错误处理实践习惯
-
-## 📖 Go错误处理哲学
-
-### 为什么Go不使用异常
-
-Go语言设计者选择了显式错误处理而不是异常机制，主要基于以下考虑：
-
-1. **明确性**: 错误处理代码清晰可见，不会被隐藏
-2. **可控性**: 错误处理流程由开发者完全控制
-3. **简洁性**: 避免了复杂的try-catch-finally结构
-4. **性能**: 显式错误处理比异常机制更高效
-
-### error接口设计
-
-Go的error是一个内置接口类型：
-
-```go
-// error是Go内置的唯一错误接口
-type error interface {
-    Error() string
-}
-```
-
-任何实现了`Error() string`方法的类型都可以作为错误使用。
-
-## 🔧 基础错误处理
-
-### 1. 创建和返回错误
-
-#### 使用errors包
+<!-- verified-case: go-errors-contract -->
 ```go
 package main
 
@@ -86,702 +29,106 @@ import (
     "fmt"
 )
 
-func divide(a, b float64) (float64, error) {
-    if b == 0 {
-        return 0, errors.New("division by zero")
-    }
-    return a / b, nil
+var ErrNotFound = errors.New("user not found")
+
+type InputError struct { Field string }
+func (e *InputError) Error() string { return "invalid field: " + e.Field }
+
+func findUser(id int) (string, error) {
+    if id <= 0 { return "", &InputError{Field: "id"} }
+    if id != 1 { return "", ErrNotFound }
+    return "Ada", nil
+}
+
+func loadUser(id int) (string, error) {
+    name, err := findUser(id)
+    if err != nil { return "", fmt.Errorf("load user %d: %w", id, err) }
+    return name, nil
 }
 
 func main() {
-    result, err := divide(10, 0)
-    if err != nil {
-        fmt.Printf("错误: %v\n", err)
-        return
-    }
-    fmt.Printf("结果: %.2f\n", result)
-}
-```
-
-#### 使用fmt.Errorf创建格式化错误
-```go
-func checkAge(age int) error {
-    if age < 0 {
-        return fmt.Errorf("年龄不能为负数: %d", age)
-    }
-    if age > 150 {
-        return fmt.Errorf("年龄超出合理范围: %d", age)
-    }
-    return nil
-}
-
-func main() {
-    ages := []int{-5, 25, 200}
-
-    for _, age := range ages {
-        if err := checkAge(age); err != nil {
-            fmt.Printf("检查年龄 %d 失败: %v\n", age, err)
-        } else {
-            fmt.Printf("年龄 %d 有效\n", age)
+    for _, id := range []int{1, 0, 2} {
+        name, err := loadUser(id)
+        var input *InputError
+        switch {
+        case err == nil:
+            fmt.Println(name)
+        case errors.As(err, &input):
+            fmt.Println("invalid", input.Field)
+        case errors.Is(err, ErrNotFound):
+            fmt.Println("not found")
+        default:
+            panic(err) // 本程序没有其他失败路径；服务边界应映射为内部错误
         }
     }
+    wrapped := fmt.Errorf("lookup: %w", ErrNotFound)
+    fmt.Println(errors.Is(wrapped, errors.New("user not found")))
+    joined := errors.Join(wrapped, &InputError{Field: "email"})
+    var input *InputError
+    fmt.Println(errors.Is(joined, ErrNotFound), errors.As(joined, &input))
+    fmt.Println(errors.Unwrap(joined) == nil)
 }
 ```
 
-### 2. 错误处理模式
+预期输出：
 
-#### 立即处理模式
-```go
-func processFile(filename string) error {
-    file, err := os.Open(filename)
-    if err != nil {
-        return fmt.Errorf("打开文件失败: %w", err)
-    }
-    defer file.Close()
-
-    // 处理文件内容
-    return nil
-}
+```text
+Ada
+invalid id
+not found
+false
+true true
+true
 ```
 
-#### 错误聚合模式
-```go
-func validateUser(user *User) error {
-    var errs []error
+`errors.Is` 不只是一次 `==`：它会检查当前错误、可选的 `Is(error) bool` 方法及包装的错误树。`errors.As` 类似地寻找可赋给目标类型的错误，并支持自定义 `As`。因此不要手写 `for err != nil { err = errors.Unwrap(err) }` 来代替所有错误匹配；这种循环会漏掉 Join 的分支。
 
-    if user.Name == "" {
-        errs = append(errs, errors.New("姓名不能为空"))
-    }
+`var input *InputError; errors.As(err, &input)` 传入的是目标变量的地址，即 `**InputError`。`As` 需要把找到的 `*InputError` 写入这个变量；直接传入 nil 的 `input` 不符合 API 要求。
 
-    if user.Age < 0 {
-        errs = append(errs, errors.New("年龄不能为负数"))
-    }
+## 2. 接口中的 typed nil 不是 nil error
 
-    if len(errs) > 0 {
-        return fmt.Errorf("验证失败: %v", errs)
-    }
+接口同时携带动态类型与动态值。一个类型为 `*InputError` 的 nil 指针装进 `error` 后，动态类型仍存在，所以 `err != nil`。成功时应明确返回无类型 `nil`。
 
-    return nil
-}
-```
-
-## 🎨 自定义错误类型
-
-### 1. 结构体错误类型
-
+<!-- verified-case: go-errors-typed-nil -->
 ```go
 package main
 
-import (
-    "fmt"
-    "strings"
-)
+import "fmt"
 
-// 自定义验证错误
-type ValidationError struct {
-    Field   string
-    Value   interface{}
-    Message string
+type Problem struct { Message string }
+func (p *Problem) Error() string { return p.Message }
+
+func incorrect() error {
+    var p *Problem
+    return p
 }
 
-func (e ValidationError) Error() string {
-    return fmt.Sprintf("字段 '%s' 验证失败: %s (当前值: %v)",
-        e.Field, e.Message, e.Value)
-}
-
-// 业务逻辑错误
-type BusinessError struct {
-    Code    string
-    Message string
-    Details map[string]interface{}
-}
-
-func (e BusinessError) Error() string {
-    return fmt.Sprintf("业务错误 [%s]: %s", e.Code, e.Message)
-}
-
-func (e BusinessError) GetDetail(key string) interface{} {
-    return e.Details[key]
-}
-
-// 使用示例
-func validateEmail(email string) error {
-    if email == "" {
-        return ValidationError{
-            Field:   "email",
-            Value:   email,
-            Message: "邮箱不能为空",
-        }
-    }
-
-    if !strings.Contains(email, "@") {
-        return ValidationError{
-            Field:   "email",
-            Value:   email,
-            Message: "邮箱格式不正确",
-        }
-    }
-
-    return nil
-}
-
-func checkUserPermission(userID int, resource string) error {
-    // 模拟权限检查
-    if userID == 0 {
-        return BusinessError{
-            Code:    "PERMISSION_DENIED",
-            Message: "用户无权限访问该资源",
-            Details: map[string]interface{}{
-                "user_id":  userID,
-                "resource": resource,
-            },
-        }
-    }
-
-    return nil
-}
+func correct() error { return nil }
 
 func main() {
-    // 测试验证错误
-    if err := validateEmail("invalid-email"); err != nil {
-        fmt.Printf("验证错误: %v\n", err)
-    }
-
-    // 测试业务错误
-    if err := checkUserPermission(0, "admin_panel"); err != nil {
-        if bizErr, ok := err.(BusinessError); ok {
-            fmt.Printf("业务错误: %v\n", bizErr)
-            fmt.Printf("错误代码: %s\n", bizErr.Code)
-            fmt.Printf("详细信息: %+v\n", bizErr.Details)
-        }
-    }
+    fmt.Println(incorrect() == nil)
+    fmt.Println(correct() == nil)
 }
 ```
 
-### 2. 错误类型断言
+预期输出：
 
-```go
-func handleError(err error) {
-    if err == nil {
-        return
-    }
-
-    // 类型断言检查具体错误类型
-    switch e := err.(type) {
-    case ValidationError:
-        fmt.Printf("验证错误 - 字段: %s, 值: %v, 消息: %s\n",
-            e.Field, e.Value, e.Message)
-    case BusinessError:
-        fmt.Printf("业务错误 - 代码: %s, 消息: %s\n", e.Code, e.Message)
-        // 可以访问特定业务错误的详细信息
-        if resource, exists := e.Details["resource"]; exists {
-            fmt.Printf("涉及资源: %v\n", resource)
-        }
-    default:
-        fmt.Printf("未知错误类型: %v\n", err)
-    }
-}
+```text
+false
+true
 ```
 
-## 🔗 错误包装和链式处理
+不要为了展示 typed nil 而随意调用它的 `Error()`：这里的方法会解引用 nil。泛型、接口和自定义指针错误混用时，应特别检查成功分支的返回值。
 
-### 1. 错误包装
+## 3. defer 清理资源，但清理也可能失败
 
-Go 1.13+ 引入了错误包装功能：
+`defer` 在包含它的函数返回时执行，不在代码块结束时执行；多个 defer 后进先出，调用参数在注册时求值。获取资源成功后再注册清理，循环里需及时释放时，把每次处理封装成一个函数。
 
-```go
-package main
+普通返回和 panic 栈展开会执行 defer；`os.Exit`、`log.Fatal` 和进程被终止则不能依赖它。底层库应返回错误，把退出进程的决定留给程序入口。
 
-import (
-    "errors"
-    "fmt"
-)
+写文件时 `Write` 或 `Close` 都可能失败。若只写 `defer f.Close()` 而丢弃结果，调用者可能以为数据已经成功提交。下面把“使用并关闭一个写入器”的所有权写在函数契约里，用故障替身同时触发写入与关闭错误。
 
-// 哨兵错误：预定义的错误变量，供调用方用 errors.Is 精确匹配
-var ErrConfigNotFound = errors.New("config file not found")
-
-// 使用 %w 动词进行错误包装
-func loadConfig() error {
-    // 模拟配置文件不存在
-    return ErrConfigNotFound
-}
-
-func initializeApp() error {
-    if err := loadConfig(); err != nil {
-        // 包装错误，添加上下文信息
-        return fmt.Errorf("初始化应用失败: %w", err)
-    }
-    return nil
-}
-
-func main() {
-    if err := initializeApp(); err != nil {
-        fmt.Printf("错误: %v\n", err)
-
-        // 注意：必须与哨兵变量比较。写成 errors.Is(err, errors.New("config file not found"))
-        // 恒为 false —— 每次调用 errors.New 都会创建一个全新的错误值，
-        // 与错误链中的任何错误都不相等（errors.Is 底层是 == 比较）
-        if errors.Is(err, ErrConfigNotFound) {
-            fmt.Println("提示: 请检查配置文件是否存在")
-        }
-
-        // 解包错误获取原始错误
-        if unwrapped := errors.Unwrap(err); unwrapped != nil {
-            fmt.Printf("原始错误: %v\n", unwrapped)
-        }
-    }
-}
-```
-
-### 2. 错误链处理
-
-```go
-package main
-
-import (
-    "errors"
-    "fmt"
-)
-
-// 自定义错误类型
-type NotFoundError struct {
-    Resource string
-    ID       string
-}
-
-func (e NotFoundError) Error() string {
-    return fmt.Sprintf("%s not found: %s", e.Resource, e.ID)
-}
-
-func getUser(id string) error {
-    if id == "invalid" {
-        return NotFoundError{Resource: "User", ID: id}
-    }
-    return nil
-}
-
-func processUserData(userID string) error {
-    if err := getUser(userID); err != nil {
-        return fmt.Errorf("处理用户数据失败: %w", err)
-    }
-    return nil
-}
-
-func main() {
-    if err := processUserData("invalid"); err != nil {
-        fmt.Printf("完整错误链: %v\n", err)
-
-        // 使用 errors.As 检查特定错误类型
-        var notFoundErr NotFoundError
-        if errors.As(err, &notFoundErr) {
-            fmt.Printf("资源 '%s' ID '%s' 未找到\n",
-                notFoundErr.Resource, notFoundErr.ID)
-        }
-
-        // 沿着错误链检查
-        for err != nil {
-            fmt.Printf("链中错误: %v\n", err)
-            err = errors.Unwrap(err)
-        }
-    }
-}
-```
-
-## ⏳ defer：延迟执行与资源清理
-
-Go 没有 `finally`，但有 `defer`——注册一个函数调用，在**外层函数返回时**执行。它与错误处理密不可分：打开资源的代码和释放资源的代码可以紧挨着写，无论从哪条路径返回（包括 panic）资源都会被释放。
-
-练习时应验证的三条规则：
-
-```go
-func main() {
-    // 1. 多个 defer 后进先出（LIFO），像栈一样
-    defer fmt.Println("defer 1")
-    defer fmt.Println("defer 2")
-    fmt.Println("函数体")
-
-    // 2. 参数在 defer 语句执行时【立即求值】
-    x := 1
-    defer fmt.Println("defer 捕获的 x:", x) // 打印 1，不是 2
-    x = 2
-    fmt.Println("修改后的 x:", x)
-
-    // 3. 经典用法：确保资源释放
-    f := func() {
-        defer fmt.Println("资源已释放")
-        fmt.Println("使用资源")
-    }
-    f()
-}
-// 输出: 函数体 / 修改后的 x: 2 / 使用资源 / 资源已释放
-//       / defer 捕获的 x: 1 / defer 2 / defer 1
-```
-
-错误处理中的标准姿势：
-
-```go
-func readFile(path string) ([]byte, error) {
-    f, err := os.Open(path)
-    if err != nil {
-        return nil, fmt.Errorf("打开 %s: %w", path, err)
-    }
-    defer f.Close() // 紧跟在错误检查之后注册，任何返回路径都会执行
-
-    return io.ReadAll(f)
-}
-```
-
-> ⚠️ **常见误解**：`defer` 不是在当前代码块结束时执行，而是**外层函数**返回时执行。循环里 `defer f.Close()` 会积攒到函数结束才统一执行，长时间运行的循环应改为每轮迭代封装成一个函数调用。
-
-defer 的另一个核心用途是配合 `recover` 捕获 panic，见下一节的 `defer func() { recover() }` 模式。
-
-## 🚨 Panic和Recover机制
-
-### 1. Panic的使用场景
-
-Panic应该只在真正异常的情况下使用：
-
-```go
-package main
-
-import (
-    "fmt"
-    "log"
-)
-
-func divide(a, b int) int {
-    if b == 0 {
-        // 除零错误属于程序逻辑错误，适合panic
-        panic("division by zero")
-    }
-    return a / b
-}
-
-func accessSlice(s []int, index int) int {
-    if index < 0 || index >= len(s) {
-        // 数组越界属于严重错误
-        panic(fmt.Sprintf("slice index out of range: %d", index))
-    }
-    return s[index]
-}
-
-func main() {
-    defer func() {
-        if r := recover(); r != nil {
-            log.Printf("程序panic并恢复: %v", r)
-        }
-    }()
-
-    fmt.Println("程序开始...")
-
-    // 正常情况
-    result := divide(10, 2)
-    fmt.Printf("10 / 2 = %d\n", result)
-
-    // 会触发panic的情况
-    slice := []int{1, 2, 3}
-    value := accessSlice(slice, 5) // 这里会panic
-    fmt.Printf("访问结果: %d\n", value)
-
-    fmt.Println("程序结束...")
-}
-```
-
-### 2. Recover最佳实践
-
-```go
-package main
-
-import (
-    "fmt"
-    "log"
-    "runtime/debug"
-)
-
-// 安全的函数调用包装器
-func safeCall(fn func()) (err error) {
-    defer func() {
-        if r := recover(); r != nil {
-            // 记录panic堆栈信息
-            log.Printf("panic recovered: %v\n%s", r, debug.Stack())
-            err = fmt.Errorf("internal error: %v", r)
-        }
-    }()
-
-    fn()
-    return nil
-}
-
-// 业务函数
-func riskyOperation(name string) {
-    if name == "" {
-        panic("name cannot be empty")
-    }
-    fmt.Printf("处理: %s\n", name)
-}
-
-func main() {
-    fmt.Println("=== 安全函数调用示例 ===")
-
-    // 正常调用
-    err := safeCall(func() {
-        riskyOperation("张三")
-    })
-    if err != nil {
-        fmt.Printf("操作失败: %v\n", err)
-    } else {
-        fmt.Println("操作成功")
-    }
-
-    // 异常调用
-    err = safeCall(func() {
-        riskyOperation("") // 这会触发panic
-    })
-    if err != nil {
-        fmt.Printf("操作失败: %v\n", err)
-    } else {
-        fmt.Println("操作成功")
-    }
-}
-```
-
-### 3. HTTP服务器中的错误处理
-
-```go
-package main
-
-import (
-    "fmt"
-    "log"
-    "net/http"
-)
-
-// 错误处理中间件
-func errorHandler(next http.HandlerFunc) http.HandlerFunc {
-    return func(w http.ResponseWriter, r *http.Request) {
-        defer func() {
-            if err := recover(); err != nil {
-                log.Printf("panic in handler: %v", err)
-                http.Error(w, "Internal Server Error", http.StatusInternalServerError)
-            }
-        }()
-
-        next(w, r)
-    }
-}
-
-func businessHandler(w http.ResponseWriter, r *http.Request) {
-    name := r.URL.Query().Get("name")
-    if name == "" {
-        panic("name parameter is required")
-    }
-
-    fmt.Fprintf(w, "Hello, %s!", name)
-}
-
-func main() {
-    // 使用错误处理中间件包装处理器
-    http.HandleFunc("/hello", errorHandler(businessHandler))
-
-    fmt.Println("服务器启动在 :8080")
-    log.Fatal(http.ListenAndServe(":8080", nil))
-}
-```
-
-## 🎯 错误处理最佳实践
-
-### 1. 错误处理原则
-
-#### 原则1: 总是检查错误
-```go
-// ❌ 错误 - 忽略错误
-data, _ := os.ReadFile("config.json")
-
-// ✅ 正确 - 检查错误
-data, err := os.ReadFile("config.json")
-if err != nil {
-    return fmt.Errorf("读取配置文件失败: %w", err)
-}
-```
-
-#### 原则2: 提供上下文信息
-```go
-// ❌ 错误 - 缺少上下文
-if err != nil {
-    return err
-}
-
-// ✅ 正确 - 添加上下文
-if err != nil {
-    return fmt.Errorf("处理用户 %s 时失败: %w", userID, err)
-}
-```
-
-#### 原则3: 避免错误处理中的错误
-```go
-// ❌ 危险 - 错误处理中可能发生新的错误
-func safeClose(file *os.File) {
-    if err := file.Close(); err != nil {
-        log.Fatal(err) // 这可能导致程序退出
-    }
-}
-
-// ✅ 安全 - 记录错误但不终止程序
-func safeClose(file *os.File) {
-    if err := file.Close(); err != nil {
-        log.Printf("关闭文件失败: %v", err)
-    }
-}
-```
-
-### 2. 错误信息设计
-
-#### 好的错误信息特征
-```go
-// ✅ 清晰、有用、可操作
-func validatePassword(password string) error {
-    if len(password) < 8 {
-        return fmt.Errorf("密码长度不足，至少需要8个字符（当前: %d）", len(password))
-    }
-
-    if !containsUpperCase(password) {
-        return fmt.Errorf("密码必须包含至少一个大写字母")
-    }
-
-    return nil
-}
-
-// ❌ 模糊、无用的错误信息
-func badValidatePassword(password string) error {
-    if len(password) < 8 {
-        return errors.New("invalid password")
-    }
-    return nil
-}
-```
-
-### 3. 性能考虑
-
-```go
-// ✅ 高效 - 使用预定义错误
-var (
-    ErrUserNotFound    = errors.New("user not found")
-    ErrInvalidInput    = errors.New("invalid input")
-    ErrPermissionDenied = errors.New("permission denied")
-)
-
-func getUser(id int) (*User, error) {
-    if id <= 0 {
-        return nil, ErrInvalidInput
-    }
-    // ... 查询逻辑
-    return nil, ErrUserNotFound
-}
-
-// ❌ 低效 - 每次都创建新的错误字符串
-func badGetUser(id int) (*User, error) {
-    if id <= 0 {
-        return nil, errors.New("invalid input") // 每次都分配新字符串
-    }
-    return nil, errors.New("user not found")
-}
-```
-
-## 🔍 常见错误和注意事项
-
-### 1. 错误处理反模式
-
-#### 忽略错误
-```go
-// ❌ 永远不要这样做
-file, _ := os.Open("important.txt")
-file.Close()
-
-// ✅ 总是处理错误
-file, err := os.Open("important.txt")
-if err != nil {
-    return fmt.Errorf("打开文件失败: %w", err)
-}
-defer file.Close()
-```
-
-#### 错误信息中暴露敏感信息
-```go
-// ❌ 危险 - 可能暴露敏感信息
-func connectDB() error {
-    if err := sql.Open("mysql", "user:password@tcp(db:3306)/db"); err != nil {
-        return fmt.Errorf("数据库连接失败: %s://%s@%s", user, password, host)
-    }
-}
-
-// ✅ 安全 - 不暴露敏感信息
-func connectDB() error {
-    if err := sql.Open(dsn); err != nil {
-        return fmt.Errorf("数据库连接失败，请检查配置")
-    }
-}
-```
-
-### 2. 测试中的错误处理
-
-```go
-func TestDivide(t *testing.T) {
-    tests := []struct {
-        name     string
-        a, b     float64
-        want     float64
-        wantErr  bool
-        errCheck func(error) bool
-    }{
-        {
-            name:    "valid division",
-            a:       10, b: 2,
-            want:    5,
-            wantErr: false,
-        },
-        {
-            name:    "division by zero",
-            a:       10, b: 0,
-            want:    0,
-            wantErr: true,
-            errCheck: func(err error) bool {
-                return err.Error() == "division by zero"
-            },
-        },
-    }
-
-    for _, tt := range tests {
-        t.Run(tt.name, func(t *testing.T) {
-            got, err := divide(tt.a, tt.b)
-
-            if tt.wantErr {
-                if err == nil {
-                    t.Errorf("divide() expected error, got nil")
-                    return
-                }
-                if tt.errCheck != nil && !tt.errCheck(err) {
-                    t.Errorf("divide() error = %v, want check failed", err)
-                }
-                return
-            }
-
-            if err != nil {
-                t.Errorf("divide() unexpected error = %v", err)
-                return
-            }
-
-            if got != tt.want {
-                t.Errorf("divide() = %v, want %v", got, tt.want)
-            }
-        })
-    }
-}
-```
-
-## 📊 实际应用示例
-
-### 示例1: 文件处理工具
-
+<!-- verified-case: go-errors-cleanup -->
 ```go
 package main
 
@@ -789,103 +136,119 @@ import (
     "errors"
     "fmt"
     "io"
-    "os"
-    "path/filepath"
 )
 
-// 文件处理错误类型
-type FileProcessError struct {
-    Operation string
-    Filename  string
-    Err       error
+var ErrWrite = errors.New("write failed")
+var ErrClose = errors.New("close failed")
+
+// 调用后，无论成功失败，w 都会被关闭；调用者不要再次使用它。
+func writeAndClose(w io.WriteCloser, data []byte) (err error) {
+    defer func() {
+        if closeErr := w.Close(); closeErr != nil {
+            err = errors.Join(err, fmt.Errorf("close output: %w", closeErr))
+        }
+    }()
+    n, writeErr := w.Write(data)
+    if writeErr != nil { return fmt.Errorf("write output: %w", writeErr) }
+    if n != len(data) { return io.ErrShortWrite }
+    return nil
 }
 
-func (e FileProcessError) Error() string {
-    return fmt.Sprintf("文件处理失败 [%s]: %s - %v",
-        e.Operation, e.Filename, e.Err)
+type faultWriter struct { closed bool }
+func (w *faultWriter) Write([]byte) (int, error) { return 0, ErrWrite }
+func (w *faultWriter) Close() error { w.closed = true; return ErrClose }
+
+func main() {
+    writer := &faultWriter{}
+    err := writeAndClose(writer, []byte("hello"))
+    fmt.Println(writer.closed)
+    fmt.Println(errors.Is(err, ErrWrite), errors.Is(err, ErrClose))
+    order := func() {
+        defer fmt.Println("last")
+        n := 1
+        defer fmt.Println("captured", n)
+        n = 2
+        fmt.Println("current", n)
+    }
+    order()
 }
+```
 
-func (e FileProcessError) Unwrap() error {
-    return e.Err
-}
+预期输出：
 
-// 文件复制函数
-func copyFile(src, dst string) error {
-    // 检查源文件是否存在
-    if _, err := os.Stat(src); os.IsNotExist(err) {
-        return FileProcessError{
-            Operation: "stat",
-            Filename:  src,
-            Err:       fmt.Errorf("源文件不存在"),
+```text
+true
+true true
+current 2
+captured 1
+last
+```
+
+函数使用具名返回 `err`，因此 defer 可以把 Close 的失败合并进最终结果。这不等于磁盘持久化保证：文件原子替换、`Sync`、目录同步、并发修改和平台语义属于另一个契约。复制文件时也不能未经检查就 `os.Create(dst)`：若源和目标指向同一文件，会先截断源；覆盖策略、临时文件和替换应显式设计。
+
+## 4. recover 只能恢复当前 goroutine，不能接着执行 panic 后一行
+
+恢复必须发生在同一 goroutine 中被 defer 直接调用的函数里。它会结束当前 panic 的栈展开；引发 panic 的操作不会自动重试，发生 panic 的函数也不会回到原位置。
+
+下面用一个私有类型表示边界协议允许转换的 panic。非该类型的 panic 原样再次抛出，避免把未知程序错误默默吞掉。正常业务校验应直接返回 error，这个例子只是解释已有组件使用 panic 时的适配边界。
+
+<!-- verified-case: go-errors-recover -->
+```go
+package main
+
+import (
+    "errors"
+    "fmt"
+)
+
+type boundaryFailure struct { err error }
+var ErrOperation = errors.New("operation failed")
+
+func call(fn func()) (err error) {
+    defer func() {
+        if value := recover(); value != nil {
+            failure, ok := value.(boundaryFailure)
+            if !ok { panic(value) }
+            err = failure.err
         }
-    }
-
-    // 创建目标目录
-    if err := os.MkdirAll(filepath.Dir(dst), 0755); err != nil {
-        return FileProcessError{
-            Operation: "mkdir",
-            Filename:  filepath.Dir(dst),
-            Err:       err,
-        }
-    }
-
-    // 打开源文件
-    srcFile, err := os.Open(src)
-    if err != nil {
-        return FileProcessError{
-            Operation: "open",
-            Filename:  src,
-            Err:       err,
-        }
-    }
-    defer srcFile.Close()
-
-    // 创建目标文件
-    dstFile, err := os.Create(dst)
-    if err != nil {
-        return FileProcessError{
-            Operation: "create",
-            Filename:  dst,
-            Err:       err,
-        }
-    }
-    defer dstFile.Close()
-
-    // 复制内容
-    if _, err := io.Copy(dstFile, srcFile); err != nil {
-        return FileProcessError{
-            Operation: "copy",
-            Filename:  fmt.Sprintf("%s -> %s", src, dst),
-            Err:       err,
-        }
-    }
-
+    }()
+    fn()
     return nil
 }
 
 func main() {
-    src := "source.txt"
-    dst := "backup/destination.txt"
-
-    if err := copyFile(src, dst); err != nil {
-        fmt.Printf("文件复制失败: %v\n", err)
-
-        // 检查具体错误类型
-        var fileErr FileProcessError
-        if errors.As(err, &fileErr) {
-            fmt.Printf("操作: %s\n", fileErr.Operation)
-            fmt.Printf("文件: %s\n", fileErr.Filename)
-        }
-
-        os.Exit(1)
-    }
-
-    fmt.Printf("文件复制成功: %s -> %s\n", src, dst)
+    fmt.Println(call(func() {}) == nil)
+    continued := false
+    err := call(func() {
+        panic(boundaryFailure{ErrOperation})
+        // panic 后的语句不会执行
+    })
+    if err == nil { continued = true }
+    fmt.Println(errors.Is(err, ErrOperation), continued)
+    func() {
+        defer func() { fmt.Println("outer received", recover()) }()
+        _ = call(func() { panic("unexpected") })
+    }()
 }
 ```
 
-### 示例2: API错误处理
+预期输出：
 
+```text
+true
+true false
+outer received unexpected
+```
+
+外层 recover 是本示例用来观察“未知 panic 被重新抛出”的测试边界。HTTP 服务器一般由框架边界记录堆栈、返回通用失败并中止该请求；日志需避免泄露请求秘密。已经写出的 HTTP 状态和响应体无法靠 recover 撤销，因此应先完成可能失败的工作，再提交响应。后台 goroutine 的 panic 不会被启动它的请求 goroutine 捕获。
+
+## 5. 把业务错误映射为 HTTP 响应
+
+缺少 ID 是输入失败，返回 400；资源不存在返回 404；未知内部错误返回不含内部细节的 500。认证与对象授权需要独立检查，不能通过“有 ID”就允许读取数据。示例仅展示错误映射，没有实现身份系统。
+
+`httptest.ResponseRecorder` 可以直接调用 Handler 检查结果，无需启动端口或连接外网。我们在写状态前先编码 JSON；一旦响应开始，写入失败只能记录并结束，不能再尝试发送第二份错误 JSON。
+
+<!-- verified-case: go-errors-http -->
 ```go
 package main
 
@@ -893,144 +256,92 @@ import (
     "encoding/json"
     "errors"
     "fmt"
+    "log"
     "net/http"
+    "net/http/httptest"
+    "strconv"
+    "strings"
 )
 
-// API错误响应结构
-type APIError struct {
-    Code    string                 `json:"code"`
-    Message string                 `json:"message"`
-    Details map[string]interface{} `json:"details,omitempty"`
+var ErrMissing = errors.New("missing user")
+
+func lookup(id int) (string, error) {
+    switch id {
+    case 1: return "Ada", nil
+    case 2: return "", ErrMissing
+    default: return "", errors.New("internal connection details")
+    }
 }
 
-func (e APIError) Error() string {
-    return fmt.Sprintf("API错误 [%s]: %s", e.Code, e.Message)
-}
-
-// 常用API错误
-var (
-    ErrInvalidRequest = APIError{
-        Code:    "INVALID_REQUEST",
-        Message: "请求参数无效",
-    }
-
-    ErrUnauthorized = APIError{
-        Code:    "UNAUTHORIZED",
-        Message: "未授权访问",
-    }
-
-    ErrResourceNotFound = APIError{
-        Code:    "RESOURCE_NOT_FOUND",
-        Message: "资源不存在",
-    }
-)
-
-// HTTP错误响应写入器
-func writeError(w http.ResponseWriter, err error) {
-    w.Header().Set("Content-Type", "application/json")
-
-    var apiErr APIError
-    if errors.As(err, &apiErr) {
-        // 已知的API错误
-        switch apiErr.Code {
-        case "INVALID_REQUEST":
-            w.WriteHeader(http.StatusBadRequest)
-        case "UNAUTHORIZED":
-            w.WriteHeader(http.StatusUnauthorized)
-        case "RESOURCE_NOT_FOUND":
-            w.WriteHeader(http.StatusNotFound)
-        default:
-            w.WriteHeader(http.StatusInternalServerError)
-        }
-    } else {
-        // 未知错误
-        apiErr = APIError{
-            Code:    "INTERNAL_ERROR",
-            Message: "内部服务器错误",
-        }
-        w.WriteHeader(http.StatusInternalServerError)
-    }
-
-    json.NewEncoder(w).Encode(apiErr)
-}
-
-// 业务处理器
-func getUserHandler(w http.ResponseWriter, r *http.Request) {
-    userID := r.URL.Query().Get("id")
-    if userID == "" {
-        writeError(w, ErrInvalidRequest)
+func respond(w http.ResponseWriter, status int, payload map[string]string) {
+    body, err := json.Marshal(payload)
+    if err != nil { // 当前 map[string]string 不会编码失败；保留边界处理
+        http.Error(w, "internal error", http.StatusInternalServerError)
         return
     }
+    w.Header().Set("Content-Type", "application/json")
+    w.WriteHeader(status)
+    if _, err := w.Write(append(body, '\n')); err != nil {
+        log.Print("response write failed")
+    }
+}
 
-    if userID == "123" {
-        // 模拟未找到用户
-        err := ErrResourceNotFound
-        err.Details = map[string]interface{}{
-            "user_id": userID,
-            "resource": "user",
-        }
-        writeError(w, err)
+func handler(w http.ResponseWriter, r *http.Request) {
+    id, err := strconv.Atoi(r.URL.Query().Get("id"))
+    if err != nil || id <= 0 {
+        respond(w, 400, map[string]string{"error": "invalid id"})
         return
     }
-
-    // 成功响应
-    w.Header().Set("Content-Type", "application/json")
-    json.NewEncoder(w).Encode(map[string]interface{}{
-        "user_id": userID,
-        "name":    "张三",
-    })
+    name, err := lookup(id)
+    switch {
+    case err == nil:
+        respond(w, 200, map[string]string{"name": name})
+    case errors.Is(err, ErrMissing):
+        respond(w, 404, map[string]string{"error": "not found"})
+    default:
+        respond(w, 500, map[string]string{"error": "internal error"})
+    }
 }
 
 func main() {
-    http.HandleFunc("/user", getUserHandler)
-    fmt.Println("API服务器启动在 :8080")
-    http.ListenAndServe(":8080", nil)
+    for _, query := range []string{"", "?id=1", "?id=2", "?id=3"} {
+        req := httptest.NewRequest(http.MethodGet, "/user" + query, nil)
+        rec := httptest.NewRecorder()
+        handler(rec, req)
+        fmt.Println(rec.Code, strings.TrimSpace(rec.Body.String()))
+    }
 }
 ```
 
-## 🔗 文档交叉引用
+预期输出：
 
-### 相关文档
-- 📄 **[函数和方法]**: [05-functions-methods.md](05-functions-methods.md) - 函数定义和方法调用
-- 📄 **[Go编程精华]**: [../reference/language-concepts/03-go-programming-essentials.md](../reference/language-concepts/03-go-programming-essentials.md) - Go语言设计哲学
-- 📄 **[Gin框架错误处理]**: [../frameworks/01-gin-framework-basics.md](../frameworks/01-gin-framework-basics.md) - Web框架错误处理
+```text
+400 {"error":"invalid id"}
+200 {"name":"Ada"}
+404 {"error":"not found"}
+500 {"error":"internal error"}
+```
 
-### 参考资源
-- 📖 **[Go错误处理文档]**: https://golang.org/pkg/errors/
-- 📖 **[Go博客: 错误处理]**: https://go.dev/blog/error-handling-and-go
-- 📖 **[Go FAQ: 错误处理]**: https://golang.org/doc/faq#exceptions
+数据库接入时先核对接口：`sql.Open(driverName, dsn)` 返回 `(*sql.DB, error)`，不是单个 error，且不保证已连接成功；需要连接检查时用有截止时间的 `PingContext`。错误日志可以保留操作、请求关联 ID 和已脱敏的原因，但不要把 DSN、密码或完整底层异常传给客户端。
 
-## 📝 总结
+## 6. 测试与练习
 
-### 核心要点回顾
-1. **错误处理哲学**: 理解Go显式错误处理的设计理念
-2. **error接口**: 掌握Go错误系统的核心机制
-3. **自定义错误**: 学会创建有意义的错误类型
-4. **错误包装**: 使用errors包进行错误链式处理
-5. **panic/recover**: 了解异常情况的处理机制
+| 练习 | 要覆盖的分支 | 验收条件 |
+|---|---|---|
+| 扩展 loadUser | 正常、非法 ID、不存在、包装后的错误 | 用 `Is`/`As` 断言类别和字段，不依赖整段错误字符串 |
+| 资源清理 | 写成功/关闭成功、仅写失败、仅关闭失败、两者都失败 | Close 恰好一次；两种错误类别都能保留；补短写反例 |
+| HTTP 错误边界 | 缺 ID、负数、非数字、不存在、内部失败 | 400/404/500 正确；响应不含内部连接信息；每条分支只写一次响应 |
+| 自定义错误 | 返回 nil、typed nil、指针错误 | 成功时 `err == nil`；失败时可用 `As` 得到正确目标类型 |
 
-### 实践练习
-- [ ] 为不同的业务场景创建自定义错误类型
-- [ ] 练习错误包装和解包操作
-- [ ] 实现一个带有错误处理的HTTP API
-- [ ] 编写测试验证错误处理的正确性
-- [ ] 建立项目的错误处理规范
+错误处理应围绕调用者的下一步决定设计：重试、修正输入、跳过还是终止。不要默认所有失败都可重试；网络写入失败可能已经产生副作用，重复执行前需要幂等契约。哨兵错误的价值首先是稳定分类，不应把它教成“避免每次分配字符串”的微优化。
 
----
+## 官方资料与后续阅读
 
-**文档状态**: ✅ 已完成
-**最后更新**: 2026年9月
-**版本**: v1.0.0
-
----
-
-> 💡 **学习建议**:
-> - 将错误处理视为程序设计的重要组成部分
-> - 为不同层次的错误设计不同的处理策略
-> - 在日志中记录足够的错误信息用于调试
-> - 定期审查和改进错误处理逻辑
-> - 避免过度使用panic，只在真正异常时使用
-
+- [errors 包](https://pkg.go.dev/errors)：`Is`、`As`、`Join`、`Unwrap` 的完整契约。
+- [Defer, Panic, and Recover](https://go.dev/blog/defer-panic-and-recover)：注册时求值、返回时清理、恢复边界。
+- [database/sql.Open](https://pkg.go.dev/database/sql#Open)：数据库句柄与连接检查的区别。
+- [httptest](https://pkg.go.dev/net/http/httptest)：Handler 测试工具。
+- [Gin 框架基础](../frameworks/01-gin-framework-basics.md)：在具体 Web 框架中应用错误分类。
 
 <!-- learning-navigation -->
 ## 阅读导航

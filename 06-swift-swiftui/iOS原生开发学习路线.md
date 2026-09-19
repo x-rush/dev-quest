@@ -6,7 +6,7 @@
 
 ## 起步：建立工具与反馈回路
 
-先完成 [环境准备](basics/01-environment-setup.md) 与 [第一个 SwiftUI 应用](basics/02-first-swiftui-app.md)。记录 Xcode、Swift 语言模式与最低部署目标，创建工程、编译、设置断点、查看控制台，并用 Git 保存首次可运行版本。
+先完成 [环境准备](basics/01-environment-setup.md) 与 [第一个 SwiftUI 应用](basics/02-first-swiftui-app.md)。记录 Xcode、Swift 语言模式与最低部署目标，创建工程、编译、设置断点、查看控制台，并用 Git 保存首次**经你自己的模拟器或设备验收**的版本。
 
 验收：从干净检出能按 README 重建工程；修改一个 Text 后模拟器可看到变化；遇到编译错误知道先读第一条诊断。不要先引入网络库、架构库和自动化平台。
 

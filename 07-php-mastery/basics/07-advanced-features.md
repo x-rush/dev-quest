@@ -87,7 +87,7 @@ echo $status->name, PHP_EOL;            // Paid：读取 case 名
 print_r(OrderStatus::cases());          // 全部 case 组成的数组
 ```
 
-**核心价值**：枚举是"类 + 单例集合"，类型系统可以精确到具体状态，配合 `match` 获得穷尽性检查（见 [控制流程](./05-control-flow.md)）。
+**核心价值**：枚举限制一组合法状态。`match` 通过严格比较分派；如果运行时遇到未覆盖的 case 且没有 `default`，会抛出 `UnhandledMatchError`，PHP 本身不会提前拒绝这个不完整的分支集合。需要提前发现遗漏时，配置支持枚举分析的静态分析工具（见 [控制流程](./05-control-flow.md)）。
 
 ### 带实现的枚举：策略分发
 
@@ -109,10 +109,13 @@ enum PaymentMethod: string
 
 ## 2. 属性注解（Attributes，PHP 8.0+）
 
-属性是**写在代码里的结构化元数据**，取代了 DocBlock 注解（`@Route(...)`），可被反射读取，是现代框架（Laravel、Symfony）路由与验证的主流声明方式。
+Attributes 是**写在代码里的结构化元数据**，可由反射读取。只有框架或应用主动读取时，它们才产生业务效果；某个库是否支持属性声明，要查该库的接口，不能把 `#[Route]` 写到任意控制器上就假定路由已注册。
 
 ### 声明与使用
 
+下面是完整脚本，保存为 `attributes.php` 后执行 `php attributes.php`。它同时检查属性侧读取成功、参数侧实例化失败，并区分“获取元数据”和“实例化元数据”。
+
+<!-- reference-case: {"id":"php-promoted-attributes","stdout":"users\n20\n1\nparameter-target-rejected\n"} -->
 ```php
 <?php
 
@@ -145,13 +148,6 @@ final class User
     ) {
     }
 }
-```
-
-### 反射读取
-
-```php
-use ReflectionClass;
-
 $ref = new ReflectionClass(User::class);
 
 // 读取类级属性
@@ -162,9 +158,19 @@ echo $table->name, PHP_EOL;        // users
 $prop = $ref->getProperty('nickname');
 $max = $prop->getAttributes(MaxLength::class)[0]->newInstance();
 echo $max->length, PHP_EOL;        // 20
+
+$param = $ref->getConstructor()->getParameters()[0];
+$attributes = $param->getAttributes(MaxLength::class);
+echo count($attributes), PHP_EOL; // 元数据存在不代表 target 合法
+try {
+    $attributes[0]->newInstance();
+    throw new RuntimeException('参数 target 本应被拒绝');
+} catch (Error $error) {
+    echo 'parameter-target-rejected', PHP_EOL;
+}
 ```
 
-**陷阱（提升参数上的注解）**：写在构造器提升参数上的注解会同时出现在 ReflectionParameter 与 ReflectionProperty 的 `getAttributes()` 结果里，但 `#[MaxLength]` 声明的 target 是 `TARGET_PROPERTY`——从参数侧 `$param->getAttributes(...)[0]->newInstance()` 会抛 `Error: Attribute "MaxLength" cannot target parameter (allowed targets: property)`（实测 8.5.10）。提升参数上的属性注解一律从 `getProperty()` 读取。
+**陷阱（提升参数上的注解）**：提升参数上的注解同时出现在参数与生成的属性上；本例 `MaxLength` 仅允许 `TARGET_PROPERTY`，所以从参数侧 `newInstance()` 会抛 `Error`。如果注解只允许 `TARGET_PARAMETER`，读取端则应使用参数反射；若两边都允许，可组合 target 标志。选择哪一端取决于注解声明与工具契约，不能一律使用 `getProperty()`。
 
 **使用准则**：属性只放**声明性元数据**（配置、规则、路由），不承载业务逻辑；运行时行为交给读取属性的框架/工具层。
 
@@ -214,6 +220,7 @@ Fiber 是可以在任意点**暂停并交还控制权**、之后从断点**恢�
 
 ### 最小示例
 
+<!-- reference-case: {"id":"php-fiber-return-channels","stdout":"执行 任务A 前半段\n主流程拿到: 任务A-等待中\n恢复，收到: 外部数据\nNULL\n任务A-完成\n"} -->
 ```php
 <?php
 
@@ -245,13 +252,14 @@ NULL
 任务A-完成
 ```
 
-**两个"返回值"不要混淆**（实测 8.5.10）：
+**两个返回通道不要混淆**（本例的运行版本与输出见文末验证报告）：
 
 - `start()/resume()` 的返回值 = fiber **下一次 `Fiber::suspend()` 交出的值**；若 fiber 不再挂起、直接结束，得到 `NULL`
 - fiber 函数的 `return` 值只能用 `$fiber->getReturn()` 获取，且必须在 fiber 终止后调用（否则抛 `Error: Cannot get fiber return value: The fiber has not returned`）
 
 ### 生命周期与状态检查
 
+<!-- reference-case: {"id":"php-fiber-lifecycle","stdout":"bool(false)\nbool(true)\n"} -->
 ```php
 <?php
 
@@ -313,7 +321,7 @@ $title = '  modern php  ';
 $clean = $title |> trim(...) |> mb_strtoupper(...);   // MODERN PHP
 ```
 
-右侧必须是**单参数** callable；多参数函数用一等公民语法固化参数或用闭包包装。
+管道把左侧结果作为一个实参传给右侧 callable；其他参数必须有默认值，或由闭包提供，例如 `$text |> (fn(string $s): string => str_replace(' ', '-', $s))`。`str_replace(...)` 只创建函数引用，**不会固定部分实参**。本节 8.5 片段需要 PHP 8.5，`mb_strtoupper` 还需要 mbstring 扩展。
 
 ### URI 扩展（8.5+）：类型化的 URL 解析
 
@@ -323,7 +331,7 @@ echo $uri->getHost(), PHP_EOL;    // example.com
 $next = $uri->withPath('/b');     // 不可变：with* 返回新实例
 ```
 
-`Uri\WhatWg\Url` 按浏览器同款 WHATWG 规则构造即校验，非法输入抛 `InvalidUrlException`；两者共同取代 `parse_url()` 的碎片化数组输出。
+`Uri\WhatWg\Url` 使用 WHATWG 解析规则，解析失败抛 `Uri\WhatWg\InvalidUrlException`（继承自 `Uri\InvalidUriException`）。这些对象提供另一套解析与修改接口；`parse_url()` 仍存在，迁移时应检查解析规则和错误行为。URL 能被解析不代表可以安全访问：服务器请求还需限制协议、目的主机及重定向。
 
 ## ✅ 最佳实践
 
@@ -337,7 +345,7 @@ $next = $uri->withPath('/b');     // 不可变：with* 返回新实例
 **A**: 不能 `new`，不能继承（枚举隐式 final），但可以实现接口、使用 trait、定义常量与方法——本质是特殊的 final 类。
 
 ### Q2: 属性注解和 DocBlock 注解什么关系？
-**A**: 属性注解是语言级结构、有语法检查、可携带类型化参数；DocBlock 只是注释文本。新代码一律用 `#[...]`，仅泛型等 PHPStan 专属信息仍写在 DocBlock。
+**A**: 属性注解提供反射可读的结构化元数据；DocBlock 仍用于说明参数、返回值、异常与静态分析类型。库支持的运行时声明可用属性，解释性文档仍写注释；属性并不会使所有 DocBlock 失去用途。
 
 ### Q3: Fiber 和 Generator（yield）怎么选？
 **A**: Generator 面向惰性序列迭代；Fiber 面向"调用栈任意深度处暂停"。异步 I/O 场景选 Fiber（或其上层库），数据流处理选 Generator。
@@ -357,6 +365,9 @@ $next = $uri->withPath('/b');     // 不可变：with* 返回新实例
 
 ## 🔗 相关文档
 
+- [PHP 官方属性说明](https://www.php.net/manual/en/language.attributes.overview.php) · [构造器属性提升](https://www.php.net/manual/en/language.oop5.decon.php) · [Fiber 返回值](https://www.php.net/manual/en/fiber.getreturn.php)
+- [管道运算符的 callable 契约](https://www.php.net/operators.functional) · [PHP 8.5 URI 与其他增量特性](https://www.php.net/releases/8.5/en.php)
+- [本文 3 个完整案例的限定运行证据](../../shared-resources/tools/document-quality/reports/php-java-core-boundaries.md)。运行器原样提取标记代码；8.4/8.5 增量片段与异步框架集成不在这 3 项范围内。
 - 📄 **[综合练习：CLI 任务管理工具](./08-first-project.md)** — 用枚举与属性完成真实项目
 - 📄 **[类型系统与现代 OOP 全表](../reference/language-concepts/03-types-oop-modern.md)** — 本篇各特性的条目式权威速查
 - 📄 **[PHP 8.4/8.5 增量特性](../reference/language-concepts/12-modern-php-85.md)** — 属性钩子/管道运算符/URI 扩展条目式全表

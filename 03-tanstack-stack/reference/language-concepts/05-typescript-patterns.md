@@ -187,7 +187,7 @@ type Users = Awaited<ReturnType<FetchUsers>>
 <!-- full-library-explanation -->
 ## 类型推断与运行时验证是两条链
 
-先修：泛型、unknown、联合类型。queryFn 的返回类型会影响 data 推断；但给 JSON 写 `as User[]` 并不会检查接口真实返回值。应在网络边界解析，再把已验证的类型交给 Query。
+先修：泛型、unknown、联合类型。queryFn 的返回类型会影响 data 推断；但给 JSON 写 `as User[]` 并不会检查接口真实返回值。应在网络边界解析成功后，再把**解析后的值及其类型**交给 Query；这里的“已解析”不等同于某个真实服务已被本仓库验证。
 
 `as const` 保留字面量和 readonly 信息，`satisfies` 检查约束，二者都不会生成运行时校验代码。普通查询键不写 as const 仍可运行，只是部分类型工具无法保留同样精确的元组信息。
 

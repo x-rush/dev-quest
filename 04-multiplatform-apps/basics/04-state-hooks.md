@@ -84,7 +84,7 @@ function Timer() {
     return () => clearInterval(id);
   }, []); // 空依赖 = 只在挂载后执行一次
 
-  return <Text>已运行 {seconds} 秒</Text>;
+  return <Text>计时 {seconds} 秒</Text>;
 }
 ```
 

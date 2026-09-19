@@ -1,328 +1,236 @@
 # 并发编程基础：goroutine、channel 与 sync
 
-## 先理解，再动手
+前置：[函数和方法](05-functions-methods.md)、[控制结构](06-control-structures.md)。本章用标准库完成“启动任务 → 传递结果 → 等待结束 → 取消任务 → 保护共享状态”。先单独保存并运行每个程序，再组合成 worker pool；不要把几个 `main` 函数放在同一个文件。
 
-go f() 安排并发工作，不保证它在 main 返回前完成。等待完成和保护共享数据是两种不同职责，WaitGroup 不能代替 Mutex。
+`go f()` 启动并发工作，不保证它在 `main` 返回前结束。等待任务完成和保护共享数据是不同职责：`WaitGroup` 负责前者，`Mutex` 或数据所有权转移负责后者。goroutine 使用可增长的栈，但数量、阻塞的网络连接和每个任务占用的内存仍需限制。
 
-**本节自测**：启动两个任务，各发送一个整数到 channel，由 main 接收两次求和。
+本文四个命名程序由[验证器](../../shared-resources/tools/document-quality/verify_go_rust_basics.py)原样抽取，以 `go build -race` 构建并比对输出；环境与范围见[报告](../../shared-resources/tools/document-quality/reports/go-rust-basics.md)。此处不包含外网性能测量。
 
-<details>
-<summary>预期结果与参考思路（先尝试再展开）</summary>
+## 1. 用 channel 收集结果，显式等待所有发送者
 
-求和确定，打印先后未必确定；若不接收、不等待就返回，不能保证任务完成。
+假设要并发计算 1、2、3 的平方，并返回总和。每个任务只拥有自己的输入，通过 channel 交付结果；主 goroutine 是唯一累加者，因此不需要锁。
 
-</details>
-
-> **文档简介**: 掌握Go最著名的并发模型——用 goroutine 启动并发任务、用 channel 在任务间通信、用 sync 包协调同步，并避开最常见的并发陷阱
-
-> **目标读者**: 已掌握函数与控制结构、想理解Go并发精髓的学习者
-
-> **前置知识**: 已完成 [函数和方法](05-functions-methods.md)（理解闭包）与 [控制结构](06-control-structures.md)
-
-> **预计时长**: 3-4小时学习 + 练习
-
-<details>
-<summary>文档信息（用途、难度与维护记录）</summary>
-
-## 📚 文档元数据
-
-| 属性 | 内容 |
-|------|------|
-| **模块** | `01-go-backend` |
-| **分类** | `basics/concurrency` |
-| **难度** | ⭐⭐ (2/5) |
-| **标签** | `#goroutine` `#channel` `#select` `#sync` `#并发` |
-| **更新日期** | `2026年9月` |
-| **作者** | Dev Quest Team |
-| **状态** | ✅ 已完成 |
-
-</details>
-
-## 🎯 学习目标
-
-通过本文档学习，您将能够：
-- 用 `go` 关键字启动 goroutine，并用 `WaitGroup` 等待完成
-- 使用无缓冲/有缓冲 channel 在 goroutine 间传递数据
-- 用 `select` 实现多路复用、超时与非阻塞收发
-- 用 `sync.Mutex` 保护共享数据，理解数据竞争
-- 识别并避开死锁、close 误用等典型陷阱
-
-## 📝 goroutine：轻量级并发
-
-### 1. 用 go 关键字启动
-
-`go` 关键字让函数在新的 goroutine 中运行——它比线程轻量得多（初始仅几 KB 栈），单程序轻松开数十万个：
-
+<!-- verified-case: go-concurrency-results -->
 ```go
-func worker(id int, wg *sync.WaitGroup) {
-	defer wg.Done() // 完成时通知 WaitGroup
-	fmt.Printf("worker %d 开始\n", id)
-	time.Sleep(10 * time.Millisecond) // 模拟工作
-	fmt.Printf("worker %d 结束\n", id)
+package main
+
+import (
+    "fmt"
+    "sync"
+)
+
+func main() {
+    results := make(chan int)
+    var wg sync.WaitGroup
+    for i := 1; i <= 3; i++ {
+        wg.Add(1) // 在启动之前增加，防止 Wait 看见零而提前返回
+        go func(n int) {
+            defer wg.Done()
+            results <- n * n
+        }(i)
+    }
+    go func() {
+        wg.Wait()
+        close(results) // 所有发送者结束后，由协调者关闭
+    }()
+    total := 0
+    for value := range results {
+        total += value
+    }
+    fmt.Println(total)
+}
+```
+
+预期输出：
+
+```text
+14
+```
+
+这里不能先在主 goroutine 中 `wg.Wait()` 再接收：无缓冲 channel 的发送必须等到接收方，任务不完成，Wait 也不完成。单独的协调 goroutine 等待计数归零；主 goroutine 同时持续接收。结果到达顺序未规定，整数求和不受顺序影响。
+
+`WaitGroup` 首次使用后不能复制。传给其他函数时通常使用 `*sync.WaitGroup`；也可以像示例那样闭包引用同一个变量。只有所有调用 `Done` 的任务确实结束，Wait 才能完成。Go 1.25 起还提供 `WaitGroup.Go`，但传入函数不能 panic；这里保留 `Add`/`Done` 以展示计数关系。
+
+### 循环变量：版本和声明方式都重要
+
+Go 1.22 语言语义下，`for i := ...` 或 `for _, v := range ...` 声明的循环变量每轮新建；通常由模块 `go.mod` 的 `go` 指令决定。对循环外变量赋值的 `for i = ...` 不适用此规则。旧语义下捕获共享变量可能读到不同值并产生数据竞争，不能保证某个固定输出。
+
+示例显式把 `i` 作为参数传入，传参在启动语句处求值，因此也适用于旧语义。这不保证调度次序，也不保护循环体捕获的其他共享对象。
+
+## 2. channel 的缓冲、关闭与单向类型
+
+| 操作 | 未关闭、非 nil channel | 已关闭 channel | nil channel |
+|---|---|---|---|
+| 发送 | 无缓冲时等待接收；缓冲满时等待 | panic | 永久阻塞 |
+| 接收 | 空且没有发送者时等待 | 先取缓冲值，再返回零值和 `false` | 永久阻塞 |
+| `close` | 宣告不再发送；不会等待消费者处理结束 | panic | panic |
+
+没有配对的收发会阻塞。只有运行时检测到整个程序无法继续推进时，才可能报告全局死锁；服务里仍有其他活动任务时，一个泄漏的 goroutine 可以一直挂住，没有自动报错。
+
+<!-- verified-case: go-concurrency-channel -->
+```go
+package main
+
+import "fmt"
+
+func produce(out chan<- int) {
+    out <- 7
+    close(out)
 }
 
 func main() {
-	var wg sync.WaitGroup
-	for i := 1; i <= 3; i++ {
-		wg.Add(1) // 每启动一个 goroutine 计数 +1
-		go worker(i, &wg)
-	}
-	wg.Wait() // 阻塞直到计数归零
-	fmt.Println("所有 worker 完成")
+    values := make(chan int, 1)
+    produce(values) // 缓冲能容纳一次发送，因此本例不需要 goroutine
+    first, ok1 := <-values
+    second, ok2 := <-values
+    fmt.Println(first, ok1)
+    fmt.Println(second, ok2)
+    var disabled <-chan int
+    select {
+    case <-disabled:
+        panic("nil channel cannot become ready")
+    default:
+        fmt.Println("no ready channel")
+    }
 }
 ```
 
-> ⚠️ **WaitGroup 传指针**：`wg *sync.WaitGroup` 是必须的——WaitGroup 含内部状态，按值传递会让每个 goroutine 拿到副本，`Wait()` 永远等不到完成。
+预期输出：
 
-> ⚠️ **main 退出 = 全部 goroutine 终止**。goroutine 没有父子层级，main 不等待就直接返回，未完成的 goroutine 被直接丢弃。所以需要 WaitGroup 或 channel 协调。
-
-### 2. Go 1.22+ 的循环变量语义
-
-在循环里启动 goroutine 是最经典的陷阱。**Go 1.22 起，循环变量每次迭代都是独立变量**，闭包捕获的值是正确的：
-
-```go
-var wg sync.WaitGroup
-for i := 1; i <= 3; i++ {
-	wg.Add(1)
-	go func() {
-		defer wg.Done()
-		fmt.Print(i, " ") // Go 1.22+ 每个闭包捕获自己的 i
-	}()
-}
-wg.Wait()
+```text
+7 true
+0 false
+no ready channel
 ```
 
-多次运行输出是 `3 2 1`、`1 2 3`、`2 1 3`……——**值总是 1/2/3 各出现一次（正确），但打印顺序不确定**。goroutine 的调度顺序没有任何保证，永远不要依赖它。
+`chan<- T` 限定发送，`<-chan T` 限定接收，帮助编译器发现误用。关闭责任属于能证明“以后没人发送”的一方；单生产者通常自己关闭，多生产者通常用第一例的协调者。`sync.Once` 只能避免重复关闭，不能防止关闭与发送并发导致 panic。channel 无需为了释放内存而关闭；close 的用途是协议通知。
 
-> 📌 Go 1.21 及更早版本中，所有迭代共享同一个 `i`：循环要等 `i <= 3` 不成立才退出，此时 `i` 已是 4，因此经典输出是 `4 4 4`（Go 从不因共享循环变量而 panic）。当时的惯用法是 `i := i` 复制一份，升级到 1.22+（循环变量每迭代新建）后不再需要。
+`select` 在多个已就绪分支之间伪随机选择，不保证严格轮转或某个任务在有限次数内必定获选。`default` 只代表此刻没有就绪分支；放进没有阻塞的无限循环会忙等占用 CPU。
 
-## 📝 channel：goroutine 间的管道
+## 3. 取消不仅是停止等待，还必须让工作者退出
 
-> 💡 Go 的并发哲学：**不要通过共享内存来通信，而要通过通信来共享内存**。channel 就是"通信"的工具。
+旧式写法“后台 sleep 后向无缓冲 channel 发送；前台 `time.After` 超时返回”会留下无人接收的发送者。取消是双方约定：调用方发出信号，任务在阻塞处观察信号，随后调用方等待清理结束。
 
-### 1. 无缓冲 channel：同步握手
+下面为了稳定演示，主动调用 `cancel()`，再观察任务结束。真实网络请求可以用 `context.WithTimeout` 建立截止时间，并把 context 传入 `http.NewRequestWithContext`；只在外面加 select 不会取消底层 I/O。
 
-无缓冲 channel 的发送和接收**必须同时就绪**——像面对面交接，双方都到场才能完成：
-
+<!-- verified-case: go-concurrency-cancel -->
 ```go
-ch := make(chan string) // 无缓冲
-go func() {
-	ch <- "hello" // 阻塞，直到有人接收
-}()
-msg := <-ch // 阻塞，直到有人发送
-fmt.Println("收到:", msg) // 收到: hello
-```
+package main
 
-这个"必然阻塞"的特性使无缓冲 channel 天然是**同步点**：发送方可以确定接收方已经拿到数据。
+import (
+    "context"
+    "fmt"
+)
 
-### 2. 有缓冲 channel：异步队列
-
-```go
-ch := make(chan int, 2) // 容量 2
-ch <- 1 // 缓冲未满，不阻塞
-ch <- 2
-// ch <- 3 // 缓冲已满且无人接收：fatal error: all goroutines are asleep - deadlock!
-fmt.Println(len(ch), cap(ch)) // 2 2
-fmt.Println(<-ch, <-ch)       // 1 2
-```
-
-缓冲区满时发送阻塞、空时接收阻塞。**向无人接收且永远不会再被接收的 channel 发送，Go 运行时会直接报 deadlock 错误**（不是 panic，是 fatal error，无法 recover）。
-
-### 3. close 与 range：生产者-消费者模式
-
-channel 由**发送方**负责关闭，接收方用 `range` 自动消费到关闭为止：
-
-```go
-jobs := make(chan int, 5)
-for i := 1; i <= 5; i++ {
-	jobs <- i
-}
-close(jobs) // 发送方 close，告知"没有更多数据了"
-
-for job := range jobs { // 取尽且已 close 时循环自动结束
-	fmt.Print("处理任务", job, " ")
-}
-// 处理任务1 处理任务2 处理任务3 处理任务4 处理任务5
-```
-
-接收端也可以用 comma-ok 判断：
-
-```go
-v, ok := <-jobs // ok == false 表示 channel 已关闭且已取空
-```
-
-### 4. 单向 channel：表达意图
-
-函数签名可以限定 channel 方向，让编译器帮你检查误用：
-
-```go
-func producer(out chan<- int) { // 只发送
-	for i := 1; i <= 3; i++ {
-		out <- i
-	}
-	close(out) // close 是发送方特权，双向/只发送 channel 才能调用
+func produce(ctx context.Context, out chan<- int, done chan<- struct{}) {
+    defer close(done)
+    for n := 0; ; n++ {
+        select {
+        case <-ctx.Done():
+            return
+        case out <- n:
+        }
+    }
 }
 
-func consumer(in <-chan int, done chan<- bool) { // 只接收
-	for v := range in {
-		fmt.Print(v, " ")
-	}
-	done <- true
+func main() {
+    ctx, cancel := context.WithCancel(context.Background())
+    defer cancel()
+    values := make(chan int)
+    done := make(chan struct{})
+    go produce(ctx, values, done)
+    fmt.Println(<-values)
+    cancel()
+    <-done // 观察工作者实际退出，不能用 Sleep 猜测它已结束
+    fmt.Println(ctx.Err())
 }
 ```
 
-## 📝 select：多路复用
+预期输出：
 
-`select` 同时等待多个 channel 操作，哪个就绪执行哪个；多个就绪时**随机选择**（防止饥饿）：
-
-### 1. 超时控制
-
-```go
-ch := make(chan string)
-go func() {
-	time.Sleep(100 * time.Millisecond)
-	ch <- "慢消息"
-}()
-
-select {
-case msg := <-ch:
-	fmt.Println("收到:", msg)
-case <-time.After(50 * time.Millisecond):
-	fmt.Println("超时！没等到消息") // 100ms > 50ms，走这里
-}
+```text
+0
+context canceled
 ```
 
-### 2. default：非阻塞收发
+本例的输出 channel 不再有人接收，所以取消后只有 `ctx.Done()` 分支可推进。一般场景里若发送和取消同时就绪，select 仍可能选择发送，因此不能声称 cancel 返回后绝不再产生一个结果。需要严格停止边界时，应设计协调协议并等待完成通知。
 
+## 4. Mutex 保护整个共享状态约束
+
+多个任务必须读写同一个计数器时，给每次访问使用同一把锁。不要仅锁写、不锁并发读；也不要把含已使用 Mutex 的结构体复制到另一个变量。
+
+<!-- verified-case: go-concurrency-mutex -->
 ```go
-select {
-case <-ch:
-	fmt.Println("收到了消息")
-default: // 没有就绪的 case 时立即走 default，不阻塞
-	fmt.Println("无数据，立即走 default")
-}
-```
+package main
 
-`select + default` 是"试着读一下、没有就算了"的标准写法；`select + time.After` 是网络请求超时的标准写法。
+import (
+    "fmt"
+    "sync"
+    "sync/atomic"
+)
 
-## 📝 sync.Mutex：保护共享数据
-
-channel 适合传递数据，但当多个 goroutine 要更新**同一个变量**时，互斥锁更直接：
-
-```go
 type Counter struct {
-	mu    sync.Mutex
-	count int
+    mu sync.Mutex
+    value int
 }
 
 func (c *Counter) Inc() {
-	c.mu.Lock()
-	defer c.mu.Unlock()
-	c.count++ // 同一时刻只有一个 goroutine 能执行到这里
+    c.mu.Lock()
+    defer c.mu.Unlock()
+    c.value++
+}
+
+func (c *Counter) Value() int {
+    c.mu.Lock()
+    defer c.mu.Unlock()
+    return c.value
+}
+
+func main() {
+    var counter Counter
+    var atomicCounter atomic.Int64
+    var wg sync.WaitGroup
+    for i := 0; i < 100; i++ {
+        wg.Add(1)
+        go func() {
+            defer wg.Done()
+            counter.Inc()
+            atomicCounter.Add(1)
+        }()
+    }
+    wg.Wait()
+    fmt.Println(counter.Value(), atomicCounter.Load())
 }
 ```
 
-1000 个 goroutine 并发递增：
+预期输出：
 
-```go
-var c Counter
-var wg sync.WaitGroup
-for i := 0; i < 1000; i++ {
-	wg.Add(1)
-	go func() {
-		defer wg.Done()
-		c.Inc()
-	}()
-}
-wg.Wait()
-fmt.Println(c.count) // 1000 —— 稳定正确
+```text
+100 100
 ```
 
-**对比：不加锁会怎样？** 把 `c.Inc()` 换成裸的 `count++` 后存在数据竞争，结果不受语言保证：它可能碰巧为 1000，也可能丢更新。请用 `go test -race` 或重复运行观察，而不要依赖某组固定数字。这种“偶尔才错”的数据竞争很难排查。
+单一计数可选 `atomic.Int64`。如果约束是“余额减少的同时库存也必须减少”，对两个独立变量分别执行原子操作并不能形成整体事务，此时需将整个检查与更新放进同一临界区。
 
-### 用 -race 检测竞争
+保存任一完整程序为 `main.go` 后运行 `go run -race main.go`。竞争检测器会观测本次执行，未触发的路径没有被证明无竞争；目标平台还需支持 race 工具链及 C 编译器。将无锁计数器作为独立反例时，应观察 `WARNING: DATA RACE`，不能通过“这次刚好输出 100”判断安全。
 
-Go 内置竞争检测器，`go run -race` / `go test -race` 会在发生竞争时打印详细报告：
+## 5. 练习与验收
 
-```bash
-$ go run -race main.go
-==================
-WARNING: DATA RACE
-Read at 0x00c0000140f8 by goroutine 11: ...
-```
+| 练习 | 先实现 | 通过条件 |
+|---|---|---|
+| 有界 worker pool | 一个生产者、3 个 worker、100 个整数任务 | 每项恰好处理一次、结果总和 5050；只有协调者关闭结果 channel |
+| 提前停止 | 消费者拿到 10 个结果后取消 | 所有生产者和 worker 都观察 context，并通过 WaitGroup 确认退出；不依赖 sleep |
+| 并发缓存 | map 的读写使用同一把锁 | 测试覆盖同时读写并运行 `go test -race`；不把 WaitGroup 误当成锁 |
+| 请求取消 | 使用 `httptest` 本地服务器模拟等待 | 请求截止后返回可用 `errors.Is` 判断的取消/截止错误；服务端也观察请求 context |
 
-> ⚠️ `-race` 只能检出**运行时实际发生**的竞争，未触发的路径检不出来。测试时始终带上 `-race`，CI 中也应开启。
+先写出谁拥有数据、谁发送、谁接收、谁关闭、谁取消、谁等待，再决定是否需要 channel。性能优化应在正确性和任务生命周期清楚后进行。
 
-### 原子操作的极简场景
+## 相关资料
 
-单纯计数可用 `sync/atomic` 免去显式锁管理：
-
-```go
-var count atomic.Int64
-count.Add(1)
-fmt.Println(count.Load())
-```
-
-## ⚠️ 常见陷阱速查
-
-| 陷阱 | 现象 | 正确做法 |
-|------|------|----------|
-| 忘记 wg.Add 或在 goroutine 内 Add | Wait 提前返回或 panic | Add 在启动前、主 goroutine 中调用 |
-| WaitGroup 按值传递 | Wait 永久阻塞 | 始终传 `*sync.WaitGroup` |
-| 向已关闭 channel 发送 | panic: send on closed channel | 只有发送方 close；多发送方时用 WaitGroup 等"全部发完"再 close |
-| 重复 close | panic: close of closed channel | close 只由发送方调用一次（可用 sync.Once 保护） |
-| 循环内 goroutine 依赖共享变量（<1.22） | 闭包读到意外值 | 升级 Go 1.22+，或 `i := i` 复制 |
-| 无缓冲 channel 双方不同时就绪 | deadlock fatal error | 检查发送/接收是否配对，需要异步时用缓冲 |
-
-关于 close 后的语言语义：**接收是安全的**——先排空缓冲区剩余值，取尽后返回零值且 `ok == false`；**发送会 panic**（`send on closed channel`）；**再次 close 也会 panic**。可将这三个分支写成单独测试验证。
-
-## 📈 深入方向
-
-- **context**：生产级超时与取消传播，见 [Go 标准库字典](../reference/library-guides/01-go-standard-library.md) 的 context 条目
-- **errgroup**：带错误传播的 WaitGroup 替代，见 `golang.org/x/sync/errgroup`
-- **worker pool**：固定数量 goroutine 消费任务队列的完整模式，见 advanced-topics 并发模式专题
-- **channel 底层实现**：hchan 结构与调度交互，见 advanced-topics Go 语言机制专题
-
-## 🔗 文档交叉引用
-
-### 相关文档
-- 📄 **[函数和方法]**: [05-functions-methods.md](05-functions-methods.md) - 闭包语法是 goroutine 的基础
-- 📄 **[错误处理]**: [08-error-handling.md](08-error-handling.md) - defer 与并发安全配合
-- 📄 **[Go 标准库字典]**: [../reference/library-guides/01-go-standard-library.md](../reference/library-guides/01-go-standard-library.md) - sync 包完整条目
-
-### 参考资源
-- 📖 **[Go 内存模型]**: https://go.dev/ref/mem
-- 📖 **[Share Memory By Communicating]**: https://go.dev/doc/codewalk/sharemem/
-- 📖 **[Go 1.22 Release Notes: 循环变量变更]**: https://go.dev/doc/go1.22#language
-
-## 📝 总结
-
-### 核心要点回顾
-1. **goroutine 极轻量**：`go f()` 即启动，但 main 退出会终止一切，需 WaitGroup 协调
-2. **channel 是通信原语**：无缓冲=同步握手，有缓冲=异步队列，发送方负责 close
-3. **select 处理多路**：`time.After` 做超时，`default` 做非阻塞
-4. **共享状态用锁**：Mutex 保护，`-race` 检测，atomic 处理纯计数
-5. **调度顺序不可依赖**：Go 1.22+ 修复的是循环变量值，不是执行顺序
-
-### 实践练习
-- [ ] 启动 10 个 goroutine 并发抓取 10 个 URL（用 WaitGroup 等待全部完成）
-- [ ] 实现生产者-消费者：1 个生产者发送 100 个整数，3 个 worker 消费并统计总和
-- [ ] 给练习 1 加上 2 秒超时：任一请求超时则输出超时信息
-- [ ] 故意写一个数据竞争程序，用 `go run -race` 观察报告，再用 Mutex 修复
-
----
-
-**文档状态**: ✅ 已完成
-**最后更新**: 2026年9月
-**版本**: v1.0.0
-
----
-
-> 💡 **学习建议**:
-> - 并发代码必须用 `-race` 验证，养成习惯
-> - 先想清楚数据的所有权归谁（谁来发、谁来收、谁来 close），再写 channel 代码
-> - 不确定时选 Mutex——它比错误的 channel 用法容易排查得多
-
+- [Go 内存模型](https://go.dev/ref/mem)：解释哪些同步操作建立可见性关系。
+- [sync 官方文档](https://pkg.go.dev/sync)：Mutex、WaitGroup 的复制与使用约束。
+- [context 官方文档](https://pkg.go.dev/context)：取消是通知机制，任务需自行响应。
+- [Go 1.22 循环变量语义](https://go.dev/doc/go1.22#language)。
+- [Go 标准库参考](../reference/library-guides/01-go-standard-library.md)与[错误处理](08-error-handling.md)。
 
 <!-- learning-navigation -->
 ## 阅读导航

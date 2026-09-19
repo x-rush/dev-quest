@@ -22,7 +22,7 @@
 现代 RN 动画的模型是**"UI 线程上的响应式系统"**，库是该模型的实现载体：
 
 - **共享值（shared value）**：一个同时可被 JS 线程与 UI 线程读写的响应式数值。改它不触发 React 重渲染——这是"跟手"的关键
-- **worklet**：声明可运行在 UI 线程的小函数（`useAnimatedStyle` 回调、手势回调天然是 worklet）。worklet 里引用 JS 可变变量只拿到快照，跨线程通信必须经共享值或 `runOnJS`
+- **worklet**：由 Reanimated 标记为可在 UI 线程执行的小函数（`useAnimatedStyle` 回调、手势回调通常处于该模型）。worklet 引用 JS 可变变量时得到的是捕获快照；跨线程通信使用共享值或 `runOnJS`。具体线程行为须以所用 Reanimated 版本和设备调试结果为准。
 - **派生样式（animated style）**：worklet 依据共享值计算样式对象，值变即重算，直接提交给渲染器，绕过 setState
 - **手势系统两层**：原生响应链（`onTouch`/responder）在 JS 侧、能力有限；专用手势库（Gesture Handler）在原生层识别手势并以事件流喂给 worklet，跟手动画由此闭环
 - **动画函数**：`withSpring` / `withTiming` / `withDecay` 等在 UI 线程驱动物理插值，可与手势衔接（手势中断时动画接力）

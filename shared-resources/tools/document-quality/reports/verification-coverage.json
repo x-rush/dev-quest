@@ -17,13 +17,13 @@
   "summary": {
     "documents": 641,
     "by_primary_state": {
-      "not_verified": 565,
-      "runtime": 76
+      "not_verified": 559,
+      "runtime": 82
     },
-    "verification_wording_occurrences": 200,
+    "verification_wording_occurrences": 173,
     "marker_classification": {
-      "source_has_limited_runtime_evidence": 74,
-      "unbound_verification_wording": 126
+      "source_has_limited_runtime_evidence": 76,
+      "unbound_verification_wording": 97
     }
   },
   "documents": [
@@ -185,26 +185,68 @@
     },
     {
       "path": "01-go-backend/basics/07-concurrency-basics.md",
-      "sha256": "c191e429184a3fe73e7bb71514146ff569d86c0f760765e335fa7dd3630c60f5",
+      "sha256": "97b4eb77a0a833cef83b6f4c658225b64bb34629792cc44c20b95049e50c5e14",
       "verification": [
         {
-          "mode": "not_verified",
-          "status": "NOT_VERIFIED",
-          "report": null,
-          "scope": "No named runtime or syntax evidence is recorded for this document."
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "go-rust-basics.json",
+          "scope": "9 complete Go programs built with -race, 4 Rust programs and 3 expected compile failures; no unmarked snippets or external services"
+        },
+        {
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "go-rust-basics.json",
+          "scope": "9 complete Go programs built with -race, 4 Rust programs and 3 expected compile failures; no unmarked snippets or external services"
+        },
+        {
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "go-rust-basics.json",
+          "scope": "9 complete Go programs built with -race, 4 Rust programs and 3 expected compile failures; no unmarked snippets or external services"
+        },
+        {
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "go-rust-basics.json",
+          "scope": "9 complete Go programs built with -race, 4 Rust programs and 3 expected compile failures; no unmarked snippets or external services"
         }
       ],
       "marker_count": 0
     },
     {
       "path": "01-go-backend/basics/08-error-handling.md",
-      "sha256": "0e9169c8015f98a7a9a6289ad0ecd0138d2d8271aa0cf4e7063f82bfb5d2adbd",
+      "sha256": "1d5e851d10b7a50cd2d403303a05d02bf0d3a9c2b6f619ea059fca88ef586a5d",
       "verification": [
         {
-          "mode": "not_verified",
-          "status": "NOT_VERIFIED",
-          "report": null,
-          "scope": "No named runtime or syntax evidence is recorded for this document."
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "go-rust-basics.json",
+          "scope": "9 complete Go programs built with -race, 4 Rust programs and 3 expected compile failures; no unmarked snippets or external services"
+        },
+        {
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "go-rust-basics.json",
+          "scope": "9 complete Go programs built with -race, 4 Rust programs and 3 expected compile failures; no unmarked snippets or external services"
+        },
+        {
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "go-rust-basics.json",
+          "scope": "9 complete Go programs built with -race, 4 Rust programs and 3 expected compile failures; no unmarked snippets or external services"
+        },
+        {
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "go-rust-basics.json",
+          "scope": "9 complete Go programs built with -race, 4 Rust programs and 3 expected compile failures; no unmarked snippets or external services"
+        },
+        {
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "go-rust-basics.json",
+          "scope": "9 complete Go programs built with -race, 4 Rust programs and 3 expected compile failures; no unmarked snippets or external services"
         }
       ],
       "marker_count": 0
@@ -1615,7 +1657,7 @@
     },
     {
       "path": "02-nextjs-frontend/reference/framework-patterns/14-env-vars.md",
-      "sha256": "11be4de51183b59f2372f8fa1b740f7f478f38be05a693f44f0b71d03cb1852d",
+      "sha256": "1033319d232fc1a8b40f2d567ce18d3d060500a746012f9dbf337d727531f03a",
       "verification": [
         {
           "mode": "not_verified",
@@ -1624,7 +1666,7 @@
           "scope": "No named runtime or syntax evidence is recorded for this document."
         }
       ],
-      "marker_count": 1
+      "marker_count": 0
     },
     {
       "path": "02-nextjs-frontend/reference/language-concepts/01-react-syntax-cheatsheet.md",
@@ -2347,7 +2389,7 @@
     },
     {
       "path": "03-tanstack-stack/reference/language-concepts/05-typescript-patterns.md",
-      "sha256": "e937580d1e7419a7293fba91f71d5532c496ba769878417641c2d351271d391b",
+      "sha256": "b39859cb8c952a3f09d00e202996d7926a7a8b75947c35bff6c7e00be8befe53",
       "verification": [
         {
           "mode": "not_verified",
@@ -2356,7 +2398,7 @@
           "scope": "No named runtime or syntax evidence is recorded for this document."
         }
       ],
-      "marker_count": 2
+      "marker_count": 1
     },
     {
       "path": "03-tanstack-stack/reference/language-concepts/06-optimistic-update.md",
@@ -2568,7 +2610,7 @@
     },
     {
       "path": "03-tanstack-stack/reference/library-guides/01-ecosystem-integrations.md",
-      "sha256": "f4a983e041a271bcd6f1880d0fa28717c578aa4fa433d0fd07215c05decddb81",
+      "sha256": "0dc6638603090e13eae03db8f227a10f92b14c4e049002aaf58e734a13fe592c",
       "verification": [
         {
           "mode": "not_verified",
@@ -2577,7 +2619,7 @@
           "scope": "No named runtime or syntax evidence is recorded for this document."
         }
       ],
-      "marker_count": 1
+      "marker_count": 0
     },
     {
       "path": "03-tanstack-stack/reference/library-guides/02-related-libs.md",
@@ -2698,7 +2740,7 @@
     },
     {
       "path": "04-multiplatform-apps/advanced-topics/performance/02-startup-optimization.md",
-      "sha256": "83533b4150d59c20bc2e0fe7e7b300824cfd1bfec478818ce845984977f087fc",
+      "sha256": "10a962473614bfe3c156346db27d51df127eb2aa8983866023ce6741ef2a3840",
       "verification": [
         {
           "mode": "not_verified",
@@ -2707,7 +2749,7 @@
           "scope": "No named runtime or syntax evidence is recorded for this document."
         }
       ],
-      "marker_count": 1
+      "marker_count": 0
     },
     {
       "path": "04-multiplatform-apps/advanced-topics/security/01-security-practices.md",
@@ -2763,7 +2805,7 @@
     },
     {
       "path": "04-multiplatform-apps/basics/04-state-hooks.md",
-      "sha256": "61ad1882d399e16c4c693b356b05ae15aa6f992ac1d0d64af83357def4d3f281",
+      "sha256": "dff3f2e38d0213367ac1883d49ff8389157b2899031d954d0c33b04e36d85253",
       "verification": [
         {
           "mode": "not_verified",
@@ -2772,7 +2814,7 @@
           "scope": "No named runtime or syntax evidence is recorded for this document."
         }
       ],
-      "marker_count": 1
+      "marker_count": 0
     },
     {
       "path": "04-multiplatform-apps/basics/05-navigation.md",
@@ -2919,7 +2961,7 @@
     },
     {
       "path": "04-multiplatform-apps/LEARNING_GUIDE.md",
-      "sha256": "71ea30acee65474efc5e8070a6baafc3ad3cf8ba12d71f9aa12f13b90fc61e82",
+      "sha256": "be0849fd2cd2f23e7e27303071a37d0bd5365d7fa73f8b5ed213aa13c4c4620d",
       "verification": [
         {
           "mode": "not_verified",
@@ -2928,7 +2970,7 @@
           "scope": "No named runtime or syntax evidence is recorded for this document."
         }
       ],
-      "marker_count": 1
+      "marker_count": 0
     },
     {
       "path": "04-multiplatform-apps/projects/01-todo-app.md",
@@ -2997,7 +3039,7 @@
     },
     {
       "path": "04-multiplatform-apps/README.md",
-      "sha256": "9accc0d19e077a03472a8fc733cc6f2f8dadb9e5e8821b29f82fdded419cacb6",
+      "sha256": "400c8c34a6e25deb55cde60f5974a975d73feb2e812e425513379f002433174d",
       "verification": [
         {
           "mode": "not_verified",
@@ -3006,7 +3048,7 @@
           "scope": "No named runtime or syntax evidence is recorded for this document."
         }
       ],
-      "marker_count": 1
+      "marker_count": 0
     },
     {
       "path": "04-multiplatform-apps/reference/framework-essentials/01-expo-essentials.md",
@@ -3205,7 +3247,7 @@
     },
     {
       "path": "04-multiplatform-apps/reference/language-concepts/12-list-performance-model.md",
-      "sha256": "30fd9010bedee39860d8ba1600c3095e57553618baca96d2c7999d1c90aa2780",
+      "sha256": "0aa71507aaf3d728fb2ca82273b4ac26c98bec77378e2254f4d08978f8b8e32a",
       "verification": [
         {
           "mode": "not_verified",
@@ -3214,7 +3256,7 @@
           "scope": "No named runtime or syntax evidence is recorded for this document."
         }
       ],
-      "marker_count": 3
+      "marker_count": 0
     },
     {
       "path": "04-multiplatform-apps/reference/language-concepts/13-platform-api-map.md",
@@ -3270,7 +3312,7 @@
     },
     {
       "path": "04-multiplatform-apps/reference/library-guides/04-animation-gesture-libs.md",
-      "sha256": "e87235736b56418ec1b4244ea7fe0e5e08df00d64f013b8c550b6c3554692708",
+      "sha256": "304ec1deedefe33c3a85ff00001c69242d136f2c7fec5b9edd17a4d4a7b3992c",
       "verification": [
         {
           "mode": "not_verified",
@@ -3279,7 +3321,7 @@
           "scope": "No named runtime or syntax evidence is recorded for this document."
         }
       ],
-      "marker_count": 1
+      "marker_count": 0
     },
     {
       "path": "04-multiplatform-apps/reference/quick-references/01-cli-and-debug-cheatsheet.md",
@@ -4290,7 +4332,7 @@
     },
     {
       "path": "06-swift-swiftui/frameworks/03-ecosystem-integration.md",
-      "sha256": "2fe4775c4f408cf0fba5adf845dd927b47c378e077db51d2729dc053d50ab1d8",
+      "sha256": "da9424b04d2fc8368b4a2f0f8ed28c95566069cdce313516dd6ae0a1c5808cd1",
       "verification": [
         {
           "mode": "not_verified",
@@ -4299,7 +4341,7 @@
           "scope": "No named runtime or syntax evidence is recorded for this document."
         }
       ],
-      "marker_count": 1
+      "marker_count": 0
     },
     {
       "path": "06-swift-swiftui/frameworks/04-devtools.md",
@@ -4316,7 +4358,7 @@
     },
     {
       "path": "06-swift-swiftui/iOS原生开发学习路线.md",
-      "sha256": "ced17e260063e059512d63a4e7f001e9f3b5eac85e534d272eb6c639a3a803df",
+      "sha256": "d1af024dcd2cae31145238558ae64a3aeed2094f4b13386b4a778446bfaaffb5",
       "verification": [
         {
           "mode": "not_verified",
@@ -4325,7 +4367,7 @@
           "scope": "No named runtime or syntax evidence is recorded for this document."
         }
       ],
-      "marker_count": 1
+      "marker_count": 0
     },
     {
       "path": "06-swift-swiftui/LEARNING_GUIDE.md",
@@ -4407,7 +4449,7 @@
     },
     {
       "path": "06-swift-swiftui/reference/framework-essentials/01-swiftui-essentials.md",
-      "sha256": "5ad0b5321ff6cbdbb7cfb4b98ae6f641697ace82fd82b69440c7388973a9ef86",
+      "sha256": "f8818cf7efdfe3fa1b171ad1b16b89654aeff825c93f2b2c47158176c72ce466",
       "verification": [
         {
           "mode": "not_verified",
@@ -4416,7 +4458,7 @@
           "scope": "No named runtime or syntax evidence is recorded for this document."
         }
       ],
-      "marker_count": 1
+      "marker_count": 0
     },
     {
       "path": "06-swift-swiftui/reference/framework-essentials/02-swiftdata-observability.md",
@@ -4992,16 +5034,28 @@
     },
     {
       "path": "07-php-mastery/basics/07-advanced-features.md",
-      "sha256": "16542f671c5db027edc57e0d219aa4ed50ec7a069fb35e7fd201e31bd780ea79",
+      "sha256": "91a5bea3ab846160fc43c02d6ae3502d25762813caa63bcbf6b5906398b9ca2b",
       "verification": [
         {
-          "mode": "not_verified",
-          "status": "NOT_VERIFIED",
-          "report": null,
-          "scope": "No named runtime or syntax evidence is recorded for this document."
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "php-java-core-boundaries.json",
+          "scope": "marked complete examples only; not framework or network validation"
+        },
+        {
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "php-java-core-boundaries.json",
+          "scope": "marked complete examples only; not framework or network validation"
+        },
+        {
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "php-java-core-boundaries.json",
+          "scope": "marked complete examples only; not framework or network validation"
         }
       ],
-      "marker_count": 2
+      "marker_count": 0
     },
     {
       "path": "07-php-mastery/basics/08-first-project.md",
@@ -6086,13 +6140,25 @@
     },
     {
       "path": "08-java-revisited/reference/language-concepts/02-collections-generics.md",
-      "sha256": "d009b18026a6d5cde93c39a9beea5bafac199104ae0b66b7de581925af02505c",
+      "sha256": "338cb4c4c7fd9ae196e6c2ec74a0ed8f27266e836178d089a0073a3fe77f194c",
       "verification": [
         {
-          "mode": "not_verified",
-          "status": "NOT_VERIFIED",
-          "report": null,
-          "scope": "No named runtime or syntax evidence is recorded for this document."
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "php-java-core-boundaries.json",
+          "scope": "marked complete examples only; not framework or network validation"
+        },
+        {
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "php-java-core-boundaries.json",
+          "scope": "marked complete examples only; not framework or network validation"
+        },
+        {
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "php-java-core-boundaries.json",
+          "scope": "marked complete examples only; not framework or network validation"
         }
       ],
       "marker_count": 0
@@ -6138,13 +6204,19 @@
     },
     {
       "path": "08-java-revisited/reference/language-concepts/06-exceptions-resources.md",
-      "sha256": "36855d2b67ac25570b1bce22bece14ad1a24ba783106e0674fb83ecaf02d30fb",
+      "sha256": "3e57b4f27290a55055d1b3681a083eecf3ee14e1127aba9f5fc180c0df04c639",
       "verification": [
         {
-          "mode": "not_verified",
-          "status": "NOT_VERIFIED",
-          "report": null,
-          "scope": "No named runtime or syntax evidence is recorded for this document."
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "php-java-core-boundaries.json",
+          "scope": "marked complete examples only; not framework or network validation"
+        },
+        {
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "php-java-core-boundaries.json",
+          "scope": "marked complete examples only; not framework or network validation"
         }
       ],
       "marker_count": 0
@@ -8348,16 +8420,52 @@
     },
     {
       "path": "11-rust-cross-platform/reference/language-concepts/04-advanced-lifetimes.md",
-      "sha256": "49b6952d9b18da7dd60f67adbaafa8b0a8d733b6a87014006108f36aeda1829f",
+      "sha256": "7acf63db105538c1d6ff91474edebc2ee5737bc8eb59c09aec19fe3d5dc738d3",
       "verification": [
         {
-          "mode": "not_verified",
-          "status": "NOT_VERIFIED",
-          "report": null,
-          "scope": "No named runtime or syntax evidence is recorded for this document."
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "go-rust-basics.json",
+          "scope": "9 complete Go programs built with -race, 4 Rust programs and 3 expected compile failures; no unmarked snippets or external services"
+        },
+        {
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "go-rust-basics.json",
+          "scope": "9 complete Go programs built with -race, 4 Rust programs and 3 expected compile failures; no unmarked snippets or external services"
+        },
+        {
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "go-rust-basics.json",
+          "scope": "9 complete Go programs built with -race, 4 Rust programs and 3 expected compile failures; no unmarked snippets or external services"
+        },
+        {
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "go-rust-basics.json",
+          "scope": "9 complete Go programs built with -race, 4 Rust programs and 3 expected compile failures; no unmarked snippets or external services"
+        },
+        {
+          "mode": "compile_contract",
+          "status": "PASS",
+          "report": "go-rust-basics.json",
+          "scope": "9 complete Go programs built with -race, 4 Rust programs and 3 expected compile failures; no unmarked snippets or external services"
+        },
+        {
+          "mode": "compile_contract",
+          "status": "PASS",
+          "report": "go-rust-basics.json",
+          "scope": "9 complete Go programs built with -race, 4 Rust programs and 3 expected compile failures; no unmarked snippets or external services"
+        },
+        {
+          "mode": "compile_contract",
+          "status": "PASS",
+          "report": "go-rust-basics.json",
+          "scope": "9 complete Go programs built with -race, 4 Rust programs and 3 expected compile failures; no unmarked snippets or external services"
         }
       ],
-      "marker_count": 13
+      "marker_count": 2
     },
     {
       "path": "11-rust-cross-platform/reference/language-concepts/05-macros.md",
@@ -8657,12 +8765,6 @@
       "classification": "unbound_verification_wording"
     },
     {
-      "path": "02-nextjs-frontend/reference/framework-patterns/14-env-vars.md",
-      "line": 123,
-      "excerpt": "env.d.ts 把字段声明为 string 不会校验部署配置，反而可能掩盖 undefined。先用启动或请求入口的解析函数检查必需值、URL 协议与允许范围，再把结果作为已验证配置使用。服务端读取也可能发生在预渲染时，只有处于请求时执行的路径才读取该次运行环境。",
-      "classification": "unbound_verification_wording"
-    },
-    {
       "path": "02-nextjs-frontend/reference/language-concepts/08-ts-declarations-modules.md",
       "line": 111,
       "excerpt": "依据：[声明合并与相对模块扩充](https://www.typescriptlang.org/docs/handbook/declaration-merging.html)、[模块参考](https://www.typescriptlang.org/docs/handbook/modules/reference.html)。本轮未复现原文的版本实测记录，const enum 输出还取决于转译器与编译选项。",
@@ -8688,20 +8790,8 @@
     },
     {
       "path": "03-tanstack-stack/reference/language-concepts/05-typescript-patterns.md",
-      "line": 190,
-      "excerpt": "先修：泛型、unknown、联合类型。queryFn 的返回类型会影响 data 推断；但给 JSON 写 `as User[]` 并不会检查接口真实返回值。应在网络边界解析，再把已验证的类型交给 Query。",
-      "classification": "unbound_verification_wording"
-    },
-    {
-      "path": "03-tanstack-stack/reference/language-concepts/05-typescript-patterns.md",
       "line": 192,
       "excerpt": "`as const` 保留字面量和 readonly 信息，`satisfies` 检查约束，二者都不会生成运行时校验代码。普通查询键不写 as const 仍可运行，只是部分类型工具无法保留同样精确的元组信息。",
-      "classification": "unbound_verification_wording"
-    },
-    {
-      "path": "03-tanstack-stack/reference/library-guides/01-ecosystem-integrations.md",
-      "line": 152,
-      "excerpt": "- `estimateSize` 严重失准时滚动条会跳动，动态行高用 `measureElement` 实测",
       "classification": "unbound_verification_wording"
     },
     {
@@ -8717,28 +8807,10 @@
       "classification": "unbound_verification_wording"
     },
     {
-      "path": "04-multiplatform-apps/advanced-topics/performance/02-startup-optimization.md",
-      "line": 35,
-      "excerpt": "需实测               需实测        需实测         ★           ★",
-      "classification": "unbound_verification_wording"
-    },
-    {
-      "path": "04-multiplatform-apps/basics/04-state-hooks.md",
-      "line": 87,
-      "excerpt": "return <Text>已运行 {seconds} 秒</Text>;",
-      "classification": "unbound_verification_wording"
-    },
-    {
       "path": "04-multiplatform-apps/basics/08-first-project.md",
       "line": 329,
       "excerpt": "将读写存储放到可单测的函数或服务；需要与组件生命周期结合时再封装 Hook。表单在小屏、键盘弹起和大字体下都应能提交，键盘避让策略按平台实测，不把某个 behavior 写成固定答案。",
       "classification": "source_has_limited_runtime_evidence"
-    },
-    {
-      "path": "04-multiplatform-apps/LEARNING_GUIDE.md",
-      "line": 3,
-      "excerpt": "> 前置：React、TypeScript 和异步请求；先选择 Android 或 iOS 一个可运行目标。iOS 原生本地构建需要 macOS/Xcode，鸿蒙适配单独核查。",
-      "classification": "unbound_verification_wording"
     },
     {
       "path": "04-multiplatform-apps/projects/01-todo-app.md",
@@ -8747,39 +8819,9 @@
       "classification": "source_has_limited_runtime_evidence"
     },
     {
-      "path": "04-multiplatform-apps/README.md",
-      "line": 41,
-      "excerpt": "| **内容形式** | 纯文档学习路径（本仓库无可运行代码） |",
-      "classification": "unbound_verification_wording"
-    },
-    {
       "path": "04-multiplatform-apps/reference/language-concepts/01-rn-core-api.md",
       "line": 327,
       "excerpt": "已运行的应用通过 `url` 事件收到链接；冷启动还需要读取初始 URL，或交给导航库统一处理。链接里的资源 ID 是输入，必须校验格式，并由服务端验证当前用户权限。能跳到某页面不代表能读取其数据。",
-      "classification": "unbound_verification_wording"
-    },
-    {
-      "path": "04-multiplatform-apps/reference/language-concepts/12-list-performance-model.md",
-      "line": 42,
-      "excerpt": "| `removeClippedSubviews` | 裁剪视口外子视图 | Android 默认 true，其他平台按版本核对 | Android 收益明显，iOS 需实测 |",
-      "classification": "unbound_verification_wording"
-    },
-    {
-      "path": "04-multiplatform-apps/reference/language-concepts/12-list-performance-model.md",
-      "line": 79,
-      "excerpt": "**何时换 FlashList**：条目上千、行结构复杂、`windowSize`/批次调参后白屏仍明显。FlashList v2（新架构专用）已转为 **JS-only 实现**：不再要求行高估计（v1 的 `estimatedItemSize` 在 v2 已不存在，无需提供），视图回收复用仍保留——只是从 v1 的原生视图池挪到了 JS 层。Expo 工程用 `npx expo install @shopify/flash-list` 安装版本对齐的包（新架构工程装 2.",
-      "classification": "unbound_verification_wording"
-    },
-    {
-      "path": "04-multiplatform-apps/reference/language-concepts/12-list-performance-model.md",
-      "line": 106,
-      "excerpt": "- 📄 **[渲染性能（解释篇）](../../advanced-topics/performance/01-rendering-performance.md)** — FlashList 对比实测、掉帧归因清单",
-      "classification": "unbound_verification_wording"
-    },
-    {
-      "path": "04-multiplatform-apps/reference/library-guides/04-animation-gesture-libs.md",
-      "line": 25,
-      "excerpt": "- **worklet**：声明可运行在 UI 线程的小函数（`useAnimatedStyle` 回调、手势回调天然是 worklet）。worklet 里引用 JS 可变变量只拿到快照，跨线程通信必须经共享值或 `runOnJS`",
       "classification": "unbound_verification_wording"
     },
     {
@@ -8861,24 +8903,6 @@
       "classification": "source_has_limited_runtime_evidence"
     },
     {
-      "path": "06-swift-swiftui/frameworks/03-ecosystem-integration.md",
-      "line": 211,
-      "excerpt": "**Q2: 关系字段要双向声明吗？** 单向即可运行；声明反向属性便于从记录找城市，代价是级联语义要明确 `deleteRule`。",
-      "classification": "unbound_verification_wording"
-    },
-    {
-      "path": "06-swift-swiftui/iOS原生开发学习路线.md",
-      "line": 9,
-      "excerpt": "先完成 [环境准备](basics/01-environment-setup.md) 与 [第一个 SwiftUI 应用](basics/02-first-swiftui-app.md)。记录 Xcode、Swift 语言模式与最低部署目标，创建工程、编译、设置断点、查看控制台，并用 Git 保存首次可运行版本。",
-      "classification": "unbound_verification_wording"
-    },
-    {
-      "path": "06-swift-swiftui/reference/framework-essentials/01-swiftui-essentials.md",
-      "line": 200,
-      "excerpt": "TextField 和 Stepper 通过 Binding 写回同一份状态，Text 从状态推导说明，无须额外保存 summary。验收：输入名称立即更新说明；步进器不能低于 1；切换提醒不清空名称；大字体与深色模式下仍可操作。本轮没有 Apple SDK 实测。",
-      "classification": "unbound_verification_wording"
-    },
-    {
       "path": "06-swift-swiftui/reference/framework-essentials/06-swift-charts.md",
       "line": 201,
       "excerpt": "折线数据先按时间排序；同一日期多系列使用稳定的系列标识。柱状图通常从零起，截断坐标轴应明确标注。验收包含大字体、VoiceOver、色觉差异以及空数据，颜色不能是表达完成状态的唯一渠道。本页前面的 habit/data 等是项目集成片段，需配套模型，不是独立可运行文件。",
@@ -8907,18 +8931,6 @@
       "line": 175,
       "excerpt": "**练习**：用户 A 请求用户 B 的订单，预期拒绝且不泄露订单内容；把 sort 改成不允许的字段，预期校验失败；提交带脚本标签的标题，页面显示文本而不执行。对 Cookie 认证的写接口分别发送缺失、错误和正确 CSRF 凭据，在启用真实中间件的环境验证。测试通过的结论应限定在覆盖的入口和输入。",
       "classification": "source_has_limited_runtime_evidence"
-    },
-    {
-      "path": "07-php-mastery/basics/07-advanced-features.md",
-      "line": 167,
-      "excerpt": "**陷阱（提升参数上的注解）**：写在构造器提升参数上的注解会同时出现在 ReflectionParameter 与 ReflectionProperty 的 `getAttributes()` 结果里，但 `#[MaxLength]` 声明的 target 是 `TARGET_PROPERTY`——从参数侧 `$param->getAttributes(...)[0]->newInstance()` 会抛 `Error: Attribute \"MaxLength\" cann",
-      "classification": "unbound_verification_wording"
-    },
-    {
-      "path": "07-php-mastery/basics/07-advanced-features.md",
-      "line": 248,
-      "excerpt": "**两个\"返回值\"不要混淆**（实测 8.5.10）：",
-      "classification": "unbound_verification_wording"
     },
     {
       "path": "07-php-mastery/projects/04-production-laravel-app.md",
@@ -9534,81 +9546,15 @@
     },
     {
       "path": "11-rust-cross-platform/reference/language-concepts/04-advanced-lifetimes.md",
-      "line": 32,
-      "excerpt": "> 版本基线：Rust 1.98.1 / edition 2024（核实记录见模块 README）。本文示例均经本机 rustc（edition 2024）编译运行实测。",
-      "classification": "unbound_verification_wording"
-    },
-    {
-      "path": "11-rust-cross-platform/reference/language-concepts/04-advanced-lifetimes.md",
       "line": 44,
       "excerpt": "- [示例与编译失败演示](#-可运行示例)",
-      "classification": "unbound_verification_wording"
-    },
-    {
-      "path": "11-rust-cross-platform/reference/language-concepts/04-advanced-lifetimes.md",
-      "line": 100,
-      "excerpt": "已实测形态见下文示例三。",
-      "classification": "unbound_verification_wording"
-    },
-    {
-      "path": "11-rust-cross-platform/reference/language-concepts/04-advanced-lifetimes.md",
-      "line": 113,
-      "excerpt": "- `T: 'static` ≠ \"T 是活到程序结束的引用\"——`fn keep<T: 'static>(v: T)` 接受任何 owned 值（已实测，见示例四）。",
-      "classification": "unbound_verification_wording"
-    },
-    {
-      "path": "11-rust-cross-platform/reference/language-concepts/04-advanced-lifetimes.md",
-      "line": 135,
-      "excerpt": "推论：**两个输入引用 + 一个输出引用**必然推不出（规则 2 失效）→ 必须显式 `<'a>` 关联（已实测演示二）。",
-      "classification": "unbound_verification_wording"
+      "classification": "source_has_limited_runtime_evidence"
     },
     {
       "path": "11-rust-cross-platform/reference/language-concepts/04-advanced-lifetimes.md",
       "line": 161,
       "excerpt": "## 💡 可运行示例",
-      "classification": "unbound_verification_wording"
-    },
-    {
-      "path": "11-rust-cross-platform/reference/language-concepts/04-advanced-lifetimes.md",
-      "line": 199,
-      "excerpt": "已实测（输出三行 `long string first`）。",
-      "classification": "unbound_verification_wording"
-    },
-    {
-      "path": "11-rust-cross-platform/reference/language-concepts/04-advanced-lifetimes.md",
-      "line": 224,
-      "excerpt": "已实测（两行输出，协变收窄全通过）。",
-      "classification": "unbound_verification_wording"
-    },
-    {
-      "path": "11-rust-cross-platform/reference/language-concepts/04-advanced-lifetimes.md",
-      "line": 248,
-      "excerpt": "已实测（`HRTB` 与 `sugar` 两行）。",
-      "classification": "unbound_verification_wording"
-    },
-    {
-      "path": "11-rust-cross-platform/reference/language-concepts/04-advanced-lifetimes.md",
-      "line": 275,
-      "excerpt": "已实测——第五节两种含义的对照实证。",
-      "classification": "unbound_verification_wording"
-    },
-    {
-      "path": "11-rust-cross-platform/reference/language-concepts/04-advanced-lifetimes.md",
-      "line": 279,
-      "excerpt": "**以下两块为编译失败演示，错误码已实测复核**（rustc，edition 2024）。",
-      "classification": "unbound_verification_wording"
-    },
-    {
-      "path": "11-rust-cross-platform/reference/language-concepts/04-advanced-lifetimes.md",
-      "line": 298,
-      "excerpt": "实测报错：`error[E0597]: 'local' does not live long enough`。",
-      "classification": "unbound_verification_wording"
-    },
-    {
-      "path": "11-rust-cross-platform/reference/language-concepts/04-advanced-lifetimes.md",
-      "line": 316,
-      "excerpt": "实测报错：`error[E0106]: missing lifetime specifier`（提示两个输入引用各自独立生命周期，输出无法继承）。",
-      "classification": "unbound_verification_wording"
+      "classification": "source_has_limited_runtime_evidence"
     },
     {
       "path": "11-rust-cross-platform/reference/language-concepts/05-macros.md",
