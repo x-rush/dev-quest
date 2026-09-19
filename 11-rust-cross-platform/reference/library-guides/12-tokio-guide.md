@@ -45,7 +45,17 @@
 
 ## 🔍 核心概念：Tokio 在异步栈中的位置
 
-`async fn` 只是生成状态机（[Future](../language-concepts/08-async-internals.md)），**不执行**。Tokio 补齐执行层的三件事：**reactor**（注册 IO/定时器就绪事件）、**调度器**（多线程 work-stealing 执行任务）、**资源层**（`net`/`time`/`io`/`sync` 的异步版本 API）。本文所有 API 均要求"已在 runtime 上下文内"——要么在 `block_on` 的 future 里，要么在 `spawn` 出的任务里。
+调用 `async fn` 得到状态机（[Future](../language-concepts/08-async-internals.md)），函数体由后续 poll 驱动。Tokio 提供 I/O 与时间驱动、任务调度和异步资源 API。`tokio::spawn`、计时器等需要运行时上下文；创建通道、oneshot 同步发送等操作不要求运行时。current-thread 调度器和多线程调度器也不是同一种执行方式。
+
+下文标记为“完整程序”的围栏可分别存为 `src/main.rs`，其余围栏是有上下文前提的 API 片段。验证使用 Rust edition 2024，精确依赖与锁文件见[本批验证报告](../../../shared-resources/tools/document-quality/reports/rust-ecosystem-validation.md)。学习时先创建 `cargo new tokio-reference`，再配置：
+
+```toml
+[dependencies]
+tokio = { version = "=1.53.0", features = ["rt-multi-thread", "macros", "sync", "time", "io-util", "test-util"] }
+tokio-stream = { version = "=0.1.17", features = ["sync"] }
+```
+
+`test-util` 只为下面的虚拟时间验收；服务应用应按自己实际使用的能力配置 features。
 
 ## 🛠️ Runtime：创建与进入
 
@@ -91,33 +101,29 @@ rt.block_on(async { /* ... */ });
 
 | API | 签名要点 | 说明 |
 |------|---------|------|
-| `tokio::spawn` | `spawn<F: Future>(fut) -> JoinHandle<F::Output>` | 调度到 runtime；**必须**在 runtime 上下文内调用 |
+| `tokio::spawn` | 输入 `Future + Send + 'static`，输出也需 `Send + 'static` | 调度到 runtime；必须在 runtime 上下文内调用。`'static` 表示不借用短命外部数据，不表示任务永久运行 |
 | `JoinHandle::await` | `Result<T, JoinError>` | 任务 panic 或被 abort 时为 `Err` |
-| `JoinHandle::abort()` | 取消任务 | 被 abort 的 `.await` 返回 `Err`，`JoinError::is_cancelled() == true` |
+| `JoinHandle::abort()` | 请求取消任务 | 已完成的任务可能仍返回 `Ok`；已启动的 `spawn_blocking` 无法借此停止。等待 handle 才能观察最终结果 |
 | `JoinHandle::is_finished()` | `-> bool` | 非阻塞查询是否已结束 |
 | `task::spawn_blocking` | `spawn_blocking(\|\| T) -> JoinHandle<T>` | 同步闭包移入**阻塞线程池**，不占用 worker |
 | `task::block_in_place` | `block_in_place(\|\| T) -> T` | 当前 worker 让出其他任务；**仅多线程 runtime 可用** |
 | `task::yield_now()` | 让出一次调度权 | 防长循环饿死同 worker 任务 |
 | `task::JoinSet` | 收集一批任务 | `spawn` 多个后按**完成序** `join_next()` |
 
-### 示例（实测）
+### 完整程序：任务结果与取消
 
+<!-- rust-ecosystem: tokio-tasks -->
 ```rust
-use std::time::Duration;
-
-// abort → JoinError::is_cancelled
-let h = tokio::spawn(async {
-    tokio::time::sleep(Duration::from_millis(50)).await;
-});
-h.abort();
-assert!(h.await.unwrap_err().is_cancelled());
-
-// 正常完成取值
-let v = tokio::spawn(async { 21 * 2 }).await.unwrap();
-assert_eq!(v, 42);
-
-// CPU/阻塞任务走阻塞线程池
-let v = tokio::task::spawn_blocking(|| 7u32 * 6).await.unwrap();
+#[tokio::main(flavor = "current_thread")]
+async fn main() {
+    // pending 永远不自行完成，因此这个案例没有“先完成后 abort”的竞态。
+    let h = tokio::spawn(std::future::pending::<()>());
+    h.abort();
+    assert!(h.await.unwrap_err().is_cancelled());
+    assert_eq!(tokio::spawn(async { 21 * 2 }).await.unwrap(), 42);
+    assert_eq!(tokio::task::spawn_blocking(|| 7u32 * 6).await.unwrap(), 42);
+    println!("tokio-tasks: ok");
+}
 ```
 
 **JoinHandle 是 fire-and-forget 的**：不 `.await` 任务也会继续执行；drop handle 不会取消任务（与 `Future` 未被 poll 即不动不同）。
@@ -130,35 +136,50 @@ let v = tokio::task::spawn_blocking(|| 7u32 * 6).await.unwrap();
 |------|------------|------|------|---------|---------|
 | **mpsc** | `mpsc::channel(n)` → `(Sender, Receiver)` | `send(v).await`（异步，满时背压等待） | `recv().await → Option<T>` | 所有 Sender drop 后 recv 得 `None` | 任务间数据管道，**容量 n 即背压** |
 | **mpsc 无界** | `mpsc::unbounded_channel()` | `send(v)`（同步，不等待） | 同上 | 同上 | 无法限流时慎用（内存可无限涨） |
-| **oneshot** | `oneshot::channel()` → `(Sender, Receiver)` | `send(v)`（同步，**消费 self**，只能发一次） | Receiver 本身实现 Future：`rx.await → Result<T, RecvError>` | 发送端 drop 未发送 → `Err(RecvError::Closed)` | 请求-响应、一次性回执 |
-| **watch** | `watch::channel(init)` → `(Sender, Receiver)` | `send(v)`（同步，覆盖旧值） | `changed().await`；`borrow()` / `borrow_and_update()` | 发送端 drop 后 `changed()` 得 `Err` | 配置/状态最新值广播，只关心"现在" |
-| **broadcast** | `broadcast::channel(n)` → `(Sender, Receiver)` | `send(v) -> Ok(读者数)`（同步） | `recv().await → Result<T, RecvError>`；多读者需各自 `subscribe()` | 全部 drop 前 `Closed`；读者落后超容量得 `Err(RecvError::Lagged(n))` | 事件扇出，读者各自独立游标 |
+| **oneshot** | `oneshot::channel()` → `(Sender, Receiver)` | `send(v)`（同步，**消费 self**，只能发一次） | Receiver 本身实现 Future：`rx.await → Result<T, RecvError>` | 发送端 drop 未发送 → `Err(RecvError)`；它不是带 `Closed` 变体的枚举 | 请求-响应、一次性回执 |
+| **watch** | `watch::channel(init)` → `(Sender, Receiver)` | `send(v)`（同步，覆盖旧值） | `changed().await`；`borrow()` / `borrow_and_update()` | 所有发送端 drop 且当前值已读后，`changed()` 得 `Err` | 配置/状态最新值广播，只关心"现在" |
+| **broadcast** | `broadcast::channel(n)` → `(Sender, Receiver)` | `send(v) -> Ok(读者数)`（同步） | `recv().await → Result<T, RecvError>`；多读者需各自 `subscribe()` | 所有发送端 drop 且已保留消息读尽后 `Closed`；读者落后得 `Lagged(n)` | 事件扇出，读者各自独立游标 |
 
-### 签名细节（易错点）
+### 完整程序：先排空消息，再观察关闭
 
+<!-- rust-ecosystem: tokio-channels -->
 ```rust
+#[tokio::main(flavor = "current_thread")]
+async fn main() {
 // mpsc：send 是 async；Receiver 关闭后返回 None 作为"流结束"
 let (tx, mut rx) = tokio::sync::mpsc::channel::<i32>(4);
 tx.send(1).await.unwrap();
 drop(tx);
-assert_eq!(rx.recv().await, None); // Some(1) 读完之后
+assert_eq!(rx.recv().await, Some(1));
+assert_eq!(rx.recv().await, None);
 
 // oneshot：send 同步且消费 self；发送失败原值退回 Err(v)
 let (otx, orx) = tokio::sync::oneshot::channel::<&'static str>();
 otx.send("done").unwrap();
 assert_eq!(orx.await, Ok("done"));
+let (otx, orx) = tokio::sync::oneshot::channel::<()>();
+drop(otx);
+assert!(orx.await.is_err());
 
 // watch：send 同步可多次；changed() 与 borrow() 要配对
 let (wtx, mut wrx) = tokio::sync::watch::channel(0u8);
-wtx.send(2).unwrap();          // 连发两次只会看到最新值 2
+wtx.send(1).unwrap();
+wtx.send(2).unwrap();          // 当前接收者两次发送之间未读取，只看到最新值 2
 wrx.changed().await.unwrap(); // 有"未读变更"才返回
-assert_eq!(*wrx.borrow(), 2);
+assert_eq!(*wrx.borrow_and_update(), 2);
+drop(wtx);
+assert!(wrx.changed().await.is_err());
 
 // broadcast：subscribe() 才产生新读者；send 返回当前读者数
 let (btx, mut brx) = tokio::sync::broadcast::channel::<i32>(8);
 let mut brx2 = btx.subscribe();
 assert_eq!(btx.send(9).unwrap(), 2);
 assert_eq!(brx.recv().await, Ok(9));
+assert_eq!(brx2.recv().await, Ok(9));
+drop(btx);
+assert!(matches!(brx.recv().await, Err(tokio::sync::broadcast::error::RecvError::Closed)));
+println!("tokio-channels: ok");
+}
 ```
 
 `watch::Receiver::borrow()` 返回读锁引用，持有期间会阻塞 sender；读取并标记已读用 `borrow_and_update()`。
@@ -170,7 +191,7 @@ assert_eq!(brx.recv().await, Ok(9));
 ```rust
 tokio::select! {
     biased;                                  // 可选：按声明顺序严格轮询（默认随机起点保公平）
-    m = rx.recv(), if !rx.is_closed() => { /* m: Option<T> */ }   // 绑定 + if 守卫
+    m = rx.recv(), if receiving => { /* m: Option<T>；None 后把 receiving 设为 false */ }
     Some(v) = rx2.recv() => { /* 模式失配（None）→ 该分支禁用 */ }
     _ = tokio::time::sleep(d) => { /* 超时分支 */ }
     else => { /* 全部分支都禁用/失配时执行 */ }
@@ -180,7 +201,31 @@ tokio::select! {
 - 每个分支：`<模式> = <future表达式> => <handler>`，逗号分隔。
 - **模式可解构**：`Some(m) = rx.recv()` 在通道关闭时失配，分支自动禁用——全部禁用时需有 `else` 兜底。
 - **默认公平**：随机轮询起点；`biased;` 省掉随机开销但要自己防低优先级分支饿死。
-- **取消安全**：未被选中的分支 future 被**丢弃**。分支里的 future 必须能安全取消（`recv()`、`send()` 是取消安全的；`read_exact()` 半读到一半的数据会丢，需缓冲或拆分）。
+- **取消安全**：临时创建且未获选的 future 会被丢弃；借用到外部保存的 future 不因此销毁原对象。mpsc `recv()` 落选不会消费消息；`send(value)` 落选保证没发出，但已移入 future 的 value 会被丢弃。需要保留消息时先 `reserve()` 等待容量，再用 Permit 发送。`read_exact()` 可能已消费部分输入，重试前必须处理这一进度。[发送与取消契约](https://docs.rs/tokio/1.53.0/tokio/sync/mpsc/struct.Sender.html#cancel-safety)
+
+关闭不代表缓冲区已空，不要用 `!rx.is_closed()` 作为排空通道的守卫。
+
+<!-- rust-ecosystem: tokio-reserve -->
+```rust
+#[tokio::main(flavor = "current_thread")]
+async fn main() {
+    let (tx, mut rx) = tokio::sync::mpsc::channel(1);
+    tx.send(String::from("first")).await.unwrap();
+    let mut pending = Some(String::from("second"));
+    tokio::select! {
+        biased;
+        _ = std::future::ready(()) => {}, // 模拟取消，消息仍由外部变量持有
+        permit = tx.reserve() => { permit.unwrap().send(pending.take().unwrap()); }
+    }
+    assert_eq!(pending.as_deref(), Some("second"));
+    assert_eq!(rx.recv().await.as_deref(), Some("first"));
+    tx.reserve().await.unwrap().send(pending.take().unwrap());
+    drop(tx);
+    assert_eq!(rx.recv().await.as_deref(), Some("second"));
+    assert_eq!(rx.recv().await, None);
+    println!("tokio-reserve: ok");
+}
+```
 
 ## ⏱️ time 定时器
 
@@ -195,13 +240,19 @@ tokio::select! {
 
 **测试加速**：feature `test-util` 下 `#[tokio::test(start_paused = true)]` 冻结时钟，用 `tokio::time::advance(d).await` 瞬时推进——单元测试不必真实等待。
 
+<!-- rust-ecosystem: tokio-time -->
 ```rust
-// 实测：超时返回 Err(Elapsed)
+use std::time::Duration;
+#[tokio::main(flavor = "current_thread")]
+async fn main() {
+tokio::time::pause(); // 这个程序使用虚拟时间，无需等待真实的 50 毫秒
 let r = tokio::time::timeout(
     Duration::from_millis(5),
     tokio::time::sleep(Duration::from_millis(50)),
 ).await;
 assert!(r.is_err());
+println!("tokio-time: ok");
+}
 ```
 
 ## 📡 IO trait（异步读写）
@@ -219,7 +270,8 @@ assert!(r.is_err());
 
 | 类型 | 读/写 | 说明 |
 |------|-------|------|
-| `&[u8]` / `&mut [u8]` | 读 | 内存源最常用 |
+| `&[u8]` | 读 | 可将切片引用变量作为内存读取游标 |
+| `&mut [u8]` | 写 | 固定长度内存目标，空间耗尽后不能继续写入 |
 | `Vec<u8>` | 写 | 内存 sink |
 | `tokio::fs::File` | 读写 | feature `fs` |
 | `tokio::net::TcpStream` | 读写 | feature `net`；`into_split()` 拆读写半 |
@@ -249,7 +301,7 @@ assert_eq!(line, "line1\n");
 
 ## 🌊 stream 适配（tokio-stream）
 
-**Stream trait 不在 tokio 本体**：异步序列抽象在独立轻量 crate `tokio-stream`（`futures` crate 也可）。**默认 features 仅含 `time`**（实测 0.1 线）：`ReceiverStream`/`StreamMap` 无需额外 feature，`WatchStream`/`BroadcastStream` 需 `sync`（`cargo add tokio-stream --features sync`），`IntervalStream` 由默认的 `time` 覆盖。
+**Stream trait 不在 tokio 本体**：`tokio-stream` 重导出 `futures_core::Stream`，并提供适配器。本文固定版本 0.1.17 的默认 feature 是 `time`；`ReceiverStream`/`StreamMap` 无需额外 feature，`WatchStream`/`BroadcastStream` 需 `sync`，`IntervalStream` 需 `time`。其它 wrappers 还可能要求 `io-util` 或 `net`，不要从下面的名称表推断全部默认可用。[feature 表](https://docs.rs/crate/tokio-stream/0.1.17/features)
 
 ```rust
 use tokio_stream::{Stream, StreamExt, wrappers::ReceiverStream, StreamMap};
@@ -295,6 +347,10 @@ select 丢弃未获选 Future 的语义要求检查取消安全，部分读写�
 
 ## ❓ 常见问题
 
+### 练习：优雅停止一个有界工作队列
+
+从通道完整程序开始，将输入改成三个任务：收到停止信号后停止接收新工作，消费缓冲中的工作，再等待工作任务退出。验收正常停止、生产者提前 drop、工作任务返回错误三条路径。说明为什么“关闭后立刻丢弃 receiver”会丢任务，以及为什么仅 drop JoinHandle 不足以证明资源已清理。
+
 ### Q1: `spawn` panic "must be called from the context of a Tokio 1.x runtime"？
 **A**: 当前线程没有 runtime 上下文。要么整体进入（`#[tokio::main]` / `rt.block_on`），要么在库边界持有 `Handle`：`tokio::runtime::Handle::current()` / `Handle::try_current()`，用 `handle.spawn(...)` 从同步代码投递任务。
 
@@ -303,10 +359,10 @@ select 丢弃未获选 Future 的语义要求检查取消安全，部分读写�
 
 ## 📏 模式不变量
 
-1. **Future 是惰性状态机**：不被 executor poll 就永不执行——"创建了但没 spawn/没 await"的代码是静默 no-op。
+1. **async 函数体由 poll 驱动**：仅创建 future 不执行函数体；但普通函数返回 future 前可以已做工作，spawn 返回的 handle 背后任务也已提交。
 2. **阻塞与 reactor 互斥**：任何长阻塞必须移出 worker（`spawn_blocking`）或让出 worker（`block_in_place`），与具体 Tokio 版本无关。
 3. **通道容量即背压策略**：有界=流控，无界=内存换吞吐，oneshot/watch/broadcast 是"单值/最新值/扇出"三种语义特化——换运行时这套判断依然成立。
-4. **多路等待时落选分支被取消**：`select!` 每次循环丢弃未完成分支，"分支内状态"必须可安全丢弃或外置到分支外。
+4. **多路等待时检查所有权**：`select!` 丢弃落选的临时 future；外部保存并借用的 future 可以继续使用，消息与部分 I/O 进度需要明确保存位置。
 5. **事件扇出必有滞后边界**：容量有限的广播通道本质是"最新 n 条事件"的滑动窗口，消费者必须处理丢帧。
 
 ## 🔗 相关资源
@@ -324,7 +380,7 @@ select 丢弃未获选 Future 的语义要求检查取消安全，部分读写�
 
 ## 📝 总结
 
-1. **进入方式两族**：宏（main 场景）与 Builder（库/多 runtime），手动 build 必须 `enable_all`。
+1. **进入方式两族**：宏与 Builder；手动 build 按 API 所需启用 I/O 或时间驱动，也可用 `enable_all`。
 2. **任务三出口**：`.await` 收值、`abort` 取消、`spawn_blocking` 隔离阻塞。
 3. **通道按语义选**：多值管道 mpsc、单值回执 oneshot、最新状态 watch、扇出 broadcast。
 4. **Stream 是独立 crate**：`tokio-stream` 负责 trait 与适配，tokio 本体提供资源。

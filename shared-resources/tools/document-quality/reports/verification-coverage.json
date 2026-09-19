@@ -15,18 +15,44 @@
     "11-rust-cross-platform": "Rust / Cross-platform"
   },
   "summary": {
-    "documents": 641,
+    "documents": 642,
     "by_primary_state": {
-      "not_verified": 559,
-      "runtime": 82
+      "not_verified": 553,
+      "runtime": 89
     },
-    "verification_wording_occurrences": 173,
+    "verification_wording_occurrences": 163,
     "marker_classification": {
-      "source_has_limited_runtime_evidence": 76,
-      "unbound_verification_wording": 97
+      "source_has_limited_runtime_evidence": 78,
+      "unbound_verification_wording": 85
     }
   },
   "documents": [
+    {
+      "path": "01-go-backend/LEARNING_GUIDE.md",
+      "sha256": "ba6cb85fa20d89f5d4e315a68e7ebfd2388055702edd9faf59669e8afc867ae7",
+      "verification": [
+        {
+          "mode": "not_verified",
+          "status": "NOT_VERIFIED",
+          "report": null,
+          "scope": "No named runtime or syntax evidence is recorded for this document."
+        }
+      ],
+      "marker_count": 0
+    },
+    {
+      "path": "01-go-backend/README.md",
+      "sha256": "346639279b8373903c1e73d6124255fe7762ee3626e64f43f324efc992658a18",
+      "verification": [
+        {
+          "mode": "not_verified",
+          "status": "NOT_VERIFIED",
+          "report": null,
+          "scope": "No named runtime or syntax evidence is recorded for this document."
+        }
+      ],
+      "marker_count": 0
+    },
     {
       "path": "01-go-backend/advanced-topics/api-advanced/01-restful-patterns.md",
       "sha256": "2bdc29c52dabba99b59806bd1153c6e2b4cc300a172a6225a067f30de1289ce9",
@@ -382,19 +408,6 @@
       "marker_count": 0
     },
     {
-      "path": "01-go-backend/LEARNING_GUIDE.md",
-      "sha256": "ba6cb85fa20d89f5d4e315a68e7ebfd2388055702edd9faf59669e8afc867ae7",
-      "verification": [
-        {
-          "mode": "not_verified",
-          "status": "NOT_VERIFIED",
-          "report": null,
-          "scope": "No named runtime or syntax evidence is recorded for this document."
-        }
-      ],
-      "marker_count": 0
-    },
-    {
       "path": "01-go-backend/projects/00-stdlib-todo-cli.md",
       "sha256": "858f421d9a33581fac47e98a04eca74f1e7155b9d48a0c6a1a1d91a49c8181a8",
       "verification": [
@@ -449,19 +462,6 @@
     {
       "path": "01-go-backend/projects/04-cli-tool.md",
       "sha256": "192918c8efab19966666a38e386135c45745118d19b04b0e220f7a994ac1bdf7",
-      "verification": [
-        {
-          "mode": "not_verified",
-          "status": "NOT_VERIFIED",
-          "report": null,
-          "scope": "No named runtime or syntax evidence is recorded for this document."
-        }
-      ],
-      "marker_count": 0
-    },
-    {
-      "path": "01-go-backend/README.md",
-      "sha256": "346639279b8373903c1e73d6124255fe7762ee3626e64f43f324efc992658a18",
       "verification": [
         {
           "mode": "not_verified",
@@ -1071,6 +1071,32 @@
       "marker_count": 4
     },
     {
+      "path": "02-nextjs-frontend/LEARNING_GUIDE.md",
+      "sha256": "23dcc1ed87b1dc3c597c51bee4af9ec9766c98514edaa8c2328e9ae095afb243",
+      "verification": [
+        {
+          "mode": "not_verified",
+          "status": "NOT_VERIFIED",
+          "report": null,
+          "scope": "No named runtime or syntax evidence is recorded for this document."
+        }
+      ],
+      "marker_count": 0
+    },
+    {
+      "path": "02-nextjs-frontend/README.md",
+      "sha256": "8b25d01fc607bec0249a69eb1fa7db7e494ae16696808da4051cd252830d860d",
+      "verification": [
+        {
+          "mode": "not_verified",
+          "status": "NOT_VERIFIED",
+          "report": null,
+          "scope": "No named runtime or syntax evidence is recorded for this document."
+        }
+      ],
+      "marker_count": 0
+    },
+    {
       "path": "02-nextjs-frontend/advanced-topics/api-integration/01-graphql-apollo.md",
       "sha256": "f80861cb2ae5b82e433acbc686657a81b95695bc192df6763ced1558ec081684",
       "verification": [
@@ -1357,19 +1383,6 @@
       "marker_count": 0
     },
     {
-      "path": "02-nextjs-frontend/LEARNING_GUIDE.md",
-      "sha256": "23dcc1ed87b1dc3c597c51bee4af9ec9766c98514edaa8c2328e9ae095afb243",
-      "verification": [
-        {
-          "mode": "not_verified",
-          "status": "NOT_VERIFIED",
-          "report": null,
-          "scope": "No named runtime or syntax evidence is recorded for this document."
-        }
-      ],
-      "marker_count": 0
-    },
-    {
       "path": "02-nextjs-frontend/projects/01-corporate-landing.md",
       "sha256": "38a16c1d750fe46c4423756d7cd83e34482753de83562193368da60c3f9caa5b",
       "verification": [
@@ -1411,19 +1424,6 @@
     {
       "path": "02-nextjs-frontend/projects/04-saas-platform.md",
       "sha256": "dc6c99b9442222762aeb626792388b86ed75603f804e288ea7756e4ee11dbc1a",
-      "verification": [
-        {
-          "mode": "not_verified",
-          "status": "NOT_VERIFIED",
-          "report": null,
-          "scope": "No named runtime or syntax evidence is recorded for this document."
-        }
-      ],
-      "marker_count": 0
-    },
-    {
-      "path": "02-nextjs-frontend/README.md",
-      "sha256": "8b25d01fc607bec0249a69eb1fa7db7e494ae16696808da4051cd252830d860d",
       "verification": [
         {
           "mode": "not_verified",
@@ -1933,6 +1933,32 @@
       "marker_count": 2
     },
     {
+      "path": "03-tanstack-stack/LEARNING_GUIDE.md",
+      "sha256": "a9afb0a42209214b71666265a390a5bb7ff14f47d30a0610bd990ca0fcbc2721",
+      "verification": [
+        {
+          "mode": "not_verified",
+          "status": "NOT_VERIFIED",
+          "report": null,
+          "scope": "No named runtime or syntax evidence is recorded for this document."
+        }
+      ],
+      "marker_count": 0
+    },
+    {
+      "path": "03-tanstack-stack/README.md",
+      "sha256": "2bc60a1fe14f42c01348e91224a1cd081a0a564e7016e5ceafd70b0a5dca6aba",
+      "verification": [
+        {
+          "mode": "not_verified",
+          "status": "NOT_VERIFIED",
+          "report": null,
+          "scope": "No named runtime or syntax evidence is recorded for this document."
+        }
+      ],
+      "marker_count": 0
+    },
+    {
       "path": "03-tanstack-stack/advanced-topics/architecture/01-cache-architecture.md",
       "sha256": "338bdb273b280723aea21228fe6494c550653e8de07e3f25cdd11d91f434095b",
       "verification": [
@@ -2180,19 +2206,6 @@
       "marker_count": 0
     },
     {
-      "path": "03-tanstack-stack/LEARNING_GUIDE.md",
-      "sha256": "a9afb0a42209214b71666265a390a5bb7ff14f47d30a0610bd990ca0fcbc2721",
-      "verification": [
-        {
-          "mode": "not_verified",
-          "status": "NOT_VERIFIED",
-          "report": null,
-          "scope": "No named runtime or syntax evidence is recorded for this document."
-        }
-      ],
-      "marker_count": 0
-    },
-    {
       "path": "03-tanstack-stack/projects/01-todo-app.md",
       "sha256": "2cfee4b127781711a272a04917a78a3c578ba3a986fd822d419b71ca56808892",
       "verification": [
@@ -2234,19 +2247,6 @@
     {
       "path": "03-tanstack-stack/projects/04-saas-admin-platform.md",
       "sha256": "60d39d615be0474ceecc8e5c8c001b73ab279dc1b046fb89b439d89c1472fcad",
-      "verification": [
-        {
-          "mode": "not_verified",
-          "status": "NOT_VERIFIED",
-          "report": null,
-          "scope": "No named runtime or syntax evidence is recorded for this document."
-        }
-      ],
-      "marker_count": 0
-    },
-    {
-      "path": "03-tanstack-stack/README.md",
-      "sha256": "2bc60a1fe14f42c01348e91224a1cd081a0a564e7016e5ceafd70b0a5dca6aba",
       "verification": [
         {
           "mode": "not_verified",
@@ -2635,6 +2635,25 @@
       "marker_count": 0
     },
     {
+      "path": "03-tanstack-stack/reference/library-guides/03-language-web-foundations.md",
+      "sha256": "ed77e7ae1eb9c5c7d88abf6fb41ed772a2aa0dfe614ec1ac2153ebb3418db46c",
+      "verification": [
+        {
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "frontend-foundations.json",
+          "scope": "Eight marked complete programs, executed verbatim with Node; no browser UI, network, SSR or framework build validation."
+        },
+        {
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "frontend-foundations.json",
+          "scope": "Eight marked complete programs, executed verbatim with Node; no browser UI, network, SSR or framework build validation."
+        }
+      ],
+      "marker_count": 2
+    },
+    {
       "path": "03-tanstack-stack/reference/quick-references/01-syntax-cheatsheet.md",
       "sha256": "ea622380b6876a117e26acef283852410ce05b306c12e8e904abcc7f6bc35c73",
       "verification": [
@@ -2702,6 +2721,45 @@
     {
       "path": "03-tanstack-stack/testing/04-e2e-testing.md",
       "sha256": "eb32cab9acd9da03d0ab59ac5460d8b99088b0f84ffe3406f7ac7e869d3e2b61",
+      "verification": [
+        {
+          "mode": "not_verified",
+          "status": "NOT_VERIFIED",
+          "report": null,
+          "scope": "No named runtime or syntax evidence is recorded for this document."
+        }
+      ],
+      "marker_count": 0
+    },
+    {
+      "path": "04-multiplatform-apps/LEARNING_GUIDE.md",
+      "sha256": "be0849fd2cd2f23e7e27303071a37d0bd5365d7fa73f8b5ed213aa13c4c4620d",
+      "verification": [
+        {
+          "mode": "not_verified",
+          "status": "NOT_VERIFIED",
+          "report": null,
+          "scope": "No named runtime or syntax evidence is recorded for this document."
+        }
+      ],
+      "marker_count": 0
+    },
+    {
+      "path": "04-multiplatform-apps/README.md",
+      "sha256": "400c8c34a6e25deb55cde60f5974a975d73feb2e812e425513379f002433174d",
+      "verification": [
+        {
+          "mode": "not_verified",
+          "status": "NOT_VERIFIED",
+          "report": null,
+          "scope": "No named runtime or syntax evidence is recorded for this document."
+        }
+      ],
+      "marker_count": 0
+    },
+    {
+      "path": "04-multiplatform-apps/React Native三端原生应用学习路线.md",
+      "sha256": "37f0ec3597880f7e290ceaa7fb1bc327e75c987f5b9193373b4e1ec5b6603193",
       "verification": [
         {
           "mode": "not_verified",
@@ -2960,19 +3018,6 @@
       "marker_count": 0
     },
     {
-      "path": "04-multiplatform-apps/LEARNING_GUIDE.md",
-      "sha256": "be0849fd2cd2f23e7e27303071a37d0bd5365d7fa73f8b5ed213aa13c4c4620d",
-      "verification": [
-        {
-          "mode": "not_verified",
-          "status": "NOT_VERIFIED",
-          "report": null,
-          "scope": "No named runtime or syntax evidence is recorded for this document."
-        }
-      ],
-      "marker_count": 0
-    },
-    {
       "path": "04-multiplatform-apps/projects/01-todo-app.md",
       "sha256": "eb169a373f467af0b6c4cd2bd5a6efa0938a14e423f568b6113ba726d5147d9d",
       "verification": [
@@ -3014,32 +3059,6 @@
     {
       "path": "04-multiplatform-apps/projects/04-production-mobile-app.md",
       "sha256": "c84f0ae98491e05e02840e97e41a74891f3144c821db6987049841c13c64715a",
-      "verification": [
-        {
-          "mode": "not_verified",
-          "status": "NOT_VERIFIED",
-          "report": null,
-          "scope": "No named runtime or syntax evidence is recorded for this document."
-        }
-      ],
-      "marker_count": 0
-    },
-    {
-      "path": "04-multiplatform-apps/React Native三端原生应用学习路线.md",
-      "sha256": "37f0ec3597880f7e290ceaa7fb1bc327e75c987f5b9193373b4e1ec5b6603193",
-      "verification": [
-        {
-          "mode": "not_verified",
-          "status": "NOT_VERIFIED",
-          "report": null,
-          "scope": "No named runtime or syntax evidence is recorded for this document."
-        }
-      ],
-      "marker_count": 0
-    },
-    {
-      "path": "04-multiplatform-apps/README.md",
-      "sha256": "400c8c34a6e25deb55cde60f5974a975d73feb2e812e425513379f002433174d",
       "verification": [
         {
           "mode": "not_verified",
@@ -3389,6 +3408,45 @@
       "marker_count": 0
     },
     {
+      "path": "05-kotlin-compose/Android原生开发学习路线.md",
+      "sha256": "8bf3c9d991b66feb1c6d67f1035d33b4023a534479092c003c40feb885cbd3cc",
+      "verification": [
+        {
+          "mode": "not_verified",
+          "status": "NOT_VERIFIED",
+          "report": null,
+          "scope": "No named runtime or syntax evidence is recorded for this document."
+        }
+      ],
+      "marker_count": 0
+    },
+    {
+      "path": "05-kotlin-compose/LEARNING_GUIDE.md",
+      "sha256": "a9071587d85f26f1d0b41277da7e5d8754a507ac2fee92f75f3754f2f467b327",
+      "verification": [
+        {
+          "mode": "not_verified",
+          "status": "NOT_VERIFIED",
+          "report": null,
+          "scope": "No named runtime or syntax evidence is recorded for this document."
+        }
+      ],
+      "marker_count": 0
+    },
+    {
+      "path": "05-kotlin-compose/README.md",
+      "sha256": "ad1e17e0be5167ee57f3ccb3037093ee286fa8c535c49bb6f9d000991957ad8a",
+      "verification": [
+        {
+          "mode": "not_verified",
+          "status": "NOT_VERIFIED",
+          "report": null,
+          "scope": "No named runtime or syntax evidence is recorded for this document."
+        }
+      ],
+      "marker_count": 1
+    },
+    {
       "path": "05-kotlin-compose/advanced-topics/architecture/01-app-architecture.md",
       "sha256": "d1fb52f9c43587c5ec83158b035b33d9909b24c851b528991b9035586590e00d",
       "verification": [
@@ -3430,19 +3488,6 @@
     {
       "path": "05-kotlin-compose/advanced-topics/security/01-security-practices.md",
       "sha256": "35c4cd915f806fa60b08d442e54ee341332ebe02b8b3e352b9dd7f82ce1f5f5d",
-      "verification": [
-        {
-          "mode": "not_verified",
-          "status": "NOT_VERIFIED",
-          "report": null,
-          "scope": "No named runtime or syntax evidence is recorded for this document."
-        }
-      ],
-      "marker_count": 0
-    },
-    {
-      "path": "05-kotlin-compose/Android原生开发学习路线.md",
-      "sha256": "8bf3c9d991b66feb1c6d67f1035d33b4023a534479092c003c40feb885cbd3cc",
       "verification": [
         {
           "mode": "not_verified",
@@ -3649,19 +3694,6 @@
       "marker_count": 0
     },
     {
-      "path": "05-kotlin-compose/LEARNING_GUIDE.md",
-      "sha256": "a9071587d85f26f1d0b41277da7e5d8754a507ac2fee92f75f3754f2f467b327",
-      "verification": [
-        {
-          "mode": "not_verified",
-          "status": "NOT_VERIFIED",
-          "report": null,
-          "scope": "No named runtime or syntax evidence is recorded for this document."
-        }
-      ],
-      "marker_count": 0
-    },
-    {
       "path": "05-kotlin-compose/projects/01-notes-app.md",
       "sha256": "c037465031ae2d7d972abba0b0681a23cc3abbb31b3487ea823eccdb9f923c30",
       "verification": [
@@ -3712,19 +3744,6 @@
         }
       ],
       "marker_count": 0
-    },
-    {
-      "path": "05-kotlin-compose/README.md",
-      "sha256": "ad1e17e0be5167ee57f3ccb3037093ee286fa8c535c49bb6f9d000991957ad8a",
-      "verification": [
-        {
-          "mode": "not_verified",
-          "status": "NOT_VERIFIED",
-          "report": null,
-          "scope": "No named runtime or syntax evidence is recorded for this document."
-        }
-      ],
-      "marker_count": 1
     },
     {
       "path": "05-kotlin-compose/reference/framework-essentials/01-compose-essentials.md",
@@ -4110,6 +4129,32 @@
       "marker_count": 0
     },
     {
+      "path": "06-swift-swiftui/LEARNING_GUIDE.md",
+      "sha256": "ff85d47e2c30983acfcf6d4284a9799c3c56a368ff340b87cc427f0dcdcd9dcf",
+      "verification": [
+        {
+          "mode": "not_verified",
+          "status": "NOT_VERIFIED",
+          "report": null,
+          "scope": "No named runtime or syntax evidence is recorded for this document."
+        }
+      ],
+      "marker_count": 0
+    },
+    {
+      "path": "06-swift-swiftui/README.md",
+      "sha256": "4a05d106d4a91b3fe7e4c15cbf2e6b703763e192ab568038bfad0376ca6beed4",
+      "verification": [
+        {
+          "mode": "not_verified",
+          "status": "NOT_VERIFIED",
+          "report": null,
+          "scope": "No named runtime or syntax evidence is recorded for this document."
+        }
+      ],
+      "marker_count": 0
+    },
+    {
       "path": "06-swift-swiftui/advanced-topics/architecture/01-app-architecture.md",
       "sha256": "2f172ed59c248067082e0605b64c3751b24ae4165f9e7aa3d9a0bf100c16b73a",
       "verification": [
@@ -4370,19 +4415,6 @@
       "marker_count": 0
     },
     {
-      "path": "06-swift-swiftui/LEARNING_GUIDE.md",
-      "sha256": "ff85d47e2c30983acfcf6d4284a9799c3c56a368ff340b87cc427f0dcdcd9dcf",
-      "verification": [
-        {
-          "mode": "not_verified",
-          "status": "NOT_VERIFIED",
-          "report": null,
-          "scope": "No named runtime or syntax evidence is recorded for this document."
-        }
-      ],
-      "marker_count": 0
-    },
-    {
       "path": "06-swift-swiftui/projects/01-notes-app.md",
       "sha256": "9b09e4598ef682af6504471863a4f363f92094824785fa04a0b1d582587c9bab",
       "verification": [
@@ -4424,19 +4456,6 @@
     {
       "path": "06-swift-swiftui/projects/04-production-ios-app.md",
       "sha256": "aff28da584bfbe27e9e75a84b7223023baa997e2764f94f79f4dda2c52b3b0a0",
-      "verification": [
-        {
-          "mode": "not_verified",
-          "status": "NOT_VERIFIED",
-          "report": null,
-          "scope": "No named runtime or syntax evidence is recorded for this document."
-        }
-      ],
-      "marker_count": 0
-    },
-    {
-      "path": "06-swift-swiftui/README.md",
-      "sha256": "4a05d106d4a91b3fe7e4c15cbf2e6b703763e192ab568038bfad0376ca6beed4",
       "verification": [
         {
           "mode": "not_verified",
@@ -4851,6 +4870,32 @@
       "marker_count": 0
     },
     {
+      "path": "07-php-mastery/LEARNING_GUIDE.md",
+      "sha256": "2cc3bbc96ce821ab25240015bfde0d12ed4ea0a14bd3118dd078c60e5493d4d3",
+      "verification": [
+        {
+          "mode": "not_verified",
+          "status": "NOT_VERIFIED",
+          "report": null,
+          "scope": "No named runtime or syntax evidence is recorded for this document."
+        }
+      ],
+      "marker_count": 0
+    },
+    {
+      "path": "07-php-mastery/README.md",
+      "sha256": "f2d1827340d460680ac2e2661cd68850dedc414eb26a2738ac29de87dd9a1080",
+      "verification": [
+        {
+          "mode": "not_verified",
+          "status": "NOT_VERIFIED",
+          "report": null,
+          "scope": "No named runtime or syntax evidence is recorded for this document."
+        }
+      ],
+      "marker_count": 0
+    },
+    {
       "path": "07-php-mastery/advanced-topics/architecture/01-laravel-architecture.md",
       "sha256": "bd4380df849117d4c1354da627b9bbd95ad3f2f0a6645685562bc7ac56e93fcf",
       "verification": [
@@ -4982,13 +5027,19 @@
     },
     {
       "path": "07-php-mastery/basics/03-variables-types.md",
-      "sha256": "bef079412f8c42ca339db2eb22599606bbe59882846cdc3581b8a4afd562664c",
+      "sha256": "b1fc2c91bc6e4150cd4b090e3af690d93112a27d6f82a27cbef3804f952a89e4",
       "verification": [
         {
-          "mode": "not_verified",
-          "status": "NOT_VERIFIED",
-          "report": null,
-          "scope": "No named runtime or syntax evidence is recorded for this document."
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "php-java-types.json",
+          "scope": "marked complete examples only; not framework or network validation"
+        },
+        {
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "php-java-types.json",
+          "scope": "marked complete examples only; not framework or network validation"
         }
       ],
       "marker_count": 0
@@ -5162,19 +5213,6 @@
       "marker_count": 0
     },
     {
-      "path": "07-php-mastery/LEARNING_GUIDE.md",
-      "sha256": "2cc3bbc96ce821ab25240015bfde0d12ed4ea0a14bd3118dd078c60e5493d4d3",
-      "verification": [
-        {
-          "mode": "not_verified",
-          "status": "NOT_VERIFIED",
-          "report": null,
-          "scope": "No named runtime or syntax evidence is recorded for this document."
-        }
-      ],
-      "marker_count": 0
-    },
-    {
       "path": "07-php-mastery/projects/01-todo-api.md",
       "sha256": "cf5eb2b4e8b9a6dfb9e296b1efc35ac5c0c9b1001e418437227b50c31c2a1998",
       "verification": [
@@ -5225,19 +5263,6 @@
         }
       ],
       "marker_count": 1
-    },
-    {
-      "path": "07-php-mastery/README.md",
-      "sha256": "f2d1827340d460680ac2e2661cd68850dedc414eb26a2738ac29de87dd9a1080",
-      "verification": [
-        {
-          "mode": "not_verified",
-          "status": "NOT_VERIFIED",
-          "report": null,
-          "scope": "No named runtime or syntax evidence is recorded for this document."
-        }
-      ],
-      "marker_count": 0
     },
     {
       "path": "07-php-mastery/reference/framework-essentials/01-laravel-essentials.md",
@@ -5692,6 +5717,32 @@
       "marker_count": 0
     },
     {
+      "path": "08-java-revisited/LEARNING_GUIDE.md",
+      "sha256": "70420eaf791350e87b6b2905dfa840f148fa0385e85d63fcb385f6c59254dc49",
+      "verification": [
+        {
+          "mode": "not_verified",
+          "status": "NOT_VERIFIED",
+          "report": null,
+          "scope": "No named runtime or syntax evidence is recorded for this document."
+        }
+      ],
+      "marker_count": 1
+    },
+    {
+      "path": "08-java-revisited/README.md",
+      "sha256": "210f0f810bfad6085034a201b8bdace04a9565d560b24422a078d8ab3e2c5c16",
+      "verification": [
+        {
+          "mode": "not_verified",
+          "status": "NOT_VERIFIED",
+          "report": null,
+          "scope": "No named runtime or syntax evidence is recorded for this document."
+        }
+      ],
+      "marker_count": 1
+    },
+    {
       "path": "08-java-revisited/advanced-topics/architecture/01-layered-architecture.md",
       "sha256": "070cb03f04813fbfb22ba367635f8b8046196f7b1499c56b5f74c19a50ddc914",
       "verification": [
@@ -5771,26 +5822,32 @@
     },
     {
       "path": "08-java-revisited/basics/03-variables-types.md",
-      "sha256": "a64f9765ee3ce6b09214fb00895545148e048e036eeab14e6ca889b6f87b6be4",
+      "sha256": "ffee69f502604e1a5abc074a0ebd01f04336880d18b2a9497ab057090dcf9348",
       "verification": [
         {
-          "mode": "not_verified",
-          "status": "NOT_VERIFIED",
-          "report": null,
-          "scope": "No named runtime or syntax evidence is recorded for this document."
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "php-java-types.json",
+          "scope": "marked complete examples only; not framework or network validation"
+        },
+        {
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "php-java-types.json",
+          "scope": "marked complete examples only; not framework or network validation"
         }
       ],
       "marker_count": 0
     },
     {
       "path": "08-java-revisited/basics/04-classes-records.md",
-      "sha256": "119fbe16786c40a774babdca7eb67f43f2d3771bdc0f71bbf1881396c870304b",
+      "sha256": "4a1b31ccca0947134e3f2a4991eaee877e048b27e4443994a2e18fdb3199c8a7",
       "verification": [
         {
-          "mode": "not_verified",
-          "status": "NOT_VERIFIED",
-          "report": null,
-          "scope": "No named runtime or syntax evidence is recorded for this document."
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "php-java-types.json",
+          "scope": "marked complete examples only; not framework or network validation"
         }
       ],
       "marker_count": 0
@@ -5939,19 +5996,6 @@
       "marker_count": 0
     },
     {
-      "path": "08-java-revisited/LEARNING_GUIDE.md",
-      "sha256": "70420eaf791350e87b6b2905dfa840f148fa0385e85d63fcb385f6c59254dc49",
-      "verification": [
-        {
-          "mode": "not_verified",
-          "status": "NOT_VERIFIED",
-          "report": null,
-          "scope": "No named runtime or syntax evidence is recorded for this document."
-        }
-      ],
-      "marker_count": 1
-    },
-    {
       "path": "08-java-revisited/projects/01-todo-api.md",
       "sha256": "b1863c9e4c368e683b03192d035ab7bc3405698d5146fc0e29eb40997c9cb8fb",
       "verification": [
@@ -6002,19 +6046,6 @@
         }
       ],
       "marker_count": 0
-    },
-    {
-      "path": "08-java-revisited/README.md",
-      "sha256": "210f0f810bfad6085034a201b8bdace04a9565d560b24422a078d8ab3e2c5c16",
-      "verification": [
-        {
-          "mode": "not_verified",
-          "status": "NOT_VERIFIED",
-          "report": null,
-          "scope": "No named runtime or syntax evidence is recorded for this document."
-        }
-      ],
-      "marker_count": 1
     },
     {
       "path": "08-java-revisited/reference/framework-essentials/01-spring-boot-essentials.md",
@@ -6493,6 +6524,32 @@
       "marker_count": 0
     },
     {
+      "path": "09-nodejs-backend/LEARNING_GUIDE.md",
+      "sha256": "e78abb91d4886165561ebf100e95ba08829a18bf9c0197e0fc54e252492a3b61",
+      "verification": [
+        {
+          "mode": "not_verified",
+          "status": "NOT_VERIFIED",
+          "report": null,
+          "scope": "No named runtime or syntax evidence is recorded for this document."
+        }
+      ],
+      "marker_count": 0
+    },
+    {
+      "path": "09-nodejs-backend/README.md",
+      "sha256": "0983ec2f120a4a16c55e6649198b338025e4ebba3b18dbbe5230a1cfe1694e9e",
+      "verification": [
+        {
+          "mode": "not_verified",
+          "status": "NOT_VERIFIED",
+          "report": null,
+          "scope": "No named runtime or syntax evidence is recorded for this document."
+        }
+      ],
+      "marker_count": 0
+    },
+    {
       "path": "09-nodejs-backend/advanced-topics/architecture/01-service-architecture.md",
       "sha256": "3ec1d4f7ba208a28e9bde49f4beb4667015af46c013c652f1f946c5ca1bd0a10",
       "verification": [
@@ -6746,19 +6803,6 @@
       "marker_count": 0
     },
     {
-      "path": "09-nodejs-backend/LEARNING_GUIDE.md",
-      "sha256": "e78abb91d4886165561ebf100e95ba08829a18bf9c0197e0fc54e252492a3b61",
-      "verification": [
-        {
-          "mode": "not_verified",
-          "status": "NOT_VERIFIED",
-          "report": null,
-          "scope": "No named runtime or syntax evidence is recorded for this document."
-        }
-      ],
-      "marker_count": 0
-    },
-    {
       "path": "09-nodejs-backend/projects/01-todo-api.md",
       "sha256": "cf7be6b5f09e75ad32b7ba980bab61df3b5e2af6997df6f382d1e8d40ce62e32",
       "verification": [
@@ -6799,20 +6843,7 @@
     },
     {
       "path": "09-nodejs-backend/projects/04-production-nodejs-api.md",
-      "sha256": "ca6990176991fefe079385cf4d09d516697d553108df0b933bc745ebf3d6ab4b",
-      "verification": [
-        {
-          "mode": "not_verified",
-          "status": "NOT_VERIFIED",
-          "report": null,
-          "scope": "No named runtime or syntax evidence is recorded for this document."
-        }
-      ],
-      "marker_count": 2
-    },
-    {
-      "path": "09-nodejs-backend/README.md",
-      "sha256": "0983ec2f120a4a16c55e6649198b338025e4ebba3b18dbbe5230a1cfe1694e9e",
+      "sha256": "e1b6d74c4e886183ca647af469b3a4ebeed2124f3bd2e4893a1c5920755a97a4",
       "verification": [
         {
           "mode": "not_verified",
@@ -7167,6 +7198,32 @@
       "marker_count": 1
     },
     {
+      "path": "10-python-discovery/LEARNING_GUIDE.md",
+      "sha256": "ba12eed00abafbb33a1121d33f43064eced4c636f084e4dfd2ec5c591986047f",
+      "verification": [
+        {
+          "mode": "not_verified",
+          "status": "NOT_VERIFIED",
+          "report": null,
+          "scope": "No named runtime or syntax evidence is recorded for this document."
+        }
+      ],
+      "marker_count": 0
+    },
+    {
+      "path": "10-python-discovery/README.md",
+      "sha256": "103f4206bcdee2d0c265ce8e5e045a09171b3b6bbb18fbca846cef9ea73673ba",
+      "verification": [
+        {
+          "mode": "not_verified",
+          "status": "NOT_VERIFIED",
+          "report": null,
+          "scope": "No named runtime or syntax evidence is recorded for this document."
+        }
+      ],
+      "marker_count": 0
+    },
+    {
       "path": "10-python-discovery/advanced-topics/architecture/01-project-architecture.md",
       "sha256": "cf2e2861f2f827039b967c9eb8688d21d80e0bf27e8045e572652d09a5211519",
       "verification": [
@@ -7414,19 +7471,6 @@
       "marker_count": 0
     },
     {
-      "path": "10-python-discovery/LEARNING_GUIDE.md",
-      "sha256": "ba12eed00abafbb33a1121d33f43064eced4c636f084e4dfd2ec5c591986047f",
-      "verification": [
-        {
-          "mode": "not_verified",
-          "status": "NOT_VERIFIED",
-          "report": null,
-          "scope": "No named runtime or syntax evidence is recorded for this document."
-        }
-      ],
-      "marker_count": 0
-    },
-    {
       "path": "10-python-discovery/projects/01-todo-api.md",
       "sha256": "41d46d69d8667a2ed438b3f874a9fa60cd484543a7e7f5883e8f830a8ce248f7",
       "verification": [
@@ -7468,19 +7512,6 @@
     {
       "path": "10-python-discovery/projects/04-production-fastapi-app.md",
       "sha256": "f1dc7610520d7a45ab69c52bac4ad4da46a04be983098430ee3aa467aecd6b41",
-      "verification": [
-        {
-          "mode": "not_verified",
-          "status": "NOT_VERIFIED",
-          "report": null,
-          "scope": "No named runtime or syntax evidence is recorded for this document."
-        }
-      ],
-      "marker_count": 0
-    },
-    {
-      "path": "10-python-discovery/README.md",
-      "sha256": "103f4206bcdee2d0c265ce8e5e045a09171b3b6bbb18fbca846cef9ea73673ba",
       "verification": [
         {
           "mode": "not_verified",
@@ -7925,6 +7956,32 @@
       "marker_count": 1
     },
     {
+      "path": "11-rust-cross-platform/LEARNING_GUIDE.md",
+      "sha256": "e4ee8c9f6cd7f265da04784bae2415a8456ffe565d4faf006f3c263fdc768531",
+      "verification": [
+        {
+          "mode": "not_verified",
+          "status": "NOT_VERIFIED",
+          "report": null,
+          "scope": "No named runtime or syntax evidence is recorded for this document."
+        }
+      ],
+      "marker_count": 0
+    },
+    {
+      "path": "11-rust-cross-platform/README.md",
+      "sha256": "be44a8af692fc4e049afe7a3720424b3224b6e39d5ffa2b5cf870198a6419f0c",
+      "verification": [
+        {
+          "mode": "not_verified",
+          "status": "NOT_VERIFIED",
+          "report": null,
+          "scope": "No named runtime or syntax evidence is recorded for this document."
+        }
+      ],
+      "marker_count": 0
+    },
+    {
       "path": "11-rust-cross-platform/advanced-topics/01-memory-layout-performance.md",
       "sha256": "06d7fe473f805ebaebaa2601a49775293320a46b7771ec058118e52c6cc9902e",
       "verification": [
@@ -8250,19 +8307,6 @@
       "marker_count": 0
     },
     {
-      "path": "11-rust-cross-platform/LEARNING_GUIDE.md",
-      "sha256": "e4ee8c9f6cd7f265da04784bae2415a8456ffe565d4faf006f3c263fdc768531",
-      "verification": [
-        {
-          "mode": "not_verified",
-          "status": "NOT_VERIFIED",
-          "report": null,
-          "scope": "No named runtime or syntax evidence is recorded for this document."
-        }
-      ],
-      "marker_count": 0
-    },
-    {
       "path": "11-rust-cross-platform/projects/01-cli-tool.md",
       "sha256": "b0d4aa7d1124c918ed9e1135f6a0c86a9720694235a7163f901ce4a9b2cd259d",
       "verification": [
@@ -8317,19 +8361,6 @@
     {
       "path": "11-rust-cross-platform/projects/05-multiplatform-release.md",
       "sha256": "517a723173a3423559f3c7e04a1f69075999b8e92787e073a2db4b047e6bf89d",
-      "verification": [
-        {
-          "mode": "not_verified",
-          "status": "NOT_VERIFIED",
-          "report": null,
-          "scope": "No named runtime or syntax evidence is recorded for this document."
-        }
-      ],
-      "marker_count": 0
-    },
-    {
-      "path": "11-rust-cross-platform/README.md",
-      "sha256": "be44a8af692fc4e049afe7a3720424b3224b6e39d5ffa2b5cf870198a6419f0c",
       "verification": [
         {
           "mode": "not_verified",
@@ -8547,42 +8578,84 @@
     },
     {
       "path": "11-rust-cross-platform/reference/library-guides/12-tokio-guide.md",
-      "sha256": "0cf2a1bdf60656f29f845acd25edb775177f227f1c564e86e0a76420d93279a4",
+      "sha256": "85bd7ae5a326e441eed8a7876a7d2d26e3c3e1ad5bd8a85f222089af2f1b1cb8",
       "verification": [
         {
-          "mode": "not_verified",
-          "status": "NOT_VERIFIED",
-          "report": null,
-          "scope": "No named runtime or syntax evidence is recorded for this document."
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "rust-ecosystem-runtime.json",
+          "scope": "10 named complete programs only; unmarked snippets and framework integration are outside this run"
+        },
+        {
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "rust-ecosystem-runtime.json",
+          "scope": "10 named complete programs only; unmarked snippets and framework integration are outside this run"
+        },
+        {
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "rust-ecosystem-runtime.json",
+          "scope": "10 named complete programs only; unmarked snippets and framework integration are outside this run"
+        },
+        {
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "rust-ecosystem-runtime.json",
+          "scope": "10 named complete programs only; unmarked snippets and framework integration are outside this run"
         }
       ],
-      "marker_count": 3
+      "marker_count": 0
     },
     {
       "path": "11-rust-cross-platform/reference/library-guides/13-serde-guide.md",
-      "sha256": "b94f235d502e696900706f1f72ad861c9209765dac922574921a3bb83f537f0d",
+      "sha256": "1deeca61c66337ba0fb436fa816e714344249d1c32c04dc27ba8e43c0bda8d37",
       "verification": [
         {
-          "mode": "not_verified",
-          "status": "NOT_VERIFIED",
-          "report": null,
-          "scope": "No named runtime or syntax evidence is recorded for this document."
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "rust-ecosystem-runtime.json",
+          "scope": "10 named complete programs only; unmarked snippets and framework integration are outside this run"
+        },
+        {
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "rust-ecosystem-runtime.json",
+          "scope": "10 named complete programs only; unmarked snippets and framework integration are outside this run"
+        },
+        {
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "rust-ecosystem-runtime.json",
+          "scope": "10 named complete programs only; unmarked snippets and framework integration are outside this run"
+        },
+        {
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "rust-ecosystem-runtime.json",
+          "scope": "10 named complete programs only; unmarked snippets and framework integration are outside this run"
         }
       ],
-      "marker_count": 3
+      "marker_count": 0
     },
     {
       "path": "11-rust-cross-platform/reference/library-guides/14-error-libraries.md",
-      "sha256": "b7ef47733c7e81bd9a4785afaf36c1e35f0afe0f9879f7215f5c72f26486119b",
+      "sha256": "4d61ae1f582414a563fbf0feaf842b0ce3552effd5ad686575f61efe58b22158",
       "verification": [
         {
-          "mode": "not_verified",
-          "status": "NOT_VERIFIED",
-          "report": null,
-          "scope": "No named runtime or syntax evidence is recorded for this document."
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "rust-ecosystem-runtime.json",
+          "scope": "10 named complete programs only; unmarked snippets and framework integration are outside this run"
+        },
+        {
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "rust-ecosystem-runtime.json",
+          "scope": "10 named complete programs only; unmarked snippets and framework integration are outside this run"
         }
       ],
-      "marker_count": 4
+      "marker_count": 0
     },
     {
       "path": "11-rust-cross-platform/reference/library-guides/15-standard-library-map.md",
@@ -8795,6 +8868,18 @@
       "classification": "unbound_verification_wording"
     },
     {
+      "path": "03-tanstack-stack/reference/library-guides/03-language-web-foundations.md",
+      "line": 21,
+      "excerpt": "可运行示例，保存为 `search-input.mjs`，执行 `node search-input.mjs`。预期六行：`1:js,ts`、`3:js`、`invalid page`、`invalid page`、`invalid page`、`duplicate page`。",
+      "classification": "source_has_limited_runtime_evidence"
+    },
+    {
+      "path": "03-tanstack-stack/reference/library-guides/03-language-web-foundations.md",
+      "line": 57,
+      "excerpt": "可运行示例，保存为 `immutable-data.mjs`，执行 `node immutable-data.mjs`。预期五行：`false,true`、`false,true`、`true`、`true`、`true`。",
+      "classification": "source_has_limited_runtime_evidence"
+    },
+    {
       "path": "03-tanstack-stack/testing/01-unit-testing.md",
       "line": 224,
       "excerpt": "选择项目中的 queryKey 工厂和分页解析函数：同一资源的相同参数产生等价键，不同账号或分页不得误共用；非法页码回到约定默认值或明确拒绝。把账号字段故意从键里删除，至少一个隔离测试应失败。验收：恢复后测试通过，改变执行顺序仍通过；这组纯函数测试不需要真实网络，也不能证明 Provider 和界面订阅正确。",
@@ -8825,6 +8910,12 @@
       "classification": "unbound_verification_wording"
     },
     {
+      "path": "05-kotlin-compose/README.md",
+      "line": 28,
+      "excerpt": "> 复现时采用练习工程的 Gradle Wrapper、`gradle/libs.versions.toml` 与 SDK 配置。上表提供版本背景，不能把各组件分别升级到“最新”当作已验证的兼容组合；修改组合后重新同步、构建与测试。",
+      "classification": "unbound_verification_wording"
+    },
+    {
       "path": "05-kotlin-compose/basics/02-first-compose-app.md",
       "line": 12,
       "excerpt": "设备上可交互；只在 Preview 看见按钮不代表运行时行为已验证。",
@@ -8847,12 +8938,6 @@
       "line": 99,
       "excerpt": "将下面条目合并到已有同名节，不要重复创建 `[plugins]` 或 `[libraries]`。本例 Room 2.8 系列要求 `minSdk >= 23`；Room 插件版本不会替库声明版本，三个库必须显式使用同一个版本。先保留 Android Studio 空 Compose 工程已有的 AGP、Kotlin、Compose、Activity 和 Lifecycle 版本。本文尚无 Android 构建证据，不能把以下配置称为“已验证兼容组合”。",
       "classification": "source_has_limited_runtime_evidence"
-    },
-    {
-      "path": "05-kotlin-compose/README.md",
-      "line": 28,
-      "excerpt": "> 复现时采用练习工程的 Gradle Wrapper、`gradle/libs.versions.toml` 与 SDK 配置。上表提供版本背景，不能把各组件分别升级到“最新”当作已验证的兼容组合；修改组合后重新同步、构建与测试。",
-      "classification": "unbound_verification_wording"
     },
     {
       "path": "05-kotlin-compose/reference/framework-essentials/08-composition-model.md",
@@ -8945,6 +9030,18 @@
       "classification": "unbound_verification_wording"
     },
     {
+      "path": "08-java-revisited/LEARNING_GUIDE.md",
+      "line": 42,
+      "excerpt": "| 持久化：[图书管理系统](projects/02-library-management.md) | 写入后重启；制造一组操作中的第二步失败 | 持久数据可读回，事务应回滚的部分确实未保留；验证使用真实测试数据库而非只检查 Mock 调用 |",
+      "classification": "unbound_verification_wording"
+    },
+    {
+      "path": "08-java-revisited/README.md",
+      "line": 35,
+      "excerpt": "- 将业务结果映射成 HTTP 响应，使用真实测试数据库验证约束与事务。",
+      "classification": "unbound_verification_wording"
+    },
+    {
       "path": "08-java-revisited/advanced-topics/security/01-security-practices.md",
       "line": 152,
       "excerpt": "第二层片段需要启用 `@EnableMethodSecurity`，并通过 Spring 代理调用。JWT 的默认 principal 是 `Jwt`，不能假设它有业务字段 `memberId`。由已验证的 `sub` 查找内部用户，不能信任请求里传来的 memberId。方法授权可以调用实际对象权限规则；上例的 scope 只表达操作能力，仍需第三层对象检查或带 owner 条件的数据查询。",
@@ -8963,21 +9060,9 @@
       "classification": "source_has_limited_runtime_evidence"
     },
     {
-      "path": "08-java-revisited/LEARNING_GUIDE.md",
-      "line": 42,
-      "excerpt": "| 持久化：[图书管理系统](projects/02-library-management.md) | 写入后重启；制造一组操作中的第二步失败 | 持久数据可读回，事务应回滚的部分确实未保留；验证使用真实测试数据库而非只检查 Mock 调用 |",
-      "classification": "unbound_verification_wording"
-    },
-    {
       "path": "08-java-revisited/projects/01-todo-api.md",
       "line": 258,
       "excerpt": "选做：把嵌套类型拆到同包多个文件，保留测试通过；然后提取存储接口，用数据库实现替换。替换前先决定事务、唯一性、排序与并发语义，不能仅凭“有接口”宣称上层永远零改动。",
-      "classification": "unbound_verification_wording"
-    },
-    {
-      "path": "08-java-revisited/README.md",
-      "line": 35,
-      "excerpt": "- 将业务结果映射成 HTTP 响应，使用真实测试数据库验证约束与事务。",
       "classification": "unbound_verification_wording"
     },
     {
@@ -9014,18 +9099,6 @@
       "path": "09-nodejs-backend/projects/01-todo-api.md",
       "line": 245,
       "excerpt": "- [ ] 至少 3 条服务层测试通过",
-      "classification": "unbound_verification_wording"
-    },
-    {
-      "path": "09-nodejs-backend/projects/04-production-nodejs-api.md",
-      "line": 5,
-      "excerpt": "**最小阶段**：把已验证 API 容器化并启动在干净环境。",
-      "classification": "unbound_verification_wording"
-    },
-    {
-      "path": "09-nodejs-backend/projects/04-production-nodejs-api.md",
-      "line": 194,
-      "excerpt": "- [ ] SIGTERM 优雅关闭实测通过（发信号后存量请求全部完成）",
       "classification": "unbound_verification_wording"
     },
     {
@@ -9572,66 +9645,6 @@
       "path": "11-rust-cross-platform/reference/language-concepts/08-async-internals.md",
       "line": 27,
       "excerpt": "// std::future::Future（签名摘录，非可运行块）",
-      "classification": "unbound_verification_wording"
-    },
-    {
-      "path": "11-rust-cross-platform/reference/library-guides/12-tokio-guide.md",
-      "line": 103,
-      "excerpt": "### 示例（实测）",
-      "classification": "unbound_verification_wording"
-    },
-    {
-      "path": "11-rust-cross-platform/reference/library-guides/12-tokio-guide.md",
-      "line": 199,
-      "excerpt": "// 实测：超时返回 Err(Elapsed)",
-      "classification": "unbound_verification_wording"
-    },
-    {
-      "path": "11-rust-cross-platform/reference/library-guides/12-tokio-guide.md",
-      "line": 252,
-      "excerpt": "**Stream trait 不在 tokio 本体**：异步序列抽象在独立轻量 crate `tokio-stream`（`futures` crate 也可）。**默认 features 仅含 `time`**（实测 0.1 线）：`ReceiverStream`/`StreamMap` 无需额外 feature，`WatchStream`/`BroadcastStream` 需 `sync`（`cargo add tokio-stream --features sync",
-      "classification": "unbound_verification_wording"
-    },
-    {
-      "path": "11-rust-cross-platform/reference/library-guides/13-serde-guide.md",
-      "line": 112,
-      "excerpt": "### 实测：核心字段属性",
-      "classification": "unbound_verification_wording"
-    },
-    {
-      "path": "11-rust-cross-platform/reference/library-guides/13-serde-guide.md",
-      "line": 209,
-      "excerpt": "### 手写 Serialize（实测）",
-      "classification": "unbound_verification_wording"
-    },
-    {
-      "path": "11-rust-cross-platform/reference/library-guides/13-serde-guide.md",
-      "line": 230,
-      "excerpt": "### 手写 Deserialize（Visitor 模式，实测）",
-      "classification": "unbound_verification_wording"
-    },
-    {
-      "path": "11-rust-cross-platform/reference/library-guides/14-error-libraries.md",
-      "line": 44,
-      "excerpt": "- [手写范式](#️-手写范式纯-std实测)",
-      "classification": "unbound_verification_wording"
-    },
-    {
-      "path": "11-rust-cross-platform/reference/library-guides/14-error-libraries.md",
-      "line": 76,
-      "excerpt": "## ✍️ 手写范式（纯 std，实测）",
-      "classification": "unbound_verification_wording"
-    },
-    {
-      "path": "11-rust-cross-platform/reference/library-guides/14-error-libraries.md",
-      "line": 178,
-      "excerpt": "实测确认的语义细节：",
-      "classification": "unbound_verification_wording"
-    },
-    {
-      "path": "11-rust-cross-platform/reference/library-guides/14-error-libraries.md",
-      "line": 226,
-      "excerpt": "**三种打印形态（实测）**：`Display` = 最外层消息；`{:#}` = 全链冒号拼接；`{:?}` = 缩进多行含 Caused by。给用户看用 Display，排障看 `{:#}` 或 Debug。",
       "classification": "unbound_verification_wording"
     },
     {

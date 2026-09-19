@@ -5,26 +5,26 @@
   "scope": "verification-coverage.json 的 11 个现行教学模块；不含生成报告、归档和不活跃文件。",
   "method": "为 not_verified 文件建立文件级任务，并按覆盖台账同一标记规则重新扫描当前源码以定位逐行任务；仅通过性断言升为 P0，不判断教学内容真伪。",
   "summary": {
-    "items": 656,
-    "file_level_items": 559,
-    "unbound_wording_items": 97,
+    "items": 638,
+    "file_level_items": 553,
+    "unbound_wording_items": 85,
     "by_priority": {
-      "P0": 62,
-      "P1": 301,
-      "P2": 148,
-      "P3": 145
+      "P0": 43,
+      "P1": 297,
+      "P2": 149,
+      "P3": 149
     },
     "by_kind": {
-      "核心基础": 301,
+      "核心基础": 285,
       "首项目": 16,
       "框架": 118,
       "部署": 45,
-      "进阶与测试": 176
+      "进阶与测试": 174
     },
     "excluded": {
       "inactive_or_archived": 0,
       "generated_or_report": 0,
-      "runtime_document": 82
+      "runtime_document": 89
     }
   },
   "items": [
@@ -70,138 +70,6 @@
       "path": "11-rust-cross-platform/reference/language-concepts/08-async-internals.md",
       "line": 27,
       "source_excerpt": "// std::future::Future（签名摘录，非可运行块）",
-      "evidence_action": "优先复跑该行承诺的完整示例；若环境不可得，删除绝对化结果并说明实际未验证范围。"
-    },
-    {
-      "priority": "P0",
-      "kind": "核心基础",
-      "task": "绑定命名验证证据，或把验证措辞收窄为可证明的范围",
-      "reason": "正文含有未绑定到该文件运行记录的验证性措辞；这不是自动技术错误结论。",
-      "module": "Rust / Cross-platform",
-      "path": "11-rust-cross-platform/reference/library-guides/12-tokio-guide.md",
-      "line": 103,
-      "source_excerpt": "### 示例（实测）",
-      "evidence_action": "优先复跑该行承诺的完整示例；若环境不可得，删除绝对化结果并说明实际未验证范围。"
-    },
-    {
-      "priority": "P0",
-      "kind": "核心基础",
-      "task": "绑定命名验证证据，或把验证措辞收窄为可证明的范围",
-      "reason": "正文含有未绑定到该文件运行记录的验证性措辞；这不是自动技术错误结论。",
-      "module": "Rust / Cross-platform",
-      "path": "11-rust-cross-platform/reference/library-guides/12-tokio-guide.md",
-      "line": 199,
-      "source_excerpt": "// 实测：超时返回 Err(Elapsed)",
-      "evidence_action": "优先复跑该行承诺的完整示例；若环境不可得，删除绝对化结果并说明实际未验证范围。"
-    },
-    {
-      "priority": "P0",
-      "kind": "核心基础",
-      "task": "绑定命名验证证据，或把验证措辞收窄为可证明的范围",
-      "reason": "正文含有未绑定到该文件运行记录的验证性措辞；这不是自动技术错误结论。",
-      "module": "Rust / Cross-platform",
-      "path": "11-rust-cross-platform/reference/library-guides/12-tokio-guide.md",
-      "line": 252,
-      "source_excerpt": "**Stream trait 不在 tokio 本体**：异步序列抽象在独立轻量 crate `tokio-stream`（`futures` crate 也可）。**默认 features 仅含 `time`**（实测 0.1 线）：`ReceiverStream`/`StreamMap` 无需额外 feature，`WatchStream`/`BroadcastStream` 需 `sync`（`cargo add tokio-stream --features sync`），`IntervalStream` 由默认的 `time` 覆盖。",
-      "evidence_action": "优先复跑该行承诺的完整示例；若环境不可得，删除绝对化结果并说明实际未验证范围。"
-    },
-    {
-      "priority": "P0",
-      "kind": "核心基础",
-      "task": "绑定命名验证证据，或把验证措辞收窄为可证明的范围",
-      "reason": "正文含有未绑定到该文件运行记录的验证性措辞；这不是自动技术错误结论。",
-      "module": "Rust / Cross-platform",
-      "path": "11-rust-cross-platform/reference/library-guides/13-serde-guide.md",
-      "line": 112,
-      "source_excerpt": "### 实测：核心字段属性",
-      "evidence_action": "优先复跑该行承诺的完整示例；若环境不可得，删除绝对化结果并说明实际未验证范围。"
-    },
-    {
-      "priority": "P0",
-      "kind": "核心基础",
-      "task": "绑定命名验证证据，或把验证措辞收窄为可证明的范围",
-      "reason": "正文含有未绑定到该文件运行记录的验证性措辞；这不是自动技术错误结论。",
-      "module": "Rust / Cross-platform",
-      "path": "11-rust-cross-platform/reference/library-guides/13-serde-guide.md",
-      "line": 209,
-      "source_excerpt": "### 手写 Serialize（实测）",
-      "evidence_action": "优先复跑该行承诺的完整示例；若环境不可得，删除绝对化结果并说明实际未验证范围。"
-    },
-    {
-      "priority": "P0",
-      "kind": "核心基础",
-      "task": "绑定命名验证证据，或把验证措辞收窄为可证明的范围",
-      "reason": "正文含有未绑定到该文件运行记录的验证性措辞；这不是自动技术错误结论。",
-      "module": "Rust / Cross-platform",
-      "path": "11-rust-cross-platform/reference/library-guides/13-serde-guide.md",
-      "line": 230,
-      "source_excerpt": "### 手写 Deserialize（Visitor 模式，实测）",
-      "evidence_action": "优先复跑该行承诺的完整示例；若环境不可得，删除绝对化结果并说明实际未验证范围。"
-    },
-    {
-      "priority": "P0",
-      "kind": "核心基础",
-      "task": "绑定命名验证证据，或把验证措辞收窄为可证明的范围",
-      "reason": "正文含有未绑定到该文件运行记录的验证性措辞；这不是自动技术错误结论。",
-      "module": "Rust / Cross-platform",
-      "path": "11-rust-cross-platform/reference/library-guides/14-error-libraries.md",
-      "line": 44,
-      "source_excerpt": "- [手写范式](#️-手写范式纯-std实测)",
-      "evidence_action": "优先复跑该行承诺的完整示例；若环境不可得，删除绝对化结果并说明实际未验证范围。"
-    },
-    {
-      "priority": "P0",
-      "kind": "核心基础",
-      "task": "绑定命名验证证据，或把验证措辞收窄为可证明的范围",
-      "reason": "正文含有未绑定到该文件运行记录的验证性措辞；这不是自动技术错误结论。",
-      "module": "Rust / Cross-platform",
-      "path": "11-rust-cross-platform/reference/library-guides/14-error-libraries.md",
-      "line": 76,
-      "source_excerpt": "## ✍️ 手写范式（纯 std，实测）",
-      "evidence_action": "优先复跑该行承诺的完整示例；若环境不可得，删除绝对化结果并说明实际未验证范围。"
-    },
-    {
-      "priority": "P0",
-      "kind": "核心基础",
-      "task": "绑定命名验证证据，或把验证措辞收窄为可证明的范围",
-      "reason": "正文含有未绑定到该文件运行记录的验证性措辞；这不是自动技术错误结论。",
-      "module": "Rust / Cross-platform",
-      "path": "11-rust-cross-platform/reference/library-guides/14-error-libraries.md",
-      "line": 178,
-      "source_excerpt": "实测确认的语义细节：",
-      "evidence_action": "优先复跑该行承诺的完整示例；若环境不可得，删除绝对化结果并说明实际未验证范围。"
-    },
-    {
-      "priority": "P0",
-      "kind": "核心基础",
-      "task": "绑定命名验证证据，或把验证措辞收窄为可证明的范围",
-      "reason": "正文含有未绑定到该文件运行记录的验证性措辞；这不是自动技术错误结论。",
-      "module": "Rust / Cross-platform",
-      "path": "11-rust-cross-platform/reference/library-guides/14-error-libraries.md",
-      "line": 226,
-      "source_excerpt": "**三种打印形态（实测）**：`Display` = 最外层消息；`{:#}` = 全链冒号拼接；`{:?}` = 缩进多行含 Caused by。给用户看用 Display，排障看 `{:#}` 或 Debug。",
-      "evidence_action": "优先复跑该行承诺的完整示例；若环境不可得，删除绝对化结果并说明实际未验证范围。"
-    },
-    {
-      "priority": "P0",
-      "kind": "首项目",
-      "task": "绑定命名验证证据，或把验证措辞收窄为可证明的范围",
-      "reason": "正文含有未绑定到该文件运行记录的验证性措辞；这不是自动技术错误结论。",
-      "module": "Java",
-      "path": "08-java-revisited/projects/01-todo-api.md",
-      "line": 258,
-      "source_excerpt": "选做：把嵌套类型拆到同包多个文件，保留测试通过；然后提取存储接口，用数据库实现替换。替换前先决定事务、唯一性、排序与并发语义，不能仅凭“有接口”宣称上层永远零改动。",
-      "evidence_action": "优先复跑该行承诺的完整示例；若环境不可得，删除绝对化结果并说明实际未验证范围。"
-    },
-    {
-      "priority": "P0",
-      "kind": "首项目",
-      "task": "绑定命名验证证据，或把验证措辞收窄为可证明的范围",
-      "reason": "正文含有未绑定到该文件运行记录的验证性措辞；这不是自动技术错误结论。",
-      "module": "Node.js",
-      "path": "09-nodejs-backend/projects/01-todo-api.md",
-      "line": 245,
-      "source_excerpt": "- [ ] 至少 3 条服务层测试通过",
       "evidence_action": "优先复跑该行承诺的完整示例；若环境不可得，删除绝对化结果并说明实际未验证范围。"
     },
     {
@@ -308,17 +176,6 @@
       "kind": "部署",
       "task": "绑定命名验证证据，或把验证措辞收窄为可证明的范围",
       "reason": "正文含有未绑定到该文件运行记录的验证性措辞；这不是自动技术错误结论。",
-      "module": "Python",
-      "path": "10-python-discovery/deployment/02-ci-cd-pipelines.md",
-      "line": 130,
-      "source_excerpt": "**Q1: CI 里测试通过、部署失败了？**",
-      "evidence_action": "优先复跑该行承诺的完整示例；若环境不可得，删除绝对化结果并说明实际未验证范围。"
-    },
-    {
-      "priority": "P0",
-      "kind": "部署",
-      "task": "绑定命名验证证据，或把验证措辞收窄为可证明的范围",
-      "reason": "正文含有未绑定到该文件运行记录的验证性措辞；这不是自动技术错误结论。",
       "module": "Rust / Cross-platform",
       "path": "11-rust-cross-platform/deployment/01-cross-compilation-targets.md",
       "line": 281,
@@ -418,28 +275,6 @@
       "kind": "进阶与测试",
       "task": "绑定命名验证证据，或把验证措辞收窄为可证明的范围",
       "reason": "正文含有未绑定到该文件运行记录的验证性措辞；这不是自动技术错误结论。",
-      "module": "Node.js",
-      "path": "09-nodejs-backend/projects/04-production-nodejs-api.md",
-      "line": 5,
-      "source_excerpt": "**最小阶段**：把已验证 API 容器化并启动在干净环境。",
-      "evidence_action": "优先复跑该行承诺的完整示例；若环境不可得，删除绝对化结果并说明实际未验证范围。"
-    },
-    {
-      "priority": "P0",
-      "kind": "进阶与测试",
-      "task": "绑定命名验证证据，或把验证措辞收窄为可证明的范围",
-      "reason": "正文含有未绑定到该文件运行记录的验证性措辞；这不是自动技术错误结论。",
-      "module": "Node.js",
-      "path": "09-nodejs-backend/projects/04-production-nodejs-api.md",
-      "line": 194,
-      "source_excerpt": "- [ ] SIGTERM 优雅关闭实测通过（发信号后存量请求全部完成）",
-      "evidence_action": "优先复跑该行承诺的完整示例；若环境不可得，删除绝对化结果并说明实际未验证范围。"
-    },
-    {
-      "priority": "P0",
-      "kind": "进阶与测试",
-      "task": "绑定命名验证证据，或把验证措辞收窄为可证明的范围",
-      "reason": "正文含有未绑定到该文件运行记录的验证性措辞；这不是自动技术错误结论。",
       "module": "PHP",
       "path": "07-php-mastery/advanced-topics/architecture/01-laravel-architecture.md",
       "line": 125,
@@ -466,28 +301,6 @@
       "path": "07-php-mastery/projects/04-production-laravel-app.md",
       "line": 168,
       "source_excerpt": "[ ] 全量测试通过且覆盖核心业务流（testing/03-feature-testing.md）",
-      "evidence_action": "优先复跑该行承诺的完整示例；若环境不可得，删除绝对化结果并说明实际未验证范围。"
-    },
-    {
-      "priority": "P0",
-      "kind": "进阶与测试",
-      "task": "绑定命名验证证据，或把验证措辞收窄为可证明的范围",
-      "reason": "正文含有未绑定到该文件运行记录的验证性措辞；这不是自动技术错误结论。",
-      "module": "Python",
-      "path": "10-python-discovery/advanced-topics/performance/02-profiling-optimization.md",
-      "line": 107,
-      "source_excerpt": "| tottime 集中在序列化函数 | 编码、字段转换或数据量可能占主要成本 | 先缩小热点、检查重复转换与输出大小，再实测候选实现 |",
-      "evidence_action": "优先复跑该行承诺的完整示例；若环境不可得，删除绝对化结果并说明实际未验证范围。"
-    },
-    {
-      "priority": "P0",
-      "kind": "进阶与测试",
-      "task": "绑定命名验证证据，或把验证措辞收窄为可证明的范围",
-      "reason": "正文含有未绑定到该文件运行记录的验证性措辞；这不是自动技术错误结论。",
-      "module": "Python",
-      "path": "10-python-discovery/testing/03-mocking-testing.md",
-      "line": 145,
-      "source_excerpt": "**Q1: patch 之后测试通过但线上失败？**",
       "evidence_action": "优先复跑该行承诺的完整示例；若环境不可得，删除绝对化结果并说明实际未验证范围。"
     },
     {
@@ -576,17 +389,6 @@
       "path": "11-rust-cross-platform/advanced-topics/01-memory-layout-performance.md",
       "line": 314,
       "source_excerpt": "**评估标准**: 手算与实测一致；重排后比原声明少一个数量级的填充字节。",
-      "evidence_action": "优先复跑该行承诺的完整示例；若环境不可得，删除绝对化结果并说明实际未验证范围。"
-    },
-    {
-      "priority": "P0",
-      "kind": "进阶与测试",
-      "task": "绑定命名验证证据，或把验证措辞收窄为可证明的范围",
-      "reason": "正文含有未绑定到该文件运行记录的验证性措辞；这不是自动技术错误结论。",
-      "module": "Rust / Cross-platform",
-      "path": "11-rust-cross-platform/advanced-topics/01-memory-layout-performance.md",
-      "line": 361,
-      "source_excerpt": "- [ ] 能对任意 struct 心算 repr(C) 的填充并实测验证",
       "evidence_action": "优先复跑该行承诺的完整示例；若环境不可得，删除绝对化结果并说明实际未验证范围。"
     },
     {
@@ -686,17 +488,6 @@
       "path": "11-rust-cross-platform/testing/01-unit-integration-tests.md",
       "line": 215,
       "source_excerpt": "**操作指南**: 在 `///` 或 `//!` 文档注释中写 ```` ```rust ```` 代码块（如上方 `src/lib.rs` 所示）。`cargo test` 的输出会呈现清晰的三段结构（本机实测输出，节选）:",
-      "evidence_action": "优先复跑该行承诺的完整示例；若环境不可得，删除绝对化结果并说明实际未验证范围。"
-    },
-    {
-      "priority": "P0",
-      "kind": "进阶与测试",
-      "task": "绑定命名验证证据，或把验证措辞收窄为可证明的范围",
-      "reason": "正文含有未绑定到该文件运行记录的验证性措辞；这不是自动技术错误结论。",
-      "module": "Rust / Cross-platform",
-      "path": "11-rust-cross-platform/testing/01-unit-integration-tests.md",
-      "line": 247,
-      "source_excerpt": "**验证方法**: 过滤器命中数会体现在 `test result` 行的 `filtered out` 计数中（本机实测确认）。",
       "evidence_action": "优先复跑该行承诺的完整示例；若环境不可得，删除绝对化结果并说明实际未验证范围。"
     },
     {
@@ -1069,28 +860,6 @@
       "reason": "当前没有与此文件绑定的命名运行或语法证据。",
       "module": "Java",
       "path": "08-java-revisited/basics/02-first-program.md",
-      "line": null,
-      "source_excerpt": null,
-      "evidence_action": "抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。"
-    },
-    {
-      "priority": "P1",
-      "kind": "核心基础",
-      "task": "为文档选择一个最小可复现案例并记录限定运行证据",
-      "reason": "当前没有与此文件绑定的命名运行或语法证据。",
-      "module": "Java",
-      "path": "08-java-revisited/basics/03-variables-types.md",
-      "line": null,
-      "source_excerpt": null,
-      "evidence_action": "抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。"
-    },
-    {
-      "priority": "P1",
-      "kind": "核心基础",
-      "task": "为文档选择一个最小可复现案例并记录限定运行证据",
-      "reason": "当前没有与此文件绑定的命名运行或语法证据。",
-      "module": "Java",
-      "path": "08-java-revisited/basics/04-classes-records.md",
       "line": null,
       "source_excerpt": null,
       "evidence_action": "抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。"
@@ -2070,17 +1839,6 @@
       "reason": "当前没有与此文件绑定的命名运行或语法证据。",
       "module": "PHP",
       "path": "07-php-mastery/basics/02-first-script.md",
-      "line": null,
-      "source_excerpt": null,
-      "evidence_action": "抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。"
-    },
-    {
-      "priority": "P1",
-      "kind": "核心基础",
-      "task": "为文档选择一个最小可复现案例并记录限定运行证据",
-      "reason": "当前没有与此文件绑定的命名运行或语法证据。",
-      "module": "PHP",
-      "path": "07-php-mastery/basics/03-variables-types.md",
       "line": null,
       "source_excerpt": null,
       "evidence_action": "抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。"
@@ -3168,39 +2926,6 @@
       "kind": "核心基础",
       "task": "为文档选择一个最小可复现案例并记录限定运行证据",
       "reason": "当前没有与此文件绑定的命名运行或语法证据。",
-      "module": "Rust / Cross-platform",
-      "path": "11-rust-cross-platform/reference/library-guides/12-tokio-guide.md",
-      "line": null,
-      "source_excerpt": null,
-      "evidence_action": "抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。"
-    },
-    {
-      "priority": "P1",
-      "kind": "核心基础",
-      "task": "为文档选择一个最小可复现案例并记录限定运行证据",
-      "reason": "当前没有与此文件绑定的命名运行或语法证据。",
-      "module": "Rust / Cross-platform",
-      "path": "11-rust-cross-platform/reference/library-guides/13-serde-guide.md",
-      "line": null,
-      "source_excerpt": null,
-      "evidence_action": "抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。"
-    },
-    {
-      "priority": "P1",
-      "kind": "核心基础",
-      "task": "为文档选择一个最小可复现案例并记录限定运行证据",
-      "reason": "当前没有与此文件绑定的命名运行或语法证据。",
-      "module": "Rust / Cross-platform",
-      "path": "11-rust-cross-platform/reference/library-guides/14-error-libraries.md",
-      "line": null,
-      "source_excerpt": null,
-      "evidence_action": "抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。"
-    },
-    {
-      "priority": "P1",
-      "kind": "核心基础",
-      "task": "为文档选择一个最小可复现案例并记录限定运行证据",
-      "reason": "当前没有与此文件绑定的命名运行或语法证据。",
       "module": "Swift / SwiftUI",
       "path": "06-swift-swiftui/LEARNING_GUIDE.md",
       "line": null,
@@ -3881,6 +3606,17 @@
     {
       "priority": "P1",
       "kind": "首项目",
+      "task": "保留诚实的验证边界，并在补证据时决定是否增加最小练习",
+      "reason": "这行是未验证范围或验证步骤的披露，不是声称已经通过的证据。",
+      "module": "Java",
+      "path": "08-java-revisited/projects/01-todo-api.md",
+      "line": 258,
+      "source_excerpt": "选做：把嵌套类型拆到同包多个文件，保留测试通过；然后提取存储接口，用数据库实现替换。替换前先决定事务、唯一性、排序与并发语义，不能仅凭“有接口”宣称上层永远零改动。",
+      "evidence_action": "保持已有边界说明；若新增示例，记录工具链、命令、预期行为和未覆盖范围。"
+    },
+    {
+      "priority": "P1",
+      "kind": "首项目",
       "task": "为文档选择一个最小可复现案例并记录限定运行证据",
       "reason": "当前没有与此文件绑定的命名运行或语法证据。",
       "module": "Java",
@@ -3932,6 +3668,17 @@
       "line": null,
       "source_excerpt": null,
       "evidence_action": "抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。"
+    },
+    {
+      "priority": "P1",
+      "kind": "首项目",
+      "task": "保留诚实的验证边界，并在补证据时决定是否增加最小练习",
+      "reason": "这行是未验证范围或验证步骤的披露，不是声称已经通过的证据。",
+      "module": "Node.js",
+      "path": "09-nodejs-backend/projects/01-todo-api.md",
+      "line": 245,
+      "source_excerpt": "- [ ] 至少 3 条服务层测试通过",
+      "evidence_action": "保持已有边界说明；若新增示例，记录工具链、命令、预期行为和未覆盖范围。"
     },
     {
       "priority": "P1",
@@ -5480,6 +5227,17 @@
       "reason": "这行是未验证范围或验证步骤的披露，不是声称已经通过的证据。",
       "module": "Python",
       "path": "10-python-discovery/deployment/02-ci-cd-pipelines.md",
+      "line": 130,
+      "source_excerpt": "**Q1: CI 里测试通过、部署失败了？**",
+      "evidence_action": "保持已有边界说明；若新增示例，记录工具链、命令、预期行为和未覆盖范围。"
+    },
+    {
+      "priority": "P2",
+      "kind": "部署",
+      "task": "保留诚实的验证边界，并在补证据时决定是否增加最小练习",
+      "reason": "这行是未验证范围或验证步骤的披露，不是声称已经通过的证据。",
+      "module": "Python",
+      "path": "10-python-discovery/deployment/02-ci-cd-pipelines.md",
       "line": 143,
       "source_excerpt": "验证三个事件：PR 应执行检查但不推送镜像；main 的 push 应在测试通过后构建推送；v 开头的 tag 也应先通过相同检查，再构建发布候选镜像。然后故意破坏一条测试，确认 build 被阻止；这比只看 YAML 能解析更有意义。",
       "evidence_action": "保持已有边界说明；若新增示例，记录工具链、命令、预期行为和未覆盖范围。"
@@ -6686,6 +6444,17 @@
     {
       "priority": "P3",
       "kind": "进阶与测试",
+      "task": "保留诚实的验证边界，并在补证据时决定是否增加最小练习",
+      "reason": "这行是未验证范围或验证步骤的披露，不是声称已经通过的证据。",
+      "module": "Python",
+      "path": "10-python-discovery/advanced-topics/performance/02-profiling-optimization.md",
+      "line": 107,
+      "source_excerpt": "| tottime 集中在序列化函数 | 编码、字段转换或数据量可能占主要成本 | 先缩小热点、检查重复转换与输出大小，再实测候选实现 |",
+      "evidence_action": "保持已有边界说明；若新增示例，记录工具链、命令、预期行为和未覆盖范围。"
+    },
+    {
+      "priority": "P3",
+      "kind": "进阶与测试",
       "task": "为文档选择一个最小可复现案例并记录限定运行证据",
       "reason": "当前没有与此文件绑定的命名运行或语法证据。",
       "module": "Python",
@@ -6748,6 +6517,17 @@
       "line": null,
       "source_excerpt": null,
       "evidence_action": "抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。"
+    },
+    {
+      "priority": "P3",
+      "kind": "进阶与测试",
+      "task": "保留诚实的验证边界，并在补证据时决定是否增加最小练习",
+      "reason": "这行是未验证范围或验证步骤的披露，不是声称已经通过的证据。",
+      "module": "Python",
+      "path": "10-python-discovery/testing/03-mocking-testing.md",
+      "line": 145,
+      "source_excerpt": "**Q1: patch 之后测试通过但线上失败？**",
+      "evidence_action": "保持已有边界说明；若新增示例，记录工具链、命令、预期行为和未覆盖范围。"
     },
     {
       "priority": "P3",
@@ -6895,6 +6675,17 @@
     {
       "priority": "P3",
       "kind": "进阶与测试",
+      "task": "保留诚实的验证边界，并在补证据时决定是否增加最小练习",
+      "reason": "这行是未验证范围或验证步骤的披露，不是声称已经通过的证据。",
+      "module": "Rust / Cross-platform",
+      "path": "11-rust-cross-platform/advanced-topics/01-memory-layout-performance.md",
+      "line": 361,
+      "source_excerpt": "- [ ] 能对任意 struct 心算 repr(C) 的填充并实测验证",
+      "evidence_action": "保持已有边界说明；若新增示例，记录工具链、命令、预期行为和未覆盖范围。"
+    },
+    {
+      "priority": "P3",
+      "kind": "进阶与测试",
       "task": "为文档选择一个最小可复现案例并记录限定运行证据",
       "reason": "当前没有与此文件绑定的命名运行或语法证据。",
       "module": "Rust / Cross-platform",
@@ -6979,6 +6770,17 @@
       "line": null,
       "source_excerpt": null,
       "evidence_action": "抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。"
+    },
+    {
+      "priority": "P3",
+      "kind": "进阶与测试",
+      "task": "保留诚实的验证边界，并在补证据时决定是否增加最小练习",
+      "reason": "这行是未验证范围或验证步骤的披露，不是声称已经通过的证据。",
+      "module": "Rust / Cross-platform",
+      "path": "11-rust-cross-platform/testing/01-unit-integration-tests.md",
+      "line": 247,
+      "source_excerpt": "**验证方法**: 过滤器命中数会体现在 `test result` 行的 `filtered out` 计数中（本机实测确认）。",
+      "evidence_action": "保持已有边界说明；若新增示例，记录工具链、命令、预期行为和未覆盖范围。"
     },
     {
       "priority": "P3",

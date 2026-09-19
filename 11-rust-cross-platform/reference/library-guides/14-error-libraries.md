@@ -29,7 +29,7 @@
 
 </details>
 
-**版本基线**: Rust **1.98.1**（edition 2024）见[模块 README](../../README.md)；thiserror / anyhow 未列入基线表，本文不标版本号（依赖用 `cargo add` 取当前稳定版）。
+**版本基线**: Rust **1.98.1**（edition 2024）见[模块 README](../../README.md)；本文完整程序固定 thiserror 2.0.17、anyhow 1.0.100，锁文件与执行范围见[验证报告](../../../shared-resources/tools/document-quality/reports/rust-ecosystem-validation.md)。每个完整程序单独保存为 `src/main.rs`，片段需结合所在小节上下文阅读。
 
 ## 🎯 学习目标
 
@@ -41,7 +41,7 @@
 ## 📋 目录
 
 - [std Error trait 与错误链](#-std-error-trait-与错误链)
-- [手写范式](#️-手写范式纯-std实测)
+- [手写范式](#️-手写范式纯-std)
 - [thiserror：派生宏属性表](#️-thiserror派生宏属性表)
 - [anyhow：应用层错误](#-anyhow应用层错误)
 - [选型矩阵](#️-选型矩阵)
@@ -61,20 +61,22 @@ pub trait Error: Debug + Display {
 
 Rust 错误是**普通值**：`Result<T, E>` 的 `E` 不必实现 Debug/Display；能否使用 `?` 取决于返回类型与错误转换约束；实现 `Error` trait 才能进入"错误链"生态——`source()` 声明"谁导致了我"，让整条因果链可遍历、可 downcast。`?` 的自动 `From` 转换负责**换型**，`source()` 负责**保留根因**，两者互补。
 
-- **`source()` 链**：从外到内逐层 `source()` 直到 `None` 即根因；Display 消息逐层叠加。
+- **`source()` 链**：从外到内逐层 `source()` 直到 `None`；Display 不会自动拼接消息，是否显示下层原因由实现或最终报告器决定。
 - **downcast**：对 `&dyn Error` 可 `downcast_ref::<T>()` 取回具体类型（需 `'static`）。
 - **`Box<dyn Error>`**：trait 对象错误，`From<&str>`/`From<String>` 可直接构造；适合示例、main、快速原型。
 - **`provide()`/`Request`**（携带 Backtrace 等附加数据）：截至本文仍属 nightly 特性 `error_generic_member_access`，稳定层只需掌握 `source()`。
 
-### 依赖（未列入基线，不标版本）
+### 依赖
 
-```bash
-cargo add thiserror   # 库层：derive 出标准 Error 实现
-cargo add anyhow      # 应用层：动态错误类型 + 上下文
+```toml
+[dependencies]
+thiserror = "=2.0.17"
+anyhow = "=1.0.100"
 ```
 
-## ✍️ 手写范式（纯 std，实测）
+## ✍️ 手写范式（纯 std）
 
+<!-- rust-ecosystem: error-std -->
 ```rust
 use std::error::Error;
 use std::fmt::{self, Display, Formatter};
@@ -124,6 +126,7 @@ fn load(path: &str) -> Result<String, LoadErr> {
     })
 }
 
+fn main() {
 // 沿链下钻 + downcast 取回具体类型
 let err = load("db/users.json").unwrap_err();
 assert_eq!(err.to_string(), "加载 db/users.json 失败");
@@ -134,6 +137,10 @@ while let Some(e) = cur {
 }
 let root = err.source().unwrap();
 assert!(root.downcast_ref::<DataErr>().is_some());
+assert!(root.source().is_none());
+assert_eq!(DataErr::Parse { pos: 2, msg: "bad".into() }.to_string(), "解析失败 @ 2: bad");
+println!("error-std: ok");
+}
 ```
 
 手写范式的信息密度：**Display 一行 + source 一个字段**——这正是 thiserror 帮你生成的全部内容。
@@ -146,7 +153,7 @@ assert!(root.downcast_ref::<DataErr>().is_some());
 |------|------|------|
 | `#[error("…")]` | 变体或 struct 级 | 生成 `Display`；`{0}`/`{name}` 插值字段，`{source}` 引 source 字段，`{:?}` 可用，额外参数可写任意表达式 |
 | `#[source]` | 字段级 | 标记 `source()` 返回的字段；**字段名叫 `source` 时可省略此属性** |
-| `#[from]` | 字段/变体级 | 同时生成 `From<T> for 该错误`（使 `?` 直通）**并**把该字段当 source；两者**不可再重复标注**；该变体除 source 外不能再有其他字段 |
+| `#[from]` | 字段级 | 同时生成 `From<T>` 并把该字段当 source；通常变体只有该字段，另有 Backtrace 字段是特例。无需再写 `#[source]` |
 | `#[error(transparent)]` | 变体或 struct 级 | Display 与 `source()` 全部转发给内部错误——自身"隐身" |
 | `#[backtrace]` | 字段级 | 标记 Backtrace 字段；依赖 nightly 特性（同 `provide()`），稳定层暂不依赖 |
 
@@ -168,14 +175,13 @@ enum DataErr {
     #[error(transparent)]
     TransparentIo(std::io::Error),
 
-    // 透传 anyhow::Error：仅转发 Display
-    //（anyhow::Error 未实现 std::error::Error，source 链不经此变体）
+    // thiserror 对 anyhow::Error 有适配；Display 与底层 source 均被转发。
     #[error(transparent)]
     Other(#[from] anyhow::Error),
 }
 ```
 
-实测确认的语义细节：
+属性语义与验收重点：
 
 - `#[error(transparent)]` 转发的是 `inner.source()`（内层的内层），不是 inner 本身——transparent 类型在链上"变成" inner。
 - 手写 `Display` + `#[derive(Error)]` 合法：没有 `#[error]` 属性时自己补 Display 即可。
@@ -198,10 +204,24 @@ enum DataErr {
 | `.downcast_ref::<T>()` / `downcast_mut` | 取回具体错误类型 |
 | `{:#}` | Display 的 alternate 形式：行内打印全链 |
 
+下面是独立完整程序，检查类型化错误、上下文、向下转换，以及 transparent 包装后的 source。包装层是否出现在链里，取决于包装方式；不能从 anyhow::Error 本身是否实现 Error 推导“丢失整条错误链”。
+
+<!-- rust-ecosystem: error-anyhow -->
 ```rust
 use anyhow::{bail, ensure, Context};
+use std::error::Error as _;
 
-fn find(id: u32) -> Result<String, DataErr> { /* …库层错误… */ }
+#[derive(Debug, thiserror::Error)]
+#[error("not found: user #{0}")]
+struct DataErr(u32);
+
+#[derive(Debug, thiserror::Error)]
+enum BoundaryError {
+    #[error(transparent)]
+    Other(#[from] anyhow::Error),
+}
+
+fn find(id: u32) -> Result<String, DataErr> { Err(DataErr(id)) }
 
 fn app() -> anyhow::Result<()> {
     find(1).context("加载用户失败")?;   // DataErr: std::error::Error → 直接 context
@@ -214,16 +234,24 @@ fn bailing(n: i32) -> anyhow::Result<()> {
     Ok(())
 }
 
-let e = app().unwrap_err();
-e.to_string();                        // "加载用户失败"（只显示最外层！）
-format!("{:#}", e);                   // "加载用户失败: not found: user #1"（行内全链）
-format!("{e:?}");                     // 多行 "Caused by:" 列表
-e.chain().count();                    // 链长度
-e.downcast_ref::<DataErr>().unwrap(); // 取回库层具体类型
-e.root_cause().to_string();           // "not found: user #1"
+fn main() {
+    let e = app().unwrap_err();
+    assert_eq!(e.to_string(), "加载用户失败");
+    assert_eq!(format!("{e:#}"), "加载用户失败: not found: user #1");
+    assert_eq!(e.chain().count(), 2);
+    assert_eq!(e.downcast_ref::<DataErr>().unwrap().0, 1);
+    assert_eq!(e.root_cause().to_string(), "not found: user #1");
+    let outer = BoundaryError::from(e);
+    assert_eq!(outer.to_string(), "加载用户失败");
+    assert_eq!(outer.source().unwrap().downcast_ref::<DataErr>().unwrap().0, 1);
+    assert!(bailing(0).unwrap_err().to_string().contains("必须为正"));
+    assert!(bailing(2).unwrap_err().to_string().contains("太小"));
+    assert!(bailing(10).is_ok());
+    println!("error-anyhow: ok");
+}
 ```
 
-**三种打印形态（实测）**：`Display` = 最外层消息；`{:#}` = 全链冒号拼接；`{:?}` = 缩进多行含 Caused by。给用户看用 Display，排障看 `{:#}` 或 Debug。
+**三种打印形态**：`Display` 显示最外层消息，`{:#}` 展示冒号分隔的错误链，`{:?}` 提供多行诊断（有原因时可含 Caused by，有回溯时还可含回溯）。给终端用户或 HTTP 客户端的消息仍需筛选，最外层上下文也可能包含路径、用户标识等敏感信息。
 
 ## 🗺️ 选型矩阵
 
@@ -233,7 +261,7 @@ e.root_cause().to_string();           // "not found: user #1"
 | **应用/二进制的业务层** | anyhow | 不想为每层定义类型；`?` 全通吃，context 按需叠加 |
 | **示例/原型/测试** | `Box<dyn Error>` / anyhow | 零设计成本 |
 | **错误需要携带结构化字段供程序判断** | thiserror（或手写） | enum 变体字段可被 match；anyhow 只能 downcast 尝试 |
-| **库需要同时服务 anyhow 用户** | thiserror + `#[error(transparent)] Other(#[from] anyhow::Error)` 变体 | 官方推荐的桥接写法（注意：该变体 source 链不转发） |
+| **确实需要容纳动态错误的边界** | `#[error(transparent)] Other(#[from] anyhow::Error)` | 支持 source 转发，但削弱调用方按变体判断原因的能力；普通类型化库无需为服务 anyhow 用户而加这个变体 |
 | **任何场景** | std `Error` + `source()` 是共同地基 | thiserror 生成的、anyhow 包装的都是它 |
 
 **分层惯例**：底层 crate 用 thiserror 定义类型化错误 → 中间层 `?` 直通（`#[from]`）→ 应用边界 anyhow `context` 补充人类可读上下文 → main/处理器统一消费。错误消息全小写、结尾不带标点，让多层叠加读起来像句子。
@@ -246,11 +274,15 @@ e.root_cause().to_string();           // "not found: user #1"
 
 ## ❓ 常见问题
 
+### 练习：让调用者能够处理恢复动作
+
+给 `DataErr` 增加 `PermissionDenied` 与 `InvalidData` 两种情况。库层保留类型化错误，应用层添加操作上下文；验收调用者可按类型选择“提示权限问题”或“拒绝损坏数据”，同时诊断链能到达原始错误。不得用错误消息字符串比较来决定业务动作，也不要把完整诊断链直接返回 HTTP 客户端。
+
 ### Q1: `?` 到底做了什么，为什么有时不用写 `#[from]` 也能传播？
 **A**: `?` 调用 `From::from` 把内层错误转成函数签名里的错误类型。std 已为常见组合提供 `From`（如 `io::Error → Box<dyn Error>`）；thiserror 的 `#[from]` 是为"你的枚举 ← 依赖的错误类型"补 `From`。没有对应 `From` 就必须 `map_err` 手动换型。
 
 ### Q2: 泛型错误 `E: Error` 和 trait 对象 `Box<dyn Error>` / `anyhow::Error` 怎么选？
-**A**: 泛型是编译期单态化，零开销但会把错误类型传染到整个调用链签名；trait 对象在边界处统一类型、动态分发一次。惯例：**内部传递用具体类型或泛型，跨模块/跨 crate 边界用 trait 对象**（thiserror 枚举或 anyhow），把"错误类型爆炸"挡在边界上。
+**A**: 泛型保留具体类型但会增加签名约束；trait 对象可统一多种错误，方法调用可能使用动态分发。thiserror 枚举仍是具体类型，不是 trait 对象。公共 API 若需要调用者稳定地 match，优先考虑具体枚举；应用入口汇总诊断时可使用 anyhow 或 Box。不要仅凭“跨模块”决定必须抹去错误类型。
 
 ## 📏 模式不变量
 

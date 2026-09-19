@@ -29,7 +29,9 @@
 | [Kotlin 与 Swift 核心验证](reports/kotlin-swift-core-validation.md) | Kotlin/JVM 与 Swift 语法、输入规则的限定运行结果；不覆盖原生 UI 与设备构建 |
 | [Node 与 Python 标准库验证](reports/node-python-libraries.md) | child_process、zlib、enum、functools/subprocess 中 9 个正文完整程序的隔离运行范围 |
 | [PHP 与 Java 核心边界验证](reports/php-java-core-boundaries.md) | PHP 属性/Fiber、Java 集合/泛型和资源异常的 8 个正文完整程序验证 |
+| [PHP 与 Java 类型验证](reports/php-java-types-validation.md) | PHP 声明类型、Java 基本类型与 record 的 5 个正文完整程序验证 |
 | [Go 与 Rust 基础验证](reports/go-rust-basics.md) | Go 并发/错误处理和 Rust 生命周期的 13 个运行案例、3 个预期编译失败案例 |
+| [Rust 生态验证](reports/rust-ecosystem-validation.md) | Tokio、Serde 与错误处理库的 10 个锁定依赖、无网络运行案例 |
 | [验证覆盖状态台账](reports/verification-coverage.md) | 逐文件区分限定运行证据、语法检查和未验证状态，避免把验证措辞或代码围栏当成通过证明 |
 | [本轮交付状态](reports/delivery-status-2026-09-19.md) | 已修复项、已验证项与仍未达到全库交付条件的范围 |
 

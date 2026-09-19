@@ -1,0 +1,230 @@
+{
+  "documents": {
+    "tokio": {
+      "path": "11-rust-cross-platform/reference/library-guides/12-tokio-guide.md",
+      "sha256": "149dbe7613189a49f1b532231c672df2f82c7e5c634ff5d05f881f3fd4f6a0e7"
+    },
+    "serde": {
+      "path": "11-rust-cross-platform/reference/library-guides/13-serde-guide.md",
+      "sha256": "fd1c66a7fda9c229d022b8803818fe80e679191f8f8f773c0bf69eb8a858166a"
+    },
+    "errors": {
+      "path": "11-rust-cross-platform/reference/library-guides/14-error-libraries.md",
+      "sha256": "1db8a75e2ff79556a3f015dae034ceb2adb0df5774b1de577a7ccabd588a1917"
+    }
+  },
+  "commands": [
+    {
+      "argv": [
+        "rustc",
+        "--version"
+      ],
+      "cwd": "/lab/rust-ecosystem",
+      "returncode": 0,
+      "stdout": "rustc 1.98.1 (48a229cea 2026-09-01)\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "cargo",
+        "--version"
+      ],
+      "cwd": "/lab/rust-ecosystem",
+      "returncode": 0,
+      "stdout": "cargo 1.98.1 (797e8a9bc 2026-08-05)\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "cargo",
+        "build",
+        "--offline",
+        "--locked",
+        "--bins"
+      ],
+      "cwd": "/lab/rust-ecosystem/tokio",
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "   Compiling reference-tokio v0.1.0 (/lab/rust-ecosystem/tokio)\n    Finished `dev` profile [unoptimized + debuginfo] target(s) in 2.83s\n"
+    },
+    {
+      "argv": [
+        "/lab/rust-ecosystem/tokio/target/debug/tokio-tasks"
+      ],
+      "cwd": "/lab/rust-ecosystem/tokio",
+      "returncode": 0,
+      "stdout": "tokio-tasks: ok\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/lab/rust-ecosystem/tokio/target/debug/tokio-channels"
+      ],
+      "cwd": "/lab/rust-ecosystem/tokio",
+      "returncode": 0,
+      "stdout": "tokio-channels: ok\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/lab/rust-ecosystem/tokio/target/debug/tokio-reserve"
+      ],
+      "cwd": "/lab/rust-ecosystem/tokio",
+      "returncode": 0,
+      "stdout": "tokio-reserve: ok\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/lab/rust-ecosystem/tokio/target/debug/tokio-time"
+      ],
+      "cwd": "/lab/rust-ecosystem/tokio",
+      "returncode": 0,
+      "stdout": "tokio-time: ok\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "cargo",
+        "build",
+        "--offline",
+        "--locked",
+        "--bins"
+      ],
+      "cwd": "/lab/rust-ecosystem/serde",
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "   Compiling proc-macro2 v1.0.107\n   Compiling quote v1.0.47\n   Compiling serde_core v1.0.229\n   Compiling syn v3.0.6\n   Compiling serde v1.0.229\n   Compiling serde_json v1.0.145\n   Compiling serde_derive v1.0.229\n   Compiling toml_datetime v0.6.11\n   Compiling serde_spanned v0.6.9\n   Compiling toml_edit v0.22.27\n   Compiling toml v0.8.23\n   Compiling reference-serde v0.1.0 (/lab/rust-ecosystem/serde)\n    Finished `dev` profile [unoptimized + debuginfo] target(s) in 11.72s\n"
+    },
+    {
+      "argv": [
+        "/lab/rust-ecosystem/serde/target/debug/serde-fields"
+      ],
+      "cwd": "/lab/rust-ecosystem/serde",
+      "returncode": 0,
+      "stdout": "serde-fields: ok\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/lab/rust-ecosystem/serde/target/debug/serde-serialize"
+      ],
+      "cwd": "/lab/rust-ecosystem/serde",
+      "returncode": 0,
+      "stdout": "serde-serialize: ok\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/lab/rust-ecosystem/serde/target/debug/serde-visitor"
+      ],
+      "cwd": "/lab/rust-ecosystem/serde",
+      "returncode": 0,
+      "stdout": "serde-visitor: ok\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/lab/rust-ecosystem/serde/target/debug/serde-with"
+      ],
+      "cwd": "/lab/rust-ecosystem/serde",
+      "returncode": 0,
+      "stdout": "serde-with: ok\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "cargo",
+        "build",
+        "--offline",
+        "--locked",
+        "--bins"
+      ],
+      "cwd": "/lab/rust-ecosystem/errors",
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "   Compiling proc-macro2 v1.0.107\n   Compiling quote v1.0.47\n   Compiling thiserror v2.0.17\n   Compiling syn v2.0.119\n   Compiling thiserror-impl v2.0.17\n   Compiling reference-errors v0.1.0 (/lab/rust-ecosystem/errors)\n    Finished `dev` profile [unoptimized + debuginfo] target(s) in 5.28s\n"
+    },
+    {
+      "argv": [
+        "/lab/rust-ecosystem/errors/target/debug/error-std"
+      ],
+      "cwd": "/lab/rust-ecosystem/errors",
+      "returncode": 0,
+      "stdout": "  - 加载 db/users.json 失败\n  - 未找到: users.json\nerror-std: ok\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/lab/rust-ecosystem/errors/target/debug/error-anyhow"
+      ],
+      "cwd": "/lab/rust-ecosystem/errors",
+      "returncode": 0,
+      "stdout": "error-anyhow: ok\n",
+      "stderr": ""
+    }
+  ],
+  "cases": [
+    {
+      "id": "tokio-tasks",
+      "document": "11-rust-cross-platform/reference/library-guides/12-tokio-guide.md",
+      "code_sha256": "816319529c11eda70e2351ebfd42157655237bb1bea65540960c762cb49e8c06",
+      "status": "PASS"
+    },
+    {
+      "id": "tokio-channels",
+      "document": "11-rust-cross-platform/reference/library-guides/12-tokio-guide.md",
+      "code_sha256": "f614a2a7244e53b269b022f35389f4d7b796cd42df865f060d88caf98411c896",
+      "status": "PASS"
+    },
+    {
+      "id": "tokio-reserve",
+      "document": "11-rust-cross-platform/reference/library-guides/12-tokio-guide.md",
+      "code_sha256": "17bd75e3595b2f39619bd3f3e6e4bee16647b72e2e8f205f02d9c3fa2525b0f6",
+      "status": "PASS"
+    },
+    {
+      "id": "tokio-time",
+      "document": "11-rust-cross-platform/reference/library-guides/12-tokio-guide.md",
+      "code_sha256": "c77959d1f18c45c12b39e1e566f8bf384452e557a638fd863725e5c002f6a4e9",
+      "status": "PASS"
+    },
+    {
+      "id": "serde-fields",
+      "document": "11-rust-cross-platform/reference/library-guides/13-serde-guide.md",
+      "code_sha256": "d31ce0915e045a385897014b8c1ef48a9b7bdeb4b61fc6393efe66b347b4c713",
+      "status": "PASS"
+    },
+    {
+      "id": "serde-serialize",
+      "document": "11-rust-cross-platform/reference/library-guides/13-serde-guide.md",
+      "code_sha256": "2b0c5f36d677dfc3d76b3de6074e88e1d48bd150feced5a77a887ff18bddd6f9",
+      "status": "PASS"
+    },
+    {
+      "id": "serde-visitor",
+      "document": "11-rust-cross-platform/reference/library-guides/13-serde-guide.md",
+      "code_sha256": "e2487b136262da524efcbf925672d793d27f5e88462f0e51fea0b15919917c4b",
+      "status": "PASS"
+    },
+    {
+      "id": "serde-with",
+      "document": "11-rust-cross-platform/reference/library-guides/13-serde-guide.md",
+      "code_sha256": "2e44c0c08540db441ff87932574a21433cd4f565b40a22d02b30977da2511e58",
+      "status": "PASS"
+    },
+    {
+      "id": "error-std",
+      "document": "11-rust-cross-platform/reference/library-guides/14-error-libraries.md",
+      "code_sha256": "132f8d191c559540707e39adc067443a1f47e99cc779cc789286cdfe3b6fa6ac",
+      "status": "PASS"
+    },
+    {
+      "id": "error-anyhow",
+      "document": "11-rust-cross-platform/reference/library-guides/14-error-libraries.md",
+      "code_sha256": "1b0ba1e85c4d6cd2753b31492a465cdf1a4549a9fa078b18cce5c6db313624fc",
+      "status": "PASS"
+    }
+  ],
+  "scope": "10 named complete programs only; unmarked snippets and framework integration are outside this run"
+}

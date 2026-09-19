@@ -68,8 +68,17 @@ def marker_priority(source_line: str, kind: str) -> tuple[str, str, str]:
         r"(?:未|不|不能|不代表|尚未|缺少).{0,16}(?:实测|验证|通过|可运行|已运行)|"
         r"(?:实测|验证|通过|可运行|已运行).{0,16}(?:未|不|不能|尚未|缺少)", compact
     )
-    instructional = re.search(r"(?:最小可运行骨架|开始.*项目|重新.*(?:验证|构建|测试)|需要.*(?:验证|运行|测试))", compact)
-    if honest_disclosure or instructional:
+    instructional = re.search(
+        r"(?:最小可运行骨架|开始.*项目|重新.*(?:验证|构建|测试)|需要.*(?:验证|运行|测试)|"
+        r"^[-*]\s*\[[ xX]\].*(?:验证|通过|测试|运行)|^\*\*Q\d+:)",
+        source_line,
+        re.IGNORECASE,
+    )
+    conditional_or_next_step = re.search(
+        r"(?:先|再|然后|后).{0,18}(?:实测|验证|测试|运行)|(?:实测|验证|测试|运行).{0,18}(?:候选|实现|步骤|方法)",
+        compact,
+    )
+    if honest_disclosure or instructional or conditional_or_next_step:
         return (
             file_priority(kind),
             "保留诚实的验证边界，并在补证据时决定是否增加最小练习",

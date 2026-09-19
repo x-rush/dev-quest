@@ -2,7 +2,7 @@
 
 ## 分阶段练习与验收
 
-**最小阶段**：把已验证 API 容器化并启动在干净环境。
+**最小阶段**：把前一阶段完成验收的 API 容器化，并在干净环境启动。
 
 **验收结果**：健康检查、正常请求、失败日志和关闭流程均可观察。
 
@@ -191,7 +191,7 @@ app.get('/readyz', async (c) => {                               // 依赖就绪�
 ## 6. 上线清单
 
 - [ ] 环境变量启动时校验，缺配置立即退出
-- [ ] SIGTERM 优雅关闭实测通过（发信号后存量请求全部完成）
+- [ ] 验证 SIGTERM 优雅关闭：发信号后记录存量请求是否全部完成
 - [ ] 全局限流 + 登录限流已启用且走 Redis
 - [ ] liveness/readiness 探针就绪，端到端测试全绿（[`../testing/03-e2e-api-testing.md`](../testing/03-e2e-api-testing.md)）
 - [ ] 多阶段 Docker 构建，非 root 运行（[`../deployment/01-docker-deployment.md`](../deployment/01-docker-deployment.md)）

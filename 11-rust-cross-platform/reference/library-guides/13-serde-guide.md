@@ -21,7 +21,9 @@
 
 </details>
 
-**版本基线**: Serde **1.0.229**（核实日期 2026-09-16，单一事实来源见[模块 README 技术基线](../../README.md)）。后端 crate（serde_json/toml 等）未列入基线，本文不标版本号。
+**版本基线**: Serde **1.0.229**，模块学习基线见[模块 README](../../README.md)。示例依赖固定在下方清单，便于重建同一环境；升级时重新生成锁文件并执行边界验收。
+
+下文完整 JSON 程序的精确依赖、锁文件与运行结果见[验证报告](../../../shared-resources/tools/document-quality/reports/rust-ecosystem-validation.md)。TOML 示例在本批仅提供 API 用法，不计入 JSON 程序验证范围。
 
 ## 🎯 学习目标
 
@@ -45,18 +47,17 @@
 
 ## 🔍 核心概念：数据模型与两端
 
-Serde 把"数据怎么变 Rust 值"拆成三层：**数据模型**（序列化原语操作的中间表示）居中；左侧 `#[derive(Serialize, Deserialize)]` 描述你的类型如何映射到模型；右侧各格式 crate（`serde_json`、`toml`…）实现 `Serializer`/`Deserializer` 把模型翻译为具体格式。**格式之间不互通代码**——换后端只换依赖，derive 层原样复用。
+Serde 把类型与数据格式分开：derive 描述 Rust 类型怎样映射到 Serde 数据模型，格式 crate 实现编码和解码。很多类型可以复用 derive，但换格式仍需检查限制：JSON 对象键必须能表示成字符串，TOML 顶层是表，某些格式不支持 `deserialize_any`。类型能 derive 不等于任意格式都支持往返转换。
 
 ```toml
-# Cargo.toml —— 版本标注策略：基线内技术写具体版本（见模块 README），
-# 后端 crate 用 cargo add 取当前稳定版，避免文档出现第二处会过时的版本号
+# 下文命名完整程序分别保存为 src/main.rs；使用同一组依赖。
 [dependencies]
-serde = { version = "1.0.229", features = ["derive"] }
-# cargo add serde_json   # JSON 后端
-# cargo add toml         # TOML 后端
+serde = { version = "=1.0.229", features = ["derive"] }
+serde_json = "=1.0.145"
+toml = "=0.8.23"
 ```
 
-**derive 一次、处处可用**：
+下面为类型定义片段；是否适用于某个后端仍需检查该格式限制：
 
 ```rust
 use serde::{Deserialize, Serialize};
@@ -94,7 +95,7 @@ struct User {
 
 | 属性 | 写法 | 作用 |
 |------|------|------|
-| `rename` | `#[serde(rename = "userName")]` | 单字段重命名（Rust 关键字冲突必用，如 `"type"`） |
+| `rename` | `#[serde(rename = "userName")]` | 单字段重命名；关键字也可用原始标识符 `r#type`，不必总加 rename |
 | `alias` | `#[serde(alias = "name")]` | 反序列化时的**备用**名（`rename` 仍生效；序列化只用主名） |
 | `skip` | `#[serde(skip)]` | 双向都不参与；反序列化时该字段取 `Default` |
 | `skip_serializing` / `skip_deserializing` | — | 单向跳过 |
@@ -109,12 +110,15 @@ struct User {
 
 变体级属性（enum 变体上）：`rename`、`skip`（跳过该变体）、`untagged`、`other`（反序列化未匹配时的兜底 unit 变体）、`serialize_with`/`deserialize_with`。
 
-### 实测：核心字段属性
+### 完整程序：缺失、null、别名与跳过字段
 
+<!-- rust-ecosystem: serde-fields -->
 ```rust
+use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize, Debug)]
 #[serde(rename_all = "camelCase")]
 struct User {
+    #[serde(alias = "name")]
     user_name: String,
     #[serde(skip_serializing_if = "Option::is_none")]
     nickname: Option<String>,
@@ -124,13 +128,18 @@ struct User {
     internal: String,
 }
 
-// 序列化：skip 字段消失，None 字段消失
-// {"userName":"ada","nickname":"a","age":30}
-// {"userName":"b","age":0}
-
-// 反序列化：缺 age 用 default(0)；skip 字段自动 Default
+fn main() {
 let u: User = serde_json::from_str(r#"{"userName":"c"}"#).unwrap();
 assert_eq!(u.age, 0);
+assert_eq!(u.nickname, None);
+assert_eq!(u.internal, "");
+assert_eq!(serde_json::to_value(&u).unwrap(), serde_json::json!({"userName":"c", "age":0}));
+assert_eq!(serde_json::from_str::<User>(r#"{"name":"ada"}"#).unwrap().user_name, "ada");
+// default 处理缺失，不把 null 自动变成 u8 的 0。
+assert!(serde_json::from_str::<User>(r#"{"userName":"c","age":null}"#).is_err());
+assert!(serde_json::from_str::<User>(r#"{"name":"a","userName":"b"}"#).is_err());
+println!("serde-fields: ok");
+}
 ```
 
 ## 🧬 枚举的四种表示
@@ -163,10 +172,10 @@ enum Num {
     I(i64),
     F(f64),
     S(String),
-}  // "-3" → I；2.5 → F；"x" → S
+}  // JSON 数值 -3 → I；2.5 → F；JSON 字符串 "-3" 与 "x" → S
 ```
 
-`tag`/`content`/`untagged` 三者互斥；`deny_unknown_fields` 与 `flatten` 互斥（flatten 本质允许任意剩余键）。
+`tag` 单独使用选择内部标签，`tag` 与 `content` 联用选择邻接标签，`untagged` 选择无标签，不能与前两种表示组合。Serde 不支持将 `deny_unknown_fields` 与 `flatten` 联用；这不代表字段拍平在概念上必然允许任意键。[枚举表示](https://serde.rs/enum-representations.html)、[字段属性](https://serde.rs/field-attrs.html)
 
 ## 🗄️ 后端：json 与 toml
 
@@ -206,11 +215,12 @@ TOML 无顶层"数组标量"概念，序列化目标需为表（struct/map）。
 
 ## ✍️ 自定义序列化
 
-### 手写 Serialize（实测）
+### 完整程序：手写 Serialize
 
+<!-- rust-ecosystem: serde-serialize -->
 ```rust
 use serde::ser::SerializeStruct;      // serialize_field 方法在此 trait 上
-use serde::{Serialize, Serializer};
+use serde::Serialize;
 
 struct Point { x: i32, y: i32 }
 
@@ -222,17 +232,25 @@ impl Serialize for Point {
         st.end()
     }
 }
-// 输出: {"x":1,"y":2}
+fn main() {
+    assert_eq!(serde_json::to_string(&Point { x: 1, y: 2 }).unwrap(), r#"{"x":1,"y":2}"#);
+    println!("serde-serialize: ok");
+}
 ```
 
 其他常用 Serializer 钩子：`serialize_str` / `serialize_i32` / `serialize_seq` / `serialize_map` / `serialize_newtype_struct`。
 
-### 手写 Deserialize（Visitor 模式，实测）
+### 完整程序：Visitor 必须消费每个值
 
+当决定忽略未知字段时，也必须调用 `next_value::<IgnoredAny>()` 消费其值，否则解析器仍停留在该字段的值上。下面独立程序还拒绝重复字段和缺失字段，避免损坏坐标悄悄变成 `(0, 0)`。
+
+<!-- rust-ecosystem: serde-visitor -->
 ```rust
-use serde::de::{MapAccess, Visitor};
+use serde::de::{MapAccess, Visitor, IgnoredAny, Error};
 use serde::{Deserialize, Deserializer};
 
+#[derive(Debug, PartialEq)]
+struct Point { x: i32, y: i32 }
 impl<'de> Deserialize<'de> for Point {
     fn deserialize<D: Deserializer<'de>>(d: D) -> Result<Self, D::Error> {
         d.deserialize_struct("Point", &["x", "y"], PointVisitor)
@@ -252,36 +270,72 @@ impl<'de> Visitor<'de> for PointVisitor {
         let (mut x, mut y) = (None, None);
         while let Some(k) = map.next_key::<String>()? {
             match k.as_str() {
-                "x" => x = Some(map.next_value()?),
-                "y" => y = Some(map.next_value()?),
-                _ => {}
+                "x" => {
+                    if x.is_some() { return Err(A::Error::duplicate_field("x")); }
+                    x = Some(map.next_value()?);
+                }
+                "y" => {
+                    if y.is_some() { return Err(A::Error::duplicate_field("y")); }
+                    y = Some(map.next_value()?);
+                }
+                _ => { let _: IgnoredAny = map.next_value()?; }
             }
         }
-        Ok(Point { x: x.unwrap_or_default(), y: y.unwrap_or_default() })
+        Ok(Point {
+            x: x.ok_or_else(|| A::Error::missing_field("x"))?,
+            y: y.ok_or_else(|| A::Error::missing_field("y"))?,
+        })
     }
 }
-// 输入 {"x":3,"y":4} → Point { x: 3, y: 4 }
+fn main() {
+    assert_eq!(serde_json::from_str::<Point>(r#"{"extra":{"a":[1,2]},"x":3,"y":4}"#).unwrap(), Point { x: 3, y: 4 });
+    assert!(serde_json::from_str::<Point>(r#"{"x":3}"#).unwrap_err().to_string().contains("missing field"));
+    assert!(serde_json::from_str::<Point>(r#"{"x":3,"x":4,"y":5}"#).unwrap_err().to_string().contains("duplicate field"));
+    assert!(serde_json::from_str::<Point>(r#"{"x":"bad","y":4}"#).is_err());
+    println!("serde-visitor: ok");
+}
 ```
 
 Visitor 按"你愿意接受的数据形态"实现 `visit_str`/`visit_map`/`visit_seq`/`visit_u64` 等入口；没实现的形态得到默认的"类型不匹配"错误。
 
 ### `with` 模块契约
 
+下面是独立完整程序；定义了 `Point`、模块导入、解析与失败路径，不依赖前面示例中的类型。
+
+<!-- rust-ecosystem: serde-with -->
 ```rust
+use serde::{Serialize, Deserialize};
+#[derive(Debug, PartialEq)]
+struct Point { x: i32, y: i32 }
 mod point_as_str {
-    use serde::{Deserialize, Deserializer, Serialize, Serializer};
+    use super::Point;
+    use serde::{Deserialize, Deserializer, Serializer};
+    use serde::de::Error;
 
     pub fn serialize<S: Serializer>(v: &Point, s: S) -> Result<S::Ok, S::Error> {
         s.serialize_str(&format!("({},{})", v.x, v.y))
     }
     pub fn deserialize<'de, D: Deserializer<'de>>(d: D) -> Result<Point, D::Error> {
         let s = String::deserialize(d)?;
-        // ...解析 s...
+        let body = s.strip_prefix('(').and_then(|s| s.strip_suffix(')'))
+            .ok_or_else(|| D::Error::custom("expected (x,y)"))?;
+        let (x, y) = body.split_once(',').ok_or_else(|| D::Error::custom("missing comma"))?;
+        Ok(Point { x: x.parse().map_err(D::Error::custom)?, y: y.parse().map_err(D::Error::custom)? })
     }
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, PartialEq, Serialize, Deserialize)]
 struct Wrapper(#[serde(with = "point_as_str")] Point);
+fn main() {
+    let value = Wrapper(Point { x: -3, y: 4 });
+    let encoded = serde_json::to_string(&value).unwrap();
+    assert_eq!(encoded, r#""(-3,4)""#);
+    assert_eq!(serde_json::from_str::<Wrapper>(&encoded).unwrap(), value);
+    for bad in [r#""3,4""#, r#""(3,4,5)""#, r#""(x,4)""#] {
+        assert!(serde_json::from_str::<Wrapper>(bad).is_err());
+    }
+    println!("serde-with: ok");
+}
 ```
 
 `with = "module"` 要求模块提供上述两个自由函数；只单向需要时用 `serialize_with`/`deserialize_with`。
@@ -294,17 +348,21 @@ derive 适合类型结构与格式一致的场景，特殊边界可使用转换�
 
 ## ❓ 常见问题
 
+### 练习：把外部 JSON 当作不可信输入
+
+先执行四个完整程序，再把 `Point` 的未知字段策略从“消费并忽略”改成“返回错误”。验收时保留正常、缺失、重复、类型不匹配四类输入，并增加未知嵌套对象。解释为什么 `age: null` 与缺少 `age` 不等价；如果接口要支持主动清空昵称，应如何区别字段缺失与显式 null？答案应写成输入/输出表，不能只写“使用 Option”。
+
 ### Q1: 字段名撞 Rust 关键字（如 `type`、`ref`）怎么办？
 **A**: 用 `#[serde(rename = "type")]` 显式指定线格式名字；Rust 侧声明可用原生标识符 `r#type`。推荐 rename 方案——线格式名与 Rust 命名解耦。
 
 ### Q2: 什么时候需要手写 Serialize/Deserialize？
-**A**: 三种情况：① 线格式与内存结构有固定换算（如 `(u8,u8,u8)` ↔ `"#rrggbb"`）；② 需要校验/归一化（反序列化时 fallible 逻辑）；③ `remote` 桥接外部类型。能用属性表达的（rename/default/flatten）不要手写——属性可读性更高且 derive 保证双向一致。
+**A**: 当默认映射不足以表达格式时，可考虑自定义实现，例如颜色三元组与十六进制字符串互转。校验可以先用 `try_from`，外部类型可先用 remote derive，并非都必须写 Visitor。属性能表达的映射通常优先使用属性，但单向 skip、default、alias 本来就可能使读写不对称，derive 不保证任意数据往返后保持原样。
 
 ## 📏 模式不变量
 
-1. **数据模型是合约**：类型 ↔ 格式之间隔着一层中间表示，因此"换后端不换业务代码"——凡属性表能表达的映射都与具体格式无关。
+1. **数据模型是合约**：类型与格式之间有一层抽象，但每种格式只支持其中一部分形态；更换后端必须重新验证数据契约。
 2. **线格式名与内存名是两个命名空间**：`rename/rename_all` 的存在本身证明两侧命名各自演化，跨语言接口永远显式声明线名。
-3. **缺省是反序列化单向概念**：`default`/`skip` 只 relax 读取端；序列化端的取舍由 `skip_serializing_if` 独立控制——读写策略不对称是常态。
+3. **读取与写出分别设计**：`default` 决定缺字段时的读取行为；`skip` 同时影响两个方向；`skip_serializing_if` 只影响写出。不要把单向策略当成往返保证。
 4. **枚举表示是版本化承诺**：改 tag/untagged 形态等于改协议；选型时以"五年内最不容易改的表示"为准。
 5. **derive 无法表达的就下沉到 Visitor**：校验、归一化、条件解析属于类型不变量，放在反序列化边界一次性完成。
 

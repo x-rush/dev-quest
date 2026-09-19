@@ -83,10 +83,16 @@ def records_from_reports():
     php_java_core = load("php-java-core-boundaries.json")
     for row in php_java_core.get("cases", []):
         add_record(records, row.get("document"), "runtime", "php-java-core-boundaries.json", php_java_core.get("scope", "selected PHP/Java core-boundary example"), "PASS" if row.get("passed") else "FAIL")
+    php_java_types = load("php-java-types.json")
+    for row in php_java_types.get("cases", []):
+        add_record(records, row.get("document"), "runtime", "php-java-types.json", php_java_types.get("scope", "selected PHP/Java type example"), "PASS" if row.get("passed") else "FAIL")
     go_rust_basics = load("go-rust-basics.json")
     for row in go_rust_basics.get("results", []):
         mode = "runtime" if row.get("mode") == "runtime" else "compile_contract"
         add_record(records, row.get("source"), mode, "go-rust-basics.json", go_rust_basics.get("scope", "selected Go/Rust basic example"), "PASS" if row.get("status", "").upper() == "PASS" else "FAIL")
+    rust_ecosystem = load("rust-ecosystem-runtime.json")
+    for row in rust_ecosystem.get("cases", []):
+        add_record(records, row.get("document"), "runtime", "rust-ecosystem-runtime.json", rust_ecosystem.get("scope", "selected Rust ecosystem example"), "PASS" if row.get("status", "").upper() == "PASS" else "FAIL")
     # The web report names its source set rather than assigning a result per source.
     web = load("final-web-examples.json")
     for source in web.get("sources", []):
