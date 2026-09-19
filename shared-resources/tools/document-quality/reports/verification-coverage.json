@@ -2464,7 +2464,7 @@
     },
     {
       "path": "03-tanstack-stack/reference/language-concepts/08-placeholder-data.md",
-      "sha256": "606a764d2ac5e51b40656e8c8d60aa8c8c28e55c73b8e65d1331a8c309212806",
+      "sha256": "a686183528534cfd26e53996c2b536e6d3e6b8951cd6cbbcb4d4aa106a9b15cc",
       "verification": [
         {
           "mode": "not_verified",
@@ -2555,7 +2555,7 @@
     },
     {
       "path": "03-tanstack-stack/reference/language-concepts/15-enabled-conditional-queries.md",
-      "sha256": "96e25e09f2e38dadf920a79b8af169176135d211717d1b8070832a10ef3cf281",
+      "sha256": "4aff5ef8905b552ef2ea365514d2fa9ce22546a83893ea181f017e198f74780f",
       "verification": [
         {
           "mode": "not_verified",
@@ -3302,7 +3302,7 @@
     },
     {
       "path": "04-multiplatform-apps/reference/language-concepts/12-list-performance-model.md",
-      "sha256": "0aa71507aaf3d728fb2ca82273b4ac26c98bec77378e2254f4d08978f8b8e32a",
+      "sha256": "a09b4d5a82cc2e045bff364597b8d164c76188e021546a6d2b49fe4670b63606",
       "verification": [
         {
           "mode": "not_verified",
@@ -5668,7 +5668,7 @@
     },
     {
       "path": "07-php-mastery/reference/language-concepts/17-magic-methods.md",
-      "sha256": "88b6edaace8981a6850ff6caaecf10444545301e35a94f79101d6e36a83eb5a0",
+      "sha256": "81010d3d87f518b08f6d89a89344f2a1231cf2d7b5dd1b86ff3b13c071e6b27b",
       "verification": [
         {
           "mode": "not_verified",
@@ -6454,7 +6454,7 @@
     },
     {
       "path": "08-java-revisited/reference/language-concepts/09-annotations.md",
-      "sha256": "88b51f6c5e1b3788f64df56e8632deb209c58fff3196db76023834c6df63d833",
+      "sha256": "00d53c72fd4ec4feed77de93b5f8c9e55aca54683ebd9df5b3a441f59087f236",
       "verification": [
         {
           "mode": "not_verified",
@@ -8825,7 +8825,7 @@
     },
     {
       "path": "11-rust-cross-platform/reference/language-concepts/06-unsafe.md",
-      "sha256": "e2dc6741c46f2db3e8f795327202e2b455d135da553091f7fcc34fdddc0e3acf",
+      "sha256": "95410493d1788943041363ac326f6fd95c797a0ca0c4826f1e42fc61c65c992a",
       "verification": [
         {
           "mode": "not_verified",
