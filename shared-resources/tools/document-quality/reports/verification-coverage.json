@@ -17,8 +17,8 @@
   "summary": {
     "documents": 642,
     "by_primary_state": {
-      "not_verified": 530,
-      "runtime": 112
+      "not_verified": 526,
+      "runtime": 116
     },
     "verification_wording_occurrences": 123,
     "marker_classification": {
@@ -576,13 +576,13 @@
     },
     {
       "path": "01-go-backend/reference/language-concepts/01-go-keywords.md",
-      "sha256": "c2215a0b999c1a5aa86b075db2aa7819a76c4b16e24b86bfb2b6551e1e63d98a",
+      "sha256": "5811a9a8215a5002f7d81c4168f2d6b55d83fc365a08c2cd328be55da481500f",
       "verification": [
         {
-          "mode": "not_verified",
-          "status": "NOT_VERIFIED",
-          "report": null,
-          "scope": "No named runtime or syntax evidence is recorded for this document."
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "go-rust-keyword-body-validation.json",
+          "scope": "Only the extracted Go package/import program and Rust keyword task program are verified. Other fences, prose, compiler-error exercises, OS behavior, dependencies, and performance claims are out of scope."
         }
       ],
       "marker_count": 0
@@ -5649,13 +5649,13 @@
     },
     {
       "path": "07-php-mastery/reference/library-guides/04-json.md",
-      "sha256": "c0d06619369fa2cc4ea9a82932b1617c26a1d741edc922d6d2a9e3516be7e553",
+      "sha256": "1b4b92e2c5af5ff001b0140e33ba4ab0565c3ec1d1aaceb224a650945e418372",
       "verification": [
         {
-          "mode": "not_verified",
-          "status": "NOT_VERIFIED",
-          "report": null,
-          "scope": "No named runtime or syntax evidence is recorded for this document."
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "php-java-json-math.json",
+          "scope": "only the two explicitly marked complete Markdown programs; excludes snippets, frameworks, HTTP, and other documents"
         }
       ],
       "marker_count": 0
@@ -6467,13 +6467,13 @@
     },
     {
       "path": "08-java-revisited/reference/library-guides/06-java-math.md",
-      "sha256": "9c0eb0b4ab5ca84a8a352e9b8e7704cc2747835d8344cc3b2498d96dd47b811e",
+      "sha256": "af30a491c3f4ae835bf491b94e24cc13ebc287d0c0c43879ece83d026b7d68d8",
       "verification": [
         {
-          "mode": "not_verified",
-          "status": "NOT_VERIFIED",
-          "report": null,
-          "scope": "No named runtime or syntax evidence is recorded for this document."
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "php-java-json-math.json",
+          "scope": "only the two explicitly marked complete Markdown programs; excludes snippets, frameworks, HTTP, and other documents"
         }
       ],
       "marker_count": 0
@@ -8666,13 +8666,13 @@
     },
     {
       "path": "11-rust-cross-platform/reference/language-concepts/09-keywords-and-syntax.md",
-      "sha256": "3858941ea0ddc4eb6d66f0b961bce8259f569755007a35dfa3227b0f19166622",
+      "sha256": "be64ead85637ad69da339a8b37a5e5224d4e9e5b70e173e61227b942f37d4f2a",
       "verification": [
         {
-          "mode": "not_verified",
-          "status": "NOT_VERIFIED",
-          "report": null,
-          "scope": "No named runtime or syntax evidence is recorded for this document."
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "go-rust-keyword-body-validation.json",
+          "scope": "Only the extracted Go package/import program and Rust keyword task program are verified. Other fences, prose, compiler-error exercises, OS behavior, dependencies, and performance claims are out of scope."
         }
       ],
       "marker_count": 0

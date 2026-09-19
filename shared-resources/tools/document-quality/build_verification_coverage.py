@@ -116,6 +116,12 @@ def records_from_reports():
     php_java_control_flow = load("php-java-control-flow.json")
     for row in php_java_control_flow.get("cases", []):
         add_record(records, row.get("document"), "runtime", "php-java-control-flow.json", php_java_control_flow.get("scope", "selected PHP/Java control-flow program"), "PASS" if row.get("passed") else "FAIL")
+    php_java_json_math = load("php-java-json-math.json")
+    for row in php_java_json_math.get("cases", []):
+        add_record(records, row.get("document"), "runtime", "php-java-json-math.json", php_java_json_math.get("scope", "selected PHP JSON/Java math program"), "PASS" if row.get("passed") else "FAIL")
+    go_rust_keyword_body = load("go-rust-keyword-body-validation.json")
+    for row in go_rust_keyword_body.get("results", []):
+        add_record(records, row.get("source"), "runtime", "go-rust-keyword-body-validation.json", go_rust_keyword_body.get("scope", "selected Go/Rust keyword body program"), "PASS" if row.get("status", "").upper() == "PASSED" else "FAIL")
     rust_ecosystem = load("rust-ecosystem-runtime.json")
     for row in rust_ecosystem.get("cases", []):
         add_record(records, row.get("document"), "runtime", "rust-ecosystem-runtime.json", rust_ecosystem.get("scope", "selected Rust ecosystem example"), "PASS" if row.get("status", "").upper() == "PASS" else "FAIL")

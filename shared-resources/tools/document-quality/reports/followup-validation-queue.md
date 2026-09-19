@@ -15,9 +15,9 @@
 
 ## 汇总
 
-- 队列条目：574 条，其中文件级证据缺口 530 条，逐行未绑定验证措辞 44 条。
-- 优先级：P0 0；P1 274；P2 149；P3 151。
-- 分类：核心基础 258；首项目 16；框架 110；部署 39；进阶与测试 151。
+- 队列条目：570 条，其中文件级证据缺口 526 条，逐行未绑定验证措辞 44 条。
+- 优先级：P0 0；P1 270；P2 149；P3 151。
+- 分类：核心基础 254；首项目 16；框架 110；部署 39；进阶与测试 151。
 
 ## 明细
 
@@ -29,7 +29,6 @@
 | P1 | 核心基础 | Go | [01-go-backend/basics/02-first-program.md](../../../../01-go-backend/basics/02-first-program.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
 | P1 | 核心基础 | Go | [01-go-backend/basics/05-functions-methods.md](../../../../01-go-backend/basics/05-functions-methods.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
 | P1 | 核心基础 | Go | [01-go-backend/basics/06-control-structures.md](../../../../01-go-backend/basics/06-control-structures.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
-| P1 | 核心基础 | Go | [01-go-backend/reference/language-concepts/01-go-keywords.md](../../../../01-go-backend/reference/language-concepts/01-go-keywords.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
 | P1 | 核心基础 | Go | [01-go-backend/reference/language-concepts/02-go-built-in-functions.md](../../../../01-go-backend/reference/language-concepts/02-go-built-in-functions.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
 | P1 | 核心基础 | Go | [01-go-backend/reference/language-concepts/03-go-programming-essentials.md](../../../../01-go-backend/reference/language-concepts/03-go-programming-essentials.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
 | P1 | 核心基础 | Go | [01-go-backend/reference/language-concepts/05-go-control-flow.md](../../../../01-go-backend/reference/language-concepts/05-go-control-flow.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
@@ -65,7 +64,6 @@
 | P1 | 核心基础 | Java | [08-java-revisited/reference/language-concepts/10-interface-semantics.md](../../../../08-java-revisited/reference/language-concepts/10-interface-semantics.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
 | P1 | 核心基础 | Java | [08-java-revisited/reference/library-guides/03-java-lang.md](../../../../08-java-revisited/reference/library-guides/03-java-lang.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
 | P1 | 核心基础 | Java | [08-java-revisited/reference/library-guides/05-java-util-function.md](../../../../08-java-revisited/reference/library-guides/05-java-util-function.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
-| P1 | 核心基础 | Java | [08-java-revisited/reference/library-guides/06-java-math.md](../../../../08-java-revisited/reference/library-guides/06-java-math.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
 | P1 | 核心基础 | Java | [08-java-revisited/reference/library-guides/08-java-util-regex.md](../../../../08-java-revisited/reference/library-guides/08-java-util-regex.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
 | P1 | 核心基础 | Java | [08-java-revisited/reference/library-guides/09-jdk-package-map.md](../../../../08-java-revisited/reference/library-guides/09-jdk-package-map.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
 | P1 | 核心基础 | Java | [08-java-revisited/reference/quick-references/01-java-cheatsheet.md](../../../../08-java-revisited/reference/quick-references/01-java-cheatsheet.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
@@ -155,7 +153,6 @@
 | P1 | 核心基础 | PHP | [07-php-mastery/reference/library-guides/01-standard-library-spl.md](../../../../07-php-mastery/reference/library-guides/01-standard-library-spl.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
 | P1 | 核心基础 | PHP | [07-php-mastery/reference/library-guides/02-composer-ecosystem.md](../../../../07-php-mastery/reference/library-guides/02-composer-ecosystem.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
 | P1 | 核心基础 | PHP | [07-php-mastery/reference/library-guides/03-pdo.md](../../../../07-php-mastery/reference/library-guides/03-pdo.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
-| P1 | 核心基础 | PHP | [07-php-mastery/reference/library-guides/04-json.md](../../../../07-php-mastery/reference/library-guides/04-json.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
 | P1 | 核心基础 | PHP | [07-php-mastery/reference/library-guides/05-file-stream-io.md](../../../../07-php-mastery/reference/library-guides/05-file-stream-io.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
 | P1 | 核心基础 | PHP | [07-php-mastery/reference/library-guides/06-http-session-cookie.md](../../../../07-php-mastery/reference/library-guides/06-http-session-cookie.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
 | P1 | 核心基础 | PHP | [07-php-mastery/reference/library-guides/07-extension-map.md](../../../../07-php-mastery/reference/library-guides/07-extension-map.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
@@ -224,7 +221,6 @@
 | P1 | 核心基础 | Rust / Cross-platform | [11-rust-cross-platform/reference/language-concepts/06-unsafe.md](../../../../11-rust-cross-platform/reference/language-concepts/06-unsafe.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
 | P1 | 核心基础 | Rust / Cross-platform | [11-rust-cross-platform/reference/language-concepts/07-smart-pointers.md](../../../../11-rust-cross-platform/reference/language-concepts/07-smart-pointers.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
 | P1 | 核心基础 | Rust / Cross-platform | [11-rust-cross-platform/reference/language-concepts/08-async-internals.md](../../../../11-rust-cross-platform/reference/language-concepts/08-async-internals.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
-| P1 | 核心基础 | Rust / Cross-platform | [11-rust-cross-platform/reference/language-concepts/09-keywords-and-syntax.md](../../../../11-rust-cross-platform/reference/language-concepts/09-keywords-and-syntax.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
 | P1 | 核心基础 | Swift / SwiftUI | [06-swift-swiftui/LEARNING_GUIDE.md](../../../../06-swift-swiftui/LEARNING_GUIDE.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
 | P1 | 核心基础 | Swift / SwiftUI | [06-swift-swiftui/README.md](../../../../06-swift-swiftui/README.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
 | P1 | 核心基础 | Swift / SwiftUI | [06-swift-swiftui/basics/01-environment-setup.md](../../../../06-swift-swiftui/basics/01-environment-setup.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |

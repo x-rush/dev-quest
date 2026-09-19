@@ -71,6 +71,43 @@ json_encode($deeplyNested, JSON_THROW_ON_ERROR);   // 深度不足时 JsonExcept
 - ✅ 实现 `JsonSerializable`，显式声明对外字段（预期 `{"pub":"yes"}`）。
 
 <!-- full-library-explanation -->
+## 完整实验：编码约定与解析边界
+
+以下是可直接运行的完整脚本，使用 PHP 8.3+ 执行 `php json-boundaries.php`。它同时验证 Unicode 输出、浮点零小数位、关联数组解码、大整数以字符串保存，以及语法错误走异常；预期输出为 `json boundaries: ok`。执行器只会提取这一标记代码块，范围和结果见[JSON / java.math 正文验证报告](../../../shared-resources/tools/document-quality/reports/php-java-json-math-validation.md)。
+
+<!-- reference-case: {"id":"php-json-boundaries","stdout":"json boundaries: ok\n"} -->
+```php
+<?php
+
+declare(strict_types=1);
+
+function check(bool $condition, string $message): void
+{
+    if (!$condition) {
+        throw new RuntimeException($message);
+    }
+}
+
+$encoded = json_encode(
+    ['name' => '中文', 'price' => 1.0, 'items' => [1, 2]],
+    JSON_THROW_ON_ERROR | JSON_UNESCAPED_UNICODE | JSON_PRESERVE_ZERO_FRACTION
+);
+check($encoded === '{"name":"中文","price":1.0,"items":[1,2]}', '编码选项不符');
+
+$decoded = json_decode('{"id":123456789012345678901234567890}', true, 512,
+    JSON_THROW_ON_ERROR | JSON_BIGINT_AS_STRING);
+check(is_array($decoded) && $decoded['id'] === '123456789012345678901234567890', '大整数未保留为字符串');
+
+try {
+    json_decode('{bad}', true, 512, JSON_THROW_ON_ERROR);
+    throw new RuntimeException('非法 JSON 未抛出异常');
+} catch (JsonException) {
+    // 这是预期的语法错误分支。
+}
+
+echo "json boundaries: ok\n";
+```
+
 ## 解析成功不等于数据符合接口
 
 前置是 PHP 类型与异常。JSON 顶层可以是对象、数组、数字、字符串、布尔值或 null。接口若要求对象，要先验证结构再访问 id；开启 JSON_THROW_ON_ERROR 只保证语法可解析，无法替代字段范围、权限或业务校验。json_validate 适合只验证而不需要结果的场景，马上还要 decode 时先 validate 会重复解析。
@@ -80,9 +117,6 @@ json_encode($deeplyNested, JSON_THROW_ON_ERROR);   // 深度不足时 JsonExcept
 **练习**：解析 null、[]、{}、{"id":"42"} 和 {"id":42}，分别检查顶层类型和字段类型。删除列表中间项后编码，观察不连续数字键变成 JSON 对象；使用 array_values 重新编号后应恢复列表。不要全局开 JSON_FORCE_OBJECT 修复空对象，它也会改变其他合法列表。
 
 依据：[json_decode](https://www.php.net/manual/en/function.json-decode.php)、[json_encode](https://www.php.net/manual/en/function.json-encode.php)。
-
-
-本轮未在本机执行 PHP 片段；文中的输出为预期值，版本相关行为请用项目运行时验证。
 
 ## 🔗 相关条目
 

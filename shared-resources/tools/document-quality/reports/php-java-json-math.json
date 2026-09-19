@@ -1,0 +1,65 @@
+{
+  "scope": "only the two explicitly marked complete Markdown programs; excludes snippets, frameworks, HTTP, and other documents",
+  "required_executables": [
+    "php",
+    "javac",
+    "java"
+  ],
+  "missing_executables": [],
+  "cases": [
+    {
+      "id": "php-json-boundaries",
+      "document": "07-php-mastery/reference/library-guides/04-json.md",
+      "source_sha256": "7d1a5a3a02916930aa952e11e06d4e6388abeccf8a40b30ad9f660d8017910ac",
+      "expected_stdout": "json boundaries: ok\n",
+      "commands": [
+        {
+          "command": [
+            "php",
+            "-d",
+            "display_errors=stderr",
+            "main.php"
+          ],
+          "exit_code": 0,
+          "stdout": "json boundaries: ok\n",
+          "stderr": ""
+        }
+      ],
+      "status": "run",
+      "passed": true
+    },
+    {
+      "id": "java-math-boundaries",
+      "document": "08-java-revisited/reference/library-guides/06-java-math.md",
+      "source_sha256": "3b20e814a0d566895d000d83c8c60314a413daf86317a2d3898ee452c38fead9",
+      "expected_stdout": "java math boundaries: ok\n",
+      "commands": [
+        {
+          "command": [
+            "javac",
+            "--release",
+            "21",
+            "-encoding",
+            "UTF-8",
+            "Main.java"
+          ],
+          "exit_code": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "java",
+            "Main"
+          ],
+          "exit_code": 0,
+          "stdout": "java math boundaries: ok\n",
+          "stderr": ""
+        }
+      ],
+      "status": "run",
+      "passed": true
+    }
+  ],
+  "passed": true
+}

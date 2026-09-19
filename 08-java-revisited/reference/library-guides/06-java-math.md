@@ -25,7 +25,7 @@
 
 `java.math` 提供**十进制精确**数值类型：`BigDecimal`（任意精度十进制数，适用于明确精度与舍入规则的计算）与 `BigInteger`（任意大小整数），配套 `RoundingMode` 舍入模式与 `MathContext` 精度上下文。核心模型：值 = `unscaledValue × 10^(-scale)`。
 
-> 示例给出预期行为与规范依据。本轮环境未提供 Java 编译器，未复现历史运行记录；请在项目约定 JDK 上编译验证。
+> 示例给出预期行为与规范依据。文末的完整程序可由仓库执行器以 JDK 21 编译并运行；其范围与结果会写入限定验证报告。
 
 ## 📖 语法 / 签名
 
@@ -122,6 +122,46 @@ public class MoneyDemo {
   ✅ 必须接住返回值：`x = x.add(y)`。
 
 <!-- full-library-explanation -->
+## 完整实验：表示、数值比较与舍入规则
+
+将以下完整程序保存为 `Main.java`，用 `javac --release 21 -encoding UTF-8 Main.java` 编译，再运行 `java Main`。预期输出 `java math boundaries: ok`。程序同时固定 `equals` 与 `compareTo` 的差异、字符串构造的十进制值、非终止除法的异常，以及 `BigInteger` 的 `remainder`/`mod` 语义。仓库执行器只提取这一个标记代码块，范围和结果见[JSON / java.math 正文验证报告](../../../shared-resources/tools/document-quality/reports/php-java-json-math-validation.md)。
+
+<!-- reference-case: {"id":"java-math-boundaries","stdout":"java math boundaries: ok\n"} -->
+```java
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.math.RoundingMode;
+
+public class Main {
+    private static void check(boolean condition, String message) {
+        if (!condition) throw new AssertionError(message);
+    }
+
+    public static void main(String[] args) {
+        BigDecimal onePointZero = new BigDecimal("1.0");
+        BigDecimal onePointZeroZero = new BigDecimal("1.00");
+        check(!onePointZero.equals(onePointZeroZero), "equals 必须比较 scale");
+        check(onePointZero.compareTo(onePointZeroZero) == 0, "compareTo 必须比较数值");
+        check(new BigDecimal("1.005").setScale(2, RoundingMode.HALF_UP)
+                .equals(new BigDecimal("1.01")), "字符串十进制舍入不符");
+
+        try {
+            BigDecimal.ONE.divide(BigDecimal.valueOf(3));
+            throw new AssertionError("1/3 应要求舍入规则");
+        } catch (ArithmeticException expected) {
+            // 非终止小数的精确除法会失败。
+        }
+        check(BigDecimal.ONE.divide(BigDecimal.valueOf(3), 4, RoundingMode.HALF_UP)
+                .equals(new BigDecimal("0.3333")), "指定舍入的除法不符");
+        check(BigInteger.valueOf(-7).remainder(BigInteger.valueOf(3)).equals(BigInteger.valueOf(-1)),
+                "remainder 的符号应随被除数");
+        check(BigInteger.valueOf(-7).mod(BigInteger.valueOf(3)).equals(BigInteger.valueOf(2)),
+                "mod 应为非负");
+        System.out.println("java math boundaries: ok");
+    }
+}
+```
+
 ## 精确表示不等于已经定义业务舍入规则
 
 BigDecimal 保存未缩放整数与 scale，因此 1.0 和 1.00 数值相同，却有不同表示。HashSet 根据 equals 区分它们，按自然顺序的 TreeSet 根据 compareTo 将它们视为同一排序键；选择集合前先确定业务想比较数值还是表示。

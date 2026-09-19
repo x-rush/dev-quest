@@ -1,0 +1,115 @@
+{
+  "schema_version": 1,
+  "purpose": "Narrow runtime evidence for two named, complete Markdown body programs.",
+  "scope": "Only the extracted Go package/import program and Rust keyword task program are verified. Other fences, prose, compiler-error exercises, OS behavior, dependencies, and performance claims are out of scope.",
+  "toolchains": {
+    "go": {
+      "command": [
+        "docker",
+        "run",
+        "--rm",
+        "golang:1",
+        "go",
+        "version"
+      ],
+      "exit_code": 0,
+      "stdout": "go version go1.27.1 linux/amd64\n",
+      "stderr": ""
+    },
+    "rust": {
+      "command": [
+        "docker",
+        "run",
+        "--rm",
+        "rust:1-slim-bookworm",
+        "rustc",
+        "--version"
+      ],
+      "exit_code": 0,
+      "stdout": "rustc 1.98.1 (48a229cea 2026-09-01)\n",
+      "stderr": ""
+    }
+  },
+  "results": [
+    {
+      "id": "go-keyword-package",
+      "source": "01-go-backend/reference/language-concepts/01-go-keywords.md",
+      "anchor": "<!-- go-example: keyword-package -->",
+      "extraction": "complete first fenced program after named body anchor, preserved verbatim",
+      "source_sha256": "a8e1a15bd183f45ca532df8b3eb511b32cf816f2fd3883bc3d58e48044cda634",
+      "image": "golang:1",
+      "build": {
+        "command": [
+          "docker",
+          "run",
+          "--rm",
+          "-v",
+          "C:\\Users\\77958\\Documents\\ChatGPT\\技术栈探索路径\\verification-lab\\go-rust-keyword-body\\go-keyword-package:/work",
+          "-w",
+          "/work",
+          "golang:1",
+          "go",
+          "run",
+          "main.go"
+        ],
+        "exit_code": 0,
+        "stdout": "package name is not an import path\n",
+        "stderr": ""
+      },
+      "run": null,
+      "expected_stdout": "package name is not an import path\n",
+      "status": "passed"
+    },
+    {
+      "id": "rust-keyword-task",
+      "source": "11-rust-cross-platform/reference/language-concepts/09-keywords-and-syntax.md",
+      "anchor": "## 一个完整的语言层实验",
+      "extraction": "complete first fenced program after named body anchor, preserved verbatim",
+      "source_sha256": "271616b8d8f91d53e22117b03b591b2eda8f8fe3a3e47e16e0f8bf7b0d50bff3",
+      "image": "rust:1-slim-bookworm",
+      "build": {
+        "command": [
+          "docker",
+          "run",
+          "--rm",
+          "-v",
+          "C:\\Users\\77958\\Documents\\ChatGPT\\技术栈探索路径\\verification-lab\\go-rust-keyword-body\\rust-keyword-task:/work",
+          "-w",
+          "/work",
+          "rust:1-slim-bookworm",
+          "rustc",
+          "--edition",
+          "2024",
+          "main.rs",
+          "-o",
+          "keyword-lab"
+        ],
+        "exit_code": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "run": {
+        "command": [
+          "docker",
+          "run",
+          "--rm",
+          "-v",
+          "C:\\Users\\77958\\Documents\\ChatGPT\\技术栈探索路径\\verification-lab\\go-rust-keyword-body\\rust-keyword-task:/work",
+          "-w",
+          "/work",
+          "rust:1-slim-bookworm",
+          "./keyword-lab"
+        ],
+        "exit_code": 0,
+        "stdout": "2\ntrue\n",
+        "stderr": ""
+      },
+      "expected_stdout": "2\ntrue\n",
+      "status": "passed"
+    }
+  ],
+  "summary": {
+    "passed": 2,
+    "total": 2
+  }
+}

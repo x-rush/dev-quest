@@ -4,7 +4,7 @@
 
 ## 一个完整的语言层实验
 
-执行 `cargo new keyword-lab`，把以下代码保存到 `keyword-lab/src/main.rs`，进入目录执行 `cargo run`。无需第三方依赖。预期输出 `2` 和 `true`，各占一行；本轮未在本机 Rust 工具链执行。
+执行 `cargo new keyword-lab`，把以下代码保存到 `keyword-lab/src/main.rs`，进入目录执行 `cargo run`。无需第三方依赖。预期输出 `2` 和 `true`，各占一行；本次以正文原样提取并用 Rust 1.98.1 / edition 2024 验证，精确命令、输出和范围见[关键词正文验证报告](../../../shared-resources/tools/document-quality/reports/go-rust-keyword-body-validation.md)。
 
 ```rust
 #[derive(Debug)]

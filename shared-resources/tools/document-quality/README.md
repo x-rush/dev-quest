@@ -40,6 +40,8 @@
 | [Next、TanStack 与移动端 P1 补充验证](reports/p1-next-web-mobile-runtime.md) | 输入守卫、Query Core、深链参数、Kotlin collection 和 Swift enum 的 5 个限定运行案例 |
 | [Go 与 Rust P1 基础验证](reports/go-rust-p1-basics-runtime.md) | Go 常量及 Rust 集合迭代器的 3 个通过案例；另有 1 个 Go 案例因本机执行策略受阻，未计为通过 |
 | [PHP 与 Java 控制流验证](reports/php-java-control-flow.md) | PHP match/enum 与 Java 21 模式 switch 的 2 个正文完整程序验证 |
+| [PHP JSON 与 Java Math 验证](reports/php-java-json-math-validation.md) | PHP JSON 编解码边界及 Java BigDecimal/BigInteger 的 2 个正文完整程序验证 |
+| [Go 与 Rust 关键字正文验证](reports/go-rust-keyword-body-validation.md) | Go package 与泛型方法边界、Rust 关键字和语法案例的 2 个正文完整程序验证 |
 | [验证覆盖状态台账](reports/verification-coverage.md) | 逐文件区分限定运行证据、语法检查和未验证状态，避免把验证措辞或代码围栏当成通过证明 |
 | [本轮交付状态](reports/delivery-status-2026-09-19.md) | 已修复项、已验证项与仍未达到全库交付条件的范围 |
 

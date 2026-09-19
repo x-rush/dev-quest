@@ -7,8 +7,8 @@
 | 指标 | 数量 |
 |---|---:|
 | 纳入模块文档 | 642 |
-| 主状态：not_verified | 530 |
-| 主状态：runtime | 112 |
+| 主状态：not_verified | 526 |
+| 主状态：runtime | 116 |
 | 验证措辞出现次数 | 123 |
 | 措辞分类：source_has_limited_runtime_evidence | 79 |
 | 措辞分类：unbound_verification_wording | 44 |
@@ -68,7 +68,7 @@
 | Go | [01-go-backend/reference/framework-essentials/04-router-selection.md](../../../../01-go-backend/reference/framework-essentials/04-router-selection.md) | `not_verified` | 0 | 0 |
 | Go | [01-go-backend/reference/framework-essentials/05-mongo-driver.md](../../../../01-go-backend/reference/framework-essentials/05-mongo-driver.md) | `not_verified` | 0 | 0 |
 | Go | [01-go-backend/reference/framework-essentials/06-go-redis.md](../../../../01-go-backend/reference/framework-essentials/06-go-redis.md) | `not_verified` | 0 | 0 |
-| Go | [01-go-backend/reference/language-concepts/01-go-keywords.md](../../../../01-go-backend/reference/language-concepts/01-go-keywords.md) | `not_verified` | 0 | 0 |
+| Go | [01-go-backend/reference/language-concepts/01-go-keywords.md](../../../../01-go-backend/reference/language-concepts/01-go-keywords.md) | `runtime` | 1 | 0 |
 | Go | [01-go-backend/reference/language-concepts/02-go-built-in-functions.md](../../../../01-go-backend/reference/language-concepts/02-go-built-in-functions.md) | `not_verified` | 0 | 0 |
 | Go | [01-go-backend/reference/language-concepts/03-go-programming-essentials.md](../../../../01-go-backend/reference/language-concepts/03-go-programming-essentials.md) | `not_verified` | 0 | 0 |
 | Go | [01-go-backend/reference/language-concepts/04-go-data-types.md](../../../../01-go-backend/reference/language-concepts/04-go-data-types.md) | `runtime` | 1 | 0 |
@@ -449,7 +449,7 @@
 | PHP | [07-php-mastery/reference/library-guides/01-standard-library-spl.md](../../../../07-php-mastery/reference/library-guides/01-standard-library-spl.md) | `not_verified` | 0 | 0 |
 | PHP | [07-php-mastery/reference/library-guides/02-composer-ecosystem.md](../../../../07-php-mastery/reference/library-guides/02-composer-ecosystem.md) | `not_verified` | 0 | 0 |
 | PHP | [07-php-mastery/reference/library-guides/03-pdo.md](../../../../07-php-mastery/reference/library-guides/03-pdo.md) | `not_verified` | 0 | 0 |
-| PHP | [07-php-mastery/reference/library-guides/04-json.md](../../../../07-php-mastery/reference/library-guides/04-json.md) | `not_verified` | 0 | 0 |
+| PHP | [07-php-mastery/reference/library-guides/04-json.md](../../../../07-php-mastery/reference/library-guides/04-json.md) | `runtime` | 1 | 0 |
 | PHP | [07-php-mastery/reference/library-guides/05-file-stream-io.md](../../../../07-php-mastery/reference/library-guides/05-file-stream-io.md) | `not_verified` | 0 | 0 |
 | PHP | [07-php-mastery/reference/library-guides/06-http-session-cookie.md](../../../../07-php-mastery/reference/library-guides/06-http-session-cookie.md) | `not_verified` | 0 | 0 |
 | PHP | [07-php-mastery/reference/library-guides/07-extension-map.md](../../../../07-php-mastery/reference/library-guides/07-extension-map.md) | `not_verified` | 0 | 0 |
@@ -505,7 +505,7 @@
 | Java | [08-java-revisited/reference/library-guides/03-java-lang.md](../../../../08-java-revisited/reference/library-guides/03-java-lang.md) | `not_verified` | 0 | 0 |
 | Java | [08-java-revisited/reference/library-guides/04-java-io.md](../../../../08-java-revisited/reference/library-guides/04-java-io.md) | `runtime` | 3 | 0 |
 | Java | [08-java-revisited/reference/library-guides/05-java-util-function.md](../../../../08-java-revisited/reference/library-guides/05-java-util-function.md) | `not_verified` | 0 | 0 |
-| Java | [08-java-revisited/reference/library-guides/06-java-math.md](../../../../08-java-revisited/reference/library-guides/06-java-math.md) | `not_verified` | 0 | 0 |
+| Java | [08-java-revisited/reference/library-guides/06-java-math.md](../../../../08-java-revisited/reference/library-guides/06-java-math.md) | `runtime` | 1 | 0 |
 | Java | [08-java-revisited/reference/library-guides/07-java-text-and-time-format.md](../../../../08-java-revisited/reference/library-guides/07-java-text-and-time-format.md) | `not_verified` | 0 | 0 |
 | Java | [08-java-revisited/reference/library-guides/08-java-util-regex.md](../../../../08-java-revisited/reference/library-guides/08-java-util-regex.md) | `not_verified` | 0 | 0 |
 | Java | [08-java-revisited/reference/library-guides/09-jdk-package-map.md](../../../../08-java-revisited/reference/library-guides/09-jdk-package-map.md) | `not_verified` | 0 | 0 |
@@ -664,7 +664,7 @@
 | Rust / Cross-platform | [11-rust-cross-platform/reference/language-concepts/06-unsafe.md](../../../../11-rust-cross-platform/reference/language-concepts/06-unsafe.md) | `not_verified` | 0 | 1 |
 | Rust / Cross-platform | [11-rust-cross-platform/reference/language-concepts/07-smart-pointers.md](../../../../11-rust-cross-platform/reference/language-concepts/07-smart-pointers.md) | `not_verified` | 0 | 0 |
 | Rust / Cross-platform | [11-rust-cross-platform/reference/language-concepts/08-async-internals.md](../../../../11-rust-cross-platform/reference/language-concepts/08-async-internals.md) | `not_verified` | 0 | 0 |
-| Rust / Cross-platform | [11-rust-cross-platform/reference/language-concepts/09-keywords-and-syntax.md](../../../../11-rust-cross-platform/reference/language-concepts/09-keywords-and-syntax.md) | `not_verified` | 0 | 0 |
+| Rust / Cross-platform | [11-rust-cross-platform/reference/language-concepts/09-keywords-and-syntax.md](../../../../11-rust-cross-platform/reference/language-concepts/09-keywords-and-syntax.md) | `runtime` | 1 | 0 |
 | Rust / Cross-platform | [11-rust-cross-platform/reference/language-concepts/10-standard-types-and-methods.md](../../../../11-rust-cross-platform/reference/language-concepts/10-standard-types-and-methods.md) | `runtime` | 1 | 0 |
 | Rust / Cross-platform | [11-rust-cross-platform/reference/library-guides/12-tokio-guide.md](../../../../11-rust-cross-platform/reference/library-guides/12-tokio-guide.md) | `runtime` | 4 | 0 |
 | Rust / Cross-platform | [11-rust-cross-platform/reference/library-guides/13-serde-guide.md](../../../../11-rust-cross-platform/reference/library-guides/13-serde-guide.md) | `runtime` | 4 | 0 |
