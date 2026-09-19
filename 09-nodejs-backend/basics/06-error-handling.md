@@ -90,7 +90,7 @@ Hono 的进步：路由处理器抛出的错误（含 async rejection）自动�
 
 这段是上面包装规则的无框架最小版。它只验证 `Error` 的 `cause` 会保留原始错误对象；日志工具是否展开 cause 链仍取决于日志工具的序列化配置。
 
-```js
+```js verify:node-error-cause-chain
 class ServiceError extends Error {
   constructor(message, options = {}) {
     super(message, { cause: options.cause });

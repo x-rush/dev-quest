@@ -10,6 +10,7 @@
 | `dev-quest/09-nodejs-backend/reference/library-guides/07-process-lifecycle.md` | `node-lifecycle-idempotent-shutdown` | 118 | PASS |
 | `dev-quest/09-nodejs-backend/basics/07-streams-workers.md` | `node-stream-worker-boundaries` | 126 | PASS |
 | `dev-quest/09-nodejs-backend/basics/05-http-routing.md` | `node-request-body-boundaries` | 198 | PASS |
+| `dev-quest/09-nodejs-backend/basics/06-error-handling.md` | `node-error-cause-chain` | 94 | PASS |
 | `dev-quest/10-python-discovery/reference/quick-references/01-python-cheatsheet.md` | `python-cheatsheet-boundaries` | 124 | PASS |
 | `dev-quest/10-python-discovery/basics/03-variables-types.md` | `python-bindings-formatting` | 229 | PASS |
 

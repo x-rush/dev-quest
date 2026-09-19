@@ -6944,13 +6944,19 @@
     },
     {
       "path": "09-nodejs-backend/basics/06-error-handling.md",
-      "sha256": "8966021b00b08d018ebca7f056e6f7c65e1f36119e8afcd2dee598fddfcf5acd",
+      "sha256": "62a3640b5c2d1a3629b3989e3a47df4d7c59b920978c380e117795c1843778f0",
       "verification": [
         {
           "mode": "runtime",
           "status": "PASS",
           "report": "java-node-python-exceptions-results.json",
           "scope": "One complete fenced program extracted verbatim from each named Java, Node.js, and Python P1 foundation page and run in dev-quest-validation:local. No framework, network, process-crash, or whole-document claim is made."
+        },
+        {
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "next-node-python-basics-results.json",
+          "scope": "Only this named, complete code block; no whole-document, framework, network, or application coverage."
         }
       ],
       "marker_count": 0
