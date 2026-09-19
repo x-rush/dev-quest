@@ -214,6 +214,9 @@ def records_from_reports():
     rust_ecosystem = load("rust-ecosystem-runtime.json")
     for row in rust_ecosystem.get("cases", []):
         add_record(records, row.get("document"), "runtime", "rust-ecosystem-runtime.json", rust_ecosystem.get("scope", "selected Rust ecosystem example"), "PASS" if row.get("status", "").upper() == "PASS" else "FAIL")
+    rust_auth_header = load("rust-auth-header.json")
+    for row in rust_auth_header.get("documents", []):
+        add_record(records, row.get("path"), "runtime", "rust-auth-header.json", rust_auth_header.get("scope", "named Rust authentication-header parser"), "PASS" if rust_auth_header.get("status") == "passed" else "FAIL")
     # A source inventory alone does not bind any result to a document.
     web = load("final-web-examples.json")
     for row in web.get("results", []):

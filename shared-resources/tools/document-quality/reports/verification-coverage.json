@@ -17,13 +17,13 @@
   "summary": {
     "documents": 644,
     "by_primary_state": {
-      "not_verified": 450,
-      "runtime": 194
+      "not_verified": 449,
+      "runtime": 195
     },
     "verification_wording_occurrences": 151,
     "marker_classification": {
-      "source_has_limited_runtime_evidence": 91,
-      "unbound_verification_wording": 60
+      "source_has_limited_runtime_evidence": 93,
+      "unbound_verification_wording": 58
     }
   },
   "documents": [
@@ -8689,10 +8689,10 @@
       "sha256": "1b91bba45692d71bb42bdcedfc09702082c5028651207e48242bfdd9bd8d0b7f",
       "verification": [
         {
-          "mode": "not_verified",
-          "status": "NOT_VERIFIED",
-          "report": null,
-          "scope": "No named runtime or syntax evidence is recorded for this document."
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "rust-auth-header.json",
+          "scope": "The named dependency-free Authorization header parser only; Axum/JWT/router integration is excluded."
         }
       ],
       "marker_count": 2
@@ -10013,13 +10013,13 @@
       "path": "11-rust-cross-platform/frameworks/06-auth-middleware.md",
       "line": 132,
       "excerpt": "**验证方法**: 该块不依赖任何第三方 crate，已用 `rustc --edition 2024` 本机实测（6 项断言全部通过），可直接 `rustc extract.rs && ./extract` 复现。",
-      "classification": "unbound_verification_wording"
+      "classification": "source_has_limited_runtime_evidence"
     },
     {
       "path": "11-rust-cross-platform/frameworks/06-auth-middleware.md",
       "line": 441,
       "excerpt": "认证验证身份，资源授权判断当前身份能做什么；已验证身份可供后续处理复用，但不同入口仍需各自保证没有绕过检查。route_layer 与其他层的覆盖范围按路由组合实测，不能由返回 401 或 404 单独推断泄漏与否。",
-      "classification": "unbound_verification_wording"
+      "classification": "source_has_limited_runtime_evidence"
     },
     {
       "path": "11-rust-cross-platform/reference/language-concepts/03-const-generics.md",

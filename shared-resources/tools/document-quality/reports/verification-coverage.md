@@ -7,11 +7,11 @@
 | 指标 | 数量 |
 |---|---:|
 | 纳入模块文档 | 644 |
-| 主状态：not_verified | 450 |
-| 主状态：runtime | 194 |
+| 主状态：not_verified | 449 |
+| 主状态：runtime | 195 |
 | 验证措辞出现次数 | 151 |
-| 措辞分类：source_has_limited_runtime_evidence | 91 |
-| 措辞分类：unbound_verification_wording | 60 |
+| 措辞分类：source_has_limited_runtime_evidence | 93 |
+| 措辞分类：unbound_verification_wording | 58 |
 
 ## 语法级覆盖（不能当作运行覆盖）
 
@@ -651,7 +651,7 @@
 | Rust / Cross-platform | [11-rust-cross-platform/frameworks/03-tauri-frontend-react.md](../../../../11-rust-cross-platform/frameworks/03-tauri-frontend-react.md) | `not_verified` | 0 | 0 |
 | Rust / Cross-platform | [11-rust-cross-platform/frameworks/04-axum-web-stack.md](../../../../11-rust-cross-platform/frameworks/04-axum-web-stack.md) | `not_verified` | 0 | 0 |
 | Rust / Cross-platform | [11-rust-cross-platform/frameworks/05-state-and-database-sqlx.md](../../../../11-rust-cross-platform/frameworks/05-state-and-database-sqlx.md) | `not_verified` | 0 | 0 |
-| Rust / Cross-platform | [11-rust-cross-platform/frameworks/06-auth-middleware.md](../../../../11-rust-cross-platform/frameworks/06-auth-middleware.md) | `not_verified` | 0 | 2 |
+| Rust / Cross-platform | [11-rust-cross-platform/frameworks/06-auth-middleware.md](../../../../11-rust-cross-platform/frameworks/06-auth-middleware.md) | `runtime` | 1 | 2 |
 | Rust / Cross-platform | [11-rust-cross-platform/frameworks/07-desktop-packaging.md](../../../../11-rust-cross-platform/frameworks/07-desktop-packaging.md) | `not_verified` | 0 | 0 |
 | Rust / Cross-platform | [11-rust-cross-platform/projects/01-cli-tool.md](../../../../11-rust-cross-platform/projects/01-cli-tool.md) | `runtime` | 1 | 0 |
 | Rust / Cross-platform | [11-rust-cross-platform/projects/02-tauri-notes-app.md](../../../../11-rust-cross-platform/projects/02-tauri-notes-app.md) | `not_verified` | 0 | 0 |

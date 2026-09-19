@@ -1,0 +1,40 @@
+{
+  "status": "passed",
+  "scope": "The named dependency-free Authorization header parser only; Axum/JWT/router integration is excluded.",
+  "documents": [
+    {
+      "path": "11-rust-cross-platform/frameworks/06-auth-middleware.md",
+      "sha256": "1b91bba45692d71bb42bdcedfc09702082c5028651207e48242bfdd9bd8d0b7f",
+      "code_sha256": "6a071a74db2d35c8a614b7b024b3805db453a96bd91071b81020e9456e115258"
+    }
+  ],
+  "cases": [
+    {
+      "id": "extract-bearer-six-assertions",
+      "status": "PASS"
+    }
+  ],
+  "commands": [
+    {
+      "argv": [
+        "rustc",
+        "--edition",
+        "2024",
+        "/mnt/c/Users/77958/Documents/ChatGPT/技术栈探索路径/dev-quest/.validation-tmp/rust-auth-header/extract.rs",
+        "-o",
+        "/mnt/c/Users/77958/Documents/ChatGPT/技术栈探索路径/dev-quest/.validation-tmp/rust-auth-header/extract"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/mnt/c/Users/77958/Documents/ChatGPT/技术栈探索路径/dev-quest/.validation-tmp/rust-auth-header/extract"
+      ],
+      "returncode": 0,
+      "stdout": "extract_bearer 6 项断言全部通过\n",
+      "stderr": ""
+    }
+  ]
+}
