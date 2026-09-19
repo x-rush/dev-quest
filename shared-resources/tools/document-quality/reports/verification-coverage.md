@@ -7,8 +7,8 @@
 | 指标 | 数量 |
 |---|---:|
 | 纳入模块文档 | 642 |
-| 主状态：not_verified | 468 |
-| 主状态：runtime | 174 |
+| 主状态：not_verified | 467 |
+| 主状态：runtime | 175 |
 | 验证措辞出现次数 | 142 |
 | 措辞分类：source_has_limited_runtime_evidence | 88 |
 | 措辞分类：unbound_verification_wording | 54 |
@@ -468,7 +468,7 @@
 | Java | [08-java-revisited/advanced-topics/performance/02-virtual-threads.md](../../../../08-java-revisited/advanced-topics/performance/02-virtual-threads.md) | `not_verified` | 0 | 0 |
 | Java | [08-java-revisited/advanced-topics/security/01-security-practices.md](../../../../08-java-revisited/advanced-topics/security/01-security-practices.md) | `not_verified` | 0 | 1 |
 | Java | [08-java-revisited/basics/01-environment-setup.md](../../../../08-java-revisited/basics/01-environment-setup.md) | `not_verified` | 0 | 0 |
-| Java | [08-java-revisited/basics/02-first-program.md](../../../../08-java-revisited/basics/02-first-program.md) | `not_verified` | 0 | 0 |
+| Java | [08-java-revisited/basics/02-first-program.md](../../../../08-java-revisited/basics/02-first-program.md) | `runtime` | 1 | 0 |
 | Java | [08-java-revisited/basics/03-variables-types.md](../../../../08-java-revisited/basics/03-variables-types.md) | `runtime` | 2 | 0 |
 | Java | [08-java-revisited/basics/04-classes-records.md](../../../../08-java-revisited/basics/04-classes-records.md) | `runtime` | 1 | 0 |
 | Java | [08-java-revisited/basics/05-control-flow.md](../../../../08-java-revisited/basics/05-control-flow.md) | `runtime` | 1 | 0 |

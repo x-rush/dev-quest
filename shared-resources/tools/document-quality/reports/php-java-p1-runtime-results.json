@@ -1,12 +1,13 @@
 {
-  "scope": "Six explicitly marked, complete reference examples: PHP and Java keyword, built-in/API, and standard-library pages. Excludes existing control-flow evidence and all unmarked partial snippets.",
+  "scope": "Seven explicitly marked, complete examples: PHP and Java keyword, built-in/API, standard-library, and Java first-program pages. Excludes existing control-flow evidence and all unmarked partial snippets.",
   "documents": {
-    "07-php-mastery/reference/language-concepts/01-php-keywords.md": "a22b13521f16529fe8ce4c8eba77ff3c28d3b036b4c864e30b3ebb571059e18d",
+    "07-php-mastery/reference/language-concepts/01-php-keywords.md": "867df9b19bf026d7f474899698db2a752d67d1cdfcce82b9d73458c8e1efc1a1",
     "07-php-mastery/reference/language-concepts/02-built-in-functions.md": "f2e60510ec55dd5bef56adeed3ba0cd66be01009f1e474a90e601ec8917ac11f",
     "07-php-mastery/reference/library-guides/01-standard-library-spl.md": "e7cfaba59931a3ca7d47b14f24190149b964a5b45926e0c8480cbd0201537771",
     "08-java-revisited/reference/language-concepts/01-java-keywords.md": "b3b6f875d877a1df7bbca90f2e05252990092ff468c03e21050ef20f0059a224",
+    "08-java-revisited/basics/02-first-program.md": "a21b66cb245876b2b1f1ae17ab9411e2724c5f0a3d3343766dd776764b9e8daa",
     "08-java-revisited/reference/library-guides/03-java-lang.md": "c448851054b98e20a9aa961e61a2e53b7873aecbfd3cd614b2959cfd30437287",
-    "08-java-revisited/reference/library-guides/01-standard-library.md": "eb0d10994ed6f29c36838bd4bc62579b67934408008e47821e70493740b1f69b"
+    "08-java-revisited/reference/library-guides/01-standard-library.md": "3df9f4557447a022165742bcdfab31e5291fae5c0ee586e669f71ad1342fefc7"
   },
   "cases": [
     {
@@ -15,15 +16,19 @@
       "language": "php",
       "document": "07-php-mastery/reference/language-concepts/01-php-keywords.md",
       "source_sha256": "6383a9e9553a1f109d47a9180413240c05a920e80de36c7bc35b037216da962c",
-      "runner": "local php",
+      "runner": "php:8.5-cli-alpine container",
       "expected_stdout": "strict rejected\n6\n10\nstring\n",
       "commands": [
         {
           "command": [
-            "/usr/bin/php",
+            "docker",
+            "run",
+            "--rm",
+            "-i",
+            "php:8.5-cli-alpine",
+            "php",
             "-d",
-            "display_errors=stderr",
-            "case.php"
+            "display_errors=stderr"
           ],
           "exit_code": 0,
           "stdout": "strict rejected\n6\n10\nstring\n",
@@ -38,15 +43,19 @@
       "language": "php",
       "document": "07-php-mastery/reference/language-concepts/02-built-in-functions.md",
       "source_sha256": "2adbe1db878ba97ae9a23f5d39faad3334a406f1bccc712c94d574afb72aee98",
-      "runner": "local php",
+      "runner": "php:8.5-cli-alpine container",
       "expected_stdout": "int(0)\nbool(true)\n{\"1\":2,\"2\":4}\n[2,4]\nbool(true)\nbool(false)\n",
       "commands": [
         {
           "command": [
-            "/usr/bin/php",
+            "docker",
+            "run",
+            "--rm",
+            "-i",
+            "php:8.5-cli-alpine",
+            "php",
             "-d",
-            "display_errors=stderr",
-            "case.php"
+            "display_errors=stderr"
           ],
           "exit_code": 0,
           "stdout": "int(0)\nbool(true)\n{\"1\":2,\"2\":4}\n[2,4]\nbool(true)\nbool(false)\n",
@@ -61,19 +70,23 @@
       "language": "php",
       "document": "07-php-mastery/reference/library-guides/01-standard-library-spl.md",
       "source_sha256": "0ed1da54cfcb6362bc549b24e2e6a32d32c4316e95433c3729af0c6f3ef1faf7",
-      "runner": "local php",
+      "runner": "php:8.5-cli-alpine container",
       "expected_stdout": "first\n2\n[\"a\",\"b\"]\n",
       "commands": [
         {
           "command": [
-            "/usr/bin/php",
+            "docker",
+            "run",
+            "--rm",
+            "-i",
+            "php:8.5-cli-alpine",
+            "php",
             "-d",
-            "display_errors=stderr",
-            "case.php"
+            "display_errors=stderr"
           ],
           "exit_code": 0,
           "stdout": "first\n2\n[\"a\",\"b\"]\n",
-          "stderr": ""
+          "stderr": "Deprecated: Method SplObjectStorage::attach() is deprecated since 8.5, use method SplObjectStorage::offsetSet() instead in Standard input code on line 13\nDeprecated: Method SplObjectStorage::attach() is deprecated since 8.5, use method SplObjectStorage::offsetSet() instead in Standard input code on line 14\nDeprecated: Method SplObjectStorage::attach() is deprecated since 8.5, use method SplObjectStorage::offsetSet() instead in Standard input code on line 15\n"
         }
       ],
       "passed": true
@@ -84,29 +97,49 @@
       "language": "java",
       "document": "08-java-revisited/reference/language-concepts/01-java-keywords.md",
       "source_sha256": "5b98e2c0adc73f9b0b4d9656c29817b768c99d2acfa9987566c42635fcee2839",
-      "runner": "local JDK",
+      "runner": "eclipse-temurin:21-jdk-noble container",
       "expected_stdout": "5\nmedium\n",
       "commands": [
         {
           "command": [
-            "/opt/java/openjdk/bin/javac",
-            "--release",
-            "21",
-            "-encoding",
-            "UTF-8",
-            "Main.java"
-          ],
-          "exit_code": 0,
-          "stdout": "",
-          "stderr": ""
-        },
-        {
-          "command": [
-            "/opt/java/openjdk/bin/java",
-            "Main"
+            "docker",
+            "run",
+            "--rm",
+            "-i",
+            "eclipse-temurin:21-jdk-noble",
+            "sh",
+            "-c",
+            "cat > Main.java && javac --release 21 -encoding UTF-8 Main.java && java Main"
           ],
           "exit_code": 0,
           "stdout": "5\nmedium\n",
+          "stderr": ""
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "java-first-program-classic",
+      "category": "first program",
+      "language": "java",
+      "document": "08-java-revisited/basics/02-first-program.md",
+      "source_sha256": "a4e45decb5e80404156a59f6ddd8ba3e9763bfc5a2c5f2608cc319246af1a056",
+      "runner": "eclipse-temurin:21-jdk-noble container",
+      "expected_stdout": "Hello, Java!\n",
+      "commands": [
+        {
+          "command": [
+            "docker",
+            "run",
+            "--rm",
+            "-i",
+            "eclipse-temurin:21-jdk-noble",
+            "sh",
+            "-c",
+            "cat > Hello.java && javac --release 21 -encoding UTF-8 Hello.java && java Hello"
+          ],
+          "exit_code": 0,
+          "stdout": "Hello, Java!\n",
           "stderr": ""
         }
       ],
@@ -118,26 +151,19 @@
       "language": "java",
       "document": "08-java-revisited/reference/library-guides/03-java-lang.md",
       "source_sha256": "c6132cb8bd8a5795e18d5e617fdee69abb8f7f70fdec35b1907e8114b37dfa9b",
-      "runner": "local JDK",
+      "runner": "eclipse-temurin:21-jdk-noble container",
       "expected_stdout": "true\nPoint[x=1, y=2]\ncba\nfalse\n",
       "commands": [
         {
           "command": [
-            "/opt/java/openjdk/bin/javac",
-            "--release",
-            "21",
-            "-encoding",
-            "UTF-8",
-            "ContractDemo.java"
-          ],
-          "exit_code": 0,
-          "stdout": "",
-          "stderr": ""
-        },
-        {
-          "command": [
-            "/opt/java/openjdk/bin/java",
-            "ContractDemo"
+            "docker",
+            "run",
+            "--rm",
+            "-i",
+            "eclipse-temurin:21-jdk-noble",
+            "sh",
+            "-c",
+            "cat > ContractDemo.java && javac --release 21 -encoding UTF-8 ContractDemo.java && java ContractDemo"
           ],
           "exit_code": 0,
           "stdout": "true\nPoint[x=1, y=2]\ncba\nfalse\n",
@@ -152,26 +178,19 @@
       "language": "java",
       "document": "08-java-revisited/reference/library-guides/01-standard-library.md",
       "source_sha256": "13fee5503782c0b853689bff149b46134683c3f0dba872334be830a81756ffd2",
-      "runner": "local JDK",
+      "runner": "eclipse-temurin:21-jdk-noble container",
       "expected_stdout": "4\n3\n[a, b]\n[a, b, ]\nhello\n",
       "commands": [
         {
           "command": [
-            "/opt/java/openjdk/bin/javac",
-            "--release",
-            "21",
-            "-encoding",
-            "UTF-8",
-            "Main.java"
-          ],
-          "exit_code": 0,
-          "stdout": "",
-          "stderr": ""
-        },
-        {
-          "command": [
-            "/opt/java/openjdk/bin/java",
-            "Main"
+            "docker",
+            "run",
+            "--rm",
+            "-i",
+            "eclipse-temurin:21-jdk-noble",
+            "sh",
+            "-c",
+            "cat > Main.java && javac --release 21 -encoding UTF-8 Main.java && java Main"
           ],
           "exit_code": 0,
           "stdout": "4\n3\n[a, b]\n[a, b, ]\nhello\n",

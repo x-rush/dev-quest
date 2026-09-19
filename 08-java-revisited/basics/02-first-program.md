@@ -45,6 +45,9 @@
 
 ### 写法一：经典写法（Java 1.0 至今有效）
 
+下面是本页的基线程序。它只使用 JDK 21 也支持的语法，因此可用来区分“经典编译运行闭环已通”与后文需要 JDK 25 的紧凑源文件。
+
+<!-- reference-case: {"id":"java-first-program-classic","stdout":"Hello, Java!\n","requires":"JDK 21"} -->
 ```java
 // Hello.java
 public class Hello {
@@ -59,7 +62,7 @@ javac Hello.java   # 生成 Hello.class
 java Hello         # 运行
 ```
 
-要点回顾：文件名必须与 public 类名一致；JVM 入口是 `public static void main(String[] args)`。
+要点回顾：文件名必须与 public 类名一致；JVM 入口是 `public static void main(String[] args)`。本例的可观察结果固定为 `Hello, Java!`；修改源码后必须重新执行 `javac Hello.java`，否则 `java Hello` 仍会运行先前生成的 `Hello.class`。
 
 ### 写法二：单文件直接运行（Java 11+）
 

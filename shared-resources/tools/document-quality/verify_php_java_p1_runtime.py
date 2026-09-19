@@ -29,6 +29,7 @@ CASES = (
     ("php-array", "07-php-mastery/reference/language-concepts/02-built-in-functions.md", "reference-case", "php", "int(0)\nbool(true)\n{\"1\":2,\"2\":4}\n[2,4]\nbool(true)\nbool(false)\n", "built-in functions"),
     ("php-spl-core", "07-php-mastery/reference/library-guides/01-standard-library-spl.md", "runtime-evidence", "php", "first\n2\n[\"a\",\"b\"]\n", "standard library"),
     ("java-flow", "08-java-revisited/reference/language-concepts/01-java-keywords.md", "reference-case", "java", "5\nmedium\n", "keyword"),
+    ("java-first-program-classic", "08-java-revisited/basics/02-first-program.md", "reference-case", "java", "Hello, Java!\n", "first program"),
     ("java-java-lang-contract", "08-java-revisited/reference/library-guides/03-java-lang.md", "runtime-evidence", "java", "true\nPoint[x=1, y=2]\ncba\nfalse\n", "built-in APIs (java.lang)"),
     ("java-text", "08-java-revisited/reference/library-guides/01-standard-library.md", "reference-case", "java", "4\n3\n[a, b]\n[a, b, ]\nhello\n", "standard library"),
 )
@@ -118,7 +119,7 @@ def main() -> None:
                 "passed": passed,
             })
     data = {
-        "scope": "Six explicitly marked, complete reference examples: PHP and Java keyword, built-in/API, and standard-library pages. Excludes existing control-flow evidence and all unmarked partial snippets.",
+        "scope": "Seven explicitly marked, complete examples: PHP and Java keyword, built-in/API, standard-library, and Java first-program pages. Excludes existing control-flow evidence and all unmarked partial snippets.",
         "documents": {relative: hashlib.sha256((ROOT / relative).read_bytes()).hexdigest() for _, relative, *_ in CASES},
         "cases": records,
         "passed": all(record["passed"] for record in records),
@@ -127,7 +128,7 @@ def main() -> None:
     rows = [
         "# PHP / Java P1 正文提取运行验证",
         "",
-        "范围只包括六个带命名标记的完整代码围栏：每种语言各覆盖关键字、内置 API/函数和标准库一篇。控制流程页已有独立证据，未重新计入；无标记的教学片段也不计入。",
+        "范围只包括七个带命名标记的完整代码围栏：覆盖 PHP/Java 的关键字、内置 API/函数和标准库，以及 Java 的第一个程序。控制流程页已有独立证据，未重新计入；无标记的教学片段也不计入。",
         "",
         "| Case | Category | Document | Runner | Result |",
         "| --- | --- | --- | --- | --- |",

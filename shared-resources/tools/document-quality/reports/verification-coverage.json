@@ -17,8 +17,8 @@
   "summary": {
     "documents": 642,
     "by_primary_state": {
-      "not_verified": 468,
-      "runtime": 174
+      "not_verified": 467,
+      "runtime": 175
     },
     "verification_wording_occurrences": 142,
     "marker_classification": {
@@ -5412,7 +5412,7 @@
           "mode": "runtime",
           "status": "PASS",
           "report": "php-java-p1-runtime-results.json",
-          "scope": "Six explicitly marked, complete reference examples: PHP and Java keyword, built-in/API, and standard-library pages. Excludes existing control-flow evidence and all unmarked partial snippets."
+          "scope": "Seven explicitly marked, complete examples: PHP and Java keyword, built-in/API, standard-library, and Java first-program pages. Excludes existing control-flow evidence and all unmarked partial snippets."
         },
         {
           "mode": "runtime",
@@ -5473,7 +5473,7 @@
           "mode": "runtime",
           "status": "PASS",
           "report": "php-java-p1-runtime-results.json",
-          "scope": "Six explicitly marked, complete reference examples: PHP and Java keyword, built-in/API, and standard-library pages. Excludes existing control-flow evidence and all unmarked partial snippets."
+          "scope": "Seven explicitly marked, complete examples: PHP and Java keyword, built-in/API, standard-library, and Java first-program pages. Excludes existing control-flow evidence and all unmarked partial snippets."
         },
         {
           "mode": "runtime",
@@ -5748,7 +5748,7 @@
           "mode": "runtime",
           "status": "PASS",
           "report": "php-java-p1-runtime-results.json",
-          "scope": "Six explicitly marked, complete reference examples: PHP and Java keyword, built-in/API, and standard-library pages. Excludes existing control-flow evidence and all unmarked partial snippets."
+          "scope": "Seven explicitly marked, complete examples: PHP and Java keyword, built-in/API, standard-library, and Java first-program pages. Excludes existing control-flow evidence and all unmarked partial snippets."
         }
       ],
       "marker_count": 0
@@ -5989,13 +5989,13 @@
     },
     {
       "path": "08-java-revisited/basics/02-first-program.md",
-      "sha256": "206cbc17884d9b8552932a4cdb6715697d64de7dd05e2423388d638466b513df",
+      "sha256": "f09dcba5262460620399d102f4e4ce013cae6c8abb2b5957aa71318ce8d1ac17",
       "verification": [
         {
-          "mode": "not_verified",
-          "status": "NOT_VERIFIED",
-          "report": null,
-          "scope": "No named runtime or syntax evidence is recorded for this document."
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "php-java-p1-runtime-results.json",
+          "scope": "Seven explicitly marked, complete examples: PHP and Java keyword, built-in/API, standard-library, and Java first-program pages. Excludes existing control-flow evidence and all unmarked partial snippets."
         }
       ],
       "marker_count": 0
@@ -6350,7 +6350,7 @@
           "mode": "runtime",
           "status": "PASS",
           "report": "php-java-p1-runtime-results.json",
-          "scope": "Six explicitly marked, complete reference examples: PHP and Java keyword, built-in/API, and standard-library pages. Excludes existing control-flow evidence and all unmarked partial snippets."
+          "scope": "Seven explicitly marked, complete examples: PHP and Java keyword, built-in/API, standard-library, and Java first-program pages. Excludes existing control-flow evidence and all unmarked partial snippets."
         },
         {
           "mode": "runtime",
@@ -6564,7 +6564,7 @@
           "mode": "runtime",
           "status": "PASS",
           "report": "php-java-p1-runtime-results.json",
-          "scope": "Six explicitly marked, complete reference examples: PHP and Java keyword, built-in/API, and standard-library pages. Excludes existing control-flow evidence and all unmarked partial snippets."
+          "scope": "Seven explicitly marked, complete examples: PHP and Java keyword, built-in/API, standard-library, and Java first-program pages. Excludes existing control-flow evidence and all unmarked partial snippets."
         },
         {
           "mode": "runtime",
@@ -6620,7 +6620,7 @@
           "mode": "runtime",
           "status": "PASS",
           "report": "php-java-p1-runtime-results.json",
-          "scope": "Six explicitly marked, complete reference examples: PHP and Java keyword, built-in/API, and standard-library pages. Excludes existing control-flow evidence and all unmarked partial snippets."
+          "scope": "Seven explicitly marked, complete examples: PHP and Java keyword, built-in/API, standard-library, and Java first-program pages. Excludes existing control-flow evidence and all unmarked partial snippets."
         }
       ],
       "marker_count": 0
