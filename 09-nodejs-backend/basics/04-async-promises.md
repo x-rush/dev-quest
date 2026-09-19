@@ -166,8 +166,14 @@ Node 24 中 `AbortController` 是取消异步操作的标准协议，原生 fetc
 ```ts
 // 模式一：手动取消
 const controller = new AbortController();
-const resp = await fetch("http://localhost:3000/api/heavy", { signal: controller.signal });
-// 任意时刻: controller.abort() → fetch 抛 AbortError
+const pending = fetch("http://localhost:3000/api/heavy", { signal: controller.signal });
+controller.abort(new Error("caller no longer needs this response"));
+try {
+  await pending;
+} catch (error) {
+  // 按运行时与 abort reason 识别取消；不要把它伪装成成功响应。
+  console.log("request cancelled", error);
+}
 
 // 模式二：超时自动取消（最常用）
 const resp2 = await fetch("http://localhost:3000/api/data", { signal: AbortSignal.timeout(3_000) });
