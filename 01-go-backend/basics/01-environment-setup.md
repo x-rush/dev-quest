@@ -67,21 +67,17 @@ go env
 
 #### 核心环境变量
 ```bash
-# GOROOT - Go安装目录
-export GOROOT=/usr/local/go
+# 安装器通常会设置好 Go 本身的位置；不要为了“配置环境”手动覆盖 GOROOT。
+go env GOROOT GOPATH GOBIN
 
-# GOPATH - Go工作区 (Go 1.11+后主要用于第三方包)
-export GOPATH=$HOME/go
+# 只有需要自定义工具安装目录时才设置 GOBIN；随后把它加入当前 shell 的 PATH。
+export GOBIN="$HOME/go/bin"
+export PATH="$PATH:$GOBIN"
 
-# GOBIN - 可执行文件目录
-export GOBIN=$GOPATH/bin
-
-# PATH - 添加Go可执行文件到PATH
-export PATH=$PATH:$GOROOT/bin:$GOBIN
-
-# Go代理设置 (国内用户推荐)
-export GOPROXY=https://goproxy.cn,direct
-export GOSUMDB=off
+# 代理和校验和数据库是网络/供应链策略，先查看当前值。
+go env GOPROXY GOSUMDB
+# 若组织提供了受信任代理，再按其文档设置；不要为解决下载问题直接关闭 GOSUMDB。
+# go env -w GOPROXY=https://<trusted-proxy>,direct
 ```
 
 #### 与PHP的对比
@@ -92,7 +88,7 @@ export GOSUMDB=off
 | Composer包管理 | Go Modules |
 | 即时运行 | 编译后运行 |
 
-### 3. Go Modules (Go 1.11+)
+### 3. Go Modules
 
 #### 初始化模块
 ```bash
@@ -113,11 +109,11 @@ hello-go/
 
 #### 依赖管理
 ```bash
-# 添加依赖
-go get github.com/gin-gonic/gin
+# 为可复现实验添加明确版本；版本号应来自当前项目的兼容矩阵或官方发布说明。
+go get github.com/gin-gonic/gin@v1.12.0
 
-# 添加特定版本
-go get github.com/gin-gonic/gin@latest
+# 检查本次实际解析到的模块，再提交 go.mod 与 go.sum。
+go list -m github.com/gin-gonic/gin
 
 # 移除依赖
 go get github.com/gin-gonic/gin@none
@@ -128,6 +124,8 @@ go mod tidy
 # 查看依赖图
 go mod graph
 ```
+
+`@latest` 会随执行日期改变解析结果，不适合作为教程的可复现默认。练习升级时可先在独立分支运行 `go get 模块@目标版本`、`go mod tidy` 和项目测试，审阅 `go.mod`、`go.sum` 与行为差异后再合并。`go mod tidy` 会增删依赖，执行前应确保工作区干净，以便检查它修改了什么。
 
 ## 🛠️ 开发工具配置
 
