@@ -30,8 +30,8 @@ CASES = (
 
 
 def extract(path: Path, needle: str, language: str) -> str:
-    text = path.read_text(encoding="utf-8")
-    for match in re.finditer(rf"```{language}\s*\n(.*?)\n```", text, re.DOTALL):
+    text = path.read_text(encoding="utf-8").replace("\r\n", "\n")
+    for match in re.finditer(rf"```{language}(?:[ \t]+[^\n]*)?\n(.*?)\n```", text, re.DOTALL):
         if needle in match.group(1):
             return match.group(1) + "\n"
     raise RuntimeError(f"missing {language} fence containing {needle}: {path}")

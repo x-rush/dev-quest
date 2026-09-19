@@ -1,0 +1,372 @@
+{
+  "scope": "marked complete examples only; not framework or network validation",
+  "versions": {
+    "php": {
+      "command": [
+        "php",
+        "--version"
+      ],
+      "exit_code": 0,
+      "stdout": "PHP 8.3.6 (cli) (built: Sep  2 2026 12:56:02) (NTS)\nCopyright (c) The PHP Group\nZend Engine v4.3.6, Copyright (c) Zend Technologies\n    with Zend OPcache v8.3.6, Copyright (c), by Zend Technologies\n",
+      "stderr": ""
+    },
+    "javac": {
+      "command": [
+        "javac",
+        "-version"
+      ],
+      "exit_code": 0,
+      "stdout": "javac 21.0.12\n",
+      "stderr": ""
+    },
+    "java": {
+      "command": [
+        "java",
+        "-version"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": "openjdk version \"21.0.12\" 2026-07-21 LTS\nOpenJDK Runtime Environment Temurin-21.0.12+8 (build 21.0.12+8-LTS)\nOpenJDK 64-Bit Server VM Temurin-21.0.12+8 (build 21.0.12+8-LTS, mixed mode, sharing)\n"
+    }
+  },
+  "documents": {
+    "07-php-mastery/reference/language-concepts/05-arrays-patterns.md": "32c82b8345505d5a89f237ec4012bfd2cd1c974ce88d87b09510cb4b4a2359cb",
+    "07-php-mastery/reference/language-concepts/06-generators-iterators.md": "03aa88b8036208aaef44dbcdbb424fb9d023ac6fcc95268853b58197fdd273de",
+    "08-java-revisited/reference/language-concepts/03-streams-optional.md": "7ff0568331aedf0ed5229e78531931136aa7735f9bcb12bf4d9ba6d6159c0b93",
+    "08-java-revisited/reference/library-guides/04-java-io.md": "76a99fc8ac97e57652f2bfd5de29850c8f1ca0f1eb4f196c907b2711a82a964c"
+  },
+  "cases": [
+    {
+      "id": "php-array-paid-pipeline",
+      "document": "07-php-mastery/reference/language-concepts/05-arrays-patterns.md",
+      "source_sha256": "d8503d4b382c0cfa7b4544e2592e3fe481ebca701e665f41b29a6343ed22b958",
+      "expected_stdout": "47500\n",
+      "commands": [
+        {
+          "command": [
+            "php",
+            "-d",
+            "display_errors=stderr",
+            "-d",
+            "error_reporting=-1",
+            "main.php"
+          ],
+          "exit_code": 0,
+          "stdout": "47500\n",
+          "stderr": ""
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "php-array-key-contracts",
+      "document": "07-php-mastery/reference/language-concepts/05-arrays-patterns.md",
+      "source_sha256": "f7640bd8a0ee235f83116af8996735363c72b66142619b7f4b5d5b499f1da1e4",
+      "expected_stdout": "{\"0\":0,\"2\":2}\n[0,2]\n[\"0\",0,false,\"\"]\n{\"a\":2,\"b\":4}\n[2,4]\n{\"name\":\"left\",\"0\":\"L\"}\n{\"name\":\"right\",\"0\":\"L\",\"1\":\"R\"}\n[]\n[1]\nduplicate-id\n",
+      "commands": [
+        {
+          "command": [
+            "php",
+            "-d",
+            "display_errors=stderr",
+            "-d",
+            "error_reporting=-1",
+            "main.php"
+          ],
+          "exit_code": 0,
+          "stdout": "{\"0\":0,\"2\":2}\n[0,2]\n[\"0\",0,false,\"\"]\n{\"a\":2,\"b\":4}\n[2,4]\n{\"name\":\"left\",\"0\":\"L\"}\n{\"name\":\"right\",\"0\":\"L\",\"1\":\"R\"}\n[]\n[1]\nduplicate-id\n",
+          "stderr": ""
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "php-array-object-and-sort",
+      "document": "07-php-mastery/reference/language-concepts/05-arrays-patterns.md",
+      "source_sha256": "acaf3591555f0a8bcc90dffe8821defe05ecc257a0dae179bcb1af6a5216a747",
+      "expected_stdout": "changed\n[2,3,1]\n[20,10]\n",
+      "commands": [
+        {
+          "command": [
+            "php",
+            "-d",
+            "display_errors=stderr",
+            "-d",
+            "error_reporting=-1",
+            "main.php"
+          ],
+          "exit_code": 0,
+          "stdout": "changed\n[2,3,1]\n[20,10]\n",
+          "stderr": ""
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "php-generator-resource-lifetime",
+      "document": "07-php-mastery/reference/language-concepts/06-generators-iterators.md",
+      "source_sha256": "b6eed2bba6323d3a5ae620d278df8a9f66b9c2170165d2a383ca3ddcb20fc796",
+      "expected_stdout": "0\nstart\n10\n0\nclosed\n1\n0\n",
+      "commands": [
+        {
+          "command": [
+            "php",
+            "-d",
+            "display_errors=stderr",
+            "-d",
+            "error_reporting=-1",
+            "main.php"
+          ],
+          "exit_code": 0,
+          "stdout": "0\nstart\n10\n0\nclosed\n1\n0\n",
+          "stderr": ""
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "php-generator-delegation-return",
+      "document": "07-php-mastery/reference/language-concepts/06-generators-iterators.md",
+      "source_sha256": "cbc9c18a890ff5ea50b286b088a91382cff217cfa6bdf57aadfe680c5e5d2e51",
+      "expected_stdout": "{\"0\":\"inner\"}\n[\"outer\",\"inner\"]\n[\"outer\",\"inner\"]\ndone\nnot-finished\nboom\nno-return\n",
+      "commands": [
+        {
+          "command": [
+            "php",
+            "-d",
+            "display_errors=stderr",
+            "-d",
+            "error_reporting=-1",
+            "main.php"
+          ],
+          "exit_code": 0,
+          "stdout": "{\"0\":\"inner\"}\n[\"outer\",\"inner\"]\n[\"outer\",\"inner\"]\ndone\nnot-finished\nboom\nno-return\n",
+          "stderr": ""
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "php-generator-take-demand",
+      "document": "07-php-mastery/reference/language-concepts/06-generators-iterators.md",
+      "source_sha256": "0dd5f94acd2515230c6232bc22a95916227e5d45d74948e2a1120c748f51876f",
+      "expected_stdout": "[]\n0\n[1,4,9]\n3\n",
+      "commands": [
+        {
+          "command": [
+            "php",
+            "-d",
+            "display_errors=stderr",
+            "-d",
+            "error_reporting=-1",
+            "main.php"
+          ],
+          "exit_code": 0,
+          "stdout": "[]\n0\n[1,4,9]\n3\n",
+          "stderr": ""
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "java-stream-collection-contracts",
+      "document": "08-java-revisited/reference/language-concepts/03-streams-optional.md",
+      "source_sha256": "43b8a1f3a9843ce3d598d5476d32c30c1a6ccd8ee5ce31ff26d44e12fbe0bec8",
+      "expected_stdout": "[a, null]\nlist-rejects-add\n[changed]\n[a, b]\ncollector-rejects-null\nduplicate-rejected\n{a=3}\n",
+      "commands": [
+        {
+          "command": [
+            "javac",
+            "--release",
+            "21",
+            "-encoding",
+            "UTF-8",
+            "Main.java"
+          ],
+          "exit_code": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "java",
+            "-cp",
+            "<temporary-workdir>",
+            "Main"
+          ],
+          "exit_code": 0,
+          "stdout": "[a, null]\nlist-rejects-add\n[changed]\n[a, b]\ncollector-rejects-null\nduplicate-rejected\n{a=3}\n",
+          "stderr": ""
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "java-optional-fallbacks",
+      "document": "08-java-revisited/reference/language-concepts/03-streams-optional.md",
+      "source_sha256": "73b7103cd7f31ef29572acd2bcef75429a847b416ae6a3364781531a59b95bb4",
+      "expected_stdout": "fallback\nx\nx\ntrue\nflatMap-rejects-null\nempty-rejected\n[x]\n",
+      "commands": [
+        {
+          "command": [
+            "javac",
+            "--release",
+            "21",
+            "-encoding",
+            "UTF-8",
+            "Main.java"
+          ],
+          "exit_code": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "java",
+            "-cp",
+            "<temporary-workdir>",
+            "Main"
+          ],
+          "exit_code": 0,
+          "stdout": "fallback\nx\nx\ntrue\nflatMap-rejects-null\nempty-rejected\n[x]\n",
+          "stderr": ""
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "java-stream-lifecycle",
+      "document": "08-java-revisited/reference/language-concepts/03-streams-optional.md",
+      "source_sha256": "6b6cf8346f255845c6ad3b243c1dca835106ec60aeca804ce31635cc772bf8c3",
+      "expected_stdout": "true\nfalse\n6\n[a, b]\nreused-rejected\n2\ntrue\n",
+      "commands": [
+        {
+          "command": [
+            "javac",
+            "--release",
+            "21",
+            "-encoding",
+            "UTF-8",
+            "Main.java"
+          ],
+          "exit_code": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "java",
+            "-cp",
+            "<temporary-workdir>",
+            "Main"
+          ],
+          "exit_code": 0,
+          "stdout": "true\nfalse\n6\n[a, b]\nreused-rejected\n2\ntrue\n",
+          "stderr": ""
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "java-io-text-roundtrip",
+      "document": "08-java-revisited/reference/library-guides/04-java-io.md",
+      "source_sha256": "319ededdc1d999ddb576fdfb5b995046e32b174470ed20c8c6bb862c64bcf56f",
+      "expected_stdout": "h\n第一行\n第二行\nnull\n",
+      "commands": [
+        {
+          "command": [
+            "javac",
+            "--release",
+            "21",
+            "-encoding",
+            "UTF-8",
+            "Main.java"
+          ],
+          "exit_code": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "java",
+            "-cp",
+            "<temporary-workdir>",
+            "Main"
+          ],
+          "exit_code": 0,
+          "stdout": "h\n第一行\n第二行\nnull\n",
+          "stderr": ""
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "java-io-short-read-decoder",
+      "document": "08-java-revisited/reference/library-guides/04-java-io.md",
+      "source_sha256": "0222c76c6333eb51fc9055569338a8eeab1c697d54c4fe9a94f3d932403cda8d",
+      "expected_stdout": "true\n中A\nmalformed-rejected\n",
+      "commands": [
+        {
+          "command": [
+            "javac",
+            "--release",
+            "21",
+            "-encoding",
+            "UTF-8",
+            "Main.java"
+          ],
+          "exit_code": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "java",
+            "-cp",
+            "<temporary-workdir>",
+            "Main"
+          ],
+          "exit_code": 0,
+          "stdout": "true\n中A\nmalformed-rejected\n",
+          "stderr": ""
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "java-io-writer-failure",
+      "document": "08-java-revisited/reference/library-guides/04-java-io.md",
+      "source_sha256": "4cff24362a7a33f07e0647592d0e68245e3eaa394ab1da6ca622c2aa161386b3",
+      "expected_stdout": "true\ntrue\n",
+      "commands": [
+        {
+          "command": [
+            "javac",
+            "--release",
+            "21",
+            "-encoding",
+            "UTF-8",
+            "Main.java"
+          ],
+          "exit_code": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "java",
+            "-cp",
+            "<temporary-workdir>",
+            "Main"
+          ],
+          "exit_code": 0,
+          "stdout": "true\ntrue\n",
+          "stderr": ""
+        }
+      ],
+      "passed": true
+    }
+  ],
+  "passed": 12,
+  "total": 12
+}

@@ -1,0 +1,184 @@
+{
+  "scope": "marked complete examples only; not framework or network validation",
+  "versions": {
+    "php": {
+      "command": [
+        "php",
+        "--version"
+      ],
+      "exit_code": 0,
+      "stdout": "PHP 8.3.6 (cli) (built: Sep  2 2026 12:56:02) (NTS)\nCopyright (c) The PHP Group\nZend Engine v4.3.6, Copyright (c) Zend Technologies\n    with Zend OPcache v8.3.6, Copyright (c), by Zend Technologies\n",
+      "stderr": ""
+    },
+    "javac": {
+      "command": [
+        "javac",
+        "-version"
+      ],
+      "exit_code": 0,
+      "stdout": "javac 21.0.12\n",
+      "stderr": ""
+    },
+    "java": {
+      "command": [
+        "java",
+        "-version"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": "openjdk version \"21.0.12\" 2026-07-21 LTS\nOpenJDK Runtime Environment Temurin-21.0.12+8 (build 21.0.12+8-LTS)\nOpenJDK 64-Bit Server VM Temurin-21.0.12+8 (build 21.0.12+8-LTS, mixed mode, sharing)\n"
+    }
+  },
+  "documents": {
+    "07-php-mastery/basics/03-variables-types.md": "369668b65855b540cc67d7bb17214f9b5b78f758ba128ac84d22e6cef4e0d436",
+    "08-java-revisited/basics/03-variables-types.md": "8135166a3a6222371ba190d83b4975153ad3a5b8128ad8afd972a6ef676025ba",
+    "08-java-revisited/basics/04-classes-records.md": "188809b29d6d3c29366308e509d493bec689803079b445b10bebb0a3d8cbed12"
+  },
+  "cases": [
+    {
+      "id": "php-strict-types-boundaries",
+      "document": "07-php-mastery/basics/03-variables-types.md",
+      "source_sha256": "ce34ef00902ea2f40f0c8e9eb5fadd51975558699de71cc954590c9e8c2179b6",
+      "expected_stdout": "strict types: ok\n",
+      "commands": [
+        {
+          "command": [
+            "php",
+            "-d",
+            "display_errors=stderr",
+            "-d",
+            "error_reporting=-1",
+            "main.php"
+          ],
+          "exit_code": 0,
+          "stdout": "strict types: ok\n",
+          "stderr": ""
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "php-weak-call-boundaries",
+      "document": "07-php-mastery/basics/03-variables-types.md",
+      "source_sha256": "d923ee6acc0dfdd1adb1bc12c528745d5fde00ababb883552fecda2cc6d514a3",
+      "expected_stdout": "weak caller: ok\n",
+      "commands": [
+        {
+          "command": [
+            "php",
+            "-d",
+            "display_errors=stderr",
+            "-d",
+            "error_reporting=-1",
+            "main.php"
+          ],
+          "exit_code": 0,
+          "stdout": "weak caller: ok\n",
+          "stderr": ""
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "java-boxing-boundaries",
+      "document": "08-java-revisited/basics/03-variables-types.md",
+      "source_sha256": "bd533004cb498e8ec8a11465c1f7c7c9975eacddb8d8b7839515ba3dbe147652",
+      "expected_stdout": "boxing boundaries: ok\n",
+      "commands": [
+        {
+          "command": [
+            "javac",
+            "--release",
+            "21",
+            "-encoding",
+            "UTF-8",
+            "Main.java"
+          ],
+          "exit_code": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "java",
+            "-cp",
+            "<temporary-workdir>",
+            "Main"
+          ],
+          "exit_code": 0,
+          "stdout": "boxing boundaries: ok\n",
+          "stderr": ""
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "java-text-block-boundaries",
+      "document": "08-java-revisited/basics/03-variables-types.md",
+      "source_sha256": "ace12e3c8b7f23c0c94dccf2143844fbdd193888097700803c65d2bd29348565",
+      "expected_stdout": "text block: ok\n",
+      "commands": [
+        {
+          "command": [
+            "javac",
+            "--release",
+            "21",
+            "-encoding",
+            "UTF-8",
+            "Main.java"
+          ],
+          "exit_code": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "java",
+            "-cp",
+            "<temporary-workdir>",
+            "Main"
+          ],
+          "exit_code": 0,
+          "stdout": "text block: ok\n",
+          "stderr": ""
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "java-record-boundaries",
+      "document": "08-java-revisited/basics/04-classes-records.md",
+      "source_sha256": "e2a36366c5c35cf1181787e16113ee16c103537df4864a1b06ee77da61a351b6",
+      "expected_stdout": "record boundaries: ok\n",
+      "commands": [
+        {
+          "command": [
+            "javac",
+            "--release",
+            "21",
+            "-encoding",
+            "UTF-8",
+            "Main.java"
+          ],
+          "exit_code": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "java",
+            "-cp",
+            "<temporary-workdir>",
+            "Main"
+          ],
+          "exit_code": 0,
+          "stdout": "record boundaries: ok\n",
+          "stderr": ""
+        }
+      ],
+      "passed": true
+    }
+  ],
+  "passed": 5,
+  "total": 5
+}
