@@ -5,17 +5,17 @@
   "scope": "verification-coverage.json 的 11 个现行教学模块；不含生成报告、归档和不活跃文件。",
   "method": "为 not_verified 文件建立文件级任务，并按覆盖台账同一标记规则重新扫描当前源码以定位逐行任务；仅通过性断言升为 P0，不判断教学内容真伪。",
   "summary": {
-    "items": 563,
-    "file_level_items": 519,
-    "unbound_wording_items": 44,
+    "items": 558,
+    "file_level_items": 513,
+    "unbound_wording_items": 45,
     "by_priority": {
-      "P1": 263,
+      "P1": 258,
       "P2": 149,
       "P3": 151
     },
     "by_kind": {
-      "核心基础": 248,
-      "首项目": 15,
+      "核心基础": 242,
+      "首项目": 16,
       "框架": 110,
       "部署": 39,
       "进阶与测试": 151
@@ -23,7 +23,7 @@
     "excluded": {
       "inactive_or_archived": 0,
       "generated_or_report": 0,
-      "runtime_document": 123
+      "runtime_document": 129
     }
   },
   "items": [
@@ -671,17 +671,6 @@
       "task": "为文档选择一个最小可复现案例并记录限定运行证据",
       "reason": "当前没有与此文件绑定的命名运行或语法证据。",
       "module": "Kotlin / Compose",
-      "path": "05-kotlin-compose/reference/language-concepts/02-null-safety-collections.md",
-      "line": null,
-      "source_excerpt": null,
-      "evidence_action": "抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。"
-    },
-    {
-      "priority": "P1",
-      "kind": "核心基础",
-      "task": "为文档选择一个最小可复现案例并记录限定运行证据",
-      "reason": "当前没有与此文件绑定的命名运行或语法证据。",
-      "module": "Kotlin / Compose",
       "path": "05-kotlin-compose/reference/language-concepts/03-coroutines-flow-api.md",
       "line": null,
       "source_excerpt": null,
@@ -837,17 +826,6 @@
       "reason": "当前没有与此文件绑定的命名运行或语法证据。",
       "module": "Next.js / TypeScript",
       "path": "02-nextjs-frontend/basics/03-typescript-integration.md",
-      "line": null,
-      "source_excerpt": null,
-      "evidence_action": "抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。"
-    },
-    {
-      "priority": "P1",
-      "kind": "核心基础",
-      "task": "为文档选择一个最小可复现案例并记录限定运行证据",
-      "reason": "当前没有与此文件绑定的命名运行或语法证据。",
-      "module": "Next.js / TypeScript",
-      "path": "02-nextjs-frontend/basics/04-layouts-routing.md",
       "line": null,
       "source_excerpt": null,
       "evidence_action": "抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。"
@@ -1529,17 +1507,6 @@
       "task": "为文档选择一个最小可复现案例并记录限定运行证据",
       "reason": "当前没有与此文件绑定的命名运行或语法证据。",
       "module": "Python",
-      "path": "10-python-discovery/basics/05-control-flow.md",
-      "line": null,
-      "source_excerpt": null,
-      "evidence_action": "抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。"
-    },
-    {
-      "priority": "P1",
-      "kind": "核心基础",
-      "task": "为文档选择一个最小可复现案例并记录限定运行证据",
-      "reason": "当前没有与此文件绑定的命名运行或语法证据。",
-      "module": "Python",
       "path": "10-python-discovery/basics/06-exceptions.md",
       "line": null,
       "source_excerpt": null,
@@ -1629,17 +1596,6 @@
       "reason": "当前没有与此文件绑定的命名运行或语法证据。",
       "module": "React Native / Multi-platform",
       "path": "04-multiplatform-apps/basics/02-first-app.md",
-      "line": null,
-      "source_excerpt": null,
-      "evidence_action": "抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。"
-    },
-    {
-      "priority": "P1",
-      "kind": "核心基础",
-      "task": "为文档选择一个最小可复现案例并记录限定运行证据",
-      "reason": "当前没有与此文件绑定的命名运行或语法证据。",
-      "module": "React Native / Multi-platform",
-      "path": "04-multiplatform-apps/basics/03-components-jsx.md",
       "line": null,
       "source_excerpt": null,
       "evidence_action": "抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。"
@@ -2233,17 +2189,6 @@
       "task": "为文档选择一个最小可复现案例并记录限定运行证据",
       "reason": "当前没有与此文件绑定的命名运行或语法证据。",
       "module": "Swift / SwiftUI",
-      "path": "06-swift-swiftui/reference/language-concepts/01-swift-keywords.md",
-      "line": null,
-      "source_excerpt": null,
-      "evidence_action": "抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。"
-    },
-    {
-      "priority": "P1",
-      "kind": "核心基础",
-      "task": "为文档选择一个最小可复现案例并记录限定运行证据",
-      "reason": "当前没有与此文件绑定的命名运行或语法证据。",
-      "module": "Swift / SwiftUI",
       "path": "06-swift-swiftui/reference/language-concepts/03-concurrency-api.md",
       "line": null,
       "source_excerpt": null,
@@ -2454,17 +2399,6 @@
       "reason": "当前没有与此文件绑定的命名运行或语法证据。",
       "module": "TanStack / TypeScript",
       "path": "03-tanstack-stack/basics/02-headless-philosophy.md",
-      "line": null,
-      "source_excerpt": null,
-      "evidence_action": "抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。"
-    },
-    {
-      "priority": "P1",
-      "kind": "核心基础",
-      "task": "为文档选择一个最小可复现案例并记录限定运行证据",
-      "reason": "当前没有与此文件绑定的命名运行或语法证据。",
-      "module": "TanStack / TypeScript",
-      "path": "03-tanstack-stack/basics/03-query-fundamentals.md",
       "line": null,
       "source_excerpt": null,
       "evidence_action": "抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。"
@@ -2828,7 +2762,18 @@
       "reason": "这行是未验证范围或验证步骤的披露，不是声称已经通过的证据。",
       "module": "Node.js",
       "path": "09-nodejs-backend/projects/01-todo-api.md",
-      "line": 245,
+      "line": 22,
+      "source_excerpt": "这些是需要在目标练习环境执行的验收要求；补充桥接说明本身不代表本页工程已经运行通过。",
+      "evidence_action": "保持已有边界说明；若新增示例，记录工具链、命令、预期行为和未覆盖范围。"
+    },
+    {
+      "priority": "P1",
+      "kind": "首项目",
+      "task": "保留诚实的验证边界，并在补证据时决定是否增加最小练习",
+      "reason": "这行是未验证范围或验证步骤的披露，不是声称已经通过的证据。",
+      "module": "Node.js",
+      "path": "09-nodejs-backend/projects/01-todo-api.md",
+      "line": 256,
       "source_excerpt": "- [ ] 至少 3 条服务层测试通过",
       "evidence_action": "保持已有边界说明；若新增示例，记录工具链、命令、预期行为和未覆盖范围。"
     },
@@ -2883,7 +2828,7 @@
       "reason": "这行是未验证范围或验证步骤的披露，不是声称已经通过的证据。",
       "module": "Python",
       "path": "10-python-discovery/projects/01-todo-api.md",
-      "line": 219,
+      "line": 230,
       "source_excerpt": "验证记录（2026-09-19）：从本页原样抽取四个 Python 文件，在 Python 3.12.14 与 Python 3.14 容器中均通过 12 项测试；实际依赖为 FastAPI 0.141.1、Pydantic 2.13.5、pytest 9.1.1、httpx 0.28.1。当前 Starlette 1.6.0 会报告 httpx 测试适配器与 AnyIO 别名弃用警告；测试通过不代表依赖无迁移工作，也不涵盖数据库、部署或多 worker 持久化。",
       "evidence_action": "保持已有边界说明；若新增示例，记录工具链、命令、预期行为和未覆盖范围。"
     },

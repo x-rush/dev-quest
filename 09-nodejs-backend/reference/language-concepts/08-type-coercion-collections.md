@@ -130,6 +130,21 @@ JSON.stringify({ b: 1n });                   // TypeError：BigInt 不支持
 const o = {}; o.self = o; JSON.stringify(o); // TypeError：循环引用
 ```
 
+<!-- node-python-seventh-case: node-builtins-collection-contracts -->
+```js
+import assert from 'node:assert/strict';
+
+assert.equal(Object.is(NaN, NaN), true);
+assert.equal(Object.is(0, -0), false);
+const values = new Set([NaN, NaN, -0, 0, '0']);
+assert.equal(values.size, 3);
+assert.equal(JSON.stringify({ absent: undefined, empty: null }), '{"empty":null}');
+assert.throws(() => JSON.stringify({ id: 1n }), TypeError);
+console.log('builtins-collections: Object.is; Set SameValueZero; JSON omission; BigInt error');
+```
+
+本程序运行页面中列出的内置对象和集合契约。`Set` 的大小为 3：`NaN` 去重一次、`-0` 与 `0` 为同一个键、字符串 `'0'` 是另一个键。它不验证 JSON 的业务 schema，也不覆盖所有 `replacer`、`reviver` 或 BigInt 编码策略。
+
 ### 陷阱
 - ❌ 直接 `JSON.stringify` 可能含循环引用的对象——上线即炸
 - ✅ 需要安全序列化时捕获 TypeError，或用带循环保护的库（flatted 等）

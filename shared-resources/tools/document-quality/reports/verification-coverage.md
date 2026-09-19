@@ -7,11 +7,11 @@
 | 指标 | 数量 |
 |---|---:|
 | 纳入模块文档 | 642 |
-| 主状态：not_verified | 519 |
-| 主状态：runtime | 123 |
-| 验证措辞出现次数 | 125 |
+| 主状态：not_verified | 513 |
+| 主状态：runtime | 129 |
+| 验证措辞出现次数 | 126 |
 | 措辞分类：source_has_limited_runtime_evidence | 81 |
-| 措辞分类：unbound_verification_wording | 44 |
+| 措辞分类：unbound_verification_wording | 45 |
 
 ## 语法级覆盖（不能当作运行覆盖）
 
@@ -119,7 +119,7 @@
 | Next.js / TypeScript | [02-nextjs-frontend/basics/01-environment-setup.md](../../../../02-nextjs-frontend/basics/01-environment-setup.md) | `not_verified` | 0 | 0 |
 | Next.js / TypeScript | [02-nextjs-frontend/basics/02-first-nextjs-app.md](../../../../02-nextjs-frontend/basics/02-first-nextjs-app.md) | `not_verified` | 0 | 0 |
 | Next.js / TypeScript | [02-nextjs-frontend/basics/03-typescript-integration.md](../../../../02-nextjs-frontend/basics/03-typescript-integration.md) | `not_verified` | 0 | 0 |
-| Next.js / TypeScript | [02-nextjs-frontend/basics/04-layouts-routing.md](../../../../02-nextjs-frontend/basics/04-layouts-routing.md) | `not_verified` | 0 | 0 |
+| Next.js / TypeScript | [02-nextjs-frontend/basics/04-layouts-routing.md](../../../../02-nextjs-frontend/basics/04-layouts-routing.md) | `runtime` | 1 | 0 |
 | Next.js / TypeScript | [02-nextjs-frontend/basics/05-styling-with-tailwind.md](../../../../02-nextjs-frontend/basics/05-styling-with-tailwind.md) | `not_verified` | 0 | 0 |
 | Next.js / TypeScript | [02-nextjs-frontend/basics/06-data-fetching-basics.md](../../../../02-nextjs-frontend/basics/06-data-fetching-basics.md) | `not_verified` | 0 | 0 |
 | Next.js / TypeScript | [02-nextjs-frontend/basics/07-state-management.md](../../../../02-nextjs-frontend/basics/07-state-management.md) | `not_verified` | 0 | 0 |
@@ -180,7 +180,7 @@
 | TanStack / TypeScript | [03-tanstack-stack/advanced-topics/security/01-security-practices.md](../../../../03-tanstack-stack/advanced-topics/security/01-security-practices.md) | `not_verified` | 0 | 0 |
 | TanStack / TypeScript | [03-tanstack-stack/basics/01-environment-setup.md](../../../../03-tanstack-stack/basics/01-environment-setup.md) | `not_verified` | 0 | 0 |
 | TanStack / TypeScript | [03-tanstack-stack/basics/02-headless-philosophy.md](../../../../03-tanstack-stack/basics/02-headless-philosophy.md) | `not_verified` | 0 | 0 |
-| TanStack / TypeScript | [03-tanstack-stack/basics/03-query-fundamentals.md](../../../../03-tanstack-stack/basics/03-query-fundamentals.md) | `not_verified` | 0 | 0 |
+| TanStack / TypeScript | [03-tanstack-stack/basics/03-query-fundamentals.md](../../../../03-tanstack-stack/basics/03-query-fundamentals.md) | `runtime` | 1 | 0 |
 | TanStack / TypeScript | [03-tanstack-stack/basics/04-table-fundamentals.md](../../../../03-tanstack-stack/basics/04-table-fundamentals.md) | `not_verified` | 0 | 0 |
 | TanStack / TypeScript | [03-tanstack-stack/basics/05-router-fundamentals.md](../../../../03-tanstack-stack/basics/05-router-fundamentals.md) | `not_verified` | 0 | 0 |
 | TanStack / TypeScript | [03-tanstack-stack/basics/06-form-fundamentals.md](../../../../03-tanstack-stack/basics/06-form-fundamentals.md) | `not_verified` | 0 | 0 |
@@ -242,7 +242,7 @@
 | React Native / Multi-platform | [04-multiplatform-apps/advanced-topics/security/01-security-practices.md](../../../../04-multiplatform-apps/advanced-topics/security/01-security-practices.md) | `not_verified` | 0 | 0 |
 | React Native / Multi-platform | [04-multiplatform-apps/basics/01-environment-setup.md](../../../../04-multiplatform-apps/basics/01-environment-setup.md) | `not_verified` | 0 | 0 |
 | React Native / Multi-platform | [04-multiplatform-apps/basics/02-first-app.md](../../../../04-multiplatform-apps/basics/02-first-app.md) | `not_verified` | 0 | 0 |
-| React Native / Multi-platform | [04-multiplatform-apps/basics/03-components-jsx.md](../../../../04-multiplatform-apps/basics/03-components-jsx.md) | `not_verified` | 0 | 0 |
+| React Native / Multi-platform | [04-multiplatform-apps/basics/03-components-jsx.md](../../../../04-multiplatform-apps/basics/03-components-jsx.md) | `runtime` | 1 | 0 |
 | React Native / Multi-platform | [04-multiplatform-apps/basics/04-state-hooks.md](../../../../04-multiplatform-apps/basics/04-state-hooks.md) | `not_verified` | 0 | 0 |
 | React Native / Multi-platform | [04-multiplatform-apps/basics/05-navigation.md](../../../../04-multiplatform-apps/basics/05-navigation.md) | `not_verified` | 0 | 0 |
 | React Native / Multi-platform | [04-multiplatform-apps/basics/06-native-modules.md](../../../../04-multiplatform-apps/basics/06-native-modules.md) | `not_verified` | 0 | 0 |
@@ -322,7 +322,7 @@
 | Kotlin / Compose | [05-kotlin-compose/reference/framework-essentials/09-gestures.md](../../../../05-kotlin-compose/reference/framework-essentials/09-gestures.md) | `not_verified` | 0 | 1 |
 | Kotlin / Compose | [05-kotlin-compose/reference/framework-essentials/10-canvas-drawing.md](../../../../05-kotlin-compose/reference/framework-essentials/10-canvas-drawing.md) | `not_verified` | 0 | 1 |
 | Kotlin / Compose | [05-kotlin-compose/reference/language-concepts/01-kotlin-keywords.md](../../../../05-kotlin-compose/reference/language-concepts/01-kotlin-keywords.md) | `not_verified` | 0 | 3 |
-| Kotlin / Compose | [05-kotlin-compose/reference/language-concepts/02-null-safety-collections.md](../../../../05-kotlin-compose/reference/language-concepts/02-null-safety-collections.md) | `not_verified` | 0 | 0 |
+| Kotlin / Compose | [05-kotlin-compose/reference/language-concepts/02-null-safety-collections.md](../../../../05-kotlin-compose/reference/language-concepts/02-null-safety-collections.md) | `runtime` | 1 | 0 |
 | Kotlin / Compose | [05-kotlin-compose/reference/language-concepts/03-coroutines-flow-api.md](../../../../05-kotlin-compose/reference/language-concepts/03-coroutines-flow-api.md) | `not_verified` | 0 | 0 |
 | Kotlin / Compose | [05-kotlin-compose/reference/language-concepts/04-compose-state-api.md](../../../../05-kotlin-compose/reference/language-concepts/04-compose-state-api.md) | `not_verified` | 0 | 0 |
 | Kotlin / Compose | [05-kotlin-compose/reference/language-concepts/05-generics-delegates.md](../../../../05-kotlin-compose/reference/language-concepts/05-generics-delegates.md) | `not_verified` | 0 | 0 |
@@ -374,7 +374,7 @@
 | Swift / SwiftUI | [06-swift-swiftui/reference/framework-essentials/06-swift-charts.md](../../../../06-swift-swiftui/reference/framework-essentials/06-swift-charts.md) | `not_verified` | 0 | 1 |
 | Swift / SwiftUI | [06-swift-swiftui/reference/framework-essentials/07-swiftdata-migration.md](../../../../06-swift-swiftui/reference/framework-essentials/07-swiftdata-migration.md) | `not_verified` | 0 | 0 |
 | Swift / SwiftUI | [06-swift-swiftui/reference/framework-essentials/08-gestures.md](../../../../06-swift-swiftui/reference/framework-essentials/08-gestures.md) | `not_verified` | 0 | 0 |
-| Swift / SwiftUI | [06-swift-swiftui/reference/language-concepts/01-swift-keywords.md](../../../../06-swift-swiftui/reference/language-concepts/01-swift-keywords.md) | `not_verified` | 0 | 0 |
+| Swift / SwiftUI | [06-swift-swiftui/reference/language-concepts/01-swift-keywords.md](../../../../06-swift-swiftui/reference/language-concepts/01-swift-keywords.md) | `runtime` | 1 | 0 |
 | Swift / SwiftUI | [06-swift-swiftui/reference/language-concepts/02-optionals-collections.md](../../../../06-swift-swiftui/reference/language-concepts/02-optionals-collections.md) | `runtime` | 2 | 0 |
 | Swift / SwiftUI | [06-swift-swiftui/reference/language-concepts/03-concurrency-api.md](../../../../06-swift-swiftui/reference/language-concepts/03-concurrency-api.md) | `not_verified` | 0 | 0 |
 | Swift / SwiftUI | [06-swift-swiftui/reference/language-concepts/04-swiftui-state-api.md](../../../../06-swift-swiftui/reference/language-concepts/04-swiftui-state-api.md) | `not_verified` | 0 | 0 |
@@ -536,7 +536,7 @@
 | Node.js | [09-nodejs-backend/frameworks/02-hono-advanced.md](../../../../09-nodejs-backend/frameworks/02-hono-advanced.md) | `not_verified` | 0 | 0 |
 | Node.js | [09-nodejs-backend/frameworks/03-ecosystem-integration.md](../../../../09-nodejs-backend/frameworks/03-ecosystem-integration.md) | `not_verified` | 0 | 0 |
 | Node.js | [09-nodejs-backend/frameworks/04-devtools.md](../../../../09-nodejs-backend/frameworks/04-devtools.md) | `not_verified` | 0 | 0 |
-| Node.js | [09-nodejs-backend/projects/01-todo-api.md](../../../../09-nodejs-backend/projects/01-todo-api.md) | `not_verified` | 0 | 1 |
+| Node.js | [09-nodejs-backend/projects/01-todo-api.md](../../../../09-nodejs-backend/projects/01-todo-api.md) | `not_verified` | 0 | 2 |
 | Node.js | [09-nodejs-backend/projects/02-auth-service.md](../../../../09-nodejs-backend/projects/02-auth-service.md) | `not_verified` | 0 | 0 |
 | Node.js | [09-nodejs-backend/projects/03-file-storage-service.md](../../../../09-nodejs-backend/projects/03-file-storage-service.md) | `not_verified` | 0 | 0 |
 | Node.js | [09-nodejs-backend/projects/04-production-nodejs-api.md](../../../../09-nodejs-backend/projects/04-production-nodejs-api.md) | `not_verified` | 0 | 0 |
@@ -544,12 +544,12 @@
 | Node.js | [09-nodejs-backend/reference/framework-essentials/02-fastify-nestjs.md](../../../../09-nodejs-backend/reference/framework-essentials/02-fastify-nestjs.md) | `not_verified` | 0 | 0 |
 | Node.js | [09-nodejs-backend/reference/language-concepts/01-js-modern-syntax.md](../../../../09-nodejs-backend/reference/language-concepts/01-js-modern-syntax.md) | `runtime` | 2 | 0 |
 | Node.js | [09-nodejs-backend/reference/language-concepts/02-async-api.md](../../../../09-nodejs-backend/reference/language-concepts/02-async-api.md) | `runtime` | 1 | 0 |
-| Node.js | [09-nodejs-backend/reference/language-concepts/03-node-core-api.md](../../../../09-nodejs-backend/reference/language-concepts/03-node-core-api.md) | `runtime` | 1 | 0 |
+| Node.js | [09-nodejs-backend/reference/language-concepts/03-node-core-api.md](../../../../09-nodejs-backend/reference/language-concepts/03-node-core-api.md) | `runtime` | 2 | 0 |
 | Node.js | [09-nodejs-backend/reference/language-concepts/04-streams-api.md](../../../../09-nodejs-backend/reference/language-concepts/04-streams-api.md) | `not_verified` | 0 | 0 |
 | Node.js | [09-nodejs-backend/reference/language-concepts/05-typescript-patterns.md](../../../../09-nodejs-backend/reference/language-concepts/05-typescript-patterns.md) | `not_verified` | 0 | 0 |
 | Node.js | [09-nodejs-backend/reference/language-concepts/06-esm-module-resolution.md](../../../../09-nodejs-backend/reference/language-concepts/06-esm-module-resolution.md) | `not_verified` | 0 | 0 |
-| Node.js | [09-nodejs-backend/reference/language-concepts/07-js-core-semantics.md](../../../../09-nodejs-backend/reference/language-concepts/07-js-core-semantics.md) | `runtime` | 1 | 1 |
-| Node.js | [09-nodejs-backend/reference/language-concepts/08-type-coercion-collections.md](../../../../09-nodejs-backend/reference/language-concepts/08-type-coercion-collections.md) | `runtime` | 1 | 5 |
+| Node.js | [09-nodejs-backend/reference/language-concepts/07-js-core-semantics.md](../../../../09-nodejs-backend/reference/language-concepts/07-js-core-semantics.md) | `runtime` | 2 | 1 |
+| Node.js | [09-nodejs-backend/reference/language-concepts/08-type-coercion-collections.md](../../../../09-nodejs-backend/reference/language-concepts/08-type-coercion-collections.md) | `runtime` | 2 | 5 |
 | Node.js | [09-nodejs-backend/reference/language-concepts/09-globals-reference.md](../../../../09-nodejs-backend/reference/language-concepts/09-globals-reference.md) | `runtime` | 1 | 0 |
 | Node.js | [09-nodejs-backend/reference/library-guides/01-core-modules.md](../../../../09-nodejs-backend/reference/library-guides/01-core-modules.md) | `runtime` | 2 | 0 |
 | Node.js | [09-nodejs-backend/reference/library-guides/02-ecosystem-libs.md](../../../../09-nodejs-backend/reference/library-guides/02-ecosystem-libs.md) | `not_verified` | 0 | 0 |
@@ -575,7 +575,7 @@
 | Python | [10-python-discovery/basics/02-first-script.md](../../../../10-python-discovery/basics/02-first-script.md) | `not_verified` | 0 | 0 |
 | Python | [10-python-discovery/basics/03-variables-types.md](../../../../10-python-discovery/basics/03-variables-types.md) | `not_verified` | 0 | 0 |
 | Python | [10-python-discovery/basics/04-functions-oop.md](../../../../10-python-discovery/basics/04-functions-oop.md) | `not_verified` | 0 | 0 |
-| Python | [10-python-discovery/basics/05-control-flow.md](../../../../10-python-discovery/basics/05-control-flow.md) | `not_verified` | 0 | 0 |
+| Python | [10-python-discovery/basics/05-control-flow.md](../../../../10-python-discovery/basics/05-control-flow.md) | `runtime` | 1 | 0 |
 | Python | [10-python-discovery/basics/06-exceptions.md](../../../../10-python-discovery/basics/06-exceptions.md) | `not_verified` | 0 | 0 |
 | Python | [10-python-discovery/basics/07-advanced-features.md](../../../../10-python-discovery/basics/07-advanced-features.md) | `not_verified` | 0 | 0 |
 | Python | [10-python-discovery/basics/08-first-project.md](../../../../10-python-discovery/basics/08-first-project.md) | `not_verified` | 0 | 0 |

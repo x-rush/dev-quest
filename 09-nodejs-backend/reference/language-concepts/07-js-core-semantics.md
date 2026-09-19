@@ -24,7 +24,7 @@
 ## 1. 原型链与 class
 
 ### 定义
-`class` 是原型继承的语法糖：类本身就是函数，实例方法挂在 `prototype` 上，属性查找沿 `__proto__` 链逐级上溯。
+`class` 的实例方法建立在原型链上，类本身也是函数；但它不只是可随意替换的“语法糖”。类体有严格模式、暂时性死区、私有字段和必须经 `new` 调用等独立语义。实例属性查找仍会沿原型链逐级上溯。
 
 ### 实测要点（Node 24）
 
@@ -154,6 +154,28 @@ function* ids() { yield 1; yield* [2, 3]; }   // yield* 委托内层可迭代
 [...ids()];        // [1, 2, 3]
 for (const v of ids()) {}                     // for...of 消费
 ```
+
+<!-- node-python-seventh-case: node-keyword-binding-contracts -->
+```js
+import assert from 'node:assert/strict';
+
+class Parent {
+  constructor(value) { this.value = value; }
+  read() { return this.value; }
+}
+class Child extends Parent {
+  read() { return `${super.read()}!`; }
+}
+
+const callbacks = [];
+for (let index = 0; index < 3; index++) callbacks.push(() => index);
+assert.deepEqual(callbacks.map((callback) => callback()), [0, 1, 2]);
+assert.equal(new Child('ok').read(), 'ok!');
+assert.throws(() => Child(), TypeError);
+console.log('keyword-binding: class extends super; let loop bindings; new required');
+```
+
+这段完整 ESM 程序同时运行 `class`、`extends`、`super`、`let`、`for` 与 `new` 的关键语义。它只验证这里列出的绑定和构造约束；私有字段、静态初始化块和跨模块的解析错误仍需在各自的最小程序中检验。
 
 与事件循环的配合见 [异步 API 全表](./02-async-api.md)（异步迭代 `for await...of`）。
 

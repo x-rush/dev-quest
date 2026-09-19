@@ -17,13 +17,13 @@
   "summary": {
     "documents": 642,
     "by_primary_state": {
-      "not_verified": 519,
-      "runtime": 123
+      "not_verified": 513,
+      "runtime": 129
     },
-    "verification_wording_occurrences": 125,
+    "verification_wording_occurrences": 126,
     "marker_classification": {
       "source_has_limited_runtime_evidence": 81,
-      "unbound_verification_wording": 44
+      "unbound_verification_wording": 45
     }
   },
   "documents": [
@@ -446,7 +446,7 @@
     },
     {
       "path": "01-go-backend/projects/01-rest-api-server.md",
-      "sha256": "969777376724c464e8ef43fa1605bd9260612e6a7d9bd501b1b0a692162b96e3",
+      "sha256": "1ec7abdb5b63e8ed9160a0cd2a5acf708713cfa17e1f0059b0d31da7ead05658",
       "verification": [
         {
           "mode": "not_verified",
@@ -1239,13 +1239,13 @@
     },
     {
       "path": "02-nextjs-frontend/basics/04-layouts-routing.md",
-      "sha256": "23ca15c591673ecdfe10c4e76b94194f6fe22c2d677c1f967cd4735d8c8c1555",
+      "sha256": "b35fbc1db4bfdb74ee2783470d14db40f3efbf03e8ef47632e87a411d60e7a53",
       "verification": [
         {
-          "mode": "not_verified",
-          "status": "NOT_VERIFIED",
-          "report": null,
-          "scope": "No named runtime or syntax evidence is recorded for this document."
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "frontend-mobile-p1-runtime.json",
+          "scope": "Five exact marked programs: Next URL input, TanStack Query cache identity, React JSX child structure used by React Native, Kotlin collections, and Swift control-flow keywords."
         }
       ],
       "marker_count": 0
@@ -2068,13 +2068,13 @@
     },
     {
       "path": "03-tanstack-stack/basics/03-query-fundamentals.md",
-      "sha256": "e54c5dd3adff791d29c975fb181bcf4d3ecc217fe2254feb1ba5c5ac33ee69c4",
+      "sha256": "91b5686365f2d8f51f4a62851892e08290cc6acaa268273d0dd4d8dd00b7011e",
       "verification": [
         {
-          "mode": "not_verified",
-          "status": "NOT_VERIFIED",
-          "report": null,
-          "scope": "No named runtime or syntax evidence is recorded for this document."
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "frontend-mobile-p1-runtime.json",
+          "scope": "Five exact marked programs: Next URL input, TanStack Query cache identity, React JSX child structure used by React Native, Kotlin collections, and Swift control-flow keywords."
         }
       ],
       "marker_count": 0
@@ -2886,13 +2886,13 @@
     },
     {
       "path": "04-multiplatform-apps/basics/03-components-jsx.md",
-      "sha256": "f497c06eff3975ac3a3bb8d248f09576d81808c184cf49a80491e3831518a24f",
+      "sha256": "b07439114b9816a7ef989d120bd7c3a6b871f489ef887617c0163d10ffe01d68",
       "verification": [
         {
-          "mode": "not_verified",
-          "status": "NOT_VERIFIED",
-          "report": null,
-          "scope": "No named runtime or syntax evidence is recorded for this document."
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "frontend-mobile-p1-runtime.json",
+          "scope": "Five exact marked programs: Next URL input, TanStack Query cache identity, React JSX child structure used by React Native, Kotlin collections, and Swift control-flow keywords."
         }
       ],
       "marker_count": 0
@@ -3926,13 +3926,13 @@
     },
     {
       "path": "05-kotlin-compose/reference/language-concepts/02-null-safety-collections.md",
-      "sha256": "e1e7a2a72843f0fcd540289f23d3ff81b4ddb1b0649cda3609345cc84b5f5981",
+      "sha256": "ff37e513115335a65eed262f1641047d4f7586ece10aa8e2b893169e821308e2",
       "verification": [
         {
-          "mode": "not_verified",
-          "status": "NOT_VERIFIED",
-          "report": null,
-          "scope": "No named runtime or syntax evidence is recorded for this document."
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "frontend-mobile-p1-runtime.json",
+          "scope": "Five exact marked programs: Next URL input, TanStack Query cache identity, React JSX child structure used by React Native, Kotlin collections, and Swift control-flow keywords."
         }
       ],
       "marker_count": 0
@@ -4614,13 +4614,13 @@
     },
     {
       "path": "06-swift-swiftui/reference/language-concepts/01-swift-keywords.md",
-      "sha256": "cdec26def1304f08b62c169d68695cbd4dffaf6975313dc27b0724ceec7ef1e7",
+      "sha256": "5cc1d0e7107f5bda4a91510f3c52578a34835a3c4f4e3ba0b6fcda9b2c05a085",
       "verification": [
         {
-          "mode": "not_verified",
-          "status": "NOT_VERIFIED",
-          "report": null,
-          "scope": "No named runtime or syntax evidence is recorded for this document."
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "frontend-mobile-p1-runtime.json",
+          "scope": "Five exact marked programs: Next URL input, TanStack Query cache identity, React JSX child structure used by React Native, Kotlin collections, and Swift control-flow keywords."
         }
       ],
       "marker_count": 0
@@ -6924,7 +6924,7 @@
     },
     {
       "path": "09-nodejs-backend/projects/01-todo-api.md",
-      "sha256": "cf7be6b5f09e75ad32b7ba980bab61df3b5e2af6997df6f382d1e8d40ce62e32",
+      "sha256": "89fee5e8621108faa38a980f6de465307a65b4dacc009d08ded34c4a83372f23",
       "verification": [
         {
           "mode": "not_verified",
@@ -6933,7 +6933,7 @@
           "scope": "No named runtime or syntax evidence is recorded for this document."
         }
       ],
-      "marker_count": 1
+      "marker_count": 2
     },
     {
       "path": "09-nodejs-backend/projects/02-auth-service.md",
@@ -7034,13 +7034,19 @@
     },
     {
       "path": "09-nodejs-backend/reference/language-concepts/03-node-core-api.md",
-      "sha256": "8223a6a4684e9eecc122f9b39882d82d979e6baa1f059d8d0cbcd6f7dc774680",
+      "sha256": "e80e82c0ea1e59f30e4162efe15f1701b7c8c8c044b50bfce5c8c6f55b5f6b7a",
       "verification": [
         {
           "mode": "runtime",
           "status": "PASS",
           "report": "node-reference-examples.json",
           "scope": "selected complete Node.js reference example"
+        },
+        {
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "node-python-p1-seventh.json",
+          "scope": "Four named, complete programs extracted unchanged from previously unrecorded P1 reference pages: Node language-keyword binding semantics, built-in collections, Node standard-library APIs, and Python control-flow keywords. They run in pre-existing local Docker images with network disabled, read-only root filesystem, no Linux capabilities, and a temporary read-only input mount. Only the listed contracts execute; no whole-document, HTTP-server, external-service, permission, platform, or framework coverage is claimed."
         }
       ],
       "marker_count": 0
@@ -7086,26 +7092,38 @@
     },
     {
       "path": "09-nodejs-backend/reference/language-concepts/07-js-core-semantics.md",
-      "sha256": "015fdecb58dfb274f6404c59dba118c167a6dfb1f8e256aed342e12bb174a095",
+      "sha256": "b751433b670e65ff3cca4a10fc7f51baa6fbf6d9401699bf5dc41c94ef538124",
       "verification": [
         {
           "mode": "runtime",
           "status": "PASS",
           "report": "node-reference-examples.json",
           "scope": "selected complete Node.js reference example"
+        },
+        {
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "node-python-p1-seventh.json",
+          "scope": "Four named, complete programs extracted unchanged from previously unrecorded P1 reference pages: Node language-keyword binding semantics, built-in collections, Node standard-library APIs, and Python control-flow keywords. They run in pre-existing local Docker images with network disabled, read-only root filesystem, no Linux capabilities, and a temporary read-only input mount. Only the listed contracts execute; no whole-document, HTTP-server, external-service, permission, platform, or framework coverage is claimed."
         }
       ],
       "marker_count": 1
     },
     {
       "path": "09-nodejs-backend/reference/language-concepts/08-type-coercion-collections.md",
-      "sha256": "f74d67702fbd7bb6cfbd8cb6cf74b0b9daf2f406cd2631f61a148f1fcebf37b2",
+      "sha256": "52fbda37e6acc8672d725523de9e5f56260f0e76531b7e096059feb5e65ad780",
       "verification": [
         {
           "mode": "runtime",
           "status": "PASS",
           "report": "node-reference-examples.json",
           "scope": "selected complete Node.js reference example"
+        },
+        {
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "node-python-p1-seventh.json",
+          "scope": "Four named, complete programs extracted unchanged from previously unrecorded P1 reference pages: Node language-keyword binding semantics, built-in collections, Node standard-library APIs, and Python control-flow keywords. They run in pre-existing local Docker images with network disabled, read-only root filesystem, no Linux capabilities, and a temporary read-only input mount. Only the listed contracts execute; no whole-document, HTTP-server, external-service, permission, platform, or framework coverage is claimed."
         }
       ],
       "marker_count": 5
@@ -7461,13 +7479,13 @@
     },
     {
       "path": "10-python-discovery/basics/05-control-flow.md",
-      "sha256": "5a899e5143e398eccd8abf263c864703d7e61034ef7ecbe3d8bc1263023cb909",
+      "sha256": "7b47d699e43afcf8fa1380b26d2ace82f1e113c530b1dc34dbcb07adcc653129",
       "verification": [
         {
-          "mode": "not_verified",
-          "status": "NOT_VERIFIED",
-          "report": null,
-          "scope": "No named runtime or syntax evidence is recorded for this document."
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "node-python-p1-seventh.json",
+          "scope": "Four named, complete programs extracted unchanged from previously unrecorded P1 reference pages: Node language-keyword binding semantics, built-in collections, Node standard-library APIs, and Python control-flow keywords. They run in pre-existing local Docker images with network disabled, read-only root filesystem, no Linux capabilities, and a temporary read-only input mount. Only the listed contracts execute; no whole-document, HTTP-server, external-service, permission, platform, or framework coverage is claimed."
         }
       ],
       "marker_count": 0
@@ -7604,7 +7622,7 @@
     },
     {
       "path": "10-python-discovery/projects/01-todo-api.md",
-      "sha256": "41d46d69d8667a2ed438b3f874a9fa60cd484543a7e7f5883e8f830a8ce248f7",
+      "sha256": "f2d54ba8d382561d4e6de3b9f6c42750a4600f47c97b1296b1dc66026b60886d",
       "verification": [
         {
           "mode": "not_verified",
@@ -9223,7 +9241,13 @@
     },
     {
       "path": "09-nodejs-backend/projects/01-todo-api.md",
-      "line": 245,
+      "line": 22,
+      "excerpt": "这些是需要在目标练习环境执行的验收要求；补充桥接说明本身不代表本页工程已经运行通过。",
+      "classification": "unbound_verification_wording"
+    },
+    {
+      "path": "09-nodejs-backend/projects/01-todo-api.md",
+      "line": 256,
       "excerpt": "- [ ] 至少 3 条服务层测试通过",
       "classification": "unbound_verification_wording"
     },
@@ -9361,7 +9385,7 @@
     },
     {
       "path": "10-python-discovery/projects/01-todo-api.md",
-      "line": 219,
+      "line": 230,
       "excerpt": "验证记录（2026-09-19）：从本页原样抽取四个 Python 文件，在 Python 3.12.14 与 Python 3.14 容器中均通过 12 项测试；实际依赖为 FastAPI 0.141.1、Pydantic 2.13.5、pytest 9.1.1、httpx 0.28.1。当前 Starlette 1.6.0 会报告 httpx 测试适配器与 AnyIO 别名弃用警告；测试通过不代表依赖无迁移工作，也不涵盖数据库、部署或多 worker 持久化。",
       "classification": "unbound_verification_wording"
     },

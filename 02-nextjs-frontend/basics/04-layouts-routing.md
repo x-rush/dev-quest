@@ -1096,6 +1096,26 @@ Next.js 16的路由系统为现代Web应用提供了强大而灵活的架构基�
 **最后更新**: 2026年9月
 **版本**: v1.0.0
 
+## 可复跑：URL 参数不是组件状态
+
+Next 取得的 `params` 和 `searchParams` 最终都来自 URL 文本。尤其是查询参数可能重复、缺失或带有非数字值，因此解析时先保留原始字符串，再按页面契约收窄；不要把 `Number(value) || 1` 当作校验，因为它会把合法的 `0` 和非法输入混在一起。
+
+<!-- dq-p1-case: next-route-url-contract -->
+```js
+const url = new URL('https://example.test/notes/42?mode=preview&page=2&page=3')
+const segments = url.pathname.split('/').filter(Boolean)
+const pageText = url.searchParams.get('page')
+const page = pageText !== null && /^\d+$/.test(pageText) ? Number(pageText) : 1
+
+if (segments.at(-1) !== '42') throw new Error('动态路径参数解析错误')
+if (url.searchParams.get('mode') !== 'preview') throw new Error('查询参数解析错误')
+if (url.searchParams.getAll('page').join(',') !== '2,3') throw new Error('重复查询参数不应静默丢失')
+if (page !== 2) throw new Error('页码收窄错误')
+console.log('Next route URL contracts passed')
+```
+
+该程序只运行 Web 标准 `URL`/`URLSearchParams` 的路由输入契约，并不启动 Next 服务器、验证文件约定或替代浏览器导航测试。实际页面还应决定重复 `page` 是拒绝、取首个还是取最后一个值。
+
 <!-- learning-navigation -->
 ## 阅读导航
 

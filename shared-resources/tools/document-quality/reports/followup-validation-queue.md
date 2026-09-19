@@ -11,13 +11,13 @@
 - **P2**：框架与部署文档没有命名运行证据。优先建立版本锁定的最小工程、构建或部署演练。
 - **P3**：进阶、测试和其他专题没有命名运行证据。按依赖关系排入后续批次。
 
-台账对应的 44 条未绑定措辞全部保留，并在生成时重新定位到当前源码行。明确写出“尚未验证”、说明如何验证或给出练习要求的行，按所属文件的普通优先级排序，不会被误报成 P0 通过性断言。同一文件可同时有一条文件级缺口和多条逐行任务；两者不能互相抵消。每次验证只能声明其命名案例和环境覆盖的范围。
+台账对应的 45 条未绑定措辞全部保留，并在生成时重新定位到当前源码行。明确写出“尚未验证”、说明如何验证或给出练习要求的行，按所属文件的普通优先级排序，不会被误报成 P0 通过性断言。同一文件可同时有一条文件级缺口和多条逐行任务；两者不能互相抵消。每次验证只能声明其命名案例和环境覆盖的范围。
 
 ## 汇总
 
-- 队列条目：563 条，其中文件级证据缺口 519 条，逐行未绑定验证措辞 44 条。
-- 优先级：P0 0；P1 263；P2 149；P3 151。
-- 分类：核心基础 248；首项目 15；框架 110；部署 39；进阶与测试 151。
+- 队列条目：558 条，其中文件级证据缺口 513 条，逐行未绑定验证措辞 45 条。
+- 优先级：P0 0；P1 258；P2 149；P3 151。
+- 分类：核心基础 242；首项目 16；框架 110；部署 39；进阶与测试 151。
 
 ## 明细
 
@@ -81,7 +81,6 @@
 | P1 | 核心基础 | Kotlin / Compose | [05-kotlin-compose/reference/language-concepts/01-kotlin-keywords.md](../../../../05-kotlin-compose/reference/language-concepts/01-kotlin-keywords.md#L540):540 | 保留诚实的验证边界，并在补证据时决定是否增加最小练习<br/>保持已有边界说明；若新增示例，记录工具链、命令、预期行为和未覆盖范围。 | - 只能有一个主构造属性；**不能声明为局部类或内部类**（实测编译错误：value class cannot be local or inner） |
 | P1 | 核心基础 | Kotlin / Compose | [05-kotlin-compose/reference/language-concepts/01-kotlin-keywords.md](../../../../05-kotlin-compose/reference/language-concepts/01-kotlin-keywords.md#L658):658 | 保留诚实的验证边界，并在补证据时决定是否增加最小练习<br/>保持已有边界说明；若新增示例，记录工具链、命令、预期行为和未覆盖范围。 | var temperature = 50 // 初始化直写幕后字段——不走 setter（实测：读到 50 而非 40） |
 | P1 | 核心基础 | Kotlin / Compose | [05-kotlin-compose/reference/language-concepts/01-kotlin-keywords.md](../../../../05-kotlin-compose/reference/language-concepts/01-kotlin-keywords.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
-| P1 | 核心基础 | Kotlin / Compose | [05-kotlin-compose/reference/language-concepts/02-null-safety-collections.md](../../../../05-kotlin-compose/reference/language-concepts/02-null-safety-collections.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
 | P1 | 核心基础 | Kotlin / Compose | [05-kotlin-compose/reference/language-concepts/03-coroutines-flow-api.md](../../../../05-kotlin-compose/reference/language-concepts/03-coroutines-flow-api.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
 | P1 | 核心基础 | Kotlin / Compose | [05-kotlin-compose/reference/language-concepts/04-compose-state-api.md](../../../../05-kotlin-compose/reference/language-concepts/04-compose-state-api.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
 | P1 | 核心基础 | Kotlin / Compose | [05-kotlin-compose/reference/language-concepts/05-generics-delegates.md](../../../../05-kotlin-compose/reference/language-concepts/05-generics-delegates.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
@@ -97,7 +96,6 @@
 | P1 | 核心基础 | Next.js / TypeScript | [02-nextjs-frontend/basics/01-environment-setup.md](../../../../02-nextjs-frontend/basics/01-environment-setup.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
 | P1 | 核心基础 | Next.js / TypeScript | [02-nextjs-frontend/basics/02-first-nextjs-app.md](../../../../02-nextjs-frontend/basics/02-first-nextjs-app.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
 | P1 | 核心基础 | Next.js / TypeScript | [02-nextjs-frontend/basics/03-typescript-integration.md](../../../../02-nextjs-frontend/basics/03-typescript-integration.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
-| P1 | 核心基础 | Next.js / TypeScript | [02-nextjs-frontend/basics/04-layouts-routing.md](../../../../02-nextjs-frontend/basics/04-layouts-routing.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
 | P1 | 核心基础 | Next.js / TypeScript | [02-nextjs-frontend/basics/05-styling-with-tailwind.md](../../../../02-nextjs-frontend/basics/05-styling-with-tailwind.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
 | P1 | 核心基础 | Next.js / TypeScript | [02-nextjs-frontend/basics/06-data-fetching-basics.md](../../../../02-nextjs-frontend/basics/06-data-fetching-basics.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
 | P1 | 核心基础 | Next.js / TypeScript | [02-nextjs-frontend/basics/07-state-management.md](../../../../02-nextjs-frontend/basics/07-state-management.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
@@ -159,7 +157,6 @@
 | P1 | 核心基础 | Python | [10-python-discovery/basics/02-first-script.md](../../../../10-python-discovery/basics/02-first-script.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
 | P1 | 核心基础 | Python | [10-python-discovery/basics/03-variables-types.md](../../../../10-python-discovery/basics/03-variables-types.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
 | P1 | 核心基础 | Python | [10-python-discovery/basics/04-functions-oop.md](../../../../10-python-discovery/basics/04-functions-oop.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
-| P1 | 核心基础 | Python | [10-python-discovery/basics/05-control-flow.md](../../../../10-python-discovery/basics/05-control-flow.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
 | P1 | 核心基础 | Python | [10-python-discovery/basics/06-exceptions.md](../../../../10-python-discovery/basics/06-exceptions.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
 | P1 | 核心基础 | Python | [10-python-discovery/basics/07-advanced-features.md](../../../../10-python-discovery/basics/07-advanced-features.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
 | P1 | 核心基础 | Python | [10-python-discovery/reference/library-guides/02-ecosystem-libs.md](../../../../10-python-discovery/reference/library-guides/02-ecosystem-libs.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
@@ -169,7 +166,6 @@
 | P1 | 核心基础 | React Native / Multi-platform | [04-multiplatform-apps/README.md](../../../../04-multiplatform-apps/README.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
 | P1 | 核心基础 | React Native / Multi-platform | [04-multiplatform-apps/basics/01-environment-setup.md](../../../../04-multiplatform-apps/basics/01-environment-setup.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
 | P1 | 核心基础 | React Native / Multi-platform | [04-multiplatform-apps/basics/02-first-app.md](../../../../04-multiplatform-apps/basics/02-first-app.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
-| P1 | 核心基础 | React Native / Multi-platform | [04-multiplatform-apps/basics/03-components-jsx.md](../../../../04-multiplatform-apps/basics/03-components-jsx.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
 | P1 | 核心基础 | React Native / Multi-platform | [04-multiplatform-apps/basics/04-state-hooks.md](../../../../04-multiplatform-apps/basics/04-state-hooks.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
 | P1 | 核心基础 | React Native / Multi-platform | [04-multiplatform-apps/basics/05-navigation.md](../../../../04-multiplatform-apps/basics/05-navigation.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
 | P1 | 核心基础 | React Native / Multi-platform | [04-multiplatform-apps/basics/06-native-modules.md](../../../../04-multiplatform-apps/basics/06-native-modules.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
@@ -223,7 +219,6 @@
 | P1 | 核心基础 | Swift / SwiftUI | [06-swift-swiftui/basics/05-layouts.md](../../../../06-swift-swiftui/basics/05-layouts.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
 | P1 | 核心基础 | Swift / SwiftUI | [06-swift-swiftui/basics/06-navigation.md](../../../../06-swift-swiftui/basics/06-navigation.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
 | P1 | 核心基础 | Swift / SwiftUI | [06-swift-swiftui/basics/07-concurrency-async-await.md](../../../../06-swift-swiftui/basics/07-concurrency-async-await.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
-| P1 | 核心基础 | Swift / SwiftUI | [06-swift-swiftui/reference/language-concepts/01-swift-keywords.md](../../../../06-swift-swiftui/reference/language-concepts/01-swift-keywords.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
 | P1 | 核心基础 | Swift / SwiftUI | [06-swift-swiftui/reference/language-concepts/03-concurrency-api.md](../../../../06-swift-swiftui/reference/language-concepts/03-concurrency-api.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
 | P1 | 核心基础 | Swift / SwiftUI | [06-swift-swiftui/reference/language-concepts/04-swiftui-state-api.md](../../../../06-swift-swiftui/reference/language-concepts/04-swiftui-state-api.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
 | P1 | 核心基础 | Swift / SwiftUI | [06-swift-swiftui/reference/language-concepts/05-protocols-generics.md](../../../../06-swift-swiftui/reference/language-concepts/05-protocols-generics.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
@@ -244,7 +239,6 @@
 | P1 | 核心基础 | TanStack / TypeScript | [03-tanstack-stack/README.md](../../../../03-tanstack-stack/README.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
 | P1 | 核心基础 | TanStack / TypeScript | [03-tanstack-stack/basics/01-environment-setup.md](../../../../03-tanstack-stack/basics/01-environment-setup.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
 | P1 | 核心基础 | TanStack / TypeScript | [03-tanstack-stack/basics/02-headless-philosophy.md](../../../../03-tanstack-stack/basics/02-headless-philosophy.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
-| P1 | 核心基础 | TanStack / TypeScript | [03-tanstack-stack/basics/03-query-fundamentals.md](../../../../03-tanstack-stack/basics/03-query-fundamentals.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
 | P1 | 核心基础 | TanStack / TypeScript | [03-tanstack-stack/basics/04-table-fundamentals.md](../../../../03-tanstack-stack/basics/04-table-fundamentals.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
 | P1 | 核心基础 | TanStack / TypeScript | [03-tanstack-stack/basics/05-router-fundamentals.md](../../../../03-tanstack-stack/basics/05-router-fundamentals.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
 | P1 | 核心基础 | TanStack / TypeScript | [03-tanstack-stack/basics/06-form-fundamentals.md](../../../../03-tanstack-stack/basics/06-form-fundamentals.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
@@ -277,12 +271,13 @@
 | P1 | 首项目 | Kotlin / Compose | [05-kotlin-compose/projects/01-notes-app.md](../../../../05-kotlin-compose/projects/01-notes-app.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
 | P1 | 首项目 | Next.js / TypeScript | [02-nextjs-frontend/projects/01-corporate-landing.md](../../../../02-nextjs-frontend/projects/01-corporate-landing.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
 | P1 | 首项目 | Node.js | [09-nodejs-backend/basics/08-first-project.md](../../../../09-nodejs-backend/basics/08-first-project.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
-| P1 | 首项目 | Node.js | [09-nodejs-backend/projects/01-todo-api.md](../../../../09-nodejs-backend/projects/01-todo-api.md#L245):245 | 保留诚实的验证边界，并在补证据时决定是否增加最小练习<br/>保持已有边界说明；若新增示例，记录工具链、命令、预期行为和未覆盖范围。 | - &#91; &#93; 至少 3 条服务层测试通过 |
+| P1 | 首项目 | Node.js | [09-nodejs-backend/projects/01-todo-api.md](../../../../09-nodejs-backend/projects/01-todo-api.md#L22):22 | 保留诚实的验证边界，并在补证据时决定是否增加最小练习<br/>保持已有边界说明；若新增示例，记录工具链、命令、预期行为和未覆盖范围。 | 这些是需要在目标练习环境执行的验收要求；补充桥接说明本身不代表本页工程已经运行通过。 |
+| P1 | 首项目 | Node.js | [09-nodejs-backend/projects/01-todo-api.md](../../../../09-nodejs-backend/projects/01-todo-api.md#L256):256 | 保留诚实的验证边界，并在补证据时决定是否增加最小练习<br/>保持已有边界说明；若新增示例，记录工具链、命令、预期行为和未覆盖范围。 | - &#91; &#93; 至少 3 条服务层测试通过 |
 | P1 | 首项目 | Node.js | [09-nodejs-backend/projects/01-todo-api.md](../../../../09-nodejs-backend/projects/01-todo-api.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
 | P1 | 首项目 | PHP | [07-php-mastery/projects/01-todo-api.md](../../../../07-php-mastery/projects/01-todo-api.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
 | P1 | 首项目 | Python | [10-python-discovery/basics/08-first-project.md](../../../../10-python-discovery/basics/08-first-project.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
 | P1 | 首项目 | Python | [10-python-discovery/projects/01-todo-api.md](../../../../10-python-discovery/projects/01-todo-api.md#L11):11 | 保留诚实的验证边界，并在补证据时决定是否增加最小练习<br/>保持已有边界说明；若新增示例，记录工具链、命令、预期行为和未覆盖范围。 | 本页是完整的内存版练习：依次保存 `schemas.py`、`store.py`、`main.py` 和 `tests/test_api.py` 即可运行。每次服务重启清空数据，多个 worker 不共享数据；它用于学习 HTTP 契约，不用于持久化部署。先通过第 6 节测试，再替换存储。 |
-| P1 | 首项目 | Python | [10-python-discovery/projects/01-todo-api.md](../../../../10-python-discovery/projects/01-todo-api.md#L219):219 | 保留诚实的验证边界，并在补证据时决定是否增加最小练习<br/>保持已有边界说明；若新增示例，记录工具链、命令、预期行为和未覆盖范围。 | 验证记录（2026-09-19）：从本页原样抽取四个 Python 文件，在 Python 3.12.14 与 Python 3.14 容器中均通过 12 项测试；实际依赖为 FastAPI 0.141.1、Pydantic 2.13.5、pytest 9.1.1、httpx 0.28.1。当前 Starlette 1.6.0 会报告 httpx 测试适配器与 AnyIO 别名弃用警告；测试通过不代表依赖无迁移工作，也不涵盖数据库、部署或多 worker 持久化。 |
+| P1 | 首项目 | Python | [10-python-discovery/projects/01-todo-api.md](../../../../10-python-discovery/projects/01-todo-api.md#L230):230 | 保留诚实的验证边界，并在补证据时决定是否增加最小练习<br/>保持已有边界说明；若新增示例，记录工具链、命令、预期行为和未覆盖范围。 | 验证记录（2026-09-19）：从本页原样抽取四个 Python 文件，在 Python 3.12.14 与 Python 3.14 容器中均通过 12 项测试；实际依赖为 FastAPI 0.141.1、Pydantic 2.13.5、pytest 9.1.1、httpx 0.28.1。当前 Starlette 1.6.0 会报告 httpx 测试适配器与 AnyIO 别名弃用警告；测试通过不代表依赖无迁移工作，也不涵盖数据库、部署或多 worker 持久化。 |
 | P1 | 首项目 | Python | [10-python-discovery/projects/01-todo-api.md](../../../../10-python-discovery/projects/01-todo-api.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
 | P1 | 首项目 | Swift / SwiftUI | [06-swift-swiftui/projects/01-notes-app.md](../../../../06-swift-swiftui/projects/01-notes-app.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
 | P1 | 首项目 | TanStack / TypeScript | [03-tanstack-stack/basics/08-first-project.md](../../../../03-tanstack-stack/basics/08-first-project.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |

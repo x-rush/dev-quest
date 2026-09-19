@@ -192,6 +192,32 @@ actor Config {
 - 📄 [05-protocols-generics.md](./05-protocols-generics.md) — some/any 与泛型的完整原理
 
 
+## 可复跑：`guard`、`defer` 与 `switch` 的控制流边界
+
+`guard` 的 else 分支必须离开当前作用域，`defer` 在作用域退出时执行，`switch` 需要穷尽匹配。把清理动作放在 `defer` 中能覆盖早退与正常返回，但它不是并发资源同步机制。
+
+<!-- dq-p1-case: swift-control-flow-keywords-contract -->
+```swift
+enum Input { case number(Int), missing }
+
+func describe(_ input: Input, events: inout [String]) -> String {
+    defer { events.append("cleanup") }
+    guard case let .number(value) = input else { return "missing" }
+    switch value {
+    case 0: return "zero"
+    default: return "number"
+    }
+}
+
+var events: [String] = []
+precondition(describe(.missing, events: &events) == "missing")
+precondition(describe(.number(0), events: &events) == "zero")
+precondition(events == ["cleanup", "cleanup"])
+print("Swift control-flow keyword contracts passed")
+```
+
+这段程序验证 Swift 语言控制流和标准库数组行为；不验证 SwiftUI `body` 的求值次数，也不把 `defer` 当作 actor、Task 或 UI 资源的生命周期替代品。
+
 <!-- learning-navigation -->
 ## 阅读导航
 

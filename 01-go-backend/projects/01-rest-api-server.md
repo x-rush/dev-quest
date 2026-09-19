@@ -1,6 +1,16 @@
 # REST API 服务器实战项目
 
-> **阅读准备**：已完成 Gin 路由与数据库基础；先实现单资源创建和查询，再加入认证、缓存等扩展。
+> **阅读准备**：先通过下方 CLI → HTTP 桥接，再学习 Gin 路由；进入正文数据库阶段前补齐 GORM 基础。
+
+## 从标准库首项目走到 Gin
+
+完成[标准库 TODO CLI](./00-stdlib-todo-cli.md)后，先保留其 `Store` 的输入和错误语义，在独立练习目录中完成一层 HTTP 入口。本段是桥接练习规格，需自行实现并在目标环境执行验收；不把后文的完整服务器结构视为此阶段已经交付的代码。
+
+1. **前置**：CLI 的 `go test ./...` 通过，能解释空标题为何失败、`List` 为什么返回副本。阅读[并发基础](../basics/07-concurrency-basics.md)与 [net/http](../reference/library-guides/03-net-http.md)，明确 HTTP 请求可能并发访问同一个 Store。
+2. **产物**：增加 HTTP handler 与 `httptest` 测试，先只实现 `POST /todos` 和 `GET /todos`；Store 由服务共享并保护读写，不能在每次请求内重新创建，也不能无锁复用 CLI 的切片存储。POST 的 JSON 标题沿用原校验，成功返回 201 与 ID，空标题或损坏 JSON 返回 400。
+3. **验收**：在同一服务实例创建后，列表包含刚返回的 ID；失败请求前后列表不变；保存 `go test ./...` 的结果，并在支持 race detector 的本地工具链执行 `go test -race ./...` 检查并发读写。此阶段重启清空数据是预期。
+4. **失败回查**：创建后列表为空，查 Store 生命周期；非法输入仍写入，查解码与 `Store.Add` 的先后顺序；并发检查失败，回到锁的覆盖范围和 `List` 副本。HTTP 状态不符则回到 handler 的错误映射，不要修改已经通过的业务规则来迁就响应。
+5. **下一步**：阅读 [Gin 基础](../frameworks/01-gin-framework-basics.md)，把上述两个 handler 换成 Gin 路由并重跑相同契约测试；再阅读 [GORM](../frameworks/03-gorm-orm-complete.md)，进入本文正文的数据库阶段。正文的用户、商品、认证属于后续扩展，逐项新增验收，不要求一次替换 CLI 全部能力。
 
 ## 分阶段练习与验收
 

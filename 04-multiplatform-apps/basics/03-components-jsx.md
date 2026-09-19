@@ -218,6 +218,28 @@ StyleSheet 有助于组织与检查样式，动态样式对象也合法；是否
 > 💡 **学习建议**: 每学一个组件就在练习 App 里造一个真实场景的小界面，比通读文档十遍都有效。
 
 
+## 可复跑：JSX 子节点的结构契约
+
+React Native 的 `<Text>`、`<View>` 等最终是 React 元素。JSX 中嵌套数组与条件子节点会先经过 React 的子节点规则；列表项必须提供稳定 key，不能把“数组能渲染”误解成“下标 key 在插入后仍安全”。下面运行真实 React 的 `Children.toArray`，只验证 JSX/React 的元素结构，不声称验证原生 Text 渲染或 Flexbox。
+
+<!-- dq-p1-case: react-native-jsx-children-contract -->
+```js
+import React from 'react'
+
+const rows = [{ id: 'a', title: '第一项' }, { id: 'b', title: '第二项' }]
+const children = rows.map((row) => React.createElement('Text', { key: row.id }, row.title))
+const flattened = React.Children.toArray([null, children, false])
+
+if (flattened.length !== 2) throw new Error('空条件节点不应成为可渲染条目')
+if (flattened.map((child) => child.props.children).join(',') !== '第一项,第二项') {
+  throw new Error('JSX 子节点顺序错误')
+}
+if (!flattened.every((child) => child.key !== null)) throw new Error('列表项缺少稳定 key')
+console.log('React Native JSX children contracts passed')
+```
+
+要验证原生规则，请继续在 Android 与 iOS 模拟器或真机运行：`View` 下的裸文本报错、长文本换行、无障碍树和触摸区域都属于宿主平台行为，不由这段 Node 程序覆盖。
+
 <!-- learning-navigation -->
 ## 阅读导航
 

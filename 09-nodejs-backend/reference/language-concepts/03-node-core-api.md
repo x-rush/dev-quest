@@ -196,8 +196,27 @@ const res = await fetch("http://127.0.0.1:3000/ping");
 
 ### 陷阱
 - `req`/`res` 是 Node 自己的 IncomingMessage/ServerResponse（**不是** Web 标准 Request/Response）——迁移 Hono 时心智模型要换：Hono 处理器 `return c.json()`，这里必须显式 `res.end()`
-- 忘调 `res.end()` 客户端会悬挂到超时；`res.writeHead` 与 `setHeader` 二选一，别混用
+- 忘调 `res.end()` 客户端会悬挂到超时；`setHeader` 可先设置默认头，`writeHead` 的同名头会覆盖它。实际项目选定一种组织方式，避免在分支中产生难追踪的覆盖
 - `req.url` 只含路径与查询串（`/ping?x=1`），不含协议与主机
+
+<!-- node-python-seventh-case: node-core-api-contracts -->
+```js
+import assert from 'node:assert/strict';
+import { EventEmitter, once } from 'node:events';
+import { basename, join } from 'node:path';
+import { fileURLToPath, pathToFileURL } from 'node:url';
+
+const bus = new EventEmitter();
+const received = once(bus, 'done');
+queueMicrotask(() => bus.emit('done', 'task-7'));
+assert.deepEqual(await received, ['task-7']);
+
+const file = fileURLToPath(pathToFileURL(join('/tmp', 'task.txt')));
+assert.equal(basename(file), 'task.txt');
+console.log('core-api: EventEmitter once; path join; file URL round-trip');
+```
+
+该程序不启动端口或读取宿主文件，只运行 `node:events`、`node:path` 与 `node:url` 的本页契约。URL 往返的具体路径分隔符由当前运行平台决定，所以只断言文件名；HTTP、权限和 Windows 路径兼容性不在本检查范围内。
 
 ## 8. node:worker_threads
 

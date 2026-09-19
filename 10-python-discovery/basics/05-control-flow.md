@@ -80,6 +80,32 @@ def handle(command: str) -> str:
 
 > ⚠️ `case _` 是通配符，**必须放最后**；匹配字面量直接写值，匹配变量会被当作捕获名——要用点号访问的常量（如 `Status.OK`）才按值匹配。
 
+<!-- node-python-seventh-case: python-control-flow-keywords-contracts -->
+```python
+def classify(command):
+    match command.split():
+        case ["add", name] if name:
+            return f"add:{name}"
+        case ["quit"]:
+            return "quit"
+        case _:
+            return "unknown"
+
+found = None
+for value in [0, -1, 4]:
+    if value > 0:
+        found = value
+        break
+else:
+    found = "missing"
+
+assert (classify("add Ada"), classify("quit"), classify("add"), found) == ("add:Ada", "quit", "unknown", 4)
+print("python-keywords: match case guard; for else; break")
+```
+
+该程序从正文原样提取并运行 `match`、`case`、`if`、`for`、`break`、`else` 与 `return`。
+它只验证三条具体控制流路径；模式匹配的类模式、映射模式和异常传播需要另建输入验证。
+
 ---
 
 ## 2. for 循环：迭代即遍历
@@ -137,7 +163,7 @@ else:
 
 ## 3. 推导式：Python 的标志表达力
 
-推导式（comprehension）把"建列表的循环"压缩成一行，且比等价循环更快：
+推导式（comprehension）把"建列表的循环"压缩成一行；其性能常常不错，但是否更快取决于工作量、解释器和等价循环的具体写法：
 
 ```python
 nums = [1, 2, 3, 4, 5, 6]

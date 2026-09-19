@@ -225,6 +225,28 @@ fun main() {
 
 练习：为“接口未加载、加载成功但为空、失败”建一个 sealed 类型，并分别渲染。验收：不用 `null.orEmpty()` 抹掉失败原因，能解释空集合的 all 为什么为 true。对 Java 平台类型在边界处收窄，比到处添加 `!!` 更容易定位问题。
 
+## 可复跑：只读接口、快照与空集合的标准库语义
+
+`List` 是只读接口，不是不可变对象；`toList()` 才创建列表结构快照。空集合上的 `all` 也会返回 `true`，它表达“没有反例”，不能被误读为“至少存在一个通过项”。
+
+<!-- dq-p1-case: kotlin-collections-contract -->
+```kotlin
+fun main() {
+    val source = mutableListOf("A")
+    val readOnlyView: List<String> = source
+    val snapshot = source.toList()
+    source += "B"
+
+    check(readOnlyView == listOf("A", "B"))
+    check(snapshot == listOf("A"))
+    check(emptyList<Int>().all { it > 0 })
+    check(emptyList<Int>().none { it > 0 })
+    println("Kotlin collection contracts passed")
+}
+```
+
+它只依赖 Kotlin 标准库，验证的是集合契约；元素对象本身仍可能可变，`toList()` 不是深拷贝，也不涉及 Compose 状态、Flow 或 Android 生命周期。
+
 <!-- learning-navigation -->
 ## 阅读导航
 

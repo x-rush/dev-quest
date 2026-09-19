@@ -89,6 +89,9 @@ def records_from_reports():
     node_python_p1_final = load("node-python-p1-final.json")
     for row in node_python_p1_final.get("results", []):
         add_record(records, row.get("source"), "runtime", "node-python-p1-final.json", node_python_p1_final.get("scope", "selected Node/Python P1 final example"), "PASS" if row.get("status", "").upper() == "PASS" else "FAIL")
+    node_python_p1_seventh = load("node-python-p1-seventh.json")
+    for row in node_python_p1_seventh.get("results", []):
+        add_record(records, row.get("source"), "runtime", "node-python-p1-seventh.json", node_python_p1_seventh.get("scope", "selected Node/Python P1 seventh example"), "PASS" if row.get("status", "").upper() == "PASS" else "FAIL")
     frontend_mobile_core_p1 = load("p1-frontend-mobile-core-runtime.json")
     for row in frontend_mobile_core_p1.get("results", []):
         add_record(records, row.get("source"), "runtime", "p1-frontend-mobile-core-runtime.json", frontend_mobile_core_p1.get("scope", "selected frontend/mobile P1 core example"), "PASS" if row.get("status", "").upper() == "PASS" else "FAIL")
@@ -98,6 +101,9 @@ def records_from_reports():
     p1_runtime_evidence = load("p1-runtime-evidence.json")
     for row in p1_runtime_evidence.get("results", []):
         add_record(records, row.get("source"), "runtime", "p1-runtime-evidence.json", p1_runtime_evidence.get("scope", "selected P1 runtime example"), "PASS" if row.get("status", "").upper() == "PASS" else "FAIL")
+    frontend_mobile_p1 = load("frontend-mobile-p1-runtime.json")
+    for row in frontend_mobile_p1.get("results", []):
+        add_record(records, row.get("source"), "runtime", "frontend-mobile-p1-runtime.json", frontend_mobile_p1.get("scope", "selected frontend/mobile P1 contract"), "PASS" if row.get("status", "").upper() == "PASS" else "FAIL")
     go_rust_p1_pages = load("go-rust-p1-page-validation.json")
     for row in go_rust_p1_pages.get("cases", []):
         add_record(records, row.get("path"), "runtime", "go-rust-p1-page-validation.json", go_rust_p1_pages.get("scope", "selected Go/Rust P1 page example"), "PASS" if row.get("passed") else "FAIL")

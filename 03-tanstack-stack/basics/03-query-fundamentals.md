@@ -178,6 +178,32 @@ async function readTodos(): Promise<Todo[]> {
 - 写入成功后需要确定受影响的读取范围。
 - 首次失败与有历史数据的后台失败需要分别设计界面。
 
+## 可复跑：queryKey 隔离缓存身份
+
+`queryKey` 不是展示标签，而是缓存身份的一部分。把用户 ID 放进请求却漏出键，会让不同用户读取同一个缓存槽位。下面的最小程序直接使用 Query v5 的 `QueryClient`，验证两个键的缓存彼此独立，并验证失效不会清除已有快照。
+
+<!-- dq-p1-case: tanstack-query-key-contract -->
+```js
+import { QueryClient } from '@tanstack/react-query'
+
+const client = new QueryClient({ defaultOptions: { queries: { retry: false } } })
+const aliceKey = ['todos', 'alice']
+const bobKey = ['todos', 'bob']
+
+await client.fetchQuery({ queryKey: aliceKey, queryFn: async () => ['alice task'] })
+await client.fetchQuery({ queryKey: bobKey, queryFn: async () => ['bob task'] })
+await client.invalidateQueries({ queryKey: aliceKey, exact: true })
+
+if (client.getQueryData(aliceKey)?.[0] !== 'alice task') throw new Error('Alice 快照丢失')
+if (client.getQueryData(bobKey)?.[0] !== 'bob task') throw new Error('不同用户缓存串联')
+if (!client.getQueryState(aliceKey)?.isInvalidated) throw new Error('目标键未失效')
+if (client.getQueryState(bobKey)?.isInvalidated) throw new Error('非目标键被错误失效')
+client.clear()
+console.log('TanStack query key contracts passed')
+```
+
+这验证的是 Query 核心的键与失效语义，不挂载 React 组件、不覆盖网络重试、Provider 生命周期或服务端 hydration；这些行为仍要在应用测试中验证。
+
 <!-- learning-navigation -->
 ## 阅读导航
 

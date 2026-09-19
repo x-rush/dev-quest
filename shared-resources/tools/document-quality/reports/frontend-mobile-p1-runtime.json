@@ -1,0 +1,84 @@
+{
+  "scope": "Five exact marked programs: Next URL input, TanStack Query cache identity, React JSX child structure used by React Native, Kotlin collections, and Swift control-flow keywords.",
+  "execution": "Docker containers with no network, a read-only root filesystem, capabilities dropped, and bounded resources.",
+  "not_verified": [
+    "Next.js server, route-file build, SSR, or browser navigation",
+    "React Native Android/iOS renderer, Flexbox, accessibility, or device input",
+    "React mounting, Query Provider lifecycle, hydration, and real network retry",
+    "Compose/Android and SwiftUI/iOS lifecycle behavior"
+  ],
+  "passed": 5,
+  "total": 5,
+  "results": [
+    {
+      "case": "next-route-url-contract",
+      "source": "02-nextjs-frontend/basics/04-layouts-routing.md",
+      "source_sha256": "b35fbc1db4bfdb74ee2783470d14db40f3efbf03e8ef47632e87a411d60e7a53",
+      "extracted_code_sha256": "062ebe91a93c9624ff5515999b1fc47bf75615e3213dc836ea03050b9b504254",
+      "image": "node:24-bookworm-slim",
+      "command": "node Case.mjs",
+      "expected_stdout": "Next route URL contracts passed\n",
+      "stdout": "Next route URL contracts passed\n",
+      "stderr": "",
+      "exit_code": 0,
+      "error": null,
+      "status": "PASS"
+    },
+    {
+      "case": "tanstack-query-key-contract",
+      "source": "03-tanstack-stack/basics/03-query-fundamentals.md",
+      "source_sha256": "91b5686365f2d8f51f4a62851892e08290cc6acaa268273d0dd4d8dd00b7011e",
+      "extracted_code_sha256": "b510e49eb13689bb0904bdeed505fddf06dd659eaf58fc12eba331f2974210f7",
+      "image": "node:24-bookworm-slim",
+      "command": "node Case.mjs",
+      "expected_stdout": "TanStack query key contracts passed\n",
+      "stdout": "TanStack query key contracts passed\n",
+      "stderr": "",
+      "exit_code": 0,
+      "error": null,
+      "status": "PASS"
+    },
+    {
+      "case": "react-native-jsx-children-contract",
+      "source": "04-multiplatform-apps/basics/03-components-jsx.md",
+      "source_sha256": "b07439114b9816a7ef989d120bd7c3a6b871f489ef887617c0163d10ffe01d68",
+      "extracted_code_sha256": "067dc82f7a0d0849a84137124b5acb3f120d416656deaa8465bc0eb0de9f48ae",
+      "image": "node:24-bookworm-slim",
+      "command": "node Case.mjs",
+      "expected_stdout": "React Native JSX children contracts passed\n",
+      "stdout": "React Native JSX children contracts passed\n",
+      "stderr": "",
+      "exit_code": 0,
+      "error": null,
+      "status": "PASS"
+    },
+    {
+      "case": "kotlin-collections-contract",
+      "source": "05-kotlin-compose/reference/language-concepts/02-null-safety-collections.md",
+      "source_sha256": "ff37e513115335a65eed262f1641047d4f7586ece10aa8e2b893169e821308e2",
+      "extracted_code_sha256": "3cf04c81abbe371dc7a3c1e69bd43ee975affef78fd9060faa21c55cbe8b8446",
+      "image": "dev-quest-validation:local",
+      "command": "kotlinc Case.kt -include-runtime -d /tmp/case.jar && java -jar /tmp/case.jar",
+      "expected_stdout": "Kotlin collection contracts passed\n",
+      "stdout": "Kotlin collection contracts passed\n",
+      "stderr": "",
+      "exit_code": 0,
+      "error": null,
+      "status": "PASS"
+    },
+    {
+      "case": "swift-control-flow-keywords-contract",
+      "source": "06-swift-swiftui/reference/language-concepts/01-swift-keywords.md",
+      "source_sha256": "5cc1d0e7107f5bda4a91510f3c52578a34835a3c4f4e3ba0b6fcda9b2c05a085",
+      "extracted_code_sha256": "3882d4dd7b3a367b8645d09ce6d8d3d9cbd86f4be35ab96074ac8eb9dc4be36c",
+      "image": "swift:6.3.3-noble",
+      "command": "swift Case.swift",
+      "expected_stdout": "Swift control-flow keyword contracts passed\n",
+      "stdout": "Swift control-flow keyword contracts passed\n",
+      "stderr": "",
+      "exit_code": 0,
+      "error": null,
+      "status": "PASS"
+    }
+  ]
+}
