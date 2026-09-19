@@ -39,6 +39,7 @@ s5 := arr[1:3:3]              // cap = max - low，append 不再写回原数组
 ## 💡 示例
 
 <!-- ninth-reference-case: {"id":"go-slice-full-expression","stdout":"[9 2 3]\n[9 8]\n"} -->
+<!-- doc-verify:go-slice-full-expression -->
 ```go
 package main
 
