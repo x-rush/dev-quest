@@ -4,3 +4,6 @@
 
 # Serena MCP project-local config
 .serena/
+
+# Disposable work directory used by reproducible documentation validators.
+/.validation-tmp/
