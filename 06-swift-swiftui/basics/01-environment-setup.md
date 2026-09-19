@@ -47,11 +47,10 @@ Xcode 包含平台 SDK、编译与签名工具。模拟器运行、真机签名�
 
 ### 1.1 检查系统要求
 
-开发 iOS 26 SDK 应用需要：
+开发 iOS 应用前，先在 [Apple 的 Xcode 系统要求](https://developer.apple.com/xcode/system-requirements)中核对当前 Xcode 与 macOS 的组合；课程不以一个未锁定的小版本作为永远正确的基线。写作时的 Xcode 26.2 需要 macOS Sequoia 15.6 或更高，并包含 Swift 6.2.3；你的工程应记录实际 Xcode、SDK、Swift language mode 与 deployment target。
 
-- **macOS 版本**：Xcode 26.x 要求 macOS Sequoia 15.4 或更高（本模块基线为 Xcode 26.6）
-- **磁盘空间**：Xcode 本体约 12 GB，加上模拟器与组件缓存，建议预留 40 GB
-- **Apple ID**：免费账号即可开发与真机调试，付费账号才能上架 App Store
+- **磁盘空间**：Xcode、平台组件、模拟器与派生数据会持续增长。安装前查看磁盘余量；为首次安装与一个模拟器保留足够空间，遇到下载失败先检查空间而不是反复重装。
+- **Apple Account / Team**：模拟器不需要签名。要在个人设备安装应用，在 Xcode 的 Apple Accounts 登录 Apple Account，并在 Signing & Capabilities 中选择 Personal Team 或已加入的开发团队。App Store、TestFlight、受限能力和分发需要相应的 Apple Developer Program 资格。
 
 ### 1.2 通过 App Store 安装（推荐）
 
@@ -72,7 +71,7 @@ sudo xcode-select -s /Applications/Xcode.app/Contents/Developer
 
 # 验证安装
 xcode-select -p
-swift --version   # 应输出 Apple Swift version 6.3.x
+swift --version   # 记录输出；它应与当前 xcode-select 指向的开发者目录一致
 ```
 
 > 💡 如果只做命令行/服务端开发，或需要在多个 Swift 版本之间切换，可以用 swiftly 独立管理 Swift 工具链（见 swift.org/install）。iOS 开发仍以 Xcode 内置工具链为主。
@@ -109,8 +108,8 @@ SwiftNotes.xcodeproj         # 项目配置文件（Targets、签名、构建设
 
 ### 3.1 运行应用
 
-1. Xcode 左上角选择运行目标，如 **iPhone 17 Pro**
-2. 按 `⌘R` 编译并运行
+1. Xcode 左上角先选择当前 scheme，再选一个已安装、且系统版本不低于项目 deployment target 的模拟器；不要把某个手机型号名称当作必然存在。
+2. 按 `⌘R` 编译并运行，并在活动区记录 Build succeeded 或首个错误。
 3. 首次启动模拟器较慢，属正常现象
 
 ### 3.2 常用模拟器技巧
@@ -135,21 +134,21 @@ xcrun simctl erase "iPhone 17 Pro"
 
 ### 3.3 真机调试
 
-模拟器无法覆盖摄像头、推送、传感器等硬件能力，真机调试步骤：
+模拟器能验证基础 UI、导航与很多系统行为，但不能完整复制真实设备的性能和硬件能力。摄像头、推送、传感器、后台限制、发布构建等需要真机或相应服务验收。真机调试步骤：
 
 1. 用数据线连接 iPhone
 2. iPhone 上信任该电脑
 3. Xcode 中 **Settings > Accounts** 添加 Apple ID
 4. 选择你的 iPhone 作为运行目标，`⌘R` 运行
-5. 首次真机运行需在 iPhone **设置 > 通用 > VPN与设备管理** 中信任开发者证书
+5. 保持 Xcode 的 **Automatically manage signing** 开启；Xcode 会注册设备并创建开发 provisioning profile。若系统提示，按设备上的开发者模式或信任流程完成授权；界面路径会随 iOS 版本变化，以设备提示为准。
 
 ## 👤 第四步：理解开发者账号
 
 | 账号类型 | 费用 | 能力 |
 |----------|------|------|
-| 免费（个人 Apple ID） | 0 | 模拟器开发 + 真机调试（签名 7 天过期，最多 3 台设备） |
-| Apple Developer Program | $99/年 | 上架 App Store、TestFlight 分发、推送、CloudKit 高级能力 |
-| Apple Developer Enterprise Program | $299/年 | 企业内部分发（不可上架） |
+| Personal Team（免费 Apple Account） | 0 | 个人设备安装与调试；App ID、设备和已安装 App 均有小额度限制，provisioning profile 约 7 天后需重新构建/安装 |
+| Apple Developer Program | 以所在地区当前价格为准 | App Store Connect、TestFlight、分发与更多服务；费用、可用能力和地区条件以 Apple 当前计划页为准 |
+| Apple Developer Enterprise Program | 面向符合资格的组织 | 仅用于受控内部员工分发，不能替代 App Store 发布 |
 
 学习阶段使用免费账号完全够用；等到准备发布第一个项目（见 [08-first-project.md](./08-first-project.md)）再考虑付费账号。
 
@@ -179,9 +178,10 @@ Command Line Tools 未安装或未指向 Xcode。执行 `xcode-select --install`
 
 ### 练习一：基础练习
 
-- [ ] 安装 Xcode 并确认 `swift --version` 输出 6.x 版本号
-- [ ] 创建名为 `SwiftNotes` 的 SwiftUI 项目并成功运行在 iPhone 17 Pro 模拟器上
-- [ ] 用 `xcrun simctl` 命令行截取一张模拟器屏幕截图
+- [ ] 安装 Xcode，记录 `xcodebuild -version`、`xcode-select -p` 与 `swift --version`
+- [ ] 创建名为 `SwiftNotes` 的 SwiftUI 项目，选择已安装且满足 deployment target 的模拟器，构建并运行模板页
+- [ ] 修改首页文本，停止后再次运行，确认正在运行的是刚修改的 target
+- [ ] 用 `xcrun simctl` 截取 booted 模拟器屏幕截图；若没有 booted 设备，先记录“未验证”而不是伪造成功
 
 ### 进阶挑战
 
