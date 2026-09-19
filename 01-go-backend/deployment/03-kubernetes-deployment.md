@@ -21,7 +21,7 @@
 
 ## 📚 概述
 
-Kubernetes是现代云原生应用的事实标准，为Go应用提供了强大的编排和扩展能力。Go应用的二进制分发特性与Kubernetes的容器化理念完美契合，使Go成为Kubernetes环境下的理想选择。
+Kubernetes 是一套容器编排平台，适合已经需要副本调度、服务发现、资源隔离或声明式发布的系统。它不会自动解决数据库容量、权限、配置泄露、跨服务事务或故障恢复。Go 二进制可以作为容器进程运行，但是否适合部署取决于镜像、探针、资源、依赖和目标 SLO，而不是语言名称。
 
 ### 🎯 学习目标
 - 掌握Go应用在Kubernetes中的部署策略
@@ -96,7 +96,8 @@ spec:
     spec:
       containers:
       - name: go-app
-        image: go-app:latest
+        # 用不可变 digest 部署；<image-digest> 由构建流水线的实际产物替换。
+        image: registry.example.com/go-app@sha256:<image-digest>
         ports:
         - containerPort: 8080
         resources:
@@ -113,6 +114,11 @@ spec:
             port: 8080
           initialDelaySeconds: 30
           periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /ready
+            port: 8080
+          periodSeconds: 5
 ```
 
 ## 📝 Kubernetes 基础部署
@@ -931,7 +937,7 @@ spec:
     spec:
       containers:
       - name: api-gateway
-        image: api-gateway:latest
+        image: registry.example.com/api-gateway@sha256:<image-digest>
         ports:
         - containerPort: 8080
         env:
@@ -992,7 +998,8 @@ spec:
     spec:
       containers:
       - name: prometheus
-        image: prom/prometheus:latest
+        # 示例省略实际 digest；部署时固定到经过审查的镜像摘要。
+        image: prom/prometheus@sha256:<image-digest>
         ports:
         - containerPort: 9090
         volumeMounts:
@@ -1009,6 +1016,16 @@ spec:
 requests 用于调度资源，limits 约束消耗，两者从代表性负载测量；过紧限制可能导致节流或 OOM。HPA 依据配置指标扩副本，不会自动解决数据库瓶颈，还可能增加连接总量。
 
 探针、非特权身份、网络策略与密钥管理分别保护运行和访问边界，配置存在不等于已生效。多副本也不能代替数据备份；跨区方案还要考虑延迟、一致性与成本。演练一个副本退出和一次备份恢复，检查用户请求与数据是否满足目标。
+
+## ✅ 集群交付验收
+
+在独立命名空间执行本节 YAML 前，先将所有 `<image-digest>` 替换为已扫描且可追溯的真实镜像摘要。以下结果才表示该部署路径在目标集群得到验证：
+
+1. `kubectl apply --dry-run=server -f <manifest>` 与实际 `kubectl apply` 都成功；保存 manifest 的 commit SHA、集群版本和 namespace。
+2. `kubectl rollout status deployment/<name>` 在规定时间内完成；`kubectl get pods -o wide` 显示预期副本与节点分布。镜像摘要必须与构建记录一致。
+3. 将 `/ready` 临时改为失败或让关键依赖不可用，确认 Pod 不再进入 Service 后端；再恢复并确认旧连接和新请求按产品规则处理。liveness 失败则应验证重启没有掩盖真正的配置/依赖故障。
+4. 模拟一次滚动发布失败，执行 `kubectl rollout undo` 或项目规定的回退流程，验证运行镜像、健康检查和一条真实业务请求恢复到已知好版本。
+5. 在代表性负载下记录 CPU、内存、延迟、错误率和依赖连接数；资源 requests/limits 与 HPA 阈值必须来自这些观测，不使用文中数字作为生产默认。
 
 ## 📋 检查清单
 
@@ -1031,7 +1048,7 @@ requests 用于调度资源，limits 约束消耗，两者从代表性负载测�
 
 ---
 
-**学习提示**: Go应用的二进制特性使其在Kubernetes中表现出色。合理的资源管理和监控配置可以让你的Go应用在Kubernetes环境中高效运行。
+**学习提示**: 把 Go 服务装进容器只是起点。先证明它在目标集群中能就绪、拒绝不健康流量、发布可回退并在代表性负载下满足目标，再决定是否扩大副本、引入 HPA 或服务网格。
 
 *最后更新: 2025年9月*
 
