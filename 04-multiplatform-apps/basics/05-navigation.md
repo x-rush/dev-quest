@@ -113,7 +113,12 @@ import Discover from '../screens/Discover';
 import Profile from '../screens/Profile';
 import Detail from '../screens/Detail';
 
-const Stack = createNativeStackNavigator();
+type RootStackParamList = {
+  Main: undefined;
+  Detail: { itemId: string; from?: string };
+};
+
+const Stack = createNativeStackNavigator<RootStackParamList>();
 const Tab = createBottomTabNavigator();
 
 // 一级分区：底部标签
@@ -156,11 +161,6 @@ import 'react-native-gesture-handler';
 import { View, Text, Pressable } from 'react-native';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 
-// 1. 声明参数类型（类型推导详见 TS 模式文档）
-type RootStackParamList = {
-  Detail: { itemId: string; from?: string };
-};
-
 type Props = NativeStackScreenProps<RootStackParamList, 'Detail'>;
 
 export default function Detail({ route, navigation }: Props) {
@@ -187,14 +187,14 @@ export default function Detail({ route, navigation }: Props) {
 navigation.navigate('Detail', { itemId: '42', from: 'Home' });
 ```
 
-**navigate vs push**: `navigate` 对栈内已有同名页面做去重（回到它），`push` 无条件压新层。详情页套详情页用 `push`，普通跳转用 `navigate`。
+**navigate vs push**: `push` 每次都在当前栈压入一个新 screen；`navigate` 的目标解析会受当前导航树、嵌套 navigator 与已有路由状态影响，通常适合“前往某功能”，但不要用“它一定回到同名页”推断复杂嵌套的行为。详情页套详情页可用 `push`；需要精确恢复或替换时，写测试或查看当前 navigation state。
 
 ## 🌍 三端导航差异
 
 | 差异点 | Android | iOS | 鸿蒙 |
 |--------|---------|-----|------|
 | 返回手段 | 物理返回键/手势 | 边缘滑动手势 | 侧滑/手势导航 |
-| 页面切换动画 | 平台默认（栈导航自动适配） | 平台默认 | RNOH 映射为 ArkUI 页面转场 |
+| 页面切换动画 | 由导航器配置与系统行为共同决定 | 由导航器配置与系统行为共同决定 | 以选定 RNOH 发行版与 ArkUI 壳工程实际行为为准 |
 | 头部样式 | Material 风格 | 大标题/毛玻璃 | 鸿蒙设计规范 |
 | 深链 | `intent-filter` 配置 | Universal Links | `want` 隐式跳转配置 |
 
@@ -248,7 +248,7 @@ useEffect(() => {
 1. "我的"页面修改昵称后，切回"首页"能看到最新昵称
 2. 通过全局 store 或 Context 实现（路由参数无法跨 Tab）
 
-**提示**: Tab 页面默认不销毁，切走再切回不会重执行 useEffect，这正是需要全局状态的原因。
+**提示**: Tab 页面是否保持挂载、是否冻结由导航器与 screen 配置决定。不要依赖“切换 tab 必然不重跑 effect”；昵称应来自共享状态或数据层，这样无论页面保活、重挂载还是深链进入，首页都能读取最新值。
 
 ---
 
@@ -259,7 +259,7 @@ useEffect(() => {
 - 📄 **[TS 类型模式](../reference/language-concepts/04-typescript-patterns.md)**: ParamList 类型推导全解
 - 📄 **[Hooks 速查](../reference/language-concepts/03-hooks-reference.md)**: `useNavigation`/`useRoute` 等导航 Hook
 
-> 💡 **学习建议**: 先用最小结构（一个 Stack）跑通，再逐层加 Tabs 和 Drawer；每加一层都在真机上验证返回手势，导航问题一定要在三端真机上确认。
+> 💡 **学习建议**: 先用最小结构（一个 Stack）在已选目标设备跑通，再逐层加 Tabs 和 Drawer；每加一层都验证返回、深链入口和状态恢复。第二、三平台按实际发布目标分别复验，不能用一个平台的成功代替另一个平台。
 
 
 <!-- learning-navigation -->
