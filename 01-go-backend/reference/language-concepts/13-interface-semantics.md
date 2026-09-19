@@ -48,6 +48,7 @@ default:     // v 保持接口类型
 
 ## 💡 示例
 
+<!-- doc-verify:go-interface-typed-nil -->
 ```go
 package main
 

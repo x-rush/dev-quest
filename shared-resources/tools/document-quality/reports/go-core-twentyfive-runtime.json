@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-19T17:08:13.652277+00:00",
-  "purpose": "Twenty-fifth-round runtime evidence for four marked Go core-document fences.",
+  "generated_at": "2026-09-19T17:09:53.185393+00:00",
+  "purpose": "Twenty-fifth-round runtime evidence for five marked Go core-document fences.",
   "isolation": "No network, read-only container root, dropped capabilities, no-new-privileges, bounded CPU/memory/PIDs, and tmpfs-only writable workspace. Image must already exist because --pull=never is used.",
-  "scope": "Only the four named complete Go fences extracted unchanged after CRLF-to-LF normalization were executed. Other fences, toolchain setup, web services, filesystem integrations, concurrency scheduling, performance, and projects remain outside this evidence.",
+  "scope": "Only the five named complete Go fences extracted unchanged after CRLF-to-LF normalization were executed. Other fences, toolchain setup, web services, filesystem integrations, concurrency scheduling, performance, and projects remain outside this evidence.",
   "results": [
     {
       "id": "go-first-program-hello",
@@ -60,10 +60,24 @@
       "stderr": "",
       "exit_code": 0,
       "status": "PASS"
+    },
+    {
+      "id": "go-interface-typed-nil",
+      "language": "go",
+      "document": "01-go-backend/reference/language-concepts/13-interface-semantics.md",
+      "image": "golang:1.25-alpine",
+      "document_sha256": "455d31b665937bcb72a48c2ee5cb788c7fb1e16fcd06d699c0bb7be93beaa8a3",
+      "code_sha256": "19c9caab0af2a363d5107069645c1ae9e0f20ace524510042e4f0d1fd432291d",
+      "command": "GOCACHE=/tmp/go-build go run /tmp/main.go",
+      "expected_stdout": "误判为失败！动态类型: *main.MyErr\n正确：err == nil\n是 int: 42\nint 42\n",
+      "stdout": "误判为失败！动态类型: *main.MyErr\n正确：err == nil\n是 int: 42\nint 42\n",
+      "stderr": "",
+      "exit_code": 0,
+      "status": "PASS"
     }
   ],
   "summary": {
-    "passed": 4,
-    "total": 4
+    "passed": 5,
+    "total": 5
   }
 }
