@@ -90,7 +90,7 @@
 | Go | [01-go-backend/reference/library-guides/02-third-party-libs.md](../../../../01-go-backend/reference/library-guides/02-third-party-libs.md) | `not_verified` | 0 | 0 |
 | Go | [01-go-backend/reference/library-guides/03-net-http.md](../../../../01-go-backend/reference/library-guides/03-net-http.md) | `runtime` | 1 | 1 |
 | Go | [01-go-backend/reference/library-guides/04-encoding-json.md](../../../../01-go-backend/reference/library-guides/04-encoding-json.md) | `runtime` | 1 | 1 |
-| Go | [01-go-backend/reference/library-guides/05-context.md](../../../../01-go-backend/reference/library-guides/05-context.md) | `runtime` | 1 | 0 |
+| Go | [01-go-backend/reference/library-guides/05-context.md](../../../../01-go-backend/reference/library-guides/05-context.md) | `runtime` | 2 | 0 |
 | Go | [01-go-backend/reference/library-guides/06-sync.md](../../../../01-go-backend/reference/library-guides/06-sync.md) | `runtime` | 1 | 2 |
 | Go | [01-go-backend/reference/library-guides/07-database-sql.md](../../../../01-go-backend/reference/library-guides/07-database-sql.md) | `runtime` | 1 | 0 |
 | Go | [01-go-backend/reference/library-guides/08-time.md](../../../../01-go-backend/reference/library-guides/08-time.md) | `runtime` | 1 | 0 |
