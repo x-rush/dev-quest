@@ -17,13 +17,31 @@ PROGRAMS = {
     'library-guides/06-sync.md': (False, ['100\n3']),
     'library-guides/07-database-sql.md': (False, ['a@b.c\ntrue']),
     'library-guides/08-time.md': (False, ['2026-09-14T08:05:03Z', 'tick 完成 3', '超时']),
-    'library-guides/09-errors.md': (False, ['load user 42: record not found', 'email']),
-    'library-guides/10-io-bufio.md': (False, ['true 102400', 'copiedbuffered']),
+    # This is the complete first program in the entry.  The business-error
+    # example below it is checked separately so neither complete program is
+    # silently skipped.
+    'library-guides/09-errors.md': (False, ['true\nboom', 'true config.json', 'true metrics']),
+    'library-guides/10-io-bufio.md': (False, ['5 <nil> hello', 'small input <nil>', 'AB AB <nil>', 'buffered write', 'one\ntwo\nthree']),
     'library-guides/11-os.md': (False, ['hello os true', 'true true']),
-    'library-guides/13-slices-maps.md': (False, ['[a b c]', '[a b]']),
+    'library-guides/13-slices-maps.md': (False, ['true 1', '[9 8 5 2 2] false', '[5 9] [3 2 1] 9 2']),
     'library-guides/14-strconv.md': (False, ['id=9001,ok=true']),
     'library-guides/15-log-slog.md': (False, ['"service":"api"', '"http":{"ms":950}']),
     'library-guides/16-flag.md': (False, ['9000 true 3 a,b']),
+}
+
+SECONDARY_PROGRAMS = {
+    'library-guides/09-errors.md': (
+        'func loadUser(id int) error',
+        ['load user 42: record not found', 'email', 'cache flush failed\nmetrics flush failed'],
+    ),
+    'library-guides/10-io-bufio.md': (
+        '100*1024',
+        ['true 102400', 'copiedbuffered'],
+    ),
+    'library-guides/13-slices-maps.md': (
+        'slices.Sorted(maps.Keys(m))',
+        ['[a b c]', '[a b]'],
+    ),
 }
 
 def blocks(path):
@@ -71,6 +89,18 @@ def main():
                 assert fragment in output, (path, fragment, output)
             results.append({'path': PREFIX + path, 'status': 'passed', 'kind': 'selected complete program', 'code_sha256': hashlib.sha256(code.encode()).hexdigest()})
             print('PASS', path, flush=True)
+        for index, (path, (marker, expected)) in enumerate(SECONDARY_PROGRAMS.items(), start=len(PROGRAMS)):
+            source = (ROOT / (PREFIX + path)).read_text(encoding='utf8')
+            code = next(b for b in re.findall(r'```go\s*\n(.*?)\n```', source, re.S)
+                        if b.startswith('package main') and marker in b)
+            cwd = root / str(index)
+            cwd.mkdir()
+            (cwd / 'main.go').write_text(code, encoding='utf8')
+            output = execute([go, 'run', 'main.go'], cwd)
+            for fragment in expected:
+                assert fragment in output, (path, fragment, output)
+            results.append({'path': PREFIX + path, 'status': 'passed', 'kind': 'secondary complete program', 'code_sha256': hashlib.sha256(code.encode()).hexdigest()})
+            print('PASS', path, 'secondary program', flush=True)
         path = 'library-guides/12-testing.md'
         code = next(b for b in blocks(path) if 'package mathx' in b)
         cwd = root / 'testing'

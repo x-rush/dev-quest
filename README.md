@@ -41,6 +41,7 @@
 - [文档索引](shared-resources/tools/document-index.md)用于定位，[学习记录](shared-resources/progress/learning-progress.md)用于保存自己的实践证据。
 - 易变版本与 API 看各模块 README 的技术基线；已有核实日期是历史记录，不能替代自己工程的锁文件和兼容性检查。
 - 框架收录看[价值与维护标准](shared-resources/standards/tech-adoption-checklist.md)。稳定原理长期保留，版本相关写法单独注明；不承诺某个框架永远不过时。
+- 内容是否达到可交付标准，看[知识库交付基线](shared-resources/standards/knowledge-delivery-baseline.md)：它把“全量基础”、渐进路线、示例身份与运行证据拆开验收，未验证内容不能标成完成。
 - 文档修改遵循[写作规范](shared-resources/standards/documentation-guidelines.md)和[贡献说明](CONTRIBUTING.md)。
 
 历史重构过程保存在 [refactor-archives](refactor-archives/README.md)，不作为当前学习的必读内容。

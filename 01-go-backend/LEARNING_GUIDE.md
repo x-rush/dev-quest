@@ -10,7 +10,7 @@ Go 负责在服务端执行程序。先用普通函数处理数据，再把函�
 
 ## 概念怎样连接
 
-值与零值 → 切片/映射/结构体 → 方法与接口 → 显式错误 → goroutine 与同步 → HTTP → 数据库
+值与零值 → 切片/映射/结构体 → 方法与接口 → 显式错误 → 标准库小项目 → goroutine 与同步 → HTTP → 数据库
 
 | 概念 | 必要解释 |
 |---|---|
@@ -28,13 +28,14 @@ Go 负责在服务端执行程序。先用普通函数处理数据，再把函�
 4. [复合数据类型：数组、切片、映射与结构体](basics/04-composite-types.md)
 5. [函数定义与方法调用](basics/05-functions-methods.md)
 6. [条件语句与循环控制](basics/06-control-structures.md)
-7. [并发编程基础：goroutine、channel 与 sync](basics/07-concurrency-basics.md)
-8. [Go 错误处理机制](basics/08-error-handling.md)
+7. [Go 错误处理机制](basics/08-error-handling.md)
+8. [标准库待办命令行项目](projects/00-stdlib-todo-cli.md)：把输入、验证、状态、输出和测试连成一个程序。
+9. [并发编程基础：goroutine、channel 与 sync](basics/07-concurrency-basics.md)
 
 ## 三个阶段如何验收
 
 1. 写一个接收标题并返回待办或错误的函数：空白标题失败，正常标题保留。
-2. 用内存集合完成增删查；删除不存在 ID 的行为必须明确，再写测试。
+2. 完成[标准库待办命令行项目](projects/00-stdlib-todo-cli.md)：用内存集合完成增删查；删除不存在 ID 的行为必须明确，再写测试。
 3. 接上 HTTP 后验证成功、空输入和不存在三条路径；最后才换数据库。
 
 每阶段保留实际输入、输出和一个失败案例。只阅读或复制成功代码，不等同于已经通过验收。练习用小功能承接已学知识，大型项目的扩展需求可按需选做。

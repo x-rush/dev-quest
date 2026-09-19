@@ -15,6 +15,10 @@
 | [测试与交付练习](reports/acceptance-exercises.json) | 26 篇文章追加具体失败演练、观察结果与通过条件 |
 | [阅读前置知识](reports/reading-prerequisites.json) | 40 篇文章追加与主题对应的学习准备 |
 | [最终验证汇总](reports/validation.json) | 文件链接、章节锚点、围栏、空白检查，以及保留的限定范围运行记录 |
+| [知识库交付基线](../../standards/knowledge-delivery-baseline.md) | “全量基础”、渐进路线、示例身份与交付完成判据 |
+| [学习路径与参考库存](reports/learning-reference-inventory.md) | 11 个模块的目录、导读、参考入口与易变表述复核队列；仅作机械盘点 |
+| [Go 离线运行验证](reports/go-runtime-validation.md) | 18 个标准库完整程序/测试的实际运行范围、边界与复现命令 |
+| [本轮交付状态](reports/delivery-status-2026-09-19.md) | 已修复项、已验证项与仍未达到全库交付条件的范围 |
 
 根入口：[知识库 README](../../../README.md)。每个技术模块的 LEARNING_GUIDE 都提供渐进顺序、概念关系、练习与参考文章导航。
 
@@ -60,7 +64,7 @@
 | Query 入门组件 | 7 项 DOM 交互通过，保留原记录 | 完整 Next.js SSR 或浏览器布局通过 |
 | 收尾 Web 示例 | 7 项通过，含 strict 类型检查与 3 项请求生命周期验证 | 所有历史大组件或所有浏览器行为通过 |
 
-实际环境记录在对应 JSON 中：Python 3.12.14、Node 24.19.0、TypeScript 5.9.3、React 19.3.0、Query 5.103.1。TypeScript 5.9 的类型测试不能替代模块拟采用版本的完整工程构建。Swift、Kotlin/Android、Java、PHP、Rust 的完整平台工程未在本机执行；Go 被系统拦截的程序没有绕过策略。
+实际环境记录在对应 JSON 中：Python 3.12.14、Node 24.19.0、TypeScript 5.9.3、React 19.3.0、Query 5.103.1。TypeScript 5.9 的类型测试不能替代模块拟采用版本的完整工程构建。Swift、Kotlin/Android、Java、PHP、Rust 的完整平台工程未在本机执行；Go 的早期 Windows 阻断记录不再被当成通过，本轮可运行标准库示例改由离线 Go 1.27.1 容器实际验证，见 [Go 离线运行验证](reports/go-runtime-validation.md)。
 
 ## 维护者如何重跑
 

@@ -123,8 +123,8 @@
 │   ├── 04-composite-types.md       # 数组、切片、映射与结构体 ✅
 │   ├── 05-functions-methods.md     # 函数定义与方法调用 ✅
 │   ├── 06-control-structures.md    # 条件语句与循环控制 ✅
-│   ├── 07-concurrency-basics.md    # 并发编程基础 ✅
-│   └── 08-error-handling.md        # Go错误处理机制 ✅
+│   ├── 07-concurrency-basics.md    # 并发编程基础（完成错误处理后学习） ✅
+│   └── 08-error-handling.md        # Go错误处理机制（基础路径第 7 步） ✅
 ├── 🏗️ frameworks/                  # 数据库和框架深度学习路径
 │   ├── 01-gin-framework-basics.md # Gin框架基础入门 ✅
 │   ├── 02-gin-framework-advanced.md # Gin框架高级特性 ✅
@@ -133,7 +133,8 @@
 │   ├── 05-go-redis-complete.md     # go-redis客户端学习 📋
 │   └── 06-grpc-service-development.md # gRPC服务开发完整指南 ✅
 ├── 🚀 projects/                   # 实战项目（技能全覆盖）
-│   ├── 01-rest-api-server.md      # REST API服务器 (Gin+GORM+MySQL) ✅
+│   ├── 00-stdlib-todo-cli.md      # 标准库待办命令行：基础路径的第一个完整项目 ✅
+│   ├── 01-rest-api-server.md      # REST API服务器 (Gin+GORM+PostgreSQL) ✅
 │   ├── 02-microservices-demo.md   # 微服务演示 (Gin+Redis+服务发现) ✅
 │   ├── 03-real-time-app.md        # 实时应用 (WebSocket+MongoDB) ✅
 │   └── 04-cli-tool.md             # CLI工具开发 (Cobra+文件操作+配置管理) ✅
@@ -168,8 +169,9 @@
 2. **语法入门** → `basics/02-first-program.md`
 3. **基础知识** → `basics/03-variables-constants.md` → `basics/04-composite-types.md` → `basics/05-functions-methods.md`
 4. **控制流程** → `basics/06-control-structures.md`
-5. **并发入门** → `basics/07-concurrency-basics.md`
-6. **错误处理** → `basics/08-error-handling.md`
+5. **错误处理** → `basics/08-error-handling.md`
+6. **标准库小项目** → `projects/00-stdlib-todo-cli.md`
+7. **并发入门** → `basics/07-concurrency-basics.md`
 
 ### 🔧 框架学习路径（推荐进阶）
 1. **Gin框架基础** → `frameworks/01-gin-framework-basics.md`

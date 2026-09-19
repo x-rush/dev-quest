@@ -55,9 +55,24 @@
 ### 核心设计原则
 
 #### 1. 简洁性 (Simplicity)
+
+下面是同一批输入的两个**局部函数片段**。它们依赖本节的 `User` 定义；应放进同一个包中比较，函数名不同，因此可以同时编译。第一个版本刻意保留多层嵌套，用来观察它为什么难读；它不是推荐实现。
+
 ```go
+package users
+
+import "time"
+
+type User struct {
+	ID        int
+	Name      string
+	CreatedAt time.Time
+	UpdatedAt time.Time
+	Status    string
+}
+
 // ❌ 过度复杂的实现
-func ProcessUsers(users []User) map[string]interface{} {
+func ProcessUsersNested(users []*User) map[string]any {
     result := make(map[string]interface{})
     for i, user := range users {
         if user != nil {
@@ -80,11 +95,11 @@ func ProcessUsers(users []User) map[string]interface{} {
 }
 
 // ✅ 简洁明了的实现
-func ProcessUsers(users []User) map[int]User {
+func ProcessValidUsers(users []*User) map[int]User {
     result := make(map[int]User)
     for _, user := range users {
         if user.IsValid() {
-            result[user.ID] = user
+            result[user.ID] = *user
         }
     }
     return result
@@ -94,6 +109,8 @@ func (u *User) IsValid() bool {
     return u != nil && u.ID > 0 && u.Name != ""
 }
 ```
+
+两者都跳过 `nil`、无效 ID 与空名称。第二个版本把“什么是有效用户”收进 `IsValid`，调用处只保留遍历和收集这两个职责；但 `IsValid` 的规则必须随业务要求审查，不能把它当作所有用户系统的通用规则。
 
 #### 2. 可读性 (Readability)
 ```go

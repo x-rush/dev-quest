@@ -8,7 +8,7 @@
 |---|---|---|---|---|
 | 待读者填写 | 例如 Query 缓存 | queryKey 决定结果身份 | 创建后重取的运行记录 | 并发回滚待学 |
 
-入口：[学习方法](../learning-guide.md)、[通用术语](../glossary.md)、[全部模块入口](../../README.md)。各模块新增 LEARNING_GUIDE.md，包含前置能力、概念关系和阶段验收。文档增强与验证状态单独保存在[审查台账](../tools/document-quality/README.md)。
+入口：[学习方法](../learning-guide.md)、[通用术语](../glossary.md)、[全部模块入口](../../README.md)。各模块新增 LEARNING_GUIDE.md，包含前置能力、概念关系和阶段验收。文档增强与验证状态单独保存在[审查台账](../tools/document-quality/README.md)；课程内容是否达到交付要求以[知识库交付基线](../standards/knowledge-delivery-baseline.md)为准，个人勾选不构成内容验收。
 
 
 > **难度**: ⭐⭐ | **学习方式**: 自主进度跟踪 | **目标**: 可视化学习进展

@@ -12,6 +12,7 @@
 - [怎样学习与验收](../learning-guide.md)：建立运行、修改、解释的反馈过程。
 - [跨技术栈术语](../glossary.md)：理解请求、状态、异步、测试等共用概念。
 - [文档质量审查](./document-quality/README.md)：区分结构覆盖、正文增强和实际验证。
+- [知识库交付基线](../standards/knowledge-delivery-baseline.md)：按知识项、示例证据、练习反馈与渐进阶段验收，不把目录存在或语法通过当作教学完成。
 
 
 > 📚 **智能文档导航**: 快速找到你需要的学习资源，建立知识关联，优化学习路径。
@@ -52,8 +53,8 @@
 | [复合类型](../../01-go-backend/basics/04-composite-types.md) | 数组、切片、映射与结构体 |
 | [函数与方法](../../01-go-backend/basics/05-functions-methods.md) | 函数定义与使用 |
 | [控制结构](../../01-go-backend/basics/06-control-structures.md) | 条件与循环 |
-| [并发基础](../../01-go-backend/basics/07-concurrency-basics.md) | goroutine 与 channel 入门 |
 | [错误处理](../../01-go-backend/basics/08-error-handling.md) | Go错误处理哲学 |
+| [并发基础](../../01-go-backend/basics/07-concurrency-basics.md) | goroutine 与 channel 入门（完成错误处理后学习） |
 
 ### 🛠️ 框架工具 (frameworks/)
 | 框架 | 文档 | 应用场景 |
@@ -68,6 +69,7 @@
 ### 🚀 项目实战 (projects/)
 | 项目 | 技术栈 | 说明 |
 |------|--------|------|
+| [标准库待办命令行](../../01-go-backend/projects/00-stdlib-todo-cli.md) | Go 标准库 | 输入、校验、内存状态、输出与测试的最小闭环 |
 | [REST API服务器](../../01-go-backend/projects/01-rest-api-server.md) | Gin + PostgreSQL | 完整的RESTful API |
 | [微服务演示](../../01-go-backend/projects/02-microservices-demo.md) | Go + gRPC + Docker | 微服务架构示例 |
 | [实时应用](../../01-go-backend/projects/03-real-time-app.md) | WebSocket + Redis | 实时通信应用 |
