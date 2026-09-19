@@ -23,7 +23,7 @@
 
 ## 🎯 本指南解决什么问题
 
-Xcode 26.x 内置 Swift Testing（`import Testing`），与 XCTest 并存但**新代码首选 Swift Testing**：宏驱动、无继承、参数化一行搞定。本指南以习惯追踪器的业务扩展为例，建立"哪些测、怎么测、测到什么程度"的操作规程。
+Swift Testing（`import Testing`）可与 XCTest 并存，是否可用取决于项目的 Xcode、Swift 工具链和部署目标。它减少了测试样板代码，但不会替你选择断言、隔离外部依赖或定义失败后的正确状态。本指南以习惯追踪器的业务扩展为例，建立“哪些测、怎么测、测到什么程度”的操作规程；开始前在目标工程中确认 `import Testing` 能通过编译。
 
 ## 🛠️ 任务一：第一个 @Test
 
@@ -60,7 +60,7 @@ struct HabitLogicTests {
 }
 ```
 
-**断言速查**：`#expect(条件)` 通用断言，失败时自动打印表达式两侧值；`#require(可选值)` 解包失败即中止本测试（抛错风格）。
+**断言速查**：`#expect(条件)` 记录条件不成立；测试报告展示的诊断细节随工具链和表达式而变，不应依赖某种固定输出格式。`#require(可选值)` 在值不存在时中止当前测试路径，适合后续断言无法继续成立的前置条件。
 
 ## 🛠️ 任务二：参数化（一个测试跑多组数据）
 
@@ -81,7 +81,7 @@ func toggleIsIdempotent(initial: Bool, expectedAfterToggle: Bool) {
 }
 ```
 
-一组 `arguments` 生成 N 个独立测试用例，失败时精确到具体参数——这是 Swift Testing 相对 XCTest 的最大效率提升。
+一组 `arguments` 会展开为多个测试参数组合。测试报告如何展示参数取决于当前工具链；真正要验收的是每组输入都运行，并能定位到失败的输入，而不是把参数化当成天然更快或更完整的测试。
 
 ## 🛠️ 任务三：异步与并发测试
 
@@ -108,7 +108,7 @@ func cancelledTaskDoesNotMutateState() async throws {
 }
 ```
 
-Swift Testing 测试函数**运行在并发安全的沙箱中**：默认每个测试独立并行执行，不存在 XCTest 类级的共享状态污染；需要串行时用 `@Suite(.serialized)`。
+Swift Testing 可以并行调度测试，但“并行”不等于自动隔离共享单例、磁盘目录、环境变量、网络端口或全局时间。每个测试仍应创建自己的数据和依赖；对无法并行的共享资源，按当前 Swift Testing 版本提供的 suite/trait 机制明确串行化，并在并行与单独运行时都复测。
 
 ## 🛠️ 任务四：用协议 Mock 隔离依赖
 
@@ -166,6 +166,16 @@ func loadFailureSetsFailedState() async {
 - [ ] 给 `streak` 补边界测试：跨月第一天、跨年、空打卡记录
 - [ ] 把天气服务测试改为 Mock，覆盖成功 / 失败 / 取消三条路径
 - [ ] 用 `#require` 重构所有 `#expect(x != nil) && #expect(x!.y)` 写法
+
+## ✅ 运行验收
+
+在 Xcode 的 Test Navigator 或 CI 中运行目标测试。命令行场景把 `<scheme>`、`<destination>` 替换为项目实际值：
+
+```bash
+xcodebuild test -scheme <scheme> -destination '<destination>'
+```
+
+通过条件不是只有进程退出码为 0：连续打卡、空记录、失败服务和取消服务四类测试都被发现并执行；Mock 路径没有发出真实网络请求；把 `#expect(habit.streak == 3)` 临时改成 `== 2` 时测试必须失败并在恢复后再次通过。保存一次 CI/Xcode 测试报告链接或产物，记录工具链、scheme 和 destination。本文未在当前仓库执行 Xcode/SwiftUI 工程构建，示例的跨平台纯函数验证范围另见验证台账。
 
 ## 相关文档
 
