@@ -138,7 +138,7 @@ export const requestLogger: MiddlewareHandler = async (c, next) => {
 // src/app.ts —— 顺序即语义：通用中间件在前，路由在后
 import { logger } from 'hono/logger';
 import { cors } from 'hono/cors';
-import requestLogger from './middleware/logger.js';
+import { requestLogger } from './middleware/logger.js';
 
 app.use(requestLogger);              // 1. 自定义：记录所有请求
 app.use(logger());                   // 2. 内置：开发期请求日志
