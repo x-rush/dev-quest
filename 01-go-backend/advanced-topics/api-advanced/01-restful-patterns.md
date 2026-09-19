@@ -821,54 +821,66 @@ func (s *OrderService) CreateOrder(userID uint, items []OrderItem) (*Order, erro
 
 ### Q2: 如何实现API缓存？
 
-**A**: 使用Redis实现多层缓存策略：
+**A**: 先把一个读取路径的缓存契约说清，再决定是否需要 Redis。以下是**缓存旁路（cache-aside）**：先读缓存；未命中才读数据库；读到后写入一个有限 TTL。它不是“多层缓存”——进程内缓存、CDN 与 Redis 是不同层，各层是否存在要由延迟目标、数据可接受的陈旧时间和失效能力决定。
 
 ```go
 type CacheService struct {
     redis *redis.Client
 }
 
-func (c *CacheService) Get(key string, dest interface{}) error {
-    val, err := c.redis.Get(context.Background(), key).Result()
-    if err != nil {
-        return err
+func (c *CacheService) Get(ctx context.Context, key string, dest any) (bool, error) {
+    val, err := c.redis.Get(ctx, key).Result()
+    if errors.Is(err, redis.Nil) {
+        return false, nil // 只有 redis.Nil 是正常未命中
     }
-
-    return json.Unmarshal([]byte(val), dest)
+    if err != nil {
+        return false, err // 超时、认证等基础设施故障不能伪装成未命中
+    }
+    if err := json.Unmarshal([]byte(val), dest); err != nil {
+        return false, fmt.Errorf("decode cache %q: %w", key, err)
+    }
+    return true, nil
 }
 
-func (c *CacheService) Set(key string, value interface{}, expiration time.Duration) error {
+func (c *CacheService) Set(ctx context.Context, key string, value any, expiration time.Duration) error {
     data, err := json.Marshal(value)
     if err != nil {
         return err
     }
 
-    return c.redis.Set(context.Background(), key, data, expiration).Err()
+    return c.redis.Set(ctx, key, data, expiration).Err()
 }
 
 // 在服务层使用缓存
-func (s *UserService) GetUserByIDWithCache(id uint) (*User, error) {
+func (s *UserService) GetUserByIDWithCache(ctx context.Context, id uint) (*User, error) {
     cacheKey := fmt.Sprintf("user:%d", id)
 
-    // 尝试从缓存获取
     var user User
-    err := s.cache.Get(cacheKey, &user)
-    if err == nil {
+    hit, err := s.cache.Get(ctx, cacheKey, &user)
+    if err != nil {
+        // 策略选择：可记录后降级读库；不能把损坏缓存当作可信数据。
+        // 对需要强一致性的端点，可直接返回服务不可用。
+        hit = false
+    }
+    if hit {
         return &user, nil
     }
 
-    // 缓存未命中，从数据库获取
-    user, err = s.userRepo.GetByID(id)
+    user, err = s.userRepo.GetByID(ctx, id)
     if err != nil {
         return nil, err
     }
 
-    // 写入缓存
-    s.cache.Set(cacheKey, user, 5*time.Minute)
+    // 缓存写入失败不改变已成功的读取结果；记录它以便发现缓存退化。
+    _ = s.cache.Set(ctx, cacheKey, user, 5*time.Minute)
 
     return &user, nil
 }
 ```
+
+写路径必须有对应失效规则：成功更新或删除用户后，删除 `user:<id>`；若删除失败，下一次读取可能在 TTL（本例最多五分钟）内拿到旧值。缓存键应包含资源版本、租户和会影响结果的查询参数，不能把不同权限或分页请求共用同一键。不要缓存密码、访问令牌等敏感字段；缓存值的 schema 变化需要版本化键或兼容读取策略。
+
+最低验收：首次读取访问仓储并写入缓存，第二次读取不访问仓储；更新后立即读取不返回旧值；Redis 超时按选定的降级策略处理；并发未命中时确认仓储能承受回源，或加入短锁 / 请求合并并测量其超时行为。只有这些条件成立后，才考虑增加本地层或 CDN 层。
 
 ### Q3: 如何实现API限流？
 
