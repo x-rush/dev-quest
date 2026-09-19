@@ -148,6 +148,7 @@ cargo new borrow-lab && cd borrow-lab
 
 ### 示例一：move 语义
 
+<!-- go-rust-node-tenth-case: rust-ownership-move-clone-copy -->
 ```rust
 fn main() {
     let s1 = String::from("所有权");
@@ -168,7 +169,7 @@ fn main() {
 ```
 
 **关键点解析**:
-- move 转移的是栈上的指针与元数据，堆数据原地不动——所以 move 很便宜
+- 对 `String` 而言，move 转移的是这个值的所有权，不会要求把其管理的字符串内容复制一份；这是语言层面可依赖的结论。具体栈/堆布局属于实现细节，不应用来推断所有类型的成本。
 - `Copy` 类型与堆类型的行为差异是初学者最常踩的认知差
 - 这里 String 的 clone 复制字符串内容；其他类型须查 Clone 实现，不能一概推断成本
 

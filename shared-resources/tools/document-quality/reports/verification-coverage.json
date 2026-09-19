@@ -17,8 +17,8 @@
   "summary": {
     "documents": 642,
     "by_primary_state": {
-      "not_verified": 508,
-      "runtime": 134
+      "not_verified": 505,
+      "runtime": 137
     },
     "verification_wording_occurrences": 126,
     "marker_classification": {
@@ -433,7 +433,7 @@
     },
     {
       "path": "01-go-backend/projects/00-stdlib-todo-cli.md",
-      "sha256": "858f421d9a33581fac47e98a04eca74f1e7155b9d48a0c6a1a1d91a49c8181a8",
+      "sha256": "6867c3baf4dd712525a330f412b37bb5b882f73b2008be223fc9df07ffeaa03c",
       "verification": [
         {
           "mode": "runtime",
@@ -758,13 +758,13 @@
     },
     {
       "path": "01-go-backend/reference/language-concepts/15-nil-semantics.md",
-      "sha256": "b69a43c5ce6bd5018ccc4b2f482eb4f6d608af247f544a8f1b487130899078a6",
+      "sha256": "b7d7d62ea5539c53bd6ddf78c24dbcf8a5ba9b90105e44fd0abb86197cd07365",
       "verification": [
         {
-          "mode": "not_verified",
-          "status": "NOT_VERIFIED",
-          "report": null,
-          "scope": "No named runtime or syntax evidence is recorded for this document."
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "go-rust-node-tenth-runtime.json",
+          "scope": "Three named, complete fenced programs extracted unchanged from currently not_verified P1 Go, Rust, and Node.js pages. Go runs with the repository toolchain; Rust and Node run in existing local Docker images with network disabled, read-only roots, dropped capabilities, bounded CPU/memory/processes, and a read-only input mount. This does not verify other snippets, prose, network, filesystem, platform, framework, or production-security behavior."
         }
       ],
       "marker_count": 0
@@ -5564,7 +5564,7 @@
     },
     {
       "path": "07-php-mastery/reference/language-concepts/09-strings-regex.md",
-      "sha256": "71165fa6de0ef27c75b0b5fb5b755cad6442deda0a4af6d55917de1cf9c958af",
+      "sha256": "5b234753a78f933c7d1b694132dbb1559db73f071e89e8b440320614c16b39ad",
       "verification": [
         {
           "mode": "not_verified",
@@ -6025,7 +6025,7 @@
     },
     {
       "path": "08-java-revisited/basics/08-first-project.md",
-      "sha256": "fe9d2a1a84d44eaf8419d10476a615ab0fcf082b4c1ac358f3050acb9fd49da1",
+      "sha256": "92c38924b9d3338f6b8a7555bb07396cd5dc2ee0b8a9402fd5d9cb5b289bbc1b",
       "verification": [
         {
           "mode": "runtime",
@@ -6630,7 +6630,7 @@
     },
     {
       "path": "08-java-revisited/reference/library-guides/07-java-text-and-time-format.md",
-      "sha256": "61c90825758920482ec2b59ec041f851eb73c387b07376b467b5077445d390af",
+      "sha256": "fb1a9e853f1863ff522416d49f55c2b48f9d9ebb080dd1e9d588949adc69086b",
       "verification": [
         {
           "mode": "not_verified",
@@ -6922,7 +6922,7 @@
     },
     {
       "path": "09-nodejs-backend/basics/08-first-project.md",
-      "sha256": "d6e962bac56a67cade06f1b6c01242a0f4c5cde5ea167e5f1710064a217da0ec",
+      "sha256": "d882675d9c55ef3ad60c693abe2b3c23458dc0cc38b53ca181fc7093a37983c3",
       "verification": [
         {
           "mode": "not_verified",
@@ -7277,13 +7277,13 @@
     },
     {
       "path": "09-nodejs-backend/reference/library-guides/03-crypto.md",
-      "sha256": "6dd1b32affa05aa4ce6c71e415868c65dff418f68369094a0122e4f42a61127d",
+      "sha256": "f551cf00a8324416efb1afc1c46dbc15972f2441e7f25694e6e0b8ae004549b0",
       "verification": [
         {
-          "mode": "not_verified",
-          "status": "NOT_VERIFIED",
-          "report": null,
-          "scope": "No named runtime or syntax evidence is recorded for this document."
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "go-rust-node-tenth-runtime.json",
+          "scope": "Three named, complete fenced programs extracted unchanged from currently not_verified P1 Go, Rust, and Node.js pages. Go runs with the repository toolchain; Rust and Node run in existing local Docker images with network disabled, read-only roots, dropped capabilities, bounded CPU/memory/processes, and a read-only input mount. This does not verify other snippets, prose, network, filesystem, platform, framework, or production-security behavior."
         }
       ],
       "marker_count": 0
@@ -7568,7 +7568,7 @@
     },
     {
       "path": "10-python-discovery/basics/04-functions-oop.md",
-      "sha256": "716ac7733bc5d93d3e74dea23240ab85803cb84a253557fe0acc29cd663459ef",
+      "sha256": "12702d8da749229ebd439b51551ba3e05ad277a715985bfd3d1b034fbb21c64a",
       "verification": [
         {
           "mode": "not_verified",
@@ -8318,13 +8318,13 @@
     },
     {
       "path": "11-rust-cross-platform/basics/02-ownership-borrowing.md",
-      "sha256": "472958a065113bfa0861d4bb1491686ba3f6f754dc971bddfebc2ec8809f2d77",
+      "sha256": "bdf8ad8c2da5498371925b8363b3e4f7d3661ee9c08dce0770886b6937d59132",
       "verification": [
         {
-          "mode": "not_verified",
-          "status": "NOT_VERIFIED",
-          "report": null,
-          "scope": "No named runtime or syntax evidence is recorded for this document."
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "go-rust-node-tenth-runtime.json",
+          "scope": "Three named, complete fenced programs extracted unchanged from currently not_verified P1 Go, Rust, and Node.js pages. Go runs with the repository toolchain; Rust and Node run in existing local Docker images with network disabled, read-only roots, dropped capabilities, bounded CPU/memory/processes, and a read-only input mount. This does not verify other snippets, prose, network, filesystem, platform, framework, or production-security behavior."
         }
       ],
       "marker_count": 0

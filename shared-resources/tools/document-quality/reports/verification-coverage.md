@@ -7,8 +7,8 @@
 | 指标 | 数量 |
 |---|---:|
 | 纳入模块文档 | 642 |
-| 主状态：not_verified | 508 |
-| 主状态：runtime | 134 |
+| 主状态：not_verified | 505 |
+| 主状态：runtime | 137 |
 | 验证措辞出现次数 | 126 |
 | 措辞分类：source_has_limited_runtime_evidence | 82 |
 | 措辞分类：unbound_verification_wording | 44 |
@@ -85,7 +85,7 @@
 | Go | [01-go-backend/reference/language-concepts/12-channel-semantics.md](../../../../01-go-backend/reference/language-concepts/12-channel-semantics.md) | `not_verified` | 0 | 1 |
 | Go | [01-go-backend/reference/language-concepts/13-interface-semantics.md](../../../../01-go-backend/reference/language-concepts/13-interface-semantics.md) | `not_verified` | 0 | 0 |
 | Go | [01-go-backend/reference/language-concepts/14-defer-panic-recover.md](../../../../01-go-backend/reference/language-concepts/14-defer-panic-recover.md) | `not_verified` | 0 | 0 |
-| Go | [01-go-backend/reference/language-concepts/15-nil-semantics.md](../../../../01-go-backend/reference/language-concepts/15-nil-semantics.md) | `not_verified` | 0 | 0 |
+| Go | [01-go-backend/reference/language-concepts/15-nil-semantics.md](../../../../01-go-backend/reference/language-concepts/15-nil-semantics.md) | `runtime` | 1 | 0 |
 | Go | [01-go-backend/reference/library-guides/01-go-standard-library.md](../../../../01-go-backend/reference/library-guides/01-go-standard-library.md) | `runtime` | 1 | 0 |
 | Go | [01-go-backend/reference/library-guides/02-third-party-libs.md](../../../../01-go-backend/reference/library-guides/02-third-party-libs.md) | `not_verified` | 0 | 0 |
 | Go | [01-go-backend/reference/library-guides/03-net-http.md](../../../../01-go-backend/reference/library-guides/03-net-http.md) | `runtime` | 1 | 1 |
@@ -556,7 +556,7 @@
 | Node.js | [09-nodejs-backend/reference/language-concepts/09-globals-reference.md](../../../../09-nodejs-backend/reference/language-concepts/09-globals-reference.md) | `runtime` | 1 | 0 |
 | Node.js | [09-nodejs-backend/reference/library-guides/01-core-modules.md](../../../../09-nodejs-backend/reference/library-guides/01-core-modules.md) | `runtime` | 2 | 0 |
 | Node.js | [09-nodejs-backend/reference/library-guides/02-ecosystem-libs.md](../../../../09-nodejs-backend/reference/library-guides/02-ecosystem-libs.md) | `not_verified` | 0 | 0 |
-| Node.js | [09-nodejs-backend/reference/library-guides/03-crypto.md](../../../../09-nodejs-backend/reference/library-guides/03-crypto.md) | `not_verified` | 0 | 0 |
+| Node.js | [09-nodejs-backend/reference/library-guides/03-crypto.md](../../../../09-nodejs-backend/reference/library-guides/03-crypto.md) | `runtime` | 1 | 0 |
 | Node.js | [09-nodejs-backend/reference/library-guides/04-child-process.md](../../../../09-nodejs-backend/reference/library-guides/04-child-process.md) | `runtime` | 3 | 1 |
 | Node.js | [09-nodejs-backend/reference/library-guides/05-buffer.md](../../../../09-nodejs-backend/reference/library-guides/05-buffer.md) | `runtime` | 1 | 3 |
 | Node.js | [09-nodejs-backend/reference/library-guides/06-util.md](../../../../09-nodejs-backend/reference/library-guides/06-util.md) | `runtime` | 1 | 0 |
@@ -631,7 +631,7 @@
 | Rust / Cross-platform | [11-rust-cross-platform/advanced-topics/03-wasm32-target.md](../../../../11-rust-cross-platform/advanced-topics/03-wasm32-target.md) | `not_verified` | 0 | 0 |
 | Rust / Cross-platform | [11-rust-cross-platform/advanced-topics/04-security-practices.md](../../../../11-rust-cross-platform/advanced-topics/04-security-practices.md) | `not_verified` | 0 | 0 |
 | Rust / Cross-platform | [11-rust-cross-platform/basics/01-environment-setup.md](../../../../11-rust-cross-platform/basics/01-environment-setup.md) | `not_verified` | 0 | 1 |
-| Rust / Cross-platform | [11-rust-cross-platform/basics/02-ownership-borrowing.md](../../../../11-rust-cross-platform/basics/02-ownership-borrowing.md) | `not_verified` | 0 | 0 |
+| Rust / Cross-platform | [11-rust-cross-platform/basics/02-ownership-borrowing.md](../../../../11-rust-cross-platform/basics/02-ownership-borrowing.md) | `runtime` | 1 | 0 |
 | Rust / Cross-platform | [11-rust-cross-platform/basics/03-structs-enums-patterns.md](../../../../11-rust-cross-platform/basics/03-structs-enums-patterns.md) | `not_verified` | 0 | 0 |
 | Rust / Cross-platform | [11-rust-cross-platform/basics/04-traits-generics.md](../../../../11-rust-cross-platform/basics/04-traits-generics.md) | `not_verified` | 0 | 0 |
 | Rust / Cross-platform | [11-rust-cross-platform/basics/05-error-handling.md](../../../../11-rust-cross-platform/basics/05-error-handling.md) | `not_verified` | 0 | 2 |

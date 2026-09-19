@@ -1,0 +1,97 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-09-19T14:48:51.600Z",
+  "scope": "Three named, complete fenced programs extracted unchanged from currently not_verified P1 Go, Rust, and Node.js pages. Go runs with the repository toolchain; Rust and Node run in existing local Docker images with network disabled, read-only roots, dropped capabilities, bounded CPU/memory/processes, and a read-only input mount. This does not verify other snippets, prose, network, filesystem, platform, framework, or production-security behavior.",
+  "runtimes": {
+    "go": "go version go1.27.1 windows/amd64",
+    "rust": "rustc 1.98.1 (48a229cea 2026-09-01)",
+    "node": "v24.21.0"
+  },
+  "passed": 3,
+  "total": 3,
+  "results": [
+    {
+      "id": "go-nil-semantics",
+      "source": "01-go-backend/reference/language-concepts/15-nil-semantics.md",
+      "language": "go",
+      "source_sha256": "b7d7d62ea5539c53bd6ddf78c24dbcf8a5ba9b90105e44fd0abb86197cd07365",
+      "extracted_code_sha256": "33c8bbac462653c31f44952dd9f355110ff997900cc3b6f33a233d2daf1fe062",
+      "command": [
+        "C:\\Users\\77958\\Documents\\ChatGPT\\技术栈探索路径\\verification-lab\\go-toolchain\\go\\bin\\go.exe",
+        "run",
+        "C:\\Users\\77958\\AppData\\Local\\Temp\\go-rust-node-tenth-c5v2LO\\go-nil-semantics.go"
+      ],
+      "expected_stdout": "0 0\n[1]\n0\n0\ntrue\ntrue\ntrue\n",
+      "exit_code": 0,
+      "stdout": "0 0\n[1]\n0\n0\ntrue\ntrue\ntrue\n",
+      "stderr": "",
+      "status": "PASS"
+    },
+    {
+      "id": "rust-ownership-move-clone-copy",
+      "source": "11-rust-cross-platform/basics/02-ownership-borrowing.md",
+      "language": "rust",
+      "source_sha256": "bdf8ad8c2da5498371925b8363b3e4f7d3661ee9c08dce0770886b6937d59132",
+      "extracted_code_sha256": "3c7b18e04941f279097264b7f205124f8b8d247737e6a9bb4a824bfa381761e0",
+      "command": [
+        "docker",
+        "run",
+        "--rm",
+        "--pull=never",
+        "--network=none",
+        "--read-only",
+        "--cap-drop=ALL",
+        "--pids-limit=64",
+        "--memory=128m",
+        "--cpus=1",
+        "--tmpfs",
+        "/work:rw,exec,nosuid,size=16m",
+        "--mount",
+        "type=bind,source=C:\\Users\\77958\\AppData\\Local\\Temp\\go-rust-node-tenth-c5v2LO,target=/input,readonly",
+        "--workdir=/work",
+        "rust:1-slim-bookworm",
+        "sh",
+        "-c",
+        "rustc --edition=2024 /input/rust-ownership-move-clone-copy.rs -o /work/program && /work/program"
+      ],
+      "expected_stdout": "所有权\nn1 = 42, n2 = 42\ns2 = 所有权, s3 = 所有权\n",
+      "exit_code": 0,
+      "stdout": "所有权\nn1 = 42, n2 = 42\ns2 = 所有权, s3 = 所有权\n",
+      "stderr": "",
+      "status": "PASS"
+    },
+    {
+      "id": "node-crypto-aes-gcm-round-trip",
+      "source": "09-nodejs-backend/reference/library-guides/03-crypto.md",
+      "language": "ts",
+      "source_sha256": "f551cf00a8324416efb1afc1c46dbc15972f2441e7f25694e6e0b8ae004549b0",
+      "extracted_code_sha256": "2595bee0e6ff9bdb75df6e3ffdb3bc7e3aa442e91004a0ec77b194cb65126cf4",
+      "command": [
+        "docker",
+        "run",
+        "--rm",
+        "--pull=never",
+        "--network=none",
+        "--read-only",
+        "--cap-drop=ALL",
+        "--pids-limit=64",
+        "--memory=128m",
+        "--cpus=1",
+        "--tmpfs",
+        "/tmp:rw,nosuid,size=16m",
+        "--mount",
+        "type=bind,source=C:\\Users\\77958\\AppData\\Local\\Temp\\go-rust-node-tenth-c5v2LO,target=/input,readonly",
+        "--workdir=/tmp",
+        "node:24-bookworm-slim",
+        "node",
+        "--experimental-strip-types",
+        "/input/node-crypto-aes-gcm-round-trip.ts"
+      ],
+      "expected_stdout": "秘密消息\n",
+      "exit_code": 0,
+      "stdout": "秘密消息\n",
+      "stderr": "",
+      "status": "PASS"
+    }
+  ]
+}

@@ -218,4 +218,4 @@ func TestRunPropagatesOutputFailure(t *testing.T) {
 
 ## 下一步
 
-接下来学习 [并发编程基础](../basics/07-concurrency-basics.md)，再阅读 [net/http](../reference/library-guides/03-net-http.md)。将本例转换为 HTTP API 时，保持 `Store` 的输入和错误语义，再只替换命令行入口；不要在还不能解释错误路径时先引入 Gin 或数据库。
+接下来学习 [并发编程基础](../basics/07-concurrency-basics.md)，再阅读 [net/http](../reference/library-guides/03-net-http.md)，然后进入 [REST API 项目的 CLI → HTTP 桥接练习](./01-rest-api-server.md)。先按该页桥接段交付共享 Store 的两个 handler 与 `httptest` 测试，通过创建后查回、非法输入不写入及并发检查，再继续 Gin 和数据库阶段。转换时保持本例 `Store` 的输入和错误语义；HTTP 请求并发共享状态所需的同步由桥接阶段补齐。

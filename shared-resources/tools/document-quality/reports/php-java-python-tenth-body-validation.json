@@ -1,0 +1,33 @@
+{
+  "report": "php-java-python-tenth-body-validation",
+  "generated_at": "2026-09-19T14:48:52.482901+00:00",
+  "execution_environment": "dev-quest-validation:local when invoked through the documented Docker command",
+  "method": "Each named Markdown fence is extracted at run time. Assertions are appended only after the extracted source; temporary files are deleted after execution.",
+  "scope": "Only the named cases are verified. A passing case is not whole-document verification.",
+  "cases": [
+    {
+      "language": "PHP",
+      "path": "07-php-mastery/reference/language-concepts/09-strings-regex.md",
+      "source": "PCRE example fence containing preg_replace_callback",
+      "status": "PASS",
+      "exit_code": 0,
+      "detail": "ada\nexample.com\nHello, Grace!\nbool(true)"
+    },
+    {
+      "language": "Java",
+      "path": "08-java-revisited/reference/library-guides/07-java-text-and-time-format.md",
+      "source": "complete FormatDemo fence",
+      "status": "PASS",
+      "exit_code": 0,
+      "detail": "compile: \nrun: 2026-09-14\n2026-09-15"
+    },
+    {
+      "language": "Python",
+      "path": "10-python-discovery/basics/04-functions-oop.md",
+      "source": "dataclass example fence",
+      "status": "PASS",
+      "exit_code": 0,
+      "detail": "Bookmark(title='uv', url='https://astral.sh', tags=[], pinned=False)\nTrue"
+    }
+  ]
+}

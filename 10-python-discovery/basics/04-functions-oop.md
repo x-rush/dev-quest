@@ -150,7 +150,7 @@ print(bm == Bookmark("uv", "https://astral.sh"))   # True，按字段比较
 
 | 装饰器 | 作用 |
 |------|------|
-| `@dataclass(frozen=True)` | 实例不可变，可哈希、可作 dict 键 |
+| `@dataclass(frozen=True)` | 阻止字段重新赋值；只有全部参与比较的字段都可哈希时，实例才可哈希、可作 dict 键 |
 | `@dataclass(order=True)` | 生成 `<`、`>=` 等比较方法 |
 | `@dataclass(slots=True)` | 启用 `__slots__`，省内存、禁止动态属性 |
 
@@ -205,7 +205,7 @@ class Vector:
 
 ## ✅ 最佳实践
 
-dataclass 减少数据载体的初始化和比较样板，复杂不变量或不同身份语义可能需要普通类。函数的可变默认参数在定义时创建，dataclass 的可变字段通常用 default_factory 为每个实例生成独立对象。
+dataclass 减少数据载体的初始化和比较样板，复杂不变量或不同身份语义可能需要普通类。函数的可变默认参数在定义时创建，dataclass 的可变字段通常用 default_factory 为每个实例生成独立对象。`frozen=True` 不会把 `list`、`dict` 等字段变成可哈希对象：例如本页 `tags: list[str]` 仍会让默认生成的 `hash()` 抛出 `TypeError`；需要作键时应使用 `tuple` 等不可变、可哈希字段，或按业务语义另行定义哈希。
 
 repr 帮助调试，但不要把秘密字段直接展示；asdict 的递归转换也不保证任意成员都能被 JSON 序列化。创建两个实例只修改其中一个的列表，验证没有共享默认状态。
 

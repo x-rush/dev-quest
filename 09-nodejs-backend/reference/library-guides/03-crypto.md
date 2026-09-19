@@ -82,6 +82,7 @@ AES-GCM 是带认证的对称加密：密文被篡改时解密直接失败，无
 
 ### 完整闭环示例（以本机 Node 24 运行结果为准）
 
+<!-- go-rust-node-tenth-case: node-crypto-aes-gcm-round-trip -->
 ```ts
 import { createCipheriv, createDecipheriv, randomBytes } from "node:crypto";
 
@@ -98,6 +99,7 @@ const decipher = createDecipheriv("aes-256-gcm", key, iv);
 decipher.setAuthTag(tag);
 const plaintext = Buffer.concat([decipher.update(ciphertext), decipher.final()])
   .toString("utf8");                      // "秘密消息"
+console.log(plaintext);                     // 移除一行也会使下方运行验收失败
 
 // 篡改检测：密文翻转 1 位后解密直接抛错（认证失败）；update 的输出在 final 成功前不能使用
 ```

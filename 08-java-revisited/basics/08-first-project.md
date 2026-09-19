@@ -283,6 +283,12 @@ java Main books.tsv search Java
 
 [首项目验证器](../../shared-resources/tools/document-quality/verify_php_java_projects.py) 直接抽取本篇程序，编译后通过真实 CLI 执行；[报告](../../shared-resources/tools/document-quality/reports/php-java-projects.md) 给出实测范围。通过只证明报告中的环境与案例，不代表所有平台文件系统行为相同。
 
+## 失败回查与下一步
+
+编译失败时先核对第 3 节两个版本命令与 `--release 21`，工具链缺失回 [环境搭建](./01-environment-setup.md)。重启后查不到书，先核对命令的当前目录和 `books.tsv` 实际路径；输入错误仍输出“已保存”，沿 `main` 的异常出口回查 [异常处理](./06-exceptions.md)。原子移动失败则按第 4 节检查目标文件系统，保留失败信息和原数据，不跳过保存错误继续验收。
+
+保存第 5 节的命令、退出码及文件前后对比结果后，阅读 [Spring Boot 入门](../frameworks/01-spring-boot-basics.md)，再进入 [TODO REST API](../projects/01-todo-api.md)。下一项目先将命令参数换为 HTTP 请求并验证校验、状态码与错误响应；它使用内存存储，重启会清空数据，与本课的 TSV 持久化边界不同。迁移领域规则时先保持非法输入不修改状态，再按下一项目指引接入数据库。
+
 ## 6. 递进练习
 
 1. **拆文件**：把 `Book`、`BookStatus`、`Library` 移入同一包的独立源文件。保持输出和失败契约，重新运行验收矩阵。

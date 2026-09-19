@@ -15,9 +15,9 @@
 
 ## 汇总
 
-- 队列条目：552 条，其中文件级证据缺口 508 条，逐行未绑定验证措辞 44 条。
-- 优先级：P0 0；P1 249；P2 150；P3 153。
-- 分类：核心基础 233；首项目 16；框架 111；部署 39；进阶与测试 153。
+- 队列条目：549 条，其中文件级证据缺口 505 条，逐行未绑定验证措辞 44 条。
+- 优先级：P0 0；P1 246；P2 150；P3 153。
+- 分类：核心基础 230；首项目 16；框架 111；部署 39；进阶与测试 153。
 
 ## 明细
 
@@ -40,7 +40,6 @@
 | P1 | 核心基础 | Go | [01-go-backend/reference/language-concepts/12-channel-semantics.md](../../../../01-go-backend/reference/language-concepts/12-channel-semantics.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
 | P1 | 核心基础 | Go | [01-go-backend/reference/language-concepts/13-interface-semantics.md](../../../../01-go-backend/reference/language-concepts/13-interface-semantics.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
 | P1 | 核心基础 | Go | [01-go-backend/reference/language-concepts/14-defer-panic-recover.md](../../../../01-go-backend/reference/language-concepts/14-defer-panic-recover.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
-| P1 | 核心基础 | Go | [01-go-backend/reference/language-concepts/15-nil-semantics.md](../../../../01-go-backend/reference/language-concepts/15-nil-semantics.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
 | P1 | 核心基础 | Go | [01-go-backend/reference/library-guides/17-std-package-map.md](../../../../01-go-backend/reference/library-guides/17-std-package-map.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
 | P1 | 核心基础 | Go | [01-go-backend/reference/quick-references/01-syntax-cheatsheet.md](../../../../01-go-backend/reference/quick-references/01-syntax-cheatsheet.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
 | P1 | 核心基础 | Go | [01-go-backend/reference/quick-references/02-web-tools.md](../../../../01-go-backend/reference/quick-references/02-web-tools.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
@@ -114,7 +113,6 @@
 | P1 | 核心基础 | Node.js | [09-nodejs-backend/reference/language-concepts/05-typescript-patterns.md](../../../../09-nodejs-backend/reference/language-concepts/05-typescript-patterns.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
 | P1 | 核心基础 | Node.js | [09-nodejs-backend/reference/language-concepts/06-esm-module-resolution.md](../../../../09-nodejs-backend/reference/language-concepts/06-esm-module-resolution.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
 | P1 | 核心基础 | Node.js | [09-nodejs-backend/reference/library-guides/02-ecosystem-libs.md](../../../../09-nodejs-backend/reference/library-guides/02-ecosystem-libs.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
-| P1 | 核心基础 | Node.js | [09-nodejs-backend/reference/library-guides/03-crypto.md](../../../../09-nodejs-backend/reference/library-guides/03-crypto.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
 | P1 | 核心基础 | Node.js | [09-nodejs-backend/reference/library-guides/07-process-lifecycle.md](../../../../09-nodejs-backend/reference/library-guides/07-process-lifecycle.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
 | P1 | 核心基础 | Node.js | [09-nodejs-backend/reference/quick-references/01-node-cheatsheet.md](../../../../09-nodejs-backend/reference/quick-references/01-node-cheatsheet.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
 | P1 | 核心基础 | Node.js | [09-nodejs-backend/reference/quick-references/02-troubleshooting.md](../../../../09-nodejs-backend/reference/quick-references/02-troubleshooting.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
@@ -183,7 +181,6 @@
 | P1 | 核心基础 | Rust / Cross-platform | [11-rust-cross-platform/README.md](../../../../11-rust-cross-platform/README.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
 | P1 | 核心基础 | Rust / Cross-platform | [11-rust-cross-platform/basics/01-environment-setup.md](../../../../11-rust-cross-platform/basics/01-environment-setup.md#L12):12 | 保留诚实的验证边界，并在补证据时决定是否增加最小练习<br/>保持已有边界说明；若新增示例，记录工具链、命令、预期行为和未覆盖范围。 | 能说明检查、运行、测试各自证明什么；命令成功不等于未编写的行为已验证。 |
 | P1 | 核心基础 | Rust / Cross-platform | [11-rust-cross-platform/basics/01-environment-setup.md](../../../../11-rust-cross-platform/basics/01-environment-setup.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
-| P1 | 核心基础 | Rust / Cross-platform | [11-rust-cross-platform/basics/02-ownership-borrowing.md](../../../../11-rust-cross-platform/basics/02-ownership-borrowing.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
 | P1 | 核心基础 | Rust / Cross-platform | [11-rust-cross-platform/basics/03-structs-enums-patterns.md](../../../../11-rust-cross-platform/basics/03-structs-enums-patterns.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
 | P1 | 核心基础 | Rust / Cross-platform | [11-rust-cross-platform/basics/04-traits-generics.md](../../../../11-rust-cross-platform/basics/04-traits-generics.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
 | P1 | 核心基础 | Rust / Cross-platform | [11-rust-cross-platform/basics/05-error-handling.md](../../../../11-rust-cross-platform/basics/05-error-handling.md#L306):306 | 保留诚实的验证边界，并在补证据时决定是否增加最小练习<br/>保持已有边界说明；若新增示例，记录工具链、命令、预期行为和未覆盖范围。 | > ⚠️ 本段依赖 crates.io 的 thiserror，不在自包含实测范围内；用法以官方文档为准。`#&#91;error("...")&#93;` 生成 Display，`#&#91;from&#93;` 生成 `From<io::Error>` 使 `?` 自动转换生效——与示例三逐项对应。 |

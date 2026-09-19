@@ -33,7 +33,7 @@
 
 | 字母 | 含义 | 示例输出（2026-09-14 14:30:05） |
 |------|------|------|
-| `yyyy` / `uuuu` | 年（纪元年 / 纯年） | 2026 |
+| `yyyy` / `uuuu` | year-of-era（通常需 era）/ proleptic year（可含 0 和负年） | 2026 |
 | `MM` / `MMM` / `MMMM` | 月：数字 / 简名 / 全名 | 09 / 9月(zh-CN) / September(en) |
 | `dd` | 日 | 14 |
 | `HH` / `hh` | 时：0-23 / 1-12 | 14 / 02 |
@@ -43,7 +43,7 @@
 | `E` / `EEEE` | 星期缩写 / 全名 | 周一 / 星期一 |
 | `z` / `Z` / `X` | 时区名 / 偏移(+0800) / ISO 偏移(Z) | CST / +0800 / Z |
 
-> 预期：`yyyy/MM/dd` → `2026/09/14`；`MMMM`+en → `September`；`MMM`+zh-CN → `9月`；`ofLocalizedDate(FULL)`+zh-CN → `2026年9月14日星期一`。
+> 预期：`yyyy/MM/dd` → `2026/09/14`；`MMMM`+en → `September`；`MMM`+zh-CN → `9月`；`ofLocalizedDate(FULL)`+zh-CN → `2026年9月14日星期一`。需要严格解析常见公历日期时，模式应写 `uuuu`，不是 `yyyy`。
 
 ```java
 var fmt = DateTimeFormatter.ofPattern("yyyy年MM月dd日 HH:mm");

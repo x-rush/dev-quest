@@ -4,7 +4,7 @@
 
 ## 📌 定义
 
-nil 是 6 类引用型值（pointer/slice/map/channel/func/interface）的**零值**，但每种类型对 nil 的容忍度完全不同：有的只读安全、有的彻底不可用、有的还能合法增删。本条目是各类型 nil 行为的**单一汇总表**，判断姿势一次讲清。
+nil 是 6 类值（pointer/slice/map/channel/func/interface）的**零值**，但每种类型对 nil 的容忍度完全不同：有的只读安全、有的彻底不可用、有的还能合法增删。`error` 不是第七类；它是接口类型的常见用法，因此沿用 interface 的 nil 规则。本条目是各类型 nil 行为的**单一汇总表**，判断姿势一次讲清。
 
 ## 📖 语法 / 签名：各类型 nil 行为总表
 
@@ -30,6 +30,7 @@ if err != nil {}      // error：标准三段式
 
 ## 💡 示例
 
+<!-- go-rust-node-tenth-case: go-nil-semantics -->
 ```go
 package main
 
