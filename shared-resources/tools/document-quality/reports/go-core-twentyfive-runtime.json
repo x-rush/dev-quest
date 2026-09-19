@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-19T17:34:00.178672+00:00",
-  "purpose": "Twenty-fifth-round runtime evidence for thirteen marked Go core-document fences.",
+  "generated_at": "2026-09-19T17:37:22.854647+00:00",
+  "purpose": "Twenty-fifth-round runtime evidence for fourteen marked Go core-document fences.",
   "isolation": "No network, read-only container root, dropped capabilities, no-new-privileges, bounded CPU/memory/PIDs, and tmpfs-only writable workspace. Image must already exist because --pull=never is used.",
-  "scope": "Only the thirteen named complete Go fences extracted unchanged after CRLF-to-LF normalization were executed. Other fences, toolchain setup, web services, filesystem integrations, concurrency scheduling, performance, and projects remain outside this evidence.",
+  "scope": "Only the fourteen named complete Go fences extracted unchanged after CRLF-to-LF normalization were executed. Other fences, toolchain setup, web services, filesystem integrations, concurrency scheduling, performance, and projects remain outside this evidence.",
   "results": [
     {
       "id": "go-first-program-hello",
@@ -186,10 +186,24 @@
       "stderr": "",
       "exit_code": 0,
       "status": "PASS"
+    },
+    {
+      "id": "go-sync-mutex-waitgroup-once",
+      "language": "go",
+      "document": "01-go-backend/reference/library-guides/06-sync.md",
+      "image": "golang:1.25-alpine",
+      "document_sha256": "cd1349305625fffe5841f1c14f4b240bf404a4c1cd3164b7b0bf30f4ea4a661d",
+      "code_sha256": "75c5637da0cf582e657d37c89e55d0f488ce5e3447de314bff4b0805d14bf800",
+      "command": "GOCACHE=/tmp/go-build go run /tmp/main.go",
+      "expected_stdout": "hits=100 once=1 atomic=5\n",
+      "stdout": "hits=100 once=1 atomic=5\n",
+      "stderr": "",
+      "exit_code": 0,
+      "status": "PASS"
     }
   ],
   "summary": {
-    "passed": 13,
-    "total": 13
+    "passed": 14,
+    "total": 14
   }
 }

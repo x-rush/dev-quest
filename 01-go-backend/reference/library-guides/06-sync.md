@@ -124,6 +124,52 @@ func main() {
 }
 ```
 
+### 固定输出的并发最小验收
+
+不要从 goroutine 内打印来判断并发是否正确，输出顺序本身不可预测。下面只在 `Wait` 后读取状态：每个任务在同一把锁下递增，因而结果固定为 100；`Once` 的函数无论被调用多少次都只执行一次；atomic 用于一个独立的计数值。
+
+<!-- doc-verify:go-sync-mutex-waitgroup-once -->
+```go
+package main
+
+import (
+	"fmt"
+	"sync"
+	"sync/atomic"
+)
+
+func main() {
+	var wg sync.WaitGroup
+	var mu sync.Mutex
+	hits := 0
+	for range 100 {
+		wg.Add(1)
+		go func() {
+			defer wg.Done()
+			mu.Lock()
+			hits++
+			mu.Unlock()
+		}()
+	}
+	wg.Wait()
+
+	initializations := 0
+	var once sync.Once
+	for range 3 { once.Do(func() { initializations++ }) }
+
+	var total atomic.Int64
+	total.Add(2)
+	total.Add(3)
+	fmt.Printf("hits=%d once=%d atomic=%d\n", hits, initializations, total.Load())
+}
+```
+
+预期输出：
+
+```text
+hits=100 once=1 atomic=5
+```
+
 ## ⚠️ 常见陷阱
 
 - ❌ **错误做法**：WaitGroup 只 `go f()` 忘了 `Add(1)`，或 Add 在 goroutine 内调用。
