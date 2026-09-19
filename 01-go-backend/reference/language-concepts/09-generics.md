@@ -90,6 +90,35 @@ func main() {
 }
 ```
 
+下面这段是可直接执行的最小完整程序。它同时验证类型推断、`~int` 对命名类型的匹配，以及泛型容器的“零值 + ok”读取约定；其中 `Score` 不需要显式转换为 `int`。
+
+<!-- terra-thirteenth-case: go-generics-named-type -->
+```go
+package main
+
+import "fmt"
+
+type Number interface { ~int | ~int64 }
+type Score int
+
+func Sum[T Number](xs []T) T {
+	var total T
+	for _, x := range xs { total += x }
+	return total
+}
+
+type Cache[K comparable, V any] struct { values map[K]V }
+func NewCache[K comparable, V any]() *Cache[K, V] { return &Cache[K, V]{values: map[K]V{}} }
+func (c *Cache[K, V]) Get(key K) (V, bool) { value, ok := c.values[key]; return value, ok }
+
+func main() {
+	fmt.Printf("score=%d\n", Sum([]Score{1, 2, 3}))
+	cache := NewCache[string, int]()
+	value, found := cache.Get("missing")
+	fmt.Printf("missing=%d,%t\n", value, found)
+}
+```
+
 与库层结合的典型场景：ORM/Redis 客户端等框架提供基于泛型的强类型查询入口，把"返回结构体类型是否匹配"的检查从运行时移到编译期——泛型是这些 API 的语言基石。
 
 ## ⚠️ 常见陷阱

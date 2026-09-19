@@ -126,7 +126,7 @@ import { add } from "./add.js";   // 源文件是 add.ts
 ### 陷阱
 - `module: nodenext` 下省略扩展名直接编译报错——这正是它"所见即所跑"的价值
 - 三方包类型找不到时先查它的 `exports.types` 条件，再查本项目的 `moduleResolution`
-- Node 原生跑 `.ts`（`node file.ts`）时同样执行上述解析规则
+- 不要把 `node file.ts` 当作跨版本的 TypeScript 运行方案。较新的 Node 可以在受限条件下做 TypeScript 类型擦除，较旧版本会拒绝 `.ts`；它也不替代 `tsc` 的完整类型检查。需要可移植部署时，先编译为 `.js`，再运行产物。
 
 ## 5. 高频报错速查
 
@@ -137,6 +137,40 @@ import { add } from "./add.js";   // 源文件是 add.ts
 | `ERR_PACKAGE_IMPORT_NOT_DEFINED` | 在作用域外使用 `#` 别名 | 别名仅限定义它的包内使用 |
 | `ERR_INVALID_PACKAGE_TARGET` | 包的 exports 目标路径写错 | 锁旧版或向包提 issue |
 | `ERR_UNSUPPORTED_DIR_IMPORT` | 导入目录（ESM 不补 index.js） | 写全 `./dir/index.js` |
+
+### 可运行的解析边界实验
+
+以下程序不依赖网络或已安装包：它在临时目录创建一个 ESM 包和一个消费者，再通过**包名**导入公开入口。`exports` 只开放 `.`，因此深层路径被拒绝；程序同时验证相对 `.mjs` 导入仍按文件路径工作。运行 `node esm-resolution-demo.mjs` 应输出两行固定结果。
+
+<!-- terra-thirteenth-case: node-exports-resolution -->
+```js
+import { mkdtemp, mkdir, rm, writeFile } from "node:fs/promises";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
+import { pathToFileURL } from "node:url";
+
+const root = await mkdtemp(join(tmpdir(), "esm-resolution-"));
+try {
+  const packageDir = join(root, "node_modules", "@demo", "math");
+  await mkdir(packageDir, { recursive: true });
+  await writeFile(join(packageDir, "package.json"), JSON.stringify({
+    name: "@demo/math", type: "module", exports: { ".": "./index.mjs" },
+  }));
+  await writeFile(join(packageDir, "index.mjs"), "export const add = (a, b) => a + b;\n");
+  await writeFile(join(packageDir, "secret.mjs"), "export const secret = 1;\n");
+  await writeFile(join(root, "relative.mjs"), "export const label = 'relative-ok';\n");
+  await writeFile(join(root, "consumer.mjs"), [
+    "import { add } from '@demo/math';",
+    "import { label } from './relative.mjs';",
+    "console.log(`sum=${add(2, 3)} ${label}`);",
+    "try { await import('@demo/math/secret.mjs'); }",
+    "catch (error) { console.log(`blocked=${error.code}`); }",
+  ].join("\n"));
+  await import(`${pathToFileURL(join(root, "consumer.mjs")).href}?case=1`);
+} finally {
+  await rm(root, { recursive: true, force: true });
+}
+```
 
 ---
 

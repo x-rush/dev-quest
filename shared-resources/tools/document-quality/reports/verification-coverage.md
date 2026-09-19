@@ -7,10 +7,10 @@
 | 指标 | 数量 |
 |---|---:|
 | 纳入模块文档 | 642 |
-| 主状态：not_verified | 495 |
-| 主状态：runtime | 147 |
-| 验证措辞出现次数 | 126 |
-| 措辞分类：source_has_limited_runtime_evidence | 82 |
+| 主状态：not_verified | 492 |
+| 主状态：runtime | 150 |
+| 验证措辞出现次数 | 127 |
+| 措辞分类：source_has_limited_runtime_evidence | 83 |
 | 措辞分类：unbound_verification_wording | 44 |
 
 ## 语法级覆盖（不能当作运行覆盖）
@@ -79,7 +79,7 @@
 | Go | [01-go-backend/reference/language-concepts/06-go-oop-concepts.md](../../../../01-go-backend/reference/language-concepts/06-go-oop-concepts.md) | `runtime` | 1 | 0 |
 | Go | [01-go-backend/reference/language-concepts/07-error-handling.md](../../../../01-go-backend/reference/language-concepts/07-error-handling.md) | `not_verified` | 0 | 0 |
 | Go | [01-go-backend/reference/language-concepts/08-concurrency-basics.md](../../../../01-go-backend/reference/language-concepts/08-concurrency-basics.md) | `not_verified` | 0 | 0 |
-| Go | [01-go-backend/reference/language-concepts/09-generics.md](../../../../01-go-backend/reference/language-concepts/09-generics.md) | `not_verified` | 0 | 0 |
+| Go | [01-go-backend/reference/language-concepts/09-generics.md](../../../../01-go-backend/reference/language-concepts/09-generics.md) | `runtime` | 1 | 0 |
 | Go | [01-go-backend/reference/language-concepts/10-slice-semantics.md](../../../../01-go-backend/reference/language-concepts/10-slice-semantics.md) | `runtime` | 1 | 0 |
 | Go | [01-go-backend/reference/language-concepts/11-map-semantics.md](../../../../01-go-backend/reference/language-concepts/11-map-semantics.md) | `runtime` | 1 | 0 |
 | Go | [01-go-backend/reference/language-concepts/12-channel-semantics.md](../../../../01-go-backend/reference/language-concepts/12-channel-semantics.md) | `not_verified` | 0 | 1 |
@@ -550,7 +550,7 @@
 | Node.js | [09-nodejs-backend/reference/language-concepts/03-node-core-api.md](../../../../09-nodejs-backend/reference/language-concepts/03-node-core-api.md) | `runtime` | 2 | 0 |
 | Node.js | [09-nodejs-backend/reference/language-concepts/04-streams-api.md](../../../../09-nodejs-backend/reference/language-concepts/04-streams-api.md) | `not_verified` | 0 | 0 |
 | Node.js | [09-nodejs-backend/reference/language-concepts/05-typescript-patterns.md](../../../../09-nodejs-backend/reference/language-concepts/05-typescript-patterns.md) | `not_verified` | 0 | 0 |
-| Node.js | [09-nodejs-backend/reference/language-concepts/06-esm-module-resolution.md](../../../../09-nodejs-backend/reference/language-concepts/06-esm-module-resolution.md) | `not_verified` | 0 | 0 |
+| Node.js | [09-nodejs-backend/reference/language-concepts/06-esm-module-resolution.md](../../../../09-nodejs-backend/reference/language-concepts/06-esm-module-resolution.md) | `runtime` | 1 | 1 |
 | Node.js | [09-nodejs-backend/reference/language-concepts/07-js-core-semantics.md](../../../../09-nodejs-backend/reference/language-concepts/07-js-core-semantics.md) | `runtime` | 2 | 1 |
 | Node.js | [09-nodejs-backend/reference/language-concepts/08-type-coercion-collections.md](../../../../09-nodejs-backend/reference/language-concepts/08-type-coercion-collections.md) | `runtime` | 2 | 5 |
 | Node.js | [09-nodejs-backend/reference/language-concepts/09-globals-reference.md](../../../../09-nodejs-backend/reference/language-concepts/09-globals-reference.md) | `runtime` | 1 | 0 |
@@ -577,7 +577,7 @@
 | Python | [10-python-discovery/basics/01-environment-setup.md](../../../../10-python-discovery/basics/01-environment-setup.md) | `not_verified` | 0 | 0 |
 | Python | [10-python-discovery/basics/02-first-script.md](../../../../10-python-discovery/basics/02-first-script.md) | `not_verified` | 0 | 0 |
 | Python | [10-python-discovery/basics/03-variables-types.md](../../../../10-python-discovery/basics/03-variables-types.md) | `runtime` | 1 | 0 |
-| Python | [10-python-discovery/basics/04-functions-oop.md](../../../../10-python-discovery/basics/04-functions-oop.md) | `not_verified` | 0 | 0 |
+| Python | [10-python-discovery/basics/04-functions-oop.md](../../../../10-python-discovery/basics/04-functions-oop.md) | `runtime` | 1 | 0 |
 | Python | [10-python-discovery/basics/05-control-flow.md](../../../../10-python-discovery/basics/05-control-flow.md) | `runtime` | 1 | 0 |
 | Python | [10-python-discovery/basics/06-exceptions.md](../../../../10-python-discovery/basics/06-exceptions.md) | `runtime` | 1 | 0 |
 | Python | [10-python-discovery/basics/07-advanced-features.md](../../../../10-python-discovery/basics/07-advanced-features.md) | `runtime` | 1 | 0 |

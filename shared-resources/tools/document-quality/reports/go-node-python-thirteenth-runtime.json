@@ -1,0 +1,178 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-09-19T15:32:47.346660+00:00",
+  "scope": "Three named complete programs, extracted unchanged from the listed P1 core/standard-library Markdown documents. A passing result covers only these contracts, not an entire page or module.",
+  "method": "The validator writes each exact marked fence to a temporary directory and runs it in a pre-existing Docker image with no network, read-only root filesystem, dropped capabilities, and bounded resources.",
+  "not_verified": [
+    "other prose and fences in the three documents",
+    "compile-failure examples",
+    "network, database, framework, performance, concurrency, and platform behavior"
+  ],
+  "docker": {
+    "command": [
+      "docker",
+      "--version"
+    ],
+    "exit_code": 0,
+    "stdout": "Docker version 29.8.0, build 88096ef\n",
+    "stderr": ""
+  },
+  "cases": [
+    {
+      "id": "go-generics-named-type",
+      "language": "Go",
+      "source": "01-go-backend/reference/language-concepts/09-generics.md",
+      "image": "golang:1.27",
+      "document_sha256": "6e527e746b553b369a129397dc0f6da7a22c817418f0105aeeed46c63017541f",
+      "code_sha256": "34213114366385c6e5d2bf72fe2888f89520735f60ee27062408966e8efcb32f",
+      "expected_stdout": "score=6\nmissing=0,false\n",
+      "toolchain": {
+        "command": [
+          "docker",
+          "run",
+          "--rm",
+          "--pull=never",
+          "--network=none",
+          "golang:1.27",
+          "go",
+          "version"
+        ],
+        "exit_code": 0,
+        "stdout": "go version go1.27.1 linux/amd64\n",
+        "stderr": ""
+      },
+      "execution": {
+        "command": [
+          "docker",
+          "run",
+          "--rm",
+          "--pull=never",
+          "--network=none",
+          "--read-only",
+          "--cap-drop=ALL",
+          "--pids-limit=64",
+          "--memory=512m",
+          "--cpus=1",
+          "--tmpfs",
+          "/tmp:rw,exec,nosuid,size=256m",
+          "--env",
+          "GOCACHE=/tmp/go-build-cache",
+          "--workdir=/work",
+          "--mount",
+          "type=bind,source=C:\\Users\\77958\\AppData\\Local\\Temp\\dev-quest-thirteenth-cy5rindl\\go-generics-named-type,target=/work,readonly",
+          "golang:1.27",
+          "go",
+          "run",
+          "main.go"
+        ],
+        "exit_code": 0,
+        "stdout": "score=6\nmissing=0,false\n",
+        "stderr": ""
+      },
+      "status": "PASS"
+    },
+    {
+      "id": "node-exports-resolution",
+      "language": "Node.js",
+      "source": "09-nodejs-backend/reference/language-concepts/06-esm-module-resolution.md",
+      "image": "node:24-bookworm-slim",
+      "document_sha256": "0873ddcbe95ad0de39ad40cf3ca83ecb983891250cca328d849eff8b0cb1be21",
+      "code_sha256": "125cb24a0afa0487b988cb86dc4053f4fe4f476ec2a564e28024f5fc42924a02",
+      "expected_stdout": "sum=5 relative-ok\nblocked=ERR_PACKAGE_PATH_NOT_EXPORTED\n",
+      "toolchain": {
+        "command": [
+          "docker",
+          "run",
+          "--rm",
+          "--pull=never",
+          "--network=none",
+          "node:24-bookworm-slim",
+          "node",
+          "--version"
+        ],
+        "exit_code": 0,
+        "stdout": "v24.21.0\n",
+        "stderr": ""
+      },
+      "execution": {
+        "command": [
+          "docker",
+          "run",
+          "--rm",
+          "--pull=never",
+          "--network=none",
+          "--read-only",
+          "--cap-drop=ALL",
+          "--pids-limit=64",
+          "--memory=512m",
+          "--cpus=1",
+          "--tmpfs",
+          "/tmp:rw,exec,nosuid,size=256m",
+          "--workdir=/work",
+          "--mount",
+          "type=bind,source=C:\\Users\\77958\\AppData\\Local\\Temp\\dev-quest-thirteenth-cy5rindl\\node-exports-resolution,target=/work,readonly",
+          "node:24-bookworm-slim",
+          "node",
+          "case.mjs"
+        ],
+        "exit_code": 0,
+        "stdout": "sum=5 relative-ok\nblocked=ERR_PACKAGE_PATH_NOT_EXPORTED\n",
+        "stderr": ""
+      },
+      "status": "PASS"
+    },
+    {
+      "id": "python-default-factory",
+      "language": "Python",
+      "source": "10-python-discovery/basics/04-functions-oop.md",
+      "image": "python:3.14-alpine",
+      "document_sha256": "76146cf7c0c0851a84cdbea649f36b7300c71d9cfb8cfb5b919483a41c33d3b4",
+      "code_sha256": "9664911cae017b2b2f8384c05bfd4662cab2d087547a9cfd0132187df1c6ff96",
+      "expected_stdout": "unsafe=['one'],['one', 'two']\nsafe=['one'],['two']; tasks=['urgent'],[]\n",
+      "toolchain": {
+        "command": [
+          "docker",
+          "run",
+          "--rm",
+          "--pull=never",
+          "--network=none",
+          "python:3.14-alpine",
+          "python",
+          "--version"
+        ],
+        "exit_code": 0,
+        "stdout": "Python 3.14.7\n",
+        "stderr": ""
+      },
+      "execution": {
+        "command": [
+          "docker",
+          "run",
+          "--rm",
+          "--pull=never",
+          "--network=none",
+          "--read-only",
+          "--cap-drop=ALL",
+          "--pids-limit=64",
+          "--memory=512m",
+          "--cpus=1",
+          "--tmpfs",
+          "/tmp:rw,exec,nosuid,size=256m",
+          "--workdir=/work",
+          "--mount",
+          "type=bind,source=C:\\Users\\77958\\AppData\\Local\\Temp\\dev-quest-thirteenth-cy5rindl\\python-default-factory,target=/work,readonly",
+          "python:3.14-alpine",
+          "python",
+          "-I",
+          "case.py"
+        ],
+        "exit_code": 0,
+        "stdout": "unsafe=['one'],['one', 'two']\nsafe=['one'],['two']; tasks=['urgent'],[]\n",
+        "stderr": ""
+      },
+      "status": "PASS"
+    }
+  ],
+  "passed": 3,
+  "total": 3
+}

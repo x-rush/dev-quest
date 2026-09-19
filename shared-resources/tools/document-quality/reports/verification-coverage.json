@@ -17,12 +17,12 @@
   "summary": {
     "documents": 642,
     "by_primary_state": {
-      "not_verified": 495,
-      "runtime": 147
+      "not_verified": 492,
+      "runtime": 150
     },
-    "verification_wording_occurrences": 126,
+    "verification_wording_occurrences": 127,
     "marker_classification": {
-      "source_has_limited_runtime_evidence": 82,
+      "source_has_limited_runtime_evidence": 83,
       "unbound_verification_wording": 44
     }
   },
@@ -680,13 +680,13 @@
     },
     {
       "path": "01-go-backend/reference/language-concepts/09-generics.md",
-      "sha256": "cd725b3057bff29bf17df42c4220150ff1d82f122785f08361dae7731a73b185",
+      "sha256": "c873dd98522f8cf441cb374aad450282a6a6998f99688556e2d2832513e5ec73",
       "verification": [
         {
-          "mode": "not_verified",
-          "status": "NOT_VERIFIED",
-          "report": null,
-          "scope": "No named runtime or syntax evidence is recorded for this document."
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "go-node-python-thirteenth-runtime.json",
+          "scope": "Three named complete programs, extracted unchanged from the listed P1 core/standard-library Markdown documents. A passing result covers only these contracts, not an entire page or module."
         }
       ],
       "marker_count": 0
@@ -3458,7 +3458,7 @@
     },
     {
       "path": "05-kotlin-compose/LEARNING_GUIDE.md",
-      "sha256": "a9071587d85f26f1d0b41277da7e5d8754a507ac2fee92f75f3754f2f467b327",
+      "sha256": "33c8f37600dd7ecd97f92ee2e26dedb6f298eb4848a82a55e17324a8f311710b",
       "verification": [
         {
           "mode": "not_verified",
@@ -3731,7 +3731,7 @@
     },
     {
       "path": "05-kotlin-compose/projects/01-notes-app.md",
-      "sha256": "f4c82a3031b6ec01a949bfd9530e9ea66f0d7994a2982ae12f930caf7f6b24d3",
+      "sha256": "a707f96a0064642e3dc583a1d3bfdf3723bb561f569c8b10bc899c5b8100816e",
       "verification": [
         {
           "mode": "not_verified",
@@ -7181,16 +7181,16 @@
     },
     {
       "path": "09-nodejs-backend/reference/language-concepts/06-esm-module-resolution.md",
-      "sha256": "8035e64122050cab6b4e3eeca36a792c10c1fd56d8f082c4a42c48408b4cf0be",
+      "sha256": "2f1f08723d8e9e19e302e9a6959ba0fd748551b711182f68fc56e7f446cb9e32",
       "verification": [
         {
-          "mode": "not_verified",
-          "status": "NOT_VERIFIED",
-          "report": null,
-          "scope": "No named runtime or syntax evidence is recorded for this document."
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "go-node-python-thirteenth-runtime.json",
+          "scope": "Three named complete programs, extracted unchanged from the listed P1 core/standard-library Markdown documents. A passing result covers only these contracts, not an entire page or module."
         }
       ],
-      "marker_count": 0
+      "marker_count": 1
     },
     {
       "path": "09-nodejs-backend/reference/language-concepts/07-js-core-semantics.md",
@@ -7568,13 +7568,13 @@
     },
     {
       "path": "10-python-discovery/basics/04-functions-oop.md",
-      "sha256": "12702d8da749229ebd439b51551ba3e05ad277a715985bfd3d1b034fbb21c64a",
+      "sha256": "e38660bd5c1a4a2fb40bc5abb083e3e3e467b8a09018e96de49c0712e6164575",
       "verification": [
         {
-          "mode": "not_verified",
-          "status": "NOT_VERIFIED",
-          "report": null,
-          "scope": "No named runtime or syntax evidence is recorded for this document."
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "go-node-python-thirteenth-runtime.json",
+          "scope": "Three named complete programs, extracted unchanged from the listed P1 core/standard-library Markdown documents. A passing result covers only these contracts, not an entire page or module."
         }
       ],
       "marker_count": 0
@@ -9352,6 +9352,12 @@
       "line": 256,
       "excerpt": "- [ ] 至少 3 条服务层测试通过",
       "classification": "unbound_verification_wording"
+    },
+    {
+      "path": "09-nodejs-backend/reference/language-concepts/06-esm-module-resolution.md",
+      "line": 141,
+      "excerpt": "### 可运行的解析边界实验",
+      "classification": "source_has_limited_runtime_evidence"
     },
     {
       "path": "09-nodejs-backend/reference/language-concepts/07-js-core-semantics.md",

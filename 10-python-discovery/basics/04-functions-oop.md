@@ -80,6 +80,40 @@ def add_tag(tag: str, tags: list[str] | None = None):  # ✅ 标准解法
     return tags
 ```
 
+把“默认值只创建一次”和 `default_factory` 放在同一个小程序里看会更直观。下例先显示错误函数的共享状态，再断言两次安全调用与两个 `Task` 实例都各自得到新列表；可保存为 `functions_dataclass_demo.py` 后执行 `python functions_dataclass_demo.py`。
+
+<!-- terra-thirteenth-case: python-default-factory -->
+```python
+from dataclasses import dataclass, field
+
+def unsafe_add(tag: str, tags: list[str] = []) -> list[str]:
+    tags.append(tag)
+    return tags
+
+def safe_add(tag: str, tags: list[str] | None = None) -> list[str]:
+    if tags is None:
+        tags = []
+    tags.append(tag)
+    return tags
+
+@dataclass
+class Task:
+    title: str
+    tags: list[str] = field(default_factory=list)
+
+def main() -> None:
+    print(f"unsafe={unsafe_add('one')},{unsafe_add('two')}")
+    first, second = safe_add("one"), safe_add("two")
+    a, b = Task("A"), Task("B")
+    a.tags.append("urgent")
+    assert first == ["one"] and second == ["two"]
+    assert b.tags == []
+    print(f"safe={first},{second}; tasks={a.tags},{b.tags}")
+
+if __name__ == "__main__":
+    main()
+```
+
 > 💡 上面用到的 `if tags is None` 是条件判断，下一章[控制流](./05-control-flow.md)才系统讲解。这里先记住惯例：**可变默认参数一律用 `None` 占位**，函数体内再判空重建——背下这个固定套路即可，原理下一章补齐。
 
 更深入的错误案例见[常见错误排查](../reference/quick-references/02-troubleshooting.md)。

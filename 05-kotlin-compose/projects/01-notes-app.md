@@ -41,8 +41,8 @@
 
 - ✅ 笔记列表 + 新建/编辑 + 删除，数据落 **Room**
 - ✅ 标题搜索（数据库层过滤，而非内存过滤）
-- ✅ **UiState 单一状态** + 状态提升的 Compose 界面
-- ✅ 空态/加载态显式处理
+- ✅ 查询结果集中在 **UiState**，删除错误独立展示；Compose 界面接收状态与事件
+- ✅ 空态、加载态与可重试错误显式处理
 
 不涉及网络与 DI——那是 [天气应用](02-weather-app.md) 的任务。
 
@@ -59,7 +59,7 @@ data class NoteEntity(
 
 @Dao
 interface NoteDao {
-    // 搜索在 SQL 层完成：数据量大时远快于内存过滤
+    // 数据库执行过滤，减少传回 UI 的记录；包含搜索不保证使用普通索引。
     @Query("SELECT * FROM notes WHERE title LIKE '%' || :query || '%' ORDER BY createdAt DESC, id DESC")
     fun observeNotes(query: String): Flow<List<NoteEntity>>
 
@@ -75,29 +75,45 @@ interface NoteDao {
 
 ## 2️⃣ ViewModel：查询词也是状态
 
+搜索输入应立即回显，结果则在防抖和查询结束后更新；等待期间不能把旧结果当成新查询的结果。以下增量还需要 `kotlinx.coroutines.delay`、`kotlinx.coroutines.CancellationException`、`kotlinx.coroutines.flow.*`、`kotlinx.coroutines.launch`。DAO 查询错误在每次查询内部捕获，避免一次失败就终止整个搜索流。
+
 ```kotlin
 data class NotesUiState(
     val query: String = "",
     val notes: List<Note> = emptyList(),
     val loading: Boolean = true,
+    val error: String? = null,
 )
 
 class NotesViewModel(private val dao: NoteDao) : ViewModel() {
 
     private val queryFlow = MutableStateFlow("")
+    private val reload = MutableStateFlow(0)
+    val deleteError = MutableStateFlow<String?>(null)
 
-    // 搜索词防抖 300ms，再映射为数据库查询
-    @OptIn(FlowPreview::class, ExperimentalCoroutinesApi::class)
-    private val notesFlow = queryFlow
-        .debounce(300)
-        .flatMapLatest { q -> dao.observeNotes(q).map { list -> list.map { it.toDomain() } } }
+    // 输入改变即取消旧收集；新查询等待 300ms，快速输入只执行最后一次。
+    @OptIn(ExperimentalCoroutinesApi::class)
+    private val notesFlow = combine(queryFlow, reload) { q, _ -> q }
+        .flatMapLatest { q ->
+            flow {
+                emit(NotesUiState(query = q))
+                delay(300)
+                emitAll(dao.observeNotes(q).map { list ->
+                    NotesUiState(query = q, notes = list.map { it.toDomain() }, loading = false)
+                })
+            }.catch { failure ->
+                if (failure is CancellationException) throw failure
+                emit(NotesUiState(query = q, loading = false, error = "读取失败，请重试。"))
+            }
+        }
 
     val uiState: StateFlow<NotesUiState> =
-        combine(queryFlow, notesFlow) { q, notes ->
-            NotesUiState(query = q, notes = notes, loading = false)
+        combine(queryFlow, notesFlow) { q, result ->
+            if (q == result.query) result else NotesUiState(query = q)
         }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), NotesUiState())
 
     fun onQueryChange(q: String) { queryFlow.value = q }
+    fun retry() { reload.value += 1 }
 
     suspend fun getNote(id: Long): NoteEntity? = dao.getNote(id)
 
@@ -111,13 +127,24 @@ class NotesViewModel(private val dao: NoteDao) : ViewModel() {
             ?: NoteEntity(title = draft.title, content = draft.content))
     }
 
-    fun deleteNote(id: Long) = viewModelScope.launch { dao.deleteById(id) }
+    fun deleteNote(id: Long) = viewModelScope.launch {
+        deleteError.value = null
+        try {
+            dao.deleteById(id)
+        } catch (cancelled: CancellationException) {
+            throw cancelled
+        } catch (failure: Exception) {
+            deleteError.value = "删除失败，笔记仍保留，请重试。"
+        }
+    }
 }
 ```
 
-> `debounce/flatMapLatest/combine` 的完整语义见 [协程与 Flow API 全表](../reference/language-concepts/03-coroutines-flow-api.md)。
+> `flatMapLatest/combine` 的完整语义见 [协程与 Flow API 全表](../reference/language-concepts/03-coroutines-flow-api.md)。本例搜索词保留在 ViewModel，能跨 Activity 配置重建；尚未接入 SavedStateHandle，进程重建时搜索词回到空串，持久笔记仍由 Room 读取。
 
-## 3️⃣ 列表界面：LazyColumn + 三种状态
+本例 SQL 的 `%` 和 `_` 仍是 LIKE 通配符，输入 `%` 会匹配所有标题；它不是字面量子串搜索。需要按字面搜索时另加转义规则和用例。前导 `%` 不满足 SQLite 的 LIKE 范围索引优化条件，不能凭“过滤在数据库”宣称大数据性能更好；先测查询计划，再考虑全文检索。依据：[SQLite LIKE 优化](https://www.sqlite.org/optoverview.html#the_like_optimization)。
+
+## 3️⃣ 列表界面：LazyColumn + 加载、错误、空态与结果
 
 ```kotlin
 @Composable
@@ -126,6 +153,9 @@ fun NotesScreen(
     onQueryChange: (String) -> Unit,
     onNoteClick: (Long) -> Unit,
     onAddClick: () -> Unit,
+    onDelete: (Long) -> Unit,
+    onRetry: () -> Unit,
+    deleteError: String?,
 ) {
     Scaffold(floatingActionButton = {
         FloatingActionButton(onClick = onAddClick) { Icon(Icons.Default.Add, "新建笔记") }
@@ -137,18 +167,23 @@ fun NotesScreen(
                 placeholder = { Text("搜索标题") },
                 modifier = Modifier.fillMaxWidth().padding(16.dp),
             )
+            deleteError?.let { Text(it) }
             when {
                 state.loading -> LinearProgressIndicator(Modifier.fillMaxWidth())
+                state.error != null -> Column {
+                    Text(state.error)
+                    Button(onClick = onRetry) { Text("重试") }
+                }
                 state.notes.isEmpty() -> EmptyHint()          // 显式空态
                 else -> LazyColumn(
                     contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)
                 ) {
-                    // key 保证删除/搜索后动画与状态复用正确
+                    // 稳定 id 帮助 Compose 对应条目身份；仍需验证状态和动画。
                     items(state.notes, key = { it.id }) { note ->
                         NoteRow(
                             note = note,
                             onClick = { onNoteClick(note.id) },
-                            onDelete = { /* 调用 VM 删除 */ },
+                            onDelete = { onDelete(note.id) },
                         )
                     }
                 }
@@ -166,11 +201,11 @@ fun NotesScreen(
 @Composable
 fun NoteEditorScreen(noteId: Long?, viewModel: NotesViewModel, onDone: () -> Unit) {
     // 只有"草稿"属于 UI；持久化才进 ViewModel/Room
-    var title by rememberSaveable { mutableStateOf("") }
-    var content by rememberSaveable { mutableStateOf("") }
+    var title by rememberSaveable(noteId) { mutableStateOf("") }
+    var content by rememberSaveable(noteId) { mutableStateOf("") }
     var loaded by rememberSaveable(noteId) { mutableStateOf(noteId == null) }
-    var saving by remember { mutableStateOf(false) }
-    var error by remember { mutableStateOf<String?>(null) }
+    var saving by remember(noteId) { mutableStateOf(false) }
+    var error by remember(noteId) { mutableStateOf<String?>(null) }
     val scope = rememberCoroutineScope()
 
     // 编辑模式：进入时回填既有笔记（新建 noteId == null 跳过）
@@ -220,11 +255,20 @@ fun NoteEditorScreen(noteId: Long?, viewModel: NotesViewModel, onDone: () -> Uni
 
 ## 5️⃣ 实施步骤
 
-1. 复制已验收的首项目作为本次练习，保留 Compose、Room/KSP 和数据库配置
-2. 增加 DAO 的搜索与按 id 查询，检查编辑保存保留原 id 和创建时间
-3. 实现 ViewModel：`stateIn` 收敛 UiState，接搜索防抖
-4. 搭列表页（三态渲染）+ 编辑页，用 Navigation Compose 连接
-5. 真机跑通增删改查 + 搜索，用 [Layout Inspector](../frameworks/04-devtools.md) 检查列表重组
+1. 复制已验收的首项目，保留 Compose、Room/KSP 和数据库配置；在工程根运行 Windows 的 `.\gradlew.bat :app:assembleDebug` 或 macOS/Linux 的 `./gradlew :app:assembleDebug`，先保存基线构建结果。
+2. 增加 DAO 的搜索与按 id 查询。给 A 记录 id 和创建时间，改成 A2 后两项都应保持原值，数据库仍只有 A2/B 两条记录。
+3. 接入 ViewModel 与列表：路由层用 `collectAsStateWithLifecycle()` 收集 `uiState`、`deleteError`，分别传入 `NotesScreen`；回调绑定 `viewModel::onQueryChange`、`viewModel::deleteNote` 和 `viewModel::retry`。保留首项目的 ViewModel Factory，不能直接在 Composable 重建 ViewModel。
+4. 实现 `NoteRow(note, onClick, onDelete)` 和 `EmptyHint()` 两个展示函数，再接导航：新建传 `null`，编辑传所点击的 id，保存成功的 `onDone` 才返回列表。系统返回键作为取消，不调用保存。先补齐这些接线，再判断工程能否编译。
+5. 完成下表行为记录；构建失败先检查 import、Factory、导航参数与新增回调，行为失败再定位状态或数据库。本文代码是增量片段，本轮未在 Android 工具链或设备执行，不能把阅读完成记为工程验证。
+
+| 操作 | 成功条件 | 失败时优先检查 |
+|---|---|---|
+| 连续输入 A、B，等待超过 300ms | 输入立即回显；等待时显示加载，最终只显示 B 的结果 | 结果是否携带对应查询词；是否还在混用新输入与旧列表 |
+| 搜索无结果、清空输入 | 分别出现空态、恢复全部笔记 | 空列表是否被误判为加载中 |
+| DAO 查询第一次抛错，然后点重试 | 显示错误；同一查询可再次成功 | catch 是否在每个查询内部；重试是否触发新收集 |
+| DAO 删除抛错 | 不崩溃，记录保留，可见错误；再次成功后才消失 | 回调是否接入、异常是否被捕获 |
+| 编辑 A 后返回取消，再打开 A | 数据库内容未变；成功保存才更新原记录 | 草稿是否误写模型、是否丢失 id |
+| 旋转空闲编辑页、终止并重启应用 | 前者恢复草稿；后者恢复已保存笔记，未保存草稿不作承诺 | 区分保存状态恢复与 Room 持久化 |
 
 ## 🎨 验收清单
 

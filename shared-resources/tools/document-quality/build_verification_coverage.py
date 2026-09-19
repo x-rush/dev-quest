@@ -139,6 +139,9 @@ def records_from_reports():
     java_node_python_exceptions = load("java-node-python-exceptions-results.json")
     for row in java_node_python_exceptions.get("cases", []):
         add_record(records, row.get("document"), "runtime", "java-node-python-exceptions-results.json", java_node_python_exceptions.get("scope", "selected Java/Node/Python exception example"), "PASS" if row.get("passed") else "FAIL")
+    go_node_python_thirteenth = load("go-node-python-thirteenth-runtime.json")
+    for row in go_node_python_thirteenth.get("cases", []):
+        add_record(records, row.get("source"), "runtime", "go-node-python-thirteenth-runtime.json", go_node_python_thirteenth.get("scope", "selected Go/Node/Python thirteenth body example"), "PASS" if row.get("status", "").upper() == "PASS" else "FAIL")
     next_node_python_basics = load("next-node-python-basics-results.json")
     for row in next_node_python_basics.get("results", []):
         add_record(records, row.get("source"), "runtime", "next-node-python-basics-results.json", row.get("scope", "selected Next/Node/Python basic example"), "PASS" if row.get("status", "").upper() == "PASS" else "FAIL")
