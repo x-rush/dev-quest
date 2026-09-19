@@ -19,6 +19,7 @@ const cases = [
   ['node-esm-binding', '09-nodejs-backend/basics/03-modules-esm.md', 'js', 'node'],
   ['node-first-server-routing', '09-nodejs-backend/basics/02-first-server.md', 'js', 'node'],
   ['node-lifecycle-idempotent-shutdown', '09-nodejs-backend/reference/library-guides/07-process-lifecycle.md', 'js', 'node'],
+  ['node-stream-worker-boundaries', '09-nodejs-backend/basics/07-streams-workers.md', 'js', 'node'],
   ['python-bindings-formatting', '10-python-discovery/basics/03-variables-types.md', 'python', 'python'],
 ];
 
@@ -82,7 +83,7 @@ try {
 
 const report = {
   generated_at: new Date().toISOString(),
-  purpose: 'Limited direct-body extraction verification for five P1 basics documents.',
+  purpose: 'Limited direct-body extraction verification for six P1 basics documents.',
   passed: results.filter((result) => result.status === 'PASS').length,
   total: results.length,
   results,

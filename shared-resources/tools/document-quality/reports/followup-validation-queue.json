@@ -5,16 +5,16 @@
   "scope": "verification-coverage.json 的 11 个现行教学模块；不含生成报告、归档和不活跃文件。",
   "method": "为 not_verified 文件建立文件级任务，并按覆盖台账同一标记规则重新扫描当前源码以定位逐行任务；仅通过性断言升为 P0，不判断教学内容真伪。",
   "summary": {
-    "items": 516,
-    "file_level_items": 461,
+    "items": 515,
+    "file_level_items": 460,
     "unbound_wording_items": 55,
     "by_priority": {
-      "P1": 211,
+      "P1": 210,
       "P2": 150,
       "P3": 155
     },
     "by_kind": {
-      "核心基础": 195,
+      "核心基础": 194,
       "首项目": 16,
       "框架": 111,
       "部署": 39,
@@ -23,7 +23,7 @@
     "excluded": {
       "inactive_or_archived": 0,
       "generated_or_report": 0,
-      "runtime_document": 181
+      "runtime_document": 182
     }
   },
   "items": [
@@ -683,17 +683,6 @@
       "reason": "当前没有与此文件绑定的命名运行或语法证据。",
       "module": "Node.js",
       "path": "09-nodejs-backend/basics/05-http-routing.md",
-      "line": null,
-      "source_excerpt": null,
-      "evidence_action": "抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。"
-    },
-    {
-      "priority": "P1",
-      "kind": "核心基础",
-      "task": "为文档选择一个最小可复现案例并记录限定运行证据",
-      "reason": "当前没有与此文件绑定的命名运行或语法证据。",
-      "module": "Node.js",
-      "path": "09-nodejs-backend/basics/07-streams-workers.md",
       "line": null,
       "source_excerpt": null,
       "evidence_action": "抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。"

@@ -118,6 +118,54 @@ await pipeline(
 );
 ```
 
+### 可复现验收：流的完成信号与 Worker 的消息边界
+
+这段程序不读写真实文件，因此可以稳定地检查两件不同的事：`pipeline` 只有在 Writable 已接收所有转换结果后才 resolve；Worker 的结果通过 `message` 回到主线程，主线程并没有执行那段计算。它不是吞吐量基准，也不能据此推导 worker 数量。
+
+```js verify:node-stream-worker-boundaries
+import { Readable, Transform, Writable } from "node:stream";
+import { pipeline } from "node:stream/promises";
+import { Worker } from "node:worker_threads";
+
+let collected = "";
+await pipeline(
+  Readable.from(["a", "b"]),
+  new Transform({
+    transform(chunk, _encoding, callback) {
+      callback(null, chunk.toString().toUpperCase());
+    },
+  }),
+  new Writable({
+    write(chunk, _encoding, callback) {
+      collected += chunk;
+      callback();
+    },
+  }),
+);
+
+const doubled = await new Promise((resolve, reject) => {
+  const worker = new Worker(
+    "const { parentPort, workerData } = require('node:worker_threads'); parentPort.postMessage(workerData * 2);",
+    { eval: true, workerData: 21 },
+  );
+  worker.once("message", resolve);
+  worker.once("error", reject);
+  worker.once("exit", (code) => {
+    if (code !== 0) reject(new Error(`worker exited: ${code}`));
+  });
+});
+
+console.log(`pipeline=${collected} worker=${doubled}`);
+```
+
+预期输出：
+
+```text
+pipeline=AB worker=42
+```
+
+生产代码还要处理输入流失败、部分输出文件和 worker 任务取消；这里的 `eval: true` 仅为单文件教学验收，应用应引用经过构建和审查的 worker 模块。
+
 ## 🔍 Worker Threads：CPU 密集的出路
 
 事件循环是单线程的：一个 200ms 的图像缩放会让所有请求排队。Worker Threads 把计算移到独立线程，主线程继续服务请求。

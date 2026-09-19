@@ -7,8 +7,8 @@
 | 指标 | 数量 |
 |---|---:|
 | 纳入模块文档 | 642 |
-| 主状态：not_verified | 461 |
-| 主状态：runtime | 181 |
+| 主状态：not_verified | 460 |
+| 主状态：runtime | 182 |
 | 验证措辞出现次数 | 143 |
 | 措辞分类：source_has_limited_runtime_evidence | 88 |
 | 措辞分类：unbound_verification_wording | 55 |
@@ -530,7 +530,7 @@
 | Node.js | [09-nodejs-backend/basics/04-async-promises.md](../../../../09-nodejs-backend/basics/04-async-promises.md) | `runtime` | 2 | 0 |
 | Node.js | [09-nodejs-backend/basics/05-http-routing.md](../../../../09-nodejs-backend/basics/05-http-routing.md) | `not_verified` | 0 | 0 |
 | Node.js | [09-nodejs-backend/basics/06-error-handling.md](../../../../09-nodejs-backend/basics/06-error-handling.md) | `runtime` | 1 | 0 |
-| Node.js | [09-nodejs-backend/basics/07-streams-workers.md](../../../../09-nodejs-backend/basics/07-streams-workers.md) | `not_verified` | 0 | 0 |
+| Node.js | [09-nodejs-backend/basics/07-streams-workers.md](../../../../09-nodejs-backend/basics/07-streams-workers.md) | `runtime` | 1 | 0 |
 | Node.js | [09-nodejs-backend/basics/08-first-project.md](../../../../09-nodejs-backend/basics/08-first-project.md) | `not_verified` | 0 | 0 |
 | Node.js | [09-nodejs-backend/deployment/01-docker-deployment.md](../../../../09-nodejs-backend/deployment/01-docker-deployment.md) | `not_verified` | 0 | 0 |
 | Node.js | [09-nodejs-backend/deployment/02-ci-cd-pipelines.md](../../../../09-nodejs-backend/deployment/02-ci-cd-pipelines.md) | `not_verified` | 0 | 0 |
