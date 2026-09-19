@@ -3,7 +3,9 @@
 > **本轮增强与版本核对**：学习路径及正文增强范围见 [逐文件台账](../shared-resources/tools/document-quality/reports/coverage.md)。下方技术基线中的旧核对日期属于历史记录，不表示这次已重跑所有平台；安装与升级以官方兼容要求、项目锁文件和实际构建结果为准。
 
 
-> 第一次学习请从[理解地图与学习规划](LEARNING_GUIDE.md)开始；按关键词查阅可直接使用其中的完整参考导航。
+第一次学习请从[理解地图与学习规划](LEARNING_GUIDE.md)开始，按其中的阶段任务和验收条件推进。先在虚拟环境中完成函数、容器和文件小工具，再进入 FastAPI 或数据处理。装饰器、生成器、异步按项目需求学习，首个命令行项目无需等待全部高级章节完成。
+
+查语法、函数或库时使用下方参考目录。文件数量与目录中的完成标记表示内容组织情况，不能替代示例运行证据；具体交付按[知识库质量基线](../shared-resources/standards/knowledge-delivery-baseline.md)验收。
 
 ## 📚 模块概述
 
@@ -21,14 +23,14 @@
 | Pydantic | v2（2.13.5） | 运行时数据校验 |
 | Ruff | 0.16.6 | lint + format 一体化工具链 |
 
-> 版本随时间推进，安装时以 `uv add` 解析到的最新稳定版为准；教程代码不依赖具体补丁版本。
+> 复现时采用练习工程声明的 Python 版本、依赖清单和锁文件。`uv add` 可能改变解析结果，新增或升级依赖后重新测试；不能假定任意新版本都与当前示例兼容。
 
 ### 🎯 学习目标
 
-- 掌握 Python 3.14 基础语法与现代语言特性（类型注解、结构化模式匹配、模板字符串、异步）
-- 熟练使用 uv / ruff / pytest / mypy 现代工具链
-- 能独立构建、测试并部署 FastAPI 服务
-- 理解 asyncio 并发模型、性能剖析与安全实践等生产级主题
+- 用函数、容器与异常完成一个文件小工具，能解释可变对象和资源清理。
+- 在隔离环境中管理依赖，以测试验证返回值、错误和文件变化。
+- 将普通函数接入 FastAPI，区分类型提示、请求校验与业务规则。
+- 有实际异步或性能需求后再展开 asyncio 和剖析，保留测量条件与结果。
 
 ### 💡 学习建议（针对有编程经验的学习者）
 
@@ -40,7 +42,7 @@
 
 | 象限 | 目录 | 定位 | 文档 |
 |------|------|------|------|
-| 教程 | [basics/](basics/) | 按序学习入门（8 篇） | 环境搭建 → 第一个脚本 → 变量与类型 → 函数与 OOP → 控制流 → 异常 → 高级特性 → 第一个项目 |
+| 教程 | [basics/](basics/) | 按导读的能力顺序学习（8 篇） | 环境搭建 → 第一个脚本 → 变量与类型 → 函数与 OOP → 控制流 → 异常 → 第一个项目；高级特性按需补齐 |
 | 字典 | [reference/](reference/) | 全量参考，任意跳入（28 篇） | 关键字 / 内置函数 / 数据结构 / OOP 协议 / 类型注解 / 装饰器 / 生成器与迭代器 / 上下文管理器 / asyncio / 异常体系 / 模块与导入 / 字符串格式化 / dataclass / 推导式 · FastAPI / Django&Flask / uv · 标准库 / 生态库 / pytest · 语法速查 / 故障排除 |
 | 操作指南 | [frameworks/](frameworks/) | 框架与工具链 | [FastAPI 入门 ⭐](frameworks/01-fastapi-basics.md) · [FastAPI 进阶 ⭐⭐](frameworks/02-fastapi-advanced.md) · [生态集成 ⭐⭐](frameworks/03-ecosystem-integration.md) · [开发工具链 ⭐](frameworks/04-devtools.md) |
 | 操作指南 | [projects/](projects/) | 实战项目（⭐ 递进） | [TODO API ⭐](projects/01-todo-api.md) · [短链接服务 ⭐⭐](projects/02-url-shortener.md) · [数据管道 ⭐⭐](projects/03-data-pipeline.md) · [生产级应用 ⭐⭐⭐](projects/04-production-fastapi-app.md) |
@@ -52,7 +54,7 @@
 
 ### 入门路径（⭐）
 
-[环境搭建](basics/01-environment-setup.md) → [第一个脚本](basics/02-first-script.md) → [变量与类型](basics/03-variables-types.md) → [函数与 OOP](basics/04-functions-oop.md) → [控制流](basics/05-control-flow.md) → [异常处理](basics/06-exceptions.md) → [开发工具链](frameworks/04-devtools.md) → [FastAPI 入门](frameworks/01-fastapi-basics.md) → [项目：TODO API](projects/01-todo-api.md) → [实战收束：第一个完整项目](basics/08-first-project.md)
+[环境搭建](basics/01-environment-setup.md) → [第一个脚本](basics/02-first-script.md) → [变量与类型](basics/03-variables-types.md) → [函数与 OOP](basics/04-functions-oop.md) → [控制流](basics/05-control-flow.md) → [异常处理](basics/06-exceptions.md) → [命令行书签项目](basics/08-first-project.md) → [开发工具链](frameworks/04-devtools.md) → [FastAPI 入门](frameworks/01-fastapi-basics.md) → [项目：TODO API](projects/01-todo-api.md)
 
 ### 进阶路径（⭐⭐）
 

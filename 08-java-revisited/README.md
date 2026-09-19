@@ -3,14 +3,16 @@
 > **本轮增强与版本核对**：学习路径及正文增强范围见 [逐文件台账](../shared-resources/tools/document-quality/reports/coverage.md)。下方技术基线中的旧核对日期属于历史记录，不表示这次已重跑所有平台；安装与升级以官方兼容要求、项目锁文件和实际构建结果为准。
 
 
-> 第一次学习请从[理解地图与学习规划](LEARNING_GUIDE.md)开始；按关键词查阅可直接使用其中的完整参考导航。
+第一次学习请从[理解地图与学习规划](LEARNING_GUIDE.md)开始，按其中的阶段任务和验收条件推进。先从 javac、普通对象、集合和异常开始，完成控制台图书管理，再接 Spring 的对象装配与 HTTP。已有 Java 经验可以用阶段自测决定跳过哪些基础。
+
+查语法、函数或库时使用下方参考目录。文件数量与目录中的完成标记表示内容组织情况，不能替代示例运行证据；具体交付按[知识库质量基线](../shared-resources/standards/knowledge-delivery-baseline.md)验收。
 
 ## 📚 模块简介
 
-本模块面向**有 Java 开发经验的学习者**，旨在回顾 Java 核心知识、掌握 Java 21/25 LTS 与 Spring Boot 4.x 的现代化开发模式，并将 Java 设计思想与其他技术栈进行对比迁移。
+本模块面向会基本编程、初次接触 Java 的读者，也供已有经验者查阅。先理解类、接口、集合和异常，再用 Spring 组织请求与依赖；不会其他后端框架也可以沿导读入门。
 
 - **技术栈基线**：Java 21 LTS（虚拟线程、Record、模式匹配、Sealed 类；25 LTS 已发布可选用）· Spring Boot 4.x（Spring Framework 7 / Jakarta EE 11 命名空间）· Maven/Gradle · JUnit 6（Jupiter）
-- **模块定位**：从"Java 8 时代经验"升级到现代 Java 全栈能力，覆盖语言特性、Spring 生态、测试工程、容器化部署与生产级架构
+- **模块定位**：语言参考与渐进实践并行，先完成普通 Java 小程序，再逐项接入 Spring、持久化、测试和部署
 
 ## 🧱 技术基线（2026-09-11 核实）
 
@@ -28,10 +30,10 @@
 
 ### 🎯 学习目标
 
-- 回顾 Java 核心概念和最佳实践
-- 掌握 Java 17-25 新特性与现代化开发模式（Record、模式匹配、虚拟线程）
-- 系统化掌握 Spring Boot 4.x 全栈：数据访问、安全、消息、测试、部署
-- 将 Java 设计思想应用到其他技术栈，建立跨语言的知识体系
+- 解释值、引用、接口、集合和异常，并用普通对象完成一个可测试的业务功能。
+- 比较手动传入依赖与 Spring 装配，知道对象从哪里产生、由谁调用。
+- 将业务结果映射成 HTTP 响应，使用真实测试数据库验证约束与事务。
+- 按运行问题学习线程、JVM 与部署，区分语言版本特性与框架能力。
 
 ## 🧭 四象限导览
 
@@ -39,7 +41,7 @@
 |------|------|------|------|
 | **教程** | [basics/](basics/) | 8 篇按序学习：环境 → 语法 → OOP/Record → 控制流 → 异常 → 现代特性 → 项目 | 零散时间按序过一遍 |
 | **字典** | [reference/](reference/) | 29 篇全量参考：语言核心概念（含字符串常量池/枚举/注解/接口语义）、Spring 核心（IoC/DI、AOP、事务、Security、REST 客户端）、Boot 3→4 迁移速查、标准库包导览与 JDK 包地图、故障排除 | 查字典，任意跳入 |
-| **操作指南** | [frameworks/](frameworks/) [projects/](projects/) [testing/](testing/) [deployment/](deployment/) | Spring Boot 生态 4 篇 · 实战项目 4 个 · 测试工程 3 篇 · 部署运维 3 篇 | 面向任务，照做即成 |
+| **操作指南** | [frameworks/](frameworks/) [projects/](projects/) [testing/](testing/) [deployment/](deployment/) | Spring Boot 生态 4 篇 · 实战项目 4 个 · 测试工程 3 篇 · 部署运维 3 篇 | 先确认前置环境，再按任务实施与验收 |
 | **解释** | [advanced-topics/](advanced-topics/) | 架构演进 · JVM/GC · 虚拟线程 · 安全实践 | 深挖"为什么" |
 
 ## 🛤️ 学习路径

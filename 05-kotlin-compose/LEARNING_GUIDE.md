@@ -20,11 +20,13 @@ Kotlin 语法 → Composable → 状态与重组 → 布局 → 导航 → ViewM
 
 ## 从 0 到 1 的阅读顺序
 
-以下按模块现有章节编号导航。章节中的“先理解，再动手”给出本节重点与自测；环境版本集中看[模块 README](README.md)。
+环境建立后先学习 Kotlin 语法，用函数处理可空字符串和集合，再理解 Compose 界面代码。显示第一个界面只证明工程能启动；状态变化、旋转和进程重建要分别观察。
+
+环境版本集中看[模块 README](README.md)，实际构建使用工程内的 Gradle Wrapper 和版本目录；不要独立升级 Kotlin、AGP 和 Compose 后假定仍兼容。官方工程起点：[Compose Quick start](https://developer.android.com/develop/ui/compose/setup)。
 
 1. [环境搭建 - Android Studio 与 Kotlin 开发环境](basics/01-environment-setup.md)
-2. [第一个 Compose 应用 - 从零到运行](basics/02-first-compose-app.md)
-3. [Kotlin 语法基础 - 面向 Compose 开发者](basics/03-kotlin-syntax-essentials.md)
+2. [Kotlin 语法基础 - 面向 Compose 开发者](basics/03-kotlin-syntax-essentials.md)
+3. [第一个 Compose 应用 - 从零到运行](basics/02-first-compose-app.md)
 4. [Composable 与状态 - 声明式 UI 的核心](basics/04-composables-state.md)
 5. [布局系统 - Column/Row/Box 与 LazyColumn](basics/05-layouts.md)
 6. [页面导航 - Navigation Compose 入门](basics/06-navigation.md)
@@ -33,9 +35,11 @@ Kotlin 语法 → Composable → 状态与重组 → 布局 → 导航 → ViewM
 
 ## 三个阶段如何验收
 
-1. 计数器加重置按钮，解释点击到文本变化的过程。
-2. 把状态提升给父组件，让两个子组件显示同一数字；再旋转屏幕比较保存方式。
-3. 做本地笔记，重启后仍可读取；网络加载再补加载、错误、重试和取消。
+| 阶段与入口 | 练习输入与动作 | 通过条件 |
+| --- | --- | --- |
+| 界面状态：[Composable 与状态](basics/04-composables-state.md) | 点击两次加一，再点击重置；让两个子组件显示这个值 | 两处依次显示 2 和 0；能指出状态拥有者和事件返回路径 |
+| 生命周期：[首个项目](basics/08-first-project.md) | 编辑草稿后旋转屏幕；保存笔记后关闭并重新启动应用 | 分清草稿保存与数据库持久化；说明每种操作后哪些内容按设计保留 |
+| 异步数据：[Flow 入门](basics/07-coroutines-flow-basics.md)、[天气应用](projects/02-weather-app.md) | 请求成功、断网重试、快速离开页面 | 加载与错误明确；离开后任务遵循预定生命周期，不靠无限重试掩盖错误 |
 
 每阶段保留实际输入、输出和一个失败案例。只阅读或复制成功代码，不等同于已经通过验收。练习用小功能承接已学知识，大型项目的扩展需求可按需选做。
 

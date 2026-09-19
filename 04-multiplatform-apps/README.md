@@ -3,13 +3,15 @@
 > **本轮增强与版本核对**：学习路径及正文增强范围见 [逐文件台账](../shared-resources/tools/document-quality/reports/coverage.md)。下方技术基线中的旧核对日期属于历史记录，不表示这次已重跑所有平台；安装与升级以官方兼容要求、项目锁文件和实际构建结果为准。
 
 
-> 第一次学习请从[理解地图与学习规划](LEARNING_GUIDE.md)开始；按关键词查阅可直接使用其中的完整参考导航。
+第一次学习请从[理解地图与学习规划](LEARNING_GUIDE.md)开始，按其中的阶段任务和验收条件推进。先选 Android 或 iOS 一个平台运行待办应用，完成输入、列表和存储。第二平台、原生桥接与鸿蒙适配各有环境和依赖要求，分别学习与验收。
 
-> **模块简介**: 专注 React Native 跨平台原生应用开发，一套 TypeScript 代码覆盖 Android、iOS、鸿蒙（HarmonyOS，经 RNOH 适配）三端，实现原生级用户体验与生态全覆盖
+查语法、函数或库时使用下方参考目录。文件数量与目录中的完成标记表示内容组织情况，不能替代示例运行证据；具体交付按[知识库质量基线](../shared-resources/standards/knowledge-delivery-baseline.md)验收。
+
+> **模块简介**: 学习 React Native 的组件、状态、导航与原生能力；先完成单平台应用，再根据具体依赖与适配方案验证 Android、iOS 或鸿蒙目标
 >
 > **技术栈**: React Native 0.87 新架构（Fabric 渲染器 + TurboModules，旧架构已移除）· Expo SDK 57 · TypeScript · Reanimated 4 · Expo Router / EAS
 >
-> **目标读者**: 有 React/TypeScript 基础、准备进入移动端开发的工程师，直至主导生产级应用交付的资深开发者
+> **目标读者**: 会基本编程、准备学习移动端的开发者；React 与 TypeScript 不熟时先完成导读列出的补课项
 
 ## 🧪 技术基线（核实日期：2026-09-16）
 

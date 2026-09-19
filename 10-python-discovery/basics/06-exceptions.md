@@ -209,6 +209,10 @@ try 的范围应覆盖同一个需要处理的失败操作，而非机械限制�
 
 ---
 
+当配置文件“缺失”允许使用默认值，而内容损坏必须阻止启动时，不能用 `except Exception: return {}` 把两者合并。最小决策是只对 FileNotFoundError 返回默认配置，对 JSONDecodeError 转换为 ConfigError 并保留原因；权限错误仍交给上层处理。
+
+**验收：** 分别使用不存在的文件、合法 JSON、损坏 JSON 和无法读取的路径；前三者应得到默认值、配置对象、带原因链的错误，第四种不能伪装成默认配置。日志可记录配置路径，但不要输出包含令牌的完整配置内容。异常链与精确捕获规则见 [Python 官方异常教程](https://docs.python.org/3/tutorial/errors.html)。
+
 ## ❓ 常见问题
 
 ### Q1: finally 和 with 都能清理资源，用哪个？

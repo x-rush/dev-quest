@@ -20,11 +20,13 @@ Swift 值与可选值 → View → State/Binding → 布局与身份 → 导航 
 
 ## 从 0 到 1 的阅读顺序
 
-以下按模块现有章节编号导航。章节中的“先理解，再动手”给出本节重点与自测；环境版本集中看[模块 README](README.md)。
+先在 Xcode 中运行一个最小工程，再单独学习可选值、结构体和闭包，之后把这些语法带入 View 与状态。首次 App 一章可作为环境冒烟检查；若其代码读不懂，先完成下列语法篇再返回。
+
+工具链与部署目标见[模块 README](README.md)，以练习工程的实际 Xcode、SDK 和目标系统配置为准。官方学习入口：[Apple Develop in Swift](https://developer.apple.com/tutorials/develop-in-swift)。Swift 命令行语法通过不等于 SwiftUI 工程已在目标设备运行。
 
 1. [环境搭建 - Xcode 与 Swift 工具链](basics/01-environment-setup.md)
-2. [第一个 SwiftUI App - 声明式 UI 入门](basics/02-first-swiftui-app.md)
-3. [Swift 语法 Essentials - 写 SwiftUI 前必须会的 Swift](basics/03-swift-syntax-essentials.md)
+2. [Swift 语法 Essentials - 写 SwiftUI 前必须会的 Swift](basics/03-swift-syntax-essentials.md)
+3. [第一个 SwiftUI App - 声明式 UI 入门](basics/02-first-swiftui-app.md)
 4. [View 协议与状态管理 - @State、@Binding 与 @Observable](basics/04-views-state.md)
 5. [布局系统 - Stack、Spacer 与滚动容器](basics/05-layouts.md)
 6. [导航 - NavigationStack、TabView 与模态呈现](basics/06-navigation.md)
@@ -33,9 +35,11 @@ Swift 值与可选值 → View → State/Binding → 布局与身份 → 导航 
 
 ## 三个阶段如何验收
 
-1. 做计数器与子视图按钮，父视图保存状态、子视图修改绑定。
-2. 添加详情导航并返回，解释需要保留的数据由谁拥有。
-3. 保存一条笔记后重启验证；异步加载覆盖失败与取消，不在 body 中直接请求。
+| 阶段与入口 | 练习输入与动作 | 通过条件 |
+| --- | --- | --- |
+| 状态与绑定：[视图状态](basics/04-views-state.md) | 父视图展示数字，子视图增加和重置 | 数值一致；能解释 Binding 修改的是哪份状态 |
+| 导航与持久化：[导航](basics/06-navigation.md)、[笔记应用](projects/01-notes-app.md) | 编辑笔记、进入详情再返回、保存后终止应用并重新启动 | 分别解释导航保留与持久化；数据库保存的内容可读回，空白输入按约定处理 |
+| 异步请求：[并发入门](basics/07-concurrency-async-await.md)、[天气应用](projects/02-weather-app.md) | 成功、请求失败、请求中离开页面 | 有加载和恢复入口；取消与真正失败区分处理。验收在声明的 Apple 目标上执行，不能用 Linux 解析代替 |
 
 每阶段保留实际输入、输出和一个失败案例。只阅读或复制成功代码，不等同于已经通过验收。练习用小功能承接已学知识，大型项目的扩展需求可按需选做。
 

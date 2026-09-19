@@ -3,9 +3,11 @@
 > **本轮增强与版本核对**：学习路径及正文增强范围见 [逐文件台账](../shared-resources/tools/document-quality/reports/coverage.md)。下方技术基线中的旧核对日期属于历史记录，不表示这次已重跑所有平台；安装与升级以官方兼容要求、项目锁文件和实际构建结果为准。
 
 
-> 第一次学习请从[理解地图与学习规划](LEARNING_GUIDE.md)开始；按关键词查阅可直接使用其中的完整参考导航。
+第一次学习请从[理解地图与学习规划](LEARNING_GUIDE.md)开始，按其中的阶段任务和验收条件推进。先补 Kotlin 的可空类型、函数和集合，再用 Compose 做计数器和本地笔记。无需预先掌握 Go 或 Web 前端；运行 Android 界面需要可用的 Android 开发环境。
 
-> **文档简介**: 05-kotlin-compose 模块总览——面向有 Go 后端与现代前端经验的学习者的 Android 原生开发完整学习路径
+查语法、函数或库时使用下方参考目录。文件数量与目录中的完成标记表示内容组织情况，不能替代示例运行证据；具体交付按[知识库质量基线](../shared-resources/standards/knowledge-delivery-baseline.md)验收。
+
+> **文档简介**: 面向会基本编程但初次学习 Kotlin 与 Android 的读者，从语言、界面状态到本地数据与应用交付
 >
 > **技术栈基线**: Kotlin 2.4（K2 编译器）· Jetpack Compose（BOM 2026.09.00）+ Material 3 · Android Studio（Quail 或更新）· Gradle Kotlin DSL——具体版本见下方「技术基线」
 >
@@ -23,18 +25,18 @@
 | **KSP** | 2.3.x | KSP 已改用独立版本号，与 Kotlin 版本解耦 |
 | **targetSdk** | 36（Android 16） | Play 2026 年新提交要求线；Android 17（API 37）尚在 Beta |
 
-> 模块内示例默认不锁定上述版本（统一经 `gradle/libs.versions.toml` 管理，以官方最新稳定版为准）；少数涉及具体版本号的示例已按本表基线书写。
+> 复现时采用练习工程的 Gradle Wrapper、`gradle/libs.versions.toml` 与 SDK 配置。上表提供版本背景，不能把各组件分别升级到“最新”当作已验证的兼容组合；修改组合后重新同步、构建与测试。
 
 ## 🧭 模块定位
 
-本模块专为有 **Go 后端和现代前端开发经验**的学习者设计，系统掌握 Android 原生开发技术。Android 开发已全面进入 Jetpack Compose 声明式 UI 时代，本模块以 **Kotlin 2.4（K2 编译器）+ Jetpack Compose + Material 3** 为基线，帮你构建高性能、可发布、可维护的现代化 Android 应用。
+本模块从 Kotlin 语言开始，解释 Compose 如何根据状态描述界面，以及 Android 生命周期怎样影响数据。Go、React 或 SwiftUI 经验可用于对照，但不是学习前提。界面、持久化、网络和发布分别通过小任务串联。
 
 **学习目标**：
 
-- 掌握 Kotlin 2.4 语言特性与协程/Flow 并发范式
-- 熟练使用 Jetpack Compose 进行声明式 UI 开发（状态驱动、组合模型）
-- 理解现代 Android 分层架构与单向数据流（UDF），打通 Room + Hilt + Retrofit + ViewModel 完整链路
-- 完成从入门项目到生产级应用的四个递进实战，掌握测试、签名发布与线上可观测性
+- 用可空类型、函数和集合处理输入，区分缺少值与正常结果。
+- 说明状态由谁拥有、事件怎样更新状态，并验证重组和旋转后的界面行为。
+- 逐步加入 ViewModel、Room 与网络，验证重启后的数据和请求失败的恢复方式。
+- 为业务与界面编写测试，再学习打包、签名和发布条件；是否能上架还需满足目标平台要求。
 - 与 SwiftUI（[06 模块](../06-swift-swiftui/README.md)）、跨平台方案（[04 模块](../04-multiplatform-apps/README.md)）形成声明式 UI 与移动端技术对照
 
 ## 🗺️ 四象限导览
@@ -55,7 +57,7 @@
 
 ### 入门路径（⭐）
 
-[环境搭建](basics/01-environment-setup.md) → [第一个 Compose 应用](basics/02-first-compose-app.md) → [Kotlin 语法基础](basics/03-kotlin-syntax-essentials.md) → [Composable 与状态](basics/04-composables-state.md) → [布局系统](basics/05-layouts.md) → [页面导航](basics/06-navigation.md) → [协程与 Flow 基础](basics/07-coroutines-flow-basics.md) → [第一个项目](basics/08-first-project.md) → [Compose 入门核心](frameworks/01-compose-basics.md) → [开发工具链](frameworks/04-devtools.md) → [实战：本地笔记应用](projects/01-notes-app.md)
+[环境搭建](basics/01-environment-setup.md) → [Kotlin 语法基础](basics/03-kotlin-syntax-essentials.md) → [第一个 Compose 应用](basics/02-first-compose-app.md) → [Composable 与状态](basics/04-composables-state.md) → [布局系统](basics/05-layouts.md) → [页面导航](basics/06-navigation.md) → [协程与 Flow 基础](basics/07-coroutines-flow-basics.md) → [第一个项目](basics/08-first-project.md) → [Compose 入门核心](frameworks/01-compose-basics.md) → [开发工具链](frameworks/04-devtools.md) → [实战：本地笔记应用](projects/01-notes-app.md)
 
 ### 进阶路径（⭐⭐）
 

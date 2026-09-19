@@ -585,51 +585,31 @@ spec:
 ## 🎯 最佳实践
 
 ### 1. 流水线设计原则
-- **快速反馈**: 测试阶段要在5分钟内完成
-- **并行执行**: 独立的任务并行运行
-- **失败快速**: 优先运行快速失败的检查
-- **环境一致性**: 使用相同的基础镜像
+
+先把任务按“是否需要前一步产物”画出依赖：格式/静态检查与单元测试可独立执行，发布必须等待必需检查和构建通过。5 分钟可以是团队的反馈目标，不是所有项目的正确性标准；先测实际耗时，再把慢的外部服务测试拆到合适阶段。
+
+最小故障演练是提交一个确定失败的断言，确认测试 job 变红、发布 job 不执行、失败日志仍可下载。独立文档检查不应因为代码编译失败而被跳过；收集日志的步骤可使用 `if: always()`，但不能用 `continue-on-error` 把必需测试失败变成通过。命令经过 `tee` 时启用 `pipefail`，避免只保留最后一个命令的退出状态。
 
 ### 2. 安全实践
-```yaml
-# 安全扫描配置
-- name: Run Trivy vulnerability scanner
-  uses: aquasecurity/trivy-action@master
-  with:
-    scan-type: 'fs'
-    scan-ref: '.'
-    format: 'sarif'
-    output: 'trivy-results.sarif'
 
-- name: Upload Trivy scan results
-  uses: github/codeql-action/upload-sarif@v2
-  with:
-    sarif_file: 'trivy-results.sarif'
-```
+当流水线开始接触镜像仓库、部署密钥或云账号时，先列出每个 job 需要读取/写入什么，再配置最小权限。来自外部贡献的代码只运行不含部署凭证的检查；部署放到受保护环境，并采用短时凭证或明确的密钥管理流程。
+
+依赖和镜像扫描的意义是给出受影响版本、利用条件、修复版本及处置优先级。选择维护中的扫描工具，把 Actions 固定到经过审查的版本或提交，不要复制 `@master` 作为长期基线。报告上传失败和“扫描发现漏洞”是两种问题，都要可追踪；报告可下载并不表示发布已经安全。
+
+**验收：** 用无生产权限的演练环境确认普通检查拿不到部署密钥；选一条扫描结果复查依赖来源与修复版本。例外必须注明原因、责任人和复核日期，不能整类永久忽略。
 
 ### 3. 性能优化
-```yaml
-# 缓存优化
-- name: Cache Go modules
-  uses: actions/cache@v3
-  with:
-    path: |
-      ~/.cache/go-build
-      ~/go/pkg/mod
-    key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
-    restore-keys: |
-      ${{ runner.os }}-go-
 
-# 构建优化
-- name: Build optimized binary
-  run: |
-    CGO_ENABLED=0 GOOS=linux go build \
-      -ldflags='-w -s -extldflags "-static"' \
-      -a -installsuffix cgo \
-      -o main .
-```
+优先缓存可重建的依赖下载和编译结果，缓存键覆盖操作系统、工具链和依赖锁文件；有 go.sum 的 Go 模块可由 setup-go 管理缓存，仅标准库的小工具没有 go.sum 时不要强行启用模块缓存。冷缓存仍必须能成功构建，缓存是加速器，不是缺失依赖的补丁。
+
+先比较一次冷构建与一次热构建的耗时。不要把 `go build -a` 当作加速选项，它会强制重建已有包；`-ldflags='-s -w'` 主要影响符号/调试信息与产物大小，不能承诺运行更快。只有依赖确实不需要 cgo 时才设置 `CGO_ENABLED=0`，跨平台和静态链接另行验证。
+
+**验收：** 清空缓存后流水线仍通过；恢复缓存后的二进制运行同一组测试；记录时间和产物大小的变化。并行化时检查 CPU/内存是否被争抢，避免每个 job 更慢却误以为总吞吐提高。
 
 ### 4. 监控和日志
+
+下面是已有 Gin/Prometheus 项目中的中间件片段，计数器与直方图需要先定义和注册。标签使用路由模板（如 `/users/:id`），不使用每个用户的原始 URL，以免产生无限增长的时间序列。未匹配路由统一为固定标签。验收时请求两个不同用户 ID，确认它们落在同一路由指标，并用一次失败请求核对状态码计数。
+
 ```go
 // 应用监控中间件
 func MonitoringMiddleware() gin.HandlerFunc {
@@ -641,16 +621,21 @@ func MonitoringMiddleware() gin.HandlerFunc {
         duration := time.Since(start)
         status := c.Writer.Status()
 
+        route := c.FullPath()
+        if route == "" {
+            route = "unmatched"
+        }
+
         // Prometheus metrics
         httpRequestsTotal.WithLabelValues(
             c.Request.Method,
-            c.Request.URL.Path,
+            route,
             fmt.Sprintf("%d", status),
         ).Inc()
 
         httpRequestDuration.WithLabelValues(
             c.Request.Method,
-            c.Request.URL.Path,
+            route,
         ).Observe(duration.Seconds())
     }
 }

@@ -3,13 +3,15 @@
 > **本轮增强与版本核对**：学习路径及正文增强范围见 [逐文件台账](../shared-resources/tools/document-quality/reports/coverage.md)。下方技术基线中的旧核对日期属于历史记录，不表示这次已重跑所有平台；安装与升级以官方兼容要求、项目锁文件和实际构建结果为准。
 
 
-> 第一次学习请从[理解地图与学习规划](LEARNING_GUIDE.md)开始；按关键词查阅可直接使用其中的完整参考导航。
+第一次学习请从[理解地图与学习规划](LEARNING_GUIDE.md)开始，按其中的阶段任务和验收条件推进。先写接收输入、返回值与错误的普通函数，再完成[标准库待办 CLI](projects/00-stdlib-todo-cli.md)。HTTP、数据库和并发在这个基础上逐项加入；不要求开课前会安装数据库或部署微服务。
+
+查语法、函数或库时使用下方参考目录。文件数量与目录中的完成标记表示内容组织情况，不能替代示例运行证据；具体交付按[知识库质量基线](../shared-resources/standards/knowledge-delivery-baseline.md)验收。
 
 > **模块简介**: 系统掌握Go后端开发技术栈，从基础语法到高性能微服务架构的完整学习路径
 >
 > **目标读者**: 希望学习Go后端开发的初学者和有经验的后端开发者
 >
-> **前置知识**: 基础编程概念、HTTP协议、数据库基础
+> **前置知识**: 变量、条件、循环和函数；HTTP 与数据库在对应阶段学习
 >
 > **预计学习时长**: 3-6个月系统学习路径
 
@@ -47,10 +49,10 @@
 本模块采用现代化的学习体系设计，建立**双路径学习模式**，满足不同学习场景的需求：
 
 ### 🎯 核心目标
-- **技术栈全面**: 掌握Go语言、Gin框架、GORM、MongoDB、Redis等现代后端技术
-- **工程实践**: 建立完整的开发、测试、部署、监控能力
-- **项目实战**: 通过真实项目巩固理论知识
-- **前沿应用**: 掌握微服务、云原生、高并发等先进技术
+- 用类型、集合、函数和显式错误描述一项业务，解释输入怎样变成结果。
+- 先用标准库实现并测试小程序，再把同一业务接到 HTTP 与数据库。
+- 对请求失败、资源关闭和并发访问建立可复现测试，明确程序运行的边界。
+- 当单体应用遇到具体扩展问题时，再研究缓存、微服务与部署方式的取舍。
 
 ## 🧭 四象限导览
 
@@ -63,7 +65,7 @@
 | 📚 字典参考 | `reference/` | **41** | [语言核心](reference/language-concepts/01-go-keywords.md) · [框架核心](reference/framework-essentials/01-gin-framework.md) · [数据层选型](reference/framework-essentials/03-sqlc-vs-gorm.md) · [路由器选型](reference/framework-essentials/04-router-selection.md) · [标准库字典](reference/library-guides/01-go-standard-library.md) |
 | 🎓 深度解释 | `advanced-topics/` | 6 | [并发模式](advanced-topics/performance/01-concurrency-patterns.md) |
 
-> **字典无等级，学习有路径**：同一概念的完整解释在 `reference/` 只有一份权威条目，其他目录链接过去。
+> **参考与教程协作**：完整契约在 `reference/` 集中维护；教程仍就地解释完成当前步骤所需的概念，再链接更完整的边界说明。
 
 ## 📁 目录结构
 

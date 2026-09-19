@@ -20,7 +20,9 @@ Rust 把所有权与借用约束放进类型检查。先用 CLI 理解数据如�
 
 ## 从 0 到 1 的阅读顺序
 
-以下按模块现有章节编号导航。章节中的“先理解，再动手”给出本节重点与自测；环境版本集中看[模块 README](README.md)。
+先用 Cargo 建立工程并运行，再学习变量、函数与所有权。基本单元测试应在 Result 和集合练习时开始；智能指针、异步与复杂生命周期按应用需求逐步补齐。
+
+工具链、edition 和框架基线见[模块 README](README.md)，第三方依赖按 Cargo.lock 复现。官方主线：[The Rust Programming Language](https://doc.rust-lang.org/book/)。先用语言基础章节解释编译器报错，再选择桌面或后端方向。
 
 先用[关键词与完整语法实验](reference/language-concepts/09-keywords-and-syntax.md)认识 fn、let、struct 和 match，再开始所有权章节；不要求从其他系统语言迁移而来。
 
@@ -29,17 +31,19 @@ Rust 把所有权与借用约束放进类型检查。先用 CLI 理解数据如�
 3. [结构体、枚举与模式匹配](basics/03-structs-enums-patterns.md)
 4. [trait 与泛型](basics/04-traits-generics.md)
 5. [错误处理：Result / panic / anyhow / thiserror](basics/05-error-handling.md)
-6. [集合与迭代器：零抽象成本的数据流水线](basics/06-collections-iterators.md)
-7. [生命周期标注：让引用的合法性成为编译期契约](basics/07-lifetimes.md)
-8. [智能指针：当所有权与借用不够用的时候](basics/08-smart-pointers.md)
-9. [并发与 async：无畏并发的两条路线](basics/09-concurrency-async.md)
-10. [Cargo 工程化与单元测试：从单文件到可维护的仓库](basics/10-cargo-testing.md)
+6. [Cargo 工程化与单元测试](basics/10-cargo-testing.md)：先完成工程结构与基本测试部分。
+7. [集合与迭代器](basics/06-collections-iterators.md)，随后完成 [CLI 工具](projects/01-cli-tool.md)。
+8. [生命周期标注](basics/07-lifetimes.md)：涉及返回引用时带着具体编译问题学习。
+9. [智能指针](basics/08-smart-pointers.md)：需要共享所有权或内部可变性时再引入。
+10. [并发与 async](basics/09-concurrency-async.md)：进入需要异步运行时的框架前学习。
 
 ## 三个阶段如何验收
 
-1. 写一个接收 &str 返回长度的函数，原字符串调用两次仍可用；再比较接收 String。
-2. 做内存 CLI 并把错误用 Result 返回，测试无效输入；持久化另加文件错误用例。
-3. 选择 Tauri 或 Axum 一条分支，先走通一条命令或路由，再引入数据库和并发。
+| 阶段与入口 | 练习输入与动作 | 通过条件 |
+| --- | --- | --- |
+| 借用与结果：[所有权](basics/02-ownership-borrowing.md)、[错误处理](basics/05-error-handling.md) | 用 &str 接收同一个 String 两次；再改成按值接收并比较编译结果 | 能解释移动和借用；涉及长度时声明计算字节数还是字符数，中文输入也符合契约 |
+| 完整工具：[Cargo 与测试](basics/10-cargo-testing.md)、[CLI 项目](projects/01-cli-tool.md) | 正常输入、格式错误、文件不存在 | Result 的错误有调用方处理，单元测试和命令行结果一致；不使用 unwrap 隐藏预期输入错误 |
+| 应用分支：[桌面笔记](projects/02-tauri-notes-app.md)或 [Axum API](projects/03-axum-rest-api.md) | 选择一条路径，完成一次创建和读取，再触发非法输入 | 桌面命令或 HTTP 路由能往返；界面/接口能显示失败。平台打包、数据库与 WebSocket 另设验收 |
 
 每阶段保留实际输入、输出和一个失败案例。只阅读或复制成功代码，不等同于已经通过验收。练习用小功能承接已学知识，大型项目的扩展需求可按需选做。
 

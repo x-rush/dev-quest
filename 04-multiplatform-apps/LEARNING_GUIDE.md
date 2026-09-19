@@ -20,22 +20,26 @@ React Native 用 React 思维描述原生界面，不是把 HTML 放进手机。
 
 ## 从 0 到 1 的阅读顺序
 
-以下按模块现有章节编号导航。章节中的“先理解，再动手”给出本节重点与自测；环境版本集中看[模块 README](README.md)。
+先选一个设备目标和一种工程方式，在这个环境走完整条入门路径。学习到导航后就可以做本地待办；原生桥接、新架构和多端适配在有相应需求时再学，不作为第一个项目的前置。
+
+版本和平台组合见[模块 README](README.md)，以所选工程的依赖及原生配置为准。官方起点：[React Native Get Started](https://reactnative.dev/docs/environment-setup)。Expo 工程与自行管理原生工程的配置不要拼接使用。
 
 1. [环境搭建 — Node/RN CLI/Expo 与三端工具链](basics/01-environment-setup.md)
 2. [第一个 App — 创建、Metro 与三端运行](basics/02-first-app.md)
 3. [核心组件、JSX 与 Flexbox 布局](basics/03-components-jsx.md)
 4. [状态管理 — useState/useEffect 与自定义 Hook](basics/04-state-hooks.md)
 5. [导航基础 — React Navigation 栈/标签/抽屉](basics/05-navigation.md)
-6. [原生模块桥接 — Android/iOS 实现与 TurboModules 概念](basics/06-native-modules.md)
-7. [高级特性 — 新架构 Fabric、Hermes 与动画](basics/07-advanced-features.md)
-8. [综合练习 — 三端待办记账 App](basics/08-first-project.md)
+6. [综合练习 — 待办记账 App](basics/08-first-project.md)：先完成单平台输入、列表和存储，再扩展第二平台。
+7. 选学：[原生模块桥接](basics/06-native-modules.md)，用于现有组件无法满足的平台能力。
+8. 选学：[新架构、Hermes 与动画](basics/07-advanced-features.md)，带着实际渲染或性能问题学习。
 
 ## 三个阶段如何验收
 
-1. 在一台设备显示并修改一行文字，记录设备与运行方式。
-2. 做本地待办，输入、删除和空列表都可操作，再接持久化。
-3. 接网络后模拟失败及权限拒绝；第二平台作为独立验收，不凭第一平台成功推断。
+| 阶段与入口 | 练习输入与动作 | 通过条件 |
+| --- | --- | --- |
+| 一台设备：[首个 App](basics/02-first-app.md)、[状态](basics/04-state-hooks.md) | 修改文本并添加点击计数 | 真机或模拟器能看到变化；记录设备、系统和构建方式，知道刷新 JS 与重建原生应用的区别 |
+| 本地应用：[Todo 项目](projects/01-todo-app.md) | 添加普通标题，拒绝空白标题，删除所有项，再重启 | 操作有反馈，空列表可继续添加；接入持久化后重启仍能读回数据 |
+| 网络与平台：[天气项目](projects/02-weather-app.md) | 请求成功、断网、拒绝定位授权、手动选城市 | 失败与拒绝均可恢复；第二平台重新构建并重复检查，多端成功分别记录 |
 
 每阶段保留实际输入、输出和一个失败案例。只阅读或复制成功代码，不等同于已经通过验收。练习用小功能承接已学知识，大型项目的扩展需求可按需选做。
 

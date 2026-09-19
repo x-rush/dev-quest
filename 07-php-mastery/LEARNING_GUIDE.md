@@ -20,7 +20,9 @@ CLI 脚本 → 类型与数组 → 函数/类 → 异常 → Composer/自动加�
 
 ## 从 0 到 1 的阅读顺序
 
-以下按模块现有章节编号导航。章节中的“先理解，再动手”给出本节重点与自测；环境版本集中看[模块 README](README.md)。
+先在 CLI 内掌握类型、数组、函数和异常，完成小工具后再进入 HTTP 与 Laravel。控制流文章可以在函数篇前阅读；类与框架注解不影响你先做一个函数练习。高级特性按项目实际使用补齐，不要求先学完 Fibers 才能保存待办。
+
+版本集中看[模块 README](README.md)，项目依赖以 composer.json 和 composer.lock 为准；同时检查 PHP 扩展。官方语言入口：[PHP 手册](https://www.php.net/manual/en/)，按语言参考、函数参考和扩展分别查询。
 
 1. [PHP 开发环境搭建 - PHP 8.5+ 与现代工具链](basics/01-environment-setup.md)
 2. [第一个 PHP 脚本 - CLI 与 Web 双运行模式](basics/02-first-script.md)
@@ -28,14 +30,16 @@ CLI 脚本 → 类型与数组 → 函数/类 → 异常 → Composer/自动加�
 4. [函数与面向对象 - 构造器属性提升时代](basics/04-functions-oop.md)
 5. [控制流程 - 从 if 到 match 表达式](basics/05-control-flow.md)
 6. [错误与异常 - Throwable 的世界](basics/06-error-exceptions.md)
-7. [高级特性 - 枚举、属性注解与 Fibers](basics/07-advanced-features.md)
-8. [综合练习 - CLI 任务管理工具](basics/08-first-project.md)
+7. [综合练习 - CLI 任务管理工具](basics/08-first-project.md)
+8. 按需补课：[枚举、属性注解与 Fibers](basics/07-advanced-features.md)，根据后续代码实际使用的特性选择小节。
 
 ## 三个阶段如何验收
 
-1. 写 CLI 标题校验，正常和空白输入产生不同退出结果。
-2. 用 JSON 文件保存待办，损坏 JSON 要报告错误而不是悄悄当成空列表。
-3. 迁移到 Laravel API 后，测试创建、非法输入与不存在 ID；再接认证。
+| 阶段与入口 | 练习输入与动作 | 通过条件 |
+| --- | --- | --- |
+| 函数与输入：[类型](basics/03-variables-types.md)、[异常](basics/06-error-exceptions.md) | 校验普通标题和全空白标题 | 正常值与失败可区分；CLI 输出和退出结果与约定一致 |
+| 文件小工具：[CLI 任务项目](basics/08-first-project.md) | 创建任务后重启，再分别提供不存在和损坏的数据文件 | 已保存任务可读回；损坏文件产生明确错误，不悄悄覆盖为新空文件 |
+| HTTP 边界：[Laravel Todo API](projects/01-todo-api.md) | 创建有效任务、提交非法数据、查询不存在 ID | 分别验证成功、校验失败和不存在；存储无无效记录。身份认证在基础 CRUD 验收后加入 |
 
 每阶段保留实际输入、输出和一个失败案例。只阅读或复制成功代码，不等同于已经通过验收。练习用小功能承接已学知识，大型项目的扩展需求可按需选做。
 

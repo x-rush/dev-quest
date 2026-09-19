@@ -20,7 +20,9 @@ Java 提供类型、对象与异常，Spring 管理对象装配与请求处理�
 
 ## 从 0 到 1 的阅读顺序
 
-以下按模块现有章节编号导航。章节中的“先理解，再动手”给出本节重点与自测；环境版本集中看[模块 README](README.md)。
+不要求已有 Java 工作经验。先能编译运行一个类，区分对象和引用，再用普通方法表达业务。基础项目用到 record、集合或 lambda 时就地补对应知识；虚拟线程无需在首个项目之前学完。
+
+JDK 与框架基线见[模块 README](README.md)，每个练习选定一套 Maven 或 Gradle 工程并使用 Wrapper。官方学习入口：[Dev.java Learn](https://dev.java/learn/)，从语言基础和类开始，随后进入异常与集合。
 
 1. [环境搭建 - JDK 与现代工具链](basics/01-environment-setup.md)
 2. [第一个程序 - 从 javac 到现代工作流](basics/02-first-program.md)
@@ -28,14 +30,16 @@ Java 提供类型、对象与异常，Spring 管理对象装配与请求处理�
 4. [类、接口与 Record](basics/04-classes-records.md)
 5. [控制流程 - 条件、循环与模式匹配](basics/05-control-flow.md)
 6. [异常处理 - 异常体系与现代设计](basics/06-exceptions.md)
-7. [现代 Java 特性 - Lambda、Stream、Optional、虚拟线程与 Sealed](basics/07-modern-features.md)
-8. [综合练习 - 控制台图书管理系统](basics/08-first-project.md)
+7. [综合练习 - 控制台图书管理系统](basics/08-first-project.md)
+8. 按需补课：[Lambda、Stream、Optional、虚拟线程与 Sealed](basics/07-modern-features.md)，先补项目使用的语法，虚拟线程留到并发专题。
 
 ## 三个阶段如何验收
 
-1. 用普通 Java 对象完成图书新增与查询，未知 ID 产生明确异常。
-2. 为业务方法写测试后再接 Controller；HTTP 状态码属于接口映射，不属于普通 Java 异常本身。
-3. 切换数据库实现并用集成测试证明约束和回滚；不能只验证 Mock 调用。
+| 阶段与入口 | 练习输入与动作 | 通过条件 |
+| --- | --- | --- |
+| 普通对象：[控制台图书项目](basics/08-first-project.md) | 新增图书、查询已有和未知 ID | 不启动 Spring 也能运行；未知 ID 按契约返回空结果或业务异常，测试与说明保持一致 |
+| HTTP 映射：[Todo API](projects/01-todo-api.md) | 创建合法条目、提交空标题、查询不存在 ID | 状态码和响应与接口约定一致；能指出 Java 异常在哪一层转成 HTTP 响应 |
+| 持久化：[图书管理系统](projects/02-library-management.md) | 写入后重启；制造一组操作中的第二步失败 | 持久数据可读回，事务应回滚的部分确实未保留；验证使用真实测试数据库而非只检查 Mock 调用 |
 
 每阶段保留实际输入、输出和一个失败案例。只阅读或复制成功代码，不等同于已经通过验收。练习用小功能承接已学知识，大型项目的扩展需求可按需选做。
 

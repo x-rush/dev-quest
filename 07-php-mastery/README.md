@@ -3,9 +3,11 @@
 > **本轮增强与版本核对**：学习路径及正文增强范围见 [逐文件台账](../shared-resources/tools/document-quality/reports/coverage.md)。下方技术基线中的旧核对日期属于历史记录，不表示这次已重跑所有平台；安装与升级以官方兼容要求、项目锁文件和实际构建结果为准。
 
 
-> 第一次学习请从[理解地图与学习规划](LEARNING_GUIDE.md)开始；按关键词查阅可直接使用其中的完整参考导航。
+第一次学习请从[理解地图与学习规划](LEARNING_GUIDE.md)开始，按其中的阶段任务和验收条件推进。先通过 CLI 脚本学习 PHP 类型、数组、函数和异常，再完成文件存储小工具，最后进入 Laravel API。不要求已有 PHP 工作经验；常驻进程与协程是后续专题。
 
-> 面向在职 PHP 开发者的温故知新模块：以 **PHP 8.5（管道运算符 / URI 扩展 / 属性钩子）+ Composer 2.x + Laravel 13（Artisan / Eloquent / 队列）+ PHPUnit 13 / Pest 5** 为技术栈基线，采用 Diátaxis 双轴框架组织内容，实现从"会用"到"精通"的跃升。本模块属**技术探索系列**，适合零散时间学习，建议每天 30 分钟到 1 小时。
+查语法、函数或库时使用下方参考目录。文件数量与目录中的完成标记表示内容组织情况，不能替代示例运行证据；具体交付按[知识库质量基线](../shared-resources/standards/knowledge-delivery-baseline.md)验收。
+
+> 面向会基本编程、希望学习 PHP 的读者，也供已有经验者查阅。语言部分解释脚本、类型、数组、对象与错误；应用部分逐步进入 Composer、Laravel、数据库和测试。每次围绕一个可验收的小任务推进，版本与扩展要求见下方基线。
 
 ## 🧪 技术基线
 
@@ -36,17 +38,16 @@
 
 ## 🎯 学习目标
 
-- 巩固 PHP 基础，系统掌握 PHP 8.x 现代特性与最佳实践（含 8.4 属性钩子与 8.5 管道运算符等增量特性）
-- 深入理解 Laravel 13 框架体系，从路由到生产级架构
-- 建立测试工程与部署运维的完整工程能力
-- 理解 FPM 短生命周期与常驻内存+协程两种运行模型的根本差异，认识 Workerman/Webman/Swoole 生态
-- 通过 4 个递进项目积累可复用的实战经验
+- 用数组、函数和对象表达业务，解释类型转换、返回值和异常的边界。
+- 从 CLI 文件小工具进入 Laravel 请求处理，验证校验失败、不存在数据和存储错误。
+- 用测试记录接口与数据行为，在独立环境复现依赖安装和启动。
+- 完成基础服务后比较传统请求与常驻 worker 的状态生命周期，再按需要学习队列与协程。
 
 ## 🧭 四象限导览
 
 | 象限 | 目录 | 内容 | 访问方式 |
 |------|------|------|---------|
-| **教程** | [basics/](./basics/) | 8 篇按序入门：环境搭建 → 语言基础 → 现代 OOP → 错误处理 → 高级特性 → 综合项目 | 按编号顺序学 |
+| **教程** | [basics/](./basics/) | 8 篇教程：环境搭建 → 语言基础 → OOP → 错误处理 → 综合项目；高级特性按需补齐 | 按导读的能力顺序学习 |
 | **字典** | [reference/](./reference/) | 29 篇全量参考：关键字、内置函数、类型与 OOP、数组模式、生成器、命名空间与自动加载、反射、字符串与正则、日期时间、异常体系、PHP 8.4/8.5 增量特性、弱比较与强比较、值语义与引用、超全局变量、运算符、魔术方法、常量与魔术常量、PDO/JSON、文件与流 I/O、HTTP/会话/Cookie、扩展地图、Laravel/Symfony 速查、故障排除 | 按需跳入，可独立查阅，仍有前置知识 |
 | **操作指南** | [frameworks/](./frameworks/) · [projects/](./projects/) · [testing/](./testing/) · [deployment/](./deployment/) | Laravel 13 入门/进阶/生态/工具链；4 个 ⭐ 递进项目；PHPUnit/Pest/Feature 测试；Docker/服务器/CI-CD 部署 | 面向目标，照做即可 |
 | **解释** | [advanced-topics/](./advanced-topics/) | 4 个专题目录：架构解析、查询优化、缓存与队列、安全实践、运行时专题（FPM vs 常驻 / Workerman / Webman / Swoole 协程） | 为什么这样设计 |
@@ -57,7 +58,7 @@
 
 ### 入门路径（⭐）
 
-[环境搭建](./basics/01-environment-setup.md) → [第一个脚本](./basics/02-first-script.md) → [变量与类型](./basics/03-variables-types.md) → [函数与 OOP](./basics/04-functions-oop.md) → [控制流程](./basics/05-control-flow.md) → [错误与异常](./basics/06-error-exceptions.md) → [Laravel 入门](./frameworks/01-laravel-basics.md) → [开发工具链](./frameworks/04-devtools.md) → [TODO REST API](./projects/01-todo-api.md)
+[环境搭建](./basics/01-environment-setup.md) → [第一个脚本](./basics/02-first-script.md) → [变量与类型](./basics/03-variables-types.md) → [函数与 OOP](./basics/04-functions-oop.md) → [控制流程](./basics/05-control-flow.md) → [错误与异常](./basics/06-error-exceptions.md) → [CLI 任务工具](./basics/08-first-project.md) → [Laravel 入门](./frameworks/01-laravel-basics.md) → [开发工具链](./frameworks/04-devtools.md) → [TODO REST API](./projects/01-todo-api.md)
 
 > 枚举前置：[TODO REST API](./projects/01-todo-api.md) 直接使用 Backed Enum 与 `enum:` 校验规则，开工前先读 [高级特性](./basics/07-advanced-features.md) 的"枚举"一节（⭐⭐ 文档按需单读即可，不必整篇学完）。
 

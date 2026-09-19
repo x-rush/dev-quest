@@ -3,7 +3,9 @@
 > **本轮增强与版本核对**：学习路径及正文增强范围见 [逐文件台账](../shared-resources/tools/document-quality/reports/coverage.md)。下方技术基线中的旧核对日期属于历史记录，不表示这次已重跑所有平台；安装与升级以官方兼容要求、项目锁文件和实际构建结果为准。
 
 
-> 第一次学习请从[理解地图与学习规划](LEARNING_GUIDE.md)开始；按关键词查阅可直接使用其中的完整参考导航。
+第一次学习请从[理解地图与学习规划](LEARNING_GUIDE.md)开始，按其中的阶段任务和验收条件推进。先学习 Swift 可选值、结构体和闭包，再用 SwiftUI 做状态界面与本地笔记。无需预先掌握 Go 或 React；原生应用构建与运行使用对应的 Apple 开发环境。
+
+查语法、函数或库时使用下方参考目录。文件数量与目录中的完成标记表示内容组织情况，不能替代示例运行证据；具体交付按[知识库质量基线](../shared-resources/standards/knowledge-delivery-baseline.md)验收。
 
 > **文档简介**: Dev Quest 应用帝国矩阵的 iOS 支柱模块：以 Swift 6.3 严格并发为地基，用 SwiftUI + Observation + SwiftData 构建现代原生应用，直至上架与运维
 >
@@ -38,22 +40,20 @@
 
 ## 🎯 模块简介
 
-本模块专为有 Go 后端和现代前端开发经验的学习者设计，目标是系统掌握 iOS 原生开发技术。2026 年的 iOS 开发已全面进入 Swift 6 时代：严格并发检查、Observation 框架与 SwiftData 正在重塑开发范式。本模块帮助你构建高质量、高性能、可上架的现代化 iOS 应用。
+本模块面向会基本编程、初次学习 Swift 与 iOS 的读者。先理解可选值、值语义和闭包，再学习视图身份、状态和持久化。Go 或前端经验可用于对照，不是前提；应用是否可发布需要在目标工具链和平台上另行验收。
 
 完成本模块后，你将能够：
 
-- ✅ 掌握 Swift 6 语言特性与严格并发编程（async/await、actor）
-- ✅ 用 SwiftUI 声明式框架 + @Observable 数据流构建现代 UI
-- ✅ 用 SwiftData 完成本地持久化与数据建模
-- ✅ 集成网络、定位等系统能力，完成完整应用
-- ✅ 建立 Swift Testing / XCUITest 测试体系与 CI/CD
-- ✅ 完成 TestFlight 分发、App Store 上架与线上可观测性
+- 解释可选值、结构体、闭包与错误，能从编译器信息定位相关代码。
+- 让父子视图共享同一份状态，验证导航前后哪些状态保留或重建。
+- 保存并重新读取一条本地数据，再加入网络请求、取消和失败恢复。
+- 在声明的目标系统上运行测试与构建；分发、签名和上架作为后续独立任务。
 
 ## 🧭 四象限导览
 
 | 象限 | 目录 | 内容 | 访问方式 |
 |------|------|------|---------|
-| **📖 教程** | [basics/](./basics/01-environment-setup.md) | 环境搭建 → Swift 语法 → SwiftUI 视图/状态/布局/导航 → 并发入门 → 首个项目，共 8 篇按序学习 | 从头到尾按编号走 |
+| **📖 教程** | [basics/](./basics/01-environment-setup.md) | 环境搭建 → Swift 语法 → SwiftUI 视图/状态/布局/导航 → 并发入门 → 首个项目，共 8 篇 | 按导读的能力顺序学习 |
 | **📚 字典** | [reference/](./reference/quick-references/01-swift-swiftui-cheatsheet.md) | 语言概念（16 篇，含构造/关键字总索引/正则/URLSession/包地图）/ 框架要点（8 篇，含手势）/ 库指南（2 篇）/ 速查与故障排除（2 篇），共 28 篇全量参考 | **可独立查阅，仍有前置知识**，任意跳入查询 |
 | **🛠️ 操作指南** | [frameworks/](./frameworks/01-swiftui-basics.md) [projects/](./projects/01-notes-app.md) [testing/](./testing/01-unit-testing.md) [deployment/](./deployment/01-app-release.md) | 框架任务指南 4 篇 · 实战项目 4 个（⭐ 递进）· 测试工程 3 篇 · 部署运维 3 篇 | 面向目标，按需照做 |
 | **🎓 解释** | [advanced-topics/](./advanced-topics/architecture/01-app-architecture.md) | 应用架构、渲染性能、并发深度、安全实践，共 4 篇深度专题（均 ⭐⭐⭐） | 有实践困惑后带着问题读 |
@@ -64,9 +64,9 @@
 
 ### 入门路径（⭐）
 
-环境搭建 → 第一个 SwiftUI App → Swift 语法要点 → 视图与状态 → 布局系统 → 导航模式 → SwiftUI 基础任务指南 → Xcode 工具链 → 本地笔记应用
+环境搭建 → Swift 语法要点 → 第一个 SwiftUI App → 视图与状态 → 布局系统 → 导航模式 → SwiftUI 基础任务指南 → Xcode 工具链 → 本地笔记应用
 
-[01 环境搭建](./basics/01-environment-setup.md) → [02 第一个 SwiftUI App](./basics/02-first-swiftui-app.md) → [03 Swift 语法要点](./basics/03-swift-syntax-essentials.md) → [04 视图与状态](./basics/04-views-state.md) → [05 布局系统](./basics/05-layouts.md) → [06 导航模式](./basics/06-navigation.md) → [SwiftUI 基础任务指南](./frameworks/01-swiftui-basics.md) → [Xcode 工具链](./frameworks/04-devtools.md) → [项目：本地笔记应用](./projects/01-notes-app.md)
+[01 环境搭建](./basics/01-environment-setup.md) → [03 Swift 语法要点](./basics/03-swift-syntax-essentials.md) → [02 第一个 SwiftUI App](./basics/02-first-swiftui-app.md) → [04 视图与状态](./basics/04-views-state.md) → [05 布局系统](./basics/05-layouts.md) → [06 导航模式](./basics/06-navigation.md) → [SwiftUI 基础任务指南](./frameworks/01-swiftui-basics.md) → [Xcode 工具链](./frameworks/04-devtools.md) → [项目：本地笔记应用](./projects/01-notes-app.md)
 
 ### 进阶路径（⭐⭐）
 
