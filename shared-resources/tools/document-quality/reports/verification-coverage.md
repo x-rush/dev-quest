@@ -7,8 +7,8 @@
 | 指标 | 数量 |
 |---|---:|
 | 纳入模块文档 | 642 |
-| 主状态：not_verified | 501 |
-| 主状态：runtime | 141 |
+| 主状态：not_verified | 495 |
+| 主状态：runtime | 147 |
 | 验证措辞出现次数 | 126 |
 | 措辞分类：source_has_limited_runtime_evidence | 82 |
 | 措辞分类：unbound_verification_wording | 44 |
@@ -76,7 +76,7 @@
 | Go | [01-go-backend/reference/language-concepts/03-go-programming-essentials.md](../../../../01-go-backend/reference/language-concepts/03-go-programming-essentials.md) | `not_verified` | 0 | 0 |
 | Go | [01-go-backend/reference/language-concepts/04-go-data-types.md](../../../../01-go-backend/reference/language-concepts/04-go-data-types.md) | `runtime` | 1 | 0 |
 | Go | [01-go-backend/reference/language-concepts/05-go-control-flow.md](../../../../01-go-backend/reference/language-concepts/05-go-control-flow.md) | `not_verified` | 0 | 0 |
-| Go | [01-go-backend/reference/language-concepts/06-go-oop-concepts.md](../../../../01-go-backend/reference/language-concepts/06-go-oop-concepts.md) | `not_verified` | 0 | 0 |
+| Go | [01-go-backend/reference/language-concepts/06-go-oop-concepts.md](../../../../01-go-backend/reference/language-concepts/06-go-oop-concepts.md) | `runtime` | 1 | 0 |
 | Go | [01-go-backend/reference/language-concepts/07-error-handling.md](../../../../01-go-backend/reference/language-concepts/07-error-handling.md) | `not_verified` | 0 | 0 |
 | Go | [01-go-backend/reference/language-concepts/08-concurrency-basics.md](../../../../01-go-backend/reference/language-concepts/08-concurrency-basics.md) | `not_verified` | 0 | 0 |
 | Go | [01-go-backend/reference/language-concepts/09-generics.md](../../../../01-go-backend/reference/language-concepts/09-generics.md) | `not_verified` | 0 | 0 |
@@ -446,7 +446,7 @@
 | PHP | [07-php-mastery/reference/language-concepts/13-weak-comparison.md](../../../../07-php-mastery/reference/language-concepts/13-weak-comparison.md) | `runtime` | 1 | 1 |
 | PHP | [07-php-mastery/reference/language-concepts/14-references-value-semantics.md](../../../../07-php-mastery/reference/language-concepts/14-references-value-semantics.md) | `not_verified` | 0 | 0 |
 | PHP | [07-php-mastery/reference/language-concepts/15-superglobals.md](../../../../07-php-mastery/reference/language-concepts/15-superglobals.md) | `not_verified` | 0 | 0 |
-| PHP | [07-php-mastery/reference/language-concepts/16-operators.md](../../../../07-php-mastery/reference/language-concepts/16-operators.md) | `not_verified` | 0 | 0 |
+| PHP | [07-php-mastery/reference/language-concepts/16-operators.md](../../../../07-php-mastery/reference/language-concepts/16-operators.md) | `runtime` | 1 | 0 |
 | PHP | [07-php-mastery/reference/language-concepts/17-magic-methods.md](../../../../07-php-mastery/reference/language-concepts/17-magic-methods.md) | `not_verified` | 0 | 0 |
 | PHP | [07-php-mastery/reference/language-concepts/18-constants-magic-constants.md](../../../../07-php-mastery/reference/language-concepts/18-constants-magic-constants.md) | `not_verified` | 0 | 0 |
 | PHP | [07-php-mastery/reference/library-guides/01-standard-library-spl.md](../../../../07-php-mastery/reference/library-guides/01-standard-library-spl.md) | `runtime` | 1 | 0 |
@@ -472,7 +472,7 @@
 | Java | [08-java-revisited/basics/03-variables-types.md](../../../../08-java-revisited/basics/03-variables-types.md) | `runtime` | 2 | 0 |
 | Java | [08-java-revisited/basics/04-classes-records.md](../../../../08-java-revisited/basics/04-classes-records.md) | `runtime` | 1 | 0 |
 | Java | [08-java-revisited/basics/05-control-flow.md](../../../../08-java-revisited/basics/05-control-flow.md) | `runtime` | 1 | 0 |
-| Java | [08-java-revisited/basics/06-exceptions.md](../../../../08-java-revisited/basics/06-exceptions.md) | `not_verified` | 0 | 0 |
+| Java | [08-java-revisited/basics/06-exceptions.md](../../../../08-java-revisited/basics/06-exceptions.md) | `runtime` | 1 | 0 |
 | Java | [08-java-revisited/basics/07-modern-features.md](../../../../08-java-revisited/basics/07-modern-features.md) | `not_verified` | 0 | 0 |
 | Java | [08-java-revisited/basics/08-first-project.md](../../../../08-java-revisited/basics/08-first-project.md) | `runtime` | 1 | 2 |
 | Java | [08-java-revisited/deployment/01-docker-deployment.md](../../../../08-java-revisited/deployment/01-docker-deployment.md) | `not_verified` | 0 | 0 |
@@ -529,7 +529,7 @@
 | Node.js | [09-nodejs-backend/basics/03-modules-esm.md](../../../../09-nodejs-backend/basics/03-modules-esm.md) | `runtime` | 1 | 0 |
 | Node.js | [09-nodejs-backend/basics/04-async-promises.md](../../../../09-nodejs-backend/basics/04-async-promises.md) | `runtime` | 2 | 0 |
 | Node.js | [09-nodejs-backend/basics/05-http-routing.md](../../../../09-nodejs-backend/basics/05-http-routing.md) | `not_verified` | 0 | 0 |
-| Node.js | [09-nodejs-backend/basics/06-error-handling.md](../../../../09-nodejs-backend/basics/06-error-handling.md) | `not_verified` | 0 | 0 |
+| Node.js | [09-nodejs-backend/basics/06-error-handling.md](../../../../09-nodejs-backend/basics/06-error-handling.md) | `runtime` | 1 | 0 |
 | Node.js | [09-nodejs-backend/basics/07-streams-workers.md](../../../../09-nodejs-backend/basics/07-streams-workers.md) | `not_verified` | 0 | 0 |
 | Node.js | [09-nodejs-backend/basics/08-first-project.md](../../../../09-nodejs-backend/basics/08-first-project.md) | `not_verified` | 0 | 0 |
 | Node.js | [09-nodejs-backend/deployment/01-docker-deployment.md](../../../../09-nodejs-backend/deployment/01-docker-deployment.md) | `not_verified` | 0 | 0 |
@@ -579,7 +579,7 @@
 | Python | [10-python-discovery/basics/03-variables-types.md](../../../../10-python-discovery/basics/03-variables-types.md) | `runtime` | 1 | 0 |
 | Python | [10-python-discovery/basics/04-functions-oop.md](../../../../10-python-discovery/basics/04-functions-oop.md) | `not_verified` | 0 | 0 |
 | Python | [10-python-discovery/basics/05-control-flow.md](../../../../10-python-discovery/basics/05-control-flow.md) | `runtime` | 1 | 0 |
-| Python | [10-python-discovery/basics/06-exceptions.md](../../../../10-python-discovery/basics/06-exceptions.md) | `not_verified` | 0 | 0 |
+| Python | [10-python-discovery/basics/06-exceptions.md](../../../../10-python-discovery/basics/06-exceptions.md) | `runtime` | 1 | 0 |
 | Python | [10-python-discovery/basics/07-advanced-features.md](../../../../10-python-discovery/basics/07-advanced-features.md) | `runtime` | 1 | 0 |
 | Python | [10-python-discovery/basics/08-first-project.md](../../../../10-python-discovery/basics/08-first-project.md) | `not_verified` | 0 | 0 |
 | Python | [10-python-discovery/deployment/01-docker-deployment.md](../../../../10-python-discovery/deployment/01-docker-deployment.md) | `not_verified` | 0 | 0 |
@@ -660,7 +660,7 @@
 | Rust / Cross-platform | [11-rust-cross-platform/reference/framework-essentials/10-tauri-ipc-commands.md](../../../../11-rust-cross-platform/reference/framework-essentials/10-tauri-ipc-commands.md) | `not_verified` | 0 | 0 |
 | Rust / Cross-platform | [11-rust-cross-platform/reference/framework-essentials/11-axum-essentials.md](../../../../11-rust-cross-platform/reference/framework-essentials/11-axum-essentials.md) | `not_verified` | 0 | 0 |
 | Rust / Cross-platform | [11-rust-cross-platform/reference/language-concepts/01-ownership-dictionary.md](../../../../11-rust-cross-platform/reference/language-concepts/01-ownership-dictionary.md) | `runtime` | 1 | 0 |
-| Rust / Cross-platform | [11-rust-cross-platform/reference/language-concepts/02-trait-objects.md](../../../../11-rust-cross-platform/reference/language-concepts/02-trait-objects.md) | `not_verified` | 0 | 0 |
+| Rust / Cross-platform | [11-rust-cross-platform/reference/language-concepts/02-trait-objects.md](../../../../11-rust-cross-platform/reference/language-concepts/02-trait-objects.md) | `runtime` | 1 | 0 |
 | Rust / Cross-platform | [11-rust-cross-platform/reference/language-concepts/03-const-generics.md](../../../../11-rust-cross-platform/reference/language-concepts/03-const-generics.md) | `not_verified` | 0 | 1 |
 | Rust / Cross-platform | [11-rust-cross-platform/reference/language-concepts/04-advanced-lifetimes.md](../../../../11-rust-cross-platform/reference/language-concepts/04-advanced-lifetimes.md) | `runtime` | 4 | 2 |
 | Rust / Cross-platform | [11-rust-cross-platform/reference/language-concepts/05-macros.md](../../../../11-rust-cross-platform/reference/language-concepts/05-macros.md) | `runtime` | 4 | 0 |

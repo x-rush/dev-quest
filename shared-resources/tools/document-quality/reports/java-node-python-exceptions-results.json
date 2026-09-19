@@ -1,0 +1,108 @@
+{
+  "scope": "One complete fenced program extracted verbatim from each named Java, Node.js, and Python P1 foundation page and run in dev-quest-validation:local. No framework, network, process-crash, or whole-document claim is made.",
+  "documents": {
+    "08-java-revisited/basics/06-exceptions.md": "27a524e12fb909c7e4b5187b49aa27b8aa94f0c2515a8cd1eba90184937f6c3c",
+    "09-nodejs-backend/basics/06-error-handling.md": "5bd452f0ff718801e0b2376e36cecaf48298ce130e07cf8d2eaa5c7a7fb0f3f9",
+    "10-python-discovery/basics/06-exceptions.md": "99bc9b84fefcf82967bfdb60b8ff6e264117aac930582cbe4e4780c9081ee0e4"
+  },
+  "cases": [
+    {
+      "id": "java-try-with-resources-suppressed",
+      "document": "08-java-revisited/basics/06-exceptions.md",
+      "source_sha256": "8fc99648a6e09bb8e9a73e48f1409850969eb37c05c954bfc9aa0854d69fa26a",
+      "expected_stdout": "work\nclose:second\nclose:first\n",
+      "commands": [
+        {
+          "command": [
+            "docker",
+            "run",
+            "--rm",
+            "-v",
+            "C:\\Users\\77958\\AppData\\Local\\Temp\\dq-exceptions-tpldcree:/work",
+            "-w",
+            "/work",
+            "dev-quest-validation:local",
+            "javac",
+            "--release",
+            "21",
+            "ExceptionResourcesVerification.java"
+          ],
+          "exit_code": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "docker",
+            "run",
+            "--rm",
+            "-v",
+            "C:\\Users\\77958\\AppData\\Local\\Temp\\dq-exceptions-tpldcree:/work",
+            "-w",
+            "/work",
+            "dev-quest-validation:local",
+            "java",
+            "ExceptionResourcesVerification"
+          ],
+          "exit_code": 0,
+          "stdout": "work\nclose:second\nclose:first\n",
+          "stderr": ""
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "node-error-cause",
+      "document": "09-nodejs-backend/basics/06-error-handling.md",
+      "source_sha256": "250d53846693cf989d9885c475865f9f2815377a8d03ec3bcd22944421135fe3",
+      "expected_stdout": "ServiceError|query failed|database unavailable\n",
+      "commands": [
+        {
+          "command": [
+            "docker",
+            "run",
+            "--rm",
+            "-v",
+            "C:\\Users\\77958\\AppData\\Local\\Temp\\dq-exceptions-tpldcree:/work",
+            "-w",
+            "/work",
+            "dev-quest-validation:local",
+            "node",
+            "error-cause.js"
+          ],
+          "exit_code": 0,
+          "stdout": "ServiceError|query failed|database unavailable\n",
+          "stderr": ""
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "python-exception-chain-context-manager",
+      "document": "10-python-discovery/basics/06-exceptions.md",
+      "source_sha256": "259f9c138d75fd9214faf67a240e4d5efa4594e7f8675ee7e6ea1031063db89e",
+      "expected_stdout": "enter|RuntimeError\ninvalid port|ValueError\n",
+      "commands": [
+        {
+          "command": [
+            "docker",
+            "run",
+            "--rm",
+            "-v",
+            "C:\\Users\\77958\\AppData\\Local\\Temp\\dq-exceptions-tpldcree:/work",
+            "-w",
+            "/work",
+            "dev-quest-validation:local",
+            "python3",
+            "exception-context.py"
+          ],
+          "exit_code": 0,
+          "stdout": "enter|RuntimeError\ninvalid port|ValueError\n",
+          "stderr": ""
+        }
+      ],
+      "passed": true
+    }
+  ],
+  "passed": true
+}

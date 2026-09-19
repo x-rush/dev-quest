@@ -118,7 +118,33 @@ or                （最低，低于 =）
 **练习**：分别运行上述 and/&& 两种赋值并输出结果；再对 -7、0、7 在正模数 3 下规范化余数，预期为 2、0、1。不要简单给所有余数加模数，否则 0 会错误地变成 3。@ 不会将失败结果转换成成功，也不会替你检查 false。
 
 
-本轮未在本机执行 PHP 片段；文中的输出为预期值，版本相关行为请用项目运行时验证。
+### 可复核的优先级与余数案例
+
+下面是一个完整、无外部输入的最小程序。它同时确认 `and` 与 `&&` 在赋值中的优先级差异，以及负数余数的规范化写法；这不覆盖本页的 `@`、字符串插值或版本迁移细节。
+
+<!-- go-rust-php-twelfth-case: php-precedence-remainder -->
+```php
+<?php
+
+declare(strict_types=1);
+
+$withAnd = true and false;
+$withAmpersands = true && false;
+
+function modulo(int $value, int $base): int
+{
+    if ($base <= 0) {
+        throw new InvalidArgumentException('base must be positive');
+    }
+    $remainder = $value % $base;
+    return $remainder < 0 ? $remainder + $base : $remainder;
+}
+
+printf("and=%s &&=%s\n", $withAnd ? 'true' : 'false', $withAmpersands ? 'true' : 'false');
+printf("remainders=%d,%d,%d\n", modulo(-7, 3), modulo(0, 3), modulo(7, 3));
+```
+
+预期输出是 `and=true &&=false` 与 `remainders=2,0,1`。这里的规范化只适用于正模数；若业务允许负模数，应先定义所需的数学语义，而不是沿用此函数。
 
 ## 🔗 相关条目
 

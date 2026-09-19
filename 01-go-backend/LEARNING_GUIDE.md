@@ -39,10 +39,14 @@ Go 负责在服务端执行程序。先用普通函数处理数据，再把函�
 | 阶段与入口 | 练习输入与动作 | 通过条件 |
 | --- | --- | --- |
 | 函数与错误：[错误处理](basics/08-error-handling.md) | 分别传入普通标题和全空白标题 | 正常输入返回业务值；空白输入返回可判断的错误，不创建记录 |
-| 标准库项目：[待办 CLI](projects/00-stdlib-todo-cli.md) | 添加两项，删除一项，再查询不存在的 ID | 剩余内容和错误与约定一致；测试覆盖成功与失败，能解释数据是否在退出后保留 |
+| 标准库项目：[待办 CLI](projects/00-stdlib-todo-cli.md) | 运行 `go run . demo`，再为 `Store.Delete(99)` 补失败测试 | demo 输出 `#2 写 Go 测试`；删除未知 ID 返回错误且列表不变。CLI 只有 `add` 与 `demo`，没有按 ID 查询命令；每次启动状态清空 |
 | HTTP 与持久化：[HTTP 参考](reference/library-guides/03-net-http.md)、[REST 项目](projects/01-rest-api-server.md) | 先做内存 CRUD，再切换数据库 | 请求状态、JSON 及错误一致；接数据库后单独验证重启和写入失败，不提前加入缓存与微服务 |
 
 每阶段保留实际输入、输出和一个失败案例。只阅读或复制成功代码，不等同于已经通过验收。练习用小功能承接已学知识，大型项目的扩展需求可按需选做。
+
+进入首项目之前，完成[复合类型](basics/04-composite-types.md)、[函数与方法](basics/05-functions-methods.md)和[错误处理](basics/08-error-handling.md)。产物是独立目录内的 `go.mod`、`main.go`、`main_test.go` 与实际验收记录；先执行 `go test ./...` 和 `go run . demo`，再执行 `go run . add "   "`，应非零退出且不输出添加成功消息。未知 ID 的失败验收直接调用 `Store.Delete`，不要尝试正文未提供的 CLI 子命令。
+
+编译失败回查[环境搭建](basics/01-environment-setup.md)，状态或错误不符回查[首项目](projects/00-stdlib-todo-cli.md)的 `Store` 与测试。通过后补[并发基础](basics/07-concurrency-basics.md)与 [net/http](reference/library-guides/03-net-http.md)，进入 [CLI → HTTP 桥接](projects/01-rest-api-server.md)：交付共享且受同步保护的 Store、创建/列表 handler 和 `httptest` 测试，验收创建后查回、非法输入不写入，再继续 Gin 与数据库阶段。
 
 ## 框架与高级主题怎么选
 

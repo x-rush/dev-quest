@@ -88,7 +88,7 @@ import json
 def load_config(path: str) -> dict:
     try:
         with open(path, encoding="utf-8") as f:
-            return json.load(f)
+            config = json.load(f)
     except FileNotFoundError:
         print(f"配置 {path} 不存在，使用默认配置")
         return {}
@@ -97,8 +97,39 @@ def load_config(path: str) -> dict:
         return {}
     else:
         print("配置加载成功")                 # 无异常时才执行
+        return config
     finally:
         print("清理动作（无论如何都执行）")
+```
+
+### 可直接运行的异常链与上下文管理器示例
+
+这段完整程序验证两件事：`__exit__` 即使在块内抛异常时也会执行；`raise ... from e` 会把底层 `ValueError` 放在新异常的 `__cause__` 中。
+
+```python
+events = []
+
+class Marker:
+    def __enter__(self):
+        events.append("enter")
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        events.append(exc_type.__name__)
+        return False
+
+def parse_port(text: str) -> int:
+    try:
+        return int(text)
+    except ValueError as error:
+        raise RuntimeError("invalid port") from error
+
+try:
+    with Marker():
+        parse_port("not-a-number")
+except RuntimeError as error:
+    print("|".join(events))
+    print(f"{error}|{type(error.__cause__).__name__}")
 ```
 
 各块职责：

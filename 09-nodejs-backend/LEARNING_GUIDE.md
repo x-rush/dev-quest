@@ -38,10 +38,14 @@ HTTP 最小服务 → ESM → Promise/await → 路由与校验 → 错误与取
 | 阶段与入口 | 练习输入与动作 | 通过条件 |
 | --- | --- | --- |
 | 最小请求：[HTTP 服务器](basics/02-first-server.md) | 请求已定义路径，再请求不存在路径 | 状态码、响应头与 JSON 一致；响应能结束，没有一直等待的连接 |
-| 基础业务：[首个项目](basics/08-first-project.md)、[Todo API](projects/01-todo-api.md) | 创建、读取、提交空标题、查询未知 ID | 正常和错误都得到约定响应；失败的 Promise 被明确处理，不返回成功空对象 |
+| 基础业务：[Task 首项目](basics/08-first-project.md)，通过后再做 [Todo 扩展](projects/01-todo-api.md) | 首先完成 Task 创建、读取、空标题和未知 ID 检查，并保留一条记录重启读取 | Task 首项目使用 SQLite，必须完成迁移、客户端生成、类型检查和 4 项测试；扩展保留 Task，新增 Todo 模型与路由，不能把两页当成可互换的起点 |
 | 资源边界：[流与 Worker](basics/07-streams-workers.md)、[文件服务](projects/03-file-storage-service.md) | 测试超时、超限文件和中断上传 | 有错误结果和资源清理；记录输入规模、内存与耗时，比较方案使用相同条件。此阶段在基础 API 之后进行 |
 
 每阶段保留实际输入、输出和一个失败案例。只阅读或复制成功代码，不等同于已经通过验收。练习用小功能承接已学知识，大型项目的扩展需求可按需选做。
+
+进入 Task 首项目之前，完成 [ESM](basics/03-modules-esm.md)、[Promise](basics/04-async-promises.md)、[路由与校验](basics/05-http-routing.md)及[错误处理](basics/06-error-handling.md)。交付锁文件、Prisma schema 与迁移、生成客户端、应用/监听入口和测试。按[首项目](basics/08-first-project.md)先生成客户端，再在专用测试库应用迁移，执行 `pnpm exec tsc --noEmit` 与 `pnpm exec tsx --test test/tasks.test.ts`；4 项为需实际执行的预期，不能用文中的依赖安装失败记录代替通过证据。
+
+测试后按正文移除测试用 `DATABASE_URL` 覆盖，恢复开发库，再启动服务。正常验收为创建后按返回 ID 查回，保留另一条记录重启仍可读；失败验收为空白标题返回 400、未知 ID 返回 404，非法请求不新增记录。类型/导入失败回查客户端生成与 ESM；缺表回查迁移及当前数据库路径；错误变 500 回查统一错误出口。通过后进入 [Todo API 扩展](projects/01-todo-api.md)，保留 `/api/tasks` 及原有 4 项测试，再新增 `/todos`、迁移与独立测试；此后才继续认证服务。
 
 ## 框架与高级主题怎么选
 

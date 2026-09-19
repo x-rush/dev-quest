@@ -147,6 +147,7 @@ trait 必须满足 dyn 兼容才能写成 `dyn Trait`。逐形态判定：
 
 ### 示例一：异构集合与 `&dyn` 传参
 
+<!-- go-rust-php-twelfth-case: rust-dyn-collection -->
 ```rust
 trait Draw {
     fn draw(&self) -> String;

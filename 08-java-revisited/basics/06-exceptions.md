@@ -77,6 +77,31 @@ try (conn) {            // 直接引用已有资源
 }
 ```
 
+### 可完整编译和运行的验证示例（Java 21）
+
+下面这段程序把正文中的两个关键承诺放在一个可观察的场景里：业务异常仍是主异常，两个资源按**声明的逆序**关闭，`close()` 的失败出现在主异常的 `getSuppressed()` 中。
+
+```java
+public class ExceptionResourcesVerification {
+    static final class Resource implements AutoCloseable {
+        private final String name;
+        Resource(String name) { this.name = name; }
+        @Override public void close() { throw new IllegalStateException("close:" + name); }
+    }
+
+    public static void main(String[] args) {
+        try (var first = new Resource("first"); var second = new Resource("second")) {
+            throw new IllegalArgumentException("work");
+        } catch (IllegalArgumentException error) {
+            System.out.println(error.getMessage());
+            for (Throwable suppressed : error.getSuppressed()) {
+                System.out.println(suppressed.getMessage());
+            }
+        }
+    }
+}
+```
+
 ## 🎣 多捕获与精确重抛
 
 ```java

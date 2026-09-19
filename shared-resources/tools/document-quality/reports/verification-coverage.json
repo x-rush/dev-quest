@@ -17,8 +17,8 @@
   "summary": {
     "documents": 642,
     "by_primary_state": {
-      "not_verified": 501,
-      "runtime": 141
+      "not_verified": 495,
+      "runtime": 147
     },
     "verification_wording_occurrences": 126,
     "marker_classification": {
@@ -29,7 +29,7 @@
   "documents": [
     {
       "path": "01-go-backend/LEARNING_GUIDE.md",
-      "sha256": "ba6cb85fa20d89f5d4e315a68e7ebfd2388055702edd9faf59669e8afc867ae7",
+      "sha256": "60ce2473a1284eaa9fa7bccd3f5f405c6f3e26354e789a58e116d7b7883a4e48",
       "verification": [
         {
           "mode": "not_verified",
@@ -641,13 +641,13 @@
     },
     {
       "path": "01-go-backend/reference/language-concepts/06-go-oop-concepts.md",
-      "sha256": "5a0f8929bbb5f204a6a54bcc152432b1817351c69c842e0bf95f631f6d917a3e",
+      "sha256": "5a3d36b6e07eb6d8ead565cb1ce9bfd07f1e0827a73795a72a67d1a8406c02f1",
       "verification": [
         {
-          "mode": "not_verified",
-          "status": "NOT_VERIFIED",
-          "report": null,
-          "scope": "No named runtime or syntax evidence is recorded for this document."
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "go-rust-php-twelfth-body-validation.json",
+          "scope": "Only three named P1 core/standard-library body programs. Passing is not whole-page or whole-module verification."
         }
       ],
       "marker_count": 0
@@ -5655,13 +5655,13 @@
     },
     {
       "path": "07-php-mastery/reference/language-concepts/16-operators.md",
-      "sha256": "62608e375de985785bf6aa033cbe27df35ec667a8e9ff8497933a7df7286ce84",
+      "sha256": "6ffdeb0b1621a0933ac8e45b49514fb1e427c3faa58bf663d08b7d5dfeee6daf",
       "verification": [
         {
-          "mode": "not_verified",
-          "status": "NOT_VERIFIED",
-          "report": null,
-          "scope": "No named runtime or syntax evidence is recorded for this document."
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "go-rust-php-twelfth-body-validation.json",
+          "scope": "Only three named P1 core/standard-library body programs. Passing is not whole-page or whole-module verification."
         }
       ],
       "marker_count": 0
@@ -5999,13 +5999,13 @@
     },
     {
       "path": "08-java-revisited/basics/06-exceptions.md",
-      "sha256": "7c7e9f05792dd0b01202cb98418b34da8a42180178220ce7ae93abf6c584c258",
+      "sha256": "83667b5cc40c3f24a0af9677dcad5289c5c8f7bf1f4e753c1a56c7b0514b0ac7",
       "verification": [
         {
-          "mode": "not_verified",
-          "status": "NOT_VERIFIED",
-          "report": null,
-          "scope": "No named runtime or syntax evidence is recorded for this document."
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "java-node-python-exceptions-results.json",
+          "scope": "One complete fenced program extracted verbatim from each named Java, Node.js, and Python P1 foundation page and run in dev-quest-validation:local. No framework, network, process-crash, or whole-document claim is made."
         }
       ],
       "marker_count": 0
@@ -6747,7 +6747,7 @@
     },
     {
       "path": "09-nodejs-backend/LEARNING_GUIDE.md",
-      "sha256": "e78abb91d4886165561ebf100e95ba08829a18bf9c0197e0fc54e252492a3b61",
+      "sha256": "219dc384b2503311f388c155409268926e2d6f7c20f9d0a134c18981a79b65f6",
       "verification": [
         {
           "mode": "not_verified",
@@ -6896,13 +6896,13 @@
     },
     {
       "path": "09-nodejs-backend/basics/06-error-handling.md",
-      "sha256": "e2c08dc58d04bb502c8584b8771409852b131c66c2b7715e333aa5445846240f",
+      "sha256": "8966021b00b08d018ebca7f056e6f7c65e1f36119e8afcd2dee598fddfcf5acd",
       "verification": [
         {
-          "mode": "not_verified",
-          "status": "NOT_VERIFIED",
-          "report": null,
-          "scope": "No named runtime or syntax evidence is recorded for this document."
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "java-node-python-exceptions-results.json",
+          "scope": "One complete fenced program extracted verbatim from each named Java, Node.js, and Python P1 foundation page and run in dev-quest-validation:local. No framework, network, process-crash, or whole-document claim is made."
         }
       ],
       "marker_count": 0
@@ -7594,13 +7594,13 @@
     },
     {
       "path": "10-python-discovery/basics/06-exceptions.md",
-      "sha256": "9b0d6bb000b764a0bce1f55e18ecad701b8685a4ab2731c53c1a7431febe0285",
+      "sha256": "c0389faf191b90c57e84a1ceceb2e770d79c316939f3466665706274027c23b2",
       "verification": [
         {
-          "mode": "not_verified",
-          "status": "NOT_VERIFIED",
-          "report": null,
-          "scope": "No named runtime or syntax evidence is recorded for this document."
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "java-node-python-exceptions-results.json",
+          "scope": "One complete fenced program extracted verbatim from each named Java, Node.js, and Python P1 foundation page and run in dev-quest-validation:local. No framework, network, process-crash, or whole-document claim is made."
         }
       ],
       "marker_count": 0
@@ -8227,7 +8227,7 @@
     },
     {
       "path": "11-rust-cross-platform/LEARNING_GUIDE.md",
-      "sha256": "c605fc8d41493b7372dd17234c1d33886f184956f7d218d39ab1102127b90133",
+      "sha256": "4b2096a243ad644725c11b6af6d6508302fa8ac6155460aa786ebd9fec43ffc7",
       "verification": [
         {
           "mode": "not_verified",
@@ -8695,13 +8695,13 @@
     },
     {
       "path": "11-rust-cross-platform/reference/language-concepts/02-trait-objects.md",
-      "sha256": "8a306a8dd6b61c390aea6968e69c9481fa59f2b45e6adec9e204c768b7f304f1",
+      "sha256": "7fe8bc3939260745875a25313786eb6cc8943046b2f4807136dc024019077190",
       "verification": [
         {
-          "mode": "not_verified",
-          "status": "NOT_VERIFIED",
-          "report": null,
-          "scope": "No named runtime or syntax evidence is recorded for this document."
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "go-rust-php-twelfth-body-validation.json",
+          "scope": "Only three named P1 core/standard-library body programs. Passing is not whole-page or whole-module verification."
         }
       ],
       "marker_count": 0

@@ -86,6 +86,23 @@ bootstrap().catch((err) => {
 
 Hono 的进步：路由处理器抛出的错误（含 async rejection）自动转发给 `app.onError`，无需手写 try/catch，也不需要老框架时代的 async 包装补丁。
 
+### 可直接运行的错误因果链示例（Node.js）
+
+这段是上面包装规则的无框架最小版。它只验证 `Error` 的 `cause` 会保留原始错误对象；日志工具是否展开 cause 链仍取决于日志工具的序列化配置。
+
+```js
+class ServiceError extends Error {
+  constructor(message, options = {}) {
+    super(message, { cause: options.cause });
+    this.name = "ServiceError";
+  }
+}
+
+const root = new Error("database unavailable");
+const wrapped = new ServiceError("query failed", { cause: root });
+console.log(`${wrapped.name}|${wrapped.message}|${wrapped.cause.message}`);
+```
+
 ### 回调式 API：error-first 约定
 
 遗留回调式 API 遵循 `(err, result)` 首参错误约定——不处理也不传出的回调错误会变成 `uncaughtException`。现代代码应改用 `node:fs/promises` 等 Promise 版本。
@@ -201,7 +218,7 @@ process.on("SIGTERM", () => console.log("收到 SIGTERM")); // 优雅退出见 0
 要点：
 
 - `uncaughtException` 后 **Node 文档明确不建议继续运行**——正确姿势是退出并让 systemd/K8s 重启
-- `unhandledRejection` 自 Node 15 起默认就是崩溃（`--unhandled-rejections=throw`），不要试图"修复"这个行为
+- `unhandledRejection` 的默认处理曾随 Node 版本变化，也可由 `--unhandled-rejections` 改写；不要把某个默认模式当作恢复策略。入口应记录失败并以受监督的方式退出。
 - 兜底处理器里只做同步日志，不要再启动可能抛错的异步操作
 
 ## 🎨 最佳实践

@@ -1,0 +1,188 @@
+{
+  "schema_version": 1,
+  "report": "go-rust-php-twelfth-body-validation",
+  "generated_at": "2026-09-19T15:20:28.590279+00:00",
+  "method": "Extract each named Markdown fence unchanged; run it in an existing Docker image with --network none and a read-only source mount.",
+  "scope": "Only three named P1 core/standard-library body programs. Passing is not whole-page or whole-module verification.",
+  "not_verified": [
+    "other fences and prose in the three pages",
+    "compile-failure demonstrations",
+    "network, file-system, framework, performance, concurrency, and platform behavior"
+  ],
+  "docker": {
+    "argv": [
+      "docker",
+      "--version"
+    ],
+    "returncode": 0,
+    "stdout": "Docker version 29.8.0, build 88096ef\n",
+    "stderr": ""
+  },
+  "cases": [
+    {
+      "id": "go-pointer-method-set",
+      "language": "Go",
+      "path": "01-go-backend/reference/language-concepts/06-go-oop-concepts.md",
+      "fence": "go",
+      "image": "golang:1.27",
+      "filename": "main.go",
+      "command": [
+        "go",
+        "run",
+        "main.go"
+      ],
+      "expected_stdout": "1\n",
+      "document_sha256": "3bf9a56e8480c5d3cb7bc85f3f6d7f57a0625ac9d8aa211232449fa705c7dafa",
+      "source_sha256": "522395980d3d94c3807f777838c574fb650653562ba86cc524b78dff6b671ff1",
+      "toolchain": {
+        "argv": [
+          "docker",
+          "run",
+          "--rm",
+          "--network",
+          "none",
+          "golang:1.27",
+          "go",
+          "version"
+        ],
+        "returncode": 0,
+        "stdout": "go version go1.27.1 linux/amd64\n",
+        "stderr": ""
+      },
+      "execution": {
+        "argv": [
+          "docker",
+          "run",
+          "--rm",
+          "--network",
+          "none",
+          "-v",
+          "C:\\Users\\77958\\AppData\\Local\\Temp\\dev-quest-go-rust-php-twelfth-r4m4oweo\\go-pointer-method-set:/work:ro",
+          "-w",
+          "/work",
+          "golang:1.27",
+          "sh",
+          "-c",
+          "go run main.go"
+        ],
+        "returncode": 0,
+        "stdout": "1\n",
+        "stderr": ""
+      },
+      "status": "PASS"
+    },
+    {
+      "id": "rust-dyn-collection",
+      "language": "Rust",
+      "path": "11-rust-cross-platform/reference/language-concepts/02-trait-objects.md",
+      "fence": "rust",
+      "image": "rust:1-slim-bookworm",
+      "filename": "main.rs",
+      "command": [
+        "rustc",
+        "--edition",
+        "2024",
+        "main.rs",
+        "-o",
+        "/tmp/case",
+        "&&",
+        "/tmp/case"
+      ],
+      "expected_stdout": "[按钮:提交]\n<滑杆:72%>\n预览: [按钮:取消]\n",
+      "document_sha256": "af81293e3f4c6517590f66ffacda19aab670f3fa7c6afb728bd6d481be9028e1",
+      "source_sha256": "ca9af31b1dab0dd87b2c91e57ca218b92107ecef3d08b63cdf30852acc7f7920",
+      "toolchain": {
+        "argv": [
+          "docker",
+          "run",
+          "--rm",
+          "--network",
+          "none",
+          "rust:1-slim-bookworm",
+          "rustc",
+          "--version"
+        ],
+        "returncode": 0,
+        "stdout": "rustc 1.98.1 (48a229cea 2026-09-01)\n",
+        "stderr": ""
+      },
+      "execution": {
+        "argv": [
+          "docker",
+          "run",
+          "--rm",
+          "--network",
+          "none",
+          "-v",
+          "C:\\Users\\77958\\AppData\\Local\\Temp\\dev-quest-go-rust-php-twelfth-r4m4oweo\\rust-dyn-collection:/work:ro",
+          "-w",
+          "/work",
+          "rust:1-slim-bookworm",
+          "sh",
+          "-c",
+          "rustc --edition 2024 main.rs -o /tmp/case && /tmp/case"
+        ],
+        "returncode": 0,
+        "stdout": "[按钮:提交]\n<滑杆:72%>\n预览: [按钮:取消]\n",
+        "stderr": ""
+      },
+      "status": "PASS"
+    },
+    {
+      "id": "php-precedence-remainder",
+      "language": "PHP",
+      "path": "07-php-mastery/reference/language-concepts/16-operators.md",
+      "fence": "php",
+      "image": "php:8.5-cli",
+      "filename": "case.php",
+      "command": [
+        "php",
+        "case.php"
+      ],
+      "expected_stdout": "and=true &&=false\nremainders=2,0,1\n",
+      "document_sha256": "5e408a258338ea138969dc25ad5b44966704e9335e18085d91564a51d7e8ea36",
+      "source_sha256": "d9e881a296ad9f3d7a900c02d681123441466bc484c908a9fab3430f0350365e",
+      "toolchain": {
+        "argv": [
+          "docker",
+          "run",
+          "--rm",
+          "--network",
+          "none",
+          "php:8.5-cli",
+          "php",
+          "--version"
+        ],
+        "returncode": 0,
+        "stdout": "PHP 8.5.10 (cli) (built: Sep 19 2026 00:23:53) (NTS)\nCopyright (c) The PHP Group\nBuilt by https://github.com/docker-library/php\nZend Engine v4.5.10, Copyright (c) Zend Technologies\n    with Zend OPcache v8.5.10, Copyright (c), by Zend Technologies\n",
+        "stderr": ""
+      },
+      "execution": {
+        "argv": [
+          "docker",
+          "run",
+          "--rm",
+          "--network",
+          "none",
+          "-v",
+          "C:\\Users\\77958\\AppData\\Local\\Temp\\dev-quest-go-rust-php-twelfth-r4m4oweo\\php-precedence-remainder:/work:ro",
+          "-w",
+          "/work",
+          "php:8.5-cli",
+          "sh",
+          "-c",
+          "php case.php"
+        ],
+        "returncode": 0,
+        "stdout": "and=true &&=false\nremainders=2,0,1\n",
+        "stderr": ""
+      },
+      "status": "PASS"
+    }
+  ],
+  "summary": {
+    "passed": 3,
+    "total": 3
+  },
+  "status": "passed"
+}

@@ -121,6 +121,9 @@ def records_from_reports():
     go_php_java_python_eleventh = load("go-php-java-python-eleventh-runtime.json")
     for row in go_php_java_python_eleventh.get("results", []):
         add_record(records, row.get("file"), "runtime", "go-php-java-python-eleventh-runtime.json", go_php_java_python_eleventh.get("scope", "selected Go/PHP/Java/Python eleventh runtime example"), "PASS" if row.get("status", "").upper() == "PASS" else "FAIL")
+    go_rust_php_twelfth = load("go-rust-php-twelfth-body-validation.json")
+    for row in go_rust_php_twelfth.get("cases", []):
+        add_record(records, row.get("path"), "runtime", "go-rust-php-twelfth-body-validation.json", go_rust_php_twelfth.get("scope", "selected Go/Rust/PHP twelfth body example"), "PASS" if row.get("status", "").upper() == "PASS" else "FAIL")
     php_java_p1_runtime = load("php-java-p1-runtime-results.json")
     for row in php_java_p1_runtime.get("cases", []):
         add_record(records, row.get("document"), "runtime", "php-java-p1-runtime-results.json", php_java_p1_runtime.get("scope", "selected PHP/Java P1 runtime example"), "PASS" if row.get("passed") else "FAIL")
@@ -133,6 +136,9 @@ def records_from_reports():
     php_java_python_tenth = load("php-java-python-tenth-body-validation.json")
     for row in php_java_python_tenth.get("results", []):
         add_record(records, row.get("path"), "runtime", "php-java-python-tenth-body-validation.json", php_java_python_tenth.get("scope", "selected PHP/Java/Python tenth body example"), "PASS" if row.get("status", "").upper() == "PASS" else "FAIL")
+    java_node_python_exceptions = load("java-node-python-exceptions-results.json")
+    for row in java_node_python_exceptions.get("cases", []):
+        add_record(records, row.get("document"), "runtime", "java-node-python-exceptions-results.json", java_node_python_exceptions.get("scope", "selected Java/Node/Python exception example"), "PASS" if row.get("passed") else "FAIL")
     next_node_python_basics = load("next-node-python-basics-results.json")
     for row in next_node_python_basics.get("results", []):
         add_record(records, row.get("source"), "runtime", "next-node-python-basics-results.json", row.get("scope", "selected Next/Node/Python basic example"), "PASS" if row.get("status", "").upper() == "PASS" else "FAIL")
