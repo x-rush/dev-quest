@@ -4,12 +4,12 @@
 
 | 处理层级 | 文档数 |
 |---|---:|
+| 新增模块导读与完整文章导航 | 11 |
 | 主题解释、边界与反馈练习增强；运行范围另记 | 313 |
 | 正文段落重写与语义纠错；非全篇深审 | 90 |
 | 正文增强：概念、自测与反馈；非全篇深审 | 90 |
 | 正文增强：职责、数据流与验收；非全篇深审 | 49 |
-| 新增模块导读与完整文章导航 | 11 |
-| 新增文档，教学内容待审查 | 1 |
+| 新增文档，教学内容待审查 | 2 |
 | 正文增强：范围、阶段与验收；非完整工程实测 | 45 |
 | 重点参考增强或语义纠错；非全篇深审 | 32 |
 | 入口增强；原版本表未全量复核 | 10 |
@@ -18,6 +18,8 @@
 
 | 文档 | 本轮处理 | 结构复核线索 |
 |---|---|---|
+| [LEARNING_GUIDE.md](../../../../01-go-backend/LEARNING_GUIDE.md) | 新增模块导读与完整文章导航 | 未命中；不代表技术验证通过 |
+| [README.md](../../../../01-go-backend/README.md) | 主题解释、边界与反馈练习增强；运行范围另记；追加上下文纠错；全库增强轮次已处理原文与补充教学内容 | 未命中；不代表技术验证通过 |
 | [advanced-topics/api-advanced/01-restful-patterns.md](../../../../01-go-backend/advanced-topics/api-advanced/01-restful-patterns.md) | 主题解释、边界与反馈练习增强；运行范围另记；全库增强轮次已处理原文与补充教学内容 | 未命中；不代表技术验证通过 |
 | [advanced-topics/api-advanced/02-graphql-apis.md](../../../../01-go-backend/advanced-topics/api-advanced/02-graphql-apis.md) | 主题解释、边界与反馈练习增强；运行范围另记；全库增强轮次已处理原文与补充教学内容 | 未命中；不代表技术验证通过 |
 | [advanced-topics/architecture/01-microservices-design.md](../../../../01-go-backend/advanced-topics/architecture/01-microservices-design.md) | 正文段落重写与语义纠错；非全篇深审；追加上下文纠错 | 未命中；不代表技术验证通过 |
@@ -31,7 +33,7 @@
 | [basics/05-functions-methods.md](../../../../01-go-backend/basics/05-functions-methods.md) | 正文增强：概念、自测与反馈；非全篇深审 | 未命中；不代表技术验证通过 |
 | [basics/06-control-structures.md](../../../../01-go-backend/basics/06-control-structures.md) | 正文增强：概念、自测与反馈；非全篇深审 | 未命中；不代表技术验证通过 |
 | [basics/07-concurrency-basics.md](../../../../01-go-backend/basics/07-concurrency-basics.md) | 正文增强：概念、自测与反馈；非全篇深审 | 未命中；不代表技术验证通过 |
-| [basics/08-error-handling.md](../../../../01-go-backend/basics/08-error-handling.md) | 正文增强：概念、自测与反馈；非全篇深审 | 教程代码含省略标记，需人工判断 |
+| [basics/08-error-handling.md](../../../../01-go-backend/basics/08-error-handling.md) | 正文增强：概念、自测与反馈；非全篇深审 | 未命中；不代表技术验证通过 |
 | [deployment/01-containerization.md](../../../../01-go-backend/deployment/01-containerization.md) | 正文段落重写与语义纠错；非全篇深审；本轮重写 1 个记录段落 | 缺少明确结果信号 |
 | [deployment/02-ci-cd-pipelines.md](../../../../01-go-backend/deployment/02-ci-cd-pipelines.md) | 正文段落重写与语义纠错；非全篇深审；追加上下文纠错 | 未命中；不代表技术验证通过 |
 | [deployment/03-kubernetes-deployment.md](../../../../01-go-backend/deployment/03-kubernetes-deployment.md) | 正文段落重写与语义纠错；非全篇深审；本轮重写 1 个记录段落 | 缺少明确结果信号 |
@@ -42,13 +44,11 @@
 | [frameworks/04-mongodb-go-driver.md](../../../../01-go-backend/frameworks/04-mongodb-go-driver.md) | 正文增强：职责、数据流与验收；非全篇深审 | 未命中；不代表技术验证通过 |
 | [frameworks/05-go-redis-complete.md](../../../../01-go-backend/frameworks/05-go-redis-complete.md) | 正文增强：职责、数据流与验收；非全篇深审 | 未命中；不代表技术验证通过 |
 | [frameworks/06-grpc-service-development.md](../../../../01-go-backend/frameworks/06-grpc-service-development.md) | 正文增强：职责、数据流与验收；非全篇深审 | 未命中；不代表技术验证通过 |
-| [LEARNING_GUIDE.md](../../../../01-go-backend/LEARNING_GUIDE.md) | 新增模块导读与完整文章导航 | 未命中；不代表技术验证通过 |
 | [projects/00-stdlib-todo-cli.md](../../../../01-go-backend/projects/00-stdlib-todo-cli.md) | 新增文档，教学内容待审查 | 未命中；不代表技术验证通过 |
 | [projects/01-rest-api-server.md](../../../../01-go-backend/projects/01-rest-api-server.md) | 正文增强：范围、阶段与验收；非完整工程实测 | 短条目重复术语，需核查是否缺少解释 |
 | [projects/02-microservices-demo.md](../../../../01-go-backend/projects/02-microservices-demo.md) | 正文增强：范围、阶段与验收；非完整工程实测 | 未命中；不代表技术验证通过 |
 | [projects/03-real-time-app.md](../../../../01-go-backend/projects/03-real-time-app.md) | 正文增强：范围、阶段与验收；非完整工程实测 | 未命中；不代表技术验证通过 |
 | [projects/04-cli-tool.md](../../../../01-go-backend/projects/04-cli-tool.md) | 正文增强：范围、阶段与验收；非完整工程实测 | 未命中；不代表技术验证通过 |
-| [README.md](../../../../01-go-backend/README.md) | 主题解释、边界与反馈练习增强；运行范围另记；追加上下文纠错；全库增强轮次已处理原文与补充教学内容 | 未命中；不代表技术验证通过 |
 | [reference/framework-essentials/01-gin-framework.md](../../../../01-go-backend/reference/framework-essentials/01-gin-framework.md) | 重点参考增强或语义纠错；非全篇深审；本轮重写 35 个记录段落 | 未命中；不代表技术验证通过 |
 | [reference/framework-essentials/02-gorm-orm.md](../../../../01-go-backend/reference/framework-essentials/02-gorm-orm.md) | 正文段落重写与语义纠错；非全篇深审；本轮重写 42 个记录段落 | 未命中；不代表技术验证通过 |
 | [reference/framework-essentials/03-sqlc-vs-gorm.md](../../../../01-go-backend/reference/framework-essentials/03-sqlc-vs-gorm.md) | 主题解释、边界与反馈练习增强；运行范围另记；全库增强轮次已处理原文与补充教学内容 | 未命中；不代表技术验证通过 |
@@ -100,6 +100,8 @@
 
 | 文档 | 本轮处理 | 结构复核线索 |
 |---|---|---|
+| [LEARNING_GUIDE.md](../../../../02-nextjs-frontend/LEARNING_GUIDE.md) | 新增模块导读与完整文章导航 | 未命中；不代表技术验证通过 |
+| [README.md](../../../../02-nextjs-frontend/README.md) | 入口增强；原版本表未全量复核 | 未命中；不代表技术验证通过 |
 | [advanced-topics/api-integration/01-graphql-apollo.md](../../../../02-nextjs-frontend/advanced-topics/api-integration/01-graphql-apollo.md) | 正文段落重写与语义纠错；非全篇深审；本轮重写 1 个记录段落 | 未命中；不代表技术验证通过 |
 | [advanced-topics/architecture/01-scaling-patterns.md](../../../../02-nextjs-frontend/advanced-topics/architecture/01-scaling-patterns.md) | 主题解释、边界与反馈练习增强；运行范围另记；全库增强轮次已处理原文与补充教学内容 | 未命中；不代表技术验证通过 |
 | [advanced-topics/architecture/02-micro-frontends.md](../../../../02-nextjs-frontend/advanced-topics/architecture/02-micro-frontends.md) | 正文段落重写与语义纠错；非全篇深审；本轮重写 1 个记录段落 | 未命中；不代表技术验证通过 |
@@ -122,12 +124,10 @@
 | [frameworks/02-react-19-integration.md](../../../../02-nextjs-frontend/frameworks/02-react-19-integration.md) | 正文增强：职责、数据流与验收；非全篇深审；本轮重写 1 个记录段落 | 未命中；不代表技术验证通过 |
 | [frameworks/03-full-stack-patterns.md](../../../../02-nextjs-frontend/frameworks/03-full-stack-patterns.md) | 正文增强：职责、数据流与验收；非全篇深审 | 未命中；不代表技术验证通过 |
 | [frameworks/04-performance-optimization.md](../../../../02-nextjs-frontend/frameworks/04-performance-optimization.md) | 正文增强：职责、数据流与验收；非全篇深审 | 未命中；不代表技术验证通过 |
-| [LEARNING_GUIDE.md](../../../../02-nextjs-frontend/LEARNING_GUIDE.md) | 新增模块导读与完整文章导航 | 未命中；不代表技术验证通过 |
 | [projects/01-corporate-landing.md](../../../../02-nextjs-frontend/projects/01-corporate-landing.md) | 正文增强：范围、阶段与验收；非完整工程实测 | 教程代码含省略标记，需人工判断 |
 | [projects/02-ecommerce-store.md](../../../../02-nextjs-frontend/projects/02-ecommerce-store.md) | 正文增强：范围、阶段与验收；非完整工程实测 | 未命中；不代表技术验证通过 |
 | [projects/03-dashboard-analytics.md](../../../../02-nextjs-frontend/projects/03-dashboard-analytics.md) | 正文增强：范围、阶段与验收；非完整工程实测 | 未命中；不代表技术验证通过 |
 | [projects/04-saas-platform.md](../../../../02-nextjs-frontend/projects/04-saas-platform.md) | 正文增强：范围、阶段与验收；非完整工程实测 | 短条目重复术语，需核查是否缺少解释 |
-| [README.md](../../../../02-nextjs-frontend/README.md) | 入口增强；原版本表未全量复核 | 未命中；不代表技术验证通过 |
 | [reference/development-tools/01-testing-tools.md](../../../../02-nextjs-frontend/reference/development-tools/01-testing-tools.md) | 主题解释、边界与反馈练习增强；运行范围另记；全库增强轮次已处理原文与补充教学内容 | 未命中；不代表技术验证通过 |
 | [reference/development-tools/02-styling-tools.md](../../../../02-nextjs-frontend/reference/development-tools/02-styling-tools.md) | 主题解释、边界与反馈练习增强；运行范围另记；全库增强轮次已处理原文与补充教学内容 | 未命中；不代表技术验证通过 |
 | [reference/development-tools/03-package-managers.md](../../../../02-nextjs-frontend/reference/development-tools/03-package-managers.md) | 正文段落重写与语义纠错；非全篇深审；本轮重写 1 个记录段落 | 未命中；不代表技术验证通过 |
@@ -169,6 +169,8 @@
 
 | 文档 | 本轮处理 | 结构复核线索 |
 |---|---|---|
+| [LEARNING_GUIDE.md](../../../../03-tanstack-stack/LEARNING_GUIDE.md) | 新增模块导读与完整文章导航 | 未命中；不代表技术验证通过 |
+| [README.md](../../../../03-tanstack-stack/README.md) | 入口增强；原版本表未全量复核 | 未命中；不代表技术验证通过 |
 | [advanced-topics/architecture/01-cache-architecture.md](../../../../03-tanstack-stack/advanced-topics/architecture/01-cache-architecture.md) | 主题解释、边界与反馈练习增强；运行范围另记；全库增强轮次已处理原文与补充教学内容 | 未命中；不代表技术验证通过 |
 | [advanced-topics/performance/01-query-optimization.md](../../../../03-tanstack-stack/advanced-topics/performance/01-query-optimization.md) | 主题解释、边界与反馈练习增强；运行范围另记；全库增强轮次已处理原文与补充教学内容 | 未命中；不代表技术验证通过 |
 | [advanced-topics/performance/02-rendering-performance.md](../../../../03-tanstack-stack/advanced-topics/performance/02-rendering-performance.md) | 主题解释、边界与反馈练习增强；运行范围另记；全库增强轮次已处理原文与补充教学内容 | 未命中；不代表技术验证通过 |
@@ -188,12 +190,10 @@
 | [frameworks/02-tanstack-query-advanced.md](../../../../03-tanstack-stack/frameworks/02-tanstack-query-advanced.md) | 正文增强：职责、数据流与验收；非全篇深审；本轮重写 1 个记录段落 | 未命中；不代表技术验证通过 |
 | [frameworks/03-ecosystem-integration.md](../../../../03-tanstack-stack/frameworks/03-ecosystem-integration.md) | 正文增强：职责、数据流与验收；非全篇深审；本轮重写 1 个记录段落 | 未命中；不代表技术验证通过 |
 | [frameworks/04-devtools.md](../../../../03-tanstack-stack/frameworks/04-devtools.md) | 正文增强：职责、数据流与验收；非全篇深审；本轮重写 1 个记录段落 | 未命中；不代表技术验证通过 |
-| [LEARNING_GUIDE.md](../../../../03-tanstack-stack/LEARNING_GUIDE.md) | 新增模块导读与完整文章导航 | 未命中；不代表技术验证通过 |
 | [projects/01-todo-app.md](../../../../03-tanstack-stack/projects/01-todo-app.md) | 正文增强：范围、阶段与验收；非完整工程实测 | 未命中；不代表技术验证通过 |
 | [projects/02-data-dashboard.md](../../../../03-tanstack-stack/projects/02-data-dashboard.md) | 正文增强：范围、阶段与验收；非完整工程实测 | 未命中；不代表技术验证通过 |
 | [projects/03-collaborative-kanban.md](../../../../03-tanstack-stack/projects/03-collaborative-kanban.md) | 正文增强：范围、阶段与验收；非完整工程实测 | 未命中；不代表技术验证通过 |
 | [projects/04-saas-admin-platform.md](../../../../03-tanstack-stack/projects/04-saas-admin-platform.md) | 正文增强：范围、阶段与验收；非完整工程实测 | 未命中；不代表技术验证通过 |
-| [README.md](../../../../03-tanstack-stack/README.md) | 入口增强；原版本表未全量复核 | 未命中；不代表技术验证通过 |
 | [reference/framework-essentials/01-query-essentials.md](../../../../03-tanstack-stack/reference/framework-essentials/01-query-essentials.md) | 主题解释、边界与反馈练习增强；运行范围另记；全库增强轮次已处理原文与补充教学内容 | 未命中；不代表技术验证通过 |
 | [reference/framework-essentials/02-router-essentials.md](../../../../03-tanstack-stack/reference/framework-essentials/02-router-essentials.md) | 主题解释、边界与反馈练习增强；运行范围另记；全库增强轮次已处理原文与补充教学内容 | 未命中；不代表技术验证通过 |
 | [reference/framework-essentials/03-queryclient-config.md](../../../../03-tanstack-stack/reference/framework-essentials/03-queryclient-config.md) | 主题解释、边界与反馈练习增强；运行范围另记；全库增强轮次已处理原文与补充教学内容 | 未命中；不代表技术验证通过 |
@@ -223,6 +223,7 @@
 | [reference/language-concepts/21-usefield-and-createformhook.md](../../../../03-tanstack-stack/reference/language-concepts/21-usefield-and-createformhook.md) | 主题解释、边界与反馈练习增强；运行范围另记；全库增强轮次已处理原文与补充教学内容 | 未命中；不代表技术验证通过 |
 | [reference/library-guides/01-ecosystem-integrations.md](../../../../03-tanstack-stack/reference/library-guides/01-ecosystem-integrations.md) | 主题解释、边界与反馈练习增强；运行范围另记；全库增强轮次已处理原文与补充教学内容 | 未命中；不代表技术验证通过 |
 | [reference/library-guides/02-related-libs.md](../../../../03-tanstack-stack/reference/library-guides/02-related-libs.md) | 主题解释、边界与反馈练习增强；运行范围另记；全库增强轮次已处理原文与补充教学内容 | 未命中；不代表技术验证通过 |
+| [reference/library-guides/03-language-web-foundations.md](../../../../03-tanstack-stack/reference/library-guides/03-language-web-foundations.md) | 新增文档，教学内容待审查 | 未命中；不代表技术验证通过 |
 | [reference/quick-references/01-syntax-cheatsheet.md](../../../../03-tanstack-stack/reference/quick-references/01-syntax-cheatsheet.md) | 主题解释、边界与反馈练习增强；运行范围另记；全库增强轮次已处理原文与补充教学内容 | 未命中；不代表技术验证通过 |
 | [reference/quick-references/02-troubleshooting.md](../../../../03-tanstack-stack/reference/quick-references/02-troubleshooting.md) | 主题解释、边界与反馈练习增强；运行范围另记；全库增强轮次已处理原文与补充教学内容 | 未命中；不代表技术验证通过 |
 | [testing/01-unit-testing.md](../../../../03-tanstack-stack/testing/01-unit-testing.md) | 正文段落重写与语义纠错；非全篇深审；本轮重写 1 个记录段落 | 未命中；不代表技术验证通过 |
@@ -234,6 +235,9 @@
 
 | 文档 | 本轮处理 | 结构复核线索 |
 |---|---|---|
+| [LEARNING_GUIDE.md](../../../../04-multiplatform-apps/LEARNING_GUIDE.md) | 新增模块导读与完整文章导航 | 未命中；不代表技术验证通过 |
+| [README.md](../../../../04-multiplatform-apps/README.md) | 入口增强；原版本表未全量复核 | 未命中；不代表技术验证通过 |
+| [React Native三端原生应用学习路线.md](../../../../04-multiplatform-apps/React Native三端原生应用学习路线.md) | 正文段落重写与语义纠错；非全篇深审；本轮重写 1 个记录段落 | 未命中；不代表技术验证通过 |
 | [advanced-topics/architecture/01-new-architecture.md](../../../../04-multiplatform-apps/advanced-topics/architecture/01-new-architecture.md) | 主题解释、边界与反馈练习增强；运行范围另记；全库增强轮次已处理原文与补充教学内容 | 未命中；不代表技术验证通过 |
 | [advanced-topics/performance/01-rendering-performance.md](../../../../04-multiplatform-apps/advanced-topics/performance/01-rendering-performance.md) | 主题解释、边界与反馈练习增强；运行范围另记；全库增强轮次已处理原文与补充教学内容 | 未命中；不代表技术验证通过 |
 | [advanced-topics/performance/02-startup-optimization.md](../../../../04-multiplatform-apps/advanced-topics/performance/02-startup-optimization.md) | 主题解释、边界与反馈练习增强；运行范围另记；全库增强轮次已处理原文与补充教学内容 | 未命中；不代表技术验证通过 |
@@ -253,13 +257,10 @@
 | [frameworks/02-react-native-advanced.md](../../../../04-multiplatform-apps/frameworks/02-react-native-advanced.md) | 正文增强：职责、数据流与验收；非全篇深审；本轮重写 1 个记录段落 | 未命中；不代表技术验证通过 |
 | [frameworks/03-ecosystem-integration.md](../../../../04-multiplatform-apps/frameworks/03-ecosystem-integration.md) | 正文增强：职责、数据流与验收；非全篇深审；本轮重写 1 个记录段落 | 未命中；不代表技术验证通过 |
 | [frameworks/04-devtools.md](../../../../04-multiplatform-apps/frameworks/04-devtools.md) | 正文增强：职责、数据流与验收；非全篇深审；本轮重写 1 个记录段落 | 未命中；不代表技术验证通过 |
-| [LEARNING_GUIDE.md](../../../../04-multiplatform-apps/LEARNING_GUIDE.md) | 新增模块导读与完整文章导航 | 未命中；不代表技术验证通过 |
 | [projects/01-todo-app.md](../../../../04-multiplatform-apps/projects/01-todo-app.md) | 正文增强：范围、阶段与验收；非完整工程实测；本轮重写 1 个记录段落 | 未命中；不代表技术验证通过 |
 | [projects/02-weather-app.md](../../../../04-multiplatform-apps/projects/02-weather-app.md) | 正文增强：范围、阶段与验收；非完整工程实测；本轮重写 1 个记录段落 | 未命中；不代表技术验证通过 |
 | [projects/03-chat-app.md](../../../../04-multiplatform-apps/projects/03-chat-app.md) | 正文增强：范围、阶段与验收；非完整工程实测；本轮重写 1 个记录段落 | 未命中；不代表技术验证通过 |
 | [projects/04-production-mobile-app.md](../../../../04-multiplatform-apps/projects/04-production-mobile-app.md) | 正文增强：范围、阶段与验收；非完整工程实测；本轮重写 1 个记录段落 | 未命中；不代表技术验证通过 |
-| [React Native三端原生应用学习路线.md](../../../../04-multiplatform-apps/React Native三端原生应用学习路线.md) | 正文段落重写与语义纠错；非全篇深审；本轮重写 1 个记录段落 | 未命中；不代表技术验证通过 |
-| [README.md](../../../../04-multiplatform-apps/README.md) | 入口增强；原版本表未全量复核 | 未命中；不代表技术验证通过 |
 | [reference/framework-essentials/01-expo-essentials.md](../../../../04-multiplatform-apps/reference/framework-essentials/01-expo-essentials.md) | 主题解释、边界与反馈练习增强；运行范围另记；全库增强轮次已处理原文与补充教学内容 | 未命中；不代表技术验证通过 |
 | [reference/framework-essentials/02-navigation-essentials.md](../../../../04-multiplatform-apps/reference/framework-essentials/02-navigation-essentials.md) | 主题解释、边界与反馈练习增强；运行范围另记；全库增强轮次已处理原文与补充教学内容 | 未命中；不代表技术验证通过 |
 | [reference/framework-essentials/03-config-plugins-prebuild.md](../../../../04-multiplatform-apps/reference/framework-essentials/03-config-plugins-prebuild.md) | 主题解释、边界与反馈练习增强；运行范围另记；全库增强轮次已处理原文与补充教学内容 | 未命中；不代表技术验证通过 |
@@ -291,11 +292,13 @@
 
 | 文档 | 本轮处理 | 结构复核线索 |
 |---|---|---|
+| [Android原生开发学习路线.md](../../../../05-kotlin-compose/Android原生开发学习路线.md) | 主题解释、边界与反馈练习增强；运行范围另记；全库增强轮次已处理原文与补充教学内容 | 未命中；不代表技术验证通过 |
+| [LEARNING_GUIDE.md](../../../../05-kotlin-compose/LEARNING_GUIDE.md) | 新增模块导读与完整文章导航 | 未命中；不代表技术验证通过 |
+| [README.md](../../../../05-kotlin-compose/README.md) | 入口增强；原版本表未全量复核 | 未命中；不代表技术验证通过 |
 | [advanced-topics/architecture/01-app-architecture.md](../../../../05-kotlin-compose/advanced-topics/architecture/01-app-architecture.md) | 主题解释、边界与反馈练习增强；运行范围另记；全库增强轮次已处理原文与补充教学内容 | 未命中；不代表技术验证通过 |
 | [advanced-topics/performance/01-recomposition-optimization.md](../../../../05-kotlin-compose/advanced-topics/performance/01-recomposition-optimization.md) | 正文段落重写与语义纠错；非全篇深审；本轮重写 1 个记录段落 | 未命中；不代表技术验证通过 |
 | [advanced-topics/performance/02-startup-memory.md](../../../../05-kotlin-compose/advanced-topics/performance/02-startup-memory.md) | 正文段落重写与语义纠错；非全篇深审；本轮重写 1 个记录段落 | 未命中；不代表技术验证通过 |
 | [advanced-topics/security/01-security-practices.md](../../../../05-kotlin-compose/advanced-topics/security/01-security-practices.md) | 正文段落重写与语义纠错；非全篇深审；本轮重写 1 个记录段落 | 未命中；不代表技术验证通过 |
-| [Android原生开发学习路线.md](../../../../05-kotlin-compose/Android原生开发学习路线.md) | 主题解释、边界与反馈练习增强；运行范围另记；全库增强轮次已处理原文与补充教学内容 | 未命中；不代表技术验证通过 |
 | [basics/01-environment-setup.md](../../../../05-kotlin-compose/basics/01-environment-setup.md) | 正文增强：概念、自测与反馈；非全篇深审 | 未命中；不代表技术验证通过 |
 | [basics/02-first-compose-app.md](../../../../05-kotlin-compose/basics/02-first-compose-app.md) | 正文增强：概念、自测与反馈；非全篇深审 | 未命中；不代表技术验证通过 |
 | [basics/03-kotlin-syntax-essentials.md](../../../../05-kotlin-compose/basics/03-kotlin-syntax-essentials.md) | 正文增强：概念、自测与反馈；非全篇深审 | 未命中；不代表技术验证通过 |
@@ -311,12 +314,10 @@
 | [frameworks/02-compose-advanced.md](../../../../05-kotlin-compose/frameworks/02-compose-advanced.md) | 正文增强：职责、数据流与验收；非全篇深审；本轮重写 1 个记录段落 | 未命中；不代表技术验证通过 |
 | [frameworks/03-ecosystem-integration.md](../../../../05-kotlin-compose/frameworks/03-ecosystem-integration.md) | 正文增强：职责、数据流与验收；非全篇深审；本轮重写 1 个记录段落 | 未命中；不代表技术验证通过 |
 | [frameworks/04-devtools.md](../../../../05-kotlin-compose/frameworks/04-devtools.md) | 正文增强：职责、数据流与验收；非全篇深审；本轮重写 1 个记录段落 | 未命中；不代表技术验证通过 |
-| [LEARNING_GUIDE.md](../../../../05-kotlin-compose/LEARNING_GUIDE.md) | 新增模块导读与完整文章导航 | 未命中；不代表技术验证通过 |
 | [projects/01-notes-app.md](../../../../05-kotlin-compose/projects/01-notes-app.md) | 正文增强：范围、阶段与验收；非完整工程实测 | 未命中；不代表技术验证通过 |
 | [projects/02-weather-app.md](../../../../05-kotlin-compose/projects/02-weather-app.md) | 正文增强：范围、阶段与验收；非完整工程实测 | 未命中；不代表技术验证通过 |
 | [projects/03-news-reader.md](../../../../05-kotlin-compose/projects/03-news-reader.md) | 正文增强：范围、阶段与验收；非完整工程实测 | 未命中；不代表技术验证通过 |
 | [projects/04-production-android-app.md](../../../../05-kotlin-compose/projects/04-production-android-app.md) | 正文增强：范围、阶段与验收；非完整工程实测 | 未命中；不代表技术验证通过 |
-| [README.md](../../../../05-kotlin-compose/README.md) | 入口增强；原版本表未全量复核 | 未命中；不代表技术验证通过 |
 | [reference/framework-essentials/01-compose-essentials.md](../../../../05-kotlin-compose/reference/framework-essentials/01-compose-essentials.md) | 主题解释、边界与反馈练习增强；运行范围另记；全库增强轮次已处理原文与补充教学内容 | 未命中；不代表技术验证通过 |
 | [reference/framework-essentials/02-compose-material3.md](../../../../05-kotlin-compose/reference/framework-essentials/02-compose-material3.md) | 正文段落重写与语义纠错；非全篇深审；本轮重写 1 个记录段落 | 未命中；不代表技术验证通过 |
 | [reference/framework-essentials/03-side-effects.md](../../../../05-kotlin-compose/reference/framework-essentials/03-side-effects.md) | 主题解释、边界与反馈练习增强；运行范围另记；全库增强轮次已处理原文与补充教学内容 | 未命中；不代表技术验证通过 |
@@ -351,6 +352,8 @@
 
 | 文档 | 本轮处理 | 结构复核线索 |
 |---|---|---|
+| [LEARNING_GUIDE.md](../../../../06-swift-swiftui/LEARNING_GUIDE.md) | 新增模块导读与完整文章导航 | 未命中；不代表技术验证通过 |
+| [README.md](../../../../06-swift-swiftui/README.md) | 入口增强；原版本表未全量复核 | 未命中；不代表技术验证通过 |
 | [advanced-topics/architecture/01-app-architecture.md](../../../../06-swift-swiftui/advanced-topics/architecture/01-app-architecture.md) | 主题解释、边界与反馈练习增强；运行范围另记；全库增强轮次已处理原文与补充教学内容 | 未命中；不代表技术验证通过 |
 | [advanced-topics/performance/01-rendering-performance.md](../../../../06-swift-swiftui/advanced-topics/performance/01-rendering-performance.md) | 主题解释、边界与反馈练习增强；运行范围另记；全库增强轮次已处理原文与补充教学内容 | 未命中；不代表技术验证通过 |
 | [advanced-topics/performance/02-concurrency-optimization.md](../../../../06-swift-swiftui/advanced-topics/performance/02-concurrency-optimization.md) | 主题解释、边界与反馈练习增强；运行范围另记；全库增强轮次已处理原文与补充教学内容 | 未命中；不代表技术验证通过 |
@@ -371,12 +374,10 @@
 | [frameworks/03-ecosystem-integration.md](../../../../06-swift-swiftui/frameworks/03-ecosystem-integration.md) | 正文增强：职责、数据流与验收；非全篇深审；本轮重写 1 个记录段落 | 未命中；不代表技术验证通过 |
 | [frameworks/04-devtools.md](../../../../06-swift-swiftui/frameworks/04-devtools.md) | 正文增强：职责、数据流与验收；非全篇深审；本轮重写 1 个记录段落 | 未命中；不代表技术验证通过 |
 | [iOS原生开发学习路线.md](../../../../06-swift-swiftui/iOS原生开发学习路线.md) | 主题解释、边界与反馈练习增强；运行范围另记；全库增强轮次已处理原文与补充教学内容 | 未命中；不代表技术验证通过 |
-| [LEARNING_GUIDE.md](../../../../06-swift-swiftui/LEARNING_GUIDE.md) | 新增模块导读与完整文章导航 | 未命中；不代表技术验证通过 |
 | [projects/01-notes-app.md](../../../../06-swift-swiftui/projects/01-notes-app.md) | 正文增强：范围、阶段与验收；非完整工程实测 | 未命中；不代表技术验证通过 |
 | [projects/02-weather-app.md](../../../../06-swift-swiftui/projects/02-weather-app.md) | 正文增强：范围、阶段与验收；非完整工程实测 | 未命中；不代表技术验证通过 |
 | [projects/03-habit-tracker.md](../../../../06-swift-swiftui/projects/03-habit-tracker.md) | 正文增强：范围、阶段与验收；非完整工程实测 | 未命中；不代表技术验证通过 |
 | [projects/04-production-ios-app.md](../../../../06-swift-swiftui/projects/04-production-ios-app.md) | 正文增强：范围、阶段与验收；非完整工程实测 | 未命中；不代表技术验证通过 |
-| [README.md](../../../../06-swift-swiftui/README.md) | 入口增强；原版本表未全量复核 | 未命中；不代表技术验证通过 |
 | [reference/framework-essentials/01-swiftui-essentials.md](../../../../06-swift-swiftui/reference/framework-essentials/01-swiftui-essentials.md) | 主题解释、边界与反馈练习增强；运行范围另记；全库增强轮次已处理原文与补充教学内容 | 未命中；不代表技术验证通过 |
 | [reference/framework-essentials/02-swiftdata-observability.md](../../../../06-swift-swiftui/reference/framework-essentials/02-swiftdata-observability.md) | 主题解释、边界与反馈练习增强；运行范围另记；全库增强轮次已处理原文与补充教学内容 | 未命中；不代表技术验证通过 |
 | [reference/framework-essentials/03-state-driven-views.md](../../../../06-swift-swiftui/reference/framework-essentials/03-state-driven-views.md) | 主题解释、边界与反馈练习增强；运行范围另记；全库增强轮次已处理原文与补充教学内容 | 未命中；不代表技术验证通过 |
@@ -413,6 +414,8 @@
 
 | 文档 | 本轮处理 | 结构复核线索 |
 |---|---|---|
+| [LEARNING_GUIDE.md](../../../../07-php-mastery/LEARNING_GUIDE.md) | 新增模块导读与完整文章导航 | 未命中；不代表技术验证通过 |
+| [README.md](../../../../07-php-mastery/README.md) | 入口增强；原版本表未全量复核 | 未命中；不代表技术验证通过 |
 | [advanced-topics/architecture/01-laravel-architecture.md](../../../../07-php-mastery/advanced-topics/architecture/01-laravel-architecture.md) | 主题解释、边界与反馈练习增强；运行范围另记；全库增强轮次已处理原文与补充教学内容 | 未命中；不代表技术验证通过 |
 | [advanced-topics/performance/01-query-optimization.md](../../../../07-php-mastery/advanced-topics/performance/01-query-optimization.md) | 主题解释、边界与反馈练习增强；运行范围另记；全库增强轮次已处理原文与补充教学内容 | 未命中；不代表技术验证通过 |
 | [advanced-topics/performance/02-caching-queues.md](../../../../07-php-mastery/advanced-topics/performance/02-caching-queues.md) | 主题解释、边界与反馈练习增强；运行范围另记；全库增强轮次已处理原文与补充教学内容 | 未命中；不代表技术验证通过 |
@@ -436,12 +439,10 @@
 | [frameworks/02-laravel-advanced.md](../../../../07-php-mastery/frameworks/02-laravel-advanced.md) | 正文增强：职责、数据流与验收；非全篇深审 | 未命中；不代表技术验证通过 |
 | [frameworks/03-ecosystem-integration.md](../../../../07-php-mastery/frameworks/03-ecosystem-integration.md) | 正文增强：职责、数据流与验收；非全篇深审 | 未命中；不代表技术验证通过 |
 | [frameworks/04-devtools.md](../../../../07-php-mastery/frameworks/04-devtools.md) | 正文增强：职责、数据流与验收；非全篇深审 | 未命中；不代表技术验证通过 |
-| [LEARNING_GUIDE.md](../../../../07-php-mastery/LEARNING_GUIDE.md) | 新增模块导读与完整文章导航 | 未命中；不代表技术验证通过 |
 | [projects/01-todo-api.md](../../../../07-php-mastery/projects/01-todo-api.md) | 正文增强：范围、阶段与验收；非完整工程实测 | 未命中；不代表技术验证通过 |
 | [projects/02-blog-platform.md](../../../../07-php-mastery/projects/02-blog-platform.md) | 正文增强：范围、阶段与验收；非完整工程实测 | 教程代码含省略标记，需人工判断 |
 | [projects/03-ecommerce-api.md](../../../../07-php-mastery/projects/03-ecommerce-api.md) | 正文增强：范围、阶段与验收；非完整工程实测 | 未命中；不代表技术验证通过 |
 | [projects/04-production-laravel-app.md](../../../../07-php-mastery/projects/04-production-laravel-app.md) | 正文增强：范围、阶段与验收；非完整工程实测 | 未命中；不代表技术验证通过 |
-| [README.md](../../../../07-php-mastery/README.md) | 入口增强；原版本表未全量复核 | 未命中；不代表技术验证通过 |
 | [reference/framework-essentials/01-laravel-essentials.md](../../../../07-php-mastery/reference/framework-essentials/01-laravel-essentials.md) | 主题解释、边界与反馈练习增强；运行范围另记；全库增强轮次已处理原文与补充教学内容 | 未命中；不代表技术验证通过 |
 | [reference/framework-essentials/02-symfony-essentials.md](../../../../07-php-mastery/reference/framework-essentials/02-symfony-essentials.md) | 主题解释、边界与反馈练习增强；运行范围另记；全库增强轮次已处理原文与补充教学内容 | 未命中；不代表技术验证通过 |
 | [reference/language-concepts/01-php-keywords.md](../../../../07-php-mastery/reference/language-concepts/01-php-keywords.md) | 主题解释、边界与反馈练习增强；运行范围另记；全库增强轮次已处理原文与补充教学内容 | 未命中；不代表技术验证通过 |
@@ -479,6 +480,8 @@
 
 | 文档 | 本轮处理 | 结构复核线索 |
 |---|---|---|
+| [LEARNING_GUIDE.md](../../../../08-java-revisited/LEARNING_GUIDE.md) | 新增模块导读与完整文章导航 | 未命中；不代表技术验证通过 |
+| [README.md](../../../../08-java-revisited/README.md) | 入口增强；原版本表未全量复核 | 未命中；不代表技术验证通过 |
 | [advanced-topics/architecture/01-layered-architecture.md](../../../../08-java-revisited/advanced-topics/architecture/01-layered-architecture.md) | 主题解释、边界与反馈练习增强；运行范围另记；全库增强轮次已处理原文与补充教学内容 | 未命中；不代表技术验证通过 |
 | [advanced-topics/performance/01-jvm-tuning.md](../../../../08-java-revisited/advanced-topics/performance/01-jvm-tuning.md) | 正文段落重写与语义纠错；非全篇深审；本轮重写 1 个记录段落 | 未命中；不代表技术验证通过 |
 | [advanced-topics/performance/02-virtual-threads.md](../../../../08-java-revisited/advanced-topics/performance/02-virtual-threads.md) | 主题解释、边界与反馈练习增强；运行范围另记；全库增强轮次已处理原文与补充教学内容 | 未命中；不代表技术验证通过 |
@@ -490,7 +493,7 @@
 | [basics/05-control-flow.md](../../../../08-java-revisited/basics/05-control-flow.md) | 正文增强：概念、自测与反馈；非全篇深审；本轮重写 1 个记录段落 | 未命中；不代表技术验证通过 |
 | [basics/06-exceptions.md](../../../../08-java-revisited/basics/06-exceptions.md) | 正文增强：概念、自测与反馈；非全篇深审；本轮重写 1 个记录段落 | 未命中；不代表技术验证通过 |
 | [basics/07-modern-features.md](../../../../08-java-revisited/basics/07-modern-features.md) | 正文增强：概念、自测与反馈；非全篇深审；本轮重写 1 个记录段落 | 未命中；不代表技术验证通过 |
-| [basics/08-first-project.md](../../../../08-java-revisited/basics/08-first-project.md) | 正文增强：概念、自测与反馈；非全篇深审 | 未命中；不代表技术验证通过 |
+| [basics/08-first-project.md](../../../../08-java-revisited/basics/08-first-project.md) | 正文增强：概念、自测与反馈；非全篇深审 | 未显式说明阅读前提 |
 | [deployment/01-docker-deployment.md](../../../../08-java-revisited/deployment/01-docker-deployment.md) | 正文段落重写与语义纠错；非全篇深审；本轮重写 1 个记录段落 | 未命中；不代表技术验证通过 |
 | [deployment/02-kubernetes-deployment.md](../../../../08-java-revisited/deployment/02-kubernetes-deployment.md) | 正文段落重写与语义纠错；非全篇深审；本轮重写 1 个记录段落 | 缺少明确结果信号 |
 | [deployment/03-ci-cd-observability.md](../../../../08-java-revisited/deployment/03-ci-cd-observability.md) | 正文段落重写与语义纠错；非全篇深审；本轮重写 1 个记录段落 | 未命中；不代表技术验证通过 |
@@ -498,12 +501,10 @@
 | [frameworks/02-spring-boot-advanced.md](../../../../08-java-revisited/frameworks/02-spring-boot-advanced.md) | 正文增强：职责、数据流与验收；非全篇深审；本轮重写 1 个记录段落 | 未命中；不代表技术验证通过 |
 | [frameworks/03-ecosystem-integration.md](../../../../08-java-revisited/frameworks/03-ecosystem-integration.md) | 正文增强：职责、数据流与验收；非全篇深审；本轮重写 1 个记录段落 | 未命中；不代表技术验证通过 |
 | [frameworks/04-devtools.md](../../../../08-java-revisited/frameworks/04-devtools.md) | 正文增强：职责、数据流与验收；非全篇深审；本轮重写 1 个记录段落 | 未命中；不代表技术验证通过 |
-| [LEARNING_GUIDE.md](../../../../08-java-revisited/LEARNING_GUIDE.md) | 新增模块导读与完整文章导航 | 未命中；不代表技术验证通过 |
 | [projects/01-todo-api.md](../../../../08-java-revisited/projects/01-todo-api.md) | 正文增强：范围、阶段与验收；非完整工程实测 | 教程代码含省略标记，需人工判断 |
 | [projects/02-library-management.md](../../../../08-java-revisited/projects/02-library-management.md) | 正文增强：范围、阶段与验收；非完整工程实测；本轮重写 1 个记录段落 | 未命中；不代表技术验证通过 |
 | [projects/03-order-system.md](../../../../08-java-revisited/projects/03-order-system.md) | 正文增强：范围、阶段与验收；非完整工程实测；本轮重写 1 个记录段落 | 未命中；不代表技术验证通过 |
 | [projects/04-production-spring-app.md](../../../../08-java-revisited/projects/04-production-spring-app.md) | 正文增强：范围、阶段与验收；非完整工程实测；本轮重写 1 个记录段落 | 未命中；不代表技术验证通过 |
-| [README.md](../../../../08-java-revisited/README.md) | 入口增强；原版本表未全量复核 | 未命中；不代表技术验证通过 |
 | [reference/framework-essentials/01-spring-boot-essentials.md](../../../../08-java-revisited/reference/framework-essentials/01-spring-boot-essentials.md) | 正文段落重写与语义纠错；非全篇深审；本轮重写 1 个记录段落 | 未命中；不代表技术验证通过 |
 | [reference/framework-essentials/02-jpa-essentials.md](../../../../08-java-revisited/reference/framework-essentials/02-jpa-essentials.md) | 正文段落重写与语义纠错；非全篇深审；本轮重写 1 个记录段落 | 未命中；不代表技术验证通过 |
 | [reference/framework-essentials/03-ioc-di-essentials.md](../../../../08-java-revisited/reference/framework-essentials/03-ioc-di-essentials.md) | 主题解释、边界与反馈练习增强；运行范围另记；全库增强轮次已处理原文与补充教学内容 | 未命中；不代表技术验证通过 |
@@ -541,6 +542,8 @@
 
 | 文档 | 本轮处理 | 结构复核线索 |
 |---|---|---|
+| [LEARNING_GUIDE.md](../../../../09-nodejs-backend/LEARNING_GUIDE.md) | 新增模块导读与完整文章导航 | 未命中；不代表技术验证通过 |
+| [README.md](../../../../09-nodejs-backend/README.md) | 入口增强；原版本表未全量复核 | 未命中；不代表技术验证通过 |
 | [advanced-topics/architecture/01-service-architecture.md](../../../../09-nodejs-backend/advanced-topics/architecture/01-service-architecture.md) | 主题解释、边界与反馈练习增强；运行范围另记；全库增强轮次已处理原文与补充教学内容 | 未命中；不代表技术验证通过 |
 | [advanced-topics/performance/01-event-loop.md](../../../../09-nodejs-backend/advanced-topics/performance/01-event-loop.md) | 主题解释、边界与反馈练习增强；运行范围另记；全库增强轮次已处理原文与补充教学内容 | 未命中；不代表技术验证通过 |
 | [advanced-topics/performance/02-streaming-clustering.md](../../../../09-nodejs-backend/advanced-topics/performance/02-streaming-clustering.md) | 主题解释、边界与反馈练习增强；运行范围另记；全库增强轮次已处理原文与补充教学内容 | 未命中；不代表技术验证通过 |
@@ -560,12 +563,10 @@
 | [frameworks/02-hono-advanced.md](../../../../09-nodejs-backend/frameworks/02-hono-advanced.md) | 正文增强：职责、数据流与验收；非全篇深审；本轮重写 1 个记录段落 | 未命中；不代表技术验证通过 |
 | [frameworks/03-ecosystem-integration.md](../../../../09-nodejs-backend/frameworks/03-ecosystem-integration.md) | 正文增强：职责、数据流与验收；非全篇深审；本轮重写 1 个记录段落 | 未命中；不代表技术验证通过 |
 | [frameworks/04-devtools.md](../../../../09-nodejs-backend/frameworks/04-devtools.md) | 正文增强：职责、数据流与验收；非全篇深审；本轮重写 1 个记录段落 | 未命中；不代表技术验证通过 |
-| [LEARNING_GUIDE.md](../../../../09-nodejs-backend/LEARNING_GUIDE.md) | 新增模块导读与完整文章导航 | 未命中；不代表技术验证通过 |
 | [projects/01-todo-api.md](../../../../09-nodejs-backend/projects/01-todo-api.md) | 正文增强：范围、阶段与验收；非完整工程实测 | 未命中；不代表技术验证通过 |
 | [projects/02-auth-service.md](../../../../09-nodejs-backend/projects/02-auth-service.md) | 正文增强：范围、阶段与验收；非完整工程实测 | 未命中；不代表技术验证通过 |
 | [projects/03-file-storage-service.md](../../../../09-nodejs-backend/projects/03-file-storage-service.md) | 正文增强：范围、阶段与验收；非完整工程实测；本轮重写 1 个记录段落 | 未命中；不代表技术验证通过 |
 | [projects/04-production-nodejs-api.md](../../../../09-nodejs-backend/projects/04-production-nodejs-api.md) | 正文增强：范围、阶段与验收；非完整工程实测 | 未命中；不代表技术验证通过 |
-| [README.md](../../../../09-nodejs-backend/README.md) | 入口增强；原版本表未全量复核 | 未命中；不代表技术验证通过 |
 | [reference/framework-essentials/01-hono-essentials.md](../../../../09-nodejs-backend/reference/framework-essentials/01-hono-essentials.md) | 主题解释、边界与反馈练习增强；运行范围另记；全库增强轮次已处理原文与补充教学内容 | 未命中；不代表技术验证通过 |
 | [reference/framework-essentials/02-fastify-nestjs.md](../../../../09-nodejs-backend/reference/framework-essentials/02-fastify-nestjs.md) | 主题解释、边界与反馈练习增强；运行范围另记；全库增强轮次已处理原文与补充教学内容 | 未命中；不代表技术验证通过 |
 | [reference/language-concepts/01-js-modern-syntax.md](../../../../09-nodejs-backend/reference/language-concepts/01-js-modern-syntax.md) | 主题解释、边界与反馈练习增强；运行范围另记；全库增强轮次已处理原文与补充教学内容 | 未命中；不代表技术验证通过 |
@@ -596,6 +597,8 @@
 
 | 文档 | 本轮处理 | 结构复核线索 |
 |---|---|---|
+| [LEARNING_GUIDE.md](../../../../10-python-discovery/LEARNING_GUIDE.md) | 新增模块导读与完整文章导航 | 未命中；不代表技术验证通过 |
+| [README.md](../../../../10-python-discovery/README.md) | 入口增强；原版本表未全量复核 | 未命中；不代表技术验证通过 |
 | [advanced-topics/architecture/01-project-architecture.md](../../../../10-python-discovery/advanced-topics/architecture/01-project-architecture.md) | 主题解释、边界与反馈练习增强；运行范围另记；全库增强轮次已处理原文与补充教学内容 | 未命中；不代表技术验证通过 |
 | [advanced-topics/performance/01-async-python.md](../../../../10-python-discovery/advanced-topics/performance/01-async-python.md) | 主题解释、边界与反馈练习增强；运行范围另记；全库增强轮次已处理原文与补充教学内容 | 未命中；不代表技术验证通过 |
 | [advanced-topics/performance/02-profiling-optimization.md](../../../../10-python-discovery/advanced-topics/performance/02-profiling-optimization.md) | 主题解释、边界与反馈练习增强；运行范围另记；全库增强轮次已处理原文与补充教学内容 | 未命中；不代表技术验证通过 |
@@ -615,12 +618,10 @@
 | [frameworks/02-fastapi-advanced.md](../../../../10-python-discovery/frameworks/02-fastapi-advanced.md) | 正文增强：职责、数据流与验收；非全篇深审；本轮重写 1 个记录段落 | 未命中；不代表技术验证通过 |
 | [frameworks/03-ecosystem-integration.md](../../../../10-python-discovery/frameworks/03-ecosystem-integration.md) | 正文增强：职责、数据流与验收；非全篇深审；本轮重写 1 个记录段落 | 未命中；不代表技术验证通过 |
 | [frameworks/04-devtools.md](../../../../10-python-discovery/frameworks/04-devtools.md) | 正文增强：职责、数据流与验收；非全篇深审；本轮重写 1 个记录段落 | 未命中；不代表技术验证通过 |
-| [LEARNING_GUIDE.md](../../../../10-python-discovery/LEARNING_GUIDE.md) | 新增模块导读与完整文章导航 | 未命中；不代表技术验证通过 |
 | [projects/01-todo-api.md](../../../../10-python-discovery/projects/01-todo-api.md) | 正文增强：范围、阶段与验收；非完整工程实测 | 未命中；不代表技术验证通过 |
 | [projects/02-url-shortener.md](../../../../10-python-discovery/projects/02-url-shortener.md) | 正文增强：范围、阶段与验收；非完整工程实测 | 教程代码含省略标记，需人工判断 |
 | [projects/03-data-pipeline.md](../../../../10-python-discovery/projects/03-data-pipeline.md) | 正文增强：范围、阶段与验收；非完整工程实测 | 未命中；不代表技术验证通过 |
 | [projects/04-production-fastapi-app.md](../../../../10-python-discovery/projects/04-production-fastapi-app.md) | 正文增强：范围、阶段与验收；非完整工程实测 | 未命中；不代表技术验证通过 |
-| [README.md](../../../../10-python-discovery/README.md) | 入口增强；原版本表未全量复核 | 未命中；不代表技术验证通过 |
 | [reference/framework-essentials/01-fastapi-essentials.md](../../../../10-python-discovery/reference/framework-essentials/01-fastapi-essentials.md) | 主题解释、边界与反馈练习增强；运行范围另记；全库增强轮次已处理原文与补充教学内容 | 未命中；不代表技术验证通过 |
 | [reference/framework-essentials/02-django-flask.md](../../../../10-python-discovery/reference/framework-essentials/02-django-flask.md) | 主题解释、边界与反馈练习增强；运行范围另记；全库增强轮次已处理原文与补充教学内容 | 未命中；不代表技术验证通过 |
 | [reference/framework-essentials/03-uv-package-manager.md](../../../../10-python-discovery/reference/framework-essentials/03-uv-package-manager.md) | 主题解释、边界与反馈练习增强；运行范围另记；全库增强轮次已处理原文与补充教学内容 | 未命中；不代表技术验证通过 |
@@ -657,6 +658,8 @@
 
 | 文档 | 本轮处理 | 结构复核线索 |
 |---|---|---|
+| [LEARNING_GUIDE.md](../../../../11-rust-cross-platform/LEARNING_GUIDE.md) | 新增模块导读与完整文章导航 | 未命中；不代表技术验证通过 |
+| [README.md](../../../../11-rust-cross-platform/README.md) | 入口增强；原版本表未全量复核 | 未命中；不代表技术验证通过 |
 | [advanced-topics/01-memory-layout-performance.md](../../../../11-rust-cross-platform/advanced-topics/01-memory-layout-performance.md) | 正文段落重写与语义纠错；非全篇深审；本轮重写 1 个记录段落 | 未命中；不代表技术验证通过 |
 | [advanced-topics/02-ffi-bindgen.md](../../../../11-rust-cross-platform/advanced-topics/02-ffi-bindgen.md) | 正文段落重写与语义纠错；非全篇深审；本轮重写 1 个记录段落 | 未命中；不代表技术验证通过 |
 | [advanced-topics/03-wasm32-target.md](../../../../11-rust-cross-platform/advanced-topics/03-wasm32-target.md) | 正文段落重写与语义纠错；非全篇深审；本轮重写 1 个记录段落 | 未命中；不代表技术验证通过 |
@@ -682,13 +685,11 @@
 | [frameworks/05-state-and-database-sqlx.md](../../../../11-rust-cross-platform/frameworks/05-state-and-database-sqlx.md) | 正文增强：职责、数据流与验收；非全篇深审；本轮重写 1 个记录段落 | 未命中；不代表技术验证通过 |
 | [frameworks/06-auth-middleware.md](../../../../11-rust-cross-platform/frameworks/06-auth-middleware.md) | 正文增强：职责、数据流与验收；非全篇深审；本轮重写 1 个记录段落 | 未命中；不代表技术验证通过 |
 | [frameworks/07-desktop-packaging.md](../../../../11-rust-cross-platform/frameworks/07-desktop-packaging.md) | 正文增强：职责、数据流与验收；非全篇深审；本轮重写 1 个记录段落 | 未命中；不代表技术验证通过 |
-| [LEARNING_GUIDE.md](../../../../11-rust-cross-platform/LEARNING_GUIDE.md) | 新增模块导读与完整文章导航 | 未命中；不代表技术验证通过 |
 | [projects/01-cli-tool.md](../../../../11-rust-cross-platform/projects/01-cli-tool.md) | 正文增强：范围、阶段与验收；非完整工程实测；本轮重写 1 个记录段落 | 未命中；不代表技术验证通过 |
 | [projects/02-tauri-notes-app.md](../../../../11-rust-cross-platform/projects/02-tauri-notes-app.md) | 正文增强：范围、阶段与验收；非完整工程实测；本轮重写 1 个记录段落 | 未命中；不代表技术验证通过 |
 | [projects/03-axum-rest-api.md](../../../../11-rust-cross-platform/projects/03-axum-rest-api.md) | 正文增强：范围、阶段与验收；非完整工程实测；本轮重写 1 个记录段落 | 未命中；不代表技术验证通过 |
 | [projects/04-websocket-realtime.md](../../../../11-rust-cross-platform/projects/04-websocket-realtime.md) | 正文增强：范围、阶段与验收；非完整工程实测；本轮重写 1 个记录段落 | 未命中；不代表技术验证通过 |
 | [projects/05-multiplatform-release.md](../../../../11-rust-cross-platform/projects/05-multiplatform-release.md) | 正文增强：范围、阶段与验收；非完整工程实测；本轮重写 1 个记录段落 | 未命中；不代表技术验证通过 |
-| [README.md](../../../../11-rust-cross-platform/README.md) | 入口增强；原版本表未全量复核 | 未命中；不代表技术验证通过 |
 | [reference/framework-essentials/09-tauri-2-essentials.md](../../../../11-rust-cross-platform/reference/framework-essentials/09-tauri-2-essentials.md) | 正文段落重写与语义纠错；非全篇深审；本轮重写 1 个记录段落 | 未命中；不代表技术验证通过 |
 | [reference/framework-essentials/10-tauri-ipc-commands.md](../../../../11-rust-cross-platform/reference/framework-essentials/10-tauri-ipc-commands.md) | 正文段落重写与语义纠错；非全篇深审；本轮重写 1 个记录段落 | 未命中；不代表技术验证通过 |
 | [reference/framework-essentials/11-axum-essentials.md](../../../../11-rust-cross-platform/reference/framework-essentials/11-axum-essentials.md) | 正文段落重写与语义纠错；非全篇深审；本轮重写 1 个记录段落 | 未命中；不代表技术验证通过 |

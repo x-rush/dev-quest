@@ -1,5 +1,5 @@
 {
-  "python": "3.12.14",
+  "python": "3.12.3",
   "results": [
     {
       "case": "python-0.py",
@@ -10,7 +10,7 @@
     {
       "case": "python-1.py",
       "status": "PASS",
-      "output": "3\n",
+      "output": "keywords-control-flow: first=3; missing=True\n",
       "source": "10-python-discovery/reference/language-concepts/01-python-keywords.md"
     },
     {

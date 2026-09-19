@@ -6,6 +6,7 @@
 
 保存为 `builtins.mjs`，执行 `node builtins.mjs`。预期输出是 `2,7,10`、`19`、`false`、`true`、`true`，各占一行。
 
+<!-- verification-case: shared-js-builtins-data-cleaning -->
 ```js
 const raw = ["7", "2", "bad", "10", "2"];
 const numbers = raw.map(Number).filter(Number.isFinite);

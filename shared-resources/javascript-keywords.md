@@ -88,6 +88,7 @@ console.log(settings.nested.enabled);     // true：对象展开不是深拷贝
 
 保存为 `keywords.mjs`，用 `node keywords.mjs` 运行。只用基础语言能力，不需要 npm 依赖。
 
+<!-- verification-case: shared-js-keywords-binding-flow -->
 ```js
 const tasks = [{ title: "read", done: false }];
 tasks[0].done = true; // 修改对象允许；tasks = [] 则不允许

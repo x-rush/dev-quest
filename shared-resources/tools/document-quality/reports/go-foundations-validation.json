@@ -1,0 +1,750 @@
+{
+  "scope": [
+    "01-go-backend/reference/language-concepts/01-go-keywords.md",
+    "01-go-backend/reference/language-concepts/02-go-built-in-functions.md"
+  ],
+  "tool": {
+    "command": [
+      "go",
+      "version"
+    ],
+    "cwd": "/source",
+    "returncode": 0,
+    "stdout": "go version go1.27.1 linux/amd64\n",
+    "stderr": ""
+  },
+  "environment": {
+    "GOTOOLCHAIN": "local",
+    "GOPROXY": "off",
+    "GOSUMDB": "off",
+    "GOWORK": "off"
+  },
+  "total": 20,
+  "passed": 20,
+  "results": [
+    {
+      "id": "keyword-package",
+      "file": "01-go-backend/reference/language-concepts/01-go-keywords.md",
+      "line": 53,
+      "kind": "example",
+      "source_sha256": "a8e1a15bd183f45ca532df8b3eb511b32cf816f2fd3883bc3d58e48044cda634",
+      "project_files": {
+        "main.go": "package main\n\nimport output \"fmt\"\n\nfunc main() {\n    output.Println(\"package name is not an import path\")\n}\n",
+        "go.mod": "module example.com/devquest/foundations\n\ngo 1.27\n"
+      },
+      "expected_stdout": "package name is not an import path\n",
+      "expected_stderr": "",
+      "expected_diagnostic": null,
+      "build": {
+        "command": [
+          "go",
+          "build",
+          "-o",
+          "/tmp/go-foundations-crmr7ny9/example",
+          "."
+        ],
+        "cwd": "/tmp/go-foundations-crmr7ny9",
+        "returncode": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "execution": {
+        "command": [
+          "/tmp/go-foundations-crmr7ny9/example"
+        ],
+        "cwd": "/tmp/go-foundations-crmr7ny9",
+        "returncode": 0,
+        "stdout": "package name is not an import path\n",
+        "stderr": ""
+      },
+      "passed": true
+    },
+    {
+      "id": "keyword-declarations",
+      "file": "01-go-backend/reference/language-concepts/01-go-keywords.md",
+      "line": 84,
+      "kind": "example",
+      "source_sha256": "9eb9ce89682c3c74a5c9ed7c292f279d6bc8a22b1db1cd3aef80ebeb3658bf36",
+      "project_files": {
+        "main.go": "package main\n\nimport \"fmt\"\n\ntype ID int\ntype Label = string\n\ntype User struct {\n    ID ID\n    Title Label\n}\n\nfunc (u User) Name() string { return u.Title }\n\ntype Named interface {\n    Name() string\n}\n\nconst (\n    pending = iota\n    active\n)\n\nfunc doubled(x int) (result int) {\n    result = x * 2\n    return\n}\n\nfunc main() {\n    var empty string\n    var user = User{ID: ID(7), Title: \"Ada\"}\n    var named Named = user\n    fmt.Printf(\"%q %d %d %s\\n\", empty, pending, active, named.Name())\n    factor := 3\n    multiply := func(x int) int { return x * factor }\n    fmt.Println(doubled(4), multiply(4))\n}\n",
+        "go.mod": "module example.com/devquest/foundations\n\ngo 1.27\n"
+      },
+      "expected_stdout": "\"\" 0 1 Ada\n8 12\n",
+      "expected_stderr": "",
+      "expected_diagnostic": null,
+      "build": {
+        "command": [
+          "go",
+          "build",
+          "-o",
+          "/tmp/go-foundations-hnczzy2q/example",
+          "."
+        ],
+        "cwd": "/tmp/go-foundations-hnczzy2q",
+        "returncode": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "execution": {
+        "command": [
+          "/tmp/go-foundations-hnczzy2q/example"
+        ],
+        "cwd": "/tmp/go-foundations-hnczzy2q",
+        "returncode": 0,
+        "stdout": "\"\" 0 1 Ada\n8 12\n",
+        "stderr": ""
+      },
+      "passed": true
+    },
+    {
+      "id": "keyword-decisions-seventh",
+      "file": "01-go-backend/reference/language-concepts/01-go-keywords.md",
+      "line": 145,
+      "kind": "example",
+      "source_sha256": "ee6129cb986eb865d0667751c5e5de7a9dbec6bc99d62a0a195c1e7c5d578503",
+      "project_files": {
+        "main.go": "package main\n\nimport \"fmt\"\n\nfunc classify(score int) string {\n    if score < 0 || score > 100 {\n        return \"invalid\"\n    } else if score == 100 {\n        return \"perfect\"\n    }\n    switch {\n    case score >= 80:\n        return \"pass\"\n    default:\n        return \"retry\"\n    }\n}\n\nfunc main() {\n    fmt.Println(classify(-1), classify(85), classify(100))\n    switch n := 2; n {\n    case 2:\n        fmt.Println(\"matched 2\")\n        fallthrough\n    case 99:\n        fmt.Println(\"ran body of 99\")\n    }\n    var value any = \"hello\"\n    switch v := value.(type) {\n    case string:\n        fmt.Println(\"string bytes:\", len(v))\n    case int:\n        fmt.Println(\"integer:\", v)\n    default:\n        fmt.Println(\"other\")\n    }\n}\n",
+        "go.mod": "module example.com/devquest/foundations\n\ngo 1.27\n"
+      },
+      "expected_stdout": "invalid pass perfect\nmatched 2\nran body of 99\nstring bytes: 5\n",
+      "expected_stderr": "",
+      "expected_diagnostic": null,
+      "build": {
+        "command": [
+          "go",
+          "build",
+          "-o",
+          "/tmp/go-foundations-l6c4s2ac/example",
+          "."
+        ],
+        "cwd": "/tmp/go-foundations-l6c4s2ac",
+        "returncode": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "execution": {
+        "command": [
+          "/tmp/go-foundations-l6c4s2ac/example"
+        ],
+        "cwd": "/tmp/go-foundations-l6c4s2ac",
+        "returncode": 0,
+        "stdout": "invalid pass perfect\nmatched 2\nran body of 99\nstring bytes: 5\n",
+        "stderr": ""
+      },
+      "passed": true
+    },
+    {
+      "id": "keyword-loops",
+      "file": "01-go-backend/reference/language-concepts/01-go-keywords.md",
+      "line": 214,
+      "kind": "example",
+      "source_sha256": "b8cdc799d45baaf2cd610f12dc183cd9ec1b88a19fac4d0483b60d7444b169dc",
+      "project_files": {
+        "main.go": "package main\n\nimport \"fmt\"\n\nfunc firstThree(yield func(int) bool) {\n    for i := range 3 {\n        if !yield(i) {\n            return\n        }\n    }\n}\n\nfunc main() {\n    sum := 0\nOuter:\n    for i := 0; i < 3; i++ {\n        for j := 0; j < 3; j++ {\n            if i == 1 { break Outer }\n            if j == 1 { continue }\n            sum += j\n        }\n    }\n    fmt.Println(\"sum:\", sum)\n\n    items := []int{1, 2}\n    for _, item := range items { item *= 10 }\n    fmt.Println(\"copy:\", items)\n    for i := range items { items[i] *= 10 }\n    fmt.Println(\"index:\", items)\n    for offset, r := range \"A中\" { fmt.Printf(\"%d:%c\\n\", offset, r) }\n\n    fresh := []func() int{}\n    for i := range 3 {\n        fresh = append(fresh, func() int { return i })\n    }\n    shared := []func() int{}\n    var j int\n    for j = range 3 {\n        shared = append(shared, func() int { return j })\n    }\n    fmt.Println(\"fresh:\", fresh[0](), fresh[1](), fresh[2]())\n    fmt.Println(\"shared:\", shared[0](), shared[1](), shared[2]())\n    values := []int{}\n    for v := range firstThree {\n        if v == 2 { break }\n        values = append(values, v)\n    }\n    fmt.Println(\"iterator:\", values)\n}\n",
+        "go.mod": "module example.com/devquest/foundations\n\ngo 1.27\n"
+      },
+      "expected_stdout": "sum: 2\ncopy: [1 2]\nindex: [10 20]\n0:A\n1:中\nfresh: 0 1 2\nshared: 2 2 2\niterator: [0 1]\n",
+      "expected_stderr": "",
+      "expected_diagnostic": null,
+      "build": {
+        "command": [
+          "go",
+          "build",
+          "-o",
+          "/tmp/go-foundations-i37ur9hs/example",
+          "."
+        ],
+        "cwd": "/tmp/go-foundations-i37ur9hs",
+        "returncode": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "execution": {
+        "command": [
+          "/tmp/go-foundations-i37ur9hs/example"
+        ],
+        "cwd": "/tmp/go-foundations-i37ur9hs",
+        "returncode": 0,
+        "stdout": "sum: 2\ncopy: [1 2]\nindex: [10 20]\n0:A\n1:中\nfresh: 0 1 2\nshared: 2 2 2\niterator: [0 1]\n",
+        "stderr": ""
+      },
+      "passed": true
+    },
+    {
+      "id": "keyword-defer",
+      "file": "01-go-backend/reference/language-concepts/01-go-keywords.md",
+      "line": 288,
+      "kind": "example",
+      "source_sha256": "9857fa60cd4ac4c0b3c7435b0f1f552798a1fb65d280a8cdbfd4c06df19db028",
+      "project_files": {
+        "main.go": "package main\n\nimport \"fmt\"\n\nfunc unnamed() int {\n    result := 1\n    defer func() { result *= 2 }()\n    return result\n}\n\nfunc named() (result int) {\n    defer func() { result *= 2 }()\n    return 1\n}\n\nfunc showOrder() {\n    x := 1\n    defer fmt.Println(\"argument:\", x)\n    defer func() { fmt.Println(\"closure:\", x) }()\n    x = 2\n    fmt.Println(\"body:\", x)\n}\n\nfunc main() {\n    fmt.Println(unnamed(), named())\n    showOrder()\n}\n",
+        "go.mod": "module example.com/devquest/foundations\n\ngo 1.27\n"
+      },
+      "expected_stdout": "1 2\nbody: 2\nclosure: 2\nargument: 1\n",
+      "expected_stderr": "",
+      "expected_diagnostic": null,
+      "build": {
+        "command": [
+          "go",
+          "build",
+          "-o",
+          "/tmp/go-foundations-54nxaohs/example",
+          "."
+        ],
+        "cwd": "/tmp/go-foundations-54nxaohs",
+        "returncode": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "execution": {
+        "command": [
+          "/tmp/go-foundations-54nxaohs/example"
+        ],
+        "cwd": "/tmp/go-foundations-54nxaohs",
+        "returncode": 0,
+        "stdout": "1 2\nbody: 2\nclosure: 2\nargument: 1\n",
+        "stderr": ""
+      },
+      "passed": true
+    },
+    {
+      "id": "keyword-concurrency",
+      "file": "01-go-backend/reference/language-concepts/01-go-keywords.md",
+      "line": 338,
+      "kind": "example",
+      "source_sha256": "c4f1209406ec204f211d0d749d98f20c0ea6240798a25707d5ef9f4f9f8de82e",
+      "project_files": {
+        "main.go": "package main\n\nimport \"fmt\"\n\nfunc produce(out chan<- int) {\n    defer close(out) // 只有这个生产者负责发送和关闭。\n    for i := range 3 { out <- i * i }\n}\n\nfunc main() {\n    out := make(chan int)\n    go produce(out)\n    values := []int{}\n    for v := range out { values = append(values, v) }\n    fmt.Println(\"values:\", values)\n\n    var disabled <-chan int\n    select {\n    case <-disabled:\n        fmt.Println(\"unreachable\")\n    default:\n        fmt.Println(\"nothing ready\")\n    }\n    select {\n    case v, ok := <-out:\n        fmt.Println(\"closed:\", v, ok)\n    default:\n        fmt.Println(\"unreachable\")\n    }\n}\n",
+        "go.mod": "module example.com/devquest/foundations\n\ngo 1.27\n"
+      },
+      "expected_stdout": "values: [0 1 4]\nnothing ready\nclosed: 0 false\n",
+      "expected_stderr": "",
+      "expected_diagnostic": null,
+      "build": {
+        "command": [
+          "go",
+          "build",
+          "-o",
+          "/tmp/go-foundations-7f9wbdor/example",
+          "."
+        ],
+        "cwd": "/tmp/go-foundations-7f9wbdor",
+        "returncode": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "execution": {
+        "command": [
+          "/tmp/go-foundations-7f9wbdor/example"
+        ],
+        "cwd": "/tmp/go-foundations-7f9wbdor",
+        "returncode": 0,
+        "stdout": "values: [0 1 4]\nnothing ready\nclosed: 0 false\n",
+        "stderr": ""
+      },
+      "passed": true
+    },
+    {
+      "id": "keyword-map",
+      "file": "01-go-backend/reference/language-concepts/01-go-keywords.md",
+      "line": 388,
+      "kind": "example",
+      "source_sha256": "988ed562ff9efb29db0a889935395aaa685cb2bb3c2e5e1a4ad434bfcad2ff94",
+      "project_files": {
+        "main.go": "package main\n\nimport \"fmt\"\n\nfunc main() {\n    var scores map[string]int\n    value, ok := scores[\"Ada\"]\n    fmt.Println(value, ok, len(scores))\n    scores = make(map[string]int)\n    scores[\"Ada\"] = 0\n    value, ok = scores[\"Ada\"]\n    fmt.Println(value, ok, len(scores))\n    alias := scores\n    alias[\"Ada\"] = 9\n    fmt.Println(scores[\"Ada\"])\n}\n",
+        "go.mod": "module example.com/devquest/foundations\n\ngo 1.27\n"
+      },
+      "expected_stdout": "0 false 0\n0 true 1\n9\n",
+      "expected_stderr": "",
+      "expected_diagnostic": null,
+      "build": {
+        "command": [
+          "go",
+          "build",
+          "-o",
+          "/tmp/go-foundations-8lroyqkm/example",
+          "."
+        ],
+        "cwd": "/tmp/go-foundations-8lroyqkm",
+        "returncode": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "execution": {
+        "command": [
+          "/tmp/go-foundations-8lroyqkm/example"
+        ],
+        "cwd": "/tmp/go-foundations-8lroyqkm",
+        "returncode": 0,
+        "stdout": "0 false 0\n0 true 1\n9\n",
+        "stderr": ""
+      },
+      "passed": true
+    },
+    {
+      "id": "keyword-goto",
+      "file": "01-go-backend/reference/language-concepts/01-go-keywords.md",
+      "line": 422,
+      "kind": "example",
+      "source_sha256": "ae4b73a48724b7f2fe96f55a8f0d43c7feafadb82b561c8b7a08b8ba9614e656",
+      "project_files": {
+        "main.go": "package main\n\nimport \"fmt\"\n\nfunc main() {\n    n := 0\nAgain:\n    fmt.Println(n)\n    n++\n    if n < 2 { goto Again }\n}\n",
+        "go.mod": "module example.com/devquest/foundations\n\ngo 1.27\n"
+      },
+      "expected_stdout": "0\n1\n",
+      "expected_stderr": "",
+      "expected_diagnostic": null,
+      "build": {
+        "command": [
+          "go",
+          "build",
+          "-o",
+          "/tmp/go-foundations-9seb80oi/example",
+          "."
+        ],
+        "cwd": "/tmp/go-foundations-9seb80oi",
+        "returncode": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "execution": {
+        "command": [
+          "/tmp/go-foundations-9seb80oi/example"
+        ],
+        "cwd": "/tmp/go-foundations-9seb80oi",
+        "returncode": 0,
+        "stdout": "0\n1\n",
+        "stderr": ""
+      },
+      "passed": true
+    },
+    {
+      "id": "keyword-goto-scope",
+      "file": "01-go-backend/reference/language-concepts/01-go-keywords.md",
+      "line": 446,
+      "kind": "compile-error",
+      "source_sha256": "6df25384fc2e454dcca044650842c1f661ab57d9c68f6049be868d12d1235912",
+      "project_files": {
+        "main.go": "package main\n\nfunc main() {\n    goto Done\n    x := 1\nDone:\n    println(x)\n}\n",
+        "go.mod": "module example.com/devquest/foundations\n\ngo 1.27\n"
+      },
+      "expected_stdout": "",
+      "expected_stderr": "",
+      "expected_diagnostic": "jumps over declaration",
+      "build": {
+        "command": [
+          "go",
+          "build",
+          "-o",
+          "/tmp/go-foundations-hbcp7d2z/example",
+          "."
+        ],
+        "cwd": "/tmp/go-foundations-hbcp7d2z",
+        "returncode": 1,
+        "stdout": "",
+        "stderr": "# example.com/devquest/foundations\n./main.go:4:10: goto Done jumps over declaration of x at ./main.go:5:7\n"
+      },
+      "execution": null,
+      "passed": true
+    },
+    {
+      "id": "keyword-predeclared",
+      "file": "01-go-backend/reference/language-concepts/01-go-keywords.md",
+      "line": 480,
+      "kind": "example",
+      "source_sha256": "67fd8b703d6ccb0147194b90a8029ee8c6708fd5504aaf8d3476d7ab5020a1cc",
+      "project_files": {
+        "main.go": "package main\n\nimport \"fmt\"\n\ntype titleError string\n\nfunc (e titleError) Error() string { return string(e) }\n\nfunc unique[T comparable](values []T) []T {\n    seen := make(map[T]bool)\n    result := []T{}\n    for _, value := range values {\n        if !seen[value] {\n            seen[value] = true\n            result = append(result, value)\n        }\n    }\n    return result\n}\n\nfunc main() {\n    var octet byte = 65\n    var codePoint rune = '中'\n    var unknown any = codePoint\n    var err error = titleError(\"empty title\")\n    var missing *int\n    fmt.Printf(\"%T %T %T\\n\", octet, codePoint, unknown)\n    fmt.Println(err.Error(), missing == nil, true && !false)\n    fmt.Println(unique([]string{\"Go\", \"Go\", \"SQL\"}))\n}\n",
+        "go.mod": "module example.com/devquest/foundations\n\ngo 1.27\n"
+      },
+      "expected_stdout": "uint8 int32 int32\nempty title true true\n[Go SQL]\n",
+      "expected_stderr": "",
+      "expected_diagnostic": null,
+      "build": {
+        "command": [
+          "go",
+          "build",
+          "-o",
+          "/tmp/go-foundations-lrb3_c3l/example",
+          "."
+        ],
+        "cwd": "/tmp/go-foundations-lrb3_c3l",
+        "returncode": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "execution": {
+        "command": [
+          "/tmp/go-foundations-lrb3_c3l/example"
+        ],
+        "cwd": "/tmp/go-foundations-lrb3_c3l",
+        "returncode": 0,
+        "stdout": "uint8 int32 int32\nempty title true true\n[Go SQL]\n",
+        "stderr": ""
+      },
+      "passed": true
+    },
+    {
+      "id": "builtin-append-copy-seventh",
+      "file": "01-go-backend/reference/language-concepts/02-go-built-in-functions.md",
+      "line": 46,
+      "kind": "example",
+      "source_sha256": "cf2d5242fea085572ab6f0355cfbb6e73c1ac7ae42df28e6cb9c8876542cfca8",
+      "project_files": {
+        "main.go": "package main\n\nimport \"fmt\"\n\nfunc main() {\n    base := []int{1, 2, 3}\n    short := base[:1]\n    grown := append(short, 9)\n    fmt.Println(\"shared:\", base, grown)\n\n    separate := append(base[:1:1], 8)\n    separate[0] = 7\n    fmt.Println(\"separate:\", base, separate)\n\n    empty := make([]int, 0, 5)\n    fmt.Println(\"empty copy:\", copy(empty, base))\n    target := make([]int, 2)\n    fmt.Println(\"copied:\", copy(target, base), target)\n    fmt.Println(\"overlap:\", copy(base[1:], base), base)\n\n    bytes := append([]byte(\"Go\"), ' ')\n    bytes = append(bytes, \"好\"...)\n    text := make([]byte, 3)\n    fmt.Println(\"text:\", string(bytes), copy(text, \"中\"), string(text))\n}\n",
+        "go.mod": "module example.com/devquest/foundations\n\ngo 1.27\n"
+      },
+      "expected_stdout": "shared: [1 9 3] [1 9]\nseparate: [1 9 3] [7 8]\nempty copy: 0\ncopied: 2 [1 9]\noverlap: 2 [1 1 9]\ntext: Go 好 3 中\n",
+      "expected_stderr": "",
+      "expected_diagnostic": null,
+      "build": {
+        "command": [
+          "go",
+          "build",
+          "-o",
+          "/tmp/go-foundations-z4uokmz5/example",
+          "."
+        ],
+        "cwd": "/tmp/go-foundations-z4uokmz5",
+        "returncode": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "execution": {
+        "command": [
+          "/tmp/go-foundations-z4uokmz5/example"
+        ],
+        "cwd": "/tmp/go-foundations-z4uokmz5",
+        "returncode": 0,
+        "stdout": "shared: [1 9 3] [1 9]\nseparate: [1 9 3] [7 8]\nempty copy: 0\ncopied: 2 [1 9]\noverlap: 2 [1 1 9]\ntext: Go 好 3 中\n",
+        "stderr": ""
+      },
+      "passed": true
+    },
+    {
+      "id": "builtin-clear-delete",
+      "file": "01-go-backend/reference/language-concepts/02-go-built-in-functions.md",
+      "line": 98,
+      "kind": "example",
+      "source_sha256": "cd5ae86a5b4cf0d889c6893304f7bc06b1837f542d7a5aa85995daf6b64f2f88",
+      "project_files": {
+        "main.go": "package main\n\nimport (\n    \"fmt\"\n    \"math\"\n)\n\nfunc main() {\n    all := []int{1, 2, 3}\n    part := all[:2]\n    clear(part)\n    fmt.Println(\"slice:\", len(part), cap(part), all)\n\n    names := map[int]string{1: \"Ada\", 2: \"Lin\"}\n    delete(names, 1)\n    _, exists := names[1]\n    fmt.Println(\"delete:\", len(names), exists)\n    clear(names)\n    fmt.Println(\"map:\", len(names), names == nil)\n\n    var absent map[int]string\n    delete(absent, 1)\n    clear(absent)\n    fmt.Println(\"nil:\", len(absent), absent == nil)\n\n    nan := math.NaN()\n    unusual := map[float64]string{nan: \"not-a-number\"}\n    delete(unusual, nan)\n    fmt.Println(\"NaN delete:\", len(unusual))\n    clear(unusual)\n    fmt.Println(\"NaN clear:\", len(unusual))\n}\n",
+        "go.mod": "module example.com/devquest/foundations\n\ngo 1.27\n"
+      },
+      "expected_stdout": "slice: 2 3 [0 0 3]\ndelete: 1 false\nmap: 0 false\nnil: 0 true\nNaN delete: 1\nNaN clear: 0\n",
+      "expected_stderr": "",
+      "expected_diagnostic": null,
+      "build": {
+        "command": [
+          "go",
+          "build",
+          "-o",
+          "/tmp/go-foundations-dwny8c76/example",
+          "."
+        ],
+        "cwd": "/tmp/go-foundations-dwny8c76",
+        "returncode": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "execution": {
+        "command": [
+          "/tmp/go-foundations-dwny8c76/example"
+        ],
+        "cwd": "/tmp/go-foundations-dwny8c76",
+        "returncode": 0,
+        "stdout": "slice: 2 3 [0 0 3]\ndelete: 1 false\nmap: 0 false\nnil: 0 true\nNaN delete: 1\nNaN clear: 0\n",
+        "stderr": ""
+      },
+      "passed": true
+    },
+    {
+      "id": "builtin-len-cap",
+      "file": "01-go-backend/reference/language-concepts/02-go-built-in-functions.md",
+      "line": 155,
+      "kind": "example",
+      "source_sha256": "62027dbb7a9e7766c10466f99e74eec1f219523a3dffcef60b9f15320041be2c",
+      "project_files": {
+        "main.go": "package main\n\nimport \"fmt\"\n\nfunc main() {\n    text := \"A中\"\n    fmt.Println(\"text:\", len(text), len([]rune(text)))\n    var slice []int\n    var mapping map[string]int\n    var channel chan int\n    fmt.Println(\"nil:\", len(slice), cap(slice), len(mapping), len(channel), cap(channel))\n    var arrayPointer *[4]int\n    fmt.Println(\"array pointer:\", len(arrayPointer), cap(arrayPointer))\n    buffered := make(chan int, 2)\n    buffered <- 7\n    fmt.Println(\"channel:\", len(buffered), cap(buffered))\n}\n",
+        "go.mod": "module example.com/devquest/foundations\n\ngo 1.27\n"
+      },
+      "expected_stdout": "text: 4 2\nnil: 0 0 0 0 0\narray pointer: 4 4\nchannel: 1 2\n",
+      "expected_stderr": "",
+      "expected_diagnostic": null,
+      "build": {
+        "command": [
+          "go",
+          "build",
+          "-o",
+          "/tmp/go-foundations-r2s_ipqf/example",
+          "."
+        ],
+        "cwd": "/tmp/go-foundations-r2s_ipqf",
+        "returncode": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "execution": {
+        "command": [
+          "/tmp/go-foundations-r2s_ipqf/example"
+        ],
+        "cwd": "/tmp/go-foundations-r2s_ipqf",
+        "returncode": 0,
+        "stdout": "text: 4 2\nnil: 0 0 0 0 0\narray pointer: 4 4\nchannel: 1 2\n",
+        "stderr": ""
+      },
+      "passed": true
+    },
+    {
+      "id": "builtin-make-new",
+      "file": "01-go-backend/reference/language-concepts/02-go-built-in-functions.md",
+      "line": 202,
+      "kind": "example",
+      "source_sha256": "1187272fabc4bf7a3241348882b66b7ea81a3f683a1c778ed71e4da9c734f3bb",
+      "project_files": {
+        "main.go": "package main\n\nimport \"fmt\"\n\nfunc main() {\n    values := make([]int, 2, 4)\n    names := make(map[string]int, 100)\n    names[\"Ada\"] = 1\n    fmt.Println(\"make:\", values, len(values), cap(values), len(names))\n\n    zero := new(int)\n    source := 7\n    copied := new(source)\n    source = 9\n    fmt.Println(\"new:\", *zero, *copied, source)\n    flag := new(true)\n    fmt.Printf(\"expression type: %T %v\\n\", flag, *flag)\n\n    pointerToMap := new(map[string]int)\n    fmt.Println(\"map zero:\", *pointerToMap == nil)\n    *pointerToMap = make(map[string]int)\n    (*pointerToMap)[\"ready\"] = 1\n    fmt.Println(\"map initialized:\", (*pointerToMap)[\"ready\"])\n}\n",
+        "go.mod": "module example.com/devquest/foundations\n\ngo 1.27\n"
+      },
+      "expected_stdout": "make: [0 0] 2 4 1\nnew: 0 7 9\nexpression type: *bool true\nmap zero: true\nmap initialized: 1\n",
+      "expected_stderr": "",
+      "expected_diagnostic": null,
+      "build": {
+        "command": [
+          "go",
+          "build",
+          "-o",
+          "/tmp/go-foundations-mzomf6_m/example",
+          "."
+        ],
+        "cwd": "/tmp/go-foundations-mzomf6_m",
+        "returncode": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "execution": {
+        "command": [
+          "/tmp/go-foundations-mzomf6_m/example"
+        ],
+        "cwd": "/tmp/go-foundations-mzomf6_m",
+        "returncode": 0,
+        "stdout": "make: [0 0] 2 4 1\nnew: 0 7 9\nexpression type: *bool true\nmap zero: true\nmap initialized: 1\n",
+        "stderr": ""
+      },
+      "passed": true
+    },
+    {
+      "id": "builtin-close",
+      "file": "01-go-backend/reference/language-concepts/02-go-built-in-functions.md",
+      "line": 248,
+      "kind": "example",
+      "source_sha256": "77a61e4a767034030c4577bf95d81669a25b8322a935bb33782ba80044b2edd8",
+      "project_files": {
+        "main.go": "package main\n\nimport \"fmt\"\n\nfunc capture(action func()) (panicked bool) {\n    defer func() {\n        if recover() != nil { panicked = true }\n    }()\n    action()\n    return\n}\n\nfunc main() {\n    ch := make(chan int, 1)\n    ch <- 0\n    close(ch)\n    first, firstOK := <-ch\n    second, secondOK := <-ch\n    fmt.Println(\"buffer:\", first, firstOK)\n    fmt.Println(\"drained:\", second, secondOK)\n    fmt.Println(\"close twice:\", capture(func() { close(ch) }))\n    fmt.Println(\"send closed:\", capture(func() { ch <- 1 }))\n    var absent chan int\n    fmt.Println(\"close nil:\", capture(func() { close(absent) }))\n}\n",
+        "go.mod": "module example.com/devquest/foundations\n\ngo 1.27\n"
+      },
+      "expected_stdout": "buffer: 0 true\ndrained: 0 false\nclose twice: true\nsend closed: true\nclose nil: true\n",
+      "expected_stderr": "",
+      "expected_diagnostic": null,
+      "build": {
+        "command": [
+          "go",
+          "build",
+          "-o",
+          "/tmp/go-foundations-k2pjdnq1/example",
+          "."
+        ],
+        "cwd": "/tmp/go-foundations-k2pjdnq1",
+        "returncode": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "execution": {
+        "command": [
+          "/tmp/go-foundations-k2pjdnq1/example"
+        ],
+        "cwd": "/tmp/go-foundations-k2pjdnq1",
+        "returncode": 0,
+        "stdout": "buffer: 0 true\ndrained: 0 false\nclose twice: true\nsend closed: true\nclose nil: true\n",
+        "stderr": ""
+      },
+      "passed": true
+    },
+    {
+      "id": "builtin-complex",
+      "file": "01-go-backend/reference/language-concepts/02-go-built-in-functions.md",
+      "line": 295,
+      "kind": "example",
+      "source_sha256": "1ec5b44fa704e4e5659ce7db835a130aecbd116a9fe02e3e26efb5baf23bc623",
+      "project_files": {
+        "main.go": "package main\n\nimport \"fmt\"\n\nfunc main() {\n    var a, b float32 = 3, 4\n    z := complex(a, b)\n    fmt.Printf(\"%T %v\\n\", z, z)\n    fmt.Printf(\"%T %v %v\\n\", real(z), real(z), imag(z))\n    other := complex(1, 2)\n    fmt.Printf(\"%T %v\\n\", other, other)\n    fmt.Println(z + complex64(other), z * complex64(other))\n}\n",
+        "go.mod": "module example.com/devquest/foundations\n\ngo 1.27\n"
+      },
+      "expected_stdout": "complex64 (3+4i)\nfloat32 3 4\ncomplex128 (1+2i)\n(4+6i) (-5+10i)\n",
+      "expected_stderr": "",
+      "expected_diagnostic": null,
+      "build": {
+        "command": [
+          "go",
+          "build",
+          "-o",
+          "/tmp/go-foundations-922h66e9/example",
+          "."
+        ],
+        "cwd": "/tmp/go-foundations-922h66e9",
+        "returncode": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "execution": {
+        "command": [
+          "/tmp/go-foundations-922h66e9/example"
+        ],
+        "cwd": "/tmp/go-foundations-922h66e9",
+        "returncode": 0,
+        "stdout": "complex64 (3+4i)\nfloat32 3 4\ncomplex128 (1+2i)\n(4+6i) (-5+10i)\n",
+        "stderr": ""
+      },
+      "passed": true
+    },
+    {
+      "id": "builtin-min-max",
+      "file": "01-go-backend/reference/language-concepts/02-go-built-in-functions.md",
+      "line": 329,
+      "kind": "example",
+      "source_sha256": "e4e213b6b038af09792a3b9d8803cba5d67d95aba765a24e7cd7451122e28722",
+      "project_files": {
+        "main.go": "package main\n\nimport (\n    \"fmt\"\n    \"math\"\n    \"slices\"\n)\n\nfunc main() {\n    fmt.Println(min(8, 3, 5), max(8, 3, 5), min(7))\n    fmt.Println(min(\"Go\", \"Rust\"), max(\"Go\", \"Rust\"))\n    values := []int{8, 3, 5}\n    if len(values) > 0 { fmt.Println(\"slice:\", slices.Min(values)) }\n    fmt.Println(\"NaN:\", math.IsNaN(min(1.0, math.NaN())))\n    negativeZero := math.Copysign(0, -1)\n    positiveZero := 0.0\n    fmt.Println(\"zero signs:\",\n        math.Signbit(min(negativeZero, positiveZero)),\n        math.Signbit(max(negativeZero, positiveZero)))\n}\n",
+        "go.mod": "module example.com/devquest/foundations\n\ngo 1.27\n"
+      },
+      "expected_stdout": "3 8 7\nGo Rust\nslice: 3\nNaN: true\nzero signs: true false\n",
+      "expected_stderr": "",
+      "expected_diagnostic": null,
+      "build": {
+        "command": [
+          "go",
+          "build",
+          "-o",
+          "/tmp/go-foundations-zfcs666e/example",
+          "."
+        ],
+        "cwd": "/tmp/go-foundations-zfcs666e",
+        "returncode": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "execution": {
+        "command": [
+          "/tmp/go-foundations-zfcs666e/example"
+        ],
+        "cwd": "/tmp/go-foundations-zfcs666e",
+        "returncode": 0,
+        "stdout": "3 8 7\nGo Rust\nslice: 3\nNaN: true\nzero signs: true false\n",
+        "stderr": ""
+      },
+      "passed": true
+    },
+    {
+      "id": "builtin-min-slice",
+      "file": "01-go-backend/reference/language-concepts/02-go-built-in-functions.md",
+      "line": 365,
+      "kind": "compile-error",
+      "source_sha256": "02de21ff1bb5a80fa28a52f87766afe24c6fd637ac64cec77cd8a0d21132305a",
+      "project_files": {
+        "main.go": "package main\n\nfunc main() {\n    values := []int{8, 3, 5}\n    _ = min(values...)\n}\n",
+        "go.mod": "module example.com/devquest/foundations\n\ngo 1.27\n"
+      },
+      "expected_stdout": "",
+      "expected_stderr": "",
+      "expected_diagnostic": "invalid use of \\.\\.\\.",
+      "build": {
+        "command": [
+          "go",
+          "build",
+          "-o",
+          "/tmp/go-foundations-t8x78345/example",
+          "."
+        ],
+        "cwd": "/tmp/go-foundations-t8x78345",
+        "returncode": 1,
+        "stdout": "",
+        "stderr": "# example.com/devquest/foundations\n./main.go:5:9: invalid operation: invalid use of ... with built-in min\n"
+      },
+      "execution": null,
+      "passed": true
+    },
+    {
+      "id": "builtin-panic-recover",
+      "file": "01-go-backend/reference/language-concepts/02-go-built-in-functions.md",
+      "line": 383,
+      "kind": "example",
+      "source_sha256": "c843cd53327232a1508e4ec8df20273e3b62c6388053dfcb7af990215737ff43",
+      "project_files": {
+        "main.go": "package main\n\nimport \"fmt\"\n\nfunc divide(a, b int) int {\n    if b == 0 { panic(\"division by zero\") }\n    return a / b\n}\n\nfunc guarded(a, b int) (result int, err error) {\n    defer func() {\n        if problem := recover(); problem != nil {\n            err = fmt.Errorf(\"calculation failed: %v\", problem)\n        }\n    }()\n    result = divide(a, b)\n    return result, nil\n}\n\nfunc main() {\n    result, err := guarded(8, 2)\n    fmt.Println(\"normal:\", result, err)\n    result, err = guarded(8, 0)\n    fmt.Println(\"failure:\", result, err)\n    fmt.Println(\"outside panic:\", recover() == nil)\n}\n",
+        "go.mod": "module example.com/devquest/foundations\n\ngo 1.27\n"
+      },
+      "expected_stdout": "normal: 4 <nil>\nfailure: 0 calculation failed: division by zero\noutside panic: true\n",
+      "expected_stderr": "",
+      "expected_diagnostic": null,
+      "build": {
+        "command": [
+          "go",
+          "build",
+          "-o",
+          "/tmp/go-foundations-asqbx1r3/example",
+          "."
+        ],
+        "cwd": "/tmp/go-foundations-asqbx1r3",
+        "returncode": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "execution": {
+        "command": [
+          "/tmp/go-foundations-asqbx1r3/example"
+        ],
+        "cwd": "/tmp/go-foundations-asqbx1r3",
+        "returncode": 0,
+        "stdout": "normal: 4 <nil>\nfailure: 0 calculation failed: division by zero\noutside panic: true\n",
+        "stderr": ""
+      },
+      "passed": true
+    },
+    {
+      "id": "builtin-debug",
+      "file": "01-go-backend/reference/language-concepts/02-go-built-in-functions.md",
+      "line": 431,
+      "kind": "example",
+      "source_sha256": "0f6f5ff498028fe4c06bdb0bdf5acaaec316e828fc8f2eb45d9605a4496d2918",
+      "project_files": {
+        "main.go": "package main\n\nimport \"fmt\"\n\nfunc main() {\n    print(\"debug:\")\n    println(\" 2\")\n    fmt.Println(\"stable: 2\")\n}\n",
+        "go.mod": "module example.com/devquest/foundations\n\ngo 1.27\n"
+      },
+      "expected_stdout": "stable: 2\n",
+      "expected_stderr": "debug: 2\n",
+      "expected_diagnostic": null,
+      "build": {
+        "command": [
+          "go",
+          "build",
+          "-o",
+          "/tmp/go-foundations-zwtgufjy/example",
+          "."
+        ],
+        "cwd": "/tmp/go-foundations-zwtgufjy",
+        "returncode": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "execution": {
+        "command": [
+          "/tmp/go-foundations-zwtgufjy/example"
+        ],
+        "cwd": "/tmp/go-foundations-zwtgufjy",
+        "returncode": 0,
+        "stdout": "stable: 2\n",
+        "stderr": "debug: 2\n"
+      },
+      "passed": true
+    }
+  ]
+}

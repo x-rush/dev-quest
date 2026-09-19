@@ -30,10 +30,10 @@
     }
   },
   "documents": {
-    "07-php-mastery/reference/language-concepts/01-php-keywords.md": "a22b13521f16529fe8ce4c8eba77ff3c28d3b036b4c864e30b3ebb571059e18d",
+    "07-php-mastery/reference/language-concepts/01-php-keywords.md": "867df9b19bf026d7f474899698db2a752d67d1cdfcce82b9d73458c8e1efc1a1",
     "07-php-mastery/reference/language-concepts/02-built-in-functions.md": "f2e60510ec55dd5bef56adeed3ba0cd66be01009f1e474a90e601ec8917ac11f",
     "08-java-revisited/reference/language-concepts/01-java-keywords.md": "b3b6f875d877a1df7bbca90f2e05252990092ff468c03e21050ef20f0059a224",
-    "08-java-revisited/reference/library-guides/01-standard-library.md": "eb0d10994ed6f29c36838bd4bc62579b67934408008e47821e70493740b1f69b"
+    "08-java-revisited/reference/library-guides/01-standard-library.md": "3df9f4557447a022165742bcdfab31e5291fae5c0ee586e669f71ad1342fefc7"
   },
   "cases": [
     {
@@ -235,7 +235,7 @@
           "command": [
             "java",
             "-cp",
-            "/tmp/reference-r60b5i8u",
+            "/tmp/reference-e5mhrocw",
             "Main"
           ],
           "exit_code": 0,
@@ -268,7 +268,7 @@
           "command": [
             "java",
             "-cp",
-            "/tmp/reference-x037osp2",
+            "/tmp/reference-xzs9va91",
             "Main"
           ],
           "exit_code": 0,
@@ -301,7 +301,7 @@
           "command": [
             "java",
             "-cp",
-            "/tmp/reference-1pe1ojps",
+            "/tmp/reference-74c7g3d3",
             "Main"
           ],
           "exit_code": 0,
@@ -334,7 +334,7 @@
           "command": [
             "java",
             "-cp",
-            "/tmp/reference-dlalb2cr",
+            "/tmp/reference-bti7xqrn",
             "Main"
           ],
           "exit_code": 0,
@@ -367,7 +367,7 @@
           "command": [
             "java",
             "-cp",
-            "/tmp/reference-k4mqokfw",
+            "/tmp/reference-6l7woun8",
             "Main"
           ],
           "exit_code": 0,
@@ -400,7 +400,7 @@
           "command": [
             "java",
             "-cp",
-            "/tmp/reference-bbkwwhe1",
+            "/tmp/reference-16zgt7y7",
             "Main"
           ],
           "exit_code": 0,
@@ -433,7 +433,7 @@
           "command": [
             "java",
             "-cp",
-            "/tmp/reference-t51dvutw",
+            "/tmp/reference-5qd3_a64",
             "Main"
           ],
           "exit_code": 0,
@@ -466,7 +466,7 @@
           "command": [
             "java",
             "-cp",
-            "/tmp/reference-_5wj6p8u",
+            "/tmp/reference-6kq4ngqr",
             "Main"
           ],
           "exit_code": 0,
@@ -499,7 +499,7 @@
           "command": [
             "java",
             "-cp",
-            "/tmp/reference-4qauc93i",
+            "/tmp/reference-3we8cxn3",
             "Main"
           ],
           "exit_code": 0,

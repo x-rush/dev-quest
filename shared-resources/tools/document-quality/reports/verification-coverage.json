@@ -17,13 +17,13 @@
   "summary": {
     "documents": 642,
     "by_primary_state": {
-      "not_verified": 449,
-      "runtime": 193
+      "not_verified": 448,
+      "runtime": 194
     },
-    "verification_wording_occurrences": 144,
+    "verification_wording_occurrences": 149,
     "marker_classification": {
-      "source_has_limited_runtime_evidence": 88,
-      "unbound_verification_wording": 56
+      "source_has_limited_runtime_evidence": 91,
+      "unbound_verification_wording": 58
     }
   },
   "documents": [
@@ -55,7 +55,7 @@
     },
     {
       "path": "01-go-backend/advanced-topics/api-advanced/01-restful-patterns.md",
-      "sha256": "2bdc29c52dabba99b59806bd1153c6e2b4cc300a172a6225a067f30de1289ce9",
+      "sha256": "3c9cf61c04f1e5bbc44b605659cd1bdaf314b5df66662dcfe16f992d8507a6c0",
       "verification": [
         {
           "mode": "not_verified",
@@ -68,7 +68,7 @@
     },
     {
       "path": "01-go-backend/advanced-topics/api-advanced/02-graphql-apis.md",
-      "sha256": "0a0ec06cd223dc772d608dc47beb23db561b47a64244daab69256e5396aa5799",
+      "sha256": "08748e63272b3170b995436337518fed7cb2063eaadb224227167cf35248c028",
       "verification": [
         {
           "mode": "not_verified",
@@ -81,7 +81,7 @@
     },
     {
       "path": "01-go-backend/advanced-topics/architecture/01-microservices-design.md",
-      "sha256": "81cac5c440c28cbd5fbb3fbf75f7adca29eb782870eb78e95dbd603dd31bc7b4",
+      "sha256": "0d687c5b5db422059285464f5b294efaf17faaf39cc3a8abfaeea5351fbcb9e3",
       "verification": [
         {
           "mode": "not_verified",
@@ -107,7 +107,7 @@
     },
     {
       "path": "01-go-backend/advanced-topics/performance/02-performance-tuning.md",
-      "sha256": "78912a60cda30111ff86676a16c9f368a41c4318b94293be49542e6a8724613d",
+      "sha256": "8a7527f3d74f40aa694f46cee992b63eb6a2f388cb193eae9f7aef0d4865884f",
       "verification": [
         {
           "mode": "not_verified",
@@ -322,7 +322,7 @@
     },
     {
       "path": "01-go-backend/deployment/02-ci-cd-pipelines.md",
-      "sha256": "807f6370ffa352d170a722964c210e0c9c639ee1ed8e1c28c8c19b5772d84aec",
+      "sha256": "f669c6650d631222fbacee3b53a58e40b989ed2d1a26ceaf6a34d0fb936f26f7",
       "verification": [
         {
           "mode": "not_verified",
@@ -387,7 +387,7 @@
     },
     {
       "path": "01-go-backend/frameworks/03-gorm-orm-complete.md",
-      "sha256": "2f53f3029a8576a85ce32e18ff2d6fe08c2eeb7220a831f159f9a0ff1a816bd8",
+      "sha256": "7e25f1d486a302a44a16022c3eee13dcabf947440c98ee62fe8b91c3a61ae998",
       "verification": [
         {
           "mode": "not_verified",
@@ -452,7 +452,7 @@
     },
     {
       "path": "01-go-backend/projects/01-rest-api-server.md",
-      "sha256": "1ec7abdb5b63e8ed9160a0cd2a5acf708713cfa17e1f0059b0d31da7ead05658",
+      "sha256": "24fe7496d3f253a55070952aa53c505f9cde600fa8c5e26b179a898d94670b84",
       "verification": [
         {
           "mode": "not_verified",
@@ -1092,7 +1092,7 @@
     },
     {
       "path": "01-go-backend/testing/02-mocking-stubbing.md",
-      "sha256": "2983fe60b305faa9a53a1455c85762a3444e10902de8697d7f59d546b8b6d74f",
+      "sha256": "521b92c149b31d46ee8155782e78025b459df43c7a4df3296633cf7b3e81ba1e",
       "verification": [
         {
           "mode": "not_verified",
@@ -1105,7 +1105,7 @@
     },
     {
       "path": "01-go-backend/testing/03-integration-testing.md",
-      "sha256": "c835e5c9dd08e19f11361ddc5e36fede6be67fcfa628f2cd74145ef275ce6289",
+      "sha256": "a897ddecd19a8285f2e79867cc7cd2945a7b9c6e9d2faaaaadcefaa6191b4283",
       "verification": [
         {
           "mode": "not_verified",
@@ -1118,7 +1118,7 @@
     },
     {
       "path": "01-go-backend/testing/04-benchmarking.md",
-      "sha256": "559712b36a902b1925a6dc159d07fe44ae88ccf92b41e812300a13294b899445",
+      "sha256": "feadef853c7fa7685f9f15c50907db146b4e3d8027eb101fb06359f97f2322e1",
       "verification": [
         {
           "mode": "not_verified",
@@ -1131,7 +1131,7 @@
     },
     {
       "path": "01-go-backend/testing/05-test-driven-development.md",
-      "sha256": "c51b9256986aa1e681651d282121627beddd00dfc99f4821ccd49dce1e0184d3",
+      "sha256": "2cc972071703ab09322966a4f78d9e3e9f3fcd0c237eead38c5152c25ebbe8cc",
       "verification": [
         {
           "mode": "not_verified",
@@ -1140,7 +1140,7 @@
           "scope": "No named runtime or syntax evidence is recorded for this document."
         }
       ],
-      "marker_count": 2
+      "marker_count": 5
     },
     {
       "path": "02-nextjs-frontend/LEARNING_GUIDE.md",
@@ -1157,7 +1157,7 @@
     },
     {
       "path": "02-nextjs-frontend/README.md",
-      "sha256": "8b25d01fc607bec0249a69eb1fa7db7e494ae16696808da4051cd252830d860d",
+      "sha256": "bf219674dcccbdaf9bec383a8f886b9d44208f4085a716162751678b94cee02f",
       "verification": [
         {
           "mode": "not_verified",
@@ -1170,7 +1170,7 @@
     },
     {
       "path": "02-nextjs-frontend/advanced-topics/api-integration/01-graphql-apollo.md",
-      "sha256": "f80861cb2ae5b82e433acbc686657a81b95695bc192df6763ced1558ec081684",
+      "sha256": "349dbe7758d48f6de1cde48747418acd03f1446cf700a99322517c64566b216b",
       "verification": [
         {
           "mode": "not_verified",
@@ -1196,7 +1196,7 @@
     },
     {
       "path": "02-nextjs-frontend/advanced-topics/architecture/02-micro-frontends.md",
-      "sha256": "9fe7e5a8230b93da84e294ba3a86ba57fdd1c1e4a789d8077b4281607802635c",
+      "sha256": "2b46b0c1214e65859c73e7d65d6ee285ffb0f6c182c72d23aaa6bc83de29c8e6",
       "verification": [
         {
           "mode": "not_verified",
@@ -1261,7 +1261,7 @@
     },
     {
       "path": "02-nextjs-frontend/basics/02-first-nextjs-app.md",
-      "sha256": "639f9f0c8b04952abcc5b5ffd921c090d8ea4d2bfc97c912fa4f18350ceff06f",
+      "sha256": "4e4add37a582b83507a59f62237f88537817246a4d2955232eb90a2fda635ba6",
       "verification": [
         {
           "mode": "not_verified",
@@ -1274,7 +1274,7 @@
     },
     {
       "path": "02-nextjs-frontend/basics/03-typescript-integration.md",
-      "sha256": "773013c4e7ddc2488f98c6a8f9e69c9b7f4948ac642bafc3754da9382b07fd82",
+      "sha256": "80fc9a76c16e1a893c0db05688fdac80a5491e4608d495800a59aa4068d2c7f2",
       "verification": [
         {
           "mode": "runtime",
@@ -1287,7 +1287,7 @@
     },
     {
       "path": "02-nextjs-frontend/basics/04-layouts-routing.md",
-      "sha256": "b35fbc1db4bfdb74ee2783470d14db40f3efbf03e8ef47632e87a411d60e7a53",
+      "sha256": "400063a2caafbaf1808baa7a0390ff1e911850c8e7a2f9babc3aa571d87a5ca8",
       "verification": [
         {
           "mode": "runtime",
@@ -1300,7 +1300,7 @@
     },
     {
       "path": "02-nextjs-frontend/basics/05-styling-with-tailwind.md",
-      "sha256": "7e0959336c98a6f0a6b527d81e0d6a6986fa3c4c94baf89f284b79f7b529c378",
+      "sha256": "574867ef72d0b90685a0b4e668a906bec2e939a7002667b869cd8c87f7582461",
       "verification": [
         {
           "mode": "not_verified",
@@ -1313,7 +1313,7 @@
     },
     {
       "path": "02-nextjs-frontend/basics/06-data-fetching-basics.md",
-      "sha256": "cd821739bb596d635389e607e1be504c42d0147ff3b52c04533e7acdbe501191",
+      "sha256": "9865117fdd690cdca2054234f903cd077d638e9c535cba40a974327cacf9cf70",
       "verification": [
         {
           "mode": "not_verified",
@@ -1326,7 +1326,7 @@
     },
     {
       "path": "02-nextjs-frontend/basics/07-state-management.md",
-      "sha256": "36ffee6f51716167f35ac6d920d96c44be05d6927199c2aaa77a3e09af444c8a",
+      "sha256": "844c4ef7b8623c0ce7238f3e77708b3244fb4f6b478de9627070425b06d19ec9",
       "verification": [
         {
           "mode": "not_verified",
@@ -1339,7 +1339,7 @@
     },
     {
       "path": "02-nextjs-frontend/basics/08-first-project.md",
-      "sha256": "3291c5f3c298840aad417287104fb901c6f6de07fdbe6ab557533153e35925d3",
+      "sha256": "85b7760c30422817b53a913742dea0917a6f627dcc77e02e4dd0e5dc00ac67e1",
       "verification": [
         {
           "mode": "runtime",
@@ -1348,7 +1348,7 @@
           "scope": "JSDOM DOM verification only; no TypeScript semantic check, Next.js build, hydration or real browser verification."
         }
       ],
-      "marker_count": 1
+      "marker_count": 2
     },
     {
       "path": "02-nextjs-frontend/deployment/01-vercel-deployment.md",
@@ -1365,7 +1365,7 @@
     },
     {
       "path": "02-nextjs-frontend/deployment/02-docker-containerization.md",
-      "sha256": "9bcf029e5bd49c73b258b7b58554e010d71f411ca18e1ee01034abca6d0edba5",
+      "sha256": "eb2be88bb1eb287768404b599b27478843cc29fe5cc80203a59e29b4b3dfd263",
       "verification": [
         {
           "mode": "not_verified",
@@ -1378,7 +1378,7 @@
     },
     {
       "path": "02-nextjs-frontend/deployment/03-ci-cd-pipelines.md",
-      "sha256": "4eb95acec0398026b990209eef38934196eb1e8c0f00117749bb254743ab6bd7",
+      "sha256": "5fc290011bcfb97519cb30fd7bbe0e98396d16e86c5623b11f56c75a72226734",
       "verification": [
         {
           "mode": "not_verified",
@@ -1391,7 +1391,7 @@
     },
     {
       "path": "02-nextjs-frontend/deployment/04-monitoring-analytics.md",
-      "sha256": "16ed0397e457afe54c405015189b263ea5ac7881210855d2446a9e8778fe3e3f",
+      "sha256": "75996096e0482c58b80e5bbe5ed014d6bbebf753e9d37de9a85b1c69af00b358",
       "verification": [
         {
           "mode": "not_verified",
@@ -1404,7 +1404,7 @@
     },
     {
       "path": "02-nextjs-frontend/frameworks/01-nextjs-16-complete.md",
-      "sha256": "943545070b3317e3eb2286c969c8704db53e52ea7b864adef78948510b151f78",
+      "sha256": "41ee97391876a26994835f7872979db84166afcb566c05c3da89c759536b9263",
       "verification": [
         {
           "mode": "not_verified",
@@ -1417,7 +1417,7 @@
     },
     {
       "path": "02-nextjs-frontend/frameworks/02-react-19-integration.md",
-      "sha256": "ec7f3f8492ff77a84a0ccdcff1b26b651408b005e3b05e9440d4e94705e7716c",
+      "sha256": "ebe3815e7989091494daadd615815e11d3abe3da286b878fad09f378bc5b346c",
       "verification": [
         {
           "mode": "not_verified",
@@ -1430,7 +1430,7 @@
     },
     {
       "path": "02-nextjs-frontend/frameworks/03-full-stack-patterns.md",
-      "sha256": "0f23f99230fa4373211b990424c676f589f1d6094de8196d6d0a9abfea641883",
+      "sha256": "34eab711fb1ee3db60f2871e0058692bb7c6eff16a075ddecba586b3d0c995ae",
       "verification": [
         {
           "mode": "not_verified",
@@ -1443,7 +1443,7 @@
     },
     {
       "path": "02-nextjs-frontend/frameworks/04-performance-optimization.md",
-      "sha256": "5fadfb44545de44adb538ef336254176484d04fd1491fb7a671422af4f131ec1",
+      "sha256": "931129637e7cc72aaaa92fa770c0eb47f65e79de8075a069f6c8576c2ee6a90c",
       "verification": [
         {
           "mode": "not_verified",
@@ -1560,7 +1560,7 @@
     },
     {
       "path": "02-nextjs-frontend/reference/framework-patterns/01-app-router-patterns.md",
-      "sha256": "1b43dbdc65ed809ab3c17f4b9a90665f1e98da616d41f5c32ef1d12d9b9c5f9d",
+      "sha256": "72ec2e1d66c8cfaa9b8b353c6323262e991d6a35859a28b698ff251ec22e4f30",
       "verification": [
         {
           "mode": "not_verified",
@@ -1625,7 +1625,7 @@
     },
     {
       "path": "02-nextjs-frontend/reference/framework-patterns/06-form-validation-patterns.md",
-      "sha256": "f3de18ac863589ff19574129f79f3eaf9289b882860dc2083527bf899627f327",
+      "sha256": "3b79e1ef3df602c99493cbc343196060f7dc072cb69722645a50d7710326a099",
       "verification": [
         {
           "mode": "not_verified",
@@ -1638,7 +1638,7 @@
     },
     {
       "path": "02-nextjs-frontend/reference/framework-patterns/07-authentication-flows.md",
-      "sha256": "3036560fb193c551030acb1f8147a774b29bc704b57a526419337f32c9143c8c",
+      "sha256": "9863432fdf088e0bb248995bd1ae69dde5ba8e5b109e9f10ac2034c23562428c",
       "verification": [
         {
           "mode": "not_verified",
@@ -1742,7 +1742,7 @@
     },
     {
       "path": "02-nextjs-frontend/reference/language-concepts/01-react-syntax-cheatsheet.md",
-      "sha256": "aa8ed4f93bd8ea999a4a47d2cfded0a59ebbf2112c476b0a788126354e9030c2",
+      "sha256": "035a72a11956c532f2649bc27e7f12a2cf97dba4871e18e350b0b0382aa9cc63",
       "verification": [
         {
           "mode": "not_verified",
@@ -1755,7 +1755,7 @@
     },
     {
       "path": "02-nextjs-frontend/reference/language-concepts/02-nextjs-api-reference.md",
-      "sha256": "69e1eb09f797bedb082b647c15773eba18355f04313b22fc61e64c273faccf03",
+      "sha256": "9a231a0608d62df5335826474101d527850e843b7f59043f735908607f7cb89a",
       "verification": [
         {
           "mode": "not_verified",
@@ -1768,7 +1768,7 @@
     },
     {
       "path": "02-nextjs-frontend/reference/language-concepts/03-typescript-types.md",
-      "sha256": "32e3da7fcdbbf6037c59ff32f2df29ebb17c9e3dc47ef1896bfac3375c537789",
+      "sha256": "6d26d4899a220ca68e79e552198203ed43246d4570672c3fc3b6d0da92d410ca",
       "verification": [
         {
           "mode": "runtime",
@@ -1870,7 +1870,7 @@
           "mode": "runtime",
           "status": "PASS",
           "report": "p1-runtime-evidence.json",
-          "scope": "Five P1 core or standard-library pages selected outside the earlier named validation pages. Each program is extracted unchanged from its Markdown body by its p1-runtime-case marker."
+          "scope": "Six P1 core or standard-library pages selected outside the earlier named validation pages. Each program is extracted unchanged from its Markdown body by its p1-runtime-case marker."
         }
       ],
       "marker_count": 1
@@ -1928,7 +1928,7 @@
     },
     {
       "path": "02-nextjs-frontend/reference/performance-optimization/02-bundle-optimization.md",
-      "sha256": "d478e6e1d5ada015a686390fe44293c98eabca5448ed32bb74b4e0f90049214f",
+      "sha256": "65e38191226b5b57ef7903e757e50e6035c1e8fad85c8c56c2c464b521328d37",
       "verification": [
         {
           "mode": "not_verified",
@@ -1954,7 +1954,7 @@
     },
     {
       "path": "02-nextjs-frontend/testing/01-unit-testing.md",
-      "sha256": "dce6869d47dc143009530b4745f63f69ea738c902a8acde18bdc05ec22cf93f8",
+      "sha256": "1627828f185c5259ac5a24779f39d30ba2a657b8a72a707e7e1ff4c0028be46a",
       "verification": [
         {
           "mode": "runtime",
@@ -1969,11 +1969,11 @@
           "scope": "Exact Hook source executed with real React and jsdom, plus a separate Node server renderer. No browser hydration, Next build, cross-tab storage or dynamic key support."
         }
       ],
-      "marker_count": 0
+      "marker_count": 1
     },
     {
       "path": "02-nextjs-frontend/testing/02-component-testing.md",
-      "sha256": "083f1457fcc45cd070ff4f0a1483da82274a6aeed03ac2daa9f455a88356e74c",
+      "sha256": "cb0aee3fcb2d74cc518b5784b1a2b56c4b5eee7aedebaeefd274b55acbdfae3b",
       "verification": [
         {
           "mode": "not_verified",
@@ -1986,7 +1986,7 @@
     },
     {
       "path": "02-nextjs-frontend/testing/03-e2e-testing.md",
-      "sha256": "3af905232370cae0e74c6060e757bc90c4e15de7dcd392f17ca4f688ea158f65",
+      "sha256": "f5abd454326810c26e962127ec19f44b8ec8cacc8164000fea88dbf38e79476e",
       "verification": [
         {
           "mode": "not_verified",
@@ -2025,7 +2025,7 @@
     },
     {
       "path": "03-tanstack-stack/README.md",
-      "sha256": "2bc60a1fe14f42c01348e91224a1cd081a0a564e7016e5ceafd70b0a5dca6aba",
+      "sha256": "46cfff66b7990e738819f1ef045bea3f2b4fda2505f137671e05f166e661cb28",
       "verification": [
         {
           "mode": "not_verified",
@@ -2479,7 +2479,7 @@
           "mode": "runtime",
           "status": "PASS",
           "report": "p1-runtime-evidence.json",
-          "scope": "Five P1 core or standard-library pages selected outside the earlier named validation pages. Each program is extracted unchanged from its Markdown body by its p1-runtime-case marker."
+          "scope": "Six P1 core or standard-library pages selected outside the earlier named validation pages. Each program is extracted unchanged from its Markdown body by its p1-runtime-case marker."
         }
       ],
       "marker_count": 1
@@ -2830,7 +2830,7 @@
     },
     {
       "path": "04-multiplatform-apps/README.md",
-      "sha256": "8c92416ade936aca664bc78043c22e95ead2a78815d2c0dc84e675252505eb50",
+      "sha256": "3ded18eabe44ae3942d402ed0c3ea2d70195ba40be4d7e97eec654796e1ffaef",
       "verification": [
         {
           "mode": "not_verified",
@@ -2908,7 +2908,7 @@
     },
     {
       "path": "04-multiplatform-apps/basics/01-environment-setup.md",
-      "sha256": "ec05ba93e8267e656f18d2632690846e11a9d495cdd05d888623912734fd71d5",
+      "sha256": "8d0f8456a0293e8025ee2c181f37c9319001c77b9319600e7829cd06f67baa77",
       "verification": [
         {
           "mode": "not_verified",
@@ -2921,7 +2921,7 @@
     },
     {
       "path": "04-multiplatform-apps/basics/02-first-app.md",
-      "sha256": "5fd3928a783afb4511917cbbd557a4b6868059184a9ca50d1403d54917ec754c",
+      "sha256": "86d4df1488a23d0b79e0f7d9e664a9114798c78d0d5f9f9ea385f8692684ae61",
       "verification": [
         {
           "mode": "not_verified",
@@ -2934,7 +2934,7 @@
     },
     {
       "path": "04-multiplatform-apps/basics/03-components-jsx.md",
-      "sha256": "b07439114b9816a7ef989d120bd7c3a6b871f489ef887617c0163d10ffe01d68",
+      "sha256": "8e1adea817275aa9607607f554bcd7362cbfa19d28972f1d82c641663e42ece8",
       "verification": [
         {
           "mode": "runtime",
@@ -2947,7 +2947,7 @@
     },
     {
       "path": "04-multiplatform-apps/basics/04-state-hooks.md",
-      "sha256": "dff3f2e38d0213367ac1883d49ff8389157b2899031d954d0c33b04e36d85253",
+      "sha256": "84149059e295cc5dea4c6fb06d1af5f3bfd821d74005ed0949fd6e087f8180f2",
       "verification": [
         {
           "mode": "not_verified",
@@ -2960,7 +2960,7 @@
     },
     {
       "path": "04-multiplatform-apps/basics/05-navigation.md",
-      "sha256": "1b320079f85ce5175954e3d18bb90ec92ed7911c4048fccb9b455255ebf6507a",
+      "sha256": "1f23549878f9eb91fe00e07ec5b757074722c59fe680b29817b2820243b076bd",
       "verification": [
         {
           "mode": "not_verified",
@@ -2973,7 +2973,7 @@
     },
     {
       "path": "04-multiplatform-apps/basics/06-native-modules.md",
-      "sha256": "62ea18a8f52d473a20bbe3bbdc2d3e9d2951c09a3f0019a8cf7967f1d24e5187",
+      "sha256": "a9872e5aacd8ecaa39b4a0d00a4fa018615ebfe44bebe16cfe8ebbf1cc8cb964",
       "verification": [
         {
           "mode": "not_verified",
@@ -2986,7 +2986,7 @@
     },
     {
       "path": "04-multiplatform-apps/basics/07-advanced-features.md",
-      "sha256": "f61b0d0e7761d06d6108b7293e0f000f325e793de297f8580e9df812ab8b1161",
+      "sha256": "c959dbe17c4330c8707112cddde0819f66c89d68978864b13d23fb31120ca558",
       "verification": [
         {
           "mode": "not_verified",
@@ -2999,7 +2999,7 @@
     },
     {
       "path": "04-multiplatform-apps/basics/08-first-project.md",
-      "sha256": "fde8ff30885fa899a7bdcee585bdd46ce341a43ba6e49fc7fca653fee5c9cf45",
+      "sha256": "9f8b49e5bd6ab729da4cbe91d0980397a72d28ca1f266b032e3a13313a724356",
       "verification": [
         {
           "mode": "runtime",
@@ -3207,13 +3207,13 @@
     },
     {
       "path": "04-multiplatform-apps/reference/language-concepts/01-rn-core-api.md",
-      "sha256": "4c89ffa430891bee2a3ec140d80c42fb2567c80c87faae9b63cdc4d3b622040a",
+      "sha256": "414fec056671c8852e4cd75be0d8113baa96c732ff7ea7727358c54c571919db",
       "verification": [
         {
-          "mode": "not_verified",
-          "status": "NOT_VERIFIED",
-          "report": null,
-          "scope": "No named runtime or syntax evidence is recorded for this document."
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "p1-runtime-evidence.json",
+          "scope": "Six P1 core or standard-library pages selected outside the earlier named validation pages. Each program is extracted unchanged from its Markdown body by its p1-runtime-case marker."
         }
       ],
       "marker_count": 1
@@ -3226,7 +3226,7 @@
           "mode": "runtime",
           "status": "PASS",
           "report": "p1-runtime-evidence.json",
-          "scope": "Five P1 core or standard-library pages selected outside the earlier named validation pages. Each program is extracted unchanged from its Markdown body by its p1-runtime-case marker."
+          "scope": "Six P1 core or standard-library pages selected outside the earlier named validation pages. Each program is extracted unchanged from its Markdown body by its p1-runtime-case marker."
         }
       ],
       "marker_count": 0
@@ -3519,7 +3519,7 @@
     },
     {
       "path": "05-kotlin-compose/README.md",
-      "sha256": "0ad7fbb8f41f9882af25aab2519077d2a953cc7babc9a519909e8f34e9f0a883",
+      "sha256": "bd75d225d6d8eca3a9936fabdd2049de7b68d9bf0736481a5bd35edf51fa96d3",
       "verification": [
         {
           "mode": "not_verified",
@@ -3584,7 +3584,7 @@
     },
     {
       "path": "05-kotlin-compose/basics/01-environment-setup.md",
-      "sha256": "fa858ac2978385844474536420af69b679c417ba9c5f0d40b12b22b46e6b1fc6",
+      "sha256": "ca06e934caf4085c113325592587ebb53ec6a030bbec5f13f9ee6985ae492805",
       "verification": [
         {
           "mode": "not_verified",
@@ -4096,7 +4096,7 @@
           "mode": "runtime",
           "status": "PASS",
           "report": "p1-runtime-evidence.json",
-          "scope": "Five P1 core or standard-library pages selected outside the earlier named validation pages. Each program is extracted unchanged from its Markdown body by its p1-runtime-case marker."
+          "scope": "Six P1 core or standard-library pages selected outside the earlier named validation pages. Each program is extracted unchanged from its Markdown body by its p1-runtime-case marker."
         }
       ],
       "marker_count": 0
@@ -4233,7 +4233,7 @@
     },
     {
       "path": "06-swift-swiftui/README.md",
-      "sha256": "21a8d135b631c8c0d15c4a6066ea258f18ee8a5bab0c7cac3d67d2d09d393768",
+      "sha256": "5dddeae1f45b6367a631656df5dbf11ff082fd303fd3c70485c61abb91f6a22a",
       "verification": [
         {
           "mode": "not_verified",
@@ -4298,7 +4298,7 @@
     },
     {
       "path": "06-swift-swiftui/basics/01-environment-setup.md",
-      "sha256": "7aab3cef753fbefabc502bcf652ae8b7cc79c9f75e91646338d62fe719319bd2",
+      "sha256": "0f015311d9d5c408ff39ca9a5c1e0493fa88af19915493f16e9204f27cc632a9",
       "verification": [
         {
           "mode": "not_verified",
@@ -4687,7 +4687,7 @@
           "mode": "runtime",
           "status": "PASS",
           "report": "p1-runtime-evidence.json",
-          "scope": "Five P1 core or standard-library pages selected outside the earlier named validation pages. Each program is extracted unchanged from its Markdown body by its p1-runtime-case marker."
+          "scope": "Six P1 core or standard-library pages selected outside the earlier named validation pages. Each program is extracted unchanged from its Markdown body by its p1-runtime-case marker."
         }
       ],
       "marker_count": 0
@@ -6912,7 +6912,7 @@
     },
     {
       "path": "09-nodejs-backend/basics/04-async-promises.md",
-      "sha256": "5cf7c26e69a380e2a89e05c46f5878ce930ac79445d07fc078807cb8751c7825",
+      "sha256": "358d48407e5782a73e0e1292012314e1d946bf323392d9306ec0a673dec16056",
       "verification": [
         {
           "mode": "runtime",
@@ -6925,6 +6925,12 @@
           "status": "PASS",
           "report": "examples.json",
           "scope": "Only named complete examples; no Java, Go, Rust, PHP or native UI execution."
+        },
+        {
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "next-node-python-basics-results.json",
+          "scope": "Only this named, complete code block; no whole-document, framework, network, or application coverage."
         }
       ],
       "marker_count": 0
@@ -6944,7 +6950,7 @@
     },
     {
       "path": "09-nodejs-backend/basics/06-error-handling.md",
-      "sha256": "62a3640b5c2d1a3629b3989e3a47df4d7c59b920978c380e117795c1843778f0",
+      "sha256": "3d01213f1102456b676f472a6bd39fead8eabd7d8a4b8847fb7592d881eb9e1e",
       "verification": [
         {
           "mode": "runtime",
@@ -7299,7 +7305,7 @@
     },
     {
       "path": "09-nodejs-backend/reference/library-guides/01-core-modules.md",
-      "sha256": "da65afe0dce4add6c8d64eeea0f508c22f9beb9c2a5c8e3922b5562571ddaff6",
+      "sha256": "ed17b08bffec61ea7efdcaf58fb104ce53bbc89bfd7c7c558a78378d30367c53",
       "verification": [
         {
           "mode": "runtime",
@@ -9097,7 +9103,7 @@
   "verification_wording": [
     {
       "path": "01-go-backend/advanced-topics/api-advanced/02-graphql-apis.md",
-      "line": 1136,
+      "line": 1149,
       "excerpt": "按 0→1 顺序练习：先通过 gqlgen init 得到与固定版本匹配的项目，只实现 hello 查询；再加入单用户查询、一个 mutation、数据访问接口，最后才加入批量加载与订阅。验收包含未知字段被 schema 拒绝、无权限字段不泄露、复杂度上限生效、订阅取消后 goroutine 退出。本文各节模型和 resolver 是主题片段，不能全部拼接成一个可运行项目；以 gqlgen.yml 和生成的接口为准填入实现，避免手写与生成结构冲突。",
       "classification": "unbound_verification_wording"
     },
@@ -9186,9 +9192,33 @@
       "classification": "unbound_verification_wording"
     },
     {
+      "path": "01-go-backend/testing/05-test-driven-development.md",
+      "line": 797,
+      "excerpt": "2. **绿阶段只补当前规则**：写能让该测试通过的最小实现，再运行整个相关包的测试。此时不为了未来假设加入多余抽象，也不接受只硬编码当前输入而放过相邻边界。",
+      "classification": "unbound_verification_wording"
+    },
+    {
+      "path": "01-go-backend/testing/05-test-driven-development.md",
+      "line": 804,
+      "excerpt": "- [ ] 用最小实现使测试通过，再增加一个相邻边界用例，确认实现不是只为第一个样例硬编码。",
+      "classification": "unbound_verification_wording"
+    },
+    {
+      "path": "01-go-backend/testing/05-test-driven-development.md",
+      "line": 805,
+      "excerpt": "- [ ] 在全部相关测试通过后重命名或抽取一段重复逻辑，运行 `go test ./...`，确认重构没有改变外部行为。",
+      "classification": "unbound_verification_wording"
+    },
+    {
       "path": "02-nextjs-frontend/basics/08-first-project.md",
       "line": 79,
       "excerpt": "沿用工程的启动命令（npm 工程为 `npm run dev`），打开终端显示的本地地址下的 `/drafts`。交付这个页面、工程锁文件和下表的实际结果；本节没有附带已运行的浏览器验收记录。",
+      "classification": "source_has_limited_runtime_evidence"
+    },
+    {
+      "path": "02-nextjs-frontend/basics/08-first-project.md",
+      "line": 1212,
+      "excerpt": "完成本章的功能和验收项后，你会得到一条可运行、可继续扩展的内容管理项目基线。它不自动包含邮件验证、支付、多租户、实时协作或生产运维；每一项扩展都需要单独定义数据边界、失败处理和验收场景。带着这里的路由、数据校验和权限分层继续完成下一项需求，并在提交前复现对应验收步骤。",
       "classification": "source_has_limited_runtime_evidence"
     },
     {
@@ -9207,6 +9237,12 @@
       "path": "02-nextjs-frontend/reference/language-concepts/09-js-core-semantics.md",
       "line": 180,
       "excerpt": "以下程序是上面“闭包持有绑定，箭头函数持有外层 this”的独立可运行版本。保存为 `bindings-contract.mjs` 并用 Node 24 运行；这里使用 `console.log` 输出单个成功标记，让自动验证可以区分“程序启动”与“每个语义断言都成立”。它只验证 JavaScript 的 ESM 语义，不验证 Next.js 渲染或 React Hook 行为。",
+      "classification": "source_has_limited_runtime_evidence"
+    },
+    {
+      "path": "02-nextjs-frontend/testing/01-unit-testing.md",
+      "line": 1506,
+      "excerpt": "4. **依赖替身**：只替换测试不关心的边界（时间、网络、存储或昂贵服务），并为替身写出输入和返回约定；如果 mock 与真实接口形状不同，测试通过也不代表集成可用。",
       "classification": "source_has_limited_runtime_evidence"
     },
     {
@@ -9283,7 +9319,7 @@
     },
     {
       "path": "04-multiplatform-apps/basics/08-first-project.md",
-      "line": 337,
+      "line": 342,
       "excerpt": "将读写存储放到可单测的函数或服务；需要与组件生命周期结合时再封装 Hook。表单在小屏、键盘弹起和大字体下都应能提交，键盘避让策略按平台实测，不把某个 behavior 写成固定答案。",
       "classification": "source_has_limited_runtime_evidence"
     },
@@ -9303,7 +9339,7 @@
       "path": "04-multiplatform-apps/reference/language-concepts/01-rn-core-api.md",
       "line": 327,
       "excerpt": "已运行的应用通过 `url` 事件收到链接；冷启动还需要读取初始 URL，或交给导航库统一处理。链接里的资源 ID 是输入，必须校验格式，并由服务端验证当前用户权限。能跳到某页面不代表能读取其数据。",
-      "classification": "unbound_verification_wording"
+      "classification": "source_has_limited_runtime_evidence"
     },
     {
       "path": "04-multiplatform-apps/reference/language-concepts/10-styling-model.md",

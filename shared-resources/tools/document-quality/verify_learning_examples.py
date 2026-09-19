@@ -16,7 +16,8 @@ ROOT = Path(__file__).resolve().parents[3]
 PYTHON_CASES = [
     ("10-python-discovery/reference/language-concepts/02-built-in-functions.md",
      "[7, 2, 10] [2, 7, 10]\n19 2 10\n[(1, 2), (2, 7), (3, 10)]\n2 7 10 结束\nFalse True\nTrue False\n"),
-    ("10-python-discovery/reference/language-concepts/01-python-keywords.md", "3\n"),
+    ("10-python-discovery/reference/language-concepts/01-python-keywords.md",
+     "keywords-control-flow: first=3; missing=True\n"),
     ("10-python-discovery/reference/language-concepts/06-decorators.md", "开始\n完成\n你好，Ada\ngreet\n"),
 ]
 
@@ -26,6 +27,22 @@ def first_block(relative, language):
     match = re.search(r"^```" + re.escape(language) + r"\n(.*?)^```\s*$", text, re.M | re.S)
     if match is None:
         raise ValueError(f"No {language} example in {relative}")
+    return match.group(1)
+
+
+def marked_block(relative, language, marker):
+    """Extract the fence attached to an explicit verification-case marker.
+
+    First-fence extraction is deliberately avoided for documents that contain
+    several teaching snippets: adding an introductory example must not silently
+    change which contract this verifier executes.
+    """
+    text = (ROOT / relative).read_text(encoding="utf-8")
+    pattern = (r"<!--\s*verification-case:\s*" + re.escape(marker) +
+               r"\s*-->\s*\n```" + re.escape(language) + r"\n(.*?)^```\s*$")
+    match = re.search(pattern, text, re.M | re.S)
+    if match is None:
+        raise ValueError(f"No marked {language} example {marker!r} in {relative}")
     return match.group(1)
 
 
@@ -68,11 +85,13 @@ def main():
                               "core-lab.mjs\ntrue\nfunction\n")
             result["source"] = source
             results.append(result)
-            for source, name, expected in [
-                ("shared-resources/javascript-keywords.md", "keywords.mjs", "read\ntrue\nfinished\n"),
-                ("shared-resources/javascript-builtins.md", "builtins.mjs", "2,7,10\n19\nfalse\ntrue\ntrue\n"),
+            for source, name, marker, expected in [
+                ("shared-resources/javascript-keywords.md", "keywords.mjs",
+                 "shared-js-keywords-binding-flow", "read\ntrue\nfinished\n"),
+                ("shared-resources/javascript-builtins.md", "builtins.mjs",
+                 "shared-js-builtins-data-cleaning", "2,7,10\n19\nfalse\ntrue\ntrue\n"),
             ]:
-                result = run_case([args.node], work / name, first_block(source, "js"), expected)
+                result = run_case([args.node], work / name, marked_block(source, "js", marker), expected)
                 result["source"] = source
                 results.append(result)
         else:

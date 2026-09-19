@@ -1,16 +1,30 @@
 {
   "counts": {
+    "新增模块导读与完整文章导航": 11,
     "主题解释、边界与反馈练习增强；运行范围另记": 313,
     "正文段落重写与语义纠错；非全篇深审": 90,
     "正文增强：概念、自测与反馈；非全篇深审": 90,
     "正文增强：职责、数据流与验收；非全篇深审": 49,
-    "新增模块导读与完整文章导航": 11,
-    "新增文档，教学内容待审查": 1,
+    "新增文档，教学内容待审查": 2,
     "正文增强：范围、阶段与验收；非完整工程实测": 45,
     "重点参考增强或语义纠错；非全篇深审": 32,
     "入口增强；原版本表未全量复核": 10
   },
   "documents": [
+    {
+      "path": "01-go-backend/LEARNING_GUIDE.md",
+      "status": "新增模块导读与完整文章导航",
+      "editorial_sections": 0,
+      "editorial_detail": "",
+      "structure_signals": []
+    },
+    {
+      "path": "01-go-backend/README.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；追加上下文纠错；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
     {
       "path": "01-go-backend/advanced-topics/api-advanced/01-restful-patterns.md",
       "status": "主题解释、边界与反馈练习增强；运行范围另记",
@@ -107,9 +121,7 @@
       "status": "正文增强：概念、自测与反馈；非全篇深审",
       "editorial_sections": 0,
       "editorial_detail": "",
-      "structure_signals": [
-        "教程代码含省略标记，需人工判断"
-      ]
+      "structure_signals": []
     },
     {
       "path": "01-go-backend/deployment/01-containerization.md",
@@ -188,13 +200,6 @@
       "structure_signals": []
     },
     {
-      "path": "01-go-backend/LEARNING_GUIDE.md",
-      "status": "新增模块导读与完整文章导航",
-      "editorial_sections": 0,
-      "editorial_detail": "",
-      "structure_signals": []
-    },
-    {
       "path": "01-go-backend/projects/00-stdlib-todo-cli.md",
       "status": "新增文档，教学内容待审查",
       "editorial_sections": 0,
@@ -229,13 +234,6 @@
       "status": "正文增强：范围、阶段与验收；非完整工程实测",
       "editorial_sections": 0,
       "editorial_detail": "",
-      "structure_signals": []
-    },
-    {
-      "path": "01-go-backend/README.md",
-      "status": "主题解释、边界与反馈练习增强；运行范围另记",
-      "editorial_sections": 0,
-      "editorial_detail": "；追加上下文纠错；全库增强轮次已处理原文与补充教学内容",
       "structure_signals": []
     },
     {
@@ -563,6 +561,20 @@
       "structure_signals": []
     },
     {
+      "path": "02-nextjs-frontend/LEARNING_GUIDE.md",
+      "status": "新增模块导读与完整文章导航",
+      "editorial_sections": 0,
+      "editorial_detail": "",
+      "structure_signals": []
+    },
+    {
+      "path": "02-nextjs-frontend/README.md",
+      "status": "入口增强；原版本表未全量复核",
+      "editorial_sections": 0,
+      "editorial_detail": "",
+      "structure_signals": []
+    },
+    {
       "path": "02-nextjs-frontend/advanced-topics/api-integration/01-graphql-apollo.md",
       "status": "正文段落重写与语义纠错；非全篇深审",
       "editorial_sections": 1,
@@ -719,13 +731,6 @@
       "structure_signals": []
     },
     {
-      "path": "02-nextjs-frontend/LEARNING_GUIDE.md",
-      "status": "新增模块导读与完整文章导航",
-      "editorial_sections": 0,
-      "editorial_detail": "",
-      "structure_signals": []
-    },
-    {
       "path": "02-nextjs-frontend/projects/01-corporate-landing.md",
       "status": "正文增强：范围、阶段与验收；非完整工程实测",
       "editorial_sections": 0,
@@ -756,13 +761,6 @@
       "structure_signals": [
         "短条目重复术语，需核查是否缺少解释"
       ]
-    },
-    {
-      "path": "02-nextjs-frontend/README.md",
-      "status": "入口增强；原版本表未全量复核",
-      "editorial_sections": 0,
-      "editorial_detail": "",
-      "structure_signals": []
     },
     {
       "path": "02-nextjs-frontend/reference/development-tools/01-testing-tools.md",
@@ -1019,6 +1017,20 @@
       "structure_signals": []
     },
     {
+      "path": "03-tanstack-stack/LEARNING_GUIDE.md",
+      "status": "新增模块导读与完整文章导航",
+      "editorial_sections": 0,
+      "editorial_detail": "",
+      "structure_signals": []
+    },
+    {
+      "path": "03-tanstack-stack/README.md",
+      "status": "入口增强；原版本表未全量复核",
+      "editorial_sections": 0,
+      "editorial_detail": "",
+      "structure_signals": []
+    },
+    {
       "path": "03-tanstack-stack/advanced-topics/architecture/01-cache-architecture.md",
       "status": "主题解释、边界与反馈练习增强；运行范围另记",
       "editorial_sections": 0,
@@ -1152,13 +1164,6 @@
       "structure_signals": []
     },
     {
-      "path": "03-tanstack-stack/LEARNING_GUIDE.md",
-      "status": "新增模块导读与完整文章导航",
-      "editorial_sections": 0,
-      "editorial_detail": "",
-      "structure_signals": []
-    },
-    {
       "path": "03-tanstack-stack/projects/01-todo-app.md",
       "status": "正文增强：范围、阶段与验收；非完整工程实测",
       "editorial_sections": 0,
@@ -1182,13 +1187,6 @@
     {
       "path": "03-tanstack-stack/projects/04-saas-admin-platform.md",
       "status": "正文增强：范围、阶段与验收；非完整工程实测",
-      "editorial_sections": 0,
-      "editorial_detail": "",
-      "structure_signals": []
-    },
-    {
-      "path": "03-tanstack-stack/README.md",
-      "status": "入口增强；原版本表未全量复核",
       "editorial_sections": 0,
       "editorial_detail": "",
       "structure_signals": []
@@ -1397,6 +1395,13 @@
       "structure_signals": []
     },
     {
+      "path": "03-tanstack-stack/reference/library-guides/03-language-web-foundations.md",
+      "status": "新增文档，教学内容待审查",
+      "editorial_sections": 0,
+      "editorial_detail": "",
+      "structure_signals": []
+    },
+    {
       "path": "03-tanstack-stack/reference/quick-references/01-syntax-cheatsheet.md",
       "status": "主题解释、边界与反馈练习增强；运行范围另记",
       "editorial_sections": 0,
@@ -1433,6 +1438,27 @@
     },
     {
       "path": "03-tanstack-stack/testing/04-e2e-testing.md",
+      "status": "正文段落重写与语义纠错；非全篇深审",
+      "editorial_sections": 1,
+      "editorial_detail": "；本轮重写 1 个记录段落",
+      "structure_signals": []
+    },
+    {
+      "path": "04-multiplatform-apps/LEARNING_GUIDE.md",
+      "status": "新增模块导读与完整文章导航",
+      "editorial_sections": 0,
+      "editorial_detail": "",
+      "structure_signals": []
+    },
+    {
+      "path": "04-multiplatform-apps/README.md",
+      "status": "入口增强；原版本表未全量复核",
+      "editorial_sections": 0,
+      "editorial_detail": "",
+      "structure_signals": []
+    },
+    {
+      "path": "04-multiplatform-apps/React Native三端原生应用学习路线.md",
       "status": "正文段落重写与语义纠错；非全篇深审",
       "editorial_sections": 1,
       "editorial_detail": "；本轮重写 1 个记录段落",
@@ -1574,13 +1600,6 @@
       "structure_signals": []
     },
     {
-      "path": "04-multiplatform-apps/LEARNING_GUIDE.md",
-      "status": "新增模块导读与完整文章导航",
-      "editorial_sections": 0,
-      "editorial_detail": "",
-      "structure_signals": []
-    },
-    {
       "path": "04-multiplatform-apps/projects/01-todo-app.md",
       "status": "正文增强：范围、阶段与验收；非完整工程实测",
       "editorial_sections": 1,
@@ -1606,20 +1625,6 @@
       "status": "正文增强：范围、阶段与验收；非完整工程实测",
       "editorial_sections": 1,
       "editorial_detail": "；本轮重写 1 个记录段落",
-      "structure_signals": []
-    },
-    {
-      "path": "04-multiplatform-apps/React Native三端原生应用学习路线.md",
-      "status": "正文段落重写与语义纠错；非全篇深审",
-      "editorial_sections": 1,
-      "editorial_detail": "；本轮重写 1 个记录段落",
-      "structure_signals": []
-    },
-    {
-      "path": "04-multiplatform-apps/README.md",
-      "status": "入口增强；原版本表未全量复核",
-      "editorial_sections": 0,
-      "editorial_detail": "",
       "structure_signals": []
     },
     {
@@ -1805,6 +1810,27 @@
       "structure_signals": []
     },
     {
+      "path": "05-kotlin-compose/Android原生开发学习路线.md",
+      "status": "主题解释、边界与反馈练习增强；运行范围另记",
+      "editorial_sections": 0,
+      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
+      "structure_signals": []
+    },
+    {
+      "path": "05-kotlin-compose/LEARNING_GUIDE.md",
+      "status": "新增模块导读与完整文章导航",
+      "editorial_sections": 0,
+      "editorial_detail": "",
+      "structure_signals": []
+    },
+    {
+      "path": "05-kotlin-compose/README.md",
+      "status": "入口增强；原版本表未全量复核",
+      "editorial_sections": 0,
+      "editorial_detail": "",
+      "structure_signals": []
+    },
+    {
       "path": "05-kotlin-compose/advanced-topics/architecture/01-app-architecture.md",
       "status": "主题解释、边界与反馈练习增强；运行范围另记",
       "editorial_sections": 0,
@@ -1830,13 +1856,6 @@
       "status": "正文段落重写与语义纠错；非全篇深审",
       "editorial_sections": 1,
       "editorial_detail": "；本轮重写 1 个记录段落",
-      "structure_signals": []
-    },
-    {
-      "path": "05-kotlin-compose/Android原生开发学习路线.md",
-      "status": "主题解释、边界与反馈练习增强；运行范围另记",
-      "editorial_sections": 0,
-      "editorial_detail": "；全库增强轮次已处理原文与补充教学内容",
       "structure_signals": []
     },
     {
@@ -1945,13 +1964,6 @@
       "structure_signals": []
     },
     {
-      "path": "05-kotlin-compose/LEARNING_GUIDE.md",
-      "status": "新增模块导读与完整文章导航",
-      "editorial_sections": 0,
-      "editorial_detail": "",
-      "structure_signals": []
-    },
-    {
       "path": "05-kotlin-compose/projects/01-notes-app.md",
       "status": "正文增强：范围、阶段与验收；非完整工程实测",
       "editorial_sections": 0,
@@ -1975,13 +1987,6 @@
     {
       "path": "05-kotlin-compose/projects/04-production-android-app.md",
       "status": "正文增强：范围、阶段与验收；非完整工程实测",
-      "editorial_sections": 0,
-      "editorial_detail": "",
-      "structure_signals": []
-    },
-    {
-      "path": "05-kotlin-compose/README.md",
-      "status": "入口增强；原版本表未全量复核",
       "editorial_sections": 0,
       "editorial_detail": "",
       "structure_signals": []
@@ -2190,6 +2195,20 @@
       "structure_signals": []
     },
     {
+      "path": "06-swift-swiftui/LEARNING_GUIDE.md",
+      "status": "新增模块导读与完整文章导航",
+      "editorial_sections": 0,
+      "editorial_detail": "",
+      "structure_signals": []
+    },
+    {
+      "path": "06-swift-swiftui/README.md",
+      "status": "入口增强；原版本表未全量复核",
+      "editorial_sections": 0,
+      "editorial_detail": "",
+      "structure_signals": []
+    },
+    {
       "path": "06-swift-swiftui/advanced-topics/architecture/01-app-architecture.md",
       "status": "主题解释、边界与反馈练习增强；运行范围另记",
       "editorial_sections": 0,
@@ -2334,13 +2353,6 @@
       "structure_signals": []
     },
     {
-      "path": "06-swift-swiftui/LEARNING_GUIDE.md",
-      "status": "新增模块导读与完整文章导航",
-      "editorial_sections": 0,
-      "editorial_detail": "",
-      "structure_signals": []
-    },
-    {
       "path": "06-swift-swiftui/projects/01-notes-app.md",
       "status": "正文增强：范围、阶段与验收；非完整工程实测",
       "editorial_sections": 0,
@@ -2364,13 +2376,6 @@
     {
       "path": "06-swift-swiftui/projects/04-production-ios-app.md",
       "status": "正文增强：范围、阶段与验收；非完整工程实测",
-      "editorial_sections": 0,
-      "editorial_detail": "",
-      "structure_signals": []
-    },
-    {
-      "path": "06-swift-swiftui/README.md",
-      "status": "入口增强；原版本表未全量复核",
       "editorial_sections": 0,
       "editorial_detail": "",
       "structure_signals": []
@@ -2597,6 +2602,20 @@
       ]
     },
     {
+      "path": "07-php-mastery/LEARNING_GUIDE.md",
+      "status": "新增模块导读与完整文章导航",
+      "editorial_sections": 0,
+      "editorial_detail": "",
+      "structure_signals": []
+    },
+    {
+      "path": "07-php-mastery/README.md",
+      "status": "入口增强；原版本表未全量复核",
+      "editorial_sections": 0,
+      "editorial_detail": "",
+      "structure_signals": []
+    },
+    {
       "path": "07-php-mastery/advanced-topics/architecture/01-laravel-architecture.md",
       "status": "主题解释、边界与反馈练习增强；运行范围另记",
       "editorial_sections": 0,
@@ -2762,13 +2781,6 @@
       "structure_signals": []
     },
     {
-      "path": "07-php-mastery/LEARNING_GUIDE.md",
-      "status": "新增模块导读与完整文章导航",
-      "editorial_sections": 0,
-      "editorial_detail": "",
-      "structure_signals": []
-    },
-    {
       "path": "07-php-mastery/projects/01-todo-api.md",
       "status": "正文增强：范围、阶段与验收；非完整工程实测",
       "editorial_sections": 0,
@@ -2794,13 +2806,6 @@
     {
       "path": "07-php-mastery/projects/04-production-laravel-app.md",
       "status": "正文增强：范围、阶段与验收；非完整工程实测",
-      "editorial_sections": 0,
-      "editorial_detail": "",
-      "structure_signals": []
-    },
-    {
-      "path": "07-php-mastery/README.md",
-      "status": "入口增强；原版本表未全量复核",
       "editorial_sections": 0,
       "editorial_detail": "",
       "structure_signals": []
@@ -3030,6 +3035,20 @@
       "structure_signals": []
     },
     {
+      "path": "08-java-revisited/LEARNING_GUIDE.md",
+      "status": "新增模块导读与完整文章导航",
+      "editorial_sections": 0,
+      "editorial_detail": "",
+      "structure_signals": []
+    },
+    {
+      "path": "08-java-revisited/README.md",
+      "status": "入口增强；原版本表未全量复核",
+      "editorial_sections": 0,
+      "editorial_detail": "",
+      "structure_signals": []
+    },
+    {
       "path": "08-java-revisited/advanced-topics/architecture/01-layered-architecture.md",
       "status": "主题解释、边界与反馈练习增强；运行范围另记",
       "editorial_sections": 0,
@@ -3111,7 +3130,9 @@
       "status": "正文增强：概念、自测与反馈；非全篇深审",
       "editorial_sections": 0,
       "editorial_detail": "",
-      "structure_signals": []
+      "structure_signals": [
+        "未显式说明阅读前提"
+      ]
     },
     {
       "path": "08-java-revisited/deployment/01-docker-deployment.md",
@@ -3165,13 +3186,6 @@
       "structure_signals": []
     },
     {
-      "path": "08-java-revisited/LEARNING_GUIDE.md",
-      "status": "新增模块导读与完整文章导航",
-      "editorial_sections": 0,
-      "editorial_detail": "",
-      "structure_signals": []
-    },
-    {
       "path": "08-java-revisited/projects/01-todo-api.md",
       "status": "正文增强：范围、阶段与验收；非完整工程实测",
       "editorial_sections": 0,
@@ -3199,13 +3213,6 @@
       "status": "正文增强：范围、阶段与验收；非完整工程实测",
       "editorial_sections": 1,
       "editorial_detail": "；本轮重写 1 个记录段落",
-      "structure_signals": []
-    },
-    {
-      "path": "08-java-revisited/README.md",
-      "status": "入口增强；原版本表未全量复核",
-      "editorial_sections": 0,
-      "editorial_detail": "",
       "structure_signals": []
     },
     {
@@ -3435,6 +3442,20 @@
       "structure_signals": []
     },
     {
+      "path": "09-nodejs-backend/LEARNING_GUIDE.md",
+      "status": "新增模块导读与完整文章导航",
+      "editorial_sections": 0,
+      "editorial_detail": "",
+      "structure_signals": []
+    },
+    {
+      "path": "09-nodejs-backend/README.md",
+      "status": "入口增强；原版本表未全量复核",
+      "editorial_sections": 0,
+      "editorial_detail": "",
+      "structure_signals": []
+    },
+    {
       "path": "09-nodejs-backend/advanced-topics/architecture/01-service-architecture.md",
       "status": "主题解释、边界与反馈练习增强；运行范围另记",
       "editorial_sections": 0,
@@ -3568,13 +3589,6 @@
       "structure_signals": []
     },
     {
-      "path": "09-nodejs-backend/LEARNING_GUIDE.md",
-      "status": "新增模块导读与完整文章导航",
-      "editorial_sections": 0,
-      "editorial_detail": "",
-      "structure_signals": []
-    },
-    {
       "path": "09-nodejs-backend/projects/01-todo-api.md",
       "status": "正文增强：范围、阶段与验收；非完整工程实测",
       "editorial_sections": 0,
@@ -3598,13 +3612,6 @@
     {
       "path": "09-nodejs-backend/projects/04-production-nodejs-api.md",
       "status": "正文增强：范围、阶段与验收；非完整工程实测",
-      "editorial_sections": 0,
-      "editorial_detail": "",
-      "structure_signals": []
-    },
-    {
-      "path": "09-nodejs-backend/README.md",
-      "status": "入口增强；原版本表未全量复核",
       "editorial_sections": 0,
       "editorial_detail": "",
       "structure_signals": []
@@ -3785,6 +3792,20 @@
       "structure_signals": []
     },
     {
+      "path": "10-python-discovery/LEARNING_GUIDE.md",
+      "status": "新增模块导读与完整文章导航",
+      "editorial_sections": 0,
+      "editorial_detail": "",
+      "structure_signals": []
+    },
+    {
+      "path": "10-python-discovery/README.md",
+      "status": "入口增强；原版本表未全量复核",
+      "editorial_sections": 0,
+      "editorial_detail": "",
+      "structure_signals": []
+    },
+    {
       "path": "10-python-discovery/advanced-topics/architecture/01-project-architecture.md",
       "status": "主题解释、边界与反馈练习增强；运行范围另记",
       "editorial_sections": 0,
@@ -3918,13 +3939,6 @@
       "structure_signals": []
     },
     {
-      "path": "10-python-discovery/LEARNING_GUIDE.md",
-      "status": "新增模块导读与完整文章导航",
-      "editorial_sections": 0,
-      "editorial_detail": "",
-      "structure_signals": []
-    },
-    {
       "path": "10-python-discovery/projects/01-todo-api.md",
       "status": "正文增强：范围、阶段与验收；非完整工程实测",
       "editorial_sections": 0,
@@ -3950,13 +3964,6 @@
     {
       "path": "10-python-discovery/projects/04-production-fastapi-app.md",
       "status": "正文增强：范围、阶段与验收；非完整工程实测",
-      "editorial_sections": 0,
-      "editorial_detail": "",
-      "structure_signals": []
-    },
-    {
-      "path": "10-python-discovery/README.md",
-      "status": "入口增强；原版本表未全量复核",
       "editorial_sections": 0,
       "editorial_detail": "",
       "structure_signals": []
@@ -4179,6 +4186,20 @@
       "structure_signals": []
     },
     {
+      "path": "11-rust-cross-platform/LEARNING_GUIDE.md",
+      "status": "新增模块导读与完整文章导航",
+      "editorial_sections": 0,
+      "editorial_detail": "",
+      "structure_signals": []
+    },
+    {
+      "path": "11-rust-cross-platform/README.md",
+      "status": "入口增强；原版本表未全量复核",
+      "editorial_sections": 0,
+      "editorial_detail": "",
+      "structure_signals": []
+    },
+    {
       "path": "11-rust-cross-platform/advanced-topics/01-memory-layout-performance.md",
       "status": "正文段落重写与语义纠错；非全篇深审",
       "editorial_sections": 1,
@@ -4364,13 +4385,6 @@
       "structure_signals": []
     },
     {
-      "path": "11-rust-cross-platform/LEARNING_GUIDE.md",
-      "status": "新增模块导读与完整文章导航",
-      "editorial_sections": 0,
-      "editorial_detail": "",
-      "structure_signals": []
-    },
-    {
       "path": "11-rust-cross-platform/projects/01-cli-tool.md",
       "status": "正文增强：范围、阶段与验收；非完整工程实测",
       "editorial_sections": 1,
@@ -4403,13 +4417,6 @@
       "status": "正文增强：范围、阶段与验收；非完整工程实测",
       "editorial_sections": 1,
       "editorial_detail": "；本轮重写 1 个记录段落",
-      "structure_signals": []
-    },
-    {
-      "path": "11-rust-cross-platform/README.md",
-      "status": "入口增强；原版本表未全量复核",
-      "editorial_sections": 0,
-      "editorial_detail": "",
       "structure_signals": []
     },
     {

@@ -7,11 +7,11 @@
 | 指标 | 数量 |
 |---|---:|
 | 纳入模块文档 | 642 |
-| 主状态：not_verified | 449 |
-| 主状态：runtime | 193 |
-| 验证措辞出现次数 | 144 |
-| 措辞分类：source_has_limited_runtime_evidence | 88 |
-| 措辞分类：unbound_verification_wording | 56 |
+| 主状态：not_verified | 448 |
+| 主状态：runtime | 194 |
+| 验证措辞出现次数 | 149 |
+| 措辞分类：source_has_limited_runtime_evidence | 91 |
+| 措辞分类：unbound_verification_wording | 58 |
 
 ## 语法级覆盖（不能当作运行覆盖）
 
@@ -110,7 +110,7 @@
 | Go | [01-go-backend/testing/02-mocking-stubbing.md](../../../../01-go-backend/testing/02-mocking-stubbing.md) | `not_verified` | 0 | 0 |
 | Go | [01-go-backend/testing/03-integration-testing.md](../../../../01-go-backend/testing/03-integration-testing.md) | `not_verified` | 0 | 0 |
 | Go | [01-go-backend/testing/04-benchmarking.md](../../../../01-go-backend/testing/04-benchmarking.md) | `not_verified` | 0 | 0 |
-| Go | [01-go-backend/testing/05-test-driven-development.md](../../../../01-go-backend/testing/05-test-driven-development.md) | `not_verified` | 0 | 2 |
+| Go | [01-go-backend/testing/05-test-driven-development.md](../../../../01-go-backend/testing/05-test-driven-development.md) | `not_verified` | 0 | 5 |
 | Next.js / TypeScript | [02-nextjs-frontend/LEARNING_GUIDE.md](../../../../02-nextjs-frontend/LEARNING_GUIDE.md) | `not_verified` | 0 | 0 |
 | Next.js / TypeScript | [02-nextjs-frontend/README.md](../../../../02-nextjs-frontend/README.md) | `not_verified` | 0 | 0 |
 | Next.js / TypeScript | [02-nextjs-frontend/advanced-topics/api-integration/01-graphql-apollo.md](../../../../02-nextjs-frontend/advanced-topics/api-integration/01-graphql-apollo.md) | `not_verified` | 0 | 0 |
@@ -126,7 +126,7 @@
 | Next.js / TypeScript | [02-nextjs-frontend/basics/05-styling-with-tailwind.md](../../../../02-nextjs-frontend/basics/05-styling-with-tailwind.md) | `not_verified` | 0 | 0 |
 | Next.js / TypeScript | [02-nextjs-frontend/basics/06-data-fetching-basics.md](../../../../02-nextjs-frontend/basics/06-data-fetching-basics.md) | `not_verified` | 0 | 0 |
 | Next.js / TypeScript | [02-nextjs-frontend/basics/07-state-management.md](../../../../02-nextjs-frontend/basics/07-state-management.md) | `not_verified` | 0 | 0 |
-| Next.js / TypeScript | [02-nextjs-frontend/basics/08-first-project.md](../../../../02-nextjs-frontend/basics/08-first-project.md) | `runtime` | 1 | 1 |
+| Next.js / TypeScript | [02-nextjs-frontend/basics/08-first-project.md](../../../../02-nextjs-frontend/basics/08-first-project.md) | `runtime` | 1 | 2 |
 | Next.js / TypeScript | [02-nextjs-frontend/deployment/01-vercel-deployment.md](../../../../02-nextjs-frontend/deployment/01-vercel-deployment.md) | `not_verified` | 0 | 0 |
 | Next.js / TypeScript | [02-nextjs-frontend/deployment/02-docker-containerization.md](../../../../02-nextjs-frontend/deployment/02-docker-containerization.md) | `not_verified` | 0 | 0 |
 | Next.js / TypeScript | [02-nextjs-frontend/deployment/03-ci-cd-pipelines.md](../../../../02-nextjs-frontend/deployment/03-ci-cd-pipelines.md) | `not_verified` | 0 | 0 |
@@ -171,7 +171,7 @@
 | Next.js / TypeScript | [02-nextjs-frontend/reference/performance-optimization/01-rendering-optimization.md](../../../../02-nextjs-frontend/reference/performance-optimization/01-rendering-optimization.md) | `not_verified` | 0 | 0 |
 | Next.js / TypeScript | [02-nextjs-frontend/reference/performance-optimization/02-bundle-optimization.md](../../../../02-nextjs-frontend/reference/performance-optimization/02-bundle-optimization.md) | `not_verified` | 0 | 0 |
 | Next.js / TypeScript | [02-nextjs-frontend/reference/performance-optimization/03-image-font-optimization.md](../../../../02-nextjs-frontend/reference/performance-optimization/03-image-font-optimization.md) | `not_verified` | 0 | 0 |
-| Next.js / TypeScript | [02-nextjs-frontend/testing/01-unit-testing.md](../../../../02-nextjs-frontend/testing/01-unit-testing.md) | `runtime` | 2 | 0 |
+| Next.js / TypeScript | [02-nextjs-frontend/testing/01-unit-testing.md](../../../../02-nextjs-frontend/testing/01-unit-testing.md) | `runtime` | 2 | 1 |
 | Next.js / TypeScript | [02-nextjs-frontend/testing/02-component-testing.md](../../../../02-nextjs-frontend/testing/02-component-testing.md) | `not_verified` | 0 | 0 |
 | Next.js / TypeScript | [02-nextjs-frontend/testing/03-e2e-testing.md](../../../../02-nextjs-frontend/testing/03-e2e-testing.md) | `not_verified` | 0 | 0 |
 | Next.js / TypeScript | [02-nextjs-frontend/testing/04-performance-testing.md](../../../../02-nextjs-frontend/testing/04-performance-testing.md) | `not_verified` | 0 | 2 |
@@ -266,7 +266,7 @@
 | React Native / Multi-platform | [04-multiplatform-apps/reference/framework-essentials/02-navigation-essentials.md](../../../../04-multiplatform-apps/reference/framework-essentials/02-navigation-essentials.md) | `not_verified` | 0 | 0 |
 | React Native / Multi-platform | [04-multiplatform-apps/reference/framework-essentials/03-config-plugins-prebuild.md](../../../../04-multiplatform-apps/reference/framework-essentials/03-config-plugins-prebuild.md) | `not_verified` | 0 | 0 |
 | React Native / Multi-platform | [04-multiplatform-apps/reference/framework-essentials/04-dev-client-and-updates.md](../../../../04-multiplatform-apps/reference/framework-essentials/04-dev-client-and-updates.md) | `not_verified` | 0 | 0 |
-| React Native / Multi-platform | [04-multiplatform-apps/reference/language-concepts/01-rn-core-api.md](../../../../04-multiplatform-apps/reference/language-concepts/01-rn-core-api.md) | `not_verified` | 0 | 1 |
+| React Native / Multi-platform | [04-multiplatform-apps/reference/language-concepts/01-rn-core-api.md](../../../../04-multiplatform-apps/reference/language-concepts/01-rn-core-api.md) | `runtime` | 1 | 1 |
 | React Native / Multi-platform | [04-multiplatform-apps/reference/language-concepts/02-components-props.md](../../../../04-multiplatform-apps/reference/language-concepts/02-components-props.md) | `runtime` | 1 | 0 |
 | React Native / Multi-platform | [04-multiplatform-apps/reference/language-concepts/03-hooks-reference.md](../../../../04-multiplatform-apps/reference/language-concepts/03-hooks-reference.md) | `not_verified` | 0 | 0 |
 | React Native / Multi-platform | [04-multiplatform-apps/reference/language-concepts/04-typescript-patterns.md](../../../../04-multiplatform-apps/reference/language-concepts/04-typescript-patterns.md) | `runtime` | 1 | 0 |
@@ -527,7 +527,7 @@
 | Node.js | [09-nodejs-backend/basics/01-environment-setup.md](../../../../09-nodejs-backend/basics/01-environment-setup.md) | `not_verified` | 0 | 0 |
 | Node.js | [09-nodejs-backend/basics/02-first-server.md](../../../../09-nodejs-backend/basics/02-first-server.md) | `runtime` | 1 | 0 |
 | Node.js | [09-nodejs-backend/basics/03-modules-esm.md](../../../../09-nodejs-backend/basics/03-modules-esm.md) | `runtime` | 1 | 0 |
-| Node.js | [09-nodejs-backend/basics/04-async-promises.md](../../../../09-nodejs-backend/basics/04-async-promises.md) | `runtime` | 2 | 0 |
+| Node.js | [09-nodejs-backend/basics/04-async-promises.md](../../../../09-nodejs-backend/basics/04-async-promises.md) | `runtime` | 3 | 0 |
 | Node.js | [09-nodejs-backend/basics/05-http-routing.md](../../../../09-nodejs-backend/basics/05-http-routing.md) | `runtime` | 1 | 0 |
 | Node.js | [09-nodejs-backend/basics/06-error-handling.md](../../../../09-nodejs-backend/basics/06-error-handling.md) | `runtime` | 2 | 0 |
 | Node.js | [09-nodejs-backend/basics/07-streams-workers.md](../../../../09-nodejs-backend/basics/07-streams-workers.md) | `runtime` | 1 | 0 |
