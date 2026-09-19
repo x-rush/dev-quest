@@ -93,6 +93,7 @@ func main() {
 下面这段是可直接执行的最小完整程序。它同时验证类型推断、`~int` 对命名类型的匹配，以及泛型容器的“零值 + ok”读取约定；其中 `Score` 不需要显式转换为 `int`。
 
 <!-- terra-thirteenth-case: go-generics-named-type -->
+<!-- doc-verify:go-generics-named-type -->
 ```go
 package main
 

@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-19T17:22:20.851803+00:00",
-  "purpose": "Twenty-fifth-round runtime evidence for eight marked Go core-document fences.",
+  "generated_at": "2026-09-19T17:24:22.337446+00:00",
+  "purpose": "Twenty-fifth-round runtime evidence for nine marked Go core-document fences.",
   "isolation": "No network, read-only container root, dropped capabilities, no-new-privileges, bounded CPU/memory/PIDs, and tmpfs-only writable workspace. Image must already exist because --pull=never is used.",
-  "scope": "Only the eight named complete Go fences extracted unchanged after CRLF-to-LF normalization were executed. Other fences, toolchain setup, web services, filesystem integrations, concurrency scheduling, performance, and projects remain outside this evidence.",
+  "scope": "Only the nine named complete Go fences extracted unchanged after CRLF-to-LF normalization were executed. Other fences, toolchain setup, web services, filesystem integrations, concurrency scheduling, performance, and projects remain outside this evidence.",
   "results": [
     {
       "id": "go-first-program-hello",
@@ -116,10 +116,24 @@
       "stderr": "",
       "exit_code": 0,
       "status": "PASS"
+    },
+    {
+      "id": "go-generics-named-type",
+      "language": "go",
+      "document": "01-go-backend/reference/language-concepts/09-generics.md",
+      "image": "golang:1.25-alpine",
+      "document_sha256": "af0ad846cec433a2b31dc50d58e65e47d8d083c81e877388d66665f9c13d793f",
+      "code_sha256": "34213114366385c6e5d2bf72fe2888f89520735f60ee27062408966e8efcb32f",
+      "command": "GOCACHE=/tmp/go-build go run /tmp/main.go",
+      "expected_stdout": "score=6\nmissing=0,false\n",
+      "stdout": "score=6\nmissing=0,false\n",
+      "stderr": "",
+      "exit_code": 0,
+      "status": "PASS"
     }
   ],
   "summary": {
-    "passed": 8,
-    "total": 8
+    "passed": 9,
+    "total": 9
   }
 }
