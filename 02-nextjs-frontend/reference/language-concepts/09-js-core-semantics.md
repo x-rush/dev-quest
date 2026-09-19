@@ -175,6 +175,35 @@ console.log(arrow.call({ value: 99 }));
 
 最后一行仍使用 model：箭头函数固定的是外层 this 关系，value 属性本身仍能变化。练习：将循环 let 改成 var，解释为什么变成 `3,3,3`；再给 detached 绑定 model，确认结果恢复。
 
+### 可直接提取的运行案例
+
+以下程序是上面“闭包持有绑定，箭头函数持有外层 this”的独立可运行版本。保存为 `bindings-contract.mjs` 并用 Node 24 运行；这里使用 `console.log` 输出单个成功标记，让自动验证可以区分“程序启动”与“每个语义断言都成立”。它只验证 JavaScript 的 ESM 语义，不验证 Next.js 渲染或 React Hook 行为。
+
+<!-- p1-runtime-case: next-js-bindings -->
+```js
+let value = 1
+const read = () => value
+value = 2
+
+const readers = []
+for (let i = 0; i < 3; i++) readers.push(() => i)
+
+const model = {
+  value: 7,
+  read() { return this?.value },
+  makeReader() { return () => this.value },
+}
+const detached = model.read
+const arrow = model.makeReader()
+model.value = 8
+
+if (read() !== 2) throw new Error('closure must read the current binding')
+if (readers.map((fn) => fn()).join(',') !== '0,1,2') throw new Error('let must create per-iteration bindings')
+if (model.read() !== 8 || detached() !== undefined) throw new Error('method receiver binding changed unexpectedly')
+if (arrow.call({ value: 99 }) !== 8) throw new Error('arrow must retain its lexical this')
+console.log('JavaScript binding contracts passed')
+```
+
 ### 生成器消费后不会自动重置
 
 保存为 `iteration.mjs`，预期三行：`0,1,2`、空行、`a:1,b:2`。

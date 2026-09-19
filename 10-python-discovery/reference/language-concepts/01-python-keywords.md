@@ -4,8 +4,9 @@
 
 前置：变量、函数与条件。关键词不是需要背诵的清单，而是用来描述数据流和控制流的语法。先按“定义 → 调用 → 分支 → 返回”理解，再查异步和模式匹配。
 
-完整示例，保存为 `keywords_lab.py` 并用 Python 运行：
+完整示例，保存为 `keywords_lab.py` 并用 Python 运行。它同时覆盖 `for`、`if`、`return` 与 `is None`，并显式验收两条分支：
 
+<!-- node-python-p1-final-case: python-keywords-control-flow -->
 ```python
 def first_positive(values):
     for value in values:
@@ -14,13 +15,14 @@ def first_positive(values):
     return None
 
 answer = first_positive([-2, 0, 3, 8])
-if answer is None:
-    print("没有正数")
-else:
-    print(answer)
+missing = first_positive([-2, 0])
+
+if answer != 3 or missing is not None:
+    raise AssertionError("keyword control-flow contract failed")
+print(f"keywords-control-flow: first={answer}; missing={missing is None}")
 ```
 
-预期输出 3。def 创建函数，for 按次取值，if 判断当前项，return 同时结束函数并交出结果。换成 `[-2, 0]` 应输出“没有正数”；这里 None 表达缺失，不能用 `answer or ...` 代替所有缺失判断，因为其他题目里 0 可能是合法答案。
+预期输出 `keywords-control-flow: first=3; missing=True`。def 创建函数，for 按次取值，if 判断当前项，return 同时结束函数并交出结果。这里 None 表达缺失，不能用 `answer or ...` 代替所有缺失判断，因为其他题目里 0 可能是合法答案。
 
 **边界辨析**：and 与 or 短路并返回选中的操作数；not 返回布尔值。is 比较对象身份，== 比较值是否相等，两个列表内容相同不代表是同一个列表。自测 `[] == []` 为 True，`[] is []` 为 False；能解释原因再继续读身份与作用域条目。
 

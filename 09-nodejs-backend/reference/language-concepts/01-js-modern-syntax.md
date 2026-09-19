@@ -202,19 +202,27 @@ try {
 
 前置是对象、数组与函数。解构默认值只处理 undefined，?? 处理 null 和 undefined，|| 处理所有假值。选择哪一个取决于业务：重试次数允许 0 时用 || 会错误地改回默认次数；姓名空串应报错时，用 ?? 也不会自动验证它。可选链只避免特定的空值访问，不保证函数存在且可调用，也不会吞掉函数内部异常。
 
-完整实验保存为 syntax.mjs，运行 node syntax.mjs：
+完整实验保存为 syntax.mjs，运行 node syntax.mjs。它将“未提供”和“明确为 0”分开，也验证浅拷贝的嵌套引用：
 
+<!-- node-python-p1-final-case: node-modern-syntax-contracts -->
 ```js
 const settings = { retries: 0, label: null };
 const { label = 'untitled' } = settings;
-console.log(settings.retries || 3, settings.retries ?? 3, label);
 const original = { tags: ['node'] };
 const copy = { ...original };
 copy.tags.push('js');
-console.log(original.tags.join(','));
+
+const report = [
+  `fallback=${settings.retries || 3}/${settings.retries ?? 3}/${String(label)}`,
+  `shared=${original.tags.join(',')}`,
+];
+if (report.join(';') !== 'fallback=3/0/null;shared=node,js') {
+  throw new Error(`Unexpected syntax contract: ${report.join(';')}`);
+}
+console.log(`modern-syntax: ${report.join('; ')}`);
 ```
 
-预期输出 `3 0 null` 和 `node,js`。第二行说明展开只复制外层属性，嵌套数组仍共享。练习：改成 structuredClone 后，原数组应保留 node；再给对象加入函数，观察该克隆方法并非适用于所有对象。对象展开枚举自身可枚举属性，与数组展开所需的迭代协议是两种不同机制，不应混为“任意对象都能展开成数组”。
+预期输出 `modern-syntax: fallback=3/0/null; shared=node,js`。`||` 将 0 当作假值，`??` 只替换 null/undefined；解构默认值只替换 undefined，所以 label 仍是 null。第二个字段说明展开只复制外层属性，嵌套数组仍共享。练习：改成 structuredClone 后，原数组应保留 node；再给对象加入函数，观察该克隆方法并非适用于所有对象。对象展开枚举自身可枚举属性，与数组展开所需的迭代协议是两种不同机制，不应混为“任意对象都能展开成数组”。
 
 ## 🔗 相关文档
 

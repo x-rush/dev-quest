@@ -17,12 +17,12 @@
   "summary": {
     "documents": 642,
     "by_primary_state": {
-      "not_verified": 526,
-      "runtime": 116
+      "not_verified": 524,
+      "runtime": 118
     },
-    "verification_wording_occurrences": 123,
+    "verification_wording_occurrences": 124,
     "marker_classification": {
-      "source_has_limited_runtime_evidence": 79,
+      "source_has_limited_runtime_evidence": 80,
       "unbound_verification_wording": 44
     }
   },
@@ -1798,7 +1798,7 @@
     },
     {
       "path": "02-nextjs-frontend/reference/language-concepts/09-js-core-semantics.md",
-      "sha256": "58dd1b3b8786c7219c87ca1f572c584a660f65107161360020a2b99efa68b2c6",
+      "sha256": "4303f573cfea3138630f719862b72f2878885876ca6195ba32b8d4563b941685",
       "verification": [
         {
           "mode": "runtime",
@@ -1817,9 +1817,15 @@
           "status": "PASS",
           "report": "frontend-foundations.json",
           "scope": "Eight marked complete programs, executed verbatim with Node; no browser UI, network, SSR or framework build validation."
+        },
+        {
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "p1-runtime-evidence.json",
+          "scope": "Five P1 core or standard-library pages selected outside the earlier named validation pages. Each program is extracted unchanged from its Markdown body by its p1-runtime-case marker."
         }
       ],
-      "marker_count": 0
+      "marker_count": 1
     },
     {
       "path": "02-nextjs-frontend/reference/language-concepts/10-web-platform-apis.md",
@@ -2420,6 +2426,12 @@
           "status": "PASS",
           "report": "p1-frontend-mobile-core-runtime.json",
           "scope": "Four exact marked P1 core/standard-library programs: Next.js-adjacent input boundary, TanStack query-key factory, Kotlin Sequence, and Swift Optional/collections."
+        },
+        {
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "p1-runtime-evidence.json",
+          "scope": "Five P1 core or standard-library pages selected outside the earlier named validation pages. Each program is extracted unchanged from its Markdown body by its p1-runtime-case marker."
         }
       ],
       "marker_count": 1
@@ -3160,13 +3172,13 @@
     },
     {
       "path": "04-multiplatform-apps/reference/language-concepts/02-components-props.md",
-      "sha256": "1364e60b4a188ea1519082f15843163e8121f956f5a606fd65c1295fd5ef0ec9",
+      "sha256": "9b921c1c7daa378008a3599b5711dbcbc8083c549c87cdf3484cd00ed4018c90",
       "verification": [
         {
-          "mode": "not_verified",
-          "status": "NOT_VERIFIED",
-          "report": null,
-          "scope": "No named runtime or syntax evidence is recorded for this document."
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "p1-runtime-evidence.json",
+          "scope": "Five P1 core or standard-library pages selected outside the earlier named validation pages. Each program is extracted unchanged from its Markdown body by its p1-runtime-case marker."
         }
       ],
       "marker_count": 0
@@ -4031,6 +4043,12 @@
           "status": "PASS",
           "report": "p1-frontend-mobile-core-runtime.json",
           "scope": "Four exact marked P1 core/standard-library programs: Next.js-adjacent input boundary, TanStack query-key factory, Kotlin Sequence, and Swift Optional/collections."
+        },
+        {
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "p1-runtime-evidence.json",
+          "scope": "Five P1 core or standard-library pages selected outside the earlier named validation pages. Each program is extracted unchanged from its Markdown body by its p1-runtime-case marker."
         }
       ],
       "marker_count": 0
@@ -4616,6 +4634,12 @@
           "status": "PASS",
           "report": "p1-frontend-mobile-core-runtime.json",
           "scope": "Four exact marked P1 core/standard-library programs: Next.js-adjacent input boundary, TanStack query-key factory, Kotlin Sequence, and Swift Optional/collections."
+        },
+        {
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "p1-runtime-evidence.json",
+          "scope": "Five P1 core or standard-library pages selected outside the earlier named validation pages. Each program is extracted unchanged from its Markdown body by its p1-runtime-case marker."
         }
       ],
       "marker_count": 0
@@ -5134,7 +5158,7 @@
     },
     {
       "path": "07-php-mastery/basics/08-first-project.md",
-      "sha256": "37901c4a3351613a0533b184e1a20c5e494f6a90bacf3e9bfdfca36ba44e0d5c",
+      "sha256": "74e0dde46125b4cdf1de09e4aac720c09ff8c85adcca0f81730bd71e7e0028d2",
       "verification": [
         {
           "mode": "runtime",
@@ -5766,7 +5790,7 @@
     },
     {
       "path": "08-java-revisited/LEARNING_GUIDE.md",
-      "sha256": "70420eaf791350e87b6b2905dfa840f148fa0385e85d63fcb385f6c59254dc49",
+      "sha256": "cc9d2caaa7ffc5a13b19b21d7ce459d78d2baaf67c817f619524454967cd5103",
       "verification": [
         {
           "mode": "not_verified",
@@ -6954,13 +6978,19 @@
     },
     {
       "path": "09-nodejs-backend/reference/language-concepts/01-js-modern-syntax.md",
-      "sha256": "7a090fb18f5ab096a1a25f210dd3b54d08fe1dd77c7016f2a7b3cd45be4183e0",
+      "sha256": "8fc9bc3450d6738112a91dacde5d2a7516bda5d74a06b193be0ba8d4b581bd69",
       "verification": [
         {
           "mode": "runtime",
           "status": "PASS",
           "report": "node-reference-examples.json",
           "scope": "selected complete Node.js reference example"
+        },
+        {
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "node-python-p1-final.json",
+          "scope": "Four named, complete programs extracted unchanged from two Node and two Python P1 reference documents not covered by the earlier core and follow-up checks. They run in pre-existing local Docker images with network disabled, a read-only root filesystem and a temporary input bind mount. Only the listed language and standard-library contracts execute; no whole-document, network, database, permission, platform, or framework coverage is claimed."
         }
       ],
       "marker_count": 0
@@ -7058,13 +7088,13 @@
     },
     {
       "path": "09-nodejs-backend/reference/language-concepts/09-globals-reference.md",
-      "sha256": "876e458c57a213645e96a1f75c7ed41e9f2104f6a508b1ff5c1acde944732195",
+      "sha256": "8d60ae014b3fd3a12feaad0bdc3124be50e2b8555437fdfd61332f1195f3b4d3",
       "verification": [
         {
-          "mode": "not_verified",
-          "status": "NOT_VERIFIED",
-          "report": null,
-          "scope": "No named runtime or syntax evidence is recorded for this document."
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "node-python-p1-final.json",
+          "scope": "Four named, complete programs extracted unchanged from two Node and two Python P1 reference documents not covered by the earlier core and follow-up checks. They run in pre-existing local Docker images with network disabled, a read-only root filesystem and a temporary input bind mount. Only the listed language and standard-library contracts execute; no whole-document, network, database, permission, platform, or framework coverage is claimed."
         }
       ],
       "marker_count": 0
@@ -7446,7 +7476,7 @@
     },
     {
       "path": "10-python-discovery/basics/08-first-project.md",
-      "sha256": "aa43fbe8de89c191dde6555c8246ca5b9afe630d5f0fa62db17957ee1cc6533f",
+      "sha256": "c847cd5d2a16376c113367fe7ec931b683e5a8d22f894aa4fcd35e43be0e7153",
       "verification": [
         {
           "mode": "not_verified",
@@ -7641,13 +7671,19 @@
     },
     {
       "path": "10-python-discovery/reference/language-concepts/01-python-keywords.md",
-      "sha256": "825370e5b5a15c40600f9fa7d21f353b47f0c8f9ec51b04e87b227becf362454",
+      "sha256": "e794f10b2dcbbf240538f7a30fb9ca946f376ee39843e3cad756c1952ba4ea93",
       "verification": [
         {
           "mode": "runtime",
           "status": "PASS",
           "report": "examples.json",
           "scope": "Only named complete examples; no Java, Go, Rust, PHP or native UI execution."
+        },
+        {
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "node-python-p1-final.json",
+          "scope": "Four named, complete programs extracted unchanged from two Node and two Python P1 reference documents not covered by the earlier core and follow-up checks. They run in pre-existing local Docker images with network disabled, a read-only root filesystem and a temporary input bind mount. Only the listed language and standard-library contracts execute; no whole-document, network, database, permission, platform, or framework coverage is claimed."
         }
       ],
       "marker_count": 0
@@ -7907,13 +7943,19 @@
     },
     {
       "path": "10-python-discovery/reference/library-guides/04-os-sys.md",
-      "sha256": "3f4b61bea90588c6ab1600bf8f66766c22c820e7d0eeed96af34610ae70c6284",
+      "sha256": "c27781185c82fdea87122d059e80ef8a96f482e13444af23e230457117cba398",
       "verification": [
         {
           "mode": "runtime",
           "status": "PASS",
           "report": "reference-examples.json",
           "scope": "selected Python reference example"
+        },
+        {
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "node-python-p1-final.json",
+          "scope": "Four named, complete programs extracted unchanged from two Node and two Python P1 reference documents not covered by the earlier core and follow-up checks. They run in pre-existing local Docker images with network disabled, a read-only root filesystem and a temporary input bind mount. Only the listed language and standard-library contracts execute; no whole-document, network, database, permission, platform, or framework coverage is claimed."
         }
       ],
       "marker_count": 5
@@ -8910,6 +8952,12 @@
       "classification": "unbound_verification_wording"
     },
     {
+      "path": "02-nextjs-frontend/reference/language-concepts/09-js-core-semantics.md",
+      "line": 180,
+      "excerpt": "以下程序是上面“闭包持有绑定，箭头函数持有外层 this”的独立可运行版本。保存为 `bindings-contract.mjs` 并用 Node 24 运行；这里使用 `console.log` 输出单个成功标记，让自动验证可以区分“程序启动”与“每个语义断言都成立”。它只验证 JavaScript 的 ESM 语义，不验证 Next.js 渲染或 React Hook 行为。",
+      "classification": "source_has_limited_runtime_evidence"
+    },
+    {
       "path": "02-nextjs-frontend/testing/04-performance-testing.md",
       "line": 126,
       "excerpt": "不要用 Math.random 生成性能值，也不要在没有保存报告时写“实测提升 60%”。缺少基线就无法知道变化；有基线但条件不同，也不足以归因于代码修改。",
@@ -9079,7 +9127,7 @@
     },
     {
       "path": "08-java-revisited/LEARNING_GUIDE.md",
-      "line": 42,
+      "line": 46,
       "excerpt": "| 持久化：[图书管理系统](projects/02-library-management.md) | 写入后重启；制造一组操作中的第二步失败 | 持久数据可读回，事务应回滚的部分确实未保留；验证使用真实测试数据库而非只检查 Mock 调用 |",
       "classification": "unbound_verification_wording"
     },

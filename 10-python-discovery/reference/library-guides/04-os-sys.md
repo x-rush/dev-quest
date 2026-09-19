@@ -116,19 +116,24 @@ if __name__ == "__main__":
 
 前置知识是终端命令和相对路径。当前工作目录由启动方式决定，并不必然等于脚本所在目录；虚拟环境选中的是解释器和包搜索路径，也不会自动改变工作目录。因此“同一文件在编辑器能运行、在终端不能运行”需要分别检查路径和解释器。
 
-保存为 `environment.py` 后运行 `python environment.py hello`：
+保存为 `environment.py` 后运行 `python environment.py hello`。这个版本不依赖某个固定工作目录或环境变量值，而是验证 argv、cwd 与解释器路径的契约：
 
+<!-- node-python-p1-final-case: python-os-sys-environment-contracts -->
 ```python
 import os
 import sys
 from pathlib import Path
 
-print(sys.argv[1:])
-print(Path.cwd() == Path(os.getcwd()))
-print(bool(sys.executable))
+arguments = sys.argv[1:]
+same_cwd = Path.cwd() == Path(os.getcwd())
+has_interpreter = bool(sys.executable)
+
+if arguments != ["hello"] or not same_cwd or not has_interpreter:
+    raise AssertionError("os/sys environment contract failed")
+print(f"os-sys-environment: argv={arguments!r}; cwd={same_cwd}; executable={has_interpreter}")
 ```
 
-普通 Python 解释器下预期输出 `['hello']`、`True`、`True`。第三行只确认解释器路径可用；诊断实际环境时打印 sys.executable 的具体值，再用该解释器执行 `-m pip` 或测试命令，避免安装到另一个环境。
+普通 Python 解释器下预期输出 `os-sys-environment: argv=['hello']; cwd=True; executable=True`。最后一个字段只确认解释器路径非空；诊断实际环境时打印 sys.executable 的具体值，再用该解释器执行 `-m pip` 或测试命令，避免安装到另一个环境。
 
 练习：从父目录启动脚本，观察 argv 中的参数不变而 cwd 改变。需要项目数据文件时，应明确以工作目录、脚本目录还是配置路径为基准；不要用全局 chdir 偷偷改变其他模块的相对路径语义。
 

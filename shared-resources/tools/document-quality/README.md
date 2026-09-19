@@ -38,6 +38,8 @@
 | [前端与移动端 P1 核心验证](reports/p1-frontend-mobile-core-runtime.md) | TypeScript、TanStack Query key、Kotlin Sequence、Swift Optional/Collection 的 4 个限定运行案例 |
 | [Node 与 Python P1 补充验证](reports/node-python-p1-next.md) | Node util 以及 Python MRO/slots 的 2 个正文完整程序验证 |
 | [Next、TanStack 与移动端 P1 补充验证](reports/p1-next-web-mobile-runtime.md) | 输入守卫、Query Core、深链参数、Kotlin collection 和 Swift enum 的 5 个限定运行案例 |
+| [Node 与 Python P1 最终补充验证](reports/node-python-p1-final.md) | Node 现代语法/全局对象与 Python 关键字/os/sys 的 4 个正文完整程序验证 |
+| [P1 运行时补充验证](reports/p1-runtime-evidence.md) | Next JavaScript 绑定、React Native 输入边界及跨端标准库案例的 5 个限定运行结果 |
 | [Go 与 Rust P1 基础验证](reports/go-rust-p1-basics-runtime.md) | Go 常量及 Rust 集合迭代器的 3 个通过案例；另有 1 个 Go 案例因本机执行策略受阻，未计为通过 |
 | [PHP 与 Java 控制流验证](reports/php-java-control-flow.md) | PHP match/enum 与 Java 21 模式 switch 的 2 个正文完整程序验证 |
 | [PHP JSON 与 Java Math 验证](reports/php-java-json-math-validation.md) | PHP JSON 编解码边界及 Java BigDecimal/BigInteger 的 2 个正文完整程序验证 |

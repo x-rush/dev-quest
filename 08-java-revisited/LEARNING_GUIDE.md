@@ -22,7 +22,7 @@ Java 提供类型、对象与异常，Spring 管理对象装配与请求处理�
 
 不要求已有 Java 工作经验。先能编译运行一个类，区分对象和引用，再用普通方法表达业务。基础项目用到 record、集合或 lambda 时就地补对应知识；虚拟线程无需在首个项目之前学完。
 
-JDK 与框架基线见[模块 README](README.md)，每个练习选定一套 Maven 或 Gradle 工程并使用 Wrapper。官方学习入口：[Dev.java Learn](https://dev.java/learn/)，从语言基础和类开始，随后进入异常与集合。
+JDK 与框架基线见[模块 README](README.md)。语言基础和控制台首项目直接用 `javac` / `java`；进入需要第三方依赖的工程时，再选 Maven 或 Gradle 并使用 Wrapper。官方学习入口：[Dev.java Learn](https://dev.java/learn/)，从语言基础和类开始，随后进入异常与集合。
 
 1. [环境搭建 - JDK 与现代工具链](basics/01-environment-setup.md)
 2. [第一个程序 - 从 javac 到现代工作流](basics/02-first-program.md)
@@ -34,6 +34,10 @@ JDK 与框架基线见[模块 README](README.md)，每个练习选定一套 Mave
 8. 按需补课：[Lambda、Stream、Optional、虚拟线程与 Sealed](basics/07-modern-features.md)，先补项目使用的语法，虚拟线程留到并发专题。
 
 ## 三个阶段如何验收
+
+首项目的明确前置是能编译一个类，并读懂 [类与 record](basics/04-classes-records.md) 和 [异常](basics/06-exceptions.md)；使用到的集合、Optional 和 Stream 可以对照 [现代特性](basics/07-modern-features.md) 相应小节补齐。产物为 `Main.java`、编译出的类文件和练习数据 `books.tsv`，此阶段无需构建工具或 Spring。
+
+在空练习目录按 [控制台图书项目](basics/08-first-project.md) 保存源码，执行 `javac --release 21 -encoding UTF-8 Main.java`，再运行 `java Main books.tsv add 978-1 "Java 入门" Alice 2024`、`java Main books.tsv borrow 978-1`、`java Main books.tsv find 978-1`。最后一次是新进程，仍应显示 `BORROWED`；再借同一本应失败且不改变文件。编译失败先回查 [环境搭建](basics/01-environment-setup.md) 的 `java` / `javac` 版本与当前目录；业务失败回查首项目的命令规则；存储失败回查它的读写与文件格式说明。保存命令、输出和退出码后，再进入 [Todo API](projects/01-todo-api.md)，把同样的业务错误映射到 HTTP。
 
 | 阶段与入口 | 练习输入与动作 | 通过条件 |
 | --- | --- | --- |

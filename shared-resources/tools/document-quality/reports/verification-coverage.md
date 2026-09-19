@@ -7,10 +7,10 @@
 | 指标 | 数量 |
 |---|---:|
 | 纳入模块文档 | 642 |
-| 主状态：not_verified | 526 |
-| 主状态：runtime | 116 |
-| 验证措辞出现次数 | 123 |
-| 措辞分类：source_has_limited_runtime_evidence | 79 |
+| 主状态：not_verified | 524 |
+| 主状态：runtime | 118 |
+| 验证措辞出现次数 | 124 |
+| 措辞分类：source_has_limited_runtime_evidence | 80 |
 | 措辞分类：unbound_verification_wording | 44 |
 
 ## 语法级覆盖（不能当作运行覆盖）
@@ -162,7 +162,7 @@
 | Next.js / TypeScript | [02-nextjs-frontend/reference/language-concepts/06-react-19-hooks.md](../../../../02-nextjs-frontend/reference/language-concepts/06-react-19-hooks.md) | `not_verified` | 0 | 0 |
 | Next.js / TypeScript | [02-nextjs-frontend/reference/language-concepts/07-type-narrowing-guards.md](../../../../02-nextjs-frontend/reference/language-concepts/07-type-narrowing-guards.md) | `runtime` | 1 | 0 |
 | Next.js / TypeScript | [02-nextjs-frontend/reference/language-concepts/08-ts-declarations-modules.md](../../../../02-nextjs-frontend/reference/language-concepts/08-ts-declarations-modules.md) | `not_verified` | 0 | 1 |
-| Next.js / TypeScript | [02-nextjs-frontend/reference/language-concepts/09-js-core-semantics.md](../../../../02-nextjs-frontend/reference/language-concepts/09-js-core-semantics.md) | `runtime` | 3 | 0 |
+| Next.js / TypeScript | [02-nextjs-frontend/reference/language-concepts/09-js-core-semantics.md](../../../../02-nextjs-frontend/reference/language-concepts/09-js-core-semantics.md) | `runtime` | 4 | 1 |
 | Next.js / TypeScript | [02-nextjs-frontend/reference/language-concepts/10-web-platform-apis.md](../../../../02-nextjs-frontend/reference/language-concepts/10-web-platform-apis.md) | `runtime` | 3 | 0 |
 | Next.js / TypeScript | [02-nextjs-frontend/reference/library-guides/03-ecosystem-map.md](../../../../02-nextjs-frontend/reference/library-guides/03-ecosystem-map.md) | `not_verified` | 0 | 0 |
 | Next.js / TypeScript | [02-nextjs-frontend/reference/performance-optimization/01-rendering-optimization.md](../../../../02-nextjs-frontend/reference/performance-optimization/01-rendering-optimization.md) | `not_verified` | 0 | 0 |
@@ -207,7 +207,7 @@
 | TanStack / TypeScript | [03-tanstack-stack/reference/language-concepts/02-table-core-api.md](../../../../03-tanstack-stack/reference/language-concepts/02-table-core-api.md) | `not_verified` | 0 | 0 |
 | TanStack / TypeScript | [03-tanstack-stack/reference/language-concepts/03-router-core-api.md](../../../../03-tanstack-stack/reference/language-concepts/03-router-core-api.md) | `not_verified` | 0 | 0 |
 | TanStack / TypeScript | [03-tanstack-stack/reference/language-concepts/04-form-core-api.md](../../../../03-tanstack-stack/reference/language-concepts/04-form-core-api.md) | `not_verified` | 0 | 0 |
-| TanStack / TypeScript | [03-tanstack-stack/reference/language-concepts/05-typescript-patterns.md](../../../../03-tanstack-stack/reference/language-concepts/05-typescript-patterns.md) | `runtime` | 1 | 1 |
+| TanStack / TypeScript | [03-tanstack-stack/reference/language-concepts/05-typescript-patterns.md](../../../../03-tanstack-stack/reference/language-concepts/05-typescript-patterns.md) | `runtime` | 2 | 1 |
 | TanStack / TypeScript | [03-tanstack-stack/reference/language-concepts/06-optimistic-update.md](../../../../03-tanstack-stack/reference/language-concepts/06-optimistic-update.md) | `not_verified` | 0 | 0 |
 | TanStack / TypeScript | [03-tanstack-stack/reference/language-concepts/07-infinite-query.md](../../../../03-tanstack-stack/reference/language-concepts/07-infinite-query.md) | `not_verified` | 0 | 0 |
 | TanStack / TypeScript | [03-tanstack-stack/reference/language-concepts/08-placeholder-data.md](../../../../03-tanstack-stack/reference/language-concepts/08-placeholder-data.md) | `not_verified` | 0 | 0 |
@@ -264,7 +264,7 @@
 | React Native / Multi-platform | [04-multiplatform-apps/reference/framework-essentials/03-config-plugins-prebuild.md](../../../../04-multiplatform-apps/reference/framework-essentials/03-config-plugins-prebuild.md) | `not_verified` | 0 | 0 |
 | React Native / Multi-platform | [04-multiplatform-apps/reference/framework-essentials/04-dev-client-and-updates.md](../../../../04-multiplatform-apps/reference/framework-essentials/04-dev-client-and-updates.md) | `not_verified` | 0 | 0 |
 | React Native / Multi-platform | [04-multiplatform-apps/reference/language-concepts/01-rn-core-api.md](../../../../04-multiplatform-apps/reference/language-concepts/01-rn-core-api.md) | `not_verified` | 0 | 1 |
-| React Native / Multi-platform | [04-multiplatform-apps/reference/language-concepts/02-components-props.md](../../../../04-multiplatform-apps/reference/language-concepts/02-components-props.md) | `not_verified` | 0 | 0 |
+| React Native / Multi-platform | [04-multiplatform-apps/reference/language-concepts/02-components-props.md](../../../../04-multiplatform-apps/reference/language-concepts/02-components-props.md) | `runtime` | 1 | 0 |
 | React Native / Multi-platform | [04-multiplatform-apps/reference/language-concepts/03-hooks-reference.md](../../../../04-multiplatform-apps/reference/language-concepts/03-hooks-reference.md) | `not_verified` | 0 | 0 |
 | React Native / Multi-platform | [04-multiplatform-apps/reference/language-concepts/04-typescript-patterns.md](../../../../04-multiplatform-apps/reference/language-concepts/04-typescript-patterns.md) | `runtime` | 1 | 0 |
 | React Native / Multi-platform | [04-multiplatform-apps/reference/language-concepts/05-harmonyos-rnoh-api.md](../../../../04-multiplatform-apps/reference/language-concepts/05-harmonyos-rnoh-api.md) | `not_verified` | 0 | 0 |
@@ -330,7 +330,7 @@
 | Kotlin / Compose | [05-kotlin-compose/reference/language-concepts/07-scope-functions.md](../../../../05-kotlin-compose/reference/language-concepts/07-scope-functions.md) | `runtime` | 2 | 1 |
 | Kotlin / Compose | [05-kotlin-compose/reference/language-concepts/08-lambdas-higher-order.md](../../../../05-kotlin-compose/reference/language-concepts/08-lambdas-higher-order.md) | `not_verified` | 0 | 0 |
 | Kotlin / Compose | [05-kotlin-compose/reference/language-concepts/09-collections-operations.md](../../../../05-kotlin-compose/reference/language-concepts/09-collections-operations.md) | `runtime` | 1 | 0 |
-| Kotlin / Compose | [05-kotlin-compose/reference/language-concepts/10-sequences.md](../../../../05-kotlin-compose/reference/language-concepts/10-sequences.md) | `runtime` | 1 | 0 |
+| Kotlin / Compose | [05-kotlin-compose/reference/language-concepts/10-sequences.md](../../../../05-kotlin-compose/reference/language-concepts/10-sequences.md) | `runtime` | 2 | 0 |
 | Kotlin / Compose | [05-kotlin-compose/reference/language-concepts/11-text-and-regex.md](../../../../05-kotlin-compose/reference/language-concepts/11-text-and-regex.md) | `not_verified` | 0 | 0 |
 | Kotlin / Compose | [05-kotlin-compose/reference/library-guides/01-androidx-libraries.md](../../../../05-kotlin-compose/reference/library-guides/01-androidx-libraries.md) | `not_verified` | 0 | 0 |
 | Kotlin / Compose | [05-kotlin-compose/reference/library-guides/02-third-party-libs.md](../../../../05-kotlin-compose/reference/library-guides/02-third-party-libs.md) | `not_verified` | 0 | 0 |
@@ -375,7 +375,7 @@
 | Swift / SwiftUI | [06-swift-swiftui/reference/framework-essentials/07-swiftdata-migration.md](../../../../06-swift-swiftui/reference/framework-essentials/07-swiftdata-migration.md) | `not_verified` | 0 | 0 |
 | Swift / SwiftUI | [06-swift-swiftui/reference/framework-essentials/08-gestures.md](../../../../06-swift-swiftui/reference/framework-essentials/08-gestures.md) | `not_verified` | 0 | 0 |
 | Swift / SwiftUI | [06-swift-swiftui/reference/language-concepts/01-swift-keywords.md](../../../../06-swift-swiftui/reference/language-concepts/01-swift-keywords.md) | `not_verified` | 0 | 0 |
-| Swift / SwiftUI | [06-swift-swiftui/reference/language-concepts/02-optionals-collections.md](../../../../06-swift-swiftui/reference/language-concepts/02-optionals-collections.md) | `runtime` | 1 | 0 |
+| Swift / SwiftUI | [06-swift-swiftui/reference/language-concepts/02-optionals-collections.md](../../../../06-swift-swiftui/reference/language-concepts/02-optionals-collections.md) | `runtime` | 2 | 0 |
 | Swift / SwiftUI | [06-swift-swiftui/reference/language-concepts/03-concurrency-api.md](../../../../06-swift-swiftui/reference/language-concepts/03-concurrency-api.md) | `not_verified` | 0 | 0 |
 | Swift / SwiftUI | [06-swift-swiftui/reference/language-concepts/04-swiftui-state-api.md](../../../../06-swift-swiftui/reference/language-concepts/04-swiftui-state-api.md) | `not_verified` | 0 | 0 |
 | Swift / SwiftUI | [06-swift-swiftui/reference/language-concepts/05-protocols-generics.md](../../../../06-swift-swiftui/reference/language-concepts/05-protocols-generics.md) | `not_verified` | 0 | 0 |
@@ -542,7 +542,7 @@
 | Node.js | [09-nodejs-backend/projects/04-production-nodejs-api.md](../../../../09-nodejs-backend/projects/04-production-nodejs-api.md) | `not_verified` | 0 | 0 |
 | Node.js | [09-nodejs-backend/reference/framework-essentials/01-hono-essentials.md](../../../../09-nodejs-backend/reference/framework-essentials/01-hono-essentials.md) | `not_verified` | 0 | 0 |
 | Node.js | [09-nodejs-backend/reference/framework-essentials/02-fastify-nestjs.md](../../../../09-nodejs-backend/reference/framework-essentials/02-fastify-nestjs.md) | `not_verified` | 0 | 0 |
-| Node.js | [09-nodejs-backend/reference/language-concepts/01-js-modern-syntax.md](../../../../09-nodejs-backend/reference/language-concepts/01-js-modern-syntax.md) | `runtime` | 1 | 0 |
+| Node.js | [09-nodejs-backend/reference/language-concepts/01-js-modern-syntax.md](../../../../09-nodejs-backend/reference/language-concepts/01-js-modern-syntax.md) | `runtime` | 2 | 0 |
 | Node.js | [09-nodejs-backend/reference/language-concepts/02-async-api.md](../../../../09-nodejs-backend/reference/language-concepts/02-async-api.md) | `runtime` | 1 | 0 |
 | Node.js | [09-nodejs-backend/reference/language-concepts/03-node-core-api.md](../../../../09-nodejs-backend/reference/language-concepts/03-node-core-api.md) | `runtime` | 1 | 0 |
 | Node.js | [09-nodejs-backend/reference/language-concepts/04-streams-api.md](../../../../09-nodejs-backend/reference/language-concepts/04-streams-api.md) | `not_verified` | 0 | 0 |
@@ -550,7 +550,7 @@
 | Node.js | [09-nodejs-backend/reference/language-concepts/06-esm-module-resolution.md](../../../../09-nodejs-backend/reference/language-concepts/06-esm-module-resolution.md) | `not_verified` | 0 | 0 |
 | Node.js | [09-nodejs-backend/reference/language-concepts/07-js-core-semantics.md](../../../../09-nodejs-backend/reference/language-concepts/07-js-core-semantics.md) | `runtime` | 1 | 1 |
 | Node.js | [09-nodejs-backend/reference/language-concepts/08-type-coercion-collections.md](../../../../09-nodejs-backend/reference/language-concepts/08-type-coercion-collections.md) | `runtime` | 1 | 5 |
-| Node.js | [09-nodejs-backend/reference/language-concepts/09-globals-reference.md](../../../../09-nodejs-backend/reference/language-concepts/09-globals-reference.md) | `not_verified` | 0 | 0 |
+| Node.js | [09-nodejs-backend/reference/language-concepts/09-globals-reference.md](../../../../09-nodejs-backend/reference/language-concepts/09-globals-reference.md) | `runtime` | 1 | 0 |
 | Node.js | [09-nodejs-backend/reference/library-guides/01-core-modules.md](../../../../09-nodejs-backend/reference/library-guides/01-core-modules.md) | `runtime` | 2 | 0 |
 | Node.js | [09-nodejs-backend/reference/library-guides/02-ecosystem-libs.md](../../../../09-nodejs-backend/reference/library-guides/02-ecosystem-libs.md) | `not_verified` | 0 | 0 |
 | Node.js | [09-nodejs-backend/reference/library-guides/03-crypto.md](../../../../09-nodejs-backend/reference/library-guides/03-crypto.md) | `not_verified` | 0 | 0 |
@@ -593,7 +593,7 @@
 | Python | [10-python-discovery/reference/framework-essentials/01-fastapi-essentials.md](../../../../10-python-discovery/reference/framework-essentials/01-fastapi-essentials.md) | `runtime` | 1 | 1 |
 | Python | [10-python-discovery/reference/framework-essentials/02-django-flask.md](../../../../10-python-discovery/reference/framework-essentials/02-django-flask.md) | `not_verified` | 0 | 0 |
 | Python | [10-python-discovery/reference/framework-essentials/03-uv-package-manager.md](../../../../10-python-discovery/reference/framework-essentials/03-uv-package-manager.md) | `not_verified` | 0 | 0 |
-| Python | [10-python-discovery/reference/language-concepts/01-python-keywords.md](../../../../10-python-discovery/reference/language-concepts/01-python-keywords.md) | `runtime` | 1 | 0 |
+| Python | [10-python-discovery/reference/language-concepts/01-python-keywords.md](../../../../10-python-discovery/reference/language-concepts/01-python-keywords.md) | `runtime` | 2 | 0 |
 | Python | [10-python-discovery/reference/language-concepts/02-built-in-functions.md](../../../../10-python-discovery/reference/language-concepts/02-built-in-functions.md) | `runtime` | 2 | 4 |
 | Python | [10-python-discovery/reference/language-concepts/03-data-structures.md](../../../../10-python-discovery/reference/language-concepts/03-data-structures.md) | `runtime` | 1 | 3 |
 | Python | [10-python-discovery/reference/language-concepts/04-oop-protocols.md](../../../../10-python-discovery/reference/language-concepts/04-oop-protocols.md) | `runtime` | 1 | 0 |
@@ -613,7 +613,7 @@
 | Python | [10-python-discovery/reference/library-guides/01-standard-library.md](../../../../10-python-discovery/reference/library-guides/01-standard-library.md) | `runtime` | 1 | 0 |
 | Python | [10-python-discovery/reference/library-guides/02-ecosystem-libs.md](../../../../10-python-discovery/reference/library-guides/02-ecosystem-libs.md) | `not_verified` | 0 | 0 |
 | Python | [10-python-discovery/reference/library-guides/03-pytest-testing.md](../../../../10-python-discovery/reference/library-guides/03-pytest-testing.md) | `runtime` | 1 | 1 |
-| Python | [10-python-discovery/reference/library-guides/04-os-sys.md](../../../../10-python-discovery/reference/library-guides/04-os-sys.md) | `runtime` | 1 | 5 |
+| Python | [10-python-discovery/reference/library-guides/04-os-sys.md](../../../../10-python-discovery/reference/library-guides/04-os-sys.md) | `runtime` | 2 | 5 |
 | Python | [10-python-discovery/reference/library-guides/05-enum-module.md](../../../../10-python-discovery/reference/library-guides/05-enum-module.md) | `runtime` | 3 | 0 |
 | Python | [10-python-discovery/reference/library-guides/06-functools-subprocess.md](../../../../10-python-discovery/reference/library-guides/06-functools-subprocess.md) | `runtime` | 4 | 0 |
 | Python | [10-python-discovery/reference/quick-references/01-python-cheatsheet.md](../../../../10-python-discovery/reference/quick-references/01-python-cheatsheet.md) | `not_verified` | 0 | 0 |

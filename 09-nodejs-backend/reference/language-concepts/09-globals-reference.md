@@ -151,7 +151,29 @@ await r.json();
 
 取消是协作协议，AbortController 只通知支持该 signal 的操作；不能自动停止任意 Promise、撤销已完成的写入或清除自建定时器。Response body 只能消费一次，clone 会为两个消费者分流数据，某个消费者太慢时可能带来额外缓冲，不是免费的任意次数重读。
 
-练习：构造一个本地 Response，读取 json 后再次读取应失败；改为读取前 clone，两份均可读取。再用 structuredClone 复制带 Date、Map、循环引用的对象，与 JSON 往返比较；函数不可克隆，类实例的自定义原型与私有状态也不能假定完整保留。console.assert 仅输出诊断，不应代替 node:assert 在测试中触发失败。
+下面的程序只使用本地 Response，不发出网络请求；保存为 `globals-lab.mjs` 后运行 `node globals-lab.mjs`。它证明 body 的单次消费限制，以及 clone 必须发生在第一次消费之前：
+
+<!-- node-python-p1-final-case: node-globals-response-contracts -->
+```js
+const response = new Response(JSON.stringify({ ok: true }));
+const copy = response.clone();
+const first = await response.json();
+const second = await copy.json();
+
+let consumedTwice = false;
+try {
+  await response.text();
+} catch (error) {
+  consumedTwice = error instanceof TypeError;
+}
+
+if (!first.ok || !second.ok || !consumedTwice) {
+  throw new Error('Response body contract was not met');
+}
+console.log('globals-response: clone reads twice; original body locks after read');
+```
+
+预期输出 `globals-response: clone reads twice; original body locks after read`。再用 structuredClone 复制带 Date、Map、循环引用的对象，与 JSON 往返比较；函数不可克隆，类实例的自定义原型与私有状态也不能假定完整保留。console.assert 仅输出诊断，不应代替 node:assert 在测试中触发失败。
 
 ## 🔗 相关文档
 

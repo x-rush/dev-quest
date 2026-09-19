@@ -210,7 +210,8 @@ import { Text, TextInput, View } from 'react-native';
 
 export function AmountInput() {
   const [text, setText] = useState('');
-  const valid = /^\d+(\.\d{1,2})?$/.test(text);
+  // 空字符串是编辑中的中性状态；提交时再由业务规则决定它是否必填。
+  const valid = text === '' || /^\d+(\.\d{1,2})?$/.test(text);
   return <View>
     <TextInput accessibilityLabel="金额" value={text}
       onChangeText={setText} keyboardType="decimal-pad" />
@@ -219,7 +220,25 @@ export function AmountInput() {
 }
 ```
 
-此例只验证非负十进制文本格式，没有处理币种、金额上限和本地化小数分隔符；支付系统还需明确金额单位和服务端规则。保留原始输入字符串，用户才可以输入 `1.` 这样的中间状态。
+此例只验证非负十进制文本格式，没有处理币种、金额上限和本地化小数分隔符；支付系统还需明确金额单位和服务端规则。保留原始输入字符串，用户才可以输入 `1.` 这样的中间状态。空文本在编辑时不显示格式错误；如果金额必填，应在提交边界给出“必填”反馈，而不是把它混成格式错误。
+
+### 可直接提取的运行案例
+
+将输入规则抽成纯函数后，格式边界可以在 Node 中复跑，而无需模拟器或 React Native 运行时。下面完整程序与上例使用同一正则：它接受空字符串作为正在编辑的状态，接受最多两位小数，并拒绝负号、第三位小数和本地化逗号。保存为 `amount-input-contract.mjs`，使用 Node 24 运行。它不验证 `TextInput` 的键盘、无障碍树或平台渲染。
+
+<!-- p1-runtime-case: react-native-amount-input -->
+```js
+function isAmountInput(text) {
+  return text === '' || /^\d+(\.\d{1,2})?$/.test(text)
+}
+
+const accepted = ['', '0', '1.2', '1.20']
+const rejected = ['-1', '1.', '1.234', '1,20', 'abc']
+
+if (!accepted.every(isAmountInput)) throw new Error('an editable valid amount was rejected')
+if (rejected.some(isAmountInput)) throw new Error('an invalid amount was accepted')
+console.log('React Native amount-input contracts passed')
+```
 
 练习：粘贴 `abc`、输入 `1.20`、清空输入框，再用屏幕阅读器定位输入框。验收：界面与文本状态一致，反馈能解释错误，不因数值转换丢失输入过程。
 

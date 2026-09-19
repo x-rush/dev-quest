@@ -13,11 +13,15 @@ CLI 工具也需要稳定的输入、输出和失败约定。保存文件时应�
 
 </details>
 
-> **文档简介**: 综合运用前七篇知识，用 Composer PSR-4 项目结构从零实现一个命令行任务管理工具（增删改查 + JSON 持久化）
+> **文档简介**: 综合运用基础语法与异常处理，用 Composer PSR-4 项目结构从零实现一个命令行任务管理工具（增删改查 + JSON 持久化）
 >
-> **目标读者**: 已完成 basics 全部教程、准备第一次独立交付完整项目的学习者
+> **目标读者**: 已完成 basics 01–06、准备第一次独立交付完整项目的学习者
 >
-> **前置知识**: [环境搭建](./01-environment-setup.md) 至 [高级特性](./07-advanced-features.md) 全部内容
+> **前置知识**: [环境搭建](./01-environment-setup.md)、函数与类、控制流程和 [错误与异常](./06-error-exceptions.md)。本篇用到枚举时补读 [高级特性](./07-advanced-features.md) 的枚举部分；属性注解与 Fibers 无需先学完。
+
+本课产物是可用 `php bin/task` 调用的 Composer 工程和 JSON 数据文件。按正文建好文件并执行 `composer dump-autoload` 后，新增两项、用实际返回的 ID 完成一项，再启动新进程执行 `php bin/task list --all`：两项仍在且只有一项完成。按第 6 节将 `TASK_FILE` 指向专用测试文件，再写入损坏 JSON；列表必须失败，原文件不能变成空列表。记录输出与退出码后才算完成本课。
+
+失败时先分层回查：命令不存在回 [环境搭建](./01-environment-setup.md)，类找不到回本页 PSR-4 配置并重新生成自动加载，数据损坏回本页存储层与第 6 节验收；异常传播不清则回 [错误与异常](./06-error-exceptions.md)。通过后按 [学习规划](../LEARNING_GUIDE.md) 进入 [Laravel Todo API](../projects/01-todo-api.md)，比较 CLI 参数如何换成 HTTP 请求。
 
 <details>
 <summary>文档信息（用途、难度与维护记录）</summary>
