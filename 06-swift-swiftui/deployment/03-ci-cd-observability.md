@@ -107,7 +107,7 @@ final class MetricsSubscriber: NSObject, MXMetricManagerSubscriber {
 }
 ```
 
-**解读要点**：直方图指标看 P90 分位而不是均值；指标劣化的代码级排查见 [01-rendering-performance.md](../advanced-topics/performance/01-rendering-performance.md)。iOS 27 起 MetricKit 提供 `MetricReport` 等新 API（含 `HitchTimeMetric` 等原生指标，旧 `MXAppResponsivenessMetric` 同步弃用），新代码建议关注。
+**解读要点**：直方图指标看 P90 分位而不是均值；指标劣化的代码级排查见 [01-rendering-performance.md](../advanced-topics/performance/01-rendering-performance.md)。上面的 `MXMetricManagerSubscriber` / `MXMetricPayload` 是兼容旧部署目标的写法；Apple 已将它们的多项指标 API 标为 deprecated。新工具链应优先评估 `MetricManager` 的异步报告、`MetricReport` / `DiagnosticReport` 与 `MetricResult`，并按项目最低系统版本做可用性分支。以 [MetricKit 更新说明](https://developer.apple.com/documentation/updates/metrickit) 和实际 Xcode SDK 为准，不能只把新 API 名称替换进旧代码。
 
 ## 🛠️ 任务三：崩溃上报与符号化
 
@@ -140,6 +140,17 @@ final class MetricsSubscriber: NSObject, MXMetricManagerSubscriber {
 3. 卡顿比 / 启动 P90 劣化 > 10%？ → 建 perf 工单，Instruments 复现
 4. TestFlight 反馈关键词归类 → 转化为下个迭代的需求
 ```
+
+## ✅ 发布与观测验收
+
+每次发布候选版本做一次受控演练并保留结果：
+
+1. 让一条单元测试失败后推送候选提交。**期望结果**：工作流停在测试关卡，不产生可分发的 Archive；修复后同一提交重新运行才允许后续阶段。
+2. 用受控异常或测试专用崩溃路径生成一个诊断事件，并保存构建对应的 dSYM。**期望结果**：崩溃面板能按构建号关联事件，堆栈包含可读源码符号；若只有地址，先核对 dSYM 是否属于该 Archive。
+3. 对同一版本记录一个用户旅程的启动或卡顿基线，下一版本在相同口径下比较。**期望结果**：报告携带版本、样本量和时间窗口；少量样本或遥测延迟不能触发自动回退结论。
+4. 禁用遥测出口或让上报超时。**期望结果**：应用主流程仍可用，上报异步失败被记录且不会阻塞启动或退出。
+
+本文未在仓库内运行 Xcode Cloud、真机 MetricKit 或第三方崩溃平台；这些演练产生的工作流日志、构建 ID、dSYM 记录与面板截图才是具体应用通过交付门禁的证据。
 
 ## ✅ 最佳实践
 
