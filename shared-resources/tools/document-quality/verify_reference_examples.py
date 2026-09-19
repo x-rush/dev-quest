@@ -80,7 +80,10 @@ def main():
             (work / 'test_example.py').write_text(blocks(added(path))[0], encoding='utf8')
             output = run([args.python, '-m', 'pytest', 'test_example.py', '-q', '-p', 'no:cacheprovider'], work)
             assert f'{count} passed' in output, output
-            results.append({'source': P + path, 'status': 'PASS', 'tests': count, 'output': output})
+            # Pytest's elapsed time varies by host load; preserve assertion and
+            # warnings while making the stored runtime evidence reproducible.
+            report_output = re.sub(r'(in )\d+(?:\.\d+)?s\n', r'\1<variable>s\n', output)
+            results.append({'source': P + path, 'status': 'PASS', 'tests': count, 'output': report_output})
         versions = run([args.python, '-c', 'import sys,json,importlib.metadata as m;print(json.dumps({"python":sys.version.split()[0],**{p:m.version(p) for p in ["pytest","fastapi","httpx","pydantic"]}}))'], work)
     report = {'environment': json.loads(versions), 'results': results,
               'scope': 'Only the listed complete added examples. Historical snippets, Python 3.14-only syntax, databases, Docker and CI are not executed by this tool.'}
