@@ -747,8 +747,10 @@ module.exports = nextConfig
 
 ### Bundle分析和优化
 
+> **设计草图边界**：下面的片段混有 TypeScript 类型断言，因此若保留需保存为 `scripts/analyze-bundle.ts` 并由项目配置的 TypeScript runner 执行；它当前使用固定的 `actualSize`、依赖统计和构建时间，只说明预算比较的数据形状，**不能**作为 CI 性能门禁或“实际构建结果”。接入前必须从目标生产构建的 manifest、产物目录或选定的 bundle analyzer 读取数据，并记录命令、构建模式、提交、平台和资源口径。
+
 ```typescript
-// scripts/analyze-bundle.js
+// scripts/analyze-bundle.ts — 设计草图，不读取真实构建产物
 const { execSync } = require('child_process')
 const path = require('path')
 const fs = require('fs')
@@ -850,7 +852,7 @@ function checkPerformanceBudget() {
     total: 3 * 1024 * 1024 // 3MB
   }
 
-  // 这里应该从实际构建结果中获取数据
+  // 固定夹具：只演示预算比较逻辑，不能代表当前构建。
   const actualSize = {
     javascript: 180 * 1024,
     css: 80 * 1024,
@@ -904,9 +906,11 @@ async function generatePerformanceReport() {
   console.log('📊 Performance report saved to performance-report.json')
 }
 
-// 获取bundle大小
+// 以下三个函数是待接入的基础设施边界；返回值是夹具，不是测量结果。
+// 真实实现还需统一 gzip/brotli、首屏/异步资源、图片和第三方资源的统计口径。
+// 获取 bundle 大小
 async function getBundleSize() {
-  // 实现bundle大小获取逻辑
+  // fixture
   return {
     javascript: 180000,
     css: 80000,
@@ -918,7 +922,7 @@ async function getBundleSize() {
 
 // 获取依赖分析
 async function getDependencyAnalysis() {
-  // 实现依赖分析逻辑
+  // fixture
   return {
     totalDependencies: 50,
     vulnerablePackages: 0,
@@ -929,7 +933,7 @@ async function getDependencyAnalysis() {
 
 // 获取构建时间
 async function getBuildTime() {
-  // 实现构建时间获取逻辑
+  // fixture
   return 45000 // 45秒
 }
 
