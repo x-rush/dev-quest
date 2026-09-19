@@ -354,6 +354,8 @@ type User struct {
     Role  string
 }
 
+// 设计草图：此段展示 gqlgen extension 的上下文挂载位置，不是 JWT 实现。
+// validateToken 中的固定 token 只用于说明成功/失败分支；绝不能用于真实认证。
 func AuthMiddleware() graphql.HandlerExtension {
     return &authMiddleware{}
 }
@@ -390,8 +392,8 @@ func (a *authMiddleware) InterceptOperation(ctx context.Context, next graphql.Op
 }
 
 func validateToken(token string) (*User, error) {
-    // 实现token验证逻辑
-    // 这里简化实现，实际应该使用JWT等
+    // 演示身份注入边界，不验证签名、issuer、audience、过期时间或撤销状态。
+    // 生产代码必须使用项目选定的身份提供商/JWT 库，并把验证后的 claims 映射为最小用户上下文。
     if token == "valid-token" {
         return &User{
             ID:    "1",
@@ -412,6 +414,8 @@ func GetUserFromContext(ctx context.Context) *User {
 ```
 
 ### 3. 指令和扩展
+
+> **设计草图边界**：下列复杂度函数故意只展示 middleware 接入点。`calculateComplexity` 恒返回 `1`，因此不提供任何实际限流保护；片段展开、字段权重、变量、递归、查询深度和错误响应格式都未实现。不要把它注册到公开 GraphQL 服务。实际实现应使用 gqlgen 版本兼容的复杂度扩展或完整遍历器，并对拒绝路径写集成测试。
 ```go
 // directive/auth.go
 package directive
@@ -1110,13 +1114,22 @@ func ComplexityLimitMiddleware(maxComplexity int) func(context.Context, graphql.
 }
 
 func calculateComplexity(operation *ast.OperationDefinition) int {
-    // 实现复杂度计算逻辑
+    // 占位返回值：只使本段结构可读，不能用于安全决策。
     return 1
 }
 ```
 
 ## 总结
-gqlgen作为Go语言中最流行的GraphQL服务器库，提供了完整的GraphQL API开发解决方案。通过其schema优先的方式、强类型支持和丰富的功能特性，开发者可以快速构建高性能、类型安全的GraphQL API。结合数据加载器、中间件、测试和监控等最佳实践，可以构建出可扩展、可维护的现代化GraphQL服务。
+
+gqlgen 的 schema 优先和生成类型能缩小 resolver 与 schema 不一致的范围，但不自动解决对象授权、N+1、查询成本、订阅取消或缓存隔离。先让一个查询、一个 mutation 和一条无权限错误链可测，再按真实数据量引入 DataLoader、复杂度限制和订阅。
+
+### 交付验收
+
+- [ ] 对合法、未知字段、缺变量、无权限字段和 resolver 失败分别断言 GraphQL 响应的 `data` 与 `errors`，不只检查 HTTP 200。
+- [ ] 用两个身份访问同一对象及敏感字段，确认 resolver 层再次授权且缓存/DataLoader 不跨身份复用数据。
+- [ ] 对列表关联字段记录查询次数；引入批量加载后验证结果顺序和缺失键行为，避免只优化一个理想样例。
+- [ ] 使用完整复杂度实现或框架扩展，对超深、超重、含 fragment 的查询验证会被拒绝；恒为 1 的占位函数不计作保护。
+- [ ] 启动并取消订阅，确认 context 取消后后台 goroutine、连接与资源均退出。
 
 ## 学习资源
 - [gqlgen官方文档](https://gqlgen.com/)
