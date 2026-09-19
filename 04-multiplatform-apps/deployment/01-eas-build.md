@@ -75,13 +75,13 @@ eas build:list                                       # 查看历史构建
 | 凭据 | Android | iOS |
 |------|---------|-----|
 | 签名材料 | upload keystore | 分发证书 + provisioning profile |
-| 托管方式 | `eas credentials` 管理，云端加密保存 | 同左；可在 App Store Connect 自动生成 |
+| 托管方式 | 可由 `eas credentials` 管理，云端保存 | 可由 `eas credentials` 与 Apple 开发者账号协作管理；证书、profile 和账号权限都需核对 |
 | 本地恢复 | `eas credentials` → 同步到本地 | 同左 |
 
 **实践要点**：
 - 首次构建选 "Generate new keystore"，EAS 生成并托管；**务必备份**（`eas credentials` 可导出）
 - 已有旧项目可用 `eas credentials` 上传现有 keystore，保证升级签名一致
-- iOS 证书续期由 EAS 自动处理，手动模式仅特殊团队流程需要
+- iOS 凭据的创建、续期和撤销受 Apple 账号角色、现有证书、profile 与 EAS 配置共同影响。构建前在 `eas credentials` 中核对实际使用的材料和到期日；不要把“托管”理解成无需备份、无需权限审计或永远自动续期。
 
 ## 🌍 环境变量体系
 
@@ -120,10 +120,10 @@ export const API_URL = process.env.EXPO_PUBLIC_API_URL ?? 'http://localhost:3000
 A: 能出模拟器构建（`ios.simulator: true`）；真机分发与上架需要付费账号（$99/年）。
 
 **Q2: 本地构建和 EAS 构建产物有差异吗？**
-A: EAS 是受控的标准环境，可复现性更好；本地构建需自备 macOS/Xcode 且易受本地缓存影响。调试技巧见 [开发工具链](../frameworks/04-devtools.md)。
+A: 两者都可能受 Node、包管理器锁文件、Expo/原生依赖、环境变量和凭据影响。EAS 提供受控的云构建环境，但不自动保证可复现：把构建 profile、依赖锁文件、构建日志、环境变量名称和产物/提交关联保存下来，才能定位差异。iOS 本地构建仍需 macOS/Xcode。调试技巧见 [开发工具链](../frameworks/04-devtools.md)。
 
 **Q3: monorepo 怎么配？**
-A: `eas.json` 顶层加 `monorepo: true`，并在 package.json 指定 `projectRoot`；pnpm workspace 注意 lock 文件路径。
+A: 先按当前 Expo/EAS 官方 monorepo 指南确认工作区工具与项目根目录；不要凭通用的 `monorepo: true` 或 `projectRoot` 字段猜测配置。验收时从仓库根目录和应用目录各触发一次构建，确认锁文件、Metro 解析、原生目录和 EAS 上传上下文一致；pnpm workspace 还要确认被上传的是正确 lock 文件。
 
 ---
 

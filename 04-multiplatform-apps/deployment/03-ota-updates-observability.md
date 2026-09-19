@@ -108,7 +108,7 @@ Sentry.init({
 | 性能 | Sentry Performance | 冷启动耗时、慢请求、页面渲染时长 |
 | 商店 | Play Vitals / Xcode Organizer | ANR 率、电量、第三方视角崩溃 |
 
-**Crashlytics 取舍**：Firebase Crashlytics 免费且 Android 生态深，但与 Expo 配置链路更绕；已有 Firebase 栈可加，新项目优先 Sentry（source map 自动上传由 plugin 处理）。
+**Crashlytics 与 Sentry 的取舍**：两者都需要验证原生符号文件、source map、隐私字段、告警路由和费用模型。已有 Firebase 或 Sentry 组织账号时，优先比较复用现有告警与访问控制的成本；新项目用一个最小发布包制造可控 JS 与原生错误，确认事件能正确归属到发布版本后再决定。配置插件可减少部分上传步骤，但不能替代产物级验证。
 
 ## 🚨 质量红线与告警
 
