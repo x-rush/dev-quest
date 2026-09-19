@@ -45,14 +45,16 @@
 
 ## 🔍 核心概念：JS 与原生如何通信
 
-| 维度 | 旧架构 Bridge | 新架构 JSI（当前默认） |
+| 维度 | Legacy Native Module | Turbo Native Module / 新架构 |
 |------|--------------|----------------------|
-| 通信模型 | 异步 JSON 队列，批量过桥 | JS 直接持有 C++ 引用，同步/异步均可 |
-| 原生模块注册 | 运行时反射 | TurboModules：按需懒加载 |
-| 类型安全 | 无（手写两端代码靠人肉对齐） | Codegen 依据 TS 规约生成类型代码 |
-| 适用 | 旧架构遗留代码 | 现行 RN 全部新项目（0.82 起新架构为唯一架构） |
+| 通信模型 | 基于旧 Bridge 的异步调用模型 | 通过 JSI 与 Codegen 接入；接口可声明同步或异步方法，但耗时工作仍必须由原生侧安排线程 |
+| 注册与发现 | `ReactPackage` 返回模块实例 | 由生成规约、原生实现及包注册共同完成；是否按需创建由具体包实现决定 |
+| 类型安全 | JS 与原生签名靠人工保持一致 | Codegen 从 TS/Flow 规约生成平台接口，仍需为输入、权限和运行失败建模 |
+| 适用 | 维护已有遗留模块、理解兼容层 | 新建 RN 原生模块优先采用的方向；RN 0.82 起运行时完全采用新架构 |
 
-**决策顺序**: 优先查社区库（React Native Directory）→ Expo SDK 能力 → 再自研原生模块。鸿蒙端的自研走 RNOH 的 ArkTS TurboModule，见 [RNOH 架构](../reference/language-concepts/05-harmonyos-rnoh-api.md)。
+**决策顺序**: 优先查社区库（React Native Directory）→ Expo SDK 能力 → 再自研原生模块。若项目已使用 Expo，优先评估 Expo Modules API：它用 Kotlin/Swift 定义模块，并通过 Expo Autolinking 接入；确有 C++ 互操作或需要直接控制 RN Codegen 时，再走 Turbo Native Module。鸿蒙端的自研走 RNOH 的 ArkTS TurboModule，见 [RNOH 架构](../reference/language-concepts/05-harmonyos-rnoh-api.md)。
+
+> **路径选择**：下节 Android/ObjC 代码展示的是 Legacy Native Module 的最小注册机制，目的是读懂既有项目，不是 Expo 主线的新模块模板。Expo 项目请从 [Expo Modules API 官方概览](https://docs.expo.dev/modules/overview/)开始；它会生成注册代码，且修改原生部分后仍需重建 development build。
 
 ## 💻 Android：Kotlin 原生模块
 
@@ -87,16 +89,37 @@ class DeviceModule(reactContext: ReactApplicationContext) :
 }
 ```
 
-2. 在 `MainApplication.kt` 的 Package 列表中注册：
+2. 模块必须由一个 `ReactPackage` 提供。创建 `DevicePackage.kt`：
 
 ```kotlin
-override fun getPackages(): List<NativeModule> =
+package com.myfirstapp
+
+import com.facebook.react.ReactPackage
+import com.facebook.react.bridge.NativeModule
+import com.facebook.react.bridge.ReactApplicationContext
+import com.facebook.react.uimanager.ViewManager
+
+class DevicePackage : ReactPackage {
+    override fun createNativeModules(context: ReactApplicationContext): List<NativeModule> =
+        listOf(DeviceModule(context))
+
+    override fun createViewManagers(context: ReactApplicationContext): List<ViewManager<*, *>> =
+        emptyList()
+}
+```
+
+3. 再在 `MainApplication.kt` 的 Package 列表中注册**包**，不要直接加入 `DeviceModule`：
+
+```kotlin
+import com.facebook.react.ReactPackage
+
+override fun getPackages(): List<ReactPackage> =
     PackageList(this).packages.apply {
-        add(DeviceModule(reactContext))
+        add(DevicePackage())
     }
 ```
 
-3. JS 侧调用：
+4. JS 侧调用：
 
 ```tsx
 import { NativeModules } from 'react-native';
@@ -133,11 +156,12 @@ RCT_EXPORT_METHOD(getDeviceName:(RCTPromiseResolveBlock)resolve
 @end
 ```
 
-修改原生代码后需要重新编译安装（Metro 热更新只覆盖 JS 层）：
+修改原生代码后需要重新编译安装（Metro 热更新只覆盖 JS 层）。如项目有 `Gemfile`，用它锁定 CocoaPods：
 
 ```bash
 npm run android   # Android 重新构建
-cd ios && pod install && cd .. && npm run ios
+bundle exec pod install --project-directory=ios
+npm run ios
 ```
 
 ## 💻 新架构：Codegen 规约 + TurboModule
@@ -156,7 +180,7 @@ export interface Spec extends TurboModule {
 export default TurboModuleRegistry.getEnforcing<Spec>('DeviceModule');
 ```
 
-在 `package.json` 中声明 `codegenConfig` 后，构建期 Codegen 会据此生成 C++/Kotlin/ObjC 胶水代码，原生侧实现 `Spec` 协议即可。运行时通过 `TurboModuleRegistry` 按需加载——这就是 TurboModules "懒加载 + 类型安全"的价值。
+在 `package.json` 中声明 `codegenConfig` 后，构建期 Codegen 会据此生成 C++/Kotlin/ObjC 接口，原生侧按生成接口实现模块。`getEnforcing` 表示“模块缺失就是配置或构建错误”，会抛出异常；如果功能是平台可选的，改用 `TurboModuleRegistry.get<Spec>()` 并在 JS 侧处理 `null`。不要把“TurboModule”直接等同于任意模块一定懒加载或一定更快。
 
 完整的 Codegen 配置字段与目录约定见 [TS 类型模式](../reference/language-concepts/04-typescript-patterns.md)。
 
@@ -172,7 +196,7 @@ export default TurboModuleRegistry.getEnforcing<Spec>('DeviceModule');
 **A**: 模块没注册成功。Android 检查 Package 列表与 `getName()` 返回值；iOS 检查 `.mm` 文件是否在 Xcode target 内、模块名是否一致。
 
 ### Q2: 现在还必须手写这些胶水吗？
-**A**: 新架构下多数场景由社区库（已适配 TurboModules）覆盖；自研时优先走 Codegen 规约路线，手写 Bridge 模块仅用于维护旧代码。
+**A**: 新架构下多数场景由社区库覆盖。Expo 项目自研时优先评估 Expo Modules API；直接使用 RN 原生接口时，优先走 Codegen 规约路线。手写 Legacy Bridge 模块适合维护已有代码或学习其注册机制，不应与新模块教程混为同一条默认路径。
 
 ### Q3: 鸿蒙端怎么写等价模块？
 **A**: RNOH 提供 ArkTS TurboModule 机制，在鸿蒙壳工程内实现并注册，JS 侧接口不变；细节见 [05-harmonyos-rnoh-api](../reference/language-concepts/05-harmonyos-rnoh-api.md)。
@@ -194,7 +218,7 @@ export default TurboModuleRegistry.getEnforcing<Spec>('DeviceModule');
 1. 按 Codegen 规约改造练习一的模块
 2. 观察构建产物中生成的原生接口文件
 
-**提示**: 新架构自 RN 0.82 起为唯一架构（旧架构不再可启用，Legacy 组件已在 0.84+ 移除），新项目无需任何开关配置。
+**提示**: RN 0.82 起应用运行时完全采用新架构；这不代表旧库接口会立即消失，兼容层和迁移状态仍要看目标 RN 版本与库的发布说明。把生成的接口文件、构建命令和实际安装的 development build 版本一起记录。
 
 ---
 
