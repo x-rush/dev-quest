@@ -5,7 +5,7 @@
 
 第一次学习请从[理解地图与学习规划](LEARNING_GUIDE.md)开始，按其中的阶段任务和验收条件推进。先学习 Swift 可选值、结构体和闭包，再用 SwiftUI 做状态界面与本地笔记。无需预先掌握 Go 或 React；原生应用构建与运行使用对应的 Apple 开发环境。
 
-查语法、函数或库时使用下方参考目录。文件数量与目录中的完成标记表示内容组织情况，不能替代示例运行证据；具体交付按[知识库质量基线](../shared-resources/standards/knowledge-delivery-baseline.md)验收。
+查语法、函数或库时使用下方参考目录；Swift 先从[关键词](reference/language-concepts/01-swift-keywords.md)、[Optional 与集合](reference/language-concepts/02-optionals-collections.md)、[高频全局函数](reference/language-concepts/17-swift-built-in-functions.md)和[Foundation 与标准库](reference/library-guides/01-foundation-and-stdlib.md)进入。文件数量与目录中的完成标记表示内容组织情况，不能替代示例运行证据；具体交付按[知识库质量基线](../shared-resources/standards/knowledge-delivery-baseline.md)验收。
 
 > **文档简介**: Dev Quest 应用帝国矩阵的 iOS 支柱模块：以 Swift 6.3 严格并发为地基，用 SwiftUI + Observation + SwiftData 构建现代原生应用，直至上架与运维
 >
