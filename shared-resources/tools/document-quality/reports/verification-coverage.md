@@ -7,11 +7,11 @@
 | 指标 | 数量 |
 |---|---:|
 | 纳入模块文档 | 642 |
-| 主状态：not_verified | 464 |
-| 主状态：runtime | 178 |
-| 验证措辞出现次数 | 142 |
+| 主状态：not_verified | 463 |
+| 主状态：runtime | 179 |
+| 验证措辞出现次数 | 143 |
 | 措辞分类：source_has_limited_runtime_evidence | 88 |
-| 措辞分类：unbound_verification_wording | 54 |
+| 措辞分类：unbound_verification_wording | 55 |
 
 ## 语法级覆盖（不能当作运行覆盖）
 
@@ -461,7 +461,7 @@
 | PHP | [07-php-mastery/testing/01-unit-testing.md](../../../../07-php-mastery/testing/01-unit-testing.md) | `not_verified` | 0 | 0 |
 | PHP | [07-php-mastery/testing/02-pest-testing.md](../../../../07-php-mastery/testing/02-pest-testing.md) | `not_verified` | 0 | 0 |
 | PHP | [07-php-mastery/testing/03-feature-testing.md](../../../../07-php-mastery/testing/03-feature-testing.md) | `not_verified` | 0 | 0 |
-| Java | [08-java-revisited/LEARNING_GUIDE.md](../../../../08-java-revisited/LEARNING_GUIDE.md) | `not_verified` | 0 | 1 |
+| Java | [08-java-revisited/LEARNING_GUIDE.md](../../../../08-java-revisited/LEARNING_GUIDE.md) | `not_verified` | 0 | 2 |
 | Java | [08-java-revisited/README.md](../../../../08-java-revisited/README.md) | `not_verified` | 0 | 1 |
 | Java | [08-java-revisited/advanced-topics/architecture/01-layered-architecture.md](../../../../08-java-revisited/advanced-topics/architecture/01-layered-architecture.md) | `not_verified` | 0 | 0 |
 | Java | [08-java-revisited/advanced-topics/performance/01-jvm-tuning.md](../../../../08-java-revisited/advanced-topics/performance/01-jvm-tuning.md) | `not_verified` | 0 | 0 |
@@ -512,7 +512,7 @@
 | Java | [08-java-revisited/reference/library-guides/07-java-text-and-time-format.md](../../../../08-java-revisited/reference/library-guides/07-java-text-and-time-format.md) | `runtime` | 1 | 0 |
 | Java | [08-java-revisited/reference/library-guides/08-java-util-regex.md](../../../../08-java-revisited/reference/library-guides/08-java-util-regex.md) | `runtime` | 1 | 0 |
 | Java | [08-java-revisited/reference/library-guides/09-jdk-package-map.md](../../../../08-java-revisited/reference/library-guides/09-jdk-package-map.md) | `runtime` | 1 | 0 |
-| Java | [08-java-revisited/reference/quick-references/01-java-cheatsheet.md](../../../../08-java-revisited/reference/quick-references/01-java-cheatsheet.md) | `not_verified` | 0 | 0 |
+| Java | [08-java-revisited/reference/quick-references/01-java-cheatsheet.md](../../../../08-java-revisited/reference/quick-references/01-java-cheatsheet.md) | `runtime` | 1 | 0 |
 | Java | [08-java-revisited/reference/quick-references/02-troubleshooting.md](../../../../08-java-revisited/reference/quick-references/02-troubleshooting.md) | `not_verified` | 0 | 0 |
 | Java | [08-java-revisited/reference/quick-references/03-spring-boot4-migration.md](../../../../08-java-revisited/reference/quick-references/03-spring-boot4-migration.md) | `not_verified` | 0 | 0 |
 | Java | [08-java-revisited/testing/01-unit-testing.md](../../../../08-java-revisited/testing/01-unit-testing.md) | `not_verified` | 0 | 0 |

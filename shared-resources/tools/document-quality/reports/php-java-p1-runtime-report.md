@@ -1,6 +1,6 @@
 # PHP / Java P1 正文提取运行验证
 
-范围只包括十个带命名标记的完整代码围栏：覆盖 PHP/Java 的关键字、内置 API/函数和标准库，以及 Java 的第一个程序、现代特性、枚举语义和接口语义。控制流程页已有独立证据，未重新计入；无标记的教学片段也不计入。
+范围只包括十一个带命名标记的完整代码围栏：覆盖 PHP/Java 的关键字、内置 API/函数和标准库，以及 Java 的第一个程序、现代特性、枚举语义、接口语义和速查边界。控制流程页已有独立证据，未重新计入；无标记的教学片段也不计入。
 
 | Case | Category | Document | Runner | Result |
 | --- | --- | --- | --- | --- |
@@ -12,6 +12,7 @@
 | `java-enum-stable-code` | enum semantics | `08-java-revisited/reference/language-concepts/08-enums.md` | eclipse-temurin:21-jdk-noble container | PASS |
 | `java-interface-default-resolution` | interface semantics | `08-java-revisited/reference/language-concepts/10-interface-semantics.md` | eclipse-temurin:21-jdk-noble container | PASS |
 | `java-modern-features-jdk21` | modern Java features | `08-java-revisited/basics/07-modern-features.md` | eclipse-temurin:21-jdk-noble container | PASS |
+| `java-cheatsheet-boundaries` | quick-reference boundaries | `08-java-revisited/reference/quick-references/01-java-cheatsheet.md` | eclipse-temurin:21-jdk-noble container | PASS |
 | `java-java-lang-contract` | built-in APIs (java.lang) | `08-java-revisited/reference/library-guides/03-java-lang.md` | eclipse-temurin:21-jdk-noble container | PASS |
 | `java-text` | standard library | `08-java-revisited/reference/library-guides/01-standard-library.md` | eclipse-temurin:21-jdk-noble container | PASS |
 

@@ -1,5 +1,5 @@
 {
-  "scope": "Ten explicitly marked, complete examples: PHP and Java keyword, built-in/API, standard-library, Java first-program, modern-features, enum-semantics, and interface-semantics pages. Excludes existing control-flow evidence and all unmarked partial snippets.",
+  "scope": "Eleven explicitly marked, complete examples: PHP and Java keyword, built-in/API, standard-library, Java first-program, modern-features, enum-semantics, interface-semantics, and quick-reference pages. Excludes existing control-flow evidence and all unmarked partial snippets.",
   "documents": {
     "07-php-mastery/reference/language-concepts/01-php-keywords.md": "867df9b19bf026d7f474899698db2a752d67d1cdfcce82b9d73458c8e1efc1a1",
     "07-php-mastery/reference/language-concepts/02-built-in-functions.md": "f2e60510ec55dd5bef56adeed3ba0cd66be01009f1e474a90e601ec8917ac11f",
@@ -9,6 +9,7 @@
     "08-java-revisited/reference/language-concepts/08-enums.md": "d798fc10ce7b89f4cb9249df5536586c0bfee3bca1c1b213688a15d1ef4dce71",
     "08-java-revisited/reference/language-concepts/10-interface-semantics.md": "f4234b4437c4325bf0d55b18e58fa61fc82a27c3c25f191645a732fa6b79a091",
     "08-java-revisited/basics/07-modern-features.md": "f8eb23fc34f9f27ce8cdee89332f0648a261051ede563f0418934a711c53f5d9",
+    "08-java-revisited/reference/quick-references/01-java-cheatsheet.md": "5e8bf207a750366b8166fbe98026771b7c2c0fbfa1594ed42b51a0d036ac2876",
     "08-java-revisited/reference/library-guides/03-java-lang.md": "c448851054b98e20a9aa961e61a2e53b7873aecbfd3cd614b2959cfd30437287",
     "08-java-revisited/reference/library-guides/01-standard-library.md": "3df9f4557447a022165742bcdfab31e5291fae5c0ee586e669f71ad1342fefc7"
   },
@@ -224,6 +225,33 @@
           ],
           "exit_code": 0,
           "stdout": "[Ada]\nmissing\nvirtual=7\nvalue=3\n",
+          "stderr": ""
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "java-cheatsheet-boundaries",
+      "category": "quick-reference boundaries",
+      "language": "java",
+      "document": "08-java-revisited/reference/quick-references/01-java-cheatsheet.md",
+      "source_sha256": "e022f432dc2c1aa36cd466b89128d320b3901818f3b361c77e71fc8fb99ed0d7",
+      "runner": "eclipse-temurin:21-jdk-noble container",
+      "expected_stdout": "[a, b, ]\nnull\n[c, b, a]\ncomputed\n",
+      "commands": [
+        {
+          "command": [
+            "docker",
+            "run",
+            "--rm",
+            "-i",
+            "eclipse-temurin:21-jdk-noble",
+            "sh",
+            "-c",
+            "cat > JavaCheatsheetBoundaries.java && javac --release 21 -encoding UTF-8 JavaCheatsheetBoundaries.java && java JavaCheatsheetBoundaries"
+          ],
+          "exit_code": 0,
+          "stdout": "[a, b, ]\nnull\n[c, b, a]\ncomputed\n",
           "stderr": ""
         }
       ],

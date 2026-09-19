@@ -79,6 +79,36 @@ opt.map(Foo::name).filter(n -> !n.isBlank()).ifPresent(System.out::println);
 opt.ifPresentOrElse(this::use, this::fallback);
 ```
 
+### JDK 21 基线验收：四个易误用的速查项
+
+以下程序将上面的独立片段放进一个完整 `main`。它刻意选取边界输入：末尾分隔符、值为 `null` 的已存在键、`reversed()` 视图，以及空 `Optional`。这四项都应以输出为准，而不是凭方法名猜测。
+
+<!-- reference-case: {"id":"java-cheatsheet-boundaries","stdout":"[a, b, ]\nnull\n[c, b, a]\ncomputed\n","requires":"JDK 21"} -->
+```java
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Optional;
+
+public class JavaCheatsheetBoundaries {
+    public static void main(String[] args) {
+        System.out.println(Arrays.toString("a,b,".split(",", -1)));
+
+        var values = new HashMap<String, Integer>();
+        values.put("present-but-null", null);
+        System.out.println(values.getOrDefault("present-but-null", 99));
+
+        var mutable = new ArrayList<>(List.of("a", "b", "c"));
+        System.out.println(mutable.reversed());
+
+        System.out.println(Optional.<String>empty().orElseGet(() -> "computed"));
+    }
+}
+```
+
+`getOrDefault` 的第二行输出是 `null`，说明“键已存在但映射值为 null”不等同于键缺失；若随后拆箱为 `int`，会触发 `NullPointerException`。`reversed()` 是视图，若需要独立可变列表，应显式复制。
+
 ## 🧩 record 与模式匹配
 
 ```java
