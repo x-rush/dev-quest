@@ -59,7 +59,7 @@ import { randomBytes, randomInt, randomUUID } from "node:crypto";
 randomBytes(16);                 // 16 字节 Buffer（IV、盐、token 用它）
 randomBytes(16).toString("hex"); // 32 字符十六进制串
 randomInt(0, 10);                // [0, 10) 整数——含头不含尾
-randomUUID();                    // UUID v4（实测第 14 位恒为 '4'）
+randomUUID();                    // UUID v4；按 RFC 4122 的版本位应为 '4'，可用下方命令自行检查
 ```
 
 ### 陷阱
@@ -72,7 +72,7 @@ randomUUID();                    // UUID v4（实测第 14 位恒为 '4'）
 ### 定义
 AES-GCM 是带认证的对称加密：密文被篡改时解密直接失败，无需额外再算 HMAC。生产对称加密的默认选择。
 
-### 参数速查（实测）
+### 参数速查（请在目标 Node 版本自行验证）
 
 | 参数 | 长度 | 生成方式 |
 |------|------|---------|
@@ -80,7 +80,7 @@ AES-GCM 是带认证的对称加密：密文被篡改时解密直接失败，无
 | iv | 12 字节 | `randomBytes(12)`，**每次加密必须换新** |
 | authTag | 16 字节 | 解密前必须 `setAuthTag` |
 
-### 完整闭环示例（Node 24 实测通过）
+### 完整闭环示例（以本机 Node 24 运行结果为准）
 
 ```ts
 import { createCipheriv, createDecipheriv, randomBytes } from "node:crypto";

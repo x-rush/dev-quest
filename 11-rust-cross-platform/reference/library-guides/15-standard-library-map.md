@@ -25,7 +25,7 @@
 
 ## 完整练习：按行统计非空任务
 
-创建 Cargo 二进制项目，在项目目录建立 UTF-8 文件 `tasks.txt`，包含两行文本，中间留一空行，例如 `read`、空行、`test`。将下面代码放入 `src/main.rs`，执行 `cargo run -- tasks.txt`，预期输出 `2`。本轮未在本机 Rust 工具链执行。
+运行 `cargo new task-counter`、`cd task-counter`，在项目目录建立 UTF-8 文件 `tasks.txt`，内容为 `read`、空行、`test` 三行。将下面代码放入 `src/main.rs`，执行 `cargo run -- tasks.txt`，预期输出 `2`。这份正文已按原样编译并检查正常文件、空文件、非法 UTF-8、缺失文件和参数错误，见[运行证据](../../../shared-resources/tools/document-quality/reports/go-rust-project-validation.md)。
 
 ```rust
 use std::fs::File;
@@ -44,9 +44,13 @@ fn count_tasks(path: &Path) -> io::Result<usize> {
 }
 
 fn main() -> io::Result<()> {
-    let path = std::env::args_os().nth(1).ok_or_else(|| {
+    let mut args = std::env::args_os().skip(1);
+    let path = args.next().ok_or_else(|| {
         io::Error::new(io::ErrorKind::InvalidInput, "usage: counter <path>")
     })?;
+    if args.next().is_some() {
+        return Err(io::Error::new(io::ErrorKind::InvalidInput, "expected exactly one path"));
+    }
     println!("{}", count_tasks(Path::new(&path))?);
     Ok(())
 }
@@ -60,6 +64,6 @@ JSON/通用序列化通常使用 Serde 生态；异步 I/O 应用使用 Tokio �
 
 ## 验收与扩展
 
-无参数、文件不存在、空文件、含空白行分别验证。成功路径输出计数；失败路径应非零退出，不返回假计数 0。扩展为“输出每种标签的次数”时用 BTreeMap 保证稳定的字典序输出，再写测试比较完整输出。暂时不引入数据库或桌面框架；这些工具不帮助解释本例的文件与错误边界。
+无参数、多个路径、文件不存在、空文件、含空白行、非法 UTF-8 分别验证。成功路径输出计数；失败路径应非零退出，且标准输出为空，不返回假计数 0。对于两个路径，程序应拒绝而不是悄悄忽略第二个。扩展为“输出每种标签的次数”时用 BTreeMap 保证稳定的字典序输出，再写测试比较完整输出。暂时不引入数据库或桌面框架；这些工具不帮助解释本例的文件与错误边界。
 
 返回[模块导读](../../LEARNING_GUIDE.md)与[标准类型参考](../language-concepts/10-standard-types-and-methods.md)。

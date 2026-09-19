@@ -12,7 +12,7 @@
 
 ## 📌 定义
 
-PDO（PHP Data Objects）是 PHP 内置的数据库**访问抽象层**：统一的连接、预处理语句、事务与取回接口，驱动覆盖 MySQL/PostgreSQL/SQLite 等。它抽象 API，不抽象 SQL 方言。本条目示例在 PHP 8.5.10 + pdo_sqlite 实测。
+PDO（PHP Data Objects）是 PHP 内置的数据库**访问抽象层**：统一的连接、预处理语句、事务与取回接口，驱动覆盖 MySQL/PostgreSQL/SQLite 等。它抽象 API，不抽象 SQL 方言。请使用项目锁定的 PHP 与驱动版本运行示例确认行为。
 
 ## 📖 连接与 DSN
 
@@ -29,7 +29,7 @@ $pdo = new PDO('pgsql:host=localhost;port=5432;dbname=app', $user, $pass);
 $pdo = new PDO('sqlite:' . __DIR__ . '/app.sqlite');
 ```
 
-错误模式（php.net 官方）：**PHP 8.0.0 起 PDO 默认错误模式即 `PDO::ERRMODE_EXCEPTION`**（实测 8.5 中 `getAttribute(PDO::ATTR_ERRMODE) === 2`，坏 SQL 直接抛 `PDOException`）；8.0 之前默认是 `ERRMODE_SILENT`。连接失败则无论何种模式都抛 `PDOException`。
+错误模式（php.net 官方）：**PHP 8.0.0 起 PDO 默认错误模式即 `PDO::ERRMODE_EXCEPTION`**；8.0 之前默认是 `ERRMODE_SILENT`。请在目标驱动中用 `getAttribute(PDO::ATTR_ERRMODE)` 和错误 SQL 确认行为；连接失败则无论何种模式都抛 `PDOException`。
 
 ## 📖 预处理语句：prepare / execute / bind
 
@@ -42,7 +42,7 @@ $stmt->bindValue(':n', $name, PDO::PARAM_STR);
 
 // bindParam：按引用绑定，execute 时才读取变量
 $stmt->bindParam(':a', $age, PDO::PARAM_INT);
-$age = 99;                      // 实测：execute 插入的是 99，不是绑定时的旧值
+$age = 99;                      // 预期 execute 插入 99，而不是绑定时的旧值；请在目标驱动确认
 $stmt->execute();
 
 // 更常用：execute 参数数组一次性绑定（全部按值）
@@ -60,7 +60,7 @@ $pdo->prepare('INSERT INTO users (name, age) VALUES (?, ?)')
 
 ```php
 $stmt = $pdo->query('SELECT id, name, age FROM users');
-$row = $stmt->fetch(PDO::FETCH_ASSOC);      // ['id' => 1, 'name' => 'alice', 'age' => 99]，实测原生类型
+$row = $stmt->fetch(PDO::FETCH_ASSOC);      // 预期形如 ['id' => 1, 'name' => 'alice', 'age' => 99]；字段类型受驱动配置影响
 $row = $stmt->fetch(PDO::FETCH_OBJ);        // stdClass 实例，$row->name
 $obj = $stmt->fetchObject(User::class);     // 映射到指定类（属性同名赋值）
 $ids = $pdo->query('SELECT id FROM users')->fetchAll(PDO::FETCH_COLUMN);  // 单列数组
@@ -81,7 +81,7 @@ try {
     $pdo->commit();
 } catch (Throwable $e) {
     if ($pdo->inTransaction()) {
-        $pdo->rollBack();                   // 实测：中途坏 SQL 异常后回滚，inTransaction() 为 false
+        $pdo->rollBack();                   // 回滚后应检查 inTransaction() 为 false，并验证前序写入未保留
     }
     throw $e;
 }
@@ -91,13 +91,13 @@ try {
 
 - **只有"参数化"是防护**：`prepare` + 占位符绑定，让值永远不参与 SQL 解析。
 - 表名/列名/排序方向无法参数化——用白名单映射（`$sortMap = ['name' => 'name', 'age' => 'age'];`）。
-- `quote()` 只是转义字符串（实测 `'o''reilly'`），远不如预处理可靠，遗留代码再考虑。
+- `quote()` 只是转义字符串；其返回形式受驱动影响，远不如预处理可靠，遗留代码再考虑。
 - 关闭模拟预处理（`ATTR_EMULATE_PREPARES => false`）避免多语句注入与本地类型处理差异。
 - LIKE 通配符（`%`/`_`）不是注入但需转义业务语义。
 
 ## ⚠️ 常见陷阱
 
-- ❌ **`rowCount()` 判断 SELECT 行数**：多数驱动对 SELECT 返回 0 或无意义值（实测 sqlite SELECT 后 `rowCount() === 0`）。
+- ❌ **`rowCount()` 判断 SELECT 行数**：多数驱动对 SELECT 返回 0 或无意义值；在实际目标驱动上验证后再选择计数查询或逐行读取策略。
 - ✅ 用 `COUNT(*)` 或直接遍历结果。
 - ❌ **`lastInsertId()` 当 int 用**：不同驱动可能返回 `string`。
 - ✅ 显式 `(int)` 转换。

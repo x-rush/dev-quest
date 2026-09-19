@@ -37,7 +37,7 @@ a.kind          # 类属性（实例未覆盖时回退到类）
 
 ### 属性查找顺序
 
-对普通属性，可用“先实例存储，再沿类的 MRO”理解；数据描述符（如带 setter 的 property）会优先于实例字典，__getattribute__ 也可定制查找行为。`a.name = "x"` 只写实例层，不碰类；实例属性被 `del` 后回退到类属性。本机 3.14.7 实测：`k.x = 2` 后 `k.x` 为 2 而 `K().x` 仍为 1；`del k.x` 再读回退到类属性 1。
+对普通属性，可用“先实例存储，再沿类的 MRO”理解；数据描述符（如带 setter 的 property）会优先于实例字典，__getattribute__ 也可定制查找行为。`a.name = "x"` 只写实例层，不碰类；实例属性被 `del` 后回退到类属性。执行本节片段检查：`k.x = 2` 后 `k.x` 为 2 而 `K().x` 仍为 1；`del k.x` 后再读应回退到类属性 1。
 
 ### MRO：C3 线性化
 
@@ -54,11 +54,11 @@ class C(A):
 class D(B, C):
     def who(self): return "D|" + super().who()
 
-D.mro()      # [<class D>, <class B>, <class C>, <class A>, <class 'object'>]（实测）
+D.mro()      # 预期为 [<class D>, <class B>, <class C>, <class A>, <class 'object'>]
 D().who()    # 'D|B|C|A' —— 每个类的方法恰好参与一次
 ```
 
-C3 线性化保证三条不变式：**子类总排在父类之前；多父类按声明顺序；每个类只出现一次**。声明顺序冲突时类根本建不出来（实测）：
+C3 线性化保证三条不变式：**子类总排在父类之前；多父类按声明顺序；每个类只出现一次**。声明顺序冲突时类无法创建；运行下例观察 `TypeError`：
 
 ```python
 class X(B, A, C): pass
@@ -67,7 +67,7 @@ class X(B, A, C): pass
 
 ### super() 的真实语义
 
-`super().method()` = 在"**当前类在 MRO 中的位置**"之后继续找 `method`——不是"直接父类"。菱形结构靠它实现每层只执行一次的协作式初始化（本机实测输出顺序 Child → Left → Right → Base）：
+`super().method()` = 在“**当前类在 MRO 中的位置**”之后继续找 `method`——不是“直接父类”。菱形结构靠它实现每层只执行一次的协作式初始化；运行下例确认输出顺序是否为 Child → Left → Right → Base：
 
 ```python
 class Base:
@@ -104,7 +104,7 @@ class User(JsonMixin):                  # 行为在前，业务基类在后
     def __init__(self, name: str):
         self.name = name
 
-User("ada").to_json()                   # '{"name": "ada"}'（实测）
+User("ada").to_json()                   # 预期 '{"name": "ada"}'
 ```
 
 组合原则：Mixin 放前、业务基类在后；Mixin 之间不互相依赖；需要的状态由宿主类提供。
@@ -117,11 +117,11 @@ class Slim:
 
 s = Slim()
 s.x = 1
-s.z = 3                   # AttributeError: ... has no attribute 'z' and no __dict__ ...（实测）
+s.z = 3                   # 预期 AttributeError：没有 z 属性且没有 __dict__
 hasattr(s, "__dict__")    # False —— 不再为每个实例挂属性字典
 ```
 
-收益：省内存（本机 3.14.7 实测：空实例两种写法均 48 字节；普通实例赋属性后惰性创建 296 字节的 `__dict__`，合计 344 vs 48，slots 实例始终保持 48 字节且无 `__dict__`）、属性访问更快。dataclass 一行开启：`@dataclass(slots=True)`，详见 [13-dataclasses](./13-dataclasses.md)。
+收益：可减少每实例的字典开销，属性访问有时更快；具体字节数取决于 Python 版本、构建和平台，需用 `sys.getsizeof` 在目标环境测量。dataclass 一行开启：`@dataclass(slots=True)`，详见 [13-dataclasses](./13-dataclasses.md)。
 
 ### object 基类
 
@@ -155,7 +155,7 @@ isinstance(dog, Animal)      # True
 
 - ❌ **子类重写 `__init__` 忘调 `super().__init__()`**：基类负责的字段全部缺失。
   ✅ 若基类契约需要初始化，应在合适位置调用 super 并按约定传参；不必把“首行”当成语言规则。
-- ❌ **可变类属性当"实例默认值"**：`class C: items = []`，一个实例 `append` 全体实例可见（实测 `K().items == [9]`）。
+- ❌ **可变类属性当“实例默认值”**：`class C: items = []`，一个实例 `append` 后全体实例都会看到同一列表；运行小片段确认共享行为。
   ✅ 实例状态放 `__init__`：`self.items = []`；类属性只放真常量与配置。
 - ❌ **把 super() 当"直接父类"手动指定**：`super(B, self).method()` 跳层只在明确意图时使用，乱用会漏初始化。
   ✅ 默认零参 `super()`，交给 MRO 协作分发。

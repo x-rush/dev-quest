@@ -40,7 +40,7 @@ interface Iterator {
 
 ## 💡 示例
 
-### 事件循环顺序（本机 Node 24 实测输出）
+### 事件循环顺序（在 Node 24 中自行运行观察）
 
 ```js
 console.log('1 sync')
@@ -78,7 +78,7 @@ Object.getPrototypeOf(a) === A.prototype // true —— 使用标准反射 API �
 
 属性查找顺序：实例自身 → 构造函数 `prototype` → 父类 `prototype` → … → `null`。
 
-### this 绑定四条（本机 Node 24 实测）
+### this 绑定四条（用下方示例自行观察）
 
 ```js
 function show() { return this?.v }
@@ -115,7 +115,7 @@ const range = {
 - ❌ **对普通对象用 `for...of`**：对象默认不实现 `Symbol.iterator`，`for...of {}` 直接抛 `TypeError: not iterable`。✅ 迭代对象用 `Object.keys/entries/values`（返回数组，天然可迭代），或给对象实现 `[Symbol.iterator]`。
 - ❌ **混淆 nextTick 与微任务（Node）**：常见 CJS 顶层中 nextTick 先执行，但 ESM 顶层可不同；递归 nextTick 还可能饿死 I/O。✅ 按用途选择：`queueMicrotask` 用于当前同步工作结束后的微任务；Node `setImmediate` 用于其 check 阶段，不是浏览器标准 API，也不与微任务等价。
 
-## 可运行实验：绑定与对象究竟何时创建
+## 练习：绑定与对象究竟何时创建
 
 以下完整程序均保存为 `.mjs` 文件、用 Node 24 执行。ESM 明确采用严格模式，避免浏览器普通脚本和 CommonJS 顶层 this 的差异。每个围栏独立运行，不需要拼接前文片段。
 

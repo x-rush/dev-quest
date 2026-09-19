@@ -10,6 +10,7 @@
 
 ```text
 todo-cli/
+├── go.mod
 ├── main.go
 └── main_test.go
 ```
@@ -17,6 +18,7 @@ todo-cli/
 ```bash
 mkdir todo-cli
 cd todo-cli
+go mod init example.com/todo-cli
 # 保存下文两个文件后：
 go test ./...
 go run . add "买牛奶"
@@ -94,6 +96,9 @@ func run(args []string, out io.Writer) error {
 		_, err = fmt.Fprintf(out, "已添加 #%d: %s\n", todo.ID, todo.Title)
 		return err
 	case "demo":
+		if len(args) != 1 {
+			return errors.New("demo 不接受额外参数")
+		}
 		for _, title := range []string{"买牛奶", "写 Go 测试"} {
 			if _, err := store.Add(title); err != nil {
 				return err
@@ -169,6 +174,30 @@ func TestRunDemoAndUnknownCommand(t *testing.T) {
 	}
 	if err := run([]string{"unknown"}, &out); err == nil || !strings.Contains(err.Error(), "未知命令") {
 		t.Fatalf("未知命令错误 = %v", err)
+	}
+}
+
+func TestRunRejectsInvalidArguments(t *testing.T) {
+	for _, args := range [][]string{nil, {"add"}, {"add", "one", "two"}, {"demo", "extra"}} {
+		var out bytes.Buffer
+		if err := run(args, &out); err == nil {
+			t.Fatalf("run(%q) 应拒绝非法参数", args)
+		}
+		if out.Len() != 0 {
+			t.Fatalf("非法参数不应输出成功消息: %q", out.String())
+		}
+	}
+}
+
+type failingWriter struct{}
+
+func (failingWriter) Write(p []byte) (int, error) {
+	return 0, errors.New("输出设备不可写")
+}
+
+func TestRunPropagatesOutputFailure(t *testing.T) {
+	if err := run([]string{"add", "task"}, failingWriter{}); err == nil {
+		t.Fatal("输出失败应传播给 main 并导致非零退出")
 	}
 }
 ```

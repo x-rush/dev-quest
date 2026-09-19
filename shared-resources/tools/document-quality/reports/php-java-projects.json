@@ -1,0 +1,1318 @@
+{
+  "scope": "two local CLI projects; no frameworks, NFS or power-loss guarantees",
+  "documents": {
+    "07-php-mastery/basics/08-first-project.md": {
+      "sha256": "bf12e73dd56aa114afd01360a3d0a4ed376ddc6b54178bf0b3b4161d853f0941",
+      "files": {
+        "composer.json": "90f42fa48c83fefafb12a1b37d4370adda8c725a89a0e4592d4ba08be343fb3c",
+        "src/Model/Priority.php": "d15923cc07cc7ef46b56184b5faca1342ee05af6a57b7079b20b9fbfa4f9f658",
+        "src/Model/Status.php": "22ab80dea2fdea80858fa18081436c21b43438dd14615b593a15ba837462e2a6",
+        "src/Model/Task.php": "92b4ee21b1c0e9fc332b0b1c37dbe82d8f167780d0019fabb0a6a6f38d7504d0",
+        "src/Storage/TaskRepository.php": "5ff9ee5e30bbfa6c3333a3f3927cb24e1c4ee1271a89381031e70cab002d8fc6",
+        "src/Service/TaskService.php": "9855dd1b47fcdaca9e068749422ada19004b301f3db7a881cfc3431979cfbb6a",
+        "bin/task": "88f0a31b5cf3687a6a74b04c0b327886daa99892f141587dbac93d32e0082d42"
+      }
+    },
+    "08-java-revisited/basics/08-first-project.md": {
+      "sha256": "fe9d2a1a84d44eaf8419d10476a615ab0fcf082b4c1ac358f3050acb9fd49da1",
+      "files": {
+        "Main.java": "c975f39c25a9e93142ff70432ad21aa7938954603a051a82c9bd0c720bc4b493"
+      }
+    }
+  },
+  "versions": {
+    "php": {
+      "exit_code": 0,
+      "stdout": "PHP 8.3.6 (cli) (built: Sep  2 2026 12:56:02) (NTS)\nCopyright (c) The PHP Group\nZend Engine v4.3.6, Copyright (c) Zend Technologies\n    with Zend OPcache v8.3.6, Copyright (c), by Zend Technologies\n",
+      "stderr": ""
+    },
+    "java": {
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": "openjdk version \"21.0.12\" 2026-07-21 LTS\nOpenJDK Runtime Environment Temurin-21.0.12+8 (build 21.0.12+8-LTS)\nOpenJDK 64-Bit Server VM Temurin-21.0.12+8 (build 21.0.12+8-LTS, mixed mode, sharing)\n"
+    },
+    "composer": {
+      "exit_code": 0,
+      "stdout": "Composer version 2.10.3 2026-08-27 13:34:23\n",
+      "stderr": "PHP version 8.3.6 (/usr/bin/php8.3)\nRun the \"diagnose\" command to get more detailed diagnostics output.\n"
+    }
+  },
+  "cases": [
+    {
+      "id": "php-composer-autoload",
+      "document": "07-php-mastery/basics/08-first-project.md",
+      "commands": [
+        {
+          "command": [
+            "php",
+            "/out/composer.phar",
+            "dump-autoload",
+            "--no-interaction"
+          ],
+          "exit_code": 0,
+          "stdout": "Generating autoload files\nGenerated autoload files\n",
+          "stderr": ""
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "php-roundtrip-remove-and-idempotency",
+      "document": "07-php-mastery/basics/08-first-project.md",
+      "commands": [
+        {
+          "command": [
+            "php",
+            "-d",
+            "display_errors=stderr",
+            "-d",
+            "error_reporting=-1",
+            "bin/task",
+            "add",
+            "写周报",
+            "--priority",
+            "high"
+          ],
+          "exit_code": 0,
+          "stdout": "已添加 [9fcbfbd6] 写周报\n",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "php",
+            "-d",
+            "display_errors=stderr",
+            "-d",
+            "error_reporting=-1",
+            "bin/task",
+            "add",
+            "第二条"
+          ],
+          "exit_code": 0,
+          "stdout": "已添加 [6e2fe1c5] 第二条\n",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "php",
+            "-d",
+            "display_errors=stderr",
+            "-d",
+            "error_reporting=-1",
+            "bin/task",
+            "done",
+            "9fcbfbd6"
+          ],
+          "exit_code": 0,
+          "stdout": "已完成\n",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "php",
+            "-d",
+            "display_errors=stderr",
+            "-d",
+            "error_reporting=-1",
+            "bin/task",
+            "list"
+          ],
+          "exit_code": 0,
+          "stdout": "[6e2fe1c5] normal pending  第二条\n",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "php",
+            "-d",
+            "display_errors=stderr",
+            "-d",
+            "error_reporting=-1",
+            "bin/task",
+            "list",
+            "--all"
+          ],
+          "exit_code": 0,
+          "stdout": "[9fcbfbd6] high   done     写周报\n[6e2fe1c5] normal pending  第二条\n",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "php",
+            "-d",
+            "display_errors=stderr",
+            "-d",
+            "error_reporting=-1",
+            "bin/task",
+            "done",
+            "9fcbfbd6"
+          ],
+          "exit_code": 0,
+          "stdout": "已完成\n",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "php",
+            "-d",
+            "display_errors=stderr",
+            "-d",
+            "error_reporting=-1",
+            "bin/task",
+            "remove",
+            "9fcbfbd6"
+          ],
+          "exit_code": 0,
+          "stdout": "已删除\n",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "php",
+            "-d",
+            "display_errors=stderr",
+            "-d",
+            "error_reporting=-1",
+            "bin/task",
+            "remove",
+            "9fcbfbd6"
+          ],
+          "exit_code": 1,
+          "stdout": "",
+          "stderr": "错误: 任务不存在: 9fcbfbd6\n"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "php-empty-title",
+      "document": "07-php-mastery/basics/08-first-project.md",
+      "commands": [
+        {
+          "command": [
+            "php",
+            "-d",
+            "display_errors=stderr",
+            "-d",
+            "error_reporting=-1",
+            "bin/task",
+            "add",
+            "   "
+          ],
+          "exit_code": 1,
+          "stdout": "",
+          "stderr": "错误: 任务标题不能为空\n"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "php-control-title",
+      "document": "07-php-mastery/basics/08-first-project.md",
+      "commands": [
+        {
+          "command": [
+            "php",
+            "-d",
+            "display_errors=stderr",
+            "-d",
+            "error_reporting=-1",
+            "bin/task",
+            "add",
+            "x\ny"
+          ],
+          "exit_code": 1,
+          "stdout": "",
+          "stderr": "错误: 标题须为 1–240 字节 UTF-8 文本，不能包含控制字符\n"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "php-unknown-priority",
+      "document": "07-php-mastery/basics/08-first-project.md",
+      "commands": [
+        {
+          "command": [
+            "php",
+            "-d",
+            "display_errors=stderr",
+            "-d",
+            "error_reporting=-1",
+            "bin/task",
+            "add",
+            "x",
+            "--priority",
+            "urgent"
+          ],
+          "exit_code": 1,
+          "stdout": "",
+          "stderr": "错误: priority 只能是 low、normal 或 high\n"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "php-incomplete-option",
+      "document": "07-php-mastery/basics/08-first-project.md",
+      "commands": [
+        {
+          "command": [
+            "php",
+            "-d",
+            "display_errors=stderr",
+            "-d",
+            "error_reporting=-1",
+            "bin/task",
+            "add",
+            "x",
+            "--priority"
+          ],
+          "exit_code": 1,
+          "stdout": "",
+          "stderr": "错误: 用法: task add \"标题\" [--priority high]\n"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "php-unknown-option",
+      "document": "07-php-mastery/basics/08-first-project.md",
+      "commands": [
+        {
+          "command": [
+            "php",
+            "-d",
+            "display_errors=stderr",
+            "-d",
+            "error_reporting=-1",
+            "bin/task",
+            "list",
+            "--unknown"
+          ],
+          "exit_code": 1,
+          "stdout": "",
+          "stderr": "错误: 用法: task list [--all]\n"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "php-extra-argument",
+      "document": "07-php-mastery/basics/08-first-project.md",
+      "commands": [
+        {
+          "command": [
+            "php",
+            "-d",
+            "display_errors=stderr",
+            "-d",
+            "error_reporting=-1",
+            "bin/task",
+            "done",
+            "00000000",
+            "extra"
+          ],
+          "exit_code": 1,
+          "stdout": "",
+          "stderr": "错误: 需要一个 8 位十六进制任务 ID\n"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "php-missing-id",
+      "document": "07-php-mastery/basics/08-first-project.md",
+      "commands": [
+        {
+          "command": [
+            "php",
+            "-d",
+            "display_errors=stderr",
+            "-d",
+            "error_reporting=-1",
+            "bin/task",
+            "done",
+            "00000000"
+          ],
+          "exit_code": 1,
+          "stdout": "",
+          "stderr": "错误: 任务不存在: 00000000\n"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "php-broken-json",
+      "document": "07-php-mastery/basics/08-first-project.md",
+      "commands": [
+        {
+          "command": [
+            "php",
+            "-d",
+            "display_errors=stderr",
+            "-d",
+            "error_reporting=-1",
+            "bin/task",
+            "add",
+            "new"
+          ],
+          "exit_code": 1,
+          "stdout": "",
+          "stderr": "错误: Syntax error\n"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "php-object-root",
+      "document": "07-php-mastery/basics/08-first-project.md",
+      "commands": [
+        {
+          "command": [
+            "php",
+            "-d",
+            "display_errors=stderr",
+            "-d",
+            "error_reporting=-1",
+            "bin/task",
+            "add",
+            "new"
+          ],
+          "exit_code": 1,
+          "stdout": "",
+          "stderr": "错误: 存储根节点必须是 JSON 数组\n"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "php-scalar-root",
+      "document": "07-php-mastery/basics/08-first-project.md",
+      "commands": [
+        {
+          "command": [
+            "php",
+            "-d",
+            "display_errors=stderr",
+            "-d",
+            "error_reporting=-1",
+            "bin/task",
+            "add",
+            "new"
+          ],
+          "exit_code": 1,
+          "stdout": "",
+          "stderr": "错误: 存储根节点必须是 JSON 数组\n"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "php-bad-record",
+      "document": "07-php-mastery/basics/08-first-project.md",
+      "commands": [
+        {
+          "command": [
+            "php",
+            "-d",
+            "display_errors=stderr",
+            "-d",
+            "error_reporting=-1",
+            "bin/task",
+            "add",
+            "new"
+          ],
+          "exit_code": 1,
+          "stdout": "",
+          "stderr": "错误: 字段必须是字符串: id\n"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "php-invalid-utf8",
+      "document": "07-php-mastery/basics/08-first-project.md",
+      "commands": [
+        {
+          "command": [
+            "php",
+            "-d",
+            "display_errors=stderr",
+            "-d",
+            "error_reporting=-1",
+            "bin/task",
+            "add",
+            "new"
+          ],
+          "exit_code": 1,
+          "stdout": "",
+          "stderr": "错误: Malformed UTF-8 characters, possibly incorrectly encoded\n"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "php-duplicate-id",
+      "document": "07-php-mastery/basics/08-first-project.md",
+      "commands": [
+        {
+          "command": [
+            "php",
+            "-d",
+            "display_errors=stderr",
+            "-d",
+            "error_reporting=-1",
+            "bin/task",
+            "add",
+            "new"
+          ],
+          "exit_code": 1,
+          "stdout": "",
+          "stderr": "错误: 存储包含重复 id: 11223344\n"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "php-invalid-date",
+      "document": "07-php-mastery/basics/08-first-project.md",
+      "commands": [
+        {
+          "command": [
+            "php",
+            "-d",
+            "display_errors=stderr",
+            "-d",
+            "error_reporting=-1",
+            "bin/task",
+            "add",
+            "new"
+          ],
+          "exit_code": 1,
+          "stdout": "",
+          "stderr": "错误: created_at 必须是有效的 ISO 8601 时间\n"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "php-directory-path",
+      "document": "07-php-mastery/basics/08-first-project.md",
+      "commands": [
+        {
+          "command": [
+            "php",
+            "-d",
+            "display_errors=stderr",
+            "-d",
+            "error_reporting=-1",
+            "bin/task",
+            "add",
+            "new"
+          ],
+          "exit_code": 1,
+          "stdout": "",
+          "stderr": "错误: 存储路径必须是普通文件，不能是目录或符号链接\n"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "php-permission-denied",
+      "document": "07-php-mastery/basics/08-first-project.md",
+      "commands": [
+        {
+          "command": [
+            "php",
+            "-d",
+            "display_errors=stderr",
+            "-d",
+            "error_reporting=-1",
+            "bin/task",
+            "add",
+            "new"
+          ],
+          "exit_code": 1,
+          "stdout": "",
+          "stderr": "错误: 无法取得数据文件锁\n"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "php-concurrent-writers",
+      "document": "07-php-mastery/basics/08-first-project.md",
+      "commands": [
+        {
+          "command": [
+            "php",
+            "-d",
+            "display_errors=stderr",
+            "-d",
+            "error_reporting=-1",
+            "bin/task",
+            "add",
+            "concurrent-1"
+          ],
+          "exit_code": 0,
+          "stdout": "已添加 [14564ce1] concurrent-1\n",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "php",
+            "-d",
+            "display_errors=stderr",
+            "-d",
+            "error_reporting=-1",
+            "bin/task",
+            "add",
+            "concurrent-3"
+          ],
+          "exit_code": 0,
+          "stdout": "已添加 [d223db5e] concurrent-3\n",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "php",
+            "-d",
+            "display_errors=stderr",
+            "-d",
+            "error_reporting=-1",
+            "bin/task",
+            "add",
+            "concurrent-0"
+          ],
+          "exit_code": 0,
+          "stdout": "已添加 [60ae8ecc] concurrent-0\n",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "php",
+            "-d",
+            "display_errors=stderr",
+            "-d",
+            "error_reporting=-1",
+            "bin/task",
+            "add",
+            "concurrent-2"
+          ],
+          "exit_code": 0,
+          "stdout": "已添加 [3dabcaad] concurrent-2\n",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "php",
+            "-d",
+            "display_errors=stderr",
+            "-d",
+            "error_reporting=-1",
+            "bin/task",
+            "add",
+            "concurrent-4"
+          ],
+          "exit_code": 0,
+          "stdout": "已添加 [27482398] concurrent-4\n",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "php",
+            "-d",
+            "display_errors=stderr",
+            "-d",
+            "error_reporting=-1",
+            "bin/task",
+            "add",
+            "concurrent-6"
+          ],
+          "exit_code": 0,
+          "stdout": "已添加 [0e5569eb] concurrent-6\n",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "php",
+            "-d",
+            "display_errors=stderr",
+            "-d",
+            "error_reporting=-1",
+            "bin/task",
+            "add",
+            "concurrent-5"
+          ],
+          "exit_code": 0,
+          "stdout": "已添加 [e6dedf41] concurrent-5\n",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "php",
+            "-d",
+            "display_errors=stderr",
+            "-d",
+            "error_reporting=-1",
+            "bin/task",
+            "add",
+            "concurrent-7"
+          ],
+          "exit_code": 0,
+          "stdout": "已添加 [f4823b2d] concurrent-7\n",
+          "stderr": ""
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "java-compile",
+      "document": "08-java-revisited/basics/08-first-project.md",
+      "commands": [
+        {
+          "command": [
+            "javac",
+            "--release",
+            "21",
+            "-encoding",
+            "UTF-8",
+            "Main.java"
+          ],
+          "exit_code": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "java-roundtrip-and-state-machine",
+      "document": "08-java-revisited/basics/08-first-project.md",
+      "commands": [
+        {
+          "command": [
+            "java",
+            "-cp",
+            "/tmp/devquest-java-0fd3s9e3",
+            "Main",
+            "/tmp/devquest-java-0fd3s9e3/books.tsv",
+            "add",
+            "978-1",
+            "Java; \"入门\"",
+            "Alice",
+            "2024"
+          ],
+          "exit_code": 0,
+          "stdout": "已保存\n",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "java",
+            "-cp",
+            "/tmp/devquest-java-0fd3s9e3",
+            "Main",
+            "/tmp/devquest-java-0fd3s9e3/books.tsv",
+            "find",
+            "978-1"
+          ],
+          "exit_code": 0,
+          "stdout": "978-1\tJava; \"入门\"\tAlice\t2024\tAVAILABLE\n",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "java",
+            "-cp",
+            "/tmp/devquest-java-0fd3s9e3",
+            "Main",
+            "/tmp/devquest-java-0fd3s9e3/books.tsv",
+            "borrow",
+            "978-1"
+          ],
+          "exit_code": 0,
+          "stdout": "已保存\n",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "java",
+            "-cp",
+            "/tmp/devquest-java-0fd3s9e3",
+            "Main",
+            "/tmp/devquest-java-0fd3s9e3/books.tsv",
+            "find",
+            "978-1"
+          ],
+          "exit_code": 0,
+          "stdout": "978-1\tJava; \"入门\"\tAlice\t2024\tBORROWED\n",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "java",
+            "-cp",
+            "/tmp/devquest-java-0fd3s9e3",
+            "Main",
+            "/tmp/devquest-java-0fd3s9e3/books.tsv",
+            "borrow",
+            "978-1"
+          ],
+          "exit_code": 1,
+          "stdout": "",
+          "stderr": "操作失败: 图书已被借出: 978-1\n"
+        },
+        {
+          "command": [
+            "java",
+            "-cp",
+            "/tmp/devquest-java-0fd3s9e3",
+            "Main",
+            "/tmp/devquest-java-0fd3s9e3/books.tsv",
+            "return",
+            "978-1"
+          ],
+          "exit_code": 0,
+          "stdout": "已保存\n",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "java",
+            "-cp",
+            "/tmp/devquest-java-0fd3s9e3",
+            "Main",
+            "/tmp/devquest-java-0fd3s9e3/books.tsv",
+            "find",
+            "978-1"
+          ],
+          "exit_code": 0,
+          "stdout": "978-1\tJava; \"入门\"\tAlice\t2024\tAVAILABLE\n",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "java",
+            "-cp",
+            "/tmp/devquest-java-0fd3s9e3",
+            "Main",
+            "/tmp/devquest-java-0fd3s9e3/books.tsv",
+            "return",
+            "978-1"
+          ],
+          "exit_code": 1,
+          "stdout": "",
+          "stderr": "操作失败: 图书尚未借出: 978-1\n"
+        },
+        {
+          "command": [
+            "java",
+            "-cp",
+            "/tmp/devquest-java-0fd3s9e3",
+            "Main",
+            "/tmp/devquest-java-0fd3s9e3/books.tsv",
+            "search",
+            "JAVA"
+          ],
+          "exit_code": 0,
+          "stdout": "978-1\tJava; \"入门\"\tAlice\t2024\tAVAILABLE\n",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "java",
+            "-cp",
+            "/tmp/devquest-java-0fd3s9e3",
+            "Main",
+            "/tmp/devquest-java-0fd3s9e3/books.tsv",
+            "search",
+            "nothing"
+          ],
+          "exit_code": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "java-duplicate-isbn",
+      "document": "08-java-revisited/basics/08-first-project.md",
+      "commands": [
+        {
+          "command": [
+            "java",
+            "-cp",
+            "/tmp/devquest-java-0fd3s9e3",
+            "Main",
+            "/tmp/devquest-java-0fd3s9e3/books.tsv",
+            "add",
+            "978-1",
+            "other",
+            "Bob",
+            "2025"
+          ],
+          "exit_code": 1,
+          "stdout": "",
+          "stderr": "操作失败: 重复 ISBN: 978-1\n"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "java-empty-title",
+      "document": "08-java-revisited/basics/08-first-project.md",
+      "commands": [
+        {
+          "command": [
+            "java",
+            "-cp",
+            "/tmp/devquest-java-0fd3s9e3",
+            "Main",
+            "/tmp/devquest-java-0fd3s9e3/books.tsv",
+            "add",
+            "978-2",
+            " ",
+            "Bob",
+            "2025"
+          ],
+          "exit_code": 1,
+          "stdout": "",
+          "stderr": "操作失败: 书名须为 1–240 个 UTF-16 单元的非空文本，不能含控制字符\n"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "java-control-title",
+      "document": "08-java-revisited/basics/08-first-project.md",
+      "commands": [
+        {
+          "command": [
+            "java",
+            "-cp",
+            "/tmp/devquest-java-0fd3s9e3",
+            "Main",
+            "/tmp/devquest-java-0fd3s9e3/books.tsv",
+            "add",
+            "978-2",
+            "x\ty",
+            "Bob",
+            "2025"
+          ],
+          "exit_code": 1,
+          "stdout": "",
+          "stderr": "操作失败: 书名须为 1–240 个 UTF-16 单元的非空文本，不能含控制字符\n"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "java-invalid-year",
+      "document": "08-java-revisited/basics/08-first-project.md",
+      "commands": [
+        {
+          "command": [
+            "java",
+            "-cp",
+            "/tmp/devquest-java-0fd3s9e3",
+            "Main",
+            "/tmp/devquest-java-0fd3s9e3/books.tsv",
+            "add",
+            "978-2",
+            "title",
+            "Bob",
+            "abc"
+          ],
+          "exit_code": 1,
+          "stdout": "",
+          "stderr": "操作失败: For input string: \"abc\"\n"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "java-unknown-id",
+      "document": "08-java-revisited/basics/08-first-project.md",
+      "commands": [
+        {
+          "command": [
+            "java",
+            "-cp",
+            "/tmp/devquest-java-0fd3s9e3",
+            "Main",
+            "/tmp/devquest-java-0fd3s9e3/books.tsv",
+            "borrow",
+            "missing"
+          ],
+          "exit_code": 1,
+          "stdout": "",
+          "stderr": "操作失败: 未找到: missing\n"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "java-extra-argument",
+      "document": "08-java-revisited/basics/08-first-project.md",
+      "commands": [
+        {
+          "command": [
+            "java",
+            "-cp",
+            "/tmp/devquest-java-0fd3s9e3",
+            "Main",
+            "/tmp/devquest-java-0fd3s9e3/books.tsv",
+            "list",
+            "extra"
+          ],
+          "exit_code": 1,
+          "stdout": "",
+          "stderr": "操作失败: 参数数量错误；用法: java Main <数据文件> <命令> [参数]\n"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "java-broken-header",
+      "document": "08-java-revisited/basics/08-first-project.md",
+      "commands": [
+        {
+          "command": [
+            "java",
+            "-cp",
+            "/tmp/devquest-java-0fd3s9e3",
+            "Main",
+            "/tmp/devquest-java-0fd3s9e3/books.tsv",
+            "add",
+            "new",
+            "Title",
+            "Author",
+            "2025"
+          ],
+          "exit_code": 1,
+          "stdout": "",
+          "stderr": "操作失败: 存储格式或版本不正确\n"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "java-short-record",
+      "document": "08-java-revisited/basics/08-first-project.md",
+      "commands": [
+        {
+          "command": [
+            "java",
+            "-cp",
+            "/tmp/devquest-java-0fd3s9e3",
+            "Main",
+            "/tmp/devquest-java-0fd3s9e3/books.tsv",
+            "add",
+            "new",
+            "Title",
+            "Author",
+            "2025"
+          ],
+          "exit_code": 1,
+          "stdout": "",
+          "stderr": "操作失败: 第 2 行无效: 记录必须有 5 个字段\n"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "java-invalid-state",
+      "document": "08-java-revisited/basics/08-first-project.md",
+      "commands": [
+        {
+          "command": [
+            "java",
+            "-cp",
+            "/tmp/devquest-java-0fd3s9e3",
+            "Main",
+            "/tmp/devquest-java-0fd3s9e3/books.tsv",
+            "add",
+            "new",
+            "Title",
+            "Author",
+            "2025"
+          ],
+          "exit_code": 1,
+          "stdout": "",
+          "stderr": "操作失败: 第 2 行无效: No enum constant Main.BookStatus.LOST\n"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "java-duplicate-record",
+      "document": "08-java-revisited/basics/08-first-project.md",
+      "commands": [
+        {
+          "command": [
+            "java",
+            "-cp",
+            "/tmp/devquest-java-0fd3s9e3",
+            "Main",
+            "/tmp/devquest-java-0fd3s9e3/books.tsv",
+            "add",
+            "new",
+            "Title",
+            "Author",
+            "2025"
+          ],
+          "exit_code": 1,
+          "stdout": "",
+          "stderr": "操作失败: 第 3 行无效: 重复 ISBN: 978-2\n"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "java-invalid-utf8",
+      "document": "08-java-revisited/basics/08-first-project.md",
+      "commands": [
+        {
+          "command": [
+            "java",
+            "-cp",
+            "/tmp/devquest-java-0fd3s9e3",
+            "Main",
+            "/tmp/devquest-java-0fd3s9e3/books.tsv",
+            "add",
+            "new",
+            "Title",
+            "Author",
+            "2025"
+          ],
+          "exit_code": 1,
+          "stdout": "",
+          "stderr": "操作失败: Input length = 1\n"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "java-directory-path",
+      "document": "08-java-revisited/basics/08-first-project.md",
+      "commands": [
+        {
+          "command": [
+            "java",
+            "-cp",
+            "/tmp/devquest-java-0fd3s9e3",
+            "Main",
+            "/tmp/devquest-java-0fd3s9e3/directory-as-file",
+            "add",
+            "new",
+            "Title",
+            "Author",
+            "2025"
+          ],
+          "exit_code": 1,
+          "stdout": "",
+          "stderr": "操作失败: 数据路径必须是普通文件\n"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "java-permission-denied",
+      "document": "08-java-revisited/basics/08-first-project.md",
+      "commands": [
+        {
+          "command": [
+            "java",
+            "-cp",
+            "/tmp/devquest-java-0fd3s9e3",
+            "Main",
+            "/tmp/devquest-java-0fd3s9e3/denied/data",
+            "add",
+            "new",
+            "Title",
+            "Author",
+            "2025"
+          ],
+          "exit_code": 1,
+          "stdout": "",
+          "stderr": "操作失败: /tmp/devquest-java-0fd3s9e3/denied/data.lock\n"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "java-concurrent-writers",
+      "document": "08-java-revisited/basics/08-first-project.md",
+      "commands": [
+        {
+          "command": [
+            "java",
+            "-cp",
+            "/tmp/devquest-java-0fd3s9e3",
+            "Main",
+            "/tmp/devquest-java-0fd3s9e3/books.tsv",
+            "list"
+          ],
+          "exit_code": 0,
+          "stdout": "978-1\tJava; \"入门\"\tAlice\t2024\tAVAILABLE\n",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "java",
+            "-cp",
+            "/tmp/devquest-java-0fd3s9e3",
+            "Main",
+            "/tmp/devquest-java-0fd3s9e3/books.tsv",
+            "add",
+            "book-0",
+            "Title",
+            "Author",
+            "2025"
+          ],
+          "exit_code": 0,
+          "stdout": "已保存\n",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "java",
+            "-cp",
+            "/tmp/devquest-java-0fd3s9e3",
+            "Main",
+            "/tmp/devquest-java-0fd3s9e3/books.tsv",
+            "add",
+            "book-6",
+            "Title",
+            "Author",
+            "2025"
+          ],
+          "exit_code": 0,
+          "stdout": "已保存\n",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "java",
+            "-cp",
+            "/tmp/devquest-java-0fd3s9e3",
+            "Main",
+            "/tmp/devquest-java-0fd3s9e3/books.tsv",
+            "add",
+            "book-5",
+            "Title",
+            "Author",
+            "2025"
+          ],
+          "exit_code": 0,
+          "stdout": "已保存\n",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "java",
+            "-cp",
+            "/tmp/devquest-java-0fd3s9e3",
+            "Main",
+            "/tmp/devquest-java-0fd3s9e3/books.tsv",
+            "add",
+            "book-2",
+            "Title",
+            "Author",
+            "2025"
+          ],
+          "exit_code": 0,
+          "stdout": "已保存\n",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "java",
+            "-cp",
+            "/tmp/devquest-java-0fd3s9e3",
+            "Main",
+            "/tmp/devquest-java-0fd3s9e3/books.tsv",
+            "add",
+            "book-4",
+            "Title",
+            "Author",
+            "2025"
+          ],
+          "exit_code": 0,
+          "stdout": "已保存\n",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "java",
+            "-cp",
+            "/tmp/devquest-java-0fd3s9e3",
+            "Main",
+            "/tmp/devquest-java-0fd3s9e3/books.tsv",
+            "add",
+            "book-3",
+            "Title",
+            "Author",
+            "2025"
+          ],
+          "exit_code": 0,
+          "stdout": "已保存\n",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "java",
+            "-cp",
+            "/tmp/devquest-java-0fd3s9e3",
+            "Main",
+            "/tmp/devquest-java-0fd3s9e3/books.tsv",
+            "add",
+            "book-7",
+            "Title",
+            "Author",
+            "2025"
+          ],
+          "exit_code": 0,
+          "stdout": "已保存\n",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "java",
+            "-cp",
+            "/tmp/devquest-java-0fd3s9e3",
+            "Main",
+            "/tmp/devquest-java-0fd3s9e3/books.tsv",
+            "add",
+            "book-1",
+            "Title",
+            "Author",
+            "2025"
+          ],
+          "exit_code": 0,
+          "stdout": "已保存\n",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "java",
+            "-cp",
+            "/tmp/devquest-java-0fd3s9e3",
+            "Main",
+            "/tmp/devquest-java-0fd3s9e3/books.tsv",
+            "list"
+          ],
+          "exit_code": 0,
+          "stdout": "978-1\tJava; \"入门\"\tAlice\t2024\tAVAILABLE\nbook-0\tTitle\tAuthor\t2025\tAVAILABLE\nbook-1\tTitle\tAuthor\t2025\tAVAILABLE\nbook-2\tTitle\tAuthor\t2025\tAVAILABLE\nbook-3\tTitle\tAuthor\t2025\tAVAILABLE\nbook-4\tTitle\tAuthor\t2025\tAVAILABLE\nbook-5\tTitle\tAuthor\t2025\tAVAILABLE\nbook-6\tTitle\tAuthor\t2025\tAVAILABLE\nbook-7\tTitle\tAuthor\t2025\tAVAILABLE\n",
+          "stderr": ""
+        }
+      ],
+      "passed": true
+    }
+  ],
+  "passed": 35,
+  "total": 35
+}

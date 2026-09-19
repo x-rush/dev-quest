@@ -1,6 +1,6 @@
 # node:util 工具集速查
 
-> **文档简介**: `node:util` 的字典式速查——inspect 调试输出、promisify、parseArgs 命令行解析、styleText 终端着色、types 类型判定与 deprecate，用法在 Node 24 实测
+> **文档简介**: `node:util` 的字典式速查——inspect 调试输出、promisify、parseArgs 命令行解析、styleText 终端着色、types 类型判定与 deprecate；请在项目锁定的 Node 版本运行示例确认行为。
 
 > **目标读者**: 写 CLI 工具、调试输出、迁移回调式旧 API 的开发者
 
@@ -52,7 +52,7 @@ import { execFile } from "node:child_process";
 const pExecFile = promisify(execFile);
 const { stdout } = await pExecFile("node", ["--version"]);
 
-const sleep = promisify(setTimeout);   // 实测可用，resolve undefined
+const sleep = promisify(setTimeout);   // 预期 resolve 为 undefined；用 await sleep(...) 自行确认
 await sleep(500);
 
 // 自定义 Promise 版：回调签名不规范时
@@ -125,7 +125,7 @@ styleText("blue", url, { validateStream: false });  // 跳过 TTY 检测强制�
 ### 陷阱
 - ❌ 输出被管道/重定向（非 TTY）时**默认不着色**——函数正常返回但无 ANSI 码，测试里"看不到颜色"不是 bug
 - ✅ 只有明确需要验证 ANSI 序列时才传 validateStream:false；普通文件与机器输出通常应保持无颜色
-- ❌ 参数顺序记反：是 `styleText(format, text)`，不是 `styleText(text, format)`——记反会抛 TypeError（实测）
+- ❌ 参数顺序记反：是 `styleText(format, text)`，不是 `styleText(text, format)`；记反时应在目标 Node 版本观察到类型错误。
 
 ## 5. types.isXxx 与 deprecate
 

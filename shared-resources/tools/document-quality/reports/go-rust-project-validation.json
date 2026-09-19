@@ -1,0 +1,409 @@
+{
+  "documents": {
+    "go-cli": {
+      "path": "01-go-backend/projects/00-stdlib-todo-cli.md",
+      "sha256": "858f421d9a33581fac47e98a04eca74f1e7155b9d48a0c6a1a1d91a49c8181a8"
+    },
+    "rust-cli": {
+      "path": "11-rust-cross-platform/projects/01-cli-tool.md",
+      "sha256": "020be8ceee97d85e2c6ba91a1ecdbd6d54f2f44e0460871994f67c9a82a6bfd7"
+    },
+    "rust-counter": {
+      "path": "11-rust-cross-platform/reference/library-guides/15-standard-library-map.md",
+      "sha256": "af53dff780e573c2455cd30c0d143e40a68f5ceaf7878ccca0ba650c7a2b1858"
+    },
+    "rust-types": {
+      "path": "11-rust-cross-platform/reference/language-concepts/10-standard-types-and-methods.md",
+      "sha256": "4f3b7610e9905969ceda429feea360120a5f8e4775457443d4031ed10b16a478"
+    }
+  },
+  "commands": [
+    {
+      "argv": [
+        "go",
+        "version"
+      ],
+      "cwd": "/work/go-rust-projects",
+      "returncode": 0,
+      "stdout": "go version go1.27.1 linux/amd64\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "rustc",
+        "--version"
+      ],
+      "cwd": "/work/go-rust-projects",
+      "returncode": 0,
+      "stdout": "rustc 1.98.1 (48a229cea 2026-09-01)\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "cargo",
+        "--version"
+      ],
+      "cwd": "/work/go-rust-projects",
+      "returncode": 0,
+      "stdout": "cargo 1.98.1 (797e8a9bc 2026-08-05)\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "go",
+        "test",
+        "-count=1",
+        "./..."
+      ],
+      "cwd": "/work/go-rust-projects/go-cli",
+      "returncode": 0,
+      "stdout": "ok  \texample.com/todo-cli\t0.003s\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "go",
+        "build",
+        "-o",
+        "todo-cli",
+        "."
+      ],
+      "cwd": "/work/go-rust-projects/go-cli",
+      "returncode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/work/go-rust-projects/go-cli/todo-cli",
+        "add",
+        "买牛奶"
+      ],
+      "cwd": "/work/go-rust-projects/go-cli",
+      "returncode": 0,
+      "stdout": "已添加 #1: 买牛奶\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/work/go-rust-projects/go-cli/todo-cli",
+        "demo"
+      ],
+      "cwd": "/work/go-rust-projects/go-cli",
+      "returncode": 0,
+      "stdout": "#2 写 Go 测试\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/work/go-rust-projects/go-cli/todo-cli",
+        "add",
+        ""
+      ],
+      "cwd": "/work/go-rust-projects/go-cli",
+      "returncode": 1,
+      "stdout": "",
+      "stderr": "错误: 待办标题不能为空\n"
+    },
+    {
+      "argv": [
+        "/work/go-rust-projects/go-cli/todo-cli",
+        "demo",
+        "extra"
+      ],
+      "cwd": "/work/go-rust-projects/go-cli",
+      "returncode": 1,
+      "stdout": "",
+      "stderr": "错误: demo 不接受额外参数\n"
+    },
+    {
+      "argv": [
+        "cargo",
+        "test",
+        "--offline",
+        "--locked"
+      ],
+      "cwd": "/work/go-rust-projects/rust-cli",
+      "returncode": 0,
+      "stdout": "\nrunning 7 tests\ntest tests::invalid_input_preserves_original_file ... ok\ntest tests::next_id_follows_max ... ok\ntest tests::next_id_rejects_overflow ... ok\ntest tests::next_id_starts_from_one ... ok\ntest tests::storage_rejects_invalid_records ... ok\ntest tests::storage_roundtrip_and_corruption ... ok\ntest tests::file_option_works_after_subcommand ... ok\n\ntest result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s\n\n",
+      "stderr": "   Compiling rtask v0.1.0 (/work/go-rust-projects/rust-cli)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 4.09s\n     Running unittests src/main.rs (target/debug/deps/rtask-f3b85bfdce71c022)\n"
+    },
+    {
+      "argv": [
+        "cargo",
+        "build",
+        "--offline",
+        "--locked"
+      ],
+      "cwd": "/work/go-rust-projects/rust-cli",
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "   Compiling rtask v0.1.0 (/work/go-rust-projects/rust-cli)\n    Finished `dev` profile [unoptimized + debuginfo] target(s) in 3.69s\n"
+    },
+    {
+      "argv": [
+        "/work/go-rust-projects/rust-cli/target/debug/rtask",
+        "list"
+      ],
+      "cwd": "/work/go-rust-projects/rtask-cases-01dd39x5",
+      "returncode": 0,
+      "stdout": "（暂无任务）\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/work/go-rust-projects/rust-cli/target/debug/rtask",
+        "add",
+        "  学习 Rust  "
+      ],
+      "cwd": "/work/go-rust-projects/rtask-cases-01dd39x5",
+      "returncode": 0,
+      "stdout": "已添加任务 #1: 学习 Rust\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/work/go-rust-projects/rust-cli/target/debug/rtask",
+        "list"
+      ],
+      "cwd": "/work/go-rust-projects/rtask-cases-01dd39x5",
+      "returncode": 0,
+      "stdout": "[ ] #1   学习 Rust\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/work/go-rust-projects/rust-cli/target/debug/rtask",
+        "done",
+        "1"
+      ],
+      "cwd": "/work/go-rust-projects/rtask-cases-01dd39x5",
+      "returncode": 0,
+      "stdout": "已完成任务 #1: 学习 Rust\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/work/go-rust-projects/rust-cli/target/debug/rtask",
+        "list",
+        "--pending"
+      ],
+      "cwd": "/work/go-rust-projects/rtask-cases-01dd39x5",
+      "returncode": 0,
+      "stdout": "（暂无任务）\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/work/go-rust-projects/rust-cli/target/debug/rtask",
+        "add",
+        " "
+      ],
+      "cwd": "/work/go-rust-projects/rtask-cases-01dd39x5",
+      "returncode": 1,
+      "stdout": "",
+      "stderr": "rtask: 任务标题不能为空\n"
+    },
+    {
+      "argv": [
+        "/work/go-rust-projects/rust-cli/target/debug/rtask",
+        "done",
+        "99"
+      ],
+      "cwd": "/work/go-rust-projects/rtask-cases-01dd39x5",
+      "returncode": 1,
+      "stdout": "",
+      "stderr": "rtask: 任务 #99 不存在\n"
+    },
+    {
+      "argv": [
+        "/work/go-rust-projects/rust-cli/target/debug/rtask",
+        "list",
+        "--file",
+        "other.json"
+      ],
+      "cwd": "/work/go-rust-projects/rtask-cases-01dd39x5",
+      "returncode": 0,
+      "stdout": "（暂无任务）\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/work/go-rust-projects/rust-cli/target/debug/rtask",
+        "rm",
+        "1"
+      ],
+      "cwd": "/work/go-rust-projects/rtask-cases-01dd39x5",
+      "returncode": 0,
+      "stdout": "已删除任务 #1\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/work/go-rust-projects/rust-cli/target/debug/rtask",
+        "add",
+        "safe"
+      ],
+      "cwd": "/work/go-rust-projects/rtask-cases-01dd39x5",
+      "returncode": 1,
+      "stdout": "",
+      "stderr": "rtask: 解析 rtask.json 失败: invalid type: map, expected a sequence at line 1 column 0\n"
+    },
+    {
+      "argv": [
+        "/work/go-rust-projects/rust-cli/target/debug/rtask",
+        "add",
+        "safe"
+      ],
+      "cwd": "/work/go-rust-projects/rtask-cases-01dd39x5",
+      "returncode": 1,
+      "stdout": "",
+      "stderr": "rtask: 校验 rtask.json 失败: 任务 ID 必须为非零且不重复的整数\n"
+    },
+    {
+      "argv": [
+        "/work/go-rust-projects/rust-cli/target/debug/rtask",
+        "add",
+        "safe"
+      ],
+      "cwd": "/work/go-rust-projects/rtask-cases-01dd39x5",
+      "returncode": 1,
+      "stdout": "",
+      "stderr": "rtask: 任务 ID 已耗尽\n"
+    },
+    {
+      "argv": [
+        "/work/go-rust-projects/rust-cli/target/debug/rtask",
+        "done",
+        "abc"
+      ],
+      "cwd": "/work/go-rust-projects/rtask-cases-01dd39x5",
+      "returncode": 2,
+      "stdout": "",
+      "stderr": "error: invalid value 'abc' for '<ID>': invalid digit found in string\n\nFor more information, try '--help'.\n"
+    },
+    {
+      "argv": [
+        "rustc",
+        "--edition",
+        "2024",
+        "main.rs",
+        "-o",
+        "example"
+      ],
+      "cwd": "/work/go-rust-projects/rust-counter",
+      "returncode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/work/go-rust-projects/rust-counter/example",
+        "normal.txt"
+      ],
+      "cwd": "/work/go-rust-projects/rust-counter",
+      "returncode": 0,
+      "stdout": "2\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/work/go-rust-projects/rust-counter/example",
+        "empty.txt"
+      ],
+      "cwd": "/work/go-rust-projects/rust-counter",
+      "returncode": 0,
+      "stdout": "0\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/work/go-rust-projects/rust-counter/example"
+      ],
+      "cwd": "/work/go-rust-projects/rust-counter",
+      "returncode": 1,
+      "stdout": "",
+      "stderr": "Error: Custom { kind: InvalidInput, error: \"usage: counter <path>\" }\n"
+    },
+    {
+      "argv": [
+        "/work/go-rust-projects/rust-counter/example",
+        "missing.txt"
+      ],
+      "cwd": "/work/go-rust-projects/rust-counter",
+      "returncode": 1,
+      "stdout": "",
+      "stderr": "Error: Os { code: 2, kind: NotFound, message: \"No such file or directory\" }\n"
+    },
+    {
+      "argv": [
+        "/work/go-rust-projects/rust-counter/example",
+        "invalid.txt"
+      ],
+      "cwd": "/work/go-rust-projects/rust-counter",
+      "returncode": 1,
+      "stdout": "",
+      "stderr": "Error: Error { kind: InvalidData, message: \"stream did not contain valid UTF-8\" }\n"
+    },
+    {
+      "argv": [
+        "/work/go-rust-projects/rust-counter/example",
+        "normal.txt",
+        "extra"
+      ],
+      "cwd": "/work/go-rust-projects/rust-counter",
+      "returncode": 1,
+      "stdout": "",
+      "stderr": "Error: Custom { kind: InvalidInput, error: \"expected exactly one path\" }\n"
+    },
+    {
+      "argv": [
+        "rustc",
+        "--edition",
+        "2024",
+        "main.rs",
+        "-o",
+        "example"
+      ],
+      "cwd": "/work/go-rust-projects/rust-types",
+      "returncode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/work/go-rust-projects/rust-types/example"
+      ],
+      "cwd": "/work/go-rust-projects/rust-types",
+      "returncode": 0,
+      "stdout": "[2, 7, 10]\ntrue\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "rustc",
+        "--edition",
+        "2024",
+        "--test",
+        "main.rs",
+        "-o",
+        "tests"
+      ],
+      "cwd": "/work/go-rust-projects/rust-types",
+      "returncode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/work/go-rust-projects/rust-types/tests"
+      ],
+      "cwd": "/work/go-rust-projects/rust-types",
+      "returncode": 0,
+      "stdout": "\nrunning 4 tests\ntest tests::empty_input_is_success ... ok\ntest tests::preserves_input_order ... ok\ntest tests::rejects_integer_overflow ... ok\ntest tests::rejects_invalid_item_instead_of_dropping_it ... ok\n\ntest result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n",
+      "stderr": ""
+    }
+  ],
+  "status": "passed",
+  "cargo_lock_sha256": "22c473b05d701acbe68894ed422fa0db966105658770b4c39ac070dcb7ace8e2"
+}

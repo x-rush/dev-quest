@@ -16,10 +16,14 @@ MODULES = {
     "01-go-backend": "Go",
     "02-nextjs-frontend": "Next.js / TypeScript",
     "03-tanstack-stack": "TanStack / TypeScript",
+    "04-multiplatform-apps": "React Native / Multi-platform",
+    "05-kotlin-compose": "Kotlin / Compose",
+    "06-swift-swiftui": "Swift / SwiftUI",
     "07-php-mastery": "PHP",
     "08-java-revisited": "Java",
     "09-nodejs-backend": "Node.js",
     "10-python-discovery": "Python",
+    "11-rust-cross-platform": "Rust / Cross-platform",
 }
 MARKER = re.compile(r"实测|已验证|验证通过|运行通过|测试通过|可运行|已运行|\bPASS\b")
 
@@ -50,6 +54,18 @@ def records_from_reports():
     foundations = load("php-java-foundations.json")
     for row in foundations.get("cases", []):
         add_record(records, row.get("document"), "runtime", "php-java-foundations.json", foundations["scope"], "PASS" if row.get("passed") else "FAIL")
+    frontend = load("frontend-foundations.json")
+    for row in frontend.get("results", []):
+        add_record(records, row.get("source"), "runtime", "frontend-foundations.json", frontend["scope"], row.get("status", "FAIL"))
+    php_java_projects = load("php-java-projects.json")
+    for path in php_java_projects.get("documents", {}):
+        add_record(records, path, "runtime", "php-java-projects.json", php_java_projects.get("scope", "selected local CLI project checks"), "PASS" if php_java_projects.get("passed") == php_java_projects.get("total") else "FAIL")
+    go_rust_projects = load("go-rust-project-validation.json")
+    for document in go_rust_projects.get("documents", {}).values():
+        add_record(records, document.get("path"), "runtime", "go-rust-project-validation.json", "selected Go/Rust CLI and standard-library project checks", "PASS" if go_rust_projects.get("status") == "passed" else "FAIL")
+    mobile = load("mobile-foundations.json")
+    for row in mobile.get("results", []):
+        add_record(records, row.get("source"), "runtime", "mobile-foundations.json", mobile.get("scope", "selected portable mobile-language check"), "PASS" if row.get("status") == "PASS" else "FAIL")
     # The web report names its source set rather than assigning a result per source.
     web = load("final-web-examples.json")
     for source in web.get("sources", []):

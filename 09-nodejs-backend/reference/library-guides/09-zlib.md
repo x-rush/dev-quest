@@ -1,6 +1,6 @@
 # node:zlib 压缩速查
 
-> **文档简介**: `node:zlib` 的字典式速查——gzip/deflate/brotli 三算法选择、同步与流式两种用法、HTTP 压缩中间件场景与常见报错，用法在 Node 24 实测
+> **文档简介**: `node:zlib` 的字典式速查——gzip/deflate/brotli 三算法选择、同步与流式两种用法、HTTP 压缩中间件场景与常见报错；请在项目锁定的 Node 版本运行示例确认行为。
 
 > **目标读者**: 给 HTTP 服务加响应压缩、处理压缩文件传输的开发者
 
@@ -33,21 +33,21 @@
 | brotli | `brotliCompressSync`/`brotliDecompressSync` | `createBrotliCompress`/`createBrotliDecompress` | 静态资源预压缩（更高压缩率） |
 
 ```ts
-// Node 24 实测（12000 字节重复文本）：
+// 对 12000 字节重复文本的示例；压缩比例应在目标数据与 Node 版本中测量：
 gzipSync(src).length;                 // 73，往返 gunzipSync 还原 ✅
 inflateSync(deflateSync(src));        // deflate 配 inflate，不是 gunzip ✅
 brotliCompressSync(src).length < gzipSync(src).length;  // ✅ brotli 更小
 ```
 
 ### 陷阱
-- ❌ 解压用错逆函数：`gunzipSync(deflateSync(x))` 抛 `Z_DATA_ERROR`（incorrect header check，实测）
+- ❌ 解压用错逆函数：`gunzipSync(deflateSync(x))` 应抛 `Z_DATA_ERROR`；错误消息会因版本而异。
 - ✅ gzip↔gunzip、deflate↔inflate、brotliCompress↔brotliDecompress 成对记忆
 - 本页讨论的 HTTP Content-Encoding 取值包括 `gzip`/`deflate`/`br`——deflate 在实践中历史上常指 zlib 包装格式，做协议前先看对端实现
 
 ## 2. 两种用法：一次性 vs 流式
 
 ### 定义
-同步版适合小数据（一次进内存）；流式版是 Transform 流，接进 `pipeline` 处理任意大小数据（Node 24 实测文件 gzip 通过）。
+同步版适合能一次放入内存的小数据；流式版是 Transform 流，可接进 `pipeline` 处理大输入。请用目标文件和内存限制验证吞吐与资源占用。
 
 ```ts
 import { gzipSync, gunzipSync, createGzip } from "node:zlib";

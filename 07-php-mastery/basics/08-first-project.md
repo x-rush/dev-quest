@@ -41,11 +41,13 @@ CLI 工具也需要稳定的输入、输出和失败约定。保存文件时应�
 - ✅ 从零初始化 Composer 项目并配置 PSR-4 自动加载
 - ✅ 按分层结构组织代码：模型 / 存储 / 服务 / 命令
 - ✅ 使用枚举与构造器属性提升构建领域模型
-- ✅ 让 `task` 命令可以直接全局执行（bin 脚本）
+- ✅ 用 `php bin/task` 执行命令，并通过退出码判断成功与失败
 
 ## 0. 项目需求
 
-命令 `task` 支持以下子命令：
+本项目基线为 PHP 8.3+、Composer 2、本地普通文件系统。先完成 basics 01–06；枚举可结合第 07 篇边做边学。下面 shell 命令使用 Bash；Windows 可在 WSL 中创建目录，也可手动按文件名创建，再用 `php bin/task` 运行。
+
+命令 `task` 支持以下子命令（开发目录中实际使用 `php bin/task`）：
 
 ```text
 task add "写周报" --priority high    # 新增任务
@@ -75,8 +77,9 @@ mkdir task-cli && cd task-cli
 composer init --name devquest/task-cli --type project --no-interaction
 ```
 
-编辑生成的 `composer.json`，加入 PSR-4 映射与 bin 声明：
+编辑生成的 `composer.json`，加入 PSR-4 映射与 bin 声明。`bin` 声明供 Composer 安装包时识别可执行文件，它不会把当前项目自动加入系统 PATH。
 
+<!-- project-file: composer.json -->
 ```json
 {
   "name": "devquest/task-cli",
@@ -105,6 +108,7 @@ composer dump-autoload
 
 `src/Model/Priority.php`：
 
+<!-- project-file: src/Model/Priority.php -->
 ```php
 <?php
 
@@ -131,6 +135,7 @@ enum Priority: string
 
 `src/Model/Status.php`：
 
+<!-- project-file: src/Model/Status.php -->
 ```php
 <?php
 
@@ -147,6 +152,7 @@ enum Status: string
 
 `src/Model/Task.php`：
 
+<!-- project-file: src/Model/Task.php -->
 ```php
 <?php
 
@@ -156,21 +162,36 @@ namespace DevQuest\TaskCli\Model;
 
 use InvalidArgumentException;
 
-final class Task
+final readonly class Task
 {
     public function __construct(
-        public readonly string $id,
-        public readonly string $title,
-        public readonly Priority $priority,
+        public string $id,
+        public string $title,
+        public Priority $priority,
         public Status $status = Status::Pending,
-        public readonly string $createdAt = '',
+        public string $createdAt = '',
     ) {
-        $createdAt !== '' || throw new InvalidArgumentException('createdAt 不能为空');
+        if (!preg_match('/\A[0-9a-f]{8}\z/', $id)) {
+            throw new InvalidArgumentException('id 必须是 8 位十六进制字符串');
+        }
+        if (trim($title) === '' || strlen($title) > 240
+            || !preg_match('//u', $title) || preg_match('/[\x00-\x1f\x7f]/', $title)) {
+            throw new InvalidArgumentException('标题须为 1–240 字节 UTF-8 文本，不能包含控制字符');
+        }
+        $date = \DateTimeImmutable::createFromFormat(DATE_ATOM, $createdAt);
+        if ($date === false || $date->format(DATE_ATOM) !== $createdAt) {
+            throw new InvalidArgumentException('created_at 必须是有效的 ISO 8601 时间');
+        }
     }
 
     /** 反序列化入口：数组 -> 对象，非法值统一在此暴露 */
     public static function fromArray(array $row): self
     {
+        foreach (['id', 'title', 'priority', 'status', 'created_at'] as $key) {
+            if (!isset($row[$key]) || !is_string($row[$key])) {
+                throw new InvalidArgumentException("字段必须是字符串: {$key}");
+            }
+        }
         return new self(
             id: $row['id'],
             title: $row['title'],
@@ -195,9 +216,7 @@ final class Task
     /** 完成操作返回新对象（不可变风格），原对象保持不动 */
     public function markDone(): self
     {
-        $copy = clone $this;
-        $copy->status = Status::Done;
-        return $copy;
+        return new self($this->id, $this->title, $this->priority, Status::Done, $this->createdAt);
     }
 }
 ```
@@ -206,6 +225,7 @@ final class Task
 
 `src/Storage/TaskRepository.php`：
 
+<!-- project-file: src/Storage/TaskRepository.php -->
 ```php
 <?php
 
@@ -226,17 +246,36 @@ final class TaskRepository
     /** @return list<Task> */
     public function all(): array
     {
-        if (!is_file($this->file)) {
+        if (!file_exists($this->file) && !is_link($this->file)) {
             return [];
         }
+        if (!is_file($this->file) || is_link($this->file)) {
+            throw new RuntimeException('存储路径必须是普通文件，不能是目录或符号链接');
+        }
 
-        $raw = file_get_contents($this->file);
+        $raw = @file_get_contents($this->file);
         if ($raw === false) {
             throw new RuntimeException("无法读取: {$this->file}");
         }
 
-        $rows = json_decode($raw, true, flags: JSON_THROW_ON_ERROR);
-        return array_map(Task::fromArray(...), $rows);
+        $rows = json_decode($raw, flags: JSON_THROW_ON_ERROR);
+        if (!is_array($rows)) {
+            throw new RuntimeException('存储根节点必须是 JSON 数组');
+        }
+        $tasks = [];
+        $ids = [];
+        foreach ($rows as $row) {
+            if (!$row instanceof \stdClass) {
+                throw new RuntimeException('任务记录必须是 JSON 对象');
+            }
+            $task = Task::fromArray((array) $row);
+            if (isset($ids[$task->id])) {
+                throw new RuntimeException("存储包含重复 id: {$task->id}");
+            }
+            $ids[$task->id] = true;
+            $tasks[] = $task;
+        }
+        return $tasks;
     }
 
     /** @param list<Task> $tasks */
@@ -248,8 +287,21 @@ final class TaskRepository
             JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_THROW_ON_ERROR
         );
 
-        if (file_put_contents($this->file, $json) === false) {
-            throw new RuntimeException("无法写入: {$this->file}");
+        // 同目录临时文件：成功写完后再替换，避免截断原文件。
+        $temp = @tempnam(dirname($this->file), '.tasks-');
+        if ($temp === false || realpath(dirname($temp)) !== realpath(dirname($this->file))) {
+            if ($temp !== false) { @unlink($temp); }
+            throw new RuntimeException('无法在数据目录创建临时文件');
+        }
+        try {
+            if (@file_put_contents($temp, $json) !== strlen($json)) {
+                throw new RuntimeException('数据未完整写入');
+            }
+            if (!@rename($temp, $this->file)) {
+                throw new RuntimeException("无法替换: {$this->file}");
+            }
+        } finally {
+            if (is_file($temp)) { @unlink($temp); }
         }
     }
 
@@ -264,6 +316,7 @@ final class TaskRepository
 
 `src/Service/TaskService.php`：
 
+<!-- project-file: src/Service/TaskService.php -->
 ```php
 <?php
 
@@ -292,14 +345,19 @@ final class TaskService
             throw new InvalidArgumentException('任务标题不能为空');
         }
 
+        $level = Priority::tryFrom($priority)
+            ?? throw new InvalidArgumentException('priority 只能是 low、normal 或 high');
+        $tasks = $this->repo->all();
+        $ids = array_map(fn(Task $t) => $t->id, $tasks);
+        do { $id = $this->repo->nextId(); } while (in_array($id, $ids, true));
         $task = new Task(
-            id: $this->repo->nextId(),
+            id: $id,
             title: $trimmed,
-            priority: Priority::tryFrom($priority) ?? Priority::Normal,
-            createdAt: date('c'),
+            priority: $level,
+            createdAt: (new \DateTimeImmutable('now', new \DateTimeZone('UTC')))->format(DATE_ATOM),
         );
 
-        $this->repo->save([...$this->repo->all(), $task]);
+        $this->repo->save([...$tasks, $task]);
         return $task;
     }
 
@@ -326,7 +384,9 @@ final class TaskService
         $tasks = $this->repo->all();
         $kept  = array_values(array_filter($tasks, fn(Task $t) => $t->id !== $id));
 
-        count($kept) === count($tasks) || throw new RuntimeException("任务不存在: {$id}");
+        if (count($kept) === count($tasks)) {
+            throw new RuntimeException("任务不存在: {$id}");
+        }
         $this->repo->save($kept);
     }
 
@@ -348,8 +408,9 @@ final class TaskService
 
 ## 5. 入口：bin 脚本与参数解析
 
-`bin/task`（无 `.php` 后缀，加上可执行权限 `chmod +x bin/task`）：
+`bin/task`（无 `.php` 后缀；使用 `php bin/task` 无需执行权限）：
 
+<!-- project-file: bin/task -->
 ```php
 #!/usr/bin/env php
 <?php
@@ -360,37 +421,45 @@ require __DIR__ . '/../vendor/autoload.php';
 
 use DevQuest\TaskCli\Service\TaskService;
 use DevQuest\TaskCli\Storage\TaskRepository;
-use InvalidArgumentException;
-use Throwable;
-
-$repo = new TaskRepository(__DIR__ . '/../tasks.json');
-$svc  = new TaskService($repo);
-
 $command = $argv[1] ?? 'list';
+$options = array_slice($argv, 2);
+$file = getenv('TASK_FILE') ?: __DIR__ . '/../tasks.json';
+$lock = null;
+$exit = 1;
 
 try {
+    // 固定锁文件不随数据文件 rename 改变。整个读→改→写操作持有同一把锁。
+    $lock = @fopen($file . '.lock', 'c');
+    if ($lock === false || !flock($lock, LOCK_EX)) {
+        throw new RuntimeException('无法取得数据文件锁');
+    }
+    $svc = new TaskService(new TaskRepository($file));
     $exit = match ($command) {
-        'add' => (function () use ($svc, $argv): int {
-            $title = $argv[2] ?? throw new InvalidArgumentException('用法: task add "标题" [--priority high]');
-            preg_match('/--priority\s+(\w+)/', implode(' ', array_slice($argv, 3)), $m);
-            $task = $svc->add($title, $m[1] ?? 'normal');
+        'add' => (function () use ($svc, $options): int {
+            if (count($options) !== 1 && !(count($options) === 3 && $options[1] === '--priority')) {
+                throw new InvalidArgumentException('用法: task add "标题" [--priority high]');
+            }
+            $task = $svc->add($options[0], $options[2] ?? 'normal');
             printf("已添加 [%s] %s%s", $task->id, $task->title, PHP_EOL);
             return 0;
         })(),
-        'list' => (function () use ($svc, $argv): int {
-            foreach ($svc->list(in_array('--all', $argv, true)) as $t) {
+        'list' => (function () use ($svc, $options): int {
+            if ($options !== [] && $options !== ['--all']) {
+                throw new InvalidArgumentException('用法: task list [--all]');
+            }
+            foreach ($svc->list($options === ['--all']) as $t) {
                 printf("[%s] %-6s %-8s %s%s", $t->id, $t->priority->value, $t->status->value, $t->title, PHP_EOL);
             }
             return 0;
         })(),
-        'done' => (function () use ($svc, $argv): int {
-            $id = $argv[2] ?? throw new InvalidArgumentException('用法: task done <id>');
+        'done' => (function () use ($svc, $options): int {
+            $id = taskId($options);
             $svc->done($id);
             echo "已完成", PHP_EOL;
             return 0;
         })(),
-        'remove' => (function () use ($svc, $argv): int {
-            $id = $argv[2] ?? throw new InvalidArgumentException('用法: task remove <id>');
+        'remove' => (function () use ($svc, $options): int {
+            $id = taskId($options);
             $svc->remove($id);
             echo "已删除", PHP_EOL;
             return 0;
@@ -402,11 +471,29 @@ try {
     };
 } catch (Throwable $e) {
     fwrite(STDERR, "错误: {$e->getMessage()}" . PHP_EOL);
-    exit(1);
+} finally {
+    if (is_resource($lock)) {
+        flock($lock, LOCK_UN);
+        fclose($lock);
+    }
 }
 
 exit($exit);
+
+function taskId(array $options): string
+{
+    if (count($options) !== 1 || !preg_match('/\A[0-9a-f]{8}\z/', $options[0])) {
+        throw new InvalidArgumentException('需要一个 8 位十六进制任务 ID');
+    }
+    return $options[0];
+}
 ```
+
+这里按 `$argv` 的每个元素解析参数。先 `implode()` 再正则匹配会丢失 shell 已解析好的参数边界，并把拼错的选项静默忽略。未知优先级现在明确报错；`done` 重复执行是幂等的，`remove` 删除未知 ID 则失败。
+
+固定 `.lock` 文件保护所有 CLI 实例的完整读改写周期；**不要在运行中删除锁文件**。`TaskRepository` 本身没有线程/进程事务能力，直接调用服务的其他程序也必须遵循同一锁协议。锁语义见 [PHP flock 手册](https://www.php.net/manual/en/function.flock.php)。
+
+临时文件替换减少了半写 JSON 的风险，但不能保证断电时数据已经落盘；网络文件系统、不同平台的替换语义需要单独验收。这个练习只面向受控的本地数据目录，多用户服务应采用具有事务和唯一约束的数据库。
 
 ## 6. 运行验证
 
@@ -421,7 +508,20 @@ php bin/task list --all
 php bin/task remove "${TASK_ID:?请先填写任务ID}"
 ```
 
-每一步输出都符合预期、`tasks.json` 内容正确，即项目完成。
+每条命令启动新进程，所以后一次 `list` 已经验证了重启读取。完成以下失败路径才能验收：
+
+| 操作 | 可观察结果 |
+|---|---|
+| `add "   "`、`add "任务" --priority urgent`、`list --unknown` | 退出码 1；标准错误说明原因；原 JSON 字节保持不变 |
+| 对现存 ID 执行 `remove` | 退出码 0；再次列出时该记录消失 |
+| 再次删除同一 ID | 退出码 1；其余记录不变 |
+| 将测试文件改成 `{`、`{}` 或含重复 ID 的数组，再执行新增 | 拒绝损坏存储；不覆盖原文件 |
+| 让 `TASK_FILE` 指向目录或不可写目录 | 明确失败；不能报告已添加 |
+| 多个进程向同一个本地文件新增 | 所有成功返回的记录保留，ID 不重复 |
+
+先复制测试目录再做损坏/权限实验；用 `TASK_FILE=/tmp/task-test.json php bin/task list` 可隔离数据。PowerShell 对应 `$env:TASK_FILE = "$PWD/tasks-test.json"`。
+
+仓库的 [首项目验证器](../../shared-resources/tools/document-quality/verify_php_java_projects.py) 从本篇逐字提取文件，再用 Composer 生成自动加载并执行上述场景；结果见 [验证报告](../../shared-resources/tools/document-quality/reports/php-java-projects.md)。
 
 ## ✅ 最佳实践
 
@@ -438,7 +538,7 @@ CLI 入口负责读参数、组装依赖和映射退出码，业务规则放在�
 **A**: `chmod +x bin/task`；Windows 下用 `php bin/task` 调用即可。
 
 ### Q3: JSON 文件损坏后如何兜底？
-**A**: `JSON_THROW_ON_ERROR` 会让 `json_decode` 抛出 `JsonException`。生产化做法是写入前先写临时文件再原子重命名（`rename`），并在读取失败时备份损坏文件。
+**A**: 本文已经使用 `JSON_THROW_ON_ERROR` 和逐字段校验。读取失败时停止修改，先手工备份原文件，再修复或恢复备份；不要把损坏当作“空列表”继续保存。临时文件替换只能降低新的写入损坏风险，不能恢复已有损坏。
 
 ## 🎯 练习与实践
 
@@ -449,7 +549,7 @@ CLI 入口负责读参数、组装依赖和映射退出码，业务规则放在�
 
 ### 进阶挑战
 - [ ] 引入 `symfony/console` 重写入口，获得彩色输出与帮助信息（参照 [`../reference/framework-essentials/02-symfony-essentials.md`](../reference/framework-essentials/02-symfony-essentials.md)）
-- [ ] 用 Pest 给 `TaskService` 写单元测试，用内存假仓库替代文件存储（参照 [`../reference/library-guides/02-composer-ecosystem.md`](../reference/library-guides/02-composer-ecosystem.md)）
+- [ ] 先提取 `TaskStore` 接口，再让文件仓库与内存仓库实现它，并用 Pest 测试服务；当前 `final TaskRepository` 不能靠继承替换（参照 [`../reference/library-guides/02-composer-ecosystem.md`](../reference/library-guides/02-composer-ecosystem.md)）。
 
 ---
 

@@ -8,7 +8,7 @@
 
 **扩展顺序**：不要吞掉读取错误并覆盖旧数据；再考虑原子写入与并发。
 
-建议保存一份正常输入、一份失败输入、实际输出和对应测试。先完成以上阶段再扩展正文中的完整设计；遇到省略实现或未定义依赖，应按文档上下文补齐，不能把代码片段拼接后当作已经验证的完整工程。
+下面四个 Rust 代码块按顺序组成同一个 `src/main.rs`，不要分别编译。先完成这个单进程项目，再增加锁或数据库；不要同时启动两个命令修改同一文件。
 
 > **文档简介**: 从零构建一个完整的待办任务命令行工具，覆盖 Clap 4.6 derive 风格参数解析、子命令设计、JSON 文件持久化、anyhow 错误链与 `cargo install` 发布全流程
 >
@@ -32,7 +32,7 @@
 
 </details>
 
-> 版本基线以 [模块 README 技术基线区块](../README.md) 为准（Rust 1.98.1 / edition 2024、Clap 4.6、Serde 1.0.229）。本篇 Rust 代码块已经本机 `cargo`（含依赖实装）与 `rustc --edition 2024` 实测通过。
+> 工程使用 edition 2024；实际工具链、锁定依赖和正文抽取验证结果见[Go/Rust 首项目验证报告](../../shared-resources/tools/document-quality/reports/go-rust-project-validation.md)。首次安装依赖需要网络，之后保留 `Cargo.lock` 并用 `--locked` 重现依赖选择。
 
 ## 🎯 学习目标
 
@@ -80,7 +80,7 @@ rtask --file ~/tasks.json list  # 自定义存储文件
 
 ### 技术栈与依赖
 
-`cargo new rtask` 后编辑 `Cargo.toml`（版本基线见模块 README）：
+运行 `cargo new rtask`、`cd rtask` 后编辑 `Cargo.toml`。下面的版本约束允许兼容更新；首次构建生成的 `Cargo.lock` 才记录实际精确版本，应随二进制项目提交：
 
 ```toml
 [package]
@@ -93,6 +93,7 @@ clap = { version = "4.6", features = ["derive"] }
 serde = { version = "1.0.229", features = ["derive"] }
 serde_json = "1"
 anyhow = "1"
+tempfile = "3"
 ```
 
 ### 项目结构
@@ -102,6 +103,7 @@ anyhow = "1"
 ```
 rtask/
 ├── Cargo.toml
+├── Cargo.lock     # 首次 cargo build 后生成
 └── src/
     └── main.rs     # CLI 定义 + 存储 + 业务逻辑 + 单元测试
 ```
@@ -118,6 +120,8 @@ Clap derive 风格把"参数解析"变成类型定义：结构体字段即选项
 use anyhow::{Context, Result, bail};
 use clap::{Parser, Subcommand};
 use serde::{Deserialize, Serialize};
+use std::collections::HashSet;
+use std::io::Write;
 use std::path::{Path, PathBuf};
 
 /// rtask —— 基于 JSON 文件的待办任务管理器
@@ -125,7 +129,7 @@ use std::path::{Path, PathBuf};
 #[command(name = "rtask", version, about)]
 struct Cli {
     /// 任务存储文件路径（默认 ./rtask.json）
-    #[arg(short, long, default_value = "rtask.json")]
+    #[arg(short, long, global = true, default_value = "rtask.json")]
     file: PathBuf,
 
     #[command(subcommand)]
@@ -154,7 +158,7 @@ enum Commands {
 
 **关键点解析**：
 
-- `#[derive(Parser)]`：入口结构体。`--file/-f` 是全局选项，必须出现在子命令之前（如 `rtask --file x.json list`）
+- `#[derive(Parser)]`：入口结构体。`global = true` 让 `--file/-f` 同时在根命令和子命令可用，例如 `rtask --file x.json list` 与 `rtask list --file x.json`。
 - 文档注释 `///` 会成为 `rtask add --help` 的说明文本，不是装饰
 - `Done { id: u32 }`：位置参数自动做类型校验，`rtask done abc` 会被 Clap 拒绝
 - 枚举变体名 `Rm` 会被转为小写子命令 `rm`
@@ -176,24 +180,50 @@ fn load(path: &Path) -> Result<Vec<Task>> {
         Err(e) if e.kind() == std::io::ErrorKind::NotFound => return Ok(Vec::new()),
         Err(e) => return Err(e).with_context(|| format!("读取 {} 失败", path.display())),
     };
-    serde_json::from_str(&raw).with_context(|| format!("解析 {} 失败", path.display()))
+    let tasks: Vec<Task> = serde_json::from_str(&raw)
+        .with_context(|| format!("解析 {} 失败", path.display()))?;
+    validate_tasks(&tasks).with_context(|| format!("校验 {} 失败", path.display()))?;
+    Ok(tasks)
 }
 
 fn save(path: &Path, tasks: &[Task]) -> Result<()> {
     let raw = serde_json::to_string_pretty(tasks).context("序列化任务失败")?;
-    std::fs::write(path, raw).with_context(|| format!("写入 {} 失败", path.display()))
+    // 同目录临时文件确保替换时处于同一文件系统；失败时旧文件不被提前截断。
+    let parent = path.parent().filter(|p| !p.as_os_str().is_empty()).unwrap_or(Path::new("."));
+    let mut temp = tempfile::NamedTempFile::new_in(parent)
+        .with_context(|| format!("在 {} 创建临时文件失败", parent.display()))?;
+    temp.write_all(raw.as_bytes()).context("写临时文件失败")?;
+    temp.as_file().sync_all().context("同步临时文件失败")?;
+    temp.persist(path).with_context(|| format!("替换 {} 失败", path.display()))?;
+    Ok(())
 }
 
-fn next_id(tasks: &[Task]) -> u32 {
-    tasks.iter().map(|t| t.id).max().unwrap_or(0) + 1
+fn validate_tasks(tasks: &[Task]) -> Result<()> {
+    let mut ids = HashSet::new();
+    for task in tasks {
+        if task.id == 0 || !ids.insert(task.id) {
+            bail!("任务 ID 必须为非零且不重复的整数");
+        }
+        if task.text.trim().is_empty() {
+            bail!("任务 #{} 的标题不能为空", task.id);
+        }
+    }
+    Ok(())
+}
+
+fn next_id(tasks: &[Task]) -> Result<u32> {
+    tasks.iter().map(|t| t.id).max().unwrap_or(0)
+        .checked_add(1).context("任务 ID 已耗尽")
 }
 ```
 
 **关键点解析**：
 
-- `with_context` 只在出错时才构造消息，成功路径零开销
-- 错误链一条输出两层信息：`读取 /x/rtask.json 失败: No such file or directory`
+- `with_context` 的闭包只在出错时构造消息，不应据此承诺整个调用“零开销”。
+- 文件不存在返回空列表；其他读取错误、JSON 语法错误、重复 ID 和空标题都会失败。合法 JSON 也可能不满足业务约束。
 - 打印路径用 `path.display()`，而非直接格式化 `Path`
+- `checked_add` 将 ID 溢出变成可说明的错误，避免调试模式 panic、发布模式回绕。当前 ID 只保证在现有列表内唯一；删除最大 ID 后可能复用它。需要历史永久唯一 ID 时，持久化单独的递增序列或使用 UUID。
+- 临时文件替换避免提前截断旧文件，但不是完整事务系统：没有并发锁，也没有跨平台的目录元数据同步保证。断电耐久性、权限继承和多进程一致性应作为下一阶段的专门需求。
 
 ### 步骤 3：业务逻辑（含一个借用检查教学点）
 
@@ -202,8 +232,12 @@ fn run(cli: &Cli) -> Result<()> {
     let mut tasks = load(&cli.file)?;
     match &cli.command {
         Commands::Add { text } => {
-            let id = next_id(&tasks);
-            tasks.push(Task { id, text: text.clone(), done: false });
+            let text = text.trim();
+            if text.is_empty() {
+                bail!("任务标题不能为空");
+            }
+            let id = next_id(&tasks)?;
+            tasks.push(Task { id, text: text.to_owned(), done: false });
             save(&cli.file, &tasks)?;
             println!("已添加任务 #{id}: {text}");
         }
@@ -222,8 +256,7 @@ fn run(cli: &Cli) -> Result<()> {
             }
         }
         Commands::Done { id } => {
-            // 借用检查教学点：task 的可变借用必须先结束，才能把 tasks 整体传给 save。
-            // 用块作用域收敛可变借用，块内取出所需数据。
+            // 复制要打印的文本，让 save 时不再需要 task 的可变借用。
             let text = {
                 let task = tasks
                     .iter_mut()
@@ -254,8 +287,8 @@ fn run(cli: &Cli) -> Result<()> {
 
 **关键点解析**：
 
-- `Done` 分支：若在 `find` 返回的 `&mut Task` 存活期间调用 `save(&tasks)`，会触发 E0502（同一数据的可变借用与不可变借用并存）。块作用域 + 取出 `text` 是最直白的解法
-- 一次性工具的业务错误直接用 `bail!`/`anyhow!` 构造，无需定义错误类型；库代码应改用 thiserror（对照 [basics 05](../basics/05-error-handling.md)）
+- `Done` 分支：如果 `save(&tasks)` 后还要使用 `task`，两种借用会重叠，触发 E0502。Rust 的非词法生命周期通常可以在最后一次使用后结束借用，块并非必需；这里的块让读者容易看清借用边界。
+- 应用入口可用 `anyhow` 保留上下文。库接口若要求调用者按错误种类处理，应暴露具体错误类型；可以手写 `Error`，也可以使用 thiserror，后者不是强制依赖。
 
 ### 步骤 4：入口与单元测试
 
@@ -279,12 +312,56 @@ mod tests {
 
     #[test]
     fn next_id_starts_from_one() {
-        assert_eq!(next_id(&[]), 1);
+        assert_eq!(next_id(&[]).unwrap(), 1);
     }
 
     #[test]
     fn next_id_follows_max() {
-        assert_eq!(next_id(&[task(3, false), task(7, true)]), 8);
+        assert_eq!(next_id(&[task(3, false), task(7, true)]).unwrap(), 8);
+    }
+
+    #[test]
+    fn next_id_rejects_overflow() {
+        assert!(next_id(&[task(u32::MAX, false)]).is_err());
+    }
+
+    #[test]
+    fn storage_rejects_invalid_records() {
+        assert!(validate_tasks(&[task(0, false)]).is_err());
+        assert!(validate_tasks(&[task(1, false), task(1, true)]).is_err());
+        assert!(validate_tasks(&[Task { id: 1, text: "  ".into(), done: false }]).is_err());
+    }
+
+    #[test]
+    fn file_option_works_after_subcommand() {
+        let cli = Cli::try_parse_from(["rtask", "list", "--file", "other.json"]).unwrap();
+        assert_eq!(cli.file, PathBuf::from("other.json"));
+    }
+
+    #[test]
+    fn invalid_input_preserves_original_file() {
+        let dir = tempfile::tempdir().unwrap();
+        let file = dir.path().join("tasks.json");
+        save(&file, &[task(1, false)]).unwrap();
+        let original = std::fs::read(&file).unwrap();
+        assert!(run(&Cli { file: file.clone(), command: Commands::Add { text: "  ".into() } }).is_err());
+        assert!(run(&Cli { file: file.clone(), command: Commands::Done { id: 99 } }).is_err());
+        assert_eq!(std::fs::read(&file).unwrap(), original);
+    }
+
+    #[test]
+    fn storage_roundtrip_and_corruption() {
+        let dir = tempfile::tempdir().unwrap();
+        let file = dir.path().join("tasks.json");
+        assert!(load(&file).unwrap().is_empty());
+        save(&file, &[task(1, false)]).unwrap();
+        save(&file, &[task(1, true), task(2, false)]).unwrap();
+        let tasks = load(&file).unwrap();
+        assert_eq!(tasks.len(), 2);
+        assert!(tasks[0].done);
+        std::fs::write(&file, "{").unwrap();
+        assert!(run(&Cli { file: file.clone(), command: Commands::Add { text: "valid".into() } }).is_err());
+        assert_eq!(std::fs::read_to_string(&file).unwrap(), "{");
     }
 }
 ```
@@ -307,7 +384,7 @@ cargo run -- done 1
 cargo run -- list --pending
 cargo run -- rm 2
 cargo run -- done 99     # 错误路径：rtask: 任务 #99 不存在（退出码 1）
-cargo test               # 2 个单元测试
+cargo test --locked      # 7 个单元测试
 ```
 
 存储文件 `rtask.json`（serde_json 序列化结果）：
@@ -326,14 +403,16 @@ cargo test               # 2 个单元测试
 
 ## 发布：cargo install 与 crates.io
 
-**本地安装**：编译 release 版并放入 `~/.cargo/bin`（该目录默认在 PATH 中）：
+**本地安装**：编译 release 版并放入 Cargo 安装目录的 `bin`（通常为 `~/.cargo/bin`；请确认它在 PATH 中）：
 
 ```bash
-cargo install --path .
-rtask list   # 任意目录可用
+cargo install --path . --locked
+rtask list   # 从当前工作目录读取 rtask.json
 ```
 
 **发布到 crates.io**（可选）：
+
+从不同目录运行默认读取的是不同文件。需要共用任务时，显式传同一个 `--file` 绝对路径；安装可执行文件不会自动迁移数据。
 
 1. 注册 crates.io 账号并 `cargo login <token>`
 2. 确认 `Cargo.toml` 的 `name` 未被占用，补全 `description`、`license` 字段
@@ -356,11 +435,11 @@ Path/PathBuf 配合 args_os 等接口处理可能不是 UTF-8 的路径；库化
 
 ### Q1: 想让 `rtask add --file x "..."`（选项在子命令后）也能用？
 
-**A**: 把 `--file` 从 `Cli` 移到每个子命令变体中，或定义公共选项结构体后用 `#[command(flatten)]` 混入各子命令。`Cli` 上的全局选项必须出现在子命令之前，这是 POSIX 风格约定，Clap 默认遵循。
+**A**: 本例已经通过 `#[arg(global = true)]` 支持。去掉该属性才会让此选项只属于根命令。这个行为是 Clap 的参数作用域配置，不是 POSIX 对所有 CLI 的强制规定。见 [Clap global 参数](https://docs.rs/clap/latest/clap/struct.Arg.html#method.global)。
 
 ### Q2: JSON 文件被手工改坏了怎么办？
 
-**A**: `serde_json::from_str` 的解析错误经 `with_context` 已带出行列信息。生产级工具可在此分支提示用户备份并重建文件；更严谨的方案是"写临时文件 + `std::fs::rename` 原子替换"，避免写一半崩溃损坏数据。
+**A**: 保留原文件，先备份再修复。解析失败会非零退出，`add` 不会覆盖坏文件；业务校验也拒绝重复 ID。写入采用同目录临时文件与替换，相关保证和限制见 [NamedTempFile::persist](https://docs.rs/tempfile/latest/tempfile/struct.NamedTempFile.html#method.persist)。原子替换不能修复已经损坏的数据，也不能阻止两个进程相互覆盖。
 
 ---
 
@@ -395,7 +474,7 @@ Path/PathBuf 配合 args_os 等接口处理可能不是 UTF-8 的路径；库化
 ### 学习成果检查
 
 - [ ] 能不查资料写出一个带 3 个子命令的 Clap derive 骨架
-- [ ] 能解释 `Done` 分支为什么需要块作用域（E0502）
+- [ ] 能解释 `Done` 分支的借用何时结束，以及为什么块作用域不是唯一解法
 - [ ] 能用 `cargo install --path .` 安装并在任意目录运行工具
 
 ---

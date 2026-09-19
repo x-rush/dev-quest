@@ -4,7 +4,7 @@ Rust 的日常能力分布在原始类型方法、标准类型、trait 与宏中
 
 ## 完整例子：错误怎样保留下来
 
-在 Cargo 二进制项目中替换 `src/main.rs`，运行 `cargo run`。无需依赖。预期输出 `[2, 7, 10]` 和 `true`；本轮未做本机 Rust 执行。
+运行 `cargo new parse-numbers`、`cd parse-numbers`，替换 `src/main.rs`，运行 `cargo run` 与 `cargo test`。无需第三方依赖。预期输出 `[2, 7, 10]` 和 `true`；4 个测试覆盖正常输入、空输入、非法文本和整数越界，运行证据见[验证报告](../../../shared-resources/tools/document-quality/reports/go-rust-project-validation.md)。
 
 ```rust
 fn parse_all(input: &[&str]) -> Result<Vec<i32>, std::num::ParseIntError> {
@@ -17,6 +17,31 @@ fn main() -> Result<(), std::num::ParseIntError> {
     println!("{values:?}");
     println!("{}", parse_all(&["bad"]).is_err());
     Ok(())
+}
+
+#[cfg(test)]
+mod tests {
+    use super::parse_all;
+
+    #[test]
+    fn preserves_input_order() {
+        assert_eq!(parse_all(&["7", "2", "10"]).unwrap(), [7, 2, 10]);
+    }
+
+    #[test]
+    fn empty_input_is_success() {
+        assert_eq!(parse_all(&[]).unwrap(), Vec::<i32>::new());
+    }
+
+    #[test]
+    fn rejects_invalid_item_instead_of_dropping_it() {
+        assert!(parse_all(&["7", "bad", "2"]).is_err());
+    }
+
+    #[test]
+    fn rejects_integer_overflow() {
+        assert!(parse_all(&["2147483648"]).is_err());
+    }
 }
 ```
 
