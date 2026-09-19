@@ -190,6 +190,40 @@ app.post("/users", zValidator("json", CreateUserSchema), (c) => {
 
 完整 API 速查见 [Zod 与生态库指南](../reference/library-guides/02-ecosystem-libs.md)。
 
+### 可复现验收：解析 JSON 与接受业务输入是两步
+
+下面程序不依赖 Hono 或 Zod；它把处理器必须面对的两个边界固定下来。语法正确的 `{}` 可以被 JSON 解析，但仍缺少必填 title；空白 title 也不是可创建任务。框架 schema 应产生同类区分，只是把分支与错误格式统一封装。
+
+```js verify:node-request-body-boundaries
+function parseCreateTask(text) {
+  let body;
+  try {
+    body = JSON.parse(text);
+  } catch {
+    return { status: 400, code: "invalid_json" };
+  }
+  if (typeof body.title !== "string" || body.title.trim() === "") {
+    return { status: 422, code: "invalid_title" };
+  }
+  return { status: 201, title: body.title.trim() };
+}
+
+for (const input of ['{"title":"  ship docs  "}', '{"title":"   "}', '{}', '{']) {
+  console.log(JSON.stringify(parseCreateTask(input)));
+}
+```
+
+预期输出：
+
+```text
+{"status":201,"title":"ship docs"}
+{"status":422,"code":"invalid_title"}
+{"status":422,"code":"invalid_title"}
+{"status":400,"code":"invalid_json"}
+```
+
+实际 API 还应限制请求体大小、拒绝未知字段或按产品需求保留它们，并把错误响应中的 `code` 固定为客户端可依赖的契约；不要把 `JSON.parse` 的原始异常文本返回给外部调用者。
+
 ## 🎨 最佳实践
 
 路由按资源或业务边界组织，读请求、校验、调用服务和写响应各有明确责任，不用文件超过某行数就强制拆分。客户端的 JSON、路径和查询参数都属于待验证输入，转换成功还要检查范围及业务合法性。

@@ -17,13 +17,13 @@
   "summary": {
     "documents": 642,
     "by_primary_state": {
-      "not_verified": 459,
-      "runtime": 183
+      "not_verified": 458,
+      "runtime": 184
     },
-    "verification_wording_occurrences": 143,
+    "verification_wording_occurrences": 144,
     "marker_classification": {
       "source_has_limited_runtime_evidence": 88,
-      "unbound_verification_wording": 55
+      "unbound_verification_wording": 56
     }
   },
   "documents": [
@@ -1430,7 +1430,7 @@
     },
     {
       "path": "02-nextjs-frontend/frameworks/03-full-stack-patterns.md",
-      "sha256": "aa7ae46811776dc2aee7c0c5f947b423f0f4fdad8c89461caf72f0de4c94fb3c",
+      "sha256": "0f23f99230fa4373211b990424c676f589f1d6094de8196d6d0a9abfea641883",
       "verification": [
         {
           "mode": "not_verified",
@@ -1456,7 +1456,7 @@
     },
     {
       "path": "02-nextjs-frontend/projects/01-corporate-landing.md",
-      "sha256": "38a16c1d750fe46c4423756d7cd83e34482753de83562193368da60c3f9caa5b",
+      "sha256": "99f2dc13e2d47e01d75992e51a796a4cc0f71cee996f8be4c52ace3b26e9c91b",
       "verification": [
         {
           "mode": "not_verified",
@@ -1469,7 +1469,7 @@
     },
     {
       "path": "02-nextjs-frontend/projects/02-ecommerce-store.md",
-      "sha256": "c594075c55d8b1517ee02661288e7fe468d7fc53b30e88ee6415177bc8157e26",
+      "sha256": "62d771decedcfce3b83d0927a4cd1b71dc7b4cfb947f15bfc3a2a300f5c02d40",
       "verification": [
         {
           "mode": "not_verified",
@@ -1482,7 +1482,7 @@
     },
     {
       "path": "02-nextjs-frontend/projects/03-dashboard-analytics.md",
-      "sha256": "4c5a1052e52fc93f52487f3380fa9ae76fef137c5fd22b8d05dd2d67a23296be",
+      "sha256": "b682bf5f2a49f3a153679e87927c44e34472f2f62092b22532488e82465317fa",
       "verification": [
         {
           "mode": "not_verified",
@@ -1495,7 +1495,7 @@
     },
     {
       "path": "02-nextjs-frontend/projects/04-saas-platform.md",
-      "sha256": "dc6c99b9442222762aeb626792388b86ed75603f804e288ea7756e4ee11dbc1a",
+      "sha256": "417fbe962e88028471fda1bf7c69a65423402c94fb8b5f911d772eda884268ec",
       "verification": [
         {
           "mode": "not_verified",
@@ -1504,7 +1504,7 @@
           "scope": "No named runtime or syntax evidence is recorded for this document."
         }
       ],
-      "marker_count": 0
+      "marker_count": 1
     },
     {
       "path": "02-nextjs-frontend/reference/development-tools/01-testing-tools.md",
@@ -6795,7 +6795,7 @@
     },
     {
       "path": "09-nodejs-backend/LEARNING_GUIDE.md",
-      "sha256": "219dc384b2503311f388c155409268926e2d6f7c20f9d0a134c18981a79b65f6",
+      "sha256": "e67af3919a3ff558b79d96327a1ab95313b6a027ba0516d542a29859f5734c93",
       "verification": [
         {
           "mode": "not_verified",
@@ -6931,13 +6931,13 @@
     },
     {
       "path": "09-nodejs-backend/basics/05-http-routing.md",
-      "sha256": "9078b868616923822e53e9434af6103c92732939300c3bb3565a9859a48c72db",
+      "sha256": "a360933d98dd60cd90e21181ad5125cfabfd50be4a6022d27ef7f0660440ed2a",
       "verification": [
         {
-          "mode": "not_verified",
-          "status": "NOT_VERIFIED",
-          "report": null,
-          "scope": "No named runtime or syntax evidence is recorded for this document."
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "next-node-python-basics-results.json",
+          "scope": "Only this named, complete code block; no whole-document, framework, network, or application coverage."
         }
       ],
       "marker_count": 0
@@ -7511,7 +7511,7 @@
     },
     {
       "path": "10-python-discovery/LEARNING_GUIDE.md",
-      "sha256": "ba12eed00abafbb33a1121d33f43064eced4c636f084e4dfd2ec5c591986047f",
+      "sha256": "3f0c63d45b397b6a03e63e730330b7eb2f9f269bb080b0bcc2b9f5389fc87342",
       "verification": [
         {
           "mode": "not_verified",
@@ -9178,6 +9178,12 @@
       "line": 79,
       "excerpt": "沿用工程的启动命令（npm 工程为 `npm run dev`），打开终端显示的本地地址下的 `/drafts`。交付这个页面、工程锁文件和下表的实际结果；本节没有附带已运行的浏览器验收记录。",
       "classification": "source_has_limited_runtime_evidence"
+    },
+    {
+      "path": "02-nextjs-frontend/projects/04-saas-platform.md",
+      "line": 3752,
+      "excerpt": "把“企业级 SaaS”收敛为一个可追踪的租户生命周期：组织创建后拥有一个不可伪造的 `tenantId`；成员邀请和角色变更由授权规则控制；所有业务读取、写入、缓存键和异步任务都带该租户维度；订阅状态由支付提供方的已验证事件驱动，再决定可用功能和配额。不要从客户端传来的 tenant 字段直接信任归属，也不要把“当前套餐”只存在前端状态。",
+      "classification": "unbound_verification_wording"
     },
     {
       "path": "02-nextjs-frontend/reference/language-concepts/08-ts-declarations-modules.md",

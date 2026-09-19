@@ -7,11 +7,11 @@
 | 指标 | 数量 |
 |---|---:|
 | 纳入模块文档 | 642 |
-| 主状态：not_verified | 459 |
-| 主状态：runtime | 183 |
-| 验证措辞出现次数 | 143 |
+| 主状态：not_verified | 458 |
+| 主状态：runtime | 184 |
+| 验证措辞出现次数 | 144 |
 | 措辞分类：source_has_limited_runtime_evidence | 88 |
-| 措辞分类：unbound_verification_wording | 55 |
+| 措辞分类：unbound_verification_wording | 56 |
 
 ## 语法级覆盖（不能当作运行覆盖）
 
@@ -138,7 +138,7 @@
 | Next.js / TypeScript | [02-nextjs-frontend/projects/01-corporate-landing.md](../../../../02-nextjs-frontend/projects/01-corporate-landing.md) | `not_verified` | 0 | 0 |
 | Next.js / TypeScript | [02-nextjs-frontend/projects/02-ecommerce-store.md](../../../../02-nextjs-frontend/projects/02-ecommerce-store.md) | `not_verified` | 0 | 0 |
 | Next.js / TypeScript | [02-nextjs-frontend/projects/03-dashboard-analytics.md](../../../../02-nextjs-frontend/projects/03-dashboard-analytics.md) | `not_verified` | 0 | 0 |
-| Next.js / TypeScript | [02-nextjs-frontend/projects/04-saas-platform.md](../../../../02-nextjs-frontend/projects/04-saas-platform.md) | `not_verified` | 0 | 0 |
+| Next.js / TypeScript | [02-nextjs-frontend/projects/04-saas-platform.md](../../../../02-nextjs-frontend/projects/04-saas-platform.md) | `not_verified` | 0 | 1 |
 | Next.js / TypeScript | [02-nextjs-frontend/reference/development-tools/01-testing-tools.md](../../../../02-nextjs-frontend/reference/development-tools/01-testing-tools.md) | `not_verified` | 0 | 0 |
 | Next.js / TypeScript | [02-nextjs-frontend/reference/development-tools/02-styling-tools.md](../../../../02-nextjs-frontend/reference/development-tools/02-styling-tools.md) | `not_verified` | 0 | 0 |
 | Next.js / TypeScript | [02-nextjs-frontend/reference/development-tools/03-package-managers.md](../../../../02-nextjs-frontend/reference/development-tools/03-package-managers.md) | `not_verified` | 0 | 0 |
@@ -528,7 +528,7 @@
 | Node.js | [09-nodejs-backend/basics/02-first-server.md](../../../../09-nodejs-backend/basics/02-first-server.md) | `runtime` | 1 | 0 |
 | Node.js | [09-nodejs-backend/basics/03-modules-esm.md](../../../../09-nodejs-backend/basics/03-modules-esm.md) | `runtime` | 1 | 0 |
 | Node.js | [09-nodejs-backend/basics/04-async-promises.md](../../../../09-nodejs-backend/basics/04-async-promises.md) | `runtime` | 2 | 0 |
-| Node.js | [09-nodejs-backend/basics/05-http-routing.md](../../../../09-nodejs-backend/basics/05-http-routing.md) | `not_verified` | 0 | 0 |
+| Node.js | [09-nodejs-backend/basics/05-http-routing.md](../../../../09-nodejs-backend/basics/05-http-routing.md) | `runtime` | 1 | 0 |
 | Node.js | [09-nodejs-backend/basics/06-error-handling.md](../../../../09-nodejs-backend/basics/06-error-handling.md) | `runtime` | 1 | 0 |
 | Node.js | [09-nodejs-backend/basics/07-streams-workers.md](../../../../09-nodejs-backend/basics/07-streams-workers.md) | `runtime` | 1 | 0 |
 | Node.js | [09-nodejs-backend/basics/08-first-project.md](../../../../09-nodejs-backend/basics/08-first-project.md) | `not_verified` | 0 | 0 |
