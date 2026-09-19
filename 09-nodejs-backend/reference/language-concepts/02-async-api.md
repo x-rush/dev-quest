@@ -94,6 +94,7 @@ clearImmediate(iid);
 
 // Promise 化定时（Node 15+，支持取消信号）
 import { setTimeout } from "node:timers/promises";
+import { on } from "node:events";
 await setTimeout(500);                        // 定时等待
 await setTimeout(500, "value");               // 定时并返回值
 await setTimeout(500, undefined, { signal }); // 可被 AbortSignal 取消
@@ -147,9 +148,34 @@ AbortSignal.abort(reason);                   // 预先取消的信号
 // 支持信号的常用 API
 fetch(url, { signal });
 await setTimeout(ms, value, { signal });     // 仅 timers/promises 版支持；全局 setTimeout 第三参是传给回调的展开参数
-eventEmitter.on(evt, fn, { signal });        // 自动解绑
+on(eventEmitter, evt, { signal });           // 异步迭代器；取消时停止等待
 fsPromises.readFile(p, { signal });
 ```
+
+`EventEmitter.prototype.on()` 不会把 `{ signal }` 识别为自动解绑选项；需要长期登记回调时，
+应在 abort 监听器里用相同函数引用显式 `off()`。`events.on()` 的用途不同：它返回供
+`for await` 消费的异步迭代器，并能以 signal 停止等待。
+
+<!-- core-p1-case: node-async-combinators -->
+```js
+import assert from 'node:assert/strict';
+
+const settled = await Promise.allSettled([
+  Promise.resolve('ready'),
+  Promise.reject(new Error('unavailable')),
+]);
+assert.deepEqual(settled.map(({ status }) => status), ['fulfilled', 'rejected']);
+assert.equal(await Promise.any([Promise.reject('no'), Promise.resolve('yes')]), 'yes');
+await assert.rejects(Promise.all([Promise.resolve(1), Promise.reject(new Error('stop'))]));
+
+const controller = new AbortController();
+controller.abort('operator cancelled');
+assert.throws(() => controller.signal.throwIfAborted(), error => error === 'operator cancelled');
+console.log('async-combinators: settled, any, rejection, abort reason');
+```
+
+该程序只验证这里列出的组合器和手动取消信号。它不启动 HTTP 请求，因此不证明网络 API
+是否会在取消后停止 I/O；消费方仍必须传入并处理 signal。
 
 ### 陷阱
 - 取消是**协作式**的：API 收到信号后尽力中断，正在执行的同步代码无法被打断

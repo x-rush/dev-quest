@@ -35,6 +35,25 @@ False True
 True False
 ```
 
+<!-- core-p1-case: python-builtins-iteration -->
+```python
+import math
+
+raw = [" 7 ", "2", "10"]
+numbers = list(map(int, raw))
+assert numbers == [7, 2, 10]
+assert sorted(numbers) == [2, 7, 10]
+assert list(enumerate(sorted(numbers), start=1)) == [(1, 2), (2, 7), (3, 10)]
+stream = iter(numbers)
+assert [next(stream), next(stream), next(stream), next(stream, "结束")] == [7, 2, 10, "结束"]
+assert (any([]), all([]), bool("False"), bool("")) == (False, True, True, False)
+assert math.isclose(0.1 + 0.2, 0.3)
+print("builtins-iteration: map, sorted, next default, truth values, isclose")
+```
+
+这段程序直接运行本文使用的内置函数与一个标准库比较函数。它不证明每个内置函数的所有
+重载；例如 `map` 的转换异常仍在消费迭代器时发生，应按输入边界单独测试。
+
 map 逐项转换，list 消费迭代结果；sorted 创建新列表，没有修改 numbers。next 每调用一次就消耗一个元素。any 空集合没有真值证据，all 空集合没有反例，因此分别为 False 与 True。非空文本 "False" 仍是真值：bool 不解析英文布尔文本。
 
 ## 容易缺失的契约

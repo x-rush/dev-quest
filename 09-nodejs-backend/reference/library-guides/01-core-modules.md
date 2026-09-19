@@ -20,6 +20,25 @@ console.log(typeof AbortController)
 
 预期为 core-lab.mjs、true、function。三个模块各负责读取、路径和 URL 转换；无需安装名为 fs 的 npm 包。练习把路径改成一个不存在文件并用 try/catch 输出错误 code，预期为 ENOENT，而不是把失败当成空文本。
 
+<!-- core-p1-case: node-core-file-url -->
+```js
+import assert from 'node:assert/strict';
+import { readFile } from 'node:fs/promises';
+import { basename } from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+const currentFile = fileURLToPath(import.meta.url);
+const source = await readFile(currentFile, 'utf8');
+assert.match(basename(currentFile), /^case-\d+\.mjs$/);
+assert.match(source, /node:fs\/promises/);
+await assert.rejects(readFile(new URL('./missing.txt', import.meta.url), 'utf8'),
+  error => error?.code === 'ENOENT');
+console.log('core-file-url: module URL, source read, missing-file code');
+```
+
+该程序在临时目录中读取自身并验证不存在文件的错误码。它不覆盖权限、符号链接、Windows
+路径格式或生产目录布局；这些条件须在目标环境单独验证。
+
 > **文档简介**: Node.js 全部常用内置模块的分类导航，标注使用频率与一句话用途，快速定位该用哪个模块
 
 > **目标读者**: 需要判断"这个功能是不是内置、该 import 什么"的开发者

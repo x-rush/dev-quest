@@ -16,6 +16,36 @@
 
 自测：先解码合法 JSON `{}`，再读其中的必填 title。为什么 JSON 解析成功仍不能当成有效笔记？因为语法与业务结构属于两层校验。再用 pathlib 指向不存在文件，读取失败应保留路径和原因，不能自动当成空列表覆盖原有数据。
 
+<!-- core-p1-case: python-stdlib-contracts -->
+```python
+from collections import Counter, defaultdict
+from itertools import groupby
+import json
+from pathlib import Path
+import tempfile
+
+assert Counter("abracadabra")["a"] == 5
+groups = defaultdict(list)
+groups["dev"].append("ada")
+assert groups == {"dev": ["ada"]}
+assert [(key, list(values)) for key, values in groupby(sorted("baab"))] == [("a", ["a", "a"]), ("b", ["b", "b"])]
+assert json.loads(json.dumps({"title": "任务"}, ensure_ascii=False))["title"] == "任务"
+with tempfile.TemporaryDirectory() as directory:
+    path = Path(directory) / "note.txt"
+    path.write_text("ok", encoding="utf-8")
+    assert path.read_text(encoding="utf-8") == "ok"
+    try:
+        (Path(directory) / "missing.txt").read_text(encoding="utf-8")
+    except FileNotFoundError:
+        pass
+    else:
+        raise AssertionError("missing file was treated as content")
+print("stdlib-contracts: collections, groupby, json, pathlib missing-file")
+```
+
+该程序只在临时目录验证本页代表性标准库契约：JSON 语法有效性仍不等于业务结构有效，
+`groupby` 仍以相邻值分组。它不连接数据库、执行外部命令或覆盖真实权限与时区配置。
+
 ## 概述
 
 Python "自带电池"：大量日常需求无需第三方包。本条目按场景导航最值得掌握的标准库模块，每个给出最小可用示例。

@@ -33,6 +33,14 @@ TanStack 是一组可组合的库。Query 管请求结果，Table 管表格行�
 7. [Query 高级特性：乐观更新、无限查询与失效策略](basics/07-advanced-features.md)
 8. [第一个项目：城市天气数据面板](basics/08-first-project.md)
 
+## 首次交付选哪条线
+
+完成 Query 基础后，先交付 [城市天气面板](basics/08-first-project.md) 的读取与排序阶段，再做写入项目。天气面板还需要 [Table 基础](basics/04-table-fundamentals.md)；Router、Form 和乐观更新不属于这个最小阶段的前置。产物是能启动的 React 工程、依赖锁文件，以及记录加载、失败、空列表、成功与排序结果的验收说明。这个面板使用模拟天气，不能作为真实天气查询产品。
+
+接着进入 [Todo 项目](projects/01-todo-app.md) 前，先确认 `/api/todos` 已有实现：创建后再次 GET 能读回同一条记录。该项目的前端片段不会自动提供后端；尚无接口时先完成 [Node.js 首项目](../09-nodejs-backend/basics/08-first-project.md)，再按 Todo 文档的字段、路径和方法核对契约，不能假设两个示例可直接对接。没有可读回的接口时，暂留在读取阶段，不把一次模拟成功响应当作写入完成。
+
+遇到缓存不更新，带着请求与 queryKey 回查 [Query 框架要点](reference/framework-essentials/01-query-essentials.md)，只修改键或失效范围中的一个因素，再重做创建与 GET。完成写入验收后，下一步是 [数据看板](projects/02-data-dashboard.md) 的筛选与分页；需要立即反馈时再增加 [乐观更新](reference/language-concepts/06-optimistic-update.md) 的失败回滚练习。
+
 ## 三个阶段如何验收
 
 | 阶段与入口 | 练习输入与动作 | 通过条件 |

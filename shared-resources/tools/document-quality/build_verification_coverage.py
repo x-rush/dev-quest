@@ -80,6 +80,12 @@ def records_from_reports():
     node_python = load("node-python-libraries.json")
     for row in node_python.get("results", []):
         add_record(records, row.get("source"), "runtime", "node-python-libraries.json", node_python.get("scope", "selected Node/Python standard-library program"), "PASS" if row.get("status", "").upper() == "PASS" else "FAIL")
+    node_python_core_p1 = load("node-python-core-p1.json")
+    for row in node_python_core_p1.get("results", []):
+        add_record(records, row.get("source"), "runtime", "node-python-core-p1.json", node_python_core_p1.get("scope", "selected Node/Python P1 core example"), "PASS" if row.get("status", "").upper() == "PASS" else "FAIL")
+    frontend_mobile_core_p1 = load("p1-frontend-mobile-core-runtime.json")
+    for row in frontend_mobile_core_p1.get("results", []):
+        add_record(records, row.get("source"), "runtime", "p1-frontend-mobile-core-runtime.json", frontend_mobile_core_p1.get("scope", "selected frontend/mobile P1 core example"), "PASS" if row.get("status", "").upper() == "PASS" else "FAIL")
     php_java_core = load("php-java-core-boundaries.json")
     for row in php_java_core.get("cases", []):
         add_record(records, row.get("document"), "runtime", "php-java-core-boundaries.json", php_java_core.get("scope", "selected PHP/Java core-boundary example"), "PASS" if row.get("passed") else "FAIL")

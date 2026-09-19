@@ -1,0 +1,75 @@
+{
+  "scope": "Four exact marked P1 core/standard-library programs: Next.js-adjacent input boundary, TanStack query-key factory, Kotlin Sequence, and Swift Optional/collections.",
+  "execution": "Docker containers: no network, read-only root filesystem, capabilities dropped, bounded resources.",
+  "not_verified": [
+    "TypeScript compiler diagnostics",
+    "TanStack Query invalidation or cache runtime",
+    "Next.js browser, SSR, routing, or build",
+    "Compose/Android runtime",
+    "SwiftUI/iOS runtime"
+  ],
+  "passed": 4,
+  "total": 4,
+  "results": [
+    {
+      "id": "next-title-boundary",
+      "source": "02-nextjs-frontend/reference/language-concepts/03-typescript-types.md",
+      "language": "js",
+      "source_sha256": "32e3da7fcdbbf6037c59ff32f2df29ebb17c9e3dc47ef1896bfac3375c537789",
+      "extracted_code_sha256": "26102571aea03bce3adb4c39185dc84a1e7ca1ca9e4eb4805007d335b48823c6",
+      "image": "node:24-bookworm-slim",
+      "command": "node Case.mjs",
+      "expected_stdout": "A|缺少标题|缺少标题|标题必须是非空文本|标题必须是非空文本\n",
+      "stdout": "A|缺少标题|缺少标题|标题必须是非空文本|标题必须是非空文本\n",
+      "stderr": "",
+      "exit_code": 0,
+      "error": null,
+      "status": "PASS"
+    },
+    {
+      "id": "tanstack-query-key-factory",
+      "source": "03-tanstack-stack/reference/language-concepts/05-typescript-patterns.md",
+      "language": "js",
+      "source_sha256": "504fd6870c71a5ef804172c8164a9e5c377fe5107141ba57c7daf7bdf5b6e17d",
+      "extracted_code_sha256": "1afa81ea2dad816f91dde0cc771340d0ff3a46c1e05d0f3f08378552c93b07b4",
+      "image": "node:24-bookworm-slim",
+      "command": "node Case.mjs",
+      "expected_stdout": "[[\"todos\"],[\"todos\",\"list\"],[\"todos\",\"detail\",3],[\"todos\",\"list\",{\"page\":2,\"status\":\"open\"}]]\n",
+      "stdout": "[[\"todos\"],[\"todos\",\"list\"],[\"todos\",\"detail\",3],[\"todos\",\"list\",{\"page\":2,\"status\":\"open\"}]]\n",
+      "stderr": "",
+      "exit_code": 0,
+      "error": null,
+      "status": "PASS"
+    },
+    {
+      "id": "kotlin-sequence-short-circuit",
+      "source": "05-kotlin-compose/reference/language-concepts/10-sequences.md",
+      "language": "kotlin",
+      "source_sha256": "b1d74f92a28b67e20d71ddad703b351f311af3b549f952c6f5a6f1a7d612fb47",
+      "extracted_code_sha256": "2c517d05f2011efba78550c6a63cf82be938d872032fc3f9bc00933b44630fce",
+      "image": "dev-quest-validation:local",
+      "command": "kotlinc Case.kt -include-runtime -d /tmp/case.jar && java -jar /tmp/case.jar",
+      "expected_stdout": "Sequence short-circuit contracts passed\n",
+      "stdout": "Sequence short-circuit contracts passed\n",
+      "stderr": "",
+      "exit_code": 0,
+      "error": null,
+      "status": "PASS"
+    },
+    {
+      "id": "swift-optionals-collections",
+      "source": "06-swift-swiftui/reference/language-concepts/02-optionals-collections.md",
+      "language": "swift",
+      "source_sha256": "b975d08dbfbd0e4c4c13ae0c25a1907a938ed092faa5a3502f816a02e147b517",
+      "extracted_code_sha256": "8e442ed9c2a8c5a65f6b520286b8b9b842b59d4ecaddf1744003628db6ba22bf",
+      "image": "swift:6.3.3-noble",
+      "command": "swift Case.swift",
+      "expected_stdout": "Swift optional and collection contracts passed\n",
+      "stdout": "Swift optional and collection contracts passed\n",
+      "stderr": "",
+      "exit_code": 0,
+      "error": null,
+      "status": "PASS"
+    }
+  ]
+}

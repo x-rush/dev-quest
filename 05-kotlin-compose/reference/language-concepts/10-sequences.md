@@ -123,6 +123,29 @@ big.asSequence().filter { it % 2 == 0 }.map { it * 2 }.take(5).toList()
 
 这里不提供未经本轮复现的毫秒数。急切版先过滤与映射全部数据；该 Sequence 管道只需检查到第 10 个输入便取得五个偶数。实际耗时还取决于 JVM、输入形状和测量方法。
 
+以下完整标准库程序验证“逐元素流水线”和短路边界。它不测量耗时，也不涉及 Compose 或 Android：输出中的访问记录是语义证据，而不是性能基准。
+
+<!-- p1-runtime-case: kotlin-sequence-short-circuit -->
+```kotlin
+fun main() {
+    val eagerSeen = mutableListOf<Int>()
+    val eager = listOf(1, 2, 3, 4, 5)
+        .map { eagerSeen += it; it * 2 }
+        .first { it > 4 }
+
+    val lazySeen = mutableListOf<Int>()
+    val lazy = listOf(1, 2, 3, 4, 5)
+        .asSequence()
+        .map { lazySeen += it; it * 2 }
+        .first { it > 4 }
+
+    check(eager == 6 && lazy == 6)
+    check(eagerSeen == listOf(1, 2, 3, 4, 5))
+    check(lazySeen == listOf(1, 2, 3))
+    println("Sequence short-circuit contracts passed")
+}
+```
+
 ## ⚠️ 常见陷阱
 
 - ❌ 把"Sequence 惰性"理解成"能随便存起来反复用"——**单次迭代限制确实存在，但只作用于一次性来源**：`iterator().asSequence()`（预期行为第二次 `toList()` 抛 `IllegalStateException: This sequence can be consumed only once.`）与 `.constrainOnce()` 标记的序列。

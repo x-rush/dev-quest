@@ -215,6 +215,24 @@ let valid = texts.compactMap(Int.init) // [Int]，丢弃失败项
 print(parsed.count, valid.count)       // 3 2
 ```
 
+以下完整 Swift 标准库程序把 Optional、`map`、`compactMap` 和 Dictionary 缺键语义放在一个可复跑的契约中。它只覆盖语言与标准库；不覆盖 SwiftUI 的视图更新。
+
+<!-- p1-runtime-case: swift-optionals-collections -->
+```swift
+let texts = ["1", "bad", "3"]
+let parsed = texts.map(Int.init)
+let valid = texts.compactMap(Int.init)
+var scores = ["alice": 90]
+
+precondition(parsed.count == 3)
+precondition(parsed[1] == nil)
+precondition(valid == [1, 3])
+precondition(scores["nobody"] == nil)
+scores["alice"] = nil
+precondition(scores["alice"] == nil)
+print("Swift optional and collection contracts passed")
+```
+
 练习：为导入清单保留每个失败项的行号和原因。验收：不能用 compactMap 静默删除坏数据后宣布“全部导入成功”。另测字典值本身为 Optional 时的缺键与存储 nil，必要时用 updateValue 或显式枚举表达。
 
 <!-- learning-navigation -->

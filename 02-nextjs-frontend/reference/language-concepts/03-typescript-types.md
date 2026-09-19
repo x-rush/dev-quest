@@ -20,6 +20,29 @@ function readTitle(input: unknown): string {
 
 自测传入 `{ title: ' A ' }` 应得到 A；传 null、空对象或数字标题应失败。对照 `input as {title: string}`：断言不会在运行时增加这些分支。联合类型表达不同可能，收窄是在分支里排除不可能的类型；泛型则保留输入输出之间的关系，不能把三者都当作“类型写得复杂”。
 
+下面是同一请求边界的完整 JavaScript 运行时契约。它刻意没有 TypeScript 标注：验证的是 `unknown` 数据进入程序后的行为；TypeScript 的收窄仍需由 `tsc` 在项目中检查。
+
+<!-- p1-runtime-case: next-title-boundary -->
+```js
+function readTitle(input) {
+  if (typeof input !== 'object' || input === null || !('title' in input)) {
+    throw new Error('缺少标题')
+  }
+  if (typeof input.title !== 'string' || !input.title.trim()) {
+    throw new Error('标题必须是非空文本')
+  }
+  return input.title.trim()
+}
+
+const results = [
+  readTitle({ title: ' A ' }),
+  ...[null, {}, { title: 3 }, { title: '  ' }].map((value) => {
+    try { readTitle(value); return 'unexpected' } catch (error) { return error.message }
+  }),
+]
+console.log(results.join('|'))
+```
+
 > **文档简介**: TypeScript 7核心类型和实用类型快速参考，涵盖基础类型、高级类型、工具类型等
 >
 > **目标读者**: TypeScript开发者，需要快速查阅类型语法的开发者

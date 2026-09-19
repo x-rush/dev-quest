@@ -34,6 +34,8 @@
 | [Rust 生态验证](reports/rust-ecosystem-validation.md) | Tokio、Serde 与错误处理库的 10 个锁定依赖、无网络运行案例 |
 | [Go 复合类型与 Rust 宏验证](reports/go-composite-rust-macros.md) | Go 切片、map、接口与 Rust 宏系统的 8 个运行案例、2 个预期编译失败案例 |
 | [PHP 与 Java 数据管道验证](reports/php-java-pipelines-validation.md) | PHP 数组/生成器以及 Java Stream/Optional、IO 的 12 个正文完整程序验证 |
+| [Node 与 Python P1 核心验证](reports/node-python-core-p1.md) | Node 异步/核心模块与 Python 内置函数/标准库的 4 个正文完整程序验证 |
+| [前端与移动端 P1 核心验证](reports/p1-frontend-mobile-core-runtime.md) | TypeScript、TanStack Query key、Kotlin Sequence、Swift Optional/Collection 的 4 个限定运行案例 |
 | [验证覆盖状态台账](reports/verification-coverage.md) | 逐文件区分限定运行证据、语法检查和未验证状态，避免把验证措辞或代码围栏当成通过证明 |
 | [本轮交付状态](reports/delivery-status-2026-09-19.md) | 已修复项、已验证项与仍未达到全库交付条件的范围 |
 

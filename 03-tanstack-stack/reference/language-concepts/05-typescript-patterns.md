@@ -83,6 +83,23 @@ queryClient.invalidateQueries({ queryKey: todoKeys.detail(3) }) // 单条详情
 - `as const` 不能省：没有它 `['todos']` 是 `string[]`，失去字面量收窄
 - key 里的对象字段顺序不影响命中（结构化比较），但**类型**要一致
 
+`invalidateQueries({ queryKey })` 的“按层级命中”是 TanStack Query 的库行为，不能从数组前缀本身推导为已经调用过库。下面仅验证 key 工厂生成的不可变值形状；它不替代 QueryClient 集成测试。
+
+<!-- p1-runtime-case: tanstack-query-key-factory -->
+```js
+const todoKeys = {
+  all: ['todos'],
+  lists: () => [...todoKeys.all, 'list'],
+  list: (filters) => [...todoKeys.lists(), filters],
+  details: () => [...todoKeys.all, 'detail'],
+  detail: (id) => [...todoKeys.details(), id],
+}
+
+const list = todoKeys.list({ page: 1, status: 'open' })
+list[2].page = 2
+console.log(JSON.stringify([todoKeys.all, todoKeys.lists(), todoKeys.detail(3), list]))
+```
+
 ## 3. Discriminated Union（判别联合）
 
 ### 定义

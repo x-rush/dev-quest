@@ -17,13 +17,13 @@
   "summary": {
     "documents": 642,
     "by_primary_state": {
-      "not_verified": 547,
-      "runtime": 95
+      "not_verified": 541,
+      "runtime": 101
     },
     "verification_wording_occurrences": 123,
     "marker_classification": {
-      "source_has_limited_runtime_evidence": 78,
-      "unbound_verification_wording": 45
+      "source_has_limited_runtime_evidence": 79,
+      "unbound_verification_wording": 44
     }
   },
   "documents": [
@@ -1714,13 +1714,13 @@
     },
     {
       "path": "02-nextjs-frontend/reference/language-concepts/03-typescript-types.md",
-      "sha256": "61a20fee5b8f68f55d951bb26be95664c5893ec9142c9d89eecd434650b8fbc4",
+      "sha256": "32e3da7fcdbbf6037c59ff32f2df29ebb17c9e3dc47ef1896bfac3375c537789",
       "verification": [
         {
-          "mode": "not_verified",
-          "status": "NOT_VERIFIED",
-          "report": null,
-          "scope": "No named runtime or syntax evidence is recorded for this document."
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "p1-frontend-mobile-core-runtime.json",
+          "scope": "Four exact marked P1 core/standard-library programs: Next.js-adjacent input boundary, TanStack query-key factory, Kotlin Sequence, and Swift Optional/collections."
         }
       ],
       "marker_count": 0
@@ -1952,7 +1952,7 @@
     },
     {
       "path": "03-tanstack-stack/LEARNING_GUIDE.md",
-      "sha256": "a9afb0a42209214b71666265a390a5bb7ff14f47d30a0610bd990ca0fcbc2721",
+      "sha256": "1a627c3b164175f0273f78e74dfbabd782f7e037a06b2b7ac2bad77cb1ed2ef5",
       "verification": [
         {
           "mode": "not_verified",
@@ -2121,7 +2121,7 @@
     },
     {
       "path": "03-tanstack-stack/basics/08-first-project.md",
-      "sha256": "d5fbf052ac977fc51f2cc2f327ab11063583075373a2dee0c11a68878688edea",
+      "sha256": "adf394001d2a6b02261c1a38e5d2bd185381608a540e74e52aac27d5cabbe0d8",
       "verification": [
         {
           "mode": "not_verified",
@@ -2407,13 +2407,13 @@
     },
     {
       "path": "03-tanstack-stack/reference/language-concepts/05-typescript-patterns.md",
-      "sha256": "b39859cb8c952a3f09d00e202996d7926a7a8b75947c35bff6c7e00be8befe53",
+      "sha256": "504fd6870c71a5ef804172c8164a9e5c377fe5107141ba57c7daf7bdf5b6e17d",
       "verification": [
         {
-          "mode": "not_verified",
-          "status": "NOT_VERIFIED",
-          "report": null,
-          "scope": "No named runtime or syntax evidence is recorded for this document."
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "p1-frontend-mobile-core-runtime.json",
+          "scope": "Four exact marked P1 core/standard-library programs: Next.js-adjacent input boundary, TanStack query-key factory, Kotlin Sequence, and Swift Optional/collections."
         }
       ],
       "marker_count": 1
@@ -4018,13 +4018,13 @@
     },
     {
       "path": "05-kotlin-compose/reference/language-concepts/10-sequences.md",
-      "sha256": "8c2ab45c718add26b0358c059cace3c994d86eac76a7f259adf5b2525ac7923b",
+      "sha256": "b1d74f92a28b67e20d71ddad703b351f311af3b549f952c6f5a6f1a7d612fb47",
       "verification": [
         {
-          "mode": "not_verified",
-          "status": "NOT_VERIFIED",
-          "report": null,
-          "scope": "No named runtime or syntax evidence is recorded for this document."
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "p1-frontend-mobile-core-runtime.json",
+          "scope": "Four exact marked P1 core/standard-library programs: Next.js-adjacent input boundary, TanStack query-key factory, Kotlin Sequence, and Swift Optional/collections."
         }
       ],
       "marker_count": 0
@@ -4603,13 +4603,13 @@
     },
     {
       "path": "06-swift-swiftui/reference/language-concepts/02-optionals-collections.md",
-      "sha256": "5da989421f27ae0ec621ec76fbcacf3f0dea44948f9102bb3d9bf6001bbe56d5",
+      "sha256": "b975d08dbfbd0e4c4c13ae0c25a1907a938ed092faa5a3502f816a02e147b517",
       "verification": [
         {
-          "mode": "not_verified",
-          "status": "NOT_VERIFIED",
-          "report": null,
-          "scope": "No named runtime or syntax evidence is recorded for this document."
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "p1-frontend-mobile-core-runtime.json",
+          "scope": "Four exact marked P1 core/standard-library programs: Next.js-adjacent input boundary, TanStack query-key factory, Kotlin Sequence, and Swift Optional/collections."
         }
       ],
       "marker_count": 0
@@ -6961,13 +6961,13 @@
     },
     {
       "path": "09-nodejs-backend/reference/language-concepts/02-async-api.md",
-      "sha256": "5f4a7cb9ea48cc9e7930440987b659f72fd2e58f0f5e75e3d59736ee0c1a3dc1",
+      "sha256": "7798acfa04a158507223fd69bc6f3e6f4809a9aabacc8964167540d173ada81c",
       "verification": [
         {
-          "mode": "not_verified",
-          "status": "NOT_VERIFIED",
-          "report": null,
-          "scope": "No named runtime or syntax evidence is recorded for this document."
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "node-python-core-p1.json",
+          "scope": "Four named, complete programs extracted unchanged from two Node and two Python P1 core-reference documents. They run in pre-existing local Docker images with network disabled, a read-only root filesystem and a temporary input bind mount. Only the listed contracts execute; no whole-document, network, database, permission, platform, or framework coverage is claimed."
         }
       ],
       "marker_count": 0
@@ -7065,13 +7065,19 @@
     },
     {
       "path": "09-nodejs-backend/reference/library-guides/01-core-modules.md",
-      "sha256": "0957ccaf8f99bc13ac78e72f8980de80584bc400a02f8613a23a719d13690e46",
+      "sha256": "da65afe0dce4add6c8d64eeea0f508c22f9beb9c2a5c8e3922b5562571ddaff6",
       "verification": [
         {
           "mode": "runtime",
           "status": "PASS",
           "report": "examples.json",
           "scope": "Only named complete examples; no Java, Go, Rust, PHP or native UI execution."
+        },
+        {
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "node-python-core-p1.json",
+          "scope": "Four named, complete programs extracted unchanged from two Node and two Python P1 core-reference documents. They run in pre-existing local Docker images with network disabled, a read-only root filesystem and a temporary input bind mount. Only the listed contracts execute; no whole-document, network, database, permission, platform, or framework coverage is claimed."
         }
       ],
       "marker_count": 0
@@ -7642,13 +7648,19 @@
     },
     {
       "path": "10-python-discovery/reference/language-concepts/02-built-in-functions.md",
-      "sha256": "4b160d675f96d051fd34be56ef1df7ef1b76a87827686cb7c6f2c744fa858d71",
+      "sha256": "c6a7b3680932739216049f9af47985ac6b9bc7c3ef0326f5d6903947d7ae15f4",
       "verification": [
         {
           "mode": "runtime",
           "status": "PASS",
           "report": "examples.json",
           "scope": "Only named complete examples; no Java, Go, Rust, PHP or native UI execution."
+        },
+        {
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "node-python-core-p1.json",
+          "scope": "Four named, complete programs extracted unchanged from two Node and two Python P1 core-reference documents. They run in pre-existing local Docker images with network disabled, a read-only root filesystem and a temporary input bind mount. Only the listed contracts execute; no whole-document, network, database, permission, platform, or framework coverage is claimed."
         }
       ],
       "marker_count": 4
@@ -7850,13 +7862,13 @@
     },
     {
       "path": "10-python-discovery/reference/library-guides/01-standard-library.md",
-      "sha256": "79b73ee2ef54bff09079cd8a990e309580054b076dfbfae5ff84728872c09c35",
+      "sha256": "359910897762656290004e903739b60eeb26954fd6eb2692dab8e748e9057959",
       "verification": [
         {
-          "mode": "not_verified",
-          "status": "NOT_VERIFIED",
-          "report": null,
-          "scope": "No named runtime or syntax evidence is recorded for this document."
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "node-python-core-p1.json",
+          "scope": "Four named, complete programs extracted unchanged from two Node and two Python P1 core-reference documents. They run in pre-existing local Docker images with network disabled, a read-only root filesystem and a temporary input bind mount. Only the listed contracts execute; no whole-document, network, database, permission, platform, or framework coverage is claimed."
         }
       ],
       "marker_count": 0
@@ -8911,9 +8923,9 @@
     },
     {
       "path": "03-tanstack-stack/reference/language-concepts/05-typescript-patterns.md",
-      "line": 192,
+      "line": 209,
       "excerpt": "`as const` 保留字面量和 readonly 信息，`satisfies` 检查约束，二者都不会生成运行时校验代码。普通查询键不写 as const 仍可运行，只是部分类型工具无法保留同样精确的元组信息。",
-      "classification": "unbound_verification_wording"
+      "classification": "source_has_limited_runtime_evidence"
     },
     {
       "path": "03-tanstack-stack/reference/library-guides/03-language-web-foundations.md",
@@ -9277,25 +9289,25 @@
     },
     {
       "path": "10-python-discovery/reference/language-concepts/02-built-in-functions.md",
-      "line": 103,
+      "line": 122,
       "excerpt": "| `memoryview(obj)` | 零拷贝缓冲区视图；视图存活期间原对象禁止扩缩容（实测抛 `BufferError`），`mv.release()` 或 with 释放 |",
       "classification": "source_has_limited_runtime_evidence"
     },
     {
       "path": "10-python-discovery/reference/language-concepts/02-built-in-functions.md",
-      "line": 158,
+      "line": 177,
       "excerpt": "object()                     # 万类之根：<object object ...>；无 __dict__，不能动态加属性（实测 AttributeError）",
       "classification": "source_has_limited_runtime_evidence"
     },
     {
       "path": "10-python-discovery/reference/language-concepts/02-built-in-functions.md",
-      "line": 162,
+      "line": 181,
       "excerpt": "类定义期四件套（实测行为）：",
       "classification": "source_has_limited_runtime_evidence"
     },
     {
       "path": "10-python-discovery/reference/language-concepts/02-built-in-functions.md",
-      "line": 182,
+      "line": 201,
       "excerpt": "super().__init__(k - 273.15)                 # super()：调父类实现（实测 373.15 → 100.0）",
       "classification": "source_has_limited_runtime_evidence"
     },
