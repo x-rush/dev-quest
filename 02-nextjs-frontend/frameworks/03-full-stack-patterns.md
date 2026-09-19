@@ -1358,8 +1358,8 @@ API 的成功与失败都应有契约：无会话通常是 401，无权访问资
 5. 创建Pull Request
 
 ### 反馈渠道
-- **问题反馈**: [GitHub Issues](https://github.com/your-username/dev-quest/issues)
-- **内容建议**: [Discussion板块](https://github.com/your-username/dev-quest/discussions)
+- **问题反馈**: [GitHub Issues](https://github.com/x-rush/dev-quest/issues)
+- **内容建议**: [Discussion板块](https://github.com/x-rush/dev-quest/discussions)
 - **技术交流**: 欢迎提交PR或Issue参与讨论
 
 ### 贡献者

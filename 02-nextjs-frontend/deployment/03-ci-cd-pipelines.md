@@ -1195,8 +1195,8 @@ Next.js 16 CI/CD流水线是现代软件工程的核心实践，直接影响开�
 5. 创建Pull Request
 
 ### 反馈渠道
-- **问题反馈**: [GitHub Issues](https://github.com/your-username/dev-quest/issues)
-- **内容建议**: [Discussion板块](https://github.com/your-username/dev-quest/discussions)
+- **问题反馈**: [GitHub Issues](https://github.com/x-rush/dev-quest/issues)
+- **内容建议**: [Discussion板块](https://github.com/x-rush/dev-quest/discussions)
 - **技术交流**: 欢迎提交PR或Issue参与讨论
 
 ### 贡献者

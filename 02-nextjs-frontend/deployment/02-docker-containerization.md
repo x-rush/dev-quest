@@ -1587,8 +1587,8 @@ Next.js 16 Docker 容器化部署为现代应用提供了可靠、可扩展的�
 5. 创建Pull Request
 
 ### 反馈渠道
-- **问题反馈**: [GitHub Issues](https://github.com/your-username/dev-quest/issues)
-- **内容建议**: [Discussion板块](https://github.com/your-username/dev-quest/discussions)
+- **问题反馈**: [GitHub Issues](https://github.com/x-rush/dev-quest/issues)
+- **内容建议**: [Discussion板块](https://github.com/x-rush/dev-quest/discussions)
 - **技术交流**: 欢迎提交PR或Issue参与讨论
 
 ### 贡献者
