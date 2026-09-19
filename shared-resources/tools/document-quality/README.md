@@ -40,6 +40,9 @@
 | [Next、TanStack 与移动端 P1 补充验证](reports/p1-next-web-mobile-runtime.md) | 输入守卫、Query Core、深链参数、Kotlin collection 和 Swift enum 的 5 个限定运行案例 |
 | [Node 与 Python P1 最终补充验证](reports/node-python-p1-final.md) | Node 现代语法/全局对象与 Python 关键字/os/sys 的 4 个正文完整程序验证 |
 | [P1 运行时补充验证](reports/p1-runtime-evidence.md) | Next JavaScript 绑定、React Native 输入边界及跨端标准库案例的 5 个限定运行结果 |
+| [Go P1 页面验证](reports/go-rust-p1-page-validation.md) | Go 内置函数和标准库页面的 2 个正文完整程序验证；报告不主张 Rust 覆盖 |
+| [PHP 与 Java P1 运行验证](reports/php-java-p1-runtime-report.md) | PHP/Java 关键词、内置 API 和标准库中的 6 个正文完整程序验证 |
+| [Next 首项目验证](reports/next-first-project-2026-09-19.json) | `/drafts` 首项目的 React/JSDOM 八项交互验证；不覆盖 Next 构建或真实浏览器 |
 | [Go 与 Rust P1 基础验证](reports/go-rust-p1-basics-runtime.md) | Go 常量及 Rust 集合迭代器的 3 个通过案例；另有 1 个 Go 案例因本机执行策略受阻，未计为通过 |
 | [PHP 与 Java 控制流验证](reports/php-java-control-flow.md) | PHP match/enum 与 Java 21 模式 switch 的 2 个正文完整程序验证 |
 | [PHP JSON 与 Java Math 验证](reports/php-java-json-math-validation.md) | PHP JSON 编解码边界及 Java BigDecimal/BigInteger 的 2 个正文完整程序验证 |

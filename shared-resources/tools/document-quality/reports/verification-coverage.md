@@ -7,10 +7,10 @@
 | 指标 | 数量 |
 |---|---:|
 | 纳入模块文档 | 642 |
-| 主状态：not_verified | 524 |
-| 主状态：runtime | 118 |
-| 验证措辞出现次数 | 124 |
-| 措辞分类：source_has_limited_runtime_evidence | 80 |
+| 主状态：not_verified | 519 |
+| 主状态：runtime | 123 |
+| 验证措辞出现次数 | 125 |
+| 措辞分类：source_has_limited_runtime_evidence | 81 |
 | 措辞分类：unbound_verification_wording | 44 |
 
 ## 语法级覆盖（不能当作运行覆盖）
@@ -69,7 +69,7 @@
 | Go | [01-go-backend/reference/framework-essentials/05-mongo-driver.md](../../../../01-go-backend/reference/framework-essentials/05-mongo-driver.md) | `not_verified` | 0 | 0 |
 | Go | [01-go-backend/reference/framework-essentials/06-go-redis.md](../../../../01-go-backend/reference/framework-essentials/06-go-redis.md) | `not_verified` | 0 | 0 |
 | Go | [01-go-backend/reference/language-concepts/01-go-keywords.md](../../../../01-go-backend/reference/language-concepts/01-go-keywords.md) | `runtime` | 1 | 0 |
-| Go | [01-go-backend/reference/language-concepts/02-go-built-in-functions.md](../../../../01-go-backend/reference/language-concepts/02-go-built-in-functions.md) | `not_verified` | 0 | 0 |
+| Go | [01-go-backend/reference/language-concepts/02-go-built-in-functions.md](../../../../01-go-backend/reference/language-concepts/02-go-built-in-functions.md) | `runtime` | 1 | 0 |
 | Go | [01-go-backend/reference/language-concepts/03-go-programming-essentials.md](../../../../01-go-backend/reference/language-concepts/03-go-programming-essentials.md) | `not_verified` | 0 | 0 |
 | Go | [01-go-backend/reference/language-concepts/04-go-data-types.md](../../../../01-go-backend/reference/language-concepts/04-go-data-types.md) | `runtime` | 1 | 0 |
 | Go | [01-go-backend/reference/language-concepts/05-go-control-flow.md](../../../../01-go-backend/reference/language-concepts/05-go-control-flow.md) | `not_verified` | 0 | 0 |
@@ -83,7 +83,7 @@
 | Go | [01-go-backend/reference/language-concepts/13-interface-semantics.md](../../../../01-go-backend/reference/language-concepts/13-interface-semantics.md) | `not_verified` | 0 | 0 |
 | Go | [01-go-backend/reference/language-concepts/14-defer-panic-recover.md](../../../../01-go-backend/reference/language-concepts/14-defer-panic-recover.md) | `not_verified` | 0 | 0 |
 | Go | [01-go-backend/reference/language-concepts/15-nil-semantics.md](../../../../01-go-backend/reference/language-concepts/15-nil-semantics.md) | `not_verified` | 0 | 0 |
-| Go | [01-go-backend/reference/library-guides/01-go-standard-library.md](../../../../01-go-backend/reference/library-guides/01-go-standard-library.md) | `not_verified` | 0 | 0 |
+| Go | [01-go-backend/reference/library-guides/01-go-standard-library.md](../../../../01-go-backend/reference/library-guides/01-go-standard-library.md) | `runtime` | 1 | 0 |
 | Go | [01-go-backend/reference/library-guides/02-third-party-libs.md](../../../../01-go-backend/reference/library-guides/02-third-party-libs.md) | `not_verified` | 0 | 0 |
 | Go | [01-go-backend/reference/library-guides/03-net-http.md](../../../../01-go-backend/reference/library-guides/03-net-http.md) | `runtime` | 1 | 1 |
 | Go | [01-go-backend/reference/library-guides/04-encoding-json.md](../../../../01-go-backend/reference/library-guides/04-encoding-json.md) | `runtime` | 1 | 1 |
@@ -123,7 +123,7 @@
 | Next.js / TypeScript | [02-nextjs-frontend/basics/05-styling-with-tailwind.md](../../../../02-nextjs-frontend/basics/05-styling-with-tailwind.md) | `not_verified` | 0 | 0 |
 | Next.js / TypeScript | [02-nextjs-frontend/basics/06-data-fetching-basics.md](../../../../02-nextjs-frontend/basics/06-data-fetching-basics.md) | `not_verified` | 0 | 0 |
 | Next.js / TypeScript | [02-nextjs-frontend/basics/07-state-management.md](../../../../02-nextjs-frontend/basics/07-state-management.md) | `not_verified` | 0 | 0 |
-| Next.js / TypeScript | [02-nextjs-frontend/basics/08-first-project.md](../../../../02-nextjs-frontend/basics/08-first-project.md) | `not_verified` | 0 | 0 |
+| Next.js / TypeScript | [02-nextjs-frontend/basics/08-first-project.md](../../../../02-nextjs-frontend/basics/08-first-project.md) | `runtime` | 1 | 1 |
 | Next.js / TypeScript | [02-nextjs-frontend/deployment/01-vercel-deployment.md](../../../../02-nextjs-frontend/deployment/01-vercel-deployment.md) | `not_verified` | 0 | 0 |
 | Next.js / TypeScript | [02-nextjs-frontend/deployment/02-docker-containerization.md](../../../../02-nextjs-frontend/deployment/02-docker-containerization.md) | `not_verified` | 0 | 0 |
 | Next.js / TypeScript | [02-nextjs-frontend/deployment/03-ci-cd-pipelines.md](../../../../02-nextjs-frontend/deployment/03-ci-cd-pipelines.md) | `not_verified` | 0 | 0 |
@@ -428,8 +428,8 @@
 | PHP | [07-php-mastery/projects/04-production-laravel-app.md](../../../../07-php-mastery/projects/04-production-laravel-app.md) | `not_verified` | 0 | 0 |
 | PHP | [07-php-mastery/reference/framework-essentials/01-laravel-essentials.md](../../../../07-php-mastery/reference/framework-essentials/01-laravel-essentials.md) | `not_verified` | 0 | 0 |
 | PHP | [07-php-mastery/reference/framework-essentials/02-symfony-essentials.md](../../../../07-php-mastery/reference/framework-essentials/02-symfony-essentials.md) | `not_verified` | 0 | 0 |
-| PHP | [07-php-mastery/reference/language-concepts/01-php-keywords.md](../../../../07-php-mastery/reference/language-concepts/01-php-keywords.md) | `runtime` | 3 | 0 |
-| PHP | [07-php-mastery/reference/language-concepts/02-built-in-functions.md](../../../../07-php-mastery/reference/language-concepts/02-built-in-functions.md) | `runtime` | 5 | 0 |
+| PHP | [07-php-mastery/reference/language-concepts/01-php-keywords.md](../../../../07-php-mastery/reference/language-concepts/01-php-keywords.md) | `runtime` | 4 | 0 |
+| PHP | [07-php-mastery/reference/language-concepts/02-built-in-functions.md](../../../../07-php-mastery/reference/language-concepts/02-built-in-functions.md) | `runtime` | 6 | 0 |
 | PHP | [07-php-mastery/reference/language-concepts/03-types-oop-modern.md](../../../../07-php-mastery/reference/language-concepts/03-types-oop-modern.md) | `not_verified` | 0 | 0 |
 | PHP | [07-php-mastery/reference/language-concepts/04-control-flow.md](../../../../07-php-mastery/reference/language-concepts/04-control-flow.md) | `not_verified` | 0 | 0 |
 | PHP | [07-php-mastery/reference/language-concepts/05-arrays-patterns.md](../../../../07-php-mastery/reference/language-concepts/05-arrays-patterns.md) | `runtime` | 3 | 0 |
@@ -446,7 +446,7 @@
 | PHP | [07-php-mastery/reference/language-concepts/16-operators.md](../../../../07-php-mastery/reference/language-concepts/16-operators.md) | `not_verified` | 0 | 0 |
 | PHP | [07-php-mastery/reference/language-concepts/17-magic-methods.md](../../../../07-php-mastery/reference/language-concepts/17-magic-methods.md) | `not_verified` | 0 | 0 |
 | PHP | [07-php-mastery/reference/language-concepts/18-constants-magic-constants.md](../../../../07-php-mastery/reference/language-concepts/18-constants-magic-constants.md) | `not_verified` | 0 | 0 |
-| PHP | [07-php-mastery/reference/library-guides/01-standard-library-spl.md](../../../../07-php-mastery/reference/library-guides/01-standard-library-spl.md) | `not_verified` | 0 | 0 |
+| PHP | [07-php-mastery/reference/library-guides/01-standard-library-spl.md](../../../../07-php-mastery/reference/library-guides/01-standard-library-spl.md) | `runtime` | 1 | 0 |
 | PHP | [07-php-mastery/reference/library-guides/02-composer-ecosystem.md](../../../../07-php-mastery/reference/library-guides/02-composer-ecosystem.md) | `not_verified` | 0 | 0 |
 | PHP | [07-php-mastery/reference/library-guides/03-pdo.md](../../../../07-php-mastery/reference/library-guides/03-pdo.md) | `not_verified` | 0 | 0 |
 | PHP | [07-php-mastery/reference/library-guides/04-json.md](../../../../07-php-mastery/reference/library-guides/04-json.md) | `runtime` | 1 | 0 |
@@ -490,7 +490,7 @@
 | Java | [08-java-revisited/reference/framework-essentials/05-transaction-essentials.md](../../../../08-java-revisited/reference/framework-essentials/05-transaction-essentials.md) | `not_verified` | 0 | 0 |
 | Java | [08-java-revisited/reference/framework-essentials/06-spring-security-essentials.md](../../../../08-java-revisited/reference/framework-essentials/06-spring-security-essentials.md) | `not_verified` | 0 | 0 |
 | Java | [08-java-revisited/reference/framework-essentials/07-rest-client-essentials.md](../../../../08-java-revisited/reference/framework-essentials/07-rest-client-essentials.md) | `not_verified` | 0 | 0 |
-| Java | [08-java-revisited/reference/language-concepts/01-java-keywords.md](../../../../08-java-revisited/reference/language-concepts/01-java-keywords.md) | `runtime` | 4 | 1 |
+| Java | [08-java-revisited/reference/language-concepts/01-java-keywords.md](../../../../08-java-revisited/reference/language-concepts/01-java-keywords.md) | `runtime` | 5 | 1 |
 | Java | [08-java-revisited/reference/language-concepts/02-collections-generics.md](../../../../08-java-revisited/reference/language-concepts/02-collections-generics.md) | `runtime` | 3 | 0 |
 | Java | [08-java-revisited/reference/language-concepts/03-streams-optional.md](../../../../08-java-revisited/reference/language-concepts/03-streams-optional.md) | `runtime` | 3 | 0 |
 | Java | [08-java-revisited/reference/language-concepts/04-concurrency-api.md](../../../../08-java-revisited/reference/language-concepts/04-concurrency-api.md) | `not_verified` | 0 | 0 |
@@ -500,9 +500,9 @@
 | Java | [08-java-revisited/reference/language-concepts/08-enums.md](../../../../08-java-revisited/reference/language-concepts/08-enums.md) | `not_verified` | 0 | 0 |
 | Java | [08-java-revisited/reference/language-concepts/09-annotations.md](../../../../08-java-revisited/reference/language-concepts/09-annotations.md) | `not_verified` | 0 | 0 |
 | Java | [08-java-revisited/reference/language-concepts/10-interface-semantics.md](../../../../08-java-revisited/reference/language-concepts/10-interface-semantics.md) | `not_verified` | 0 | 0 |
-| Java | [08-java-revisited/reference/library-guides/01-standard-library.md](../../../../08-java-revisited/reference/library-guides/01-standard-library.md) | `runtime` | 5 | 1 |
+| Java | [08-java-revisited/reference/library-guides/01-standard-library.md](../../../../08-java-revisited/reference/library-guides/01-standard-library.md) | `runtime` | 6 | 1 |
 | Java | [08-java-revisited/reference/library-guides/02-third-party-libs.md](../../../../08-java-revisited/reference/library-guides/02-third-party-libs.md) | `not_verified` | 0 | 0 |
-| Java | [08-java-revisited/reference/library-guides/03-java-lang.md](../../../../08-java-revisited/reference/library-guides/03-java-lang.md) | `not_verified` | 0 | 0 |
+| Java | [08-java-revisited/reference/library-guides/03-java-lang.md](../../../../08-java-revisited/reference/library-guides/03-java-lang.md) | `runtime` | 1 | 0 |
 | Java | [08-java-revisited/reference/library-guides/04-java-io.md](../../../../08-java-revisited/reference/library-guides/04-java-io.md) | `runtime` | 3 | 0 |
 | Java | [08-java-revisited/reference/library-guides/05-java-util-function.md](../../../../08-java-revisited/reference/library-guides/05-java-util-function.md) | `not_verified` | 0 | 0 |
 | Java | [08-java-revisited/reference/library-guides/06-java-math.md](../../../../08-java-revisited/reference/library-guides/06-java-math.md) | `runtime` | 1 | 0 |

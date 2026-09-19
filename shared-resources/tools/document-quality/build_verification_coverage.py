@@ -98,6 +98,14 @@ def records_from_reports():
     p1_runtime_evidence = load("p1-runtime-evidence.json")
     for row in p1_runtime_evidence.get("results", []):
         add_record(records, row.get("source"), "runtime", "p1-runtime-evidence.json", p1_runtime_evidence.get("scope", "selected P1 runtime example"), "PASS" if row.get("status", "").upper() == "PASS" else "FAIL")
+    go_rust_p1_pages = load("go-rust-p1-page-validation.json")
+    for row in go_rust_p1_pages.get("cases", []):
+        add_record(records, row.get("path"), "runtime", "go-rust-p1-page-validation.json", go_rust_p1_pages.get("scope", "selected Go/Rust P1 page example"), "PASS" if row.get("passed") else "FAIL")
+    php_java_p1_runtime = load("php-java-p1-runtime-results.json")
+    for row in php_java_p1_runtime.get("cases", []):
+        add_record(records, row.get("document"), "runtime", "php-java-p1-runtime-results.json", php_java_p1_runtime.get("scope", "selected PHP/Java P1 runtime example"), "PASS" if row.get("passed") else "FAIL")
+    next_first_project = load("next-first-project-2026-09-19.json")
+    add_record(records, next_first_project.get("source"), "runtime", "next-first-project-2026-09-19.json", next_first_project.get("limits", "selected Next first-project JSDOM check"), next_first_project.get("status", "FAIL"))
     php_java_core = load("php-java-core-boundaries.json")
     for row in php_java_core.get("cases", []):
         add_record(records, row.get("document"), "runtime", "php-java-core-boundaries.json", php_java_core.get("scope", "selected PHP/Java core-boundary example"), "PASS" if row.get("passed") else "FAIL")

@@ -1,0 +1,21 @@
+{
+  "source": "02-nextjs-frontend/basics/08-first-project.md",
+  "sourceBlockSha256": "69ce4c81ac5e69d99247b03542928d1717310f7c24745cd51d029d095ab4ad18",
+  "status": "PASS",
+  "node": "v24.19.0",
+  "typescript": "5.9.3",
+  "react": "19.3.0",
+  "cases": [
+    "TSX transpilation",
+    "read gate",
+    "empty state",
+    "A/B save",
+    "whitespace rejection",
+    "remount/read persistence",
+    "corrupt data preserved and save disabled",
+    "write failure preserves draft/list"
+  ],
+  "limits": "JSDOM DOM verification only; no TypeScript semantic check, Next.js build, hydration or real browser verification.",
+  "dependencyManifest": "shared-resources/tools/document-quality/next-project-validation/package.json",
+  "dependencyLock": "shared-resources/tools/document-quality/next-project-validation/pnpm-lock.yaml"
+}

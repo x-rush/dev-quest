@@ -1,0 +1,58 @@
+{
+  "scope": "named P1 reference-page body extraction only",
+  "toolchain": {
+    "go": {
+      "argv": [
+        "C:\\Users\\77958\\Documents\\ChatGPT\\技术栈探索路径\\verification-lab\\go-toolchain\\go\\bin\\go.exe",
+        "version"
+      ],
+      "cwd": "C:\\Users\\77958\\Documents\\ChatGPT\\技术栈探索路径\\dev-quest",
+      "returncode": 0,
+      "stdout": "go version go1.27.1 windows/amd64\n",
+      "stderr": ""
+    }
+  },
+  "cases": [
+    {
+      "name": "go-builtins",
+      "path": "01-go-backend/reference/language-concepts/02-go-built-in-functions.md",
+      "marker": "builtin-panic-recover",
+      "document_sha256": "ea6c40d3fc60e547f3bdcf2a1fe41b56f2ffc04c9f7a0e7d68f9f386ae769aab",
+      "source_sha256": "c843cd53327232a1508e4ec8df20273e3b62c6388053dfcb7af990215737ff43",
+      "expected_stdout": "normal: 4 <nil>\nfailure: 0 calculation failed: division by zero\noutside panic: true\n",
+      "command": {
+        "argv": [
+          "C:\\Users\\77958\\Documents\\ChatGPT\\技术栈探索路径\\verification-lab\\go-toolchain\\go\\bin\\go.exe",
+          "run",
+          "main.go"
+        ],
+        "cwd": "C:\\Users\\77958\\AppData\\Local\\Temp\\dev-quest-go-p1-q9tnau3e\\go-builtins",
+        "returncode": 0,
+        "stdout": "normal: 4 <nil>\nfailure: 0 calculation failed: division by zero\noutside panic: true\n",
+        "stderr": ""
+      },
+      "passed": true
+    },
+    {
+      "name": "go-standard-library",
+      "path": "01-go-backend/reference/library-guides/01-go-standard-library.md",
+      "marker": "stdlib-parse-json",
+      "document_sha256": "52038d6c2fc5c1d36c77bdfa6fe78015a4e66544c2b88cedcca2aac327bf35c5",
+      "source_sha256": "38d1c7093a1ab63804d2a362bfa5519c143dd38654d12e0ec0bee33c32452153",
+      "expected_stdout": "42 true\ntrue\n{\"count\":42,\"name\":\"go\"} 42 go\n",
+      "command": {
+        "argv": [
+          "C:\\Users\\77958\\Documents\\ChatGPT\\技术栈探索路径\\verification-lab\\go-toolchain\\go\\bin\\go.exe",
+          "run",
+          "main.go"
+        ],
+        "cwd": "C:\\Users\\77958\\AppData\\Local\\Temp\\dev-quest-go-p1-q9tnau3e\\go-standard-library",
+        "returncode": 0,
+        "stdout": "42 true\ntrue\n{\"count\":42,\"name\":\"go\"} 42 go\n",
+        "stderr": ""
+      },
+      "passed": true
+    }
+  ],
+  "status": "passed"
+}

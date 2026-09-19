@@ -1,5 +1,94 @@
 # Next.js 16 第一个完整项目实战指南
 
+## 首次交付入口：先完成浏览器文章草稿
+
+本章后半部分的认证、数据库与评论属于博客扩展，不能作为第一次交付的前置。初学者先完成本节：在同一浏览器保存文章标题、拒绝空白输入、刷新后读回。这里的存储是当前站点的 `localStorage`，不是服务端数据库；换浏览器、换站点地址或清除站点数据后不会共享草稿。
+
+**开工条件**：先按[第一个应用](./02-first-nextjs-app.md)启动自己的 App Router 工程，能打开模板页面；会 `useState`、受控输入和 `try/catch`，不熟时返回[状态管理](./07-state-management.md)。保留工程生成的根布局和锁文件，不需要先安装正文中的认证或数据库依赖。
+
+在现有路由根目录新建 `drafts/page.tsx`：采用 `src/app` 的工程放在 `src/app/drafts/page.tsx`，采用 `app` 的工程放在 `app/drafts/page.tsx`，二者只选一个。完整内容如下：
+
+```tsx
+'use client'
+
+import { useState } from 'react'
+
+const storageKey = 'dev-quest-article-drafts-v1'
+
+export default function DraftsPage() {
+  const [titles, setTitles] = useState<string[]>([])
+  const [draft, setDraft] = useState('')
+  const [ready, setReady] = useState(false)
+  const [message, setMessage] = useState('先读取已有草稿，再新增。')
+
+  function load() {
+    try {
+      const raw = localStorage.getItem(storageKey)
+      const saved: unknown = raw === null ? [] : JSON.parse(raw)
+      if (!Array.isArray(saved) || !saved.every(
+        (title): title is string => typeof title === 'string' && title.trim().length > 0,
+      )) throw new Error('草稿格式无效')
+      setTitles(saved)
+      setReady(true)
+      setMessage('读取成功。')
+    } catch {
+      setReady(false)
+      setMessage('读取失败：检查站点存储权限或已有草稿格式；未覆盖原数据。')
+    }
+  }
+
+  function save() {
+    if (!ready) return
+    const title = draft.trim()
+    if (!title) {
+      setMessage('标题不能为空。')
+      return
+    }
+    const next = [...titles, title]
+    try {
+      localStorage.setItem(storageKey, JSON.stringify(next))
+      setTitles(next)
+      setDraft('')
+      setMessage('保存成功。')
+    } catch {
+      setMessage('保存失败：输入与已有列表已保留，请检查站点存储后重试。')
+    }
+  }
+
+  return (
+    <main>
+      <h1>文章草稿</h1>
+      <button onClick={load}>读取已有草稿</button>
+      <form onSubmit={(event) => { event.preventDefault(); save() }}>
+        <label htmlFor="draft-title">文章标题</label>
+        <input id="draft-title" value={draft}
+          onChange={(event) => setDraft(event.target.value)} />
+        <button type="submit" disabled={!ready}>保存标题</button>
+      </form>
+      <p role="status">{message}</p>
+      {!ready ? <p>尚未读取存储。</p> : titles.length === 0 ? <p>暂无草稿。</p> : (
+        <ul>{titles.map((title, index) => <li key={index}>{title}</li>)}</ul>
+      )}
+    </main>
+  )
+}
+```
+
+这里刻意用按钮触发读取：浏览器存储仅在浏览器事件里访问，首次服务端渲染不读取它；读取成功前禁止写入，避免把尚未加载的旧草稿覆盖为空列表。此练习只追加标题，不提供排序或删除，所以暂用数组位置作列表键；增加编辑、删除时应先引入稳定 ID。练习只验收单标签页，多标签页同时写入的冲突留到后续设计。
+
+沿用工程的启动命令（npm 工程为 `npm run dev`），打开终端显示的本地地址下的 `/drafts`。交付这个页面、工程锁文件和下表的实际结果；本节没有附带已运行的浏览器验收记录。
+
+| 操作 | 通过条件 | 失败时回查 |
+|---|---|---|
+| 首次打开后点击读取 | 没有保存记录时显示“暂无草稿”，保存按钮可用 | 路由 404 查[布局路由](./04-layouts-routing.md)的路由根目录；读取失败查看浏览器站点存储 |
+| 保存 A、B，再提交三个空格 | 只有 A、B；空白输入提示错误，不增加记录 | 查[状态管理](./07-state-management.md)中的受控输入，确认提交前执行 `trim()` |
+| 刷新页面，再点击读取 | A、B 恢复，能说明恢复来自本地存储 | 确认地址、端口和浏览器未变化；查[Web 平台 API](../reference/language-concepts/10-web-platform-apis.md)中的 Storage |
+| 在开发者工具 Application/Storage 中把本练习键的值暂改成 `not-json`，再读取 | 显示读取失败，保存禁用，原值未被覆盖 | 检查 `JSON.parse` 和格式校验是否位于同一个 `try/catch`；测试后仅恢复这个键原先备份的值 |
+
+**下一步**：通过后先按[布局路由](./04-layouts-routing.md)为草稿增加稳定 ID 和详情页，再按[数据获取](./06-data-fetching-basics.md)把读取替换成服务端接口。需要跨浏览器共享时才进入下方博客扩展并接数据库，分别重做写入失败与服务重启验收；本地草稿通过不代表认证、权限或服务端持久化已经完成。
+
+## 博客扩展：按需求选做
+
 ## 先理解，再动手
 
 第一个应用的目标是把一条数据链路走通。页面数量、库数量和目录层次不是完成标准。

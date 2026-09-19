@@ -15,9 +15,9 @@
 
 ## 汇总
 
-- 队列条目：568 条，其中文件级证据缺口 524 条，逐行未绑定验证措辞 44 条。
-- 优先级：P0 0；P1 268；P2 149；P3 151。
-- 分类：核心基础 252；首项目 16；框架 110；部署 39；进阶与测试 151。
+- 队列条目：563 条，其中文件级证据缺口 519 条，逐行未绑定验证措辞 44 条。
+- 优先级：P0 0；P1 263；P2 149；P3 151。
+- 分类：核心基础 248；首项目 15；框架 110；部署 39；进阶与测试 151。
 
 ## 明细
 
@@ -29,7 +29,6 @@
 | P1 | 核心基础 | Go | [01-go-backend/basics/02-first-program.md](../../../../01-go-backend/basics/02-first-program.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
 | P1 | 核心基础 | Go | [01-go-backend/basics/05-functions-methods.md](../../../../01-go-backend/basics/05-functions-methods.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
 | P1 | 核心基础 | Go | [01-go-backend/basics/06-control-structures.md](../../../../01-go-backend/basics/06-control-structures.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
-| P1 | 核心基础 | Go | [01-go-backend/reference/language-concepts/02-go-built-in-functions.md](../../../../01-go-backend/reference/language-concepts/02-go-built-in-functions.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
 | P1 | 核心基础 | Go | [01-go-backend/reference/language-concepts/03-go-programming-essentials.md](../../../../01-go-backend/reference/language-concepts/03-go-programming-essentials.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
 | P1 | 核心基础 | Go | [01-go-backend/reference/language-concepts/05-go-control-flow.md](../../../../01-go-backend/reference/language-concepts/05-go-control-flow.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
 | P1 | 核心基础 | Go | [01-go-backend/reference/language-concepts/06-go-oop-concepts.md](../../../../01-go-backend/reference/language-concepts/06-go-oop-concepts.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
@@ -43,7 +42,6 @@
 | P1 | 核心基础 | Go | [01-go-backend/reference/language-concepts/13-interface-semantics.md](../../../../01-go-backend/reference/language-concepts/13-interface-semantics.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
 | P1 | 核心基础 | Go | [01-go-backend/reference/language-concepts/14-defer-panic-recover.md](../../../../01-go-backend/reference/language-concepts/14-defer-panic-recover.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
 | P1 | 核心基础 | Go | [01-go-backend/reference/language-concepts/15-nil-semantics.md](../../../../01-go-backend/reference/language-concepts/15-nil-semantics.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
-| P1 | 核心基础 | Go | [01-go-backend/reference/library-guides/01-go-standard-library.md](../../../../01-go-backend/reference/library-guides/01-go-standard-library.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
 | P1 | 核心基础 | Go | [01-go-backend/reference/library-guides/17-std-package-map.md](../../../../01-go-backend/reference/library-guides/17-std-package-map.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
 | P1 | 核心基础 | Go | [01-go-backend/reference/quick-references/01-syntax-cheatsheet.md](../../../../01-go-backend/reference/quick-references/01-syntax-cheatsheet.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
 | P1 | 核心基础 | Go | [01-go-backend/reference/quick-references/02-web-tools.md](../../../../01-go-backend/reference/quick-references/02-web-tools.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
@@ -62,7 +60,6 @@
 | P1 | 核心基础 | Java | [08-java-revisited/reference/language-concepts/08-enums.md](../../../../08-java-revisited/reference/language-concepts/08-enums.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
 | P1 | 核心基础 | Java | [08-java-revisited/reference/language-concepts/09-annotations.md](../../../../08-java-revisited/reference/language-concepts/09-annotations.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
 | P1 | 核心基础 | Java | [08-java-revisited/reference/language-concepts/10-interface-semantics.md](../../../../08-java-revisited/reference/language-concepts/10-interface-semantics.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
-| P1 | 核心基础 | Java | [08-java-revisited/reference/library-guides/03-java-lang.md](../../../../08-java-revisited/reference/library-guides/03-java-lang.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
 | P1 | 核心基础 | Java | [08-java-revisited/reference/library-guides/05-java-util-function.md](../../../../08-java-revisited/reference/library-guides/05-java-util-function.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
 | P1 | 核心基础 | Java | [08-java-revisited/reference/library-guides/08-java-util-regex.md](../../../../08-java-revisited/reference/library-guides/08-java-util-regex.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
 | P1 | 核心基础 | Java | [08-java-revisited/reference/library-guides/09-jdk-package-map.md](../../../../08-java-revisited/reference/library-guides/09-jdk-package-map.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
@@ -149,7 +146,6 @@
 | P1 | 核心基础 | PHP | [07-php-mastery/reference/language-concepts/16-operators.md](../../../../07-php-mastery/reference/language-concepts/16-operators.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
 | P1 | 核心基础 | PHP | [07-php-mastery/reference/language-concepts/17-magic-methods.md](../../../../07-php-mastery/reference/language-concepts/17-magic-methods.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
 | P1 | 核心基础 | PHP | [07-php-mastery/reference/language-concepts/18-constants-magic-constants.md](../../../../07-php-mastery/reference/language-concepts/18-constants-magic-constants.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
-| P1 | 核心基础 | PHP | [07-php-mastery/reference/library-guides/01-standard-library-spl.md](../../../../07-php-mastery/reference/library-guides/01-standard-library-spl.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
 | P1 | 核心基础 | PHP | [07-php-mastery/reference/library-guides/02-composer-ecosystem.md](../../../../07-php-mastery/reference/library-guides/02-composer-ecosystem.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
 | P1 | 核心基础 | PHP | [07-php-mastery/reference/library-guides/03-pdo.md](../../../../07-php-mastery/reference/library-guides/03-pdo.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
 | P1 | 核心基础 | PHP | [07-php-mastery/reference/library-guides/05-file-stream-io.md](../../../../07-php-mastery/reference/library-guides/05-file-stream-io.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
@@ -279,7 +275,6 @@
 | P1 | 首项目 | Java | [08-java-revisited/projects/01-todo-api.md](../../../../08-java-revisited/projects/01-todo-api.md#L258):258 | 保留诚实的验证边界，并在补证据时决定是否增加最小练习<br/>保持已有边界说明；若新增示例，记录工具链、命令、预期行为和未覆盖范围。 | 选做：把嵌套类型拆到同包多个文件，保留测试通过；然后提取存储接口，用数据库实现替换。替换前先决定事务、唯一性、排序与并发语义，不能仅凭“有接口”宣称上层永远零改动。 |
 | P1 | 首项目 | Java | [08-java-revisited/projects/01-todo-api.md](../../../../08-java-revisited/projects/01-todo-api.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
 | P1 | 首项目 | Kotlin / Compose | [05-kotlin-compose/projects/01-notes-app.md](../../../../05-kotlin-compose/projects/01-notes-app.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
-| P1 | 首项目 | Next.js / TypeScript | [02-nextjs-frontend/basics/08-first-project.md](../../../../02-nextjs-frontend/basics/08-first-project.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
 | P1 | 首项目 | Next.js / TypeScript | [02-nextjs-frontend/projects/01-corporate-landing.md](../../../../02-nextjs-frontend/projects/01-corporate-landing.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
 | P1 | 首项目 | Node.js | [09-nodejs-backend/basics/08-first-project.md](../../../../09-nodejs-backend/basics/08-first-project.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
 | P1 | 首项目 | Node.js | [09-nodejs-backend/projects/01-todo-api.md](../../../../09-nodejs-backend/projects/01-todo-api.md#L245):245 | 保留诚实的验证边界，并在补证据时决定是否增加最小练习<br/>保持已有边界说明；若新增示例，记录工具链、命令、预期行为和未覆盖范围。 | - &#91; &#93; 至少 3 条服务层测试通过 |

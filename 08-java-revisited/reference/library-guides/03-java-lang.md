@@ -86,6 +86,11 @@ record 自动生成：全参构造器、组件访问器（`x()` 而非 `getX()`�
 
 ## 💡 示例
 
+### 可完整编译和运行的 java.lang 验证示例（Java 21）
+
+下面的代码块是本页唯一供自动提取的完整 Java 程序。文件名必须为 `ContractDemo.java`；它验证值对象的 equals/hashCode 配对、record 的文本表示、StringBuilder 的变换以及其不按内容比较的边界。其余围栏只说明单个 API 调用。
+
+<!-- runtime-evidence: {"id":"java-java-lang-contract","stdout":"true\nPoint[x=1, y=2]\ncba\nfalse\n"} -->
 ```java
 import java.util.Objects;
 

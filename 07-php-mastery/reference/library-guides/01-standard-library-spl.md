@@ -23,7 +23,7 @@ SPL（Standard PHP Library）随 PHP 内核发布，提供数据结构、迭代�
 
 ### SplStack / SplQueue
 
-**定义**: 双向链表实现的栈与队列，性能优于 `array_shift`（后者 O(n)）。
+**定义**: 双向链表实现的栈与队列。对需要频繁从队首移除的大数据量，`SplQueue` 可避免普通数组 `array_shift` 的线性移动成本；是否更快仍取决于工作负载与 PHP 版本。
 
 ```php
 $stack = new SplStack();
@@ -223,6 +223,35 @@ bin2hex(random_bytes(8));                       // 16 位随机 hex
 ```
 
 **陷阱**: `md5`/`sha1` 不适合密码存储，一律 `password_hash`；`json_decode` 默认静默返回 `null`，解析外部输入必须 `JSON_THROW_ON_ERROR`。
+
+## 可完整运行的 SPL 验证示例
+
+下面的代码块是本页唯一供自动提取的完整脚本；保存为 `spl-verification.php` 后用 `php spl-verification.php` 执行。它只使用随 PHP 核心提供的 SPL：队列出队顺序、对象身份键以及迭代器保留键的行为都有固定输出。其他代码块仍是局部 API 说明。
+
+<!-- runtime-evidence: {"id":"php-spl-core","stdout":"first\n2\n[\"a\",\"b\"]\n"} -->
+```php
+<?php
+
+declare(strict_types=1);
+
+$queue = new SplQueue();
+$queue->enqueue('first');
+$queue->enqueue('second');
+echo $queue->dequeue(), PHP_EOL;
+
+$objects = new SplObjectStorage();
+$first = new stdClass();
+$second = new stdClass();
+$objects->attach($first);
+$objects->attach($first);
+$objects->attach($second);
+echo count($objects), PHP_EOL;
+
+$iterator = new ArrayIterator([4 => 'a', 7 => 'b']);
+echo json_encode(iterator_to_array($iterator, false), JSON_THROW_ON_ERROR), PHP_EOL;
+```
+
+预期输出依次是 `first`、`2` 和 `["a","b"]`。同一对象重复 attach 不会增加成员；`iterator_to_array(..., false)` 明确放弃原始键，避免把键处理误读成值去重。
 
 ## 相关文档
 

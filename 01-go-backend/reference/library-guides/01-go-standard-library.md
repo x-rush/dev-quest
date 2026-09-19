@@ -15,6 +15,51 @@
 
 练习：把字符串 "42" 与 "four" 转成整数，分别输出结果与错误。随后读一个 JSON 文件并解码，说明读取错误与解码错误发生在哪一层。验收不是“用了三个包”，而是两类失败都能被定位且没有静默返回零值。
 
+## 可独立运行的解析与 JSON 边界
+
+下面的程序是本页可直接提取的正文验证样本。保存为 `main.go` 并执行
+`go run main.go`；它故意同时覆盖一个有效整数、一个解析失败和 JSON 的往返。
+`strconv.Atoi` 的错误不能被替换成零值继续处理，`json.Marshal` 只会序列化导出的
+字段。示例不读取文件或网络，因此它验证的是包的值与错误契约，不是 I/O 超时策略。
+
+<!-- go-example: stdlib-parse-json -->
+```go
+package main
+
+import (
+	"encoding/json"
+	"fmt"
+	"strconv"
+)
+
+type Record struct {
+	Count int    `json:"count"`
+	Name  string `json:"name"`
+}
+
+func main() {
+	count, err := strconv.Atoi("42")
+	fmt.Println(count, err == nil)
+	_, err = strconv.Atoi("four")
+	fmt.Println(err != nil)
+
+	encoded, err := json.Marshal(Record{Count: count, Name: "go"})
+	if err != nil {
+		panic(err)
+	}
+	var decoded Record
+	if err := json.Unmarshal(encoded, &decoded); err != nil {
+		panic(err)
+	}
+	fmt.Printf("%s %d %s\n", encoded, decoded.Count, decoded.Name)
+}
+```
+
+预期输出为 `42 true`、`true` 与 `{"count":42,"name":"go"} 42 go` 三行。若把
+`Record` 的字段改为小写，编码结果会缺少相应字段；这不是 JSON 损坏，而是 Go 的导出
+规则。需要处理来自文件或 HTTP 的 JSON 时，应在 `ReadFile`/响应读取失败与
+`Unmarshal` 失败之间保留不同上下文，便于调用方判断故障层级。
+
 Go标准库提供了丰富的包，涵盖了从基础数据结构到网络编程的各个方面。本文档详细介绍Go 1.27+版本中最重要的标准库包。
 
 <details>

@@ -17,12 +17,12 @@
   "summary": {
     "documents": 642,
     "by_primary_state": {
-      "not_verified": 524,
-      "runtime": 118
+      "not_verified": 519,
+      "runtime": 123
     },
-    "verification_wording_occurrences": 124,
+    "verification_wording_occurrences": 125,
     "marker_classification": {
-      "source_has_limited_runtime_evidence": 80,
+      "source_has_limited_runtime_evidence": 81,
       "unbound_verification_wording": 44
     }
   },
@@ -592,10 +592,10 @@
       "sha256": "ea6c40d3fc60e547f3bdcf2a1fe41b56f2ffc04c9f7a0e7d68f9f386ae769aab",
       "verification": [
         {
-          "mode": "not_verified",
-          "status": "NOT_VERIFIED",
-          "report": null,
-          "scope": "No named runtime or syntax evidence is recorded for this document."
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "go-rust-p1-page-validation.json",
+          "scope": "named P1 reference-page body extraction only"
         }
       ],
       "marker_count": 0
@@ -771,13 +771,13 @@
     },
     {
       "path": "01-go-backend/reference/library-guides/01-go-standard-library.md",
-      "sha256": "9cb679471781d6f5b4028a2f6304b651397451d3298097a0860eba4907a1f5db",
+      "sha256": "19945c3a04e7725466a429128129d61b75484137b4e42c891e9867d92402154c",
       "verification": [
         {
-          "mode": "not_verified",
-          "status": "NOT_VERIFIED",
-          "report": null,
-          "scope": "No named runtime or syntax evidence is recorded for this document."
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "go-rust-p1-page-validation.json",
+          "scope": "named P1 reference-page body extraction only"
         }
       ],
       "marker_count": 0
@@ -1096,7 +1096,7 @@
     },
     {
       "path": "02-nextjs-frontend/LEARNING_GUIDE.md",
-      "sha256": "23dcc1ed87b1dc3c597c51bee4af9ec9766c98514edaa8c2328e9ae095afb243",
+      "sha256": "2dff5d49aafae581bf1d8ac9095c2c54df99ca600db6429bec48bbe9b45ca91b",
       "verification": [
         {
           "mode": "not_verified",
@@ -1291,16 +1291,16 @@
     },
     {
       "path": "02-nextjs-frontend/basics/08-first-project.md",
-      "sha256": "f02bdce3962ba975dafd542ccdf1606c719776d1823578d70bb153d4f79c9cbd",
+      "sha256": "3291c5f3c298840aad417287104fb901c6f6de07fdbe6ab557533153e35925d3",
       "verification": [
         {
-          "mode": "not_verified",
-          "status": "NOT_VERIFIED",
-          "report": null,
-          "scope": "No named runtime or syntax evidence is recorded for this document."
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "next-first-project-2026-09-19.json",
+          "scope": "JSDOM DOM verification only; no TypeScript semantic check, Next.js build, hydration or real browser verification."
         }
       ],
-      "marker_count": 0
+      "marker_count": 1
     },
     {
       "path": "02-nextjs-frontend/deployment/01-vercel-deployment.md",
@@ -5359,6 +5359,12 @@
           "status": "PASS",
           "report": "php-java-foundations.json",
           "scope": "marked complete examples only; not framework or network validation"
+        },
+        {
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "php-java-p1-runtime-results.json",
+          "scope": "Six explicitly marked, complete reference examples: PHP and Java keyword, built-in/API, and standard-library pages. Excludes existing control-flow evidence and all unmarked partial snippets."
         }
       ],
       "marker_count": 0
@@ -5396,6 +5402,12 @@
           "status": "PASS",
           "report": "php-java-foundations.json",
           "scope": "marked complete examples only; not framework or network validation"
+        },
+        {
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "php-java-p1-runtime-results.json",
+          "scope": "Six explicitly marked, complete reference examples: PHP and Java keyword, built-in/API, and standard-library pages. Excludes existing control-flow evidence and all unmarked partial snippets."
         }
       ],
       "marker_count": 0
@@ -5634,13 +5646,13 @@
     },
     {
       "path": "07-php-mastery/reference/library-guides/01-standard-library-spl.md",
-      "sha256": "4dec3e2aee3993152070bf6842b01f770f6a63f472586ca08a0ffa7b86e82c7a",
+      "sha256": "c905dd18989eea5b34ca81013f0bde488e4c3f703d05892b8ab3493af32f7fb9",
       "verification": [
         {
-          "mode": "not_verified",
-          "status": "NOT_VERIFIED",
-          "report": null,
-          "scope": "No named runtime or syntax evidence is recorded for this document."
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "php-java-p1-runtime-results.json",
+          "scope": "Six explicitly marked, complete reference examples: PHP and Java keyword, built-in/API, and standard-library pages. Excludes existing control-flow evidence and all unmarked partial snippets."
         }
       ],
       "marker_count": 0
@@ -6237,6 +6249,12 @@
           "status": "PASS",
           "report": "php-java-foundations.json",
           "scope": "marked complete examples only; not framework or network validation"
+        },
+        {
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "php-java-p1-runtime-results.json",
+          "scope": "Six explicitly marked, complete reference examples: PHP and Java keyword, built-in/API, and standard-library pages. Excludes existing control-flow evidence and all unmarked partial snippets."
         }
       ],
       "marker_count": 1
@@ -6421,6 +6439,12 @@
           "status": "PASS",
           "report": "php-java-foundations.json",
           "scope": "marked complete examples only; not framework or network validation"
+        },
+        {
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "php-java-p1-runtime-results.json",
+          "scope": "Six explicitly marked, complete reference examples: PHP and Java keyword, built-in/API, and standard-library pages. Excludes existing control-flow evidence and all unmarked partial snippets."
         }
       ],
       "marker_count": 1
@@ -6440,13 +6464,13 @@
     },
     {
       "path": "08-java-revisited/reference/library-guides/03-java-lang.md",
-      "sha256": "5a08aa4c169160d3eb67586c08a84dcc213f59548b92e603d11b917cd685c656",
+      "sha256": "e1672de530ef17296a3ddbab0a6df3bcea4fa0567e41083c5f3d477289806887",
       "verification": [
         {
-          "mode": "not_verified",
-          "status": "NOT_VERIFIED",
-          "report": null,
-          "scope": "No named runtime or syntax evidence is recorded for this document."
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "php-java-p1-runtime-results.json",
+          "scope": "Six explicitly marked, complete reference examples: PHP and Java keyword, built-in/API, and standard-library pages. Excludes existing control-flow evidence and all unmarked partial snippets."
         }
       ],
       "marker_count": 0
@@ -8944,6 +8968,12 @@
       "line": 141,
       "excerpt": "PASS  # 预期的示例输出",
       "classification": "unbound_verification_wording"
+    },
+    {
+      "path": "02-nextjs-frontend/basics/08-first-project.md",
+      "line": 79,
+      "excerpt": "沿用工程的启动命令（npm 工程为 `npm run dev`），打开终端显示的本地地址下的 `/drafts`。交付这个页面、工程锁文件和下表的实际结果；本节没有附带已运行的浏览器验收记录。",
+      "classification": "source_has_limited_runtime_evidence"
     },
     {
       "path": "02-nextjs-frontend/reference/language-concepts/08-ts-declarations-modules.md",
