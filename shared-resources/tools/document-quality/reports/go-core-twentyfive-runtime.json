@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-19T17:29:25.191504+00:00",
-  "purpose": "Twenty-fifth-round runtime evidence for eleven marked Go core-document fences.",
+  "generated_at": "2026-09-19T17:31:33.232249+00:00",
+  "purpose": "Twenty-fifth-round runtime evidence for twelve marked Go core-document fences.",
   "isolation": "No network, read-only container root, dropped capabilities, no-new-privileges, bounded CPU/memory/PIDs, and tmpfs-only writable workspace. Image must already exist because --pull=never is used.",
-  "scope": "Only the eleven named complete Go fences extracted unchanged after CRLF-to-LF normalization were executed. Other fences, toolchain setup, web services, filesystem integrations, concurrency scheduling, performance, and projects remain outside this evidence.",
+  "scope": "Only the twelve named complete Go fences extracted unchanged after CRLF-to-LF normalization were executed. Other fences, toolchain setup, web services, filesystem integrations, concurrency scheduling, performance, and projects remain outside this evidence.",
   "results": [
     {
       "id": "go-first-program-hello",
@@ -158,10 +158,24 @@
       "stderr": "",
       "exit_code": 0,
       "status": "PASS"
+    },
+    {
+      "id": "go-control-flow-contract",
+      "language": "go",
+      "document": "01-go-backend/basics/06-control-structures.md",
+      "image": "golang:1.25-alpine",
+      "document_sha256": "587ee04d2db6c425e6b41d35dd5cb4c1fb489c682345f8beacfaf57a6ce4aec4",
+      "code_sha256": "149b29de2dab43ffa41e0486cb4d96a34f3d2e1eb3a95c6a5a59453147d43d25",
+      "command": "GOCACHE=/tmp/go-build go run /tmp/main.go",
+      "expected_stdout": "sum=5 skipped=1 stopped=true\nresult=complete-before-sentinel\n",
+      "stdout": "sum=5 skipped=1 stopped=true\nresult=complete-before-sentinel\n",
+      "stderr": "",
+      "exit_code": 0,
+      "status": "PASS"
     }
   ],
   "summary": {
-    "passed": 11,
-    "total": 11
+    "passed": 12,
+    "total": 12
   }
 }

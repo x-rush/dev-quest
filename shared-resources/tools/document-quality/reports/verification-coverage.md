@@ -47,7 +47,7 @@
 | Go | [01-go-backend/basics/03-variables-constants.md](../../../../01-go-backend/basics/03-variables-constants.md) | `runtime` | 2 | 0 |
 | Go | [01-go-backend/basics/04-composite-types.md](../../../../01-go-backend/basics/04-composite-types.md) | `runtime` | 4 | 0 |
 | Go | [01-go-backend/basics/05-functions-methods.md](../../../../01-go-backend/basics/05-functions-methods.md) | `runtime` | 1 | 0 |
-| Go | [01-go-backend/basics/06-control-structures.md](../../../../01-go-backend/basics/06-control-structures.md) | `runtime` | 1 | 1 |
+| Go | [01-go-backend/basics/06-control-structures.md](../../../../01-go-backend/basics/06-control-structures.md) | `runtime` | 2 | 1 |
 | Go | [01-go-backend/basics/07-concurrency-basics.md](../../../../01-go-backend/basics/07-concurrency-basics.md) | `runtime` | 4 | 0 |
 | Go | [01-go-backend/basics/08-error-handling.md](../../../../01-go-backend/basics/08-error-handling.md) | `runtime` | 5 | 0 |
 | Go | [01-go-backend/deployment/01-containerization.md](../../../../01-go-backend/deployment/01-containerization.md) | `not_verified` | 0 | 1 |

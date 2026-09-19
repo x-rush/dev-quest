@@ -840,6 +840,7 @@ func containsValueMap(set map[int]struct{}) bool {
 将其保存为 `main.go` 后执行 `go run main.go`：
 
 <!-- terra-fifteenth-case: go-control-flow-contract -->
+<!-- doc-verify:go-control-flow-contract -->
 ```go
 package main
 
