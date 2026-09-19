@@ -13,7 +13,7 @@
 
 </details>
 
-> **文档简介**: 从零创建一个 React Native App，理解 Metro 打包器的工作方式，并把同一个 App 跑在 Android、iOS、鸿蒙真机/模拟器上
+> **文档简介**: 从零创建一个 React Native App，理解 Metro 打包器的工作方式，并先把它运行在一个已选平台的真机或模拟器上
 >
 > **目标读者**: 已完成环境搭建、希望理解 RN 应用"启动链条"的初学者
 >
@@ -40,7 +40,7 @@
 
 - ✅ 分别用 Expo 与 RN CLI 创建工程，并说清两者工程形态的差异
 - ✅ 解释 Metro 把 TSX 代码送到屏幕的完整链路
-- ✅ 在 Android/iOS 模拟器与真机上运行并热更新
+- ✅ 在一个已选 Android 或 iOS 目标运行、输入和重新加载；理解鸿蒙需单独按 RNOH 工程验收
 - ✅ 看懂 RN 工程的目录结构，知道改哪个文件会生效
 
 ## 🚀 创建工程
@@ -53,7 +53,7 @@ cd MyFirstApp
 npx expo start
 ```
 
-创建完成后按终端提示按键即可在对应平台启动（`a` = Android，`i` = iOS，`w` = Web）。默认模板自带 `expo-router` 文件路由，`app/` 目录下的每个文件就是一个路由页面。
+创建完成后按终端提示可尝试打开对应目标（`a` = Android，`i` = iOS，`w` = Web）。`npx expo start` 启动的是 Metro 开发服务器：首次运行前，先确保目标模拟器/设备和对应 native build 已按[环境搭建](./01-environment-setup.md)准备好。模板是否使用 Expo Router、首页在哪个文件，取决于创建时选的模板；先查看生成的项目目录再编辑。
 
 ### 方式二：RN CLI（bare）
 
@@ -64,8 +64,8 @@ cd MyFirstApp
 # Android
 npm run android
 
-# iOS（仅 macOS）
-cd ios && pod install && cd ..
+# iOS（仅 macOS；若仓库提供 Gemfile，使用它固定 CocoaPods）
+bundle exec pod install --project-directory=ios
 npm run ios
 ```
 
@@ -76,9 +76,9 @@ npm run ios
 **启动链路（四步）**:
 
 1. **入口注册**: `App.tsx`（或入口文件）通过 `AppRegistry.registerComponent` 注册根组件
-2. **打包**: Metro 把所有 JS/TS 依赖打包成 bundle，Hermes 引擎进一步编译为字节码（生产模式）
-3. **传输**: 开发模式下 Metro 以 dev server 形式运行，设备通过网络加载 bundle；生产模式 bundle 直接打包进安装包
-4. **渲染**: 原生侧（Android 的 C++/Kotlin、iOS 的 C++/Swift）执行 bundle，通过新架构（Fabric 渲染器）把 React 组件树映射为原生视图
+2. **打包**: Metro 根据入口和依赖图转换、解析并提供 JavaScript bundle；是否采用 Hermes、怎样生成生产产物，取决于项目和构建配置。
+3. **加载**: 开发模式下，已安装的原生应用向 Metro 请求 bundle；生产构建使用随安装包或更新通道交付的 bundle。两者的网络路径、缓存和错误日志不同。
+4. **渲染**: 原生宿主加载运行时，把 React Native 组件更新提交为平台原生视图。Fabric 是新架构的一部分，不应把它当成所有项目已经启用的前提。
 
 **与 Web React 的关键差异**: RN 没有浏览器 DOM，`View`/`Text` 组件最终映射为 Android 的 `ViewGroup`/`TextView`、iOS 的 `UIView`/`UILabel`。写 `<div>` 会直接报错。
 
@@ -100,6 +100,12 @@ import {
 
 export default function Home() {
   const [name, setName] = useState('');
+  const [greeting, setGreeting] = useState('还没有提交名字');
+
+  function submitName() {
+    const normalized = name.trim();
+    setGreeting(normalized ? `欢迎，${normalized}` : '请输入名字后再提交');
+  }
 
   return (
     <View style={styles.container}>
@@ -112,9 +118,15 @@ export default function Home() {
         value={name}
         onChangeText={setName}
       />
-      <TouchableOpacity style={styles.button}>
-        <Text style={styles.buttonText}>欢迎，{name || '陌生人'}</Text>
+      <TouchableOpacity
+        accessibilityRole="button"
+        accessibilityLabel="提交名字"
+        style={styles.button}
+        onPress={submitName}
+      >
+        <Text style={styles.buttonText}>提交</Text>
       </TouchableOpacity>
+      <Text style={styles.result}>{greeting}</Text>
     </View>
   );
 }
@@ -149,10 +161,14 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 16,
   },
+  result: {
+    marginTop: 16,
+    textAlign: 'center',
+  },
 });
 ```
 
-保存后 Metro 会尝试通过 Fast Refresh 更新设备上的界面；能否保留组件状态取决于改动是否满足刷新边界。若更新失败或状态不符合预期，按提示完整重新加载再判断代码效果。
+**可观察结果**：输入 `Ada` 后点“提交”，页面显示“欢迎，Ada”；清空输入后提交，显示“请输入名字后再提交”。保存后 Metro 会尝试通过 Fast Refresh 更新设备；能否保留组件状态取决于改动是否满足刷新边界。若更新失败或状态不符合预期，按提示完整重新加载再判断代码效果。
 
 ## 🛠️ 真机运行
 
@@ -170,9 +186,9 @@ const styles = StyleSheet.create({
 
 ### 鸿蒙真机/模拟器
 
-1. bare 工程 + RNOH：在工程根目录生成鸿蒙壳工程（`harmony/` 目录），用 DevEco Studio 打开
-2. DevEco 中连接华为真机或启动模拟器
-3. 点击 Run 运行，鸿蒙侧同样连接 Metro 加载 bundle
+1. 从目标 RNOH 发行版的最小示例开始，确认其 RN、RNOH、DevEco 和 SDK 组合。
+2. 按该示例的步骤生成或打开 `harmony/` 壳工程，连接华为真机或启动模拟器。
+3. 构建、安装、启动后，再按其文档配置 Metro 连通；不要把 Android/iOS 的命令或目录结构直接套用。
 
 RNOH 的架构细节与依赖版本匹配见 [05-harmonyos-rnoh-api](../reference/language-concepts/05-harmonyos-rnoh-api.md)。
 
@@ -183,7 +199,7 @@ MyFirstApp/
 ├── App.tsx / index.js     # JS 入口与根组件
 ├── android/               # Android 原生工程（Gradle）
 ├── ios/                   # iOS 原生工程（Xcode + CocoaPods）
-├── harmony/               # 鸿蒙原生工程（DevEco/hvigor，接入 RNOH 后生成）
+├── harmony/               # 仅在所选 RNOH 集成方案创建；不是每个 RN 工程都自带
 ├── metro.config.js        # Metro 打包配置
 ├── babel.config.js        # 语法转换配置
 └── package.json           # 依赖与 npm scripts
@@ -210,14 +226,15 @@ MyFirstApp/
 
 ## 🎯 练习与实践
 
-### 练习一：三端运行打卡
+### 练习一：一个平台的完整运行记录
 
 **任务要求**:
-1. 在 Android 模拟器运行本节 App
-2. （有 macOS 条件者）在 iOS 模拟器运行
-3. 在你的 Android 真机上运行并截图
+1. 选择 Android 或 iOS 的一个模拟器或真机，运行本节 App。
+2. 输入 `Ada`、提交、清空输入再提交，记录三个屏幕状态。
+3. 暂停 Metro 或断开设备与开发机的连接，记录出现的现象；恢复后重新加载。
+4. 若要增加第二平台，重新构建并重复上述步骤，不能只打开 Web 预览代替。
 
-**评估标准**: 至少两端的设备上能看到交互界面且热更新生效。
+**评估标准**: 记录能够说明实际运行的平台、构建方式、输入与两个输出，以及 Metro 不可达时的表现。第二、三平台的记录是后续扩展，不是本课通过前提。
 
 ### 练习二：认识启动链路
 
