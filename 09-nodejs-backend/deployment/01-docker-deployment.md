@@ -109,11 +109,16 @@ services:
       JWT_ACCESS_SECRET: ${JWT_ACCESS_SECRET}   # 密钥走运行时注入，不进镜像
     depends_on:
       db: { condition: service_healthy }
+      migrate: { condition: service_completed_successfully }
     restart: unless-stopped
 
   migrate:
-    build: .
-    command: sh -c "npx prisma migrate deploy && echo done"
+    # 迁移需要 Prisma CLI；它是开发依赖，因此使用 build 阶段，而不是
+    # 已剔除 devDependencies 的 runner 阶段。
+    build:
+      context: .
+      target: build
+    command: pnpm exec prisma migrate deploy
     environment:
       DATABASE_URL: postgresql://postgres:pass@db:5432/app
     depends_on:
@@ -138,7 +143,7 @@ volumes:
   pgdata:
 ```
 
-Kubernetes 场景则把迁移放进 InitContainer 或发布 Job。
+`service_completed_successfully` 让 API 只在迁移任务成功退出后启动；若迁移失败，先修复或回滚迁移，而不是让 API 带着旧 schema 启动。Kubernetes 场景则把迁移放进 InitContainer 或发布 Job。
 
 ## 4. 验证清单
 

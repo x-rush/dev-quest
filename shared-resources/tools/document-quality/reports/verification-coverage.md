@@ -7,11 +7,11 @@
 | 指标 | 数量 |
 |---|---:|
 | 纳入模块文档 | 642 |
-| 主状态：not_verified | 479 |
-| 主状态：runtime | 163 |
-| 验证措辞出现次数 | 140 |
+| 主状态：not_verified | 476 |
+| 主状态：runtime | 166 |
+| 验证措辞出现次数 | 141 |
 | 措辞分类：source_has_limited_runtime_evidence | 86 |
-| 措辞分类：unbound_verification_wording | 54 |
+| 措辞分类：unbound_verification_wording | 55 |
 
 ## 语法级覆盖（不能当作运行覆盖）
 
@@ -218,7 +218,7 @@
 | TanStack / TypeScript | [03-tanstack-stack/reference/language-concepts/10-network-mode.md](../../../../03-tanstack-stack/reference/language-concepts/10-network-mode.md) | `not_verified` | 0 | 0 |
 | TanStack / TypeScript | [03-tanstack-stack/reference/language-concepts/11-search-params.md](../../../../03-tanstack-stack/reference/language-concepts/11-search-params.md) | `not_verified` | 0 | 0 |
 | TanStack / TypeScript | [03-tanstack-stack/reference/language-concepts/12-use-queries.md](../../../../03-tanstack-stack/reference/language-concepts/12-use-queries.md) | `not_verified` | 0 | 0 |
-| TanStack / TypeScript | [03-tanstack-stack/reference/language-concepts/13-use-is-fetching-use-is-mutating.md](../../../../03-tanstack-stack/reference/language-concepts/13-use-is-fetching-use-is-mutating.md) | `not_verified` | 0 | 0 |
+| TanStack / TypeScript | [03-tanstack-stack/reference/language-concepts/13-use-is-fetching-use-is-mutating.md](../../../../03-tanstack-stack/reference/language-concepts/13-use-is-fetching-use-is-mutating.md) | `not_verified` | 0 | 1 |
 | TanStack / TypeScript | [03-tanstack-stack/reference/language-concepts/14-query-persistence.md](../../../../03-tanstack-stack/reference/language-concepts/14-query-persistence.md) | `not_verified` | 0 | 0 |
 | TanStack / TypeScript | [03-tanstack-stack/reference/language-concepts/15-enabled-conditional-queries.md](../../../../03-tanstack-stack/reference/language-concepts/15-enabled-conditional-queries.md) | `not_verified` | 0 | 0 |
 | TanStack / TypeScript | [03-tanstack-stack/reference/language-concepts/16-render-optimization.md](../../../../03-tanstack-stack/reference/language-concepts/16-render-optimization.md) | `not_verified` | 0 | 0 |
@@ -438,7 +438,7 @@
 | PHP | [07-php-mastery/reference/language-concepts/05-arrays-patterns.md](../../../../07-php-mastery/reference/language-concepts/05-arrays-patterns.md) | `runtime` | 3 | 0 |
 | PHP | [07-php-mastery/reference/language-concepts/06-generators-iterators.md](../../../../07-php-mastery/reference/language-concepts/06-generators-iterators.md) | `runtime` | 3 | 0 |
 | PHP | [07-php-mastery/reference/language-concepts/07-namespaces-autoloading.md](../../../../07-php-mastery/reference/language-concepts/07-namespaces-autoloading.md) | `not_verified` | 0 | 0 |
-| PHP | [07-php-mastery/reference/language-concepts/08-reflection-attributes.md](../../../../07-php-mastery/reference/language-concepts/08-reflection-attributes.md) | `not_verified` | 0 | 0 |
+| PHP | [07-php-mastery/reference/language-concepts/08-reflection-attributes.md](../../../../07-php-mastery/reference/language-concepts/08-reflection-attributes.md) | `runtime` | 1 | 0 |
 | PHP | [07-php-mastery/reference/language-concepts/09-strings-regex.md](../../../../07-php-mastery/reference/language-concepts/09-strings-regex.md) | `not_verified` | 0 | 0 |
 | PHP | [07-php-mastery/reference/language-concepts/10-datetime.md](../../../../07-php-mastery/reference/language-concepts/10-datetime.md) | `runtime` | 1 | 0 |
 | PHP | [07-php-mastery/reference/language-concepts/11-errors-exceptions.md](../../../../07-php-mastery/reference/language-concepts/11-errors-exceptions.md) | `not_verified` | 0 | 0 |
@@ -497,7 +497,7 @@
 | Java | [08-java-revisited/reference/language-concepts/02-collections-generics.md](../../../../08-java-revisited/reference/language-concepts/02-collections-generics.md) | `runtime` | 3 | 0 |
 | Java | [08-java-revisited/reference/language-concepts/03-streams-optional.md](../../../../08-java-revisited/reference/language-concepts/03-streams-optional.md) | `runtime` | 3 | 0 |
 | Java | [08-java-revisited/reference/language-concepts/04-concurrency-api.md](../../../../08-java-revisited/reference/language-concepts/04-concurrency-api.md) | `runtime` | 1 | 0 |
-| Java | [08-java-revisited/reference/language-concepts/05-records-sealed-patterns.md](../../../../08-java-revisited/reference/language-concepts/05-records-sealed-patterns.md) | `not_verified` | 0 | 0 |
+| Java | [08-java-revisited/reference/language-concepts/05-records-sealed-patterns.md](../../../../08-java-revisited/reference/language-concepts/05-records-sealed-patterns.md) | `runtime` | 1 | 0 |
 | Java | [08-java-revisited/reference/language-concepts/06-exceptions-resources.md](../../../../08-java-revisited/reference/language-concepts/06-exceptions-resources.md) | `runtime` | 2 | 0 |
 | Java | [08-java-revisited/reference/language-concepts/07-string-immutability-pool.md](../../../../08-java-revisited/reference/language-concepts/07-string-immutability-pool.md) | `runtime` | 1 | 0 |
 | Java | [08-java-revisited/reference/language-concepts/08-enums.md](../../../../08-java-revisited/reference/language-concepts/08-enums.md) | `not_verified` | 0 | 0 |
@@ -632,7 +632,7 @@
 | Rust / Cross-platform | [11-rust-cross-platform/advanced-topics/04-security-practices.md](../../../../11-rust-cross-platform/advanced-topics/04-security-practices.md) | `not_verified` | 0 | 0 |
 | Rust / Cross-platform | [11-rust-cross-platform/basics/01-environment-setup.md](../../../../11-rust-cross-platform/basics/01-environment-setup.md) | `not_verified` | 0 | 1 |
 | Rust / Cross-platform | [11-rust-cross-platform/basics/02-ownership-borrowing.md](../../../../11-rust-cross-platform/basics/02-ownership-borrowing.md) | `runtime` | 1 | 0 |
-| Rust / Cross-platform | [11-rust-cross-platform/basics/03-structs-enums-patterns.md](../../../../11-rust-cross-platform/basics/03-structs-enums-patterns.md) | `not_verified` | 0 | 0 |
+| Rust / Cross-platform | [11-rust-cross-platform/basics/03-structs-enums-patterns.md](../../../../11-rust-cross-platform/basics/03-structs-enums-patterns.md) | `runtime` | 1 | 0 |
 | Rust / Cross-platform | [11-rust-cross-platform/basics/04-traits-generics.md](../../../../11-rust-cross-platform/basics/04-traits-generics.md) | `runtime` | 1 | 0 |
 | Rust / Cross-platform | [11-rust-cross-platform/basics/05-error-handling.md](../../../../11-rust-cross-platform/basics/05-error-handling.md) | `not_verified` | 0 | 2 |
 | Rust / Cross-platform | [11-rust-cross-platform/basics/06-collections-iterators.md](../../../../11-rust-cross-platform/basics/06-collections-iterators.md) | `runtime` | 1 | 0 |

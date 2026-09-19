@@ -90,7 +90,7 @@ RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o main .
 FROM alpine:3.18
 
 # 安装必要工具
-RUN apk --no-cache add ca-certificates tzdata
+RUN apk --no-cache add ca-certificates tzdata wget
 
 # 设置时区
 ENV TZ=Asia/Shanghai
@@ -214,7 +214,7 @@ RUN CGO_ENABLED=0 GOOS=linux go build \
 FROM alpine:3.18
 
 # 安装必要工具
-RUN apk --no-cache add ca-certificates tzdata
+RUN apk --no-cache add ca-certificates tzdata wget
 
 # 设置时区
 ENV TZ=Asia/Shanghai
@@ -281,7 +281,7 @@ RUN CGO_ENABLED=0 GOOS=linux go build \
 FROM alpine:3.18
 
 # 安装必要工具
-RUN apk --no-cache add ca-certificates tzdata
+RUN apk --no-cache add ca-certificates tzdata wget
 
 # 设置时区
 ENV TZ=Asia/Shanghai
@@ -513,11 +513,11 @@ COPY --from=builder /app/main .
 # 复制配置文件
 COPY --from=builder /app/configs ./configs
 
-# 创建必要的目录
-RUN mkdir -p logs uploads
-
 # 创建非root用户
-RUN addgroup -g 1000 appgroup && adduser -u 1000 -G appgroup -s /bin/sh -D appuser
+RUN addgroup -g 1000 appgroup \
+    && adduser -u 1000 -G appgroup -s /bin/sh -D appuser \
+    && mkdir -p logs uploads \
+    && chown -R appuser:appgroup logs uploads
 USER appuser
 
 # 暴露端口
@@ -965,7 +965,7 @@ networks:
 <!-- full-library-explanation -->
 ## 可直接采用的生产构建模板
 
-前置是项目有 `go.mod`、`go.sum`，并且 `./cmd/api` 能构建出一个监听 `8080`、提供 `/healthz` 的服务。下面的版本把依赖下载、交叉编译和运行镜像分开；`-trimpath` 与 `-buildvcs=false` 减少构建路径和 VCS 元数据进入二进制，`CGO_ENABLED=0` 使其可运行在无 shell 的 distroless 镜像中。
+使用这份模板前，项目应有 `go.mod`、`go.sum`，且 `./cmd/api` 是监听 `8080`、提供 `/healthz` 的服务入口。下面把依赖下载、交叉编译和运行镜像分开；`-trimpath` 与 `-buildvcs=false` 减少构建路径和 VCS 元数据进入二进制，`CGO_ENABLED=0` 是采用无 shell 的 distroless 镜像时常用的构建条件。请以自己的源码、目标平台和镜像构建日志确认这些条件成立。
 
 ```dockerfile
 # syntax=docker/dockerfile:1

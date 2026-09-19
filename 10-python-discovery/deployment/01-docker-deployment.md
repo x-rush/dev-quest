@@ -107,8 +107,19 @@ services:
       DATABASE_URL: postgresql+asyncpg://app:app@db:5432/app
       REDIS_URL: redis://cache:6379/0
     depends_on:
-      db:
-        condition: service_healthy     # 等数据库就绪再启动应用
+      db: { condition: service_healthy }
+      cache: { condition: service_healthy }
+      migrate: { condition: service_completed_successfully }
+
+  migrate:
+    build: .
+    command: alembic upgrade head
+    environment:
+      DATABASE_URL: postgresql+asyncpg://app:app@db:5432/app
+    depends_on:
+      db: { condition: service_healthy }
+    restart: "no"
+
   db:
     image: postgres:16-alpine
     environment:
@@ -118,15 +129,22 @@ services:
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U app"]
       interval: 5s
+      timeout: 3s
+      retries: 10
   cache:
     image: redis:7-alpine
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
 ```
 
 ```bash
 docker compose up --build      # 本地一键起全栈
 ```
 
-**要点**：服务间用服务名当主机名（`db`、`cache`）——这就是容器网络里的 DNS；首次启动后记得跑 `alembic upgrade head`（迁移见[生态集成](../frameworks/03-ecosystem-integration.md)）。
+**要点**：服务间用服务名当主机名（`db`、`cache`）——这就是容器网络里的 DNS。`migrate` 是一次性任务，`app` 仅在它成功完成后启动；这要求项目已把 Alembic 与迁移文件声明为运行依赖（迁移见[生态集成](../frameworks/03-ecosystem-integration.md)）。在多副本或正式发布中，应改为由发布系统单独执行迁移 Job，避免多个副本竞争迁移锁。
 
 ## 6. 常见问题
 

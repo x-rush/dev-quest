@@ -17,13 +17,13 @@
   "summary": {
     "documents": 642,
     "by_primary_state": {
-      "not_verified": 479,
-      "runtime": 163
+      "not_verified": 476,
+      "runtime": 166
     },
-    "verification_wording_occurrences": 140,
+    "verification_wording_occurrences": 141,
     "marker_classification": {
       "source_has_limited_runtime_evidence": 86,
-      "unbound_verification_wording": 54
+      "unbound_verification_wording": 55
     }
   },
   "documents": [
@@ -303,7 +303,7 @@
     },
     {
       "path": "01-go-backend/deployment/01-containerization.md",
-      "sha256": "a8ca226e5392cc6e9a118c62198533b6db89f47f3e37ff6f6962fbf318eb699e",
+      "sha256": "e00d795a22ef2a149f3c3518ecd2f3aa64253303ca71093c203eb4a55af4dd33",
       "verification": [
         {
           "mode": "not_verified",
@@ -2535,7 +2535,7 @@
     },
     {
       "path": "03-tanstack-stack/reference/language-concepts/13-use-is-fetching-use-is-mutating.md",
-      "sha256": "6192945eb8f705128fcbe92242a27116ef86fd9adf1ebb2a2503db818f8cbda0",
+      "sha256": "3fb0c2ea009335233f5ae0f9475cd075996f4b90113e5b07e9714261b1723105",
       "verification": [
         {
           "mode": "not_verified",
@@ -2544,7 +2544,7 @@
           "scope": "No named runtime or syntax evidence is recorded for this document."
         }
       ],
-      "marker_count": 0
+      "marker_count": 1
     },
     {
       "path": "03-tanstack-stack/reference/language-concepts/14-query-persistence.md",
@@ -2574,7 +2574,7 @@
     },
     {
       "path": "03-tanstack-stack/reference/language-concepts/16-render-optimization.md",
-      "sha256": "82dd4b41cfed1ab933eeb24b7f346a560d91b630e1c32ca7c249d5bf480d3bac",
+      "sha256": "bac994924f214f4255ba9364058ced5cafe8483a13bec824e910dfae513a7b5e",
       "verification": [
         {
           "mode": "not_verified",
@@ -2600,7 +2600,7 @@
     },
     {
       "path": "03-tanstack-stack/reference/language-concepts/18-controlled-state.md",
-      "sha256": "2f33dc352c65dca354442885511373c0a1034fa485865144f02a8353955a6c7b",
+      "sha256": "80eaa1545ebab2ba1f20e5cf79d9f191d22355387b3982cf6b344e1d34a9afc5",
       "verification": [
         {
           "mode": "not_verified",
@@ -5557,13 +5557,13 @@
     },
     {
       "path": "07-php-mastery/reference/language-concepts/08-reflection-attributes.md",
-      "sha256": "df386697e06390315534bed7dc6e06a566d9badb4d10d3bf8985dbaff610b87b",
+      "sha256": "aa1117b0140e5bc2b216445eb0dfcf531ba2c31599d622e34f7dba480cb66261",
       "verification": [
         {
-          "mode": "not_verified",
-          "status": "NOT_VERIFIED",
-          "report": null,
-          "scope": "No named runtime or syntax evidence is recorded for this document."
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "php-java-rust-twentytwo-runtime.json",
+          "scope": "Only the three unique named complete fences were extracted unchanged after CRLF-to-LF normalization and executed. Other prose/fences, framework integration, HTTP, filesystem behavior, concurrency, performance, Miri/sanitizers, external dependencies, and full projects remain outside this evidence."
         }
       ],
       "marker_count": 0
@@ -6402,13 +6402,13 @@
     },
     {
       "path": "08-java-revisited/reference/language-concepts/05-records-sealed-patterns.md",
-      "sha256": "dfba2c26b8de20b8c77b72fe2e776a6249f735f15a48609c72abfb9838deef0d",
+      "sha256": "f45f323175692eb58a92aea14beed675c775aec12489ea0c069553f23ae5b0fe",
       "verification": [
         {
-          "mode": "not_verified",
-          "status": "NOT_VERIFIED",
-          "report": null,
-          "scope": "No named runtime or syntax evidence is recorded for this document."
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "php-java-rust-twentytwo-runtime.json",
+          "scope": "Only the three unique named complete fences were extracted unchanged after CRLF-to-LF normalization and executed. Other prose/fences, framework integration, HTTP, filesystem behavior, concurrency, performance, Miri/sanitizers, external dependencies, and full projects remain outside this evidence."
         }
       ],
       "marker_count": 0
@@ -6941,7 +6941,7 @@
     },
     {
       "path": "09-nodejs-backend/deployment/01-docker-deployment.md",
-      "sha256": "ec1608102634a9158c1238d7b3778a8d15e654e904817615898eb34502310bc1",
+      "sha256": "6dff00b3ea79febe800d3674e444d05055b368458a3e27d9eb50a2222769290c",
       "verification": [
         {
           "mode": "not_verified",
@@ -7651,7 +7651,7 @@
     },
     {
       "path": "10-python-discovery/deployment/01-docker-deployment.md",
-      "sha256": "48fae814a9ca271348c8c477c92275eaf8e15d78640e5eaebfb808425e9264ea",
+      "sha256": "af0c23bcf2302c95dbc971e9899a3e63120a1dda081c89bfdf1d1154f6632a79",
       "verification": [
         {
           "mode": "not_verified",
@@ -8361,13 +8361,13 @@
     },
     {
       "path": "11-rust-cross-platform/basics/03-structs-enums-patterns.md",
-      "sha256": "532e3b0a53688e0d9c27c17e6344f99c7f5ccb4f9d2569e958f6accea01bcb61",
+      "sha256": "29826eaed3e3ca7977d4b06742af3ff5f9d5ea3cc87be299bfdb5ba649ef81f3",
       "verification": [
         {
-          "mode": "not_verified",
-          "status": "NOT_VERIFIED",
-          "report": null,
-          "scope": "No named runtime or syntax evidence is recorded for this document."
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "php-java-rust-twentytwo-runtime.json",
+          "scope": "Only the three unique named complete fences were extracted unchanged after CRLF-to-LF normalization and executed. Other prose/fences, framework integration, HTTP, filesystem behavior, concurrency, performance, Miri/sanitizers, external dependencies, and full projects remain outside this evidence."
         }
       ],
       "marker_count": 0
@@ -9178,6 +9178,12 @@
       "line": 209,
       "excerpt": "`as const` 保留字面量和 readonly 信息，`satisfies` 检查约束，二者都不会生成运行时校验代码。普通查询键不写 as const 仍可运行，只是部分类型工具无法保留同样精确的元组信息。",
       "classification": "source_has_limited_runtime_evidence"
+    },
+    {
+      "path": "03-tanstack-stack/reference/language-concepts/13-use-is-fetching-use-is-mutating.md",
+      "line": 100,
+      "excerpt": "完成后再用 `useMutationState` 展示失败记录，并限定业务键；不要把整个缓存的历史失败直接当作当前表单的失败。返回数字的 API 依据见 [useIsMutating 官方参考](https://tanstack.com/query/latest/docs/framework/react/reference/functions/useIsMutating)。本轮核对官方资料和正文，未运行 React、并发请求或浏览器交互；以上均是待执行验收，不能记为运行通过。",
+      "classification": "unbound_verification_wording"
     },
     {
       "path": "03-tanstack-stack/reference/library-guides/03-language-web-foundations.md",
