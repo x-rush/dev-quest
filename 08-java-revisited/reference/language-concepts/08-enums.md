@@ -74,6 +74,46 @@ enum Op {
 
 ## 💡 示例
 
+### 可复现示例：枚举名称、集合与稳定业务编码
+
+`ordinal()` 是声明位置，不能承担持久化或协议 ID；此示例为每个状态定义不随声明顺序变化的 `code`。`EnumSet` 和 `EnumMap` 的遍历顺序按枚举声明顺序，因此输出可稳定验收。
+
+<!-- reference-case: {"id":"java-enum-stable-code","stdout":"PAID=20\n[NEW, PAID]\n{NEW=draft, PAID=settled}\n","requires":"JDK 21"} -->
+```java
+import java.util.EnumMap;
+import java.util.EnumSet;
+
+public class EnumStableCode {
+    enum OrderStatus {
+        NEW(10), PAID(20), SHIPPED(30);
+
+        private final int code;
+
+        OrderStatus(int code) {
+            this.code = code;
+        }
+
+        int code() {
+            return code;
+        }
+    }
+
+    public static void main(String[] args) {
+        var status = OrderStatus.valueOf("PAID");
+        var active = EnumSet.of(OrderStatus.PAID, OrderStatus.NEW);
+        var labels = new EnumMap<OrderStatus, String>(OrderStatus.class);
+        labels.put(OrderStatus.NEW, "draft");
+        labels.put(OrderStatus.PAID, "settled");
+
+        System.out.println(status.name() + "=" + status.code());
+        System.out.println(active);
+        System.out.println(labels);
+    }
+}
+```
+
+预期输出中 `[NEW, PAID]` 与 Map 的键顺序均来自声明顺序；若把 `PAID` 的 `code` 保持为 20，即使重排常量，业务编码仍不变。
+
 ```java
 import java.util.EnumMap;
 import java.util.EnumSet;
