@@ -126,7 +126,7 @@ const imageExamples = <>
 
 **ScrollView**: 一次性渲染全部子元素。适合表单、设置页等确定数量的内容。
 
-**FlatList**: 只渲染可视区域附近的条目。列表超过 20 条就应使用 FlatList。
+**FlatList**: 只渲染可视区域附近的条目。数据量未知、可能持续增长，或行组件成本较高时优先考虑它；不存在适用于所有设备的“超过 20 条就必须换”的阈值。
 
 ```tsx
 import { FlatList, Text, View } from 'react-native';
@@ -143,13 +143,15 @@ const TODOS: Todo[] = Array.from({ length: 200 }, (_, i) => ({
   done: i % 3 === 0,
 }));
 
+const ROW_HEIGHT = 57; // 本示例：56 高的行 + 1 高的分隔线
+
 function TodoList() {
   return (
     <FlatList
       data={TODOS}
       keyExtractor={(item) => item.id}
       renderItem={({ item }) => (
-        <View style={{ padding: 16, borderBottomWidth: 1, borderColor: '#eee' }}>
+        <View style={{ height: ROW_HEIGHT - 1, justifyContent: 'center', paddingHorizontal: 16 }}>
           <Text style={{ textDecorationLine: item.done ? 'line-through' : 'none' }}>
             {item.title}
           </Text>
@@ -157,9 +159,9 @@ function TodoList() {
       )}
       // 性能相关 props 的完整清单见 reference 组件 Props 全表
       initialNumToRender={10}
-      getItemLayout={(data, index) => ({
-        length: 57, // 条目固定高度时可指定，跳过测量
-        offset: 57 * index,
+      getItemLayout={(_data, index) => ({
+        length: ROW_HEIGHT, // 只在“行高与分隔线总高度真的固定”时使用
+        offset: ROW_HEIGHT * index,
         index,
       })}
       ListEmptyComponent={<Text>暂无待办</Text>}
@@ -183,7 +185,7 @@ StyleSheet 有助于组织与检查样式，动态样式对象也合法；是否
 **A**: 三查——父容器是否有 `flex: 1` 撑开、元素是否有显式宽高或 flex、`Text` 是否存在。RN 没有 Web 的"内容自动撑高"兜底那么宽松。
 
 ### Q2: 阴影样式在 Android 上不生效？
-**A**: Android 只支持 `elevation`，iOS 用 `shadowColor/shadowOffset/shadowOpacity/shadowRadius`，两端需分别设置。
+**A**: 先检查所用 RN 版本及是否采用新架构：较旧 Android 实现常用 `elevation`，而 `shadowColor`、`shadowOffset`、`shadowOpacity`、`shadowRadius` 的跨平台支持随版本变化。为目标版本分别在 Android/iOS 设备确认，不要只在一端看到阴影就假定另一端相同。
 
 ### Q3: FlatList 滑动掉帧怎么办？
 **A**: `getItemLayout` 跳过测量、`renderItem` 里的组件用 `React.memo`、图片用固定宽高，进阶优化见 [07-advanced-features](./07-advanced-features.md)。
@@ -196,15 +198,15 @@ StyleSheet 有助于组织与检查样式，动态样式对象也合法；是否
 1. 用 View/Image/Text 实现一张资料卡：头像（网络图）、姓名、简介、三个横排统计数字
 2. 头像圆形，卡片圆角带 `elevation` 阴影
 
-**评估标准**: 布局在 Android 与 iOS 两端观感一致。
+**评估标准**: 在已选目标平台确认头像不变形、长简介会换行且统计数字不溢出；第二平台可作为后续差异检查，记录实际差异而非预设“必然一致”。
 
 ### 练习二：长列表性能对比
 
 **任务要求**:
-1. 分别用 ScrollView 和 FlatList 渲染 500 条数据
-2. 用开发者菜单的 "Show Perf Monitor" 对比两端帧率
+1. 分别用 ScrollView 和 FlatList 渲染 500 条数据，给每一行加入稳定 `id`。
+2. 在同一台目标设备上快速滚动、跳转到中部，再删掉一项；观察初次打开时间、滚动是否空白和删除后内容是否错行。
 
-**提示**: ScrollView 渲染 500 条会有明显卡顿甚至 OOM，这正是虚拟化存在的意义。
+**提示**: ScrollView 是否卡顿取决于设备和行组件复杂度，不能把某个数量当作必然 OOM 的证明。验收重点是：长列表需要按需渲染时，FlatList 的稳定 key、行高度假设和滚动行为都可解释。
 
 ---
 
