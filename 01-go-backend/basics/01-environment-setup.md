@@ -201,6 +201,7 @@ GOOS=windows GOARCH=amd64 go build -o hello.exe main.go
 
 ### 1. Hello World 程序
 
+<!-- doc-verify:go-environment-toolchain-hello -->
 ```go
 // main.go
 package main
@@ -208,9 +209,16 @@ package main
 import "fmt"
 
 func main() {
-    fmt.Println("Hello, Go!")
-    fmt.Println("我是从PHP转来的开发者")
+    fmt.Println("hello-go toolchain-ready")
 }
+```
+
+这个程序只验证编译器能编译并运行当前模块中的 `main.go`；还应在同一目录运行 `go env GOMOD`，确认输出是该目录下的 `go.mod`，而不是空设备。它不安装 SDK，也不下载依赖。
+
+预期输出：
+
+```text
+hello-go toolchain-ready
 ```
 
 ### 2. 编译和运行

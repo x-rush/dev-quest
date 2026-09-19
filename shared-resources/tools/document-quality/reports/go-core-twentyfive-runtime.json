@@ -1,10 +1,24 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-19T17:40:30.819973+00:00",
-  "purpose": "Twenty-fifth-round runtime evidence for fifteen marked Go core-document fences.",
+  "generated_at": "2026-09-19T18:27:34.169873+00:00",
+  "purpose": "Twenty-fifth-round runtime evidence for sixteen marked Go core-document fences.",
   "isolation": "No network, read-only container root, dropped capabilities, no-new-privileges, bounded CPU/memory/PIDs, and tmpfs-only writable workspace. Image must already exist because --pull=never is used.",
-  "scope": "Only the fifteen named complete Go fences extracted unchanged after CRLF-to-LF normalization were executed. Other fences, toolchain setup, web services, filesystem integrations, concurrency scheduling, performance, and projects remain outside this evidence.",
+  "scope": "Only the sixteen named complete Go fences extracted unchanged after CRLF-to-LF normalization were executed. Other fences, SDK installation, toolchain setup, web services, filesystem integrations, concurrency scheduling, performance, and projects remain outside this evidence.",
   "results": [
+    {
+      "id": "go-environment-toolchain-hello",
+      "language": "go",
+      "document": "01-go-backend/basics/01-environment-setup.md",
+      "image": "golang:1.25-alpine",
+      "document_sha256": "c6cb50d1222a328ff2808bbf26f53970e2022ce734f27d4ea6e416699d561232",
+      "code_sha256": "034d51818b8d1ba90f95fe87517d8efb3bbd4600bb222ed370cb6ce95b947ec2",
+      "command": "GOCACHE=/tmp/go-build go run /tmp/main.go",
+      "expected_stdout": "hello-go toolchain-ready\n",
+      "stdout": "hello-go toolchain-ready\n",
+      "stderr": "",
+      "exit_code": 0,
+      "status": "PASS"
+    },
     {
       "id": "go-first-program-hello",
       "language": "go",
@@ -217,7 +231,7 @@
     }
   ],
   "summary": {
-    "passed": 15,
-    "total": 15
+    "passed": 16,
+    "total": 16
   }
 }
