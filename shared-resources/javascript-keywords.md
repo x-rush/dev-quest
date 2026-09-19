@@ -56,6 +56,34 @@
 
 `enum` 为保留名称；严格模式还限制 `implements`、`interface`、`let`、`package`、`private`、`protected`、`public`、`static`、`yield` 等作为绑定名的使用，`await` 另受模块/异步语境限制。TypeScript 的 `interface`、`type`、`satisfies` 等有自己的规则；编译后类型信息通常不提供运行时校验。新语法如资源管理声明必须另外核对目标运行时，不因在线规范出现就默认为所有浏览器可用。
 
+## 高频语法符号：不是关键词，也不是内置函数
+
+下面几项经常出现在框架代码中。它们由 JavaScript 语法解析，不是要从某个包导入的 API；因此应和 `Array.map`、`fetch`、`useState` 分开记忆。
+
+| 写法 | 读取方式 | 容易写错的边界 |
+|---|---|---|
+| `obj?.name`、`items?.[0]` | 左边为 `null`/`undefined` 时返回 `undefined`，否则继续读取/调用 | 只短路这条链；`obj?.missing.value` 仍可能因 `missing` 是 undefined 而报错，应写 `obj?.missing?.value` |
+| `fn?.()` | 函数存在时调用 | 会吞掉“回调本应存在”的契约错误；关键回调应显式校验或让错误暴露 |
+| `left ?? right` | 仅当左边是 `null` 或 `undefined` 时选右边 | 不把 `0`、`false`、`""` 当缺失；默认值场景通常比 `\|\|` 更合适。不能未加括号地和 `&&`/`\|\|` 混用 |
+| `...items` | 展开可迭代值，或在对象字面量展开自有可枚举属性 | `[...array]`、`{...object}` 都是浅复制；嵌套对象仍共享。对象不能直接当可迭代数组展开 |
+| `function f(...args) {}` | 剩余参数把多余实参收集为真实数组 | rest 必须在参数列表最后；它不同于旧函数的类数组 `arguments` |
+| `(value) => value * 2` | 箭头函数使用词法 `this` | 没有自己的 `this`、`arguments` 或 `new.target`，不能当构造器；对象方法需要动态接收者时通常用普通方法 |
+| `{ id, title: label = '未命名' } = item` | 解构读取属性并可改名/提供默认值 | 默认值只处理 `undefined`，不处理 `null`；`item` 本身可能为空时，先做输入校验或可选链 |
+
+```js
+const settings = { retries: 0, title: undefined, nested: { enabled: false } };
+
+console.log(settings.retries ?? 3);       // 0：0 是有效值
+console.log(settings.retries || 3);       // 3：|| 把 0 当假值
+console.log(settings.title ?? '默认标题'); // 默认标题
+
+const copy = { ...settings };
+copy.nested.enabled = true;
+console.log(settings.nested.enabled);     // true：对象展开不是深拷贝
+```
+
+当你想表达“字段可能缺失”时先选 `?.` / `??`；当你想表达“任何假值都走备用分支”时才选 `||`。这一区别会直接影响金额 `0`、开关 `false` 和空文本的业务含义。
+
 ## 完整小实验：看见绑定、遍历和错误边界
 
 保存为 `keywords.mjs`，用 `node keywords.mjs` 运行。只用基础语言能力，不需要 npm 依赖。
