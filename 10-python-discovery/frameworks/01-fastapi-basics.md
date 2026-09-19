@@ -48,7 +48,7 @@
 uv init --app todo-api && cd todo-api
 uv add fastapi "uvicorn[standard]"
 
-# 启动开发服务器（热重载）
+# 先保存第 2 节 main.py，再启动开发服务器（热重载）
 uv run uvicorn main:app --reload
 ```
 
@@ -56,7 +56,7 @@ uv run uvicorn main:app --reload
 
 ```python
 # main.py
-from fastapi import FastAPI, HTTPException, status
+from fastapi import FastAPI, HTTPException, Query, status
 
 app = FastAPI(title="待办服务", version="0.1.0")
 
@@ -69,7 +69,7 @@ def health() -> dict[str, str]:
     return {"status": "ok"}
 
 @app.get("/todos/{todo_id}")
-def read_todo(todo_id: int) -> dict:
+async def read_todo(todo_id: int) -> dict:
     # 注解 int 让 FastAPI 自动做类型转换；请求 /todos/abc 会得到 422
     if todo_id not in _TODOS:
         # 规范错误出口：状态码 + 人类可读的 detail
@@ -86,10 +86,11 @@ def read_todo(todo_id: int) -> dict:
 ## 3. Pydantic 模型：请求体与响应体
 
 ```python
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
 
 class TodoCreate(BaseModel):
     """创建待办的入参——自动完成校验、序列化与文档生成。"""
+    model_config = ConfigDict(str_strip_whitespace=True, extra="forbid")
     title: str = Field(min_length=1, max_length=100, examples=["学 FastAPI"])
     done: bool = False
 
@@ -98,7 +99,7 @@ class TodoRead(TodoCreate):
     id: int
 
 @app.post("/todos", response_model=TodoRead, status_code=status.HTTP_201_CREATED)
-def create_todo(payload: TodoCreate) -> TodoRead:
+async def create_todo(payload: TodoCreate) -> TodoRead:
     # payload 已经过 Pydantic 校验：title 保证是 1-100 字符
     new_id = max(_TODOS, default=0) + 1
     todo = TodoRead(id=new_id, **payload.model_dump())
@@ -112,14 +113,16 @@ def create_todo(payload: TodoCreate) -> TodoRead:
 - `response_model` 起到"出口过滤"作用：多余字段不会泄露给客户端
 - Pydantic v2 使用 `model_dump()`，替代 v1 的 `dict()`
 
+第 3、4 节代码按顺序追加到同一个 `main.py`。演示存储仅属于一个进程，重启即丢失；内存读写端点使用不含 `await` 的短 `async def`，避免线程池中的多个请求交错分配 ID。这不替代数据库事务：接入阻塞 I/O 后须改为线程池或异步驱动，并由数据库保障 ID 与并发更新。`response_model` 还会校验输出；若服务端产生错误类型，应修正实现，不能把响应校验失败包装成客户端错误。
+
 ## 4. 查询参数：列表与过滤
 
 ```python
 @app.get("/todos", response_model=list[TodoRead])
-def list_todos(
+async def list_todos(
     done: bool | None = None,   # 可选过滤条件：?done=true
-    limit: int = 10,            # 分页大小
-    offset: int = 0,            # 分页偏移
+    limit: int = Query(10, ge=1, le=100),
+    offset: int = Query(0, ge=0),
 ) -> list[TodoRead]:
     items = [TodoRead(**t) for t in _TODOS.values()]
     if done is not None:                          # 仅在显式传入时过滤
@@ -128,6 +131,10 @@ def list_todos(
 ```
 
 **要点**：不属于路径的标量参数自动成为查询参数；`bool | None` 表达"可传可不传"。
+
+用 `/docs` 验收：创建 `{"title":"学路由"}` 返回 201 与 ID；查询该 ID 返回相同标题；`{"title":"   "}`、`?limit=0`、`?offset=-1` 返回 422；未知 ID 返回 404。`int` 只检查类型，`Query` 中的上下界才阻止负索引和无界分页。完整自动化练习见 [TODO API](../projects/01-todo-api.md)。
+
+参数声明与校验的官方说明见 [FastAPI Query 校验](https://fastapi.tiangolo.com/tutorial/query-params-str-validations/)。
 
 ## 5. 自动文档：/docs 与 /redoc
 

@@ -86,7 +86,7 @@ Room 保存数据，ViewModel 组织页面状态，Composable 显示和发事件
 └─────────────────┘
 ```
 
-数据流是双向单向的：**状态向下**（Room → Flow → StateFlow → Compose），**事件向上**（点击 → ViewModel → Repository → Room）。
+数据流遵循单向数据流：**状态向下**（Room → Flow → StateFlow → Compose），**事件向上**（点击 → ViewModel → Repository → Room）。事件会触发新的状态，而不是由 UI 直接修改数据库中的状态。
 
 ---
 
@@ -94,7 +94,7 @@ Room 保存数据，ViewModel 组织页面状态，Composable 显示和发事件
 
 ### 1. 添加 Room 依赖（KSP）
 
-`libs.versions.toml`（版本以官方最新稳定版为准）：
+`libs.versions.toml`（以下是一组教学基线；开始实际项目时，优先使用仓库锁定且已验证的兼容组合。不要因为“最新稳定版”就单独升级某一个插件或库）：
 
 ```toml
 [plugins]

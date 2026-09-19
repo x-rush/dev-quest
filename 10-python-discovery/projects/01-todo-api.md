@@ -8,7 +8,7 @@
 
 **扩展顺序**：同步与异步数据库接口不要混用，先测试再加复杂依赖。
 
-建议保存一份正常输入、一份失败输入、实际输出和对应测试。先完成以上阶段再扩展正文中的完整设计；遇到省略实现或未定义依赖，应按文档上下文补齐，不能把代码片段拼接后当作已经验证的完整工程。
+本页是完整的内存版练习：依次保存 `schemas.py`、`store.py`、`main.py` 和 `tests/test_api.py` 即可运行。每次服务重启清空数据，多个 worker 不共享数据；它用于学习 HTTP 契约，不用于持久化部署。先通过第 6 节测试，再替换存储。
 
 > **文档简介**: 综合运用 FastAPI 基础知识，从零实现一个带完整 CRUD、过滤分页与测试的 TODO API
 >
@@ -34,7 +34,7 @@
 ## 🎯 项目目标
 
 - 功能：待办的增删改查 + 完成状态切换 + 过滤分页
-- 质量门：`ruff check` 通过、`pytest` 全绿、`/docs` 可交互
+- 质量门：`pytest` 全绿、`/docs` 可交互；正常请求与非法请求都应有可断言结果
 
 ## 1. 需求与接口设计
 
@@ -57,9 +57,10 @@ uv add --dev pytest httpx
 ## 3. 数据模型：schemas.py
 
 ```python
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field, model_validator
 
 class TodoBase(BaseModel):
+    model_config = ConfigDict(str_strip_whitespace=True, extra="forbid")
     title: str = Field(min_length=1, max_length=100)
     done: bool = False
 
@@ -68,12 +69,24 @@ class TodoCreate(TodoBase):
 
 class TodoUpdate(BaseModel):
     """PATCH 语义：所有字段可选，只更新显式传入的字段。"""
+    model_config = ConfigDict(str_strip_whitespace=True, extra="forbid")
     title: str | None = Field(default=None, min_length=1, max_length=100)
     done: bool | None = None
+
+    @model_validator(mode="before")
+    @classmethod
+    def reject_empty_or_null(cls, data):
+        if isinstance(data, dict) and (not data or any(v is None for v in data.values())):
+            raise ValueError("至少提供一个字段，且字段不能为 null")
+        return data
 
 class TodoRead(TodoBase):
     id: int
 ```
+
+“可以省略”与“允许 null”是两回事。`exclude_unset=True` 只省略未提交的字段，无法自动拒绝显式的 `null`。这里先拒绝空对象与 null，再校验字段，否则 `{"title": null}` 会污染存储，随后在响应校验时变成服务端错误。
+
+`mode="before"` 接收尚未转换的输入，因此先判断是否为字典，并返回原值交给后续字段校验；参见 [Pydantic 模型校验器](https://docs.pydantic.dev/latest/concepts/validators/)。
 
 ## 4. 存储层：store.py
 
@@ -114,39 +127,42 @@ def delete(todo_id: int) -> bool:
 ## 5. 路由层：main.py
 
 ```python
-from fastapi import FastAPI, HTTPException, status
+from fastapi import FastAPI, HTTPException, Query, Response, status
 from schemas import TodoCreate, TodoRead, TodoUpdate
 import store
 
 app = FastAPI(title="TODO API")
 
 @app.get("/todos", response_model=list[TodoRead])
-def list_todos(done: bool | None = None, limit: int = 50, offset: int = 0):
+async def list_todos(done: bool | None = None, limit: int = Query(50, ge=1, le=100), offset: int = Query(0, ge=0)):
     return store.list_todos(done)[offset : offset + limit]
 
 @app.post("/todos", response_model=TodoRead, status_code=status.HTTP_201_CREATED)
-def create_todo(payload: TodoCreate):
+async def create_todo(payload: TodoCreate):
     return store.create(payload)
 
 @app.get("/todos/{todo_id}", response_model=TodoRead)
-def read_todo(todo_id: int):
+async def read_todo(todo_id: int):
     todo = store.get(todo_id)
     if todo is None:
         raise HTTPException(status.HTTP_404_NOT_FOUND, "待办不存在")
     return todo
 
 @app.patch("/todos/{todo_id}", response_model=TodoRead)
-def update_todo(todo_id: int, payload: TodoUpdate):
+async def update_todo(todo_id: int, payload: TodoUpdate):
     todo = store.update(todo_id, payload)
     if todo is None:
         raise HTTPException(status.HTTP_404_NOT_FOUND, "待办不存在")
     return todo
 
-@app.delete("/todos/{todo_id}", status_code=status.HTTP_204_NO_CONTENT)
-def delete_todo(todo_id: int) -> None:
+@app.delete("/todos/{todo_id}", status_code=status.HTTP_204_NO_CONTENT, response_class=Response)
+async def delete_todo(todo_id: int) -> Response:
     if not store.delete(todo_id):
         raise HTTPException(status.HTTP_404_NOT_FOUND, "待办不存在")
+    return Response(status_code=204)
 ```
+
+此处的 `async def` 处理器只做不含 `await` 的短内存操作，在单个事件循环中不会在分配 ID 的中途切换请求。引入文件或同步数据库 I/O 后不能直接照搬：阻塞 I/O 应移至同步处理器/线程，或者换成真正的异步驱动，并交给数据库生成 ID、处理并发与事务。
 
 ## 6. 测试：tests/test_api.py
 
@@ -159,6 +175,7 @@ import store
 @pytest.fixture(autouse=True)
 def clean_store():
     store._todos.clear()   # 每个测试从空存储开始
+    store._next_id = 1
     yield
 
 client = TestClient(app)
@@ -176,9 +193,30 @@ def test_patch_partial():
 
 def test_delete_404():
     assert client.delete("/todos/999").status_code == 404
+
+
+@pytest.mark.parametrize("payload", [{}, {"title": None}, {"done": None}, {"title": "   "}, {"unknown": 1}])
+def test_invalid_patch_does_not_mutate(payload):
+    tid = client.post("/todos", json={"title": "保留"}).json()["id"]
+    assert client.patch(f"/todos/{tid}", json=payload).status_code == 422
+    assert client.get(f"/todos/{tid}").json()["title"] == "保留"
+
+
+@pytest.mark.parametrize("query", ["limit=0", "limit=101", "offset=-1"])
+def test_invalid_pagination(query):
+    assert client.get(f"/todos?{query}").status_code == 422
+
+
+def test_delete_has_no_body():
+    tid = client.post("/todos", json={"title": "删除我"}).json()["id"]
+    response = client.delete(f"/todos/{tid}")
+    assert response.status_code == 204 and response.content == b""
+    assert client.get(f"/todos/{tid}").status_code == 404
 ```
 
-运行 `uv run pytest -q`，预期 3 passed。
+运行 `uv run python -m pytest -q`，预期 12 passed。若显示模块无法导入，确认终端位于包含 `main.py` 的项目根目录。
+
+验证记录（2026-09-19）：从本页原样抽取四个 Python 文件，在 Python 3.12.14 与 Python 3.14 容器中均通过 12 项测试；实际依赖为 FastAPI 0.141.1、Pydantic 2.13.5、pytest 9.1.1、httpx 0.28.1。当前 Starlette 1.6.0 会报告 httpx 测试适配器与 AnyIO 别名弃用警告；测试通过不代表依赖无迁移工作，也不涵盖数据库、部署或多 worker 持久化。
 
 ## 7. 运行与验证
 

@@ -1,0 +1,515 @@
+{
+  "scope": "marked complete examples only; not framework or network validation",
+  "versions": {
+    "php": {
+      "command": [
+        "php",
+        "--version"
+      ],
+      "exit_code": 0,
+      "stdout": "PHP 8.3.6 (cli) (built: Sep  2 2026 12:56:02) (NTS)\nCopyright (c) The PHP Group\nZend Engine v4.3.6, Copyright (c) Zend Technologies\n    with Zend OPcache v8.3.6, Copyright (c), by Zend Technologies\n",
+      "stderr": ""
+    },
+    "javac": {
+      "command": [
+        "javac",
+        "-version"
+      ],
+      "exit_code": 0,
+      "stdout": "javac 21.0.12\n",
+      "stderr": ""
+    },
+    "java": {
+      "command": [
+        "java",
+        "-version"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": "openjdk version \"21.0.12\" 2026-07-21 LTS\nOpenJDK Runtime Environment Temurin-21.0.12+8 (build 21.0.12+8-LTS)\nOpenJDK 64-Bit Server VM Temurin-21.0.12+8 (build 21.0.12+8-LTS, mixed mode, sharing)\n"
+    }
+  },
+  "documents": {
+    "07-php-mastery/reference/language-concepts/01-php-keywords.md": "a22b13521f16529fe8ce4c8eba77ff3c28d3b036b4c864e30b3ebb571059e18d",
+    "07-php-mastery/reference/language-concepts/02-built-in-functions.md": "f2e60510ec55dd5bef56adeed3ba0cd66be01009f1e474a90e601ec8917ac11f",
+    "08-java-revisited/reference/language-concepts/01-java-keywords.md": "b3b6f875d877a1df7bbca90f2e05252990092ff468c03e21050ef20f0059a224",
+    "08-java-revisited/reference/library-guides/01-standard-library.md": "eb0d10994ed6f29c36838bd4bc62579b67934408008e47821e70493740b1f69b"
+  },
+  "cases": [
+    {
+      "id": "php-keyword-values",
+      "document": "07-php-mastery/reference/language-concepts/01-php-keywords.md",
+      "source_sha256": "f2d2c8a7a6606e41b59bcbf32fba3322c98ebb1313347693ed98afeb6e0b1942",
+      "expected_stdout": "strict rejected\n6\n10\nstring\n",
+      "commands": [
+        {
+          "command": [
+            "php",
+            "-d",
+            "display_errors=stderr",
+            "-d",
+            "error_reporting=-1",
+            "main.php"
+          ],
+          "exit_code": 0,
+          "stdout": "strict rejected\n6\n10\nstring\n",
+          "stderr": ""
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "php-keyword-generator",
+      "document": "07-php-mastery/reference/language-concepts/01-php-keywords.md",
+      "source_sha256": "8e6a007506475e900ef02ecbeb81a688163141b5cb8c77d656e5047677cdf9ea",
+      "expected_stdout": "1,2,3\n0:4\n1:5\n9:6\n",
+      "commands": [
+        {
+          "command": [
+            "php",
+            "-d",
+            "display_errors=stderr",
+            "-d",
+            "error_reporting=-1",
+            "main.php"
+          ],
+          "exit_code": 0,
+          "stdout": "1,2,3\n0:4\n1:5\n9:6\n",
+          "stderr": ""
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "php-keyword-control",
+      "document": "07-php-mastery/reference/language-concepts/01-php-keywords.md",
+      "source_sha256": "ac07e16fcedeca18ecec60b4bfc2753ea4aee5bcfcc10f3dfa909b795ed6b6e2",
+      "expected_stdout": "bool(true)\nbool(false)\ncaught\ncleaned\n",
+      "commands": [
+        {
+          "command": [
+            "php",
+            "-d",
+            "display_errors=stderr",
+            "-d",
+            "error_reporting=-1",
+            "main.php"
+          ],
+          "exit_code": 0,
+          "stdout": "bool(true)\nbool(false)\ncaught\ncleaned\n",
+          "stderr": ""
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "php-array",
+      "document": "07-php-mastery/reference/language-concepts/02-built-in-functions.md",
+      "source_sha256": "a63bacac95684b3b8b1ff79b3762e71c7145218727e96b2b6ae5c6dcbdf457d6",
+      "expected_stdout": "int(0)\nbool(true)\n{\"1\":2,\"2\":4}\n[2,4]\nbool(true)\nbool(false)\n",
+      "commands": [
+        {
+          "command": [
+            "php",
+            "-d",
+            "display_errors=stderr",
+            "-d",
+            "error_reporting=-1",
+            "main.php"
+          ],
+          "exit_code": 0,
+          "stdout": "int(0)\nbool(true)\n{\"1\":2,\"2\":4}\n[2,4]\nbool(true)\nbool(false)\n",
+          "stderr": ""
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "php-sort",
+      "document": "07-php-mastery/reference/language-concepts/02-built-in-functions.md",
+      "source_sha256": "317f026dbcba133e83709b6bd365374d336657f595049877a601ed48c576d0c7",
+      "expected_stdout": "bool(true)\n[1,2,3]\n[3,1,2]\n[\"Ada\",\"Lin\"]\n",
+      "commands": [
+        {
+          "command": [
+            "php",
+            "-d",
+            "display_errors=stderr",
+            "-d",
+            "error_reporting=-1",
+            "main.php"
+          ],
+          "exit_code": 0,
+          "stdout": "bool(true)\n[1,2,3]\n[3,1,2]\n[\"Ada\",\"Lin\"]\n",
+          "stderr": ""
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "php-text-json",
+      "document": "07-php-mastery/reference/language-concepts/02-built-in-functions.md",
+      "source_sha256": "1b2a1719a708f29bfa47e4b81386514717fd4cc8166307c91929d97169633ea3",
+      "expected_stdout": "int(0)\nbool(true)\n6\n&lt;b&gt;Ada&lt;/b&gt;\ninvalid json\n",
+      "commands": [
+        {
+          "command": [
+            "php",
+            "-d",
+            "display_errors=stderr",
+            "-d",
+            "error_reporting=-1",
+            "main.php"
+          ],
+          "exit_code": 0,
+          "stdout": "int(0)\nbool(true)\n6\n&lt;b&gt;Ada&lt;/b&gt;\ninvalid json\n",
+          "stderr": ""
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "php-date",
+      "document": "07-php-mastery/reference/language-concepts/02-built-in-functions.md",
+      "source_sha256": "21c4207b83b3fc0ba045aa68df91d45500589e729a13d0f5366786bd704e1746",
+      "expected_stdout": "2026-09-10 12:00 +08:00\n2026-09-13 18:00 +08:00\nbool(false)\n",
+      "commands": [
+        {
+          "command": [
+            "php",
+            "-d",
+            "display_errors=stderr",
+            "-d",
+            "error_reporting=-1",
+            "main.php"
+          ],
+          "exit_code": 0,
+          "stdout": "2026-09-10 12:00 +08:00\n2026-09-13 18:00 +08:00\nbool(false)\n",
+          "stderr": ""
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "php-file",
+      "document": "07-php-mastery/reference/language-concepts/02-built-in-functions.md",
+      "source_sha256": "bc38824213de467c779cd1f23fa6a2d4302c8048bae09a3efe7a2d39b3236109",
+      "expected_stdout": "int(1)\nstring(1) \"0\"\nbool(true)\n",
+      "commands": [
+        {
+          "command": [
+            "php",
+            "-d",
+            "display_errors=stderr",
+            "-d",
+            "error_reporting=-1",
+            "main.php"
+          ],
+          "exit_code": 0,
+          "stdout": "int(1)\nstring(1) \"0\"\nbool(true)\n",
+          "stderr": ""
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "java-flow",
+      "document": "08-java-revisited/reference/language-concepts/01-java-keywords.md",
+      "source_sha256": "3f060a327a5a74a27a899fec17827e17c9553c52eacb90709f93e52b7074afa6",
+      "expected_stdout": "5\nmedium\n",
+      "commands": [
+        {
+          "command": [
+            "javac",
+            "--release",
+            "21",
+            "-encoding",
+            "UTF-8",
+            "Main.java"
+          ],
+          "exit_code": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "java",
+            "-cp",
+            "/tmp/reference-r60b5i8u",
+            "Main"
+          ],
+          "exit_code": 0,
+          "stdout": "5\nmedium\n",
+          "stderr": ""
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "java-record",
+      "document": "08-java-revisited/reference/language-concepts/01-java-keywords.md",
+      "source_sha256": "596ab2d3d2872eeb3680557e2c609c02759f53882a98d70c7262ed51285456e8",
+      "expected_stdout": "[Ada, Lin]\n[Ada]\n",
+      "commands": [
+        {
+          "command": [
+            "javac",
+            "--release",
+            "21",
+            "-encoding",
+            "UTF-8",
+            "Main.java"
+          ],
+          "exit_code": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "java",
+            "-cp",
+            "/tmp/reference-x037osp2",
+            "Main"
+          ],
+          "exit_code": 0,
+          "stdout": "[Ada, Lin]\n[Ada]\n",
+          "stderr": ""
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "java-patterns",
+      "document": "08-java-revisited/reference/language-concepts/01-java-keywords.md",
+      "source_sha256": "fe9c8f40133d249107fec64b0b6979e44c2367fc7cf2a39a62e2a424af18f8b0",
+      "expected_stdout": "positive:3\nnon-positive\nmissing\n",
+      "commands": [
+        {
+          "command": [
+            "javac",
+            "--release",
+            "21",
+            "-encoding",
+            "UTF-8",
+            "Main.java"
+          ],
+          "exit_code": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "java",
+            "-cp",
+            "/tmp/reference-1pe1ojps",
+            "Main"
+          ],
+          "exit_code": 0,
+          "stdout": "positive:3\nnon-positive\nmissing\n",
+          "stderr": ""
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "java-resource",
+      "document": "08-java-revisited/reference/language-concepts/01-java-keywords.md",
+      "source_sha256": "c6dbc53e271d07ef3d7d72c4078992fc5082d2ce9e6560859626d39c565fc969",
+      "expected_stdout": "work\nclosed\nfailed\n",
+      "commands": [
+        {
+          "command": [
+            "javac",
+            "--release",
+            "21",
+            "-encoding",
+            "UTF-8",
+            "Main.java"
+          ],
+          "exit_code": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "java",
+            "-cp",
+            "/tmp/reference-dlalb2cr",
+            "Main"
+          ],
+          "exit_code": 0,
+          "stdout": "work\nclosed\nfailed\n",
+          "stderr": ""
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "java-text",
+      "document": "08-java-revisited/reference/library-guides/01-standard-library.md",
+      "source_sha256": "ab0240ec46764d17d9b47c978579ef2e65f7293b05866fc784d9534431fb8a75",
+      "expected_stdout": "4\n3\n[a, b]\n[a, b, ]\nhello\n",
+      "commands": [
+        {
+          "command": [
+            "javac",
+            "--release",
+            "21",
+            "-encoding",
+            "UTF-8",
+            "Main.java"
+          ],
+          "exit_code": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "java",
+            "-cp",
+            "/tmp/reference-k4mqokfw",
+            "Main"
+          ],
+          "exit_code": 0,
+          "stdout": "4\n3\n[a, b]\n[a, b, ]\nhello\n",
+          "stderr": ""
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "java-collections",
+      "document": "08-java-revisited/reference/library-guides/01-standard-library.md",
+      "source_sha256": "633a5b3d4d4bc27b62d79d263be58063c281f016e3a5a8dcd7cba319bed11392",
+      "expected_stdout": "[Ada, Lin]\n[Ada]\n[Ada, Lin]\n",
+      "commands": [
+        {
+          "command": [
+            "javac",
+            "--release",
+            "21",
+            "-encoding",
+            "UTF-8",
+            "Main.java"
+          ],
+          "exit_code": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "java",
+            "-cp",
+            "/tmp/reference-bbkwwhe1",
+            "Main"
+          ],
+          "exit_code": 0,
+          "stdout": "[Ada, Lin]\n[Ada]\n[Ada, Lin]\n",
+          "stderr": ""
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "java-decimal",
+      "document": "08-java-revisited/reference/library-guides/01-standard-library.md",
+      "source_sha256": "8744b8dc97f925784e248a99b684aaa20481a423af48f9be27d2aa61fee3b1c1",
+      "expected_stdout": "0.3\nfalse\n0\n0.33\n",
+      "commands": [
+        {
+          "command": [
+            "javac",
+            "--release",
+            "21",
+            "-encoding",
+            "UTF-8",
+            "Main.java"
+          ],
+          "exit_code": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "java",
+            "-cp",
+            "/tmp/reference-t51dvutw",
+            "Main"
+          ],
+          "exit_code": 0,
+          "stdout": "0.3\nfalse\n0\n0.33\n",
+          "stderr": ""
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "java-time",
+      "document": "08-java-revisited/reference/library-guides/01-standard-library.md",
+      "source_sha256": "2ea77968d6bfcbdc45640b6d938d87971f8021c4bad0f88f3c703def9229d50d",
+      "expected_stdout": "23\n12:00\n13:00\ninvalid date\n",
+      "commands": [
+        {
+          "command": [
+            "javac",
+            "--release",
+            "21",
+            "-encoding",
+            "UTF-8",
+            "Main.java"
+          ],
+          "exit_code": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "java",
+            "-cp",
+            "/tmp/reference-_5wj6p8u",
+            "Main"
+          ],
+          "exit_code": 0,
+          "stdout": "23\n12:00\n13:00\ninvalid date\n",
+          "stderr": ""
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "java-files",
+      "document": "08-java-revisited/reference/library-guides/01-standard-library.md",
+      "source_sha256": "a706ca1a17e290949a95bb6494fff355c54b27ca6d1020292474fea03ec9cd89",
+      "expected_stdout": "2\ntrue\n",
+      "commands": [
+        {
+          "command": [
+            "javac",
+            "--release",
+            "21",
+            "-encoding",
+            "UTF-8",
+            "Main.java"
+          ],
+          "exit_code": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "java",
+            "-cp",
+            "/tmp/reference-4qauc93i",
+            "Main"
+          ],
+          "exit_code": 0,
+          "stdout": "2\ntrue\n",
+          "stderr": ""
+        }
+      ],
+      "passed": true
+    }
+  ],
+  "passed": 17,
+  "total": 17
+}

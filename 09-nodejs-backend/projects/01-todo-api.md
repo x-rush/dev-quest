@@ -8,7 +8,7 @@
 
 **扩展顺序**：每个 Promise 失败可追踪，HTTP 与存储测试分开。
 
-建议保存一份正常输入、一份失败输入、实际输出和对应测试。先完成以上阶段再扩展正文中的完整设计；遇到省略实现或未定义依赖，应按文档上下文补齐，不能把代码片段拼接后当作已经验证的完整工程。
+本练习复用 [基础项目](../basics/08-first-project.md) 的 Prisma 配置、数据库客户端、错误类型、错误出口与 TypeScript 执行配置。保留原有 Task 作为练习对照，在 schema 中追加本页 Todo，新增 `/todos` 子应用，再执行迁移和客户端生成。先通过基础项目测试，才开始本扩展。
 
 > **文档简介**: 独立完成第一个完整的 TODO REST API——Hono 4 + Prisma + Zod + Vitest 的最小组合，覆盖 CRUD、过滤、分页与测试的全流程
 >
@@ -66,6 +66,8 @@ model Todo {
 
 ```bash
 pnpm exec prisma migrate dev --name todo-init
+pnpm exec prisma generate
+pnpm add -D vitest
 ```
 
 ## 3. 校验层：Zod schema 即文档
@@ -76,7 +78,7 @@ pnpm exec prisma migrate dev --name todo-init
 import { z } from 'zod';
 
 export const createTodoSchema = z.object({
-  title: z.string().min(1).max(100),
+  title: z.string().trim().min(1).max(100),
   priority: z.enum(['low', 'mid', 'high']).default('low'),
 });
 
@@ -87,11 +89,11 @@ export const listQuerySchema = z.object({
   pageSize: z.coerce.number().int().min(1).max(50).default(20),
 });
 
-export const updateTodoSchema = z.object({
-  title: z.string().min(1).max(100).optional(),
+export const updateTodoSchema = z.strictObject({
+  title: z.string().trim().min(1).max(100).optional(),
   done: z.boolean().optional(),
   priority: z.enum(['low', 'mid', 'high']).optional(),
-});
+}).refine((value) => Object.keys(value).length > 0, '至少提供一个更新字段');
 ```
 
 ## 4. 服务层：业务与框架解耦
@@ -99,7 +101,23 @@ export const updateTodoSchema = z.object({
 ```typescript
 // src/services/todo-service.ts —— 只依赖 prisma，不感知 Hono
 import { prisma } from '../lib/prisma.js';
-import { notFound } from '../lib/http-error.js';
+import { HttpError } from '../lib/errors.js';
+
+const notFound = (message: string) => new HttpError(404, message, 'TODO_NOT_FOUND');
+
+export function createTodo(title: string, priority: 'low' | 'mid' | 'high') {
+  return prisma.todo.create({ data: { title, priority } });
+}
+
+export async function getTodo(id: string) {
+  const todo = await prisma.todo.findUnique({ where: { id } });
+  if (!todo) throw notFound(`任务 ${id} 不存在`);
+  return todo;
+}
+
+export function updateTodo(id: string, data: { title?: string; done?: boolean; priority?: 'low' | 'mid' | 'high' }) {
+  return prisma.todo.update({ where: { id }, data }); // 原子更新；P2025 由共用错误出口映射 404
+}
 
 interface ListFilter {
   status: 'all' | 'open' | 'done';
@@ -128,9 +146,7 @@ export async function listTodos(f: ListFilter) {
 }
 
 export async function toggleTodo(id: string, done: boolean) {
-  const todo = await prisma.todo.findUnique({ where: { id } });
-  if (!todo) throw notFound(`任务 ${id} 不存在`);
-  return prisma.todo.update({ where: { id }, data: { done } });
+  return updateTodo(id, { done });
 }
 
 export async function deleteTodo(id: string) {
@@ -159,7 +175,7 @@ todosApp.post('/', async (c) => {
 });
 
 todosApp.get('/', async (c) => {
-  const q = listQuerySchema.parse(c.req.query()); // ZodError → 422
+  const q = listQuerySchema.parse(c.req.query()); // 沿用基础项目：ZodError → 400
   return c.json(await svc.listTodos(q));
 });
 
@@ -177,8 +193,10 @@ todosApp.delete('/:id', async (c) => {
   return c.body(null, 204); // 删除成功无响应体
 });
 
-// 装配：app.route('/todos', todosApp)
+// 在 src/app.ts 导入 todosApp，并在 createApp 内调用 app.route('/todos', todosApp)
 ```
+
+本页路由里的 `c.req.json()` 也应换成基础项目的 `readJson`（提取为 `src/lib/read-json.ts` 后导入），让损坏 JSON 明确返回 400。不要全局把任意 `SyntaxError` 改成客户端错误，因为内部 JSON 处理缺陷也可能抛出同类异常。
 
 ## 6. 验收与测试
 
@@ -192,23 +210,37 @@ curl 'localhost:3000/todos?status=open&priority=high&page=1'
 
 ```typescript
 // tests/todo-service.test.ts
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, beforeEach, afterAll } from 'vitest';
 import { listTodos } from '../src/services/todo-service.js';
+import { prisma } from '../src/lib/prisma.js';
+
+if (process.env.DATABASE_URL !== 'file:./prisma/test.db') throw new Error('仅允许使用专用测试库');
+beforeEach(async () => {
+  await prisma.todo.deleteMany();
+  await prisma.todo.createMany({ data: [
+    { title: '完成项', done: true, priority: 'low' },
+    { title: '未完成项', done: false, priority: 'high' },
+  ] });
+});
+afterAll(() => prisma.$disconnect());
 
 describe('listTodos', () => {
   it('按 status=done 过滤', async () => {
     const result = await listTodos({ status: 'done', page: 1, pageSize: 20 });
-    expect(result.items.every((t) => t.done)).toBe(true);
+    expect(result.total).toBe(1);
+    expect(result.items.map((t) => t.title)).toEqual(['完成项']);
   });
 });
 ```
 
 完整测试方法见 [`../testing/01-unit-testing.md`](../testing/01-unit-testing.md)。
 
+先设置基础项目中的专用 `DATABASE_URL`，运行 `pnpm exec prisma migrate deploy` 与 `pnpm exec vitest run tests/todo-service.test.ts --no-file-parallelism`。断言“所有返回项都完成”会让空数组误通过，因此必须同时断言结果数量和已知样本。继续补充未知 ID 更新/删除、无效 PATCH、分页上限与创建后重启可查回的测试。
+
 ## ✅ 完成自检
 
 - [ ] 全部 5 个端点通过 curl 手工验收
-- [ ] 非法 priority 返回 422 而非 500
+- [ ] 非法 priority、损坏 JSON 与空 PATCH 返回 400，且不改变数据库
 - [ ] 删除不存在的 id 返回 404
 - [ ] 至少 3 条服务层测试通过
 

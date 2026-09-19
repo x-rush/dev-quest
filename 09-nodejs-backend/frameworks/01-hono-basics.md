@@ -177,15 +177,18 @@ return c.redirect('/new-path', 301);
 ```typescript
 // src/lib/respond.ts —— 统一响应信封助手
 import type { Context } from 'hono';
+import type { ContentfulStatusCode } from 'hono/utils/http-status';
 
-export function ok<T>(c: Context, data: T, status = 200) {
+export function ok<T>(c: Context, data: T, status: ContentfulStatusCode = 200) {
   return c.json({ success: true, data }, status);
 }
 
-export function fail(c: Context, message: string, status = 400) {
+export function fail(c: Context, message: string, status: ContentfulStatusCode = 400) {
   return c.json({ success: false, error: message }, status);
 }
 ```
+
+`ContentfulStatusCode` 表达“允许带响应体的状态码”。它能避免把任意 `number` 传给 Hono 的重载签名；204 则应走 `c.body(null, 204)`，不要套 JSON 信封。分页参数也要验证是有限正整数并设上限，`Number()` 本身不执行这些业务检查。
 
 ## ✅ 最佳实践与陷阱
 

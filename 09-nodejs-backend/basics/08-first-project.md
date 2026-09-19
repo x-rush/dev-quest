@@ -55,23 +55,43 @@
 
 字段约束：`title` 1-100 字符；`status` ∈ `todo | doing | done`，默认 `todo`。
 
-> 💡 **渐进路线（可选）**：如果想先跑通路由逻辑，可先用内存数组实现——跳过步骤二，把步骤四中的 `prisma.task.*` 换成对数组变量的 `find/filter/slice` 操作即可，步骤一、三、五、六完全不受影响。等路由、校验、错误处理都绿了，再回来补 Prisma 建模与迁移，把持久化换成真实现。
+本页给出带 SQLite 持久化的完整基线。若先改成内存存储，还必须同步替换测试的清理/断开连接逻辑与事务查询，不能仅把 `prisma.task.*` 改成数组方法。先按本页通过完整测试，再练习替换存储。
 
 ## 🛠️ 步骤一：初始化与依赖
 
 ```bash
-pnpm init && pnpm pkg set type=module
-pnpm add hono @hono/node-server @prisma/client zod
-pnpm add @prisma/adapter-better-sqlite3 better-sqlite3   # Prisma v7：SQLite 经 driver adapter 连接
-pnpm add -D prisma typescript @types/node dotenv
+mkdir quest-api
+cd quest-api
+pnpm init
+pnpm pkg set type=module
+pnpm add hono@4 @hono/node-server @prisma/client@7 zod@4 dotenv
+pnpm add @prisma/adapter-better-sqlite3@7 better-sqlite3
+pnpm add -D prisma@7 typescript @types/node tsx
 ```
+
+使用模块 README 的 Node 基线，提交生成的 `pnpm-lock.yaml` 固定依赖组合。若 pnpm 提示跳过 SQLite 的安装脚本，运行 `pnpm approve-builds`，只允许刚安装且已核对来源的原生依赖，再执行 `pnpm rebuild`；无法加载原生模块时先解决 Node ABI/本地构建环境，不要把报错当成路由错误。
+
+新建 `tsconfig.json`：
+
+```json
+{
+  "compilerOptions": {
+    "target": "ES2022", "module": "NodeNext", "moduleResolution": "NodeNext",
+    "strict": true, "noEmit": true, "skipLibCheck": true,
+    "types": ["node"]
+  },
+  "include": ["src/**/*.ts", "test/**/*.ts", "generated/**/*.ts"]
+}
+```
+
+本页用 `tsx` 运行 TypeScript 并解析源码中 `.js` 导入，用 `tsc --noEmit` 独立检查类型。不要直接执行 `node --test` 后把“发现 0 个测试”当作通过。
 
 目录规划：`src/lib/`（prisma 单例、HttpError）、`src/middleware/`（错误出口）、`src/routes/`（按资源拆分子应用）、`test/`。`app.ts` 只装配不监听，`server.ts` 负责监听——测试直接复用 Hono 实例，不占端口。
 
 ## 🛠️ 步骤二：数据模型（Prisma）
 
 ```bash
-pnpm exec prisma init   # 生成 schema 与 prisma.config.ts 骨架（v7 默认 generator 为 prisma-client）
+pnpm exec prisma init --datasource-provider sqlite
 ```
 
 ```prisma
@@ -121,7 +141,8 @@ pnpm exec prisma generate                  # v7 迁移不自动生成客户端�
 客户端单例从 generator 的 output 目录导入，且 v7 构造时必须传入 driver adapter：
 
 ```ts
-// src/lib/prisma.ts —— 单例，避免热重载创建多个连接
+// src/lib/prisma.ts —— 一个进程内的模块实例复用同一个客户端
+import "dotenv/config";
 import { PrismaClient } from "../../generated/prisma/client.js"; // 不再来自 @prisma/client，output 相对 prisma/ 目录 → 项目根 generated/prisma
 import { PrismaBetterSqlite3 } from "@prisma/adapter-better-sqlite3";
 
@@ -132,13 +153,25 @@ export const prisma = new PrismaClient({
 
 ## 🛠️ 步骤三：校验与错误基建
 
-复用 [06 课](./06-error-handling.md) 的 `HttpError` 类，并把集中式 `app.onError` 落地为独立模块。校验不需要单独的中间件：处理器里直接 `Schema.parse()`，`ZodError` 会沿 async rejection 自动传播到 `onError`（想要类型收窄的中间件方案可改用 zValidator，见 [05 课](./05-http-routing.md)）：
+先保存下面的错误类型，再注册统一出口。处理器里直接 `Schema.parse()`，`ZodError` 会沿 async rejection 传播到 `onError`：
+
+```ts
+// src/lib/errors.ts
+import type { ContentfulStatusCode } from "hono/utils/http-status";
+
+export class HttpError extends Error {
+  constructor(public status: ContentfulStatusCode, message: string, public code: string) {
+    super(message);
+  }
+}
+```
 
 ```ts
 // src/middleware/error-handler.ts
 import type { ErrorHandler } from "hono";
 import { ZodError } from "zod";
 import { HttpError } from "../lib/errors.js";
+import { Prisma } from "../../generated/prisma/client.js";
 
 export const errorHandler: ErrorHandler = (err, c) => {
   if (err instanceof ZodError) {
@@ -146,6 +179,9 @@ export const errorHandler: ErrorHandler = (err, c) => {
   }
   if (err instanceof HttpError) {
     return c.json({ error: { code: err.code, message: err.message } }, err.status);
+  }
+  if (err instanceof Prisma.PrismaClientKnownRequestError && err.code === "P2025") {
+    return c.json({ error: { code: "TASK_NOT_FOUND", message: "任务不存在" } }, 404);
   }
   console.error(err); // 500 及以上记日志，响应不泄露内部细节
   return c.json({ error: { code: "INTERNAL_ERROR" } }, 500);
@@ -157,6 +193,7 @@ export const errorHandler: ErrorHandler = (err, c) => {
 ```ts
 // src/routes/tasks.ts
 import { Hono } from "hono";
+import type { Context } from "hono";
 import { z } from "zod";
 import { prisma } from "../lib/prisma.js";
 import { HttpError } from "../lib/errors.js";
@@ -164,12 +201,22 @@ import { HttpError } from "../lib/errors.js";
 export const tasksApp = new Hono();
 
 const TaskStatus = z.enum(["todo", "doing", "done"]);
-const CreateTaskSchema = z.object({ title: z.string().min(1).max(100), status: TaskStatus.default("todo") });
-const UpdateTaskSchema = z.object({ title: z.string().min(1).max(100).optional(), status: TaskStatus.optional() });
+const CreateTaskSchema = z.strictObject({ title: z.string().trim().min(1).max(100), status: TaskStatus.default("todo") });
+const UpdateTaskSchema = z.strictObject({ title: z.string().trim().min(1).max(100).optional(), status: TaskStatus.optional() })
+  .refine((value) => Object.keys(value).length > 0, "至少提供一个更新字段");
 const ListQuerySchema = z.object({
   status: TaskStatus.optional(), page: z.coerce.number().int().min(1).default(1),
   size: z.coerce.number().int().min(1).max(100).default(20),   // 查询串全是字符串，z.coerce 强转
 });
+
+async function readJson(c: Context): Promise<unknown> {
+  try {
+    return await c.req.json();
+  } catch (error) {
+    if (error instanceof SyntaxError) throw new HttpError(400, "JSON 格式错误", "INVALID_JSON");
+    throw error;
+  }
+}
 
 tasksApp.get("/", async (c) => {
   const q = ListQuerySchema.parse(c.req.query());      // 失败自动进 onError
@@ -184,7 +231,7 @@ tasksApp.get("/", async (c) => {
 });
 
 tasksApp.post("/", async (c) => {
-  const data = CreateTaskSchema.parse(await c.req.json());
+  const data = CreateTaskSchema.parse(await readJson(c));
   return c.json(await prisma.task.create({ data }), 201);
 });
 
@@ -195,7 +242,7 @@ tasksApp.get("/:id", async (c) => {
 });
 
 tasksApp.patch("/:id", async (c) => {
-  const data = UpdateTaskSchema.parse(await c.req.json());
+  const data = UpdateTaskSchema.parse(await readJson(c));
   const task = await prisma.task.update({ where: { id: c.req.param("id") }, data }); // 不存在抛 P2025 → 404
   return c.json(task);
 });
@@ -216,7 +263,7 @@ import { tasksApp } from "./routes/tasks.js";
 import { errorHandler } from "./middleware/error-handler.js";
 
 export function createApp() {
-  const app = new Hono();
+  const app = new Hono({ strict: false }); // 本练习同时接受集合路径末尾有/无斜杠
   app.use(logger());                 // 起步用内置日志；生产换 pino 等结构化方案（见部署篇）
   app.route("/api/tasks", tasksApp);
   app.notFound((c) => c.json({ error: { code: "NOT_FOUND" } }, 404));
@@ -249,6 +296,9 @@ const app = createApp();
 // 小助手：统一拼路径——app.request() 无需监听端口
 const req = (path: string, init?: RequestInit) => app.request(`/api/tasks${path}`, init);
 
+if (process.env.DATABASE_URL !== "file:./prisma/test.db") {
+  throw new Error("测试只能使用 test.db，禁止清理开发数据库");
+}
 beforeEach(async () => { await prisma.task.deleteMany(); });
 after(async () => { await prisma.$disconnect(); });   // 否则连接池挂住测试进程
 
@@ -263,14 +313,38 @@ test("创建任务返回 201 且补全默认状态", async () => {
 });
 
 test("分页查询串自动强转", async () => {
-  const res = await req("?page=2&size=5");
+  const res = await req("/?page=2&size=5");
   assert.equal(res.status, 200);
+});
+
+test("不存在的更新/删除都返回 404", async () => {
+  const updated = await req("/missing", { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ status: "done" }) });
+  assert.equal(updated.status, 404);
+  assert.equal((await req("/missing", { method: "DELETE" })).status, 404);
+});
+
+test("损坏 JSON 和无效更新都返回 400", async () => {
+  const headers = { "Content-Type": "application/json" };
+  assert.equal((await req("/", { method: "POST", headers, body: "{" })).status, 400);
+  for (const payload of [{}, { title: "   " }, { status: null }, { unexpected: 1 }]) {
+    assert.equal((await req("/missing", { method: "PATCH", headers, body: JSON.stringify(payload) })).status, 400);
+  }
 });
 ```
 
 ```bash
-node --test          # 原生测试命令，无需额外测试框架（递归匹配 *.test.*，目录参数是 glob：node --test "test/**/*.test.ts"）
+pnpm exec tsc --noEmit
+# 下列环境变量写法适用于 Bash；PowerShell 用 $env:DATABASE_URL = 'file:./prisma/test.db'
+export DATABASE_URL="file:./prisma/test.db"
+pnpm exec prisma migrate deploy
+pnpm exec tsx --test test/tasks.test.ts
 ```
+
+测试预期 4 项通过。独立测试文件在 `beforeEach` 清空专用数据库；禁止让多个并行测试文件共享同一个 SQLite 文件。测试完在 Bash `unset DATABASE_URL`，PowerShell `Remove-Item Env:DATABASE_URL`，随后运行 `pnpm exec tsx src/server.ts`，开发服务才会恢复使用 `.env` 中的 `dev.db`。`GET /api/tasks/` 应返回带 `items/total/page/size` 的对象，新增后重启服务仍能查回。
+
+Prisma 7 的驱动适配器与显式客户端生成规则参见 [官方升级说明](https://docs.prisma.io/docs/guides/upgrade-prisma-orm/v7)。换成 PostgreSQL 时须重新选择适配器、连接配置和迁移方案，不能只改 `provider` 后复用 SQLite 迁移。
+
+验证状态（2026-09-19）：已补齐本页文件、执行命令和四项行为断言；本轮容器两次安装真实 Prisma/SQLite 依赖均因 npm 网络 `ECONNRESET` 中断，尚未完成类型检查、迁移和运行验收。上述 4 项为预期结果，不能作为已通过的报告。按锁文件完成这些命令后，再将自己的依赖版本和实际结果记录到练习仓库。
 
 ## 🎨 最佳实践
 

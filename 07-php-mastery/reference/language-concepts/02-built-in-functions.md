@@ -1,11 +1,27 @@
-# 常用内置函数分类全表
+# PHP 常用内置函数：输入、返回值、失败与副作用
 
-## 查函数时先看失败返回与是否原地修改
+本篇从数组、字符串、验证/编解码、时间、数学、文件六类建立查询入口。PHP 的函数集合受版本与扩展影响，不存在一张对所有安装环境都相同的“全部内置函数表”。完整索引见[官方函数参考](https://www.php.net/manual/en/funcref.php)；先用 `php -v`、`php -m` 确认环境，扩展函数可用 `function_exists` 检查。
 
-前置：数组、字符串和严格比较。PHP 的数组兼有列表与映射用途，所以“返回数组”还不够：要看键是否保留、是否重新编号，以及 JSON 最终会编码成数组还是对象。
+这里的 5 个完整脚本采用 PHP 8.3+、不依赖 mbstring/intl 等可选扩展；分别存成 `.php` 文件后运行 `php 文件名.php`。PHP 8.4 新增函数单独列出，不能在旧解释器上直接调用。前置知识是变量、数组、函数与严格比较。
 
-完整脚本：保存为 `array-lab.php`，运行 `php array-lab.php`。
+## 1. 数组：先决定保留键还是重新编号
 
+PHP 数组同时承担列表与映射用途。查询失败、键为 0、值为 null 是三个不同状态；不要用一次宽松布尔转换把它们混在一起。
+
+| 任务 | 函数 | 契约与边界 |
+|---|---|---|
+| 构造 | `range`、`array_fill`、`array_combine` | range 生成序列；fill 按数量填充；combine 要求键值数量一致，否则 ValueError |
+| 查值 | `in_array($v, $a, true)`、`array_search($v, $a, true)` | 第三参明确严格类型比较；search 返回键或 false，必须严格判断 |
+| 查键 | `array_key_exists`、`array_keys`、`array_values` | key_exists 对值为 null 的现有键也返回 true；values 重新编号为连续整数 |
+| 取片段/列 | `array_slice`、`array_column` | slice 默认重新编号整数键，第四参 true 才保留；column 的索引键重复会覆盖 |
+| 入栈/出栈 | `array_push`、`array_pop` | push 修改原数组并返回新长度；pop 删除末项并返回值，空数组返回 null |
+| 队首修改 | `array_unshift`、`array_shift` | 修改原数组，数字键可能重编；不要作为超大队列的默认实现 |
+| 替换片段 | `array_splice` | 修改原数组并返回移除部分，不是返回修改后的完整数组 |
+| 变换/筛选 | `array_map`、`array_filter` | 单数组 map 保留键，多数组 map 重新编号；filter 保留键 |
+| 归约 | `array_reduce` | 指定初始值，避免空输入的结果与累加类型不明确 |
+| 去重/倒序 | `array_unique`、`array_reverse` | unique 默认按字符串形式比较且保留键；reverse 是否保留数字键由参数决定 |
+
+<!-- reference-case: {"id":"php-array","stdout":"int(0)\nbool(true)\n{\"1\":2,\"2\":4}\n[2,4]\nbool(true)\nbool(false)\n"} -->
 ```php
 <?php
 declare(strict_types=1);
@@ -15,208 +31,154 @@ var_dump($position, $position !== false);
 $filtered = array_filter($values, fn(int $n): bool => $n > 0);
 echo json_encode($filtered, JSON_THROW_ON_ERROR), PHP_EOL;
 echo json_encode(array_values($filtered), JSON_THROW_ON_ERROR), PHP_EOL;
+$row = ['nickname' => null];
+var_dump(array_key_exists('nickname', $row), isset($row['nickname']));
 ```
 
-预期先看到 int(0) 与 bool(true)，再得到 `{"1":2,"2":4}` 和 `[2,4]`。下标 0 不是失败；filter 保留键，values 才重新编号。这能解释“我明明返回列表，前端却拿到对象”的常见问题。
+输出首先是 `int(0)`、`bool(true)`，然后是 `{"1":2,"2":4}` 和 `[2,4]`，最后 true/false。`array_filter` 之后的整数键不连续，因此 JSON 编成对象；确实需要列表时才用 array_values。无回调的 filter 会去掉 false、0、`'0'`、空字符串、null 等假值，可能误删合法数据，应按需求写条件。
 
-自测：sort 返回排序是否成功并原地改变数组，sorted 风格的“直接返回新数组”不是 PHP sort 的契约。需要保留原顺序时先复制，再排序；不要把返回值覆盖原数组。
+### 排序会改变谁？
 
-## 概述
+| 函数 | 按什么排序 | 键处理 |
+|---|---|---|
+| `sort` / `rsort` | 值，升序/降序 | 原地修改且重新编号 |
+| `asort` / `arsort` | 值，升序/降序 | 保留键关联 |
+| `ksort` / `krsort` | 键 | 保留键值关联 |
+| `usort` / `uasort` / `uksort` | 自定义比较器比较值/值/键 | 依次为重编键/保留键/保留键 |
 
-PHP 内置函数超过千个，本文按"高频 + 现代"原则收录数组、字符串、日期、数学与文件五类核心函数。所有函数均在严格类型模式下可用；标注 ⚠️ 的行为在 PHP 8 中有变化或易踩坑。
+比较器返回负整数、0、正整数，不应返回“a 是否大于 b”的布尔值。PHP 8 起比较为相等的元素保留原相对顺序；这不意味着混合数字和字符串的比较自动符合业务意图，应统一数据类型或指定比较方式。[sort 文档](https://www.php.net/manual/en/function.sort.php)、[usort 文档](https://www.php.net/manual/en/function.usort.php)说明了返回值与键处理。
 
-<details>
-<summary>文档信息（用途、难度与维护记录）</summary>
-
-## 📚 文档元数据
-
-| 属性 | 内容 |
-|------|------|
-| **模块** | `07-php-mastery` |
-| **象限** | 字典 |
-| **难度** | ⭐ |
-| **标签** | `#内置函数` `#数组` `#字符串` `#日期` `#速查` |
-| **更新日期** | `2026年9月` |
-
-</details>
-
-## 1. 数组函数
-
-### 创建与查询
-
-| 函数 | 签名要点 | 说明 |
-|------|---------|------|
-| `range()` | `range(1, 5)` / `range('a', 'e')` | 生成等差序列 |
-| `array_fill()` | `array_fill(0, 3, 'x')` | 指定起始索引与数量填充 |
-| `array_keys()` / `array_values()` | — | 取键列表 / 重索引取值列表 |
-| `in_array()` | `in_array($v, $arr, true)` | ⚠️ 生产代码必须传第三参严格比较 |
-| `array_search()` | 返回键名，找不到返回 `false` | ⚠️ 键名为 `0` 时与 `false` 弱比较混淆，用 `!== false` 判断 |
-| `array_key_exists()` | — | 键存在判断（值为 null 也返回 true） |
-| `array_slice()` | `array_slice($arr, 1, 2, true)` | 切片，第四参保留原键 |
-| `array_column()` | `array_column($rows, 'name', 'id')` | 从二维数组提取列，第三参作键 |
-| `array_combine()` | `array_combine($keys, $vals)` | 键数组 + 值数组合成映射 |
-
-### 增删与合并
-
+<!-- reference-case: {"id":"php-sort","stdout":"bool(true)\n[1,2,3]\n[3,1,2]\n[\"Ada\",\"Lin\"]\n"} -->
 ```php
-$stack = [1, 2];
-array_push($stack, 3);          // 尾部追加，等价 $stack[] = 3
-array_pop($stack);              // 尾部弹出
-array_unshift($stack, 0);       // 头部插入
-array_shift($stack);            // 头部弹出
-
-$merged = [...[1, 2], ...[2, 3]];           // 展开合并：[1, 2, 2, 3]
-$mapA = [...['a' => 1], ...['a' => 2]];     // ⚠️ 字符串键后者覆盖，数字键追加
-array_splice($merged, 1, 2, ['x']);          // 原地替换切片
+<?php
+declare(strict_types=1);
+$original = [3, 1, 2];
+$sorted = $original;
+$success = sort($sorted, SORT_NUMERIC);
+var_dump($success);
+echo json_encode($sorted, JSON_THROW_ON_ERROR), PHP_EOL;
+echo json_encode($original, JSON_THROW_ON_ERROR), PHP_EOL;
+$users = [['name' => 'Lin', 'age' => 30], ['name' => 'Ada', 'age' => 20]];
+usort($users, fn(array $a, array $b): int => $a['age'] <=> $b['age']);
+echo json_encode(array_column($users, 'name'), JSON_THROW_ON_ERROR), PHP_EOL;
 ```
 
-### 过滤、变换与归约（详见 [数组操作模式](./05-arrays-patterns.md)）
+不要写 `$sorted = sort($original)`，那样得到的是 bool 且原数组已被排序。数组复制是值语义，但数组中的对象仍引用同一对象，不能据此推断深拷贝。
 
-| 函数 | 说明 |
-|------|------|
-| `array_map()` | 逐元素变换；`array_map(null, $a, $b)` 可实现多数组按位合并 |
-| `array_filter()` | 默认剔除弱 false 值；`ARRAY_FILTER_USE_KEY` 按键过滤 |
-| `array_reduce()` | 归约为单值 |
-| `array_unique()` | 去重；⚠️ 保留原键，需再 `array_values()` |
-| `array_reverse()` | 反转 |
-| `usort()` / `uasort()` / `uksort()` | 自定义排序；比较函数返回负数、0、正数。应满足一致的排序关系，不能依赖运行时自动检查不对称比较 |
-| `sort()` / `rsort()` / `asort()` / `ksort()` | 基础排序；8.0 起排序参数 `SORT_REGULAR` 语义更严格 |
+PHP 8.4 的 `array_find` 返回首个符合条件的值或 null，`array_find_key` 返回相应键或 null；匹配到 null 值时，用 find_key 可以区分“找到 null”和“没有找到”。`array_any`、`array_all` 返回是否至少一个/全部符合条件；空数组的 any 是 false，all 是 true。版本入口见 [PHP 8.4 新函数](https://www.php.net/manual/en/migration84.new-functions.php)。
 
+## 2. 字符串：协议按字节，界面按文字边界
+
+| 任务 | 函数与最小调用 | 边界 |
+|---|---|---|
+| 包含与前后缀 | `str_contains('abc', 'b')`、`str_starts_with`、`str_ends_with` | 返回 bool、区分大小写；空查找字符串匹配成功 |
+| 位置 | `strpos('abc', 'a')` → 0 | 未找到返回 false，因此比较 `!== false` |
+| 长度与截取 | `strlen`、`substr` | 按字节；直接截中文 UTF-8 可能破坏编码 |
+| 多字节文字 | `mb_strlen`、`mb_substr`、`mb_str_split` | 需要 mbstring，明确 `'UTF-8'`；组合字形可能需 intl 的 grapheme 系列 |
+| 分割与拼接 | `explode(',', 'a,b', 2)`、`implode('-', ['a','b'])` | explode 是字面分隔；空分隔符抛 ValueError；不是完整 CSV 解析 |
+| 固定块拆分 | `str_split('abcd', 2)` | 按字节拆为 `['ab','cd']` |
+| 修剪 | `trim($s)`、`ltrim($s)`、`rtrim($s)` / `chop($s)` | 删除两端指定字符集合，不是删除一个完整前后缀 |
+| 替换 | `str_replace`、`strtr` | replace 可通过第4参得到次数；strtr 的映射数组优先较长键，不再处理已替换部分 |
+| 大小写 | `strtolower`、`strtoupper`、`ucfirst`、`lcfirst`、`ucwords` | ASCII/字节规则不等于所有语言的大小写；多字节文本选择 mbstring 相应函数 |
+| 格式化 | `sprintf`、`number_format` | 产生字符串，显示规则不解决浮点计算误差 |
+| 填充/重复/折行 | `str_pad`、`str_repeat`、`wordwrap` | 按指定宽度/次数构造文本，确认字节与显示宽度差异 |
+
+<!-- reference-case: {"id":"php-text-json","stdout":"int(0)\nbool(true)\n6\n&lt;b&gt;Ada&lt;/b&gt;\ninvalid json\n"} -->
 ```php
-// PHP 8.4 新增：array_find / array_any / array_all
-$users = [['age' => 15], ['age' => 22]];
-$adult = array_find($users, fn(array $u): bool => $u['age'] >= 18);   // ['age'=>22]
-var_dump(array_all($users, fn(array $u): bool => $u['age'] > 0));     // true
-var_dump(array_any($users, fn(array $u): bool => $u['age'] > 21));    // true
+<?php
+declare(strict_types=1);
+$position = strpos('abc', 'a');
+var_dump($position, $position !== false);
+echo strlen('中文'), PHP_EOL;
+echo htmlspecialchars('<b>Ada</b>', ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'), PHP_EOL;
+try {
+    json_decode('{broken}', true, flags: JSON_THROW_ON_ERROR);
+} catch (JsonException $error) {
+    echo 'invalid json', PHP_EOL;
+}
 ```
 
-## 2. 字符串函数
+PHP 文件本身保存为 UTF-8 时，“中文”占 6 字节。`htmlspecialchars` 用于 HTML 文本或正确加引号的普通 HTML 属性值；它不替代 JavaScript、URL、CSS、SQL 各自的处理规则。`strip_tags` 只是剥离部分标签，即使允许 `<a>` 也不会移除其危险属性，不能当富文本安全过滤器。契约见 [htmlspecialchars](https://www.php.net/manual/en/function.htmlspecialchars.php) 与 [strip_tags](https://www.php.net/manual/en/function.strip-tags.php)。
 
-### 查找与判断（PHP 8 新家族，替代 strpos 老写法）
+## 3. 验证、JSON 和类型：解析后仍要检查形状
 
+`json_encode($data, JSON_THROW_ON_ERROR)` 与 `json_decode($raw, true, flags: JSON_THROW_ON_ERROR)` 把 JSON 错误变成异常；true 参数将 JSON 对象解析为关联数组。合法 JSON 可以是 null、数字、字符串或列表，所以成功解析不等于“具备 name 字段的对象”。再用 `is_array`、`array_key_exists`、`is_string` 等检查业务要求。
+
+`filter_var($raw, FILTER_VALIDATE_INT)` 成功返回整数，失败返回 false；合法的整数 0 不应被 `if (!$value)` 拒绝。`is_numeric` 接受数字字符串，`is_int` 判断值本身是否为整数；二者用途不同。`get_debug_type` 用于诊断类型，`var_dump` 用于开发观察，不应直接暴露到生产响应。
+
+`strict_types=1` 主要控制调用的标量类型转换，并不验证数组的字段结构。直接从严格文件调用许多接受标量的内置函数时会遵循严格规则，但由内部函数发起的回调调用等存在专门规则；不能概括成“全部内置函数与用户函数一视同仁”。此外 int 可传给 float 形参。详细边界见[类型声明官方文档](https://www.php.net/manual/en/language.types.declarations.php)。
+
+## 4. 日期时间：固定实验输入，明确时区
+
+`DateTimeImmutable` 的修改方法返回新对象；`DateTime` 则可能原地修改。记录某次事件用明确的时刻，生日只需要日期，不能因为它们都能 format 就随意互换。解析相对时间的 strtotime 适合明确上下文，外部日期表单更适合确定格式与合法性检查。
+
+<!-- reference-case: {"id":"php-date","stdout":"2026-09-10 12:00 +08:00\n2026-09-13 18:00 +08:00\nbool(false)\n"} -->
 ```php
-str_contains('Hello PHP', 'PHP');     // true：包含判断（8.0）
-str_starts_with('v8.3.0', 'v8');      // true：前缀判断（8.0）
-str_ends_with('a.tar.gz', '.gz');     // true：后缀判断（8.0）
-str_contains('abc', '');              // true（8.0 起）：空串恒为包含
+<?php
+declare(strict_types=1);
+$start = new DateTimeImmutable('2026-09-10 12:00:00', new DateTimeZone('Asia/Shanghai'));
+$due = $start->modify('+3 days')->setTime(18, 0);
+echo $start->format('Y-m-d H:i P'), PHP_EOL;
+echo $due->format('Y-m-d H:i P'), PHP_EOL;
+var_dump(checkdate(2, 30, 2026));
 ```
 
-### 截取、分割与拼接
+原时间保持不变，截止日为 9 月 13 日，2 月 30 日被拒绝。`DateTimeImmutable::createFromFormat` 对某些越界分量会产生警告并归一化，严谨验证要查看 `getLastErrors()`，不能只判断是否返回对象。
 
+| 函数 | 作用与单位 | 失败/限制 |
+|---|---|---|
+| `time`、`date` | 秒级 Unix 时间戳、按默认时区格式化 | date 输出取决于时区设置 |
+| `microtime(true)` | 浮点秒 | 不是单调耗时计时器；测时长优先 `hrtime(true)` 纳秒计数 |
+| `mktime` | 从本地日历分量构造时间戳 | 会按时区和归一化规则处理分量，不是严格日期验证 |
+| `strtotime` | 解析英文时间描述为时间戳 | 失败 false；相对描述依赖基准时间 |
+| `date_parse`、`checkdate` | 解析分量/检查月日年 | 解析结果要检查 errors/warnings；checkdate 不处理时区 |
+
+## 5. 数学与随机：算术模型先于格式化
+
+`abs` 求绝对值；`min`/`max` 从多个参数或非空数组取极值；`floor`/`ceil` 返回向下/向上取整的浮点值；`intdiv(7, 2)` 返回整数 3，除零抛 DivisionByZeroError。`round` 需要明确精度和舍入模式，不能消除整个浮点计算链的误差。
+
+金额可使用定义好币种与最小单位的整数，或安装 BCMath/适当十进制库。`random_int(1, 6)` 两端都包含，`random_bytes(16)` 返回二进制字节，可用 bin2hex 转成文本。安全随机源失败会抛异常，不应悄悄退回 rand/mt_rand。普通仿真与安全令牌的需求不同。
+
+## 6. 文件：空内容与失败不同
+
+| 操作 | 返回/副作用 | 需要检查 |
+|---|---|---|
+| `file_get_contents` | 字符串或 false | 空字符串、字符串 `'0'` 均为成功；大文件不要无限整体读取 |
+| `file_put_contents` | 写入字节数或 false，默认覆盖 | 0 字节也可成功；LOCK_EX 不保护此前的读改写过程 |
+| `fopen` / `fgets` / `fclose` | 流资源、行或 false、关闭结果 | fopen 失败；读取失败与 EOF；finally 关闭 |
+| `file_exists` / `is_file` / `is_dir` | 检查当前状态 | 检查与后续操作间状态仍会变，最终操作的失败也需处理 |
+| `mkdir` / `unlink` | 创建目录/删除文件，bool | 权限、已存在、路径目标；不接受未限制的外部路径 |
+| `pathinfo` / `basename` / `dirname` | 文本路径信息 | 不验证目标存在，也不构成目录穿越防护 |
+| `scandir` | 文件名数组或 false | 通常包含 `.` 与 `..`，读取失败会发出警告 |
+
+<!-- reference-case: {"id":"php-file","stdout":"int(1)\nstring(1) \"0\"\nbool(true)\n"} -->
 ```php
-substr('现代PHP', 0, 2);             // ⚠️ 字节截取，中文用 mb_substr
-mb_substr('现代PHP', 0, 2);           // '现代'：按字符处理
-str_split('abcdef', 2);               // ['ab','cd','ef']
-mb_str_split('现代PHP', 2);           // 多字节安全分割
-explode(',', 'a,b,c', 2);             // ['a', 'b,c'] 第三参限制段数
-implode('-', ['a', 'b']);             // 'a-b'（别名 join）
-sprintf('%s 得分 %.1f', 'Ada', 92.45); // 'Ada 得分 92.5'
-str_repeat('=-', 3);                  // '=-=-=-'
-str_pad('7', 3, '0', STR_PAD_LEFT);   // '007'
-wordwrap($long, 20, PHP_EOL);         // 按宽度折行
+<?php
+declare(strict_types=1);
+$path = tempnam(sys_get_temp_dir(), 'reference-');
+if ($path === false) {
+    throw new RuntimeException('cannot create temporary file');
+}
+try {
+    $written = file_put_contents($path, '0', LOCK_EX);
+    if ($written === false) throw new RuntimeException('write failed');
+    $content = file_get_contents($path);
+    if ($content === false) throw new RuntimeException('read failed');
+    var_dump($written, $content, $content !== false);
+} finally {
+    if (!unlink($path)) throw new RuntimeException('cleanup failed');
+}
 ```
 
-### 清理与替换
+结果为 1 字节、字符串 `"0"`、true。这里没有全局错误处理器，文件函数的 warning 与 false 两种信号都保留；若工程把 warning 转成 ErrorException，应按工程约定处理，不能假设每个函数都只通过异常失败。此实验只写自己创建的临时文件；删除失败会明确报错。文件契约见 [file_get_contents](https://www.php.net/manual/en/function.file-get-contents.php) 与 [file_put_contents](https://www.php.net/manual/en/function.file-put-contents.php)。
 
-```php
-trim("  x  \n", " \t\n");             // 去两端字符，第二参指定字符集
-ltrim();                              // 去左端，rtrim() 别名 chop() 去右端
-str_replace(['a', 'b'], ['A', 'B'], $s);          // 批量替换
-strtr($s, ['kg' => '千克', 'g' => '克']);          // ⚠️ 按"最长优先"整体映射，不回溯已替换部分
-str_replace('甲', '乙', $s, $count);               // 第四参接收替换次数
-ucfirst(); lcfirst(); ucwords(); strtoupper(); strtolower(); mb_strtolower();
-```
+## 7. 验收与后续学习
 
-### 编解码与格式
+逐个执行 5 个脚本并对照输出，再完成三个改动：把合法输入改为 0 并保持验证成功；解释 filter 后 JSON 为什么可能变成对象；故意传入损坏 JSON 并获得明确失败。练习结果应包含正常、空值和失败分支，而非只有“程序没有报错”。
 
-```php
-json_encode($data, JSON_UNESCAPED_UNICODE | JSON_THROW_ON_ERROR);
-json_decode($raw, true, flags: JSON_THROW_ON_ERROR);   // true 返回数组，默认对象
-number_format(1234567.891, 2, '.', ',');               // '1,234,567.89'
-htmlspecialchars($html, ENT_QUOTES, 'UTF-8');          // 输出转义（防 XSS 必备）
-strip_tags($html, '<p><a>');                           // 剥离标签，白名单除外
-```
-
-## 3. 日期时间函数
-
-### DateTimeImmutable：现代首选
-
-```php
-$now = new DateTimeImmutable('now', new DateTimeZone('Asia/Shanghai'));
-$due  = $now->modify('+3 days')->setTime(18, 0);   // ⚠️ Immutable：返回新对象
-echo $due->format('Y-m-d H:i:s P'), PHP_EOL;       // 实际运行日期加三天的 18:00，非固定日期
-```
-
-**⚠️ 陷阱**：`DateTime::modify()` 修改自身并返回 `$this`，链式调用在 DateTime 上是"原地改"；项目统一用 `DateTimeImmutable` 避免共享可变状态。
-
-### 工具函数
-
-| 函数 | 示例 | 说明 |
-|------|------|------|
-| `date()` | `date('Y-m-d', $ts)` | 格式化时间戳 |
-| `time()` / `microtime(true)` | — | 整数秒 / 带小数的秒；microtime(true) 的单位仍是秒 |
-| `mktime()` | `mktime(18, 0, 0, 9, 13, 2026)` | 由分量构造时间戳 |
-| `strtotime()` | `strtotime('next friday')` | ⚠️ 解析英文相对时间，非法输入返回 false |
-| `date_parse()` | — | 解析为关联数组，配合 errors 校验 |
-| `checkdate()` | `checkdate(2, 30, 2026)` | 校验日期合法性（false） |
-
-### Interval 与比较
-
-```php
-$a = new DateTimeImmutable('2026-09-10');
-$b = new DateTimeImmutable('2026-09-20');
-$diff = $a->diff($b);                 // DateInterval
-echo $diff->days, PHP_EOL;            // 10
-
-if ($a < $b) { /* DateTime 可直接比较 */ }
-echo $a->getTimestamp(), PHP_EOL;     // Unix 时间戳
-```
-
-## 4. 数学与随机
-
-```php
-abs(-5);            // 5
-max(1, 2, 3);       // 3，也接受数组
-min([4, 2, 9]);     // 2
-var_dump(0.1 + 0.2);   // ⚠️ float(0.30000000000000004)：浮点精度问题，金额用 int 分或 BCMath
-floor(4.9); ceil(4.1);
-intdiv(7, 2);       // 3：整数除法，除零抛 DivisionByZeroError
-random_int(1, 6);   // 密码学安全随机整数（⚠️ 不要再用 rand/mt_rand 于安全场景）
-```
-
-## 5. 文件与 JSON 实用集
-
-```php
-file_exists($p); is_file($p); is_dir($p);
-file_get_contents($url);              // 读文件/URL，失败返回 false（⚠️ 需判 false）
-file_put_contents($p, $data, LOCK_EX); // LOCK_EX 只保护本次写入的合作式锁范围，不保护此前的读取与修改
-mkdir($dir, 0755, true);              // 第三参递归创建
-unlink($p);                           // 删除文件
-fopen()/fgets()/fclose();             // 大文件用流式逐行读
-pathinfo('/a/b/c.txt', PATHINFO_EXTENSION);   // 'txt'
-basename('/a/b/c.txt'); dirname('/a/b/c.txt'); // 'c.txt' / '/a/b'
-scandir($dir);                        // 列目录（含 . 与 ..）
-```
-
-## 陷阱速查
-
-- **严格模式同样约束内置函数**：`strict_types=1` 下 `str_contains(123, '1')` 直接抛 `TypeError`——内置函数与用户函数一视同仁，弱转换仅发生在非严格模式
-- **false 歧义返回**：`strpos`/`array_search`/`file_get_contents` 失败返回 `false`，判断一律 `!== false` / `=== false`
-- **多字节函数**：按 Unicode 字符处理可用 `mb_*` 并指定编码；组合 Emoji 的可见字符边界可能需要 intl 的 grapheme_*。按字节处理协议数据时仍使用字节函数
-- **浮点金额**：`round`/`floor` 受 IEEE 754 限制，金额计算用整数分、BCMath 或 `brick/math` 库
-
-## 相关文档
-
-- 📄 **[数组操作模式](./05-arrays-patterns.md)** — map/filter/reduce 组合范式
-- 📄 **[Composer 生态精选](../library-guides/02-composer-ecosystem.md)** — 内置函数不够用时的标准三方替代
-- 📄 **[常见错误排查](../quick-references/02-troubleshooting.md)** — 返回 false 类 bug 的排查清单
-
+进一步学习[数组操作](./05-arrays-patterns.md)、[标准库与 SPL](../library-guides/01-standard-library-spl.md)、[Composer 生态](../library-guides/02-composer-ecosystem.md)，最后用于[CLI 任务项目](../../basics/08-first-project.md)。
 
 <!-- learning-navigation -->
 ## 阅读导航
 
 [本模块理解地图](../../LEARNING_GUIDE.md) · [完整目录与版本](../../README.md) · [通用术语](../../../shared-resources/glossary.md)
-
-本轮语义核对来源：[PHP 排序比较函数契约](https://www.php.net/manual/en/function.usort.php)（2026-09-18；不等同于本地完整工程运行验证）。
-
-本轮语义核对来源：[PHP 文件写入与锁](https://www.php.net/manual/en/function.file-put-contents.php)（2026-09-18；不等同于本地完整工程运行验证）。

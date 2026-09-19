@@ -1,0 +1,416 @@
+{
+  "generated_on": "2026-09-19",
+  "scope": "11 个现行模块的 reference/language-concepts 与 reference/library-guides。",
+  "method": "文件名和前 6000 个字符的主题信号，加上 Markdown 围栏计数；不评价定义完整性、示例正确性或工具链可运行性。",
+  "important_boundary": "语言围栏候选不是可运行程序；除作者紧邻围栏明确标记外，本工具不推断可运行身份。验证状态也不会从围栏或目录自动推断。",
+  "modules": [
+    {
+      "module": "01-go-backend",
+      "language_or_runtime": "Go",
+      "reference_documents": 32,
+      "topic_signals": {
+        "keywords": [
+          "01-go-backend/reference/language-concepts/01-go-keywords.md",
+          "01-go-backend/reference/language-concepts/02-go-built-in-functions.md",
+          "01-go-backend/reference/language-concepts/04-go-data-types.md",
+          "01-go-backend/reference/language-concepts/07-error-handling.md",
+          "01-go-backend/reference/language-concepts/08-concurrency-basics.md"
+        ],
+        "builtins": [
+          "01-go-backend/reference/language-concepts/01-go-keywords.md",
+          "01-go-backend/reference/language-concepts/02-go-built-in-functions.md",
+          "01-go-backend/reference/language-concepts/08-concurrency-basics.md",
+          "01-go-backend/reference/language-concepts/10-slice-semantics.md",
+          "01-go-backend/reference/language-concepts/11-map-semantics.md",
+          "01-go-backend/reference/language-concepts/13-interface-semantics.md",
+          "01-go-backend/reference/language-concepts/14-defer-panic-recover.md",
+          "01-go-backend/reference/library-guides/17-std-package-map.md"
+        ],
+        "standard_library": [
+          "01-go-backend/reference/language-concepts/01-go-keywords.md",
+          "01-go-backend/reference/language-concepts/02-go-built-in-functions.md",
+          "01-go-backend/reference/language-concepts/08-concurrency-basics.md",
+          "01-go-backend/reference/language-concepts/10-slice-semantics.md",
+          "01-go-backend/reference/language-concepts/11-map-semantics.md",
+          "01-go-backend/reference/language-concepts/13-interface-semantics.md",
+          "01-go-backend/reference/language-concepts/14-defer-panic-recover.md",
+          "01-go-backend/reference/library-guides/01-go-standard-library.md",
+          "01-go-backend/reference/library-guides/02-third-party-libs.md",
+          "01-go-backend/reference/library-guides/03-net-http.md",
+          "01-go-backend/reference/library-guides/04-encoding-json.md",
+          "01-go-backend/reference/library-guides/07-database-sql.md",
+          "01-go-backend/reference/library-guides/11-os.md",
+          "01-go-backend/reference/library-guides/12-testing.md",
+          "01-go-backend/reference/library-guides/13-slices-maps.md",
+          "01-go-backend/reference/library-guides/14-strconv.md",
+          "01-go-backend/reference/library-guides/15-log-slog.md",
+          "01-go-backend/reference/library-guides/16-flag.md",
+          "01-go-backend/reference/library-guides/17-std-package-map.md"
+        ]
+      },
+      "missing_topic_signals": [],
+      "fence_languages": {
+        "bash": 21,
+        "dockerfile": 1,
+        "go": 186,
+        "gomod": 2,
+        "json": 1,
+        "makefile": 1,
+        "mermaid": 2,
+        "text": 18,
+        "toml": 1,
+        "unlabeled": 1,
+        "yaml": 2
+      },
+      "language_fence_candidates": 186,
+      "author_marked_runnable_examples": 0,
+      "verification_status": "未由本盘点推断；需链接到具名验证报告或真实工具链记录。"
+    },
+    {
+      "module": "02-nextjs-frontend",
+      "language_or_runtime": "JavaScript / TypeScript",
+      "reference_documents": 11,
+      "topic_signals": {
+        "keywords": [
+          "02-nextjs-frontend/reference/language-concepts/10-web-platform-apis.md"
+        ],
+        "builtins": [
+          "02-nextjs-frontend/reference/library-guides/03-ecosystem-map.md"
+        ],
+        "standard_library": []
+      },
+      "missing_topic_signals": [
+        "standard_library"
+      ],
+      "fence_languages": {
+        "css": 8,
+        "javascript": 18,
+        "js": 6,
+        "json": 1,
+        "jsx": 19,
+        "ts": 20,
+        "tsx": 59,
+        "txt": 1,
+        "typescript": 17,
+        "unlabeled": 1
+      },
+      "language_fence_candidates": 139,
+      "author_marked_runnable_examples": 0,
+      "verification_status": "未由本盘点推断；需链接到具名验证报告或真实工具链记录。"
+    },
+    {
+      "module": "03-tanstack-stack",
+      "language_or_runtime": "JavaScript / TypeScript",
+      "reference_documents": 23,
+      "topic_signals": {
+        "keywords": [
+          "03-tanstack-stack/reference/language-concepts/04-form-core-api.md"
+        ],
+        "builtins": [],
+        "standard_library": []
+      },
+      "missing_topic_signals": [
+        "builtins",
+        "standard_library"
+      ],
+      "fence_languages": {
+        "bash": 5,
+        "ts": 26,
+        "tsx": 44
+      },
+      "language_fence_candidates": 70,
+      "author_marked_runnable_examples": 0,
+      "verification_status": "未由本盘点推断；需链接到具名验证报告或真实工具链记录。"
+    },
+    {
+      "module": "04-multiplatform-apps",
+      "language_or_runtime": "JavaScript / TypeScript / ArkTS",
+      "reference_documents": 17,
+      "topic_signals": {
+        "keywords": [
+          "04-multiplatform-apps/reference/library-guides/03-storage-options.md"
+        ],
+        "builtins": [],
+        "standard_library": []
+      },
+      "missing_topic_signals": [
+        "builtins",
+        "standard_library"
+      ],
+      "fence_languages": {
+        "arkts": 1,
+        "bash": 1,
+        "json": 1,
+        "ts": 9,
+        "tsx": 52,
+        "unlabeled": 3
+      },
+      "language_fence_candidates": 62,
+      "author_marked_runnable_examples": 0,
+      "verification_status": "未由本盘点推断；需链接到具名验证报告或真实工具链记录。"
+    },
+    {
+      "module": "05-kotlin-compose",
+      "language_or_runtime": "Kotlin",
+      "reference_documents": 14,
+      "topic_signals": {
+        "keywords": [
+          "05-kotlin-compose/reference/language-concepts/01-kotlin-keywords.md",
+          "05-kotlin-compose/reference/language-concepts/02-null-safety-collections.md",
+          "05-kotlin-compose/reference/language-concepts/05-generics-delegates.md",
+          "05-kotlin-compose/reference/language-concepts/06-extension-functions.md",
+          "05-kotlin-compose/reference/language-concepts/08-lambdas-higher-order.md"
+        ],
+        "builtins": [],
+        "standard_library": [
+          "05-kotlin-compose/reference/language-concepts/02-null-safety-collections.md",
+          "05-kotlin-compose/reference/language-concepts/05-generics-delegates.md",
+          "05-kotlin-compose/reference/language-concepts/09-collections-operations.md",
+          "05-kotlin-compose/reference/language-concepts/10-sequences.md",
+          "05-kotlin-compose/reference/language-concepts/11-text-and-regex.md"
+        ]
+      },
+      "missing_topic_signals": [
+        "builtins"
+      ],
+      "fence_languages": {
+        "kotlin": 124,
+        "toml": 1
+      },
+      "language_fence_candidates": 124,
+      "author_marked_runnable_examples": 0,
+      "verification_status": "未由本盘点推断；需链接到具名验证报告或真实工具链记录。"
+    },
+    {
+      "module": "06-swift-swiftui",
+      "language_or_runtime": "Swift",
+      "reference_documents": 18,
+      "topic_signals": {
+        "keywords": [
+          "06-swift-swiftui/reference/language-concepts/01-swift-keywords.md",
+          "06-swift-swiftui/reference/language-concepts/02-optionals-collections.md",
+          "06-swift-swiftui/reference/language-concepts/03-concurrency-api.md",
+          "06-swift-swiftui/reference/language-concepts/13-keywords-completion.md"
+        ],
+        "builtins": [],
+        "standard_library": [
+          "06-swift-swiftui/reference/language-concepts/02-optionals-collections.md",
+          "06-swift-swiftui/reference/language-concepts/07-enums-pattern-matching.md",
+          "06-swift-swiftui/reference/language-concepts/10-value-types-arc.md",
+          "06-swift-swiftui/reference/language-concepts/14-regex.md",
+          "06-swift-swiftui/reference/language-concepts/15-urlsession.md",
+          "06-swift-swiftui/reference/language-concepts/16-stdlib-foundation-map.md",
+          "06-swift-swiftui/reference/library-guides/01-foundation-and-stdlib.md",
+          "06-swift-swiftui/reference/library-guides/02-third-party-libs.md"
+        ]
+      },
+      "missing_topic_signals": [
+        "builtins"
+      ],
+      "fence_languages": {
+        "bash": 4,
+        "swift": 116,
+        "yaml": 1
+      },
+      "language_fence_candidates": 116,
+      "author_marked_runnable_examples": 0,
+      "verification_status": "未由本盘点推断；需链接到具名验证报告或真实工具链记录。"
+    },
+    {
+      "module": "07-php-mastery",
+      "language_or_runtime": "PHP",
+      "reference_documents": 25,
+      "topic_signals": {
+        "keywords": [
+          "07-php-mastery/reference/language-concepts/01-php-keywords.md",
+          "07-php-mastery/reference/language-concepts/03-types-oop-modern.md",
+          "07-php-mastery/reference/language-concepts/04-control-flow.md",
+          "07-php-mastery/reference/language-concepts/16-operators.md"
+        ],
+        "builtins": [
+          "07-php-mastery/reference/language-concepts/02-built-in-functions.md",
+          "07-php-mastery/reference/language-concepts/05-arrays-patterns.md",
+          "07-php-mastery/reference/language-concepts/07-namespaces-autoloading.md",
+          "07-php-mastery/reference/language-concepts/09-strings-regex.md",
+          "07-php-mastery/reference/language-concepts/10-datetime.md",
+          "07-php-mastery/reference/library-guides/01-standard-library-spl.md",
+          "07-php-mastery/reference/library-guides/02-composer-ecosystem.md"
+        ],
+        "standard_library": [
+          "07-php-mastery/reference/language-concepts/06-generators-iterators.md",
+          "07-php-mastery/reference/language-concepts/07-namespaces-autoloading.md",
+          "07-php-mastery/reference/library-guides/01-standard-library-spl.md",
+          "07-php-mastery/reference/library-guides/02-composer-ecosystem.md",
+          "07-php-mastery/reference/library-guides/03-pdo.md",
+          "07-php-mastery/reference/library-guides/04-json.md",
+          "07-php-mastery/reference/library-guides/05-file-stream-io.md",
+          "07-php-mastery/reference/library-guides/07-extension-map.md"
+        ]
+      },
+      "missing_topic_signals": [],
+      "fence_languages": {
+        "bash": 5,
+        "html": 1,
+        "json": 2,
+        "php": 164,
+        "text": 2,
+        "unlabeled": 1
+      },
+      "language_fence_candidates": 164,
+      "author_marked_runnable_examples": 0,
+      "verification_status": "未由本盘点推断；需链接到具名验证报告或真实工具链记录。"
+    },
+    {
+      "module": "08-java-revisited",
+      "language_or_runtime": "Java",
+      "reference_documents": 19,
+      "topic_signals": {
+        "keywords": [
+          "08-java-revisited/reference/language-concepts/01-java-keywords.md",
+          "08-java-revisited/reference/language-concepts/05-records-sealed-patterns.md",
+          "08-java-revisited/reference/language-concepts/06-exceptions-resources.md",
+          "08-java-revisited/reference/language-concepts/07-string-immutability-pool.md",
+          "08-java-revisited/reference/library-guides/02-third-party-libs.md"
+        ],
+        "builtins": [
+          "08-java-revisited/reference/library-guides/05-java-util-function.md"
+        ],
+        "standard_library": [
+          "08-java-revisited/reference/language-concepts/02-collections-generics.md",
+          "08-java-revisited/reference/language-concepts/06-exceptions-resources.md",
+          "08-java-revisited/reference/library-guides/01-standard-library.md",
+          "08-java-revisited/reference/library-guides/03-java-lang.md",
+          "08-java-revisited/reference/library-guides/04-java-io.md",
+          "08-java-revisited/reference/library-guides/05-java-util-function.md",
+          "08-java-revisited/reference/library-guides/06-java-math.md",
+          "08-java-revisited/reference/library-guides/07-java-text-and-time-format.md",
+          "08-java-revisited/reference/library-guides/08-java-util-regex.md",
+          "08-java-revisited/reference/library-guides/09-jdk-package-map.md"
+        ]
+      },
+      "missing_topic_signals": [],
+      "fence_languages": {
+        "bash": 1,
+        "java": 87,
+        "unlabeled": 1,
+        "xml": 5
+      },
+      "language_fence_candidates": 87,
+      "author_marked_runnable_examples": 0,
+      "verification_status": "未由本盘点推断；需链接到具名验证报告或真实工具链记录。"
+    },
+    {
+      "module": "09-nodejs-backend",
+      "language_or_runtime": "JavaScript / TypeScript",
+      "reference_documents": 18,
+      "topic_signals": {
+        "keywords": [
+          "09-nodejs-backend/reference/language-concepts/01-js-modern-syntax.md"
+        ],
+        "builtins": [
+          "09-nodejs-backend/reference/library-guides/09-zlib.md"
+        ],
+        "standard_library": [
+          "09-nodejs-backend/reference/library-guides/01-core-modules.md"
+        ]
+      },
+      "missing_topic_signals": [],
+      "fence_languages": {
+        "bash": 1,
+        "js": 8,
+        "json": 3,
+        "prisma": 1,
+        "ts": 89
+      },
+      "language_fence_candidates": 97,
+      "author_marked_runnable_examples": 0,
+      "verification_status": "未由本盘点推断；需链接到具名验证报告或真实工具链记录。"
+    },
+    {
+      "module": "10-python-discovery",
+      "language_or_runtime": "Python",
+      "reference_documents": 23,
+      "topic_signals": {
+        "keywords": [
+          "10-python-discovery/reference/language-concepts/01-python-keywords.md",
+          "10-python-discovery/reference/language-concepts/02-built-in-functions.md",
+          "10-python-discovery/reference/language-concepts/11-modules-imports.md",
+          "10-python-discovery/reference/language-concepts/13-dataclasses.md",
+          "10-python-discovery/reference/language-concepts/15-closures-and-scope.md",
+          "10-python-discovery/reference/language-concepts/16-classes-and-inheritance.md",
+          "10-python-discovery/reference/language-concepts/17-functions-parameters.md"
+        ],
+        "builtins": [
+          "10-python-discovery/reference/language-concepts/01-python-keywords.md",
+          "10-python-discovery/reference/language-concepts/02-built-in-functions.md",
+          "10-python-discovery/reference/language-concepts/03-data-structures.md",
+          "10-python-discovery/reference/language-concepts/04-oop-protocols.md",
+          "10-python-discovery/reference/language-concepts/05-typing-annotations.md"
+        ],
+        "standard_library": [
+          "10-python-discovery/reference/language-concepts/02-built-in-functions.md",
+          "10-python-discovery/reference/language-concepts/03-data-structures.md",
+          "10-python-discovery/reference/language-concepts/06-decorators.md",
+          "10-python-discovery/reference/language-concepts/09-asyncio-concurrency.md",
+          "10-python-discovery/reference/language-concepts/12-string-formatting.md",
+          "10-python-discovery/reference/library-guides/01-standard-library.md",
+          "10-python-discovery/reference/library-guides/02-ecosystem-libs.md",
+          "10-python-discovery/reference/library-guides/04-os-sys.md",
+          "10-python-discovery/reference/library-guides/05-enum-module.md",
+          "10-python-discovery/reference/library-guides/06-functools-subprocess.md"
+        ]
+      },
+      "missing_topic_signals": [],
+      "fence_languages": {
+        "bash": 1,
+        "python": 136,
+        "text": 2
+      },
+      "language_fence_candidates": 136,
+      "author_marked_runnable_examples": 0,
+      "verification_status": "未由本盘点推断；需链接到具名验证报告或真实工具链记录。"
+    },
+    {
+      "module": "11-rust-cross-platform",
+      "language_or_runtime": "Rust",
+      "reference_documents": 14,
+      "topic_signals": {
+        "keywords": [
+          "11-rust-cross-platform/reference/language-concepts/05-macros.md",
+          "11-rust-cross-platform/reference/language-concepts/06-unsafe.md",
+          "11-rust-cross-platform/reference/language-concepts/09-keywords-and-syntax.md",
+          "11-rust-cross-platform/reference/library-guides/13-serde-guide.md"
+        ],
+        "builtins": [
+          "11-rust-cross-platform/reference/language-concepts/10-standard-types-and-methods.md"
+        ],
+        "standard_library": [
+          "11-rust-cross-platform/reference/language-concepts/01-ownership-dictionary.md",
+          "11-rust-cross-platform/reference/language-concepts/05-macros.md",
+          "11-rust-cross-platform/reference/language-concepts/06-unsafe.md",
+          "11-rust-cross-platform/reference/language-concepts/08-async-internals.md",
+          "11-rust-cross-platform/reference/language-concepts/09-keywords-and-syntax.md",
+          "11-rust-cross-platform/reference/language-concepts/10-standard-types-and-methods.md",
+          "11-rust-cross-platform/reference/library-guides/15-standard-library-map.md"
+        ]
+      },
+      "missing_topic_signals": [],
+      "fence_languages": {
+        "bash": 1,
+        "rust": 65,
+        "text": 1,
+        "toml": 1,
+        "unlabeled": 1
+      },
+      "language_fence_candidates": 65,
+      "author_marked_runnable_examples": 0,
+      "verification_status": "未由本盘点推断；需链接到具名验证报告或真实工具链记录。"
+    }
+  ],
+  "totals": {
+    "reference_documents": 214,
+    "language_fence_candidates": 1246,
+    "author_marked_runnable_examples": 0,
+    "modules_with_missing_topic_signal": 5
+  }
+}

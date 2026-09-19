@@ -17,6 +17,7 @@
 | [最终验证汇总](reports/validation.json) | 文件链接、章节锚点、围栏、空白检查，以及保留的限定范围运行记录 |
 | [知识库交付基线](../../standards/knowledge-delivery-baseline.md) | “全量基础”、渐进路线、示例身份与交付完成判据 |
 | [学习路径与参考库存](reports/learning-reference-inventory.md) | 11 个模块的目录、导读、参考入口与易变表述复核队列；仅作机械盘点 |
+| [基础知识覆盖缺口盘点](reports/foundation-coverage-inventory.md) | 各模块关键词、内置能力、标准库与语言围栏的机械证据；不把围栏当作已运行验证 |
 | [易变事实官方来源复核队列](reports/time-sensitive-review-queue.md) | 195 篇候选文档中版本、弃用、API 与维护状态表述的逐行定位；不是事实核验结论 |
 | [Go 离线运行验证](reports/go-runtime-validation.md) | 18 个标准库完整程序/测试的实际运行范围、边界与复现命令 |
 | [Go 关键词与内置函数验证](reports/go-foundations-validation.md) | 25 个关键字、44 个预声明标识符和 18 个内置函数相关的 18 个完整程序、2 个编译反例的当前验证证据 |

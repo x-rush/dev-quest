@@ -4,6 +4,30 @@
 
 PHP 关键字（如 `class`、`function`、`enum`）是语言结构，不区分大小写（`TRUE`/`true` 等价，但规范统一小写）；保留标识符在类、函数、方法等位置有不同限制；应按当前版本的官方列表检查。部分关键字在不同上下文中语义不同（如 `static`、`list`），本条目按用途归类说明。
 
+阅读前先会变量、数组、函数调用。本篇以 PHP 8.3 的普通语法为基础，8.4/8.5 扩展明确标注。含 `<?php` 的三个实验是完整脚本，其余代码围栏是解释局部语法的片段，需放进相应文件/类/函数上下文，不能把整篇拼成一个脚本。
+
+### 分类索引：一个词可能出现在多个位置
+
+| 类别 | 词 | 解决的问题 |
+|---|---|---|
+| 声明与组织 | `declare namespace use const function fn` | 文件行为、名称、常量和函数；use 并不加载文件 |
+| 类型与对象 | `class interface trait enum extends implements abstract final readonly new clone instanceof` | 对象结构、契约、继承与复制；enum 是枚举声明语法，标识符保留规则不能简单按关键字总表推断 |
+| 可见性与状态 | `public protected private static var global` | 成员访问、类级/函数局部状态、引用全局变量；var 是旧式 public 属性声明 |
+| 条件与选择 | `if elseif else switch case default match` | 判断与选择；switch 弱比较、match 严格比较 |
+| 循环与跳转 | `for foreach as while do break continue return goto` | 遍历、终止、跳过、返回；goto 不能跨函数跳转 |
+| 替代语法结束词 | `endif endfor endforeach endwhile endswitch enddeclare` | 配对冒号形式的控制结构，常见于模板；不是新的控制算法 |
+| 异常 | `try catch finally throw` | 异常传播与清理 |
+| 生成器 | `yield`、`yield from` | 按需产出和委托迭代 |
+| 变量与数组结构 | `array list isset empty unset` | 数组构造、解构、变量存在/空值检查与解绑；这些并非普通可调用函数 |
+| 逻辑词 | `and or xor` | 逻辑运算；and/or 的优先级低于赋值，不能不加思考地代替 &&/\|\| |
+| 输出与结束 | `echo print exit die` | 输出与结束执行；exit/die 的调用行为在 PHP 8.4 发生变化，见下方说明 |
+| 文件执行 | `include include_once require require_once` | 在当前上下文执行另一个 PHP 文件；不是命名空间导入 |
+| trait 选择 | `insteadof as` | 解决同名方法冲突、设置别名/可见性 |
+| 少见语言结构 | `eval __halt_compiler` | 执行 PHP 字符串/停止编译后续源码；普通配置不要使用 eval |
+| 类型名称 | `callable` 以及 `int string bool float iterable mixed never void object` 等 | 参数/返回/属性类型约束；不同位置允许的类型不同，见[类型系统](./03-types-oop-modern.md) |
+
+官方的[关键字表](https://www.php.net/manual/en/reserved.keywords.php)与[其他保留字](https://www.php.net/manual/en/reserved.other-reserved-words.php)分开列出，类型名、字面值与关键字不可简单混为同一组。`__FILE__`、`__DIR__`、`__LINE__`、`__CLASS__`、`__METHOD__`、`__FUNCTION__`、`__NAMESPACE__`、`__TRAIT__` 是编译位置相关的魔术常量，PHP 8.4 的属性钩子还有 `__PROPERTY__`。
+
 <details>
 <summary>文档信息（用途、难度与维护记录）</summary>
 
@@ -26,13 +50,9 @@ PHP 关键字（如 `class`、`function`、`enum`）是语言结构，不区分�
 **定义**: 为代码块或文件设置指令；strict_types 等指令有文件位置限制，不能推广为所有 declare 都必须在首行。
 
 **语法与示例**:
-```php
-declare(strict_types=1);          // 严格类型：影响本文件发起的所有调用
-declare(ticks=1) { /* 信号处理 */ }
-declare(encoding='UTF-8');
-```
+`declare(strict_types=1);` 放在 PHP 开始标签后的第一条语句。它改变本文件发起的标量参数调用及本文件函数返回值的类型检查规则，内部函数发起的回调调用等另有规则；它不是“全部数据都严格”的开关。`ticks` 涉及 tick 回调，`encoding` 依赖 Zend 多字节配置；普通入门脚本无需照抄这两个指令。
 
-**陷阱**: `strict_types` 必须是文件第一条语句，写在 `namespace` 之后会报错；它约束"本文件调用别人"，不影响"别人调用本文件"。
+**陷阱**: `strict_types` 必须是文件第一条语句，写在 `namespace` 之后会报错。用户函数参数是否允许标量转换由调用方决定；函数返回值规则由定义方文件决定。这两个方向不能合并成一句“只影响调用别人”。
 
 ### namespace / use
 
@@ -107,7 +127,7 @@ final class Point
 }
 ```
 
-**陷阱**: readonly 属性必须声明类型；PHP 8.4 可与非对称可见性组合，默认写入可见性为 protected(set)；`clone with`（8.5+，RFC clone_with_v2）是批量覆盖 readonly 对象的途径——8.3 引入的只是 `__clone` 方法内对 readonly 属性的再初始化。
+**陷阱**: readonly 属性必须声明类型；PHP 8.4 可与非对称可见性组合，默认写入可见性为 protected(set)。PHP 8.5 的 `clone($object, ['property' => $value])` 可在克隆副本上覆盖属性，并遵守可见性；“clone with”是特性的称呼，不是可直接写入程序的语法。PHP 8.3 引入的是 `__clone` 方法内对 readonly 属性的再初始化。见[官方克隆说明](https://www.php.net/manual/en/language.oop5.cloning.php)。
 
 ### final / abstract / static / instanceof
 
@@ -195,7 +215,7 @@ function gen(): Generator
 }
 ```
 
-**陷阱**: `goto` 只能跳出不能跳入循环/函数，现代代码基本不用；`yield from` 会透传返回值。
+**陷阱**: `goto` 不能跨函数，也不能跳入循环/switch；可以跳出当前循环。`yield from` 转发键值，其表达式值可以接收被委托生成器的 return 值，不代表所有可迭代对象都有 return 值。
 
 ## 5. 函数与变量类
 
@@ -247,7 +267,7 @@ try {
 } catch (RuntimeException | LogicException $e) {   // 多类型联合捕获
     echo $e->getMessage();
 } finally {
-    // 无论成败执行
+    // 正常控制流离开 try/catch 时清理；进程终止等不保证执行
 }
 ```
 
@@ -287,6 +307,78 @@ strict_types 主要约束标量参数与返回类型的转换规则，不会自�
 **练习**：在两个文件中定义接收 int 的函数，分别从严格与非严格文件传入字符串 '12'，观察差异；再传入数组，两者都不应将它当成合法整数。把一个静态局部计数器调用三次，预期依次得到 1、2、3；重新启动 CLI 进程后从 1 开始，不能据此实现跨请求的持久编号。
 
 关键字清单与标识符限制应查 [PHP 保留字](https://www.php.net/manual/en/reserved.php)；版本相关属性规则参见 [属性文档](https://www.php.net/manual/en/language.oop5.properties.php)。
+
+## 三个完整实验：从术语回到程序行为
+
+分别保存为 `keyword-lab.php`，运行 `php keyword-lab.php`。第一个实验同时观察严格标量输入、箭头函数按值捕获、普通闭包按引用捕获以及 match 严格比较。
+
+<!-- reference-case: {"id":"php-keyword-values","stdout":"strict rejected\n6\n10\nstring\n"} -->
+```php
+<?php
+declare(strict_types=1);
+function increment(int $value): int { return $value + 1; }
+try {
+    increment('12');
+} catch (TypeError $error) {
+    echo 'strict rejected', PHP_EOL;
+}
+$factor = 3;
+$snapshot = fn(int $value): int => $value * $factor;
+$live = function (int $value) use (&$factor): int { return $value * $factor; };
+$factor = 5;
+echo $snapshot(2), PHP_EOL;
+echo $live(2), PHP_EOL;
+echo match ('1') { 1 => 'integer', '1' => 'string' }, PHP_EOL;
+```
+
+输出依次是 strict rejected、6、10、string。练习：去掉 strict_types 声明再运行，字符串 `'12'` 可被转换为 int；改成数组输入则两个模式都拒绝。捕获对象时“按值”复制的是对象标识，并不深拷贝对象内容。
+
+第二个实验区分“同一进程内保留变量”与“持久化”。生成器调用先返回可迭代对象，foreach 消费时才逐步执行函数体。
+
+<!-- reference-case: {"id":"php-keyword-generator","stdout":"1,2,3\n0:4\n1:5\n9:6\n"} -->
+```php
+<?php
+declare(strict_types=1);
+function counter(): int {
+    static $value = 0;
+    return ++$value;
+}
+function numbers(): Generator {
+    yield 4;
+    yield 5;
+    yield from [9 => 6];
+}
+echo counter(), ',', counter(), ',', counter(), PHP_EOL;
+foreach (numbers() as $key => $value) {
+    echo $key, ':', $value, PHP_EOL;
+}
+```
+
+输出 1,2,3 后依次为 0:4、1:5、9:6。再次启动脚本，计数仍从 1 开始；生成器的委托键 9 不会自动重新编号。普通请求模型与常驻工作进程的生命周期不同，不要用 static 计数当数据库编号。
+
+第三个实验解释 and 的优先级，并在 catch 和 finally 中观察异常路径。
+
+<!-- reference-case: {"id":"php-keyword-control","stdout":"bool(true)\nbool(false)\ncaught\ncleaned\n"} -->
+```php
+<?php
+declare(strict_types=1);
+$first = true and false;
+$second = (true and false);
+var_dump($first, $second);
+try {
+    throw new RuntimeException('failure');
+} catch (RuntimeException $error) {
+    echo 'caught', PHP_EOL;
+} finally {
+    echo 'cleaned', PHP_EOL;
+}
+```
+
+第一行等价于先赋值 true 再参与 and 运算，所以 first 为 true；括号内先算逻辑结果，second 为 false。PHP 8.4 起 exit/die 具有函数调用语义、遵循相应类型规则；exit 仍会结束执行，不能当作业务函数的普通 return，且它不会执行普通 finally 清理路径。参见 [exit 手册](https://www.php.net/manual/en/function.exit.php)。
+
+`include` 找不到文件会产生警告并返回 false；`require` 失败会产生 Error。二者都可能执行文件中的语句，应使用固定可信路径，通常以 `__DIR__` 为基准。类加载优先遵循 Composer 自动加载规则，use 名称别名不承担加载责任。echo 是输出结构，print 是返回 1 的表达式；也不能把 echo 当作普通回调函数传给 array_map。
+
+验收：能够解释三个实验的每一行输出，并说明返回值、变量重赋值、闭包捕获、进程生命周期四种不同边界。之后进入[CLI 任务项目](../../basics/08-first-project.md)，再把这些语言机制组合为程序。
 
 <!-- learning-navigation -->
 ## 阅读导航
