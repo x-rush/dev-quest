@@ -241,6 +241,52 @@ func main() {
 
 输出三行 `0 G`、`1 o`、`2 中`，最后是 `5`。练习：将字符串改为“中Go”，索引应为 0、3、4。再解释为什么对字符串按任意字节位置切片可能切断 UTF-8 编码。for 中的 break 只退出最近相关循环或 switch/select，跨层退出需要明确标签，不能靠缩进判断。
 
+下面的完整程序同时固定验证 `continue`、默认不贯穿的 `switch`、带标签 `break`，以及字符串 `range` 的字节索引。保存为 `main.go` 后可直接运行：
+
+<!-- terra-seventeenth-case: go-control-flow-labelled-range -->
+```go
+package main
+
+import "fmt"
+
+func main() {
+	kept := []int{}
+	for n := 1; n <= 5; n++ {
+		if n%2 == 0 {
+			continue
+		}
+		kept = append(kept, n)
+	}
+
+	word := ""
+	switch len(kept) {
+	case 3:
+		word = "three" // Go does not fall through by default.
+	default:
+		word = "other"
+	}
+
+	steps := 0
+outer:
+	for row := 0; row < 3; row++ {
+		for column := 0; column < 3; column++ {
+			steps++
+			if row == 1 && column == 1 {
+				break outer
+			}
+		}
+	}
+
+	indexes := []int{}
+	for index := range "Go中" {
+		indexes = append(indexes, index)
+	}
+	fmt.Printf("kept=%v switch=%s steps=%d indexes=%v\n", kept, word, steps, indexes)
+}
+```
+
+预期输出为 `kept=[1 3 5] switch=three steps=5 indexes=[0 1 2]`。这只说明 `range` 给出每个 rune 起始的字节偏移；它不是字符计数。
+
 ## 🔗 相关资源
 
 - **深入学习**: [basics/06-control-structures.md](../../basics/06-control-structures.md)

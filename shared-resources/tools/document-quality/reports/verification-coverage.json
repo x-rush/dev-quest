@@ -17,13 +17,13 @@
   "summary": {
     "documents": 642,
     "by_primary_state": {
-      "not_verified": 485,
-      "runtime": 157
+      "not_verified": 482,
+      "runtime": 160
     },
-    "verification_wording_occurrences": 133,
+    "verification_wording_occurrences": 134,
     "marker_classification": {
       "source_has_limited_runtime_evidence": 86,
-      "unbound_verification_wording": 47
+      "unbound_verification_wording": 48
     }
   },
   "documents": [
@@ -628,13 +628,13 @@
     },
     {
       "path": "01-go-backend/reference/language-concepts/05-go-control-flow.md",
-      "sha256": "d8c15c52521bce7eb627940f606d90df8b9a035cb106397dcbc666a0e1fdb5ee",
+      "sha256": "c46c93b16910891d7edcaa130f7b8a71ba69fb6de973afe001b839ca875dc213",
       "verification": [
         {
-          "mode": "not_verified",
-          "status": "NOT_VERIFIED",
-          "report": null,
-          "scope": "No named runtime or syntax evidence is recorded for this document."
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "go-node-python-seventeenth-runtime.json",
+          "scope": "Three named, complete P1 core/standard-library Markdown programs are extracted byte-for-byte from marked fences. PASS means only that each listed command has the specified stdout and no stderr."
         }
       ],
       "marker_count": 0
@@ -2198,7 +2198,7 @@
     },
     {
       "path": "03-tanstack-stack/frameworks/02-tanstack-query-advanced.md",
-      "sha256": "28e37f722aab22af2fd5609c467db83005a066d3d938fac17712b5652cebe46c",
+      "sha256": "1e4e1fb5ae623edf959e96120f20aed2becaacfa471bb15f878105aef9bf94eb",
       "verification": [
         {
           "mode": "not_verified",
@@ -2207,7 +2207,7 @@
           "scope": "No named runtime or syntax evidence is recorded for this document."
         }
       ],
-      "marker_count": 0
+      "marker_count": 1
     },
     {
       "path": "03-tanstack-stack/frameworks/03-ecosystem-integration.md",
@@ -2224,7 +2224,7 @@
     },
     {
       "path": "03-tanstack-stack/frameworks/04-devtools.md",
-      "sha256": "8cc9452cbded842ad19fbee8c66b1c8bc81fcd55cee0a957223d44d5d32ced5c",
+      "sha256": "7212031f5c8427e7a6d1e5d165fad38fe0357f3523a73a0d4c430483cebde3b8",
       "verification": [
         {
           "mode": "not_verified",
@@ -7155,13 +7155,13 @@
     },
     {
       "path": "09-nodejs-backend/reference/language-concepts/04-streams-api.md",
-      "sha256": "d2936bb3c89bd61d3fb3fef092b35036b9793c63cdcd3e31806ee42e89e51977",
+      "sha256": "a02930eafcabf34c8a190a5ed76b5286b8b80db0de41bcb4df5062de490489d7",
       "verification": [
         {
-          "mode": "not_verified",
-          "status": "NOT_VERIFIED",
-          "report": null,
-          "scope": "No named runtime or syntax evidence is recorded for this document."
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "go-node-python-seventeenth-runtime.json",
+          "scope": "Three named, complete P1 core/standard-library Markdown programs are extracted byte-for-byte from marked fences. PASS means only that each listed command has the specified stdout and no stderr."
         }
       ],
       "marker_count": 0
@@ -7548,13 +7548,13 @@
     },
     {
       "path": "10-python-discovery/basics/02-first-script.md",
-      "sha256": "30a97dc5790706601c889eeb8cdc222561fb1d616dcb894d52dff5038927b7ed",
+      "sha256": "10383da50fc803fd06665cfafd59dc99908938a0e6dcaea7df74d631fcb9bc63",
       "verification": [
         {
-          "mode": "not_verified",
-          "status": "NOT_VERIFIED",
-          "report": null,
-          "scope": "No named runtime or syntax evidence is recorded for this document."
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "go-node-python-seventeenth-runtime.json",
+          "scope": "Three named, complete P1 core/standard-library Markdown programs are extracted byte-for-byte from marked fences. PASS means only that each listed command has the specified stdout and no stderr."
         }
       ],
       "marker_count": 0
@@ -9135,6 +9135,12 @@
       "path": "02-nextjs-frontend/testing/04-performance-testing.md",
       "line": 138,
       "excerpt": "本章提供可复现的操作方法，未声称已对某个业务站点完成性能实测。",
+      "classification": "unbound_verification_wording"
+    },
+    {
+      "path": "03-tanstack-stack/frameworks/02-tanstack-query-advanced.md",
+      "line": 14,
+      "excerpt": "完成后保留请求参数、界面状态和失败恢复步骤三项记录，再进入并发修改。2026-09-20 已按官方文档核对 API；本篇未启动 React 工程或真实 API，以上均为待执行验收，不能据此标记运行通过。",
       "classification": "unbound_verification_wording"
     },
     {

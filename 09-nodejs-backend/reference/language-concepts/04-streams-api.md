@@ -187,6 +187,51 @@ pipeline 适合将来源、转换和目标组成统一完成过程，并传播�
 
 练习：将包含中文和无末尾换行的文本拆成不同大小的 Buffer，要求转换后的文本和行数都不随分块方式变化。本页 LineCounter 实际统计换行符数，若需求是文本行数，必须说明非空最后一行是否计入，并在 flush 时处理尾部。再让 Writable 延迟完成 callback，观察生产是否受控；中途注入写入错误，pipeline 应拒绝且临时输出应被明确清理。
 
+下面是可直接以 Node ESM 运行的完整程序。它故意把一个 UTF-8 字符拆到两个 chunk 中，并用 `StringDecoder` 保留解码状态；`pipeline` 负责等待所有流完成。
+
+<!-- terra-seventeenth-case: node-stream-decoder-pipeline -->
+```js
+import { Readable, Transform, Writable } from "node:stream";
+import { pipeline } from "node:stream/promises";
+import { StringDecoder } from "node:string_decoder";
+
+class DecodeAndCountLines extends Transform {
+  constructor() {
+    super();
+    this.decoder = new StringDecoder("utf8");
+    this.newlines = 0;
+  }
+
+  _transform(chunk, encoding, callback) {
+    const text = this.decoder.write(chunk);
+    this.newlines += [...text].filter((character) => character === "\n").length;
+    callback(null, text.toUpperCase());
+  }
+
+  _flush(callback) {
+    const tail = this.decoder.end();
+    this.newlines += [...tail].filter((character) => character === "\n").length;
+    callback(null, tail.toUpperCase());
+  }
+}
+
+const original = Buffer.from("甲\n乙", "utf8");
+const source = Readable.from([original.subarray(0, 2), original.subarray(2)]);
+const transform = new DecodeAndCountLines();
+let received = "";
+const destination = new Writable({
+  write(chunk, encoding, callback) {
+    received += chunk.toString("utf8");
+    callback();
+  },
+});
+
+await pipeline(source, transform, destination);
+console.log(`text=${received} newlines=${transform.newlines}`);
+```
+
+预期输出为 `text=甲\n乙 newlines=1`（其中 `\n` 是实际换行符）。完整程序只验证有状态解码与 `pipeline` 的完成约定，不把 chunk 当作文本边界。
+
 ## 🔗 相关文档
 
 - 📄 **[Stream 与 Worker 教程](../../basics/07-streams-workers.md)** — 背压与 pipeline 的教学讲解

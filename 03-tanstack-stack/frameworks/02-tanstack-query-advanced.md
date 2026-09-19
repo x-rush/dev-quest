@@ -1,12 +1,17 @@
 # TanStack Query 进阶：无限查询、乐观更新与失效策略
 
-## 先看框架承担哪部分职责
+## 从两页数据走到一次可回滚修改
 
-**Query 进阶**：无限查询管理一组页，乐观更新管理暂时预测，失效管理与事实重新同步。它们需要各自清楚的身份和错误恢复。
+前置是能启动的 React + TypeScript 工程、稳定的 `QueryClientProvider`，以及一次成功的 `useQuery`。先用 `npm ls @tanstack/react-query` 记录实际版本；本文按 Query v5 对象参数写法说明。这里的 `/api/feed`、`/api/todos` 是需要你提供的接口契约，本文不包含服务器，不能把片段直接当作完整工程。
 
-**最小练习与预期结果**：先实现两页，再让第二页失败；已有第一页保持可读，重试不会重复插入同一页。
+本次产物是一个保留已加载内容的信息流和一个能恢复失败修改的待办列表。不要同时接入 WebSocket、筛选和无限滚动观察器：先用按钮触发，才能把一次用户动作对应到一次请求。
 
-具体 API 与安装版本以[模块基线](../README.md)和本篇官方来源为准。先完成这条数据路径，再展开后面的高级配置；框架名称变化后，输入边界、状态归属和失败处理仍是需要理解的机制。
+1. **准备确定的两页输入。** 让 `cursor=0` 返回 `{ items: [{ id: 1, title: '第一页' }], nextCursor: 1 }`，`cursor=1` 返回 `{ items: [{ id: 2, title: '第二页' }], nextCursor: null }`。先从浏览器 Network 确认响应形状，再接下面的 Hook；HTML 错误页不能交给 `res.json()` 当数据。
+2. **只读取，观察页结构。** 首屏应只有 id 1；点一次加载更多后应有 id 1、2，`data.pages` 和 `data.pageParams` 各有两项。若重复 id，先回查请求游标和后端排序，不要先用前端去重掩盖接口问题。
+3. **让第二页返回一次 500。** 本练习临时关闭自动重试，使一次点击的结果易观察。第一页应继续显示，页面底部提示失败；恢复接口后再点加载更多，第二页只追加一次。首次加载失败则显示整页错误，两种情况必须分开。
+4. **再接待办修改。** GET 返回 `Todo[]`，PATCH 输入 `{ done: boolean }`、输出更新后的完整 `Todo`。先一次只允许一笔修改：按钮在 mutation 的 `isPending` 期间禁用。让 PATCH 失败，记录“原值 → 预测值 → 原值 → 重取结果”；下面的整表快照回滚只适合这个串行练习。
+
+完成后保留请求参数、界面状态和失败恢复步骤三项记录，再进入并发修改。2026-09-20 已按官方文档核对 API；本篇未启动 React 工程或真实 API，以上均为待执行验收，不能据此标记运行通过。
 
 > **文档简介**: 掌握 Query v5 的三大进阶能力——useInfiniteQuery 分页加载、onMutate 乐观更新与系统化的 query invalidation 策略。
 >
@@ -61,7 +66,7 @@ export function useFeed() {
     queryFn: fetchFeed,
     initialPageParam: 0, // v5 起必填：显式提供初始页参
     getNextPageParam: (lastPage) => lastPage.nextCursor ?? undefined,
-    maxPages: 10, // v5 起支持：最多保留 10 页，防止无限滚动撑爆内存
+    retry: false, // 本次故障练习关闭自动重试；产品中按错误类型另定策略
   })
 }
 ```
@@ -70,10 +75,10 @@ export function useFeed() {
 
 ```tsx
 function Feed() {
-  const { data, isPending, isError, fetchNextPage, hasNextPage, isFetchingNextPage } = useFeed()
+  const { data, isPending, isError, fetchNextPage, hasNextPage, isFetching, isFetchingNextPage } = useFeed()
 
   if (isPending) return <p>加载中…</p>
-  if (isError) return <p role="alert">加载失败</p>
+  if (!data) return <p role="alert">首次加载失败，请恢复接口后刷新</p>
 
   // data.pages 是按请求顺序排列的每页结果
   const items = data.pages.flatMap((page) => page.items)
@@ -83,9 +88,10 @@ function Feed() {
       {items.map((item) => (
         <article key={item.id}>{item.title}</article>
       ))}
+      {isError && <p role="alert">更新失败，已加载内容保留；可再次加载更多</p>}
       <button
         onClick={() => fetchNextPage()}
-        disabled={!hasNextPage || isFetchingNextPage}
+        disabled={!hasNextPage || isFetching}
       >
         {isFetchingNextPage ? '加载中…' : hasNextPage ? '加载更多' : '没有更多了'}
       </button>
@@ -94,7 +100,7 @@ function Feed() {
 }
 ```
 
-**要点**：`getNextPageParam` 返回 `undefined` 即告知没有下一页；偏移量分页把 `nextCursor` 换成基于 `lastPage.items.length` 的计算即可。
+**回查数据契约**：`getNextPageParam` 返回 `null` 或 `undefined` 表示结束；合法游标 `0` 不能用 `||` 吃掉。偏移量接口需要“上次偏移量 + 本页数量”和结束条件，单凭本页长度不能推导累计偏移量。这里用 `isFetching` 禁用按钮，避免后台刷新时又抢着加载下一页。先完成两页练习，再考虑 `maxPages`；限制页数会移除旧页，若产品允许回看，还要设计前一页游标和滚动体验。[官方无限查询指南](https://tanstack.com/query/latest/docs/framework/react/guides/infinite-queries)
 
 ---
 
@@ -104,7 +110,9 @@ function Feed() {
 
 ```tsx
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import type { Todo } from '../basics/03-query-fundamentals'
+
+// 实际项目放到 src/types/todo.ts；不要从教程 Markdown 路径导入类型。
+type Todo = { id: number; title: string; done: boolean }
 
 export function useToggleTodo() {
   const queryClient = useQueryClient()
@@ -113,6 +121,7 @@ export function useToggleTodo() {
     mutationFn: (todo: Todo) =>
       fetch(`/api/todos/${todo.id}`, {
         method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ done: !todo.done }),
       }).then((res) => {
         if (!res.ok) throw new Error('切换失败')
@@ -131,7 +140,7 @@ export function useToggleTodo() {
         old.map((t) => (t.id === todo.id ? { ...t, done: !t.done } : t)),
       )
 
-      // 返回的 context 会传给 onError 与 onSettled
+      // 返回值是 onMutateResult，由后续回调接收
       return { previous }
     },
 
@@ -144,13 +153,15 @@ export function useToggleTodo() {
 
     onSettled: () => {
       // 无论成败，最终与服务端对齐一次
-      void queryClient.invalidateQueries({ queryKey: ['todos'] })
+      return queryClient.invalidateQueries({ queryKey: ['todos'] })
     },
   })
 }
 ```
 
 **何时不要乐观更新**：结果依赖服务端计算（价格、库存校验）、失败成本高（支付）、或 UI 无法表达"待确认"状态的写操作。这些场景使用 invalidate + loading 态即可。
+
+`onSettled` 返回失效 Promise，让这次 mutation 等待重取阶段结束；消费 Hook 的按钮应使用同一个 mutation 实例的 `isPending`。这只约束当前界面，不会阻止别的标签页写入。若要允许并发，不应继续用整表快照覆盖缓存，应按实体处理冲突并以服务端结果对齐。回查 [官方乐观更新指南](https://tanstack.com/query/latest/docs/framework/react/guides/optimistic-updates)。
 
 ---
 
@@ -162,7 +173,7 @@ export function useToggleTodo() {
 
 ```ts
 await queryClient.invalidateQueries({ queryKey: ['todos'] })              // 前缀匹配：todos 全家
-await queryClient.invalidateQueries({ queryKey: ['todos', 'detail', 7] }) // 只失效 id=7 的详情
+await queryClient.invalidateQueries({ queryKey: ['todos', 'detail', 7], exact: true }) // 只匹配这个完整键
 await queryClient.invalidateQueries({
   predicate: (q) => q.queryKey[0] === 'todos' && (q.state.dataUpdatedAt ?? 0) < Date.now() - 3_600_000,
 }) // 自定义谓词：只失效超过 1 小时未更新的 todos 查询
@@ -196,6 +207,8 @@ await queryClient.invalidateQueries({ queryKey: ['todos'], refetchType: 'all' })
 ---
 
 ## 🎨 最佳实践速查
+
+下一步先做失效范围实验：同时缓存 `['todos']`、`['todos', 'detail', 7]`、`['profile']`，修改待办后记录前两项是否重取、第三项是否保持。默认前缀匹配不会只命中列表；如果详情也共享这个前缀，它也会失效。把不活跃查询单独标出，避免把“没有立即发请求”误判为失效未发生。完成这份记录后，再进入协作看板的并发与实时同步。
 
 乐观更新先显示预测结果，因此要处理尚未返回的旧请求、写入失败和同时发生的第二次写入。取消相关查询能减少旧响应覆盖，但简单恢复整个旧快照仍可能抹掉后续成功修改；并发写入时应限定回滚范围或最终与服务端重新对齐。
 

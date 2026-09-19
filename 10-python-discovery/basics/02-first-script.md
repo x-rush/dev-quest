@@ -117,6 +117,36 @@ echo $?                  # 0（上一条命令的退出码）
 - **`list[str] | None`**：3.10+ 直接用内置泛型和 `|` 联合类型，无需 `typing.Optional`
 - **`main` 返回退出码**：让脚本可被 shell 与 CI 判断成败
 
+下面给出一个包含正常参数、缺省参数和不合规参数的完整版本。它仍使用“可导入的函数 + `__main__` 入口”结构，避免把参数解析分散到模块顶层：
+
+<!-- terra-seventeenth-case: python-script-entry-contract -->
+```python
+"""A small import-safe command-line greeting program."""
+
+import sys
+
+
+def greet(name: str, greeting: str = "Hello") -> str:
+    return f"{greeting}, {name}!"
+
+
+def main(argv: list[str] | None = None) -> int:
+    args = sys.argv[1:] if argv is None else argv
+    if len(args) > 2:
+        print("usage: hello.py [name] [greeting]", file=sys.stderr)
+        return 2
+    name = args[0] if args else "World"
+    greeting = args[1] if len(args) == 2 else "Hello"
+    print(greet(name, greeting))
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
+```
+
+运行 `python -I hello.py Ada Hi` 会输出 `Hi, Ada!` 并以 0 退出。传入三个以上参数时，它会把用法写到标准错误并以 2 退出；导入该文件不会自行打印或退出。
+
 ---
 
 ## 3. `__main__` 惯用法详解
