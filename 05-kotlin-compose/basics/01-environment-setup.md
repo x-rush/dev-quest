@@ -81,7 +81,7 @@ Android 开发环境由四层工具组成，理解它们的分工能让你在报
    - Platform-Tools（含 adb）
    - 模拟器与系统镜像
 
-**验证方法**: 安装完成后打开 Studio，欢迎窗口左下角能看到版本号即成功。
+打开欢迎窗口只能证明 IDE 可启动。真正完成这一节，要在第一个模板项目中完成 Gradle Sync，并把 APK 安装到一个处于 `device` 状态的模拟器或真机；两项分别排除依赖/JDK 问题与设备/SDK 问题。
 
 ---
 
@@ -107,7 +107,7 @@ macOS:   ~/Library/Android/sdk
 Linux:   ~/Android/Sdk
 ```
 
-> 💡 路径可随时在 `SDK Manager → Android SDK Location` 中查看，建议写入环境变量 `ANDROID_HOME`。
+> 💡 路径可随时在 `SDK Manager → Android SDK Location` 中查看。需要在终端或 CI 调 SDK 命令时设置 `ANDROID_HOME`，并把 `$ANDROID_HOME/platform-tools` 与 `$ANDROID_HOME/cmdline-tools/latest/bin` 加进 `PATH`。不要新设 `ANDROID_SDK_ROOT`：Android 官方已将它标为弃用；若遗留环境同时设了两者，它们必须指向同一目录。
 
 ---
 
@@ -116,8 +116,9 @@ Linux:   ~/Android/Sdk
 1. 打开 `Tools → Device Manager`，点击 **Create Virtual Device**。
 2. 选择机型（学习用 **Pixel 8** 即可），点击 Next。
 3. 选择系统镜像：
-   - 优先选 **最新稳定 API 级别 + Google APIs**（非 Play Store 版，可 root 便于调试）
-   - 镜像架构选 **x86_64**（Intel/AMD 通用，性能最好）
+   - 首先保证 API 级别不低于项目的 `minSdk`；学习模板可选 Device Manager 的 Recommended 稳定镜像。需要 Google Maps 等 Google API 时选择标有 **Google APIs** 的镜像；要测试 Play Store 行为才选带 Play Store 的镜像。
+   - 镜像架构与主机匹配：Intel/AMD PC 选 x86/x86_64，Apple Silicon 选 arm64-v8a。主机与镜像架构不匹配会失去 VM 加速，启动和运行都会明显变慢。
+   - Play Store 镜像由 release key 签名，不能取得 root。若排障确实需要 root，另建 AOSP 镜像；它不含 Google 应用和服务，不能替代 Play Store 测试。
 4. 点击 Next → Finish 完成创建。
 
 ### 启动与基本操作
@@ -154,7 +155,15 @@ List of devices attached
 emulator-5554   device
 ```
 
-三条命令都正常返回，说明 JDK、SDK、设备链路均已打通。
+接着在刚创建的模板工程根目录执行 `./gradlew :app:assembleDebug`（Windows 用 `gradlew.bat :app:assembleDebug`），再从 Studio 运行到该设备。三个层次的验收应分别记录：
+
+| 观察 | 证明什么 | 不能证明什么 |
+|---|---|---|
+| `java -version` 与 Gradle JDK 一致 | Java 进程可被找到 | AGP、Kotlin 与项目依赖兼容 |
+| `./gradlew :app:assembleDebug` 成功 | 当前 Wrapper、JDK、SDK 平台和依赖能产出 debug APK | APK 已安装或 Compose UI 正常工作 |
+| `adb devices` 为 `device`，模板页启动 | adb 能发现设备，APK 可安装运行 | 旋转、权限、网络、持久化等应用行为 |
+
+失败时不要先升级所有版本：先保存完整 Gradle 错误，确认项目使用的 Gradle JDK、`compileSdk` 是否已安装、网络或代理是否能下载当前锁定依赖。
 
 ---
 
@@ -177,10 +186,11 @@ emulator-5554   device
 ## 🎯 练习与实践
 
 ### 基础练习
-- [ ] 安装完成 Android Studio 并能打开欢迎窗口
-- [ ] 记录你的 SDK 路径，并设置 `ANDROID_HOME` 环境变量
-- [ ] 创建一台 Pixel 系列模拟器并成功启动到桌面
+- [ ] 安装完成 Android Studio，并记录版本与 Gradle JDK
+- [ ] 记录 SDK 路径；仅在命令行/CI 需要时设置 `ANDROID_HOME` 和 PATH
+- [ ] 创建一台与主机架构匹配的 Pixel 系列模拟器并成功启动到桌面
 - [ ] 在终端运行 `adb devices`，看到模拟器处于 `device` 状态
+- [ ] 用模板工程执行 `assembleDebug`，并在该设备上启动模板页；保存命令、环境和结果
 
 ### 进阶挑战
 - [ ] 安装 cmdline-tools，用 `sdkmanager` 命令行安装一个额外的系统镜像
