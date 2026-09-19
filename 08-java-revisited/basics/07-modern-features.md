@@ -163,6 +163,50 @@ public final class Triangle implements Shape {}
 
 价值在组合：**sealed + record + switch 模式匹配 = 编译器保证穷举的代数数据类型**，配合示例见[控制流程](./05-control-flow.md)与[Record/Sealed/模式匹配参考](../reference/language-concepts/05-records-sealed-patterns.md)。
 
+### 可复现示例：一条小输入的现代特性闭环（JDK 21）
+
+下例刻意使用很小、固定的输入。它不把 Stream、Optional、虚拟线程和 sealed 类型堆成生产模板，而是分别显示它们可观察的契约：Stream 的过滤与映射结果、Optional 的缺失分支、虚拟线程任务的返回值，以及穷尽 switch 的类型分派。
+
+<!-- reference-case: {"id":"java-modern-features-jdk21","stdout":"[Ada]\nmissing\nvirtual=7\nvalue=3\n","requires":"JDK 21"} -->
+```java
+import java.util.List;
+import java.util.Optional;
+import java.util.concurrent.Executors;
+
+public class ModernFeatures {
+    record Person(String name, int age) {}
+
+    sealed interface Result permits Value, Missing {}
+    record Value(int number) implements Result {}
+    record Missing() implements Result {}
+
+    static String describe(Result result) {
+        return switch (result) {
+            case Value(int number) -> "value=" + number;
+            case Missing ignored -> "missing";
+        };
+    }
+
+    public static void main(String[] args) throws Exception {
+        var adults = List.of(new Person("Ada", 20), new Person("Bo", 16)).stream()
+                .filter(person -> person.age() >= 18)
+                .map(Person::name)
+                .toList();
+        System.out.println(adults);
+
+        System.out.println(Optional.<String>empty().orElse("missing"));
+
+        try (var executor = Executors.newVirtualThreadPerTaskExecutor()) {
+            System.out.println("virtual=" + executor.submit(() -> 7).get());
+        }
+
+        System.out.println(describe(new Value(3)));
+    }
+}
+```
+
+`try` 退出时等待已提交任务完成，因此本例可以安全读取 `Future.get()` 的结果；真实 IO 任务仍需设置超时、取消和下游连接并发上限。
+
 ## ✅ 最佳实践 / ❌ 陷阱清单
 
 Stream 适合清晰的变换、筛选与聚合；包含多步副作用或复杂退出逻辑时，普通循环往往更容易验证。Optional 表达单个结果可能缺失，空集合已经能表达“零项”，无需为一致形式层层包装。

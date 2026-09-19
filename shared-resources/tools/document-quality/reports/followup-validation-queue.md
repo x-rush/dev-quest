@@ -15,9 +15,9 @@
 
 ## 汇总
 
-- 队列条目：519 条，其中文件级证据缺口 465 条，逐行未绑定验证措辞 54 条。
-- 优先级：P0 0；P1 214；P2 150；P3 155。
-- 分类：核心基础 198；首项目 16；框架 111；部署 39；进阶与测试 155。
+- 队列条目：518 条，其中文件级证据缺口 464 条，逐行未绑定验证措辞 54 条。
+- 优先级：P0 0；P1 213；P2 150；P3 155。
+- 分类：核心基础 197；首项目 16；框架 111；部署 39；进阶与测试 155。
 
 ## 明细
 
@@ -35,7 +35,6 @@
 | P1 | 核心基础 | Java | [08-java-revisited/README.md](../../../../08-java-revisited/README.md#L35):35 | 保留诚实的验证边界，并在补证据时决定是否增加最小练习<br/>保持已有边界说明；若新增示例，记录工具链、命令、预期行为和未覆盖范围。 | - 将业务结果映射成 HTTP 响应；在后续练习中用真实测试数据库检查约束与事务。 |
 | P1 | 核心基础 | Java | [08-java-revisited/README.md](../../../../08-java-revisited/README.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
 | P1 | 核心基础 | Java | [08-java-revisited/basics/01-environment-setup.md](../../../../08-java-revisited/basics/01-environment-setup.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
-| P1 | 核心基础 | Java | [08-java-revisited/basics/07-modern-features.md](../../../../08-java-revisited/basics/07-modern-features.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
 | P1 | 核心基础 | Java | [08-java-revisited/reference/language-concepts/09-annotations.md](../../../../08-java-revisited/reference/language-concepts/09-annotations.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
 | P1 | 核心基础 | Java | [08-java-revisited/reference/quick-references/01-java-cheatsheet.md](../../../../08-java-revisited/reference/quick-references/01-java-cheatsheet.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
 | P1 | 核心基础 | Java | [08-java-revisited/reference/quick-references/02-troubleshooting.md](../../../../08-java-revisited/reference/quick-references/02-troubleshooting.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |

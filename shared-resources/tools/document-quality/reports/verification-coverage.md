@@ -7,8 +7,8 @@
 | 指标 | 数量 |
 |---|---:|
 | 纳入模块文档 | 642 |
-| 主状态：not_verified | 465 |
-| 主状态：runtime | 177 |
+| 主状态：not_verified | 464 |
+| 主状态：runtime | 178 |
 | 验证措辞出现次数 | 142 |
 | 措辞分类：source_has_limited_runtime_evidence | 88 |
 | 措辞分类：unbound_verification_wording | 54 |
@@ -473,7 +473,7 @@
 | Java | [08-java-revisited/basics/04-classes-records.md](../../../../08-java-revisited/basics/04-classes-records.md) | `runtime` | 1 | 0 |
 | Java | [08-java-revisited/basics/05-control-flow.md](../../../../08-java-revisited/basics/05-control-flow.md) | `runtime` | 1 | 0 |
 | Java | [08-java-revisited/basics/06-exceptions.md](../../../../08-java-revisited/basics/06-exceptions.md) | `runtime` | 1 | 0 |
-| Java | [08-java-revisited/basics/07-modern-features.md](../../../../08-java-revisited/basics/07-modern-features.md) | `not_verified` | 0 | 0 |
+| Java | [08-java-revisited/basics/07-modern-features.md](../../../../08-java-revisited/basics/07-modern-features.md) | `runtime` | 1 | 0 |
 | Java | [08-java-revisited/basics/08-first-project.md](../../../../08-java-revisited/basics/08-first-project.md) | `runtime` | 1 | 2 |
 | Java | [08-java-revisited/deployment/01-docker-deployment.md](../../../../08-java-revisited/deployment/01-docker-deployment.md) | `not_verified` | 0 | 0 |
 | Java | [08-java-revisited/deployment/02-kubernetes-deployment.md](../../../../08-java-revisited/deployment/02-kubernetes-deployment.md) | `not_verified` | 0 | 0 |
