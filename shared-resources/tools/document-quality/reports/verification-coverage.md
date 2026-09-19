@@ -7,8 +7,8 @@
 | 指标 | 数量 |
 |---|---:|
 | 纳入模块文档 | 642 |
-| 主状态：not_verified | 456 |
-| 主状态：runtime | 186 |
+| 主状态：not_verified | 455 |
+| 主状态：runtime | 187 |
 | 验证措辞出现次数 | 144 |
 | 措辞分类：source_has_limited_runtime_evidence | 88 |
 | 措辞分类：unbound_verification_wording | 56 |
@@ -103,7 +103,7 @@
 | Go | [01-go-backend/reference/library-guides/15-log-slog.md](../../../../01-go-backend/reference/library-guides/15-log-slog.md) | `runtime` | 1 | 0 |
 | Go | [01-go-backend/reference/library-guides/16-flag.md](../../../../01-go-backend/reference/library-guides/16-flag.md) | `runtime` | 1 | 1 |
 | Go | [01-go-backend/reference/library-guides/17-std-package-map.md](../../../../01-go-backend/reference/library-guides/17-std-package-map.md) | `runtime` | 1 | 1 |
-| Go | [01-go-backend/reference/quick-references/01-syntax-cheatsheet.md](../../../../01-go-backend/reference/quick-references/01-syntax-cheatsheet.md) | `not_verified` | 0 | 0 |
+| Go | [01-go-backend/reference/quick-references/01-syntax-cheatsheet.md](../../../../01-go-backend/reference/quick-references/01-syntax-cheatsheet.md) | `runtime` | 1 | 0 |
 | Go | [01-go-backend/reference/quick-references/02-web-tools.md](../../../../01-go-backend/reference/quick-references/02-web-tools.md) | `not_verified` | 0 | 0 |
 | Go | [01-go-backend/reference/quick-references/03-troubleshooting.md](../../../../01-go-backend/reference/quick-references/03-troubleshooting.md) | `not_verified` | 0 | 0 |
 | Go | [01-go-backend/testing/01-unit-testing.md](../../../../01-go-backend/testing/01-unit-testing.md) | `not_verified` | 0 | 0 |

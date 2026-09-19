@@ -194,6 +194,32 @@ case <-time.After(time.Second):
 
 阅读任何集合操作时再问两件事：是否改变长度，是否共享底层数据。append 要接收返回值，map 读取不存在键会返回零值，若需要区分“键不存在”和“值就是零”，使用 value, ok。make 创建可用的 slice/map/channel，new 只分配并返回零值的指针；new(map[K]V) 并不会自动创建可写入的 map。
 
+### 可复现速查：`map` 读取与 `append` 返回值
+
+下面的程序把两个边界放在一起：`count["missing"]` 和已有键的零值都读取为 `0`，必须看第二个返回值 `ok`；`append` 的结果必须重新赋回变量。示例只使用标准库，适合作为遇到集合行为疑问时的最小复现模板。
+
+<!-- doc-verify:go-cheatsheet-map-append-boundaries -->
+```go
+package main
+
+import "fmt"
+
+func main() {
+	count := map[string]int{"zero": 0}
+	zero, zeroOK := count["zero"]
+	missing, missingOK := count["missing"]
+	items := []int{1}
+	items = append(items, 2)
+	fmt.Printf("zero=%d,%t missing=%d,%t items=%v\n", zero, zeroOK, missing, missingOK, items)
+}
+```
+
+预期输出：
+
+```text
+zero=0,true missing=0,false items=[1 2]
+```
+
 练习：先声明 x:=1，在内层花括号里 x:=2，离开后外层应仍为 1；将内层 := 改为 = 后外层应为 2。再对 nil map 分别读取和写入，读取得到零值、写入会 panic；用 make 初始化后才可写。遇到解释不清的结果，转到对应语言语义条目，不要仅靠记住代码形状。
 
 ## 🔗 相关资源

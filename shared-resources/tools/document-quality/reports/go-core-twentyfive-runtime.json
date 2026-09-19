@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-19T18:27:34.169873+00:00",
-  "purpose": "Twenty-fifth-round runtime evidence for sixteen marked Go core-document fences.",
+  "generated_at": "2026-09-19T18:31:45.817849+00:00",
+  "purpose": "Twenty-fifth-round runtime evidence for seventeen marked Go core-document fences.",
   "isolation": "No network, read-only container root, dropped capabilities, no-new-privileges, bounded CPU/memory/PIDs, and tmpfs-only writable workspace. Image must already exist because --pull=never is used.",
-  "scope": "Only the sixteen named complete Go fences extracted unchanged after CRLF-to-LF normalization were executed. Other fences, SDK installation, toolchain setup, web services, filesystem integrations, concurrency scheduling, performance, and projects remain outside this evidence.",
+  "scope": "Only the seventeen named complete Go fences extracted unchanged after CRLF-to-LF normalization were executed. Other fences, SDK installation, toolchain setup, web services, filesystem integrations, concurrency scheduling, performance, and projects remain outside this evidence.",
   "results": [
     {
       "id": "go-environment-toolchain-hello",
@@ -15,6 +15,20 @@
       "command": "GOCACHE=/tmp/go-build go run /tmp/main.go",
       "expected_stdout": "hello-go toolchain-ready\n",
       "stdout": "hello-go toolchain-ready\n",
+      "stderr": "",
+      "exit_code": 0,
+      "status": "PASS"
+    },
+    {
+      "id": "go-cheatsheet-map-append-boundaries",
+      "language": "go",
+      "document": "01-go-backend/reference/quick-references/01-syntax-cheatsheet.md",
+      "image": "golang:1.25-alpine",
+      "document_sha256": "c3528fb7f034771d65afef29ab9804a31e874f842827bdff7fddb94d767156fc",
+      "code_sha256": "ced8637ae0999cbaccdbf7f53eedd4542e96d504aa369174eddd0f613966d313",
+      "command": "GOCACHE=/tmp/go-build go run /tmp/main.go",
+      "expected_stdout": "zero=0,true missing=0,false items=[1 2]\n",
+      "stdout": "zero=0,true missing=0,false items=[1 2]\n",
       "stderr": "",
       "exit_code": 0,
       "status": "PASS"
@@ -231,7 +245,7 @@
     }
   ],
   "summary": {
-    "passed": 16,
-    "total": 16
+    "passed": 17,
+    "total": 17
   }
 }

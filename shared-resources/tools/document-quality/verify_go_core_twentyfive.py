@@ -14,6 +14,7 @@ ROOT = Path(__file__).resolve().parents[3]
 REPORTS = Path(__file__).with_name("reports")
 CASES = (
     ("go-environment-toolchain-hello", "01-go-backend/basics/01-environment-setup.md", "hello-go toolchain-ready\n"),
+    ("go-cheatsheet-map-append-boundaries", "01-go-backend/reference/quick-references/01-syntax-cheatsheet.md", "zero=0,true missing=0,false items=[1 2]\n"),
     ("go-first-program-hello", "01-go-backend/basics/02-first-program.md", "Hello, World!\n欢迎来到Go语言的世界!\n"),
     ("go-method-receiver-mutation", "01-go-backend/basics/05-functions-methods.md", "初始值: 0\n值接收者内部: 1\n值接收者调用后: 0\n指针接收者内部: 1\n指针接收者调用后: 1\n"),
     ("go-error-wrap-is", "01-go-backend/reference/language-concepts/07-error-handling.md", "文件不存在，使用默认配置\nloadConfig \"missing.toml\": open missing.toml: no such file or directory\n"),
@@ -47,7 +48,9 @@ def run(code: str) -> subprocess.CompletedProcess[str]:
     )
 
 def main() -> None:
-    requested = sys.argv[1:]
+    arguments = sys.argv[1:]
+    update = arguments[:1] == ["--update"]
+    requested = arguments[1:] if update else arguments
     selected = tuple(case for case in CASES if not requested or case[0] in requested)
     if requested and len(selected) != len(requested):
         raise SystemExit("unknown verification case")
@@ -58,7 +61,7 @@ def main() -> None:
         prepared.append((identifier, document, expected, document_text, code))
     # Each case remains a separate locked-down container. Parallel launches avoid
     # serial cold compilation making the verifier exceed an interactive time window.
-    with ThreadPoolExecutor(max_workers=min(4, len(prepared))) as executor:
+    with ThreadPoolExecutor(max_workers=min(8, len(prepared))) as executor:
         completed_cases = list(executor.map(lambda item: run(item[4]), prepared))
     results = []
     for (identifier, document, expected, document_text, code), completed in zip(prepared, completed_cases):
@@ -72,19 +75,33 @@ def main() -> None:
         })
     report = {
         "schema_version": 1, "generated_at": datetime.now(timezone.utc).isoformat(),
-        "purpose": "Twenty-fifth-round runtime evidence for sixteen marked Go core-document fences.",
+        "purpose": "Twenty-fifth-round runtime evidence for seventeen marked Go core-document fences.",
         "isolation": "No network, read-only container root, dropped capabilities, no-new-privileges, bounded CPU/memory/PIDs, and tmpfs-only writable workspace. Image must already exist because --pull=never is used.",
-        "scope": "Only the sixteen named complete Go fences extracted unchanged after CRLF-to-LF normalization were executed. Other fences, SDK installation, toolchain setup, web services, filesystem integrations, concurrency scheduling, performance, and projects remain outside this evidence.",
+        "scope": "Only the seventeen named complete Go fences extracted unchanged after CRLF-to-LF normalization were executed. Other fences, SDK installation, toolchain setup, web services, filesystem integrations, concurrency scheduling, performance, and projects remain outside this evidence.",
         "results": results, "summary": {"passed": sum(x["status"] == "PASS" for x in results), "total": len(results)},
     }
     REPORTS.mkdir(exist_ok=True)
+    if update:
+        if len(results) != 1:
+            raise SystemExit("--update requires exactly one verification case")
+        target = REPORTS / "go-core-twentyfive-runtime.json"
+        previous = json.loads(target.read_text(encoding="utf8"))
+        by_id = {row["id"]: row for row in previous["results"]}
+        by_id[results[0]["id"]] = results[0]
+        expected_ids = {case[0] for case in CASES}
+        if set(by_id) != expected_ids:
+            raise SystemExit("existing report does not match the declared case inventory; run the full verifier")
+        report["results"] = [by_id[case[0]] for case in CASES]
+        report["summary"] = {"passed": sum(row["status"] == "PASS" for row in report["results"]), "total": len(report["results"])}
     if requested:
-        print(json.dumps(report, ensure_ascii=False, indent=2))
+        if not update:
+            print(json.dumps(report, ensure_ascii=False, indent=2))
         if any(x["status"] != "PASS" for x in results):
             raise SystemExit(1)
-        return
+        if not update:
+            return
     (REPORTS / "go-core-twentyfive-runtime.json").write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf8")
-    lines = ["# Go 核心基础页第二十五批运行验证", "", "仅运行下列十六个正文中有 `doc-verify` 标记的完整 Go 围栏。报告不将结果扩大为整页、SDK 安装、工具链或项目验证。", "", "| 文档 | 示例 | 结果 |", "|---|---|---|"]
+    lines = ["# Go 核心基础页第二十五批运行验证", "", "仅运行下列十七个正文中有 `doc-verify` 标记的完整 Go 围栏。报告不将结果扩大为整页、SDK 安装、工具链或项目验证。", "", "| 文档 | 示例 | 结果 |", "|---|---|---|"]
     lines += [f"| [{x['document']}](../../../../{x['document']}) | `{x['id']}` | {x['status']} |" for x in results]
     lines += ["", "隔离条件、原文与代码 SHA-256、完整输出和命令见同名 JSON。"]
     (REPORTS / "go-core-twentyfive-runtime.md").write_text("\n".join(lines) + "\n", encoding="utf8")
