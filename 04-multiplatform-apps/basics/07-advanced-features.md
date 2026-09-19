@@ -40,7 +40,7 @@
 
 - ✅ 说清新架构三件套（Fabric/TurboModules/Codegen）各自的职责
 - ✅ 解释 Hermes 字节码对启动速度与内存的意义
-- ✅ 用 Reanimated 4 写出 60fps 的手势跟手动画
+- ✅ 用 Reanimated 4 写出手势跟手动画，并用目标设备的采样数据判断是否达到体验目标
 - ✅ 使用 Perf Monitor 与 DevTools 定位掉帧环节
 
 ## 🔍 核心概念
@@ -57,18 +57,15 @@
 | 优先级 | 全局统一 | 支持 Synchronous 渲染（如手势跟手） |
 | 挂载 | JS → 原生命令队列 | C++ 侧直接挂载，抖动更小 |
 
-**对业务的直接体感**: 长列表滚动更稳、模态/键盘弹出不再"跳变"、第三方原生组件兼容性由 Codegen 保障。新架构自 RN 0.82 起是唯一架构（旧架构已移除），业务代码通常无需改动；未适配的旧库已无法使用，需换 Fabric 适配版或替代库。
+**对业务的影响**：Fabric 提供同步布局读取、多优先级更新和跨平台 C++ 核心等能力，但它不保证任意列表、键盘或模态动画都会自动变流畅。RN 0.82 起应用运行时只使用新架构；兼容层仍会让部分 Legacy 库继续运行，是否可用必须用目标 RN 版本、库发布说明和真实构建确认。
 
 ### Hermes — 面向 RN 的 JS 引擎
 
 **定义**: Meta 专为移动端打造的 JavaScript 引擎，构建期把 JS 预编译为字节码（AOT），运行时直接执行。
 
-**收益**:
-- 启动提速：省去设备端即时编译（JIT 预热）
-- 内存降低：字节码 mmap 映射，按需加载
-- 调试增强：支持 Hermes 调试协议（React Native DevTools 即基于此）
+**可能的收益**：构建可生成 Hermes 字节码，减少设备端解析/编译开销；其内存和启动影响取决于 bundle、设备和构建配置。React Native 通常使用 Hermes，禁用后可能改用 JavaScriptCore；远程 JS 调试又是另一运行环境。不要把某个 Hermes 主版本、启动提速百分比或内存下降量写成跨项目保证。
 
-Hermes 默认启用，RN 0.84 起 V1 引擎为默认版本。Expo 工程开箱即用；bare 工程检查方式：iOS 看 `Podfile` 中 `:hermes_enabled => true`，Android 看 `gradle.properties` 的 `hermesEnabled=true`。
+**确认方式**：记录实际 RN/Expo 版本、构建类型和运行时；在同一台目标设备进行多次冷启动、内存与交互测量。bare 工程的引擎配置字段随模板版本变化，应以生成项目与构建日志为准；Expo 工程先查所用 SDK 的版本固定文档，不要根据最新页面反推旧项目。
 
 ## 💻 动画：Reanimated 4
 
@@ -83,20 +80,23 @@ import Animated, {
   withSpring,
 } from 'react-native-reanimated';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
+import { scheduleOnRN } from 'react-native-worklets';
 
 export function SwipeCard({ title, onDelete }: { title: string; onDelete: () => void }) {
   const translateX = useSharedValue(0);
 
   const pan = Gesture.Pan()
     .onUpdate((e) => {
-      // UI 线程直接更新，不经过 setState，不掉帧
+      // UI runtime 直接更新 shared value；“不掉帧”仍须在设备上测量
       translateX.value = e.translationX;
     })
     .onEnd(() => {
-      // 超过阈值滑出并回调删除，否则弹回
+      // 超过阈值先滑出；完成后才回 RN runtime 更新 React 状态
       if (Math.abs(translateX.value) > 120) {
-        translateX.value = withSpring(400);
-        onDelete();
+        const exitX = translateX.value < 0 ? -400 : 400;
+        translateX.value = withSpring(exitX, {}, (finished) => {
+          if (finished) scheduleOnRN(onDelete);
+        });
       } else {
         translateX.value = withSpring(0);
       }
@@ -131,7 +131,7 @@ const styles = StyleSheet.create({
 });
 ```
 
-**要点**: `useSharedValue` + `useAnimatedStyle` 的组合让"值变化 → 样式更新"完全在 UI 线程闭环；worklet 函数内不要引用 React 状态。
+**要点**: `useSharedValue` + `useAnimatedStyle` 让样式计算可在 UI runtime 执行。Gesture 回调通常也会 worklet 化；它不能直接调用普通 React 回调。Reanimated 4 使用 `scheduleOnRN` 把删除状态更新调度回 RN runtime，且它是异步的；worklet 内不要读取或修改 React state。
 
 ## 💻 性能问题定位
 
@@ -143,8 +143,8 @@ const styles = StyleSheet.create({
 | 症状 | 大概率原因 | 首选手段 |
 |------|-----------|---------|
 | 列表滑动掉帧 | renderItem 重渲染 | `React.memo` + `getItemLayout` |
-| 点击响应慢 200ms+ | JS 线程阻塞 | 交互改 Reanimated，重活移出 JS 线程 |
-| 启动慢 | bundle 过大 | 按需 import、Hermes 字节码、代码分割评估 |
+| 点击响应慢 | JS 线程、同步布局或原生 I/O 竞争 | 先采样确定线程；短暂视觉反馈可用 UI runtime，重活需拆分、缓存或移到合适的原生/后台任务 |
+| 启动慢 | bundle、初始化、图片解码、网络或设备状态 | 记录冷启动定义和多次样本，再逐项剖析；Hermes 只是可能因素 |
 | 内存持续上涨 | 泄漏 | 检查未清理的订阅/定时器 |
 
 更多调试工具命令见 [CLI 命令与调试速查](../reference/quick-references/01-cli-and-debug-cheatsheet.md)，系统性优化将归档于 `advanced-topics/performance/`。
@@ -161,7 +161,7 @@ worklet 与 React 状态所在执行环境不同，跨环境更新要使用库�
 **A**: 现行 RN 全部默认新架构（0.82 起为唯一架构，旧架构开关已删除）；DevTools 启动日志可确认；老库混用时以官方 Upgrade Helper 结果为准。
 
 ### Q2: Reanimated 与 Gesture Handler 的安装顺序？
-**A**: `npx expo install` 安装即可——Expo 工程的 `babel-preset-expo` 已自动包含 worklets 插件（Reanimated 4 起插件移交 `react-native-worklets`，仍需放插件列表最后）；bare 工程需手动确认，然后重新构建原生工程。
+**A**: Expo 工程先用 `npx expo install react-native-reanimated react-native-worklets`，再查该 SDK 的固定文档；当前 Expo 预设会自动配置所需插件。bare 工程按 Reanimated 与 Gesture Handler 对应版本文档配置，随后重新构建原生应用。不要在已有 Expo 配置中重复手加插件后再声称“顺序无关”。
 
 ### Q3: 鸿蒙端动画库怎么选？
 **A**: 使用 RNOH 官方适配列表中的版本（其组织下提供 harmony 补丁包），见 [05-harmonyos-rnoh-api](../reference/language-concepts/05-harmonyos-rnoh-api.md)。
@@ -172,9 +172,9 @@ worklet 与 React 状态所在执行环境不同，跨环境更新要使用库�
 
 **任务要求**:
 1. 实现 5 张卡片的列表，长按拖拽换位（Gesture Handler + Reanimated）
-2. 拖动全程 Perf Monitor 保持在 55fps 以上
+2. 在固定设备、固定构建类型下各执行 10 次相同拖动，记录 JS/UI 帧率、是否丢帧、卡片是否在动画结束后才删除
 
-**评估标准**: 松手后卡片动画平滑归位，无跳变。
+**评估标准**: 未过阈值时卡片归位；左右超过阈值时向对应方向退出，动画完成后列表才移除该项。把设备型号、构建类型、样本数和测得的帧率写入记录，而不是只写“流畅”。
 
 ### 练习二：启动性能体检
 
