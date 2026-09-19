@@ -5,7 +5,7 @@
 
 第一次学习请从[理解地图与学习规划](LEARNING_GUIDE.md)开始，按其中的阶段任务和验收条件推进。先选 Android 或 iOS 一个平台运行待办应用，完成输入、列表和存储。第二平台、原生桥接与鸿蒙适配各有环境和依赖要求，分别学习与验收。
 
-查语法、函数或库时使用下方参考目录。文件数量与目录中的完成标记表示内容组织情况，不能替代示例运行证据；具体交付按[知识库质量基线](../shared-resources/standards/knowledge-delivery-baseline.md)验收。
+查语法、函数或库时使用下方参考目录；JavaScript 基础分别从共享的[关键词](../shared-resources/javascript-keywords.md)、[内置能力](../shared-resources/javascript-builtins.md)和[标准库与宿主能力](../shared-resources/javascript-standard-library.md)进入。文件数量与目录中的完成标记表示内容组织情况，不能替代示例运行证据；具体交付按[知识库质量基线](../shared-resources/standards/knowledge-delivery-baseline.md)验收。
 
 > **模块简介**: 学习 React Native 的组件、状态、导航与原生能力；先完成单平台应用，再根据具体依赖与适配方案验证 Android、iOS 或鸿蒙目标
 >

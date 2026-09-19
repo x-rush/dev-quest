@@ -5,7 +5,7 @@
 
 第一次学习请从[理解地图与学习规划](LEARNING_GUIDE.md)开始，按其中的阶段任务和验收条件推进。先完成两个能直接访问的页面和一个可点击的组件，再加入数据读取与提交。HTML/CSS、JavaScript 和 React 的具体补课项见导读；电商、支付与 SaaS 项目属于后续选题。
 
-查语法、函数或库时使用下方参考目录。文件数量与目录中的完成标记表示内容组织情况，不能替代示例运行证据；具体交付按[知识库质量基线](../shared-resources/standards/knowledge-delivery-baseline.md)验收。
+查语法、函数或库时使用下方参考目录；JavaScript 基础分别从共享的[关键词](../shared-resources/javascript-keywords.md)、[内置能力](../shared-resources/javascript-builtins.md)和[标准库与宿主能力](../shared-resources/javascript-standard-library.md)进入。文件数量与目录中的完成标记表示内容组织情况，不能替代示例运行证据；具体交付按[知识库质量基线](../shared-resources/standards/knowledge-delivery-baseline.md)验收。
 
 > **文档简介**: 从 React 页面与交互出发，逐步学习 Next.js 路由、服务端执行、数据提交与应用交付
 >

@@ -5,7 +5,7 @@
 
 第一次学习请从[理解地图与学习规划](LEARNING_GUIDE.md)开始，按其中的阶段任务和验收条件推进。先用 Query 做能展示加载、失败、空列表和成功结果的小页面，再加入写入与缓存失效。Table、Router、Form 按实际任务选学，不要求在首项目中装齐全部库。
 
-查语法、函数或库时使用下方参考目录。文件数量与目录中的完成标记表示内容组织情况，不能替代示例运行证据；具体交付按[知识库质量基线](../shared-resources/standards/knowledge-delivery-baseline.md)验收。
+查语法、函数或库时使用下方参考目录；JavaScript 基础分别从共享的[关键词](../shared-resources/javascript-keywords.md)、[内置能力](../shared-resources/javascript-builtins.md)和[标准库与宿主能力](../shared-resources/javascript-standard-library.md)进入。文件数量与目录中的完成标记表示内容组织情况，不能替代示例运行证据；具体交付按[知识库质量基线](../shared-resources/standards/knowledge-delivery-baseline.md)验收。
 
 ## 📚 模块概述
 

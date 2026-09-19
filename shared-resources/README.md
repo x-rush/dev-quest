@@ -23,6 +23,9 @@
 ```
 shared-resources/
 ├── 📖 README.md                      # 本文档 - 共享资源使用指南
+├── 📄 javascript-keywords.md         # JavaScript 关键词参考（前端/移动/Node 共用）
+├── 📄 javascript-builtins.md         # JavaScript 高频内置能力与边界
+├── 📄 javascript-standard-library.md # ECMAScript 标准库与宿主能力地图
 ├── 📁 standards/                     # 核心标准规范
 │   ├── 📄 module-structure-guide.md       # 模块结构设计指南
 │   ├── 📄 documentation-guidelines.md     # 文档编写指南
@@ -40,6 +43,18 @@ shared-resources/
 └── 📁 progress/                      # 进度跟踪系统
     └── 📄 learning-progress.md            # 学习进度跟踪
 ```
+
+## JavaScript 共用基础参考
+
+Next.js、TanStack、React Native 与 Node.js 模块共用同一门 JavaScript 语言基础。按问题进入对应页面：
+
+| 需要确认的问题 | 入口 | 读完应能判断 |
+|---|---|---|
+| `const`、解构、可选链、模块等语法如何工作 | [关键词](javascript-keywords.md) | 语法在哪个作用域执行、短路或默认值何时发生 |
+| 数值转换、数组方法、对象、Promise 如何使用 | [内置能力](javascript-builtins.md) | 输入输出、是否修改原值、异步与异常边界 |
+| `Map`、`Set`、`Intl`、`JSON`、`Date`、二进制或取消请求属于什么能力 | [标准库与宿主能力](javascript-standard-library.md) | API 是 ECMAScript 标准还是浏览器、Node、React Native 的宿主能力，以及跨端使用前需验证什么 |
+
+共享页不代替框架或平台文档；`fetch`、存储、文件系统、原生桥接等能力仍应在目标运行时和项目版本中测试。
 
 ## 🏗️ 标准规范体系 (standards/)
 
