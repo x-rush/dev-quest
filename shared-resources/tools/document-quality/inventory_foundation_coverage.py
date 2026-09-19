@@ -33,6 +33,12 @@ TOPICS = {
     "builtins": (r"内置函数", r"内置能力", r"\bbuilt[ -]?ins?\b"),
     "standard_library": (r"标准库", r"\bstandard library\b", r"\bstdlib\b"),
 }
+SHARED_JS_FOUNDATIONS = (
+    ROOT / "shared-resources/javascript-keywords.md",
+    ROOT / "shared-resources/javascript-builtins.md",
+    ROOT / "shared-resources/javascript-standard-library.md",
+)
+JS_MODULES = {"02-nextjs-frontend", "03-tanstack-stack", "04-multiplatform-apps", "09-nodejs-backend"}
 FENCE = re.compile(r"^```([^\s`]*)[^\n]*\n(.*?)^```\s*$", re.M | re.S)
 
 
@@ -77,6 +83,12 @@ def row(module: str, config: dict) -> dict:
     files = docs(module)
     languages, candidate, marked = fence_inventory(files, config["fences"])
     topics = {name: topic_files(files, patterns) for name, patterns in TOPICS.items()}
+    # Browser, mobile and Node modules intentionally share the language
+    # foundation. Include these explicit files for topic signals while keeping
+    # the reference document count scoped to the module itself.
+    if module in JS_MODULES:
+        for name, patterns in TOPICS.items():
+            topics[name] = sorted(set(topics[name]) | set(topic_files(list(SHARED_JS_FOUNDATIONS), patterns)))
     gaps = [name for name, paths in topics.items() if not paths]
     # Only a dedicated validation report can change this field.  No report is
     # parsed here because validation scopes are intentionally heterogeneous.
