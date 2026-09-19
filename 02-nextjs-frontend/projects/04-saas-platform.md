@@ -3724,7 +3724,7 @@ module.exports = nextConfig
 ### 生产环境部署
 - **前端**: Vercel自动部署
 - **后端**: Railway容器部署
-- **数据库**: Supabase托管数据库
+- **持久化服务**: 选择具备目标地区、备份恢复、连接限制和迁移演练能力的受管理 PostgreSQL；Supabase 只是候选，不是项目要求
 - **文件存储**: AWS S3
 - **缓存**: Redis Cloud
 - **监控**: Sentry + LogRocket
