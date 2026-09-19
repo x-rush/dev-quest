@@ -19,13 +19,15 @@
 |------|------------|------|
 | **Kotlin** | 2.4（2.4.0 于 2026-06-03 发布，最新补丁 2.4.20） | K2 编译器唯一引擎，已移除 K1 与 `-language-version=1.9`；上下文参数、显式后备字段转正 |
 | **Jetpack Compose BOM** | 2026.09.00 | 2026 年 9 月版（Google Maven group-index 实核），核心库（Animation/Foundation/Runtime/UI）统一 1.12.x |
-| **Material 3** | 1.4.0（随 BOM 分发） | Compose 依赖一律走 BOM，不单独写版本号 |
+| **Material 3** | 由所选 BOM 的版本映射确定 | BOM 提供版本约束，不自动安装库；仍需显式声明 Material 3 等实际使用的依赖 |
 | **AGP** | 9.4.0（2026-09-01） | 要求 Gradle 9.6.0、JDK 17；最高支持 compileSdk 37 |
 | **Android Studio** | Quail（2026.1.4） | 兼容 AGP 7.1–9.4 |
 | **KSP** | 2.3.x | KSP 已改用独立版本号，与 Kotlin 版本解耦 |
 | **targetSdk** | 36（Android 16） | Play 2026 年新提交要求线；Android 17（API 37）尚在 Beta |
 
 > 复现时采用练习工程的 Gradle Wrapper、`gradle/libs.versions.toml` 与 SDK 配置。上表提供版本背景，不能把各组件分别升级到“最新”当作已验证的兼容组合；修改组合后重新同步、构建与测试。
+
+Compose BOM 不管理 Kotlin、AGP、Room 或 Compose 编译器版本。Kotlin 2.0 及以后，Compose 编译器插件与 Kotlin 编译器使用相同版本；依赖库通过 BOM 映射选择版本。配置失败先区分“编译插件不兼容”和“库依赖缺失”，不要只修改 BOM 期待解决全部问题。依据：[Android 官方 BOM 说明](https://developer.android.com/develop/ui/compose/bom)。
 
 ## 🧭 模块定位
 
@@ -58,6 +60,19 @@
 ### 入门路径（⭐）
 
 [环境搭建](basics/01-environment-setup.md) → [Kotlin 语法基础](basics/03-kotlin-syntax-essentials.md) → [第一个 Compose 应用](basics/02-first-compose-app.md) → [Composable 与状态](basics/04-composables-state.md) → [布局系统](basics/05-layouts.md) → [页面导航](basics/06-navigation.md) → [协程与 Flow 基础](basics/07-coroutines-flow-basics.md) → [第一个项目](basics/08-first-project.md) → [Compose 入门核心](frameworks/01-compose-basics.md) → [开发工具链](frameworks/04-devtools.md) → [实战：本地笔记应用](projects/01-notes-app.md)
+
+### 入门路径的四个停止检查点
+
+先让 Android Studio 的未修改模板在设备上启动，再逐关加入代码，保留每关可以返回的源码版本。已有编程经验足以开始语法练习；显示 Android 界面还需要 SDK、模拟器或设备。不要同时排查 Kotlin 语法、Gradle 配置和数据库问题。
+
+| 关卡 | 最小产物和操作 | 通过条件；失败回查 |
+|---|---|---|
+| Kotlin 输入处理 | 写一个纯函数，将 `listOf(null, "", " A ", "B")` 转成 `listOf("A", "B")`，再测试全空与空集合 | 不使用 `!!`，空输入返回空集合；结果不符回[可空性与集合](reference/language-concepts/02-null-safety-collections.md)，暂不加入 Android API |
+| Compose 状态 | 父组件拥有状态、两个子组件显示值的计数器；操作 0→1→2→0 | 两处始终一致，能指出事件返回父组件的路径；不更新回[状态篇](basics/04-composables-state.md)，检查普通变量和可观察状态 |
+| 本地笔记 | 按[首项目](basics/08-first-project.md)接入 Room；新增 A/B，删除 B，终止应用后重启 | 只读回 A，空白标题不能写入；保留工程、版本目录、schema 和设备记录。编译失败先查 KSP，重启丢数据查磁盘数据库与写入结果 |
+| 失败恢复 | 在练习工程的数据边界使用会抛错的替身；分别触发读取和保存失败，再恢复正常实现重试 | 读取失败不能伪装为空列表；保存失败保留草稿和错误，恢复后只写入一次。回查首项目错误状态与重试分支，再做[编辑与搜索](projects/01-notes-app.md) |
+
+旋转后的草稿保留与重启后的数据库记录保留分别验收；`ViewModel` 不跨进程存活，`rememberSaveable` 不能替代 Room 作为长期笔记存储。每关记录环境、期望、实际和恢复动作。本页本轮只做路线与配置语义核查，未执行 Android 构建、设备操作或故障注入；这些项目保持“未验证”，纯 Kotlin 运行不能代替 Compose/Room 验收。
 
 ### 进阶路径（⭐⭐）
 

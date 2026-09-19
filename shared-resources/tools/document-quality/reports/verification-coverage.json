@@ -17,13 +17,13 @@
   "summary": {
     "documents": 642,
     "by_primary_state": {
-      "not_verified": 492,
-      "runtime": 150
+      "not_verified": 489,
+      "runtime": 153
     },
-    "verification_wording_occurrences": 127,
+    "verification_wording_occurrences": 129,
     "marker_classification": {
       "source_has_limited_runtime_evidence": 83,
-      "unbound_verification_wording": 44
+      "unbound_verification_wording": 46
     }
   },
   "documents": [
@@ -2782,7 +2782,7 @@
     },
     {
       "path": "04-multiplatform-apps/README.md",
-      "sha256": "400c8c34a6e25deb55cde60f5974a975d73feb2e812e425513379f002433174d",
+      "sha256": "8c92416ade936aca664bc78043c22e95ead2a78815d2c0dc84e675252505eb50",
       "verification": [
         {
           "mode": "not_verified",
@@ -2791,7 +2791,7 @@
           "scope": "No named runtime or syntax evidence is recorded for this document."
         }
       ],
-      "marker_count": 0
+      "marker_count": 1
     },
     {
       "path": "04-multiplatform-apps/React Native三端原生应用学习路线.md",
@@ -3471,7 +3471,7 @@
     },
     {
       "path": "05-kotlin-compose/README.md",
-      "sha256": "ad1e17e0be5167ee57f3ccb3037093ee286fa8c535c49bb6f9d000991957ad8a",
+      "sha256": "0ad7fbb8f41f9882af25aab2519077d2a953cc7babc9a519909e8f34e9f0a883",
       "verification": [
         {
           "mode": "not_verified",
@@ -4185,7 +4185,7 @@
     },
     {
       "path": "06-swift-swiftui/README.md",
-      "sha256": "13b6859d5f5b283fee61ede7e5318acb523bc4611e16a44a7ea849074bb5745f",
+      "sha256": "21a8d135b631c8c0d15c4a6066ea258f18ee8a5bab0c7cac3d67d2d09d393768",
       "verification": [
         {
           "mode": "not_verified",
@@ -4194,7 +4194,7 @@
           "scope": "No named runtime or syntax evidence is recorded for this document."
         }
       ],
-      "marker_count": 0
+      "marker_count": 1
     },
     {
       "path": "06-swift-swiftui/advanced-topics/architecture/01-app-architecture.md",
@@ -5746,13 +5746,13 @@
     },
     {
       "path": "07-php-mastery/reference/library-guides/05-file-stream-io.md",
-      "sha256": "d52e231e5b57adcce8b9d15de11ea00fb046da4b59fa71b3108fed179092a173",
+      "sha256": "0c12dff433bfce5a497f389884827ab73a005bf0d5bd862f21af26a335c58353",
       "verification": [
         {
-          "mode": "not_verified",
-          "status": "NOT_VERIFIED",
-          "report": null,
-          "scope": "No named runtime or syntax evidence is recorded for this document."
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "php-java-rust-fourteenth-body-validation.json",
+          "scope": "Each result is one complete fenced program extracted by its unique body-runtime-case id. Partial fences, prose, external services, cross-process contention, performance, and whole-document claims are outside this evidence."
         }
       ],
       "marker_count": 0
@@ -6630,13 +6630,13 @@
     },
     {
       "path": "08-java-revisited/reference/library-guides/07-java-text-and-time-format.md",
-      "sha256": "fb1a9e853f1863ff522416d49f55c2b48f9d9ebb080dd1e9d588949adc69086b",
+      "sha256": "44ba5a0de8b99a1bad7be604634d9e168553a40817cfc777ef96e58c906d4128",
       "verification": [
         {
-          "mode": "not_verified",
-          "status": "NOT_VERIFIED",
-          "report": null,
-          "scope": "No named runtime or syntax evidence is recorded for this document."
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "php-java-rust-fourteenth-body-validation.json",
+          "scope": "Each result is one complete fenced program extracted by its unique body-runtime-case id. Partial fences, prose, external services, cross-process contention, performance, and whole-document claims are outside this evidence."
         }
       ],
       "marker_count": 0
@@ -8344,13 +8344,13 @@
     },
     {
       "path": "11-rust-cross-platform/basics/04-traits-generics.md",
-      "sha256": "ee99d041fb8c7264565cea4dc7114b065304931874f757bbf996c68fc892f936",
+      "sha256": "93d5252c1b50829894e9890497bee8ea6a5b1b94af1bc8714ef34aff7c8fb7a8",
       "verification": [
         {
-          "mode": "not_verified",
-          "status": "NOT_VERIFIED",
-          "report": null,
-          "scope": "No named runtime or syntax evidence is recorded for this document."
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "php-java-rust-fourteenth-body-validation.json",
+          "scope": "Each result is one complete fenced program extracted by its unique body-runtime-case id. Partial fences, prose, external services, cross-process contention, performance, and whole-document claims are outside this evidence."
         }
       ],
       "marker_count": 0
@@ -9144,6 +9144,12 @@
       "classification": "source_has_limited_runtime_evidence"
     },
     {
+      "path": "04-multiplatform-apps/README.md",
+      "line": 86,
+      "excerpt": "| 1. 固定环境 | 按[环境篇](basics/01-environment-setup.md)选择 Expo 或自行管理原生工程；只选一个目标设备。保存工程、锁文件与 Node/SDK/设备版本 | 模板 App 实际打开并显示自定义文本；Metro 启动但手机未显示不算通过。先恢复模板可运行状态，再排查连接或原生构建日志 |",
+      "classification": "unbound_verification_wording"
+    },
+    {
       "path": "04-multiplatform-apps/advanced-topics/architecture/01-new-architecture.md",
       "line": 43,
       "excerpt": "验收：能指出延迟发生在 JS 执行还是资源/视图工作阶段，不能只写“桥慢”。若没有设备和分析工具，先画出上述数据流，标出测量点；这属于推演，不应记录为实测性能。",
@@ -9244,6 +9250,12 @@
       "line": 102,
       "excerpt": "## 可运行练习：返回值、null 与提前执行",
       "classification": "source_has_limited_runtime_evidence"
+    },
+    {
+      "path": "06-swift-swiftui/README.md",
+      "line": 86,
+      "excerpt": "最后将“源码版本、目标环境、步骤、期望、实际、恢复后的结果”交付为一份记录，再新建独立[笔记项目](projects/01-notes-app.md)练习编辑和搜索。不要为跟随下一篇而把旧数据库模型直接替换；保留旧数据的模型演进需要迁移方案。本页本轮未执行 Xcode 构建、SwiftUI 交互或 SwiftData 故障注入，未取得这些关卡的运行通过证据。",
+      "classification": "unbound_verification_wording"
     },
     {
       "path": "06-swift-swiftui/basics/08-first-project.md",

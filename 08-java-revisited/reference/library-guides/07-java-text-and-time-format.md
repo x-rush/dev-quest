@@ -100,6 +100,41 @@ public class FormatDemo {
 }
 ```
 
+## 正文提取验证：严格日期与显式 Locale
+
+下面的完整围栏固定输入、Locale 与时区，因此输出不依赖宿主机的默认语言或系统时钟。它同时验证三个容易混淆的边界：STRICT 解析要搭配 `uuuu`、无效日期会失败，以及 `DecimalFormat` 的百分比模式会将数值乘以 100 以供展示。格式化后的文本是展示结果，不能反推为稳定的持久化协议。
+
+<!-- body-runtime-case: {"id":"java-time-strict-locale-decimal","stdout":"2024-02-29\ninvalid\nFebruary\n26%\n"} -->
+```java
+import java.text.DecimalFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+import java.time.format.ResolverStyle;
+import java.util.Locale;
+
+public class Main {
+    public static void main(String[] args) {
+        DateTimeFormatter strictDate = DateTimeFormatter
+                .ofPattern("uuuu-MM-dd", Locale.ROOT)
+                .withResolverStyle(ResolverStyle.STRICT);
+
+        System.out.println(LocalDate.parse("2024-02-29", strictDate));
+        try {
+            LocalDate.parse("2025-02-29", strictDate);
+        } catch (DateTimeParseException expected) {
+            System.out.println("invalid");
+        }
+
+        System.out.println(LocalDate.of(2026, 2, 1).format(
+                DateTimeFormatter.ofPattern("MMMM", Locale.ENGLISH)));
+        System.out.println(new DecimalFormat("0%").format(0.256));
+    }
+}
+```
+
+输出中的 `February` 来自明确指定的 `Locale.ENGLISH`；省略它时，月份名称可以随进程默认 Locale 改变。`0.256` 的 `26%` 是 `DecimalFormat` 的舍入后展示，不表示原始数值被修改。
+
 ## ⚠️ 常见陷阱
 
 - ❌ **静态共享 `SimpleDateFormat`**：并发下产出错误结果（不能依赖某个固定错误率判断安全）。

@@ -109,6 +109,79 @@ echo hash_final($hash);
 - ❌ **写文件不加锁**：并发请求交错写坏内容。
 - ✅ `flock($fh, LOCK_EX)` 或 `file_put_contents(..., LOCK_EX)`。
 
+## 正文提取验证：字节完整写入与锁内读改写
+
+下面是本页唯一用于自动运行验证的完整脚本。它在系统临时目录创建自己的文件，先用循环处理 `fwrite` 的部分写入契约，再在同一把排他锁内完成读取、递增和截断回写。`LOCK_EX` 只协调遵守相同协议的进程；此例验证的是单进程中锁覆盖整个读改写临界区这一必要结构，不声称替代多进程压力测试。
+
+<!-- body-runtime-case: {"id":"php-file-stream-full-write-and-locked-update","stdout":"bytes=6\ncontent=abc123\ncounter=42\n"} -->
+```php
+<?php
+
+declare(strict_types=1);
+
+function writeAll($stream, string $bytes): void
+{
+    $offset = 0;
+    while ($offset < strlen($bytes)) {
+        $written = fwrite($stream, substr($bytes, $offset));
+        if ($written === false || $written === 0) {
+            throw new RuntimeException('write failed');
+        }
+        $offset += $written;
+    }
+}
+
+$path = tempnam(sys_get_temp_dir(), 'php-io-');
+if ($path === false) {
+    throw new RuntimeException('cannot create temp file');
+}
+
+try {
+    $stream = fopen($path, 'c+b');
+    if ($stream === false) {
+        throw new RuntimeException('cannot open temp file');
+    }
+    try {
+        writeAll($stream, 'abc123');
+        rewind($stream);
+        $content = stream_get_contents($stream);
+        if ($content === false) {
+            throw new RuntimeException('cannot read temp file');
+        }
+        echo 'bytes=', strlen($content), PHP_EOL;
+        echo 'content=', $content, PHP_EOL;
+
+        if (!flock($stream, LOCK_EX)) {
+            throw new RuntimeException('cannot lock temp file');
+        }
+        try {
+            rewind($stream);
+            $current = stream_get_contents($stream);
+            if ($current === false || !ctype_digit($current)) {
+                $current = '41';
+            }
+            rewind($stream);
+            if (!ftruncate($stream, 0)) {
+                throw new RuntimeException('cannot truncate temp file');
+            }
+            writeAll($stream, (string) ((int) $current + 1));
+            fflush($stream);
+        } finally {
+            flock($stream, LOCK_UN);
+        }
+
+        rewind($stream);
+        echo 'counter=', stream_get_contents($stream), PHP_EOL;
+    } finally {
+        fclose($stream);
+    }
+} finally {
+    unlink($path);
+}
+```
+
+预期输出证明首段字节被完整读回，并证明覆盖写先截断了旧内容；若省略 `ftruncate`，较长旧内容的尾部会残留。`tempnam` 仅使示例可重复运行，生产代码仍须为目标目录、权限和替换策略制定自己的约束。
+
 <!-- full-library-explanation -->
 ## 文件处理要同时考虑资源和并发
 

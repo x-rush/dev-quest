@@ -19,10 +19,12 @@
 
 | 技术 | 当前版本 | 核实要点 |
 |------|---------|---------|
-| Swift | **6.4.0**（2026-09-14 发布，swift.org 官方 API 实核，Linux 工具链可用；本模块文档基于 6.3 编写，6.3 内容仍然成立） | Swift 6 严格并发为默认语言模式；6.3 起附带首个官方 **Swift SDK for Android**（跨 iOS/Android 分享 Swift 代码的里程碑） |
+| Swift | 编译器版本以练习工程实际工具链为准，历史正文包含 6.3 示例 | 编译器版本与语言模式分别记录；使用 Swift 6 编译器不代表 target 已开启 Swift 6 语言模式，需检查项目构建设置 |
 | Xcode | **26.6** | 内含 Swift 6.3.3 工具链，SDK 覆盖 iOS 26.5 等 |
 | iOS SDK | **iOS 26** | SwiftUI / SwiftData 随 SDK 一体发布，无独立版本号；标志性变化为 Liquid Glass 设计与 `.glassEffect()` 等 SwiftUI 新 API |
 | 构建系统 | Swift Build（开源） | Swift 6.3 起 Swift Build 以 preview 形式集成进 SPM（官方邀请试用反馈，尚未成为默认） |
+
+语言模式决定源代码兼容规则。先记录 Xcode 的 Swift Language Version、Strict Concurrency Checking 及默认 actor 隔离设置，再解释并发诊断；不能只凭 `swift --version` 宣称严格并发检查已开启。依据：[Swift 版本兼容说明](https://docs.swift.org/latest/documentation/the-swift-programming-language/compatibility/)、[Apple 的 Swift 6 迁移说明](https://developer.apple.com/documentation/swift/adoptingswift6)。
 
 <details>
 <summary>文档信息（用途、难度与维护记录）</summary>
@@ -69,6 +71,19 @@
 [01 环境搭建](./basics/01-environment-setup.md) → [03 Swift 语法要点](./basics/03-swift-syntax-essentials.md) → [02 第一个 SwiftUI App](./basics/02-first-swiftui-app.md) → [04 视图与状态](./basics/04-views-state.md) → [05 布局系统](./basics/05-layouts.md) → [06 导航模式](./basics/06-navigation.md) → [08 首个完整项目：待办记账](./basics/08-first-project.md) → [项目：本地笔记应用](./projects/01-notes-app.md)
 
 首项目需要可用的 macOS/Xcode、iOS 17 或更高的运行目标，以及可选值、数组和错误处理基础。交付自己的 Xcode 工程和验收记录：新增 A/B、完成并删除 B，终止应用再启动后 A 仍在且 B 不在；支出 `0.10` 与 `0.20` 合计显示 0.30 元，非法金额不能保存。先完成待办阶段，再加入记账；未运行的设备检查标为未验证。遇到视图问题查[SwiftUI 基础任务指南](./frameworks/01-swiftui-basics.md)，工程启动问题查[Xcode 工具链](./frameworks/04-devtools.md)。完成后再做笔记应用的编辑与搜索；[并发入门](./basics/07-concurrency-async-await.md)在进入网络项目之前学习。
+
+### 首次学习的四个可交付关卡
+
+前置自检：能用函数转换输入，知道值缺失不等于空字符串。Swift 可选值、结构体和闭包不熟时，先在[语法篇](basics/03-swift-syntax-essentials.md)完成练习；没有 macOS/Xcode 可先学习语言，但将下面的 SwiftUI 与 SwiftData 设备结果留为未验证。
+
+| 关卡 | 操作和最小产物 | 成功条件；失败恢复 |
+|---|---|---|
+| 1. 模板运行 | 新建 SwiftUI App，保留唯一 `@main`，选择目标设备并改一行显示文本；记录 Xcode、SDK、部署目标、语言模式 | 实际运行显示新文本；Preview 能显示不能代替应用运行。构建不通过先回[环境篇](basics/01-environment-setup.md)，不要添加持久化代码 |
+| 2. 状态拥有者 | 父视图保存计数，子视图通过 Binding 增加和重置；记录 0→1→2→0 | 父子显示一致；子视图自己复制值导致分叉时，回[视图与状态](basics/04-views-state.md)检查事实来源和视图身份 |
+| 3. 待办持久化 | 按首项目增加 A/B、完成并删除 B，再终止与重启；保存工程和设备步骤 | A 保留、B 不恢复；界面变化但重启丢数据时查显式 `save()` 结果、容器是否只在内存中及错误分支，不靠延时等待自动保存掩盖问题 |
+| 4. 金额与失败 | 待办关通过后增加记账，输入 `0.10`、`0.20` 和非法金额；在独立练习的保存入口注入失败 | 合计为 0.30，非法输入不写入；保存失败保留表单、显示错误并允许恢复后重试。失败回查[首项目](basics/08-first-project.md)金额解析、保存和回滚范围 |
+
+最后将“源码版本、目标环境、步骤、期望、实际、恢复后的结果”交付为一份记录，再新建独立[笔记项目](projects/01-notes-app.md)练习编辑和搜索。不要为跟随下一篇而把旧数据库模型直接替换；保留旧数据的模型演进需要迁移方案。本页本轮未执行 Xcode 构建、SwiftUI 交互或 SwiftData 故障注入，未取得这些关卡的运行通过证据。
 
 ### 进阶路径（⭐⭐）
 

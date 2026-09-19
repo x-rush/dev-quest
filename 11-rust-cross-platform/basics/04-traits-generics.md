@@ -307,6 +307,60 @@ fn main() {
 - `Box` 把不同大小的实现者统一到堆上的固定尺寸指针（trait 对象是胖指针：数据指针 + 虚表指针）
 - 循环里的 `s.save(key)` 在运行时经虚表分发到各自实现
 
+### 正文提取验证：默认方法、泛型 bound 与异构 trait 对象
+
+这个完整程序把三个概念放进一条可观察的路径：`Describe::label` 是依赖必需方法的默认实现；`largest` 只有 `PartialOrd` 这一项能力要求；`Vec<Box<dyn Describe>>` 则把不同大小的实现装进同一集合。它不测量单态化或虚表调用的性能，性能结论应由目标程序的基准测试给出。
+
+<!-- body-runtime-case: {"id":"rust-trait-generic-dyn-dispatch","stdout":"Ada:7\n9\nAda|Web\n"} -->
+```rust
+trait Describe {
+    fn name(&self) -> &str;
+
+    fn label(&self) -> String {
+        format!("{}:{}", self.name(), self.score())
+    }
+
+    fn score(&self) -> u8;
+}
+
+struct Person {
+    name: String,
+    score: u8,
+}
+
+struct Service {
+    name: String,
+}
+
+impl Describe for Person {
+    fn name(&self) -> &str { &self.name }
+    fn score(&self) -> u8 { self.score }
+}
+
+impl Describe for Service {
+    fn name(&self) -> &str { &self.name }
+    fn score(&self) -> u8 { 0 }
+}
+
+fn largest<T: PartialOrd + Copy>(left: T, right: T) -> T {
+    if left >= right { left } else { right }
+}
+
+fn main() {
+    let person = Person { name: "Ada".into(), score: 7 };
+    println!("{}", person.label());
+    println!("{}", largest(4, 9));
+
+    let entries: Vec<Box<dyn Describe>> = vec![
+        Box::new(person),
+        Box::new(Service { name: "Web".into() }),
+    ];
+    println!("{}", entries.iter().map(|entry| entry.name()).collect::<Vec<_>>().join("|"));
+}
+```
+
+`largest` 额外要求 `Copy` 是因为这个版本按值返回两个候选之一；若类型不应复制，应改为返回引用并同时表达生命周期关系。trait 对象中的方法只使用 `&self`、无泛型参数且返回大小已知类型，因此这里满足对象安全要求。
+
 ---
 
 ## 🎨 最佳实践

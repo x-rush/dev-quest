@@ -7,11 +7,11 @@
 | 指标 | 数量 |
 |---|---:|
 | 纳入模块文档 | 642 |
-| 主状态：not_verified | 492 |
-| 主状态：runtime | 150 |
-| 验证措辞出现次数 | 127 |
+| 主状态：not_verified | 489 |
+| 主状态：runtime | 153 |
+| 验证措辞出现次数 | 129 |
 | 措辞分类：source_has_limited_runtime_evidence | 83 |
-| 措辞分类：unbound_verification_wording | 44 |
+| 措辞分类：unbound_verification_wording | 46 |
 
 ## 语法级覆盖（不能当作运行覆盖）
 
@@ -237,7 +237,7 @@
 | TanStack / TypeScript | [03-tanstack-stack/testing/03-integration-testing.md](../../../../03-tanstack-stack/testing/03-integration-testing.md) | `not_verified` | 0 | 0 |
 | TanStack / TypeScript | [03-tanstack-stack/testing/04-e2e-testing.md](../../../../03-tanstack-stack/testing/04-e2e-testing.md) | `not_verified` | 0 | 0 |
 | React Native / Multi-platform | [04-multiplatform-apps/LEARNING_GUIDE.md](../../../../04-multiplatform-apps/LEARNING_GUIDE.md) | `not_verified` | 0 | 0 |
-| React Native / Multi-platform | [04-multiplatform-apps/README.md](../../../../04-multiplatform-apps/README.md) | `not_verified` | 0 | 0 |
+| React Native / Multi-platform | [04-multiplatform-apps/README.md](../../../../04-multiplatform-apps/README.md) | `not_verified` | 0 | 1 |
 | React Native / Multi-platform | [04-multiplatform-apps/React Native三端原生应用学习路线.md](../../../../04-multiplatform-apps/React Native三端原生应用学习路线.md) | `not_verified` | 0 | 0 |
 | React Native / Multi-platform | [04-multiplatform-apps/advanced-topics/architecture/01-new-architecture.md](../../../../04-multiplatform-apps/advanced-topics/architecture/01-new-architecture.md) | `not_verified` | 0 | 1 |
 | React Native / Multi-platform | [04-multiplatform-apps/advanced-topics/performance/01-rendering-performance.md](../../../../04-multiplatform-apps/advanced-topics/performance/01-rendering-performance.md) | `not_verified` | 0 | 0 |
@@ -344,7 +344,7 @@
 | Kotlin / Compose | [05-kotlin-compose/testing/02-ui-testing.md](../../../../05-kotlin-compose/testing/02-ui-testing.md) | `not_verified` | 0 | 0 |
 | Kotlin / Compose | [05-kotlin-compose/testing/03-integration-e2e-testing.md](../../../../05-kotlin-compose/testing/03-integration-e2e-testing.md) | `not_verified` | 0 | 0 |
 | Swift / SwiftUI | [06-swift-swiftui/LEARNING_GUIDE.md](../../../../06-swift-swiftui/LEARNING_GUIDE.md) | `not_verified` | 0 | 0 |
-| Swift / SwiftUI | [06-swift-swiftui/README.md](../../../../06-swift-swiftui/README.md) | `not_verified` | 0 | 0 |
+| Swift / SwiftUI | [06-swift-swiftui/README.md](../../../../06-swift-swiftui/README.md) | `not_verified` | 0 | 1 |
 | Swift / SwiftUI | [06-swift-swiftui/advanced-topics/architecture/01-app-architecture.md](../../../../06-swift-swiftui/advanced-topics/architecture/01-app-architecture.md) | `not_verified` | 0 | 0 |
 | Swift / SwiftUI | [06-swift-swiftui/advanced-topics/performance/01-rendering-performance.md](../../../../06-swift-swiftui/advanced-topics/performance/01-rendering-performance.md) | `not_verified` | 0 | 0 |
 | Swift / SwiftUI | [06-swift-swiftui/advanced-topics/performance/02-concurrency-optimization.md](../../../../06-swift-swiftui/advanced-topics/performance/02-concurrency-optimization.md) | `not_verified` | 0 | 0 |
@@ -453,7 +453,7 @@
 | PHP | [07-php-mastery/reference/library-guides/02-composer-ecosystem.md](../../../../07-php-mastery/reference/library-guides/02-composer-ecosystem.md) | `not_verified` | 0 | 0 |
 | PHP | [07-php-mastery/reference/library-guides/03-pdo.md](../../../../07-php-mastery/reference/library-guides/03-pdo.md) | `not_verified` | 0 | 0 |
 | PHP | [07-php-mastery/reference/library-guides/04-json.md](../../../../07-php-mastery/reference/library-guides/04-json.md) | `runtime` | 1 | 0 |
-| PHP | [07-php-mastery/reference/library-guides/05-file-stream-io.md](../../../../07-php-mastery/reference/library-guides/05-file-stream-io.md) | `not_verified` | 0 | 0 |
+| PHP | [07-php-mastery/reference/library-guides/05-file-stream-io.md](../../../../07-php-mastery/reference/library-guides/05-file-stream-io.md) | `runtime` | 1 | 0 |
 | PHP | [07-php-mastery/reference/library-guides/06-http-session-cookie.md](../../../../07-php-mastery/reference/library-guides/06-http-session-cookie.md) | `not_verified` | 0 | 0 |
 | PHP | [07-php-mastery/reference/library-guides/07-extension-map.md](../../../../07-php-mastery/reference/library-guides/07-extension-map.md) | `not_verified` | 0 | 0 |
 | PHP | [07-php-mastery/reference/quick-references/01-php-cheatsheet.md](../../../../07-php-mastery/reference/quick-references/01-php-cheatsheet.md) | `not_verified` | 0 | 0 |
@@ -509,7 +509,7 @@
 | Java | [08-java-revisited/reference/library-guides/04-java-io.md](../../../../08-java-revisited/reference/library-guides/04-java-io.md) | `runtime` | 3 | 0 |
 | Java | [08-java-revisited/reference/library-guides/05-java-util-function.md](../../../../08-java-revisited/reference/library-guides/05-java-util-function.md) | `runtime` | 1 | 0 |
 | Java | [08-java-revisited/reference/library-guides/06-java-math.md](../../../../08-java-revisited/reference/library-guides/06-java-math.md) | `runtime` | 1 | 0 |
-| Java | [08-java-revisited/reference/library-guides/07-java-text-and-time-format.md](../../../../08-java-revisited/reference/library-guides/07-java-text-and-time-format.md) | `not_verified` | 0 | 0 |
+| Java | [08-java-revisited/reference/library-guides/07-java-text-and-time-format.md](../../../../08-java-revisited/reference/library-guides/07-java-text-and-time-format.md) | `runtime` | 1 | 0 |
 | Java | [08-java-revisited/reference/library-guides/08-java-util-regex.md](../../../../08-java-revisited/reference/library-guides/08-java-util-regex.md) | `runtime` | 1 | 0 |
 | Java | [08-java-revisited/reference/library-guides/09-jdk-package-map.md](../../../../08-java-revisited/reference/library-guides/09-jdk-package-map.md) | `not_verified` | 0 | 0 |
 | Java | [08-java-revisited/reference/quick-references/01-java-cheatsheet.md](../../../../08-java-revisited/reference/quick-references/01-java-cheatsheet.md) | `not_verified` | 0 | 0 |
@@ -633,7 +633,7 @@
 | Rust / Cross-platform | [11-rust-cross-platform/basics/01-environment-setup.md](../../../../11-rust-cross-platform/basics/01-environment-setup.md) | `not_verified` | 0 | 1 |
 | Rust / Cross-platform | [11-rust-cross-platform/basics/02-ownership-borrowing.md](../../../../11-rust-cross-platform/basics/02-ownership-borrowing.md) | `runtime` | 1 | 0 |
 | Rust / Cross-platform | [11-rust-cross-platform/basics/03-structs-enums-patterns.md](../../../../11-rust-cross-platform/basics/03-structs-enums-patterns.md) | `not_verified` | 0 | 0 |
-| Rust / Cross-platform | [11-rust-cross-platform/basics/04-traits-generics.md](../../../../11-rust-cross-platform/basics/04-traits-generics.md) | `not_verified` | 0 | 0 |
+| Rust / Cross-platform | [11-rust-cross-platform/basics/04-traits-generics.md](../../../../11-rust-cross-platform/basics/04-traits-generics.md) | `runtime` | 1 | 0 |
 | Rust / Cross-platform | [11-rust-cross-platform/basics/05-error-handling.md](../../../../11-rust-cross-platform/basics/05-error-handling.md) | `not_verified` | 0 | 2 |
 | Rust / Cross-platform | [11-rust-cross-platform/basics/06-collections-iterators.md](../../../../11-rust-cross-platform/basics/06-collections-iterators.md) | `runtime` | 1 | 0 |
 | Rust / Cross-platform | [11-rust-cross-platform/basics/07-lifetimes.md](../../../../11-rust-cross-platform/basics/07-lifetimes.md) | `not_verified` | 0 | 0 |

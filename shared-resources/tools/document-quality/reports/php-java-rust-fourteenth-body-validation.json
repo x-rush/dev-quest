@@ -1,0 +1,84 @@
+{
+  "schema_version": 1,
+  "purpose": "Runtime evidence for three named complete P1 PHP/Java/Rust Markdown body programs.",
+  "scope": "Each result is one complete fenced program extracted by its unique body-runtime-case id. Partial fences, prose, external services, cross-process contention, performance, and whole-document claims are outside this evidence.",
+  "results": [
+    {
+      "id": "php-file-stream-full-write-and-locked-update",
+      "document": "07-php-mastery/reference/library-guides/05-file-stream-io.md",
+      "document_sha256": "1f82d5d0fd5dec67bfa1e822f12a17920d5aed4ab676175e92e5c02db66fa3c1",
+      "extraction": "complete named body fence, passed unchanged to stdin",
+      "toolchain": {
+        "container_image": "php:8.5-cli-alpine",
+        "language": "php"
+      },
+      "command": [
+        "docker",
+        "run",
+        "--rm",
+        "-i",
+        "php:8.5-cli-alpine",
+        "php"
+      ],
+      "exit_code": 0,
+      "stdout": "bytes=6\ncontent=abc123\ncounter=42\n",
+      "stderr": "",
+      "expected_stdout": "bytes=6\ncontent=abc123\ncounter=42\n",
+      "status": "passed"
+    },
+    {
+      "id": "java-time-strict-locale-decimal",
+      "document": "08-java-revisited/reference/library-guides/07-java-text-and-time-format.md",
+      "document_sha256": "d3fd6e29ebadee52dce441b1da78363287070719ddcaf1150172e3fe4a61a2b0",
+      "extraction": "complete named body fence, passed unchanged to stdin",
+      "toolchain": {
+        "container_image": "eclipse-temurin:21-jdk-noble",
+        "language": "java"
+      },
+      "command": [
+        "docker",
+        "run",
+        "--rm",
+        "-i",
+        "eclipse-temurin:21-jdk-noble",
+        "sh",
+        "-c",
+        "cat > /tmp/Main.java && javac --release 21 -encoding UTF-8 /tmp/Main.java && java -cp /tmp Main"
+      ],
+      "exit_code": 0,
+      "stdout": "2024-02-29\ninvalid\nFebruary\n26%\n",
+      "stderr": "",
+      "expected_stdout": "2024-02-29\ninvalid\nFebruary\n26%\n",
+      "status": "passed"
+    },
+    {
+      "id": "rust-trait-generic-dyn-dispatch",
+      "document": "11-rust-cross-platform/basics/04-traits-generics.md",
+      "document_sha256": "548169143e03c32a16569b09dddabd39343c0c0acc7acf87f144c2301e4cfc9e",
+      "extraction": "complete named body fence, passed unchanged to stdin",
+      "toolchain": {
+        "container_image": "rust:1-slim-bookworm",
+        "language": "rust"
+      },
+      "command": [
+        "docker",
+        "run",
+        "--rm",
+        "-i",
+        "rust:1-slim-bookworm",
+        "sh",
+        "-c",
+        "cat > /tmp/main.rs && rustc --edition 2024 /tmp/main.rs -o /tmp/main && /tmp/main"
+      ],
+      "exit_code": 0,
+      "stdout": "Ada:7\n9\nAda|Web\n",
+      "stderr": "",
+      "expected_stdout": "Ada:7\n9\nAda|Web\n",
+      "status": "passed"
+    }
+  ],
+  "summary": {
+    "passed": 3,
+    "failed": 0
+  }
+}
