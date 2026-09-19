@@ -137,14 +137,16 @@ final class InsufficientStockException extends OrderException
 
 final class OrderService
 {
-    public function placeOrder(string $sku, int $qty): void
+    /** @return array{sku: string, quantity: int, status: 'accepted'} */
+    public function placeOrder(string $sku, int $qty): array
     {
         $available = 3;   // 模拟查询库存
 
         if ($qty > $available) {
             throw new InsufficientStockException($sku, $qty, $available);
         }
-        // ... 下单逻辑
+        // 校验通过后才执行实际写入；这里返回可观察结果，便于调用方决定下一步。
+        return ['sku' => $sku, 'quantity' => $qty, 'status' => 'accepted'];
     }
 }
 

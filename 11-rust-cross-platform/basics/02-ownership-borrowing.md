@@ -242,7 +242,7 @@ fn make_greeting(name: &str) -> String {
     format!("你好，{name}！")
 }
 
-// 返回借用：借用生命周期与输入绑定（此处省略标注，由编译器推断）
+// 返回借用：生命周期与输入借用一致；此处由编译器根据唯一输入借用推断。
 fn first_word(sentence: &str) -> &str {
     sentence.split_whitespace().next().unwrap_or("")
 }

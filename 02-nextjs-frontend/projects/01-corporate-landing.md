@@ -1726,7 +1726,7 @@ export const colors = {
     700: '#1d4ed8',
     900: '#1e3a8a',
   },
-  // ...
+  // 其余颜色按同一命名规则补充；不要把未定义 token 用作组件样式。
 } as const
 
 export const spacing = {

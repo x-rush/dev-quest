@@ -86,7 +86,7 @@ $name = $input ?? $default ?? 'guest';
 // 判断归属：in_array 带严格比较
 $allowed = ['GET', 'POST'];
 if (in_array($method, $allowed, true)) {
-    // ...
+    echo "允许的方法：{$method}", PHP_EOL;
 }
 
 // PHP 8.0 起字符串内置包含判断，不再需要 strpos !== false

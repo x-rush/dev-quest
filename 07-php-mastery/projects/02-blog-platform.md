@@ -181,7 +181,8 @@ final class PostPolicy
 public function update(Request $request, Post $post): PostResource
 {
     $this->authorize('update', $post);
-    // ...实际更新逻辑
+    $post->update($request->validated());
+    return new PostResource($post->refresh());
 }
 ```
 
