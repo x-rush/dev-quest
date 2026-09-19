@@ -1,0 +1,84 @@
+{
+  "schema_version": 1,
+  "purpose": "Runtime evidence for the three named sixteenth-round P1 PHP/Java/Rust core or standard-library Markdown body programs.",
+  "scope": "Only the three complete fences named by sixteenth-body-runtime-case are extracted and executed. Partial snippets, all other document content, framework integration, stress testing, performance, and whole-document claims are outside this report.",
+  "results": [
+    {
+      "id": "php-readonly-slot-and-object-state",
+      "document": "07-php-mastery/reference/language-concepts/03-types-oop-modern.md",
+      "document_sha256": "3a0e9258bf8a7803508502bdb7ea66eb12d9b82865f9b57e060b7deb0ccefb24",
+      "extraction": "complete named Markdown fence passed unchanged to stdin",
+      "toolchain": {
+        "language": "php",
+        "container_image": "php:8.5-cli-alpine"
+      },
+      "command": [
+        "docker",
+        "run",
+        "--rm",
+        "-i",
+        "php:8.5-cli-alpine",
+        "php"
+      ],
+      "exit_code": 0,
+      "stdout": "2\ncannot-replace\n",
+      "stderr": "",
+      "expected_stdout": "2\ncannot-replace\n",
+      "status": "passed"
+    },
+    {
+      "id": "java-concurrent-map-per-key-initialization",
+      "document": "08-java-revisited/reference/language-concepts/04-concurrency-api.md",
+      "document_sha256": "7ea339637cf0782db3a762dcb5dc654c8aaa77f12d8f2ccd2ea81ab21035e414",
+      "extraction": "complete named Markdown fence passed unchanged to stdin",
+      "toolchain": {
+        "language": "java",
+        "container_image": "eclipse-temurin:21-jdk-noble"
+      },
+      "command": [
+        "docker",
+        "run",
+        "--rm",
+        "-i",
+        "eclipse-temurin:21-jdk-noble",
+        "sh",
+        "-c",
+        "cat > /tmp/Main.java && javac --release 21 -encoding UTF-8 /tmp/Main.java && java -cp /tmp Main"
+      ],
+      "exit_code": 0,
+      "stdout": "build:task\nsame=true\ncount=1\n",
+      "stderr": "",
+      "expected_stdout": "build:task\nsame=true\ncount=1\n",
+      "status": "passed"
+    },
+    {
+      "id": "rust-const-generic-frame-and-slice",
+      "document": "11-rust-cross-platform/reference/language-concepts/03-const-generics.md",
+      "document_sha256": "6aa77b2620b754ab99c01c10fe24c2072ba80206e7ed85ece9a7db4cc9b026c8",
+      "extraction": "complete named Markdown fence passed unchanged to stdin",
+      "toolchain": {
+        "language": "rust",
+        "container_image": "rust:1-slim-bookworm"
+      },
+      "command": [
+        "docker",
+        "run",
+        "--rm",
+        "-i",
+        "rust:1-slim-bookworm",
+        "sh",
+        "-c",
+        "cat > /tmp/main.rs && rustc --edition 2024 /tmp/main.rs -o /tmp/main && /tmp/main"
+      ],
+      "exit_code": 0,
+      "stdout": "4:10\n4\n",
+      "stderr": "",
+      "expected_stdout": "4:10\n4\n",
+      "status": "passed"
+    }
+  ],
+  "summary": {
+    "passed": 3,
+    "failed": 0
+  }
+}

@@ -17,13 +17,13 @@
   "summary": {
     "documents": 642,
     "by_primary_state": {
-      "not_verified": 488,
-      "runtime": 154
+      "not_verified": 485,
+      "runtime": 157
     },
     "verification_wording_occurrences": 133,
     "marker_classification": {
-      "source_has_limited_runtime_evidence": 85,
-      "unbound_verification_wording": 48
+      "source_has_limited_runtime_evidence": 86,
+      "unbound_verification_wording": 47
     }
   },
   "documents": [
@@ -3068,7 +3068,7 @@
     },
     {
       "path": "04-multiplatform-apps/projects/02-weather-app.md",
-      "sha256": "f8547edcbdaf84bd8bb8feea6694366ad4f66ef0c90dec92380a1a8e40d1f39c",
+      "sha256": "cd4918ac7c696b3a95633aafe7285286ca0cba37156b131117067b1f71fb5914",
       "verification": [
         {
           "mode": "not_verified",
@@ -4055,7 +4055,7 @@
     },
     {
       "path": "05-kotlin-compose/reference/language-concepts/11-text-and-regex.md",
-      "sha256": "b6b2af04fe5f17e6a7000284d69d521bf772cd8418a7708c5079cde1edde556b",
+      "sha256": "e078a40d753c7ed7caede69a7553a42be613852cef8a1406b3067560dcb16750",
       "verification": [
         {
           "mode": "not_verified",
@@ -4789,7 +4789,7 @@
     },
     {
       "path": "06-swift-swiftui/reference/language-concepts/14-regex.md",
-      "sha256": "f006263f4523fd685aba5ef12728d5fb6e4fba953fc294031f5c5e81de5a20b3",
+      "sha256": "59668acab342272540a24930360f3e88fdcc2a864a54bc702e2c0d7c0971c49b",
       "verification": [
         {
           "mode": "not_verified",
@@ -5462,13 +5462,13 @@
     },
     {
       "path": "07-php-mastery/reference/language-concepts/03-types-oop-modern.md",
-      "sha256": "3ba3ced513cc4927480abe47d5cb111f8542afd820dd7f00e057b5cc1b684db1",
+      "sha256": "fe38cec8d1ad9b4f55f221aacc1dbed75d15eebcf2d6ba1beb7cf8cd7a0c3c24",
       "verification": [
         {
-          "mode": "not_verified",
-          "status": "NOT_VERIFIED",
-          "report": null,
-          "scope": "No named runtime or syntax evidence is recorded for this document."
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "php-java-rust-sixteenth-body-validation.json",
+          "scope": "Only the three complete fences named by sixteenth-body-runtime-case are extracted and executed. Partial snippets, all other document content, framework integration, stress testing, performance, and whole-document claims are outside this report."
         }
       ],
       "marker_count": 0
@@ -6383,13 +6383,13 @@
     },
     {
       "path": "08-java-revisited/reference/language-concepts/04-concurrency-api.md",
-      "sha256": "9d4ff01fbd9a97763c03067bcd43c58b85b7a2628f9e590fcd008d349e382b4e",
+      "sha256": "067bb3adacfaa7888621724286a6ade31622b78f3ec145d7817c7dc1fbaf886d",
       "verification": [
         {
-          "mode": "not_verified",
-          "status": "NOT_VERIFIED",
-          "report": null,
-          "scope": "No named runtime or syntax evidence is recorded for this document."
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "php-java-rust-sixteenth-body-validation.json",
+          "scope": "Only the three complete fences named by sixteenth-body-runtime-case are extracted and executed. Partial snippets, all other document content, framework integration, stress testing, performance, and whole-document claims are outside this report."
         }
       ],
       "marker_count": 0
@@ -8720,13 +8720,13 @@
     },
     {
       "path": "11-rust-cross-platform/reference/language-concepts/03-const-generics.md",
-      "sha256": "de4dfda69cd6d1993875a1c6521a233aff3631833ddeef4d63fc4c079adc97cb",
+      "sha256": "a64a7b54c4b80920dc9402c6b4c276b7b4e257f0a7a7976648209de77f6d997a",
       "verification": [
         {
-          "mode": "not_verified",
-          "status": "NOT_VERIFIED",
-          "report": null,
-          "scope": "No named runtime or syntax evidence is recorded for this document."
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "php-java-rust-sixteenth-body-validation.json",
+          "scope": "Only the three complete fences named by sixteenth-body-runtime-case are extracted and executed. Partial snippets, all other document content, framework integration, stress testing, performance, and whole-document claims are outside this report."
         }
       ],
       "marker_count": 1
@@ -9793,9 +9793,9 @@
     },
     {
       "path": "11-rust-cross-platform/reference/language-concepts/03-const-generics.md",
-      "line": 333,
+      "line": 354,
       "excerpt": "2. **稳定版参数仅整数 / `bool` / `char`**；`&str`、浮点、自定义类型均不可（实测）。",
-      "classification": "unbound_verification_wording"
+      "classification": "source_has_limited_runtime_evidence"
     },
     {
       "path": "11-rust-cross-platform/reference/language-concepts/04-advanced-lifetimes.md",

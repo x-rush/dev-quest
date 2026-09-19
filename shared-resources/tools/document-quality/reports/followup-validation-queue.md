@@ -1,6 +1,6 @@
 # 后续验证优先队列
 
-生成日期：2026-09-19。输入：[验证覆盖状态台账](verification-coverage.md)。
+生成日期：2026-09-20。输入：[验证覆盖状态台账](verification-coverage.md)。
 
 这份队列把当前证据缺口转成下一步工作，**不把 `not_verified` 当作内容错误，也不把语法解析当作框架运行**。范围只来自 11 个现行教学模块的活动文档；生成报告、归档材料和不在台账内的文件均被排除。
 
@@ -11,13 +11,13 @@
 - **P2**：框架与部署文档没有命名运行证据。优先建立版本锁定的最小工程、构建或部署演练。
 - **P3**：进阶、测试和其他专题没有命名运行证据。按依赖关系排入后续批次。
 
-台账对应的 48 条未绑定措辞全部保留，并在生成时重新定位到当前源码行。明确写出“尚未验证”、说明如何验证或给出练习要求的行，按所属文件的普通优先级排序，不会被误报成 P0 通过性断言。同一文件可同时有一条文件级缺口和多条逐行任务；两者不能互相抵消。每次验证只能声明其命名案例和环境覆盖的范围。
+台账对应的 47 条未绑定措辞全部保留，并在生成时重新定位到当前源码行。明确写出“尚未验证”、说明如何验证或给出练习要求的行，按所属文件的普通优先级排序，不会被误报成 P0 通过性断言。同一文件可同时有一条文件级缺口和多条逐行任务；两者不能互相抵消。每次验证只能声明其命名案例和环境覆盖的范围。
 
 ## 汇总
 
-- 队列条目：536 条，其中文件级证据缺口 488 条，逐行未绑定验证措辞 48 条。
-- 优先级：P0 0；P1 232；P2 149；P3 155。
-- 分类：核心基础 216；首项目 16；框架 110；部署 39；进阶与测试 155。
+- 队列条目：532 条，其中文件级证据缺口 485 条，逐行未绑定验证措辞 47 条。
+- 优先级：P0 0；P1 228；P2 149；P3 155。
+- 分类：核心基础 212；首项目 16；框架 110；部署 39；进阶与测试 155。
 
 ## 明细
 
@@ -47,7 +47,6 @@
 | P1 | 核心基础 | Java | [08-java-revisited/basics/01-environment-setup.md](../../../../08-java-revisited/basics/01-environment-setup.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
 | P1 | 核心基础 | Java | [08-java-revisited/basics/02-first-program.md](../../../../08-java-revisited/basics/02-first-program.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
 | P1 | 核心基础 | Java | [08-java-revisited/basics/07-modern-features.md](../../../../08-java-revisited/basics/07-modern-features.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
-| P1 | 核心基础 | Java | [08-java-revisited/reference/language-concepts/04-concurrency-api.md](../../../../08-java-revisited/reference/language-concepts/04-concurrency-api.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
 | P1 | 核心基础 | Java | [08-java-revisited/reference/language-concepts/05-records-sealed-patterns.md](../../../../08-java-revisited/reference/language-concepts/05-records-sealed-patterns.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
 | P1 | 核心基础 | Java | [08-java-revisited/reference/language-concepts/08-enums.md](../../../../08-java-revisited/reference/language-concepts/08-enums.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
 | P1 | 核心基础 | Java | [08-java-revisited/reference/language-concepts/09-annotations.md](../../../../08-java-revisited/reference/language-concepts/09-annotations.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
@@ -114,7 +113,6 @@
 | P1 | 核心基础 | PHP | [07-php-mastery/basics/02-first-script.md](../../../../07-php-mastery/basics/02-first-script.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
 | P1 | 核心基础 | PHP | [07-php-mastery/basics/04-functions-oop.md](../../../../07-php-mastery/basics/04-functions-oop.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
 | P1 | 核心基础 | PHP | [07-php-mastery/basics/06-error-exceptions.md](../../../../07-php-mastery/basics/06-error-exceptions.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
-| P1 | 核心基础 | PHP | [07-php-mastery/reference/language-concepts/03-types-oop-modern.md](../../../../07-php-mastery/reference/language-concepts/03-types-oop-modern.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
 | P1 | 核心基础 | PHP | [07-php-mastery/reference/language-concepts/07-namespaces-autoloading.md](../../../../07-php-mastery/reference/language-concepts/07-namespaces-autoloading.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
 | P1 | 核心基础 | PHP | [07-php-mastery/reference/language-concepts/08-reflection-attributes.md](../../../../07-php-mastery/reference/language-concepts/08-reflection-attributes.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
 | P1 | 核心基础 | PHP | [07-php-mastery/reference/language-concepts/09-strings-regex.md](../../../../07-php-mastery/reference/language-concepts/09-strings-regex.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
@@ -177,8 +175,6 @@
 | P1 | 核心基础 | Rust / Cross-platform | [11-rust-cross-platform/basics/09-concurrency-async.md](../../../../11-rust-cross-platform/basics/09-concurrency-async.md#L209):209 | 保留诚实的验证边界，并在补证据时决定是否增加最小练习<br/>保持已有边界说明；若新增示例，记录工具链、命令、预期行为和未覆盖范围。 | ### 示例三：Tokio 最小异步程序（不实测执行，写码即可） |
 | P1 | 核心基础 | Rust / Cross-platform | [11-rust-cross-platform/basics/09-concurrency-async.md](../../../../11-rust-cross-platform/basics/09-concurrency-async.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
 | P1 | 核心基础 | Rust / Cross-platform | [11-rust-cross-platform/basics/10-cargo-testing.md](../../../../11-rust-cross-platform/basics/10-cargo-testing.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
-| P1 | 核心基础 | Rust / Cross-platform | [11-rust-cross-platform/reference/language-concepts/03-const-generics.md](../../../../11-rust-cross-platform/reference/language-concepts/03-const-generics.md#L333):333 | 保留诚实的验证边界，并在补证据时决定是否增加最小练习<br/>保持已有边界说明；若新增示例，记录工具链、命令、预期行为和未覆盖范围。 | 2. **稳定版参数仅整数 / `bool` / `char`**；`&amp;str`、浮点、自定义类型均不可（实测）。 |
-| P1 | 核心基础 | Rust / Cross-platform | [11-rust-cross-platform/reference/language-concepts/03-const-generics.md](../../../../11-rust-cross-platform/reference/language-concepts/03-const-generics.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
 | P1 | 核心基础 | Rust / Cross-platform | [11-rust-cross-platform/reference/language-concepts/06-unsafe.md](../../../../11-rust-cross-platform/reference/language-concepts/06-unsafe.md#L214):214 | 保留诚实的验证边界，并在补证据时决定是否增加最小练习<br/>保持已有边界说明；若新增示例，记录工具链、命令、预期行为和未覆盖范围。 | 💡 **示例**（edition 2024 示例，本轮未运行；含一个实测踩到的陷阱）: |
 | P1 | 核心基础 | Rust / Cross-platform | [11-rust-cross-platform/reference/language-concepts/06-unsafe.md](../../../../11-rust-cross-platform/reference/language-concepts/06-unsafe.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
 | P1 | 核心基础 | Rust / Cross-platform | [11-rust-cross-platform/reference/language-concepts/07-smart-pointers.md](../../../../11-rust-cross-platform/reference/language-concepts/07-smart-pointers.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |

@@ -317,6 +317,27 @@ fn main() {
 
 练习：定义 struct Buffer<const N:usize=3>([u8;N])，分别构造默认长度和显式长度 4，解释为什么它们是不同类型。再写一个接收 &[u8] 的校验函数，运行时拒绝长度不足的输入。若不需要在类型层证明长度关系，优先切片接口可减少实例化数量，也更容易接收不同来源的数据。依据见 [Rust Reference 泛型参数](https://doc.rust-lang.org/reference/items/generics.html)。
 
+## 正文提取验证：长度进入类型，切片保留运行时接口
+
+下面完整程序同时展示两个边界：`Frame<4>` 的数组长度随类型确定，传给 `&[u8]` 的函数时则以普通切片接口消费。验证器从这个围栏原样提取；它不会把“可转成切片”误读为不同长度的 `Frame` 可以互相赋值。
+
+<!-- sixteenth-body-runtime-case: {"id":"rust-const-generic-frame-and-slice","stdout":"4:10\n4\n"} -->
+```rust
+struct Frame<const N: usize> {
+    bytes: [u8; N],
+}
+
+fn checksum(bytes: &[u8]) -> u8 {
+    bytes.iter().copied().sum()
+}
+
+fn main() {
+    let frame = Frame::<4> { bytes: [1, 2, 3, 4] };
+    println!("{}:{}", frame.bytes.len(), checksum(&frame.bytes));
+    println!("{}", checksum(&[4, 0]));
+}
+```
+
 ## 🔗 相关条目
 
 - 📄 **[trait 与泛型（入门教程）](../../basics/04-traits-generics.md)** — 泛型系统与单态化

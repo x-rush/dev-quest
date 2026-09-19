@@ -139,6 +139,32 @@ CompletableFuture.anyOf(f1, f2).join();                             // 任一完
 
 等待应有取消或超时策略，但超时不自动停止后台任务，需要传递中断并释放资源。用两个并发调用测试同一库存不被超卖，再观察负载增加时的排队；不要依赖危险的强制停线程操作恢复状态。
 
+## 正文提取验证：`computeIfAbsent` 的每键原子初始化
+
+下面完整程序验证 `ConcurrentHashMap` 对同一键的初始化结果可复用。它使用单线程 executor 让输出顺序成为测试契约；这不是吞吐量或竞争压力测试，也不证明任意复合业务操作自动原子。
+
+<!-- sixteenth-body-runtime-case: {"id":"java-concurrent-map-per-key-initialization","stdout":"build:task\nsame=true\ncount=1\n"} -->
+```java
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+public class Main {
+    public static void main(String[] args) throws Exception {
+        var cache = new ConcurrentHashMap<String, String>();
+        try (ExecutorService executor = Executors.newSingleThreadExecutor()) {
+            String first = executor.submit(() -> cache.computeIfAbsent("task", key -> {
+                System.out.println("build:" + key);
+                return key.toUpperCase();
+            })).get();
+            String second = executor.submit(() -> cache.computeIfAbsent("task", key -> "OTHER")).get();
+            System.out.println("same=" + first.equals(second));
+            System.out.println("count=" + cache.size());
+        }
+    }
+}
+```
+
 ## 🔗 相关文档
 
 - 📄 **[Stream/Optional API 速查](./03-streams-optional.md)** - 并行流的边界

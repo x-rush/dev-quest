@@ -18,6 +18,39 @@
 
 本页主要讨论 Kotlin/JVM 字符串及标准库扩展；其他 Kotlin 目标不能直接等同于 java.lang.String：高频操作（split/trim/replace/substringBefore…）全部以扩展函数提供，无需 `StringUtils` 类工具库；正则通过 `Regex` 类封装，API 比 Java `Pattern`/`Matcher` 的分离式设计更直接。下文注释为预期结果；本轮未在 Kotlin/Android 工具链运行。
 
+## 先完成一个严格的时间字段解析器
+
+前置：能写函数、理解 `String?` 和提前 `return`。产物是一份独立的 `Main.kt`，只依赖 Kotlin 标准库，不依赖 Android 或 Compose。输入约定为 ASCII 的 `HH:mm:ss`；输出为当天经过的秒数，非法输入返回 `null`。本练习不自动 trim，空格也属于格式错误。
+
+先拆成两个判断：`matchEntire` 确认整个字段形状，再用范围确认时间含义。若用 `find`，`日志 09:05:30` 也会成功，违反“整个字段”的输入契约。[官方 matchEntire API](https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.text/-regex/match-entire.html) 明确规定不匹配时返回 `null`。
+
+```kotlin
+private val clockField = Regex("""([0-9]{2}):([0-9]{2}):([0-9]{2})""")
+
+fun secondsSinceMidnight(input: String): Int? {
+    val match = clockField.matchEntire(input) ?: return null
+    val (hourText, minuteText, secondText) = match.destructured
+    // 每组已限定为两位 ASCII 数字，转换不会溢出。
+    val hour = hourText.toInt()
+    val minute = minuteText.toInt()
+    val second = secondText.toInt()
+    if (hour !in 0..23 || minute !in 0..59 || second !in 0..59) return null
+    return hour * 3600 + minute * 60 + second
+}
+
+fun main() {
+    val cases = listOf("09:05:30", "00:00:00", "23:59:59",
+        "24:00:00", "09:60:00", "9:05:30", "日志 09:05:30", "")
+    cases.forEach { println("[$it] -> ${secondsSinceMidnight(it)}") }
+    check(secondsSinceMidnight("09:05:30") == 32730)
+    check(secondsSinceMidnight("24:00:00") == null)
+}
+```
+
+在已安装 JDK 与 Kotlin/JVM 编译器的终端运行 `kotlinc Main.kt -include-runtime -d clock.jar`，再运行 `java -jar clock.jar`。依次预期得到 `32730`、`0`、`86399`，后五项均为 `null`。这些是人工推导的验收值；本次没有执行 Kotlin 编译或 Android 运行。
+
+失败时按层回查：命令不存在先回环境安装；所有合法值都为 null 时检查原始字符串是否误写成双反斜杠；日志前缀也成功时检查是否用了 `find`；`24:00:00` 成功时检查数值范围层。接着将输入改成 `09:05:30 `，说明“允许空白”应是显式产品决策，而不是偷偷修改解析契约。正文的日志提取函数用途不同，它允许在长文本中找一段时间。
+
 ## 📖 语法 / API 表
 
 ### 1. 高频 String 方法

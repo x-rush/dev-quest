@@ -7,11 +7,11 @@
 | 指标 | 数量 |
 |---|---:|
 | 纳入模块文档 | 642 |
-| 主状态：not_verified | 488 |
-| 主状态：runtime | 154 |
+| 主状态：not_verified | 485 |
+| 主状态：runtime | 157 |
 | 验证措辞出现次数 | 133 |
-| 措辞分类：source_has_limited_runtime_evidence | 85 |
-| 措辞分类：unbound_verification_wording | 48 |
+| 措辞分类：source_has_limited_runtime_evidence | 86 |
+| 措辞分类：unbound_verification_wording | 47 |
 
 ## 语法级覆盖（不能当作运行覆盖）
 
@@ -433,7 +433,7 @@
 | PHP | [07-php-mastery/reference/framework-essentials/02-symfony-essentials.md](../../../../07-php-mastery/reference/framework-essentials/02-symfony-essentials.md) | `not_verified` | 0 | 0 |
 | PHP | [07-php-mastery/reference/language-concepts/01-php-keywords.md](../../../../07-php-mastery/reference/language-concepts/01-php-keywords.md) | `runtime` | 7 | 0 |
 | PHP | [07-php-mastery/reference/language-concepts/02-built-in-functions.md](../../../../07-php-mastery/reference/language-concepts/02-built-in-functions.md) | `runtime` | 11 | 0 |
-| PHP | [07-php-mastery/reference/language-concepts/03-types-oop-modern.md](../../../../07-php-mastery/reference/language-concepts/03-types-oop-modern.md) | `not_verified` | 0 | 0 |
+| PHP | [07-php-mastery/reference/language-concepts/03-types-oop-modern.md](../../../../07-php-mastery/reference/language-concepts/03-types-oop-modern.md) | `runtime` | 1 | 0 |
 | PHP | [07-php-mastery/reference/language-concepts/04-control-flow.md](../../../../07-php-mastery/reference/language-concepts/04-control-flow.md) | `runtime` | 1 | 0 |
 | PHP | [07-php-mastery/reference/language-concepts/05-arrays-patterns.md](../../../../07-php-mastery/reference/language-concepts/05-arrays-patterns.md) | `runtime` | 3 | 0 |
 | PHP | [07-php-mastery/reference/language-concepts/06-generators-iterators.md](../../../../07-php-mastery/reference/language-concepts/06-generators-iterators.md) | `runtime` | 3 | 0 |
@@ -496,7 +496,7 @@
 | Java | [08-java-revisited/reference/language-concepts/01-java-keywords.md](../../../../08-java-revisited/reference/language-concepts/01-java-keywords.md) | `runtime` | 9 | 1 |
 | Java | [08-java-revisited/reference/language-concepts/02-collections-generics.md](../../../../08-java-revisited/reference/language-concepts/02-collections-generics.md) | `runtime` | 3 | 0 |
 | Java | [08-java-revisited/reference/language-concepts/03-streams-optional.md](../../../../08-java-revisited/reference/language-concepts/03-streams-optional.md) | `runtime` | 3 | 0 |
-| Java | [08-java-revisited/reference/language-concepts/04-concurrency-api.md](../../../../08-java-revisited/reference/language-concepts/04-concurrency-api.md) | `not_verified` | 0 | 0 |
+| Java | [08-java-revisited/reference/language-concepts/04-concurrency-api.md](../../../../08-java-revisited/reference/language-concepts/04-concurrency-api.md) | `runtime` | 1 | 0 |
 | Java | [08-java-revisited/reference/language-concepts/05-records-sealed-patterns.md](../../../../08-java-revisited/reference/language-concepts/05-records-sealed-patterns.md) | `not_verified` | 0 | 0 |
 | Java | [08-java-revisited/reference/language-concepts/06-exceptions-resources.md](../../../../08-java-revisited/reference/language-concepts/06-exceptions-resources.md) | `runtime` | 2 | 0 |
 | Java | [08-java-revisited/reference/language-concepts/07-string-immutability-pool.md](../../../../08-java-revisited/reference/language-concepts/07-string-immutability-pool.md) | `runtime` | 1 | 0 |
@@ -661,7 +661,7 @@
 | Rust / Cross-platform | [11-rust-cross-platform/reference/framework-essentials/11-axum-essentials.md](../../../../11-rust-cross-platform/reference/framework-essentials/11-axum-essentials.md) | `not_verified` | 0 | 0 |
 | Rust / Cross-platform | [11-rust-cross-platform/reference/language-concepts/01-ownership-dictionary.md](../../../../11-rust-cross-platform/reference/language-concepts/01-ownership-dictionary.md) | `runtime` | 1 | 0 |
 | Rust / Cross-platform | [11-rust-cross-platform/reference/language-concepts/02-trait-objects.md](../../../../11-rust-cross-platform/reference/language-concepts/02-trait-objects.md) | `runtime` | 1 | 0 |
-| Rust / Cross-platform | [11-rust-cross-platform/reference/language-concepts/03-const-generics.md](../../../../11-rust-cross-platform/reference/language-concepts/03-const-generics.md) | `not_verified` | 0 | 1 |
+| Rust / Cross-platform | [11-rust-cross-platform/reference/language-concepts/03-const-generics.md](../../../../11-rust-cross-platform/reference/language-concepts/03-const-generics.md) | `runtime` | 1 | 1 |
 | Rust / Cross-platform | [11-rust-cross-platform/reference/language-concepts/04-advanced-lifetimes.md](../../../../11-rust-cross-platform/reference/language-concepts/04-advanced-lifetimes.md) | `runtime` | 4 | 2 |
 | Rust / Cross-platform | [11-rust-cross-platform/reference/language-concepts/05-macros.md](../../../../11-rust-cross-platform/reference/language-concepts/05-macros.md) | `runtime` | 4 | 0 |
 | Rust / Cross-platform | [11-rust-cross-platform/reference/language-concepts/06-unsafe.md](../../../../11-rust-cross-platform/reference/language-concepts/06-unsafe.md) | `not_verified` | 0 | 1 |

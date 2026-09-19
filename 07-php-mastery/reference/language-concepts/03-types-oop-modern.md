@@ -299,6 +299,35 @@ try {
 
 预期输出 2、cannot replace。练习：把对象属性改成 readonly array，并尝试修改元素，说明为何行为不同。Fiber 则保存可挂起调用栈，只有协作让出控制权才切换；包裹一个阻塞文件读取不会自动把它变成异步 I/O，也不会产生 CPU 并行。
 
+## 正文提取验证：readonly 槽位与对象内容
+
+下面是本页唯一由第十六轮验证器提取的完整程序。`readonly` 保护的是属性槽位：对象仍可通过该引用改变自身内容，但不能把属性重新绑定到另一个对象。
+
+<!-- sixteenth-body-runtime-case: {"id":"php-readonly-slot-and-object-state","stdout":"2\ncannot-replace\n"} -->
+```php
+<?php
+
+declare(strict_types=1);
+
+final class Counter {
+    public int $value = 1;
+}
+
+final class Holder {
+    public function __construct(public readonly Counter $counter) {}
+}
+
+$holder = new Holder(new Counter());
+$holder->counter->value++;
+echo $holder->counter->value, PHP_EOL;
+
+try {
+    $holder->counter = new Counter();
+} catch (Error) {
+    echo "cannot-replace", PHP_EOL;
+}
+```
+
 <!-- learning-navigation -->
 ## 阅读导航
 

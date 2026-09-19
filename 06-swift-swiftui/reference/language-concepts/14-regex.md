@@ -27,6 +27,34 @@
 
 ---
 
+## 先交付一个整串订单编号解析器
+
+前置：会写 Swift 函数、`guard let` 和可选值。使用 Swift 5.7+ 工具链；Apple 平台还需满足对应 Regex API 的部署版本，例如 iOS 16+。在 macOS Command Line Tool 的 `main.swift` 中独立放入下例，或保存为 `main.swift` 后运行 `swift main.swift`。本练习没有 SwiftUI、网络或 Foundation 依赖。
+
+最小产物的输入契约是 `order=` 后跟一个或多个 ASCII 数字；输出为正整数 `Int?`，形状错误、零以及超过 `Int` 范围都返回 `nil`。选择 `#/.../#` 扩展字面量可以明确正则边界，避免把裸斜杠的语言模式设置与匹配问题混在一起。字面量规则见 [SE-0354](https://github.com/swiftlang/swift-evolution/blob/main/proposals/0354-regex-literals.md)。
+
+```swift
+func parseOrderID(_ input: String) -> Int? {
+    let rule = #/order=([0-9]+)/#
+    guard let match = input.wholeMatch(of: rule),
+          let id = Int(match.1), id > 0 else {
+        return nil
+    }
+    return id
+}
+
+for input in ["order=42", "order=0", "order=abc", "x order=42 y", "",
+              "order=999999999999999999999999999999"] {
+    print("\(input.debugDescription) -> \(parseOrderID(input).map { String($0) } ?? "nil")")
+}
+assert(parseOrderID("order=42") == 42)
+assert(parseOrderID("x order=42 y") == nil)
+```
+
+预期第一行结果为 `42`，其余为 `nil`。先只写整串匹配，观察捕获 `.1` 为数字子串；再加入 `Int` 转换，让溢出成为可控失败；最后加上正数规则。`order=0042` 按本契约得到 `42`，若业务禁止前导零，要另行修改规则。`wholeMatch` 与 `firstMatch` 的范围区别见 [SE-0357](https://github.com/swiftlang/swift-evolution/blob/main/proposals/0357-regex-string-processing-algorithms.md)。
+
+失败回查：找不到 Regex API 先查工具链和部署目标；前后垃圾字符被接受时检查是否误用了 `firstMatch`；数字很长时崩溃则检查是否强制解包了 `Int(...)`。将提取需求单独写为 `firstMatch`，不要为迁就一条失败输入而放宽整个验证函数。本次只核对官方 API 与推导输出，没有 Swift 编译、模拟器或真机运行记录。
+
 ## 1. 两种写法：字面量与 RegexBuilder
 
 | 写法 | 形式 | 校验时机 | 适用 |
@@ -157,7 +185,7 @@ let lazy2 = Regex {
 
 - 不要假设任意 Regex、捕获输出和变换闭包都能跨隔离域传递；以实际 SDK 的 Sendable 约束及编译器诊断为准，必要时在工作域构造模式，只返回可发送的解析结果。
 - 字面量可以在编译期检查模式；不要据此承诺整个匹配过程没有运行时开销。动态模式应避免在热循环中重复构造。
-- `Regex` 输出类型默认 `AnyRegexOutput`；字面量与 RegexBuilder 构造的 Regex 捕获是强类型的。
+- 运行时字符串构造通常得到 `Regex<AnyRegexOutput>`；字面量与 RegexBuilder 可推断强类型捕获。不要把这解释成 `Regex` 泛型声明有默认输出类型。
 
 ## 5. 与 NSRegularExpression 的关系
 
