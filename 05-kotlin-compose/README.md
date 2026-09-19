@@ -5,7 +5,7 @@
 
 第一次学习请从[理解地图与学习规划](LEARNING_GUIDE.md)开始，按其中的阶段任务和验收条件推进。先补 Kotlin 的可空类型、函数和集合，再用 Compose 做计数器和本地笔记。无需预先掌握 Go 或 Web 前端；运行 Android 界面需要可用的 Android 开发环境。
 
-查语法、函数或库时使用下方参考目录。文件数量与目录中的完成标记表示内容组织情况，不能替代示例运行证据；具体交付按[知识库质量基线](../shared-resources/standards/knowledge-delivery-baseline.md)验收。
+查语法、函数或库时使用下方参考目录；Kotlin 先从[关键词](reference/language-concepts/01-kotlin-keywords.md)、[空安全与集合](reference/language-concepts/02-null-safety-collections.md)、[高频内置函数](reference/language-concepts/12-kotlin-built-in-functions.md)和[集合操作](reference/language-concepts/09-collections-operations.md)进入。文件数量与目录中的完成标记表示内容组织情况，不能替代示例运行证据；具体交付按[知识库质量基线](../shared-resources/standards/knowledge-delivery-baseline.md)验收。
 
 > **文档简介**: 面向会基本编程但初次学习 Kotlin 与 Android 的读者，从语言、界面状态到本地数据与应用交付
 >
