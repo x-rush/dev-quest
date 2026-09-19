@@ -41,7 +41,8 @@ spec:
   selector:
     matchLabels: { app: todo-api }
   strategy:
-    rollingUpdate: { maxUnavailable: 0, maxSurge: 1 }  # 先起新再停旧，零中断
+    # 尽量保持可用副本数；是否无中断仍取决于探针、容量、连接排空和下游状态。
+    rollingUpdate: { maxUnavailable: 0, maxSurge: 1 }
   template:
     metadata:
       labels: { app: todo-api }
@@ -97,13 +98,13 @@ management:
         enabled: true
 ```
 
-## 🛠️ 三、优雅停机：滚动更新零 5xx 的配方
+## 🛠️ 三、优雅停机：减少滚动更新中的失败请求
 
 1. **应用侧**：`server.shutdown: graceful` + `spring.lifecycle.timeout-per-shutdown-phase: 30s`
 2. **K8s 侧**：`preStop` 睡 5 秒——新配置尚未传播完的请求落在已摘流的 Pod 上
 3. **terminationGracePeriodSeconds**：默认 30s，若优雅停机需 40s 必须调大
 
-验证方法：滚动更新期间压测，断言 5xx 为零（见 [生产级应用](../projects/04-production-spring-app.md)）。
+不要承诺“零 5xx”：新 Pod 未就绪、旧 Pod 被过早终止、长连接、容量不足和下游失败都可能造成错误。要在接近生产的负载下用自己的 SLO 验证错误率、延迟和连接排空结果（见 [生产级应用](../projects/04-production-spring-app.md)）。
 
 ## 🛠️ 四、资源与扩缩容
 
@@ -115,7 +116,7 @@ management:
     └── 留 256Mi 给元空间、线程栈、直接内存、G1 开销
 ```
 
-CPU limit 过低会引发 GC 停顿拉长（GC 线程被限流），Java 服务建议 **CPU limit ≥ requests 的 2 倍或直接不设 limit**。
+CPU limit 过低会引发 GC 停顿拉长（GC 线程被限流）。`limit = requests × 2` 不是通用配方：先从压测下的 CPU 使用、限流次数、GC 暂停和节点超卖风险决定 requests/limits；某些集群会选择不设 CPU limit，也必须由平台配额和噪声隔离策略共同约束。
 
 ### HPA 自动扩缩
 
@@ -139,6 +140,15 @@ spec:
 ```
 
 > 生产建议叠加业务指标（如 HTTP RPS，经 Prometheus Adapter 暴露）而非只用资源指标。
+
+## ✅ 集群交付验收
+
+在有代表性流量和隔离命名空间中完成以下演练；`kubectl apply --dry-run=client` 只验证客户端清单形状，不能证明探针、Secret 或流量行为：
+
+1. 先执行服务端 dry run，再部署带不可变镜像摘要或已审计版本 tag 的候选版本，记录 Deployment revision 与镜像 digest。**期望结果**：Pod 的 labels 与 Service selector 匹配，Secret 缺失时容器不会伪装为 ready。
+2. 在启动窗口内观察 `startupProbe`，再请求 readiness/liveness 端点。**期望结果**：启动完成前不会被 liveness 重启；readiness 失败的 Pod 不接 Service 流量；liveness 失败才触发重启。探针路径、认证与管理端口必须与实际 Spring 配置一致。
+3. 以固定并发执行一次滚动更新，同时记录可用副本、P95 延迟、5xx 和连接数。**期望结果**：结果满足团队预设 SLO；若不满足，先调查容量、preStop、终止宽限期、就绪摘流和下游依赖，而非把 `maxUnavailable: 0` 当作证明。
+4. 临时让一个下游依赖不可用并执行 `kubectl rollout undo deployment/todo-api`。**期望结果**：Pod 按设计停止接新流量或降级服务，回滚恢复的是镜像版本；数据库迁移、消息和其他外部副作用需要独立回退计划。
 
 ## ❓ 常见问题
 
