@@ -21,7 +21,7 @@
 
 </details>
 
-> Criterion 是第三方 crate，**不在模块技术基线表内**，本篇不落具体版本号；接入时以 `cargo add` 解析到的最新 stable 为准。Rust 工具链基线见模块 README。
+> Criterion 是第三方 crate，版本会影响命令、报告格式和统计实现。本篇示例使用 `0.5` 系列的兼容约束；实际项目应由 `Cargo.lock` 固定解析结果，并在升级 Criterion 时重新建立基线。Rust 工具链基线见模块 README。
 
 ## 🎯 学习目标
 
@@ -81,15 +81,15 @@
 **操作指南**:
 
 ```bash
-# 添加开发依赖并启用 HTML 报告（版本由 cargo 解析最新 stable）
-cargo add --dev criterion --features html_reports
+# 添加课程示例使用的兼容范围；Cargo.lock 会记录实际解析版本。
+cargo add --dev criterion@0.5 --features html_reports
 ```
 
 ```toml
 # Cargo.toml（节选）
 [dev-dependencies]
-# 版本由上面 cargo add 写入；本篇不落具体版本号
-criterion = "*"
+# 与上方命令一致；提交 Cargo.lock，避免同一基准在不同日期解析到不同依赖。
+criterion = "0.5"
 
 # 声明基准目标：harness = false 关闭 libtest，交由 criterion 的 main 接管
 [[bench]]
@@ -98,6 +98,8 @@ harness = false
 ```
 
 **验证方法**: `cargo bench` 能编译并输出第一份统计报告（首次运行没有历史基线，变化列显示为无对比）。
+
+首次成功后提交 `Cargo.toml` 与 `Cargo.lock`，并记录 `rustc --version`、CPU/电源模式、操作系统、运行命令和基线名称。基线跨机器比较容易混入硬件差异；需要比较发布版本时，尽量在同一受控执行器上运行。
 
 ### 步骤二：编写第一个基准
 
