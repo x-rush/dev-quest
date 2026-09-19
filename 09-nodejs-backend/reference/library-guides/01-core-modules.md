@@ -151,8 +151,8 @@ TextEncoder / TextDecoder;
 ## 🧭 选用决策速判
 
 - 读写文件 → `node:fs/promises`（小文件）或 `node:stream`（大文件）
-- 出站 HTTP → 全局 `fetch`（不再需要 axios，除非依赖其拦截器生态）
-- 并发利用多核 → 先看能否容器多实例；进程内用 `worker_threads`（CPU）/ `cluster`（I/O）
+- 出站 HTTP → 新项目先评估全局 `fetch`：它已覆盖请求、响应和 `AbortSignal`。若项目需要统一拦截、重试策略、旧运行时兼容或已有客户端约定，再比较具体库；不要仅因“别人用了 axios”重复引入。
+- 并发利用多核 → 先确认瓶颈是 CPU、I/O 还是外部依赖，并先看部署平台能否多实例扩展。CPU 密集工作可评估 `worker_threads`；`cluster` 是多进程 Node 机制，是否使用取决于进程管理、端口绑定、会话和可观测性方案，不能把它当作 I/O 的默认优化。
 - 定时/重试 → `node:timers/promises` + `AbortSignal.timeout`
 - 唯一 ID → `crypto.randomUUID()`，无需 nanoid/uuid 依赖
 
