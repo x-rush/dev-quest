@@ -40,7 +40,7 @@ def main():
                 raise AssertionError(output)
             # TAP includes scheduler-dependent timing. Keep it out of the committed
             # evidence while retaining the semantic pass/fail counters above.
-            report_output = re.sub(r'(duration_ms: )\d+(?:\.\d+)?', r'\1<variable>', output)
+            report_output = re.sub(r'(duration_ms(?::)? )\d+(?:\.\d+)?', r'\1<variable>', output)
             results.append({'source': path, 'status': 'PASS', 'output': report_output})
     version = subprocess.check_output([args.node, '--version'], text=True).strip()
     report = {'node': version, 'results': results, 'scope': 'Seven selected complete added examples only. Frameworks, databases, clusters, deployment and historical snippets are not executed by this check.'}
