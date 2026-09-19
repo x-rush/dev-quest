@@ -1,5 +1,9 @@
 # 综合练习 — 三端待办记账 App
 
+交付顺序：先完成下方记账页面，再实现待办与标签导航练习，最后逐个平台验收。正文提供记账 Hook 和页面，待办页、个人页需按需求实现；不能只复制两段代码就宣称完成整个 App。Android/iOS 使用 Expo 工程；HarmonyOS 是单独的 RNOH 工程适配任务。
+
+**验证状态**：尚无 Android/iOS/HarmonyOS 设备构建证据。语法检查、纯函数测试、云端构建、真机交互是不同层级；只有实际执行的层级才能标为通过。
+
 ## 先理解，再动手
 
 待办与记账都含输入、列表、更新和存储，但数据模型不同。先完成一种业务，再抽取可复用部分。
@@ -112,7 +116,7 @@ export default function TabsLayout() {
 
 ```tsx
 // src/hooks/useLedger.ts
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export interface LedgerEntry {
@@ -124,40 +128,100 @@ export interface LedgerEntry {
 
 const KEY = 'ledger.v1';
 
+// 本练习只接受人民币 ASCII 小数，单笔最多 999999.99 元。
+export function parseCents(text: string): number | null {
+  const match = /^(\d{1,6})(?:\.(\d{1,2}))?$/.exec(text.trim());
+  if (!match) return null;
+  const cents = Number(match[1]) * 100 + Number((match[2] ?? '').padEnd(2, '0'));
+  return cents > 0 ? cents : null;
+}
+
+export function decodeEntries(raw: string | null): LedgerEntry[] {
+  if (raw === null) return [];
+  const value: unknown = JSON.parse(raw);
+  if (!Array.isArray(value) || value.length > 10000) throw new Error('Invalid ledger');
+  const ids = new Set<string>();
+  for (const entry of value) {
+    if (typeof entry !== 'object' || entry === null ||
+        typeof entry.id !== 'string' || entry.id.length === 0 || ids.has(entry.id) ||
+        !Number.isSafeInteger(entry.amount) || entry.amount <= 0 || entry.amount > 99999999 ||
+        typeof entry.note !== 'string' || typeof entry.createdAt !== 'string' ||
+        !Number.isFinite(Date.parse(entry.createdAt))) {
+      throw new Error('Invalid ledger entry');
+    }
+    ids.add(entry.id);
+  }
+  return value as LedgerEntry[];
+}
+
 export function useLedger() {
   const [entries, setEntries] = useState<LedgerEntry[]>([]);
+  const current = useRef<LedgerEntry[]>([]);
+  const locked = useRef(true);
+  const [ready, setReady] = useState(false);
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [attempt, setAttempt] = useState(0);
 
-  // 挂载时读取
+  // 读取失败或结构损坏时保留原文件，禁止写入，不用空数组“自愈”。
   useEffect(() => {
+    let active = true;
+    locked.current = true;
+    setReady(false);
+    setError(null);
     AsyncStorage.getItem(KEY)
-      .then((raw) => raw && setEntries(JSON.parse(raw)))
-      .catch(() => {/* 损坏数据按空处理，进入写回自愈 */});
+      .then(decodeEntries)
+      .then((loaded) => {
+        if (!active) return;
+        current.current = loaded;
+        setEntries(loaded);
+        locked.current = false;
+        setReady(true);
+      })
+      .catch(() => { if (active) setError('读取失败或数据损坏，原数据未被覆盖。'); });
+    return () => { active = false; };
+  }, [attempt]);
+
+  const persist = useCallback(async (change: (old: LedgerEntry[]) => LedgerEntry[]) => {
+    if (locked.current) return false;
+    locked.current = true; // 同步上锁，防止一帧内连点产生并行写入。
+    setBusy(true);
+    setError(null);
+    try {
+      const next = change(current.current);
+      await AsyncStorage.setItem(KEY, JSON.stringify(next));
+      current.current = next;
+      setEntries(next); // 确认存储成功后才显示成功结果。
+      return true;
+    } catch {
+      setError('尚未保存，请重试；表单和已保存记录仍保留。');
+      return false;
+    } finally {
+      locked.current = false;
+      setBusy(false);
+    }
   }, []);
 
-  // 任何变更写回
-  const persist = useCallback((next: LedgerEntry[]) => {
-    setEntries(next);
-    AsyncStorage.setItem(KEY, JSON.stringify(next)).catch(() => {});
-  }, []);
-
-  const add = useCallback((amountYuan: number, note: string) => {
-    persist([{
-      id: Date.now().toString(36),
-      amount: Math.round(amountYuan * 100), // 元 → 分
-      note,
-      createdAt: new Date().toISOString(),
-    }, ...entries]);
-  }, [entries, persist]);
-
-  const remove = useCallback((id: string) => {
-    persist(entries.filter((e) => e.id !== id));
-  }, [entries, persist]);
-
+  const add = (cents: number, note: string) => persist((old) => {
+    if (!Number.isSafeInteger(cents) || cents <= 0 || cents > 99999999 || old.length >= 10000) {
+      throw new Error('Invalid amount or ledger full');
+    }
+    let id = Date.now().toString(36);
+    while (old.some((entry) => entry.id === id)) id += '-';
+    return [{ id, amount: cents, note: note.trim() || '未命名支出',
+      createdAt: new Date().toISOString() }, ...old];
+  });
+  const remove = (id: string) => persist((old) => old.filter((entry) => entry.id !== id));
+  const now = new Date();
   const monthTotal = entries
-    .filter((e) => e.createdAt.slice(0, 7) === new Date().toISOString().slice(0, 7))
+    .filter((entry) => {
+      const date = new Date(entry.createdAt);
+      return date.getFullYear() === now.getFullYear() && date.getMonth() === now.getMonth();
+    })
     .reduce((sum, e) => sum + e.amount, 0);
 
-  return { entries, add, remove, monthTotal };
+  return { entries, add, remove, monthTotal, ready, busy, error,
+    retry: () => setAttempt((value) => value + 1) };
 }
 ```
 
@@ -166,51 +230,60 @@ export function useLedger() {
 ```tsx
 // app/(tabs)/ledger.tsx
 import { useState } from 'react';
-import { FlatList, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
-import { useLedger } from '../../src/hooks/useLedger';
+import { Button, FlatList, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { parseCents, useLedger } from '../../src/hooks/useLedger';
 
 export default function LedgerScreen() {
-  const { entries, add, remove, monthTotal } = useLedger();
+  const { entries, add, remove, monthTotal, ready, busy, error, retry } = useLedger();
   const [amount, setAmount] = useState('');
   const [note, setNote] = useState('');
 
-  const submit = () => {
-    const value = parseFloat(amount);
-    if (!value || value <= 0) return; // 简单校验
-    add(value, note || '未命名支出');
-    setAmount('');
-    setNote('');
+  const submit = async () => {
+    const cents = parseCents(amount);
+    if (cents === null) return;
+    if (await add(cents, note)) {
+      setAmount('');
+      setNote('');
+    }
   };
 
   return (
     <View style={styles.page}>
+      {!ready && !error && <Text>正在读取记录……</Text>}
+      {error && <Text accessibilityRole="alert">{error}</Text>}
+      {!ready && error && <Button title="重试读取" onPress={retry} />}
       <View style={styles.form}>
         <TextInput
           style={styles.input}
           placeholder="金额（元）"
-          keyboardType="decimal-pad"   // 三端都会弹数字键盘
+          keyboardType="decimal-pad"   // 键盘是输入提示，粘贴仍可带来任意字符串。
+          editable={ready && !busy}
           value={amount}
           onChangeText={setAmount}
         />
         <TextInput
           style={styles.input}
           placeholder="备注"
+          editable={ready && !busy}
           value={note}
           onChangeText={setNote}
         />
-        <TouchableOpacity style={styles.btn} onPress={submit}>
-          <Text style={styles.btnText}>记一笔</Text>
+        <TouchableOpacity style={styles.btn} onPress={submit}
+          disabled={!ready || busy || parseCents(amount) === null} accessibilityRole="button">
+          <Text style={styles.btnText}>{busy ? '保存中……' : '记一笔'}</Text>
         </TouchableOpacity>
+        {amount !== '' && parseCents(amount) === null && <Text>请输入 0.01–999999.99，最多两位小数。</Text>}
       </View>
       <Text style={styles.total}>本月支出：¥{(monthTotal / 100).toFixed(2)}</Text>
       <FlatList
         data={entries}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
-          <TouchableOpacity style={styles.row} onLongPress={() => remove(item.id)}>
+          <View style={styles.row}>
             <Text style={styles.note}>{item.note}</Text>
             <Text style={styles.amount}>¥{(item.amount / 100).toFixed(2)}</Text>
-          </TouchableOpacity>
+            <Button title="删除" disabled={!ready || busy} onPress={() => { void remove(item.id); }} />
+          </View>
         )}
       />
     </View>
@@ -257,8 +330,14 @@ const insets = useSafeAreaInsets();
 
 ## ❓ 常见问题
 
+此 Hook 只允许一个挂载实例负责 `ledger.v1`。它先读取并验证 JSON，读取失败时禁止写入；写入期间同步上锁，只有 `setItem` 成功后更新列表。这样可以避免加载未结束就写空列表、连点覆盖上一笔、吞掉错误后显示已保存。多个页面需要同一状态时，将 Hook 提升到共同父级或 Provider，不能分别实例化后写同一个 key。AsyncStorage 不是跨进程事务数据库。
+
+本月按设备本地日历计算，不能直接截取 UTC ISO 字符串前七位，否则月界附近统计会错。跨月停留还需刷新当前时间；正式财务产品应明确固定时区。最多 10000 笔是此练习的容量约束，需要大量数据或高频写入时应改为数据库。
+
+验收存储层：让替身存储延迟读取、读取失败、返回坏 JSON、写入失败。加载前禁止提交；坏数据不能被覆盖；写入失败时表单保留、列表不变；快速连点不应产生并行写入。验收金额：`0.1` 和 `0.2` 共 30 分，`12abc`、`1.234`、`Infinity` 被拒绝。最后重启验证成功写入的记录仍在。
+
 ### Q1: 数据在重装后丢失正常吗？
-**A**: 正常。AsyncStorage 属于应用沙盒数据，卸载即清空；需要跨设备同步再引入后端（本仓库 01-go-backend 模块的 API 可直接对接）。
+**A**: 本地存储不能作为重装或跨设备恢复的承诺。卸载通常移除应用沙盒，但系统备份与恢复可能使数据重新出现；分别测试清除数据、卸载重装和系统恢复。可靠同步需要后端、身份、冲突和失败恢复策略，一次本地写入不等于云备份。
 
 ### Q2: FlatList 数据更新后不刷新？
 **A**: 确认传入了新的数组引用（本文 `persist` 每次构造新数组），FlatList 依赖引用比较；另检查 `keyExtractor` 唯一性。
@@ -272,10 +351,10 @@ const insets = useSafeAreaInsets();
 
 **任务要求**:
 1. 实现需求定义中的全部 5 项功能
-2. Android 真机 + iOS 模拟器（或 EAS Build 云端验证）双端验收
+2. Android 与 iOS 真机或模拟器分别执行交互验收；EAS Build 成功只证明构建，不替代运行验收
 3. 有鸿蒙条件者完成 RNOH 接入与真机验收
 
-**评估标准**: 功能完整、无红/黄屏、热更新可用、三端导航手势正确。
+**评估标准**: 记录实际测试的平台、系统和依赖版本；输入/存储失败路径可观察，重启后数据正确，布局与导航可用。未测试平台标为未验证。热更新属于后续部署练习。
 
 ### 选做：功能增强
 

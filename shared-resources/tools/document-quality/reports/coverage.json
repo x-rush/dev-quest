@@ -5,6 +5,7 @@
     "正文增强：概念、自测与反馈；非全篇深审": 90,
     "正文增强：职责、数据流与验收；非全篇深审": 49,
     "新增模块导读与完整文章导航": 11,
+    "新增文档，教学内容待审查": 1,
     "正文增强：范围、阶段与验收；非完整工程实测": 45,
     "重点参考增强或语义纠错；非全篇深审": 32,
     "入口增强；原版本表未全量复核": 10
@@ -189,6 +190,13 @@
     {
       "path": "01-go-backend/LEARNING_GUIDE.md",
       "status": "新增模块导读与完整文章导航",
+      "editorial_sections": 0,
+      "editorial_detail": "",
+      "structure_signals": []
+    },
+    {
+      "path": "01-go-backend/projects/00-stdlib-todo-cli.md",
+      "status": "新增文档，教学内容待审查",
       "editorial_sections": 0,
       "editorial_detail": "",
       "structure_signals": []
@@ -3324,7 +3332,9 @@
       "status": "重点参考增强或语义纠错；非全篇深审",
       "editorial_sections": 1,
       "editorial_detail": "；本轮重写 1 个记录段落",
-      "structure_signals": []
+      "structure_signals": [
+        "未显式说明阅读前提"
+      ]
     },
     {
       "path": "08-java-revisited/reference/library-guides/02-third-party-libs.md",

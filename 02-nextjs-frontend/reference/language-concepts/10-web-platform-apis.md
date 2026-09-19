@@ -6,7 +6,7 @@
 
 ## 📌 定义
 
-七个不依赖任何框架、写前端必用的浏览器内置 API。它们与 Next.js 有一个共同交汇点：应按具体 API 区分运行环境；fetch、URL 等服务端也可用，而 window、DOM 表单与浏览器存储需要浏览器上下文，是本模块最常见的 SSR 陷阱来源。
+本页介绍不依赖 React、Next.js 的 Web 标准 API。JavaScript 语言标准的 Array、Map、Promise 等内置能力见[共享内置参考](../../../shared-resources/javascript-builtins.md)；TypeScript 的类型工具在编译后通常被擦除，不是额外的运行时标准库。URL、fetch、DOM、存储来自宿主平台，必须分别检查运行环境；Node 的同名 API 不意味着拥有浏览器的 Cookie、DOM 或同源策略。前置：Promise、异常、JSON。学完应能区分 HTTP 失败、结构错误、取消，以及服务端执行与浏览器副作用。
 
 ## 📖 语法 / API 表
 
@@ -27,18 +27,26 @@
 ### fetch + AbortController：取消与超时（两种标准写法）
 
 ```ts
-// 写法一：手动取消（如组件卸载时）
+// 浏览器集成片段：错误由调用者 await/catch，避免遗留 rejected Promise。
+async function search(signal: AbortSignal): Promise<unknown> {
+  const response = await fetch('/api/search?q=ts', { signal })
+  if (!response.ok) throw new Error(`HTTP ${response.status}`)
+  return response.json() // JSON 解析后还需按业务结构校验
+}
 const controller = new AbortController()
-fetch('/api/search?q=ts', { signal: controller.signal })
-  .then((res) => res.json())
-  .catch((err) => {
-    if (err.name === 'AbortError') return // 主动取消不算错误，静默处理
-    throw err
-  })
+const result = search(controller.signal)
 controller.abort()
-
-// 写法二：超时自动取消（现代标准 API）
-const res = await fetch('/api/slow', { signal: AbortSignal.timeout(5000) })
+try {
+  await result
+} catch (error) {
+  if (controller.signal.aborted && error === controller.signal.reason) {
+    console.log('请求已取消')
+  } else {
+    console.error('搜索失败', error)
+  }
+}
+// 需要超时时，可由调用者改传 AbortSignal.timeout(5000)。
+// timeout/any 等 API 的可用性要根据目标浏览器或 Node 版本检查。
 ```
 
 ### fetch：必须手动检查 HTTP 状态（404 不 reject！）
@@ -73,20 +81,41 @@ await fetch('/api/upload', { method: 'POST', body: fd })
 // 注意：用 FormData 时不要手动设 Content-Type，浏览器自动带 multipart 边界
 ```
 
-### localStorage：带 JSON 序列化的安全读写
+### localStorage：读写失败与数据损坏必须可区分
 
 ```ts
-function loadDraft(key: string): unknown | null {
-  if (typeof window === 'undefined') return null // SSR 保护
+// 浏览器集成片段；应从 effect 或事件中调用。
+type DraftResult =
+  | { status: 'ready'; text: string }
+  | { status: 'missing' | 'unavailable' | 'invalid' }
+
+function loadDraft(key: string): DraftResult {
+  if (typeof window === 'undefined') return { status: 'unavailable' }
+  let raw: string | null
+  try { raw = window.localStorage.getItem(key) }
+  catch { return { status: 'unavailable' } }
+  if (raw === null) return { status: 'missing' }
   try {
-    const raw = window.localStorage.getItem(key)
-    return raw == null ? null : JSON.parse(raw)
-  } catch { return null }
+    const value: unknown = JSON.parse(raw)
+    if (typeof value !== 'object' || value === null ||
+        !('text' in value) || typeof value.text !== 'string') {
+      return { status: 'invalid' }
+    }
+    return { status: 'ready', text: value.text }
+  } catch { return { status: 'invalid' } }
 }
-window.localStorage.setItem('draft', JSON.stringify({ text: 'hi' }))
+function saveDraft(key: string, text: string): boolean {
+  if (typeof window === 'undefined') return false
+  try {
+    window.localStorage.setItem(key, JSON.stringify({ text }))
+    return true
+  } catch { return false } // UI 应显示保存失败，而不是清空编辑器
+}
 ```
 
-### structuredClone：真正的深拷贝
+这两个函数只负责存储边界。组件应根据结果展示“无草稿”“草稿损坏”“存储不可用”，而不是把它们都当作成功读取了空文本。存储可因用户策略或额度抛错，写入同样需要处理；本地明文存储不适合保存会话密钥。
+
+### structuredClone：复制受支持的数据，不复制任意对象行为
 
 ```ts
 const orig = { d: new Date(), m: new Map([['k', 1]]), nested: { a: [1, [2]] } }
@@ -101,9 +130,12 @@ structuredClone({ fn: () => {} })       // 抛 DataCloneError —— 函数/DOM 
 ```ts
 const channel = new BroadcastChannel('auth')
 channel.onmessage = (e) => {
-  if (e.data.type === 'logout') location.reload() // 其他标签页收到登出通知
+    if (e.data && typeof e.data === 'object' && e.data.type === 'logout') {
+      location.reload() // 提示其他标签页刷新；服务端仍须验证身份
+    }
 }
 channel.postMessage({ type: 'logout' })  // 广播给同源同存储分区、同 name 的其他 channel；不是向发送对象自身回送
+// 组件卸载或监听不再需要时调用 channel.close()，释放资源。
 ```
 
 ## ⚠️ 常见陷阱
@@ -127,6 +159,94 @@ channel.postMessage({ type: 'logout' })  // 广播给同源同存储分区、同
 **练习**：用两个同源标签页广播普通消息，确认发送该消息的 channel 对象不会收到自己的广播，关闭页面组件时调用 close。测试浏览器禁止存储和额度耗尽，读取与写入都要处理异常。structuredClone 能复制多种内建数据，但不会完整保留自定义类原型与属性描述符；以类方法是否仍存在验证这一边界。
 
 依据：[Node 全局 API](https://nodejs.org/api/globals.html)、[HTML 结构化克隆与广播](https://html.spec.whatwg.org/multipage/structured-data.html)。
+
+## 无外部服务的完整实验
+
+以下围栏可分别保存为 `.mjs`，用 Node 24 运行。它们验证 Node 实现的标准对象和解析行为；不替代浏览器 Cookie、CORS、DOM 表单或存储权限验证。
+
+### URL 与表单的重复键不会自动变数组
+
+保存为 `url-form.mjs`，预期四行：`a+b & 中`、`js,ts`、`2`、`3`。URLSearchParams 和 FormData 都可保存同名多值；`get` 只取首个值，`getAll` 才返回全部值。FormData 不自动验证类型或业务规则；数字 append 后成为字符串。
+
+<!-- foundation-case: url-form -->
+```js
+const url = new URL('/search', 'https://example.com');
+url.searchParams.set('q', 'a+b & 中');
+url.searchParams.append('tag', 'js');
+url.searchParams.append('tag', 'ts');
+const restored = new URL(url.href);
+console.log(restored.searchParams.get('q'));
+console.log(restored.searchParams.getAll('tag').join(','));
+const form = new FormData();
+form.append('quantity', '2');
+form.append('quantity', '3');
+console.log(form.get('quantity'));
+form.set('quantity', '3');
+console.log(form.getAll('quantity').join(','));
+```
+
+根据 [URL 标准](https://url.spec.whatwg.org/)，参数值应交给 URLSearchParams 序列化。不要先 encodeURIComponent 再传给 set，否则 `%` 会被再次编码；不要把 URL 路径片段和查询参数混用同一套拼接逻辑。
+
+### HTTP 成功、JSON 有效和业务结构正确是三次检查
+
+保存为 `response-contract.mjs`，预期四行：`Learn`、`Error:HTTP 404`、`TypeError:invalid task`、`TypeError`。本例创建 Response 对象以隔离解析契约，无需启动服务器；真实请求时把 `await fetch(...)` 得到的 Response 交给相同函数。
+
+<!-- foundation-case: response-contract -->
+```js
+async function readTask(response) {
+  if (!response.ok) throw new Error(`HTTP ${response.status}`);
+  const value = await response.json();
+  if (typeof value !== 'object' || value === null ||
+      !Number.isSafeInteger(value.id) || value.id <= 0 ||
+      typeof value.title !== 'string' || value.title.trim() === '') {
+    throw new TypeError('invalid task');
+  }
+  return { id: value.id, title: value.title.trim() };
+}
+const cases = [
+  Response.json({ id: 1, title: ' Learn ' }),
+  Response.json({ message: 'missing' }, { status: 404 }),
+  Response.json({ id: '1', title: 'Learn' }),
+];
+for (const response of cases) {
+  try { console.log((await readTask(response)).title); }
+  catch (error) { console.log(`${error.name}:${error.message}`); }
+}
+const once = Response.json({ id: 1 });
+await once.json();
+try { await once.text(); }
+catch (error) { console.log(error.name); }
+```
+
+Response 正文通常只能消费一次；先 json 再 text 会失败。事先 clone 可以取得第二条消费路径，但会带来缓冲成本。204 等无正文响应不应该无条件调用 json。fetch 的具体请求、响应和 body 契约见 [Fetch 标准](https://fetch.spec.whatwg.org/)。
+
+### 克隆对象与转移二进制资源是不同操作
+
+保存为 `clone.mjs`，预期四行：`1`、`true`、`0,3`、`DataCloneError`。
+
+<!-- foundation-case: clone -->
+```js
+const original = { tags: new Set(['js']), nested: { value: 1 } };
+original.self = original;
+const copy = structuredClone(original);
+copy.nested.value = 2;
+console.log(original.nested.value);
+console.log(copy.self === copy && copy.tags.has('js'));
+const bytes = new Uint8Array([1, 2, 3]);
+const moved = structuredClone(bytes, { transfer: [bytes.buffer] });
+console.log([bytes.byteLength, moved.byteLength].join(','));
+try { structuredClone({ action() {} }); }
+catch (error) { console.log(error.name); }
+```
+
+transfer 将可转移资源移交给新对象，原 ArrayBuffer 脱离，不能再当原数据继续使用。普通 clone 则保留原数据；两种方式都不复制函数、自定义类行为或任意属性描述符。依据：[HTML 结构化数据](https://html.spec.whatwg.org/multipage/structured-data.html)。
+
+## 从实验到页面的验收
+
+1. 响应测试再加入无效 JSON、204 和 500，分别说明失败在哪一层；不要让错误响应进入成功渲染。
+2. 页面切换时取消旧请求，并验证旧响应即使晚到也不能覆盖新页面；取消不保证服务器尚未处理写操作。
+3. 用两个同源标签页验证 BroadcastChannel，并在组件移除时 close；确认广播没有被当作认证授权的依据。
+4. 浏览器禁止存储或写入失败时，编辑器仍保留未保存文本，并显示失败状态。Server Component 不读取 window；Client Component 的初次预渲染同样需要遵守这个边界。
 
 ## 🔗 相关条目
 

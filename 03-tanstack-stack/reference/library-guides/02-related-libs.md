@@ -181,6 +181,7 @@ useQuery({
 
 ## 相关文档
 
+- [语言内置能力与 Web 标准 API](03-language-web-foundations.md) - 引入额外库前先掌握数据转换、参数校验与不可变更新
 - 📄 **[Query 核心 API](../language-concepts/01-query-core-api.md)** - 请求层的宿主 API
 - 📄 **[Query 框架要点](../framework-essentials/01-query-essentials.md)** - 与请求层配合的缓存语义
 - 📄 **[TypeScript 模式](../language-concepts/05-typescript-patterns.md)** - zod 推断与判别联合

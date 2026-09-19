@@ -9,6 +9,7 @@
 | 正文增强：概念、自测与反馈；非全篇深审 | 90 |
 | 正文增强：职责、数据流与验收；非全篇深审 | 49 |
 | 新增模块导读与完整文章导航 | 11 |
+| 新增文档，教学内容待审查 | 1 |
 | 正文增强：范围、阶段与验收；非完整工程实测 | 45 |
 | 重点参考增强或语义纠错；非全篇深审 | 32 |
 | 入口增强；原版本表未全量复核 | 10 |
@@ -42,6 +43,7 @@
 | [frameworks/05-go-redis-complete.md](../../../../01-go-backend/frameworks/05-go-redis-complete.md) | 正文增强：职责、数据流与验收；非全篇深审 | 未命中；不代表技术验证通过 |
 | [frameworks/06-grpc-service-development.md](../../../../01-go-backend/frameworks/06-grpc-service-development.md) | 正文增强：职责、数据流与验收；非全篇深审 | 未命中；不代表技术验证通过 |
 | [LEARNING_GUIDE.md](../../../../01-go-backend/LEARNING_GUIDE.md) | 新增模块导读与完整文章导航 | 未命中；不代表技术验证通过 |
+| [projects/00-stdlib-todo-cli.md](../../../../01-go-backend/projects/00-stdlib-todo-cli.md) | 新增文档，教学内容待审查 | 未命中；不代表技术验证通过 |
 | [projects/01-rest-api-server.md](../../../../01-go-backend/projects/01-rest-api-server.md) | 正文增强：范围、阶段与验收；非完整工程实测 | 短条目重复术语，需核查是否缺少解释 |
 | [projects/02-microservices-demo.md](../../../../01-go-backend/projects/02-microservices-demo.md) | 正文增强：范围、阶段与验收；非完整工程实测 | 未命中；不代表技术验证通过 |
 | [projects/03-real-time-app.md](../../../../01-go-backend/projects/03-real-time-app.md) | 正文增强：范围、阶段与验收；非完整工程实测 | 未命中；不代表技术验证通过 |
@@ -519,7 +521,7 @@
 | [reference/language-concepts/08-enums.md](../../../../08-java-revisited/reference/language-concepts/08-enums.md) | 主题解释、边界与反馈练习增强；运行范围另记；全库增强轮次已处理原文与补充教学内容 | 未命中；不代表技术验证通过 |
 | [reference/language-concepts/09-annotations.md](../../../../08-java-revisited/reference/language-concepts/09-annotations.md) | 主题解释、边界与反馈练习增强；运行范围另记；全库增强轮次已处理原文与补充教学内容 | 未命中；不代表技术验证通过 |
 | [reference/language-concepts/10-interface-semantics.md](../../../../08-java-revisited/reference/language-concepts/10-interface-semantics.md) | 主题解释、边界与反馈练习增强；运行范围另记；全库增强轮次已处理原文与补充教学内容 | 未命中；不代表技术验证通过 |
-| [reference/library-guides/01-standard-library.md](../../../../08-java-revisited/reference/library-guides/01-standard-library.md) | 重点参考增强或语义纠错；非全篇深审；本轮重写 1 个记录段落 | 未命中；不代表技术验证通过 |
+| [reference/library-guides/01-standard-library.md](../../../../08-java-revisited/reference/library-guides/01-standard-library.md) | 重点参考增强或语义纠错；非全篇深审；本轮重写 1 个记录段落 | 未显式说明阅读前提 |
 | [reference/library-guides/02-third-party-libs.md](../../../../08-java-revisited/reference/library-guides/02-third-party-libs.md) | 正文段落重写与语义纠错；非全篇深审；本轮重写 1 个记录段落 | 未命中；不代表技术验证通过 |
 | [reference/library-guides/03-java-lang.md](../../../../08-java-revisited/reference/library-guides/03-java-lang.md) | 主题解释、边界与反馈练习增强；运行范围另记；全库增强轮次已处理原文与补充教学内容 | 未命中；不代表技术验证通过 |
 | [reference/library-guides/04-java-io.md](../../../../08-java-revisited/reference/library-guides/04-java-io.md) | 主题解释、边界与反馈练习增强；运行范围另记；全库增强轮次已处理原文与补充教学内容 | 未命中；不代表技术验证通过 |

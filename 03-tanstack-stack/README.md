@@ -114,6 +114,7 @@
 │   ├── library-guides/
 │   │   ├── 01-ecosystem-integrations.md           #   生态集成：官方周边库指南
 │   │   └── 02-related-libs.md                     #   相关库搭配：Zustand、Jotai、Axios 等
+│   │   └── 03-language-web-foundations.md          #   JS/TS/Web 基础：TanStack 之外的运行时能力边界
 │   └── quick-references/
 │       ├── 01-syntax-cheatsheet.md                #   五库语法速查表
 │       └── 02-troubleshooting.md                  #   故障排除：常见错误与排查路径

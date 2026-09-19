@@ -16,7 +16,7 @@
 
 ## 📌 定义
 
-作用域函数：对某个对象开一个**临时作用域**执行代码块。五者差异只有两点——
+作用域函数是 Kotlin 标准库提供的普通函数，不是关键字或额外的并发机制。先区分块内对象引用和表达式返回值；还要注意调用形式：`with` 接受普通参数，`run` 另有无接收者重载。
 
 1. 块内用 `it`（参数引用）还是 `this`（receiver）
 2. 返回 **lambda 结果**还是 **receiver 本身**
@@ -29,21 +29,29 @@
 |------|---------|--------|---------|
 | `let` | `it` | lambda 结果 | 空安全分支、结果变换 |
 | `run` | `this` | lambda 结果 | 计算并产出结果 |
+| `run { ... }`（无接收者重载） | 没有额外对象 | lambda 结果 | 在表达式位置组织局部计算 |
 | `with` | `this` | lambda 结果 | 对同一对象批量操作（非扩展，普通函数） |
 | `apply` | `this` | **receiver** | 对象构建 / 配置（builder 风格） |
 | `also` | `it` | **receiver** | 副作用旁路（日志、校验），不打断链 |
-| `takeIf` / `takeUnless` | `it` | 条件满足返回 receiver，否则 `null` | 链中条件筛选 |
+| `takeIf` | `it` | 条件为 true 返回 receiver，否则 `null` | 保留符合条件的对象 |
+| `takeUnless` | `it` | 条件为 false 返回 receiver，否则 `null` | 排除符合条件的对象 |
+
+下面仅为 API 签名速查，省略函数体，不是独立可编译文件。
 
 ```kotlin
 inline fun <T, R> T.let(block: (T) -> R): R
 inline fun <T, R> T.run(block: T.() -> R): R
+inline fun <R> run(block: () -> R): R
 inline fun <T, R> with(receiver: T, block: T.() -> R): R
 inline fun <T> T.apply(block: T.() -> Unit): T
 inline fun <T> T.also(block: (T) -> Unit): T
 inline fun <T> T.takeIf(predicate: (T) -> Boolean): T?
+inline fun <T> T.takeUnless(predicate: (T) -> Boolean): T?
 ```
 
 ## 💡 示例
+
+下列是 Android 工程中的调用片段，依赖项目自己的 Activity、View 和模型。先学习后面的完整命令行例子，再把这些片段放进实际类中。
 
 ```kotlin
 // let：空安全 + 变换
@@ -90,6 +98,40 @@ fun main() {
 apply 不复制对象，也不自动切线程；它返回同一接收者。let 的返回值是块最后的表达式，若把最后一行改成 println，结果类型就会变为 Unit。`?.let` 的判空来自 `?.`，不是 let 本身拒绝 null。
 
 练习：把 `loadExpensive().takeIf { enabled }` 改为 enabled 为真才调用加载函数。反馈：takeIf 在接收者已经求值后才执行，不能用它避免之前的昂贵或有副作用调用；明确的 if 往往更合适。
+
+## 可运行练习：返回值、null 与提前执行
+
+把下面保存为 `ScopeContract.kt`，执行 `kotlinc ScopeContract.kt -include-runtime -d scope.jar`，再执行 `java -jar scope.jar`。不需要 Android SDK 或 Compose；此处验证的是 Kotlin 标准库。
+
+```kotlin
+fun main() {
+    val absent: String? = null
+    val direct = absent.let { it == null }
+    val safe = absent?.let { it.length }
+    check(direct && safe == null)
+    val values = mutableListOf(1)
+    val same = values.also { it.add(2) }
+    check(same === values)
+    val sum = with(values) { sum() }
+    check(sum == 3)
+    check(2.takeIf { it > 0 } == 2)
+    check(2.takeUnless { it > 0 } == null)
+    var calls = 0
+    fun load(): String { calls += 1; return "loaded" }
+    val enabled = false
+    val tooLate = load().takeIf { enabled }
+    check(tooLate == null && calls == 1)
+    val lazyChoice = if (enabled) load() else null
+    check(lazyChoice == null && calls == 1)
+    val label = run { val count = values.size; "items=$count" }
+    check(label == "items=2")
+    println("scope contracts passed")
+}
+```
+
+预期输出只有 `scope contracts passed`。`takeIf` 和 `takeUnless` 不会延迟求值，作用域函数也不会复制可变对象；`also` 返回原对象，块内 `add` 会影响原列表。`?.let` 的非空保证来自安全调用符，直接在可空值上调用 `let` 时参数仍可为 null。选择函数时先写普通局部变量版本，再决定缩短后是否仍清楚。
+
+官方参考：[Kotlin 作用域函数](https://kotlinlang.org/docs/scope-functions.html)。内置能力与标准库的后续学习顺序：`require`/`check` 的错误契约、`toIntOrNull` 的失败返回、集合转换、序列、文本与资源管理。不要把常用函数统称为“关键字”。
 
 ## 🔗 相关条目
 

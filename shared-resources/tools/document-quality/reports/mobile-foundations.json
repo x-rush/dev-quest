@@ -1,0 +1,70 @@
+{
+  "scope": "Portable Kotlin standard-library programs; extracted unchanged RN and Swift pure functions with assertion harnesses.",
+  "not_verified": [
+    "RN Hook lifecycle and native AsyncStorage",
+    "Android/iOS/HarmonyOS builds and device behavior",
+    "SwiftUI/SwiftData type checking and persistence"
+  ],
+  "results": [
+    {
+      "case": "kotlin-scope-1",
+      "source": "05-kotlin-compose/reference/language-concepts/07-scope-functions.md",
+      "source_sha256": "087cb819f4a5fb54ff2f5a561e752d2e1bc9f43e3c0672f886f894309ebc9d17",
+      "extracted_code_sha256": "35d50d04f91ab20cb7d5ee011140e5b398358e061dcb0445c01429f2b5298f5d",
+      "extracted_code": "fun main() {\n    val builder = StringBuilder(\"A\")\n    val same = builder.apply { append(\"B\") }\n    val length = builder.let { it.length }\n    println(same === builder) // true\n    println(length)           // 2\n    println(\"  \".takeIf { it.isNotBlank() }) // null\n}\n",
+      "assertion_harness": "",
+      "image": "dev-quest-validation:local",
+      "command": "kotlinc -version && kotlinc Scope.kt -include-runtime -d scope.jar && java -jar scope.jar",
+      "exit_code": 0,
+      "stdout": "true\n2\nnull\n",
+      "stderr": "info: kotlinc-jvm 2.4.20 (JRE 21.0.12+8-LTS)\n",
+      "expected_stdout_suffix": "true\n2\nnull\n",
+      "status": "PASS"
+    },
+    {
+      "case": "kotlin-scope-2",
+      "source": "05-kotlin-compose/reference/language-concepts/07-scope-functions.md",
+      "source_sha256": "087cb819f4a5fb54ff2f5a561e752d2e1bc9f43e3c0672f886f894309ebc9d17",
+      "extracted_code_sha256": "999d5db8e655cfe89f0951f118a67ec24539cef8caf70ef2791203d4a6b78427",
+      "extracted_code": "fun main() {\n    val absent: String? = null\n    val direct = absent.let { it == null }\n    val safe = absent?.let { it.length }\n    check(direct && safe == null)\n    val values = mutableListOf(1)\n    val same = values.also { it.add(2) }\n    check(same === values)\n    val sum = with(values) { sum() }\n    check(sum == 3)\n    check(2.takeIf { it > 0 } == 2)\n    check(2.takeUnless { it > 0 } == null)\n    var calls = 0\n    fun load(): String { calls += 1; return \"loaded\" }\n    val enabled = false\n    val tooLate = load().takeIf { enabled }\n    check(tooLate == null && calls == 1)\n    val lazyChoice = if (enabled) load() else null\n    check(lazyChoice == null && calls == 1)\n    val label = run { val count = values.size; \"items=$count\" }\n    check(label == \"items=2\")\n    println(\"scope contracts passed\")\n}\n",
+      "assertion_harness": "",
+      "image": "dev-quest-validation:local",
+      "command": "kotlinc -version && kotlinc Scope.kt -include-runtime -d scope.jar && java -jar scope.jar",
+      "exit_code": 0,
+      "stdout": "scope contracts passed\n",
+      "stderr": "info: kotlinc-jvm 2.4.20 (JRE 21.0.12+8-LTS)\n",
+      "expected_stdout_suffix": "scope contracts passed\n",
+      "status": "PASS"
+    },
+    {
+      "case": "rn-ledger-pure-contracts",
+      "source": "04-multiplatform-apps/basics/08-first-project.md",
+      "source_sha256": "56076f33a429292b6434b8d52716d6ba50210500c84236ded3f6f8f30d38bee2",
+      "extracted_code_sha256": "782881a6617e580fa4695ab1f3b9d16fc1427f07ad68a50a8eb7e442dc15ef1c",
+      "extracted_code": "export interface LedgerEntry {\n  id: string;\n  amount: number;   // 正数，单位分，避免浮点误差\n  note: string;\n  createdAt: string; // ISO 8601\n}\n\nexport function parseCents(text: string): number | null {\n  const match = /^(\\d{1,6})(?:\\.(\\d{1,2}))?$/.exec(text.trim());\n  if (!match) return null;\n  const cents = Number(match[1]) * 100 + Number((match[2] ?? '').padEnd(2, '0'));\n  return cents > 0 ? cents : null;\n}\n\nexport function decodeEntries(raw: string | null): LedgerEntry[] {\n  if (raw === null) return [];\n  const value: unknown = JSON.parse(raw);\n  if (!Array.isArray(value) || value.length > 10000) throw new Error('Invalid ledger');\n  const ids = new Set<string>();\n  for (const entry of value) {\n    if (typeof entry !== 'object' || entry === null ||\n        typeof entry.id !== 'string' || entry.id.length === 0 || ids.has(entry.id) ||\n        !Number.isSafeInteger(entry.amount) || entry.amount <= 0 || entry.amount > 99999999 ||\n        typeof entry.note !== 'string' || typeof entry.createdAt !== 'string' ||\n        !Number.isFinite(Date.parse(entry.createdAt))) {\n      throw new Error('Invalid ledger entry');\n    }\n    ids.add(entry.id);\n  }\n  return value as LedgerEntry[];\n}\n\n",
+      "assertion_harness": "\nimport assert from 'node:assert/strict';\nfor (const [input, expected] of [['0.1', 10], ['0.20', 20], ['999999.99', 99999999], [' 12.50 ', 1250]]) {\n  assert.equal(parseCents(input), expected);\n}\nfor (const input of ['', ' ', '0', '-1', '12abc', 'Infinity', 'NaN', '1.234', '1.', '.1', '1000000', '１']) {\n  assert.equal(parseCents(input), null, input);\n}\nassert.equal(parseCents('0.1')! + parseCents('0.2')!, 30);\nassert.deepEqual(decodeEntries(null), []);\nassert.deepEqual(decodeEntries('[]'), []);\nconst entry = {id: 'a', amount: 10, note: 'tea', createdAt: '2026-09-19T00:00:00.000Z'};\nassert.deepEqual(decodeEntries(JSON.stringify([entry])), [entry]);\nfor (const raw of ['{', '{}', 'null', '[null]', JSON.stringify([entry, entry]),\n  JSON.stringify([{...entry, amount: -1}]), JSON.stringify([{...entry, amount: 1.5}]),\n  JSON.stringify([{...entry, createdAt: 'invalid'}]), JSON.stringify([{...entry, note: 3}])]) {\n  assert.throws(() => decodeEntries(raw));\n}\nconsole.log('RN pure input and storage-schema contracts passed');\n",
+      "image": "node:24-bookworm-slim",
+      "command": "node --version && node ledger.ts",
+      "exit_code": 0,
+      "stdout": "v24.21.0\nRN pure input and storage-schema contracts passed\n",
+      "stderr": "",
+      "expected_stdout_suffix": "RN pure input and storage-schema contracts passed\n",
+      "status": "PASS"
+    },
+    {
+      "case": "swift-money-contracts",
+      "source": "06-swift-swiftui/basics/08-first-project.md",
+      "source_sha256": "057e7438d971b63086047fdaa84b64033fdaad677898cff67ad1f9ad5b32a356",
+      "extracted_code_sha256": "99a334c19424baea844862917f4b0e843da0da4e917bf9405dc5296437a2671f",
+      "extracted_code": "import Foundation\nfunc parseCents(_ raw: String) -> Int? {\n    let text = raw.trimmingCharacters(in: .whitespacesAndNewlines)\n    let parts = text.split(separator: \".\", omittingEmptySubsequences: false)\n    guard (1...2).contains(parts.count),\n          (1...6).contains(parts[0].count),\n          parts[0].utf8.allSatisfy({ $0 >= 48 && $0 <= 57 }),\n          let whole = Int(parts[0]) else { return nil }\n    var fraction = 0\n    if parts.count == 2 {\n        guard (1...2).contains(parts[1].count),\n              parts[1].utf8.allSatisfy({ $0 >= 48 && $0 <= 57 }),\n              let digits = Int(parts[1]) else { return nil }\n        fraction = parts[1].count == 1 ? digits * 10 : digits\n    }\n    let cents = whole * 100 + fraction\n    return cents > 0 ? cents : nil\n}\n\n",
+      "assertion_harness": "\nlet expected = [(\"0.1\", 10), (\"0.20\", 20), (\"999999.99\", 99999999), (\" 12.50 \", 1250)]\nfor (input, cents) in expected { precondition(parseCents(input) == cents) }\nfor input in [\"\", \" \", \"0\", \"-1\", \"12abc\", \"Infinity\", \"NaN\", \"1.234\", \"1.\", \".1\", \"1000000\", \"１\"] {\n    precondition(parseCents(input) == nil, input)\n}\nprecondition(parseCents(\"0.1\")! + parseCents(\"0.2\")! == 30)\nprint(\"Swift money contracts passed\")\n",
+      "image": "swift:6.3.3-noble",
+      "command": "swift --version && swift Money.swift",
+      "exit_code": 0,
+      "stdout": "Swift version 6.3.3 (swift-6.3.3-RELEASE)\nTarget: x86_64-unknown-linux-gnu\nSwift money contracts passed\n",
+      "stderr": "",
+      "expected_stdout_suffix": "Swift money contracts passed\n",
+      "status": "PASS"
+    }
+  ]
+}

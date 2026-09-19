@@ -27,6 +27,25 @@
 
 ## 📌 定义
 
+## 先分清语言内置能力、宿主 API 与原生模块
+
+React Native 使用 JavaScript/TypeScript 写界面，但运行环境不是浏览器，也不是 Node.js。语言的 `Array`、`Map`、`Set`、`JSON`、`Promise` 是基础层；React 的 Hook、React Native 的组件以及相机模块分别在不同层提供能力。TypeScript 类型声明能帮助检查调用，却不能让设备凭空拥有对应功能。
+
+| 任务 | 优先查什么 | 输入输出与失败边界 |
+|---|---|---|
+| 清理标题 | `String.trim()`，然后判断长度 | 返回新字符串；空白输入清理后可能为空，不修改原值 |
+| 金额输入 | 完整格式校验，再转换整数分 | `parseFloat('12abc')` 会得到 12，因此不能用它代替整段输入校验 |
+| 更新列表 | `map` / `filter`，保持稳定业务 ID | 返回新数组；只复制数组不代表深复制元素；下标不是记录身份 |
+| 去重和按 ID 查找 | `Set` / `Map` | 对象键按引用身份比较；网络或磁盘 JSON 需另行编码结构 |
+| 本地持久化 | JSON 编解码 + AsyncStorage 或数据库 | `JSON.parse` 可抛错；解析成功仍需验证字段类型与版本；不要将损坏数据当空列表覆盖 |
+| 异步操作 | `Promise`、`async`/`await` 与错误处理 | `await` 暂停当前异步函数，不自动启动线程，也不自动取消请求 |
+| 发 HTTP 请求 | RN 提供的 `fetch` 宿主 API | 检查 HTTP 状态、响应结构与取消；能联网不代表服务器健康 |
+| 读应用文件 | 选用目标平台支持的文件模块 | 浏览器 DOM 与 Node `fs` 并非 RN 默认能力；先核对原生模块和目录权限 |
+
+先阅读 [TypeScript 模式](./04-typescript-patterns.md)，再做[首项目](../../basics/08-first-project.md)中的输入解析和存储失败练习。语言能力可用纯函数测试；设备存储、权限与 UI 需要目标运行时验证。宿主能力范围以 [React Native JavaScript 环境](https://reactnative.dev/docs/javascript-environment)及项目锁定版本为准。
+
+## 按用途找到平台 API
+
 一张按**用途**分组的 API 地图：左列是"我想做什么"，中列是该模块的一句话职责，右列指向本字典已有条目或官方文档。**选型总原则**（详见 [原生与设备能力库指南](../library-guides/02-native-and-device-libs.md)）：有 Expo SDK 模块先用 Expo 模块，其次确认新架构适配的社区库，最后才自研 TurboModule。
 
 ## 📖 RN 侧（react-native 内置）
@@ -39,7 +58,7 @@
 | `AppState` | 监听前台/后台切换，暂停轮询、上报埋点 | [核心 API 字典](./01-rn-core-api.md) |
 | `Dimensions` / `useWindowDimensions` | 窗口尺寸；Hook 版响应式 | [核心 API 字典](./01-rn-core-api.md) · [Hooks 速查](./03-hooks-reference.md) |
 | `PixelRatio` | 逻辑像素与物理像素转换；细线用 `StyleSheet.hairlineWidth` | [核心 API 字典](./01-rn-core-api.md) |
-| `NetInfo` | 网络状态监听与探测（社区包，需安装） | [核心 API 字典](./01-rn-core-api.md) · [NetInfo 仓库](https://github.com/react-native-netinfo/react-native-netinfo) |
+| `NetInfo`（社区包） | 网络状态监听与探测，需单独安装；不属于 react-native 内置导出，也不保证目标服务器可达 | [核心 API 字典](./01-rn-core-api.md) · [NetInfo 仓库](https://github.com/react-native-netinfo/react-native-netinfo) |
 | `Vibration` | 震动反馈 | [Vibration 文档](https://reactnative.dev/docs/vibration) |
 | `PermissionsAndroid` | Android 运行时权限申请 | [PermissionsAndroid 文档](https://reactnative.dev/docs/permissionsandroid) |
 | `Appearance` / `useColorScheme` | 系统深浅色；Hook 版响应式 | [核心 API 字典](./01-rn-core-api.md) · [Hooks 速查](./03-hooks-reference.md) |
@@ -61,7 +80,7 @@
 | `Keyboard` | 编程式收起键盘、监听键盘事件 | [核心 API 字典](./01-rn-core-api.md) |
 | `Alert` / `ToastAndroid` | 系统弹窗 / Android 吐司 | [核心 API 字典](./01-rn-core-api.md) |
 | `Share` | 调起系统分享面板 | [Share 文档](https://reactnative.dev/docs/share) |
-| ~~`InteractionManager`~~（已移除） | 把耗时任务推迟到交互完成后执行——**RN 0.87 起从核心移除**，替代：`requestIdleCallback` / `startTransition` | [核心 API 字典](./01-rn-core-api.md) |
+| `InteractionManager` 迁移 | 查目标版本的迁移说明；长任务拆分后考虑空闲调度；`startTransition` 只标记非紧急 React 更新，不会把同步计算移到后台线程 | [核心 API 字典](./01-rn-core-api.md) |
 | 核心组件（View/Text/Image/ScrollView/FlatList/Pressable/Modal…） | UI 骨架与列表 | [Props 全表](./02-components-props.md) |
 
 ## 📖 Expo SDK 模块（本仓库实际使用范围，SDK 57）
@@ -107,7 +126,7 @@
 | 模块/工具 | 职责 | 深入 |
 |-----------|------|------|
 | `expo-router` | 文件系统路由（SDK 56 起内置 fork 版 React Navigation，不再直接 import 其包） | [docs.expo.dev](https://docs.expo.dev/router/introduction/) · [Expo 要点](../framework-essentials/01-expo-essentials.md) |
-| `expo-updates` | OTA 更新（绕过商店的 JS/资源热更） | [docs.expo.dev](https://docs.expo.dev/versions/latest/sdk/updates/) · [dev client 与 updates](../framework-essentials/04-dev-client-and-updates.md) |
+| `expo-updates` | 向兼容原生运行时分发 JS/资源更新；改变原生代码需新构建，发布仍需符合平台政策 | [docs.expo.dev](https://docs.expo.dev/versions/latest/sdk/updates/) · [dev client 与 updates](../framework-essentials/04-dev-client-and-updates.md) |
 | `expo-dev-client` | 开发构建（dev client，替代 Expo Go 装原生依赖） | [docs.expo.dev](https://docs.expo.dev/develop/development-builds/introduction/) |
 | EAS Build / Submit | 云构建与商店提交 | [docs.expo.dev](https://docs.expo.dev/build/introduction/) · [EAS Build 指南](../../deployment/01-eas-build.md) |
 | `expo-doctor` | 检查工程依赖与配置健康度 | [docs.expo.dev](https://docs.expo.dev/develop/tools/#expo-doctor) |

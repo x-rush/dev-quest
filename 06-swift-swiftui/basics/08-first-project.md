@@ -1,243 +1,243 @@
-# 第一个完整项目 - 待办记账 App（SwiftUI + SwiftData）
+# 第一个完整项目：可保存、可恢复的待办与记账 App
 
-## 先理解，再动手
+先完成一条记录的新增、保存、重启读取，再增加分组和统计。学习重点是分清四件事：表单里的草稿、内存模型的变化、数据库保存成功、重新启动后读取到的数据。它们发生在不同的时刻。
 
-SwiftData 负责持久化模型，SwiftUI 负责界面。先把一条记录存取做好，再增加关系、统计和同步。
+前置：[视图与状态](./04-views-state.md)、[导航](./06-navigation.md)、Swift 的可选值、数组和错误处理。项目使用 SwiftUI 与 SwiftData，需要 macOS、Xcode 和 iOS 17 或更高的运行目标；Swift Linux 命令行只能验证纯 Swift 逻辑，不能构建此 UI。本文没有设备构建通过记录，下面的设备验收表须在 Xcode 工程执行后填写。
 
-**本节自测**：创建记录、重启读取、删除后再次重启，另测空输入。
+## 1. 先确定可交付范围
 
-<details>
-<summary>预期结果与参考思路（先尝试再展开）</summary>
+第一阶段只有待办：新增、完成、删除、重启仍能读取。第二阶段增加人民币支出：金额按整数“分”保存，显示时转为元。第三阶段增加本月统计与空数据状态。暂不增加云同步、通知、账户和数据库迁移，它们分别引入独立的失败条件。
 
-数据生命周期可解释；界面临时消失与数据库实际删除必须分别验证。
+| 输入或操作 | 应观察到的结果 |
+|---|---|
+| 空白标题 | 拒绝添加，已有记录不变 |
+| 添加 A、B，完成 B，删除完成组的 B | A 保留，B 删除；不能用完成组的下标删除进行中数组 |
+| 输入 `0.10` 与 `0.20` | 分别保存为 10、20，合计显示 0.30 元 |
+| 输入 `12abc`、`1.234`、`-1`、`0` | 明确拒绝；键盘类型不是输入验证 |
+| 保存失败 | 保留表单，显示错误；不得先关闭表单再报告成功 |
+| 删除、完成后关闭并重新启动 | 查询结果与最后一次成功保存一致 |
 
-</details>
+## 2. 创建空工程
 
-> **文档简介**: 综合运用前七课知识，从零构建一个带持久化的"待办 + 记账"App：SwiftData 建模、列表交互、并发加载与统计页，是入门路径的毕业项目
->
-> **目标读者**: 已完成 01-07 课、希望用一个完整项目串联知识点的学习者
->
-> **前置知识**: [04-views-state.md](./04-views-state.md)、[06-navigation.md](./06-navigation.md)、[07-concurrency-async-await.md](./07-concurrency-async-await.md)
+用 Xcode 创建 iOS App，Interface 选择 SwiftUI，部署目标设为 iOS 17 或更高。删除模板自带的 App 声明及示例模型文件，避免两个 `@main`；新建 `LedgerApp.swift`，放入下列完整应用代码。它不需要第三方依赖。
 
-<details>
-<summary>文档信息（用途、难度与维护记录）</summary>
-
-## 📚 文档元数据
-
-| 属性 | 内容 |
-|------|------|
-| **模块** | `06-swift-swiftui` |
-| **象限** | 教程 |
-| **难度** | ⭐ |
-| **标签** | `#实战项目` `#SwiftData` `#待办App` `#综合练习` |
-| **更新日期** | `2026年9月` |
-
-</details>
-
-## 🎯 学习目标
-
-完成本项目后，你将能够：
-
-- ✅ 定义 SwiftData 模型并配置 ModelContainer
-- ✅ 用 @Query 驱动列表、用 @Model 实现增删改
-- ✅ 独立评估：下一步该学什么（进阶路径的入口）
-
-## 🏗️ 一、项目蓝图
-
-**功能需求**：
-
-1. 待办列表：新增/勾选完成/滑动删除，按是否完成分组
-2. 记一笔支出：弹窗输入金额与分类，金额合计实时显示
-3. 统计页：本月待办完成率 + 支出合计
-
-新建项目（或复用 01 课的 SwiftNotes），建 5 个文件：`Models.swift`、`SwiftNotesApp.swift`、`TaskListView.swift`、`ExpenseSheet.swift`、`StatsView.swift`。
-
-## 🔍 二、数据模型（SwiftData）
+金额解析器只接受 ASCII 数字和小数点，约定单笔最高 999999.99 元；这是本练习的输入契约。面向不同地区发布时，应另外设计本地化货币输入和舍入规则，不能直接把逗号删掉再解析。
 
 ```swift
-import SwiftData
-
-@Model
-final class TaskItem {
-    var title: String
-    var isDone = false
-    var createdAt = Date.now
-
-    init(title: String) { self.title = title }
-}
-
-@Model
-final class Expense {
-    var amount: Double
-    var category: String
-    var date = Date.now
-
-    init(amount: Double, category: String) {
-        self.amount = amount
-        self.category = category
-    }
-}
-```
-
-`@Model` 宏让类获得持久化能力：属性自动映射为数据库列，对象变更自动保存（详见 [02-swiftdata-observability.md](../reference/framework-essentials/02-swiftdata-observability.md)）。
-
-## 🔍 三、注入容器
-
-```swift
-@main
-struct SwiftNotesApp: App {
-    var body: some Scene {
-        WindowGroup { MainTabView() }
-            .modelContainer(for: [TaskItem.self, Expense.self])
-    }
-}
-```
-
-`.modelContainer(for:)` 做了三件事：创建数据库、注册模型、把 context 注入环境。所有子视图即可使用 `@Query` 与 `@Environment(\.modelContext)`。
-
-## 🛠️ 四、待办列表页
-
-```swift
-import SwiftData
+import Foundation
 import SwiftUI
+import SwiftData
+
+func parseCents(_ raw: String) -> Int? {
+    let text = raw.trimmingCharacters(in: .whitespacesAndNewlines)
+    let parts = text.split(separator: ".", omittingEmptySubsequences: false)
+    guard (1...2).contains(parts.count),
+          (1...6).contains(parts[0].count),
+          parts[0].utf8.allSatisfy({ $0 >= 48 && $0 <= 57 }),
+          let whole = Int(parts[0]) else { return nil }
+    var fraction = 0
+    if parts.count == 2 {
+        guard (1...2).contains(parts[1].count),
+              parts[1].utf8.allSatisfy({ $0 >= 48 && $0 <= 57 }),
+              let digits = Int(parts[1]) else { return nil }
+        fraction = parts[1].count == 1 ? digits * 10 : digits
+    }
+    let cents = whole * 100 + fraction
+    return cents > 0 ? cents : nil
+}
+
+@Model final class TaskItem {
+    var title: String
+    var isDone: Bool
+    var createdAt: Date
+    init(title: String) {
+        self.title = title
+        self.isDone = false
+        self.createdAt = .now
+    }
+}
+
+@Model final class Expense {
+    var cents: Int
+    var category: String
+    var createdAt: Date
+    init(cents: Int, category: String) {
+        self.cents = cents
+        self.category = category
+        self.createdAt = .now
+    }
+}
+
+@main struct LedgerApp: App {
+    var body: some Scene {
+        WindowGroup {
+            TabView {
+                NavigationStack { TaskListView() }
+                    .tabItem { Label("待办", systemImage: "checklist") }
+                NavigationStack { StatsView() }
+                    .tabItem { Label("支出", systemImage: "chart.bar") }
+            }
+        }
+        .modelContainer(for: [TaskItem.self, Expense.self], isAutosaveEnabled: false)
+    }
+}
 
 struct TaskListView: View {
-    @Query(filter: #Predicate<TaskItem> { !$0.isDone }, sort: \TaskItem.createdAt, order: .reverse)
-    private var activeTasks: [TaskItem]
-
-    @Query(filter: #Predicate<TaskItem> { $0.isDone })
-    private var doneTasks: [TaskItem]
-
     @Environment(\.modelContext) private var context
-    @State private var newTitle = ""
-    @State private var showAdd = false
+    @Query(sort: \TaskItem.createdAt, order: .reverse) private var tasks: [TaskItem]
+    @State private var title = ""
+    @State private var errorText: String?
+    private var active: [TaskItem] { tasks.filter { !$0.isDone } }
+    private var completed: [TaskItem] { tasks.filter { $0.isDone } }
 
     var body: some View {
         List {
-            Section("进行中（\(activeTasks.count)）") {
-                ForEach(activeTasks) { task in
-                    TaskRow(task: task)
-                }
-                .onDelete(perform: delete)
+            Section("新建") {
+                TextField("做什么？", text: $title)
+                Button("添加") { add() }
+                    .disabled(title.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
+                if let errorText { Text(errorText).foregroundStyle(.red) }
             }
-
+            Section("进行中") {
+                ForEach(active) { task in row(task) }
+                    .onDelete { delete($0, from: active) }
+            }
             Section("已完成") {
-                ForEach(doneTasks) { task in
-                    TaskRow(task: task)
-                }
-                .onDelete(perform: delete)
+                ForEach(completed) { task in row(task) }
+                    .onDelete { delete($0, from: completed) }
             }
         }
         .navigationTitle("待办")
-        .toolbar {
-            Button { showAdd = true } label: { Image(systemName: "plus") }
+    }
+
+    private func row(_ task: TaskItem) -> some View {
+        Button {
+            task.isDone.toggle()
+            _ = save()
+        } label: {
+            Label(task.title, systemImage: task.isDone ? "checkmark.circle.fill" : "circle")
+                .strikethrough(task.isDone)
         }
-        .alert("新建待办", isPresented: $showAdd) {
-            TextField("做什么？", text: $newTitle)
-            Button("添加") { add() }
-            Button("取消", role: .cancel) {}
-        }
+        .accessibilityHint(task.isDone ? "标为未完成" : "标为已完成")
     }
 
     private func add() {
-        let title = newTitle.trimmingCharacters(in: .whitespaces)
-        guard !title.isEmpty else { return }
-        context.insert(TaskItem(title: title))   // 插入即持久化
-        newTitle = ""
+        let value = title.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !value.isEmpty else { return }
+        context.insert(TaskItem(title: value))
+        if save() { title = "" }
     }
 
-    private func delete(at offsets: IndexSet) {
-        for index in offsets { context.delete(activeTasks[index]) }
+    private func delete(_ offsets: IndexSet, from displayed: [TaskItem]) {
+        let selected = offsets.map { displayed[$0] }
+        for task in selected { context.delete(task) }
+        _ = save()
+    }
+
+    private func save() -> Bool {
+        do {
+            try context.save()
+            errorText = nil
+            return true
+        } catch {
+            context.rollback()
+            errorText = "保存失败，已恢复上次保存的数据。请重试。"
+            return false
+        }
     }
 }
 
-struct TaskRow: View {
-    @Bindable var task: TaskItem       // SwiftData 模型可直接双向绑定
+struct StatsView: View {
+    @Query private var tasks: [TaskItem]
+    @Query(sort: \Expense.createdAt, order: .reverse) private var expenses: [Expense]
+    @State private var showExpense = false
+    private var total: Decimal {
+        expenses.filter {
+            Calendar.current.isDate($0.createdAt, equalTo: .now, toGranularity: .month)
+        }.reduce(Decimal.zero) { $0 + Decimal($1.cents) } / 100
+    }
 
     var body: some View {
-        Toggle(isOn: $task.isDone) { Text(task.title).strikethrough(task.isDone) }
+        List {
+            Section("汇总") {
+                Text("完成 \(tasks.filter { $0.isDone }.count) / \(tasks.count) 项")
+                Text("本月支出：\(total.formatted(.currency(code: "CNY")))")
+            }
+            Section("全部支出") {
+                if expenses.isEmpty { Text("还没有支出记录") }
+                ForEach(expenses) { expense in
+                    LabeledContent(expense.category) {
+                        Text((Decimal(expense.cents) / 100).formatted(.currency(code: "CNY")))
+                    }
+                }
+            }
+        }
+        .navigationTitle("支出")
+        .toolbar { Button("记一笔") { showExpense = true } }
+        .sheet(isPresented: $showExpense) { ExpenseSheet() }
     }
 }
-```
 
-关键点：`@Query` 是**响应式数据库查询**，数据库一变列表自动刷新；`#Predicate` 把 Swift 闭包编译为底层查询条件；`context.insert` 后无需手动 save（默认自动保存）。
-
-## 🛠️ 五、记账弹窗与统计页
-
-### 5.1 记账 Sheet
-
-```swift
 struct ExpenseSheet: View {
     @Environment(\.modelContext) private var context
     @Environment(\.dismiss) private var dismiss
-
-    @State private var amountText = ""
+    @State private var amount = ""
     @State private var category = "餐饮"
-    private let categories = ["餐饮", "交通", "购物", "娱乐", "其他"]
+    @State private var errorText: String?
 
     var body: some View {
         NavigationStack {
             Form {
-                TextField("金额", text: $amountText)
-                    .keyboardType(.decimalPad)
+                TextField("金额，例如 12.50", text: $amount).keyboardType(.decimalPad)
                 Picker("分类", selection: $category) {
-                    ForEach(categories, id: \.self) { Text($0) }
+                    ForEach(["餐饮", "交通", "其他"], id: \.self) { Text($0) }
                 }
+                if let errorText { Text(errorText).foregroundStyle(.red) }
             }
             .navigationTitle("记一笔")
             .toolbar {
-                ToolbarItem(placement: .cancellationAction) { Button("取消") { dismiss() } }
-                ToolbarItem(placement: .confirmationAction) { Button("保存") { save() } }
+                ToolbarItem(placement: .cancellationAction) {
+                    Button("取消") { dismiss() }
+                }
+                ToolbarItem(placement: .confirmationAction) {
+                    Button("保存") { save() }.disabled(parseCents(amount) == nil)
+                }
             }
         }
-        .presentationDetents([.medium])
     }
 
     private func save() {
-        guard let amount = Double(amountText), amount > 0 else { return }
-        context.insert(Expense(amount: amount, category: category))
-        dismiss()
+        guard let cents = parseCents(amount) else { return }
+        context.insert(Expense(cents: cents, category: category))
+        do {
+            try context.save()
+            dismiss()
+        } catch {
+            context.rollback()
+            errorText = "支出尚未保存，请重试。"
+        }
     }
 }
 ```
 
-### 5.2 统计页（练习）
+## 3. 为什么这样组织
 
-自己实现 `StatsView`：用两个不带参数的 `@Query` 分别取全部 `TaskItem` 与 `Expense`，在**计算属性**里完成统计——完成率 = 已完成数 ÷ 总数；本月支出用 `Calendar.current.isDate(_:equalTo:toGranularity:)` 过滤后求和；界面用 `Gauge`（完成率）与 `LabeledContent`（金额，`format: .currency(code: "CNY")`）各占一个 Section，`@Query` 不带参数即取全部数据。
+`@Model` 让模型参与 SwiftData 管理，`insert` 把新对象登记到 context。本文关闭自动保存，在用户动作后显式 `try context.save()`，才能把保存失败展示出来。自动保存不保证每次赋值都已经落盘。参考 [ModelContext.save](https://developer.apple.com/documentation/swiftdata/modelcontext/save()) 与 [ModelContext.rollback](https://developer.apple.com/documentation/swiftdata/modelcontext/rollback())。
 
-## ✅ 最佳实践
+`@Query` 查询容器提供的 context，界面随模型变化刷新。此处只有一个编辑动作，失败时 `rollback()` 恢复全部未保存变化；扩大到多页面并行编辑时，应设计独立编辑 context 或事务边界，避免一个操作撤回其他页面的修改。
 
-查询条件适合在存储层表达时，避免把整张表读出再筛选；少量已经加载的数据则可以本地派生，选择取决于数据量和查询支持。模型字段要表达业务含义，并考虑格式变更后旧数据怎样读取。
+分组删除传入该组的数组快照。`IndexSet` 是当前分组下标，既不是数据库主键，也不是另一组的下标。完成操作用按钮触发显式保存，避免把双向绑定误解为数据库提交。
 
-把聚合与校验放到可独立测试的函数，body 负责展示结果。增加、修改、删除之后重新查询确认持久化状态，再测试一次重启；只看到当前内存界面变化还不能证明保存成功。
+统计使用用户当前日历判断月份；若财务月份固定在某地区，应固定日历与时区。演示数据量小，所以本地筛选便于观察；大量记录应使用合适的查询条件，避免每次汇总都读取全库。
 
-## ❓ 常见问题
+## 4. 按层验收，保留失败证据
 
-### Q1: `@Query` 报 "Query could not find a model container"？
+先运行纯金额函数：用独立 Swift 命令行文件复制 `parseCents`，断言 `0.1 → 10`、`0.20 → 20`、`999999.99 → 99999999`，并确认非法输入返回 `nil`。这只证明解析逻辑，不证明 SwiftData 或 UI 可运行。
 
-`WindowGroup` 上没挂 `.modelContainer(for:)`，或挂在错误的 Scene 上。确认它在 App 的 `body` 里、`WindowGroup` 本身。
+再在 Xcode 逐项执行第 1 节表格，记录 Xcode/SDK/目标系统版本与设备型号。用单独测试 context 验证存储失败与回滚，不要破坏个人数据目录制造失败。容器创建失败发生在应用启动阶段，本文 `.modelContainer` 简写尚未提供恢复 UI，正式工程需要处理这一独立错误路径。
 
-### Q2: Toggle 绑定模型的属性，修改没保存？
+进阶练习依次完成：给支出添加删除并验证重启；给待办加编辑草稿且取消不修改模型；给已有数据库增加字段并制定迁移方案；最后接入同步。每一步都有成功和失败的观察结果后再继续。
 
-`@Model` 属性修改会自动保存，但前提是属性可写且视图用的是 `@Bindable`。检查 `TaskRow` 是否声明 `@Bindable var task: TaskItem`。
-
-## 🎯 练习与实践
-
-### 练习一：基础练习
-
-- [ ] 完整跑通：新增待办 → 勾选完成 → 滑动删除 → 重启 App 数据仍在；记 3 笔支出并验证统计页合计
-- [ ] 给 ExpenseSheet 加"金额为空或非法时保存按钮禁用"的逻辑
-
----
-
-## 相关文档
-
-- 📄 进阶路径入口：`frameworks/`、`projects/`（后续补充，规划见 [模块 README](../README.md)）
-- 📄 [02-swiftdata-observability.md](../reference/framework-essentials/02-swiftdata-observability.md) — SwiftData 与 Observation 详解
-- 📄 [02-troubleshooting.md](../reference/quick-references/02-troubleshooting.md) — 项目调试排错手册
-
-
-<!-- learning-navigation -->
 ## 阅读导航
 
-[本模块理解地图](../LEARNING_GUIDE.md) · [完整目录与版本](../README.md) · [通用术语](../../shared-resources/glossary.md)
+[本模块理解地图](../LEARNING_GUIDE.md) · [完整目录与版本](../README.md) · [SwiftData 与 Observation](../reference/framework-essentials/02-swiftdata-observability.md) · [错误处理](../reference/language-concepts/08-error-handling.md)

@@ -1,12 +1,12 @@
 {
   "structure": {
     "exit_code": 0,
-    "stdout": "{\n  \"documents\": 673,\n  \"active_documents\": 640,\n  \"modules\": {\n    \"01-go-backend\": 76,\n    \"02-nextjs-frontend\": 64,\n    \"03-tanstack-stack\": 60,\n    \"04-multiplatform-apps\": 52,\n    \"05-kotlin-compose\": 55,\n    \"06-swift-swiftui\": 57,\n    \"07-php-mastery\": 61,\n    \"08-java-revisited\": 57,\n    \"09-nodejs-backend\": 50,\n    \"10-python-discovery\": 56,\n    \"11-rust-cross-platform\": 52\n  },\n  \"signals\": {\n    \"教程代码含省略标记，需人工判断\": 9,\n    \"缺少明确结果信号\": 15,\n    \"短条目重复术语，需核查是否缺少解释\": 2,\n    \"任意查阅与零前提混淆\": 1\n  },\n  \"method\": \"结构信号全量扫描；没有信号不等于内容正确，命中也不等于文档有错。\"\n}",
+    "stdout": "{\n  \"documents\": 676,\n  \"active_documents\": 641,\n  \"modules\": {\n    \"01-go-backend\": 77,\n    \"02-nextjs-frontend\": 64,\n    \"03-tanstack-stack\": 60,\n    \"04-multiplatform-apps\": 52,\n    \"05-kotlin-compose\": 55,\n    \"06-swift-swiftui\": 57,\n    \"07-php-mastery\": 61,\n    \"08-java-revisited\": 57,\n    \"09-nodejs-backend\": 50,\n    \"10-python-discovery\": 56,\n    \"11-rust-cross-platform\": 52\n  },\n  \"signals\": {\n    \"教程代码含省略标记，需人工判断\": 9,\n    \"缺少明确结果信号\": 15,\n    \"短条目重复术语，需核查是否缺少解释\": 2,\n    \"任意查阅与零前提混淆\": 1,\n    \"未显式说明阅读前提\": 1\n  },\n  \"method\": \"结构信号全量扫描；没有信号不等于内容正确，命中也不等于文档有错。\"\n}",
     "stderr": ""
   },
   "relative_links": {
     "exit_code": 0,
-    "stdout": "links_total=9494 links_checked=7836 broken=0",
+    "stdout": "links_total=11694 links_checked=9982 broken=0",
     "stderr": ""
   },
   "anchors": {
@@ -20,7 +20,7 @@
     "stderr": ""
   },
   "fences": {
-    "documents": 673,
+    "documents": 676,
     "unclosed": []
   },
   "retained_example_runs": {
@@ -367,11 +367,11 @@
         },
         {
           "path": "03-tanstack-stack/reference/language-concepts/11-search-params.md",
-          "sha256": "3f1bb4d4083aef4f4d8f84b25d055b0459a7ae882cc610f9a7c4b85342ff1276"
+          "sha256": "c6816dc283ddd63950d34875131a3aa9115a0e4408da5387db2a048edf07434c"
         },
         {
           "path": "02-nextjs-frontend/reference/framework-patterns/03-client-components-patterns.md",
-          "sha256": "5a8cf1708aad5ff3161a7fd6a411be1142383ee4c046619914b89946f8a91569"
+          "sha256": "2ca960812df44b60d588afefc88d6cf2bf0e8ce248aff0c27aee665ef2fb8bc1"
         }
       ],
       "scope": "Selected extracted examples only. jsdom does not verify browser layout, actual network, Next.js build, polling policy, or full historical snippets."
