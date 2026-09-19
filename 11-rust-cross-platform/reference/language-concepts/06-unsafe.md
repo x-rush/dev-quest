@@ -280,6 +280,37 @@ fn main() {
 
 练习：对 split_at_mut 的实现写出 mid<=len 与两段不重叠的证明，包含 mid=0 和 mid=len。优先使用标准库已有实现；手写练习用于理解契约，不应用作替换库实现的理由。Miri 可以发现被执行路径上的多种未定义行为，但不是全程序正确性证明，还受平台和 FFI 支持限制。正确性依据首先是安全契约及其证明，再用测试、Miri 和适用的 sanitizer 增加证据。
 
+## 可完整运行的受限 unsafe 切分
+
+这份程序将唯一的 unsafe 操作收在 `from_raw_parts_mut`，并在进入前检查 `mid <= len`。两段的起点分别是原始首地址与偏移 `mid` 的地址，长度之和为原长度，因此不会重叠；调用方仍只能取得同一输入切片的两个互不重叠可变借用。
+
+<!-- terra-twentieth-case: rust-unsafe-split-at-mut -->
+```rust
+fn split_at_mut<T>(slice: &mut [T], mid: usize) -> (&mut [T], &mut [T]) {
+    assert!(mid <= slice.len());
+    let len = slice.len();
+    let ptr = slice.as_mut_ptr();
+    // SAFETY: mid <= len; the two ranges [0, mid) and [mid, len) are within
+    // the same allocation and do not overlap.
+    unsafe {
+        (
+            std::slice::from_raw_parts_mut(ptr, mid),
+            std::slice::from_raw_parts_mut(ptr.add(mid), len - mid),
+        )
+    }
+}
+
+fn main() {
+    let mut values = [1, 2, 3, 4];
+    let (left, right) = split_at_mut(&mut values, 2);
+    left[0] = 10;
+    right[1] = 40;
+    println!("{:?}", values);
+}
+```
+
+预期输出为 `[10, 2, 3, 40]`。运行只覆盖这个具体边界和调用路径；`assert!` 的失败路径、Miri、优化构建、FFI 与并发安全仍需各自验证。
+
 <!-- learning-navigation -->
 ## 阅读导航
 

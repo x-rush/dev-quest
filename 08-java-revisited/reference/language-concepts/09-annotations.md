@@ -147,6 +147,40 @@ public class AnnotationDemo {
 
 *最后更新: 2026年9月 | 本条目为模块知识字典的一部分，概念完整解释以此处为单一事实来源*
 
+## 可完整运行的保留与继承示例
+
+下面是一份单文件程序。它把标记限定在类上，并用 `RUNTIME` 保留策略让反射可见；`getAnnotation` 可沿着受 `@Inherited` 支持的父类关系查找，`getDeclaredAnnotation` 只检查当前类。
+
+<!-- terra-twentieth-case: java-annotation-inherited-runtime -->
+```java
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Inherited;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.TYPE)
+@Inherited
+@interface Label {
+    String value();
+}
+
+@Label("base")
+class Base {}
+
+class Child extends Base {}
+
+public class Main {
+    public static void main(String[] args) {
+        System.out.println(Child.class.getAnnotation(Label.class).value());
+        System.out.println(Child.class.getDeclaredAnnotation(Label.class) == null);
+    }
+}
+```
+
+输出应为 `base` 和 `true`。它不覆盖接口、方法或字段上的注解继承，因为 `@Inherited` 只影响类级注解的类继承链。
+
 
 <!-- learning-navigation -->
 ## 阅读导航

@@ -1,0 +1,151 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-09-19T16:35:01.127Z",
+  "purpose": "Twentieth-round runtime evidence for three named P1 PHP, Java, and Rust core or standard-library body programs.",
+  "isolation": "No network, read-only container root, dropped capabilities, no-new-privileges, bounded CPU/memory/PIDs, and tmpfs-only writable workspace. Images must already be present because --pull=never is used.",
+  "scope": "Only the three unique named complete fences are executed. Other prose/fences, framework integration, browser or Web-SAPI behavior, performance, Miri/sanitizers, and full projects remain outside this evidence.",
+  "docker": {
+    "exit_code": 0,
+    "stdout": "Docker version 29.8.0, build 88096ef\n",
+    "stderr": ""
+  },
+  "results": [
+    {
+      "id": "php-magic-isset-get",
+      "language": "php",
+      "document": "07-php-mastery/reference/language-concepts/17-magic-methods.md",
+      "image": "php:8.5-cli-alpine",
+      "expected": "present\nempty\npresent\nempty\n",
+      "command": [
+        "php",
+        "/tmp/main.php"
+      ],
+      "document_sha256": "193f704c45f39de1a616b55effc985c9bb65b97f19620e3c6ff6d16c97cb2994",
+      "code_sha256": "a2ef703c7671c1ad081e33bd6f7d87254a29759d37fcb9bc1c4b82cb1fb47121",
+      "extraction": "unique named Markdown fence extracted without code edits after CRLF-to-LF normalization",
+      "execution": {
+        "command": [
+          "docker",
+          "run",
+          "--rm",
+          "-i",
+          "--pull=never",
+          "--network=none",
+          "--read-only",
+          "--cap-drop=ALL",
+          "--security-opt=no-new-privileges",
+          "--pids-limit=64",
+          "--memory=512m",
+          "--cpus=1",
+          "--tmpfs",
+          "/tmp:rw,exec,nosuid,nodev,size=64m",
+          "php:8.5-cli-alpine",
+          "sh",
+          "-c",
+          "cat > /tmp/main.php && exec \"$@\"",
+          "document-program",
+          "php",
+          "/tmp/main.php"
+        ],
+        "exit_code": 0,
+        "stdout": "present\nempty\npresent\nempty\n",
+        "stderr": ""
+      },
+      "status": "PASS"
+    },
+    {
+      "id": "java-annotation-inherited-runtime",
+      "language": "java",
+      "document": "08-java-revisited/reference/language-concepts/09-annotations.md",
+      "image": "eclipse-temurin:21-jdk-noble",
+      "expected": "base\ntrue\n",
+      "command": [
+        "sh",
+        "-c",
+        "javac --release 21 -encoding UTF-8 -d /tmp /tmp/Main.java && java -cp /tmp Main"
+      ],
+      "document_sha256": "ce26dbc100b3e68fc36b08b7d273b0e666254fbdd72c0b935d2ef2ddfc7e6e5e",
+      "code_sha256": "3ec5fb546be521e3cf94536b0dbe41116f14ac27ba28d42ec8b1750c864aeb66",
+      "extraction": "unique named Markdown fence extracted without code edits after CRLF-to-LF normalization",
+      "execution": {
+        "command": [
+          "docker",
+          "run",
+          "--rm",
+          "-i",
+          "--pull=never",
+          "--network=none",
+          "--read-only",
+          "--cap-drop=ALL",
+          "--security-opt=no-new-privileges",
+          "--pids-limit=64",
+          "--memory=512m",
+          "--cpus=1",
+          "--tmpfs",
+          "/tmp:rw,exec,nosuid,nodev,size=64m",
+          "eclipse-temurin:21-jdk-noble",
+          "sh",
+          "-c",
+          "cat > /tmp/Main.java && exec \"$@\"",
+          "document-program",
+          "sh",
+          "-c",
+          "javac --release 21 -encoding UTF-8 -d /tmp /tmp/Main.java && java -cp /tmp Main"
+        ],
+        "exit_code": 0,
+        "stdout": "base\ntrue\n",
+        "stderr": ""
+      },
+      "status": "PASS"
+    },
+    {
+      "id": "rust-unsafe-split-at-mut",
+      "language": "rust",
+      "document": "11-rust-cross-platform/reference/language-concepts/06-unsafe.md",
+      "image": "rust:1-slim-bookworm",
+      "expected": "[10, 2, 3, 40]\n",
+      "command": [
+        "sh",
+        "-c",
+        "rustc --edition 2024 /tmp/main.rs -o /tmp/main && /tmp/main"
+      ],
+      "document_sha256": "df5cf53fa4fd586833f2e712f7601727ef8d6ede1e33b9e35c07adea4c823b5d",
+      "code_sha256": "9dd07cedc0e9ed52fb47ff2e511c14091e1eb64e8e810b1675f45d2346e18291",
+      "extraction": "unique named Markdown fence extracted without code edits after CRLF-to-LF normalization",
+      "execution": {
+        "command": [
+          "docker",
+          "run",
+          "--rm",
+          "-i",
+          "--pull=never",
+          "--network=none",
+          "--read-only",
+          "--cap-drop=ALL",
+          "--security-opt=no-new-privileges",
+          "--pids-limit=64",
+          "--memory=512m",
+          "--cpus=1",
+          "--tmpfs",
+          "/tmp:rw,exec,nosuid,nodev,size=64m",
+          "rust:1-slim-bookworm",
+          "sh",
+          "-c",
+          "cat > /tmp/main.rs && exec \"$@\"",
+          "document-program",
+          "sh",
+          "-c",
+          "rustc --edition 2024 /tmp/main.rs -o /tmp/main && /tmp/main"
+        ],
+        "exit_code": 0,
+        "stdout": "[10, 2, 3, 40]\n",
+        "stderr": ""
+      },
+      "status": "PASS"
+    }
+  ],
+  "summary": {
+    "passed": 3,
+    "total": 3
+  }
+}

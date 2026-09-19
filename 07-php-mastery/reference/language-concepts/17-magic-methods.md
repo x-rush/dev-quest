@@ -142,6 +142,41 @@ __debugInfo 影响 var_dump 的调试展示，不是全渠道脱敏器；JSON、
 
 *最后更新: 2026年9月 | 本条目为模块知识字典的一部分，概念完整解释以此处为单一事实来源*
 
+## 可完整运行的 `__isset` / `__get` 边界
+
+这个程序刻意让 `__isset` 只报告键是否存在，随后由 `empty` 取得值并判断真假。它说明 `null` 键存在却仍为 empty，不能把“存在”和“真值”混为一个规则。
+
+<!-- terra-twentieth-case: php-magic-isset-get -->
+```php
+<?php
+
+declare(strict_types=1);
+
+final class Bag
+{
+    /** @param array<string, mixed> $values */
+    public function __construct(private array $values) {}
+
+    public function __isset(string $name): bool
+    {
+        return array_key_exists($name, $this->values);
+    }
+
+    public function __get(string $name): mixed
+    {
+        return $this->values[$name] ?? null;
+    }
+}
+
+$bag = new Bag(['zero' => 0, 'name' => 'Ada', 'none' => null]);
+echo (isset($bag->name) ? 'present' : 'missing'), PHP_EOL;
+echo (empty($bag->zero) ? 'empty' : 'nonempty'), PHP_EOL;
+echo (isset($bag->none) ? 'present' : 'missing'), PHP_EOL;
+echo (empty($bag->none) ? 'empty' : 'nonempty'), PHP_EOL;
+```
+
+预期输出为 `present`、`empty`、`present`、`empty`。这只验证上述对象的钩子契约；它不代表动态属性、序列化器或框架代理具有相同行为。
+
 
 <!-- learning-navigation -->
 ## 阅读导航
