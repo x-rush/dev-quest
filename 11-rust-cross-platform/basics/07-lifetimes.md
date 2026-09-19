@@ -279,6 +279,50 @@ mod tests {
 
 先利用省略规则，确实无法表达关联时再标注；不以未经统计的百分比判断是否需要。借用型结构体适合视图或解析结果，拥有型更独立但可能复制。区分 &'static T 与 T: 'static：后者不要求值实际活到进程结束，而是限制其中借用。
 
+### 可复现验收：借用结果与拥有结果的分界
+
+生命周期标注只能让返回的**借用**与输入借用建立关系；它不能让函数把局部变量的借用带出函数。需要在函数内部构造并返回新文本时，返回拥有所有权的 `String`。下面的程序同时演示这两条规则：`longest` 返回输入之一的切片，`owned_label` 返回自己的 `String`。
+
+<!-- doc-verify:rust-lifetime-borrowed-and-owned -->
+```rust
+fn longest<'a>(left: &'a str, right: &'a str) -> &'a str {
+    if left.len() >= right.len() { left } else { right }
+}
+
+fn owned_label() -> String {
+    let local = String::from("owned");
+    local
+}
+
+fn main() {
+    let left = String::from("pear");
+    let right = String::from("banana");
+    println!("borrowed={}", longest(&left, &right));
+    println!("owned={}", owned_label());
+}
+```
+
+预期输出：
+
+```text
+borrowed=banana
+owned=owned
+```
+
+下面的反例必须拒绝编译。`local.as_str()` 指向函数结束时就会被释放的 `String`；把它伪装成任意生命周期的 `&str` 会制造悬垂引用，因此 Rust 报 `E0515`。修复方式不是强行补生命周期，而是像上例一样返回 `String`，或让调用者提供并持有数据。
+
+<!-- doc-verify-compile-fail:rust-lifetime-local-reference; error=E0515 -->
+```rust
+fn invalid<'a>() -> &'a str {
+    let local = String::from("temporary");
+    local.as_str()
+}
+
+fn main() {
+    println!("{}", invalid());
+}
+```
+
 ---
 
 ## ❓ 常见问题

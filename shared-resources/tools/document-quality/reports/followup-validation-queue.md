@@ -15,9 +15,9 @@
 
 ## 汇总
 
-- 队列条目：514 条，其中文件级证据缺口 458 条，逐行未绑定验证措辞 56 条。
-- 优先级：P0 0；P1 208；P2 150；P3 156。
-- 分类：核心基础 192；首项目 16；框架 111；部署 39；进阶与测试 156。
+- 队列条目：513 条，其中文件级证据缺口 457 条，逐行未绑定验证措辞 56 条。
+- 优先级：P0 0；P1 207；P2 150；P3 156。
+- 分类：核心基础 191；首项目 16；框架 111；部署 39；进阶与测试 156。
 
 ## 明细
 
@@ -146,7 +146,6 @@
 | P1 | 核心基础 | Rust / Cross-platform | [11-rust-cross-platform/basics/05-error-handling.md](../../../../11-rust-cross-platform/basics/05-error-handling.md#L306):306 | 保留诚实的验证边界，并在补证据时决定是否增加最小练习<br/>保持已有边界说明；若新增示例，记录工具链、命令、预期行为和未覆盖范围。 | > ⚠️ 本段依赖 crates.io 的 thiserror，不在自包含实测范围内；用法以官方文档为准。`#&#91;error("...")&#93;` 生成 Display，`#&#91;from&#93;` 生成 `From<io::Error>` 使 `?` 自动转换生效——与示例三逐项对应。 |
 | P1 | 核心基础 | Rust / Cross-platform | [11-rust-cross-platform/basics/05-error-handling.md](../../../../11-rust-cross-platform/basics/05-error-handling.md#L326):326 | 保留诚实的验证边界，并在补证据时决定是否增加最小练习<br/>保持已有边界说明；若新增示例，记录工具链、命令、预期行为和未覆盖范围。 | > ⚠️ 本段依赖 crates.io 的 anyhow，不在自包含实测范围内；用法以官方文档为准。`Result` 是 `anyhow::Result`（错误类型为动态的 `anyhow::Error`），`.context(...)` 给错误链挂上"当时在做什么"的描述。 |
 | P1 | 核心基础 | Rust / Cross-platform | [11-rust-cross-platform/basics/05-error-handling.md](../../../../11-rust-cross-platform/basics/05-error-handling.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
-| P1 | 核心基础 | Rust / Cross-platform | [11-rust-cross-platform/basics/07-lifetimes.md](../../../../11-rust-cross-platform/basics/07-lifetimes.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
 | P1 | 核心基础 | Rust / Cross-platform | [11-rust-cross-platform/basics/08-smart-pointers.md](../../../../11-rust-cross-platform/basics/08-smart-pointers.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
 | P1 | 核心基础 | Rust / Cross-platform | [11-rust-cross-platform/basics/09-concurrency-async.md](../../../../11-rust-cross-platform/basics/09-concurrency-async.md#L209):209 | 保留诚实的验证边界，并在补证据时决定是否增加最小练习<br/>保持已有边界说明；若新增示例，记录工具链、命令、预期行为和未覆盖范围。 | ### 示例三：Tokio 最小异步程序（不实测执行，写码即可） |
 | P1 | 核心基础 | Rust / Cross-platform | [11-rust-cross-platform/basics/09-concurrency-async.md](../../../../11-rust-cross-platform/basics/09-concurrency-async.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |

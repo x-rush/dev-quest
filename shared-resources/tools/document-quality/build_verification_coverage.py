@@ -172,6 +172,9 @@ def records_from_reports():
     next_node_python_basics = load("next-node-python-basics-results.json")
     for row in next_node_python_basics.get("results", []):
         add_record(records, row.get("source"), "runtime", "next-node-python-basics-results.json", row.get("scope", "selected Next/Node/Python basic example"), "PASS" if row.get("status", "").upper() == "PASS" else "FAIL")
+    rust_lifetime_basics = load("rust-lifetime-basics-runtime.json")
+    for row in rust_lifetime_basics.get("results", []):
+        add_record(records, row.get("document"), "runtime", "rust-lifetime-basics-runtime.json", rust_lifetime_basics.get("scope", "selected Rust lifetime basic example"), "PASS" if row.get("status", "").upper() == "PASS" else "FAIL")
     next_tanstack_mobile_eleventh = load("next-tanstack-mobile-eleventh-body-validation.json")
     for row in next_tanstack_mobile_eleventh.get("results", []):
         if row.get("status", "").upper() == "PASS":

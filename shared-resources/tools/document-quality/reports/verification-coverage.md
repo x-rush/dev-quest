@@ -7,8 +7,8 @@
 | 指标 | 数量 |
 |---|---:|
 | 纳入模块文档 | 642 |
-| 主状态：not_verified | 458 |
-| 主状态：runtime | 184 |
+| 主状态：not_verified | 457 |
+| 主状态：runtime | 185 |
 | 验证措辞出现次数 | 144 |
 | 措辞分类：source_has_limited_runtime_evidence | 88 |
 | 措辞分类：unbound_verification_wording | 56 |
@@ -636,7 +636,7 @@
 | Rust / Cross-platform | [11-rust-cross-platform/basics/04-traits-generics.md](../../../../11-rust-cross-platform/basics/04-traits-generics.md) | `runtime` | 1 | 0 |
 | Rust / Cross-platform | [11-rust-cross-platform/basics/05-error-handling.md](../../../../11-rust-cross-platform/basics/05-error-handling.md) | `not_verified` | 0 | 2 |
 | Rust / Cross-platform | [11-rust-cross-platform/basics/06-collections-iterators.md](../../../../11-rust-cross-platform/basics/06-collections-iterators.md) | `runtime` | 1 | 0 |
-| Rust / Cross-platform | [11-rust-cross-platform/basics/07-lifetimes.md](../../../../11-rust-cross-platform/basics/07-lifetimes.md) | `not_verified` | 0 | 0 |
+| Rust / Cross-platform | [11-rust-cross-platform/basics/07-lifetimes.md](../../../../11-rust-cross-platform/basics/07-lifetimes.md) | `runtime` | 2 | 0 |
 | Rust / Cross-platform | [11-rust-cross-platform/basics/08-smart-pointers.md](../../../../11-rust-cross-platform/basics/08-smart-pointers.md) | `not_verified` | 0 | 0 |
 | Rust / Cross-platform | [11-rust-cross-platform/basics/09-concurrency-async.md](../../../../11-rust-cross-platform/basics/09-concurrency-async.md) | `not_verified` | 0 | 1 |
 | Rust / Cross-platform | [11-rust-cross-platform/basics/10-cargo-testing.md](../../../../11-rust-cross-platform/basics/10-cargo-testing.md) | `not_verified` | 0 | 0 |

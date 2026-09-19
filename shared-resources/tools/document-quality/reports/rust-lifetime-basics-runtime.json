@@ -1,0 +1,48 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-09-19T18:23:41.207454+00:00",
+  "purpose": "Direct Rust lifetime lesson evidence for one successful borrowed/owned result and one rejected local-reference contract.",
+  "scope": "Only the two named complete Rust fences extracted unchanged after CRLF-to-LF normalization were checked. The rest of the lesson, other compiler diagnostics, crates, async code, and projects remain outside this evidence.",
+  "isolation": "No network, read-only container root, dropped capabilities, no-new-privileges, bounded CPU/memory/PIDs, and tmpfs-only writable workspace. The cached Rust image is required because --pull=never is used.",
+  "results": [
+    {
+      "id": "rust-lifetime-borrowed-and-owned",
+      "document": "11-rust-cross-platform/basics/07-lifetimes.md",
+      "language": "rust",
+      "mode": "runtime",
+      "image": "rust:1-slim-bookworm",
+      "document_sha256": "8a159cbd5d1e6069bdeb4a17dd3469f6ffc779c3f96233a405b54df45eca3a90",
+      "code_sha256": "b2c5ba57e8449ba9720c0342b9292fcad1934a67943659464ba1a6afca363092",
+      "expected": {
+        "stdout": "borrowed=banana\nowned=owned\n"
+      },
+      "stdout": "borrowed=banana\nowned=owned\n",
+      "stderr": "",
+      "exit_code": 0,
+      "status": "PASS"
+    },
+    {
+      "id": "rust-lifetime-local-reference",
+      "document": "11-rust-cross-platform/basics/07-lifetimes.md",
+      "language": "rust",
+      "mode": "compile_fail_contract",
+      "image": "rust:1-slim-bookworm",
+      "document_sha256": "8a159cbd5d1e6069bdeb4a17dd3469f6ffc779c3f96233a405b54df45eca3a90",
+      "code_sha256": "5babac8b3e03af65b89043b85d3536492f1d3fa87dfadba0b10d1f10dfe17fd7",
+      "expected": {
+        "compile_error": "E0515",
+        "observed_error_codes": [
+          "E0515"
+        ]
+      },
+      "stdout": "",
+      "stderr": "{\"$message_type\":\"diagnostic\",\"message\":\"cannot return value referencing local variable `local`\",\"code\":{\"code\":\"E0515\",\"explanation\":\"A reference to a local variable was returned.\\n\\nErroneous code example:\\n\\n```compile_fail,E0515\\nfn get_dangling_reference() -> &'static i32 {\\n    let x = 0;\\n    &x\\n}\\n```\\n\\n```compile_fail,E0515\\nuse std::slice::Iter;\\nfn get_dangling_iterator<'a>() -> Iter<'a, i32> {\\n    let v = vec![1, 2, 3];\\n    v.iter()\\n}\\n```\\n\\nLocal variables, function parameters and temporaries are all dropped before\\nthe end of the function body. A returned reference (or struct containing a\\nreference) to such a dropped value would immediately be invalid. Therefore\\nit is not allowed to return such a reference.\\n\\nConsider returning a value that takes ownership of local data instead of\\nreferencing it:\\n\\n```\\nuse std::vec::IntoIter;\\n\\nfn get_integer() -> i32 {\\n    let x = 0;\\n    x\\n}\\n\\nfn get_owned_iterator() -> IntoIter<i32> {\\n    let v = vec![1, 2, 3];\\n    v.into_iter()\\n}\\n```\\n\"},\"level\":\"error\",\"spans\":[{\"file_name\":\"/tmp/main.rs\",\"byte_start\":79,\"byte_end\":93,\"line_start\":3,\"line_end\":3,\"column_start\":5,\"column_end\":19,\"is_primary\":true,\"text\":[{\"text\":\"    local.as_str()\",\"highlight_start\":5,\"highlight_end\":19}],\"label\":\"returns a value referencing data owned by the current function\",\"suggested_replacement\":null,\"suggestion_applicability\":null,\"expansion\":null},{\"file_name\":\"/tmp/main.rs\",\"byte_start\":79,\"byte_end\":84,\"line_start\":3,\"line_end\":3,\"column_start\":5,\"column_end\":10,\"is_primary\":false,\"text\":[{\"text\":\"    local.as_str()\",\"highlight_start\":5,\"highlight_end\":10}],\"label\":\"`local` is borrowed here\",\"suggested_replacement\":null,\"suggestion_applicability\":null,\"expansion\":null}],\"children\":[],\"rendered\":\"error[E0515]: cannot return value referencing local variable `local`\\n --> /tmp/main.rs:3:5\\n  |\\n3 |     local.as_str()\\n  |     -----^^^^^^^^^\\n  |     |\\n  |     returns a value referencing data owned by the current function\\n  |     `local` is borrowed here\\n\\n\"}\n{\"$message_type\":\"diagnostic\",\"message\":\"aborting due to 1 previous error\",\"code\":null,\"level\":\"error\",\"spans\":[],\"children\":[],\"rendered\":\"error: aborting due to 1 previous error\\n\\n\"}\n{\"$message_type\":\"diagnostic\",\"message\":\"For more information about this error, try `rustc --explain E0515`.\",\"code\":null,\"level\":\"failure-note\",\"spans\":[],\"children\":[],\"rendered\":\"For more information about this error, try `rustc --explain E0515`.\\n\"}\n",
+      "exit_code": 1,
+      "status": "PASS"
+    }
+  ],
+  "summary": {
+    "passed": 2,
+    "total": 2
+  }
+}
