@@ -244,7 +244,7 @@ cargo test -- --test-threads=1 # 串行执行（测试共享文件/端口/环境
 cargo test -- --ignored        # 只跑被 #[ignore] 标记的测试
 ```
 
-**验证方法**: 过滤器命中数会体现在 `test result` 行的 `filtered out` 计数中（本机实测确认）。
+**验证方法**: 运行带过滤器的测试后，命中数会体现在 `test result` 行的 `filtered out` 计数中；把该行与命令、Rust 版本一同保存，才能作为本项目的运行记录。
 
 ---
 
