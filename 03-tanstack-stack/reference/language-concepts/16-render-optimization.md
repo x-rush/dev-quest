@@ -108,6 +108,21 @@ select 在观察者层转换，缓存仍保存 queryFn 的原始结果。因此�
 
 参考[官方渲染优化说明](https://tanstack.com/query/latest/docs/framework/react/guides/render-optimizations)。
 
+## 渐进实作：先保证数据正确，再测量渲染
+
+前置：已配置 Query v5 Provider，理解不可变更新与 React Profiler。产物是共享 `['render-lab']` 查询的标题列表和数量组件；模拟接口返回 JSON 数组，包含稳定 id、title、completed。上文 `fetchTodos` 为项目提供的函数，签名段是概念伪代码，不能复制为可编译配置。
+
+先保留默认属性追踪与结构共享，数量组件用稳定的模块级 `selectCount` 函数返回数组长度；随后加入 Profiler，最后才尝试手动通知白名单。默认结构共享适用于 JSON 兼容数据，`select` 只改变观察者获得的数据，详见[官方渲染优化](https://tanstack.com/query/latest/docs/framework/react/guides/render-optimizations)。
+
+| 操作 | 应观察结果 | 失败回查 |
+|---|---|---|
+| 返回两条数据 | 列表两条，数量为 2，缓存仍为完整数组 | 是否误把 select 派生值写入缓存 |
+| 返回同长度但修改标题的新数组 | 标题更新，数量仍为 2 | 是否原地修改数据；自定义共享是否错误复用旧数组 |
+| 保持内容相同并重新取数 | 比较 Profiler 的提交原因，不要求固定渲染次数 | StrictMode、父组件和读取的状态字段是否引入更新 |
+| 在练习副本只订阅 data，再加入错误显示 | 对比默认追踪能否及时展示错误 | 手动白名单是否遗漏 error；queryFn 是否吞错 |
+
+回滚实验白名单后，用相同输入重新测量；只有正确性保留且提交成本下降，才保留优化。函数引用稳定减少 select 重算，不保证组件永不渲染。完成后再进入[渲染性能](../../advanced-topics/performance/02-rendering-performance.md)分析昂贵子组件。本轮只核对官方资料并静态审阅，未运行 TypeScript 编译、Profiler 或性能基准；没有实测收益结论。
+
 ## 🔗 相关条目
 
 - 📄 **[Query 核心 API](./01-query-core-api.md)** - select 参数与返回值字段总表

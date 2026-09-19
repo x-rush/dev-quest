@@ -84,6 +84,21 @@ active/inactive 描述查询观察者是否活跃，与首次/后台请求是不
 
 **练习：** 首次加载后手动失效同一查询，观察 useIsFetching 两次都计数，而第二次仍有旧数据。验收：页面不因后台同步清空内容，失败提示与进度提示分别处理。
 
+## 渐进实作：把请求数和保存结果分开显示
+
+前置：React 工程已配置稳定的 QueryClientProvider，理解 Promise、查询键和 mutationKey。产物是任务列表、独立顶栏指示器和保存按钮；上文省略的 `TopProgressBar`、`addTodo` 由练习工程提供，代码片段不是可直接启动的应用。
+
+先让本地模拟查询延迟 1 秒返回两条任务，再加入延迟保存，最后接真实接口。以 `['indicator-lab', 'todos']` 隔离查询键，以 `['indicator-lab', 'save']` 隔离 mutationKey；练习关闭重试，避免失败观察被重试延迟。
+
+| 阶段和操作 | 验收产物 | 失败回查 |
+|---|---|---|
+| 仅挂载一个列表 | 指示器先显示 1，再归 0；列表保留结果 | Provider 是否共享；是否有其他匹配查询 |
+| 成功后失效同一查询 | 后台请求也计数，已有任务仍可操作 | 是否把指示器当成整个列表的条件卸载入口 |
+| 连续发起两次独立保存 | pending 数量可达到 2，分别结束后归 0 | mutationKey 是否一致；请求是否被串行化 |
+| 让一次保存抛错 | 请求数归 0，但保存错误仍单独显示 | 是否错误地把“没有请求”解释为“保存成功” |
+
+完成后再用 `useMutationState` 展示失败记录，并限定业务键；不要把整个缓存的历史失败直接当作当前表单的失败。返回数字的 API 依据见 [useIsMutating 官方参考](https://tanstack.com/query/latest/docs/framework/react/reference/functions/useIsMutating)。本轮核对官方资料和正文，未运行 React、并发请求或浏览器交互；以上均是待执行验收，不能记为运行通过。
+
 ## 🔗 相关条目
 
 - 📄 **[Query 核心 API](./01-query-core-api.md)** - 单条查询的 `isFetching` 与 mutation 返回值

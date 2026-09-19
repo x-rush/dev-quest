@@ -148,6 +148,22 @@ function ManualUpdater() {
 
 **练习：** 在第 3 页改变筛选，使结果只剩 1 页。验收：页码回到有效范围，HTTP 参数与 UI 一致；快速连续翻页不会让旧响应覆盖新页。通过函数式 setState 应用 Updater，避免读取闭包中的过时值。
 
+## 渐进实作：从一个受控切片接到服务端查询
+
+前置：React useState、函数式更新和 Table v9 的 features 注册；先核对项目锁定版本，本页 `useTable` 不能直接放入 v8 工程。产物是显示当前页码、排序状态与当前页记录的表格。上文 `people`、`columns` 和接口均为省略的工程依赖，`ServerTable` 的静态 people 必须替换为实际响应数据才构成网络闭环。
+
+先用 25 条本地记录，只控制 pagination；再加入 sorting；最后把两者放入 Query 的 queryKey 和请求参数，启用 manualPagination/manualSorting。这样每一步只有一个新增的状态来源。官方 v9 支持按切片控制，`table.state` 是 React 选择器的订阅结果，而直接读取 atom/store 快照不会自动订阅，见[官方 Table 状态指南](https://tanstack.com/table/latest/docs/framework/react/guide/table-state)。
+
+| 阶段和动作 | 验收证据 | 失败回查 |
+|---|---|---|
+| 每页 10 条，连续下一页 | 外部 pageIndex 和 UI 同步变化 | state.pagination 与 onPaginationChange 是否配对 |
+| 用函数式 updater 连续更新 | 最终值基于真实前态 | 是否在自定义回调中把函数当成值，或捕获旧状态 |
+| 第 3 页改变筛选，只剩 1 页 | 应用显式回到有效页，显示新总数 | 关闭自动重置后是否忘记业务重置规则 |
+| 给旧页响应增加延迟，再切到新页 | 最终只展示当前查询键的数据 | 是否用未防竞态的 effect 将任意响应写入同一 state |
+| 当前页接口抛错 | 错误可见并可重试，页码不伪装成功 | 是否把错误吞成空数组；是否只有总页数而没有错误分支 |
+
+完成本地阶段后再进入[数据看板](../../projects/02-data-dashboard.md)。保存截图时同时记录请求参数和返回的页标识，避免只看到“有行”就认定分页正确。本轮仅完成官方资料与静态审阅，未安装 Table、编译示例或运行服务端分页；竞态、交互和筛选重置均仍需在工程执行验收。
+
 ## 🔗 相关条目
 
 - 📄 **[Table 核心 API](./02-table-core-api.md)** - useTable 选项总表与 v8→v9 迁移
