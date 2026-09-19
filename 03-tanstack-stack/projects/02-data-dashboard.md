@@ -265,7 +265,7 @@ export function UserTable() {
 
 **下一步**：完成本页每项检查后再进入 [SaaS 后台](04-saas-admin-platform.md)，为同一查询键加入账号和租户作用域；发现问题时先回到 Router/Table 基础，避免增加权限层后掩盖数据错位。
 
-**官方回查（2026-09-19）**：[Table v9 Quick Start](https://tanstack.com/table/latest/docs/framework/react/quick-start)、[Query 请求取消](https://tanstack.com/query/latest/docs/framework/react/guides/query-cancellation)、[React useDeferredValue](https://react.dev/reference/react/useDeferredValue)。这些资料支持 API 边界核对，不代表本文项目已运行验收。
+**官方回查（2026-09-19）**：[Table v9 Quick Start](https://tanstack.com/table/latest/docs/framework/react/quick-start)、[Query 请求取消](https://tanstack.com/query/latest/docs/framework/react/guides/query-cancellation)、[React useDeferredValue](https://react.dev/reference/react/useDeferredValue)。这些资料支持 API 边界核对；本文项目的运行检查仍需由学习者执行。
 
 - 📄 **[生态协作](../frameworks/03-ecosystem-integration.md)** - Table×Query 数据通路的原理
 - 📄 **[Table 核心 API](../reference/language-concepts/02-table-core-api.md)** - manual 模式参数字典

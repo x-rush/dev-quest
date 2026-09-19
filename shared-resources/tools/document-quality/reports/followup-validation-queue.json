@@ -5,11 +5,10 @@
   "scope": "verification-coverage.json 的 11 个现行教学模块；不含生成报告、归档和不活跃文件。",
   "method": "为 not_verified 文件建立文件级任务，并按覆盖台账同一标记规则重新扫描当前源码以定位逐行任务；仅通过性断言升为 P0，不判断教学内容真伪。",
   "summary": {
-    "items": 537,
+    "items": 536,
     "file_level_items": 488,
-    "unbound_wording_items": 49,
+    "unbound_wording_items": 48,
     "by_priority": {
-      "P0": 1,
       "P1": 232,
       "P2": 149,
       "P3": 155
@@ -19,7 +18,7 @@
       "首项目": 16,
       "框架": 110,
       "部署": 39,
-      "进阶与测试": 156
+      "进阶与测试": 155
     },
     "excluded": {
       "inactive_or_archived": 0,
@@ -28,17 +27,6 @@
     }
   },
   "items": [
-    {
-      "priority": "P0",
-      "kind": "进阶与测试",
-      "task": "绑定命名验证证据，或把验证措辞收窄为可证明的范围",
-      "reason": "正文含有未绑定到该文件运行记录的验证性措辞；这不是自动技术错误结论。",
-      "module": "TanStack / TypeScript",
-      "path": "03-tanstack-stack/projects/02-data-dashboard.md",
-      "line": 268,
-      "source_excerpt": "**官方回查（2026-09-19）**：[Table v9 Quick Start](https://tanstack.com/table/latest/docs/framework/react/quick-start)、[Query 请求取消](https://tanstack.com/query/latest/docs/framework/react/guides/query-cancellation)、[React useDeferredValue](https://react.dev/reference/react/useDeferredVal",
-      "evidence_action": "优先复跑该行承诺的完整示例；若环境不可得，删除绝对化结果并说明实际未验证范围。"
-    },
     {
       "priority": "P1",
       "kind": "核心基础",

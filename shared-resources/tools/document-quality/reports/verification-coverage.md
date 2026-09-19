@@ -9,9 +9,9 @@
 | 纳入模块文档 | 642 |
 | 主状态：not_verified | 488 |
 | 主状态：runtime | 154 |
-| 验证措辞出现次数 | 134 |
+| 验证措辞出现次数 | 133 |
 | 措辞分类：source_has_limited_runtime_evidence | 85 |
-| 措辞分类：unbound_verification_wording | 49 |
+| 措辞分类：unbound_verification_wording | 48 |
 
 ## 语法级覆盖（不能当作运行覆盖）
 
@@ -197,7 +197,7 @@
 | TanStack / TypeScript | [03-tanstack-stack/frameworks/03-ecosystem-integration.md](../../../../03-tanstack-stack/frameworks/03-ecosystem-integration.md) | `not_verified` | 0 | 0 |
 | TanStack / TypeScript | [03-tanstack-stack/frameworks/04-devtools.md](../../../../03-tanstack-stack/frameworks/04-devtools.md) | `not_verified` | 0 | 0 |
 | TanStack / TypeScript | [03-tanstack-stack/projects/01-todo-app.md](../../../../03-tanstack-stack/projects/01-todo-app.md) | `runtime` | 1 | 0 |
-| TanStack / TypeScript | [03-tanstack-stack/projects/02-data-dashboard.md](../../../../03-tanstack-stack/projects/02-data-dashboard.md) | `not_verified` | 0 | 2 |
+| TanStack / TypeScript | [03-tanstack-stack/projects/02-data-dashboard.md](../../../../03-tanstack-stack/projects/02-data-dashboard.md) | `not_verified` | 0 | 1 |
 | TanStack / TypeScript | [03-tanstack-stack/projects/03-collaborative-kanban.md](../../../../03-tanstack-stack/projects/03-collaborative-kanban.md) | `not_verified` | 0 | 0 |
 | TanStack / TypeScript | [03-tanstack-stack/projects/04-saas-admin-platform.md](../../../../03-tanstack-stack/projects/04-saas-admin-platform.md) | `not_verified` | 0 | 1 |
 | TanStack / TypeScript | [03-tanstack-stack/reference/framework-essentials/01-query-essentials.md](../../../../03-tanstack-stack/reference/framework-essentials/01-query-essentials.md) | `not_verified` | 0 | 0 |

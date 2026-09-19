@@ -20,10 +20,10 @@
       "not_verified": 488,
       "runtime": 154
     },
-    "verification_wording_occurrences": 134,
+    "verification_wording_occurrences": 133,
     "marker_classification": {
       "source_has_limited_runtime_evidence": 85,
-      "unbound_verification_wording": 49
+      "unbound_verification_wording": 48
     }
   },
   "documents": [
@@ -2250,7 +2250,7 @@
     },
     {
       "path": "03-tanstack-stack/projects/02-data-dashboard.md",
-      "sha256": "a45d51b792d03f4f98cfa7bccddecd65fff2883251f7733586eb23006017ede0",
+      "sha256": "c5b8c166f06f59429a8400f948fffa152d0ed52882e7db1c3d7c1f218356e89a",
       "verification": [
         {
           "mode": "not_verified",
@@ -2259,7 +2259,7 @@
           "scope": "No named runtime or syntax evidence is recorded for this document."
         }
       ],
-      "marker_count": 2
+      "marker_count": 1
     },
     {
       "path": "03-tanstack-stack/projects/03-collaborative-kanban.md",
@@ -9141,12 +9141,6 @@
       "path": "03-tanstack-stack/projects/02-data-dashboard.md",
       "line": 236,
       "excerpt": "`DashboardPage` 负责组合搜索表单与 `UserTable`；`user-columns` 至少定义 `name`、`createdAt` 两个允许排序的列。其他列配置 `enableSorting: false`，与 URL 白名单一致。v9 列类型需使用 `ColumnDef<typeof features, UserRow>`，因此把 §3 的 `tableFeatures(...)` 提取到模块级并导出，供列定义和 `useTable` 共享。此处不把未",
-      "classification": "unbound_verification_wording"
-    },
-    {
-      "path": "03-tanstack-stack/projects/02-data-dashboard.md",
-      "line": 268,
-      "excerpt": "**官方回查（2026-09-19）**：[Table v9 Quick Start](https://tanstack.com/table/latest/docs/framework/react/quick-start)、[Query 请求取消](https://tanstack.com/query/latest/docs/framework/react/guides/query-cancellation)、[React useDeferredValue](https://",
       "classification": "unbound_verification_wording"
     },
     {
