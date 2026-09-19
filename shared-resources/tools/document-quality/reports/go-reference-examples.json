@@ -1,99 +1,112 @@
 {
-  "runtime": "go version go1.27.1 windows/amd64",
-  "scope": "Selected programs only; no external database test, race run, deployment or whole-document compilation",
-  "passed": 13,
-  "blocked": 2,
+  "runtime": "go version go1.27.1 linux/amd64",
+  "scope": "Allowlisted complete examples only; no external databases, race run, deployment or whole-document compilation",
   "results": [
     {
       "path": "01-go-backend/reference/language-concepts/04-go-data-types.md",
       "status": "passed",
       "kind": "selected complete program",
-      "evidence": "Retained from exec sessions 80627 and 81893; no later rerun claimed"
+      "code_sha256": "8662f0c163f9bc64fc0079c12187da920940942311667af2d377d54c08ca77b5"
     },
     {
       "path": "01-go-backend/reference/library-guides/04-encoding-json.md",
       "status": "passed",
       "kind": "selected complete program",
-      "evidence": "Retained from exec sessions 80627 and 81893; no later rerun claimed"
+      "code_sha256": "dd03de62f9d9e2ace1c13ecd472c8e7dea2201eacabddf75166940b38b2a3db9"
     },
     {
       "path": "01-go-backend/reference/library-guides/05-context.md",
       "status": "passed",
       "kind": "selected complete program",
-      "evidence": "Retained from exec sessions 80627 and 81893; no later rerun claimed"
+      "code_sha256": "1941cbb072c81f2cf37cea222c7922e87ea955dceadecc60b10e56e919a94c79"
     },
     {
       "path": "01-go-backend/reference/library-guides/06-sync.md",
       "status": "passed",
       "kind": "selected complete program",
-      "evidence": "Retained from exec sessions 80627 and 81893; no later rerun claimed"
+      "code_sha256": "91ae5144571018edce5fb5a92e23eb7394ab4a582f10eb0eced6503c73e16b30"
     },
     {
       "path": "01-go-backend/reference/library-guides/07-database-sql.md",
       "status": "passed",
       "kind": "selected complete program",
-      "evidence": "Retained from exec sessions 80627 and 81893; no later rerun claimed",
-      "note": "database/sql program passed in first run; host blocked its second execution"
+      "code_sha256": "fbb923ec7a0dd5ff77ff326238284a85837cf9c7b212124958fa6181b61cf220"
     },
     {
       "path": "01-go-backend/reference/library-guides/08-time.md",
       "status": "passed",
       "kind": "selected complete program",
-      "evidence": "Retained from exec sessions 80627 and 81893; no later rerun claimed"
+      "code_sha256": "d0b3092957630fe23e6407401e078eba8ee9d6be24a0fdcb3eb9beb5719d3cab"
     },
     {
       "path": "01-go-backend/reference/library-guides/09-errors.md",
       "status": "passed",
       "kind": "selected complete program",
-      "evidence": "Retained from exec sessions 80627 and 81893; no later rerun claimed"
+      "code_sha256": "cd507874f0c7cebe1cf8cc3a23a11368dfc9d2b55c71556862e34c313dbf00be"
     },
     {
       "path": "01-go-backend/reference/library-guides/10-io-bufio.md",
       "status": "passed",
       "kind": "selected complete program",
-      "evidence": "Retained from exec sessions 80627 and 81893; no later rerun claimed"
+      "code_sha256": "456fce9083fc7df6afcd2cf3e2c8795bdf7daae2c68c96e25805673f60300558"
     },
     {
       "path": "01-go-backend/reference/library-guides/11-os.md",
       "status": "passed",
       "kind": "selected complete program",
-      "evidence": "Retained from exec sessions 80627 and 81893; no later rerun claimed"
+      "code_sha256": "24bcdf4e9311ec00d9d24ced8019a51232c34d191784589d0f7477dd599b2e2d"
     },
     {
       "path": "01-go-backend/reference/library-guides/13-slices-maps.md",
-      "status": "blocked",
+      "status": "passed",
       "kind": "selected complete program",
-      "evidence": "Retained from exec sessions 80627 and 81893; no later rerun claimed"
+      "code_sha256": "7993f8fe485f29628a029c1093fce68d3c012d6ab19df9c4e78741eff787268c"
     },
     {
       "path": "01-go-backend/reference/library-guides/14-strconv.md",
       "status": "passed",
       "kind": "selected complete program",
-      "evidence": "Retained from exec sessions 80627 and 81893; no later rerun claimed"
+      "code_sha256": "a06639097bb73741f836d5ee14c8970511e4a04f25cea7ef450cb492d762f037"
     },
     {
       "path": "01-go-backend/reference/library-guides/15-log-slog.md",
       "status": "passed",
       "kind": "selected complete program",
-      "evidence": "Retained from exec sessions 80627 and 81893; no later rerun claimed"
+      "code_sha256": "3eb21061e5a38c219b2622c1f3a2551ccdac58952c17a362f37c80213c767e8c"
     },
     {
       "path": "01-go-backend/reference/library-guides/16-flag.md",
       "status": "passed",
       "kind": "selected complete program",
-      "evidence": "Retained from exec sessions 80627 and 81893; no later rerun claimed"
+      "code_sha256": "daffb3d7d2a0c60c9b434e943f06c963afa5d218fa1fcc9e01dc9d7ce60e6bfb"
+    },
+    {
+      "path": "01-go-backend/reference/library-guides/09-errors.md",
+      "status": "passed",
+      "kind": "secondary complete program",
+      "code_sha256": "797bac6dd330e991f08bf7d856e3593393b3a3d60552ed3590d4fba6c5638d7d"
+    },
+    {
+      "path": "01-go-backend/reference/library-guides/10-io-bufio.md",
+      "status": "passed",
+      "kind": "secondary complete program",
+      "code_sha256": "bd97e9e15751182c3dbfc6060f01292c72f596d9a4952ba538a0e653931d143f"
+    },
+    {
+      "path": "01-go-backend/reference/library-guides/13-slices-maps.md",
+      "status": "passed",
+      "kind": "secondary complete program",
+      "code_sha256": "e0a8ae96a7427b7bd4b117526dafa41156342848d42e5068db07e026a0c2942e"
     },
     {
       "path": "01-go-backend/reference/library-guides/12-testing.md",
       "status": "passed",
-      "kind": "table tests and fuzz seeds; not a duration fuzz campaign",
-      "evidence": "session 81893 test command returned success before HTTP test"
+      "kind": "table tests and fuzz seeds; no duration fuzz campaign"
     },
     {
       "path": "01-go-backend/reference/library-guides/03-net-http.md",
-      "status": "blocked",
-      "kind": "HTTP route tests compiled; execution blocked by Windows Application Control",
-      "evidence": "session 81893; no bypass attempted"
+      "status": "passed",
+      "kind": "server routing and decoded response; client fragment not run"
     }
   ]
 }

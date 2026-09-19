@@ -94,11 +94,11 @@
 | Go | [01-go-backend/reference/library-guides/06-sync.md](../../../../01-go-backend/reference/library-guides/06-sync.md) | `runtime` | 2 | 2 |
 | Go | [01-go-backend/reference/library-guides/07-database-sql.md](../../../../01-go-backend/reference/library-guides/07-database-sql.md) | `runtime` | 1 | 0 |
 | Go | [01-go-backend/reference/library-guides/08-time.md](../../../../01-go-backend/reference/library-guides/08-time.md) | `runtime` | 1 | 0 |
-| Go | [01-go-backend/reference/library-guides/09-errors.md](../../../../01-go-backend/reference/library-guides/09-errors.md) | `runtime` | 1 | 0 |
-| Go | [01-go-backend/reference/library-guides/10-io-bufio.md](../../../../01-go-backend/reference/library-guides/10-io-bufio.md) | `runtime` | 2 | 0 |
+| Go | [01-go-backend/reference/library-guides/09-errors.md](../../../../01-go-backend/reference/library-guides/09-errors.md) | `runtime` | 2 | 0 |
+| Go | [01-go-backend/reference/library-guides/10-io-bufio.md](../../../../01-go-backend/reference/library-guides/10-io-bufio.md) | `runtime` | 3 | 0 |
 | Go | [01-go-backend/reference/library-guides/11-os.md](../../../../01-go-backend/reference/library-guides/11-os.md) | `runtime` | 1 | 0 |
 | Go | [01-go-backend/reference/library-guides/12-testing.md](../../../../01-go-backend/reference/library-guides/12-testing.md) | `runtime` | 1 | 0 |
-| Go | [01-go-backend/reference/library-guides/13-slices-maps.md](../../../../01-go-backend/reference/library-guides/13-slices-maps.md) | `runtime` | 1 | 0 |
+| Go | [01-go-backend/reference/library-guides/13-slices-maps.md](../../../../01-go-backend/reference/library-guides/13-slices-maps.md) | `runtime` | 2 | 0 |
 | Go | [01-go-backend/reference/library-guides/14-strconv.md](../../../../01-go-backend/reference/library-guides/14-strconv.md) | `runtime` | 1 | 0 |
 | Go | [01-go-backend/reference/library-guides/15-log-slog.md](../../../../01-go-backend/reference/library-guides/15-log-slog.md) | `runtime` | 1 | 0 |
 | Go | [01-go-backend/reference/library-guides/16-flag.md](../../../../01-go-backend/reference/library-guides/16-flag.md) | `runtime` | 1 | 1 |

@@ -9,12 +9,12 @@ import tempfile
 ROOT = Path(__file__).resolve().parents[3]
 PREFIX = '09-nodejs-backend/reference/'
 CASES = [
-    ('language-concepts/01-js-modern-syntax.md', '3 0 null\nnode,js\n'),
+    ('language-concepts/01-js-modern-syntax.md', 'modern-syntax: fallback=3/0/null; shared=node,js\n'),
     ('language-concepts/03-node-core-api.md', 'start\nemit returned\nafter await\n'),
     ('language-concepts/07-js-core-semantics.md', '2\n0,1,2\n'),
     ('language-concepts/08-type-coercion-collections.md', '0 0 true\nfalse 2\n{"empty":null}\n'),
     ('library-guides/04-child-process.md', 'a b; c\n'),
-    ('library-guides/05-buffer.md', '1,9,3 2,3\n772\n'),
+    ('library-guides/05-buffer.md', 'shared=1,9,3,4 copy=2,3,4\ntrailer=772\nshort=trailer needs two bytes\n'),
     ('library-guides/08-test-runner.md', None),
 ]
 

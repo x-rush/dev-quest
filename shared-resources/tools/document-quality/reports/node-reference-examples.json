@@ -1,10 +1,10 @@
 {
-  "node": "v24.19.0",
+  "node": "v24.21.0",
   "results": [
     {
       "source": "09-nodejs-backend/reference/language-concepts/01-js-modern-syntax.md",
       "status": "PASS",
-      "output": "3 0 null\nnode,js\n"
+      "output": "modern-syntax: fallback=3/0/null; shared=node,js\n"
     },
     {
       "source": "09-nodejs-backend/reference/language-concepts/03-node-core-api.md",
@@ -29,12 +29,12 @@
     {
       "source": "09-nodejs-backend/reference/library-guides/05-buffer.md",
       "status": "PASS",
-      "output": "1,9,3 2,3\n772\n"
+      "output": "shared=1,9,3,4 copy=2,3,4\ntrailer=772\nshort=trailer needs two bytes\n"
     },
     {
       "source": "09-nodejs-backend/reference/library-guides/08-test-runner.md",
       "status": "PASS",
-      "output": "TAP version 13\n# Subtest: port input boundaries\nok 1 - port input boundaries\n  ---\n  duration_ms: 0.6558\n  type: 'test'\n  ...\n1..1\n# tests 1\n# suites 0\n# pass 1\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 58.7914\n"
+      "output": "TAP version 13\n# Subtest: port input boundaries\nok 1 - port input boundaries\n  ---\n  duration_ms: 0.64473\n  type: 'test'\n  ...\n1..1\n# tests 1\n# suites 0\n# pass 1\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 40.072024\n"
     }
   ],
   "scope": "Seven selected complete added examples only. Frameworks, databases, clusters, deployment and historical snippets are not executed by this check."

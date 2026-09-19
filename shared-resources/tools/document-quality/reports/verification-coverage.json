@@ -831,9 +831,9 @@
       "verification": [
         {
           "mode": "runtime",
-          "status": "BLOCKED",
+          "status": "PASSED",
           "report": "go-reference-examples.json",
-          "scope": "HTTP route tests compiled; execution blocked by Windows Application Control"
+          "scope": "server routing and decoded response; client fragment not run"
         }
       ],
       "marker_count": 1
@@ -924,6 +924,12 @@
           "status": "PASSED",
           "report": "go-reference-examples.json",
           "scope": "selected complete program"
+        },
+        {
+          "mode": "runtime",
+          "status": "PASSED",
+          "report": "go-reference-examples.json",
+          "scope": "secondary complete program"
         }
       ],
       "marker_count": 0
@@ -937,6 +943,12 @@
           "status": "PASSED",
           "report": "go-reference-examples.json",
           "scope": "selected complete program"
+        },
+        {
+          "mode": "runtime",
+          "status": "PASSED",
+          "report": "go-reference-examples.json",
+          "scope": "secondary complete program"
         },
         {
           "mode": "runtime",
@@ -968,7 +980,7 @@
           "mode": "runtime",
           "status": "PASSED",
           "report": "go-reference-examples.json",
-          "scope": "table tests and fuzz seeds; not a duration fuzz campaign"
+          "scope": "table tests and fuzz seeds; no duration fuzz campaign"
         }
       ],
       "marker_count": 0
@@ -979,9 +991,15 @@
       "verification": [
         {
           "mode": "runtime",
-          "status": "BLOCKED",
+          "status": "PASSED",
           "report": "go-reference-examples.json",
           "scope": "selected complete program"
+        },
+        {
+          "mode": "runtime",
+          "status": "PASSED",
+          "report": "go-reference-examples.json",
+          "scope": "secondary complete program"
         }
       ],
       "marker_count": 0

@@ -23,7 +23,7 @@ CASES = [
     ('language-concepts/13-dataclasses.md', "['python']\n[]\nnot hashable\n", []),
     ('language-concepts/14-comprehensions.md', "{'py': 2, 'go': 2, 'rust': 4}\n{2: 'go', 4: 'rust'}\n{2: ['py', 'go'], 4: ['rust']}\n", []),
     ('language-concepts/17-functions-parameters.md', "['a']\n['b']\nTrue\n", []),
-    ('library-guides/04-os-sys.md', "['hello']\nTrue\nTrue\n", ['hello']),
+    ('library-guides/04-os-sys.md', "os-sys-environment: argv=['hello']; cwd=True; executable=True\n", ['hello']),
     ('library-guides/05-enum-module.md', 'True\nTrue\ninvalid state\n', []),
     ('library-guides/06-functools-subprocess.md', 'a b; c\n0\n', []),
 ]
