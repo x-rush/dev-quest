@@ -56,6 +56,7 @@
 | [Go、Node 与 Python 第十五批运行验证](reports/go-node-python-fifteenth-runtime.md) | Go 控制流、Node Buffer 边界和 Python 上下文清理的 3 个正文完整程序验证 |
 | [PHP、Java 与 Rust 第十六批正文验证](reports/php-java-rust-sixteenth-body-validation.md) | PHP readonly、Java ConcurrentHashMap 与 Rust const generics 的 3 个正文完整程序验证 |
 | [Go、Node 与 Python 第十七批运行验证](reports/go-node-python-seventeenth-runtime.md) | Go 控制流、Node Stream 解码和 Python CLI 入口的 3 个正文完整程序验证 |
+| [PHP、Java 与 Rust 第十八批运行验证](reports/php-java-rust-eighteenth-runtime.md) | PHP 会话关闭、Java JPMS 映射和 Rust Arc/Weak 生命周期的 3 个正文完整程序验证 |
 | [Next、TanStack 与移动端第十一批报告](reports/next-tanstack-mobile-eleventh-body-validation.json) | Next/TanStack 的 2 个纯逻辑运行结果，以及 RN/Kotlin/Swift 的明确未验证边界 |
 | [PHP 与 Java 参考案例验证](reports/php-java-reference-cases-report.md) | PHP/Java 关键词、内置函数和标准库的 17 个正文完整程序验证 |
 | [Rust、PHP 与 Java 第八批正文验证](reports/rust-php-java-eighth-body-validation.md) | 三个此前未验证核心页面的 Rust 所有权、PHP 控制流与 Java 函数式接口案例 |

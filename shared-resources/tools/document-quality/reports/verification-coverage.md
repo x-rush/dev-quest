@@ -7,11 +7,11 @@
 | 指标 | 数量 |
 |---|---:|
 | 纳入模块文档 | 642 |
-| 主状态：not_verified | 482 |
-| 主状态：runtime | 160 |
-| 验证措辞出现次数 | 134 |
+| 主状态：not_verified | 479 |
+| 主状态：runtime | 163 |
+| 验证措辞出现次数 | 137 |
 | 措辞分类：source_has_limited_runtime_evidence | 86 |
-| 措辞分类：unbound_verification_wording | 48 |
+| 措辞分类：unbound_verification_wording | 51 |
 
 ## 语法级覆盖（不能当作运行覆盖）
 
@@ -281,7 +281,7 @@
 | React Native / Multi-platform | [04-multiplatform-apps/reference/language-concepts/13-platform-api-map.md](../../../../04-multiplatform-apps/reference/language-concepts/13-platform-api-map.md) | `not_verified` | 0 | 0 |
 | React Native / Multi-platform | [04-multiplatform-apps/reference/library-guides/01-state-and-data.md](../../../../04-multiplatform-apps/reference/library-guides/01-state-and-data.md) | `not_verified` | 0 | 0 |
 | React Native / Multi-platform | [04-multiplatform-apps/reference/library-guides/02-native-and-device-libs.md](../../../../04-multiplatform-apps/reference/library-guides/02-native-and-device-libs.md) | `not_verified` | 0 | 0 |
-| React Native / Multi-platform | [04-multiplatform-apps/reference/library-guides/03-storage-options.md](../../../../04-multiplatform-apps/reference/library-guides/03-storage-options.md) | `not_verified` | 0 | 0 |
+| React Native / Multi-platform | [04-multiplatform-apps/reference/library-guides/03-storage-options.md](../../../../04-multiplatform-apps/reference/library-guides/03-storage-options.md) | `not_verified` | 0 | 1 |
 | React Native / Multi-platform | [04-multiplatform-apps/reference/library-guides/04-animation-gesture-libs.md](../../../../04-multiplatform-apps/reference/library-guides/04-animation-gesture-libs.md) | `not_verified` | 0 | 0 |
 | React Native / Multi-platform | [04-multiplatform-apps/reference/quick-references/01-cli-and-debug-cheatsheet.md](../../../../04-multiplatform-apps/reference/quick-references/01-cli-and-debug-cheatsheet.md) | `not_verified` | 0 | 0 |
 | React Native / Multi-platform | [04-multiplatform-apps/reference/quick-references/02-troubleshooting.md](../../../../04-multiplatform-apps/reference/quick-references/02-troubleshooting.md) | `not_verified` | 0 | 0 |
@@ -299,7 +299,7 @@
 | Kotlin / Compose | [05-kotlin-compose/basics/02-first-compose-app.md](../../../../05-kotlin-compose/basics/02-first-compose-app.md) | `not_verified` | 0 | 1 |
 | Kotlin / Compose | [05-kotlin-compose/basics/03-kotlin-syntax-essentials.md](../../../../05-kotlin-compose/basics/03-kotlin-syntax-essentials.md) | `runtime` | 1 | 0 |
 | Kotlin / Compose | [05-kotlin-compose/basics/04-composables-state.md](../../../../05-kotlin-compose/basics/04-composables-state.md) | `not_verified` | 0 | 0 |
-| Kotlin / Compose | [05-kotlin-compose/basics/05-layouts.md](../../../../05-kotlin-compose/basics/05-layouts.md) | `not_verified` | 0 | 0 |
+| Kotlin / Compose | [05-kotlin-compose/basics/05-layouts.md](../../../../05-kotlin-compose/basics/05-layouts.md) | `not_verified` | 0 | 1 |
 | Kotlin / Compose | [05-kotlin-compose/basics/06-navigation.md](../../../../05-kotlin-compose/basics/06-navigation.md) | `not_verified` | 0 | 1 |
 | Kotlin / Compose | [05-kotlin-compose/basics/07-coroutines-flow-basics.md](../../../../05-kotlin-compose/basics/07-coroutines-flow-basics.md) | `not_verified` | 0 | 0 |
 | Kotlin / Compose | [05-kotlin-compose/basics/08-first-project.md](../../../../05-kotlin-compose/basics/08-first-project.md) | `runtime` | 1 | 2 |
@@ -353,7 +353,7 @@
 | Swift / SwiftUI | [06-swift-swiftui/basics/02-first-swiftui-app.md](../../../../06-swift-swiftui/basics/02-first-swiftui-app.md) | `not_verified` | 0 | 0 |
 | Swift / SwiftUI | [06-swift-swiftui/basics/03-swift-syntax-essentials.md](../../../../06-swift-swiftui/basics/03-swift-syntax-essentials.md) | `runtime` | 1 | 0 |
 | Swift / SwiftUI | [06-swift-swiftui/basics/04-views-state.md](../../../../06-swift-swiftui/basics/04-views-state.md) | `not_verified` | 0 | 0 |
-| Swift / SwiftUI | [06-swift-swiftui/basics/05-layouts.md](../../../../06-swift-swiftui/basics/05-layouts.md) | `not_verified` | 0 | 0 |
+| Swift / SwiftUI | [06-swift-swiftui/basics/05-layouts.md](../../../../06-swift-swiftui/basics/05-layouts.md) | `not_verified` | 0 | 1 |
 | Swift / SwiftUI | [06-swift-swiftui/basics/06-navigation.md](../../../../06-swift-swiftui/basics/06-navigation.md) | `not_verified` | 0 | 0 |
 | Swift / SwiftUI | [06-swift-swiftui/basics/07-concurrency-async-await.md](../../../../06-swift-swiftui/basics/07-concurrency-async-await.md) | `not_verified` | 0 | 0 |
 | Swift / SwiftUI | [06-swift-swiftui/basics/08-first-project.md](../../../../06-swift-swiftui/basics/08-first-project.md) | `runtime` | 1 | 1 |
@@ -454,7 +454,7 @@
 | PHP | [07-php-mastery/reference/library-guides/03-pdo.md](../../../../07-php-mastery/reference/library-guides/03-pdo.md) | `not_verified` | 0 | 0 |
 | PHP | [07-php-mastery/reference/library-guides/04-json.md](../../../../07-php-mastery/reference/library-guides/04-json.md) | `runtime` | 1 | 0 |
 | PHP | [07-php-mastery/reference/library-guides/05-file-stream-io.md](../../../../07-php-mastery/reference/library-guides/05-file-stream-io.md) | `runtime` | 1 | 0 |
-| PHP | [07-php-mastery/reference/library-guides/06-http-session-cookie.md](../../../../07-php-mastery/reference/library-guides/06-http-session-cookie.md) | `not_verified` | 0 | 0 |
+| PHP | [07-php-mastery/reference/library-guides/06-http-session-cookie.md](../../../../07-php-mastery/reference/library-guides/06-http-session-cookie.md) | `runtime` | 1 | 0 |
 | PHP | [07-php-mastery/reference/library-guides/07-extension-map.md](../../../../07-php-mastery/reference/library-guides/07-extension-map.md) | `not_verified` | 0 | 0 |
 | PHP | [07-php-mastery/reference/quick-references/01-php-cheatsheet.md](../../../../07-php-mastery/reference/quick-references/01-php-cheatsheet.md) | `not_verified` | 0 | 0 |
 | PHP | [07-php-mastery/reference/quick-references/02-troubleshooting.md](../../../../07-php-mastery/reference/quick-references/02-troubleshooting.md) | `not_verified` | 0 | 0 |
@@ -511,7 +511,7 @@
 | Java | [08-java-revisited/reference/library-guides/06-java-math.md](../../../../08-java-revisited/reference/library-guides/06-java-math.md) | `runtime` | 1 | 0 |
 | Java | [08-java-revisited/reference/library-guides/07-java-text-and-time-format.md](../../../../08-java-revisited/reference/library-guides/07-java-text-and-time-format.md) | `runtime` | 1 | 0 |
 | Java | [08-java-revisited/reference/library-guides/08-java-util-regex.md](../../../../08-java-revisited/reference/library-guides/08-java-util-regex.md) | `runtime` | 1 | 0 |
-| Java | [08-java-revisited/reference/library-guides/09-jdk-package-map.md](../../../../08-java-revisited/reference/library-guides/09-jdk-package-map.md) | `not_verified` | 0 | 0 |
+| Java | [08-java-revisited/reference/library-guides/09-jdk-package-map.md](../../../../08-java-revisited/reference/library-guides/09-jdk-package-map.md) | `runtime` | 1 | 0 |
 | Java | [08-java-revisited/reference/quick-references/01-java-cheatsheet.md](../../../../08-java-revisited/reference/quick-references/01-java-cheatsheet.md) | `not_verified` | 0 | 0 |
 | Java | [08-java-revisited/reference/quick-references/02-troubleshooting.md](../../../../08-java-revisited/reference/quick-references/02-troubleshooting.md) | `not_verified` | 0 | 0 |
 | Java | [08-java-revisited/reference/quick-references/03-spring-boot4-migration.md](../../../../08-java-revisited/reference/quick-references/03-spring-boot4-migration.md) | `not_verified` | 0 | 0 |
@@ -665,7 +665,7 @@
 | Rust / Cross-platform | [11-rust-cross-platform/reference/language-concepts/04-advanced-lifetimes.md](../../../../11-rust-cross-platform/reference/language-concepts/04-advanced-lifetimes.md) | `runtime` | 4 | 2 |
 | Rust / Cross-platform | [11-rust-cross-platform/reference/language-concepts/05-macros.md](../../../../11-rust-cross-platform/reference/language-concepts/05-macros.md) | `runtime` | 4 | 0 |
 | Rust / Cross-platform | [11-rust-cross-platform/reference/language-concepts/06-unsafe.md](../../../../11-rust-cross-platform/reference/language-concepts/06-unsafe.md) | `not_verified` | 0 | 1 |
-| Rust / Cross-platform | [11-rust-cross-platform/reference/language-concepts/07-smart-pointers.md](../../../../11-rust-cross-platform/reference/language-concepts/07-smart-pointers.md) | `not_verified` | 0 | 0 |
+| Rust / Cross-platform | [11-rust-cross-platform/reference/language-concepts/07-smart-pointers.md](../../../../11-rust-cross-platform/reference/language-concepts/07-smart-pointers.md) | `runtime` | 1 | 0 |
 | Rust / Cross-platform | [11-rust-cross-platform/reference/language-concepts/08-async-internals.md](../../../../11-rust-cross-platform/reference/language-concepts/08-async-internals.md) | `not_verified` | 0 | 0 |
 | Rust / Cross-platform | [11-rust-cross-platform/reference/language-concepts/09-keywords-and-syntax.md](../../../../11-rust-cross-platform/reference/language-concepts/09-keywords-and-syntax.md) | `runtime` | 1 | 0 |
 | Rust / Cross-platform | [11-rust-cross-platform/reference/language-concepts/10-standard-types-and-methods.md](../../../../11-rust-cross-platform/reference/language-concepts/10-standard-types-and-methods.md) | `runtime` | 1 | 0 |

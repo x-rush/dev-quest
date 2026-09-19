@@ -111,6 +111,32 @@ session_write_close 后再修改当前进程的 $_SESSION，不会自动保存�
 
 本轮未在本机执行 PHP 片段；文中的输出为预期值，版本相关行为请用项目运行时验证。
 
+## 完整实验：隔离目录中的会话写入与关闭
+
+下面是可独立运行的 CLI 程序。它只验证文件会话存储中的启动、写入和 `session_write_close()`；不验证 HTTP 响应头、浏览器 Cookie、上传来源或并发锁行为。临时目录由程序创建并在结束时清除。
+
+<!-- terra-eighteenth-case: php-session-write-close -->
+```php
+<?php
+declare(strict_types=1);
+
+$directory = sys_get_temp_dir() . '/php-session-demo-' . bin2hex(random_bytes(4));
+mkdir($directory, 0700);
+ini_set('session.save_path', $directory);
+session_id('eighteenth-demo');
+session_start();
+$_SESSION['uid'] = 42;
+session_write_close();
+
+$file = $directory . '/sess_eighteenth-demo';
+echo session_status() === PHP_SESSION_NONE ? "closed\n" : "open\n";
+echo str_contains((string) file_get_contents($file), 'uid|i:42;') ? "stored\n" : "missing\n";
+unlink($file);
+rmdir($directory);
+```
+
+预期输出为 `closed` 与 `stored`。该程序把会话存储限制在独立目录，避免读取或修改应用的默认会话目录；实际 Web 请求的 Cookie 发送与安全属性仍须在对应 SAPI 和浏览器中验证。
+
 ## 🔗 相关条目
 
 - 📄 **[超全局变量](../language-concepts/15-superglobals.md)** — `$_COOKIE`/`$_FILES`/`$_SESSION` 数据入口

@@ -105,6 +105,28 @@ module com.example.app {
 
 **练习**：用 jshell 分别查看 String.class、java.util.logging.Logger.class 与 java.sql.Connection.class 的 getModule().getName()，预期为 java.base、java.logging、java.sql。再打开对应 Javadoc 的模块首页核对。地图覆盖常用入口，不宣称列出每个 JDK 包；完整范围以所用版本的官方总索引为准。
 
+## 完整实验：从类反查 JPMS 模块
+
+这个完整的 classpath 程序以 Java 21 编译运行，直接使用 `Class::getModule` 验证三类常见包的模块归属。它不验证命名模块的 `requires` 编译配置，也不枚举整个 JDK。
+
+<!-- terra-eighteenth-case: java-jpms-module-map -->
+```java
+public class Main {
+    static void show(Class<?> type) {
+        System.out.println(type.getName() + "=" + type.getModule().getName());
+    }
+
+    public static void main(String[] args) {
+        show(String.class);
+        show(java.util.logging.Logger.class);
+        show(java.sql.Connection.class);
+        show(javax.annotation.processing.Processor.class);
+    }
+}
+```
+
+预期输出依次为 `java.lang.String=java.base`、`java.util.logging.Logger=java.logging`、`java.sql.Connection=java.sql` 与 `javax.annotation.processing.Processor=java.compiler`。这说明包名前缀不能替代模块查询；例如 `javax.annotation.processing` 并不在 `java.base`。
+
 ## 🔗 相关条目
 
 - 📄 **[标准库核心速查](./01-standard-library.md)** — 最常用包的 API 速查

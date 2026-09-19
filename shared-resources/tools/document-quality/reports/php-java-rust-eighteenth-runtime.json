@@ -1,0 +1,130 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-09-19T16:19:57.203Z",
+  "scope": "Three named, complete PHP/Java/Rust P1 core or standard-library Markdown programs are extracted unchanged and run with exact stdout assertions.",
+  "method": "Each program is extracted unchanged from its unique named fence and passed on stdin to an already-present Docker image, where it is written only to isolated tmpfs. Containers have no network, read-only roots, no Linux capabilities, and bounded CPU, memory, process, and tmpfs resources.",
+  "not_verified": [
+    "other prose or fences in the three documents",
+    "HTTP browser and Web-SAPI behavior",
+    "named-module requires configuration",
+    "thread scheduling, performance, and platform-specific behavior"
+  ],
+  "docker": {
+    "command": [
+      "docker",
+      "--version"
+    ],
+    "exit_code": 0,
+    "stdout": "Docker version 29.8.0, build 88096ef\n",
+    "stderr": ""
+  },
+  "cases": [
+    {
+      "id": "php-session-write-close",
+      "language": "PHP",
+      "source": "07-php-mastery/reference/library-guides/06-http-session-cookie.md",
+      "filename": "main.php",
+      "image": "php:8.5-cli-alpine",
+      "document_sha256": "70f61b632359689b048ffd21ce8dc9e3698baf128b92cafd73e7f9895b6ad440",
+      "code_sha256": "0609c1ce35bf56ea157963b47b71144e0bf58ef4f7912a9e4c71bf2ab5b06438",
+      "expected_stdout": "closed\nstored\n",
+      "execution": {
+        "command": [
+          "docker",
+          "run",
+          "--rm",
+          "-i",
+          "--pull=never",
+          "--network=none",
+          "--read-only",
+          "--cap-drop=ALL",
+          "--pids-limit=64",
+          "--memory=512m",
+          "--cpus=1",
+          "--tmpfs",
+          "/tmp:rw,exec,nosuid,size=64m",
+          "php:8.5-cli-alpine",
+          "sh",
+          "-c",
+          "cat > /tmp/main.php && php /tmp/main.php"
+        ],
+        "exit_code": 0,
+        "stdout": "closed\nstored\n",
+        "stderr": ""
+      },
+      "status": "PASS"
+    },
+    {
+      "id": "java-jpms-module-map",
+      "language": "Java",
+      "source": "08-java-revisited/reference/library-guides/09-jdk-package-map.md",
+      "filename": "Main.java",
+      "image": "eclipse-temurin:21-jdk-noble",
+      "document_sha256": "47dcf0e55daa08000c5eedf390bde622441ad3e98a43cfc6098930cb9c5fccb2",
+      "code_sha256": "3c5c8cc1065c3468ec0853ae4b998131a91ec195f0bb0c9f3fdf81d4a7b7b179",
+      "expected_stdout": "java.lang.String=java.base\njava.util.logging.Logger=java.logging\njava.sql.Connection=java.sql\njavax.annotation.processing.Processor=java.compiler\n",
+      "execution": {
+        "command": [
+          "docker",
+          "run",
+          "--rm",
+          "-i",
+          "--pull=never",
+          "--network=none",
+          "--read-only",
+          "--cap-drop=ALL",
+          "--pids-limit=64",
+          "--memory=512m",
+          "--cpus=1",
+          "--tmpfs",
+          "/tmp:rw,exec,nosuid,size=64m",
+          "eclipse-temurin:21-jdk-noble",
+          "sh",
+          "-c",
+          "cat > /tmp/Main.java && javac --release 21 -encoding UTF-8 -d /tmp /tmp/Main.java && java -cp /tmp Main"
+        ],
+        "exit_code": 0,
+        "stdout": "java.lang.String=java.base\njava.util.logging.Logger=java.logging\njava.sql.Connection=java.sql\njavax.annotation.processing.Processor=java.compiler\n",
+        "stderr": ""
+      },
+      "status": "PASS"
+    },
+    {
+      "id": "rust-arc-weak-lifecycle",
+      "language": "Rust",
+      "source": "11-rust-cross-platform/reference/language-concepts/07-smart-pointers.md",
+      "filename": "main.rs",
+      "image": "rust:1-slim-bookworm",
+      "document_sha256": "fd3a939cfabd00a599d826b8a856783de90e96367d7bb429de0122b0fca21143",
+      "code_sha256": "e17f21c0914e939089577285a6c480031c2b17570c253fbfc839a8cd1a423f34",
+      "expected_stdout": "strong=2\nvalue=shared\ngone=true\n",
+      "execution": {
+        "command": [
+          "docker",
+          "run",
+          "--rm",
+          "-i",
+          "--pull=never",
+          "--network=none",
+          "--read-only",
+          "--cap-drop=ALL",
+          "--pids-limit=64",
+          "--memory=512m",
+          "--cpus=1",
+          "--tmpfs",
+          "/tmp:rw,exec,nosuid,size=64m",
+          "rust:1-slim-bookworm",
+          "sh",
+          "-c",
+          "cat > /tmp/main.rs && rustc --edition 2024 /tmp/main.rs -o /tmp/main && /tmp/main"
+        ],
+        "exit_code": 0,
+        "stdout": "strong=2\nvalue=shared\ngone=true\n",
+        "stderr": ""
+      },
+      "status": "PASS"
+    }
+  ],
+  "passed": 3,
+  "total": 3
+}

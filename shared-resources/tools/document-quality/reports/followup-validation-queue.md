@@ -11,11 +11,11 @@
 - **P2**：框架与部署文档没有命名运行证据。优先建立版本锁定的最小工程、构建或部署演练。
 - **P3**：进阶、测试和其他专题没有命名运行证据。按依赖关系排入后续批次。
 
-台账对应的 48 条未绑定措辞全部保留，并在生成时重新定位到当前源码行。明确写出“尚未验证”、说明如何验证或给出练习要求的行，按所属文件的普通优先级排序，不会被误报成 P0 通过性断言。同一文件可同时有一条文件级缺口和多条逐行任务；两者不能互相抵消。每次验证只能声明其命名案例和环境覆盖的范围。
+台账对应的 51 条未绑定措辞全部保留，并在生成时重新定位到当前源码行。明确写出“尚未验证”、说明如何验证或给出练习要求的行，按所属文件的普通优先级排序，不会被误报成 P0 通过性断言。同一文件可同时有一条文件级缺口和多条逐行任务；两者不能互相抵消。每次验证只能声明其命名案例和环境覆盖的范围。
 
 ## 汇总
 
-- 队列条目：530 条，其中文件级证据缺口 482 条，逐行未绑定验证措辞 48 条。
+- 队列条目：530 条，其中文件级证据缺口 479 条，逐行未绑定验证措辞 51 条。
 - 优先级：P0 0；P1 225；P2 150；P3 155。
 - 分类：核心基础 209；首项目 16；框架 111；部署 39；进阶与测试 155。
 
@@ -50,7 +50,6 @@
 | P1 | 核心基础 | Java | [08-java-revisited/reference/language-concepts/08-enums.md](../../../../08-java-revisited/reference/language-concepts/08-enums.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
 | P1 | 核心基础 | Java | [08-java-revisited/reference/language-concepts/09-annotations.md](../../../../08-java-revisited/reference/language-concepts/09-annotations.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
 | P1 | 核心基础 | Java | [08-java-revisited/reference/language-concepts/10-interface-semantics.md](../../../../08-java-revisited/reference/language-concepts/10-interface-semantics.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
-| P1 | 核心基础 | Java | [08-java-revisited/reference/library-guides/09-jdk-package-map.md](../../../../08-java-revisited/reference/library-guides/09-jdk-package-map.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
 | P1 | 核心基础 | Java | [08-java-revisited/reference/quick-references/01-java-cheatsheet.md](../../../../08-java-revisited/reference/quick-references/01-java-cheatsheet.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
 | P1 | 核心基础 | Java | [08-java-revisited/reference/quick-references/02-troubleshooting.md](../../../../08-java-revisited/reference/quick-references/02-troubleshooting.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
 | P1 | 核心基础 | Java | [08-java-revisited/reference/quick-references/03-spring-boot4-migration.md](../../../../08-java-revisited/reference/quick-references/03-spring-boot4-migration.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
@@ -61,6 +60,7 @@
 | P1 | 核心基础 | Kotlin / Compose | [05-kotlin-compose/basics/02-first-compose-app.md](../../../../05-kotlin-compose/basics/02-first-compose-app.md#L12):12 | 保留诚实的验证边界，并在补证据时决定是否增加最小练习<br/>保持已有边界说明；若新增示例，记录工具链、命令、预期行为和未覆盖范围。 | 设备上可交互；只在 Preview 看见按钮不代表运行时行为已验证。 |
 | P1 | 核心基础 | Kotlin / Compose | [05-kotlin-compose/basics/02-first-compose-app.md](../../../../05-kotlin-compose/basics/02-first-compose-app.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
 | P1 | 核心基础 | Kotlin / Compose | [05-kotlin-compose/basics/04-composables-state.md](../../../../05-kotlin-compose/basics/04-composables-state.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
+| P1 | 核心基础 | Kotlin / Compose | [05-kotlin-compose/basics/05-layouts.md](../../../../05-kotlin-compose/basics/05-layouts.md#L275):275 | 保留诚实的验证边界，并在补证据时决定是否增加最小练习<br/>保持已有边界说明；若新增示例，记录工具链、命令、预期行为和未覆盖范围。 | 本轮只完成官方资料核对与静态阅读，未运行 Android 构建、模拟器或截图验收。上面的结果是读者执行时的验收标准，不是本机实测记录。 |
 | P1 | 核心基础 | Kotlin / Compose | [05-kotlin-compose/basics/05-layouts.md](../../../../05-kotlin-compose/basics/05-layouts.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
 | P1 | 核心基础 | Kotlin / Compose | [05-kotlin-compose/basics/06-navigation.md](../../../../05-kotlin-compose/basics/06-navigation.md#L91):91 | 保留诚实的验证边界，并在补证据时决定是否增加最小练习<br/>保持已有边界说明；若新增示例，记录工具链、命令、预期行为和未覆盖范围。 | 最小可运行骨架： |
 | P1 | 核心基础 | Kotlin / Compose | [05-kotlin-compose/basics/06-navigation.md](../../../../05-kotlin-compose/basics/06-navigation.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
@@ -122,7 +122,6 @@
 | P1 | 核心基础 | PHP | [07-php-mastery/reference/language-concepts/18-constants-magic-constants.md](../../../../07-php-mastery/reference/language-concepts/18-constants-magic-constants.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
 | P1 | 核心基础 | PHP | [07-php-mastery/reference/library-guides/02-composer-ecosystem.md](../../../../07-php-mastery/reference/library-guides/02-composer-ecosystem.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
 | P1 | 核心基础 | PHP | [07-php-mastery/reference/library-guides/03-pdo.md](../../../../07-php-mastery/reference/library-guides/03-pdo.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
-| P1 | 核心基础 | PHP | [07-php-mastery/reference/library-guides/06-http-session-cookie.md](../../../../07-php-mastery/reference/library-guides/06-http-session-cookie.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
 | P1 | 核心基础 | PHP | [07-php-mastery/reference/library-guides/07-extension-map.md](../../../../07-php-mastery/reference/library-guides/07-extension-map.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
 | P1 | 核心基础 | PHP | [07-php-mastery/reference/quick-references/01-php-cheatsheet.md](../../../../07-php-mastery/reference/quick-references/01-php-cheatsheet.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
 | P1 | 核心基础 | PHP | [07-php-mastery/reference/quick-references/02-troubleshooting.md](../../../../07-php-mastery/reference/quick-references/02-troubleshooting.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
@@ -155,6 +154,7 @@
 | P1 | 核心基础 | React Native / Multi-platform | [04-multiplatform-apps/reference/language-concepts/13-platform-api-map.md](../../../../04-multiplatform-apps/reference/language-concepts/13-platform-api-map.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
 | P1 | 核心基础 | React Native / Multi-platform | [04-multiplatform-apps/reference/library-guides/01-state-and-data.md](../../../../04-multiplatform-apps/reference/library-guides/01-state-and-data.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
 | P1 | 核心基础 | React Native / Multi-platform | [04-multiplatform-apps/reference/library-guides/02-native-and-device-libs.md](../../../../04-multiplatform-apps/reference/library-guides/02-native-and-device-libs.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
+| P1 | 核心基础 | React Native / Multi-platform | [04-multiplatform-apps/reference/library-guides/03-storage-options.md](../../../../04-multiplatform-apps/reference/library-guides/03-storage-options.md#L87):87 | 保留诚实的验证边界，并在补证据时决定是否增加最小练习<br/>保持已有边界说明；若新增示例，记录工具链、命令、预期行为和未覆盖范围。 | - **把异步读当同步初值**：AsyncStorage 返回 Promise。先显示恢复中状态，成功后再开放编辑；反复读取可优先使用内存状态，只有实测需要时再改变底层库 |
 | P1 | 核心基础 | React Native / Multi-platform | [04-multiplatform-apps/reference/library-guides/03-storage-options.md](../../../../04-multiplatform-apps/reference/library-guides/03-storage-options.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
 | P1 | 核心基础 | React Native / Multi-platform | [04-multiplatform-apps/reference/library-guides/04-animation-gesture-libs.md](../../../../04-multiplatform-apps/reference/library-guides/04-animation-gesture-libs.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
 | P1 | 核心基础 | React Native / Multi-platform | [04-multiplatform-apps/reference/quick-references/01-cli-and-debug-cheatsheet.md](../../../../04-multiplatform-apps/reference/quick-references/01-cli-and-debug-cheatsheet.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
@@ -174,7 +174,6 @@
 | P1 | 核心基础 | Rust / Cross-platform | [11-rust-cross-platform/basics/10-cargo-testing.md](../../../../11-rust-cross-platform/basics/10-cargo-testing.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
 | P1 | 核心基础 | Rust / Cross-platform | [11-rust-cross-platform/reference/language-concepts/06-unsafe.md](../../../../11-rust-cross-platform/reference/language-concepts/06-unsafe.md#L214):214 | 保留诚实的验证边界，并在补证据时决定是否增加最小练习<br/>保持已有边界说明；若新增示例，记录工具链、命令、预期行为和未覆盖范围。 | 💡 **示例**（edition 2024 示例，本轮未运行；含一个实测踩到的陷阱）: |
 | P1 | 核心基础 | Rust / Cross-platform | [11-rust-cross-platform/reference/language-concepts/06-unsafe.md](../../../../11-rust-cross-platform/reference/language-concepts/06-unsafe.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
-| P1 | 核心基础 | Rust / Cross-platform | [11-rust-cross-platform/reference/language-concepts/07-smart-pointers.md](../../../../11-rust-cross-platform/reference/language-concepts/07-smart-pointers.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
 | P1 | 核心基础 | Rust / Cross-platform | [11-rust-cross-platform/reference/language-concepts/08-async-internals.md](../../../../11-rust-cross-platform/reference/language-concepts/08-async-internals.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
 | P1 | 核心基础 | Swift / SwiftUI | [06-swift-swiftui/LEARNING_GUIDE.md](../../../../06-swift-swiftui/LEARNING_GUIDE.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
 | P1 | 核心基础 | Swift / SwiftUI | [06-swift-swiftui/README.md](../../../../06-swift-swiftui/README.md#L86):86 | 保留诚实的验证边界，并在补证据时决定是否增加最小练习<br/>保持已有边界说明；若新增示例，记录工具链、命令、预期行为和未覆盖范围。 | 最后将“源码版本、目标环境、步骤、期望、实际、恢复后的结果”交付为一份记录，再新建独立&#91;笔记项目&#93;(projects/01-notes-app.md)练习编辑和搜索。不要为跟随下一篇而把旧数据库模型直接替换；保留旧数据的模型演进需要迁移方案。本页本轮未执行 Xcode 构建、SwiftUI 交互或 SwiftData 故障注入，未取得这些关卡的运行通过证据。 |
@@ -182,6 +181,7 @@
 | P1 | 核心基础 | Swift / SwiftUI | [06-swift-swiftui/basics/01-environment-setup.md](../../../../06-swift-swiftui/basics/01-environment-setup.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
 | P1 | 核心基础 | Swift / SwiftUI | [06-swift-swiftui/basics/02-first-swiftui-app.md](../../../../06-swift-swiftui/basics/02-first-swiftui-app.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
 | P1 | 核心基础 | Swift / SwiftUI | [06-swift-swiftui/basics/04-views-state.md](../../../../06-swift-swiftui/basics/04-views-state.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
+| P1 | 核心基础 | Swift / SwiftUI | [06-swift-swiftui/basics/05-layouts.md](../../../../06-swift-swiftui/basics/05-layouts.md#L214):214 | 保留诚实的验证边界，并在补证据时决定是否增加最小练习<br/>保持已有边界说明；若新增示例，记录工具链、命令、预期行为和未覆盖范围。 | ### 先完成一个可运行的联系人屏幕 |
 | P1 | 核心基础 | Swift / SwiftUI | [06-swift-swiftui/basics/05-layouts.md](../../../../06-swift-swiftui/basics/05-layouts.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
 | P1 | 核心基础 | Swift / SwiftUI | [06-swift-swiftui/basics/06-navigation.md](../../../../06-swift-swiftui/basics/06-navigation.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |
 | P1 | 核心基础 | Swift / SwiftUI | [06-swift-swiftui/basics/07-concurrency-async-await.md](../../../../06-swift-swiftui/basics/07-concurrency-async-await.md) | 为文档选择一个最小可复现案例并记录限定运行证据<br/>抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。 | 当前没有与此文件绑定的命名运行或语法证据。 |

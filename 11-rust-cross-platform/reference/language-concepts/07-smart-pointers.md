@@ -316,6 +316,28 @@ Clone 也要看克隆谁。Arc::clone 增加同一分配的引用计数，内部
 
 练习：克隆一个 Rc<RefCell<Vec<i32>>>，通过一个句柄修改后另一个应看到变化；再直接克隆其中的 Vec，修改应互不影响。画一个父子节点的强引用图，父持有子、子用 Weak 观察父，丢弃最后一个父强引用后 upgrade 应得到 None。跨 await 前尽量释放普通锁守卫；即使异步 Mutex 允许持锁等待，也要判断长时间独占是否阻塞其他任务。
 
+## 完整实验：Arc 的共享计数与 Weak 的失效
+
+此完整程序在 Rust 2024 edition 下运行。它验证 `Arc::clone` 共享同一分配、`Weak::upgrade` 在最后一个强引用释放后返回 `None`。它不验证跨线程调度、循环图或锁的性能与公平性。
+
+<!-- terra-eighteenth-case: rust-arc-weak-lifecycle -->
+```rust
+use std::sync::Arc;
+
+fn main() {
+    let owner = Arc::new(String::from("shared"));
+    let observer = Arc::downgrade(&owner);
+    let peer = Arc::clone(&owner);
+    println!("strong={}", Arc::strong_count(&owner));
+    println!("value={}", peer.as_str());
+    drop(peer);
+    drop(owner);
+    println!("gone={}", observer.upgrade().is_none());
+}
+```
+
+预期输出为 `strong=2`、`value=shared` 与 `gone=true`。`Weak` 只观察控制块而不延长内部值的生命周期，因此每次 `upgrade()` 都必须处理 `None`。
+
 <!-- learning-navigation -->
 ## 阅读导航
 
