@@ -35,9 +35,11 @@
 // ❌ 危险：拼接进 ORDER BY（orderByRaw 与 whereRaw 是注入高发区）
 Order::query()->orderByRaw("FIELD(status, '{$request->string('sort')}')")->get();
 
-// ✅ 安全：原生表达式必须用绑定（? 占位由 PDO 处理，把值与 SQL 结构分开交给驱动处理）
-$sort = $request->string('sort', 'created_at');
-Order::query()->orderByRaw('FIELD(status, ?)', [$sort])->get();
+// ✅ 真实需求是“按哪个字段排序”：列名不能放进 ? 值占位符。
+$data = $request->validate(['sort' => ['sometimes', 'in:created,title']]);
+$columns = ['created' => 'created_at', 'title' => 'title'];
+$column = $columns[$data['sort'] ?? 'created'];
+Order::query()->where('user_id', $request->user()->id)->orderBy($column)->get();
 ```
 
 ```php
@@ -47,11 +49,45 @@ Order::where('user_id', $request->user()->id)->get(); // 当前认证用户的�
 // 批量赋值还有第二层洞：未做字段白名单
 // ❌ $request->all() 会把 is_admin 等字段一并写入
 Order::create($request->all());
-// ✅ 只放行验证过的字段
-Order::create($request->validated());
+// ✅ 在 FormRequest 验证与授权之后，再显式构造写入字段。
+// orders 是当前登录用户定义的 HasMany 关系；user_id 由服务端设置。
+$data = $request->validated();
+$request->user()->orders()->create(['title' => $data['title']]);
 ```
 
-框架防线：PDO 预处理 + `$fillable` 白名单 + FormRequest 验证。三层缺一不可，攻击面在"绕过任何一层"的写法上。
+这些是不同防线：值绑定隔离 SQL 语法；验证限定输入形状；Policy/Gate 判断操作权限；`$fillable` 限制模型批量赋值。`validated()` 并不自动安全：如果验证规则允许了 `user_id` 或 `is_admin`，它们仍会进入验证结果。关系查询必须定义在模型中，并配置对应业务字段的 `$fillable`。
+
+### 可执行实验：绑定阻止注入，owner 条件阻止越权
+
+下面保存为 `security.php`，在启用 PDO SQLite 的 PHP CLI 中执行 `php security.php`。它只创建内存数据库，输出应为 `pdo-security: 3 checks passed`。Laravel 片段仍需在应用中另做功能测试。
+
+<!-- security-check: php-pdo -->
+```php
+<?php
+declare(strict_types=1);
+$db = new PDO('sqlite::memory:', null, null, [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]);
+$db->exec('CREATE TABLE orders (id INTEGER PRIMARY KEY, user_id INTEGER NOT NULL, title TEXT NOT NULL)');
+$insert = $db->prepare('INSERT INTO orders VALUES (?, ?, ?)');
+$insert->execute([1, 7, 'A']);
+$insert->execute([2, 8, 'B']);
+
+$query = $db->prepare('SELECT title FROM orders WHERE user_id = ? AND title = ?');
+$query->execute([7, "' OR 1=1 --"]);
+if ($query->fetchColumn() !== false) { throw new RuntimeException('injection accepted'); }
+
+$update = $db->prepare('UPDATE orders SET title = ? WHERE id = ? AND user_id = ?');
+$update->execute(['stolen', 2, 7]);
+if ($update->rowCount() !== 0 || $db->query('SELECT title FROM orders WHERE id = 2')->fetchColumn() !== 'B') {
+    throw new RuntimeException('cross-user write accepted');
+}
+$update->execute(['updated', 1, 7]);
+if ($update->rowCount() !== 1 || $db->query('SELECT title FROM orders WHERE id = 1')->fetchColumn() !== 'updated') {
+    throw new RuntimeException('owner write failed');
+}
+echo "pdo-security: 3 checks passed\n";
+```
+
+`user_id = 7` 在实验中代表已认证身份，真实接口从会话获取而不是接受请求参数。更新条件让归属检查与写入在同一 SQL 中完成；批量导出、关联资源和管理员例外也要独立测试。
 
 ## 2. XSS：转义边界在模板
 
@@ -61,7 +97,7 @@ Order::create($request->validated());
 {{-- Blade 的 {{ }} 自动调用 htmlspecialchars，默认安全 --}}
 <p>{{ $post->title }}</p>
 
-{{-- ❌ 危险：!!! 跳过转义。仅当内容经过服务端白名单清洗后才允许 --}}
+{{-- ❌ 危险：{!! !!} 跳过转义。仅当内容经过服务端允许列表清洗后才允许 --}}
 {!! $post->body_html !!}
 ```
 
@@ -69,11 +105,11 @@ Order::create($request->validated());
 
 ```php
 // composer require ezyang/htmlpurifier
-$clean = (new \HTMLPurifier())->purify($request->string('body'));
+$clean = (new \HTMLPurifier())->purify((string) $request->string('body'));
 // 服务端清洗后存储清洗结果，模板侧仍用 {!! !!}——清洗与信任点一一对应
 ```
 
-补充纵深：`Content-Security-Policy` 响应头限制脚本来源（Nginx 或中间件层配置），使侥幸注入的脚本无法加载外域资源。
+`Content-Security-Policy` 的具体指令限制脚本或连接等资源来源，是附加防线；效果取决于策略，不能保证任意注入都无法执行或外传。富文本清洗需要定义标签、属性、URL 协议及升级后重清洗规则。
 
 ## 3. CSRF：Token 防止跨站伪造写请求
 
@@ -82,7 +118,7 @@ $clean = (new \HTMLPurifier())->purify($request->string('body'));
 Laravel 的 `web` 中间件组自动校验 `_token` 字段（session 对比）：
 
 ```blade
-{{-- ❌ 表单缺 token 直接 419 --}}
+{{-- 在启用真实 CSRF 中间件的 web 路由中，缺失或错误 token 应拒绝 --}}
 <form method="POST" action="/posts">
     @csrf   {{-- 生成 <input type="hidden" name="_token" ...> --}}
     ...
@@ -92,7 +128,7 @@ Laravel 的 `web` 中间件组自动校验 `_token` 字段（session 对比）�
 边界辨析（最常混淆处）：
 
 - 默认 api 组不提供会话和 CSRF；是否需要 CSRF 防护取决于实际认证方式。仅使用显式 Authorization Bearer 凭据与启用 Cookie 会话的 API 不能一概而论
-- SPA 若走 Cookie 会话（Sanctum stateful），仍需先取 `/sanctum/csrf-cookie` 并保证 `SameSite=Lax/Strict`
+- SPA 若走 Cookie 会话（Sanctum stateful），仍需先取 `/sanctum/csrf-cookie` 并正确发送 CSRF 头；SameSite 按实际站点部署关系配置，是附加防线，不能替代 token。跨站 Cookie 需要额外考虑 `SameSite=None; Secure` 与浏览器第三方 Cookie 限制
 
 ## 4. 其他必修防线
 
@@ -105,8 +141,8 @@ Hash::check($password, $hash);// 校验
 RateLimiter::for('login', fn (Request $r) => Limit::perMinute(5)->by($r->ip()));
 
 // 上传：白名单 + MIME 校验 + 移出可执行目录
-$request->validate(['avatar' => ['image', 'mimes:jpg,png,webp', 'max:2048']]);
-$path = $request->file('avatar')->store('avatars', 's3');   // 不落 public/
+$request->validate(['avatar' => ['required', 'image', 'mimes:jpg,png,webp', 'max:2048']]);
+$path = $request->file('avatar')->store('avatars', 's3');   // S3 磁盘权限也必须配置
 ```
 
 | 风险 | 默认防线 | 常见失守点 |
@@ -141,7 +177,7 @@ $path = $request->file('avatar')->store('avatars', 's3');   // 不落 public/
 依据：[SQL 查询绑定边界](https://laravel.com/docs/13.x/queries)、[CSRF](https://laravel.com/docs/13.x/csrf)、[授权](https://laravel.com/docs/13.x/authorization)。
 
 
-本轮未在本机执行 PHP 片段；文中的输出为预期值，版本相关行为请用项目运行时验证。
+验证边界：内存 PDO 实验有独立执行命令；它不证明 Laravel 中间件、Policy、Blade 或 S3 配置正确。Laravel 自动化测试环境常会跳过 CSRF 检查，CSRF 验收应在启用真实中间件的 HTTP 环境执行，并同时检查数据库未发生写入。
 
 ## 🔗 相关文档
 

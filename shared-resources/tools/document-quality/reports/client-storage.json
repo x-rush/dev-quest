@@ -1,0 +1,34 @@
+{
+  "generated_at": "2026-09-19T11:37:40.169Z",
+  "node": "v24.19.0",
+  "source": "02-nextjs-frontend/testing/01-unit-testing.md",
+  "source_sha256": "dce6869d47dc143009530b4745f63f69ea738c902a8acde18bdc05ec22cf93f8",
+  "code_sha256": "f724b217a9eaab44ab928ecd53c0da833344bc9fa5177d76f7f722d3180dddfe",
+  "code": "// src/hooks/use-local-storage.ts\nimport { useState, useRef } from \"react\"\n\nexport function useLocalStorage<T>(key: string, initialValue: T) {\n  const [storedValue, setStoredValue] = useState<T>(() => {\n    if (typeof window === \"undefined\") {\n      return initialValue\n    }\n    try {\n      const item = window.localStorage.getItem(key)\n      return item ? JSON.parse(item) : initialValue\n    } catch (error) {\n      console.error(`Error reading localStorage key \"${key}\":`, error)\n      return initialValue\n    }\n  })\n\n  const latest = useRef(storedValue)\n  const setValue = (value: T | ((val: T) => T)) => {\n    try {\n      const valueToStore = value instanceof Function ? value(latest.current) : value\n      if (typeof window !== \"undefined\") {\n        window.localStorage.setItem(key, JSON.stringify(valueToStore))\n      }\n      latest.current = valueToStore\n      setStoredValue(valueToStore)\n    } catch (error) {\n      console.error(`Error setting localStorage key \"${key}\":`, error)\n    }\n  }\n\n  return [storedValue, setValue] as const\n}\n",
+  "dependencies": {
+    "react": "19.3.0",
+    "react-dom": "19.3.0",
+    "jsdom": "26.1.0",
+    "@testing-library/react": "16.3.3"
+  },
+  "scope": "Exact Hook source executed with real React and jsdom, plus a separate Node server renderer. No browser hydration, Next build, cross-tab storage or dynamic key support.",
+  "passed": 4,
+  "results": [
+    {
+      "case": "Node server renderer uses initial value without window",
+      "status": "PASS"
+    },
+    {
+      "case": "Batched updates persist 2 and remount reads persisted value",
+      "status": "PASS"
+    },
+    {
+      "case": "Invalid JSON returns fallback without overwriting data",
+      "status": "PASS"
+    },
+    {
+      "case": "Write failure preserves state; retry starts from last successful value",
+      "status": "PASS"
+    }
+  ]
+}

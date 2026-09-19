@@ -31,30 +31,26 @@
 ## 🛠️ 配置
 
 ```bash
-npx expo install jest-expo jest -- --save-dev
-npm install --save-dev jest @types/jest   # 确保 jest 本体与类型在
+npx expo install jest-expo jest @types/jest --dev
+npx expo install @testing-library/react-native --dev
 ```
 
 ```json
-// package.json 关键字段
 {
   "scripts": { "test": "jest" },
   "jest": {
-    "preset": "jest-expo",                // Expo 官方预设：处理 RN 特有模块与转换
-    "transformIgnorePatterns": [
-      "node_modules/(?!(jest-)?react-native|@react-native|@expo|expo.*|@tanstack)"
-    ],
+    "preset": "jest-expo",
     "setupFiles": ["./jest.setup.ts"]
   }
 }
 ```
 
-`transformIgnorePatterns` 的含义：这些包以 ESM 发布，必须交给 babel 转换，否则报 "Unexpected token 'export'"——RN 测试配置最经典的报错（更多见[故障排除](../reference/quick-references/02-troubleshooting.md)）。
+先使用 `jest-expo` 对当前 Expo SDK 的默认转换规则；若具体依赖出现未转换语法，再按 [Expo Jest 指南](https://docs.expo.dev/develop/unit-testing/)检查 Babel 和 `transformIgnorePatterns`。不要为了单个报错覆盖整套预设，也不要假定所有第三方包都需要相同处理。
 
 ```ts
 // jest.setup.ts —— 全局 mock 噪音源
 jest.mock('react-native-mmkv', () => ({
-  // 用内存 Map 模拟 MMKV，测试之间互不污染
+  // 每个实例一个 Map；同一 store 跨测试仍会复用实例，必须显式重置。
   createMMKV: jest.fn(() => {
     const map = new Map<string, string>();
     return {
@@ -72,7 +68,13 @@ jest.mock('react-native-mmkv', () => ({
 
 ```ts
 // utils/todos.test.ts
-import { toggleTodo, remainingCount } from './todos';
+import { createTodo, toggleTodo, remainingCount } from './todos';
+
+it('创建时规范标题并拒绝空输入', () => {
+  expect(createTodo('  买菜  ', 'a', 0)).toEqual({ id: 'a', title: '买菜', done: false, createdAt: 0 });
+  expect(createTodo('  ', 'a', 0)).toBeNull();
+  expect(() => createTodo('买菜', '', 0)).toThrow(RangeError);
+});
 
 describe('toggleTodo', () => {
   const base = { id: '1', title: '买菜', done: false, createdAt: 0 }; // createdAt 毫秒时间戳
@@ -113,6 +115,11 @@ it('add 会 trim 并置顶插入', () => {
   expect(todos[0].title).toBe('写测试');
   expect(todos).toHaveLength(1);
 });
+
+it('直接调用 store 也不能插入空标题', () => {
+  useTodoStore.getState().add('   ');
+  expect(useTodoStore.getState().todos).toEqual([]);
+});
 ```
 
 ### Mock 原生模块 + 定时器
@@ -128,7 +135,11 @@ jest.mock('expo-location', () => ({
 }));
 
 // 时间相关逻辑（重连指数退避、防抖）：统一用 fake timers
-jest.useFakeTimers();
+beforeEach(() => jest.useFakeTimers());
+afterEach(() => {
+  jest.clearAllTimers();
+  jest.useRealTimers();
+});
 // 思路：触发 onclose → jest.advanceTimersByTime(1000) → 断言再次 connect
 // 挂载 Hook 用 RNTL 的 renderHook，见组件测试篇
 ```
@@ -145,10 +156,10 @@ jest.useFakeTimers();
 A: 该包没进 `transformIgnorePatterns` 白名单，把包名前缀加进正则。
 
 **Q2: 测试里 setState 不生效？**
-A: zustand 在组件外更新必须包 `act(...)`，否则断言时序不稳。
+A: 先区分同步 store 与 React 订阅者。`getState()` / `setState()` 本身同步；只有测试已渲染的组件或 Hook 时，直接触发更新才需要 React 的 `act` 来完成提交。持久化恢复和异步 action 还应等待自己的完成条件，不能靠 `act` 自动等待一切。参见 [Zustand 测试指南](https://zustand.docs.pmnd.rs/guides/testing)。
 
 **Q3: CI 上测试偶发超时？**
-A: 检查是否有真实 setTimeout/网络泄漏；统一用 fake timers 并在 `afterEach` 清理。
+A: 检查未结束网络、定时器和原生订阅。只在验证时间逻辑时启用 fake timers，并恢复真实时钟；盲目全局启用会让依赖真实时间的异步等待永远不推进。
 
 ---
 

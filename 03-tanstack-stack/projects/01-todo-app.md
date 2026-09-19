@@ -110,9 +110,15 @@ export const todoApi = {
       method: 'PATCH',
       body: JSON.stringify({ done: !todo.done }),
     }),
-  remove: (id: number) => http<void>(`${BASE}/${id}`, { method: 'DELETE' }),
+  remove: async (id: number): Promise<void> => {
+    const res = await fetch(`${BASE}/${id}`, { method: 'DELETE' })
+    if (!res.ok) throw new Error(`请求失败 ${res.status}`)
+    // 删除允许 204，无响应体；不能再调用 res.json()。
+  },
 }
 ```
+
+这里的 `http<T>` 只服务于返回 JSON 的接口，类型参数不会校验服务器响应。实际后端应按约定返回 `Todo`，不可信响应应增加运行时 schema 校验。删除接口独立消费 HTTP 状态，避免服务器已经删除成功、客户端却因解析空 JSON 而报告失败。
 
 **键工厂的收益**：`invalidateQueries({ queryKey: todoKeys.all })` 一行失效列表与所有详情；将来加筛选只需扩展 `lists()`。
 

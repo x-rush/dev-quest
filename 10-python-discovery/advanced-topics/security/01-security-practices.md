@@ -31,17 +31,17 @@ uvx pip-audit -r requirements-audit.txt
 
 - `uv.lock` 锁定传递依赖的精确版本，审计才有意义——**务必提交锁文件**（工作流见[开发工具链](../../frameworks/04-devtools.md)）
 - 开启 GitHub Dependabot，自动为有漏洞的依赖开升级 PR
-- 新增依赖前问三个问题：维护活跃吗？下载量够大吗？真的需要它吗？（能用标准库就不用第三方）
+- 新增依赖先检查维护与安全响应、来源与发布权限、兼容性和实际必要性。下载量不是安全证明；标准库能满足任务时可减少依赖，安全协议和密码算法则应复用成熟实现
 
 ## 2. 注入防护：永远不手工拼接
 
 **SQL 注入**——字符串拼 SQL 是头号大坑：
 
 ```python
-# ❌ 危险：用户输入直接进 SQL——name = "' or '1'='1" 即可拖库
+# ❌ 危险：用户输入进入 SQL 语法，可能改变过滤条件和数据访问范围
 await session.execute(text(f"SELECT * FROM users WHERE name = '{name}'"))
 
-# ✅ 参数绑定：值与语句分离，驱动负责转义
+# ✅ 参数绑定：值与语句分离，由驱动处理参数
 await session.execute(
     text("SELECT * FROM users WHERE name = :name"),
     {"name": name},
@@ -57,8 +57,9 @@ stmt = select(User).where(User.email == email)
 # ❌ 用户输入进了 shell 解释器
 subprocess.run(f"convert {user_file}.png out.jpg", shell=True)
 
-# ✅ 列表参数 + shell=False；文件名做白名单校验
-subprocess.run(["convert", user_file + ".png", "out.jpg"], check=True)
+# 列表参数避免 shell 解释；两个路径由服务端文件 ID 映射得到，不能直接用 user_file。
+# 还需限制目标工具支持的输入格式、资源用量、路径/协议与选项。
+subprocess.run(["convert", trusted_input_path, trusted_output_path], check=True, timeout=10)
 ```
 
 **路径穿越**：
@@ -76,14 +77,51 @@ if not p.is_relative_to(base):
 
 **要点**：参数绑定保护作为值传入的 SQL 参数；动态表名与排序标识仍需白名单。shell=False 避免常规 shell 解析但不防程序选项注入；路径归一化与包含检查也依赖文件系统边界和竞争条件。三者共同原则：**数据永远当数据处理，不当代码执行**。
 
+### 可运行的 SQL 与对象授权实验
+
+在进入配置前，先运行下面的数据库边界实验：保存为 `security.py` 并执行 `python security.py`。它使用标准库 SQLite 内存库，预期输出 `python-security: 3 checks passed`，不连接外部数据库。
+
+<!-- security-check: python-sqlite -->
+```python
+import sqlite3
+
+db = sqlite3.connect(':memory:')
+try:
+    db.execute('CREATE TABLE notes (id INTEGER PRIMARY KEY, owner INTEGER, body TEXT)')
+    db.executemany('INSERT INTO notes VALUES (?, ?, ?)', [(1, 7, 'A'), (2, 8, 'B')])
+    rows = db.execute('SELECT body FROM notes WHERE owner = ? AND body = ?',
+                      (7, "' OR 1=1 --")).fetchall()
+    if rows:
+        raise RuntimeError('injection changed query meaning')
+    updated = db.execute('UPDATE notes SET body = ? WHERE id = ? AND owner = ?',
+                         ('stolen', 2, 7))
+    if updated.rowcount != 0 or db.execute('SELECT body FROM notes WHERE id = 2').fetchone() != ('B',):
+        raise RuntimeError('cross-user write accepted')
+    updated = db.execute('UPDATE notes SET body = ? WHERE id = ? AND owner = ?',
+                         ('updated', 1, 7))
+    if updated.rowcount != 1 or db.execute('SELECT body FROM notes WHERE id = 1').fetchone() != ('updated',):
+        raise RuntimeError('owner write failed')
+    print('python-security: 3 checks passed')
+finally:
+    db.close()
+```
+
+owner 参数代表已认证身份，不从请求体取值。绑定解决注入，owner 条件解决对象权限；这个实验不覆盖 SQLAlchemy 会话、HTTP 认证或真实数据库隔离级别。SQLite 参数使用依据：[标准库参数占位](https://docs.python.org/3/library/sqlite3.html#how-to-use-placeholders-to-bind-values-in-sql-queries)。
+
 ## 3. 密钥管理
 
 ```python
-# pydantic-settings：配置与代码分离（集成方式见生态集成）
+# 集成片段：需要 pydantic-settings；SecretStr 降低 repr 泄漏，不是加密。
+from pydantic import SecretStr
+from pydantic_settings import BaseSettings, SettingsConfigDict
+
 class Settings(BaseSettings):
-    jwt_secret: str                        # 无默认值 → 缺失即启动失败，问题尽早暴露
-    database_url: str
-    model_config = {"env_file": ".env"}    # .env 只在本地；生产用环境变量/密钥服务
+    jwt_secret: SecretStr
+    database_url: SecretStr
+    model_config = SettingsConfigDict(env_file=None)  # 生产从环境或密钥服务注入
+
+settings = Settings()  # 声明类不会校验环境；实例化时缺失必需项才失败
+# 本地开发可显式使用 Settings(_env_file=".env")，密钥使用时调用 get_secret_value()
 ```
 
 - `.env`、`*.pem` 进 `.gitignore`；仓库提交 `.env.example` 字段名占位
@@ -96,16 +134,26 @@ class Settings(BaseSettings):
 ```python
 import bcrypt
 
-# 存哈希不存密码；bcrypt 自带盐 + 慢哈希，GPU 暴力破解成本高
-password_hash = bcrypt.hashpw(password.encode(), bcrypt.gensalt(rounds=12))
-ok = bcrypt.checkpw(input_password.encode(), password_hash)
+# 既有 bcrypt 系统的集成片段；注册与登录必须采用相同字节长度规则。
+def password_bytes(value: str) -> bytes:
+    raw = value.encode('utf-8')
+    if not raw or len(raw) > 72:
+        raise ValueError('password must contain 1 to 72 UTF-8 bytes')
+    return raw
+
+password_hash = bcrypt.hashpw(password_bytes(password), bcrypt.gensalt(rounds=12))
+ok = bcrypt.checkpw(password_bytes(input_password), password_hash)
 ```
+
+72 是字节上限而非字符数，不能静默截断。上例依赖调用方提供 password/input_password，说明的是 bcrypt 边界，不是完整密码策略；工作因子要按机器与并发预算压测，新系统可评估 Argon2id。账号不存在、密码错误、超长输入都需在认证边界映射为约定响应，并做限流；无效存储哈希属于内部故障，不应把异常原文暴露给用户。
 
 JWT 三条铁律：
 
-1. 校验 `exp`（过期）与 `alg`（显式限定算法，拒绝 `alg: none`）
+1. 按服务端固定算法验签，并验证发行方 iss、受众 aud、过期 exp 和主体 sub；“校验已有 exp”不等于“要求存在 exp”
 2. payload 只放标识符——token 可被任何人 base64 解开，不放敏感数据
-3. 短有效期 + 刷新机制，而非超长过期一劳永逸
+3. 按风险选择有效期与刷新机制，另行设计撤销时效；撤销刷新令牌通常不立即撤销已有访问令牌
+
+若采用 PyJWT，显式使用 `jwt.decode(token, key, algorithms=["HS256"], issuer=ISSUER, audience=AUDIENCE, options={"require": ["exp", "iss", "aud", "sub"]})`，然后检查 sub 是符合身份格式的非空字符串。这些参数是服务端配置，不来自未验证的令牌。`require` 检查存在性，其余校验选项决定内容是否合法。依据：[PyJWT decode](https://pyjwt.readthedocs.io/en/stable/api.html#jwt.decode)。
 
 完整签发实现见[生产级应用](../../projects/04-production-fastapi-app.md)第 2 节。
 
@@ -120,7 +168,7 @@ JWT 三条铁律：
 - [ ] 审计明确的项目依赖清单，记录无法审计的包与处置结果；依赖更新机制已配置
 - [ ] 无 f-string SQL / `shell=True` / 未校验的路径拼接
 - [ ] 密钥全部环境变量注入，`.gitignore` 覆盖 `.env`，历史无泄漏
-- [ ] bcrypt 哈希密码、JWT 校验 `exp`/`alg`、短有效期
+- [ ] 专用密码哈希及输入上限；JWT 校验签名、必需声明、发行方、受众与有效期
 - [ ] CORS 白名单、`debug` 关闭、错误信息脱敏
 - [ ] 依赖审计进 CI（与[流水线](../../deployment/02-ci-cd-pipelines.md)集成）
 

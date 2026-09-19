@@ -1,6 +1,6 @@
 # 单元测试指南 (Unit Testing Guide)
 
-> **PHP开发者视角**: 从PHPUnit到Vitest的转变，了解现代前端测试工具和最佳实践。
+> 面向会基本编程、刚开始学习 Next.js 的读者：先验证纯函数的输入输出，再验证组件和 Hook。单元测试不能证明服务端渲染、路由或完整应用构建成功。
 
 ## 单元测试基础
 
@@ -128,6 +128,7 @@ vi.mock("next/navigation", () => ({
 // src/lib/utils/date.ts
 export function formatDate(date: Date | string): string {
   const d = new Date(date)
+  if (Number.isNaN(d.getTime())) throw new RangeError("无效日期")
   return d.toLocaleDateString("zh-CN", {
     timeZone: "UTC", // 本例明确使用 UTC，避免测试随机器时区变化
     year: "numeric",
@@ -142,8 +143,12 @@ export function isValidEmail(email: string): boolean {
 }
 
 export function truncateText(text: string, maxLength: number): string {
-  if (text.length <= maxLength) return text
-  return text.slice(0, maxLength) + "..."
+  if (!Number.isInteger(maxLength) || maxLength < 0) {
+    throw new RangeError("maxLength 必须是非负整数")
+  }
+  const characters = Array.from(text)
+  if (characters.length <= maxLength) return text
+  return characters.slice(0, maxLength).join("") + "..."
 }
 
 export function generateSlug(text: string): string {
@@ -153,9 +158,11 @@ export function generateSlug(text: string): string {
     .replace(/[^\w\s-]/g, "")
     .replace(/\s+/g, "-")
     .replace(/-+/g, "-")
-    .trim()
+    .replace(/^-+|-+$/g, "")
 }
 ```
+
+这里明确选择 UTC 日期与 Unicode 码点截断：`maxLength` 不含后缀的三个点；码点仍不等于人眼看到的完整字素，例如家庭 emoji 可能由多个码点组成。需要按显示字符截断时使用 `Intl.Segmenter` 并单独测试。邮箱正则只做基础格式提示，不证明地址存在。slug 函数只支持 ASCII 标识，中文标题可能得到空串；保存前必须拒绝空串并在服务端处理重复值。
 
 ```typescript
 // __tests__/utils/date.test.ts
@@ -174,10 +181,9 @@ describe("Date Utils", () => {
       expect(result).toBe("2024年1月15日")
     })
 
-    it("应该能处理当前日期", () => {
-      const today = new Date()
-      const result = formatDate(today)
-      expect(result).toContain(today.getFullYear().toString())
+    it("跨年时使用 UTC 日期，不取设备本地年份", () => {
+      expect(formatDate("2025-01-01T01:00:00+08:00")).toBe("2024年12月31日")
+      expect(() => formatDate("not-a-date")).toThrow(RangeError)
     })
   })
 
@@ -206,8 +212,15 @@ describe("Date Utils", () => {
     it("应该正确截断长文本", () => {
       const text = "这是一个很长的文本，需要被截断"
       const result = truncateText(text, 10)
-      expect(result).toBe("这是一个很长的...")
+      expect(result).toBe("这是一个很长的文本，...")
       expect(result.length).toBeLessThanOrEqual(13) // 10 + "..."
+    })
+
+    it("按码点处理 emoji，拒绝非法长度", () => {
+      expect(truncateText("😀ab", 1)).toBe("😀...")
+      expect(truncateText("a", 0)).toBe("...")
+      expect(() => truncateText("abc", -1)).toThrow(RangeError)
+      expect(() => truncateText("abc", 1.5)).toThrow(RangeError)
     })
   })
 
@@ -217,6 +230,7 @@ describe("Date Utils", () => {
       expect(generateSlug("React & Next.js")).toBe("react-nextjs")
       expect(generateSlug("  Spaces  ")).toBe("spaces")
       expect(generateSlug("Multiple---Dashes")).toBe("multiple-dashes")
+      expect(generateSlug("--Hello--")).toBe("hello")
     })
   })
 })
@@ -231,14 +245,14 @@ import { z } from "zod"
 export const userSchema = z.object({
   name: z.string().min(2, "姓名至少需要2个字符").max(50, "姓名不能超过50个字符"),
   email: z.string().email("请输入有效的邮箱地址"),
-  age: z.number().min(18, "年龄必须大于18岁").max(120, "年龄不能超过120岁"),
+  age: z.number().int("年龄必须是整数").min(18, "年龄必须至少18岁").max(120, "年龄不能超过120岁"),
   bio: z.string().max(500, "个人简介不能超过500字符").optional(),
   website: z.string().url("请输入有效的网址").optional().or(z.literal("")),
 })
 
 export const postSchema = z.object({
-  title: z.string().min(1, "标题不能为空").max(100, "标题不能超过100字符"),
-  content: z.string().min(1, "内容不能为空").max(10000, "内容不能超过10000字符"),
+  title: z.string().trim().min(1, "标题不能为空").max(100, "标题不能超过100字符"),
+  content: z.string().trim().min(1, "内容不能为空").max(10000, "内容不能超过10000字符"),
   tags: z.array(z.string()).max(5, "最多添加5个标签"),
   published: z.boolean().default(false),
 })
@@ -385,12 +399,10 @@ const buttonVariants = cva(
 
 export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement>,
-    VariantProps<typeof buttonVariants> {
-  asChild?: boolean
-}
+    VariantProps<typeof buttonVariants> {}
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant, size, asChild = false, ...props }, ref) => {
+  ({ className, variant, size, ...props }, ref) => {
     return (
       <button
         className={cn(buttonVariants({ variant, size, className }))}
@@ -759,7 +771,7 @@ describe("ContactForm Component", () => {
 
 ```typescript
 // src/hooks/use-local-storage.ts
-import { useState, useEffect } from "react"
+import { useState, useRef } from "react"
 
 export function useLocalStorage<T>(key: string, initialValue: T) {
   const [storedValue, setStoredValue] = useState<T>(() => {
@@ -775,13 +787,15 @@ export function useLocalStorage<T>(key: string, initialValue: T) {
     }
   })
 
+  const latest = useRef(storedValue)
   const setValue = (value: T | ((val: T) => T)) => {
     try {
-      const valueToStore = value instanceof Function ? value(storedValue) : value
-      setStoredValue(valueToStore)
+      const valueToStore = value instanceof Function ? value(latest.current) : value
       if (typeof window !== "undefined") {
         window.localStorage.setItem(key, JSON.stringify(valueToStore))
       }
+      latest.current = valueToStore
+      setStoredValue(valueToStore)
     } catch (error) {
       console.error(`Error setting localStorage key "${key}":`, error)
     }
@@ -868,20 +882,48 @@ describe("useLocalStorage", () => {
     consoleSpy.mockRestore()
   })
 
-  it("应该在服务器端返回初始值", () => {
-    // 模拟服务器端环境
-    const originalWindow = global.window
-    delete (global as any).window
-
-    const { result } = renderHook(() => useLocalStorage("test-key", "server-value"))
-
-    expect(result.current[0]).toBe("server-value")
-
-    // 恢复window对象
-    global.window = originalWindow
+  it("同一批次的函数式更新读取最新值", () => {
+    const { result } = renderHook(() => useLocalStorage("counter", 0))
+    act(() => {
+      result.current[1](n => n + 1)
+      result.current[1](n => n + 1)
+    })
+    expect(result.current[0]).toBe(2)
+    expect(localStorage.setItem).toHaveBeenLastCalledWith("counter", "2")
   })
+
+  it("保存失败时不把未保存的数据显示为已保存", () => {
+    const consoleSpy = vi.spyOn(console, "error").mockImplementation(() => {})
+    vi.spyOn(localStorage, "setItem").mockImplementation(() => { throw new Error("quota") })
+    const { result } = renderHook(() => useLocalStorage("test-key", "initial"))
+    act(() => result.current[1]("new"))
+    expect(result.current[0]).toBe("initial")
+    consoleSpy.mockRestore()
+  })
+
 })
 ```
+
+服务器测试应放在独立的 Node 测试环境，并使用服务端渲染器。删除 jsdom 的 `window` 后仍调用浏览器 `renderHook`，会破坏测试工具自身，并不能模拟 SSR。
+
+```typescript
+// @vitest-environment node
+// __tests__/hooks/use-local-storage.server.test.ts
+import { createElement } from "react"
+import { renderToString } from "react-dom/server"
+import { expect, it } from "vitest"
+import { useLocalStorage } from "@/hooks/use-local-storage"
+
+it("服务端渲染返回初始值", () => {
+  function Probe() {
+    const [value] = useLocalStorage("test-key", "server-value")
+    return createElement("span", null, value)
+  }
+  expect(renderToString(createElement(Probe))).toBe("<span>server-value</span>")
+})
+```
+
+这个测试只覆盖服务器分支，不证明 hydration 一致。上面的 Hook 是固定 key、JSON 可序列化值的客户端练习：它在浏览器首次渲染就读存储，因此不要直接用于服务端预渲染且显示存储值的页面。完整 Next.js 版本应先渲染相同初始值，挂载后读取并显式处理加载、损坏数据和写入失败；需要切换 key 或同步多个标签页时还须补充相应状态机。写入失败时当前示例保留旧状态并记录错误，正式界面应展示可重试错误提示。
 
 ### 2. 数据获取Hooks
 

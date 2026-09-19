@@ -82,7 +82,10 @@ const users = await prisma.$queryRaw`
 
 ```typescript
 const SORTABLE = { createdAt: 'createdAt', title: 'title' } as const;
-const field = SORTABLE[validated.sort as keyof typeof SORTABLE] ?? 'createdAt';
+if (!Object.hasOwn(SORTABLE, validated.sort)) {
+  throw new Error('Unsupported sort field'); // handler 映射为 400
+}
+const field = SORTABLE[validated.sort as keyof typeof SORTABLE];
 ```
 
 ### 命令注入
@@ -119,7 +122,7 @@ const filePath = path.join(path.resolve(UPLOAD_DIR), id);
 生产密钥的正确旅程：
   保管：云厂商 Secrets Manager / Vault / 1Password Connect
   注入：CI 的 secrets.* → 部署时挂为环境变量（或挂载文件）
-  使用：启动时 env schema 校验（长度/格式），进程内只留一份
+  使用：启动时 env schema 校验（长度/格式），限制模块访问与调试转储
   轮换：支持双密钥并行验证期 → 切换 → 移除旧密钥
   泄漏应急：立即轮换 > 追责复盘；git 历史里的密钥必须视为已泄漏
 ```
@@ -138,12 +141,52 @@ const jwtAccessSecret = z.string().min(32)
 
 ```typescript
 // 显式算法 + 受众校验
-jwt.verify(token, env.JWT_ACCESS_SECRET, {
-  algorithms: ['HS256'], // 不写 algorithms 时某些库接受攻击者指定的算法
+const claims = jwt.verify(token, env.JWT_ACCESS_SECRET, {
+  algorithms: ['HS256'], // 服务端固定算法，不根据未验证 header 选择策略
   audience: 'todo-api',
   issuer: 'https://auth.example.com',
 });
+if (typeof claims !== 'object' || claims === null ||
+    typeof claims.exp !== 'number' || !Number.isFinite(claims.exp) ||
+    typeof claims.sub !== 'string' || claims.sub.length === 0) {
+  throw new Error('Invalid access token');
+}
 ```
+
+上段使用 `jsonwebtoken`，是认证服务中的集成片段，`jwt`、`token`、`env` 由该服务提供。`verify` 验证存在的 exp 是否过期，不等于要求令牌一定含 exp；因此应用额外要求 exp 与非空 sub。校验失败在边界捕获并返回 401，不能把异常文本和原始令牌返回给客户端。刷新令牌应与访问令牌区别用途并在服务端跟踪撤销；撤销刷新令牌不自动使已有访问令牌失效。依据：[jsonwebtoken 验证选项](https://github.com/auth0/node-jsonwebtoken#jwtverifytoken-secretorpublickey-options-callback)。
+
+## 3.1 可运行的文件访问边界
+
+保存为 `security.mjs`，运行 `node security.mjs`。此案例不读磁盘，只验证 ID 格式、归属和排序允许列表；输出应为 `node-security: 6 checks passed`。用户身份必须来自已验证凭据，文件元数据必须来自服务端存储。
+
+<!-- security-check: node-boundaries -->
+```javascript
+import assert from 'node:assert/strict';
+import path from 'node:path';
+
+const fileID = 'a'.repeat(32);
+const files = new Map([[fileID, { owner: 'user-a' }]]);
+function fileFor(user, id) {
+  if (typeof id !== 'string' || !/^[a-f0-9]{32}$/.test(id)) throw new Error('bad-id');
+  const record = files.get(id);
+  if (!record || record.owner !== user) throw new Error('not-found');
+  return path.join(path.resolve('private-files'), id);
+}
+const sortable = { createdAt: 'createdAt', title: 'title' };
+function sortField(value) {
+  if (!Object.hasOwn(sortable, value)) throw new Error('bad-sort');
+  return sortable[value];
+}
+assert.equal(path.basename(fileFor('user-a', fileID)), fileID);
+assert.throws(() => fileFor('user-b', fileID), /not-found/);
+assert.throws(() => fileFor('user-a', '../secret'), /bad-id/);
+assert.throws(() => fileFor('user-a', 'b'.repeat(32)), /not-found/);
+assert.throws(() => sortField('__proto__'), /bad-sort/);
+assert.equal(sortField('title'), 'title');
+console.log('node-security: 6 checks passed');
+```
+
+文件名合法只解决路径输入，归属检查解决对象权限；两者缺一不可。真实下载还要保证目录和符号链接只能被可信进程修改、失败时不泄露文件内容、响应头安全、文件流及时关闭。该实验不证明磁盘竞争、HTTP 中间件或 JWT 库集成已验证。
 
 ## 4. 依赖与运行时
 

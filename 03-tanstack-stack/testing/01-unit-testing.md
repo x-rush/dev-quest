@@ -32,8 +32,10 @@
 ## 1. Vitest 配置
 
 ```bash
-npm install -D vitest @vitejs/plugin-react
+npm install -D vitest @vitest/coverage-v8 @vitejs/plugin-react
 ```
+
+`@vitest/coverage-v8` 只在收集覆盖率时使用，应与 Vitest 使用匹配版本并提交锁文件；详见 [Vitest 覆盖率文档](https://vitest.dev/guide/coverage.html)。覆盖率阈值是项目选择，80% 不代表行为正确，必须有能发现错误实现的边界断言。
 
 ```ts
 // vitest.config.ts
@@ -59,8 +61,7 @@ export default defineConfig({
 ```
 
 ```json
-// package.json scripts
-{ "test": "vitest run", "test:watch": "vitest", "test:coverage": "vitest run --coverage" }
+{ "scripts": { "test": "vitest run", "test:watch": "vitest", "test:coverage": "vitest run --coverage" } }
 ```
 
 ---
@@ -87,6 +88,12 @@ describe('todoApi', () => {
   it('list：非 2xx 抛出带状态码的错误', async () => {
     vi.stubGlobal('fetch', vi.fn().mockResolvedValue(new Response('', { status: 500 })))
     await expect(todoApi.list()).rejects.toThrow('请求失败 500')
+  })
+
+  it('remove：204 无响应体也是成功', async () => {
+    vi.stubGlobal('fetch', vi.fn().mockResolvedValue(new Response(null, { status: 204 })))
+    await expect(todoApi.remove(1)).resolves.toBeUndefined()
+    expect(fetch).toHaveBeenCalledWith('/api/todos/1', { method: 'DELETE' })
   })
 })
 ```
@@ -117,11 +124,14 @@ describe('todoKeys', () => {
 
 ```ts
 // src/features/board/optimistic.ts
-import type { Board } from './types'
+import type { Board } from '../../api/board'
 export function applyMove(board: Board, cardId: string, toColumn: string, index: number): Board {
-  // 与 useMoveCard 中 setQueryData 的逻辑完全一致
   const card = board.cards[cardId]
-  if (!card) return board
+  const target = board.columns.find((col) => col.id === toColumn)
+  if (!card || !target) return board
+  // index 指先移除卡片后的目标列插入位置，可等于目标列长度。
+  const size = target.cardIds.filter((id) => id !== cardId).length
+  if (!Number.isInteger(index) || index < 0 || index > size) return board
   const columns = board.columns.map((col) => {
     const ids = col.cardIds.filter((id) => id !== cardId)
     if (col.id === toColumn) ids.splice(index, 0, cardId)
@@ -141,7 +151,10 @@ const board = {
     { id: 'c1', title: '待办', cardIds: ['a', 'b'] },
     { id: 'c2', title: '进行中', cardIds: [] },
   ],
-  cards: { a: { id: 'a', columnId: 'c1', title: 'A', version: 1 } },
+  cards: {
+    a: { id: 'a', columnId: 'c1', title: 'A', version: 1 },
+    b: { id: 'b', columnId: 'c1', title: 'B', version: 1 },
+  },
 }
 
 describe('applyMove', () => {
@@ -154,8 +167,26 @@ describe('applyMove', () => {
   it('卡片不存在时返回原对象（不可变约定）', () => {
     expect(applyMove(board, 'ghost', 'c2', 0)).toBe(board)
   })
+
+  it('目标不存在或位置非法时不丢卡片', () => {
+    expect(applyMove(board, 'a', 'missing', 0)).toBe(board)
+    for (const index of [-1, 0.5, NaN, 1]) {
+      expect(applyMove(board, 'a', 'c2', index)).toBe(board)
+    }
+  })
+
+  it('同列重排以移除后的列表为准，且不修改输入', () => {
+    const before = structuredClone(board)
+    const next = applyMove(board, 'a', 'c1', 1)
+    expect(next.columns[0].cardIds).toEqual(['b', 'a'])
+    expect(next.cards.a.columnId).toBe('c1')
+    expect(board).toEqual(before)
+    expect(next.cards.b).toBe(board.cards.b)
+  })
 })
 ```
+
+`Board` 类型来自[看板项目](../projects/03-collaborative-kanban.md)的 `src/api/board.ts`。此函数只负责本地变换，不解决网络并发与回滚。未知目标必须先检查，否则先从源列删除后无法插入目标列，会使卡片消失。用 `Object.freeze` 或深冻结夹具还可以进一步检测输入突变。
 
 ---
 

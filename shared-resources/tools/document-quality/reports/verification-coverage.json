@@ -17,13 +17,13 @@
   "summary": {
     "documents": 641,
     "by_primary_state": {
-      "not_verified": 577,
-      "runtime": 64
+      "not_verified": 569,
+      "runtime": 72
     },
-    "verification_wording_occurrences": 252,
+    "verification_wording_occurrences": 259,
     "marker_classification": {
-      "source_has_limited_runtime_evidence": 92,
-      "unbound_verification_wording": 160
+      "source_has_limited_runtime_evidence": 101,
+      "unbound_verification_wording": 158
     }
   },
   "documents": [
@@ -94,16 +94,16 @@
     },
     {
       "path": "01-go-backend/advanced-topics/security/01-security-best-practices.md",
-      "sha256": "b8373bd98b2a87fabdcf2bc0bf131549bf17856e1c69985ec22c503582b61ea1",
+      "sha256": "16ab978a2e054053029aeb8d91add834ea1512dabaeb24a3831617be1d09f795",
       "verification": [
         {
-          "mode": "not_verified",
-          "status": "NOT_VERIFIED",
-          "report": null,
-          "scope": "No named runtime or syntax evidence is recorded for this document."
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "security-examples.json",
+          "scope": "marked complete program only; framework integrations are not verified"
         }
       ],
-      "marker_count": 0
+      "marker_count": 1
     },
     {
       "path": "01-go-backend/basics/01-environment-setup.md",
@@ -1834,13 +1834,19 @@
     },
     {
       "path": "02-nextjs-frontend/testing/01-unit-testing.md",
-      "sha256": "5f995cd8f937afb2d0c897d234054867edab912256315ede0a6480a65dcdbfd0",
+      "sha256": "dce6869d47dc143009530b4745f63f69ea738c902a8acde18bdc05ec22cf93f8",
       "verification": [
         {
-          "mode": "not_verified",
-          "status": "NOT_VERIFIED",
-          "report": null,
-          "scope": "No named runtime or syntax evidence is recorded for this document."
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "testing-projects.json",
+          "scope": "Four exact documentation source blocks; 11 Node behavior tests. Only fetch is replaced explicitly for HTTP contract tests. Not Vitest/Jest setup, TS typecheck, React, SSR, browser, native MMKV or device validation."
+        },
+        {
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "client-storage.json",
+          "scope": "Exact Hook source executed with real React and jsdom, plus a separate Node server renderer. No browser hydration, Next build, cross-tab storage or dynamic key support."
         }
       ],
       "marker_count": 0
@@ -2146,13 +2152,13 @@
     },
     {
       "path": "03-tanstack-stack/projects/01-todo-app.md",
-      "sha256": "844812f082c3b239434906b2bfcdb718b844faf55de5199bd8a477870713b169",
+      "sha256": "2cfee4b127781711a272a04917a78a3c578ba3a986fd822d419b71ca56808892",
       "verification": [
         {
-          "mode": "not_verified",
-          "status": "NOT_VERIFIED",
-          "report": null,
-          "scope": "No named runtime or syntax evidence is recorded for this document."
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "testing-projects.json",
+          "scope": "Four exact documentation source blocks; 11 Node behavior tests. Only fetch is replaced explicitly for HTTP contract tests. Not Vitest/Jest setup, TS typecheck, React, SSR, browser, native MMKV or device validation."
         }
       ],
       "marker_count": 0
@@ -2172,7 +2178,7 @@
     },
     {
       "path": "03-tanstack-stack/projects/03-collaborative-kanban.md",
-      "sha256": "3b694064d37ab6dc4f1ca724534a37e580d2a8411145015a15a0c38998c3b14c",
+      "sha256": "c0c306f3878658aeae57b0cf9e3ca7567d86e43b5fb4ad9d7f66c07c4fa6e87c",
       "verification": [
         {
           "mode": "not_verified",
@@ -2614,13 +2620,13 @@
     },
     {
       "path": "03-tanstack-stack/testing/01-unit-testing.md",
-      "sha256": "e8a9ab301b689840aa3e6d1c2c260e564182ffdc94c78797dd5cf6daeed5cba3",
+      "sha256": "6f5264cb62c5192c90c279e42a530a509c6bdb96e1a689f7309b7d70540e66a7",
       "verification": [
         {
-          "mode": "not_verified",
-          "status": "NOT_VERIFIED",
-          "report": null,
-          "scope": "No named runtime or syntax evidence is recorded for this document."
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "testing-projects.json",
+          "scope": "Four exact documentation source blocks; 11 Node behavior tests. Only fetch is replaced explicitly for HTTP contract tests. Not Vitest/Jest setup, TS typecheck, React, SSR, browser, native MMKV or device validation."
         }
       ],
       "marker_count": 1
@@ -2926,16 +2932,16 @@
     },
     {
       "path": "04-multiplatform-apps/projects/01-todo-app.md",
-      "sha256": "d31628fb12e82fc5a7ea9c8b7f63d2573cbecc063ed0ca5adf8017b5bc5a4f42",
+      "sha256": "eb169a373f467af0b6c4cd2bd5a6efa0938a14e423f568b6113ba726d5147d9d",
       "verification": [
         {
-          "mode": "not_verified",
-          "status": "NOT_VERIFIED",
-          "report": null,
-          "scope": "No named runtime or syntax evidence is recorded for this document."
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "testing-projects.json",
+          "scope": "Four exact documentation source blocks; 11 Node behavior tests. Only fetch is replaced explicitly for HTTP contract tests. Not Vitest/Jest setup, TS typecheck, React, SSR, browser, native MMKV or device validation."
         }
       ],
-      "marker_count": 0
+      "marker_count": 1
     },
     {
       "path": "04-multiplatform-apps/projects/02-weather-app.md",
@@ -3303,7 +3309,7 @@
     },
     {
       "path": "04-multiplatform-apps/testing/01-unit-testing.md",
-      "sha256": "52b27ea6c3ee83c4b17b5b8fa2c629ee58d351f5f76cb0b7072eaf497cb12721",
+      "sha256": "565903de99320eb2a82f736c11e48cff8bba2a5a87a0db0300c887303a07a5f6",
       "verification": [
         {
           "mode": "not_verified",
@@ -4895,13 +4901,13 @@
     },
     {
       "path": "07-php-mastery/advanced-topics/security/01-security-practices.md",
-      "sha256": "193c6dac59bb06021f22e4ae93364b840717cb12a89df57fb586b856fb38374f",
+      "sha256": "4da8c783dc44018cbf1abb6491199031377e08646a797135440e1f027695a8f6",
       "verification": [
         {
-          "mode": "not_verified",
-          "status": "NOT_VERIFIED",
-          "report": null,
-          "scope": "No named runtime or syntax evidence is recorded for this document."
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "security-examples.json",
+          "scope": "marked complete program only; framework integrations are not verified"
         }
       ],
       "marker_count": 2
@@ -5672,7 +5678,7 @@
     },
     {
       "path": "08-java-revisited/advanced-topics/security/01-security-practices.md",
-      "sha256": "1a924fc177de349419c451c7c32b24fdd229265c233c2d8f5f7a68510c5ffc6c",
+      "sha256": "935e1117e96905bc97c6758692a41308d455f5476ae84fa93dba775bf9dcc1f1",
       "verification": [
         {
           "mode": "not_verified",
@@ -5681,7 +5687,7 @@
           "scope": "No named runtime or syntax evidence is recorded for this document."
         }
       ],
-      "marker_count": 0
+      "marker_count": 1
     },
     {
       "path": "08-java-revisited/basics/01-environment-setup.md",
@@ -6455,16 +6461,16 @@
     },
     {
       "path": "09-nodejs-backend/advanced-topics/security/01-security-practices.md",
-      "sha256": "de872aef0be41bd7e01515dcefbf59cdd443b6214b7cdaf11559f522dc3064cb",
+      "sha256": "88c1d28dbdbd60fc5e100a42f2a6e1cfe9754d3bb4e33ad8026ae6f662299a97",
       "verification": [
         {
-          "mode": "not_verified",
-          "status": "NOT_VERIFIED",
-          "report": null,
-          "scope": "No named runtime or syntax evidence is recorded for this document."
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "security-examples.json",
+          "scope": "marked complete program only; framework integrations are not verified"
         }
       ],
-      "marker_count": 0
+      "marker_count": 3
     },
     {
       "path": "09-nodejs-backend/basics/01-environment-setup.md",
@@ -7111,16 +7117,16 @@
     },
     {
       "path": "10-python-discovery/advanced-topics/security/01-security-practices.md",
-      "sha256": "0e4b3ba932d8055f2cd77ba5f94686dbbaa352a011aed43e6c952dda2562bd5f",
+      "sha256": "41c8b6979af13d4b2de3c3031d6742c8ba2f31eadd1a27d6698050d46de992f9",
       "verification": [
         {
-          "mode": "not_verified",
-          "status": "NOT_VERIFIED",
-          "report": null,
-          "scope": "No named runtime or syntax evidence is recorded for this document."
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "security-examples.json",
+          "scope": "marked complete program only; framework integrations are not verified"
         }
       ],
-      "marker_count": 0
+      "marker_count": 1
     },
     {
       "path": "10-python-discovery/basics/01-environment-setup.md",
@@ -8483,6 +8489,12 @@
       "classification": "unbound_verification_wording"
     },
     {
+      "path": "01-go-backend/advanced-topics/security/01-security-best-practices.md",
+      "line": 15,
+      "excerpt": "## 2. 可运行的输入与对象授权案例",
+      "classification": "source_has_limited_runtime_evidence"
+    },
+    {
       "path": "01-go-backend/deployment/01-containerization.md",
       "line": 3,
       "excerpt": "> **阅读准备**：已有可在本机启动的 Go 服务，理解端口、环境变量与进程退出，并具备可运行的 Docker 环境。",
@@ -8646,9 +8658,9 @@
     },
     {
       "path": "03-tanstack-stack/testing/01-unit-testing.md",
-      "line": 193,
+      "line": 224,
       "excerpt": "选择项目中的 queryKey 工厂和分页解析函数：同一资源的相同参数产生等价键，不同账号或分页不得误共用；非法页码回到约定默认值或明确拒绝。把账号字段故意从键里删除，至少一个隔离测试应失败。验收：恢复后测试通过，改变执行顺序仍通过；这组纯函数测试不需要真实网络，也不能证明 Provider 和界面订阅正确。",
-      "classification": "unbound_verification_wording"
+      "classification": "source_has_limited_runtime_evidence"
     },
     {
       "path": "04-multiplatform-apps/advanced-topics/architecture/01-new-architecture.md",
@@ -8679,6 +8691,12 @@
       "line": 3,
       "excerpt": "> 前置：React、TypeScript 和异步请求；先选择 Android 或 iOS 一个可运行目标。iOS 原生本地构建需要 macOS/Xcode，鸿蒙适配单独核查。",
       "classification": "unbound_verification_wording"
+    },
+    {
+      "path": "04-multiplatform-apps/projects/01-todo-app.md",
+      "line": 39,
+      "excerpt": "- 在 Android / iOS 开发构建中分别完成下方验收；鸿蒙需独立适配与工具链验证，本文代码不证明三端已运行",
+      "classification": "source_has_limited_runtime_evidence"
     },
     {
       "path": "04-multiplatform-apps/README.md",
@@ -8922,15 +8940,15 @@
     },
     {
       "path": "07-php-mastery/advanced-topics/security/01-security-practices.md",
-      "line": 135,
+      "line": 171,
       "excerpt": "前置是 HTTP、数据库参数和浏览器渲染。输入验证确认形状与范围，授权确认当前主体能否访问资源，输出编码确认数据在目标上下文中不会变成代码。三者解决不同问题：合法整数订单 ID 仍可能属于别人；已验证文本进入 HTML、URL 或 JavaScript 时仍需各自的安全处理。",
-      "classification": "unbound_verification_wording"
+      "classification": "source_has_limited_runtime_evidence"
     },
     {
       "path": "07-php-mastery/advanced-topics/security/01-security-practices.md",
-      "line": 139,
+      "line": 175,
       "excerpt": "**练习**：用户 A 请求用户 B 的订单，预期拒绝且不泄露订单内容；把 sort 改成不允许的字段，预期校验失败；提交带脚本标签的标题，页面显示文本而不执行。对 Cookie 认证的写接口分别发送缺失、错误和正确 CSRF 凭据，在启用真实中间件的环境验证。测试通过的结论应限定在覆盖的入口和输入。",
-      "classification": "unbound_verification_wording"
+      "classification": "source_has_limited_runtime_evidence"
     },
     {
       "path": "07-php-mastery/basics/07-advanced-features.md",
@@ -8954,6 +8972,12 @@
       "path": "07-php-mastery/reference/language-concepts/13-weak-comparison.md",
       "line": 112,
       "excerpt": "前置是类型、布尔值和数组。强制转换不是验证：把 'abc' 转为 int 会丢失原始信息，之后再 === 0 也无法知道输入原来不是零。先验证原始类型、格式和范围，再把已验证的值转为内部类型，最后做业务比较。",
+      "classification": "unbound_verification_wording"
+    },
+    {
+      "path": "08-java-revisited/advanced-topics/security/01-security-practices.md",
+      "line": 152,
+      "excerpt": "第二层片段需要启用 `@EnableMethodSecurity`，并通过 Spring 代理调用。JWT 的默认 principal 是 `Jwt`，不能假设它有业务字段 `memberId`。由已验证的 `sub` 查找内部用户，不能信任请求里传来的 memberId。方法授权可以调用实际对象权限规则；上例的 scope 只表达操作能力，仍需第三层对象检查或带 owner 条件的数据查询。",
       "classification": "unbound_verification_wording"
     },
     {
@@ -8996,6 +9020,24 @@
       "path": "08-java-revisited/reference/library-guides/01-standard-library.md",
       "line": 193,
       "excerpt": "应用可在同配置请求间复用客户端。Java 21 的 HttpClient 实现 AutoCloseable，需要有清晰的应用生命周期；不要每个请求创建后立即丢弃。线程被中断时，通常传播 InterruptedException；捕获后若不能传播，应恢复中断标记并结束该操作。真实网络示例依赖服务端，本篇的离线验证不声称覆盖网络成功率、TLS 或超时实测。官方契约见 [HttpClient](https://docs.oracle.com/en/java/javase/21/do",
+      "classification": "source_has_limited_runtime_evidence"
+    },
+    {
+      "path": "09-nodejs-backend/advanced-topics/security/01-security-practices.md",
+      "line": 158,
+      "excerpt": "## 3.1 可运行的文件访问边界",
+      "classification": "source_has_limited_runtime_evidence"
+    },
+    {
+      "path": "09-nodejs-backend/advanced-topics/security/01-security-practices.md",
+      "line": 160,
+      "excerpt": "保存为 `security.mjs`，运行 `node security.mjs`。此案例不读磁盘，只验证 ID 格式、归属和排序允许列表；输出应为 `node-security: 6 checks passed`。用户身份必须来自已验证凭据，文件元数据必须来自服务端存储。",
+      "classification": "source_has_limited_runtime_evidence"
+    },
+    {
+      "path": "09-nodejs-backend/advanced-topics/security/01-security-practices.md",
+      "line": 189,
+      "excerpt": "文件名合法只解决路径输入，归属检查解决对象权限；两者缺一不可。真实下载还要保证目录和符号链接只能被可信进程修改、失败时不泄露文件内容、响应头安全、文件流及时关闭。该实验不证明磁盘竞争、HTTP 中间件或 JWT 库集成已验证。",
       "classification": "source_has_limited_runtime_evidence"
     },
     {
@@ -9129,6 +9171,12 @@
       "line": 107,
       "excerpt": "| tottime 集中在序列化函数 | 编码、字段转换或数据量可能占主要成本 | 先缩小热点、检查重复转换与输出大小，再实测候选实现 |",
       "classification": "unbound_verification_wording"
+    },
+    {
+      "path": "10-python-discovery/advanced-topics/security/01-security-practices.md",
+      "line": 80,
+      "excerpt": "### 可运行的 SQL 与对象授权实验",
+      "classification": "source_has_limited_runtime_evidence"
     },
     {
       "path": "10-python-discovery/deployment/02-ci-cd-pipelines.md",

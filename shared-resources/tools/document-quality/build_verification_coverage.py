@@ -66,6 +66,14 @@ def records_from_reports():
     mobile = load("mobile-foundations.json")
     for row in mobile.get("results", []):
         add_record(records, row.get("source"), "runtime", "mobile-foundations.json", mobile.get("scope", "selected portable mobile-language check"), "PASS" if row.get("status") == "PASS" else "FAIL")
+    security = load("security-examples.json")
+    for row in security.get("results", []):
+        add_record(records, row.get("source"), "runtime", "security-examples.json", row.get("scope", "selected security-boundary program"), "PASS" if row.get("status", "").lower() == "pass" else "FAIL")
+    testing = load("testing-projects.json")
+    for row in testing.get("results", []):
+        add_record(records, row.get("source"), "runtime", "testing-projects.json", testing.get("scope", "selected testing/project behavior block"), "PASS" if row.get("status", "").upper() == "PASS" else "FAIL")
+    client_storage = load("client-storage.json")
+    add_record(records, client_storage.get("source"), "runtime", "client-storage.json", client_storage.get("scope", "selected React/jsdom and SSR storage checks"), "PASS" if client_storage.get("passed") else "FAIL")
     # The web report names its source set rather than assigning a result per source.
     web = load("final-web-examples.json")
     for source in web.get("sources", []):

@@ -33,10 +33,10 @@
 
 ## 🎯 项目目标
 
-- ✅ 独立实现增删改查 + 已完成筛选的完整功能
+- ✅ 独立实现新增、切换完成状态、删除与未完成数量统计
 - ✅ 数据本地持久化，杀进程后不丢失
 - ✅ 掌握受控输入、列表渲染、空态处理三个基础模式
-- ✅ 三端（Android/iOS/鸿蒙）运行验证
+- 在 Android / iOS 开发构建中分别完成下方验收；鸿蒙需独立适配与工具链验证，本文代码不证明三端已运行
 
 ## 📐 需求定义
 
@@ -57,27 +57,56 @@
 ```bash
 npx create-expo-app@latest todo-app
 cd todo-app && npx expo install expo-status-bar
-npm install zustand react-native-mmkv
+npm install zustand
+npx expo install expo-crypto react-native-mmkv react-native-nitro-modules
 ```
+
+MMKV v4 是原生 Nitro Module，按 [MMKV 安装文档](https://github.com/mrousavy/react-native-mmkv#installation)安装配套模块并生成 development build；不能在只包含固定原生模块的 Expo Go 中直接加载它。Android 使用 `npx expo run:android`；iOS 在 macOS / Xcode 环境使用 `npx expo run:ios`。记录项目 SDK、React Native 和 MMKV 锁定版本，依赖升级后重新构建。
 
 ## 💻 核心实现
 
 ### 第一步：持久化 Store
+
+先隔离纯业务规则，供 store 与[单元测试](../testing/01-unit-testing.md)复用。标题为空时返回 `null`，拒绝非法时间与空 id。id 由调用者生成，因此测试可控制它；实际应用使用 [Expo Crypto 的 randomUUID](https://docs.expo.dev/versions/latest/sdk/crypto/#cryptorandomuuid)。
+
+```ts
+// utils/todos.ts
+export interface Todo {
+  id: string;
+  title: string;
+  done: boolean;
+  createdAt: number;
+}
+
+export function createTodo(title: string, id: string, createdAt: number): Todo | null {
+  const normalized = title.trim();
+  if (!normalized) return null;
+  if (!id || !Number.isFinite(createdAt) || createdAt < 0) {
+    throw new RangeError('id 和创建时间无效');
+  }
+  return { id, title: normalized, done: false, createdAt };
+}
+
+export function toggleTodo(todos: Todo[], id: string): Todo[] {
+  if (!todos.some((todo) => todo.id === id)) return todos;
+  return todos.map((todo) => todo.id === id ? { ...todo, done: !todo.done } : todo);
+}
+
+export function remainingCount(todos: Todo[]): number {
+  return todos.filter((todo) => !todo.done).length;
+}
+```
 
 ```ts
 // store/todos.ts —— 业务与持久化一体化
 import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
 import { createMMKV } from 'react-native-mmkv';
+import { randomUUID } from 'expo-crypto';
+import { createTodo, toggleTodo, type Todo } from '../utils/todos';
+export type { Todo } from '../utils/todos';
 
 const storage = createMMKV(); // 全局唯一实例
-
-export interface Todo {
-  id: string;
-  title: string;
-  done: boolean;
-  createdAt: number; // 时间戳，毫秒
-}
 
 interface TodoState {
   todos: Todo[];
@@ -90,14 +119,14 @@ export const useTodoStore = create<TodoState>()(
   persist(
     (set) => ({
       todos: [],
-      add: (title) =>
-        set((s) => ({
-          // trim + 非空校验：拦截纯空格输入
-          todos: [{ id: Date.now().toString(), title: title.trim(), done: false, createdAt: Date.now() }, ...s.todos],
-        })),
+      add: (title) => {
+        if (!title.trim()) return;
+        const todo = createTodo(title, randomUUID(), Date.now());
+        if (todo) set((s) => ({ todos: [todo, ...s.todos] }));
+      },
       toggle: (id) =>
         set((s) => ({
-          todos: s.todos.map((t) => (t.id === id ? { ...t, done: !t.done } : t)),
+          todos: toggleTodo(s.todos, id),
         })),
       remove: (id) => set((s) => ({ todos: s.todos.filter((t) => t.id !== id) })),
     }),

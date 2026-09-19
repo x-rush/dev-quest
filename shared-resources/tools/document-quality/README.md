@@ -24,6 +24,8 @@
 | [前端与 Node.js 围栏复验](reports/tsjs-validation-2026-09-19.md) | 当前 TypeScript/JavaScript 纯语法解析、7 项 Web 行为检查与 7 项 Node 示例运行的范围和边界 |
 | [前端基础运行验证](reports/frontend-foundations-validation.md) | JavaScript 核心语义、Web API 与 TanStack 基础页中 8 个完整 Node 程序的实际结果和边界 |
 | [移动端基础运行验证](reports/mobile-foundations.md) | Kotlin、React Native 与 Swift 文档中可脱离设备验证的纯逻辑范围，以及明确保留的设备/原生构建边界 |
+| [安全正文运行验证](reports/security-examples.md) | Go、PHP、Node、Python 中输入、对象授权和存储边界的 18 项隔离运行检查；不代表框架集成已运行 |
+| [前端项目与测试验证](reports/testing-projects-validation.md) | Next、TanStack、React Native 教学中的纯逻辑、React/jsdom 与 SSR 存储检查范围和边界 |
 | [验证覆盖状态台账](reports/verification-coverage.md) | 逐文件区分限定运行证据、语法检查和未验证状态，避免把验证措辞或代码围栏当成通过证明 |
 | [本轮交付状态](reports/delivery-status-2026-09-19.md) | 已修复项、已验证项与仍未达到全库交付条件的范围 |
 

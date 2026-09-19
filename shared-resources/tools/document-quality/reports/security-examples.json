@@ -1,0 +1,85 @@
+{
+  "results": [
+    {
+      "id": "go-boundaries",
+      "source": "01-go-backend/advanced-topics/security/01-security-best-practices.md",
+      "image": "golang:1",
+      "command": [
+        "go",
+        "run",
+        "/input/main.go"
+      ],
+      "scope": "marked complete program only; framework integrations are not verified",
+      "source_sha256": "16ab978a2e054053029aeb8d91add834ea1512dabaeb24a3831617be1d09f795",
+      "code_sha256": "b2880824421c798ce63c3f4aab23c1f809d8244961b7a4239272d0f8e656bb0b",
+      "line": 19,
+      "image_id": "sha256:f44f6e88636cfb311f9ebace870ded69d943f227bb3cb27d32ffd84ea18c43ea",
+      "runtime": "go version go1.27.1 linux/amd64",
+      "exit_code": 0,
+      "stdout": "security-boundaries: 6 checks passed\n",
+      "stderr": "",
+      "expected_stdout": "security-boundaries: 6 checks passed\n",
+      "status": "pass"
+    },
+    {
+      "id": "php-pdo",
+      "source": "07-php-mastery/advanced-topics/security/01-security-practices.md",
+      "image": "php:8.5-cli-alpine",
+      "command": [
+        "php",
+        "/input/security.php"
+      ],
+      "scope": "marked complete program only; framework integrations are not verified",
+      "source_sha256": "4da8c783dc44018cbf1abb6491199031377e08646a797135440e1f027695a8f6",
+      "code_sha256": "2e0c5cd2bc8aaf8341f481afcd8d262cc436ebdfe6c1621a84fcb12471116535",
+      "line": 64,
+      "image_id": "sha256:6cb4d855b2b63fd4792e76555a16211e2e4d8feab0ba770da080d774824eac92",
+      "runtime": "PHP 8.5.10 (cli) (built: Sep 17 2026 21:18:32) (NTS)\nCopyright (c) The PHP Group\nBuilt by https://github.com/docker-library/php\nZend Engine v4.5.10, Copyright (c) Zend Technologies\n    with Zend OPcache v8.5.10, Copyright (c), by Zend Technologies",
+      "exit_code": 0,
+      "stdout": "pdo-security: 3 checks passed\n",
+      "stderr": "",
+      "expected_stdout": "pdo-security: 3 checks passed\n",
+      "status": "pass"
+    },
+    {
+      "id": "node-boundaries",
+      "source": "09-nodejs-backend/advanced-topics/security/01-security-practices.md",
+      "image": "node:24-bookworm-slim",
+      "command": [
+        "node",
+        "/input/security.mjs"
+      ],
+      "scope": "marked complete program only; framework integrations are not verified",
+      "source_sha256": "88c1d28dbdbd60fc5e100a42f2a6e1cfe9754d3bb4e33ad8026ae6f662299a97",
+      "code_sha256": "8795a46c98658b79c5c4126b1859ab17ac3e73b2befc564f456ff99ebd6bd5fb",
+      "line": 162,
+      "image_id": "sha256:2fe369e969550cde8e867afc3fe370b260140cab4a23d467074295b42163d553",
+      "runtime": "v24.21.0",
+      "exit_code": 0,
+      "stdout": "node-security: 6 checks passed\n",
+      "stderr": "",
+      "expected_stdout": "node-security: 6 checks passed\n",
+      "status": "pass"
+    },
+    {
+      "id": "python-sqlite",
+      "source": "10-python-discovery/advanced-topics/security/01-security-practices.md",
+      "image": "python:3.14-alpine",
+      "command": [
+        "python",
+        "/input/security.py"
+      ],
+      "scope": "marked complete program only; framework integrations are not verified",
+      "source_sha256": "41c8b6979af13d4b2de3c3031d6742c8ba2f31eadd1a27d6698050d46de992f9",
+      "code_sha256": "9aa5cdc35ca19538f7256a76a56c516ce911f52c6fdc2de34899b09c59c3ad03",
+      "line": 84,
+      "image_id": "sha256:016508ba505da24f7139765bc4bb669df4e88eb2f12eeadd571bf2f88d7533df",
+      "runtime": "Python 3.14.7",
+      "exit_code": 0,
+      "stdout": "python-security: 3 checks passed\n",
+      "stderr": "",
+      "expected_stdout": "python-security: 3 checks passed\n",
+      "status": "pass"
+    }
+  ]
+}

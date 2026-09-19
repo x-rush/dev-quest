@@ -1,0 +1,67 @@
+{
+  "generated_at": "2026-09-19T11:37:39.616Z",
+  "node": "v24.19.0",
+  "command": "node shared-resources/tools/document-quality/verify_testing_projects.mjs",
+  "scope": "Four exact documentation source blocks; 11 Node behavior tests. Only fetch is replaced explicitly for HTTP contract tests. Not Vitest/Jest setup, TS typecheck, React, SSR, browser, native MMKV or device validation.",
+  "source_hash_normalization": "UTF-8 with CRLF normalized to LF",
+  "passed": 4,
+  "total": 4,
+  "results": [
+    {
+      "id": "next-utility-contracts",
+      "source": "02-nextjs-frontend/testing/01-unit-testing.md",
+      "source_line": 128,
+      "source_sha256": "dce6869d47dc143009530b4745f63f69ea738c902a8acde18bdc05ec22cf93f8",
+      "code_sha256": "c21f0c6232b908cf8b3c29d7b95dd3dbffaefab862b86ecc27c25c011aad3820",
+      "code": "// src/lib/utils/date.ts\nexport function formatDate(date: Date | string): string {\n  const d = new Date(date)\n  if (Number.isNaN(d.getTime())) throw new RangeError(\"无效日期\")\n  return d.toLocaleDateString(\"zh-CN\", {\n    timeZone: \"UTC\", // 本例明确使用 UTC，避免测试随机器时区变化\n    year: \"numeric\",\n    month: \"long\",\n    day: \"numeric\",\n  })\n}\n\nexport function isValidEmail(email: string): boolean {\n  const emailRegex = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/\n  return emailRegex.test(email)\n}\n\nexport function truncateText(text: string, maxLength: number): string {\n  if (!Number.isInteger(maxLength) || maxLength < 0) {\n    throw new RangeError(\"maxLength 必须是非负整数\")\n  }\n  const characters = Array.from(text)\n  if (characters.length <= maxLength) return text\n  return characters.slice(0, maxLength).join(\"\") + \"...\"\n}\n\nexport function generateSlug(text: string): string {\n  return text\n    .trim()\n    .toLowerCase()\n    .replace(/[^\\w\\s-]/g, \"\")\n    .replace(/\\s+/g, \"-\")\n    .replace(/-+/g, \"-\")\n    .replace(/^-+|-+$/g, \"\")\n}\n",
+      "test_code": "import test, { mock } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { formatDate, truncateText, generateSlug, isValidEmail } from './source.ts';\ntest('UTC date and invalid input', () => {\n  assert.equal(formatDate('2025-01-01T01:00:00+08:00'), '2024年12月31日');\n  assert.throws(() => formatDate('not-a-date'), RangeError);\n});\ntest('truncation counts code points and validates length', () => {\n  assert.equal(truncateText('这是一个很长的文本，需要被截断', 10), '这是一个很长的文本，...');\n  assert.equal(truncateText('😀ab', 1), '😀...');\n  assert.equal(truncateText('a', 0), '...');\n  assert.equal(truncateText('', 0), '');\n  assert.equal(truncateText('😀a', 2), '😀a');\n  for (const n of [-1, 0.5, NaN, Infinity]) assert.throws(() => truncateText('a', n), RangeError);\n});\ntest('slug and basic email boundaries', () => {\n  assert.equal(generateSlug('--Hello--'), 'hello');\n  assert.equal(generateSlug('React & Next.js'), 'react-nextjs');\n  assert.equal(generateSlug('中文'), '');\n  assert.equal(isValidEmail('a+b@example.org'), true);\n  assert.equal(isValidEmail(' a@example.org'), false);\n});\n",
+      "status": "PASS",
+      "stdout": "TAP version 13\n# Subtest: UTC date and invalid input\nok 1 - UTC date and invalid input\n  ---\n  duration_ms: 10.2309\n  type: 'test'\n  ...\n# Subtest: truncation counts code points and validates length\nok 2 - truncation counts code points and validates length\n  ---\n  duration_ms: 0.1431\n  type: 'test'\n  ...\n# Subtest: slug and basic email boundaries\nok 3 - slug and basic email boundaries\n  ---\n  duration_ms: 0.2141\n  type: 'test'\n  ...\n1..3\n# tests 3\n# suites 0\n# pass 3\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 90.0671\n",
+      "stderr": "",
+      "exit_code": 0,
+      "error": null
+    },
+    {
+      "id": "tanstack-optimistic-move",
+      "source": "03-tanstack-stack/testing/01-unit-testing.md",
+      "source_line": 126,
+      "source_sha256": "6f5264cb62c5192c90c279e42a530a509c6bdb96e1a689f7309b7d70540e66a7",
+      "code_sha256": "a450110b99938893ca459c2b15ef0e7e92efe2cce580c907a5bb89b387878e2e",
+      "code": "// src/features/board/optimistic.ts\nimport type { Board } from '../../api/board'\nexport function applyMove(board: Board, cardId: string, toColumn: string, index: number): Board {\n  const card = board.cards[cardId]\n  const target = board.columns.find((col) => col.id === toColumn)\n  if (!card || !target) return board\n  // index 指先移除卡片后的目标列插入位置，可等于目标列长度。\n  const size = target.cardIds.filter((id) => id !== cardId).length\n  if (!Number.isInteger(index) || index < 0 || index > size) return board\n  const columns = board.columns.map((col) => {\n    const ids = col.cardIds.filter((id) => id !== cardId)\n    if (col.id === toColumn) ids.splice(index, 0, cardId)\n    return { ...col, cardIds: ids }\n  })\n  return { ...board, columns, cards: { ...board.cards, [cardId]: { ...card, columnId: toColumn } } }\n}\n",
+      "test_code": "import test, { mock } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { applyMove } from './source.ts';\nconst base = { columns: [{ id:'c1', title:'todo', cardIds:['a','b'] }, { id:'c2', title:'doing', cardIds:[] }], cards: { a:{id:'a', title:'A', columnId:'c1', version:1}, b:{id:'b', title:'B', columnId:'c1', version:1} } };\nfunction freeze(value) { Object.values(value).forEach(v => { if (v && typeof v === 'object') freeze(v); }); return Object.freeze(value); }\nfreeze(base);\ntest('cross-column move does not mutate frozen source', () => {\n  const next = applyMove(base, 'a', 'c2', 0);\n  assert.deepEqual(next.columns.map(c => c.cardIds), [['b'],['a']]);\n  assert.equal(next.cards.a.columnId, 'c2');\n  assert.equal(next.cards.b, base.cards.b);\n  assert.deepEqual(base.columns[0].cardIds, ['a','b']);\n});\ntest('missing card, missing target and invalid index preserve original', () => {\n  assert.equal(applyMove(base, 'ghost', 'c2', 0), base);\n  assert.equal(applyMove(base, 'a', 'missing', 0), base);\n  for (const index of [-1, 0.5, NaN, Infinity, 1]) assert.equal(applyMove(base, 'a', 'c2', index), base);\n});\ntest('same-column index is measured after removal', () => {\n  assert.deepEqual(applyMove(base, 'a', 'c1', 1).columns[0].cardIds, ['b','a']);\n  assert.equal(applyMove(base, 'a', 'c1', 2), base);\n});\n",
+      "status": "PASS",
+      "stdout": "TAP version 13\n# Subtest: cross-column move does not mutate frozen source\nok 1 - cross-column move does not mutate frozen source\n  ---\n  duration_ms: 0.7991\n  type: 'test'\n  ...\n# Subtest: missing card, missing target and invalid index preserve original\nok 2 - missing card, missing target and invalid index preserve original\n  ---\n  duration_ms: 0.0939\n  type: 'test'\n  ...\n# Subtest: same-column index is measured after removal\nok 3 - same-column index is measured after removal\n  ---\n  duration_ms: 0.069\n  type: 'test'\n  ...\n1..3\n# tests 3\n# suites 0\n# pass 3\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 78.9244\n",
+      "stderr": "",
+      "exit_code": 0,
+      "error": null
+    },
+    {
+      "id": "tanstack-http-contracts",
+      "source": "03-tanstack-stack/projects/01-todo-app.md",
+      "source_line": 79,
+      "source_sha256": "2cfee4b127781711a272a04917a78a3c578ba3a986fd822d419b71ca56808892",
+      "code_sha256": "a414f58bf5b0745aca3d7980c85de0c6fb2e5c3ae9bef49f85898407c273ebe6",
+      "code": "// src/api/todos.ts\nexport interface Todo {\n  id: number\n  title: string\n  done: boolean\n}\n\n// Query Key 工厂：键的唯一事实来源\nexport const todoKeys = {\n  all: ['todos'] as const,\n  lists: () => [...todoKeys.all, 'list'] as const,\n  details: () => [...todoKeys.all, 'detail'] as const,\n  detail: (id: number) => [...todoKeys.details(), id] as const,\n}\n\nconst BASE = '/api/todos'\nasync function http<T>(url: string, init?: RequestInit): Promise<T> {\n  const res = await fetch(url, {\n    headers: { 'Content-Type': 'application/json' },\n    ...init,\n  })\n  if (!res.ok) throw new Error(`请求失败 ${res.status}`)\n  return res.json()\n}\n\nexport const todoApi = {\n  list: () => http<Todo[]>(BASE),\n  create: (title: string) =>\n    http<Todo>(BASE, { method: 'POST', body: JSON.stringify({ title }) }),\n  toggle: (todo: Todo) =>\n    http<Todo>(`${BASE}/${todo.id}`, {\n      method: 'PATCH',\n      body: JSON.stringify({ done: !todo.done }),\n    }),\n  remove: async (id: number): Promise<void> => {\n    const res = await fetch(`${BASE}/${id}`, { method: 'DELETE' })\n    if (!res.ok) throw new Error(`请求失败 ${res.status}`)\n    // 删除允许 204，无响应体；不能再调用 res.json()。\n  },\n}\n",
+      "test_code": "import test, { mock } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { todoApi, todoKeys } from './source.ts';\ntest('JSON list and hierarchical keys', async () => {\n  mock.method(globalThis, 'fetch', async () => Response.json([{id:1,title:'a',done:false}]));\n  try {\n    assert.deepEqual(await todoApi.list(), [{id:1,title:'a',done:false}]);\n    assert.deepEqual(todoKeys.detail(7), ['todos','detail',7]);\n    assert.deepEqual(todoKeys.detail(7).slice(0,2), todoKeys.details());\n  } finally { mock.restoreAll(); }\n});\ntest('204 delete succeeds without parsing JSON', async () => {\n  const calls = [];\n  mock.method(globalThis, 'fetch', async (...args) => { calls.push(args); return new Response(null, {status:204}); });\n  try {\n    assert.equal(await todoApi.remove(1), undefined);\n    assert.deepEqual(calls, [['/api/todos/1', {method:'DELETE'}]]);\n  } finally { mock.restoreAll(); }\n});\ntest('HTTP failures and invalid JSON reject', async () => {\n  mock.method(globalThis, 'fetch', async () => new Response('', {status:500}));\n  try {\n    await assert.rejects(todoApi.list(), /请求失败 500/);\n    await assert.rejects(todoApi.remove(1), /请求失败 500/);\n  } finally { mock.restoreAll(); }\n  mock.method(globalThis, 'fetch', async () => new Response('not json', {status:200}));\n  try { await assert.rejects(todoApi.list(), SyntaxError); } finally { mock.restoreAll(); }\n});\n",
+      "status": "PASS",
+      "stdout": "TAP version 13\n# Subtest: JSON list and hierarchical keys\nok 1 - JSON list and hierarchical keys\n  ---\n  duration_ms: 13.1734\n  type: 'test'\n  ...\n# Subtest: 204 delete succeeds without parsing JSON\nok 2 - 204 delete succeeds without parsing JSON\n  ---\n  duration_ms: 0.1943\n  type: 'test'\n  ...\n# Subtest: HTTP failures and invalid JSON reject\nok 3 - HTTP failures and invalid JSON reject\n  ---\n  duration_ms: 0.5717\n  type: 'test'\n  ...\n1..3\n# tests 3\n# suites 0\n# pass 3\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 94.5823\n",
+      "stderr": "",
+      "exit_code": 0,
+      "error": null
+    },
+    {
+      "id": "rn-todo-domain",
+      "source": "04-multiplatform-apps/projects/01-todo-app.md",
+      "source_line": 73,
+      "source_sha256": "eb169a373f467af0b6c4cd2bd5a6efa0938a14e423f568b6113ba726d5147d9d",
+      "code_sha256": "d729495136d10ef0d5ed36b29e5463b04fec8af3e93fe8183a837c508e11c5b6",
+      "code": "// utils/todos.ts\nexport interface Todo {\n  id: string;\n  title: string;\n  done: boolean;\n  createdAt: number;\n}\n\nexport function createTodo(title: string, id: string, createdAt: number): Todo | null {\n  const normalized = title.trim();\n  if (!normalized) return null;\n  if (!id || !Number.isFinite(createdAt) || createdAt < 0) {\n    throw new RangeError('id 和创建时间无效');\n  }\n  return { id, title: normalized, done: false, createdAt };\n}\n\nexport function toggleTodo(todos: Todo[], id: string): Todo[] {\n  if (!todos.some((todo) => todo.id === id)) return todos;\n  return todos.map((todo) => todo.id === id ? { ...todo, done: !todo.done } : todo);\n}\n\nexport function remainingCount(todos: Todo[]): number {\n  return todos.filter((todo) => !todo.done).length;\n}\n",
+      "test_code": "import test, { mock } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { createTodo, toggleTodo, remainingCount } from './source.ts';\ntest('normalized creation and rejected input', () => {\n  assert.deepEqual(createTodo('  买菜  ', 'a', 0), {id:'a',title:'买菜',done:false,createdAt:0});\n  assert.equal(createTodo('  ', 'a', 0), null);\n  assert.throws(() => createTodo('a', '', 0), RangeError);\n  for (const time of [NaN, Infinity, -1]) assert.throws(() => createTodo('a', 'a', time), RangeError);\n});\ntest('toggle is immutable and missing IDs preserve source', () => {\n  const a = Object.freeze(createTodo('A', 'a', 0));\n  const b = Object.freeze(createTodo('B', 'b', 0));\n  const source = Object.freeze([a,b]);\n  const next = toggleTodo(source, 'a');\n  assert.equal(next[0].done, true);\n  assert.equal(source[0].done, false);\n  assert.equal(next[1], b);\n  assert.equal(toggleTodo(source, 'missing'), source);\n  assert.deepEqual(toggleTodo(next, 'a'), source);\n  assert.equal(remainingCount(next), 1);\n  assert.equal(remainingCount([]), 0);\n});\n",
+      "status": "PASS",
+      "stdout": "TAP version 13\n# Subtest: normalized creation and rejected input\nok 1 - normalized creation and rejected input\n  ---\n  duration_ms: 0.9082\n  type: 'test'\n  ...\n# Subtest: toggle is immutable and missing IDs preserve source\nok 2 - toggle is immutable and missing IDs preserve source\n  ---\n  duration_ms: 0.1419\n  type: 'test'\n  ...\n1..2\n# tests 2\n# suites 0\n# pass 2\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 80.4818\n",
+      "stderr": "",
+      "exit_code": 0,
+      "error": null
+    }
+  ]
+}

@@ -7,11 +7,11 @@
 | 指标 | 数量 |
 |---|---:|
 | 纳入模块文档 | 641 |
-| 主状态：not_verified | 577 |
-| 主状态：runtime | 64 |
-| 验证措辞出现次数 | 252 |
-| 措辞分类：source_has_limited_runtime_evidence | 92 |
-| 措辞分类：unbound_verification_wording | 160 |
+| 主状态：not_verified | 569 |
+| 主状态：runtime | 72 |
+| 验证措辞出现次数 | 259 |
+| 措辞分类：source_has_limited_runtime_evidence | 101 |
+| 措辞分类：unbound_verification_wording | 158 |
 
 ## 语法级覆盖（不能当作运行覆盖）
 
@@ -36,7 +36,7 @@
 | Go | [01-go-backend/advanced-topics/architecture/01-microservices-design.md](../../../../01-go-backend/advanced-topics/architecture/01-microservices-design.md) | `not_verified` | 0 | 0 |
 | Go | [01-go-backend/advanced-topics/performance/01-concurrency-patterns.md](../../../../01-go-backend/advanced-topics/performance/01-concurrency-patterns.md) | `not_verified` | 0 | 0 |
 | Go | [01-go-backend/advanced-topics/performance/02-performance-tuning.md](../../../../01-go-backend/advanced-topics/performance/02-performance-tuning.md) | `not_verified` | 0 | 0 |
-| Go | [01-go-backend/advanced-topics/security/01-security-best-practices.md](../../../../01-go-backend/advanced-topics/security/01-security-best-practices.md) | `not_verified` | 0 | 0 |
+| Go | [01-go-backend/advanced-topics/security/01-security-best-practices.md](../../../../01-go-backend/advanced-topics/security/01-security-best-practices.md) | `runtime` | 1 | 1 |
 | Go | [01-go-backend/basics/01-environment-setup.md](../../../../01-go-backend/basics/01-environment-setup.md) | `not_verified` | 0 | 0 |
 | Go | [01-go-backend/basics/02-first-program.md](../../../../01-go-backend/basics/02-first-program.md) | `not_verified` | 0 | 0 |
 | Go | [01-go-backend/basics/03-variables-constants.md](../../../../01-go-backend/basics/03-variables-constants.md) | `not_verified` | 0 | 0 |
@@ -168,7 +168,7 @@
 | Next.js / TypeScript | [02-nextjs-frontend/reference/performance-optimization/01-rendering-optimization.md](../../../../02-nextjs-frontend/reference/performance-optimization/01-rendering-optimization.md) | `not_verified` | 0 | 0 |
 | Next.js / TypeScript | [02-nextjs-frontend/reference/performance-optimization/02-bundle-optimization.md](../../../../02-nextjs-frontend/reference/performance-optimization/02-bundle-optimization.md) | `not_verified` | 0 | 0 |
 | Next.js / TypeScript | [02-nextjs-frontend/reference/performance-optimization/03-image-font-optimization.md](../../../../02-nextjs-frontend/reference/performance-optimization/03-image-font-optimization.md) | `not_verified` | 0 | 0 |
-| Next.js / TypeScript | [02-nextjs-frontend/testing/01-unit-testing.md](../../../../02-nextjs-frontend/testing/01-unit-testing.md) | `not_verified` | 0 | 0 |
+| Next.js / TypeScript | [02-nextjs-frontend/testing/01-unit-testing.md](../../../../02-nextjs-frontend/testing/01-unit-testing.md) | `runtime` | 2 | 0 |
 | Next.js / TypeScript | [02-nextjs-frontend/testing/02-component-testing.md](../../../../02-nextjs-frontend/testing/02-component-testing.md) | `not_verified` | 0 | 0 |
 | Next.js / TypeScript | [02-nextjs-frontend/testing/03-e2e-testing.md](../../../../02-nextjs-frontend/testing/03-e2e-testing.md) | `not_verified` | 0 | 0 |
 | Next.js / TypeScript | [02-nextjs-frontend/testing/04-performance-testing.md](../../../../02-nextjs-frontend/testing/04-performance-testing.md) | `not_verified` | 0 | 2 |
@@ -192,7 +192,7 @@
 | TanStack / TypeScript | [03-tanstack-stack/frameworks/03-ecosystem-integration.md](../../../../03-tanstack-stack/frameworks/03-ecosystem-integration.md) | `not_verified` | 0 | 0 |
 | TanStack / TypeScript | [03-tanstack-stack/frameworks/04-devtools.md](../../../../03-tanstack-stack/frameworks/04-devtools.md) | `not_verified` | 0 | 0 |
 | TanStack / TypeScript | [03-tanstack-stack/LEARNING_GUIDE.md](../../../../03-tanstack-stack/LEARNING_GUIDE.md) | `not_verified` | 0 | 0 |
-| TanStack / TypeScript | [03-tanstack-stack/projects/01-todo-app.md](../../../../03-tanstack-stack/projects/01-todo-app.md) | `not_verified` | 0 | 0 |
+| TanStack / TypeScript | [03-tanstack-stack/projects/01-todo-app.md](../../../../03-tanstack-stack/projects/01-todo-app.md) | `runtime` | 1 | 0 |
 | TanStack / TypeScript | [03-tanstack-stack/projects/02-data-dashboard.md](../../../../03-tanstack-stack/projects/02-data-dashboard.md) | `not_verified` | 0 | 0 |
 | TanStack / TypeScript | [03-tanstack-stack/projects/03-collaborative-kanban.md](../../../../03-tanstack-stack/projects/03-collaborative-kanban.md) | `not_verified` | 0 | 0 |
 | TanStack / TypeScript | [03-tanstack-stack/projects/04-saas-admin-platform.md](../../../../03-tanstack-stack/projects/04-saas-admin-platform.md) | `not_verified` | 0 | 0 |
@@ -228,7 +228,7 @@
 | TanStack / TypeScript | [03-tanstack-stack/reference/library-guides/02-related-libs.md](../../../../03-tanstack-stack/reference/library-guides/02-related-libs.md) | `not_verified` | 0 | 0 |
 | TanStack / TypeScript | [03-tanstack-stack/reference/quick-references/01-syntax-cheatsheet.md](../../../../03-tanstack-stack/reference/quick-references/01-syntax-cheatsheet.md) | `not_verified` | 0 | 0 |
 | TanStack / TypeScript | [03-tanstack-stack/reference/quick-references/02-troubleshooting.md](../../../../03-tanstack-stack/reference/quick-references/02-troubleshooting.md) | `not_verified` | 0 | 0 |
-| TanStack / TypeScript | [03-tanstack-stack/testing/01-unit-testing.md](../../../../03-tanstack-stack/testing/01-unit-testing.md) | `not_verified` | 0 | 1 |
+| TanStack / TypeScript | [03-tanstack-stack/testing/01-unit-testing.md](../../../../03-tanstack-stack/testing/01-unit-testing.md) | `runtime` | 1 | 1 |
 | TanStack / TypeScript | [03-tanstack-stack/testing/02-mocking-server.md](../../../../03-tanstack-stack/testing/02-mocking-server.md) | `not_verified` | 0 | 0 |
 | TanStack / TypeScript | [03-tanstack-stack/testing/03-integration-testing.md](../../../../03-tanstack-stack/testing/03-integration-testing.md) | `not_verified` | 0 | 0 |
 | TanStack / TypeScript | [03-tanstack-stack/testing/04-e2e-testing.md](../../../../03-tanstack-stack/testing/04-e2e-testing.md) | `not_verified` | 0 | 0 |
@@ -252,7 +252,7 @@
 | React Native / Multi-platform | [04-multiplatform-apps/frameworks/03-ecosystem-integration.md](../../../../04-multiplatform-apps/frameworks/03-ecosystem-integration.md) | `not_verified` | 0 | 0 |
 | React Native / Multi-platform | [04-multiplatform-apps/frameworks/04-devtools.md](../../../../04-multiplatform-apps/frameworks/04-devtools.md) | `not_verified` | 0 | 0 |
 | React Native / Multi-platform | [04-multiplatform-apps/LEARNING_GUIDE.md](../../../../04-multiplatform-apps/LEARNING_GUIDE.md) | `not_verified` | 0 | 1 |
-| React Native / Multi-platform | [04-multiplatform-apps/projects/01-todo-app.md](../../../../04-multiplatform-apps/projects/01-todo-app.md) | `not_verified` | 0 | 0 |
+| React Native / Multi-platform | [04-multiplatform-apps/projects/01-todo-app.md](../../../../04-multiplatform-apps/projects/01-todo-app.md) | `runtime` | 1 | 1 |
 | React Native / Multi-platform | [04-multiplatform-apps/projects/02-weather-app.md](../../../../04-multiplatform-apps/projects/02-weather-app.md) | `not_verified` | 0 | 0 |
 | React Native / Multi-platform | [04-multiplatform-apps/projects/03-chat-app.md](../../../../04-multiplatform-apps/projects/03-chat-app.md) | `not_verified` | 0 | 0 |
 | React Native / Multi-platform | [04-multiplatform-apps/projects/04-production-mobile-app.md](../../../../04-multiplatform-apps/projects/04-production-mobile-app.md) | `not_verified` | 0 | 0 |
@@ -403,7 +403,7 @@
 | PHP | [07-php-mastery/advanced-topics/runtime/02-workerman-principles.md](../../../../07-php-mastery/advanced-topics/runtime/02-workerman-principles.md) | `not_verified` | 0 | 0 |
 | PHP | [07-php-mastery/advanced-topics/runtime/03-webman-practice.md](../../../../07-php-mastery/advanced-topics/runtime/03-webman-practice.md) | `not_verified` | 0 | 0 |
 | PHP | [07-php-mastery/advanced-topics/runtime/04-swoole-ecosystem.md](../../../../07-php-mastery/advanced-topics/runtime/04-swoole-ecosystem.md) | `not_verified` | 0 | 1 |
-| PHP | [07-php-mastery/advanced-topics/security/01-security-practices.md](../../../../07-php-mastery/advanced-topics/security/01-security-practices.md) | `not_verified` | 0 | 2 |
+| PHP | [07-php-mastery/advanced-topics/security/01-security-practices.md](../../../../07-php-mastery/advanced-topics/security/01-security-practices.md) | `runtime` | 1 | 2 |
 | PHP | [07-php-mastery/basics/01-environment-setup.md](../../../../07-php-mastery/basics/01-environment-setup.md) | `not_verified` | 0 | 0 |
 | PHP | [07-php-mastery/basics/02-first-script.md](../../../../07-php-mastery/basics/02-first-script.md) | `not_verified` | 0 | 0 |
 | PHP | [07-php-mastery/basics/03-variables-types.md](../../../../07-php-mastery/basics/03-variables-types.md) | `not_verified` | 0 | 0 |
@@ -460,7 +460,7 @@
 | Java | [08-java-revisited/advanced-topics/architecture/01-layered-architecture.md](../../../../08-java-revisited/advanced-topics/architecture/01-layered-architecture.md) | `not_verified` | 0 | 0 |
 | Java | [08-java-revisited/advanced-topics/performance/01-jvm-tuning.md](../../../../08-java-revisited/advanced-topics/performance/01-jvm-tuning.md) | `not_verified` | 0 | 0 |
 | Java | [08-java-revisited/advanced-topics/performance/02-virtual-threads.md](../../../../08-java-revisited/advanced-topics/performance/02-virtual-threads.md) | `not_verified` | 0 | 0 |
-| Java | [08-java-revisited/advanced-topics/security/01-security-practices.md](../../../../08-java-revisited/advanced-topics/security/01-security-practices.md) | `not_verified` | 0 | 0 |
+| Java | [08-java-revisited/advanced-topics/security/01-security-practices.md](../../../../08-java-revisited/advanced-topics/security/01-security-practices.md) | `not_verified` | 0 | 1 |
 | Java | [08-java-revisited/basics/01-environment-setup.md](../../../../08-java-revisited/basics/01-environment-setup.md) | `not_verified` | 0 | 0 |
 | Java | [08-java-revisited/basics/02-first-program.md](../../../../08-java-revisited/basics/02-first-program.md) | `not_verified` | 0 | 0 |
 | Java | [08-java-revisited/basics/03-variables-types.md](../../../../08-java-revisited/basics/03-variables-types.md) | `not_verified` | 0 | 0 |
@@ -517,7 +517,7 @@
 | Node.js | [09-nodejs-backend/advanced-topics/architecture/01-service-architecture.md](../../../../09-nodejs-backend/advanced-topics/architecture/01-service-architecture.md) | `not_verified` | 0 | 0 |
 | Node.js | [09-nodejs-backend/advanced-topics/performance/01-event-loop.md](../../../../09-nodejs-backend/advanced-topics/performance/01-event-loop.md) | `not_verified` | 0 | 0 |
 | Node.js | [09-nodejs-backend/advanced-topics/performance/02-streaming-clustering.md](../../../../09-nodejs-backend/advanced-topics/performance/02-streaming-clustering.md) | `not_verified` | 0 | 0 |
-| Node.js | [09-nodejs-backend/advanced-topics/security/01-security-practices.md](../../../../09-nodejs-backend/advanced-topics/security/01-security-practices.md) | `not_verified` | 0 | 0 |
+| Node.js | [09-nodejs-backend/advanced-topics/security/01-security-practices.md](../../../../09-nodejs-backend/advanced-topics/security/01-security-practices.md) | `runtime` | 1 | 3 |
 | Node.js | [09-nodejs-backend/basics/01-environment-setup.md](../../../../09-nodejs-backend/basics/01-environment-setup.md) | `not_verified` | 0 | 0 |
 | Node.js | [09-nodejs-backend/basics/02-first-server.md](../../../../09-nodejs-backend/basics/02-first-server.md) | `not_verified` | 0 | 0 |
 | Node.js | [09-nodejs-backend/basics/03-modules-esm.md](../../../../09-nodejs-backend/basics/03-modules-esm.md) | `not_verified` | 0 | 0 |
@@ -567,7 +567,7 @@
 | Python | [10-python-discovery/advanced-topics/architecture/01-project-architecture.md](../../../../10-python-discovery/advanced-topics/architecture/01-project-architecture.md) | `not_verified` | 0 | 0 |
 | Python | [10-python-discovery/advanced-topics/performance/01-async-python.md](../../../../10-python-discovery/advanced-topics/performance/01-async-python.md) | `not_verified` | 0 | 0 |
 | Python | [10-python-discovery/advanced-topics/performance/02-profiling-optimization.md](../../../../10-python-discovery/advanced-topics/performance/02-profiling-optimization.md) | `not_verified` | 0 | 1 |
-| Python | [10-python-discovery/advanced-topics/security/01-security-practices.md](../../../../10-python-discovery/advanced-topics/security/01-security-practices.md) | `not_verified` | 0 | 0 |
+| Python | [10-python-discovery/advanced-topics/security/01-security-practices.md](../../../../10-python-discovery/advanced-topics/security/01-security-practices.md) | `runtime` | 1 | 1 |
 | Python | [10-python-discovery/basics/01-environment-setup.md](../../../../10-python-discovery/basics/01-environment-setup.md) | `not_verified` | 0 | 0 |
 | Python | [10-python-discovery/basics/02-first-script.md](../../../../10-python-discovery/basics/02-first-script.md) | `not_verified` | 0 | 0 |
 | Python | [10-python-discovery/basics/03-variables-types.md](../../../../10-python-discovery/basics/03-variables-types.md) | `not_verified` | 0 | 0 |
