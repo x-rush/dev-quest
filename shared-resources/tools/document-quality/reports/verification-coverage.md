@@ -7,8 +7,8 @@
 | 指标 | 数量 |
 |---|---:|
 | 纳入模块文档 | 642 |
-| 主状态：not_verified | 451 |
-| 主状态：runtime | 191 |
+| 主状态：not_verified | 450 |
+| 主状态：runtime | 192 |
 | 验证措辞出现次数 | 144 |
 | 措辞分类：source_has_limited_runtime_evidence | 88 |
 | 措辞分类：unbound_verification_wording | 56 |
@@ -439,7 +439,7 @@
 | PHP | [07-php-mastery/reference/language-concepts/06-generators-iterators.md](../../../../07-php-mastery/reference/language-concepts/06-generators-iterators.md) | `runtime` | 3 | 0 |
 | PHP | [07-php-mastery/reference/language-concepts/07-namespaces-autoloading.md](../../../../07-php-mastery/reference/language-concepts/07-namespaces-autoloading.md) | `not_verified` | 0 | 0 |
 | PHP | [07-php-mastery/reference/language-concepts/08-reflection-attributes.md](../../../../07-php-mastery/reference/language-concepts/08-reflection-attributes.md) | `runtime` | 1 | 0 |
-| PHP | [07-php-mastery/reference/language-concepts/09-strings-regex.md](../../../../07-php-mastery/reference/language-concepts/09-strings-regex.md) | `not_verified` | 0 | 0 |
+| PHP | [07-php-mastery/reference/language-concepts/09-strings-regex.md](../../../../07-php-mastery/reference/language-concepts/09-strings-regex.md) | `runtime` | 1 | 0 |
 | PHP | [07-php-mastery/reference/language-concepts/10-datetime.md](../../../../07-php-mastery/reference/language-concepts/10-datetime.md) | `runtime` | 1 | 0 |
 | PHP | [07-php-mastery/reference/language-concepts/11-errors-exceptions.md](../../../../07-php-mastery/reference/language-concepts/11-errors-exceptions.md) | `runtime` | 1 | 0 |
 | PHP | [07-php-mastery/reference/language-concepts/12-modern-php-85.md](../../../../07-php-mastery/reference/language-concepts/12-modern-php-85.md) | `not_verified` | 0 | 0 |

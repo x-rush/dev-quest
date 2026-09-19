@@ -155,6 +155,33 @@ var_dump((bool) preg_match('/^[\p{Han}]+$/u', '手机验证码'));   // true
 
 ⚠️ **常见陷阱**: 忘写 `u` 修饰符时中文按字节匹配，行为诡异；模式由用户输入拼出时必须 `preg_quote()`（并传定界符参数），否则注入正则；`preg_replace` 返回 `null` 表示出错（如回溯上限），不是"替换为零处"——重要路径要检查 `preg_last_error()`。
 
+### 可复现验收：匹配、不匹配和模式错误是三种结果
+
+`preg_match` 不是布尔 API：`1` 表示匹配，`0` 表示正常不匹配，`false` 表示模式或执行错误。下面的案例仅为展示返回值而使用 `@` 抑制故意写坏模式产生的警告；业务代码不应靠 `@` 隐藏错误，而应记录模式来源并处理失败。
+
+<!-- reference-case: {"id":"php-pcre-three-states","stdout":"matched=1\nnot-matched=0\ninvalid=true\n"} -->
+```php
+<?php
+
+declare(strict_types=1);
+
+$matched = preg_match('/^order-\d+$/', 'order-42');
+$notMatched = preg_match('/^order-\d+$/', 'draft');
+$invalid = @preg_match('/[/', 'anything'); // 故意无效的模式
+
+echo 'matched=', $matched, PHP_EOL;
+echo 'not-matched=', $notMatched, PHP_EOL;
+echo 'invalid=', $invalid === false ? 'true' : 'false', PHP_EOL;
+```
+
+预期输出：
+
+```text
+matched=1
+not-matched=0
+invalid=true
+```
+
 🔗 **相关条目**: [字符串类问题排查](../quick-references/02-troubleshooting.md)
 
 ## 条目 5：拆分与拼接

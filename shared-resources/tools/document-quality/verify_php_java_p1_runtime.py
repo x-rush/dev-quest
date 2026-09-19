@@ -31,6 +31,7 @@ CASES = (
     ("php-spl-core", "07-php-mastery/reference/library-guides/01-standard-library-spl.md", "runtime-evidence", "php", "first\n2\n[\"a\",\"b\"]\n", "standard library"),
     ("php-pdo-bind-and-rollback", "07-php-mastery/reference/library-guides/03-pdo.md", "runtime-evidence", "php", "name=Ada's task\nrows-after-rollback=1\n", "PDO transaction and binding"),
     ("php-exception-chain-finally", "07-php-mastery/reference/language-concepts/11-errors-exceptions.md", "reference-case", "php", "finally\nouter=payment failed\nprevious=amount must be positive\n", "exception chain and finally"),
+    ("php-pcre-three-states", "07-php-mastery/reference/language-concepts/09-strings-regex.md", "reference-case", "php", "matched=1\nnot-matched=0\ninvalid=true\n", "PCRE result states"),
     ("java-flow", "08-java-revisited/reference/language-concepts/01-java-keywords.md", "reference-case", "java", "5\nmedium\n", "keyword"),
     ("java-first-program-classic", "08-java-revisited/basics/02-first-program.md", "reference-case", "java", "Hello, Java!\n", "first program"),
     ("java-enum-stable-code", "08-java-revisited/reference/language-concepts/08-enums.md", "reference-case", "java", "PAID=20\n[NEW, PAID]\n{NEW=draft, PAID=settled}\n", "enum semantics"),
@@ -126,7 +127,7 @@ def main() -> None:
                 "passed": passed,
             })
     data = {
-        "scope": "Fourteen explicitly marked, complete examples: PHP first-script, keyword, built-in/API, standard-library, PDO transaction/binding, exception chain/finally, Java first-program, modern-features, enum-semantics, interface-semantics, and quick-reference pages. Excludes existing control-flow evidence and all unmarked partial snippets.",
+        "scope": "Fifteen explicitly marked, complete examples: PHP first-script, keyword, built-in/API, standard-library, PDO transaction/binding, exception chain/finally, PCRE result states, Java first-program, modern-features, enum-semantics, interface-semantics, and quick-reference pages. Excludes existing control-flow evidence and all unmarked partial snippets.",
         "documents": {relative: hashlib.sha256((ROOT / relative).read_bytes()).hexdigest() for _, relative, *_ in CASES},
         "cases": records,
         "passed": all(record["passed"] for record in records),
@@ -135,7 +136,7 @@ def main() -> None:
     rows = [
         "# PHP / Java P1 正文提取运行验证",
         "",
-        "范围只包括十四个带命名标记的完整代码围栏：覆盖 PHP 的第一个脚本、关键字、内置 API/函数、标准库、PDO 事务绑定与异常链，以及 Java 的第一个程序、现代特性、枚举语义、接口语义和速查边界。控制流程页已有独立证据，未重新计入；无标记的教学片段也不计入。",
+        "范围只包括十五个带命名标记的完整代码围栏：覆盖 PHP 的第一个脚本、关键字、内置 API/函数、标准库、PDO 事务绑定、异常链和 PCRE 返回值，以及 Java 的第一个程序、现代特性、枚举语义、接口语义和速查边界。控制流程页已有独立证据，未重新计入；无标记的教学片段也不计入。",
         "",
         "| Case | Category | Document | Runner | Result |",
         "| --- | --- | --- | --- | --- |",
