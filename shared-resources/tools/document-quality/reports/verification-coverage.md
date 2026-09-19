@@ -7,8 +7,8 @@
 | 指标 | 数量 |
 |---|---:|
 | 纳入模块文档 | 642 |
-| 主状态：not_verified | 462 |
-| 主状态：runtime | 180 |
+| 主状态：not_verified | 461 |
+| 主状态：runtime | 181 |
 | 验证措辞出现次数 | 143 |
 | 措辞分类：source_has_limited_runtime_evidence | 88 |
 | 措辞分类：unbound_verification_wording | 55 |
@@ -560,7 +560,7 @@
 | Node.js | [09-nodejs-backend/reference/library-guides/04-child-process.md](../../../../09-nodejs-backend/reference/library-guides/04-child-process.md) | `runtime` | 3 | 1 |
 | Node.js | [09-nodejs-backend/reference/library-guides/05-buffer.md](../../../../09-nodejs-backend/reference/library-guides/05-buffer.md) | `runtime` | 2 | 3 |
 | Node.js | [09-nodejs-backend/reference/library-guides/06-util.md](../../../../09-nodejs-backend/reference/library-guides/06-util.md) | `runtime` | 1 | 0 |
-| Node.js | [09-nodejs-backend/reference/library-guides/07-process-lifecycle.md](../../../../09-nodejs-backend/reference/library-guides/07-process-lifecycle.md) | `not_verified` | 0 | 0 |
+| Node.js | [09-nodejs-backend/reference/library-guides/07-process-lifecycle.md](../../../../09-nodejs-backend/reference/library-guides/07-process-lifecycle.md) | `runtime` | 1 | 0 |
 | Node.js | [09-nodejs-backend/reference/library-guides/08-test-runner.md](../../../../09-nodejs-backend/reference/library-guides/08-test-runner.md) | `runtime` | 2 | 6 |
 | Node.js | [09-nodejs-backend/reference/library-guides/09-zlib.md](../../../../09-nodejs-backend/reference/library-guides/09-zlib.md) | `runtime` | 2 | 0 |
 | Node.js | [09-nodejs-backend/reference/quick-references/01-node-cheatsheet.md](../../../../09-nodejs-backend/reference/quick-references/01-node-cheatsheet.md) | `not_verified` | 0 | 0 |

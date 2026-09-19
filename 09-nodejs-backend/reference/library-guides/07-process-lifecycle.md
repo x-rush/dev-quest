@@ -110,6 +110,43 @@ process.on("SIGINT", () => { void shutdown("SIGINT"); });
 - Node 19+ server.close 会处理空闲连接，活跃长请求或升级连接仍需明确策略；closeAllConnections 也不替代对 WebSocket 等升级连接的单独管理
 - K8s 场景记得让 `terminationGracePeriodSeconds` > 代码里的宽限时长
 
+### 可复现验收：幂等关停的最小编排
+
+真实信号测试需要子进程环境，不能向文档验证进程本身发送 `SIGTERM`。这里直接调用同一个 `shutdown()` 两次，验证它们共享一次关闭工作：`server.close()` 完成后才执行依赖清理，最终不再监听，且成功路径只设置 `exitCode`。
+
+```js verify:node-lifecycle-idempotent-shutdown
+import { createServer } from "node:http";
+
+const server = createServer((_req, res) => res.end("ok"));
+await new Promise((resolve) => server.listen(0, "127.0.0.1", resolve));
+
+let cleanupRuns = 0;
+let closing;
+
+function shutdown() {
+  if (closing) return closing;
+  closing = (async () => {
+    await new Promise((resolve, reject) => {
+      server.close((error) => error ? reject(error) : resolve());
+    });
+    cleanupRuns += 1; // 这里代表关闭数据库池、消费者或定时器
+    process.exitCode = 0;
+  })();
+  return closing;
+}
+
+await Promise.all([shutdown(), shutdown()]);
+console.log(`cleanup=${cleanupRuns} listening=${server.listening} exit=${process.exitCode}`);
+```
+
+预期输出：
+
+```text
+cleanup=1 listening=false exit=0
+```
+
+这段代码没有模拟长期请求、超时强退或外部连接池；生产实现仍要为这些资源设定可观察的截止时间和失败退出码。
+
 ## 4. uncaughtException 与 unhandledRejection
 
 ### 定义

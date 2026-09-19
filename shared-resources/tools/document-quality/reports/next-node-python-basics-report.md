@@ -7,6 +7,7 @@
 | `dev-quest/02-nextjs-frontend/basics/03-typescript-integration.md` | `next-typescript-boundary` | 871 | PASS |
 | `dev-quest/09-nodejs-backend/basics/03-modules-esm.md` | `node-esm-binding` | 207 | PASS |
 | `dev-quest/09-nodejs-backend/basics/02-first-server.md` | `node-first-server-routing` | 112 | PASS |
+| `dev-quest/09-nodejs-backend/reference/library-guides/07-process-lifecycle.md` | `node-lifecycle-idempotent-shutdown` | 118 | PASS |
 | `dev-quest/10-python-discovery/basics/03-variables-types.md` | `python-bindings-formatting` | 229 | PASS |
 
 执行方式：代码在禁网、只读文件系统的 Docker 容器中执行。Next/TypeScript 示例使用 Node 24 的 TypeScript 类型擦除执行；它验证该示例可执行，不替代完整 `tsc` 项目检查。完整命令、哈希和标准输出见同目录 JSON 报告。
