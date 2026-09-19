@@ -144,6 +144,11 @@ export function parseCents(text: string): number | null {
   return cents > 0 ? cents : null;
 }
 
+function isCanonicalIsoInstant(value: string): boolean {
+  const date = new Date(value);
+  return Number.isFinite(date.getTime()) && date.toISOString() === value;
+}
+
 export function decodeEntries(raw: string | null): LedgerEntry[] {
   if (raw === null) return [];
   const value: unknown = JSON.parse(raw);
@@ -154,7 +159,7 @@ export function decodeEntries(raw: string | null): LedgerEntry[] {
         typeof entry.id !== 'string' || entry.id.length === 0 || ids.has(entry.id) ||
         !Number.isSafeInteger(entry.amount) || entry.amount <= 0 || entry.amount > 99999999 ||
         typeof entry.note !== 'string' || typeof entry.createdAt !== 'string' ||
-        !Number.isFinite(Date.parse(entry.createdAt))) {
+        !isCanonicalIsoInstant(entry.createdAt)) {
       throw new Error('Invalid ledger entry');
     }
     ids.add(entry.id);
@@ -340,7 +345,7 @@ const insets = useSafeAreaInsets();
 
 此 Hook 只允许一个挂载实例负责 `ledger.v1`。它先读取并验证 JSON，读取失败时禁止写入；写入期间同步上锁，只有 `setItem` 成功后更新列表。这样可以避免加载未结束就写空列表、连点覆盖上一笔、吞掉错误后显示已保存。多个页面需要同一状态时，将 Hook 提升到共同父级或 Provider，不能分别实例化后写同一个 key。AsyncStorage 不是跨进程事务数据库。
 
-本月按设备本地日历计算，不能直接截取 UTC ISO 字符串前七位，否则月界附近统计会错。跨月停留还需刷新当前时间；正式财务产品应明确固定时区。最多 10000 笔是此练习的容量约束，需要大量数据或高频写入时应改为数据库。
+本项目把 `createdAt` 限定为 `new Date().toISOString()` 产生的规范 UTC instant；`Date.parse` 的“能解析”不够严格，因为某些非约定日期会被宽松归一化。展示和“本月”统计按设备本地日历计算，不能直接截取 UTC 字符串前七位，否则月界附近统计会错。跨月停留还需刷新当前时间；正式财务产品应明确固定时区。最多 10000 笔是此练习的容量约束，需要大量数据或高频写入时应改为数据库。
 
 验收存储层：让替身存储延迟读取、读取失败、返回坏 JSON、写入失败。加载前禁止提交；坏数据不能被覆盖；写入失败时表单保留、列表不变；快速连点不应产生并行写入。验收金额：`0.1` 和 `0.2` 共 30 分，`12abc`、`1.234`、`Infinity` 被拒绝。最后重启验证成功写入的记录仍在。
 
