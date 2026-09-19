@@ -18,6 +18,7 @@ const cases = [
   ['next-typescript-boundary', '02-nextjs-frontend/basics/03-typescript-integration.md', 'ts', 'node'],
   ['node-esm-binding', '09-nodejs-backend/basics/03-modules-esm.md', 'js', 'node'],
   ['node-first-server-routing', '09-nodejs-backend/basics/02-first-server.md', 'js', 'node'],
+  ['node-map-pool-contract', '09-nodejs-backend/basics/04-async-promises.md', 'js', 'node'],
   ['node-lifecycle-idempotent-shutdown', '09-nodejs-backend/reference/library-guides/07-process-lifecycle.md', 'js', 'node'],
   ['node-stream-worker-boundaries', '09-nodejs-backend/basics/07-streams-workers.md', 'js', 'node'],
   ['node-request-body-boundaries', '09-nodejs-backend/basics/05-http-routing.md', 'js', 'node'],
@@ -87,7 +88,7 @@ try {
 
 const report = {
   generated_at: new Date().toISOString(),
-  purpose: 'Limited direct-body extraction verification for ten P1 basics documents.',
+  purpose: 'Limited direct-body extraction verification for eleven P1 basics documents.',
   passed: results.filter((result) => result.status === 'PASS').length,
   total: results.length,
   results,

@@ -7,6 +7,7 @@
 | `dev-quest/02-nextjs-frontend/basics/03-typescript-integration.md` | `next-typescript-boundary` | 871 | PASS |
 | `dev-quest/09-nodejs-backend/basics/03-modules-esm.md` | `node-esm-binding` | 207 | PASS |
 | `dev-quest/09-nodejs-backend/basics/02-first-server.md` | `node-first-server-routing` | 112 | PASS |
+| `dev-quest/09-nodejs-backend/basics/04-async-promises.md` | `node-map-pool-contract` | 165 | PASS |
 | `dev-quest/09-nodejs-backend/reference/library-guides/07-process-lifecycle.md` | `node-lifecycle-idempotent-shutdown` | 118 | PASS |
 | `dev-quest/09-nodejs-backend/basics/07-streams-workers.md` | `node-stream-worker-boundaries` | 126 | PASS |
 | `dev-quest/09-nodejs-backend/basics/05-http-routing.md` | `node-request-body-boundaries` | 198 | PASS |

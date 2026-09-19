@@ -159,6 +159,39 @@ const pages = await mapPool(urls, 5, (u) => fetchPage(u));
 // 也可用 p-limit 等成熟库，原理相同
 ```
 
+下面的完整程序只验证并发池的内存调度契约：同时运行的任务不超过 `limit`，结果仍按输入位置排列，非法上限会拒绝。它不模拟 HTTP 限流、取消或重试。
+
+```js verify:node-map-pool-contract
+async function mapPool(items, limit, fn) {
+  if (!Number.isInteger(limit) || limit < 1) throw new RangeError('limit 必须是正整数');
+  const results = new Array(items.length);
+  let next = 0;
+  async function worker() {
+    while (next < items.length) {
+      const index = next++;
+      results[index] = await fn(items[index]);
+    }
+  }
+  await Promise.all(Array.from({ length: limit }, worker));
+  return results;
+}
+
+let active = 0;
+let peak = 0;
+const values = await mapPool([3, 1, 2, 4], 2, async (value) => {
+  active += 1;
+  peak = Math.max(peak, active);
+  await Promise.resolve();
+  active -= 1;
+  return value * 10;
+});
+
+let invalidLimit = false;
+try { await mapPool([1], 0, async (value) => value); } catch (error) { invalidLimit = error instanceof RangeError; }
+if (peak !== 2 || values.join(',') !== '30,10,20,40' || !invalidLimit) throw new Error('mapPool contract failed');
+console.log('map-pool: bounded concurrency, ordered results, invalid-limit rejection');
+```
+
 ## 🛠️ 超时与取消：AbortController
 
 Node 24 中 `AbortController` 是取消异步操作的标准协议，原生 fetch、定时器、事件监听均支持：
