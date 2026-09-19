@@ -94,4 +94,26 @@ Date 表示时间点，Intl 处理语言地区相关的显示；Symbol 可作为
 
 ## 练习与验收
 
-把开头的 raw 改成 `["", "  ", "-2", "2.5", "8x", "8"]`，要求仅接受非空、能完整转换、有限的数；输出升序结果并保留原 raw。预期是 `-2,2.5,8`。再用 `parseInt` 替换 Number，解释为什么 `8x` 错误混入。最后输入空数组，应输出空结果和总和 0，而不是抛异常。
+表单“数值”先定义文本契约，再转换。下面示例只接受可选负号、整数部分和可选小数部分的 ASCII 十进制文本；它刻意拒绝空白、`Infinity`、科学计数法、千分位和半截输入。若产品需要其中任何一种，应修改契约并新增相应测试，不能只换成 `parseFloat`。
+
+```js
+function parseFiniteDecimal(text) {
+  const normalized = text.trim();
+  if (!/^-?(?:\d+|\d+\.\d+)$/.test(normalized)) return null;
+
+  const value = Number(normalized);
+  return Number.isFinite(value) ? value : null;
+}
+
+const raw = ["", "  ", "-2", "2.5", "8x", "8", "1e3", "1,000"];
+const accepted = raw
+  .map(parseFiniteDecimal)
+  .filter((value) => value !== null)
+  .sort((left, right) => left - right);
+
+console.log(accepted.join(","));
+console.log(accepted.reduce((sum, value) => sum + value, 0));
+console.log(raw.join("|")); // 原始输入没有被修改
+```
+
+预期输出依次为 `-2,2.5,8`、`8.5` 和 `|  |-2|2.5|8x|8|1e3|1,000`。再把 `parseFiniteDecimal` 替换为 `parseInt(text, 10)`，解释为什么 `8x` 会错误混入。最后输入空数组，应输出空结果和总和 0，而不是抛异常。
