@@ -348,7 +348,7 @@
     },
     {
       "path": "01-go-backend/deployment/04-observability.md",
-      "sha256": "2b908f71849c02787d9fb084ceac79a2a7c05c68d503a223ddf5921ebba4795c",
+      "sha256": "1af77ced1da2df37467630e290a2f05a32fbc80e4286383306f234130e8fd0d3",
       "verification": [
         {
           "mode": "not_verified",
@@ -452,7 +452,7 @@
     },
     {
       "path": "01-go-backend/projects/01-rest-api-server.md",
-      "sha256": "24fe7496d3f253a55070952aa53c505f9cde600fa8c5e26b179a898d94670b84",
+      "sha256": "e7eef8bcf28ce931041f1e5354311ee45d87b21bb815c28cfaa33f47c2310890",
       "verification": [
         {
           "mode": "not_verified",
@@ -1474,7 +1474,7 @@
     },
     {
       "path": "02-nextjs-frontend/projects/01-corporate-landing.md",
-      "sha256": "99f2dc13e2d47e01d75992e51a796a4cc0f71cee996f8be4c52ace3b26e9c91b",
+      "sha256": "aec3f780d9735805647b7e3a487dd7778e927e1383b79bc63d763d4fab24a0fb",
       "verification": [
         {
           "mode": "not_verified",
@@ -1513,7 +1513,7 @@
     },
     {
       "path": "02-nextjs-frontend/projects/04-saas-platform.md",
-      "sha256": "417fbe962e88028471fda1bf7c69a65423402c94fb8b5f911d772eda884268ec",
+      "sha256": "bd7f1f053a67bcc0626ae32259c5aadb8a65457a4f3cbc4dfbd15504da66f744",
       "verification": [
         {
           "mode": "not_verified",
@@ -2342,7 +2342,7 @@
     },
     {
       "path": "03-tanstack-stack/projects/04-saas-admin-platform.md",
-      "sha256": "38a328da81bf45d219f39af4d47a460fbddbb4b573491982b89790ed1a65db80",
+      "sha256": "b3df425be3887b67ec123f88442843f8d47f3d60a925c67156653f1c987bebec",
       "verification": [
         {
           "mode": "not_verified",
@@ -3043,7 +3043,7 @@
     },
     {
       "path": "04-multiplatform-apps/deployment/02-app-store-release.md",
-      "sha256": "6333d8923e7fec83b0d14a26ea5a6a51c1880bbe75c4206d61b2fb0535799055",
+      "sha256": "a3ecdbf5573c80427fd62dbb2cabfc813bd89f18b5a656d30440e530029f7f31",
       "verification": [
         {
           "mode": "not_verified",
@@ -4446,7 +4446,7 @@
     },
     {
       "path": "06-swift-swiftui/deployment/02-app-store-release.md",
-      "sha256": "8b655fcd79244b114c95a79f2da3fef35c961b5f6e8fe4e86467bb6b0fced018",
+      "sha256": "66f548c3698d47d3663f2de8f263bde1ea57f7d7445690998f9f7e0c64d54423",
       "verification": [
         {
           "mode": "not_verified",
@@ -4459,7 +4459,7 @@
     },
     {
       "path": "06-swift-swiftui/deployment/03-ci-cd-observability.md",
-      "sha256": "b56028a2181b958a706319bec17bae5fff1db6b5ed974b7656a35b109c1a6011",
+      "sha256": "c331e378d30f619d0a82a53e86a7ba6461cc421c6ef3e31dd71245cf459a3c23",
       "verification": [
         {
           "mode": "not_verified",
@@ -5199,7 +5199,7 @@
     },
     {
       "path": "07-php-mastery/basics/05-control-flow.md",
-      "sha256": "ebf4c19002a3dca40fed03d5f7ea70757e4725ac9f35852a5d1f6b078d057faa",
+      "sha256": "2a676f7d829f43a1dbdd61422f2e432014a1ba9cd8dfc9ab97dff86191d7be9a",
       "verification": [
         {
           "mode": "runtime",
@@ -5212,7 +5212,7 @@
     },
     {
       "path": "07-php-mastery/basics/06-error-exceptions.md",
-      "sha256": "783cbb367532bbb4844a5c813ea300bcd30894be6f2dc4ca1ce44a640d246cfe",
+      "sha256": "dce9c95772126c392128ea92f2d4c58e5aa79d40a8b46a4cf505d79befe00782",
       "verification": [
         {
           "mode": "not_verified",
@@ -5367,7 +5367,7 @@
     },
     {
       "path": "07-php-mastery/projects/02-blog-platform.md",
-      "sha256": "f04c76d9cab948242f5ec059078a838894534cc0dd1f6011b657b29352eac077",
+      "sha256": "5c6c82c0c2a698fa4493204776fb4cadd0495f0581cf36797a1caab3c507542a",
       "verification": [
         {
           "mode": "not_verified",
@@ -6117,7 +6117,7 @@
     },
     {
       "path": "08-java-revisited/basics/08-first-project.md",
-      "sha256": "92c38924b9d3338f6b8a7555bb07396cd5dc2ee0b8a9402fd5d9cb5b289bbc1b",
+      "sha256": "09d538bda583c7cdbf0f22f2708742b8746d04c0e4990502efdd0fcb444eb3de",
       "verification": [
         {
           "mode": "runtime",
@@ -6143,7 +6143,7 @@
     },
     {
       "path": "08-java-revisited/deployment/02-kubernetes-deployment.md",
-      "sha256": "91429a70316959d8ad83f32cc627953e76e275074faa8e114d8e0cd3b6f043ae",
+      "sha256": "6f301cc1eba95ed62b6f0d7f47dbbc46f9859c3ce924f95254b54bd6b5510b87",
       "verification": [
         {
           "mode": "not_verified",
@@ -6221,7 +6221,7 @@
     },
     {
       "path": "08-java-revisited/projects/01-todo-api.md",
-      "sha256": "b1863c9e4c368e683b03192d035ab7bc3405698d5146fc0e29eb40997c9cb8fb",
+      "sha256": "79ddd051453efd66a406a4aad531fb28dc4cc5219eb64d37b3754a787f30e10f",
       "verification": [
         {
           "mode": "not_verified",
@@ -6572,7 +6572,7 @@
     },
     {
       "path": "08-java-revisited/reference/library-guides/01-standard-library.md",
-      "sha256": "3df9f4557447a022165742bcdfab31e5291fae5c0ee586e669f71ad1342fefc7",
+      "sha256": "502b6b0fa52fb8418312f5df81132a049790fdde5ffec84dbbece099886852b4",
       "verification": [
         {
           "mode": "runtime",
@@ -7853,7 +7853,7 @@
     },
     {
       "path": "10-python-discovery/projects/02-url-shortener.md",
-      "sha256": "b55ca1c4899a7daca002a97dc73f856a12913ac44270a7b258c3b9f551744c80",
+      "sha256": "d1644065412313379f5202cfac0b58ee925d882a34a0ef86ff01b7a24498b2ef",
       "verification": [
         {
           "mode": "not_verified",
@@ -8446,7 +8446,7 @@
     },
     {
       "path": "11-rust-cross-platform/basics/02-ownership-borrowing.md",
-      "sha256": "bdf8ad8c2da5498371925b8363b3e4f7d3661ee9c08dce0770886b6937d59132",
+      "sha256": "e8962e9aa7f94dc9efd54f5d5837909344c390fca69a64fe12dc025eb3069050",
       "verification": [
         {
           "mode": "runtime",
@@ -9119,7 +9119,7 @@
     },
     {
       "path": "11-rust-cross-platform/testing/02-criterion-benchmarks.md",
-      "sha256": "d0ffc44f2c6593b3b068d5513484f762c8c0163df149dad53aa73d372044f1e2",
+      "sha256": "9a288f895f1a5debb1d811a291f018572849edc399abbbca8bcd6f32c1185c4c",
       "verification": [
         {
           "mode": "not_verified",
@@ -9279,7 +9279,7 @@
     },
     {
       "path": "02-nextjs-frontend/projects/04-saas-platform.md",
-      "line": 3752,
+      "line": 3754,
       "excerpt": "把“企业级 SaaS”收敛为一个可追踪的租户生命周期：组织创建后拥有一个不可伪造的 `tenantId`；成员邀请和角色变更由授权规则控制；所有业务读取、写入、缓存键和异步任务都带该租户维度；订阅状态由支付提供方的已验证事件驱动，再决定可用功能和配额。不要从客户端传来的 tenant 字段直接信任归属，也不要把“当前套餐”只存在前端状态。",
       "classification": "unbound_verification_wording"
     },
@@ -9327,7 +9327,7 @@
     },
     {
       "path": "03-tanstack-stack/projects/04-saas-admin-platform.md",
-      "line": 258,
+      "line": 273,
       "excerpt": "**下一步与证据**：记录上述五项的账号、请求状态和可见结果；后端权限与审计测试通过后，再进入部署文档。仅静态阅读这些片段不构成生产验证。Query 取消行为可回查[官方请求取消指南](https://tanstack.com/query/latest/docs/framework/react/guides/query-cancellation)，Router context 接线可回查[官方认证路由指南](https://tanstack.com/router/latest",
       "classification": "unbound_verification_wording"
     },
@@ -9567,13 +9567,13 @@
     },
     {
       "path": "08-java-revisited/basics/08-first-project.md",
-      "line": 265,
+      "line": 269,
       "excerpt": "写临时文件后移动，使新内容准备完成前原文件仍然存在。本例要求文件系统支持原子移动；Java 对 `ATOMIC_MOVE` 下目标已存在的处理保留了提供者差异，替换已有文件也必须在目标平台实测。[Files.move 官方契约](https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/nio/file/Files.html#move(java.nio.file.Path,java.nio.file.P",
       "classification": "source_has_limited_runtime_evidence"
     },
     {
       "path": "08-java-revisited/basics/08-first-project.md",
-      "line": 284,
+      "line": 288,
       "excerpt": "[首项目验证器](../../shared-resources/tools/document-quality/verify_php_java_projects.py) 直接抽取本篇程序，编译后通过真实 CLI 执行；[报告](../../shared-resources/tools/document-quality/reports/php-java-projects.md) 给出实测范围。通过只证明报告中的环境与案例，不代表所有平台文件系统行为相同。",
       "classification": "source_has_limited_runtime_evidence"
     },
@@ -9591,7 +9591,7 @@
     },
     {
       "path": "08-java-revisited/reference/library-guides/01-standard-library.md",
-      "line": 193,
+      "line": 197,
       "excerpt": "应用可在同配置请求间复用客户端。Java 21 的 HttpClient 实现 AutoCloseable，需要有清晰的应用生命周期；不要每个请求创建后立即丢弃。线程被中断时，通常传播 InterruptedException；捕获后若不能传播，应恢复中断标记并结束该操作。真实网络示例依赖服务端，本篇的离线验证不声称覆盖网络成功率、TLS 或超时实测。官方契约见 [HttpClient](https://docs.oracle.com/en/java/javase/21/do",
       "classification": "source_has_limited_runtime_evidence"
     },

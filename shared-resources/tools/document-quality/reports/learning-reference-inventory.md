@@ -87,7 +87,7 @@
 
 ### 08-java-revisited
 
-- 关键词：08-java-revisited/reference/framework-essentials/02-jpa-essentials.md；08-java-revisited/reference/language-concepts/01-java-keywords.md；08-java-revisited/reference/language-concepts/06-exceptions-resources.md
+- 关键词：08-java-revisited/reference/framework-essentials/02-jpa-essentials.md；08-java-revisited/reference/language-concepts/01-java-keywords.md；08-java-revisited/reference/language-concepts/06-exceptions-resources.md；08-java-revisited/reference/library-guides/01-standard-library.md
 - 内置能力：08-java-revisited/reference/framework-essentials/06-spring-security-essentials.md；08-java-revisited/reference/language-concepts/01-java-keywords.md；08-java-revisited/reference/language-concepts/08-enums.md；08-java-revisited/reference/language-concepts/09-annotations.md；08-java-revisited/reference/library-guides/05-java-util-function.md；08-java-revisited/reference/library-guides/09-jdk-package-map.md
 - 标准库：08-java-revisited/reference/language-concepts/01-java-keywords.md；08-java-revisited/reference/library-guides/01-standard-library.md；08-java-revisited/reference/library-guides/03-java-lang.md；08-java-revisited/reference/library-guides/04-java-io.md；08-java-revisited/reference/library-guides/05-java-util-function.md；08-java-revisited/reference/library-guides/06-java-math.md；08-java-revisited/reference/library-guides/07-java-text-and-time-format.md；08-java-revisited/reference/library-guides/08-java-util-regex.md；08-java-revisited/reference/library-guides/09-jdk-package-map.md
 - basics 练习/自测信号：8 篇；projects 验收信号：4 篇。

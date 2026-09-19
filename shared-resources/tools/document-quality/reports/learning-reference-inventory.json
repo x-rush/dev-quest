@@ -1389,7 +1389,8 @@
         "keyword_reference": [
           "08-java-revisited/reference/framework-essentials/02-jpa-essentials.md",
           "08-java-revisited/reference/language-concepts/01-java-keywords.md",
-          "08-java-revisited/reference/language-concepts/06-exceptions-resources.md"
+          "08-java-revisited/reference/language-concepts/06-exceptions-resources.md",
+          "08-java-revisited/reference/library-guides/01-standard-library.md"
         ],
         "built_in_reference": [
           "08-java-revisited/reference/framework-essentials/06-spring-security-essentials.md",

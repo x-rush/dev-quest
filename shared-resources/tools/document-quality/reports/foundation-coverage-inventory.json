@@ -303,6 +303,7 @@
           "08-java-revisited/reference/language-concepts/05-records-sealed-patterns.md",
           "08-java-revisited/reference/language-concepts/06-exceptions-resources.md",
           "08-java-revisited/reference/language-concepts/07-string-immutability-pool.md",
+          "08-java-revisited/reference/library-guides/01-standard-library.md",
           "08-java-revisited/reference/library-guides/02-third-party-libs.md"
         ],
         "builtins": [
