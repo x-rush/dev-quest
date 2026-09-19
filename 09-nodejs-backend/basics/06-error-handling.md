@@ -111,9 +111,11 @@ console.log(`${wrapped.name}|${wrapped.message}|${wrapped.cause.message}`);
 
 ```ts
 class ServiceError extends Error {
+  code?: string;
   constructor(message: string, options?: { code?: string; cause?: unknown }) {
     super(message, { cause: options?.cause }); // Error cause 标准属性
     this.name = "ServiceError";
+    this.code = options?.code;
   }
 }
 
@@ -124,6 +126,8 @@ try {
   // cause 保留原始堆栈，排查时不丢失根因
 }
 ```
+
+`code` 用于程序分支或错误响应分类，`message` 用于人类阅读，`cause` 用于诊断原始失败；三者不要互相替代。对外响应只暴露经过设计的 code 和安全消息，不能把数据库错误字符串直接透传。
 
 ## 🛠️ Hono 集中式错误处理
 
