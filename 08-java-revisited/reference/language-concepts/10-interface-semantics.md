@@ -75,6 +75,61 @@ class C implements A, B {
 
 ## 💡 示例
 
+### 可复现示例：default、static 与冲突消解
+
+这段完整程序把三个规则放在同一处验收：`Greeter.of` 只能由接口名调用；具体父类方法覆盖接口 default；两个无关 default 必须在实现类中显式选择。输出不依赖异常文本或反射实现细节。
+
+<!-- reference-case: {"id":"java-interface-default-resolution","stdout":"hi, Java\nsuper\nAB\n4\n","requires":"JDK 21"} -->
+```java
+public class InterfaceResolution {
+    interface Greeter {
+        String name();
+
+        default String greet() {
+            return "hi, " + name();
+        }
+
+        static Greeter of(String name) {
+            return () -> name;
+        }
+    }
+
+    interface A {
+        default String hi() { return "A"; }
+    }
+
+    interface B {
+        default String hi() { return "B"; }
+    }
+
+    static class Parent {
+        public String hi() { return "super"; }
+    }
+
+    static class ClassWins extends Parent implements A {}
+
+    static class Combined implements A, B {
+        @Override public String hi() {
+            return A.super.hi() + B.super.hi();
+        }
+    }
+
+    @FunctionalInterface
+    interface Length {
+        int value(String text);
+    }
+
+    public static void main(String[] args) {
+        System.out.println(Greeter.of("Java").greet());
+        System.out.println(new ClassWins().hi());
+        System.out.println(new Combined().hi());
+        System.out.println(((Length) String::length).value("java"));
+    }
+}
+```
+
+如果删除 `Combined.hi()`，程序应在编译期拒绝两个无关 default 的冲突；这是预期失败案例，实际项目的验证应只断言“编译失败”，不要绑定某一版本诊断文案。
+
 ```java
 @FunctionalInterface
 interface F { int len(String s); }

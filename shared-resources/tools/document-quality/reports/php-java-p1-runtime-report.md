@@ -1,6 +1,6 @@
 # PHP / Java P1 正文提取运行验证
 
-范围只包括八个带命名标记的完整代码围栏：覆盖 PHP/Java 的关键字、内置 API/函数和标准库，以及 Java 的第一个程序和枚举语义。控制流程页已有独立证据，未重新计入；无标记的教学片段也不计入。
+范围只包括九个带命名标记的完整代码围栏：覆盖 PHP/Java 的关键字、内置 API/函数和标准库，以及 Java 的第一个程序、枚举语义和接口语义。控制流程页已有独立证据，未重新计入；无标记的教学片段也不计入。
 
 | Case | Category | Document | Runner | Result |
 | --- | --- | --- | --- | --- |
@@ -10,6 +10,7 @@
 | `java-flow` | keyword | `08-java-revisited/reference/language-concepts/01-java-keywords.md` | eclipse-temurin:21-jdk-noble container | PASS |
 | `java-first-program-classic` | first program | `08-java-revisited/basics/02-first-program.md` | eclipse-temurin:21-jdk-noble container | PASS |
 | `java-enum-stable-code` | enum semantics | `08-java-revisited/reference/language-concepts/08-enums.md` | eclipse-temurin:21-jdk-noble container | PASS |
+| `java-interface-default-resolution` | interface semantics | `08-java-revisited/reference/language-concepts/10-interface-semantics.md` | eclipse-temurin:21-jdk-noble container | PASS |
 | `java-java-lang-contract` | built-in APIs (java.lang) | `08-java-revisited/reference/library-guides/03-java-lang.md` | eclipse-temurin:21-jdk-noble container | PASS |
 | `java-text` | standard library | `08-java-revisited/reference/library-guides/01-standard-library.md` | eclipse-temurin:21-jdk-noble container | PASS |
 

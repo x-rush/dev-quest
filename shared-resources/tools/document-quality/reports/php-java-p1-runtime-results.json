@@ -1,5 +1,5 @@
 {
-  "scope": "Eight explicitly marked, complete examples: PHP and Java keyword, built-in/API, standard-library, Java first-program, and Java enum-semantics pages. Excludes existing control-flow evidence and all unmarked partial snippets.",
+  "scope": "Nine explicitly marked, complete examples: PHP and Java keyword, built-in/API, standard-library, Java first-program, enum-semantics, and interface-semantics pages. Excludes existing control-flow evidence and all unmarked partial snippets.",
   "documents": {
     "07-php-mastery/reference/language-concepts/01-php-keywords.md": "867df9b19bf026d7f474899698db2a752d67d1cdfcce82b9d73458c8e1efc1a1",
     "07-php-mastery/reference/language-concepts/02-built-in-functions.md": "f2e60510ec55dd5bef56adeed3ba0cd66be01009f1e474a90e601ec8917ac11f",
@@ -7,6 +7,7 @@
     "08-java-revisited/reference/language-concepts/01-java-keywords.md": "b3b6f875d877a1df7bbca90f2e05252990092ff468c03e21050ef20f0059a224",
     "08-java-revisited/basics/02-first-program.md": "a21b66cb245876b2b1f1ae17ab9411e2724c5f0a3d3343766dd776764b9e8daa",
     "08-java-revisited/reference/language-concepts/08-enums.md": "d798fc10ce7b89f4cb9249df5536586c0bfee3bca1c1b213688a15d1ef4dce71",
+    "08-java-revisited/reference/language-concepts/10-interface-semantics.md": "f4234b4437c4325bf0d55b18e58fa61fc82a27c3c25f191645a732fa6b79a091",
     "08-java-revisited/reference/library-guides/03-java-lang.md": "c448851054b98e20a9aa961e61a2e53b7873aecbfd3cd614b2959cfd30437287",
     "08-java-revisited/reference/library-guides/01-standard-library.md": "3df9f4557447a022165742bcdfab31e5291fae5c0ee586e669f71ad1342fefc7"
   },
@@ -168,6 +169,33 @@
           ],
           "exit_code": 0,
           "stdout": "PAID=20\n[NEW, PAID]\n{NEW=draft, PAID=settled}\n",
+          "stderr": ""
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "java-interface-default-resolution",
+      "category": "interface semantics",
+      "language": "java",
+      "document": "08-java-revisited/reference/language-concepts/10-interface-semantics.md",
+      "source_sha256": "3a3919d775326bfdf24952c1ca0496062bb66a92ea87503a9fcee5ea681d2c52",
+      "runner": "eclipse-temurin:21-jdk-noble container",
+      "expected_stdout": "hi, Java\nsuper\nAB\n4\n",
+      "commands": [
+        {
+          "command": [
+            "docker",
+            "run",
+            "--rm",
+            "-i",
+            "eclipse-temurin:21-jdk-noble",
+            "sh",
+            "-c",
+            "cat > InterfaceResolution.java && javac --release 21 -encoding UTF-8 InterfaceResolution.java && java InterfaceResolution"
+          ],
+          "exit_code": 0,
+          "stdout": "hi, Java\nsuper\nAB\n4\n",
           "stderr": ""
         }
       ],

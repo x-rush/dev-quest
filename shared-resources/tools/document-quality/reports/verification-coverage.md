@@ -7,8 +7,8 @@
 | 指标 | 数量 |
 |---|---:|
 | 纳入模块文档 | 642 |
-| 主状态：not_verified | 466 |
-| 主状态：runtime | 176 |
+| 主状态：not_verified | 465 |
+| 主状态：runtime | 177 |
 | 验证措辞出现次数 | 142 |
 | 措辞分类：source_has_limited_runtime_evidence | 88 |
 | 措辞分类：unbound_verification_wording | 54 |
@@ -502,7 +502,7 @@
 | Java | [08-java-revisited/reference/language-concepts/07-string-immutability-pool.md](../../../../08-java-revisited/reference/language-concepts/07-string-immutability-pool.md) | `runtime` | 1 | 0 |
 | Java | [08-java-revisited/reference/language-concepts/08-enums.md](../../../../08-java-revisited/reference/language-concepts/08-enums.md) | `runtime` | 1 | 0 |
 | Java | [08-java-revisited/reference/language-concepts/09-annotations.md](../../../../08-java-revisited/reference/language-concepts/09-annotations.md) | `not_verified` | 0 | 0 |
-| Java | [08-java-revisited/reference/language-concepts/10-interface-semantics.md](../../../../08-java-revisited/reference/language-concepts/10-interface-semantics.md) | `not_verified` | 0 | 0 |
+| Java | [08-java-revisited/reference/language-concepts/10-interface-semantics.md](../../../../08-java-revisited/reference/language-concepts/10-interface-semantics.md) | `runtime` | 1 | 0 |
 | Java | [08-java-revisited/reference/library-guides/01-standard-library.md](../../../../08-java-revisited/reference/library-guides/01-standard-library.md) | `runtime` | 11 | 1 |
 | Java | [08-java-revisited/reference/library-guides/02-third-party-libs.md](../../../../08-java-revisited/reference/library-guides/02-third-party-libs.md) | `not_verified` | 0 | 0 |
 | Java | [08-java-revisited/reference/library-guides/03-java-lang.md](../../../../08-java-revisited/reference/library-guides/03-java-lang.md) | `runtime` | 1 | 0 |

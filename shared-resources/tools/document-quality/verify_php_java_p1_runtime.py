@@ -31,6 +31,7 @@ CASES = (
     ("java-flow", "08-java-revisited/reference/language-concepts/01-java-keywords.md", "reference-case", "java", "5\nmedium\n", "keyword"),
     ("java-first-program-classic", "08-java-revisited/basics/02-first-program.md", "reference-case", "java", "Hello, Java!\n", "first program"),
     ("java-enum-stable-code", "08-java-revisited/reference/language-concepts/08-enums.md", "reference-case", "java", "PAID=20\n[NEW, PAID]\n{NEW=draft, PAID=settled}\n", "enum semantics"),
+    ("java-interface-default-resolution", "08-java-revisited/reference/language-concepts/10-interface-semantics.md", "reference-case", "java", "hi, Java\nsuper\nAB\n4\n", "interface semantics"),
     ("java-java-lang-contract", "08-java-revisited/reference/library-guides/03-java-lang.md", "runtime-evidence", "java", "true\nPoint[x=1, y=2]\ncba\nfalse\n", "built-in APIs (java.lang)"),
     ("java-text", "08-java-revisited/reference/library-guides/01-standard-library.md", "reference-case", "java", "4\n3\n[a, b]\n[a, b, ]\nhello\n", "standard library"),
 )
@@ -120,7 +121,7 @@ def main() -> None:
                 "passed": passed,
             })
     data = {
-        "scope": "Eight explicitly marked, complete examples: PHP and Java keyword, built-in/API, standard-library, Java first-program, and Java enum-semantics pages. Excludes existing control-flow evidence and all unmarked partial snippets.",
+        "scope": "Nine explicitly marked, complete examples: PHP and Java keyword, built-in/API, standard-library, Java first-program, enum-semantics, and interface-semantics pages. Excludes existing control-flow evidence and all unmarked partial snippets.",
         "documents": {relative: hashlib.sha256((ROOT / relative).read_bytes()).hexdigest() for _, relative, *_ in CASES},
         "cases": records,
         "passed": all(record["passed"] for record in records),
@@ -129,7 +130,7 @@ def main() -> None:
     rows = [
         "# PHP / Java P1 正文提取运行验证",
         "",
-        "范围只包括八个带命名标记的完整代码围栏：覆盖 PHP/Java 的关键字、内置 API/函数和标准库，以及 Java 的第一个程序和枚举语义。控制流程页已有独立证据，未重新计入；无标记的教学片段也不计入。",
+        "范围只包括九个带命名标记的完整代码围栏：覆盖 PHP/Java 的关键字、内置 API/函数和标准库，以及 Java 的第一个程序、枚举语义和接口语义。控制流程页已有独立证据，未重新计入；无标记的教学片段也不计入。",
         "",
         "| Case | Category | Document | Runner | Result |",
         "| --- | --- | --- | --- | --- |",
