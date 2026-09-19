@@ -1,6 +1,6 @@
 # Java 标准库：选择、输入输出、失败与资源责任
 
-Java 标准库随 JDK 提供；Spring、Jackson、JUnit 属于外部依赖。本篇覆盖日常应用的文本、集合工具、数值、时间、文件和 HTTP。所有完整示例使用 Java 21、无外部依赖，分别保存为 `Main.java`，用 `javac --release 21 -encoding UTF-8 Main.java` 和 `java Main` 执行。
+Java 标准库随 JDK 提供；Spring、Jackson、JUnit 属于外部依赖。本篇覆盖日常应用的文本、集合工具、数值、时间、文件和 HTTP。所有完整示例使用 Java 21、无外部依赖；它们都是彼此独立的 `Main.java`，一次只保存并编译一个围栏，避免多个 `public class Main` 发生冲突。执行命令为 `javac --release 21 -encoding UTF-8 Main.java` 和 `java Main`。
 
 查方法时同时看四项：输入单位是什么、返回的是新值还是视图、失败抛什么、谁关闭资源。只记“读文件”“不可变”“格式化日期”会漏掉真正影响程序行为的条件。更大的包覆盖范围由[JDK 官方模块列表](https://docs.oracle.com/en/java/javase/21/docs/api/index.html)提供索引。
 

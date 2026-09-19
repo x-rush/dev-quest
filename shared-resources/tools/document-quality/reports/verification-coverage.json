@@ -20,9 +20,9 @@
       "not_verified": 513,
       "runtime": 129
     },
-    "verification_wording_occurrences": 126,
+    "verification_wording_occurrences": 127,
     "marker_classification": {
-      "source_has_limited_runtime_evidence": 81,
+      "source_has_limited_runtime_evidence": 82,
       "unbound_verification_wording": 45
     }
   },
@@ -576,7 +576,7 @@
     },
     {
       "path": "01-go-backend/reference/language-concepts/01-go-keywords.md",
-      "sha256": "5811a9a8215a5002f7d81c4168f2d6b55d83fc365a08c2cd328be55da481500f",
+      "sha256": "c0fabc21b7e6f5299dc5b4dc31a79410e76d856c5281a3d79a78a40d325ade0d",
       "verification": [
         {
           "mode": "runtime",
@@ -589,7 +589,7 @@
     },
     {
       "path": "01-go-backend/reference/language-concepts/02-go-built-in-functions.md",
-      "sha256": "ea6c40d3fc60e547f3bdcf2a1fe41b56f2ffc04c9f7a0e7d68f9f386ae769aab",
+      "sha256": "6fbcd80709716b0243d355489f7183a2496dbfb11083b3e582acfd98beebc303",
       "verification": [
         {
           "mode": "runtime",
@@ -615,7 +615,7 @@
     },
     {
       "path": "01-go-backend/reference/language-concepts/04-go-data-types.md",
-      "sha256": "1708021de99e58a388365accf5aa3dcfc97df4b44d0d69a9e5c47aafb083fb20",
+      "sha256": "d90d0e1dad573d7e6cc5933b77cc3cbdf54ce74bba2bca578013271c864698f0",
       "verification": [
         {
           "mode": "runtime",
@@ -823,7 +823,7 @@
     },
     {
       "path": "01-go-backend/reference/library-guides/05-context.md",
-      "sha256": "0e7f834897a526faa0ccf4996b50769fb6a3127c9223440225dbf3657f20fcc6",
+      "sha256": "4067a8821379a2cbb993715835f9f948818e3c3a479fd95d9e1dc7408f5084ba",
       "verification": [
         {
           "mode": "runtime",
@@ -3055,7 +3055,7 @@
     },
     {
       "path": "04-multiplatform-apps/projects/01-todo-app.md",
-      "sha256": "eb169a373f467af0b6c4cd2bd5a6efa0938a14e423f568b6113ba726d5147d9d",
+      "sha256": "d17716807b8c9c4ea680063c413ffbf521578a6f1b61138857293e3aab613804",
       "verification": [
         {
           "mode": "runtime",
@@ -3064,7 +3064,7 @@
           "scope": "Four exact documentation source blocks; 11 Node behavior tests. Only fetch is replaced explicitly for HTTP contract tests. Not Vitest/Jest setup, TS typecheck, React, SSR, browser, native MMKV or device validation."
         }
       ],
-      "marker_count": 1
+      "marker_count": 2
     },
     {
       "path": "04-multiplatform-apps/projects/02-weather-app.md",
@@ -3731,7 +3731,7 @@
     },
     {
       "path": "05-kotlin-compose/projects/01-notes-app.md",
-      "sha256": "c037465031ae2d7d972abba0b0681a23cc3abbb31b3487ea823eccdb9f923c30",
+      "sha256": "f4c82a3031b6ec01a949bfd9530e9ea66f0d7994a2982ae12f930caf7f6b24d3",
       "verification": [
         {
           "mode": "not_verified",
@@ -4458,7 +4458,7 @@
     },
     {
       "path": "06-swift-swiftui/projects/01-notes-app.md",
-      "sha256": "9b09e4598ef682af6504471863a4f363f92094824785fa04a0b1d582587c9bab",
+      "sha256": "31e909ee99df702deb5f80ce594dd444103b80161e48694f14c9859154c1b826",
       "verification": [
         {
           "mode": "not_verified",
@@ -5340,7 +5340,7 @@
     },
     {
       "path": "07-php-mastery/reference/language-concepts/01-php-keywords.md",
-      "sha256": "3e2efd96beb7816877fd45454546ac85b3defeddcfd06584ea2a9330ada3372b",
+      "sha256": "93fab900bc185c43dd90c82dcde04bed313f161a6bc0ee83850e92f34fa6d7e9",
       "verification": [
         {
           "mode": "runtime",
@@ -5365,6 +5365,24 @@
           "status": "PASS",
           "report": "php-java-p1-runtime-results.json",
           "scope": "Six explicitly marked, complete reference examples: PHP and Java keyword, built-in/API, and standard-library pages. Excludes existing control-flow evidence and all unmarked partial snippets."
+        },
+        {
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "php-java-reference-cases-results.json",
+          "scope": "Only reference-case fences extracted directly from four PHP/Java P1 core pages. Pages with runtime-evidence are rejected."
+        },
+        {
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "php-java-reference-cases-results.json",
+          "scope": "Only reference-case fences extracted directly from four PHP/Java P1 core pages. Pages with runtime-evidence are rejected."
+        },
+        {
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "php-java-reference-cases-results.json",
+          "scope": "Only reference-case fences extracted directly from four PHP/Java P1 core pages. Pages with runtime-evidence are rejected."
         }
       ],
       "marker_count": 0
@@ -5408,6 +5426,36 @@
           "status": "PASS",
           "report": "php-java-p1-runtime-results.json",
           "scope": "Six explicitly marked, complete reference examples: PHP and Java keyword, built-in/API, and standard-library pages. Excludes existing control-flow evidence and all unmarked partial snippets."
+        },
+        {
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "php-java-reference-cases-results.json",
+          "scope": "Only reference-case fences extracted directly from four PHP/Java P1 core pages. Pages with runtime-evidence are rejected."
+        },
+        {
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "php-java-reference-cases-results.json",
+          "scope": "Only reference-case fences extracted directly from four PHP/Java P1 core pages. Pages with runtime-evidence are rejected."
+        },
+        {
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "php-java-reference-cases-results.json",
+          "scope": "Only reference-case fences extracted directly from four PHP/Java P1 core pages. Pages with runtime-evidence are rejected."
+        },
+        {
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "php-java-reference-cases-results.json",
+          "scope": "Only reference-case fences extracted directly from four PHP/Java P1 core pages. Pages with runtime-evidence are rejected."
+        },
+        {
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "php-java-reference-cases-results.json",
+          "scope": "Only reference-case fences extracted directly from four PHP/Java P1 core pages. Pages with runtime-evidence are rejected."
         }
       ],
       "marker_count": 0
@@ -6255,6 +6303,30 @@
           "status": "PASS",
           "report": "php-java-p1-runtime-results.json",
           "scope": "Six explicitly marked, complete reference examples: PHP and Java keyword, built-in/API, and standard-library pages. Excludes existing control-flow evidence and all unmarked partial snippets."
+        },
+        {
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "php-java-reference-cases-results.json",
+          "scope": "Only reference-case fences extracted directly from four PHP/Java P1 core pages. Pages with runtime-evidence are rejected."
+        },
+        {
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "php-java-reference-cases-results.json",
+          "scope": "Only reference-case fences extracted directly from four PHP/Java P1 core pages. Pages with runtime-evidence are rejected."
+        },
+        {
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "php-java-reference-cases-results.json",
+          "scope": "Only reference-case fences extracted directly from four PHP/Java P1 core pages. Pages with runtime-evidence are rejected."
+        },
+        {
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "php-java-reference-cases-results.json",
+          "scope": "Only reference-case fences extracted directly from four PHP/Java P1 core pages. Pages with runtime-evidence are rejected."
         }
       ],
       "marker_count": 1
@@ -6408,7 +6480,7 @@
     },
     {
       "path": "08-java-revisited/reference/library-guides/01-standard-library.md",
-      "sha256": "eb0d10994ed6f29c36838bd4bc62579b67934408008e47821e70493740b1f69b",
+      "sha256": "3df9f4557447a022165742bcdfab31e5291fae5c0ee586e669f71ad1342fefc7",
       "verification": [
         {
           "mode": "runtime",
@@ -6445,6 +6517,36 @@
           "status": "PASS",
           "report": "php-java-p1-runtime-results.json",
           "scope": "Six explicitly marked, complete reference examples: PHP and Java keyword, built-in/API, and standard-library pages. Excludes existing control-flow evidence and all unmarked partial snippets."
+        },
+        {
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "php-java-reference-cases-results.json",
+          "scope": "Only reference-case fences extracted directly from four PHP/Java P1 core pages. Pages with runtime-evidence are rejected."
+        },
+        {
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "php-java-reference-cases-results.json",
+          "scope": "Only reference-case fences extracted directly from four PHP/Java P1 core pages. Pages with runtime-evidence are rejected."
+        },
+        {
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "php-java-reference-cases-results.json",
+          "scope": "Only reference-case fences extracted directly from four PHP/Java P1 core pages. Pages with runtime-evidence are rejected."
+        },
+        {
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "php-java-reference-cases-results.json",
+          "scope": "Only reference-case fences extracted directly from four PHP/Java P1 core pages. Pages with runtime-evidence are rejected."
+        },
+        {
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "php-java-reference-cases-results.json",
+          "scope": "Only reference-case fences extracted directly from four PHP/Java P1 core pages. Pages with runtime-evidence are rejected."
         }
       ],
       "marker_count": 1
@@ -9061,7 +9163,13 @@
     },
     {
       "path": "04-multiplatform-apps/projects/01-todo-app.md",
-      "line": 39,
+      "line": 9,
+      "excerpt": "**最小产物**：一个可运行的待办页面、一个负责待办读写的状态所有者、依赖锁文件，以及注明设备/系统/运行方式的验收记录。先保留一个存储实现，不同时用两套状态写同一批待办。切换 MMKV 时另建练习工程或明确实现迁移；旧 AsyncStorage 数据不会自动进入 MMKV。",
+      "classification": "source_has_limited_runtime_evidence"
+    },
+    {
+      "path": "04-multiplatform-apps/projects/01-todo-app.md",
+      "line": 43,
       "excerpt": "- 在 Android / iOS 开发构建中分别完成下方验收；鸿蒙需独立适配与工具链验证，本文代码不证明三端已运行",
       "classification": "source_has_limited_runtime_evidence"
     },

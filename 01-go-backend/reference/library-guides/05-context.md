@@ -38,6 +38,7 @@ case v := <-ch:
 
 ## 💡 示例
 
+<!-- go-example: context-cancellation-seventh -->
 ```go
 package main
 

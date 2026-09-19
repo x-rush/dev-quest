@@ -142,6 +142,7 @@ func main() {
 `fallthrough` 必须是表达式 switch 某个非末尾分支的最后一条非空语句，它执行下一个分支体而不测试条件；不能写在 if 的嵌套块里，也不能用于类型 switch 或 select。
 
 <!-- go-example: keyword-decisions -->
+<!-- go-example: keyword-decisions-seventh -->
 ```go
 package main
 

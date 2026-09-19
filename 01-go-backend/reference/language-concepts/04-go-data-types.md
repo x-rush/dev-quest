@@ -178,6 +178,8 @@ channel 用于发送和接收有类型的值；`chan T` 可收发，`<-chan T` �
 
 下面是完整程序，保存为 main.go，运行 go run main.go：
 
+<!-- go-example: data-type-value-copy-seventh -->
+
 ```go
 package main
 import "fmt"
@@ -188,10 +190,11 @@ func main() {
     s := a[:]
     s[0] = 7
     fmt.Println(a, b, s)
+    fmt.Println("array copy keeps its own first element:", b[0] == 9)
 }
 ```
 
-输出 `[7 2] [9 2] [7 2]`。b 与 a 是两个数组，s 则指向 a 的存储。练习：把 s 改为通过 make 和 copy 创建，a 应保留 `[1 2]`。另外，byte 是 uint8 别名，rune 是 int32 别名；string 存储字节，len 返回字节数，不保证等于文字数量。
+输出 `[7 2] [9 2] [7 2]` 和 `array copy keeps its own first element: true`。b 与 a 是两个数组，s 则指向 a 的存储。练习：把 s 改为通过 make 和 copy 创建，a 应保留 `[1 2]`。另外，byte 是 uint8 别名，rune 是 int32 别名；string 存储字节，len 返回字节数，不保证等于文字数量。
 
 ## 🔗 相关资源
 

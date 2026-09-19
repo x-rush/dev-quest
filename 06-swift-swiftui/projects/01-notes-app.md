@@ -2,13 +2,15 @@
 
 ## 分阶段练习与验收
 
-**最小阶段**：先在 SwiftData 创建与查询一条笔记。
+**进入条件**：在 macOS/Xcode 的 iOS 17 或更高目标完成[首项目](../basics/08-first-project.md)的新增、保存、重启读取；能解释草稿、模型变化和 `context.save()` 成功的区别。新建独立的 Notes 工程并保留唯一 `@main`，不要直接把 `Note` 容器替换进已有待办记账数据库；模型迁移留到后续练习。
 
-**验收结果**：重启后内容保留；无效标题失败；删除立即反映在查询结果。
+**最小产物**：含 `Note`、`NotesApp`、`NoteListView`、`NoteEditorView` 的 Xcode 工程，以及 Xcode/SDK/设备版本与验收记录。拆分文件时，模型文件导入 Foundation 和 SwiftData，两个视图文件均导入 SwiftUI 与 SwiftData。先做新增、列表、删除，再接编辑和搜索。
 
-**扩展顺序**：编辑和搜索作为第二阶段，关系与迁移单独测试。
+**验收动作**：新增 A/B，将 A 编辑为 A2，取消一次后确认仍是 A2；搜索 B 并删除，清空搜索后 A2 仍在。终止并重启应用，确认 A2 保留、B 不恢复；纯空格或换行标题不能保存。在独立测试工程的保存入口注入抛错替身，确认新建/编辑失败时表单保留、已保存数据回滚，删除失败时条目恢复且错误可见。本文未记录设备通过结果，未执行项写“未验证”。
 
-建议保存一份正常输入、一份失败输入、实际输出和对应测试。先完成以上阶段再扩展正文中的完整设计；遇到省略实现或未定义依赖，应按文档上下文补齐，不能把代码片段拼接后当作已经验证的完整工程。
+**失败回查**：有界面更新却重启丢数据，先检查是否走到显式保存成功；保存失败查[错误处理](../reference/language-concepts/08-error-handling.md)，容器或模型错误查[SwiftData](../reference/framework-essentials/02-swiftdata-observability.md)。本练习关闭自动保存并只允许一个编辑动作，回滚会撤销该 context 中全部未保存修改。
+
+**下一步**：上述验收通过后进入[天气应用](./02-weather-app.md)学习请求与取消；新增字段前先完成[模型迁移](../reference/framework-essentials/07-swiftdata-migration.md)，保留旧数据样本验证升级。
 
 > **文档简介**: 从零构建一个带增删改查与搜索的本地笔记应用，完整走一遍 SwiftData 持久化 + SwiftUI 列表交互的最小闭环
 >
@@ -44,6 +46,7 @@
 ## 🛠️ 第一步：数据模型
 
 ```swift
+import Foundation
 import SwiftData
 
 @Model
@@ -78,7 +81,7 @@ struct NotesApp: App {
         WindowGroup {
             NoteListView()
         }
-        .modelContainer(for: Note.self)     // 建库 + 注入环境，一行搞定
+        .modelContainer(for: Note.self, isAutosaveEnabled: false)
     }
 }
 ```
@@ -93,6 +96,7 @@ struct NoteListView: View {
 
     @State private var searchText = ""
     @State private var showingEditor = false
+    @State private var errorText: String?
 
     // 搜索过滤：纯内存过滤，数据量大再考虑 #Predicate
     private var filteredNotes: [Note] {
@@ -111,6 +115,12 @@ struct NoteListView: View {
                 }
             }
             .navigationTitle("我的笔记")
+            .alert("删除未保存", isPresented: Binding(
+                get: { errorText != nil },
+                set: { if !$0 { errorText = nil } }
+            )) {
+                Button("知道了", role: .cancel) { errorText = nil }
+            } message: { Text(errorText ?? "") }
             .searchable(text: $searchText, prompt: "搜索标题")
             .toolbar {
                 Button {
@@ -145,7 +155,15 @@ struct NoteListView: View {
     }
 
     private func delete(at offsets: IndexSet) {
-        for index in offsets { context.delete(filteredNotes[index]) }
+        let selected = offsets.map { filteredNotes[$0] }
+        for note in selected { context.delete(note) }
+        do {
+            try context.save()
+            errorText = nil
+        } catch {
+            context.rollback()
+            errorText = "删除失败，已恢复上次保存的数据。请重试。"
+        }
     }
 }
 ```
@@ -161,6 +179,7 @@ struct NoteEditorView: View {
 
     @State private var title = ""
     @State private var content = ""
+    @State private var errorText: String?
 
     var body: some View {
         NavigationStack {
@@ -168,12 +187,13 @@ struct NoteEditorView: View {
                 TextField("标题", text: $title)
                 TextField("正文", text: $content, axis: .vertical)
                     .lineLimit(6...12)
+                if let errorText { Text(errorText).foregroundStyle(.red) }
             }
             .navigationTitle(note == nil ? "新建笔记" : "编辑笔记")
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
                     Button("保存") { save() }
-                        .disabled(title.trimmingCharacters(in: .whitespaces).isEmpty)
+                        .disabled(title.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
                 }
                 ToolbarItem(placement: .cancellationAction) {
                     Button("取消") { dismiss() }
@@ -190,14 +210,25 @@ struct NoteEditorView: View {
     }
 
     private func save() {
+        let normalizedTitle = title.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !normalizedTitle.isEmpty else {
+            errorText = "请输入非空标题。"
+            return
+        }
         if let note {
-            note.title = title                    // @Model 对象直接改属性
+            note.title = normalizedTitle
             note.content = content
         } else {
-            context.insert(Note(title: title, content: content))
+            context.insert(Note(title: normalizedTitle, content: content))
         }
-        try? context.save()
-        dismiss()
+        do {
+            try context.save()
+            errorText = nil
+            dismiss()
+        } catch {
+            context.rollback()
+            errorText = "保存失败，输入仍保留。请重试。"
+        }
     }
 }
 ```

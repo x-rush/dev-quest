@@ -2,13 +2,15 @@
 
 ## 分阶段练习与验收
 
-**最小阶段**：先在 Room 保存标题和正文，提供新增与列表。
+**进入条件**：已在自己的 Android 工程完成[最小笔记应用](../basics/08-first-project.md)，通过构建及新增 A/B、删除 B、重启读回 A 的设备验收。沿用该工程的 Gradle/KSP 配置、`NotesDatabase`、领域模型 `Note`、`toDomain()` 与 `validateNote`，下面是编辑和搜索的增量练习，不是可直接替换整个工程的独立文件。
 
-**验收结果**：关闭应用再启动仍可读取；删除后重启不会恢复。
+**最小产物**：在原工程增加按 id 查询、保留 id 的编辑保存、搜索输入及导航装配，并保留源码、Room schema 与设备验收记录。本文继续使用首项目的 `createdAt` 字段，不为搜索改名或重建表；将来增加更新时间时另做 schema 迁移。新界面替换旧界面时同步修改 Activity 的参数装配，`EmptyHint` 和 `NoteRow` 是需要自行实现的展示组件。
 
-**扩展顺序**：先验证持久化，再加入编辑、搜索与依赖注入。
+**验收动作**：新增 A/B，编辑 A 为 A2，记录数仍为 2；取消修改后内容不变；搜索 A2 只显示 A2，清空搜索恢复两项；删除 B 后重启，只有 A2。用失败 DAO 替身让保存抛错，表单保留且不能导航返回；空白标题被拒绝。分别记录构建、设备交互和失败路径结果，尚未执行的项目写“未验证”。
 
-建议保存一份正常输入、一份失败输入、实际输出和对应测试。先完成以上阶段再扩展正文中的完整设计；遇到省略实现或未定义依赖，应按文档上下文补齐，不能把代码片段拼接后当作已经验证的完整工程。
+**失败回查**：编辑后多出一条记录先查 `noteId` 是否一路传入 `upsert`；编译时找不到领域类型返回首项目 Repository 段补齐；找不到 DAO 实现或 schema 不匹配查[KSP 配置](../reference/library-guides/03-ksp-configuration.md)与[故障排除](../reference/quick-references/02-troubleshooting.md)，不要清库来掩盖已有数据的升级问题。
+
+**下一步**：编辑与搜索验收通过后再进入[天气应用](./02-weather-app.md)接入网络与依赖注入；首项目已有的加载、读取错误和删除错误处理在接线时仍需保留。
 
 > **文档简介**: 用 Compose + Room + ViewModel 从零构建一个支持增删改查与搜索的本地笔记应用，覆盖现代 Android 应用最小的完整闭环
 >
@@ -52,14 +54,17 @@ data class NoteEntity(
     @PrimaryKey(autoGenerate = true) val id: Long = 0,
     val title: String,
     val content: String,
-    val updatedAt: Long = System.currentTimeMillis(),
+    val createdAt: Long = System.currentTimeMillis(),
 )
 
 @Dao
 interface NoteDao {
     // 搜索在 SQL 层完成：数据量大时远快于内存过滤
-    @Query("SELECT * FROM notes WHERE title LIKE '%' || :query || '%' ORDER BY updatedAt DESC")
+    @Query("SELECT * FROM notes WHERE title LIKE '%' || :query || '%' ORDER BY createdAt DESC, id DESC")
     fun observeNotes(query: String): Flow<List<NoteEntity>>
+
+    @Query("SELECT * FROM notes WHERE id = :id LIMIT 1")
+    suspend fun getNote(id: Long): NoteEntity?
 
     @Upsert suspend fun upsert(note: NoteEntity)
 
@@ -94,8 +99,16 @@ class NotesViewModel(private val dao: NoteDao) : ViewModel() {
 
     fun onQueryChange(q: String) { queryFlow.value = q }
 
-    fun saveNote(title: String, content: String) = viewModelScope.launch {
-        dao.upsert(NoteEntity(title = title, content = content))
+    suspend fun getNote(id: Long): NoteEntity? = dao.getNote(id)
+
+    // 调用方等待成功后才离开编辑页；异常交给表单展示。
+    suspend fun saveNote(noteId: Long?, title: String, content: String) {
+        val draft = validateNote(title, content)
+        val existing = noteId?.let { id ->
+            requireNotNull(dao.getNote(id)) { "笔记已不存在，请返回列表刷新" }
+        }
+        dao.upsert(existing?.copy(title = draft.title, content = draft.content)
+            ?: NoteEntity(title = draft.title, content = draft.content))
     }
 
     fun deleteNote(id: Long) = viewModelScope.launch { dao.deleteById(id) }
@@ -147,42 +160,68 @@ fun NotesScreen(
 
 ## 4️⃣ 编辑界面：表单状态留在 Composable 层
 
+本段除首项目已有 import 外，需要 `androidx.compose.runtime.saveable.rememberSaveable`、`kotlinx.coroutines.CancellationException` 和 `kotlinx.coroutines.launch`。表单协程属于当前组合，离开页面或 Activity 重建会取消它；数据库提交与取消可能相邻发生，返回列表后以 Room 查询结果为准。本阶段只验收空闲草稿旋转恢复；若要求保存中旋转仍持续提交，应把保存任务和忙碌状态提升到 ViewModel，沿用首项目的写入协调方式。
+
 ```kotlin
 @Composable
 fun NoteEditorScreen(noteId: Long?, viewModel: NotesViewModel, onDone: () -> Unit) {
     // 只有"草稿"属于 UI；持久化才进 ViewModel/Room
     var title by rememberSaveable { mutableStateOf("") }
     var content by rememberSaveable { mutableStateOf("") }
+    var loaded by rememberSaveable(noteId) { mutableStateOf(noteId == null) }
+    var saving by remember { mutableStateOf(false) }
+    var error by remember { mutableStateOf<String?>(null) }
+    val scope = rememberCoroutineScope()
 
     // 编辑模式：进入时回填既有笔记（新建 noteId == null 跳过）
     LaunchedEffect(noteId) {
-        noteId?.let { id ->
-            viewModel.getNote(id)?.let { note ->
+        if (!loaded && noteId != null) {
+            try {
+                val note = requireNotNull(viewModel.getNote(noteId)) { "笔记已不存在" }
                 title = note.title
                 content = note.content
+                loaded = true
+            } catch (cancelled: CancellationException) {
+                throw cancelled
+            } catch (failure: Exception) {
+                error = "读取失败，请返回列表后重试。"
             }
         }
     }
 
     Column(Modifier.padding(16.dp)) {
-        OutlinedTextField(value = title, onValueChange = { title = it }, label = { Text("标题") })
-        OutlinedTextField(value = content, onValueChange = { content = it }, minLines = 5)
-        Button(onClick = {
-            viewModel.saveNote(noteId, title, content)
-            onDone()
+        OutlinedTextField(value = title, onValueChange = { title = it }, enabled = loaded && !saving, label = { Text("标题") })
+        OutlinedTextField(value = content, onValueChange = { content = it }, enabled = loaded && !saving, minLines = 5)
+        error?.let { Text(it) }
+        Button(enabled = loaded && !saving && title.isNotBlank(), onClick = {
+            if (!saving) {
+                saving = true
+                scope.launch {
+                    try {
+                        viewModel.saveNote(noteId, title, content)
+                        onDone()
+                    } catch (cancelled: CancellationException) {
+                        throw cancelled
+                    } catch (failure: Exception) {
+                        error = failure.message ?: "保存失败，请重试。"
+                    } finally {
+                        saving = false
+                    }
+                }
+            }
         }) { Text("保存") }
     }
 }
 ```
 
-- 草稿用 `rememberSaveable`，旋转屏幕/进程恢复不丢失；
+- 草稿与已回填标记使用 `rememberSaveable`，在系统恢复保存状态时一起恢复，避免旋转后被数据库旧值覆盖；强制停止或全新启动不承诺恢复未保存草稿。
 - **编辑模式必须回填**：`LaunchedEffect(noteId)` 在进入编辑页时触发一次性加载（ViewModel 暴露 `suspend fun getNote(id: Long): NoteEntity?`，转发给 DAO 的单次查询），否则编辑页永远是空表单；`noteId` 是 key，切换笔记自动重新加载；
 - 保存把 `noteId` 一并传给 `saveNote(noteId, title, content)`——ViewModel 内部有 id 走 `upsert`（更新），没有则插入，单向数据流原理见[应用架构](../advanced-topics/architecture/01-app-architecture.md)。
 
 ## 5️⃣ 实施步骤
 
-1. 新建项目（Compose 模板），接入 Room（KSP 编译器）
-2. 实现数据层：Entity → DAO → Database，写一个 DAO 冒烟测试
+1. 复制已验收的首项目作为本次练习，保留 Compose、Room/KSP 和数据库配置
+2. 增加 DAO 的搜索与按 id 查询，检查编辑保存保留原 id 和创建时间
 3. 实现 ViewModel：`stateIn` 收敛 UiState，接搜索防抖
 4. 搭列表页（三态渲染）+ 编辑页，用 Navigation Compose 连接
 5. 真机跑通增删改查 + 搜索，用 [Layout Inspector](../frameworks/04-devtools.md) 检查列表重组

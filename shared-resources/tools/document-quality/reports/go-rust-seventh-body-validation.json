@@ -1,0 +1,100 @@
+{
+  "schema_version": 1,
+  "scope": "four named Go P1 Markdown body programs only",
+  "toolchain": {
+    "argv": [
+      "C:\\Users\\77958\\Documents\\ChatGPT\\技术栈探索路径\\verification-lab\\go-toolchain\\go\\bin\\go.exe",
+      "version"
+    ],
+    "returncode": 0,
+    "stdout": "go version go1.27.1 windows/amd64\n",
+    "stderr": ""
+  },
+  "results": [
+    {
+      "name": "keyword-decisions",
+      "category": "关键词",
+      "path": "01-go-backend/reference/language-concepts/01-go-keywords.md",
+      "marker": "keyword-decisions-seventh",
+      "document_sha256": "c0fabc21b7e6f5299dc5b4dc31a79410e76d856c5281a3d79a78a40d325ade0d",
+      "source_sha256": "ee6129cb986eb865d0667751c5e5de7a9dbec6bc99d62a0a195c1e7c5d578503",
+      "expected_stdout": "invalid pass perfect\nmatched 2\nran body of 99\nstring bytes: 5\n",
+      "execution": {
+        "argv": [
+          "C:\\Users\\77958\\Documents\\ChatGPT\\技术栈探索路径\\verification-lab\\go-toolchain\\go\\bin\\go.exe",
+          "run",
+          "main.go"
+        ],
+        "returncode": 0,
+        "stdout": "invalid pass perfect\nmatched 2\nran body of 99\nstring bytes: 5\n",
+        "stderr": ""
+      },
+      "passed": true
+    },
+    {
+      "name": "builtin-append-copy",
+      "category": "内置函数",
+      "path": "01-go-backend/reference/language-concepts/02-go-built-in-functions.md",
+      "marker": "builtin-append-copy-seventh",
+      "document_sha256": "6fbcd80709716b0243d355489f7183a2496dbfb11083b3e582acfd98beebc303",
+      "source_sha256": "cf2d5242fea085572ab6f0355cfbb6e73c1ac7ae42df28e6cb9c8876542cfca8",
+      "expected_stdout": "shared: [1 9 3] [1 9]\nseparate: [1 9 3] [7 8]\nempty copy: 0\ncopied: 2 [1 9]\noverlap: 2 [1 1 9]\ntext: Go 好 3 中\n",
+      "execution": {
+        "argv": [
+          "C:\\Users\\77958\\Documents\\ChatGPT\\技术栈探索路径\\verification-lab\\go-toolchain\\go\\bin\\go.exe",
+          "run",
+          "main.go"
+        ],
+        "returncode": 0,
+        "stdout": "shared: [1 9 3] [1 9]\nseparate: [1 9 3] [7 8]\nempty copy: 0\ncopied: 2 [1 9]\noverlap: 2 [1 1 9]\ntext: Go 好 3 中\n",
+        "stderr": ""
+      },
+      "passed": true
+    },
+    {
+      "name": "stdlib-context-cancellation",
+      "category": "标准库",
+      "path": "01-go-backend/reference/library-guides/05-context.md",
+      "marker": "context-cancellation-seventh",
+      "document_sha256": "cf0896681e431836b70337a695d75a926f78dce19515031d9bc1485e3cf9a062",
+      "source_sha256": "53caaee01ecb1c8dff130d31313d1a667736e94d405dbb74d8d70e4059adddf9",
+      "expected_stdout": "context deadline exceeded\n两个子 ctx 都已取消\n42\n",
+      "execution": {
+        "argv": [
+          "C:\\Users\\77958\\Documents\\ChatGPT\\技术栈探索路径\\verification-lab\\go-toolchain\\go\\bin\\go.exe",
+          "run",
+          "main.go"
+        ],
+        "returncode": 0,
+        "stdout": "context deadline exceeded\n两个子 ctx 都已取消\n42\n",
+        "stderr": ""
+      },
+      "passed": true
+    },
+    {
+      "name": "core-data-type-value-copy",
+      "category": "核心基础",
+      "path": "01-go-backend/reference/language-concepts/04-go-data-types.md",
+      "marker": "data-type-value-copy-seventh",
+      "document_sha256": "ee3b998c73ea65293b95a04133035fd3a147597b7899e3d44e3f8cbb505ffa7e",
+      "source_sha256": "a61ea18295562b09846290687ac83eae26491ad9ba61d01e60b6f3b9f2b4cc5a",
+      "expected_stdout": "[7 2] [9 2] [7 2]\narray copy keeps its own first element: true\n",
+      "execution": {
+        "argv": [
+          "C:\\Users\\77958\\Documents\\ChatGPT\\技术栈探索路径\\verification-lab\\go-toolchain\\go\\bin\\go.exe",
+          "run",
+          "main.go"
+        ],
+        "returncode": 0,
+        "stdout": "[7 2] [9 2] [7 2]\narray copy keeps its own first element: true\n",
+        "stderr": ""
+      },
+      "passed": true
+    }
+  ],
+  "summary": {
+    "passed": 4,
+    "total": 4
+  },
+  "status": "passed"
+}

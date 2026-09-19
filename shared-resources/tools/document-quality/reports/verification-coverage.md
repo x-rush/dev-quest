@@ -9,8 +9,8 @@
 | 纳入模块文档 | 642 |
 | 主状态：not_verified | 513 |
 | 主状态：runtime | 129 |
-| 验证措辞出现次数 | 126 |
-| 措辞分类：source_has_limited_runtime_evidence | 81 |
+| 验证措辞出现次数 | 127 |
+| 措辞分类：source_has_limited_runtime_evidence | 82 |
 | 措辞分类：unbound_verification_wording | 45 |
 
 ## 语法级覆盖（不能当作运行覆盖）
@@ -255,7 +255,7 @@
 | React Native / Multi-platform | [04-multiplatform-apps/frameworks/02-react-native-advanced.md](../../../../04-multiplatform-apps/frameworks/02-react-native-advanced.md) | `not_verified` | 0 | 0 |
 | React Native / Multi-platform | [04-multiplatform-apps/frameworks/03-ecosystem-integration.md](../../../../04-multiplatform-apps/frameworks/03-ecosystem-integration.md) | `not_verified` | 0 | 0 |
 | React Native / Multi-platform | [04-multiplatform-apps/frameworks/04-devtools.md](../../../../04-multiplatform-apps/frameworks/04-devtools.md) | `not_verified` | 0 | 0 |
-| React Native / Multi-platform | [04-multiplatform-apps/projects/01-todo-app.md](../../../../04-multiplatform-apps/projects/01-todo-app.md) | `runtime` | 1 | 1 |
+| React Native / Multi-platform | [04-multiplatform-apps/projects/01-todo-app.md](../../../../04-multiplatform-apps/projects/01-todo-app.md) | `runtime` | 1 | 2 |
 | React Native / Multi-platform | [04-multiplatform-apps/projects/02-weather-app.md](../../../../04-multiplatform-apps/projects/02-weather-app.md) | `not_verified` | 0 | 0 |
 | React Native / Multi-platform | [04-multiplatform-apps/projects/03-chat-app.md](../../../../04-multiplatform-apps/projects/03-chat-app.md) | `not_verified` | 0 | 0 |
 | React Native / Multi-platform | [04-multiplatform-apps/projects/04-production-mobile-app.md](../../../../04-multiplatform-apps/projects/04-production-mobile-app.md) | `not_verified` | 0 | 0 |
@@ -428,8 +428,8 @@
 | PHP | [07-php-mastery/projects/04-production-laravel-app.md](../../../../07-php-mastery/projects/04-production-laravel-app.md) | `not_verified` | 0 | 0 |
 | PHP | [07-php-mastery/reference/framework-essentials/01-laravel-essentials.md](../../../../07-php-mastery/reference/framework-essentials/01-laravel-essentials.md) | `not_verified` | 0 | 0 |
 | PHP | [07-php-mastery/reference/framework-essentials/02-symfony-essentials.md](../../../../07-php-mastery/reference/framework-essentials/02-symfony-essentials.md) | `not_verified` | 0 | 0 |
-| PHP | [07-php-mastery/reference/language-concepts/01-php-keywords.md](../../../../07-php-mastery/reference/language-concepts/01-php-keywords.md) | `runtime` | 4 | 0 |
-| PHP | [07-php-mastery/reference/language-concepts/02-built-in-functions.md](../../../../07-php-mastery/reference/language-concepts/02-built-in-functions.md) | `runtime` | 6 | 0 |
+| PHP | [07-php-mastery/reference/language-concepts/01-php-keywords.md](../../../../07-php-mastery/reference/language-concepts/01-php-keywords.md) | `runtime` | 7 | 0 |
+| PHP | [07-php-mastery/reference/language-concepts/02-built-in-functions.md](../../../../07-php-mastery/reference/language-concepts/02-built-in-functions.md) | `runtime` | 11 | 0 |
 | PHP | [07-php-mastery/reference/language-concepts/03-types-oop-modern.md](../../../../07-php-mastery/reference/language-concepts/03-types-oop-modern.md) | `not_verified` | 0 | 0 |
 | PHP | [07-php-mastery/reference/language-concepts/04-control-flow.md](../../../../07-php-mastery/reference/language-concepts/04-control-flow.md) | `not_verified` | 0 | 0 |
 | PHP | [07-php-mastery/reference/language-concepts/05-arrays-patterns.md](../../../../07-php-mastery/reference/language-concepts/05-arrays-patterns.md) | `runtime` | 3 | 0 |
@@ -490,7 +490,7 @@
 | Java | [08-java-revisited/reference/framework-essentials/05-transaction-essentials.md](../../../../08-java-revisited/reference/framework-essentials/05-transaction-essentials.md) | `not_verified` | 0 | 0 |
 | Java | [08-java-revisited/reference/framework-essentials/06-spring-security-essentials.md](../../../../08-java-revisited/reference/framework-essentials/06-spring-security-essentials.md) | `not_verified` | 0 | 0 |
 | Java | [08-java-revisited/reference/framework-essentials/07-rest-client-essentials.md](../../../../08-java-revisited/reference/framework-essentials/07-rest-client-essentials.md) | `not_verified` | 0 | 0 |
-| Java | [08-java-revisited/reference/language-concepts/01-java-keywords.md](../../../../08-java-revisited/reference/language-concepts/01-java-keywords.md) | `runtime` | 5 | 1 |
+| Java | [08-java-revisited/reference/language-concepts/01-java-keywords.md](../../../../08-java-revisited/reference/language-concepts/01-java-keywords.md) | `runtime` | 9 | 1 |
 | Java | [08-java-revisited/reference/language-concepts/02-collections-generics.md](../../../../08-java-revisited/reference/language-concepts/02-collections-generics.md) | `runtime` | 3 | 0 |
 | Java | [08-java-revisited/reference/language-concepts/03-streams-optional.md](../../../../08-java-revisited/reference/language-concepts/03-streams-optional.md) | `runtime` | 3 | 0 |
 | Java | [08-java-revisited/reference/language-concepts/04-concurrency-api.md](../../../../08-java-revisited/reference/language-concepts/04-concurrency-api.md) | `not_verified` | 0 | 0 |
@@ -500,7 +500,7 @@
 | Java | [08-java-revisited/reference/language-concepts/08-enums.md](../../../../08-java-revisited/reference/language-concepts/08-enums.md) | `not_verified` | 0 | 0 |
 | Java | [08-java-revisited/reference/language-concepts/09-annotations.md](../../../../08-java-revisited/reference/language-concepts/09-annotations.md) | `not_verified` | 0 | 0 |
 | Java | [08-java-revisited/reference/language-concepts/10-interface-semantics.md](../../../../08-java-revisited/reference/language-concepts/10-interface-semantics.md) | `not_verified` | 0 | 0 |
-| Java | [08-java-revisited/reference/library-guides/01-standard-library.md](../../../../08-java-revisited/reference/library-guides/01-standard-library.md) | `runtime` | 6 | 1 |
+| Java | [08-java-revisited/reference/library-guides/01-standard-library.md](../../../../08-java-revisited/reference/library-guides/01-standard-library.md) | `runtime` | 11 | 1 |
 | Java | [08-java-revisited/reference/library-guides/02-third-party-libs.md](../../../../08-java-revisited/reference/library-guides/02-third-party-libs.md) | `not_verified` | 0 | 0 |
 | Java | [08-java-revisited/reference/library-guides/03-java-lang.md](../../../../08-java-revisited/reference/library-guides/03-java-lang.md) | `runtime` | 1 | 0 |
 | Java | [08-java-revisited/reference/library-guides/04-java-io.md](../../../../08-java-revisited/reference/library-guides/04-java-io.md) | `runtime` | 3 | 0 |

@@ -43,7 +43,7 @@ copy 返回 `min(len(dst), len(src))`，不会给 dst 扩长。双方元素类�
 
 append 还有 `append([]byteValue, text...)` 的特殊形式，可直接追加字符串字节。这里只是说明形式；下面用真正的变量演示。
 
-<!-- go-example: builtin-append-copy -->
+<!-- go-example: builtin-append-copy-seventh -->
 ```go
 package main
 

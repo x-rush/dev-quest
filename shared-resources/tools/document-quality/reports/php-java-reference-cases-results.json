@@ -1,0 +1,497 @@
+{
+  "scope": "Only reference-case fences extracted directly from four PHP/Java P1 core pages. Pages with runtime-evidence are rejected.",
+  "toolchain": {
+    "php": {
+      "command": [
+        "/usr/bin/php",
+        "--version"
+      ],
+      "exit_code": 0,
+      "stdout": "PHP 8.3.6 (cli) (built: Sep  2 2026 12:56:02) (NTS)\nCopyright (c) The PHP Group\nZend Engine v4.3.6, Copyright (c) Zend Technologies\n    with Zend OPcache v8.3.6, Copyright (c), by Zend Technologies\n",
+      "stderr": ""
+    },
+    "javac": {
+      "command": [
+        "/opt/java/openjdk/bin/javac",
+        "--version"
+      ],
+      "exit_code": 0,
+      "stdout": "javac 21.0.12\n",
+      "stderr": ""
+    },
+    "java": {
+      "command": [
+        "/opt/java/openjdk/bin/java",
+        "--version"
+      ],
+      "exit_code": 0,
+      "stdout": "openjdk 21.0.12 2026-07-21 LTS\nOpenJDK Runtime Environment Temurin-21.0.12+8 (build 21.0.12+8-LTS)\nOpenJDK 64-Bit Server VM Temurin-21.0.12+8 (build 21.0.12+8-LTS, mixed mode, sharing)\n",
+      "stderr": ""
+    }
+  },
+  "documents": {
+    "07-php-mastery/reference/language-concepts/01-php-keywords.md": "867df9b19bf026d7f474899698db2a752d67d1cdfcce82b9d73458c8e1efc1a1",
+    "07-php-mastery/reference/language-concepts/02-built-in-functions.md": "f2e60510ec55dd5bef56adeed3ba0cd66be01009f1e474a90e601ec8917ac11f",
+    "08-java-revisited/reference/language-concepts/01-java-keywords.md": "b3b6f875d877a1df7bbca90f2e05252990092ff468c03e21050ef20f0059a224",
+    "08-java-revisited/reference/library-guides/01-standard-library.md": "3df9f4557447a022165742bcdfab31e5291fae5c0ee586e669f71ad1342fefc7"
+  },
+  "cases": [
+    {
+      "id": "php-keyword-values",
+      "document": "07-php-mastery/reference/language-concepts/01-php-keywords.md",
+      "language": "php",
+      "source_sha256": "6383a9e9553a1f109d47a9180413240c05a920e80de36c7bc35b037216da962c",
+      "expected_stdout": "strict rejected\n6\n10\nstring\n",
+      "commands": [
+        {
+          "command": [
+            "/usr/bin/php",
+            "-d",
+            "display_errors=stderr",
+            "1-php-keyword-values.php"
+          ],
+          "exit_code": 0,
+          "stdout": "strict rejected\n6\n10\nstring\n",
+          "stderr": ""
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "php-keyword-generator",
+      "document": "07-php-mastery/reference/language-concepts/01-php-keywords.md",
+      "language": "php",
+      "source_sha256": "9f4a732c687ce4b80e199a87e56defc0e293b51d9d0437ce7abcf2c447af5395",
+      "expected_stdout": "1,2,3\n0:4\n1:5\n9:6\n",
+      "commands": [
+        {
+          "command": [
+            "/usr/bin/php",
+            "-d",
+            "display_errors=stderr",
+            "2-php-keyword-generator.php"
+          ],
+          "exit_code": 0,
+          "stdout": "1,2,3\n0:4\n1:5\n9:6\n",
+          "stderr": ""
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "php-keyword-control",
+      "document": "07-php-mastery/reference/language-concepts/01-php-keywords.md",
+      "language": "php",
+      "source_sha256": "df2e9909d8d7a401585737ce2ecd53d48532a865626c883b22595a73d58110d1",
+      "expected_stdout": "bool(true)\nbool(false)\ncaught\ncleaned\n",
+      "commands": [
+        {
+          "command": [
+            "/usr/bin/php",
+            "-d",
+            "display_errors=stderr",
+            "3-php-keyword-control.php"
+          ],
+          "exit_code": 0,
+          "stdout": "bool(true)\nbool(false)\ncaught\ncleaned\n",
+          "stderr": ""
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "php-array",
+      "document": "07-php-mastery/reference/language-concepts/02-built-in-functions.md",
+      "language": "php",
+      "source_sha256": "2adbe1db878ba97ae9a23f5d39faad3334a406f1bccc712c94d574afb72aee98",
+      "expected_stdout": "int(0)\nbool(true)\n{\"1\":2,\"2\":4}\n[2,4]\nbool(true)\nbool(false)\n",
+      "commands": [
+        {
+          "command": [
+            "/usr/bin/php",
+            "-d",
+            "display_errors=stderr",
+            "1-php-array.php"
+          ],
+          "exit_code": 0,
+          "stdout": "int(0)\nbool(true)\n{\"1\":2,\"2\":4}\n[2,4]\nbool(true)\nbool(false)\n",
+          "stderr": ""
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "php-sort",
+      "document": "07-php-mastery/reference/language-concepts/02-built-in-functions.md",
+      "language": "php",
+      "source_sha256": "74ed9395ea969bcb59d26be7acdbb0ab407d7b151942cf357ff4e0c15e69e42f",
+      "expected_stdout": "bool(true)\n[1,2,3]\n[3,1,2]\n[\"Ada\",\"Lin\"]\n",
+      "commands": [
+        {
+          "command": [
+            "/usr/bin/php",
+            "-d",
+            "display_errors=stderr",
+            "2-php-sort.php"
+          ],
+          "exit_code": 0,
+          "stdout": "bool(true)\n[1,2,3]\n[3,1,2]\n[\"Ada\",\"Lin\"]\n",
+          "stderr": ""
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "php-text-json",
+      "document": "07-php-mastery/reference/language-concepts/02-built-in-functions.md",
+      "language": "php",
+      "source_sha256": "a571f2889061a0c4262940cffde080dcd05c188431c5f9016da02c167800fee1",
+      "expected_stdout": "int(0)\nbool(true)\n6\n&lt;b&gt;Ada&lt;/b&gt;\ninvalid json\n",
+      "commands": [
+        {
+          "command": [
+            "/usr/bin/php",
+            "-d",
+            "display_errors=stderr",
+            "3-php-text-json.php"
+          ],
+          "exit_code": 0,
+          "stdout": "int(0)\nbool(true)\n6\n&lt;b&gt;Ada&lt;/b&gt;\ninvalid json\n",
+          "stderr": ""
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "php-date",
+      "document": "07-php-mastery/reference/language-concepts/02-built-in-functions.md",
+      "language": "php",
+      "source_sha256": "64a14fe81a9c8accf3464d266bfcb58ec6be2b07eb4bb839b1fc45b486dc5d9a",
+      "expected_stdout": "2026-09-10 12:00 +08:00\n2026-09-13 18:00 +08:00\nbool(false)\n",
+      "commands": [
+        {
+          "command": [
+            "/usr/bin/php",
+            "-d",
+            "display_errors=stderr",
+            "4-php-date.php"
+          ],
+          "exit_code": 0,
+          "stdout": "2026-09-10 12:00 +08:00\n2026-09-13 18:00 +08:00\nbool(false)\n",
+          "stderr": ""
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "php-file",
+      "document": "07-php-mastery/reference/language-concepts/02-built-in-functions.md",
+      "language": "php",
+      "source_sha256": "b1e832ca72c4ee8ac0ba80130450e926b65e787fb623f4b4701f24469fcc1009",
+      "expected_stdout": "int(1)\nstring(1) \"0\"\nbool(true)\n",
+      "commands": [
+        {
+          "command": [
+            "/usr/bin/php",
+            "-d",
+            "display_errors=stderr",
+            "5-php-file.php"
+          ],
+          "exit_code": 0,
+          "stdout": "int(1)\nstring(1) \"0\"\nbool(true)\n",
+          "stderr": ""
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "java-flow",
+      "document": "08-java-revisited/reference/language-concepts/01-java-keywords.md",
+      "language": "java",
+      "source_sha256": "5b98e2c0adc73f9b0b4d9656c29817b768c99d2acfa9987566c42635fcee2839",
+      "expected_stdout": "5\nmedium\n",
+      "commands": [
+        {
+          "command": [
+            "/opt/java/openjdk/bin/javac",
+            "--release",
+            "21",
+            "-encoding",
+            "UTF-8",
+            "Main.java"
+          ],
+          "exit_code": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/opt/java/openjdk/bin/java",
+            "Main"
+          ],
+          "exit_code": 0,
+          "stdout": "5\nmedium\n",
+          "stderr": ""
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "java-record",
+      "document": "08-java-revisited/reference/language-concepts/01-java-keywords.md",
+      "language": "java",
+      "source_sha256": "2d4c37b39c5a5339521d7119738dce88174f01be416317ea9fbf3eb08526fb8a",
+      "expected_stdout": "[Ada, Lin]\n[Ada]\n",
+      "commands": [
+        {
+          "command": [
+            "/opt/java/openjdk/bin/javac",
+            "--release",
+            "21",
+            "-encoding",
+            "UTF-8",
+            "Main.java"
+          ],
+          "exit_code": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/opt/java/openjdk/bin/java",
+            "Main"
+          ],
+          "exit_code": 0,
+          "stdout": "[Ada, Lin]\n[Ada]\n",
+          "stderr": ""
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "java-patterns",
+      "document": "08-java-revisited/reference/language-concepts/01-java-keywords.md",
+      "language": "java",
+      "source_sha256": "eedfbfa34ea5b4b358b9da53ce540213229348aae08b33cc14295640d1bb5b19",
+      "expected_stdout": "positive:3\nnon-positive\nmissing\n",
+      "commands": [
+        {
+          "command": [
+            "/opt/java/openjdk/bin/javac",
+            "--release",
+            "21",
+            "-encoding",
+            "UTF-8",
+            "Main.java"
+          ],
+          "exit_code": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/opt/java/openjdk/bin/java",
+            "Main"
+          ],
+          "exit_code": 0,
+          "stdout": "positive:3\nnon-positive\nmissing\n",
+          "stderr": ""
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "java-resource",
+      "document": "08-java-revisited/reference/language-concepts/01-java-keywords.md",
+      "language": "java",
+      "source_sha256": "55b3c96a84ec5d2c4d85d58d766828d2e8f94cdcacc38f791d24f2fccba53039",
+      "expected_stdout": "work\nclosed\nfailed\n",
+      "commands": [
+        {
+          "command": [
+            "/opt/java/openjdk/bin/javac",
+            "--release",
+            "21",
+            "-encoding",
+            "UTF-8",
+            "Main.java"
+          ],
+          "exit_code": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/opt/java/openjdk/bin/java",
+            "Main"
+          ],
+          "exit_code": 0,
+          "stdout": "work\nclosed\nfailed\n",
+          "stderr": ""
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "java-text",
+      "document": "08-java-revisited/reference/library-guides/01-standard-library.md",
+      "language": "java",
+      "source_sha256": "13fee5503782c0b853689bff149b46134683c3f0dba872334be830a81756ffd2",
+      "expected_stdout": "4\n3\n[a, b]\n[a, b, ]\nhello\n",
+      "commands": [
+        {
+          "command": [
+            "/opt/java/openjdk/bin/javac",
+            "--release",
+            "21",
+            "-encoding",
+            "UTF-8",
+            "Main.java"
+          ],
+          "exit_code": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/opt/java/openjdk/bin/java",
+            "Main"
+          ],
+          "exit_code": 0,
+          "stdout": "4\n3\n[a, b]\n[a, b, ]\nhello\n",
+          "stderr": ""
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "java-collections",
+      "document": "08-java-revisited/reference/library-guides/01-standard-library.md",
+      "language": "java",
+      "source_sha256": "c159a4c253ee46954b6ee6f1e5515e487565411c689366a2e79fb65758ec1907",
+      "expected_stdout": "[Ada, Lin]\n[Ada]\n[Ada, Lin]\n",
+      "commands": [
+        {
+          "command": [
+            "/opt/java/openjdk/bin/javac",
+            "--release",
+            "21",
+            "-encoding",
+            "UTF-8",
+            "Main.java"
+          ],
+          "exit_code": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/opt/java/openjdk/bin/java",
+            "Main"
+          ],
+          "exit_code": 0,
+          "stdout": "[Ada, Lin]\n[Ada]\n[Ada, Lin]\n",
+          "stderr": ""
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "java-decimal",
+      "document": "08-java-revisited/reference/library-guides/01-standard-library.md",
+      "language": "java",
+      "source_sha256": "f7a3115f78946063c2a58c6b7701f7fb8e4ae40f8d91c19c3fc17163d053d573",
+      "expected_stdout": "0.3\nfalse\n0\n0.33\n",
+      "commands": [
+        {
+          "command": [
+            "/opt/java/openjdk/bin/javac",
+            "--release",
+            "21",
+            "-encoding",
+            "UTF-8",
+            "Main.java"
+          ],
+          "exit_code": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/opt/java/openjdk/bin/java",
+            "Main"
+          ],
+          "exit_code": 0,
+          "stdout": "0.3\nfalse\n0\n0.33\n",
+          "stderr": ""
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "java-time",
+      "document": "08-java-revisited/reference/library-guides/01-standard-library.md",
+      "language": "java",
+      "source_sha256": "a1a2c64729a67292fa46d70bead05908e9b23a5dc673f994eb70b776c73fc3c3",
+      "expected_stdout": "23\n12:00\n13:00\ninvalid date\n",
+      "commands": [
+        {
+          "command": [
+            "/opt/java/openjdk/bin/javac",
+            "--release",
+            "21",
+            "-encoding",
+            "UTF-8",
+            "Main.java"
+          ],
+          "exit_code": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/opt/java/openjdk/bin/java",
+            "Main"
+          ],
+          "exit_code": 0,
+          "stdout": "23\n12:00\n13:00\ninvalid date\n",
+          "stderr": ""
+        }
+      ],
+      "passed": true
+    },
+    {
+      "id": "java-files",
+      "document": "08-java-revisited/reference/library-guides/01-standard-library.md",
+      "language": "java",
+      "source_sha256": "55f7977f0bae9f376ef6f1b173dc2d8cce3f9de1191f8e0578a76b17dbf722e9",
+      "expected_stdout": "2\ntrue\n",
+      "commands": [
+        {
+          "command": [
+            "/opt/java/openjdk/bin/javac",
+            "--release",
+            "21",
+            "-encoding",
+            "UTF-8",
+            "Main.java"
+          ],
+          "exit_code": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "/opt/java/openjdk/bin/java",
+            "Main"
+          ],
+          "exit_code": 0,
+          "stdout": "2\ntrue\n",
+          "stderr": ""
+        }
+      ],
+      "passed": true
+    }
+  ],
+  "passed": true
+}

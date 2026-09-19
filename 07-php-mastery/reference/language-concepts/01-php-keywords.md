@@ -310,7 +310,7 @@ strict_types 主要约束标量参数与返回类型的转换规则，不会自�
 
 ## 三个完整实验：从术语回到程序行为
 
-分别保存为 `keyword-lab.php`，运行 `php keyword-lab.php`。第一个实验同时观察严格标量输入、箭头函数按值捕获、普通闭包按引用捕获以及 match 严格比较。
+三个实验是彼此独立的完整脚本：每次单独保存为 `keyword-lab.php`（或改用不同文件名），再运行 `php keyword-lab.php`。不要把三个围栏拼进同一文件，否则会重复声明函数。第一个实验同时观察严格标量输入、箭头函数按值捕获、普通闭包按引用捕获以及 match 严格比较。
 
 <!-- reference-case: {"id":"php-keyword-values","stdout":"strict rejected\n6\n10\nstring\n"} -->
 ```php
