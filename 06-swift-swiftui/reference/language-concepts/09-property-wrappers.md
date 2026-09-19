@@ -84,6 +84,8 @@ player.$stamina                           // 0...100（本例中是合法范围�
 
 ### 初始化约定速记
 
+以下是语法示意，Wrapper 与 x 未定义，不能直接拼入可运行文件。带参数的包装器必须实际声明匹配初始化器；`projectedValue` 只是普通参数标签，不是编译器自动提供的构造方法。
+
 ```swift
 // 1. 直接赋初值 → 调 init(wrappedValue:)
 @Wrapper var a = 1
@@ -97,7 +99,9 @@ player.$stamina                           // 0...100（本例中是合法范围�
 
 ## 💡 示例
 
-### 自定义 UserDefaults 包装器（项目高频）
+### 自定义 UserDefaults 包装器（局部片段）
+
+放入已导入 Foundation 的应用文件。此例仅演示 getter/setter 转发，不能接受任意 Value；传入不受 UserDefaults 支持的值会失败。Settings 的共享可变静态属性在 Swift 严格并发下还需要隔离约定；若只由界面使用，可将 Settings 标记 `@MainActor` 并在主 actor 调用，不能靠包装器名称假定线程安全。
 
 ```swift
 @propertyWrapper
@@ -128,6 +132,35 @@ struct ToggleRow: View {
     }
 }
 ```
+
+## 先验证语言机制，再连接界面
+
+前置产物：会声明 struct、计算属性与 init，已有可用 Swift 编译器；SwiftUI 实验另需 Xcode 应用目标。先将前文 Clamped 定义和 Player 定义依序放进 `WrapperProbe.swift`，不要混入 UserDefaults/SwiftUI 的替代例子。用下面代码替换此前零散的 player 使用语句：
+
+```swift
+var player = Player()
+for requested in [-1, 50, 150] {
+    player.stamina = requested
+    print("requested=\(requested), stored=\(player.stamina)")
+}
+print(player.$stamina.lowerBound, player.$stamina.upperBound)
+```
+
+执行 `swift --version` 记录工具链，再执行 `swift WrapperProbe.swift`。本文件由前文两段定义与这段入口组成，无外部包；预期三次 stored 依次为 0、50、100，最后输出 `0 100`。输入经过 wrappedValue setter 钳制，输出读取已存储值；`$stamina` 返回范围而不是 Binding。该预期尚未在本轮执行。
+
+下一步把 Player 的初值改为 150。预期新实例初值仍为 100，因为初始化器也进行了钳制；只在 setter 钳制会漏掉这一入口。再删除 projectedValue，保持 stamina 访问应仍可编译，但 `$stamina` 应编译失败。这是有意反例，恢复声明后再继续。
+
+最后在已导入 SwiftUI 的应用文件放入 ToggleRow，由已有屏幕渲染它。点击 Toggle，输入通过 `$isOn` 的 Binding 写回 State，界面显示新值。不要把自定义 Clamped 的范围投影传给 Toggle：参数要求 Binding<Bool>，与 ClosedRange<Int> 无关。此阶段需要 Apple UI 环境，命令行实验不能替代它。
+
+| 失败现象 | 回查位置 | 应恢复的契约 |
+|---|---|---|
+| 初始 150 未钳制，后续写入正常 | init 是否和 setter 都约束值 | 所有进入存储的入口遵守同一范围 |
+| `$stamina` 不存在 | 包装器是否声明 projectedValue | 投影是可选能力，不自动生成 Binding |
+| 在 Player 外访问 `_stamina` 失败 | 编译器合成的后备存储访问范围 | 在类型内部解释或调试包装器，公开读取 stamina/投影 |
+| Toggle 状态不刷新 | 是否误用普通包装器替代 State，或 Binding 指向其他实例 | 状态由视图身份保存，绑定读写同一来源 |
+| Settings 静态可变属性并发诊断 | actor 隔离与调用位置 | 按访问者设计隔离，不关闭检查掩盖问题 |
+
+**验证边界与来源：** 本轮核对 [Swift 语言手册：Properties / Property Wrappers](https://docs.swift.org/swift-book/documentation/the-swift-programming-language/properties/)，未执行此 Swift 文件、Xcode 构建或 Toggle 交互。实验给出待验证输入输出，不代表 UserDefaults 持久化、SwiftUI 更新或并发安全已验证。
 
 ## ⚠️ 常见陷阱
 
