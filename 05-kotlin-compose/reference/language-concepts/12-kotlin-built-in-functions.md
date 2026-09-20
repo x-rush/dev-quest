@@ -36,6 +36,17 @@ fun main() {
 
 `toIntOrNull()` 解决的是**整数文本能否转换**，不代表业务范围合法。上例把空、格式错误、0 和超过最大页数统一为 `null`；如果产品需要显示不同错误，应返回带原因的 sealed class，而不是继续堆叠 `null`。
 
+### 在本机验收转换语义
+
+把这一段单独保存为 `ParsePage.kt`，不要与下一段的第二个 `main` 拼在同一文件。使用 Kotlin/JVM 工具链执行：
+
+```bash
+kotlinc ParsePage.kt -include-runtime -d parse-page.jar
+java -jar parse-page.jar
+```
+
+应输出 `[null, null, 2, null, null, null]`。把 `toIntOrNull()` 改成 `toInt()` 后再次运行，`"abc"` 应触发 `NumberFormatException`；这证明“可转换”与“范围合法”是两个独立判断，而不是只看到异常就算输入验证完成。
+
 `as?` 也只解决运行时类型是否匹配：`value as? String` 返回 `String?`。它不验证字符串的格式、长度或权限。网络 JSON、Deep Link 与持久化内容要在类型转换后继续校验字段。
 
 ## 空值管道与集合函数
@@ -53,6 +64,8 @@ fun main() {
 ```
 
 `mapNotNull` 会同时变换与丢弃 `null`；若 `null` 表示“同步失败”而非“可忽略字段”，不能静默丢弃，应保留错误记录。`first()` 在空集合抛异常，`firstOrNull()` 返回 `null`；`single()` 还要求恰好一项。选哪一个反映数据不变量，不能为了少写分支一律使用 `first()`。
+
+把这一段单独保存为 `NormalizedTitles.kt`，执行同样的 `kotlinc ... -include-runtime -d normalized-titles.jar` 和 `java -jar normalized-titles.jar`，应输出 `[Kotlin]`。把 `mapNotNull` 暂时替换成 `map`，再比较结果中保留的 `null`/空字符串，说明“清理无效标题”是当前函数的业务选择，而不是集合 API 自动替你决定的数据策略。
 
 `let`、`also`、`run`、`apply`、`with` 都是普通函数，区别是接收者写法和返回值；它们不会自动创建协程、事务或 Compose 状态作用域。链条超过两三步且难以说明当前 `it`/`this` 指向时，改回具名局部变量更可读。
 
