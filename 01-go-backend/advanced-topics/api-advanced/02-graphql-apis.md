@@ -13,18 +13,18 @@
 | **标签** | `#graphql` `#api-design` `#gqlgen` `#schema-first` |
 | **更新日期** | `2026年9月` |
 | **作者** | Dev Quest Team |
-| **状态** | ✅ 已完成 |
+| **内容状态** | Schema、生成与 resolver 模式已说明；依赖版本、数据源、鉴权与部署须按本文验收条件在目标环境验证 |
 
 </details>
 
 ## 概述
-gqlgen 是 Go 生态采用 schema 优先方式的 GraphQL 服务器库，它采用schema优先（schema first）的方式，通过编写GraphQL SDL定义自动生成对应的Go代码。gqlgen提供了强类型支持、高性能和良好的开发体验，是构建现代GraphQL API的理想选择。
+gqlgen 是 Go 生态的 schema-first GraphQL 服务器库：通过 GraphQL SDL 生成部分 Go 类型与 resolver 骨架，再由应用实现数据访问和业务规则。它适合希望让 Schema 成为客户端契约的团队；生成代码不会自动实现字段授权、避免 N+1、限制查询复杂度或保证性能，这些都必须由 resolver、数据加载策略和运行时限制共同验收。
 
 ## 核心特性
-- **Schema优先**: 基于GraphQL SDL定义自动生成Go代码
-- **强类型**: 完全类型安全的API开发
-- **高性能**: 基于net/http构建，性能优异
-- **灵活的数据加载**: 支持数据加载器模式，解决N+1查询问题
+- **Schema优先**: 基于 GraphQL SDL 生成类型和 resolver 骨架，Schema 仍需定义可空性、错误和弃用语义
+- **类型约束**: 生成代码让 Go 编译器检查一部分接口匹配；外部输入、业务规则和权限仍在运行时验证
+- **HTTP 集成**: 可基于 `net/http` 提供服务；吞吐和延迟取决于 resolver、序列化、下游服务和查询形状
+- **数据加载器模式**: 可批量合并访问以缓解 N+1；必须按实际列表与关联字段记录调用次数验证
 - **插件系统**: 可扩展的插件架构
 - **中间件支持**: 支持自定义中间件
 
