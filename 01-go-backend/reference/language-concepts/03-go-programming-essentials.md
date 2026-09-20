@@ -2863,11 +2863,12 @@ go list -m -versions github.com/gin-gonic/gin
 # 更新到最新补丁版本
 go get -u=patch github.com/gin-gonic/gin
 
-# 更新到最新次版本
-go get -u=minor github.com/gin-gonic/gin
+# 更新该模块及其依赖到允许范围内的较新版本
+# -u 只有不带值或 =patch 两种形式；它不会自动跨越主版本路径。
+go get -u github.com/gin-gonic/gin
 
-# 更新到最新主版本（可能包含破坏性更改）
-go get -u=latest github.com/gin-gonic/gin
+# 明确要求该模块当前发布的最新版本；先检查 go.mod diff 和兼容性说明。
+go get github.com/gin-gonic/gin@latest
 
 # 固定版本
 go get github.com/gin-gonic/gin@v1.12.0
@@ -2875,6 +2876,8 @@ go get github.com/gin-gonic/gin@v1.12.0
 # 使用commit hash
 go get github.com/gin-gonic/gin@da5c9f7
 ```
+
+`go get -u=minor` 和 `go get -u=latest` 不是有效命令。升级前先运行测试并查看 `go.mod`/`go.sum` 的差异；对 v2+ 模块，主版本通常会出现在不同的导入路径中，不能把“获取最新”理解成安全的自动主版本升级。固定版本适合教程或可复现实验，长期维护项目还应结合安全公告、兼容性说明和自己的回归测试决定升级时机。
 
 #### 依赖清理
 ```bash
@@ -3227,9 +3230,11 @@ install-tools:
 stats:
 	scc .
 
-# 依赖管理
+# 依赖管理；示例：make deps-update MODULE=github.com/gin-gonic/gin
+# 必须指定一个模块，避免把“更新依赖”误用为不加审阅的全量升级。
 deps-update:
-	go get -u ./...
+	test -n "$(MODULE)"
+	go get -u "$(MODULE)"
 	go mod tidy
 
 deps-verify:
