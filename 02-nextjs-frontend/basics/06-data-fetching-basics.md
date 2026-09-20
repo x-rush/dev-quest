@@ -98,23 +98,40 @@ import { notFound } from 'next/navigation'
 import { PostCard } from '@/components/PostCard'
 import { PostGrid } from '@/components/PostGrid'
 
-// 模拟API数据获取
-async function getPosts() {
-  try {
-    const res = await fetch('https://jsonplaceholder.typicode.com/posts', {
-      cache: 'force-cache', // 强制缓存
-      next: { revalidate: 3600 } // 1小时重新验证
-    })
+type Post = { id: number; userId: number; title: string; body: string }
+type User = { id: number; name: string }
 
-    if (!res.ok) {
-      throw new Error('Failed to fetch posts')
-    }
+async function readJson(response: Response): Promise<unknown> {
+  if (!response.ok) throw new Error(`HTTP ${response.status}`)
+  return response.json()
+}
 
-    return res.json()
-  } catch (error) {
-    console.error('Error fetching posts:', error)
-    return []
-  }
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === 'object' && value !== null && !Array.isArray(value)
+}
+
+function parsePosts(value: unknown): Post[] {
+  if (!Array.isArray(value) || !value.every((post) =>
+    isRecord(post) && typeof post.id === 'number' && typeof post.userId === 'number'
+    && typeof post.title === 'string' && typeof post.body === 'string'
+  )) throw new Error('文章响应格式无效')
+  return value
+}
+
+function parseUsers(value: unknown): User[] {
+  if (!Array.isArray(value) || !value.every((user) =>
+    isRecord(user) && typeof user.id === 'number' && typeof user.name === 'string'
+  )) throw new Error('作者响应格式无效')
+  return value
+}
+
+// 空数组是成功结果；网络失败与非 2xx 响应交给页面的 error.tsx 或调用方处理。
+async function getPosts(): Promise<Post[]> {
+  const response = await fetch('https://jsonplaceholder.typicode.com/posts', {
+    cache: 'force-cache',
+    next: { revalidate: 3600 },
+  })
+  return parsePosts(await readJson(response))
 }
 
 // 单个文章数据获取
@@ -138,14 +155,13 @@ async function getPost(id: string) {
 // 并行数据获取
 async function getPostsWithAuthors() {
   const [posts, users] = await Promise.all([
-    fetch('https://jsonplaceholder.typicode.com/posts').then(res => res.json()),
-    fetch('https://jsonplaceholder.typicode.com/users').then(res => res.json())
+    fetch('https://jsonplaceholder.typicode.com/posts').then(readJson).then(parsePosts),
+    fetch('https://jsonplaceholder.typicode.com/users').then(readJson).then(parseUsers),
   ])
 
-  // 合并数据
-  const postsWithAuthors = posts.map((post: any) => ({
+  const postsWithAuthors = posts.map((post) => ({
     ...post,
-    author: users.find((user: any) => user.id === post.userId)
+    author: users.find((user) => user.id === post.userId) ?? null,
   }))
 
   return postsWithAuthors
