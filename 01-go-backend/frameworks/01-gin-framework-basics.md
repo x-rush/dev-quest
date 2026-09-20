@@ -184,8 +184,6 @@ Gin 可按请求的 `Content-Type` 解析 JSON、表单或查询参数，并把�
 ```go
 import (
     "github.com/gin-gonic/gin"
-    "github.com/gin-gonic/gin/binding"
-    "github.com/go-playground/validator/v10"
 )
 
 type User struct {
