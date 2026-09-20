@@ -97,6 +97,26 @@ javac --version
 # javac 21.0.9
 ```
 
+### 5. 最小编译与运行验收
+
+版本命令只能证明可执行文件在 PATH 中。新建 `Hello.java` 后实际编译并运行，才能确认编译器与运行时配套：
+
+```java
+public class Hello {
+    public static void main(String[] args) {
+        System.out.println(42);
+    }
+}
+```
+
+```bash
+javac Hello.java
+java Hello
+# 42
+```
+
+本仓于 2026-09-20 在 `eclipse-temurin:21-jdk` 容器用这段完整程序得到输出 `42`；运行时为 Temurin 21.0.12 LTS。该证据只覆盖 Java 21 的最小编译与运行，不覆盖 SDKMAN、IDE、Maven、Gradle 或 JDK 25。
+
 ## 📦 第二步：选择 JDK 发行版
 
 | 发行版 | 维护方 | 适用场景 |
