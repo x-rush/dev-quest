@@ -13,7 +13,7 @@ JDK 提供编译器与运行时，Maven/Gradle 描述依赖和构建过程。IDE
 
 </details>
 
-> **文档简介**: 使用 SDKMAN 安装并管理 JDK 21/25 LTS，配置 Maven/Gradle 构建工具与 IDE，搭建现代 Java 开发环境
+> **文档简介**: 在 Linux、macOS 或 WSL 中用 SDKMAN 安装与切换 JDK，配置 Maven/Gradle 与 IDE，完成可复现的 Java 开发环境
 >
 > **目标读者**: 有旧版 Java 经验、需要更新到现代 Java 工具链的开发者
 >
@@ -37,7 +37,7 @@ JDK 提供编译器与运行时，Maven/Gradle 描述依赖和构建过程。IDE
 ## 🎯 学习目标
 
 完成本文档后，你将能够：
-- 使用 SDKMAN 安装并自由切换多个 JDK 版本（21 LTS / 25 LTS）
+- 用 SDKMAN 安装并切换多个 JDK；能区分项目要求的 Java 版本与供应商发行版
 - 了解主流 JDK 发行版的差异并做出合理选择
 - 安装 Maven 与 Gradle，理解构建 Wrapper 的作用
 - 完成 IntelliJ IDEA 或 VS Code 的 Java 开发配置
@@ -49,7 +49,7 @@ JDK 提供编译器与运行时，Maven/Gradle 描述依赖和构建过程。IDE
 2. 手动设置 `JAVA_HOME` 与 `PATH`
 3. 切换版本 = 手改环境变量 + 重开终端
 
-**现代做法（Java 21/25 时代）**：
+**现代做法（当前 LTS 时代）**：
 1. `sdk install java` 一条命令完成安装
 2. `sdk use` / `sdk default` 秒级切换版本
 3. 项目通过构建 Wrapper（`mvnw`/`gradlew`）锁定工具版本，本地与 CI 天然一致
@@ -70,31 +70,36 @@ source "$HOME/.sdkman/bin/sdkman-init.sh"
 sdk version   # 打印版本号即安装成功
 ```
 
-### 3. 查看与安装 JDK
+### 3. 查看、选择与安装 JDK
+
+JDK 的**主版本**决定语言和标准库能力；`-tem` 这类**供应商后缀**决定二进制发行方。先读项目的 `pom.xml`、`build.gradle(.kts)` 或团队约定：项目要求 Java 21 时，即使机器已有 Java 25，也先安装并使用 21。Java 21 与 Java 25 都是 LTS 线；具体可下载的补丁号会随时间变化，不能把本文写死的补丁号当作永久命令。[Adoptium 的支持页](https://adoptium.net/support/)列出 Temurin 的当前支持线；[SDKMAN 的候选版本页](https://sdkman.io/sdks/)才是执行安装前应查看的实际列表。
 
 ```bash
 # 列出所有可用 JDK（供应商 + 版本号）
 sdk list java
 
-# 安装 Eclipse Temurin 的 Java 21 LTS（具体版本号以 list 输出为准）
-sdk install java 21.0.9-tem
+# 从刚才的列表复制一个当前可用的 Temurin 21 标识，例如 21.x.y-tem；
+# 尖括号是需要替换的占位符，不能原样执行。
+sdk install java <21.x.y-tem>
 
-# 再装一个 Java 25 LTS，方便体验最新特性
-sdk install java 25.0.1-tem
+# 只有要体验新特性或项目明确要求时，才另装列表中的 Java 25 LTS。
+sdk install java <25.x.y-tem>
 
 # 切换：use 只影响当前终端，default 影响全局
-sdk use java 21.0.9-tem
-sdk default java 21.0.9-tem
+sdk use java <21.x.y-tem>
+sdk default java <21.x.y-tem>
 ```
+
+如果你只需要最新的默认 Java，SDKMAN 也支持 `sdk install java`。教学或团队项目中通常应显式复制项目要求的版本标识，因为“默认版本”会随 SDKMAN 的候选列表变化。
 
 ### 4. 验证安装
 
 ```bash
 java --version
-# openjdk 21.0.9 2026-xx-xx LTS
+# 版本、供应商与构建号；应与刚才选择的主版本相符
 
 javac --version
-# javac 21.0.9
+# 编译器主版本；例如 21.x.y
 ```
 
 ### 5. 最小编译与运行验收
@@ -121,13 +126,13 @@ java Hello
 
 | 发行版 | 维护方 | 适用场景 |
 |--------|--------|---------|
-| Eclipse Temurin | Adoptium 社区 | 通用首选，免费且无授权顾虑 |
-| Amazon Corretto | AWS | 部署在 AWS 上的长期支持 |
-| Azul Zulu | Azul | 多平台/嵌入式需求 |
-| Oracle JDK | Oracle | 需要官方商业支持 |
-| GraalVM | Oracle | Native Image 与高性能场景 |
+| Eclipse Temurin | Adoptium | 通用学习与服务器开发；有公开的 LTS 发布与支持信息 |
+| Amazon Corretto | AWS | 已在 AWS 或其支持体系中运行，并希望统一 JDK 来源 |
+| Azul Zulu | Azul | 需要其平台覆盖或商业支持选项时 |
+| Oracle JDK | Oracle | 组织已有 Oracle 支持或许可安排时 |
+| GraalVM | Oracle | 确认要研究 Native Image 或特定运行时能力时；先核对目标项目要求 |
 
-> 💡 个人学习用 Temurin 即可。所有发行版都通过 JCK 认证，学习阶段差异可忽略；语言特性完全一致。
+> 💡 个人学习可从 Temurin 开始。不要因为供应商名称不同就假定行为必然一致：先锁定项目使用的 Java 主版本，再阅读该项目对发行版、许可证、容器镜像和 Native Image 的要求。基础 Java 语法和标准库学习通常不依赖特定供应商。
 
 ## 🛠️ 第三步：安装构建工具
 
