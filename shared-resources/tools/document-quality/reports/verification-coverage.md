@@ -7,11 +7,11 @@
 | 指标 | 数量 |
 |---|---:|
 | 纳入模块文档 | 644 |
-| 主状态：not_verified | 449 |
-| 主状态：runtime | 195 |
-| 验证措辞出现次数 | 151 |
-| 措辞分类：source_has_limited_runtime_evidence | 93 |
-| 措辞分类：unbound_verification_wording | 58 |
+| 主状态：not_verified | 448 |
+| 主状态：runtime | 196 |
+| 验证措辞出现次数 | 150 |
+| 措辞分类：source_has_limited_runtime_evidence | 94 |
+| 措辞分类：unbound_verification_wording | 56 |
 
 ## 语法级覆盖（不能当作运行覆盖）
 
@@ -54,7 +54,7 @@
 | Go | [01-go-backend/deployment/02-ci-cd-pipelines.md](../../../../01-go-backend/deployment/02-ci-cd-pipelines.md) | `not_verified` | 0 | 0 |
 | Go | [01-go-backend/deployment/03-kubernetes-deployment.md](../../../../01-go-backend/deployment/03-kubernetes-deployment.md) | `not_verified` | 0 | 0 |
 | Go | [01-go-backend/deployment/04-observability.md](../../../../01-go-backend/deployment/04-observability.md) | `not_verified` | 0 | 0 |
-| Go | [01-go-backend/frameworks/01-gin-framework-basics.md](../../../../01-go-backend/frameworks/01-gin-framework-basics.md) | `not_verified` | 0 | 1 |
+| Go | [01-go-backend/frameworks/01-gin-framework-basics.md](../../../../01-go-backend/frameworks/01-gin-framework-basics.md) | `runtime` | 1 | 1 |
 | Go | [01-go-backend/frameworks/02-gin-framework-advanced.md](../../../../01-go-backend/frameworks/02-gin-framework-advanced.md) | `not_verified` | 0 | 0 |
 | Go | [01-go-backend/frameworks/03-gorm-orm-complete.md](../../../../01-go-backend/frameworks/03-gorm-orm-complete.md) | `not_verified` | 0 | 0 |
 | Go | [01-go-backend/frameworks/04-mongodb-go-driver.md](../../../../01-go-backend/frameworks/04-mongodb-go-driver.md) | `not_verified` | 0 | 0 |
@@ -136,7 +136,7 @@
 | Next.js / TypeScript | [02-nextjs-frontend/frameworks/03-full-stack-patterns.md](../../../../02-nextjs-frontend/frameworks/03-full-stack-patterns.md) | `not_verified` | 0 | 0 |
 | Next.js / TypeScript | [02-nextjs-frontend/frameworks/04-performance-optimization.md](../../../../02-nextjs-frontend/frameworks/04-performance-optimization.md) | `not_verified` | 0 | 0 |
 | Next.js / TypeScript | [02-nextjs-frontend/projects/01-corporate-landing.md](../../../../02-nextjs-frontend/projects/01-corporate-landing.md) | `not_verified` | 0 | 0 |
-| Next.js / TypeScript | [02-nextjs-frontend/projects/02-ecommerce-store.md](../../../../02-nextjs-frontend/projects/02-ecommerce-store.md) | `not_verified` | 0 | 0 |
+| Next.js / TypeScript | [02-nextjs-frontend/projects/02-ecommerce-store.md](../../../../02-nextjs-frontend/projects/02-ecommerce-store.md) | `not_verified` | 0 | 1 |
 | Next.js / TypeScript | [02-nextjs-frontend/projects/03-dashboard-analytics.md](../../../../02-nextjs-frontend/projects/03-dashboard-analytics.md) | `not_verified` | 0 | 0 |
 | Next.js / TypeScript | [02-nextjs-frontend/projects/04-saas-platform.md](../../../../02-nextjs-frontend/projects/04-saas-platform.md) | `not_verified` | 0 | 1 |
 | Next.js / TypeScript | [02-nextjs-frontend/reference/development-tools/01-testing-tools.md](../../../../02-nextjs-frontend/reference/development-tools/01-testing-tools.md) | `not_verified` | 0 | 0 |
@@ -666,7 +666,7 @@
 | Rust / Cross-platform | [11-rust-cross-platform/reference/language-concepts/03-const-generics.md](../../../../11-rust-cross-platform/reference/language-concepts/03-const-generics.md) | `runtime` | 1 | 1 |
 | Rust / Cross-platform | [11-rust-cross-platform/reference/language-concepts/04-advanced-lifetimes.md](../../../../11-rust-cross-platform/reference/language-concepts/04-advanced-lifetimes.md) | `runtime` | 4 | 2 |
 | Rust / Cross-platform | [11-rust-cross-platform/reference/language-concepts/05-macros.md](../../../../11-rust-cross-platform/reference/language-concepts/05-macros.md) | `runtime` | 4 | 0 |
-| Rust / Cross-platform | [11-rust-cross-platform/reference/language-concepts/06-unsafe.md](../../../../11-rust-cross-platform/reference/language-concepts/06-unsafe.md) | `not_verified` | 0 | 1 |
+| Rust / Cross-platform | [11-rust-cross-platform/reference/language-concepts/06-unsafe.md](../../../../11-rust-cross-platform/reference/language-concepts/06-unsafe.md) | `not_verified` | 0 | 0 |
 | Rust / Cross-platform | [11-rust-cross-platform/reference/language-concepts/07-smart-pointers.md](../../../../11-rust-cross-platform/reference/language-concepts/07-smart-pointers.md) | `runtime` | 1 | 0 |
 | Rust / Cross-platform | [11-rust-cross-platform/reference/language-concepts/08-async-internals.md](../../../../11-rust-cross-platform/reference/language-concepts/08-async-internals.md) | `not_verified` | 0 | 0 |
 | Rust / Cross-platform | [11-rust-cross-platform/reference/language-concepts/09-keywords-and-syntax.md](../../../../11-rust-cross-platform/reference/language-concepts/09-keywords-and-syntax.md) | `runtime` | 1 | 0 |
@@ -675,7 +675,7 @@
 | Rust / Cross-platform | [11-rust-cross-platform/reference/library-guides/13-serde-guide.md](../../../../11-rust-cross-platform/reference/library-guides/13-serde-guide.md) | `runtime` | 4 | 0 |
 | Rust / Cross-platform | [11-rust-cross-platform/reference/library-guides/14-error-libraries.md](../../../../11-rust-cross-platform/reference/library-guides/14-error-libraries.md) | `runtime` | 2 | 0 |
 | Rust / Cross-platform | [11-rust-cross-platform/reference/library-guides/15-standard-library-map.md](../../../../11-rust-cross-platform/reference/library-guides/15-standard-library-map.md) | `runtime` | 1 | 0 |
-| Rust / Cross-platform | [11-rust-cross-platform/testing/01-unit-integration-tests.md](../../../../11-rust-cross-platform/testing/01-unit-integration-tests.md) | `not_verified` | 0 | 1 |
+| Rust / Cross-platform | [11-rust-cross-platform/testing/01-unit-integration-tests.md](../../../../11-rust-cross-platform/testing/01-unit-integration-tests.md) | `not_verified` | 0 | 0 |
 | Rust / Cross-platform | [11-rust-cross-platform/testing/02-criterion-benchmarks.md](../../../../11-rust-cross-platform/testing/02-criterion-benchmarks.md) | `not_verified` | 0 | 0 |
 | Rust / Cross-platform | [11-rust-cross-platform/testing/03-tauri-e2e-webdriver.md](../../../../11-rust-cross-platform/testing/03-tauri-e2e-webdriver.md) | `not_verified` | 0 | 0 |
 

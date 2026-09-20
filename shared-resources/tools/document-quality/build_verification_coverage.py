@@ -65,6 +65,9 @@ def records_from_reports():
     go_rust_projects = load("go-rust-project-validation.json")
     for document in go_rust_projects.get("documents", {}).values():
         add_record(records, document.get("path"), "runtime", "go-rust-project-validation.json", "selected Go/Rust CLI and standard-library project checks", "PASS" if go_rust_projects.get("status") == "passed" else "FAIL")
+    gin_basics = load("gin-basics-validation.json")
+    for row in gin_basics.get("results", []):
+        add_record(records, row.get("document"), "runtime", "gin-basics-validation.json", gin_basics.get("scope", "selected Gin router and binding example"), "PASS" if row.get("status", "").upper() == "PASS" else "FAIL")
     mobile = load("mobile-foundations.json")
     for row in mobile.get("results", []):
         add_record(records, row.get("source"), "runtime", "mobile-foundations.json", mobile.get("scope", "selected portable mobile-language check"), "PASS" if row.get("status") == "PASS" else "FAIL")

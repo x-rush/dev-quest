@@ -1,0 +1,14 @@
+{
+  "runtime": "Docker golang:1.27",
+  "dependency": "github.com/gin-gonic/gin v1.12.0",
+  "scope": "The two named Gin blocks are extracted verbatim and tested with net/http/httptest: health route, malformed JSON, required field, success response and unknown route. No port listener, deployment, database, authorization, TLS or performance behavior is claimed.",
+  "results": [
+    {
+      "document": "01-go-backend/frameworks/01-gin-framework-basics.md",
+      "status": "PASS",
+      "main_sha256": "f0ed1a18415bfad2ba4e6a9181adeca3653ec15ce7dff7c96624e83d3ba22360",
+      "test_sha256": "604dcf308dce4b5b5c607d4242e86f25a073a32a0ef4fd5c366d4c10296c6656",
+      "command": "docker run --rm -v <temporary-directory>:/src -w /src golang:1.27 go test -mod=mod ./..."
+    }
+  ]
+}

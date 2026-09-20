@@ -40,31 +40,92 @@ Gin是Go语言中最流行的HTTP Web框架，以其高性能和简洁的API而�
 
 ## 快速开始
 
-### 安装
+### 可复现的最小工程
+
+官方仓库当前发布的是 Gin `v1.12.0`，要求 Go `1.26` 或更新版本；本例固定该版本，避免 `go get -u` 在不同日期得到不同依赖图。创建空目录后执行：
+
 ```bash
-go get -u github.com/gin-gonic/gin
+mkdir gin-basics && cd gin-basics
+go mod init example/gin-basics
+go get github.com/gin-gonic/gin@v1.12.0
 ```
 
-### 基本示例
-```go
+把下面两段分别保存为 `main.go` 和 `main_test.go`，再执行 `go test ./...`。测试不监听端口：它把请求直接交给 router，因此能同时观察路由匹配、JSON 绑定、字段校验和未知路径。
+
+```go verify:gin-basics-main
 package main
 
 import (
-    "github.com/gin-gonic/gin"
+	"net/http"
+
+	"github.com/gin-gonic/gin"
 )
 
+type todoInput struct {
+	Title string `json:"title" binding:"required"`
+}
+
+func newRouter() *gin.Engine {
+	r := gin.New()
+	r.Use(gin.Recovery())
+
+	r.GET("/health", func(c *gin.Context) {
+		c.JSON(http.StatusOK, gin.H{"status": "ok"})
+	})
+	r.POST("/todos", func(c *gin.Context) {
+		var input todoInput
+		if err := c.ShouldBindJSON(&input); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "invalid todo"})
+			return
+		}
+		c.JSON(http.StatusCreated, gin.H{"title": input.Title})
+	})
+	return r
+}
+
 func main() {
-    r := gin.Default()
-
-    r.GET("/hello", func(c *gin.Context) {
-        c.JSON(200, gin.H{
-            "message": "Hello, World!",
-        })
-    })
-
-    r.Run(":8080")
+	if err := newRouter().Run(":8080"); err != nil {
+		panic(err)
+	}
 }
 ```
+
+```go verify:gin-basics-test
+package main
+
+import (
+	"net/http"
+	"net/http/httptest"
+	"strings"
+	"testing"
+)
+
+func TestRoutes(t *testing.T) {
+	r := newRouter()
+	for _, test := range []struct {
+		name, method, path, body string
+		wantStatus               int
+	}{
+		{"health", http.MethodGet, "/health", "", http.StatusOK},
+		{"invalid JSON", http.MethodPost, "/todos", `{"title":`, http.StatusBadRequest},
+		{"missing title", http.MethodPost, "/todos", `{}`, http.StatusBadRequest},
+		{"creates todo", http.MethodPost, "/todos", `{"title":"read Gin docs"}`, http.StatusCreated},
+		{"unknown route", http.MethodGet, "/missing", "", http.StatusNotFound},
+	} {
+		t.Run(test.name, func(t *testing.T) {
+			req := httptest.NewRequest(test.method, test.path, strings.NewReader(test.body))
+			req.Header.Set("Content-Type", "application/json")
+			res := httptest.NewRecorder()
+			r.ServeHTTP(res, req)
+			if res.Code != test.wantStatus {
+				t.Fatalf("%s %s: got %d, want %d", test.method, test.path, res.Code, test.wantStatus)
+			}
+		})
+	}
+}
+```
+
+`gin.New()` 只创建引擎；这里显式加入 `Recovery`，因此 handler panic 不会终止整个进程。它没有加入访问日志，避免测试输出被日志淹没。开发时若需要两者，可使用 `gin.Default()`；这改变的是默认中间件组合，不是性能开关。
 
 ## 核心组件
 
@@ -121,6 +182,12 @@ func AuthMiddleware() gin.HandlerFunc {
 Gin支持多种数据绑定方式，可以方便地将请求数据绑定到结构体。
 
 ```go
+import (
+    "github.com/gin-gonic/gin"
+    "github.com/gin-gonic/gin/binding"
+    "github.com/go-playground/validator/v10"
+)
+
 type User struct {
     Name  string `json:"name" binding:"required"`
     Email string `json:"email" binding:"required,email"`

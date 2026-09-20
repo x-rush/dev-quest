@@ -17,13 +17,13 @@
   "summary": {
     "documents": 644,
     "by_primary_state": {
-      "not_verified": 449,
-      "runtime": 195
+      "not_verified": 448,
+      "runtime": 196
     },
-    "verification_wording_occurrences": 151,
+    "verification_wording_occurrences": 150,
     "marker_classification": {
-      "source_has_limited_runtime_evidence": 93,
-      "unbound_verification_wording": 58
+      "source_has_limited_runtime_evidence": 94,
+      "unbound_verification_wording": 56
     }
   },
   "documents": [
@@ -42,7 +42,7 @@
     },
     {
       "path": "01-go-backend/README.md",
-      "sha256": "346639279b8373903c1e73d6124255fe7762ee3626e64f43f324efc992658a18",
+      "sha256": "b4b2e8bb38120339af697fdc5a30c058a408541ee3f4d587da2e76781a2b138d",
       "verification": [
         {
           "mode": "not_verified",
@@ -361,13 +361,13 @@
     },
     {
       "path": "01-go-backend/frameworks/01-gin-framework-basics.md",
-      "sha256": "8720bd7661c9d595388d0abba321905007e697d0e9b6d06a579fb7f06967fe03",
+      "sha256": "20621e3e6d42f4ee5e26d287b7bbffbe0a8b2bd501ab0cb7e11100c69c894e98",
       "verification": [
         {
-          "mode": "not_verified",
-          "status": "NOT_VERIFIED",
-          "report": null,
-          "scope": "No named runtime or syntax evidence is recorded for this document."
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "gin-basics-validation.json",
+          "scope": "The two named Gin blocks are extracted verbatim and tested with net/http/httptest: health route, malformed JSON, required field, success response and unknown route. No port listener, deployment, database, authorization, TLS or performance behavior is claimed."
         }
       ],
       "marker_count": 1
@@ -1331,7 +1331,7 @@
     },
     {
       "path": "02-nextjs-frontend/basics/06-data-fetching-basics.md",
-      "sha256": "9865117fdd690cdca2054234f903cd077d638e9c535cba40a974327cacf9cf70",
+      "sha256": "3747d3ee94a48bf83a7d5f195becc943b6e5acfdc69a167d56c5658f28f41421",
       "verification": [
         {
           "mode": "not_verified",
@@ -1487,7 +1487,7 @@
     },
     {
       "path": "02-nextjs-frontend/projects/02-ecommerce-store.md",
-      "sha256": "62d771decedcfce3b83d0927a4cd1b71dc7b4cfb947f15bfc3a2a300f5c02d40",
+      "sha256": "68224160fc909f31e0a9f7a8d4521cd5af5f2587aeef65408e77bc245784cf45",
       "verification": [
         {
           "mode": "not_verified",
@@ -1496,7 +1496,7 @@
           "scope": "No named runtime or syntax evidence is recorded for this document."
         }
       ],
-      "marker_count": 0
+      "marker_count": 1
     },
     {
       "path": "02-nextjs-frontend/projects/03-dashboard-analytics.md",
@@ -1578,7 +1578,7 @@
     },
     {
       "path": "02-nextjs-frontend/reference/framework-patterns/01-app-router-patterns.md",
-      "sha256": "72ec2e1d66c8cfaa9b8b353c6323262e991d6a35859a28b698ff251ec22e4f30",
+      "sha256": "02dabfe8d4109c4245cb8506ac3e3a9ff6a523abf6a0f45be7c75e09cd5903b7",
       "verification": [
         {
           "mode": "not_verified",
@@ -1617,7 +1617,7 @@
     },
     {
       "path": "02-nextjs-frontend/reference/framework-patterns/04-data-fetching-patterns.md",
-      "sha256": "c4761e13e6914672a58a5d43d14c8d06ed6c7d3e4c95713995148b71d13beffc",
+      "sha256": "3a36f757d2c16c5f3bad86c2c551efa9223063536f49840a14608c6fe1b38809",
       "verification": [
         {
           "mode": "not_verified",
@@ -1695,7 +1695,7 @@
     },
     {
       "path": "02-nextjs-frontend/reference/framework-patterns/10-proxy-patterns.md",
-      "sha256": "8e15ccd982b9ed906a4454b3f909c949b3fb93b782d19fa6174852ee65599f9f",
+      "sha256": "e24133e56f861e49991873e8fe49ed851d471b97e330bf233fe0c28b6f1a38f7",
       "verification": [
         {
           "mode": "not_verified",
@@ -7078,7 +7078,7 @@
     },
     {
       "path": "09-nodejs-backend/frameworks/01-hono-basics.md",
-      "sha256": "da40f7dd486bc01780d03de8de165c09af12a061e18807228da559853961eef2",
+      "sha256": "154fd092a7bb16ca61cb6cf6d473315905c9e0e67075cffd0f135e255918f8f9",
       "verification": [
         {
           "mode": "not_verified",
@@ -7156,7 +7156,7 @@
     },
     {
       "path": "09-nodejs-backend/projects/03-file-storage-service.md",
-      "sha256": "1b1f79c4ade857df2901941e52ca8a36be90d105a9007a1d29035e0792f8543c",
+      "sha256": "225e0a8a3cce554cb095baab66bc922816c8796ef26c0dc7110897dccedbe3df",
       "verification": [
         {
           "mode": "not_verified",
@@ -8947,7 +8947,7 @@
     },
     {
       "path": "11-rust-cross-platform/reference/language-concepts/06-unsafe.md",
-      "sha256": "95410493d1788943041363ac326f6fd95c797a0ca0c4826f1e42fc61c65c992a",
+      "sha256": "ba95c25b935e4efc799302d3580ff280e442d77bc8132eead1897a4c6180d220",
       "verification": [
         {
           "mode": "not_verified",
@@ -8956,7 +8956,7 @@
           "scope": "No named runtime or syntax evidence is recorded for this document."
         }
       ],
-      "marker_count": 1
+      "marker_count": 0
     },
     {
       "path": "11-rust-cross-platform/reference/language-concepts/07-smart-pointers.md",
@@ -9106,7 +9106,7 @@
     },
     {
       "path": "11-rust-cross-platform/testing/01-unit-integration-tests.md",
-      "sha256": "71b17e9f70aeaf80d63f2c4f6662cc77a21ed74b2f2e448ecfed84f85f7c77f0",
+      "sha256": "c1975eb367de7de58c93de34ad750c928e65e7123e0f47bd4e5f7211d802e439",
       "verification": [
         {
           "mode": "not_verified",
@@ -9115,7 +9115,7 @@
           "scope": "No named runtime or syntax evidence is recorded for this document."
         }
       ],
-      "marker_count": 1
+      "marker_count": 0
     },
     {
       "path": "11-rust-cross-platform/testing/02-criterion-benchmarks.md",
@@ -9183,9 +9183,9 @@
     },
     {
       "path": "01-go-backend/frameworks/01-gin-framework-basics.md",
-      "line": 257,
+      "line": 324,
       "excerpt": "当测试必须绕过真实数据库、或同一业务需要两种存储实现时，把依赖从构造函数传入。下面的 `NewServer(userService)` 展示“由入口提供服务实例”，避免 handler 内部临时创建连接。`UserService`、两个 handler 和其业务实现来自项目上下文，这不是独立可运行文件；它仍依赖具体服务类型，若要替换测试实现，应在使用方定义只包含实际调用方法的小接口。",
-      "classification": "unbound_verification_wording"
+      "classification": "source_has_limited_runtime_evidence"
     },
     {
       "path": "01-go-backend/projects/00-stdlib-todo-cli.md",
@@ -9276,6 +9276,12 @@
       "line": 1212,
       "excerpt": "完成本章的功能和验收项后，你会得到一条可运行、可继续扩展的内容管理项目基线。它不自动包含邮件验证、支付、多租户、实时协作或生产运维；每一项扩展都需要单独定义数据边界、失败处理和验收场景。带着这里的路由、数据校验和权限分层继续完成下一项需求，并在提交前复现对应验收步骤。",
       "classification": "source_has_limited_runtime_evidence"
+    },
+    {
+      "path": "02-nextjs-frontend/projects/02-ecommerce-store.md",
+      "line": 87,
+      "excerpt": "- **支付边界**: `PaymentGateway` + 已验证事件处理；提供方 SDK 是可替换适配器",
+      "classification": "unbound_verification_wording"
     },
     {
       "path": "02-nextjs-frontend/projects/04-saas-platform.md",
@@ -10038,18 +10044,6 @@
       "line": 161,
       "excerpt": "## 💡 可运行示例",
       "classification": "source_has_limited_runtime_evidence"
-    },
-    {
-      "path": "11-rust-cross-platform/reference/language-concepts/06-unsafe.md",
-      "line": 214,
-      "excerpt": "💡 **示例**（edition 2024 示例，本轮未运行；含一个实测踩到的陷阱）:",
-      "classification": "unbound_verification_wording"
-    },
-    {
-      "path": "11-rust-cross-platform/testing/01-unit-integration-tests.md",
-      "line": 247,
-      "excerpt": "**验证方法**: 过滤器命中数会体现在 `test result` 行的 `filtered out` 计数中（本机实测确认）。",
-      "classification": "unbound_verification_wording"
     }
   ],
   "corpus_checks": [
