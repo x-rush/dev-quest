@@ -7,8 +7,8 @@
 | 指标 | 数量 |
 |---|---:|
 | 纳入模块文档 | 644 |
-| 主状态：not_verified | 445 |
-| 主状态：runtime | 199 |
+| 主状态：not_verified | 444 |
+| 主状态：runtime | 200 |
 | 验证措辞出现次数 | 150 |
 | 措辞分类：source_has_limited_runtime_evidence | 94 |
 | 措辞分类：unbound_verification_wording | 56 |
@@ -295,7 +295,7 @@
 | Kotlin / Compose | [05-kotlin-compose/advanced-topics/performance/01-recomposition-optimization.md](../../../../05-kotlin-compose/advanced-topics/performance/01-recomposition-optimization.md) | `not_verified` | 0 | 0 |
 | Kotlin / Compose | [05-kotlin-compose/advanced-topics/performance/02-startup-memory.md](../../../../05-kotlin-compose/advanced-topics/performance/02-startup-memory.md) | `not_verified` | 0 | 0 |
 | Kotlin / Compose | [05-kotlin-compose/advanced-topics/security/01-security-practices.md](../../../../05-kotlin-compose/advanced-topics/security/01-security-practices.md) | `not_verified` | 0 | 0 |
-| Kotlin / Compose | [05-kotlin-compose/basics/01-environment-setup.md](../../../../05-kotlin-compose/basics/01-environment-setup.md) | `not_verified` | 0 | 0 |
+| Kotlin / Compose | [05-kotlin-compose/basics/01-environment-setup.md](../../../../05-kotlin-compose/basics/01-environment-setup.md) | `runtime` | 1 | 0 |
 | Kotlin / Compose | [05-kotlin-compose/basics/02-first-compose-app.md](../../../../05-kotlin-compose/basics/02-first-compose-app.md) | `not_verified` | 0 | 1 |
 | Kotlin / Compose | [05-kotlin-compose/basics/03-kotlin-syntax-essentials.md](../../../../05-kotlin-compose/basics/03-kotlin-syntax-essentials.md) | `runtime` | 1 | 0 |
 | Kotlin / Compose | [05-kotlin-compose/basics/04-composables-state.md](../../../../05-kotlin-compose/basics/04-composables-state.md) | `not_verified` | 0 | 0 |

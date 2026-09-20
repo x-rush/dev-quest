@@ -77,6 +77,9 @@ def records_from_reports():
     node_environment = load("node-environment-validation.json")
     for row in node_environment.get("results", []):
         add_record(records, row.get("document"), "runtime", "node-environment-validation.json", node_environment.get("scope", "selected Node ESM environment smoke example"), "PASS" if row.get("status", "").upper() == "PASS" else "FAIL")
+    kotlin_environment = load("kotlin-environment-validation.json")
+    for row in kotlin_environment.get("results", []):
+        add_record(records, row.get("document"), "runtime", "kotlin-environment-validation.json", kotlin_environment.get("scope", "selected Kotlin/JVM environment smoke example"), "PASS" if row.get("status", "").upper() == "PASS" else "FAIL")
     mobile = load("mobile-foundations.json")
     for row in mobile.get("results", []):
         add_record(records, row.get("source"), "runtime", "mobile-foundations.json", mobile.get("scope", "selected portable mobile-language check"), "PASS" if row.get("status") == "PASS" else "FAIL")

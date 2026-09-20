@@ -1,0 +1,14 @@
+{
+  "runtime": "Docker dev-quest-validation:local",
+  "scope": "The named Kotlin block is extracted verbatim, compiled with kotlinc, and run on the JVM. It proves only this pure Kotlin/JVM program; it does not cover Android Studio, Gradle, Android SDK, Compose, an emulator, a device, or an APK.",
+  "results": [
+    {
+      "document": "05-kotlin-compose/basics/01-environment-setup.md",
+      "case": "kotlin-environment-jvm",
+      "status": "PASS",
+      "source_sha256": "42c887ffa54c0c8324144c4a42d33a288d4825b8a21f7277fdc96fe422373273",
+      "stdout": "Kotlin JVM environment check passed\n",
+      "command": "docker run --rm -v <temporary-directory>:/work -w /work dev-quest-validation:local sh -c 'kotlinc EnvironmentCheck.kt -include-runtime -d /tmp/environment-check.jar && java -jar /tmp/environment-check.jar'"
+    }
+  ]
+}

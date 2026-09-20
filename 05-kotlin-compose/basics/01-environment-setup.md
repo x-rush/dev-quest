@@ -67,6 +67,25 @@ Android 开发环境由四层工具组成，理解它们的分工能让你在报
 
 > 💡 与 Go 的对照：`android.jar` 类似 Go 标准库，`adb` 类似设备管理工具，Gradle 扮演 `go build` 的角色——但配置复杂得多，值得花时间理解。
 
+### 先区分 Kotlin/JVM 与 Android 应用
+
+在安装 SDK 前，可以先验证 Kotlin 编译器和 JVM 能完成一个纯语言程序；这有助于把 Kotlin/JDK 问题与 Gradle、SDK、模拟器问题分开。保存下面代码为 `EnvironmentCheck.kt`，运行 `kotlinc EnvironmentCheck.kt -include-runtime -d environment-check.jar && java -jar environment-check.jar`：
+
+```kotlin verify:kotlin-environment-jvm
+data class ToolchainCheck(val name: String, val ready: Boolean)
+
+fun main() {
+    val checks = listOf(
+        ToolchainCheck("Kotlin compiler", true),
+        ToolchainCheck("JVM runtime", true),
+    )
+    check(checks.all { it.ready })
+    println("Kotlin JVM environment check passed")
+}
+```
+
+该程序只验证纯 Kotlin/JVM 的编译和执行。它不包含 Android SDK 类型、Gradle、Compose、Android Studio 或设备，所以通过它不能代替后文的 `assembleDebug` 和模板页启动验收。
+
 ---
 
 ## 🖥️ 安装 Android Studio
