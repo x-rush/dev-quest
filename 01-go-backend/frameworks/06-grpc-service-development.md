@@ -59,16 +59,16 @@ gRPC 的三块基石：
 protoc --version
 
 # Go 生成插件
-go install google.golang.org/protobuf/cmd/protoc-gen-go@latest
-go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@latest
+# 生成工具也应固定版本；升级时重新生成并审查生成代码差异。
+go install google.golang.org/protobuf/cmd/protoc-gen-go@v1.36.11
+go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@v1.6.2
 ```
 
 新建项目并拉取运行时依赖：
 
 ```bash
 go mod init example.com/userservice
-go get google.golang.org/grpc
-go get google.golang.org/protobuf
+go get google.golang.org/grpc@v1.84.0 google.golang.org/protobuf@v1.36.11
 ```
 
 ## 📝 第一步：编写 proto 文件
