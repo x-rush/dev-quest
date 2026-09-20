@@ -151,7 +151,7 @@ def main() -> None:
     rows = [module_row(module) for module in modules]
     data = {
         "generated_on": date.today().isoformat(),
-        "scope": "11 个现行模块；不含 refactor-archives 和验证报告。",
+        "scope": "11 个现行模块；不含验证报告。",
         "method": "目录、Markdown 文件、指定标题及文件名/开头正文信号的机械盘点；不评价正文正确性。",
         "modules": rows,
         "gap_counts": dict(sorted(Counter(gap["kind"] for row in rows for gap in row["gaps"]).items())),

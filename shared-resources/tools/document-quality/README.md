@@ -152,4 +152,4 @@ node shared-resources/tools/document-quality/verify_final_web_examples.mjs /path
 
 保留 [before.json](reports/before.json) 原始基线；[after.json](reports/after.json) 的线索用于人工复核，不是质量分数。剩余“短条目重复”分别是项目选型映射，“无门槛”出现在审核条件语境，不为清零指标刻意改写。
 
-长期维护仍需按目标语言版本逐项核对有限名称集合、给完整工程配置对应工具链 CI、跟踪版本迁移与外链。旧文档中的历史“已核实/实测”不能自动当成本轮证据。具体完成范围与维护事项见 [交付与持续验证记录](../../../refactor-archives/pending/2026-09-18-document-quality-plan.md)。
+长期维护仍需按目标语言版本逐项核对有限名称集合、给完整工程配置对应工具链 CI、跟踪版本迁移与外链。旧文档中的历史“已核实/实测”不能自动当成本轮证据。冻结范围的完成边界见 [最终交付报告](reports/final-delivery-2026-09-20.md)。

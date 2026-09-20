@@ -312,7 +312,7 @@
 
 ## 🧪 工程质量工具
 
-- **[code-block-verify 全仓代码块机器验证管线](code-block-verify/README.md)**：提取器 + 三层验证（L1 语法 / L2 运行 / L3 agent 裁决），对全仓 Markdown 围栏代码块做全量（非抽样）验证；全量报告与数据归档见 `refactor-archives/completed/code-block-verification/`
+- **[code-block-verify 全仓代码块机器验证管线](code-block-verify/README.md)**：提取器 + 三层验证（L1 语法 / L2 运行 / L3 agent 裁决），对全仓 Markdown 围栏代码块做全量（非抽样）验证；验证器会在本地生成临时结果，结果不提交入库。
 - **[baseline-check 基线版本漂移检查](baseline-check/README.md)**：解析各模块 README「技术基线」区块，批量比对 registry 最新版输出漂移报告；配套季度基线对齐 ritual 使用
 
 ---

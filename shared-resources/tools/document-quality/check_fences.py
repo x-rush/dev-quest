@@ -20,7 +20,7 @@ def unclosed(text):
 if __name__ == '__main__':
     issues=[]
     for path in ROOT.rglob('*.md'):
-        if set(path.relative_to(ROOT).parts) & {'.git','node_modules','refactor-archives','reports'}: continue
+        if set(path.relative_to(ROOT).parts) & {'.git','node_modules','reports'}: continue
         line = unclosed(path.read_text(encoding='utf8'))
         if line: issues.append({'file':path.relative_to(ROOT).as_posix(),'line':line})
     print(json.dumps({'unclosed_fences':issues},ensure_ascii=False,indent=2))

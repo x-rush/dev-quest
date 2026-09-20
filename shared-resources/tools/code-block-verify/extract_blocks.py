@@ -4,7 +4,7 @@
 用法: python3 extract_blocks.py [REPO_ROOT] [OUTPUT_JSONL]
 默认: REPO_ROOT=仓库根, OUTPUT=脚本同目录 manifest.jsonl
 
-排除目录: refactor-archives（历史归档）/.git/.remember/node_modules
+排除目录: .git/.remember/node_modules
 """
 import hashlib
 import json
@@ -12,7 +12,7 @@ import os
 import re
 import sys
 
-SKIP_DIRS = {"refactor-archives", ".git", ".remember", "node_modules"}
+SKIP_DIRS = {".git", ".remember", "node_modules"}
 FENCE_RE = re.compile(r"^\s*(`{3,}|~{3,})(.*)$")
 HEADING_RE = re.compile(r"^(#{1,4})\s+(.*)$")
 

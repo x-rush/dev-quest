@@ -44,7 +44,6 @@
 - 内容是否达到可交付标准，看[知识库交付基线](shared-resources/standards/knowledge-delivery-baseline.md)：它把“全量基础”、渐进路线、示例身份与运行证据拆开验收，未验证内容不能标成完成。
 - 文档修改遵循[写作规范](shared-resources/standards/documentation-guidelines.md)和[贡献说明](CONTRIBUTING.md)。
 
-历史重构过程保存在 [refactor-archives](refactor-archives/README.md)，不作为当前学习的必读内容。
 
 ## 跨模块语言参考
 

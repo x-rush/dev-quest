@@ -53,7 +53,7 @@ def main():
     args = parser.parse_args()
     cache, issues, checked = {}, [], 0
     for path in ROOT.rglob('*.md'):
-        if any(p in {'.git','node_modules','reports','refactor-archives'} for p in path.relative_to(ROOT).parts):
+        if any(p in {'.git','node_modules','reports'} for p in path.relative_to(ROOT).parts):
             continue
         for number,line in prose(path.read_text(encoding='utf8')):
             for target in re.findall(r'!?\[[^\]]*\]\(([^\s)]+)',line):
