@@ -2,7 +2,7 @@
   "source": "02-nextjs-frontend/basics/08-first-project.md",
   "sourceBlockSha256": "69ce4c81ac5e69d99247b03542928d1717310f7c24745cd51d029d095ab4ad18",
   "status": "PASS",
-  "node": "v24.19.0",
+  "node": "v24.7.0",
   "typescript": "5.9.3",
   "react": "19.3.0",
   "cases": [

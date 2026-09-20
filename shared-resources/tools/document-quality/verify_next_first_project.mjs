@@ -42,3 +42,7 @@ report.dependencyManifest = 'shared-resources/tools/document-quality/next-projec
 report.dependencyLock = 'shared-resources/tools/document-quality/next-project-validation/pnpm-lock.yaml';
 fs.writeFileSync(path.join(root,'shared-resources/tools/document-quality/reports/next-first-project-2026-09-19.json'),JSON.stringify(report,null,2)+'\n');
 console.log(JSON.stringify(report,null,2));
+// JSDOM and its transitive dependencies may retain handles after dom.close().
+// This validator performs no asynchronous cleanup after writing its report, so
+// a successful assertion run must terminate with an observable zero exit code.
+process.exit(0);
