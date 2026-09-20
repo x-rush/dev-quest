@@ -104,7 +104,7 @@ Expo SDK 的能力层。覆盖绝大多数常用设备能力，优先于社区�
 | `expo-sensors` | 传感器 |
 | `expo-file-system` | 文件读写 |
 | `expo-local-authentication` | 指纹/面容 |
-| `expo-image` | 高性能图片组件（替换 RN Image） |
+| `expo-image` | 图片加载组件，提供缓存、占位和过渡等选项；是否替换 `Image` 取决于格式、缓存策略与实际列表负载 |
 
 ### 语法和示例
 ```tsx

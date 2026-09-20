@@ -116,7 +116,7 @@ React Native 使用 JavaScript/TypeScript 写界面，但运行环境不是浏�
 
 | 模块 | 职责 | 深入 |
 |------|------|------|
-| `expo-image` | 高性能图片加载与缓存（列表图片首选） | [docs.expo.dev](https://docs.expo.dev/versions/latest/sdk/image/) |
+| `expo-image` | 图片加载与缓存选项；列表中应比较解码、缓存命中、内存与滚动表现后选择 | [docs.expo.dev](https://docs.expo.dev/versions/latest/sdk/image/) |
 | `expo-video` | 视频播放器 | [docs.expo.dev](https://docs.expo.dev/versions/latest/sdk/video/) |
 
 > 注：旧音视频包 `expo-av` 已被官方拆分为 `expo-audio` / `expo-video`，新项目直接用新包，本仓库未收录 expo-av。
