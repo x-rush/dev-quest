@@ -1,0 +1,13 @@
+{
+  "runtime": "Docker rust:1-slim-bookworm",
+  "scope": "The named Rust block is extracted verbatim into a dependency-free Cargo crate with edition 2024. cargo check, cargo run and cargo test execute offline. This does not cover rustup, a host toolchain, third-party crates, cross-compilation, networking, native linkers, or publishing.",
+  "results": [
+    {
+      "document": "11-rust-cross-platform/basics/01-environment-setup.md",
+      "case": "rust-environment-cargo",
+      "status": "PASS",
+      "source_sha256": "3958b1f0b89932bbbd522401c373e020211d56ab172ae71f41331b51ec876e14",
+      "command": "docker run --rm --network none -v <temporary-directory>:/work -w /work rust:1-slim-bookworm sh -c 'cargo check --offline && cargo run --offline --quiet && cargo test --offline --quiet'"
+    }
+  ]
+}

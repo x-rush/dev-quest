@@ -102,7 +102,7 @@ rustup 管工具链，cargo 管构建与依赖。edition 是源码语言模式�
 
 ### 步骤一：安装 rustup 与工具链
 
-**目标**: 拿到可用的 rustc / cargo，三者版本号一致
+**目标**: 拿到同一 rustup 工具链提供的可用 rustc / cargo；记录实际版本而不是假定它们显示相同的补丁号
 
 **操作指南**:
 1. 访问 [rustup.rs](https://rustup.rs) 按官方指引安装
@@ -116,7 +116,7 @@ curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 # 使当前 shell 生效（或重开终端）
 source "$HOME/.cargo/env"
 
-# 验证：rustc 与 cargo 版本号应一致
+# 验证：记录编译器、构建工具和 rustup 的实际版本
 rustc --version
 cargo --version
 rustup --version
@@ -131,7 +131,7 @@ replace-with = 'rsproxy'
 registry = "sparse+https://rsproxy.cn/index/"
 ```
 
-**验证方法**: `rustc --version` 能输出 stable 版本号（当前基线为 Rust 1.98.1，见模块 README）
+**判断方法**：`rustc --version`、`cargo --version` 能输出版本，并用下一步的 `cargo check`/`cargo run` 验证当前项目实际调用它们。稳定通道的小版本会变化；本模块的版本基线见 [模块 README](../README.md)，新建或升级项目时以 `rust-toolchain.toml` 和 CI 使用的工具链为准。
 
 ### 步骤二：创建第一个项目
 
@@ -163,7 +163,36 @@ edition = "2024"   # 当前 edition，与模块 README 技术基线一致
 [dependencies]
 ```
 
-**验证方法**: `cargo run` 输出 `Hello, world!`
+把 `src/main.rs` 改成以下程序，再在项目根目录按顺序运行 `cargo check`、`cargo run` 与 `cargo test`。`cargo check` 验证当前源码能通过分析，`cargo run` 还会生成并执行二进制，`cargo test` 只验证你实际写出的断言。
+
+```rust verify:rust-environment-cargo
+fn greeting(name: &str) -> String {
+    format!("Hello, {name}!")
+}
+
+fn main() {
+    println!("{}", greeting("Rust"));
+}
+
+#[cfg(test)]
+mod tests {
+    use super::greeting;
+
+    #[test]
+    fn formats_a_greeting() {
+        assert_eq!(greeting("Rust"), "Hello, Rust!");
+    }
+}
+```
+
+```bash
+cargo check
+cargo run
+# Hello, Rust!
+cargo test
+```
+
+这三条命令不下载外部依赖，因为示例没有依赖；它们也不证明交叉编译目标、第三方 crate、网络镜像或发布流程可用。
 
 ### 步骤三：常用 cargo 命令
 
@@ -288,8 +317,8 @@ clippy 提供改进线索，遇到告警先理解原因再修或写出例外依�
 ### Q2: 目录覆盖和 rust-toolchain.toml 冲突吗？
 **A**: 优先级为 `rust-toolchain.toml` > `rustup override set` > 全局 default。两处同时配置时以 rust-toolchain.toml 为准，团队项目建议只用后者。
 
-### Q3: stable 更新会破坏我的代码吗？
-**A**: stable 通道约每 6 周发版，`rustup update` 即可跟进。语言层的破坏性变更由 edition 机制隔离——停留在当前 edition 内，升级不影响现有代码。模块当前基线为 Rust 1.98.1（2026-09-03 stable channel，见 [模块 README](../README.md) 技术基线区块）。
+### Q3: stable 更新一定不会影响我的代码吗？
+**A**: Rust 的 edition 机制降低语言迁移成本，但不能把它理解成所有项目升级都零风险。编译器 lint 变化、依赖的 MSRV、build script、链接器和平台目标都可能让构建结果变化。stable 通道通常约每 6 周发布；先在独立变更中更新 `rust-toolchain.toml`，运行项目的 check/test/build，再升级 CI，而不是直接把所有项目切到最新版本。
 
 ---
 

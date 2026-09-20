@@ -17,13 +17,13 @@
   "summary": {
     "documents": 644,
     "by_primary_state": {
-      "not_verified": 443,
-      "runtime": 201
+      "not_verified": 442,
+      "runtime": 202
     },
     "verification_wording_occurrences": 150,
     "marker_classification": {
-      "source_has_limited_runtime_evidence": 94,
-      "unbound_verification_wording": 56
+      "source_has_limited_runtime_evidence": 95,
+      "unbound_verification_wording": 55
     }
   },
   "documents": [
@@ -8433,13 +8433,13 @@
     },
     {
       "path": "11-rust-cross-platform/basics/01-environment-setup.md",
-      "sha256": "3796799e3635d2c49d8ade86501ccbc9d9644021b0c7d3cca3b78e15c701e59a",
+      "sha256": "66c7ee5b7f91701c6ef5903b044de75f133d9c35d77bc63ffecbde2bdce58005",
       "verification": [
         {
-          "mode": "not_verified",
-          "status": "NOT_VERIFIED",
-          "report": null,
-          "scope": "No named runtime or syntax evidence is recorded for this document."
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "rust-environment-validation.json",
+          "scope": "The named Rust block is extracted verbatim into a dependency-free Cargo crate with edition 2024. cargo check, cargo run and cargo test execute offline. This does not cover rustup, a host toolchain, third-party crates, cross-compilation, networking, native linkers, or publishing."
         }
       ],
       "marker_count": 1
@@ -9995,7 +9995,7 @@
       "path": "11-rust-cross-platform/basics/01-environment-setup.md",
       "line": 12,
       "excerpt": "能说明检查、运行、测试各自证明什么；命令成功不等于未编写的行为已验证。",
-      "classification": "unbound_verification_wording"
+      "classification": "source_has_limited_runtime_evidence"
     },
     {
       "path": "11-rust-cross-platform/basics/05-error-handling.md",

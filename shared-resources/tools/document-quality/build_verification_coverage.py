@@ -83,6 +83,9 @@ def records_from_reports():
     swift_environment = load("swift-environment-validation.json")
     for row in swift_environment.get("results", []):
         add_record(records, row.get("document"), "runtime", "swift-environment-validation.json", swift_environment.get("scope", "selected pure Swift environment smoke example"), "PASS" if row.get("status", "").upper() == "PASS" else "FAIL")
+    rust_environment = load("rust-environment-validation.json")
+    for row in rust_environment.get("results", []):
+        add_record(records, row.get("document"), "runtime", "rust-environment-validation.json", rust_environment.get("scope", "selected Rust Cargo environment example"), "PASS" if row.get("status", "").upper() == "PASS" else "FAIL")
     mobile = load("mobile-foundations.json")
     for row in mobile.get("results", []):
         add_record(records, row.get("source"), "runtime", "mobile-foundations.json", mobile.get("scope", "selected portable mobile-language check"), "PASS" if row.get("status") == "PASS" else "FAIL")
