@@ -216,14 +216,12 @@ async function getPostBySlug(slug: string) {
       }
     })
 
-    if (!res.ok) {
-      return null
-    }
-
-    return res.json()
+    // 资源不存在是页面状态；网络故障和 5xx 仍应进入错误边界。
+    if (res.status === 404) return null
+    return parsePosts([await readJson(res)])[0]
   } catch (error) {
     console.error(`Error fetching post ${slug}:`, error)
-    return null
+    throw error
   }
 }
 
@@ -238,23 +236,19 @@ async function getPostComments(postId: number) {
       }
     )
 
-    if (!res.ok) {
-      return []
-    }
-
-    return res.json()
+    return readJson(res)
   } catch (error) {
     console.error(`Error fetching comments for post ${postId}:`, error)
-    return []
+    throw error
   }
 }
 
 // 生成静态参数
 export async function generateStaticParams() {
-  const posts = await fetch('https://jsonplaceholder.typicode.com/posts')
-    .then(res => res.json())
+  const response = await fetch('https://jsonplaceholder.typicode.com/posts')
+  const posts = parsePosts(await readJson(response))
 
-  return posts.slice(0, 10).map((post: any) => ({
+  return posts.slice(0, 10).map((post) => ({
     slug: post.id.toString()
   }))
 }
