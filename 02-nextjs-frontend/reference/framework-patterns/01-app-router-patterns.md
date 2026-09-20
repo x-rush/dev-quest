@@ -628,7 +628,9 @@ const getRelatedPosts = cache(async (slug: string, category?: string) => {
   return response.json();
 });
 
-// 生成静态参数
+// 生成静态参数。失败时退回空列表只适用于允许请求时生成的公开页面。
+// 若页面必须在构建时存在，应记录错误并让构建失败，而不是静默发布空站点。
+export const dynamicParams = true;
 export async function generateStaticParams(): Promise<{ slug: string }[]> {
   try {
     const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000/api';
@@ -895,6 +897,8 @@ export default function BlogLoading() {
   );
 }
 ```
+
+这里的 `[]` 不表示“没有文章”，而表示“本次构建没有预渲染任何文章”。`dynamicParams = true` 使未预渲染的合法 `slug` 仍可在请求时生成；若关闭它，返回空数组会让所有未列出的路径变成 404。对依赖完整静态导出的站点，应把列表请求失败视为构建失败，并在发布前修复数据源。
 
 ### 并行路由实现
 

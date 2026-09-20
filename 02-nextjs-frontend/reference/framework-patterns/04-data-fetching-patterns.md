@@ -126,7 +126,9 @@ const getPosts = cache(async () => {
   return response.json();
 });
 
-// 带错误处理的静态生成
+// 构建期列表不可用时不预渲染；合法 slug 仍可在首次请求时生成。
+// 对纯静态导出或必须完整预渲染的页面，不应使用这一降级策略。
+export const dynamicParams = true;
 export async function generateStaticParams() {
   try {
     const posts = await getPosts();
@@ -246,6 +248,8 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   }
 }
 ```
+
+`generateStaticParams()` 的空数组是部署策略，不是业务上的“列表为空”。只有页面允许按请求生成时才适合这样处理；如果发布物必须包含完整路径集合，应该让错误传播并阻止发布。这样能区分“构建时暂时无法取得列表”与“内容库确实没有文章”。
 
 ### 2. 增量静态再生 (ISR)
 **智能内容更新策略**
