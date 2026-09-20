@@ -1,0 +1,14 @@
+{
+  "runtime": "Docker swift:6.3.3-noble",
+  "scope": "The named Swift block is extracted verbatim and run once with the Linux Swift toolchain. It proves only this pure Swift standard-library program; it does not cover Xcode, macOS, iOS SDKs, SwiftUI, SwiftData, simulators, signing, a device, or distribution.",
+  "results": [
+    {
+      "document": "06-swift-swiftui/basics/01-environment-setup.md",
+      "case": "swift-environment-toolchain",
+      "status": "PASS",
+      "source_sha256": "ef0821a237b27667bfd0809bee2661a2c0034f566b9031ada2bf271c63f08c43",
+      "stdout": "Swift toolchain check passed\n",
+      "command": "docker run --rm -i swift:6.3.3-noble swift -"
+    }
+  ]
+}

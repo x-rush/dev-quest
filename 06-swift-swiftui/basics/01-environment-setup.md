@@ -47,7 +47,7 @@ Xcode 包含平台 SDK、编译与签名工具。模拟器运行、真机签名�
 
 ### 1.1 检查系统要求
 
-开发 iOS 应用前，先在 [Apple 的 Xcode 系统要求](https://developer.apple.com/xcode/system-requirements)中核对当前 Xcode 与 macOS 的组合；课程不以一个未锁定的小版本作为永远正确的基线。写作时的 Xcode 26.2 需要 macOS Sequoia 15.6 或更高，并包含 Swift 6.2.3；你的工程应记录实际 Xcode、SDK、Swift language mode 与 deployment target。
+开发 iOS 应用前，先在 [Apple 的 Xcode 系统要求](https://developer.apple.com/xcode/system-requirements)中核对当前 Xcode 与 macOS 的组合；课程不以一个未锁定的小版本作为永久基线。你的工程应记录实际 Xcode、SDK、Swift language mode 与 deployment target，升级 Xcode 前再复核项目依赖和最低系统版本。
 
 - **磁盘空间**：Xcode、平台组件、模拟器与派生数据会持续增长。安装前查看磁盘余量；为首次安装与一个模拟器保留足够空间，遇到下载失败先检查空间而不是反复重装。
 - **Apple Account / Team**：模拟器不需要签名。要在个人设备安装应用，在 Xcode 的 Apple Accounts 登录 Apple Account，并在 Signing & Capabilities 中选择 Personal Team 或已加入的开发团队。App Store、TestFlight、受限能力和分发需要相应的 Apple Developer Program 资格。
@@ -75,6 +75,26 @@ swift --version   # 记录输出；它应与当前 xcode-select 指向的开发�
 ```
 
 > 💡 如果只做命令行/服务端开发，或需要在多个 Swift 版本之间切换，可以用 swiftly 独立管理 Swift 工具链（见 swift.org/install）。iOS 开发仍以 Xcode 内置工具链为主。
+
+### 1.4 先验证纯 Swift 工具链
+
+下面程序只使用 Swift 标准库。把它保存为 `ToolchainCheck.swift`，执行 `swift ToolchainCheck.swift`；它能把 Swift 编译器/运行时问题与 Xcode 工程、SwiftUI 和模拟器问题分开。
+
+```swift verify:swift-environment-toolchain
+struct ToolchainCheck {
+    let language: String
+    let ready: Bool
+}
+
+let checks = [
+    ToolchainCheck(language: "Swift", ready: true),
+    ToolchainCheck(language: "standard library", ready: true),
+]
+precondition(checks.allSatisfy(\.ready))
+print("Swift toolchain check passed")
+```
+
+它不导入 SwiftUI 或 Apple 平台 SDK。成功只说明这一段纯 Swift 代码能够编译并运行；不能代替 Xcode 项目构建、iOS 模拟器、签名、SwiftUI 或 SwiftData 验收。
 
 ## 🚀 第二步：创建第一个项目
 
@@ -121,8 +141,9 @@ xcrun simctl list devices available
 # 截图模拟器屏幕
 xcrun simctl io booted screenshot ~/Desktop/shot.png
 
-# 清除某个模拟器的所有数据
-xcrun simctl erase "iPhone 17 Pro"
+# 清除某个专门用于练习的模拟器的所有数据；先用 list 获取实际 UDID。
+# 此操作不可恢复，不能对包含要保留数据的模拟器执行。
+xcrun simctl erase <UDID>
 ```
 
 模拟器窗口内的常用快捷键：

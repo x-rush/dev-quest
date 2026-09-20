@@ -7,8 +7,8 @@
 | 指标 | 数量 |
 |---|---:|
 | 纳入模块文档 | 644 |
-| 主状态：not_verified | 444 |
-| 主状态：runtime | 200 |
+| 主状态：not_verified | 443 |
+| 主状态：runtime | 201 |
 | 验证措辞出现次数 | 150 |
 | 措辞分类：source_has_limited_runtime_evidence | 94 |
 | 措辞分类：unbound_verification_wording | 56 |
@@ -350,7 +350,7 @@
 | Swift / SwiftUI | [06-swift-swiftui/advanced-topics/performance/01-rendering-performance.md](../../../../06-swift-swiftui/advanced-topics/performance/01-rendering-performance.md) | `not_verified` | 0 | 0 |
 | Swift / SwiftUI | [06-swift-swiftui/advanced-topics/performance/02-concurrency-optimization.md](../../../../06-swift-swiftui/advanced-topics/performance/02-concurrency-optimization.md) | `not_verified` | 0 | 0 |
 | Swift / SwiftUI | [06-swift-swiftui/advanced-topics/security/01-security-practices.md](../../../../06-swift-swiftui/advanced-topics/security/01-security-practices.md) | `not_verified` | 0 | 0 |
-| Swift / SwiftUI | [06-swift-swiftui/basics/01-environment-setup.md](../../../../06-swift-swiftui/basics/01-environment-setup.md) | `not_verified` | 0 | 0 |
+| Swift / SwiftUI | [06-swift-swiftui/basics/01-environment-setup.md](../../../../06-swift-swiftui/basics/01-environment-setup.md) | `runtime` | 1 | 0 |
 | Swift / SwiftUI | [06-swift-swiftui/basics/02-first-swiftui-app.md](../../../../06-swift-swiftui/basics/02-first-swiftui-app.md) | `not_verified` | 0 | 0 |
 | Swift / SwiftUI | [06-swift-swiftui/basics/03-swift-syntax-essentials.md](../../../../06-swift-swiftui/basics/03-swift-syntax-essentials.md) | `runtime` | 1 | 0 |
 | Swift / SwiftUI | [06-swift-swiftui/basics/04-views-state.md](../../../../06-swift-swiftui/basics/04-views-state.md) | `not_verified` | 0 | 0 |
