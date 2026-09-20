@@ -179,7 +179,7 @@ func AuthMiddleware() gin.HandlerFunc {
 ```
 
 ### 3. 数据绑定
-Gin支持多种数据绑定方式，可以方便地将请求数据绑定到结构体。
+Gin 可按请求的 `Content-Type` 解析 JSON、表单或查询参数，并把结果写入结构体；绑定成功只说明数据形状满足标签，不等于完成业务授权、唯一性检查或持久化。下面的处理器把解析/格式错误明确返回为 400，后续业务失败应使用项目统一的错误出口。
 
 ```go
 import (
@@ -207,23 +207,23 @@ func createUser(c *gin.Context) {
 ```
 
 ### 4. 响应渲染
-Gin支持多种响应格式，可以轻松返回JSON、XML、HTML等格式的数据。
+Gin 提供 JSON、XML、HTML、纯文本和文件等响应方法。选择方法时要同时决定状态码、`Content-Type` 和响应是否已经提交：同一个请求不要在写入 JSON 后继续写 HTML 或文件。HTML 需要先加载模板；文件路径必须来自受控映射，不能直接拼接用户输入，以免暴露目录外文件。
 
 ```go
-// JSON响应
+// JSON：序列化对象，并设置 application/json
 c.JSON(200, gin.H{"message": "success"})
 
-// XML响应
+// XML：客户端和协议确实要求 XML 时才使用
 c.XML(200, gin.H{"message": "success"})
 
-// HTML响应
+// HTML：启动阶段须用 router.LoadHTMLGlob/LoadHTMLFiles 注册模板
 c.HTML(200, "index.html", gin.H{"title": "Home"})
 
 // 字符串响应
 c.String(200, "Hello World")
 
-// 文件响应
-c.File("path/to/file.txt")
+// 文件响应：filePath 必须由服务端根据已授权的资源 ID 映射得到
+c.File(filePath)
 ```
 
 ## 高级特性
