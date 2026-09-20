@@ -15,13 +15,7 @@
       "10-python-discovery": 56,
       "11-rust-cross-platform": 52
     },
-    "signals": {
-      "缺少明确结果信号": 12,
-      "短条目重复术语，需核查是否缺少解释": 2,
-      "教程代码含省略标记，需人工判断": 7,
-      "任意查阅与零前提混淆": 1,
-      "未显式说明阅读前提": 2
-    },
+    "signals": {},
     "method": "结构信号全量扫描；没有信号不等于内容正确，命中也不等于文档有错。"
   },
   "documents": [
@@ -47,7 +41,7 @@
       "active": true,
       "lines": 323,
       "code_blocks": 1,
-      "prose_chars": 8918,
+      "prose_chars": 8928,
       "code_chars": 4814,
       "signals": [],
       "omission_lines": [],
@@ -59,10 +53,10 @@
       "module": "01-go-backend",
       "kind": "advanced-topics",
       "active": true,
-      "lines": 1081,
+      "lines": 1093,
       "code_blocks": 19,
-      "prose_chars": 5580,
-      "code_chars": 18466,
+      "prose_chars": 6001,
+      "code_chars": 18845,
       "signals": [],
       "omission_lines": [],
       "repeated_term_candidates": []
@@ -143,10 +137,10 @@
       "module": "01-go-backend",
       "kind": "basics",
       "active": true,
-      "lines": 342,
+      "lines": 340,
       "code_blocks": 13,
-      "prose_chars": 2833,
-      "code_chars": 2389,
+      "prose_chars": 2987,
+      "code_chars": 2486,
       "signals": [],
       "omission_lines": [],
       "repeated_term_candidates": []
@@ -283,13 +277,11 @@
       "module": "01-go-backend",
       "kind": "deployment",
       "active": true,
-      "lines": 1041,
+      "lines": 1058,
       "code_blocks": 30,
-      "prose_chars": 2401,
-      "code_chars": 16906,
-      "signals": [
-        "缺少明确结果信号"
-      ],
+      "prose_chars": 3041,
+      "code_chars": 17207,
+      "signals": [],
       "omission_lines": [],
       "repeated_term_candidates": []
     },
@@ -299,13 +291,11 @@
       "module": "01-go-backend",
       "kind": "deployment",
       "active": true,
-      "lines": 1702,
+      "lines": 1713,
       "code_blocks": 15,
-      "prose_chars": 2334,
+      "prose_chars": 2913,
       "code_chars": 38804,
-      "signals": [
-        "缺少明确结果信号"
-      ],
+      "signals": [],
       "omission_lines": [],
       "repeated_term_candidates": []
     },
@@ -315,10 +305,10 @@
       "module": "01-go-backend",
       "kind": "frameworks",
       "active": true,
-      "lines": 314,
-      "code_blocks": 11,
-      "prose_chars": 3075,
-      "code_chars": 3418,
+      "lines": 381,
+      "code_blocks": 12,
+      "prose_chars": 3414,
+      "code_chars": 5030,
       "signals": [],
       "omission_lines": [],
       "repeated_term_candidates": []
@@ -343,13 +333,13 @@
       "module": "01-go-backend",
       "kind": "frameworks",
       "active": true,
-      "lines": 3390,
-      "code_blocks": 63,
-      "prose_chars": 6459,
-      "code_chars": 68382,
+      "lines": 3436,
+      "code_blocks": 64,
+      "prose_chars": 6896,
+      "code_chars": 69010,
       "signals": [],
       "omission_lines": [
-        222
+        268
       ],
       "repeated_term_candidates": []
     },
@@ -359,10 +349,10 @@
       "module": "01-go-backend",
       "kind": "frameworks",
       "active": true,
-      "lines": 147,
-      "code_blocks": 1,
-      "prose_chars": 2107,
-      "code_chars": 780,
+      "lines": 311,
+      "code_blocks": 7,
+      "prose_chars": 4557,
+      "code_chars": 3839,
       "signals": [],
       "omission_lines": [],
       "repeated_term_candidates": []
@@ -373,10 +363,10 @@
       "module": "01-go-backend",
       "kind": "frameworks",
       "active": true,
-      "lines": 148,
-      "code_blocks": 1,
-      "prose_chars": 1882,
-      "code_chars": 625,
+      "lines": 240,
+      "code_blocks": 5,
+      "prose_chars": 3804,
+      "code_chars": 2207,
       "signals": [],
       "omission_lines": [],
       "repeated_term_candidates": []
@@ -390,7 +380,7 @@
       "lines": 359,
       "code_blocks": 8,
       "prose_chars": 3315,
-      "code_chars": 5095,
+      "code_chars": 5138,
       "signals": [],
       "omission_lines": [],
       "repeated_term_candidates": []
@@ -415,21 +405,13 @@
       "module": "01-go-backend",
       "kind": "projects",
       "active": true,
-      "lines": 1577,
+      "lines": 1581,
       "code_blocks": 26,
-      "prose_chars": 3176,
+      "prose_chars": 3773,
       "code_chars": 36663,
-      "signals": [
-        "短条目重复术语，需核查是否缺少解释"
-      ],
+      "signals": [],
       "omission_lines": [],
-      "repeated_term_candidates": [
-        {
-          "line": 56,
-          "term": "ORM",
-          "text": "- **ORM**: GORM"
-        }
-      ]
+      "repeated_term_candidates": []
     },
     {
       "path": "01-go-backend/projects/02-microservices-demo.md",
@@ -1248,10 +1230,10 @@
       "module": "02-nextjs-frontend",
       "kind": "basics",
       "active": true,
-      "lines": 836,
+      "lines": 844,
       "code_blocks": 34,
-      "prose_chars": 5471,
-      "code_chars": 9278,
+      "prose_chars": 5635,
+      "code_chars": 9439,
       "signals": [],
       "omission_lines": [],
       "repeated_term_candidates": []
@@ -1318,10 +1300,10 @@
       "module": "02-nextjs-frontend",
       "kind": "basics",
       "active": true,
-      "lines": 1176,
+      "lines": 1186,
       "code_blocks": 16,
       "prose_chars": 4202,
-      "code_chars": 21862,
+      "code_chars": 22760,
       "signals": [],
       "omission_lines": [],
       "repeated_term_candidates": []
@@ -1477,13 +1459,9 @@
       "lines": 1932,
       "code_blocks": 33,
       "prose_chars": 6751,
-      "code_chars": 45837,
-      "signals": [
-        "教程代码含省略标记，需人工判断"
-      ],
-      "omission_lines": [
-        1729
-      ],
+      "code_chars": 45868,
+      "signals": [],
+      "omission_lines": [],
       "repeated_term_candidates": []
     },
     {
@@ -1492,10 +1470,10 @@
       "module": "02-nextjs-frontend",
       "kind": "projects",
       "active": true,
-      "lines": 2870,
-      "code_blocks": 25,
-      "prose_chars": 6629,
-      "code_chars": 59069,
+      "lines": 2897,
+      "code_blocks": 26,
+      "prose_chars": 7017,
+      "code_chars": 59593,
       "signals": [],
       "omission_lines": [],
       "repeated_term_candidates": []
@@ -1520,21 +1498,13 @@
       "module": "02-nextjs-frontend",
       "kind": "projects",
       "active": true,
-      "lines": 3811,
+      "lines": 3813,
       "code_blocks": 20,
-      "prose_chars": 7474,
+      "prose_chars": 8108,
       "code_chars": 86069,
-      "signals": [
-        "短条目重复术语，需核查是否缺少解释"
-      ],
+      "signals": [],
       "omission_lines": [],
-      "repeated_term_candidates": [
-        {
-          "line": 3725,
-          "term": "数据库",
-          "text": "- **数据库**: Supabase托管数据库"
-        }
-      ]
+      "repeated_term_candidates": []
     },
     {
       "path": "02-nextjs-frontend/reference/development-tools/01-testing-tools.md",
@@ -1598,10 +1568,10 @@
       "module": "02-nextjs-frontend",
       "kind": "reference",
       "active": true,
-      "lines": 1859,
+      "lines": 1863,
       "code_blocks": 9,
-      "prose_chars": 4533,
-      "code_chars": 44615,
+      "prose_chars": 4687,
+      "code_chars": 44715,
       "signals": [],
       "omission_lines": [],
       "repeated_term_candidates": []
@@ -1640,10 +1610,10 @@
       "module": "02-nextjs-frontend",
       "kind": "reference",
       "active": true,
-      "lines": 2153,
+      "lines": 2157,
       "code_blocks": 9,
-      "prose_chars": 4072,
-      "code_chars": 49340,
+      "prose_chars": 4202,
+      "code_chars": 49431,
       "signals": [],
       "omission_lines": [],
       "repeated_term_candidates": []
@@ -1724,9 +1694,9 @@
       "module": "02-nextjs-frontend",
       "kind": "reference",
       "active": true,
-      "lines": 101,
+      "lines": 103,
       "code_blocks": 3,
-      "prose_chars": 2158,
+      "prose_chars": 2313,
       "code_chars": 1344,
       "signals": [],
       "omission_lines": [],
@@ -2134,10 +2104,10 @@
       "module": "03-tanstack-stack",
       "kind": "basics",
       "active": true,
-      "lines": 220,
+      "lines": 224,
       "code_blocks": 7,
-      "prose_chars": 3479,
-      "code_chars": 1648,
+      "prose_chars": 3670,
+      "code_chars": 1752,
       "signals": [],
       "omission_lines": [],
       "repeated_term_candidates": []
@@ -2386,10 +2356,10 @@
       "module": "03-tanstack-stack",
       "kind": "projects",
       "active": true,
-      "lines": 271,
+      "lines": 286,
       "code_blocks": 7,
-      "prose_chars": 4496,
-      "code_chars": 4057,
+      "prose_chars": 4740,
+      "code_chars": 4388,
       "signals": [],
       "omission_lines": [],
       "repeated_term_candidates": []
@@ -3118,7 +3088,7 @@
       "active": true,
       "lines": 150,
       "code_blocks": 5,
-      "prose_chars": 3079,
+      "prose_chars": 3373,
       "code_chars": 1328,
       "signals": [],
       "omission_lines": [],
@@ -3130,13 +3100,11 @@
       "module": "04-multiplatform-apps",
       "kind": "deployment",
       "active": true,
-      "lines": 130,
+      "lines": 144,
       "code_blocks": 2,
-      "prose_chars": 3279,
+      "prose_chars": 4049,
       "code_chars": 174,
-      "signals": [
-        "缺少明确结果信号"
-      ],
+      "signals": [],
       "omission_lines": [],
       "repeated_term_candidates": []
     },
@@ -3148,7 +3116,7 @@
       "active": true,
       "lines": 159,
       "code_blocks": 6,
-      "prose_chars": 3298,
+      "prose_chars": 3354,
       "code_chars": 901,
       "signals": [],
       "omission_lines": [],
@@ -4638,11 +4606,9 @@
       "active": true,
       "lines": 136,
       "code_blocks": 1,
-      "prose_chars": 3237,
+      "prose_chars": 3870,
       "code_chars": 127,
-      "signals": [
-        "任意查阅与零前提混淆"
-      ],
+      "signals": [],
       "omission_lines": [],
       "repeated_term_candidates": []
     },
@@ -4652,13 +4618,11 @@
       "module": "06-swift-swiftui",
       "kind": "deployment",
       "active": true,
-      "lines": 181,
+      "lines": 192,
       "code_blocks": 5,
-      "prose_chars": 3156,
+      "prose_chars": 3807,
       "code_chars": 1924,
-      "signals": [
-        "缺少明确结果信号"
-      ],
+      "signals": [],
       "omission_lines": [],
       "repeated_term_candidates": []
     },
@@ -5200,13 +5164,11 @@
       "module": "06-swift-swiftui",
       "kind": "testing",
       "active": true,
-      "lines": 181,
-      "code_blocks": 4,
-      "prose_chars": 2420,
-      "code_chars": 2698,
-      "signals": [
-        "缺少明确结果信号"
-      ],
+      "lines": 191,
+      "code_blocks": 5,
+      "prose_chars": 2903,
+      "code_chars": 2760,
+      "signals": [],
       "omission_lines": [],
       "repeated_term_candidates": []
     },
@@ -5230,13 +5192,11 @@
       "module": "06-swift-swiftui",
       "kind": "testing",
       "active": true,
-      "lines": 220,
+      "lines": 221,
       "code_blocks": 4,
-      "prose_chars": 2331,
-      "code_chars": 3969,
-      "signals": [
-        "缺少明确结果信号"
-      ],
+      "prose_chars": 3125,
+      "code_chars": 3624,
+      "signals": [],
       "omission_lines": [],
       "repeated_term_candidates": []
     },
@@ -5447,13 +5407,9 @@
       "lines": 343,
       "code_blocks": 10,
       "prose_chars": 3030,
-      "code_chars": 3554,
-      "signals": [
-        "教程代码含省略标记，需人工判断"
-      ],
-      "omission_lines": [
-        89
-      ],
+      "code_chars": 3580,
+      "signals": [],
+      "omission_lines": [],
       "repeated_term_candidates": []
     },
     {
@@ -5462,16 +5418,12 @@
       "module": "07-php-mastery",
       "kind": "basics",
       "active": true,
-      "lines": 275,
+      "lines": 277,
       "code_blocks": 5,
       "prose_chars": 3243,
-      "code_chars": 3697,
-      "signals": [
-        "教程代码含省略标记，需人工判断"
-      ],
-      "omission_lines": [
-        147
-      ],
+      "code_chars": 3873,
+      "signals": [],
+      "omission_lines": [],
       "repeated_term_candidates": []
     },
     {
@@ -5622,16 +5574,12 @@
       "module": "07-php-mastery",
       "kind": "projects",
       "active": true,
-      "lines": 240,
+      "lines": 241,
       "code_blocks": 9,
       "prose_chars": 1751,
-      "code_chars": 4241,
-      "signals": [
-        "教程代码含省略标记，需人工判断"
-      ],
-      "omission_lines": [
-        184
-      ],
+      "code_chars": 4313,
+      "signals": [],
+      "omission_lines": [],
       "repeated_term_candidates": []
     },
     {
@@ -6300,13 +6248,11 @@
       "module": "08-java-revisited",
       "kind": "basics",
       "active": true,
-      "lines": 302,
+      "lines": 306,
       "code_blocks": 2,
-      "prose_chars": 3725,
+      "prose_chars": 3794,
       "code_chars": 8007,
-      "signals": [
-        "未显式说明阅读前提"
-      ],
+      "signals": [],
       "omission_lines": [],
       "repeated_term_candidates": []
     },
@@ -6330,13 +6276,11 @@
       "module": "08-java-revisited",
       "kind": "deployment",
       "active": true,
-      "lines": 180,
+      "lines": 190,
       "code_blocks": 4,
-      "prose_chars": 2718,
-      "code_chars": 1992,
-      "signals": [
-        "缺少明确结果信号"
-      ],
+      "prose_chars": 3521,
+      "code_chars": 2020,
+      "signals": [],
       "omission_lines": [],
       "repeated_term_candidates": []
     },
@@ -6418,14 +6362,10 @@
       "active": true,
       "lines": 267,
       "code_blocks": 4,
-      "prose_chars": 2947,
+      "prose_chars": 2944,
       "code_chars": 6705,
-      "signals": [
-        "教程代码含省略标记，需人工判断"
-      ],
-      "omission_lines": [
-        19
-      ],
+      "signals": [],
+      "omission_lines": [],
       "repeated_term_candidates": []
     },
     {
@@ -6716,13 +6656,11 @@
       "module": "08-java-revisited",
       "kind": "reference",
       "active": true,
-      "lines": 204,
+      "lines": 208,
       "code_blocks": 5,
-      "prose_chars": 6519,
+      "prose_chars": 6676,
       "code_chars": 3093,
-      "signals": [
-        "未显式说明阅读前提"
-      ],
+      "signals": [],
       "omission_lines": [],
       "repeated_term_candidates": []
     },
@@ -7169,7 +7107,7 @@
       "lines": 210,
       "code_blocks": 10,
       "prose_chars": 2726,
-      "code_chars": 3097,
+      "code_chars": 3101,
       "signals": [],
       "omission_lines": [],
       "repeated_term_candidates": []
@@ -7250,10 +7188,10 @@
       "module": "09-nodejs-backend",
       "kind": "projects",
       "active": true,
-      "lines": 214,
-      "code_blocks": 8,
-      "prose_chars": 2063,
-      "code_chars": 3969,
+      "lines": 228,
+      "code_blocks": 9,
+      "prose_chars": 2257,
+      "code_chars": 4136,
       "signals": [],
       "omission_lines": [],
       "repeated_term_candidates": []
@@ -7938,14 +7876,10 @@
       "active": true,
       "lines": 189,
       "code_blocks": 7,
-      "prose_chars": 2188,
+      "prose_chars": 2212,
       "code_chars": 2894,
-      "signals": [
-        "教程代码含省略标记，需人工判断"
-      ],
-      "omission_lines": [
-        45
-      ],
+      "signals": [],
+      "omission_lines": [],
       "repeated_term_candidates": []
     },
     {
@@ -8517,13 +8451,9 @@
       "lines": 326,
       "code_blocks": 5,
       "prose_chars": 5882,
-      "code_chars": 1697,
-      "signals": [
-        "教程代码含省略标记，需人工判断"
-      ],
-      "omission_lines": [
-        245
-      ],
+      "code_chars": 1700,
+      "signals": [],
+      "omission_lines": [],
       "repeated_term_candidates": []
     },
     {
@@ -8644,13 +8574,11 @@
       "module": "11-rust-cross-platform",
       "kind": "deployment",
       "active": true,
-      "lines": 354,
+      "lines": 363,
       "code_blocks": 7,
-      "prose_chars": 8652,
+      "prose_chars": 9235,
       "code_chars": 1298,
-      "signals": [
-        "缺少明确结果信号"
-      ],
+      "signals": [],
       "omission_lines": [],
       "repeated_term_candidates": []
     },
@@ -8660,13 +8588,11 @@
       "module": "11-rust-cross-platform",
       "kind": "deployment",
       "active": true,
-      "lines": 403,
+      "lines": 413,
       "code_blocks": 5,
-      "prose_chars": 6754,
-      "code_chars": 3585,
-      "signals": [
-        "缺少明确结果信号"
-      ],
+      "prose_chars": 7321,
+      "code_chars": 3586,
+      "signals": [],
       "omission_lines": [],
       "repeated_term_candidates": []
     },
@@ -8680,9 +8606,7 @@
       "code_blocks": 7,
       "prose_chars": 8114,
       "code_chars": 1782,
-      "signals": [
-        "缺少明确结果信号"
-      ],
+      "signals": [],
       "omission_lines": [],
       "repeated_term_candidates": []
     },
@@ -8696,9 +8620,7 @@
       "code_blocks": 7,
       "prose_chars": 7174,
       "code_chars": 3377,
-      "signals": [
-        "缺少明确结果信号"
-      ],
+      "signals": [],
       "omission_lines": [],
       "repeated_term_candidates": []
     },
@@ -8990,7 +8912,7 @@
       "active": true,
       "lines": 317,
       "code_blocks": 5,
-      "prose_chars": 7097,
+      "prose_chars": 7095,
       "code_chars": 2881,
       "signals": [],
       "omission_lines": [],
@@ -9116,7 +9038,7 @@
       "active": true,
       "lines": 402,
       "code_blocks": 8,
-      "prose_chars": 5964,
+      "prose_chars": 5996,
       "code_chars": 3715,
       "signals": [],
       "omission_lines": [],
@@ -9128,13 +9050,11 @@
       "module": "11-rust-cross-platform",
       "kind": "testing",
       "active": true,
-      "lines": 329,
+      "lines": 332,
       "code_blocks": 6,
-      "prose_chars": 5584,
-      "code_chars": 2157,
-      "signals": [
-        "缺少明确结果信号"
-      ],
+      "prose_chars": 5969,
+      "code_chars": 2188,
+      "signals": [],
       "omission_lines": [],
       "repeated_term_candidates": []
     },
@@ -9494,9 +9414,9 @@
       "module": "shared-resources",
       "kind": "support",
       "active": false,
-      "lines": 107,
+      "lines": 110,
       "code_blocks": 3,
-      "prose_chars": 3477,
+      "prose_chars": 3654,
       "code_chars": 920,
       "signals": [],
       "omission_lines": [],
@@ -9682,9 +9602,9 @@
       "module": "shared-resources",
       "kind": "support",
       "active": false,
-      "lines": 3157,
+      "lines": 7067,
       "code_blocks": 0,
-      "prose_chars": 411376,
+      "prose_chars": 681874,
       "code_chars": 0,
       "signals": [],
       "omission_lines": [],
@@ -9724,9 +9644,9 @@
       "module": "shared-resources",
       "kind": "support",
       "active": false,
-      "lines": 144,
+      "lines": 147,
       "code_blocks": 2,
-      "prose_chars": 10412,
+      "prose_chars": 10731,
       "code_chars": 241,
       "signals": [],
       "omission_lines": [],
