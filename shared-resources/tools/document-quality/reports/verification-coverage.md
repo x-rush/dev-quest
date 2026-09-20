@@ -9,12 +9,12 @@
 | 纳入模块文档 | 644 |
 | 主状态：not_verified | 440 |
 | 主状态：runtime | 204 |
-| 验证措辞出现次数 | 147 |
+| 验证措辞出现次数 | 149 |
 | 措辞分类：expected_example_output | 4 |
-| 措辞分类：explicit_not_runtime_claim | 9 |
+| 措辞分类：explicit_not_runtime_claim | 10 |
 | 措辞分类：instructional_acceptance_requirement | 19 |
 | 措辞分类：source_has_limited_runtime_evidence | 93 |
-| 措辞分类：unbound_verification_wording | 22 |
+| 措辞分类：unbound_verification_wording | 23 |
 
 ## 语法级覆盖（不能当作运行覆盖）
 
@@ -65,8 +65,8 @@
 | Go | [01-go-backend/frameworks/06-grpc-service-development.md](../../../../01-go-backend/frameworks/06-grpc-service-development.md) | `not_verified` | 0 | 0 |
 | Go | [01-go-backend/projects/00-stdlib-todo-cli.md](../../../../01-go-backend/projects/00-stdlib-todo-cli.md) | `runtime` | 1 | 1 |
 | Go | [01-go-backend/projects/01-rest-api-server.md](../../../../01-go-backend/projects/01-rest-api-server.md) | `not_verified` | 0 | 0 |
-| Go | [01-go-backend/projects/02-microservices-demo.md](../../../../01-go-backend/projects/02-microservices-demo.md) | `not_verified` | 0 | 0 |
-| Go | [01-go-backend/projects/03-real-time-app.md](../../../../01-go-backend/projects/03-real-time-app.md) | `not_verified` | 0 | 0 |
+| Go | [01-go-backend/projects/02-microservices-demo.md](../../../../01-go-backend/projects/02-microservices-demo.md) | `not_verified` | 0 | 1 |
+| Go | [01-go-backend/projects/03-real-time-app.md](../../../../01-go-backend/projects/03-real-time-app.md) | `not_verified` | 0 | 1 |
 | Go | [01-go-backend/projects/04-cli-tool.md](../../../../01-go-backend/projects/04-cli-tool.md) | `not_verified` | 0 | 1 |
 | Go | [01-go-backend/reference/framework-essentials/01-gin-framework.md](../../../../01-go-backend/reference/framework-essentials/01-gin-framework.md) | `not_verified` | 0 | 0 |
 | Go | [01-go-backend/reference/framework-essentials/02-gorm-orm.md](../../../../01-go-backend/reference/framework-essentials/02-gorm-orm.md) | `not_verified` | 0 | 0 |

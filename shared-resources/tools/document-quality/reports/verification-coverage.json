@@ -20,13 +20,13 @@
       "not_verified": 440,
       "runtime": 204
     },
-    "verification_wording_occurrences": 147,
+    "verification_wording_occurrences": 149,
     "marker_classification": {
       "expected_example_output": 4,
-      "explicit_not_runtime_claim": 9,
+      "explicit_not_runtime_claim": 10,
       "instructional_acceptance_requirement": 19,
       "source_has_limited_runtime_evidence": 93,
-      "unbound_verification_wording": 22
+      "unbound_verification_wording": 23
     }
   },
   "documents": [
@@ -468,7 +468,7 @@
     },
     {
       "path": "01-go-backend/projects/02-microservices-demo.md",
-      "sha256": "b20fd6a66585c946626badb69537296b1f8538dafca847aed4a49f033bce7efe",
+      "sha256": "92b2ff67aadb4824c6c9b66b8e3a28197396f3970ae5fc5f8d81eb6addc0eb9d",
       "verification": [
         {
           "mode": "not_verified",
@@ -477,11 +477,11 @@
           "scope": "No named runtime or syntax evidence is recorded for this document."
         }
       ],
-      "marker_count": 0
+      "marker_count": 1
     },
     {
       "path": "01-go-backend/projects/03-real-time-app.md",
-      "sha256": "c70907d023bf4ddf0add04c8cf298ec2c8d65c3e91181bbe9b08680c034d8611",
+      "sha256": "c0b18d662c22bc0e54d927bcef69b3fad2d479d9f274cd1b146e33039411424e",
       "verification": [
         {
           "mode": "not_verified",
@@ -490,11 +490,11 @@
           "scope": "No named runtime or syntax evidence is recorded for this document."
         }
       ],
-      "marker_count": 0
+      "marker_count": 1
     },
     {
       "path": "01-go-backend/projects/04-cli-tool.md",
-      "sha256": "1c95ab52a39bd9c99e206eb326f9092aca260076f7a48f9b13477dc09e2e7a02",
+      "sha256": "a0cc5c63b29421c934291bf0f247770788e9f0d869af30a0ab3e95df909c7b8a",
       "verification": [
         {
           "mode": "not_verified",
@@ -1152,7 +1152,7 @@
     },
     {
       "path": "01-go-backend/testing/05-test-driven-development.md",
-      "sha256": "19a3adc3009dac1a42b3a2b6f10cd673b1cf2e45fcb3a7eb9849e704a4ced249",
+      "sha256": "ea1ab26cf74a44c7618ea271c210faf7eabe7bb6acd0b09b8ce23cface10963d",
       "verification": [
         {
           "mode": "not_verified",
@@ -1949,7 +1949,7 @@
     },
     {
       "path": "02-nextjs-frontend/reference/performance-optimization/02-bundle-optimization.md",
-      "sha256": "65e38191226b5b57ef7903e757e50e6035c1e8fad85c8c56c2c464b521328d37",
+      "sha256": "b32c993cf79274227dcbf2884401acb9182e92353350ec69160004a10e50be34",
       "verification": [
         {
           "mode": "not_verified",
@@ -9197,8 +9197,20 @@
       "classification": "expected_example_output"
     },
     {
+      "path": "01-go-backend/projects/02-microservices-demo.md",
+      "line": 44,
+      "excerpt": "| 部署与编排 | 本地多进程或 Compose 演练 | 需要多副本、服务发现和滚动发布时再评估 Docker/Kubernetes | 目标平台的启动、回滚和资源限制必须单独实测 |",
+      "classification": "unbound_verification_wording"
+    },
+    {
+      "path": "01-go-backend/projects/03-real-time-app.md",
+      "line": 46,
+      "excerpt": "Socket.IO 不是 Gorilla WebSocket 的必备搭配；只有客户端协议确实要求 Socket.IO 时才选择其服务端实现。本文的 Redis、PostgreSQL、JWT、Docker 和 Nginx 片段是后续集成设计，不构成本页已运行的外部服务验证。",
+      "classification": "explicit_not_runtime_claim"
+    },
+    {
       "path": "01-go-backend/projects/04-cli-tool.md",
-      "line": 1422,
+      "line": 1428,
       "excerpt": "本项目的发布、包管理和 CI/CD 部分只提供学习契约与模板。它们需要仓库权限、签名密钥和目标平台环境，不能因文档中有工作流片段就标记为已交付或已验证。",
       "classification": "unbound_verification_wording"
     },
@@ -9246,31 +9258,31 @@
     },
     {
       "path": "01-go-backend/testing/05-test-driven-development.md",
-      "line": 112,
+      "line": 100,
       "excerpt": "PASS  # 成功时的预期示例输出；实际耗时随环境变化",
       "classification": "expected_example_output"
     },
     {
       "path": "01-go-backend/testing/05-test-driven-development.md",
-      "line": 141,
+      "line": 129,
       "excerpt": "PASS  # 成功时的预期示例输出；实际耗时随环境变化",
       "classification": "expected_example_output"
     },
     {
       "path": "01-go-backend/testing/05-test-driven-development.md",
-      "line": 797,
+      "line": 785,
       "excerpt": "2. **绿阶段只补当前规则**：写能让该测试通过的最小实现，再运行整个相关包的测试。此时不为了未来假设加入多余抽象，也不接受只硬编码当前输入而放过相邻边界。",
       "classification": "instructional_acceptance_requirement"
     },
     {
       "path": "01-go-backend/testing/05-test-driven-development.md",
-      "line": 804,
+      "line": 792,
       "excerpt": "- [ ] 用最小实现使测试通过，再增加一个相邻边界用例，确认实现不是只为第一个样例硬编码。",
       "classification": "instructional_acceptance_requirement"
     },
     {
       "path": "01-go-backend/testing/05-test-driven-development.md",
-      "line": 805,
+      "line": 793,
       "excerpt": "- [ ] 在全部相关测试通过后重命名或抽取一段重复逻辑，运行 `go test ./...`，确认重构没有改变外部行为。",
       "classification": "instructional_acceptance_requirement"
     },
