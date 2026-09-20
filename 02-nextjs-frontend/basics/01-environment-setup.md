@@ -1,4 +1,4 @@
-# Next.js 16 开发环境搭建完整指南
+# Next.js 16 开发环境搭建
 
 ## 先理解，再动手
 
@@ -13,7 +13,7 @@
 
 </details>
 
-> **文档简介**: Next.js 16 开发环境企业级搭建指南，涵盖Node.js安装、IDE配置、开发工具、版本控制、调试环境等现代化开发环境
+> **文档简介**: 从 Node、包管理器和脚手架开始，建立可运行、可检查、可复现的 Next.js 16 学习环境
 
 > **目标读者**: 初学者和需要环境升级的开发者，希望搭建标准化Next.js开发环境的前端工程师
 
@@ -40,7 +40,7 @@
 
 ## 🎯 学习目标
 
-- 搭建完整的Next.js 16开发环境
+- 搭建并验收一个 Next.js 16 开发环境
 - 安装和配置必要的开发工具
 - 理解现代前端开发工作流程
 - 配置TypeScript、ESLint和Prettier
@@ -49,7 +49,7 @@
 
 ## 📖 概述
 
-本综合指南将帮助您搭建Next.js 16开发环境，包含所有必要的工具和配置。现代前端开发与传统后端开发有很大不同，本指南将带您逐步完成每个设置步骤。
+本章的产物是一个有锁文件、明确 Node 版本、能独立运行 lint、类型检查和开发服务器的应用。编辑器扩展和镜像是可选辅助工具，不是项目能否构建的前提。
 
 ## 💻 系统要求
 
@@ -127,11 +127,11 @@ npm --version
 
 #### 推荐：pnpm
 ```bash
-# 让 Corepack 按项目声明的 pnpm 版本提供命令
+# 启用 Corepack；随后由项目 packageManager 字段或 lock 文件决定 pnpm 版本。
 corepack enable
-corepack prepare pnpm@11.0.0 --activate
+pnpm --version
 
-# 或者使用curl安装（替代方法）
+# 若当前 Node 发行版没有可用的 Corepack，再按 pnpm 官方安装页选择安装方式。
 curl -fsSL https://get.pnpm.io/install.sh | sh
 
 # 验证安装
@@ -189,7 +189,7 @@ code --install-extension ms-vscode.vscode-react-hooks
 
 #### 使用create-next-app
 ```bash
-# 创建新的Next.js项目
+# 创建新的 Next.js 项目。首次运行会交互询问选项；也可以按下一行显式传参。
 npx create-next-app@latest my-nextjs-app --typescript --tailwind --app --src-dir --import-alias "@/*"
 
 # 或者使用pnpm
@@ -198,7 +198,7 @@ pnpm create next-app my-nextjs-app --typescript --tailwind --app --src-dir --imp
 # 进入项目目录
 cd my-nextjs-app
 
-# 立即记录脚手架实际写入的版本；后续学习与排错都以它们为准。
+# 立即记录脚手架实际写入的版本；后续学习与排错都以它们和锁文件为准。
 npm ls next react react-dom typescript
 git init
 git add package.json package-lock.json
@@ -244,7 +244,10 @@ yarn dev
 
 ## ⚙️ 环境配置文件
 
-### 1. package.json
+### 1. package.json：先理解脚本，不要手抄依赖版本
+
+`create-next-app` 已经生成和它的模板相匹配的依赖、ESLint 配置与 lock 文件。下面只展示一个项目至少应理解的脚本形状；不要把这段片段覆盖到脚手架生成的 `package.json`，也不要混用来自不同教程的 Next、React、ESLint 版本。
+
 ```json
 {
   "name": "my-nextjs-app",
@@ -254,27 +257,15 @@ yarn dev
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint .",
+    "lint": "eslint",
     "type-check": "tsc --noEmit",
     "format": "prettier --write .",
     "format:check": "prettier --check ."
-  },
-  "dependencies": {
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0",
-    "next": "16.3.0"
-  },
-  "devDependencies": {
-    "typescript": "^5.5.0",
-    "tailwindcss": "^4",
-    "@tailwindcss/postcss": "^4",
-    "postcss": "^8.4.0",
-    "eslint": "^8.0.0",
-    "eslint-config-next": "16.3.0",
-    "prettier": "^3.0.0"
   }
 }
 ```
+
+Next 16 的 `next build` 不再自动运行 lint，所以把 `npm run lint` 作为独立门槛。`npm run type-check` 也可先于构建执行，便于把类型问题与打包问题分开定位。官方的 [安装说明](https://nextjs.org/docs/app/getting-started/installation) 给出当前脚手架选项和最低 Node 要求。
 
 ### 2. tsconfig.json
 ```json
@@ -313,25 +304,11 @@ yarn dev
 ```javascript
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Turbopack 在 Next.js 16 中是默认打包器，无需任何配置开关
+  // 只在项目确实需要 next/image 远程来源限制时保留此项。
   images: {
-    // Next.js 16：images.domains 已弃用，远程域名改用 remotePatterns
+    // Next.js 16：使用 remotePatterns 描述允许的远程图片来源。
     remotePatterns: [{ protocol: 'https', hostname: 'example.com' }],
-    formats: ['image/webp', 'image/avif'], // 现代图片格式
   },
-  typescript: {
-    ignoreBuildErrors: false, // 生产环境严格类型检查
-  },
-  eslint: {
-    ignoreDuringBuilds: false, // 生产环境严格ESLint检查
-  },
-  // 开发环境启用source maps
-  ...(process.env.NODE_ENV === 'development' && {
-    webpack: (config) => {
-      config.devtool = 'eval-cheap-module-source-map'
-      return config
-    },
-  }),
 }
 
 module.exports = nextConfig
@@ -359,31 +336,18 @@ NEXT_PUBLIC_ENABLE_DEBUG=true
 ## 🛠️ 开发工具配置
 
 ### 1. ESLint配置
-创建`.eslintrc.json`:
-```json
-{
-  "extends": [
-    "next/core-web-vitals",
-    "next/typescript"
-  ],
-  "rules": {
-    "@typescript-eslint/no-unused-vars": ["error", { "argsIgnorePattern": "^_" }],
-    "@typescript-eslint/no-explicit-any": "warn",
-    "@typescript-eslint/prefer-const": "error",
-    "prefer-const": "error",
-    "no-var": "error",
-    "no-console": "warn"
-  },
-  "overrides": [
-    {
-      "files": ["*.js"],
-      "rules": {
-        "@typescript-eslint/no-unused-vars": "off"
-      }
-    }
-  ]
-}
+
+Next 16 已移除 `next lint` 和 `next.config.*` 的 `eslint` 选项。新项目优先保留脚手架生成的 `eslint.config.mjs`；若从零创建一个平坦配置，可以使用：
+
+```javascript
+// eslint.config.mjs
+import nextVitals from 'eslint-config-next/core-web-vitals'
+import nextTypeScript from 'eslint-config-next/typescript'
+
+export default [...nextVitals, ...nextTypeScript]
 ```
+
+再运行 `npm run lint`。项目已有 ESLint 配置时，不要直接覆盖它；应先合并规则并运行 lint，确认没有把现有忽略文件或自定义规则删掉。配置迁移细节见 [Next.js ESLint 文档](https://nextjs.org/docs/app/api-reference/config/eslint)。
 
 ### 2. Prettier配置
 创建`.prettierrc`:
@@ -618,7 +582,7 @@ my-nextjs-app/
 ├── public/
 ├── .next/
 ├── .gitignore
-├── .eslintrc.json
+├── eslint.config.mjs
 ├── .prettierrc
 ├── next.config.js
 ├── tsconfig.json
@@ -635,8 +599,8 @@ my-nextjs-app/
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint .",
-    "lint:fix": "eslint . --fix",
+    "lint": "eslint",
+    "lint:fix": "eslint --fix",
     "type-check": "tsc --noEmit",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
@@ -649,17 +613,11 @@ my-nextjs-app/
 ### 2. 环境特定配置
 ```javascript
 // next.config.js
-const isDevelopment = process.env.NODE_ENV === 'development'
 const isProduction = process.env.NODE_ENV === 'production'
 
 const nextConfig = {
-  // Turbopack 在 Next.js 16 中是默认打包器，无需按环境开关
-  ...(isDevelopment && {
-    webpack: (config) => {
-      config.devtool = 'eval-cheap-module-source-map'
-      return config
-    },
-  }),
+  // Next 16 默认使用 Turbopack。只有项目必须依赖 webpack 插件或回调时，
+  // 才配置 webpack，并把对应脚本明确写成 next dev --webpack / next build --webpack。
   ...(isProduction && {
     compiler: {
       removeConsole: true,
@@ -677,9 +635,9 @@ module.exports = nextConfig
 # 检查当前Node.js版本
 node --version
 
-# 使用nvm管理版本
+# 使用 nvm 管理版本；这里应使用项目要求的主版本。
 nvm list
-nvm use 20
+nvm use 24
 
 # 清除npm缓存
 npm cache clean --force
