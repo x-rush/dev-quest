@@ -1,0 +1,16 @@
+{
+  "runtime": "Docker golang:1.27",
+  "dependencies": [
+    "gorm.io/gorm v1.31.2",
+    "gorm.io/driver/sqlite v1.6.0"
+  ],
+  "scope": "The named source blocks are extracted verbatim into a temporary SQLite in-memory module. It verifies migration, create/read, ErrRecordNotFound and rollback after a returned transaction error; it does not verify other database dialects, connection pools, concurrent clients, deployment or production migrations.",
+  "results": [
+    {
+      "document": "01-go-backend/frameworks/03-gorm-orm-complete.md",
+      "status": "PASS",
+      "main_sha256": "2a97cbc848bb877ef39ce13fd92561c37f2706a9bb2eb530af884d5fe993a38a",
+      "test_sha256": "a3e12b280ea889bdd936bb48380eb5cf6887cf0aef37e3e6315743fc138fb57b"
+    }
+  ]
+}

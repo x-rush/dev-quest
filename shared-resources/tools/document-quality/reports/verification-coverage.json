@@ -17,8 +17,8 @@
   "summary": {
     "documents": 644,
     "by_primary_state": {
-      "not_verified": 448,
-      "runtime": 196
+      "not_verified": 447,
+      "runtime": 197
     },
     "verification_wording_occurrences": 150,
     "marker_classification": {
@@ -387,13 +387,13 @@
     },
     {
       "path": "01-go-backend/frameworks/03-gorm-orm-complete.md",
-      "sha256": "7e25f1d486a302a44a16022c3eee13dcabf947440c98ee62fe8b91c3a61ae998",
+      "sha256": "1770282cdd89b6c868b39bda31b9f6e0a141c1b9a596ae02aceb4c3dcec41b4f",
       "verification": [
         {
-          "mode": "not_verified",
-          "status": "NOT_VERIFIED",
-          "report": null,
-          "scope": "No named runtime or syntax evidence is recorded for this document."
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "gorm-basics-validation.json",
+          "scope": "The named source blocks are extracted verbatim into a temporary SQLite in-memory module. It verifies migration, create/read, ErrRecordNotFound and rollback after a returned transaction error; it does not verify other database dialects, connection pools, concurrent clients, deployment or production migrations."
         }
       ],
       "marker_count": 0

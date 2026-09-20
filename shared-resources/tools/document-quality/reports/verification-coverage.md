@@ -7,8 +7,8 @@
 | 指标 | 数量 |
 |---|---:|
 | 纳入模块文档 | 644 |
-| 主状态：not_verified | 448 |
-| 主状态：runtime | 196 |
+| 主状态：not_verified | 447 |
+| 主状态：runtime | 197 |
 | 验证措辞出现次数 | 150 |
 | 措辞分类：source_has_limited_runtime_evidence | 94 |
 | 措辞分类：unbound_verification_wording | 56 |
@@ -56,7 +56,7 @@
 | Go | [01-go-backend/deployment/04-observability.md](../../../../01-go-backend/deployment/04-observability.md) | `not_verified` | 0 | 0 |
 | Go | [01-go-backend/frameworks/01-gin-framework-basics.md](../../../../01-go-backend/frameworks/01-gin-framework-basics.md) | `runtime` | 1 | 1 |
 | Go | [01-go-backend/frameworks/02-gin-framework-advanced.md](../../../../01-go-backend/frameworks/02-gin-framework-advanced.md) | `not_verified` | 0 | 0 |
-| Go | [01-go-backend/frameworks/03-gorm-orm-complete.md](../../../../01-go-backend/frameworks/03-gorm-orm-complete.md) | `not_verified` | 0 | 0 |
+| Go | [01-go-backend/frameworks/03-gorm-orm-complete.md](../../../../01-go-backend/frameworks/03-gorm-orm-complete.md) | `runtime` | 1 | 0 |
 | Go | [01-go-backend/frameworks/04-mongodb-go-driver.md](../../../../01-go-backend/frameworks/04-mongodb-go-driver.md) | `not_verified` | 0 | 0 |
 | Go | [01-go-backend/frameworks/05-go-redis-complete.md](../../../../01-go-backend/frameworks/05-go-redis-complete.md) | `not_verified` | 0 | 0 |
 | Go | [01-go-backend/frameworks/06-grpc-service-development.md](../../../../01-go-backend/frameworks/06-grpc-service-development.md) | `not_verified` | 0 | 0 |

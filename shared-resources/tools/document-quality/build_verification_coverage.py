@@ -68,6 +68,9 @@ def records_from_reports():
     gin_basics = load("gin-basics-validation.json")
     for row in gin_basics.get("results", []):
         add_record(records, row.get("document"), "runtime", "gin-basics-validation.json", gin_basics.get("scope", "selected Gin router and binding example"), "PASS" if row.get("status", "").upper() == "PASS" else "FAIL")
+    gorm_basics = load("gorm-basics-validation.json")
+    for row in gorm_basics.get("results", []):
+        add_record(records, row.get("document"), "runtime", "gorm-basics-validation.json", gorm_basics.get("scope", "selected GORM SQLite transaction example"), "PASS" if row.get("status", "").upper() == "PASS" else "FAIL")
     mobile = load("mobile-foundations.json")
     for row in mobile.get("results", []):
         add_record(records, row.get("source"), "runtime", "mobile-foundations.json", mobile.get("scope", "selected portable mobile-language check"), "PASS" if row.get("status") == "PASS" else "FAIL")

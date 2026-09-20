@@ -61,6 +61,7 @@
 | [PHP、Java 与 Rust 第二十二批运行验证](reports/php-java-rust-twentytwo-runtime.md) | PHP 重复 Attribute、Java 21 sealed/record pattern 与 Rust 枚举穷尽匹配的 3 个正文完整程序验证 |
 | [Go 核心基础页第二十五批运行验证](reports/go-core-twentyfive-runtime.md) | 第一个程序、值/指针接收者和错误包装链的 3 个正文完整程序验证 |
 | [Gin 入门最小工程验证](reports/gin-basics-validation.md) | Gin 1.12 的具名 router、JSON 绑定和错误状态测试；不覆盖部署或外部服务 |
+| [GORM 入门最小工程验证](reports/gorm-basics-validation.md) | GORM 1.31/SQLite 的迁移、读写、零记录与事务回滚测试；不覆盖其他数据库方言 |
 | [Next、TanStack 与移动端第十一批报告](reports/next-tanstack-mobile-eleventh-body-validation.json) | Next/TanStack 的 2 个纯逻辑运行结果，以及 RN/Kotlin/Swift 的明确未验证边界 |
 | [PHP 与 Java 参考案例验证](reports/php-java-reference-cases-report.md) | PHP/Java 关键词、内置函数和标准库的 17 个正文完整程序验证 |
 | [Rust、PHP 与 Java 第八批正文验证](reports/rust-php-java-eighth-body-validation.md) | 三个此前未验证核心页面的 Rust 所有权、PHP 控制流与 Java 函数式接口案例 |

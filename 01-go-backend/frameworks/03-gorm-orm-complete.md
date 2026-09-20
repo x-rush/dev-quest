@@ -89,59 +89,105 @@ GORM 是 Go 的对象关系映射库：用结构体表达模型，用查询 API 
 
 ## 🚀 快速开始
 
-### 安装GORM
+### 可复现的最小工程
+
+本节的第一个练习不依赖 MySQL、PostgreSQL 或云数据库。用临时 SQLite 数据库先验证 GORM 的四个基本边界：迁移创建表、创建后取得主键、查无记录与连接/SQL 错误不同、事务返回错误会回滚先前写入。官方 GORM 当前发布 `v1.31.2`；SQLite 官方驱动在其测试模块使用 `v1.6.0`。创建空目录后执行：
+
 ```bash
-go get -u gorm.io/gorm
-go get -u gorm.io/driver/mysql    # MySQL驱动
-go get -u gorm.io/driver/postgres # PostgreSQL驱动
-go get -u gorm.io/driver/sqlite   # SQLite驱动
-go get -u gorm.io/driver/sqlserver # SQL Server驱动
+mkdir gorm-basics && cd gorm-basics
+go mod init example/gorm-basics
+go get gorm.io/gorm@v1.31.2 gorm.io/driver/sqlite@v1.6.0
 ```
 
-### 基础示例
-```go
+把下列围栏分别保存为 `main.go` 和 `main_test.go`，运行 `go test ./...`。`sqlite.Open(":memory:")` 只存在于当前进程，适合这一组数据库无关的语义练习；它不等价于多连接生产数据库。
+
+```go verify:gorm-basics-main
 package main
 
 import (
-    "gorm.io/gorm"
-    "gorm.io/driver/mysql"
-    "log"
-    "time"
+	"errors"
+
+	"gorm.io/driver/sqlite"
+	"gorm.io/gorm"
 )
 
-// 定义模型
 type User struct {
-    ID        uint           `gorm:"primaryKey"`
-    CreatedAt time.Time      `gorm:"autoCreateTime"`
-    UpdatedAt time.Time      `gorm:"autoUpdateTime"`
-    DeletedAt gorm.DeletedAt `gorm:"index"`
-    Name      string         `gorm:"size:100;not null"`
-    Email     string         `gorm:"uniqueIndex;size:255"`
-    Age       int
-    Active    bool           `gorm:"default:true"`
+	ID    uint
+	Email string `gorm:"uniqueIndex;not null"`
+	Name  string `gorm:"not null"`
 }
 
-func main() {
-    // 数据库连接
-    dsn := "user:password@tcp(127.0.0.1:3306)/dbname?charset=utf8mb4&parseTime=True&loc=Local"
-    db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
-    if err != nil {
-        log.Fatal("连接数据库失败:", err)
-    }
+func openTestDB() (*gorm.DB, error) {
+	db, err := gorm.Open(sqlite.Open(":memory:"), &gorm.Config{})
+	if err != nil {
+		return nil, err
+	}
+	if err := db.AutoMigrate(&User{}); err != nil {
+		return nil, err
+	}
+	return db, nil
+}
 
-    // 自动迁移
-    db.AutoMigrate(&User{})
-
-    // 创建用户
-    user := User{Name: "张三", Email: "zhangsan@example.com", Age: 25}
-    result := db.Create(&user)
-    if result.Error != nil {
-        log.Fatal("创建用户失败:", result.Error)
-    }
-
-    log.Printf("用户创建成功，ID: %d", user.ID)
+func createThenFail(db *gorm.DB) error {
+	return db.Transaction(func(tx *gorm.DB) error {
+		if err := tx.Create(&User{Email: "rolled-back@example.com", Name: "temporary"}).Error; err != nil {
+			return err
+		}
+		return errors.New("second step failed")
+	})
 }
 ```
+
+```go verify:gorm-basics-test
+package main
+
+import (
+	"errors"
+	"testing"
+
+	"gorm.io/gorm"
+)
+
+func TestCreateFindAndTransactionRollback(t *testing.T) {
+	db, err := openTestDB()
+	if err != nil {
+		t.Fatal(err)
+	}
+	created := User{Email: "ada@example.com", Name: "Ada"}
+	if err := db.Create(&created).Error; err != nil {
+		t.Fatal(err)
+	}
+	if created.ID == 0 {
+		t.Fatal("Create did not populate the primary key")
+	}
+
+	var found User
+	if err := db.First(&found, created.ID).Error; err != nil {
+		t.Fatal(err)
+	}
+	if found.Email != created.Email {
+		t.Fatalf("got %q, want %q", found.Email, created.Email)
+	}
+
+	err = db.First(&User{}, "email = ?", "missing@example.com").Error
+	if !errors.Is(err, gorm.ErrRecordNotFound) {
+		t.Fatalf("missing row: got %v, want ErrRecordNotFound", err)
+	}
+
+	if err := createThenFail(db); err == nil {
+		t.Fatal("transaction unexpectedly succeeded")
+	}
+	var count int64
+	if err := db.Model(&User{}).Where("email = ?", "rolled-back@example.com").Count(&count).Error; err != nil {
+		t.Fatal(err)
+	}
+	if count != 0 {
+		t.Fatalf("rollback left %d row(s)", count)
+	}
+}
+```
+
+MySQL、PostgreSQL、SQL Server 等驱动应只在项目实际采用对应数据库时加入，并将版本写入 `go.mod`/`go.sum`。每种数据库在 `decimal`、JSON、锁、索引、迁移 DDL 和隔离级别上都可能不同；不能用这个 SQLite 练习证明它们兼容。
 
 ---
 
