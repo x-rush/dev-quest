@@ -30,11 +30,14 @@ MARKER = re.compile(r"实测|已验证|验证通过|运行通过|测试通过|�
 # run. Keep those honest boundary statements visible without mislabelling them
 # as unsupported positive claims.
 EXPLICITLY_NOT_RUN = re.compile(r"未实测|不实测|未运行|不构成.*(?:运行|验证)|不能(?:据此|记为|当作).*(?:运行|验证)|待执行验收|尚无.*(?:运行|验证).*证据")
+EXPECTED_OUTPUT = re.compile(r"(?:预期|示例).*(?:输出|结果)|(?:输出|结果).*?(?:预期|示例)")
 
 
 def classify_marker(line, evidence):
     if EXPLICITLY_NOT_RUN.search(line):
         return "explicit_not_runtime_claim"
+    if EXPECTED_OUTPUT.search(line):
+        return "expected_example_output"
     return "source_has_limited_runtime_evidence" if evidence else "unbound_verification_wording"
 
 
@@ -306,7 +309,7 @@ def main():
         ],
         "known_limits": [
             "final-web-examples.json source inventory does not establish per-document runtime evidence; its unbound cases are retained under corpus_checks.",
-            "No evidence record means not verified; it is not a correctness finding. Explicit statements that a case was not run are classified separately from unsupported positive claims.",
+            "No evidence record means not verified; it is not a correctness finding. Explicit non-run boundaries and expected sample output are classified separately from unsupported positive claims.",
             "Syntax-only TS/JS coverage is recorded at corpus level in tsjs-validation-2026-09-19.md and is not promoted to per-document runtime evidence.",
             "Framework builds, devices, external services, deployments, and historical snippets outside named cases remain outside this ledger.",
         ],

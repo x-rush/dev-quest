@@ -84,7 +84,7 @@ interface ObjectStorage {
 - **状态管理**: Zustand + React Query
 - **UI组件库**: Radix UI + Tailwind CSS
 - **数据库**: PostgreSQL + Prisma ORM
-- **支付边界**: `PaymentGateway` + 已验证事件处理；提供方 SDK 是可替换适配器
+- **支付边界**: `PaymentGateway` + 经签名校验的事件处理；提供方 SDK 是可替换适配器
 - **认证**: NextAuth.js v5
 - **文件存储边界**: `ObjectStorage` 接口 + 预签名 URL 契约
 - **交付边界**: 本地构建、测试和环境变量契约；云部署由独立部署文档处理

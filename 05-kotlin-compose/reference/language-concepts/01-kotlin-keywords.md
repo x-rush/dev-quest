@@ -393,7 +393,7 @@ when (v) {
 ## 21. as / as? - 类型转换
 
 ### 定义
-`as` 不安全转换，失败抛异常（类型不符实测抛 `ClassCastException`）；`as?` 安全转换，失败返回 null。
+`as` 是不安全转换：运行时类型不符会抛出 `ClassCastException`；`as?` 是安全转换：失败返回 `null`。
 
 ### 语法和示例
 ```kotlin
@@ -537,7 +537,7 @@ fun fetch(id: TaskId) { /* 参数层即文档：Double 传不进来 */ }
 ```
 
 ### 陷阱
-- 只能有一个主构造属性；**不能声明为局部类或内部类**（实测编译错误：value class cannot be local or inner）
+- 只能有一个主构造属性；**不能声明为局部类或内部类**（编译器会拒绝此声明）
 - 实现为接口/被当 `Any?` 使用等场景会触发实际装箱，`===` 身份语义随之改变——语义敏感处以官方内联规则为准
 
 ## 29. inner - 内部类
@@ -655,7 +655,7 @@ val u = User("Ada", 30)
 ### 语法和示例
 ```kotlin
 class Thermostat {
-    var temperature = 50                   // 初始化直写幕后字段——不走 setter（实测：读到 50 而非 40）
+    var temperature = 50                   // 初始化直写幕后字段，不调用 setter；首次读取为 50
         set(value) { field = value.coerceAtMost(40) }
 }
 // 之后 thermostat.temperature = 99 → 读到 40

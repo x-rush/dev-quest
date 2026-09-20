@@ -9,10 +9,11 @@
 | 纳入模块文档 | 644 |
 | 主状态：not_verified | 441 |
 | 主状态：runtime | 203 |
-| 验证措辞出现次数 | 151 |
+| 验证措辞出现次数 | 146 |
+| 措辞分类：expected_example_output | 4 |
 | 措辞分类：explicit_not_runtime_claim | 9 |
-| 措辞分类：source_has_limited_runtime_evidence | 96 |
-| 措辞分类：unbound_verification_wording | 46 |
+| 措辞分类：source_has_limited_runtime_evidence | 95 |
+| 措辞分类：unbound_verification_wording | 38 |
 
 ## 语法级覆盖（不能当作运行覆盖）
 
@@ -137,9 +138,9 @@
 | Next.js / TypeScript | [02-nextjs-frontend/frameworks/03-full-stack-patterns.md](../../../../02-nextjs-frontend/frameworks/03-full-stack-patterns.md) | `not_verified` | 0 | 0 |
 | Next.js / TypeScript | [02-nextjs-frontend/frameworks/04-performance-optimization.md](../../../../02-nextjs-frontend/frameworks/04-performance-optimization.md) | `not_verified` | 0 | 0 |
 | Next.js / TypeScript | [02-nextjs-frontend/projects/01-corporate-landing.md](../../../../02-nextjs-frontend/projects/01-corporate-landing.md) | `not_verified` | 0 | 0 |
-| Next.js / TypeScript | [02-nextjs-frontend/projects/02-ecommerce-store.md](../../../../02-nextjs-frontend/projects/02-ecommerce-store.md) | `not_verified` | 0 | 1 |
+| Next.js / TypeScript | [02-nextjs-frontend/projects/02-ecommerce-store.md](../../../../02-nextjs-frontend/projects/02-ecommerce-store.md) | `not_verified` | 0 | 0 |
 | Next.js / TypeScript | [02-nextjs-frontend/projects/03-dashboard-analytics.md](../../../../02-nextjs-frontend/projects/03-dashboard-analytics.md) | `not_verified` | 0 | 0 |
-| Next.js / TypeScript | [02-nextjs-frontend/projects/04-saas-platform.md](../../../../02-nextjs-frontend/projects/04-saas-platform.md) | `not_verified` | 0 | 1 |
+| Next.js / TypeScript | [02-nextjs-frontend/projects/04-saas-platform.md](../../../../02-nextjs-frontend/projects/04-saas-platform.md) | `not_verified` | 0 | 0 |
 | Next.js / TypeScript | [02-nextjs-frontend/reference/development-tools/01-testing-tools.md](../../../../02-nextjs-frontend/reference/development-tools/01-testing-tools.md) | `not_verified` | 0 | 0 |
 | Next.js / TypeScript | [02-nextjs-frontend/reference/development-tools/02-styling-tools.md](../../../../02-nextjs-frontend/reference/development-tools/02-styling-tools.md) | `not_verified` | 0 | 0 |
 | Next.js / TypeScript | [02-nextjs-frontend/reference/development-tools/03-package-managers.md](../../../../02-nextjs-frontend/reference/development-tools/03-package-managers.md) | `not_verified` | 0 | 0 |
@@ -325,7 +326,7 @@
 | Kotlin / Compose | [05-kotlin-compose/reference/framework-essentials/08-composition-model.md](../../../../05-kotlin-compose/reference/framework-essentials/08-composition-model.md) | `not_verified` | 0 | 1 |
 | Kotlin / Compose | [05-kotlin-compose/reference/framework-essentials/09-gestures.md](../../../../05-kotlin-compose/reference/framework-essentials/09-gestures.md) | `not_verified` | 0 | 1 |
 | Kotlin / Compose | [05-kotlin-compose/reference/framework-essentials/10-canvas-drawing.md](../../../../05-kotlin-compose/reference/framework-essentials/10-canvas-drawing.md) | `not_verified` | 0 | 1 |
-| Kotlin / Compose | [05-kotlin-compose/reference/language-concepts/01-kotlin-keywords.md](../../../../05-kotlin-compose/reference/language-concepts/01-kotlin-keywords.md) | `not_verified` | 0 | 3 |
+| Kotlin / Compose | [05-kotlin-compose/reference/language-concepts/01-kotlin-keywords.md](../../../../05-kotlin-compose/reference/language-concepts/01-kotlin-keywords.md) | `not_verified` | 0 | 0 |
 | Kotlin / Compose | [05-kotlin-compose/reference/language-concepts/02-null-safety-collections.md](../../../../05-kotlin-compose/reference/language-concepts/02-null-safety-collections.md) | `runtime` | 1 | 0 |
 | Kotlin / Compose | [05-kotlin-compose/reference/language-concepts/03-coroutines-flow-api.md](../../../../05-kotlin-compose/reference/language-concepts/03-coroutines-flow-api.md) | `not_verified` | 0 | 0 |
 | Kotlin / Compose | [05-kotlin-compose/reference/language-concepts/04-compose-state-api.md](../../../../05-kotlin-compose/reference/language-concepts/04-compose-state-api.md) | `not_verified` | 0 | 0 |

@@ -20,11 +20,12 @@
       "not_verified": 441,
       "runtime": 203
     },
-    "verification_wording_occurrences": 151,
+    "verification_wording_occurrences": 146,
     "marker_classification": {
+      "expected_example_output": 4,
       "explicit_not_runtime_claim": 9,
-      "source_has_limited_runtime_evidence": 96,
-      "unbound_verification_wording": 46
+      "source_has_limited_runtime_evidence": 95,
+      "unbound_verification_wording": 38
     }
   },
   "documents": [
@@ -1150,7 +1151,7 @@
     },
     {
       "path": "01-go-backend/testing/05-test-driven-development.md",
-      "sha256": "2cc972071703ab09322966a4f78d9e3e9f3fcd0c237eead38c5152c25ebbe8cc",
+      "sha256": "19a3adc3009dac1a42b3a2b6f10cd673b1cf2e45fcb3a7eb9849e704a4ced249",
       "verification": [
         {
           "mode": "not_verified",
@@ -1488,7 +1489,7 @@
     },
     {
       "path": "02-nextjs-frontend/projects/02-ecommerce-store.md",
-      "sha256": "68224160fc909f31e0a9f7a8d4521cd5af5f2587aeef65408e77bc245784cf45",
+      "sha256": "20d1b4dcb451d6e6283dbc9e77078550514a4cfa290e72e01d3f8ac398ed604a",
       "verification": [
         {
           "mode": "not_verified",
@@ -1497,7 +1498,7 @@
           "scope": "No named runtime or syntax evidence is recorded for this document."
         }
       ],
-      "marker_count": 1
+      "marker_count": 0
     },
     {
       "path": "02-nextjs-frontend/projects/03-dashboard-analytics.md",
@@ -1514,7 +1515,7 @@
     },
     {
       "path": "02-nextjs-frontend/projects/04-saas-platform.md",
-      "sha256": "bd7f1f053a67bcc0626ae32259c5aadb8a65457a4f3cbc4dfbd15504da66f744",
+      "sha256": "02a502724cb5bcd3245701e098ec1be1156b379f77e122eb653fb836cb180c7e",
       "verification": [
         {
           "mode": "not_verified",
@@ -1523,7 +1524,7 @@
           "scope": "No named runtime or syntax evidence is recorded for this document."
         }
       ],
-      "marker_count": 1
+      "marker_count": 0
     },
     {
       "path": "02-nextjs-frontend/reference/development-tools/01-testing-tools.md",
@@ -3980,7 +3981,7 @@
     },
     {
       "path": "05-kotlin-compose/reference/language-concepts/01-kotlin-keywords.md",
-      "sha256": "bc90befa29e08e9ac9f34dd4c8b99552d22126bd8e6744cad44fb558c59f53fd",
+      "sha256": "c47bf12705c6e210ff2332d3bc790f15908f7e2ea9feb626848ab67320f05165",
       "verification": [
         {
           "mode": "not_verified",
@@ -3989,7 +3990,7 @@
           "scope": "No named runtime or syntax evidence is recorded for this document."
         }
       ],
-      "marker_count": 3
+      "marker_count": 0
     },
     {
       "path": "05-kotlin-compose/reference/language-concepts/02-null-safety-collections.md",
@@ -9192,7 +9193,7 @@
       "path": "01-go-backend/projects/00-stdlib-todo-cli.md",
       "line": 28,
       "excerpt": "预期：测试通过；第一个 `add` 输出 `已添加 #1: 买牛奶`；空标题输出错误并以非零状态退出。因为每次 `go run` 都启动新进程，想观察列表、删除和错误路径，请运行后文的 `demo` 命令。",
-      "classification": "source_has_limited_runtime_evidence"
+      "classification": "expected_example_output"
     },
     {
       "path": "01-go-backend/reference/language-concepts/12-channel-semantics.md",
@@ -9239,14 +9240,14 @@
     {
       "path": "01-go-backend/testing/05-test-driven-development.md",
       "line": 112,
-      "excerpt": "PASS  # 预期的示例输出",
-      "classification": "unbound_verification_wording"
+      "excerpt": "PASS  # 成功时的预期示例输出；实际耗时随环境变化",
+      "classification": "expected_example_output"
     },
     {
       "path": "01-go-backend/testing/05-test-driven-development.md",
       "line": 141,
-      "excerpt": "PASS  # 预期的示例输出",
-      "classification": "unbound_verification_wording"
+      "excerpt": "PASS  # 成功时的预期示例输出；实际耗时随环境变化",
+      "classification": "expected_example_output"
     },
     {
       "path": "01-go-backend/testing/05-test-driven-development.md",
@@ -9277,18 +9278,6 @@
       "line": 1212,
       "excerpt": "完成本章的功能和验收项后，你会得到一条可运行、可继续扩展的内容管理项目基线。它不自动包含邮件验证、支付、多租户、实时协作或生产运维；每一项扩展都需要单独定义数据边界、失败处理和验收场景。带着这里的路由、数据校验和权限分层继续完成下一项需求，并在提交前复现对应验收步骤。",
       "classification": "source_has_limited_runtime_evidence"
-    },
-    {
-      "path": "02-nextjs-frontend/projects/02-ecommerce-store.md",
-      "line": 87,
-      "excerpt": "- **支付边界**: `PaymentGateway` + 已验证事件处理；提供方 SDK 是可替换适配器",
-      "classification": "unbound_verification_wording"
-    },
-    {
-      "path": "02-nextjs-frontend/projects/04-saas-platform.md",
-      "line": 3754,
-      "excerpt": "把“企业级 SaaS”收敛为一个可追踪的租户生命周期：组织创建后拥有一个不可伪造的 `tenantId`；成员邀请和角色变更由授权规则控制；所有业务读取、写入、缓存键和异步任务都带该租户维度；订阅状态由支付提供方的已验证事件驱动，再决定可用功能和配额。不要从客户端传来的 tenant 字段直接信任归属，也不要把“当前套餐”只存在前端状态。",
-      "classification": "unbound_verification_wording"
     },
     {
       "path": "02-nextjs-frontend/reference/language-concepts/08-ts-declarations-modules.md",
@@ -9465,24 +9454,6 @@
       "classification": "explicit_not_runtime_claim"
     },
     {
-      "path": "05-kotlin-compose/reference/language-concepts/01-kotlin-keywords.md",
-      "line": 396,
-      "excerpt": "`as` 不安全转换，失败抛异常（类型不符实测抛 `ClassCastException`）；`as?` 安全转换，失败返回 null。",
-      "classification": "unbound_verification_wording"
-    },
-    {
-      "path": "05-kotlin-compose/reference/language-concepts/01-kotlin-keywords.md",
-      "line": 540,
-      "excerpt": "- 只能有一个主构造属性；**不能声明为局部类或内部类**（实测编译错误：value class cannot be local or inner）",
-      "classification": "unbound_verification_wording"
-    },
-    {
-      "path": "05-kotlin-compose/reference/language-concepts/01-kotlin-keywords.md",
-      "line": 658,
-      "excerpt": "var temperature = 50                   // 初始化直写幕后字段——不走 setter（实测：读到 50 而非 40）",
-      "classification": "unbound_verification_wording"
-    },
-    {
       "path": "05-kotlin-compose/reference/language-concepts/07-scope-functions.md",
       "line": 102,
       "excerpt": "## 可运行练习：返回值、null 与提前执行",
@@ -9504,7 +9475,7 @@
       "path": "06-swift-swiftui/basics/06-navigation.md",
       "line": 225,
       "excerpt": "本轮未在 Xcode 编译，也未执行 iOS 模拟器或真机；这些是待执行预期，不能标为原生 UI 已验证。在工程选定实际 scheme 和模拟器后执行 Build、Run，逐项记录 Xcode/iOS 版本、输入及界面结果。单纯 Swift 语法检查不能证明 SwiftUI 的呈现与返回行为。",
-      "classification": "unbound_verification_wording"
+      "classification": "expected_example_output"
     },
     {
       "path": "06-swift-swiftui/basics/08-first-project.md",
@@ -10126,7 +10097,7 @@
   ],
   "known_limits": [
     "final-web-examples.json source inventory does not establish per-document runtime evidence; its unbound cases are retained under corpus_checks.",
-    "No evidence record means not verified; it is not a correctness finding. Explicit statements that a case was not run are classified separately from unsupported positive claims.",
+    "No evidence record means not verified; it is not a correctness finding. Explicit non-run boundaries and expected sample output are classified separately from unsupported positive claims.",
     "Syntax-only TS/JS coverage is recorded at corpus level in tsjs-validation-2026-09-19.md and is not promoted to per-document runtime evidence.",
     "Framework builds, devices, external services, deployments, and historical snippets outside named cases remain outside this ledger."
   ]

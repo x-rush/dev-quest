@@ -109,7 +109,7 @@ func ReverseString(s string) string {
 #### 运行测试（通过）
 ```bash
 $ go test
-PASS  # 预期的示例输出
+PASS  # 成功时的预期示例输出；实际耗时随环境变化
 ok      example.com/stringutils    0.002s
 ```
 
@@ -138,7 +138,7 @@ func ReverseString(s string) string {
 #### 验证重构
 ```bash
 $ go test
-PASS  # 预期的示例输出
+PASS  # 成功时的预期示例输出；实际耗时随环境变化
 ok      example.com/stringutils    0.002s
 ```
 
