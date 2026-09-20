@@ -5,25 +5,25 @@
   "scope": "verification-coverage.json 的 11 个现行教学模块；不含生成报告、归档和不活跃文件。",
   "method": "为 not_verified 文件建立文件级任务，并按覆盖台账同一标记规则重新扫描当前源码以定位逐行任务；仅通过性断言升为 P0，不判断教学内容真伪。",
   "summary": {
-    "items": 505,
-    "file_level_items": 449,
-    "unbound_wording_items": 56,
+    "items": 490,
+    "file_level_items": 440,
+    "unbound_wording_items": 50,
     "by_priority": {
-      "P1": 199,
-      "P2": 150,
-      "P3": 156
+      "P1": 185,
+      "P2": 144,
+      "P3": 161
     },
     "by_kind": {
-      "核心基础": 183,
-      "首项目": 16,
-      "框架": 111,
+      "核心基础": 172,
+      "首项目": 13,
+      "框架": 105,
       "部署": 39,
-      "进阶与测试": 156
+      "进阶与测试": 161
     },
     "excluded": {
       "inactive_or_archived": 0,
       "generated_or_report": 0,
-      "runtime_document": 193
+      "runtime_document": 204
     }
   },
   "items": [
@@ -132,17 +132,6 @@
       "task": "为文档选择一个最小可复现案例并记录限定运行证据",
       "reason": "当前没有与此文件绑定的命名运行或语法证据。",
       "module": "Java",
-      "path": "08-java-revisited/basics/01-environment-setup.md",
-      "line": null,
-      "source_excerpt": null,
-      "evidence_action": "抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。"
-    },
-    {
-      "priority": "P1",
-      "kind": "核心基础",
-      "task": "为文档选择一个最小可复现案例并记录限定运行证据",
-      "reason": "当前没有与此文件绑定的命名运行或语法证据。",
-      "module": "Java",
       "path": "08-java-revisited/reference/language-concepts/09-annotations.md",
       "line": null,
       "source_excerpt": null,
@@ -199,17 +188,6 @@
       "reason": "当前没有与此文件绑定的命名运行或语法证据。",
       "module": "Kotlin / Compose",
       "path": "05-kotlin-compose/README.md",
-      "line": null,
-      "source_excerpt": null,
-      "evidence_action": "抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。"
-    },
-    {
-      "priority": "P1",
-      "kind": "核心基础",
-      "task": "为文档选择一个最小可复现案例并记录限定运行证据",
-      "reason": "当前没有与此文件绑定的命名运行或语法证据。",
-      "module": "Kotlin / Compose",
-      "path": "05-kotlin-compose/basics/01-environment-setup.md",
       "line": null,
       "source_excerpt": null,
       "evidence_action": "抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。"
@@ -294,39 +272,6 @@
     {
       "priority": "P1",
       "kind": "核心基础",
-      "task": "保留诚实的验证边界，并在补证据时决定是否增加最小练习",
-      "reason": "这行是未验证范围或验证步骤的披露，不是声称已经通过的证据。",
-      "module": "Kotlin / Compose",
-      "path": "05-kotlin-compose/reference/language-concepts/01-kotlin-keywords.md",
-      "line": 396,
-      "source_excerpt": "`as` 不安全转换，失败抛异常（类型不符实测抛 `ClassCastException`）；`as?` 安全转换，失败返回 null。",
-      "evidence_action": "保持已有边界说明；若新增示例，记录工具链、命令、预期行为和未覆盖范围。"
-    },
-    {
-      "priority": "P1",
-      "kind": "核心基础",
-      "task": "保留诚实的验证边界，并在补证据时决定是否增加最小练习",
-      "reason": "这行是未验证范围或验证步骤的披露，不是声称已经通过的证据。",
-      "module": "Kotlin / Compose",
-      "path": "05-kotlin-compose/reference/language-concepts/01-kotlin-keywords.md",
-      "line": 540,
-      "source_excerpt": "- 只能有一个主构造属性；**不能声明为局部类或内部类**（实测编译错误：value class cannot be local or inner）",
-      "evidence_action": "保持已有边界说明；若新增示例，记录工具链、命令、预期行为和未覆盖范围。"
-    },
-    {
-      "priority": "P1",
-      "kind": "核心基础",
-      "task": "保留诚实的验证边界，并在补证据时决定是否增加最小练习",
-      "reason": "这行是未验证范围或验证步骤的披露，不是声称已经通过的证据。",
-      "module": "Kotlin / Compose",
-      "path": "05-kotlin-compose/reference/language-concepts/01-kotlin-keywords.md",
-      "line": 658,
-      "source_excerpt": "var temperature = 50 // 初始化直写幕后字段——不走 setter（实测：读到 50 而非 40）",
-      "evidence_action": "保持已有边界说明；若新增示例，记录工具链、命令、预期行为和未覆盖范围。"
-    },
-    {
-      "priority": "P1",
-      "kind": "核心基础",
       "task": "为文档选择一个最小可复现案例并记录限定运行证据",
       "reason": "当前没有与此文件绑定的命名运行或语法证据。",
       "module": "Kotlin / Compose",
@@ -397,6 +342,17 @@
       "reason": "当前没有与此文件绑定的命名运行或语法证据。",
       "module": "Kotlin / Compose",
       "path": "05-kotlin-compose/reference/language-concepts/11-text-and-regex.md",
+      "line": null,
+      "source_excerpt": null,
+      "evidence_action": "抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。"
+    },
+    {
+      "priority": "P1",
+      "kind": "核心基础",
+      "task": "为文档选择一个最小可复现案例并记录限定运行证据",
+      "reason": "当前没有与此文件绑定的命名运行或语法证据。",
+      "module": "Kotlin / Compose",
+      "path": "05-kotlin-compose/reference/language-concepts/12-kotlin-built-in-functions.md",
       "line": null,
       "source_excerpt": null,
       "evidence_action": "抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。"
@@ -638,17 +594,6 @@
       "task": "为文档选择一个最小可复现案例并记录限定运行证据",
       "reason": "当前没有与此文件绑定的命名运行或语法证据。",
       "module": "Node.js",
-      "path": "09-nodejs-backend/basics/01-environment-setup.md",
-      "line": null,
-      "source_excerpt": null,
-      "evidence_action": "抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。"
-    },
-    {
-      "priority": "P1",
-      "kind": "核心基础",
-      "task": "为文档选择一个最小可复现案例并记录限定运行证据",
-      "reason": "当前没有与此文件绑定的命名运行或语法证据。",
-      "module": "Node.js",
       "path": "09-nodejs-backend/reference/library-guides/02-ecosystem-libs.md",
       "line": null,
       "source_excerpt": null,
@@ -694,17 +639,6 @@
       "reason": "当前没有与此文件绑定的命名运行或语法证据。",
       "module": "PHP",
       "path": "07-php-mastery/README.md",
-      "line": null,
-      "source_excerpt": null,
-      "evidence_action": "抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。"
-    },
-    {
-      "priority": "P1",
-      "kind": "核心基础",
-      "task": "为文档选择一个最小可复现案例并记录限定运行证据",
-      "reason": "当前没有与此文件绑定的命名运行或语法证据。",
-      "module": "PHP",
-      "path": "07-php-mastery/basics/01-environment-setup.md",
       "line": null,
       "source_excerpt": null,
       "evidence_action": "抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。"
@@ -998,28 +932,6 @@
     {
       "priority": "P1",
       "kind": "核心基础",
-      "task": "保留诚实的验证边界，并在补证据时决定是否增加最小练习",
-      "reason": "这行是未验证范围或验证步骤的披露，不是声称已经通过的证据。",
-      "module": "React Native / Multi-platform",
-      "path": "04-multiplatform-apps/reference/language-concepts/01-rn-core-api.md",
-      "line": 327,
-      "source_excerpt": "已运行的应用通过 `url` 事件收到链接；冷启动还需要读取初始 URL，或交给导航库统一处理。链接里的资源 ID 是输入，必须校验格式，并由服务端验证当前用户权限。能跳到某页面不代表能读取其数据。",
-      "evidence_action": "保持已有边界说明；若新增示例，记录工具链、命令、预期行为和未覆盖范围。"
-    },
-    {
-      "priority": "P1",
-      "kind": "核心基础",
-      "task": "为文档选择一个最小可复现案例并记录限定运行证据",
-      "reason": "当前没有与此文件绑定的命名运行或语法证据。",
-      "module": "React Native / Multi-platform",
-      "path": "04-multiplatform-apps/reference/language-concepts/01-rn-core-api.md",
-      "line": null,
-      "source_excerpt": null,
-      "evidence_action": "抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。"
-    },
-    {
-      "priority": "P1",
-      "kind": "核心基础",
       "task": "为文档选择一个最小可复现案例并记录限定运行证据",
       "reason": "当前没有与此文件绑定的命名运行或语法证据。",
       "module": "React Native / Multi-platform",
@@ -1243,28 +1155,6 @@
       "task": "保留诚实的验证边界，并在补证据时决定是否增加最小练习",
       "reason": "这行是未验证范围或验证步骤的披露，不是声称已经通过的证据。",
       "module": "Rust / Cross-platform",
-      "path": "11-rust-cross-platform/basics/01-environment-setup.md",
-      "line": 12,
-      "source_excerpt": "能说明检查、运行、测试各自证明什么；命令成功不等于未编写的行为已验证。",
-      "evidence_action": "保持已有边界说明；若新增示例，记录工具链、命令、预期行为和未覆盖范围。"
-    },
-    {
-      "priority": "P1",
-      "kind": "核心基础",
-      "task": "为文档选择一个最小可复现案例并记录限定运行证据",
-      "reason": "当前没有与此文件绑定的命名运行或语法证据。",
-      "module": "Rust / Cross-platform",
-      "path": "11-rust-cross-platform/basics/01-environment-setup.md",
-      "line": null,
-      "source_excerpt": null,
-      "evidence_action": "抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。"
-    },
-    {
-      "priority": "P1",
-      "kind": "核心基础",
-      "task": "保留诚实的验证边界，并在补证据时决定是否增加最小练习",
-      "reason": "这行是未验证范围或验证步骤的披露，不是声称已经通过的证据。",
-      "module": "Rust / Cross-platform",
       "path": "11-rust-cross-platform/basics/05-error-handling.md",
       "line": 306,
       "source_excerpt": "> ⚠️ 本段依赖 crates.io 的 thiserror，不在自包含实测范围内；用法以官方文档为准。`#[error(\"...\")]` 生成 Display，`#[from]` 生成 `From<io::Error>` 使 `?` 自动转换生效——与示例三逐项对应。",
@@ -1339,17 +1229,6 @@
     {
       "priority": "P1",
       "kind": "核心基础",
-      "task": "保留诚实的验证边界，并在补证据时决定是否增加最小练习",
-      "reason": "这行是未验证范围或验证步骤的披露，不是声称已经通过的证据。",
-      "module": "Rust / Cross-platform",
-      "path": "11-rust-cross-platform/reference/language-concepts/06-unsafe.md",
-      "line": 214,
-      "source_excerpt": "💡 **示例**（edition 2024 示例，本轮未运行；含一个实测踩到的陷阱）:",
-      "evidence_action": "保持已有边界说明；若新增示例，记录工具链、命令、预期行为和未覆盖范围。"
-    },
-    {
-      "priority": "P1",
-      "kind": "核心基础",
       "task": "为文档选择一个最小可复现案例并记录限定运行证据",
       "reason": "当前没有与此文件绑定的命名运行或语法证据。",
       "module": "Rust / Cross-platform",
@@ -1398,17 +1277,6 @@
       "reason": "当前没有与此文件绑定的命名运行或语法证据。",
       "module": "Swift / SwiftUI",
       "path": "06-swift-swiftui/README.md",
-      "line": null,
-      "source_excerpt": null,
-      "evidence_action": "抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。"
-    },
-    {
-      "priority": "P1",
-      "kind": "核心基础",
-      "task": "为文档选择一个最小可复现案例并记录限定运行证据",
-      "reason": "当前没有与此文件绑定的命名运行或语法证据。",
-      "module": "Swift / SwiftUI",
-      "path": "06-swift-swiftui/basics/01-environment-setup.md",
       "line": null,
       "source_excerpt": null,
       "evidence_action": "抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。"
@@ -1651,6 +1519,17 @@
       "reason": "当前没有与此文件绑定的命名运行或语法证据。",
       "module": "Swift / SwiftUI",
       "path": "06-swift-swiftui/reference/language-concepts/16-stdlib-foundation-map.md",
+      "line": null,
+      "source_excerpt": null,
+      "evidence_action": "抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。"
+    },
+    {
+      "priority": "P1",
+      "kind": "核心基础",
+      "task": "为文档选择一个最小可复现案例并记录限定运行证据",
+      "reason": "当前没有与此文件绑定的命名运行或语法证据。",
+      "module": "Swift / SwiftUI",
+      "path": "06-swift-swiftui/reference/language-concepts/17-swift-built-in-functions.md",
       "line": null,
       "source_excerpt": null,
       "evidence_action": "抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。"
@@ -2164,39 +2043,6 @@
     {
       "priority": "P1",
       "kind": "首项目",
-      "task": "保留诚实的验证边界，并在补证据时决定是否增加最小练习",
-      "reason": "这行是未验证范围或验证步骤的披露，不是声称已经通过的证据。",
-      "module": "Python",
-      "path": "10-python-discovery/projects/01-todo-api.md",
-      "line": 11,
-      "source_excerpt": "本页是完整的内存版练习：依次保存 `schemas.py`、`store.py`、`main.py` 和 `tests/test_api.py` 即可运行。每次服务重启清空数据，多个 worker 不共享数据；它用于学习 HTTP 契约，不用于持久化部署。先通过第 6 节测试，再替换存储。",
-      "evidence_action": "保持已有边界说明；若新增示例，记录工具链、命令、预期行为和未覆盖范围。"
-    },
-    {
-      "priority": "P1",
-      "kind": "首项目",
-      "task": "保留诚实的验证边界，并在补证据时决定是否增加最小练习",
-      "reason": "这行是未验证范围或验证步骤的披露，不是声称已经通过的证据。",
-      "module": "Python",
-      "path": "10-python-discovery/projects/01-todo-api.md",
-      "line": 230,
-      "source_excerpt": "验证记录（2026-09-19）：从本页原样抽取四个 Python 文件，在 Python 3.12.14 与 Python 3.14 容器中均通过 12 项测试；实际依赖为 FastAPI 0.141.1、Pydantic 2.13.5、pytest 9.1.1、httpx 0.28.1。当前 Starlette 1.6.0 会报告 httpx 测试适配器与 AnyIO 别名弃用警告；测试通过不代表依赖无迁移工作，也不涵盖数据库、部署或多 worker 持久化。",
-      "evidence_action": "保持已有边界说明；若新增示例，记录工具链、命令、预期行为和未覆盖范围。"
-    },
-    {
-      "priority": "P1",
-      "kind": "首项目",
-      "task": "为文档选择一个最小可复现案例并记录限定运行证据",
-      "reason": "当前没有与此文件绑定的命名运行或语法证据。",
-      "module": "Python",
-      "path": "10-python-discovery/projects/01-todo-api.md",
-      "line": null,
-      "source_excerpt": null,
-      "evidence_action": "抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。"
-    },
-    {
-      "priority": "P1",
-      "kind": "首项目",
       "task": "为文档选择一个最小可复现案例并记录限定运行证据",
       "reason": "当前没有与此文件绑定的命名运行或语法证据。",
       "module": "Swift / SwiftUI",
@@ -2219,43 +2065,10 @@
     {
       "priority": "P2",
       "kind": "框架",
-      "task": "保留诚实的验证边界，并在补证据时决定是否增加最小练习",
-      "reason": "这行是未验证范围或验证步骤的披露，不是声称已经通过的证据。",
-      "module": "Go",
-      "path": "01-go-backend/frameworks/01-gin-framework-basics.md",
-      "line": 257,
-      "source_excerpt": "当测试必须绕过真实数据库、或同一业务需要两种存储实现时，把依赖从构造函数传入。下面的 `NewServer(userService)` 展示“由入口提供服务实例”，避免 handler 内部临时创建连接。`UserService`、两个 handler 和其业务实现来自项目上下文，这不是独立可运行文件；它仍依赖具体服务类型，若要替换测试实现，应在使用方定义只包含实际调用方法的小接口。",
-      "evidence_action": "保持已有边界说明；若新增示例，记录工具链、命令、预期行为和未覆盖范围。"
-    },
-    {
-      "priority": "P2",
-      "kind": "框架",
-      "task": "为文档选择一个最小可复现案例并记录限定运行证据",
-      "reason": "当前没有与此文件绑定的命名运行或语法证据。",
-      "module": "Go",
-      "path": "01-go-backend/frameworks/01-gin-framework-basics.md",
-      "line": null,
-      "source_excerpt": null,
-      "evidence_action": "抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。"
-    },
-    {
-      "priority": "P2",
-      "kind": "框架",
       "task": "为文档选择一个最小可复现案例并记录限定运行证据",
       "reason": "当前没有与此文件绑定的命名运行或语法证据。",
       "module": "Go",
       "path": "01-go-backend/frameworks/02-gin-framework-advanced.md",
-      "line": null,
-      "source_excerpt": null,
-      "evidence_action": "抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。"
-    },
-    {
-      "priority": "P2",
-      "kind": "框架",
-      "task": "为文档选择一个最小可复现案例并记录限定运行证据",
-      "reason": "当前没有与此文件绑定的命名运行或语法证据。",
-      "module": "Go",
-      "path": "01-go-backend/frameworks/03-gorm-orm-complete.md",
       "line": null,
       "source_excerpt": null,
       "evidence_action": "抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。"
@@ -3088,39 +2901,6 @@
     {
       "priority": "P2",
       "kind": "框架",
-      "task": "保留诚实的验证边界，并在补证据时决定是否增加最小练习",
-      "reason": "这行是未验证范围或验证步骤的披露，不是声称已经通过的证据。",
-      "module": "Rust / Cross-platform",
-      "path": "11-rust-cross-platform/frameworks/06-auth-middleware.md",
-      "line": 132,
-      "source_excerpt": "**验证方法**: 该块不依赖任何第三方 crate，已用 `rustc --edition 2024` 本机实测（6 项断言全部通过），可直接 `rustc extract.rs && ./extract` 复现。",
-      "evidence_action": "保持已有边界说明；若新增示例，记录工具链、命令、预期行为和未覆盖范围。"
-    },
-    {
-      "priority": "P2",
-      "kind": "框架",
-      "task": "保留诚实的验证边界，并在补证据时决定是否增加最小练习",
-      "reason": "这行是未验证范围或验证步骤的披露，不是声称已经通过的证据。",
-      "module": "Rust / Cross-platform",
-      "path": "11-rust-cross-platform/frameworks/06-auth-middleware.md",
-      "line": 441,
-      "source_excerpt": "认证验证身份，资源授权判断当前身份能做什么；已验证身份可供后续处理复用，但不同入口仍需各自保证没有绕过检查。route_layer 与其他层的覆盖范围按路由组合实测，不能由返回 401 或 404 单独推断泄漏与否。",
-      "evidence_action": "保持已有边界说明；若新增示例，记录工具链、命令、预期行为和未覆盖范围。"
-    },
-    {
-      "priority": "P2",
-      "kind": "框架",
-      "task": "为文档选择一个最小可复现案例并记录限定运行证据",
-      "reason": "当前没有与此文件绑定的命名运行或语法证据。",
-      "module": "Rust / Cross-platform",
-      "path": "11-rust-cross-platform/frameworks/06-auth-middleware.md",
-      "line": null,
-      "source_excerpt": null,
-      "evidence_action": "抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。"
-    },
-    {
-      "priority": "P2",
-      "kind": "框架",
       "task": "为文档选择一个最小可复现案例并记录限定运行证据",
       "reason": "当前没有与此文件绑定的命名运行或语法证据。",
       "module": "Rust / Cross-platform",
@@ -3884,7 +3664,7 @@
       "reason": "这行是未验证范围或验证步骤的披露，不是声称已经通过的证据。",
       "module": "Go",
       "path": "01-go-backend/advanced-topics/api-advanced/02-graphql-apis.md",
-      "line": 1136,
+      "line": 1149,
       "source_excerpt": "按 0→1 顺序练习：先通过 gqlgen init 得到与固定版本匹配的项目，只实现 hello 查询；再加入单用户查询、一个 mutation、数据访问接口，最后才加入批量加载与订阅。验收包含未知字段被 schema 拒绝、无权限字段不泄露、复杂度上限生效、订阅取消后 goroutine 退出。本文各节模型和 resolver 是主题片段，不能全部拼接成一个可运行项目；以 gqlgen.yml 和生成的接口为准填入实现，避免手写与生成结构冲突。",
       "evidence_action": "保持已有边界说明；若新增示例，记录工具链、命令、预期行为和未覆盖范围。"
     },
@@ -3898,6 +3678,17 @@
       "line": null,
       "source_excerpt": null,
       "evidence_action": "抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。"
+    },
+    {
+      "priority": "P3",
+      "kind": "进阶与测试",
+      "task": "保留诚实的验证边界，并在补证据时决定是否增加最小练习",
+      "reason": "这行是未验证范围或验证步骤的披露，不是声称已经通过的证据。",
+      "module": "Go",
+      "path": "01-go-backend/advanced-topics/architecture/01-microservices-design.md",
+      "line": 1629,
+      "source_excerpt": "- **Micronaut**：可作为 JVM 服务框架候选；用冷启动、内存、测试与团队熟悉度的实测数据比较，而不以“现代”作为选择理由。",
+      "evidence_action": "保持已有边界说明；若新增示例，记录工具链、命令、预期行为和未覆盖范围。"
     },
     {
       "priority": "P3",
@@ -3935,6 +3726,17 @@
     {
       "priority": "P3",
       "kind": "进阶与测试",
+      "task": "保留诚实的验证边界，并在补证据时决定是否增加最小练习",
+      "reason": "这行是未验证范围或验证步骤的披露，不是声称已经通过的证据。",
+      "module": "Go",
+      "path": "01-go-backend/projects/02-microservices-demo.md",
+      "line": 44,
+      "source_excerpt": "| 部署与编排 | 本地多进程或 Compose 演练 | 需要多副本、服务发现和滚动发布时再评估 Docker/Kubernetes | 在目标平台单独验收启动、回滚和资源限制；本文不把配置样例当作已运行证据 |",
+      "evidence_action": "保持已有边界说明；若新增示例，记录工具链、命令、预期行为和未覆盖范围。"
+    },
+    {
+      "priority": "P3",
+      "kind": "进阶与测试",
       "task": "为文档选择一个最小可复现案例并记录限定运行证据",
       "reason": "当前没有与此文件绑定的命名运行或语法证据。",
       "module": "Go",
@@ -3946,6 +3748,17 @@
     {
       "priority": "P3",
       "kind": "进阶与测试",
+      "task": "保留诚实的验证边界，并在补证据时决定是否增加最小练习",
+      "reason": "这行是未验证范围或验证步骤的披露，不是声称已经通过的证据。",
+      "module": "Go",
+      "path": "01-go-backend/projects/03-real-time-app.md",
+      "line": 46,
+      "source_excerpt": "Socket.IO 不是 Gorilla WebSocket 的必备搭配；只有客户端协议确实要求 Socket.IO 时才选择其服务端实现。本文的 Redis、PostgreSQL、JWT、Docker 和 Nginx 片段是后续集成设计，不构成本页已运行的外部服务验证。",
+      "evidence_action": "保持已有边界说明；若新增示例，记录工具链、命令、预期行为和未覆盖范围。"
+    },
+    {
+      "priority": "P3",
+      "kind": "进阶与测试",
       "task": "为文档选择一个最小可复现案例并记录限定运行证据",
       "reason": "当前没有与此文件绑定的命名运行或语法证据。",
       "module": "Go",
@@ -3953,6 +3766,17 @@
       "line": null,
       "source_excerpt": null,
       "evidence_action": "抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。"
+    },
+    {
+      "priority": "P3",
+      "kind": "进阶与测试",
+      "task": "保留诚实的验证边界，并在补证据时决定是否增加最小练习",
+      "reason": "这行是未验证范围或验证步骤的披露，不是声称已经通过的证据。",
+      "module": "Go",
+      "path": "01-go-backend/projects/04-cli-tool.md",
+      "line": 1428,
+      "source_excerpt": "本项目的发布、包管理和 CI/CD 部分只提供学习契约与模板。它们需要仓库权限、签名密钥和目标平台环境，不能因文档中有工作流片段就标记为已交付或已验证。",
+      "evidence_action": "保持已有边界说明；若新增示例，记录工具链、命令、预期行为和未覆盖范围。"
     },
     {
       "priority": "P3",
@@ -4016,8 +3840,8 @@
       "reason": "这行是未验证范围或验证步骤的披露，不是声称已经通过的证据。",
       "module": "Go",
       "path": "01-go-backend/testing/05-test-driven-development.md",
-      "line": 112,
-      "source_excerpt": "PASS # 预期的示例输出",
+      "line": 100,
+      "source_excerpt": "PASS # 成功时的预期示例输出；实际耗时随环境变化",
       "evidence_action": "保持已有边界说明；若新增示例，记录工具链、命令、预期行为和未覆盖范围。"
     },
     {
@@ -4027,8 +3851,41 @@
       "reason": "这行是未验证范围或验证步骤的披露，不是声称已经通过的证据。",
       "module": "Go",
       "path": "01-go-backend/testing/05-test-driven-development.md",
-      "line": 141,
-      "source_excerpt": "PASS # 预期的示例输出",
+      "line": 129,
+      "source_excerpt": "PASS # 成功时的预期示例输出；实际耗时随环境变化",
+      "evidence_action": "保持已有边界说明；若新增示例，记录工具链、命令、预期行为和未覆盖范围。"
+    },
+    {
+      "priority": "P3",
+      "kind": "进阶与测试",
+      "task": "保留诚实的验证边界，并在补证据时决定是否增加最小练习",
+      "reason": "这行是未验证范围或验证步骤的披露，不是声称已经通过的证据。",
+      "module": "Go",
+      "path": "01-go-backend/testing/05-test-driven-development.md",
+      "line": 785,
+      "source_excerpt": "2. **绿阶段只补当前规则**：写能让该测试通过的最小实现，再运行整个相关包的测试。此时不为了未来假设加入多余抽象，也不接受只硬编码当前输入而放过相邻边界。",
+      "evidence_action": "保持已有边界说明；若新增示例，记录工具链、命令、预期行为和未覆盖范围。"
+    },
+    {
+      "priority": "P3",
+      "kind": "进阶与测试",
+      "task": "保留诚实的验证边界，并在补证据时决定是否增加最小练习",
+      "reason": "这行是未验证范围或验证步骤的披露，不是声称已经通过的证据。",
+      "module": "Go",
+      "path": "01-go-backend/testing/05-test-driven-development.md",
+      "line": 792,
+      "source_excerpt": "- [ ] 用最小实现使测试通过，再增加一个相邻边界用例，确认实现不是只为第一个样例硬编码。",
+      "evidence_action": "保持已有边界说明；若新增示例，记录工具链、命令、预期行为和未覆盖范围。"
+    },
+    {
+      "priority": "P3",
+      "kind": "进阶与测试",
+      "task": "保留诚实的验证边界，并在补证据时决定是否增加最小练习",
+      "reason": "这行是未验证范围或验证步骤的披露，不是声称已经通过的证据。",
+      "module": "Go",
+      "path": "01-go-backend/testing/05-test-driven-development.md",
+      "line": 793,
+      "source_excerpt": "- [ ] 在全部相关测试通过后重命名或抽取一段重复逻辑，运行 `go test ./...`，确认重构没有改变外部行为。",
       "evidence_action": "保持已有边界说明；若新增示例，记录工具链、命令、预期行为和未覆盖范围。"
     },
     {
@@ -4371,17 +4228,6 @@
       "line": null,
       "source_excerpt": null,
       "evidence_action": "抽取完整示例；记录工具链版本、命令、预期输出或可观察行为，以及未覆盖边界。"
-    },
-    {
-      "priority": "P3",
-      "kind": "进阶与测试",
-      "task": "保留诚实的验证边界，并在补证据时决定是否增加最小练习",
-      "reason": "这行是未验证范围或验证步骤的披露，不是声称已经通过的证据。",
-      "module": "Next.js / TypeScript",
-      "path": "02-nextjs-frontend/projects/04-saas-platform.md",
-      "line": 3752,
-      "source_excerpt": "把“企业级 SaaS”收敛为一个可追踪的租户生命周期：组织创建后拥有一个不可伪造的 `tenantId`；成员邀请和角色变更由授权规则控制；所有业务读取、写入、缓存键和异步任务都带该租户维度；订阅状态由支付提供方的已验证事件驱动，再决定可用功能和配额。不要从客户端传来的 tenant 字段直接信任归属，也不要把“当前套餐”只存在前端状态。",
-      "evidence_action": "保持已有边界说明；若新增示例，记录工具链、命令、预期行为和未覆盖范围。"
     },
     {
       "priority": "P3",
@@ -5288,17 +5134,6 @@
     {
       "priority": "P3",
       "kind": "进阶与测试",
-      "task": "保留诚实的验证边界，并在补证据时决定是否增加最小练习",
-      "reason": "这行是未验证范围或验证步骤的披露，不是声称已经通过的证据。",
-      "module": "Rust / Cross-platform",
-      "path": "11-rust-cross-platform/testing/01-unit-integration-tests.md",
-      "line": 247,
-      "source_excerpt": "**验证方法**: 过滤器命中数会体现在 `test result` 行的 `filtered out` 计数中（本机实测确认）。",
-      "evidence_action": "保持已有边界说明；若新增示例，记录工具链、命令、预期行为和未覆盖范围。"
-    },
-    {
-      "priority": "P3",
-      "kind": "进阶与测试",
       "task": "为文档选择一个最小可复现案例并记录限定运行证据",
       "reason": "当前没有与此文件绑定的命名运行或语法证据。",
       "module": "Rust / Cross-platform",
@@ -5534,7 +5369,7 @@
       "reason": "这行是未验证范围或验证步骤的披露，不是声称已经通过的证据。",
       "module": "TanStack / TypeScript",
       "path": "03-tanstack-stack/projects/04-saas-admin-platform.md",
-      "line": 258,
+      "line": 273,
       "source_excerpt": "**下一步与证据**：记录上述五项的账号、请求状态和可见结果；后端权限与审计测试通过后，再进入部署文档。仅静态阅读这些片段不构成生产验证。Query 取消行为可回查[官方请求取消指南](https://tanstack.com/query/latest/docs/framework/react/guides/query-cancellation)，Router context 接线可回查[官方认证路由指南](https://tanstack.com/router/latest/docs/framework/react/guide/authenticate",
       "evidence_action": "保持已有边界说明；若新增示例，记录工具链、命令、预期行为和未覆盖范围。"
     },

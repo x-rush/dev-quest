@@ -24,9 +24,9 @@
     "marker_classification": {
       "expected_example_output": 4,
       "explicit_not_runtime_claim": 10,
-      "instructional_acceptance_requirement": 19,
-      "source_has_limited_runtime_evidence": 93,
-      "unbound_verification_wording": 23
+      "instructional_acceptance_requirement": 20,
+      "source_has_limited_runtime_evidence": 94,
+      "unbound_verification_wording": 21
     }
   },
   "documents": [
@@ -84,7 +84,7 @@
     },
     {
       "path": "01-go-backend/advanced-topics/architecture/01-microservices-design.md",
-      "sha256": "c9972e7cd5fa45f82b6be5e593bec997868e42cbd5ca497afcb54b394c2450b7",
+      "sha256": "12ae03a53d4a3e5e0f3a9eaf5c698cd44d54c8a01cedfd494c8825a84eb07d2a",
       "verification": [
         {
           "mode": "not_verified",
@@ -93,7 +93,7 @@
           "scope": "No named runtime or syntax evidence is recorded for this document."
         }
       ],
-      "marker_count": 2
+      "marker_count": 1
     },
     {
       "path": "01-go-backend/advanced-topics/performance/01-concurrency-patterns.md",
@@ -364,7 +364,7 @@
     },
     {
       "path": "01-go-backend/frameworks/01-gin-framework-basics.md",
-      "sha256": "20621e3e6d42f4ee5e26d287b7bbffbe0a8b2bd501ab0cb7e11100c69c894e98",
+      "sha256": "773aae0145e66b46dfe32ad25c190ffa8602c6d435cbd9d7a9d05323e9caaf51",
       "verification": [
         {
           "mode": "runtime",
@@ -455,7 +455,7 @@
     },
     {
       "path": "01-go-backend/projects/01-rest-api-server.md",
-      "sha256": "a07cbe6ebe5d5c131d08746586569eec51f33c6a12d479d3c3d8dd16cabf4a07",
+      "sha256": "1374114f6ee6ebd6c49344ebeba5a856637693e2850018a8fa5f4e6645215230",
       "verification": [
         {
           "mode": "not_verified",
@@ -468,7 +468,7 @@
     },
     {
       "path": "01-go-backend/projects/02-microservices-demo.md",
-      "sha256": "92b2ff67aadb4824c6c9b66b8e3a28197396f3970ae5fc5f8d81eb6addc0eb9d",
+      "sha256": "253d6e2660c38e3c3c9e09bb7cc107460e0e7787bf50ef7bb037e1fce40a6774",
       "verification": [
         {
           "mode": "not_verified",
@@ -481,7 +481,7 @@
     },
     {
       "path": "01-go-backend/projects/03-real-time-app.md",
-      "sha256": "c0b18d662c22bc0e54d927bcef69b3fad2d479d9f274cd1b146e33039411424e",
+      "sha256": "a5a22577056101fe4ff129334141387fd80ff3cacfed15fe11905dc26afcacea",
       "verification": [
         {
           "mode": "not_verified",
@@ -494,7 +494,7 @@
     },
     {
       "path": "01-go-backend/projects/04-cli-tool.md",
-      "sha256": "a0cc5c63b29421c934291bf0f247770788e9f0d869af30a0ab3e95df909c7b8a",
+      "sha256": "4f2fbba7c94f6632ffa8008ef7ac8fc7068d5d9e9ea3f79476ca5f608b3df567",
       "verification": [
         {
           "mode": "not_verified",
@@ -676,7 +676,7 @@
     },
     {
       "path": "01-go-backend/reference/language-concepts/08-concurrency-basics.md",
-      "sha256": "f394172d4128d44b21e62cd391b5b68790c0a43749ddb5f4bb0c5b0f6976d537",
+      "sha256": "bba9c7fe70c2fe9f96932f0563c617929d1a88afd08bbb32c488c1933d097591",
       "verification": [
         {
           "mode": "runtime",
@@ -1165,7 +1165,7 @@
     },
     {
       "path": "02-nextjs-frontend/LEARNING_GUIDE.md",
-      "sha256": "2dff5d49aafae581bf1d8ac9095c2c54df99ca600db6429bec48bbe9b45ca91b",
+      "sha256": "5535c755076338d6ec1f6e735ba3a15bc6ffaf9689648e7ee303318287a2232b",
       "verification": [
         {
           "mode": "not_verified",
@@ -1178,7 +1178,7 @@
     },
     {
       "path": "02-nextjs-frontend/README.md",
-      "sha256": "bf219674dcccbdaf9bec383a8f886b9d44208f4085a716162751678b94cee02f",
+      "sha256": "65e64e465016d6fa334b9eeaeffbb7aa3ab169ec62d01235490efc2528bacb79",
       "verification": [
         {
           "mode": "not_verified",
@@ -1191,7 +1191,7 @@
     },
     {
       "path": "02-nextjs-frontend/advanced-topics/api-integration/01-graphql-apollo.md",
-      "sha256": "349dbe7758d48f6de1cde48747418acd03f1446cf700a99322517c64566b216b",
+      "sha256": "886a99d48b5fa05443d03cae51631aeeb5e812e46adb4ee9a00e08ff45107c31",
       "verification": [
         {
           "mode": "not_verified",
@@ -1217,7 +1217,7 @@
     },
     {
       "path": "02-nextjs-frontend/advanced-topics/architecture/02-micro-frontends.md",
-      "sha256": "2b46b0c1214e65859c73e7d65d6ee285ffb0f6c182c72d23aaa6bc83de29c8e6",
+      "sha256": "1058afadf046b06ab5c511a95ecb0948191a4517d454a184f50946a21be4090c",
       "verification": [
         {
           "mode": "not_verified",
@@ -1295,7 +1295,7 @@
     },
     {
       "path": "02-nextjs-frontend/basics/03-typescript-integration.md",
-      "sha256": "80fc9a76c16e1a893c0db05688fdac80a5491e4608d495800a59aa4068d2c7f2",
+      "sha256": "aa8cc3f20e61ed6e7e66486998fa289b54fa0cc0c4e0d0da17fe9b88f0a20a9c",
       "verification": [
         {
           "mode": "runtime",
@@ -1360,7 +1360,7 @@
     },
     {
       "path": "02-nextjs-frontend/basics/08-first-project.md",
-      "sha256": "85b7760c30422817b53a913742dea0917a6f627dcc77e02e4dd0e5dc00ac67e1",
+      "sha256": "b2a80f8afc4b22fe0ceac486d99d2f115a06898f8b6701d772bc84cfde0ae83c",
       "verification": [
         {
           "mode": "runtime",
@@ -1477,7 +1477,7 @@
     },
     {
       "path": "02-nextjs-frontend/projects/01-corporate-landing.md",
-      "sha256": "42cd1d94daf9e124f2ddd25761fd49cda872d702d6713f5f2f4fd3f2408be1fd",
+      "sha256": "524a85bc587f20525d93271b3b4057a451fe74b16b4efae451d3fae7292411b4",
       "verification": [
         {
           "mode": "not_verified",
@@ -1490,7 +1490,7 @@
     },
     {
       "path": "02-nextjs-frontend/projects/02-ecommerce-store.md",
-      "sha256": "20d1b4dcb451d6e6283dbc9e77078550514a4cfa290e72e01d3f8ac398ed604a",
+      "sha256": "f8fc9aeba01ce3304d22e28396aa02e442298aa6ce28c41500f1694864d12afb",
       "verification": [
         {
           "mode": "not_verified",
@@ -1503,7 +1503,7 @@
     },
     {
       "path": "02-nextjs-frontend/projects/03-dashboard-analytics.md",
-      "sha256": "497a2b7bac6d56d8da378765ffc83a369bfde4acc0f480f34198d7fa442f3fc3",
+      "sha256": "13caa1f688268e5f57b0166ccbf077cb91042f1823bfe23f615eae49dd1b8102",
       "verification": [
         {
           "mode": "not_verified",
@@ -1516,7 +1516,7 @@
     },
     {
       "path": "02-nextjs-frontend/projects/04-saas-platform.md",
-      "sha256": "02a502724cb5bcd3245701e098ec1be1156b379f77e122eb653fb836cb180c7e",
+      "sha256": "acfd9a2413dab135a08f6d0f1026c7e46de464773c03cad6e763a88c1d72e95b",
       "verification": [
         {
           "mode": "not_verified",
@@ -1529,7 +1529,7 @@
     },
     {
       "path": "02-nextjs-frontend/reference/development-tools/01-testing-tools.md",
-      "sha256": "d573b0635f307c150aedb58df740abef2bf12c8bc3c7b7eea12c0388332ef4a7",
+      "sha256": "7f9f89505c056fc1bdd820f2dc9fa167303466c9e065e35f552653da593908e2",
       "verification": [
         {
           "mode": "not_verified",
@@ -1542,7 +1542,7 @@
     },
     {
       "path": "02-nextjs-frontend/reference/development-tools/02-styling-tools.md",
-      "sha256": "148323e7cf8b55a54dedae3bd47db68a58756f267970ac099bbeff283aaf968f",
+      "sha256": "5ba3cbf1b2afadbab28f14ae5c2ec102f97c79241c3c8ee7dfb2219238d20cb8",
       "verification": [
         {
           "mode": "not_verified",
@@ -1555,7 +1555,7 @@
     },
     {
       "path": "02-nextjs-frontend/reference/development-tools/03-package-managers.md",
-      "sha256": "35d599b89c3748346eba2b3108e3385e2c120f88473004a047f31bd0b0eda0e9",
+      "sha256": "c5bdb18baf59ce70e5c928f4e32ee19d51257f2b65fec3d1de8eb11d09e3637d",
       "verification": [
         {
           "mode": "not_verified",
@@ -1568,7 +1568,7 @@
     },
     {
       "path": "02-nextjs-frontend/reference/development-tools/04-debugging-tools.md",
-      "sha256": "9a442c52b2d36f38fd57e13053d2af8f55f54541f0a69d676a84b20ee56369f3",
+      "sha256": "e2c9ddc87b5837db6f72e5ec86c8fcf0c4ebec45d285b1ecc9efeca12b8654a1",
       "verification": [
         {
           "mode": "not_verified",
@@ -1581,7 +1581,7 @@
     },
     {
       "path": "02-nextjs-frontend/reference/framework-patterns/01-app-router-patterns.md",
-      "sha256": "02dabfe8d4109c4245cb8506ac3e3a9ff6a523abf6a0f45be7c75e09cd5903b7",
+      "sha256": "0c4305d44f5129ff685cabb0f19487059824d817234afeb61e2aee4c11353f3a",
       "verification": [
         {
           "mode": "not_verified",
@@ -1594,7 +1594,7 @@
     },
     {
       "path": "02-nextjs-frontend/reference/framework-patterns/02-server-components-patterns.md",
-      "sha256": "2518870bbe2e26926dd5b8438db16e248a56f9ba4e91cb41f4fcb40c4ff33c57",
+      "sha256": "5f51f5482efd39912002667f53ef650411a01fccc8bc809f8e67665aa4c03321",
       "verification": [
         {
           "mode": "not_verified",
@@ -1607,7 +1607,7 @@
     },
     {
       "path": "02-nextjs-frontend/reference/framework-patterns/03-client-components-patterns.md",
-      "sha256": "2ca960812df44b60d588afefc88d6cf2bf0e8ce248aff0c27aee665ef2fb8bc1",
+      "sha256": "ac72417fe299575c6b223d971a87c86d3077ac09196e42d15b9ba6137b358672",
       "verification": [
         {
           "mode": "not_verified",
@@ -1620,7 +1620,7 @@
     },
     {
       "path": "02-nextjs-frontend/reference/framework-patterns/04-data-fetching-patterns.md",
-      "sha256": "3a36f757d2c16c5f3bad86c2c551efa9223063536f49840a14608c6fe1b38809",
+      "sha256": "396462b7795da44463b0af370b94f981c8647507e7fc5f8e588088383425386b",
       "verification": [
         {
           "mode": "not_verified",
@@ -1633,7 +1633,7 @@
     },
     {
       "path": "02-nextjs-frontend/reference/framework-patterns/05-state-management-patterns.md",
-      "sha256": "8b6a4307d1e65aaf37962cffafd5aa30590ef6ecc0d6fd98693f1f6666469eb4",
+      "sha256": "36f2a55447b9b07dfd73cb85383d97f4c725abd4cb2b77bfd78cac6a6dadcd6f",
       "verification": [
         {
           "mode": "not_verified",
@@ -1646,7 +1646,7 @@
     },
     {
       "path": "02-nextjs-frontend/reference/framework-patterns/06-form-validation-patterns.md",
-      "sha256": "3b79e1ef3df602c99493cbc343196060f7dc072cb69722645a50d7710326a099",
+      "sha256": "73c64b1355661fa82cab7b7bac4418f949e0d239a9d96678d1f26240349819f5",
       "verification": [
         {
           "mode": "not_verified",
@@ -1659,7 +1659,7 @@
     },
     {
       "path": "02-nextjs-frontend/reference/framework-patterns/07-authentication-flows.md",
-      "sha256": "9863432fdf088e0bb248995bd1ae69dde5ba8e5b109e9f10ac2034c23562428c",
+      "sha256": "8a926e60dd300a708b44eedf08fd2f0cbf8fb9f3d7afb4816bba1d4ecff8a83f",
       "verification": [
         {
           "mode": "not_verified",
@@ -1789,7 +1789,7 @@
     },
     {
       "path": "02-nextjs-frontend/reference/language-concepts/03-typescript-types.md",
-      "sha256": "6d26d4899a220ca68e79e552198203ed43246d4570672c3fc3b6d0da92d410ca",
+      "sha256": "e1ee17cf67f5eb79c9dbaf68c0fc4669460bd5c41182f5e89c224a4b9c9c6abd",
       "verification": [
         {
           "mode": "runtime",
@@ -3176,7 +3176,7 @@
     },
     {
       "path": "04-multiplatform-apps/reference/framework-essentials/01-expo-essentials.md",
-      "sha256": "6d792f4a83c0ecb29b35104dcc4826a769a2d01e277fecebb05b551277f32810",
+      "sha256": "aaecac51d8bd2b16988c2ca163c052a6f4e42da0fa213e9893bc75618cfdce9a",
       "verification": [
         {
           "mode": "not_verified",
@@ -3384,7 +3384,7 @@
     },
     {
       "path": "04-multiplatform-apps/reference/language-concepts/13-platform-api-map.md",
-      "sha256": "accb7006ba9d7596fb2b539fac08daf90035a274321655529a14b95185938367",
+      "sha256": "9fd9722025a12230c53663947411901389b4039248e16120a6949259f49cf493",
       "verification": [
         {
           "mode": "not_verified",
@@ -4592,7 +4592,7 @@
     },
     {
       "path": "06-swift-swiftui/reference/framework-essentials/01-swiftui-essentials.md",
-      "sha256": "f8818cf7efdfe3fa1b171ad1b16b89654aeff825c93f2b2c47158176c72ce466",
+      "sha256": "9269676682daf33bf677bb3dc75514f96a17e003ebef1a59519234dad5b3d947",
       "verification": [
         {
           "mode": "not_verified",
@@ -5079,7 +5079,7 @@
     },
     {
       "path": "07-php-mastery/advanced-topics/runtime/01-fpm-vs-resident.md",
-      "sha256": "511c5bd291da8858de438ac8c5bd7c9ee2b60034e7bdcc1ef1e9705b9adf4d94",
+      "sha256": "d8db986ebda4633f7ace7bcca7648b25d64476a50dd744d1b3638ce8ddf582b4",
       "verification": [
         {
           "mode": "not_verified",
@@ -5092,7 +5092,7 @@
     },
     {
       "path": "07-php-mastery/advanced-topics/runtime/02-workerman-principles.md",
-      "sha256": "736913e7509e943d4fc8c23afea414864ba877fe0e64a158c3fa14959bbe92e1",
+      "sha256": "1068befe3e36a3b0094605d2b70a2ef365e2321708d84093270fefaa9e6427c3",
       "verification": [
         {
           "mode": "not_verified",
@@ -5118,7 +5118,7 @@
     },
     {
       "path": "07-php-mastery/advanced-topics/runtime/04-swoole-ecosystem.md",
-      "sha256": "4e3a27cebd3a5b947454d87c1beaca2e6f89553793c2d3e39ede61f50a713def",
+      "sha256": "427368c8bd638382dc3efa01eb20cec5028d527c4d596bddaaa4d1e72cd9f237",
       "verification": [
         {
           "mode": "not_verified",
@@ -6933,7 +6933,7 @@
     },
     {
       "path": "09-nodejs-backend/basics/02-first-server.md",
-      "sha256": "86c8df8ef8568dcdd56eea7945418e86bafc2823f29e9592e9505e26a0d89962",
+      "sha256": "16cce3c17702f271771921824e1a1040d555b1846532517e2537385d62248a57",
       "verification": [
         {
           "mode": "runtime",
@@ -6942,7 +6942,7 @@
           "scope": "Only this named, complete code block; no whole-document, framework, network, or application coverage."
         }
       ],
-      "marker_count": 0
+      "marker_count": 1
     },
     {
       "path": "09-nodejs-backend/basics/03-modules-esm.md",
@@ -8056,7 +8056,7 @@
     },
     {
       "path": "10-python-discovery/reference/language-concepts/09-asyncio-concurrency.md",
-      "sha256": "ed3584f8c94b865407be009683104ffeea9a8152df047231ba0854d6c6fe736b",
+      "sha256": "cea898f4d81b47a6dc4c32876d19860b9211edf48e015ca71540e13796c72cfc",
       "verification": [
         {
           "mode": "runtime",
@@ -8533,7 +8533,7 @@
     },
     {
       "path": "11-rust-cross-platform/basics/08-smart-pointers.md",
-      "sha256": "be29a545bc04677b219819df2421a90888cca0a6c80c42ab06cf6c83aadaca88",
+      "sha256": "165b6e89d97460ae4239ee3fd1dd803357c4c3a913b3db809349c13e5e01ec59",
       "verification": [
         {
           "mode": "not_verified",
@@ -8715,7 +8715,7 @@
     },
     {
       "path": "11-rust-cross-platform/projects/01-cli-tool.md",
-      "sha256": "b0d4aa7d1124c918ed9e1135f6a0c86a9720694235a7163f901ce4a9b2cd259d",
+      "sha256": "b80bf7fea886ef631d2f1a340a4b653d3609f5779b5e754b4c9e38aea2115245",
       "verification": [
         {
           "mode": "runtime",
@@ -8728,7 +8728,7 @@
     },
     {
       "path": "11-rust-cross-platform/projects/02-tauri-notes-app.md",
-      "sha256": "c51f42ffdb8d3ac587b41ed6a6fc2443cc3afb17eec9c101f06656cdb89325bf",
+      "sha256": "56d25f6b2fb0f55fe22ce8d6f31f5e1dda0691717067eda1d84db304ba7f9b12",
       "verification": [
         {
           "mode": "not_verified",
@@ -8741,7 +8741,7 @@
     },
     {
       "path": "11-rust-cross-platform/projects/03-axum-rest-api.md",
-      "sha256": "1572aacd54a932628cd9270cd27ef69d9e651df4547b8f80b1d62469f70805c7",
+      "sha256": "74d99cf1181370ce9f08a30616ca317c48c985eb47849b43374c2754ae10307c",
       "verification": [
         {
           "mode": "not_verified",
@@ -8754,7 +8754,7 @@
     },
     {
       "path": "11-rust-cross-platform/projects/04-websocket-realtime.md",
-      "sha256": "ee3025d4cf59211ca916da9d38549a5891222842a4ec56bab2eac393e2f70754",
+      "sha256": "4a5d8f39da0bd97742840c6992347278605b773fa99e80ad4d6d7b6f2de96d9f",
       "verification": [
         {
           "mode": "not_verified",
@@ -8767,7 +8767,7 @@
     },
     {
       "path": "11-rust-cross-platform/projects/05-multiplatform-release.md",
-      "sha256": "517a723173a3423559f3c7e04a1f69075999b8e92787e073a2db4b047e6bf89d",
+      "sha256": "884259d1f7f1a65e17b28d39dc3598febc4dbdfe7083e7bdc8834088b236e06e",
       "verification": [
         {
           "mode": "not_verified",
@@ -9161,12 +9161,6 @@
       "classification": "unbound_verification_wording"
     },
     {
-      "path": "01-go-backend/advanced-topics/architecture/01-microservices-design.md",
-      "line": 1661,
-      "excerpt": "演进顺序由上述证据决定，而不是固定的“服务发现 → 熔断器 → Kubernetes → 服务网格”阶梯。每引入一项基础设施，都保留一次可运行的最小演练和一次移除/回退路径。",
-      "classification": "unbound_verification_wording"
-    },
-    {
       "path": "01-go-backend/advanced-topics/security/01-security-best-practices.md",
       "line": 15,
       "excerpt": "## 2. 可运行的输入与对象授权案例",
@@ -9186,7 +9180,7 @@
     },
     {
       "path": "01-go-backend/frameworks/01-gin-framework-basics.md",
-      "line": 324,
+      "line": 322,
       "excerpt": "当测试必须绕过真实数据库、或同一业务需要两种存储实现时，把依赖从构造函数传入。下面的 `NewServer(userService)` 展示“由入口提供服务实例”，避免 handler 内部临时创建连接。`UserService`、两个 handler 和其业务实现来自项目上下文，这不是独立可运行文件；它仍依赖具体服务类型，若要替换测试实现，应在使用方定义只包含实际调用方法的小接口。",
       "classification": "source_has_limited_runtime_evidence"
     },
@@ -9199,8 +9193,8 @@
     {
       "path": "01-go-backend/projects/02-microservices-demo.md",
       "line": 44,
-      "excerpt": "| 部署与编排 | 本地多进程或 Compose 演练 | 需要多副本、服务发现和滚动发布时再评估 Docker/Kubernetes | 目标平台的启动、回滚和资源限制必须单独实测 |",
-      "classification": "unbound_verification_wording"
+      "excerpt": "| 部署与编排 | 本地多进程或 Compose 演练 | 需要多副本、服务发现和滚动发布时再评估 Docker/Kubernetes | 在目标平台单独验收启动、回滚和资源限制；本文不把配置样例当作已运行证据 |",
+      "classification": "instructional_acceptance_requirement"
     },
     {
       "path": "01-go-backend/projects/03-real-time-app.md",
@@ -9614,6 +9608,12 @@
       "path": "09-nodejs-backend/advanced-topics/security/01-security-practices.md",
       "line": 189,
       "excerpt": "文件名合法只解决路径输入，归属检查解决对象权限；两者缺一不可。真实下载还要保证目录和符号链接只能被可信进程修改、失败时不泄露文件内容、响应头安全、文件流及时关闭。该实验不证明磁盘竞争、HTTP 中间件或 JWT 库集成已验证。",
+      "classification": "source_has_limited_runtime_evidence"
+    },
+    {
+      "path": "09-nodejs-backend/basics/02-first-server.md",
+      "line": 78,
+      "excerpt": "- **回调模型**：`createServer(handler)` 中 handler 对每个请求执行一次；事件循环能在 I/O 等待期间继续处理其他连接，但一个耗时的同步处理器仍会阻塞同一进程。连接数量取决于文件描述符、内存、背压、下游容量和实测负载，不能由“单线程”或“异步”直接推断（原理见 [04-async-promises](./04-async-promises.md)）",
       "classification": "source_has_limited_runtime_evidence"
     },
     {

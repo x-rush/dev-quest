@@ -12,9 +12,9 @@
 | 验证措辞出现次数 | 149 |
 | 措辞分类：expected_example_output | 4 |
 | 措辞分类：explicit_not_runtime_claim | 10 |
-| 措辞分类：instructional_acceptance_requirement | 19 |
-| 措辞分类：source_has_limited_runtime_evidence | 93 |
-| 措辞分类：unbound_verification_wording | 23 |
+| 措辞分类：instructional_acceptance_requirement | 20 |
+| 措辞分类：source_has_limited_runtime_evidence | 94 |
+| 措辞分类：unbound_verification_wording | 21 |
 
 ## 语法级覆盖（不能当作运行覆盖）
 
@@ -41,7 +41,7 @@
 | Go | [01-go-backend/README.md](../../../../01-go-backend/README.md) | `not_verified` | 0 | 0 |
 | Go | [01-go-backend/advanced-topics/api-advanced/01-restful-patterns.md](../../../../01-go-backend/advanced-topics/api-advanced/01-restful-patterns.md) | `not_verified` | 0 | 0 |
 | Go | [01-go-backend/advanced-topics/api-advanced/02-graphql-apis.md](../../../../01-go-backend/advanced-topics/api-advanced/02-graphql-apis.md) | `not_verified` | 0 | 1 |
-| Go | [01-go-backend/advanced-topics/architecture/01-microservices-design.md](../../../../01-go-backend/advanced-topics/architecture/01-microservices-design.md) | `not_verified` | 0 | 2 |
+| Go | [01-go-backend/advanced-topics/architecture/01-microservices-design.md](../../../../01-go-backend/advanced-topics/architecture/01-microservices-design.md) | `not_verified` | 0 | 1 |
 | Go | [01-go-backend/advanced-topics/performance/01-concurrency-patterns.md](../../../../01-go-backend/advanced-topics/performance/01-concurrency-patterns.md) | `not_verified` | 0 | 0 |
 | Go | [01-go-backend/advanced-topics/performance/02-performance-tuning.md](../../../../01-go-backend/advanced-topics/performance/02-performance-tuning.md) | `not_verified` | 0 | 0 |
 | Go | [01-go-backend/advanced-topics/security/01-security-best-practices.md](../../../../01-go-backend/advanced-topics/security/01-security-best-practices.md) | `runtime` | 1 | 1 |
@@ -530,7 +530,7 @@
 | Node.js | [09-nodejs-backend/advanced-topics/performance/02-streaming-clustering.md](../../../../09-nodejs-backend/advanced-topics/performance/02-streaming-clustering.md) | `not_verified` | 0 | 0 |
 | Node.js | [09-nodejs-backend/advanced-topics/security/01-security-practices.md](../../../../09-nodejs-backend/advanced-topics/security/01-security-practices.md) | `runtime` | 1 | 3 |
 | Node.js | [09-nodejs-backend/basics/01-environment-setup.md](../../../../09-nodejs-backend/basics/01-environment-setup.md) | `runtime` | 1 | 0 |
-| Node.js | [09-nodejs-backend/basics/02-first-server.md](../../../../09-nodejs-backend/basics/02-first-server.md) | `runtime` | 1 | 0 |
+| Node.js | [09-nodejs-backend/basics/02-first-server.md](../../../../09-nodejs-backend/basics/02-first-server.md) | `runtime` | 1 | 1 |
 | Node.js | [09-nodejs-backend/basics/03-modules-esm.md](../../../../09-nodejs-backend/basics/03-modules-esm.md) | `runtime` | 1 | 0 |
 | Node.js | [09-nodejs-backend/basics/04-async-promises.md](../../../../09-nodejs-backend/basics/04-async-promises.md) | `runtime` | 3 | 0 |
 | Node.js | [09-nodejs-backend/basics/05-http-routing.md](../../../../09-nodejs-backend/basics/05-http-routing.md) | `runtime` | 1 | 0 |
