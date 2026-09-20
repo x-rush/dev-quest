@@ -131,8 +131,11 @@ const nextConfig: NextConfig = {
       }
     }
 
-    // 自定义解析规则
-    config.resolve.extensions = ['.tsx', '.ts', '.jsx', '.js', '.json']
+    // 追加规则而不覆盖 Next/Webpack 的默认扩展名；去重避免重复解析。
+    config.resolve.extensions = Array.from(new Set([
+      ...(config.resolve.extensions ?? []),
+      '.tsx', '.ts', '.jsx', '.js', '.json',
+    ]))
 
     return config
   },
