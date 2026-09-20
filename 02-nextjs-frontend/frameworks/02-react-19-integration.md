@@ -82,7 +82,7 @@ function List({ items }: { items: string[] }) {
 
 ### React Compiler 稳定可用
 
-React Compiler v1.0 已于 2025-10 发布稳定版，Next.js 16 内置支持（`create-next-app` 模板可选启用），自动完成组件与 Hook 的记忆化，无需手写 `useMemo`/`useCallback`/`memo`。
+启用 React Compiler 后，它可以在满足 React 规则的代码上自动插入一部分记忆化；是否启用、覆盖哪些文件以及与现有手写 `useMemo`/`useCallback`/`memo` 的交互，应以项目使用的 Next.js、React 与编译器配置为准。不要为了“删掉所有手写记忆化”批量改代码：先保持行为测试、检查 lint/编译诊断，再针对关键交互比较渲染次数与用户可感知延迟。
 
 ### 其他更新
 
