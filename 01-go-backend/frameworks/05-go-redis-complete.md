@@ -221,7 +221,7 @@ commands, err := pipe.Exec(ctx)
 3. 暂停或停止测试 Redis，观察业务入口是否按你定义的故障策略回源、报错或拒绝，而不是无限等待。
 4. 给一个常用读路径写出键格式、权威数据源、TTL、失效时机、缓存故障策略和验收记录。
 
-本仓不替读者启动或修改 Redis 服务，上述步骤是外部服务练习，不被当作本机运行通过证据。API 用法以 [go-redis 官方 README](https://github.com/redis/go-redis#readme) 和 [Redis Go 客户端文档](https://redis.io/docs/latest/develop/clients/go/) 为准。
+本仓不替读者启动或修改 Redis 服务，上述步骤是外部服务练习，不构成本机执行证据。API 用法以 [go-redis 官方 README](https://github.com/redis/go-redis#readme) 和 [Redis Go 客户端文档](https://redis.io/docs/latest/develop/clients/go/) 为准。
 
 ## 🔗 相关资源
 

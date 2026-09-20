@@ -400,7 +400,7 @@
     },
     {
       "path": "01-go-backend/frameworks/04-mongodb-go-driver.md",
-      "sha256": "08e474f094c64f4795ce82d046ef46d3388c9cedb3e7e81ce226cb3b51ded3b8",
+      "sha256": "750082be2ea9cbf2b90b1a9e5852a126d7698d1471e0dd3e910ff5b126c48c6b",
       "verification": [
         {
           "mode": "not_verified",
@@ -413,7 +413,7 @@
     },
     {
       "path": "01-go-backend/frameworks/05-go-redis-complete.md",
-      "sha256": "801e4c0a2e198afbb8e152639bd8f99f75405134b1f9647fe496cf45c529e3a9",
+      "sha256": "93bbc886ba53c7665f6b07133b49a9f527111916a7720cf8cf92efb7bb1cee0a",
       "verification": [
         {
           "mode": "not_verified",
@@ -426,7 +426,7 @@
     },
     {
       "path": "01-go-backend/frameworks/06-grpc-service-development.md",
-      "sha256": "5ef2e9805a33fba8300611191f3766973977c978de7c218b1d454b4784f120f6",
+      "sha256": "881f7f5a3bb17cb697e28f367319df9993b012f60c203f89b196d49e9318843b",
       "verification": [
         {
           "mode": "not_verified",
@@ -1266,7 +1266,7 @@
     },
     {
       "path": "02-nextjs-frontend/basics/01-environment-setup.md",
-      "sha256": "ae69194119f3d5a2e532c0a452a7ccf8dfdfaa45b8bf98276291573be8eafe1e",
+      "sha256": "90b7253f6b2e2cf3f7f66da5a8708c0f1f824f3c46ccbb151d25a93235e1b405",
       "verification": [
         {
           "mode": "not_verified",
@@ -6020,7 +6020,7 @@
     },
     {
       "path": "08-java-revisited/basics/01-environment-setup.md",
-      "sha256": "8eb1a6c6826e1b56cc8e060a9587d989729ed7c8e8f7a82e60bea28df139719a",
+      "sha256": "6bbf3b1617d63e0317f0ff26a6c85e9fdfd38001ce2e3c953157ee9ae96fbf00",
       "verification": [
         {
           "mode": "not_verified",
