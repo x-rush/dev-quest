@@ -22,8 +22,9 @@
     },
     "verification_wording_occurrences": 151,
     "marker_classification": {
+      "explicit_not_runtime_claim": 9,
       "source_has_limited_runtime_evidence": 96,
-      "unbound_verification_wording": 55
+      "unbound_verification_wording": 46
     }
   },
   "documents": [
@@ -9323,7 +9324,7 @@
       "path": "03-tanstack-stack/frameworks/02-tanstack-query-advanced.md",
       "line": 14,
       "excerpt": "完成后保留请求参数、界面状态和失败恢复步骤三项记录，再进入并发修改。2026-09-20 已按官方文档核对 API；本篇未启动 React 工程或真实 API，以上均为待执行验收，不能据此标记运行通过。",
-      "classification": "unbound_verification_wording"
+      "classification": "explicit_not_runtime_claim"
     },
     {
       "path": "03-tanstack-stack/projects/02-data-dashboard.md",
@@ -9335,7 +9336,7 @@
       "path": "03-tanstack-stack/projects/04-saas-admin-platform.md",
       "line": 273,
       "excerpt": "**下一步与证据**：记录上述五项的账号、请求状态和可见结果；后端权限与审计测试通过后，再进入部署文档。仅静态阅读这些片段不构成生产验证。Query 取消行为可回查[官方请求取消指南](https://tanstack.com/query/latest/docs/framework/react/guides/query-cancellation)，Router context 接线可回查[官方认证路由指南](https://tanstack.com/router/latest",
-      "classification": "unbound_verification_wording"
+      "classification": "explicit_not_runtime_claim"
     },
     {
       "path": "03-tanstack-stack/reference/language-concepts/05-typescript-patterns.md",
@@ -9347,7 +9348,7 @@
       "path": "03-tanstack-stack/reference/language-concepts/13-use-is-fetching-use-is-mutating.md",
       "line": 100,
       "excerpt": "完成后再用 `useMutationState` 展示失败记录，并限定业务键；不要把整个缓存的历史失败直接当作当前表单的失败。返回数字的 API 依据见 [useIsMutating 官方参考](https://tanstack.com/query/latest/docs/framework/react/reference/functions/useIsMutating)。本轮核对官方资料和正文，未运行 React、并发请求或浏览器交互；以上均是待执行验收，不能记为运行通过。",
-      "classification": "unbound_verification_wording"
+      "classification": "explicit_not_runtime_claim"
     },
     {
       "path": "03-tanstack-stack/reference/library-guides/03-language-web-foundations.md",
@@ -9407,7 +9408,7 @@
       "path": "04-multiplatform-apps/reference/language-concepts/10-styling-model.md",
       "line": 98,
       "excerpt": "**验证边界：** 本轮未构建或运行 RN/鸿蒙工程，未实测旋转与字体缩放。依据官方 [Style](https://reactnative.dev/docs/style)、[Flexbox](https://reactnative.dev/docs/flexbox) 和 [useWindowDimensions](https://reactnative.dev/docs/usewindowdimensions) 核对；以上验收仍待各目标平台执行。",
-      "classification": "unbound_verification_wording"
+      "classification": "explicit_not_runtime_claim"
     },
     {
       "path": "04-multiplatform-apps/reference/library-guides/03-storage-options.md",
@@ -9431,7 +9432,7 @@
       "path": "05-kotlin-compose/basics/05-layouts.md",
       "line": 275,
       "excerpt": "本轮只完成官方资料核对与静态阅读，未运行 Android 构建、模拟器或截图验收。上面的结果是读者执行时的验收标准，不是本机实测记录。",
-      "classification": "unbound_verification_wording"
+      "classification": "explicit_not_runtime_claim"
     },
     {
       "path": "05-kotlin-compose/basics/08-first-project.md",
@@ -9449,19 +9450,19 @@
       "path": "05-kotlin-compose/reference/framework-essentials/08-composition-model.md",
       "line": 15,
       "excerpt": "> 本文属 Compose 框架层：API 行为按官方文档核对书写，**未实测（无 Android 环境）**，不编造参数名；纯 Kotlin 断言见语言概念篇。",
-      "classification": "unbound_verification_wording"
+      "classification": "explicit_not_runtime_claim"
     },
     {
       "path": "05-kotlin-compose/reference/framework-essentials/09-gestures.md",
       "line": 15,
       "excerpt": "> 本文属 Compose 框架层：API 签名按官方文档核对书写，**未实测（无 Android 环境）**，不编造参数名；纯 Kotlin 断言见语言概念篇。",
-      "classification": "unbound_verification_wording"
+      "classification": "explicit_not_runtime_claim"
     },
     {
       "path": "05-kotlin-compose/reference/framework-essentials/10-canvas-drawing.md",
       "line": 15,
       "excerpt": "> 本文属 Compose 框架层：API 签名按官方文档核对书写，**未实测（无 Android 环境）**，不编造参数名；纯 Kotlin 断言见语言概念篇。",
-      "classification": "unbound_verification_wording"
+      "classification": "explicit_not_runtime_claim"
     },
     {
       "path": "05-kotlin-compose/reference/language-concepts/01-kotlin-keywords.md",
@@ -10019,7 +10020,7 @@
       "path": "11-rust-cross-platform/basics/09-concurrency-async.md",
       "line": 209,
       "excerpt": "### 示例三：Tokio 最小异步程序（不实测执行，写码即可）",
-      "classification": "unbound_verification_wording"
+      "classification": "explicit_not_runtime_claim"
     },
     {
       "path": "11-rust-cross-platform/frameworks/06-auth-middleware.md",
@@ -10125,7 +10126,7 @@
   ],
   "known_limits": [
     "final-web-examples.json source inventory does not establish per-document runtime evidence; its unbound cases are retained under corpus_checks.",
-    "No evidence record means not verified; it is not a correctness finding.",
+    "No evidence record means not verified; it is not a correctness finding. Explicit statements that a case was not run are classified separately from unsupported positive claims.",
     "Syntax-only TS/JS coverage is recorded at corpus level in tsjs-validation-2026-09-19.md and is not promoted to per-document runtime evidence.",
     "Framework builds, devices, external services, deployments, and historical snippets outside named cases remain outside this ledger."
   ]

@@ -26,6 +26,10 @@ def main():
     for line in ("本机实测通过。", "已验证：运行通过。", "示例可运行。"):
         assert queue.marker_priority(line, "首项目")[0] == "P0", line
         checks.append({"check": line, "status": "PASS", "expected": "P0"})
+    assert coverage.classify_marker("本轮未实测，不能据此记为运行通过。", []) == "explicit_not_runtime_claim"
+    assert coverage.classify_marker("示例运行通过。", []) == "unbound_verification_wording"
+    assert coverage.classify_marker("本机实测通过。", [{"mode": "runtime"}]) == "source_has_limited_runtime_evidence"
+    checks.append({"check": "negative verification wording is distinct from positive evidence", "status": "PASS"})
 
     original_load = coverage.load
     source = "02-nextjs-frontend/regression-fixture.md"

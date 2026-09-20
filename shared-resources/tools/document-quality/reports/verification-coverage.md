@@ -10,8 +10,9 @@
 | 主状态：not_verified | 441 |
 | 主状态：runtime | 203 |
 | 验证措辞出现次数 | 151 |
+| 措辞分类：explicit_not_runtime_claim | 9 |
 | 措辞分类：source_has_limited_runtime_evidence | 96 |
-| 措辞分类：unbound_verification_wording | 55 |
+| 措辞分类：unbound_verification_wording | 46 |
 
 ## 语法级覆盖（不能当作运行覆盖）
 

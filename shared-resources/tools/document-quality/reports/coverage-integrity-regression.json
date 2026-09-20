@@ -53,6 +53,10 @@
       "expected": "P0"
     },
     {
+      "check": "negative verification wording is distinct from positive evidence",
+      "status": "PASS"
+    },
+    {
       "check": "source inventory with PASS cannot imply file runtime",
       "status": "PASS"
     },
