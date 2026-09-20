@@ -6,7 +6,7 @@
 
 **验收结果**：添加数量与金额一致，刷新后的保留策略明确；下架商品有提示。
 
-**扩展顺序**：支付阶段仅对接测试环境，订单状态由服务端确认，不信任客户端金额。
+**扩展顺序**：支付、邮件和文件存储先以端口、测试替身和固定事件样本建模；订单状态由服务端确认，不信任客户端金额。接入任意服务商是后续独立工作，不是本项目的前置条件。
 
 建议保存一份正常输入、一份失败输入、实际输出和对应测试。先完成以上阶段再扩展正文中的完整设计；遇到省略实现或未定义依赖，应按文档上下文补齐，不能把代码片段拼接后当作已经验证的完整工程。
 
@@ -22,7 +22,7 @@
 | **模块** | `02-nextjs-frontend` |
 | **分类** | `projects` |
 | **难度** | ⭐⭐⭐ (精通)|
-| **标签** | `Next.js 16` `React 19` `TypeScript 7` `电商系统` `支付集成` `Stripe` |
+| **标签** | `Next.js 16` `React 19` `TypeScript` `电商系统` `订单状态机` `Webhook` |
 | **更新日期** | `2026年9月` |
 | **作者** | Dev Quest Team |
 | **状态** | ✅ 已完成 |
@@ -30,13 +30,40 @@
 ## 🎯 学习目标
 - 构建完整的电商前端应用架构
 - 实现购物车和商品管理系统
-- 集成Stripe支付系统
+- 为支付、邮件和文件存储设计可替换的应用接口，不绑定某个供应商
 - 开发用户认证和权限管理
 - 实现订单处理和库存管理
 - 掌握电商SEO和性能优化
 - 部署生产级电商应用
 
 ## 📖 项目概述
+
+### 外部服务的学习边界
+
+本项目把支付、邮件、对象存储视为**出站依赖**：业务层只依赖应用自己定义的接口，适配器才知道某家 SDK、密钥或 HTTP API。学习阶段不要求注册支付、邮件或云存储账号，也不要求把密钥写入仓库。用内存替身或固定 webhook 事件验证下面的业务规则即可：订单金额由服务端重算；事件先验签再去重；失败不会把订单标成已支付；通知只在合法状态迁移后排队。
+
+```ts
+type PaymentResult = { providerPaymentId: string; checkoutUrl: string };
+
+interface PaymentGateway {
+  createCheckout(input: {
+    orderId: string;
+    amountInCents: number;
+    idempotencyKey: string;
+  }): Promise<PaymentResult>;
+  verifyWebhook(rawBody: string, signature: string): Promise<{
+    eventId: string;
+    orderId: string;
+    kind: 'paid' | 'failed' | 'refunded';
+  }>;
+}
+
+interface ObjectStorage {
+  createUploadUrl(input: { key: string; contentType: string; expiresInSeconds: number }): Promise<string>;
+}
+```
+
+这里的接口是教学用契约，省略了仓储、权限和供应商适配器的完整实现；它们不能直接拼成生产系统。真实接入时再选择服务商、配置密钥、验证回调来源并做沙箱验收。
 
 ### 项目背景
 电商应用是现代商业的重要组成部分，需要处理复杂的业务逻辑、高并发访问、安全支付等挑战。本项目将构建一个功能完整的B2C电商平台。
@@ -53,14 +80,14 @@
 
 ### 技术栈
 - **前端框架**: Next.js 16 + React 19
-- **开发语言**: TypeScript 7
+- **开发语言**: TypeScript（以项目锁定版本为准）
 - **状态管理**: Zustand + React Query
 - **UI组件库**: Radix UI + Tailwind CSS
 - **数据库**: PostgreSQL + Prisma ORM
-- **支付系统**: Stripe + Webhook处理
+- **支付边界**: `PaymentGateway` + 已验证事件处理；提供方 SDK 是可替换适配器
 - **认证**: NextAuth.js v5
-- **文件存储**: AWS S3/Cloudinary
-- **部署**: Vercel + Railway/Supabase
+- **文件存储边界**: `ObjectStorage` 接口 + 预签名 URL 契约
+- **交付边界**: 本地构建、测试和环境变量契约；云部署由独立部署文档处理
 
 ## 🏗️ 项目架构
 

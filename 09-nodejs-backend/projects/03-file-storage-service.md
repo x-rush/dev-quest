@@ -10,7 +10,7 @@
 
 建议保存一份正常输入、一份失败输入、实际输出和对应测试。先完成以上阶段再扩展正文中的完整设计；遇到省略实现或未定义依赖，应按文档上下文补齐，不能把代码片段拼接后当作已经验证的完整工程。
 
-> **文档简介**: 构建文件存储服务——从本地 multipart 上传升级到 S3 兼容对象存储（MinIO/阿里云 OSS/R2 均适用），掌握预签名 URL 与流式上传下载
+> **文档简介**: 用供应商无关的对象存储契约理解上传、预签名 URL 与流式下载。S3 SDK 代码是适配器示例；不要求在学习阶段启动 MinIO、注册云存储或保存真实凭据。
 >
 > **目标读者**: 已完成入门项目、接触过 multipart 表单上传的中级后端开发者
 >
@@ -36,7 +36,7 @@ Stream API 的完整字典见 [`../reference/language-concepts/04-streams-api.md
 ## 🎯 项目目标
 
 - 理解"经服务端中转"与"客户端直传"两种上传架构的取舍
-- 用 aws-sdk v3 对接任意 S3 兼容存储（本地用 MinIO 开发）
+- 识别对象存储适配器的输入、输出与失败边界；aws-sdk v3 仅作为一种实现示例
 - 实现预签名 URL 直传与流式下载，服务端不落盘
 
 ## 1. 架构决策：中转 vs 直传
@@ -48,11 +48,25 @@ Stream API 的完整字典见 [`../reference/language-concepts/04-streams-api.md
 
 服务端只做**签发与记录**，字节流不过 Node 进程——这是 Node 单线程模型下的正确姿势。
 
-## 2. 环境与客户端初始化
+## 2. 接口边界与 S3 适配器示例
+
+先把业务需要的能力写成自己的接口。这样上传流程可通过内存替身和固定 URL 在单元测试中推演；S3、MinIO、OSS、R2 或其他供应商只是在部署时替换该接口的实现。
+
+```typescript
+export interface ObjectStorage {
+  createPutUrl(input: {
+    key: string;
+    contentType: string;
+    expiresInSeconds: number;
+  }): Promise<string>;
+  createGetUrl(input: { key: string; expiresInSeconds: number }): Promise<string>;
+  delete(key: string): Promise<void>;
+}
+```
+
+下面的代码展示 **S3 兼容适配器** 的配置形状。`S3_ENDPOINT`、访问密钥和 bucket 均由真实部署环境提供；不要把示例默认值误解为可直接连通的服务，也不要把凭据提交进 Git。
 
 ```bash
-docker run -d --name minio -p 9000:9000 -p 9001:9001 \
-  minio/minio server /data --console-address ":9001"
 pnpm add @aws-sdk/client-s3 @aws-sdk/s3-request-presigner
 ```
 

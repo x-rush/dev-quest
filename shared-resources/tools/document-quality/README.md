@@ -71,6 +71,7 @@
 | [Go 与 Rust 关键字正文验证](reports/go-rust-keyword-body-validation.md) | Go package 与泛型方法边界、Rust 关键字和语法案例的 2 个正文完整程序验证 |
 | [验证覆盖状态台账](reports/verification-coverage.md) | 逐文件区分限定运行证据、语法检查和未验证状态，避免把验证措辞或代码围栏当成通过证明 |
 | [本轮交付状态](reports/delivery-status-2026-09-19.md) | 已修复项、已验证项与仍未达到全库交付条件的范围 |
+| [外部服务教学契约验证](reports/external-service-contracts-validation.md) | 支付与对象存储以供应商无关 TypeScript 端口表达；只验证契约类型，不调用外部服务 |
 
 根入口：[知识库 README](../../../README.md)。每个技术模块的 LEARNING_GUIDE 都提供渐进顺序、概念关系、练习与参考文章导航。
 
