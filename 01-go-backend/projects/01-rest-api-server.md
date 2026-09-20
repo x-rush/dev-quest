@@ -134,25 +134,28 @@ mkdir -p cmd/server internal/{config,handlers,models,middleware,services,utils} 
 
 #### 安装依赖
 ```bash
-# 安装Gin框架
-go get -u github.com/gin-gonic/gin
+# 添加 Gin；不要用 -u，否则会顺带升级已有依赖
+go get github.com/gin-gonic/gin
 
-# 安装GORM和PostgreSQL驱动
-go get -u gorm.io/gorm
-go get -u gorm.io/driver/postgres
+# 添加 GORM 和 PostgreSQL 驱动
+go get gorm.io/gorm
+go get gorm.io/driver/postgres
 
-# 安装JWT库
-go get -u github.com/golang-jwt/jwt/v5
+# 添加 JWT 库
+go get github.com/golang-jwt/jwt/v5
 
-# 安装配置库
-go get -u github.com/spf13/viper
+# 添加配置库
+go get github.com/spf13/viper
 
-# 安装日志库
-go get -u go.uber.org/zap
+# 添加日志库
+go get go.uber.org/zap
 
-# 安装验证库
-go get -u github.com/go-playground/validator/v10
+# 添加验证库，并让 Go 清理未使用模块
+go get github.com/go-playground/validator/v10
+go mod tidy
 ```
+
+这些命令只解析执行当日可用的模块版本；随后提交生成的 `go.mod` 与 `go.sum`，并在代码审查时确认版本差异。若要复现本文某次练习，使用该练习目录已提交的锁定文件，而不是重新执行带升级语义的命令。本页后续代码是分阶段工程片段，尚未在本仓作为一个完整 PostgreSQL 服务运行；不要将依赖解析成功当作数据库、认证或容器集成已通过。
 
 ### 步骤2: 配置管理
 
