@@ -239,7 +239,7 @@ graph LR
 #### 09. Node.js 后端探索
 **模块入口**: [09-nodejs-backend/README.md](../../09-nodejs-backend/README.md)（含入门/进阶/精通三路径视图）
 - [ ] **Node.js 24 LTS**: ES模块、Worker Threads、性能优化
-- [ ] **现代框架**: Hono 4（主角）、Fastify、NestJS 选型对比、TypeScript 7
+- [ ] **现代框架**: Hono 4（主角）、Fastify、NestJS 选型对比、TypeScript
 - [ ] **数据库生态**: Prisma、TypeORM、GraphQL联邦
 - [ ] **云原生架构**: Serverless、边缘计算、微服务
 - [ ] **AI时代后端**: AI Agent集成、零信任架构
