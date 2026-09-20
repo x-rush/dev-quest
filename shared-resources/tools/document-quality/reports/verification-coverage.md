@@ -7,8 +7,8 @@
 | 指标 | 数量 |
 |---|---:|
 | 纳入模块文档 | 644 |
-| 主状态：not_verified | 446 |
-| 主状态：runtime | 198 |
+| 主状态：not_verified | 445 |
+| 主状态：runtime | 199 |
 | 验证措辞出现次数 | 150 |
 | 措辞分类：source_has_limited_runtime_evidence | 94 |
 | 措辞分类：unbound_verification_wording | 56 |
@@ -526,7 +526,7 @@
 | Node.js | [09-nodejs-backend/advanced-topics/performance/01-event-loop.md](../../../../09-nodejs-backend/advanced-topics/performance/01-event-loop.md) | `not_verified` | 0 | 0 |
 | Node.js | [09-nodejs-backend/advanced-topics/performance/02-streaming-clustering.md](../../../../09-nodejs-backend/advanced-topics/performance/02-streaming-clustering.md) | `not_verified` | 0 | 0 |
 | Node.js | [09-nodejs-backend/advanced-topics/security/01-security-practices.md](../../../../09-nodejs-backend/advanced-topics/security/01-security-practices.md) | `runtime` | 1 | 3 |
-| Node.js | [09-nodejs-backend/basics/01-environment-setup.md](../../../../09-nodejs-backend/basics/01-environment-setup.md) | `not_verified` | 0 | 0 |
+| Node.js | [09-nodejs-backend/basics/01-environment-setup.md](../../../../09-nodejs-backend/basics/01-environment-setup.md) | `runtime` | 1 | 0 |
 | Node.js | [09-nodejs-backend/basics/02-first-server.md](../../../../09-nodejs-backend/basics/02-first-server.md) | `runtime` | 1 | 0 |
 | Node.js | [09-nodejs-backend/basics/03-modules-esm.md](../../../../09-nodejs-backend/basics/03-modules-esm.md) | `runtime` | 1 | 0 |
 | Node.js | [09-nodejs-backend/basics/04-async-promises.md](../../../../09-nodejs-backend/basics/04-async-promises.md) | `runtime` | 3 | 0 |

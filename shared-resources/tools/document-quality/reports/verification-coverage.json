@@ -17,8 +17,8 @@
   "summary": {
     "documents": 644,
     "by_primary_state": {
-      "not_verified": 446,
-      "runtime": 198
+      "not_verified": 445,
+      "runtime": 199
     },
     "verification_wording_occurrences": 150,
     "marker_classification": {
@@ -1266,7 +1266,7 @@
     },
     {
       "path": "02-nextjs-frontend/basics/01-environment-setup.md",
-      "sha256": "90b7253f6b2e2cf3f7f66da5a8708c0f1f824f3c46ccbb151d25a93235e1b405",
+      "sha256": "8918261fcc164fa768d28655f3f508e713a37a3bc2e0fe0bcba32385b6e26590",
       "verification": [
         {
           "mode": "not_verified",
@@ -6020,7 +6020,7 @@
     },
     {
       "path": "08-java-revisited/basics/01-environment-setup.md",
-      "sha256": "6ca7864e519edfd6c4556b7301d8ec1e064402da268f430ac8ed1a4b7e24d235",
+      "sha256": "02af9956bd5092f218f712cdbf426283a6caad059f1d866e99552af73d0bfda9",
       "verification": [
         {
           "mode": "runtime",
@@ -6917,13 +6917,13 @@
     },
     {
       "path": "09-nodejs-backend/basics/01-environment-setup.md",
-      "sha256": "ad4e55af44a9e96f67ba9d25fc7f62d1fa77a03802e31b1a341ad1bb89cd43a9",
+      "sha256": "a6b12ae81b22e9e7370ec5fa964064cea057cdbc152f61601d5b9f39dd6b2646",
       "verification": [
         {
-          "mode": "not_verified",
-          "status": "NOT_VERIFIED",
-          "report": null,
-          "scope": "No named runtime or syntax evidence is recorded for this document."
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "node-environment-validation.json",
+          "scope": "The named JavaScript block is extracted verbatim and executed once as stdin ESM. It proves Node 24 can run this minimal ESM/assertion example; it does not prove a host installation, a version-manager hook, pnpm, TypeScript type stripping, dependencies, a server, or project scripts."
         }
       ],
       "marker_count": 0

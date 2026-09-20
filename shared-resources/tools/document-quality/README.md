@@ -63,6 +63,7 @@
 | [Gin 入门最小工程验证](reports/gin-basics-validation.md) | Gin 1.12 的具名 router、JSON 绑定和错误状态测试；不覆盖部署或外部服务 |
 | [GORM 入门最小工程验证](reports/gorm-basics-validation.md) | GORM 1.31/SQLite 的迁移、读写、零记录与事务回滚测试；不覆盖其他数据库方言 |
 | [Java 环境最小程序验证](reports/java-environment-validation.md) | Java 21 的正文 `Hello.java` 编译与运行；不覆盖 IDE、SDKMAN 与构建工具 |
+| [Node 环境 ESM 最小程序验证](reports/node-environment-validation.md) | Node 24 的正文 ESM 模块运行；不覆盖 pnpm、TypeScript 或项目服务 |
 | [Next、TanStack 与移动端第十一批报告](reports/next-tanstack-mobile-eleventh-body-validation.json) | Next/TanStack 的 2 个纯逻辑运行结果，以及 RN/Kotlin/Swift 的明确未验证边界 |
 | [PHP 与 Java 参考案例验证](reports/php-java-reference-cases-report.md) | PHP/Java 关键词、内置函数和标准库的 17 个正文完整程序验证 |
 | [Rust、PHP 与 Java 第八批正文验证](reports/rust-php-java-eighth-body-validation.md) | 三个此前未验证核心页面的 Rust 所有权、PHP 控制流与 Java 函数式接口案例 |

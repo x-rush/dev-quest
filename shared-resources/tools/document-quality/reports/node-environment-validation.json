@@ -1,0 +1,14 @@
+{
+  "runtime": "Docker node:24-bookworm-slim",
+  "scope": "The named JavaScript block is extracted verbatim and executed once as stdin ESM. It proves Node 24 can run this minimal ESM/assertion example; it does not prove a host installation, a version-manager hook, pnpm, TypeScript type stripping, dependencies, a server, or project scripts.",
+  "results": [
+    {
+      "document": "09-nodejs-backend/basics/01-environment-setup.md",
+      "case": "node-environment-esm",
+      "status": "PASS",
+      "source_sha256": "ab9b280223f78f4725f0639da208a95abb161e11e937c541da90d60bdf59f071",
+      "stdout": "Node v24.21.0 executed this ESM module\n",
+      "command": "docker run --rm -i node:24-bookworm-slim node --input-type=module -"
+    }
+  ]
+}

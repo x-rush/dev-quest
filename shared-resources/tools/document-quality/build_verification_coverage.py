@@ -74,6 +74,9 @@ def records_from_reports():
     java_environment = load("java-environment-validation.json")
     for row in java_environment.get("results", []):
         add_record(records, row.get("document"), "runtime", "java-environment-validation.json", java_environment.get("scope", "selected Java environment smoke example"), "PASS" if row.get("status", "").upper() == "PASS" else "FAIL")
+    node_environment = load("node-environment-validation.json")
+    for row in node_environment.get("results", []):
+        add_record(records, row.get("document"), "runtime", "node-environment-validation.json", node_environment.get("scope", "selected Node ESM environment smoke example"), "PASS" if row.get("status", "").upper() == "PASS" else "FAIL")
     mobile = load("mobile-foundations.json")
     for row in mobile.get("results", []):
         add_record(records, row.get("source"), "runtime", "mobile-foundations.json", mobile.get("scope", "selected portable mobile-language check"), "PASS" if row.get("status") == "PASS" else "FAIL")

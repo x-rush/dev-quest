@@ -52,9 +52,9 @@ Node.js 生态版本迭代快，不同项目可能锁定不同版本。版本管
 
 - **fnm**（Fast Node Manager）：Rust 编写，启动快，单一二进制，推荐首选
 - **nvm**：老牌 Bash 脚本方案，生态文档最多，配置略繁琐
-- 二者都通过读取 `.node-version` / `.nvmrc` 文件实现"进入目录自动切换"
+- 二者都可使用版本文件；fnm 的 `--use-on-cd` 会在配置的 shell 钩子中切换，nvm 则需要额外的 shell 钩子或手动执行 `nvm use`
 
-截至 2026 年 9 月，**Node.js 24 处于活跃维护期（Active LTS）**；Node 22 已于 2025 年 10 月转入维护期（Maintenance LTS），仅接收安全修复。本模块统一以 **Node 24 LTS** 为基准，不再推荐新项目使用 Node 22。
+本模块以 **Node 24 LTS** 为基准。LTS 分支、补丁版本和维护阶段会变化；新建项目或升级运行时前，先查看 [Node.js 发布页](https://nodejs.org/en/about/previous-releases)，再以项目声明的版本和框架兼容性为准。已有项目仍在 Node 22 时，先评估依赖、测试和发布环境，不要只因为看到新主版本就直接切换。
 
 ## 🛠️ 实践步骤
 
@@ -79,20 +79,31 @@ npm -v
 
 nvm 等价操作：`nvm install 24 && nvm alias default 24`。
 
+把下面的完整程序保存为 `esm-check.mjs`，再运行 `node esm-check.mjs`。它同时确认当前命令实际执行的是 Node 24，且 `.mjs` 会作为 ESM 解析；这比只看到版本号多验证了一个模块边界。
+
+```js verify:node-environment-esm
+import assert from "node:assert/strict";
+
+assert.equal(process.versions.node.split(".")[0], "24");
+console.log(`Node ${process.version} executed this ESM module`);
+```
+
 ### 步骤二：安装 pnpm
 
 pnpm 通过内容寻址存储 + 硬链接实现快速安装与严格依赖隔离（默认无法引用未声明的依赖）。
 
 ```bash
-# 官方推荐：corepack（Node 内置，需先启用）
-corepack enable pnpm
-corepack use pnpm@latest   # 会把 packageManager 字段写入 package.json
+# 如果当前 Node 发行版提供 Corepack，先启用它；项目中应由 packageManager 字段锁定版本。
+corepack enable
+pnpm --version
 
 # 或独立脚本安装
 curl -fsSL https://get.pnpm.io/install.sh | sh
 
 pnpm -v
 ```
+
+确认 `pnpm --version` 后，再把**实际决定采用的版本**写入 `packageManager`。不要把 `latest` 当作锁定策略：它会随时间解析为不同版本。若 Node 发行版没有可用的 Corepack，则使用 pnpm 官方文档所列的安装方式，并在团队中统一版本。
 
 ### 步骤三：初始化项目
 
@@ -109,7 +120,7 @@ git init
   "name": "quest-api",
   "version": "0.1.0",
   "type": "module",
-  "packageManager": "pnpm@10.0.0",
+  "packageManager": "pnpm@<团队锁定的实际版本>",
   "engines": {
     "node": ">=24"
   },
@@ -126,11 +137,13 @@ git init
 
 - `"type": "module"`：启用原生 ESM，`.js` 文件按 ES 模块解析（详见 [03-modules-esm](./03-modules-esm.md)）
 - `--watch`：Node 内置文件监听重启，开发期无需 nodemon
-- `engines`：声明 Node 版本下限，配合 pnpm 校验
+- `engines`：声明 Node 版本下限；是否强制执行还取决于包管理器与 CI 配置
+
+`<团队锁定的实际版本>` 是占位符，不能原样写入 JSON。运行 `pnpm --version` 后，将其替换为例如 `pnpm@<该命令输出>` 的真实值并提交 package.json 和 lock 文件。
 
 ### 步骤四：配置 TypeScript
 
-Node 24 原生支持运行 **TypeScript 类型剥离**（type stripping，默认开启）：`.ts` 文件可直接 `node src/server.ts` 运行，无需预编译——前提是只使用可被剥离的类型语法（不含 enum、namespace、参数属性等需要代码转换的语法）。
+Node 24 原生支持运行 **TypeScript 类型剥离**（type stripping）：`.ts` 文件可直接 `node src/server.ts` 运行，无需预编译——前提是只使用可被剥离的类型语法（不含 enum、带运行时代码的 namespace、参数属性等需要代码转换的语法）。这条路径只移除类型，**不执行类型检查，也不读取 `tsconfig.json`**；路径别名、降级语法和其他依赖 tsconfig 的行为不能因此假定可用。
 
 ```bash
 pnpm add -D typescript @types/node
@@ -158,7 +171,7 @@ pnpm exec tsc --init
 }
 ```
 
-两种运行策略：开发期直接 `node src/server.ts`（类型剥离）；生产或需要 enum 等完整语法时用 `tsc && node dist/server.js` 预编译输出。
+两种运行策略：开发期直接 `node src/server.ts`（类型剥离）；生产或需要 enum 等完整语法时用 `tsc && node dist/server.js` 预编译输出。无论选择哪条路径，仍需单独运行 `pnpm exec tsc --noEmit` 做类型检查。Node 的 [TypeScript 运行文档](https://nodejs.org/api/typescript.html)列出了可剥离语法、扩展名和模块解析限制。
 
 ### 步骤五：配置 ESLint 9 扁平配置
 
@@ -199,7 +212,7 @@ export default tseslint.config(
 
 ### Q1: `corepack enable` 报权限错误？
 
-**A**: Node 安装目录无写权限，用 `sudo` 或改用独立安装脚本。
+**A**: 不要为了启用包管理器对 Node 安装目录盲目使用 `sudo`。先确认 Node 是由系统包、版本管理器还是手工安装；版本管理器安装通常不需要写系统目录。无法修改时改用该环境的包管理方式或独立安装脚本。
 
 ### Q2: `pnpm install` 后找不到某个依赖的函数？
 
@@ -211,8 +224,8 @@ export default tseslint.config(
 
 **任务要求**:
 1. 用 fnm 安装 Node 24，并生成 `.nvmrc`
-2. 用 corepack 启用 pnpm 并初始化项目
-3. 把 `node -v`、`pnpm -v`、`pnpm lint` 的输出贴进项目 README
+2. 启用或安装 pnpm，记录 `pnpm --version`，再把实际版本写入 `packageManager`
+3. 把 `node -v`、`pnpm -v`、`pnpm lint` 的输出和 package.json 的 `type`、`packageManager` 字段贴进项目 README
 
 ### 练习二：lint 体检
 
