@@ -17,8 +17,8 @@
   "summary": {
     "documents": 644,
     "by_primary_state": {
-      "not_verified": 447,
-      "runtime": 197
+      "not_verified": 446,
+      "runtime": 198
     },
     "verification_wording_occurrences": 150,
     "marker_classification": {
@@ -6020,13 +6020,13 @@
     },
     {
       "path": "08-java-revisited/basics/01-environment-setup.md",
-      "sha256": "6bbf3b1617d63e0317f0ff26a6c85e9fdfd38001ce2e3c953157ee9ae96fbf00",
+      "sha256": "6ca7864e519edfd6c4556b7301d8ec1e064402da268f430ac8ed1a4b7e24d235",
       "verification": [
         {
-          "mode": "not_verified",
-          "status": "NOT_VERIFIED",
-          "report": null,
-          "scope": "No named runtime or syntax evidence is recorded for this document."
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "java-environment-validation.json",
+          "scope": "The named Hello.java block is extracted verbatim, compiled with javac --release 21, and run once. This is limited evidence for Java 21 compilation and execution; it does not cover SDKMAN, host PATH configuration, IDE integration, Maven, Gradle, JDK 25, or a project build."
         }
       ],
       "marker_count": 0

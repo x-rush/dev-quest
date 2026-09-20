@@ -71,6 +71,9 @@ def records_from_reports():
     gorm_basics = load("gorm-basics-validation.json")
     for row in gorm_basics.get("results", []):
         add_record(records, row.get("document"), "runtime", "gorm-basics-validation.json", gorm_basics.get("scope", "selected GORM SQLite transaction example"), "PASS" if row.get("status", "").upper() == "PASS" else "FAIL")
+    java_environment = load("java-environment-validation.json")
+    for row in java_environment.get("results", []):
+        add_record(records, row.get("document"), "runtime", "java-environment-validation.json", java_environment.get("scope", "selected Java environment smoke example"), "PASS" if row.get("status", "").upper() == "PASS" else "FAIL")
     mobile = load("mobile-foundations.json")
     for row in mobile.get("results", []):
         add_record(records, row.get("source"), "runtime", "mobile-foundations.json", mobile.get("scope", "selected portable mobile-language check"), "PASS" if row.get("status") == "PASS" else "FAIL")

@@ -1,0 +1,14 @@
+{
+  "runtime": "Docker eclipse-temurin:21-jdk",
+  "scope": "The named Hello.java block is extracted verbatim, compiled with javac --release 21, and run once. This is limited evidence for Java 21 compilation and execution; it does not cover SDKMAN, host PATH configuration, IDE integration, Maven, Gradle, JDK 25, or a project build.",
+  "results": [
+    {
+      "document": "08-java-revisited/basics/01-environment-setup.md",
+      "case": "java-environment-hello",
+      "status": "PASS",
+      "source_sha256": "e91730fd5acd491eb398f75ab15750ea73c90c2e2ad028da75611fd59e90f6c8",
+      "stdout": "42\n",
+      "command": "docker run --rm -v <temporary-directory>:/src -w /src eclipse-temurin:21-jdk sh -c 'javac --release 21 -encoding UTF-8 Hello.java && java Hello'"
+    }
+  ]
+}

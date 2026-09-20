@@ -101,7 +101,7 @@ javac --version
 
 版本命令只能证明可执行文件在 PATH 中。新建 `Hello.java` 后实际编译并运行，才能确认编译器与运行时配套：
 
-```java
+```java verify:java-environment-hello
 public class Hello {
     public static void main(String[] args) {
         System.out.println(42);
