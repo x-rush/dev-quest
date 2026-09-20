@@ -29,8 +29,8 @@
 | 库/模块 | 能力 | 备注 |
 |---------|------|------|
 | `expo-camera` | 取景、扫码 | 配置插件声明权限文案 |
-| `expo-image-picker` | 相册选图、拍照 | 无需复杂权限配置 |
-| `react-native-vision-camera` | 高性能相机、帧处理器 | 进阶场景；鸿蒙需适配版 |
+| `expo-image-picker` | 相册选图、拍照 | 仍需请求运行时权限，并在 iOS/Android 配置相应权限文案与用途；按目标 SDK 与媒体类型核对权限模型 |
+| `react-native-vision-camera` | 相机与帧处理器 | 进阶场景；帧处理会增加 CPU/GPU、内存和发热负担，应在目标设备测量预览帧率与耗电；鸿蒙需适配版 |
 | `expo-image` / `react-native-fast-image` | 图片缓存加载 | 列表图片优化首选 |
 | `react-native-video` / `expo-video` | 播放器 | 支持字幕/缓存策略 |
 
