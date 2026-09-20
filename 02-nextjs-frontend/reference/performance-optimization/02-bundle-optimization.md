@@ -50,7 +50,7 @@
 
 ## 📖 概述
 
-Next.js 16 提供了业界领先的打包优化生态系统，结合 Webpack 5 和革命性的 Turbopack，为现代Web应用提供了极致的构建性能和运行时优化。本指南深入探讨企业级打包优化技术，从基础的代码分割到高级的微前端架构，帮助你构建高性能、可维护的现代化应用。
+打包优化的目标不是让所有项目使用同一组开关，而是用实际的构建产物和用户路径减少不必要的下载、解析和执行。Next.js 16 默认使用 Turbopack；Webpack 仍可作为兼容或迁移选择。两者的构建时间、缓存命中和输出体积都取决于依赖图、机器、冷/热缓存、路由和配置，因此先建立可复现基线，再只改一个变量进行比较。
 
 ## 🏗️ Next.js 16 打包架构概览
 
@@ -59,8 +59,9 @@ Next.js 16 提供了业界领先的打包优化生态系统，结合 Webpack 5 �
 #### 🚀 Turbopack (Next.js 16 默认打包器)
 ```typescript
 // next.config.ts
-/** @type {import('next').NextConfig} */
-const nextConfig = {
+import type { NextConfig } from 'next'
+
+const nextConfig: NextConfig = {
   // Next.js 16：Turbopack 是 next dev 与 next build 的默认打包器，
   // 配置位于顶层 turbopack 键（不再是 experimental.turbo）
   turbopack: {
@@ -76,22 +77,28 @@ const nextConfig = {
   },
 }
 
-module.exports = nextConfig
+export default nextConfig
 ```
 
-**Turbopack 核心优势**:
-- **增量构建**: 99%的更新时间 < 100ms，Fast Refresh 最快可达 5-10 倍提升
-- **内存缓存**: 智能依赖图缓存，支持文件系统缓存进一步加速启动
-- **并行处理**: 多核CPU充分利用，生产构建相比 Webpack 快 2-5 倍
-- **TypeScript集成**: 原生TS支持，无需额外配置
+**如何评估 Turbopack 是否对当前工程有帮助：**
+
+| 观察项 | 固定条件 | 比较方法 | 不应推出的结论 |
+|---|---|---|---|
+| 增量更新时间 | 同一提交、同一机器，分别记录冷启动与热缓存 | 修改一个只被单一路由使用的模块，记录文件保存到页面更新的时间 | 一次快速刷新不代表所有路由或生产构建都会更快 |
+| 构建时间与内存 | 固定 Node 版本、锁文件、CPU 并发和缓存状态 | 在相同命令下至少运行三次，报告中位数与范围 | 不能把某个仓库的倍数写成 Turbopack 的通用保证 |
+| 产物与请求 | 固定路由、构建模式和分析工具版本 | 比较首个用户路径的 JS/CSS 请求、压缩大小与重复模块 | 构建更快不等于客户端下载更少 |
+| TypeScript 行为 | 固定 `tsconfig`、类型检查命令和项目文件 | 分别运行类型检查与构建，记录任一失败 | 打包器能处理语法不代表项目类型检查已经通过 |
+
+Turbopack 使用依赖图缓存和并行工作来减少不必要的重新计算；实际收益必须由上述基线证明。若项目依赖 Webpack 专用 loader 或插件，先用 `next dev --webpack` 或 `next build --webpack` 明确验证迁移路径，而不要同时保留两套不被执行的配置。
 
 #### 📦 Webpack (迁移期回退)
 ```typescript
 // next.config.ts - Webpack 自定义配置
 // ⚠️ Next.js 16 中 Webpack 不再是默认打包器：检测到 webpack 配置时
 // 必须以 next dev --webpack / next build --webpack 显式启用，否则构建失败
-/** @type {import('next').NextConfig} */
-const nextConfig = {
+import type { NextConfig } from 'next'
+
+const nextConfig: NextConfig = {
   webpack: (config, { buildId, dev, isServer, defaultLoaders, webpack }) => {
     // 生产环境优化
     if (!dev && !isServer) {
@@ -131,7 +138,7 @@ const nextConfig = {
   },
 }
 
-module.exports = nextConfig
+export default nextConfig
 ```
 
 ## 🔄 代码分割策略
