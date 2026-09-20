@@ -49,7 +49,7 @@
 | 容器 | 说明 |
 |------|------|
 | `VStack / HStack(alignment:spacing:)`；`ZStack(alignment:)` | 垂直、水平与叠放；ZStack 没有 spacing 参数 |
-| `LazyVStack / LazyHStack` | 惰性版，长内容必备 |
+| `LazyVStack / LazyHStack` | 按需创建可见附近内容；适合长列表，但项目中仍要测量行视图成本、图片解码和状态更新 |
 | `Grid`（iOS 16+） | 二维网格，`GridRow` 分行 |
 | `LazyVGrid(columns:)` | 按行排列的自适应列网格（不是瀑布流）：`[GridItem(.adaptive(minimum: 120))]` |
 | `ScrollView(.vertical/.horizontal)` | 滚动容器 |
@@ -58,7 +58,7 @@
 | `Form` | 设置表单风格 List |
 | `Divider` | 分割线 |
 | `Spacer(minLength:)` | 弹性空白 |
-| `Canvas` | 高性能绘制（GraphicsContext） |
+| `Canvas` | 以 `GraphicsContext` 自定义绘制；适合需要合并大量绘制命令的场景，是否优于普通 View 层级须用 Instruments 针对目标交互测量 |
 | `ViewThatFits` | 在候选布局中放得下的那个（横竖屏适配利器） |
 
 ---
