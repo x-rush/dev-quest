@@ -17,7 +17,7 @@
 
 ## 📌 定义
 
-asyncio 是标准库的异步 I/O 框架：单线程内由**事件循环**调度成千上万个协程，协程在 `await` 处主动让出控制权，等待 I/O 期间去执行其他任务。它解决的是 **I/O 等待浪费**，不是 CPU 密集问题（那交给 `multiprocessing`）。
+asyncio 是标准库的异步 I/O 框架：单线程中的**事件循环**在任务遇到可挂起的 `await` 时调度其他就绪任务。可同时存活多少协程受每个任务持有的内存、套接字/文件描述符、队列长度、下游服务限额和取消是否及时响应影响；应先限制并发数，再在目标负载下测量。它主要减少 **I/O 等待期间的空转**，不能让 CPU 密集 Python 代码在同一事件循环线程中并行执行。
 
 ## 📖 语法 / 签名
 
@@ -58,7 +58,7 @@ import asyncio
 import httpx
 
 async def fetch_all(urls: list[str]) -> list[str]:
-    """并发请求全部 URL，总耗时 ≈ 最慢的一个，而非之和。"""
+    """并发发起请求；只有各请求能并行等待且没有排队/限流时，总耗时才接近最慢的一项。"""
     async with httpx.AsyncClient() as client:
         async with asyncio.TaskGroup() as tg:
             tasks = [tg.create_task(client.get(u)) for u in urls]
