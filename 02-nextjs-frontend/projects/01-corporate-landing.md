@@ -99,7 +99,7 @@ corporate-landing/
 
 ### 技术选型理由
 1. **Next.js 16**: 最新的App Router提供更好的性能和开发体验
-2. **TypeScript 7**: 类型安全和更好的开发工具支持
+2. **TypeScript**: 类型安全和更好的开发工具支持
 3. **Tailwind CSS**: 快速响应式设计和维护性
 4. **Strapi**: 灵活的内容管理和API生成
 5. **Zustand**: 轻量级状态管理，避免过度复杂

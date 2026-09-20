@@ -118,7 +118,7 @@ graph LR
 ### 核心技术
 - **Next.js 16**: React全栈框架，支持App Router和Server Components
 - **React 19.3**: 最新React版本，并发特性、Suspense、View Transitions与Fragment Refs
-- **TypeScript 7**: 类型安全的JavaScript超集
+- **TypeScript**: 类型安全的JavaScript超集
 - **Tailwind CSS 4**: 原子化CSS框架
 
 ### 开发工具
@@ -369,7 +369,7 @@ graph LR
 ### 📖 官方文档
 - **[Next.js 16 Docs](https://nextjs.org/docs)**: 官方权威文档
 - **[React 19 Docs](https://react.dev/)**: React最新版本文档
-- **[TypeScript 7 Docs](https://www.typescriptlang.org/docs/)**: TypeScript官方文档
+- **[TypeScript Docs](https://www.typescriptlang.org/docs/)**: TypeScript官方文档
 - **[Tailwind CSS 4 Docs](https://tailwindcss.com/docs)**: CSS框架文档
 
 ### 🛠️ 开发工具
@@ -506,7 +506,7 @@ graph LR
 ### 📖 官方文档
 - 📚 **[Next.js 16 官方文档](https://nextjs.org/docs)**: 完整的框架文档
 - ⚛️ **[React 19 官方文档](https://react.dev/)**: React最新版本指南
-- 📘 **[TypeScript 7 官方文档](https://www.typescriptlang.org/docs/)**: 类型系统文档
+- 📘 **[TypeScript 官方文档](https://www.typescriptlang.org/docs/)**: 类型系统文档
 - 🎨 **[Tailwind CSS 4 文档](https://tailwindcss.com/docs)**: CSS框架指南
 
 ### 🛠️ 开发工具
@@ -522,7 +522,7 @@ graph LR
 **版本**: v2.0.0
 
 > 💡 **重构说明**:
-> 本模块已于2026年9月完成重构并于2026年9月完成技术基线刷新（Next.js 16.3 / React 19.3），采用现代化的双轴学习体系：字典参考（reference）+ 渐进式学习路径，围绕Next.js 16 + React 19 + TypeScript 7最新技术栈，消除冗余内容，大幅提升学习效率和质量。
+> 本模块已于2026年9月完成重构并于2026年9月完成技术基线刷新（Next.js 16.3 / React 19.3），采用现代化的双轴学习体系：字典参考（reference）+ 渐进式学习路径，围绕Next.js 16 + React 19 + TypeScript最新技术栈，消除冗余内容，大幅提升学习效率和质量。
 
 ---
 

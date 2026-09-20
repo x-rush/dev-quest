@@ -143,7 +143,7 @@ export default function DraftsPage() {
 
 ## 📖 概述
 
-本教程将带你从零开始构建一个完整的博客平台，整合Next.js 16、React 19、TypeScript 7、Tailwind CSS 4等现代技术栈，涵盖用户认证、文章管理、评论系统、搜索功能等核心特性。
+本教程将带你从零开始构建一个完整的博客平台，整合Next.js 16、React 19、TypeScript、Tailwind CSS 4等现代技术栈，涵盖用户认证、文章管理、评论系统、搜索功能等核心特性。
 
 ## 🏗️ 项目规划和设计
 

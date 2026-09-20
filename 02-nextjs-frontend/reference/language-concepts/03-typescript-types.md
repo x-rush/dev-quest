@@ -43,7 +43,7 @@ const results = [
 console.log(results.join('|'))
 ```
 
-> **文档简介**: TypeScript 7核心类型和实用类型快速参考，涵盖基础类型、高级类型、工具类型等
+> **文档简介**: TypeScript核心类型和实用类型快速参考，涵盖基础类型、高级类型、工具类型等
 >
 > **目标读者**: TypeScript开发者，需要快速查阅类型语法的开发者
 >
@@ -853,7 +853,7 @@ function Button({ variant }: { variant: keyof typeof buttonVariants }) {
 ## 🔗 外部资源
 
 ### 官方文档
-- 📖 **[TypeScript 7 官方文档](https://www.typescriptlang.org/docs/)**: 完整TypeScript文档和类型系统说明
+- 📖 **[TypeScript 官方文档](https://www.typescriptlang.org/docs/)**: 完整TypeScript文档和类型系统说明
 - 📖 **[React + TypeScript 手册](https://react-typescript-cheatsheet.netlify.app/)**: React TypeScript完整指南
 - 📖 **[TypeScript 深入理解](https://basarat.gitbook.io/typescript/)**: TypeScript深度学习资料
 

@@ -22,7 +22,7 @@
 | **模块** | `02-nextjs-frontend` |
 | **分类** | `projects` |
 | **难度** | ⭐⭐⭐ (精通)|
-| **标签** | `Next.js 16` `React 19` `TypeScript 7` `数据可视化` `Chart.js` `D3.js` `实时数据` |
+| **标签** | `Next.js 16` `React 19` `TypeScript` `数据可视化` `Chart.js` `D3.js` `实时数据` |
 | **更新日期** | `2026年9月` |
 | **作者** | Dev Quest Team |
 | **状态** | ✅ 已完成 |
@@ -54,7 +54,7 @@
 
 ### 技术栈
 - **前端框架**: Next.js 16 + React 19
-- **开发语言**: TypeScript 7
+- **开发语言**: TypeScript
 - **图表库**: Chart.js + React-Chartjs-2 + D3.js
 - **状态管理**: Zustand + React Query
 - **UI组件库**: Shadcn/ui + Tailwind CSS

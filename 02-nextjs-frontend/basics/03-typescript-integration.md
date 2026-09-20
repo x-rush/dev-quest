@@ -1,4 +1,4 @@
-# Next.js 16 + TypeScript 7 集成配置完整指南
+# Next.js 16 + TypeScript 集成配置完整指南
 
 ## 先理解，再动手
 
@@ -13,7 +13,7 @@ TypeScript 在开发时检查代码关系，不会自动验证服务器返回的
 
 </details>
 
-> **文档简介**: Next.js 16 与 TypeScript 7 深度集成教程，涵盖类型系统配置、类型检查、类型定义、泛型编程等企业级TypeScript开发
+> **文档简介**: Next.js 16 与 TypeScript 深度集成教程，涵盖类型系统配置、类型检查、类型定义、泛型编程等企业级TypeScript开发
 
 > **目标读者**: 具备JavaScript基础的开发者，需要掌握Next.js中TypeScript应用的前端工程师
 
@@ -54,7 +54,7 @@ TypeScript 在开发时检查代码关系，不会自动验证服务器返回的
 
 ## 📖 概述
 
-TypeScript为Next.js应用提供了静态类型检查，大大提升了代码质量和开发体验。Next.js 16对TypeScript 7提供了原生支持，让类型安全的全栈开发变得简单高效。
+TypeScript为Next.js应用提供了静态类型检查，大大提升了代码质量和开发体验。Next.js 16对TypeScript提供了原生支持，让类型安全的全栈开发变得简单高效。
 
 ## 🏗️ TypeScript项目配置
 

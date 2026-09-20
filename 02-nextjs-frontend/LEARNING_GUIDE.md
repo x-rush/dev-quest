@@ -26,7 +26,7 @@ React 组件 → 文件路由与布局 → 服务端/客户端边界 → 数据�
 
 1. [Next.js 16 开发环境搭建完整指南](basics/01-environment-setup.md)
 2. [Next.js 16 第一个应用创建完整指南](basics/02-first-nextjs-app.md)
-3. [Next.js 16 + TypeScript 7 集成配置完整指南](basics/03-typescript-integration.md)
+3. [Next.js 16 + TypeScript 集成配置完整指南](basics/03-typescript-integration.md)
 4. [Next.js 16 布局和路由设计完整指南](basics/04-layouts-routing.md)
 5. [Next.js 16 + Tailwind CSS 4 企业级样式开发完整指南](basics/05-styling-with-tailwind.md)
 6. [Next.js 16 数据获取基础完整指南](basics/06-data-fetching-basics.md)

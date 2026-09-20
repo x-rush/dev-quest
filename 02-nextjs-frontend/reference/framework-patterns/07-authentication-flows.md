@@ -4,7 +4,7 @@
 
 > **目标读者**: 具备Next.js基础的中高级开发者，需要构建企业级认证系统的架构师和工程师
 
-> **前置知识**: Next.js 16基础、React 19、TypeScript 7、数据库基础、RESTful API设计
+> **前置知识**: Next.js 16基础、React 19、TypeScript、数据库基础、RESTful API设计
 
 > **预计时长**: 8-12小时
 

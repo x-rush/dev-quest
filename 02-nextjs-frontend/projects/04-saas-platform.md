@@ -22,7 +22,7 @@
 | **模块** | `02-nextjs-frontend` |
 | **分类** | `projects` |
 | **难度** | ⭐⭐⭐ (精通)|
-| **标签** | `Next.js 16` `React 19` `TypeScript 7` `SaaS` `多租户` `订阅计费` `Stripe Billing` |
+| **标签** | `Next.js 16` `React 19` `TypeScript` `SaaS` `多租户` `订阅计费` `Stripe Billing` |
 | **更新日期** | `2026年9月` |
 | **作者** | Dev Quest Team |
 | **状态** | ✅ 已完成 |

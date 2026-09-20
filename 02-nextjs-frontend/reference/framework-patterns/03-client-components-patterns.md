@@ -4,7 +4,7 @@
 
 > **目标读者**: 具备React基础的中高级开发者，需要掌握现代客户端组件开发的前端工程师
 
-> **前置知识**: Next.js 16基础、React 19组件概念、TypeScript 7、JavaScript ES6+、状态管理基础
+> **前置知识**: Next.js 16基础、React 19组件概念、TypeScript、JavaScript ES6+、状态管理基础
 
 > **预计时长**: 6-10小时
 
