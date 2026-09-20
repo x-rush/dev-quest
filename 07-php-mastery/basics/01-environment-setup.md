@@ -194,15 +194,46 @@ php -v
 
 declare(strict_types=1);
 
-// 输出版本与已加载的关键扩展
+// 输出 CLI 运行时与本项目通常需要的扩展状态。
+// Composer 由下一条独立命令验证，不从 PHP 脚本启动外部进程。
 printf("PHP 版本: %s\n", PHP_VERSION);
-printf("Xdebug: %s\n", extension_loaded('xdebug') ? '已启用' : '未启用');
-printf("Composer: %s\n", shell_exec('composer --version 2>/dev/null') ?? '未安装');
+foreach (['json', 'mbstring', 'intl'] as $extension) {
+    printf("扩展 %-8s: %s\n", $extension, extension_loaded($extension) ? '已启用' : '未启用');
+}
 ```
 
 ```bash
 php check.php
+composer --version
 ```
+
+`php check.php` 只检查当前 CLI 解释器已加载哪些扩展；`composer --version` 只检查 Composer 命令是否可用。两者都成功不表示 FPM、Web SAPI、Xdebug 或项目依赖已经就绪。
+
+下面是可复查的最小运行时案例。它验证严格类型、`json_encode` 的失败处理与 `mbstring` 是否存在这三个不同边界；将它保存为 `runtime-check.php` 后执行 `php runtime-check.php`。
+
+```php verify:php-environment-runtime
+<?php
+
+declare(strict_types=1);
+
+function encodeName(string $name): string
+{
+    $json = json_encode(['name' => $name], JSON_THROW_ON_ERROR | JSON_UNESCAPED_UNICODE);
+    return $json;
+}
+
+echo encodeName('PHP'), PHP_EOL;
+
+try {
+    encodeName(42);
+} catch (TypeError) {
+    echo "strict-type-error", PHP_EOL;
+}
+
+echo extension_loaded('mbstring') ? "mbstring-loaded" : "mbstring-missing", PHP_EOL;
+```
+
+预期前两行分别为 `{"name":"PHP"}` 与 `strict-type-error`；最后一行记录当前 CLI 是否加载 mbstring。它不应被当作 Web SAPI、数据库驱动、Composer 依赖或 Xdebug 已验证的证明。
 
 ## ✅ 最佳实践
 

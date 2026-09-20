@@ -17,12 +17,12 @@
   "summary": {
     "documents": 644,
     "by_primary_state": {
-      "not_verified": 442,
-      "runtime": 202
+      "not_verified": 441,
+      "runtime": 203
     },
-    "verification_wording_occurrences": 150,
+    "verification_wording_occurrences": 151,
     "marker_classification": {
-      "source_has_limited_runtime_evidence": 95,
+      "source_has_limited_runtime_evidence": 96,
       "unbound_verification_wording": 55
     }
   },
@@ -1474,7 +1474,7 @@
     },
     {
       "path": "02-nextjs-frontend/projects/01-corporate-landing.md",
-      "sha256": "aec3f780d9735805647b7e3a487dd7778e927e1383b79bc63d763d4fab24a0fb",
+      "sha256": "42cd1d94daf9e124f2ddd25761fd49cda872d702d6713f5f2f4fd3f2408be1fd",
       "verification": [
         {
           "mode": "not_verified",
@@ -1500,7 +1500,7 @@
     },
     {
       "path": "02-nextjs-frontend/projects/03-dashboard-analytics.md",
-      "sha256": "b682bf5f2a49f3a153679e87927c44e34472f2f62092b22532488e82465317fa",
+      "sha256": "497a2b7bac6d56d8da378765ffc83a369bfde4acc0f480f34198d7fa442f3fc3",
       "verification": [
         {
           "mode": "not_verified",
@@ -5141,16 +5141,16 @@
     },
     {
       "path": "07-php-mastery/basics/01-environment-setup.md",
-      "sha256": "2eadda573995487e66f4f88117a292f9a66bdb2dd7f1a67265013fc5a6c89147",
+      "sha256": "c0e230623ec5c34ccd678a36504604eb2e7034f14c9fe8e3ca27a7449c4635c8",
       "verification": [
         {
-          "mode": "not_verified",
-          "status": "NOT_VERIFIED",
-          "report": null,
-          "scope": "No named runtime or syntax evidence is recorded for this document."
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "php-environment-validation.json",
+          "scope": "The named PHP block is extracted verbatim and run once in PHP CLI. It proves strict scalar calls, JSON encoding and the observed mbstring state for that container; it does not cover Composer, Xdebug, FPM, web-server configuration, databases, or a host installation."
         }
       ],
-      "marker_count": 0
+      "marker_count": 1
     },
     {
       "path": "07-php-mastery/basics/02-first-script.md",
@@ -9539,6 +9539,12 @@
       "path": "07-php-mastery/advanced-topics/security/01-security-practices.md",
       "line": 175,
       "excerpt": "**练习**：用户 A 请求用户 B 的订单，预期拒绝且不泄露订单内容；把 sort 改成不允许的字段，预期校验失败；提交带脚本标签的标题，页面显示文本而不执行。对 Cookie 认证的写接口分别发送缺失、错误和正确 CSRF 凭据，在启用真实中间件的环境验证。测试通过的结论应限定在覆盖的入口和输入。",
+      "classification": "source_has_limited_runtime_evidence"
+    },
+    {
+      "path": "07-php-mastery/basics/01-environment-setup.md",
+      "line": 236,
+      "excerpt": "预期前两行分别为 `{\"name\":\"PHP\"}` 与 `strict-type-error`；最后一行记录当前 CLI 是否加载 mbstring。它不应被当作 Web SAPI、数据库驱动、Composer 依赖或 Xdebug 已验证的证明。",
       "classification": "source_has_limited_runtime_evidence"
     },
     {

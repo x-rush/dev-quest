@@ -67,6 +67,7 @@
 | [Kotlin 环境 JVM 最小程序验证](reports/kotlin-environment-validation.md) | Kotlin 正文的 JVM 编译与运行；不覆盖 Android SDK、Compose 或设备 |
 | [Swift 环境最小程序验证](reports/swift-environment-validation.md) | Swift 正文的 Linux 工具链运行；不覆盖 Xcode、iOS SDK 或设备 |
 | [Rust 环境 Cargo 最小程序验证](reports/rust-environment-validation.md) | Rust 2024 正文的离线 check/run/test；不覆盖依赖与交叉编译 |
+| [PHP 环境运行时最小程序验证](reports/php-environment-validation.md) | PHP 正文的严格类型与 JSON 运行；不覆盖 Composer、FPM 或 Xdebug |
 | [Next、TanStack 与移动端第十一批报告](reports/next-tanstack-mobile-eleventh-body-validation.json) | Next/TanStack 的 2 个纯逻辑运行结果，以及 RN/Kotlin/Swift 的明确未验证边界 |
 | [PHP 与 Java 参考案例验证](reports/php-java-reference-cases-report.md) | PHP/Java 关键词、内置函数和标准库的 17 个正文完整程序验证 |
 | [Rust、PHP 与 Java 第八批正文验证](reports/rust-php-java-eighth-body-validation.md) | 三个此前未验证核心页面的 Rust 所有权、PHP 控制流与 Java 函数式接口案例 |

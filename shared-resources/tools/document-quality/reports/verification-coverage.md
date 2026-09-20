@@ -7,10 +7,10 @@
 | 指标 | 数量 |
 |---|---:|
 | 纳入模块文档 | 644 |
-| 主状态：not_verified | 442 |
-| 主状态：runtime | 202 |
-| 验证措辞出现次数 | 150 |
-| 措辞分类：source_has_limited_runtime_evidence | 95 |
+| 主状态：not_verified | 441 |
+| 主状态：runtime | 203 |
+| 验证措辞出现次数 | 151 |
+| 措辞分类：source_has_limited_runtime_evidence | 96 |
 | 措辞分类：unbound_verification_wording | 55 |
 
 ## 语法级覆盖（不能当作运行覆盖）
@@ -412,7 +412,7 @@
 | PHP | [07-php-mastery/advanced-topics/runtime/03-webman-practice.md](../../../../07-php-mastery/advanced-topics/runtime/03-webman-practice.md) | `not_verified` | 0 | 0 |
 | PHP | [07-php-mastery/advanced-topics/runtime/04-swoole-ecosystem.md](../../../../07-php-mastery/advanced-topics/runtime/04-swoole-ecosystem.md) | `not_verified` | 0 | 0 |
 | PHP | [07-php-mastery/advanced-topics/security/01-security-practices.md](../../../../07-php-mastery/advanced-topics/security/01-security-practices.md) | `runtime` | 1 | 2 |
-| PHP | [07-php-mastery/basics/01-environment-setup.md](../../../../07-php-mastery/basics/01-environment-setup.md) | `not_verified` | 0 | 0 |
+| PHP | [07-php-mastery/basics/01-environment-setup.md](../../../../07-php-mastery/basics/01-environment-setup.md) | `runtime` | 1 | 1 |
 | PHP | [07-php-mastery/basics/02-first-script.md](../../../../07-php-mastery/basics/02-first-script.md) | `runtime` | 1 | 0 |
 | PHP | [07-php-mastery/basics/03-variables-types.md](../../../../07-php-mastery/basics/03-variables-types.md) | `runtime` | 2 | 0 |
 | PHP | [07-php-mastery/basics/04-functions-oop.md](../../../../07-php-mastery/basics/04-functions-oop.md) | `not_verified` | 0 | 0 |

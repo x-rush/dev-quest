@@ -1,0 +1,14 @@
+{
+  "runtime": "Docker php:8.5-cli",
+  "scope": "The named PHP block is extracted verbatim and run once in PHP CLI. It proves strict scalar calls, JSON encoding and the observed mbstring state for that container; it does not cover Composer, Xdebug, FPM, web-server configuration, databases, or a host installation.",
+  "results": [
+    {
+      "document": "07-php-mastery/basics/01-environment-setup.md",
+      "case": "php-environment-runtime",
+      "status": "PASS",
+      "source_sha256": "1219b6eb937b30e9947b03e04229ef3ed0cbac151ef5239541c45b7ede1240a5",
+      "stdout": "{\"name\":\"PHP\"}\nstrict-type-error\nmbstring-loaded\n",
+      "command": "docker run --rm -i php:8.5-cli php"
+    }
+  ]
+}
