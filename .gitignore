@@ -7,3 +7,6 @@
 
 # Disposable work directory used by reproducible documentation validators.
 /.validation-tmp/
+
+# pnpm content-addressable stores created by disposable container validators.
+/.pnpm-store/
