@@ -75,7 +75,7 @@ curl http://localhost:3000
 
 ### 关键概念解析
 
-- **回调模型**：`createServer(handler)` 中 handler 对每个请求执行一次，Node 靠事件循环并发处理成千上万连接（原理见 [04-async-promises](./04-async-promises.md)）
+- **回调模型**：`createServer(handler)` 中 handler 对每个请求执行一次；事件循环能在 I/O 等待期间继续处理其他连接，但一个耗时的同步处理器仍会阻塞同一进程。连接数量取决于文件描述符、内存、背压、下游容量和实测负载，不能由“单线程”或“异步”直接推断（原理见 [04-async-promises](./04-async-promises.md)）
 - **`res.writeHead` + `res.end`**：写状态码/响应头，然后结束响应体；忘记 `end` 浏览器会一直挂起
 - **没有路由**：所有路径都进同一个回调——这就是原生模块的直接体验
 
