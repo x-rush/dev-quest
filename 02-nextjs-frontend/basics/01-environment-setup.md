@@ -54,15 +54,15 @@
 ## 💻 系统要求
 
 ### 最低要求
-- **Node.js**: 20.9.0 或更高版本
+- **Node.js**: 20.9.0 或更高版本；本仓当前复现基线为 Node 24
 - **操作系统**: Windows 10+, macOS 10.15+, Linux
 - **内存**: 推荐使用8GB以上
 - **存储空间**: 10GB可用空间
 - **网络连接**: 安装软件包时需要
 
 ### 推荐配置
-- **Node.js**: 20.x LTS版本（最新版）
-- **包管理器**: pnpm 8.x 或 npm 9.x
+- **Node.js**: Node 24（使用受支持的当前 LTS/维护线；项目实际要求仍以 `package.json` 的 `engines` 为准）
+- **包管理器**: Corepack 管理的 pnpm 11，或项目锁文件指定的包管理器版本
 - **IDE**: VS Code 1.80+ 推荐扩展
 - **终端**: 支持UTF-8的现代Shell
 - **浏览器**: Chrome/Firefox最新版本用于开发
@@ -76,8 +76,8 @@
 # 如果尚未安装Homebrew，先安装它
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
-# 安装Node.js 20 LTS
-brew install node@20
+# 安装 Node 24
+brew install node@24
 
 # 验证安装
 node --version
@@ -86,8 +86,8 @@ npm --version
 
 #### Windows (使用Winget)
 ```powershell
-# 安装Node.js 20 LTS
-winget install OpenJS.NodeJS.20
+# 安装 Node 24
+winget install OpenJS.NodeJS.24
 
 # 验证安装
 node --version
@@ -96,8 +96,8 @@ npm --version
 
 #### Linux (Ubuntu/Debian)
 ```bash
-# 使用NodeSource仓库
-curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
+# 使用 NodeSource 仓库
+curl -fsSL https://deb.nodesource.com/setup_24.x | sudo -E bash -
 sudo apt-get install -y nodejs
 
 # 验证安装
@@ -113,10 +113,10 @@ curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash
 # 重新加载Shell
 source ~/.bashrc
 
-# 安装并使用Node.js 20
-nvm install 20
-nvm use 20
-nvm alias default 20
+# 安装并使用 Node 24
+nvm install 24
+nvm use 24
+nvm alias default 24
 
 # 验证安装
 node --version
@@ -127,8 +127,9 @@ npm --version
 
 #### 推荐：pnpm
 ```bash
-# 全局安装pnpm
-npm install -g pnpm
+# 让 Corepack 按项目声明的 pnpm 版本提供命令
+corepack enable
+corepack prepare pnpm@11.0.0 --activate
 
 # 或者使用curl安装（替代方法）
 curl -fsSL https://get.pnpm.io/install.sh | sh
@@ -740,7 +741,7 @@ npm ci
 
 ## 🎯 快速入门检查清单
 
-- [ ] 安装Node.js 20.x LTS
+- [ ] 安装项目所需的 Node 版本（本仓基线为 Node 24）
 - [ ] 安装pnpm包管理器
 - [ ] 安装VS Code及扩展
 - [ ] 创建Next.js 16项目
@@ -812,7 +813,7 @@ npm ci
 5. **开发工具**: 配置ESLint、Prettier等代码质量工具，建立标准化开发流程
 
 ### 学习成果检查
-- [ ] 是否成功安装Node.js 20.9+版本并能验证版本？
+- [ ] 是否成功安装项目所需 Node 版本并能验证版本？
 - [ ] 是否掌握至少一种包管理器的基本使用方法？
 - [ ] 是否能够成功创建Next.js 16项目并启动开发服务器？
 - [ ] 是否理解项目结构中各个配置文件的作用？
