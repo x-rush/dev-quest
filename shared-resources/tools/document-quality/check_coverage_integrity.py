@@ -28,6 +28,8 @@ def main():
         checks.append({"check": line, "status": "PASS", "expected": "P0"})
     assert coverage.classify_marker("本轮未实测，不能据此记为运行通过。", []) == "explicit_not_runtime_claim"
     assert coverage.classify_marker("PASS  # 成功时的预期示例输出", []) == "expected_example_output"
+    assert coverage.classify_marker("验收包含未知字段被 schema 拒绝，订阅取消后 goroutine 退出。", []) == "instructional_acceptance_requirement"
+    assert coverage.classify_marker("- [ ] 至少 3 条服务层测试通过", []) == "instructional_acceptance_requirement"
     assert coverage.classify_marker("示例运行通过。", []) == "unbound_verification_wording"
     assert coverage.classify_marker("本机实测通过。", [{"mode": "runtime"}]) == "source_has_limited_runtime_evidence"
     checks.append({"check": "negative verification wording is distinct from positive evidence", "status": "PASS"})

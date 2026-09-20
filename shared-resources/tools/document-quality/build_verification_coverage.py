@@ -31,6 +31,10 @@ MARKER = re.compile(r"实测|已验证|验证通过|运行通过|测试通过|�
 # as unsupported positive claims.
 EXPLICITLY_NOT_RUN = re.compile(r"未实测|不实测|未运行|不构成.*(?:运行|验证)|不能(?:据此|记为|当作).*(?:运行|验证)|待执行验收|尚无.*(?:运行|验证).*证据")
 EXPECTED_OUTPUT = re.compile(r"(?:预期|示例).*(?:输出|结果)|(?:输出|结果).*?(?:预期|示例)")
+# A requirement for the learner to run an acceptance check is not a claim that
+# this repository already ran it. Keep it searchable, but do not merge it into
+# the queue of unsupported positive assertions.
+INSTRUCTIONAL_ACCEPTANCE = re.compile(r"验收(?:包含|：|要求|标准)|^\s*[-*]\s+\[[ xX]\]|(?:先|再|然后|最后).*(?:运行|测试通过)|(?:通过|完成).*(?:后|再).*(?:运行|测试)")
 
 
 def classify_marker(line, evidence):
@@ -38,6 +42,8 @@ def classify_marker(line, evidence):
         return "explicit_not_runtime_claim"
     if EXPECTED_OUTPUT.search(line):
         return "expected_example_output"
+    if INSTRUCTIONAL_ACCEPTANCE.search(line):
+        return "instructional_acceptance_requirement"
     return "source_has_limited_runtime_evidence" if evidence else "unbound_verification_wording"
 
 
@@ -102,6 +108,8 @@ def records_from_reports():
     php_environment = load("php-environment-validation.json")
     for row in php_environment.get("results", []):
         add_record(records, row.get("document"), "runtime", "php-environment-validation.json", php_environment.get("scope", "selected PHP environment runtime example"), "PASS" if row.get("status", "").upper() == "PASS" else "FAIL")
+    python_todo = load("python-todo-api-validation.json")
+    add_record(records, python_todo.get("document"), "runtime", "python-todo-api-validation.json", python_todo.get("scope", "selected FastAPI in-memory TODO pytest suite"), python_todo.get("status", "FAIL"))
     mobile = load("mobile-foundations.json")
     for row in mobile.get("results", []):
         add_record(records, row.get("source"), "runtime", "mobile-foundations.json", mobile.get("scope", "selected portable mobile-language check"), "PASS" if row.get("status") == "PASS" else "FAIL")
@@ -309,7 +317,7 @@ def main():
         ],
         "known_limits": [
             "final-web-examples.json source inventory does not establish per-document runtime evidence; its unbound cases are retained under corpus_checks.",
-            "No evidence record means not verified; it is not a correctness finding. Explicit non-run boundaries and expected sample output are classified separately from unsupported positive claims.",
+            "No evidence record means not verified; it is not a correctness finding. Explicit non-run boundaries, expected sample output, and learner acceptance requirements are classified separately from unsupported positive claims.",
             "Syntax-only TS/JS coverage is recorded at corpus level in tsjs-validation-2026-09-19.md and is not promoted to per-document runtime evidence.",
             "Framework builds, devices, external services, deployments, and historical snippets outside named cases remain outside this ledger.",
         ],

@@ -17,15 +17,16 @@
   "summary": {
     "documents": 644,
     "by_primary_state": {
-      "not_verified": 441,
-      "runtime": 203
+      "not_verified": 440,
+      "runtime": 204
     },
-    "verification_wording_occurrences": 146,
+    "verification_wording_occurrences": 147,
     "marker_classification": {
       "expected_example_output": 4,
       "explicit_not_runtime_claim": 9,
-      "source_has_limited_runtime_evidence": 95,
-      "unbound_verification_wording": 38
+      "instructional_acceptance_requirement": 19,
+      "source_has_limited_runtime_evidence": 93,
+      "unbound_verification_wording": 22
     }
   },
   "documents": [
@@ -454,7 +455,7 @@
     },
     {
       "path": "01-go-backend/projects/01-rest-api-server.md",
-      "sha256": "e7eef8bcf28ce931041f1e5354311ee45d87b21bb815c28cfaa33f47c2310890",
+      "sha256": "a07cbe6ebe5d5c131d08746586569eec51f33c6a12d479d3c3d8dd16cabf4a07",
       "verification": [
         {
           "mode": "not_verified",
@@ -493,7 +494,7 @@
     },
     {
       "path": "01-go-backend/projects/04-cli-tool.md",
-      "sha256": "192918c8efab19966666a38e386135c45745118d19b04b0e220f7a994ac1bdf7",
+      "sha256": "1c95ab52a39bd9c99e206eb326f9092aca260076f7a48f9b13477dc09e2e7a02",
       "verification": [
         {
           "mode": "not_verified",
@@ -502,7 +503,7 @@
           "scope": "No named runtime or syntax evidence is recorded for this document."
         }
       ],
-      "marker_count": 0
+      "marker_count": 1
     },
     {
       "path": "01-go-backend/reference/framework-essentials/01-gin-framework.md",
@@ -610,7 +611,7 @@
     },
     {
       "path": "01-go-backend/reference/language-concepts/03-go-programming-essentials.md",
-      "sha256": "4ce85b8a60560df944e33340e55f32ed9f2996bc7dd70bf74deb5b2ff3ed24a0",
+      "sha256": "d6c66f7efb3deb94b78ce73da8962ea107ba54766820077dd7fd85e3d67886f9",
       "verification": [
         {
           "mode": "runtime",
@@ -7845,10 +7846,10 @@
       "sha256": "f2d54ba8d382561d4e6de3b9f6c42750a4600f47c97b1296b1dc66026b60886d",
       "verification": [
         {
-          "mode": "not_verified",
-          "status": "NOT_VERIFIED",
-          "report": null,
-          "scope": "No named runtime or syntax evidence is recorded for this document."
+          "mode": "runtime",
+          "status": "PASS",
+          "report": "python-todo-api-validation.json",
+          "scope": "The four complete FastAPI in-memory TODO source blocks and their 12 pytest cases on Python 3.12 and 3.14; excludes uvicorn interaction, databases, multi-worker storage, Redis, authentication, and deployment."
         }
       ],
       "marker_count": 2
@@ -9151,7 +9152,7 @@
       "path": "01-go-backend/advanced-topics/api-advanced/02-graphql-apis.md",
       "line": 1149,
       "excerpt": "按 0→1 顺序练习：先通过 gqlgen init 得到与固定版本匹配的项目，只实现 hello 查询；再加入单用户查询、一个 mutation、数据访问接口，最后才加入批量加载与订阅。验收包含未知字段被 schema 拒绝、无权限字段不泄露、复杂度上限生效、订阅取消后 goroutine 退出。本文各节模型和 resolver 是主题片段，不能全部拼接成一个可运行项目；以 gqlgen.yml 和生成的接口为准填入实现，避免手写与生成结构冲突。",
-      "classification": "unbound_verification_wording"
+      "classification": "instructional_acceptance_requirement"
     },
     {
       "path": "01-go-backend/advanced-topics/architecture/01-microservices-design.md",
@@ -9181,7 +9182,7 @@
       "path": "01-go-backend/deployment/01-containerization.md",
       "line": 934,
       "excerpt": "多阶段构建把编译工具与运行产物分开，减少运行镜像携带的内容；基础镜像还必须具备程序需要的 libc、证书与时区等能力。先验证可运行，再比较镜像大小与构建时间，不能只追求最小体积。",
-      "classification": "unbound_verification_wording"
+      "classification": "instructional_acceptance_requirement"
     },
     {
       "path": "01-go-backend/frameworks/01-gin-framework-basics.md",
@@ -9196,10 +9197,16 @@
       "classification": "expected_example_output"
     },
     {
+      "path": "01-go-backend/projects/04-cli-tool.md",
+      "line": 1422,
+      "excerpt": "本项目的发布、包管理和 CI/CD 部分只提供学习契约与模板。它们需要仓库权限、签名密钥和目标平台环境，不能因文档中有工作流片段就标记为已交付或已验证。",
+      "classification": "unbound_verification_wording"
+    },
+    {
       "path": "01-go-backend/reference/language-concepts/12-channel-semantics.md",
       "line": 130,
       "excerpt": "**经典死锁场景**：所有 goroutine 都在阻塞等待、无人再能推进时，runtime 报 `fatal error: all goroutines are asleep - deadlock!`（注意：若仍有其他可运行 goroutine 则不会触发检测，改为永久卡死）。",
-      "classification": "source_has_limited_runtime_evidence"
+      "classification": "instructional_acceptance_requirement"
     },
     {
       "path": "01-go-backend/reference/library-guides/03-net-http.md",
@@ -9253,19 +9260,19 @@
       "path": "01-go-backend/testing/05-test-driven-development.md",
       "line": 797,
       "excerpt": "2. **绿阶段只补当前规则**：写能让该测试通过的最小实现，再运行整个相关包的测试。此时不为了未来假设加入多余抽象，也不接受只硬编码当前输入而放过相邻边界。",
-      "classification": "unbound_verification_wording"
+      "classification": "instructional_acceptance_requirement"
     },
     {
       "path": "01-go-backend/testing/05-test-driven-development.md",
       "line": 804,
       "excerpt": "- [ ] 用最小实现使测试通过，再增加一个相邻边界用例，确认实现不是只为第一个样例硬编码。",
-      "classification": "unbound_verification_wording"
+      "classification": "instructional_acceptance_requirement"
     },
     {
       "path": "01-go-backend/testing/05-test-driven-development.md",
       "line": 805,
       "excerpt": "- [ ] 在全部相关测试通过后重命名或抽取一段重复逻辑，运行 `go test ./...`，确认重构没有改变外部行为。",
-      "classification": "unbound_verification_wording"
+      "classification": "instructional_acceptance_requirement"
     },
     {
       "path": "02-nextjs-frontend/basics/08-first-project.md",
@@ -9277,7 +9284,7 @@
       "path": "02-nextjs-frontend/basics/08-first-project.md",
       "line": 1212,
       "excerpt": "完成本章的功能和验收项后，你会得到一条可运行、可继续扩展的内容管理项目基线。它不自动包含邮件验证、支付、多租户、实时协作或生产运维；每一项扩展都需要单独定义数据边界、失败处理和验收场景。带着这里的路由、数据校验和权限分层继续完成下一项需求，并在提交前复现对应验收步骤。",
-      "classification": "source_has_limited_runtime_evidence"
+      "classification": "instructional_acceptance_requirement"
     },
     {
       "path": "02-nextjs-frontend/reference/language-concepts/08-ts-declarations-modules.md",
@@ -9355,19 +9362,19 @@
       "path": "03-tanstack-stack/testing/01-unit-testing.md",
       "line": 224,
       "excerpt": "选择项目中的 queryKey 工厂和分页解析函数：同一资源的相同参数产生等价键，不同账号或分页不得误共用；非法页码回到约定默认值或明确拒绝。把账号字段故意从键里删除，至少一个隔离测试应失败。验收：恢复后测试通过，改变执行顺序仍通过；这组纯函数测试不需要真实网络，也不能证明 Provider 和界面订阅正确。",
-      "classification": "source_has_limited_runtime_evidence"
+      "classification": "instructional_acceptance_requirement"
     },
     {
       "path": "04-multiplatform-apps/README.md",
       "line": 86,
       "excerpt": "| 1. 固定环境 | 按[环境篇](basics/01-environment-setup.md)选择 Expo 或自行管理原生工程；只选一个目标设备。保存工程、锁文件与 Node/SDK/设备版本 | 模板 App 实际打开并显示自定义文本；Metro 启动但手机未显示不算通过。先恢复模板可运行状态，再排查连接或原生构建日志 |",
-      "classification": "unbound_verification_wording"
+      "classification": "instructional_acceptance_requirement"
     },
     {
       "path": "04-multiplatform-apps/advanced-topics/architecture/01-new-architecture.md",
       "line": 43,
       "excerpt": "验收：能指出延迟发生在 JS 执行还是资源/视图工作阶段，不能只写“桥慢”。若没有设备和分析工具，先画出上述数据流，标出测量点；这属于推演，不应记录为实测性能。",
-      "classification": "unbound_verification_wording"
+      "classification": "instructional_acceptance_requirement"
     },
     {
       "path": "04-multiplatform-apps/basics/08-first-project.md",
@@ -9463,13 +9470,13 @@
       "path": "06-swift-swiftui/README.md",
       "line": 86,
       "excerpt": "最后将“源码版本、目标环境、步骤、期望、实际、恢复后的结果”交付为一份记录，再新建独立[笔记项目](projects/01-notes-app.md)练习编辑和搜索。不要为跟随下一篇而把旧数据库模型直接替换；保留旧数据的模型演进需要迁移方案。本页本轮未执行 Xcode 构建、SwiftUI 交互或 SwiftData 故障注入，未取得这些关卡的运行通过证据。",
-      "classification": "unbound_verification_wording"
+      "classification": "instructional_acceptance_requirement"
     },
     {
       "path": "06-swift-swiftui/basics/05-layouts.md",
       "line": 214,
       "excerpt": "### 先完成一个可运行的联系人屏幕",
-      "classification": "unbound_verification_wording"
+      "classification": "instructional_acceptance_requirement"
     },
     {
       "path": "06-swift-swiftui/basics/06-navigation.md",
@@ -9481,13 +9488,13 @@
       "path": "06-swift-swiftui/basics/08-first-project.md",
       "line": 235,
       "excerpt": "先运行纯金额函数：用独立 Swift 命令行文件复制 `parseCents`，断言 `0.1 → 10`、`0.20 → 20`、`999999.99 → 99999999`，并确认非法输入返回 `nil`。这只证明解析逻辑，不证明 SwiftData 或 UI 可运行。",
-      "classification": "source_has_limited_runtime_evidence"
+      "classification": "instructional_acceptance_requirement"
     },
     {
       "path": "06-swift-swiftui/reference/framework-essentials/06-swift-charts.md",
       "line": 201,
       "excerpt": "折线数据先按时间排序；同一日期多系列使用稳定的系列标识。柱状图通常从零起，截断坐标轴应明确标注。验收包含大字体、VoiceOver、色觉差异以及空数据，颜色不能是表达完成状态的唯一渠道。本页前面的 habit/data 等是项目集成片段，需配套模型，不是独立可运行文件。",
-      "classification": "unbound_verification_wording"
+      "classification": "instructional_acceptance_requirement"
     },
     {
       "path": "06-swift-swiftui/reference/language-concepts/09-property-wrappers.md",
@@ -9601,13 +9608,13 @@
       "path": "09-nodejs-backend/projects/01-todo-api.md",
       "line": 22,
       "excerpt": "这些是需要在目标练习环境执行的验收要求；补充桥接说明本身不代表本页工程已经运行通过。",
-      "classification": "unbound_verification_wording"
+      "classification": "instructional_acceptance_requirement"
     },
     {
       "path": "09-nodejs-backend/projects/01-todo-api.md",
       "line": 256,
       "excerpt": "- [ ] 至少 3 条服务层测试通过",
-      "classification": "unbound_verification_wording"
+      "classification": "instructional_acceptance_requirement"
     },
     {
       "path": "09-nodejs-backend/reference/language-concepts/06-esm-module-resolution.md",
@@ -9715,7 +9722,7 @@
       "path": "09-nodejs-backend/testing/03-e2e-api-testing.md",
       "line": 166,
       "excerpt": "端到端测试通过真实运行入口完成业务旅程，关键字段如创建后的 id、金额或权限结果仍必须验证，不能因“只测旅程”而省掉契约断言。底层组合边界留给更快的测试，减少重复成本。",
-      "classification": "unbound_verification_wording"
+      "classification": "instructional_acceptance_requirement"
     },
     {
       "path": "10-python-discovery/advanced-topics/performance/02-profiling-optimization.md",
@@ -9739,19 +9746,19 @@
       "path": "10-python-discovery/deployment/02-ci-cd-pipelines.md",
       "line": 143,
       "excerpt": "验证三个事件：PR 应执行检查但不推送镜像；main 的 push 应在测试通过后构建推送；v 开头的 tag 也应先通过相同检查，再构建发布候选镜像。然后故意破坏一条测试，确认 build 被阻止；这比只看 YAML 能解析更有意义。",
-      "classification": "unbound_verification_wording"
+      "classification": "instructional_acceptance_requirement"
     },
     {
       "path": "10-python-discovery/projects/01-todo-api.md",
       "line": 11,
       "excerpt": "本页是完整的内存版练习：依次保存 `schemas.py`、`store.py`、`main.py` 和 `tests/test_api.py` 即可运行。每次服务重启清空数据，多个 worker 不共享数据；它用于学习 HTTP 契约，不用于持久化部署。先通过第 6 节测试，再替换存储。",
-      "classification": "unbound_verification_wording"
+      "classification": "source_has_limited_runtime_evidence"
     },
     {
       "path": "10-python-discovery/projects/01-todo-api.md",
       "line": 230,
       "excerpt": "验证记录（2026-09-19）：从本页原样抽取四个 Python 文件，在 Python 3.12.14 与 Python 3.14 容器中均通过 12 项测试；实际依赖为 FastAPI 0.141.1、Pydantic 2.13.5、pytest 9.1.1、httpx 0.28.1。当前 Starlette 1.6.0 会报告 httpx 测试适配器与 AnyIO 别名弃用警告；测试通过不代表依赖无迁移工作，也不涵盖数据库、部署或多 worker 持久化。",
-      "classification": "unbound_verification_wording"
+      "classification": "source_has_limited_runtime_evidence"
     },
     {
       "path": "10-python-discovery/reference/framework-essentials/01-fastapi-essentials.md",
@@ -9967,7 +9974,7 @@
       "path": "11-rust-cross-platform/advanced-topics/01-memory-layout-performance.md",
       "line": 361,
       "excerpt": "- [ ] 能对任意 struct 心算 repr(C) 的填充并实测验证",
-      "classification": "unbound_verification_wording"
+      "classification": "instructional_acceptance_requirement"
     },
     {
       "path": "11-rust-cross-platform/basics/01-environment-setup.md",
@@ -10097,7 +10104,7 @@
   ],
   "known_limits": [
     "final-web-examples.json source inventory does not establish per-document runtime evidence; its unbound cases are retained under corpus_checks.",
-    "No evidence record means not verified; it is not a correctness finding. Explicit non-run boundaries and expected sample output are classified separately from unsupported positive claims.",
+    "No evidence record means not verified; it is not a correctness finding. Explicit non-run boundaries, expected sample output, and learner acceptance requirements are classified separately from unsupported positive claims.",
     "Syntax-only TS/JS coverage is recorded at corpus level in tsjs-validation-2026-09-19.md and is not promoted to per-document runtime evidence.",
     "Framework builds, devices, external services, deployments, and historical snippets outside named cases remain outside this ledger."
   ]
