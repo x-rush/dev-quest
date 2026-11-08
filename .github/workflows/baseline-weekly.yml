@@ -1,7 +1,10 @@
 # 周报：外链健康 + 基线漂移盘点（报告性，不门禁）
 #
 # - lychee 扫全仓 .md 外链：断链只进 summary/artifact，不影响 CI 状态
-#   （外链死活不受本仓控制，仅作维护信号；action 用法以官方 README 为准）
+#   （外链死活不受本仓控制，仅作维护信号）
+# - lychee 安装不用 lychee-action：其安装步骤对 GitHub Releases 下载无重试，
+#   遇到 release CDN 间歇性 504 时会把错误页存成假压缩包导致 job 失败；
+#   改为自带重试，仍失败则回退 cargo 编译（runner 镜像自带 Rust 工具链）
 # - baseline_check.py 批量比对各模块技术基线与 registry 最新版（CI 网络环境 +
 #   GITHUB_TOKEN 提额），输出 DRIFT 报告到 summary；处置走季度基线对齐 ritual
 # - 周日 UTC 02:23 错峰运行（≈北京时间 10:23）
@@ -22,19 +25,46 @@ jobs:
     steps:
       - uses: actions/checkout@v5
 
-      - name: 外链健康检查（lychee，报告不门禁）
-        uses: lycheeverse/lychee-action@v2
-        with:
-          args: >-
-            --no-progress
-            --max-retries 2
-            --exclude '^https://github\.com/.*/(issues|pull)/\d+'
-            --format markdown
-            './**/*.md'
-          output: lychee-report.md
-          fail: false
+      - name: 安装 lychee（下载重试，失败回退 cargo 编译）
+        run: |
+          set -e
+          URL="https://github.com/lycheeverse/lychee/releases/latest/download/lychee-x86_64-unknown-linux-gnu.tar.gz"
+          DIST_DIR="$(mktemp -d)"
+          installed=0
+          for i in 1 2 3; do
+            echo "::group::下载 lychee（第 $i 次尝试）"
+            if curl -sfL --retry 3 --retry-delay 20 --retry-all-errors \
+                 -o "$DIST_DIR/lychee.tar.gz" "$URL" \
+               && tar -xzf "$DIST_DIR/lychee.tar.gz" -C "$DIST_DIR" \
+               && find "$DIST_DIR" -maxdepth 2 -name lychee -type f \
+                    -exec install -t "$HOME/.local/bin" {} \; ; then
+              installed=1
+            fi
+            echo "::endgroup::"
+            if [ "$installed" -eq 1 ]; then break; fi
+            if [ "$i" -lt 3 ]; then sleep 30; fi
+          done
+          if [ "$installed" -ne 1 ]; then
+            echo "GitHub Releases 持续不可用，回退 cargo 编译 lychee（约数分钟）"
+            cargo install lychee --locked
+            install -t "$HOME/.local/bin" "$HOME/.cargo/bin/lychee"
+          fi
+          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+          "$HOME/.local/bin/lychee" --version
+
+      - name: 外链健康检查（报告不门禁）
+        id: scan
+        continue-on-error: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          lychee \
+            --no-progress \
+            --max-retries 2 \
+            --exclude '^https://github\.com/.*/(issues|pull)/\d+' \
+            --format markdown \
+            --output lychee-report.md \
+            './**/*.md'
 
       - name: 汇入 job summary
         if: always()
