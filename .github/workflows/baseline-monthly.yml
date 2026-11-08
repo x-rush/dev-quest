@@ -1,4 +1,4 @@
-# 周报：外链健康 + 基线漂移盘点（报告性，不门禁）
+# 月报：外链健康 + 基线漂移盘点（报告性，不门禁）
 #
 # - lychee 扫全仓 .md 外链：断链只进 summary/artifact，不影响 CI 状态
 #   （外链死活不受本仓控制，仅作维护信号）
@@ -7,12 +7,13 @@
 #   改为自带重试，仍失败则回退 cargo 编译（runner 镜像自带 Rust 工具链）
 # - baseline_check.py 批量比对各模块技术基线与 registry 最新版（CI 网络环境 +
 #   GITHUB_TOKEN 提额），输出 DRIFT 报告到 summary；处置走季度基线对齐 ritual
-# - 周日 UTC 02:23 错峰运行（≈北京时间 10:23）
-name: weekly-health-report
+# - 每月 1 日 UTC 02:23 错峰运行（≈北京时间 10:23）；原为每周，
+#   2026-11 降频以匹配内容更新节奏
+name: monthly-health-report
 
 on:
   schedule:
-    - cron: '23 2 * * 0'
+    - cron: '23 2 1 * *'
   workflow_dispatch:
 
 permissions:
