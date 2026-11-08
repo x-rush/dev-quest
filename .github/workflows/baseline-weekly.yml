@@ -30,27 +30,28 @@ jobs:
           set -e
           URL="https://github.com/lycheeverse/lychee/releases/latest/download/lychee-x86_64-unknown-linux-gnu.tar.gz"
           DIST_DIR="$(mktemp -d)"
+          BIN_DIR="$HOME/.local/bin"
+          mkdir -p "$BIN_DIR"
           installed=0
           for i in 1 2 3; do
             echo "::group::下载 lychee（第 $i 次尝试）"
             if curl -sfL --retry 3 --retry-delay 20 --retry-all-errors \
-                 -o "$DIST_DIR/lychee.tar.gz" "$URL" \
-               && tar -xzf "$DIST_DIR/lychee.tar.gz" -C "$DIST_DIR" \
-               && find "$DIST_DIR" -maxdepth 2 -name lychee -type f \
-                    -exec install -t "$HOME/.local/bin" {} \; ; then
-              installed=1
+                 -o "$DIST_DIR/lychee.tar.gz" "$URL"; then
+              tar -xzf "$DIST_DIR/lychee.tar.gz" -C "$DIST_DIR"
+              find "$DIST_DIR" -maxdepth 2 -name lychee -type f \
+                   -exec install -m 755 {} "$BIN_DIR/lychee" \;
             fi
             echo "::endgroup::"
-            if [ "$installed" -eq 1 ]; then break; fi
+            if [ -x "$BIN_DIR/lychee" ]; then installed=1; break; fi
             if [ "$i" -lt 3 ]; then sleep 30; fi
           done
           if [ "$installed" -ne 1 ]; then
             echo "GitHub Releases 持续不可用，回退 cargo 编译 lychee（约数分钟）"
             cargo install lychee --locked
-            install -t "$HOME/.local/bin" "$HOME/.cargo/bin/lychee"
+            install -m 755 "$HOME/.cargo/bin/lychee" "$BIN_DIR/lychee"
           fi
-          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
-          "$HOME/.local/bin/lychee" --version
+          echo "$BIN_DIR" >> "$GITHUB_PATH"
+          "$BIN_DIR/lychee" --version
 
       - name: 外链健康检查（报告不门禁）
         id: scan
